@@ -1,0 +1,13 @@
+pyramid
+paste
+ujson
+pyramid_tm
+cornice
+waitress
+WebTest
+pytest
+pymongo
+pymodm
+# The oil database is required, but is located within this project
+# at OilDatabase/oil_db
+# oil_database
