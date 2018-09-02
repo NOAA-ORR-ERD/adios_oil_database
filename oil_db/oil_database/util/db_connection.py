@@ -6,7 +6,7 @@ from pymodm import connect
 logger = logging.getLogger(__name__)
 
 
-def connect_client(settings):
+def connect_mongodb(settings):
     '''
         We are using MongoDB via pymongo for our database
     '''
@@ -16,7 +16,7 @@ def connect_client(settings):
     return MongoClient(host=host, port=port)
 
 
-def connect_modb(settings):
+def connect_modm(settings):
     '''
         We are using MongoDB via pymongo for our database, but we are using
         PyMODM to handle the object representations.  Here's why.

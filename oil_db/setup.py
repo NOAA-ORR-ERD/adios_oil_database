@@ -98,9 +98,9 @@ class make_db(Command):
                          'mongodb.alias': connection_alias}
 
         try:
-            from oil_database.util.db_connection import connect_client
+            from oil_database.util.db_connection import connect_mongodb
 
-            self.client = connect_client(self.settings)
+            self.client = connect_mongodb(self.settings)
             print 'Connected successfully!!!'
         except ConnectionFailure:
             print 'Could not connect to MongoDB!'
@@ -160,8 +160,8 @@ class make_db(Command):
         try:
             # we can't import at the top of the file because the package
             # might not be built yet
-            from oil_database.util.db_connection import connect_modb
-            connect_modb(self.settings)
+            from oil_database.util.db_connection import connect_modm
+            connect_modm(self.settings)
 
             from oil_database.scripts.initializedb import load_db
             load_db(self.settings)
