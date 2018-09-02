@@ -53,7 +53,9 @@ class CSVFile(object):
 
     def _parse_row(self, line):
         '''
-            Parse a row of .csv data into a sequence of fields
+            Parse a row of .csv data into a sequence of fields.
+            It is assumed that this data will most likely be the results of
+            the readline() file function.
 
             :param line: A row of .csv text data
             :type line: string or unicode
@@ -62,25 +64,31 @@ class CSVFile(object):
             # readline() returns empty string on EOF and '\n' for empty lines
             return None
 
-        line = line.strip()
-        if len(line) > 0:
-            try:
-                row = line.decode('utf-8')
-            except Exception:
-                # If we fail to encode in utf-8, then it is possible that
-                # our file contains mac_roman characters of which some are
-                # out-of-range.
-                # This is probably about the best we can do to anticipate
-                # our file contents.
-                row = line.decode('mac_roman')
+        line = self.normalize_to_utf8(line).rstrip('\n')
 
-            row = row.encode('utf-8')
-            row = (row.split(self.field_delim))
+        if len(line) > 0:
+            row = (line.split(self.field_delim))
             row = [c.strip('"') for c in row]
             row = [c if len(c) > 0 else None for c in row]
         else:
-            row = []
+            # empty line after stripping the newline character
+            # means a single null field
+            row = [None]
+
         return row
+
+    def normalize_to_utf8(self, str_in):
+        try:
+            str_out = str_in.decode('utf-8')
+        except Exception:
+            # If we fail to decode in utf-8, then it is possible that
+            # our file contains mac_roman characters of which some are
+            # out-of-range.
+            # This is all we will attempt to do to anticipate our file contents
+            # unless there is a pressing need to do more.
+            str_out = str_in.decode('mac_roman')
+
+        return str_out.encode('utf-8')
 
     def readline(self):
         '''
@@ -155,7 +163,7 @@ class CSVFileWithHeader(CSVFile):
             :param line: A row of parsed fields
             :type line: sequence type
         '''
-        if row is not None and len(row) != len(self.file_columns):
+        if row is not None and len(row) != self.num_columns:
             raise FileHeaderLengthError('Bad row data: '
                                         'should match the length of the '
                                         'first row!!')
@@ -175,10 +183,3 @@ class CSVFileWithHeader(CSVFile):
         super(CSVFileWithHeader, self).rewind()
 
         self.readline(check_row=False)
-
-    pass
-
-
-
-
-
