@@ -61,15 +61,10 @@ def vol_expansion_coeff(rho_0, t_0, rho_1, t_1):
 
 def specific_gravity(density):
     '''
-        Specific Gravity of Oil with respect to water at 4C (greatest
-        density of water)
-
-        Fixme: also in unit_conversion, and SG is NOT at 4C
-               -- it is usually at 60F (15.6) and that is the definition used
-                  for API gravity
-
+        Specific Gravity of Oil with respect to water at 15C (definition used
+        for API gravity)
     '''
-    return density / 1000.0
+    return density / 999.103
 
 
 def dvis_to_kvis(dvis, density):
