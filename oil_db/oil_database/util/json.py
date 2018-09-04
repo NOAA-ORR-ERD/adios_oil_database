@@ -19,11 +19,20 @@ def fix_bson_ids(json_data):
     elif isinstance(json_data, dict):
         for k, v in json_data.iteritems():
             json_data[k] = fix_bson_ids(v)
+
         return json_data
-    elif isinstance(json_data, (list, tuple, set)):
+    elif isinstance(json_data, (list, tuple)):
         for i, v in enumerate(json_data):
             json_data[i] = fix_bson_ids(v)
+
         return json_data
+    elif isinstance(json_data, set):
+        tmp_list = list(json_data)
+
+        for i, v in enumerate(tmp_list):
+            tmp_list[i] = fix_bson_ids(v)
+
+        return set(tmp_list)
     else:
         return json_data
 
