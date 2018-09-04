@@ -50,9 +50,9 @@ def csv_bad_header_file(tmpdir_factory):
 
 
 class TestCSVFile(object):
-    @pytest.mark.parametrize("name, delim",
-                             [("test", None),
-                              ("test", '|')
+    @pytest.mark.parametrize('name, delim',
+                             [('test', None),
+                              ('test', '|')
                               ])
     def test_init(self, name, delim):
         if delim is None:
@@ -64,7 +64,7 @@ class TestCSVFile(object):
         assert csv_file.name == name
         assert csv_file.field_delim == delim
 
-    @pytest.mark.parametrize("delim, line, expected",
+    @pytest.mark.parametrize('delim, line, expected',
                              [('\t', '', None),
                               ('\t', '\n', [None]),
                               ('\t', u'\n', [None]),
