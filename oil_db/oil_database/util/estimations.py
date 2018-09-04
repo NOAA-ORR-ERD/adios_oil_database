@@ -221,16 +221,30 @@ def aromatic_mol_wt(boiling_point):
     return (44.504 * (6.911 - np.log(1015.0 - T_i))) ** (3.0 / 2.0)
 
 
-def resin_mol_wt():
+def resin_mol_wt(_boiling_point):
     '''
         Source: Recommendation from Bill Lehr
+
+        Note: We pass in a boiling point to remain consistent with the other
+              molecular weight functions, even though it is not used.
+        Note: We return a scalar in all cases.  This should still work with
+              numpy array operations, but probably not with regular Python
+              sequence types.
+              We can fix this if the need arises.
     '''
     return 800.0
 
 
-def asphaltene_mol_wt():
+def asphaltene_mol_wt(_boiling_point):
     '''
         Source: Recommendation from Bill Lehr
+
+        Note: We pass in a boiling point to remain consistent with the other
+              molecular weight functions, even though it is not used.
+        Note: We return a scalar in all cases.  This should still work with
+              numpy array operations, but probably not with regular Python
+              sequence types.
+              We can fix this if the need arises.
     '''
     return 1000.0
 
@@ -245,6 +259,7 @@ def trial_densities(boiling_points, watson_factor):
         on boiling points and the Watson Characterization Factor.
         This is only good for estimating Aromatics & Saturates.
     '''
+    boiling_points = np.array(boiling_points)
     return 1000.0 * (1.8 * boiling_points) ** (1.0 / 3.0) / watson_factor
 
 
@@ -260,11 +275,27 @@ def aromatic_densities(boiling_points):
     return trial_densities(boiling_points, K_w_arom)
 
 
-def resin_density():
+def resin_densities(_boiling_points):
+    '''
+        Note: We pass in a boiling point to remain consistent with the other
+              molecular weight functions, even though it is not used.
+        Note: We return a scalar in all cases.  This should still work with
+              numpy array operations, but probably not with regular Python
+              sequence types.
+              We can fix this if the need arises.
+    '''
     return 1100.0
 
 
-def asphaltene_density():
+def asphaltene_densities(_boiling_points):
+    '''
+        Note: We pass in a boiling point to remain consistent with the other
+              molecular weight functions, even though it is not used.
+        Note: We return a scalar in all cases.  This should still work with
+              numpy array operations, but probably not with regular Python
+              sequence types.
+              We can fix this if the need arises.
+    '''
     return 1100.0
 
 
@@ -284,8 +315,8 @@ def _hydrocarbon_characterization_param(specific_gravity, temp_k):
         This is a characterization parameter, designated as I, that
         was first used by Huang to correlate hydrocarbon properties
     '''
-    T_i = temp_k
-    SG_i = specific_gravity
+    T_i = np.array(temp_k)
+    SG_i = np.array(specific_gravity)
 
     return 0.3773 * T_i ** (-0.02269) * SG_i ** (0.9182)
 
@@ -299,7 +330,7 @@ def refractive_index(hc_char_param):
         This is the refractive index of liquid hydrocarbons at 20C,
         correlated through parameter I
     '''
-    I = hc_char_param
+    I = np.array(hc_char_param)
 
     return ((1 + 2 * I) / (1 - I)) ** (1.0 / 2.0)
 
@@ -360,6 +391,9 @@ def pour_point_from_kvis(ref_kvis, ref_temp_k):
         then we can estimate what its pour point might be.
     '''
     c_v1 = 5000.0
+    ref_kvis = np.array(ref_kvis)
+    ref_temp_k = np.array(ref_temp_k)
+
     T_pp = (c_v1 * ref_temp_k) / (c_v1 - ref_temp_k * np.log(ref_kvis))
 
     return T_pp
@@ -382,14 +416,15 @@ def pour_point_from_sg_mw_kvis(specific_gravity, mol_wt, kvis):
             kvis * (0.310331 - 0.32834 * SG))
 
 
-def flash_point_from_bp(ref_temp_k):
+def flash_point_from_bp(temp_k):
     '''
         Source: Reference: Chang A., K. Pashakanti, and Y. Liu (2012),
                            Integrated Process Modeling and Optimization,
                            Wiley Verlag.
 
     '''
-    return 117.0 + 0.69 * ref_temp_k
+    temp_k = np.array(temp_k)
+    return 117.0 + 0.69 * temp_k
 
 
 def flash_point_from_api(api):
@@ -399,6 +434,7 @@ def flash_point_from_api(api):
                            Wiley Verlag.
 
     '''
+    api = np.array(api)
     return 457.0 - 3.34 * api
 
 
