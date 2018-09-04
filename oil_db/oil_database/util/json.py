@@ -65,8 +65,11 @@ class ObjFromDict(object):
             json_obj.densities[0].ref_temp_k
     '''
     def __init__(self, data):
-        for name, value in data.iteritems():
-            setattr(self, name, self._wrap(value))
+        try:
+            for name, value in data.iteritems():
+                setattr(self, name, self._wrap(value))
+        except AttributeError:
+            raise ValueError('Top level of JSON structure must be dict')
 
     def _wrap(self, value):
         if isinstance(value, (tuple, list, set, frozenset)):
