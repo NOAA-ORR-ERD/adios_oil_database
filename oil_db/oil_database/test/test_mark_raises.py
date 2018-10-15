@@ -17,12 +17,12 @@ class AnotherException(Exception):
 @pytest.mark.parametrize(
     'error',
     [None,
-     pytest.param(SomeException('the message'),
-                  marks=pytest.mark.xfail(exception=SomeException)),
-     pytest.param(AnotherException('the message'),
-                  marks=pytest.mark.xfail(exception=AnotherException)),
-     pytest.param(Exception('the message'),
-                  marks=pytest.mark.xfail(exception=Exception)),
+     pytest.mark.raises(SomeException('the message'),
+                        exception=SomeException),
+     pytest.mark.raises(AnotherException('the message'),
+                        exception=AnotherException),
+     pytest.mark.raises(Exception('the message'),
+                        exception=Exception),
      ])
 def test_mark_raises(error):
     '''
