@@ -213,6 +213,9 @@ setup(name=pkg_name,
       entry_points={'console_scripts': [('{} = oil_database.initializedb'
                                          ':make_db'
                                          .format(db_init_script_name)),
+                                        ('export_ec = '
+                                         'oil_database.scripts.export_to_csv'
+                                         ':export_to_csv_cmd'),
                                         ],
                     },
       zip_safe=False,

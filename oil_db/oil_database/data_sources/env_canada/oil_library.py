@@ -1184,6 +1184,8 @@ class EnvCanadaRecordParser(object):
             [self._rename_prop(kwargs, lbl, lbl + '_ppm')
              for lbl in kwargs.keys()]
 
+            self._prepend_underscores(kwargs)
+
             # fix the 'ND' values
             for k, v in kwargs.items():
                 if v == 'ND':
@@ -1195,6 +1197,38 @@ class EnvCanadaRecordParser(object):
             benzenes.append(kwargs)
 
         return benzenes
+
+    @property
+    def biomarkers(self):
+        '''
+            The Evironment Canada data sheet contains data for biomarkers,
+            which we will try to capture.
+            We have a single property group in this case.
+            - Dimensional parameters are (weathering).
+            - Values Units are all ug/g as far as I can tell, which is
+              basically the same as ppm, so no conversion.
+            - We will rename the properties all with a '_ppm' suffix to
+              indicate the units.
+        '''
+        biomarkers = []
+
+        bio_props = self.get_props_by_category('biomarkers_ug_g_'
+                                               'ests_2002a')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in bio_props.iteritems()])
+            kwargs = props_i
+
+            [self._rename_prop(kwargs, lbl, lbl + '_ppm')
+             for lbl in kwargs.keys()]
+
+            self._prepend_underscores(kwargs)
+
+            kwargs['weathering'] = w
+
+            biomarkers.append(kwargs)
+
+        return biomarkers
 
     def _build_kwargs(self, props,
                       add_props=None,
@@ -1361,6 +1395,16 @@ class EnvCanadaRecordParser(object):
     def _rename_prop(self, kwargs, old_prop, new_prop):
         kwargs[new_prop] = kwargs[old_prop]
         del kwargs[old_prop]
+
+    def _prepend_underscores(self, kwargs):
+        '''
+            kwargs that start with a number are not valid.
+            Prepend an underscore to them.
+        '''
+        for k, v in kwargs.items():
+            if k[0].isdigit():
+                kwargs['_' + k] = v
+                del kwargs[k]
 
     def _propagate_merged_excel_cells(self, objects, labels):
         '''

@@ -1,0 +1,31 @@
+# conda requirements file for the oil_database package.
+
+# These should all be in one of the following channels:
+# 1: conda-forge
+# 2: NOAA-ORR-ERD channel
+# 3: defaults
+# 
+# It would be best to have these channels configured the order of precedence
+# outlined above in your conda configuration.
+
+python=2.7.*
+gitpython
+numpy>=1.11.1
+scipy>=0.18.1
+
+pymongo>=3.6.0
+pymodm>=0.4.0  # might be pip only
+
+awesome-slugify>=1.6.5
+
+pytest>=3.8.0
+pytest-cov>=2.6.0
+pytest-timeout>=1.2.1
+
+# This package is not released on conda.  You will need to pip install
+# pytest-raises>=0.10
+
+backports.functools_lru_cache>=1.5
+unit_conversion>=2.5.4
+
+

@@ -101,9 +101,9 @@ class TestAngularMeasureUnit(object):
                               (10.0, u'deg'),
                               (10.0, u'degree'),
                               (10.0, u'degrees'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         am_unit = AngularMeasureUnit(value=value, unit=unit)
@@ -157,9 +157,9 @@ class TestAreaUnit(object):
                               (10.0, u'km\xb2'),
                               (10.0, u'm\xb2'),
                               (10.0, u'nm\xb2'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         area_unit = AreaUnit(value=value, unit=unit)
@@ -215,9 +215,9 @@ class TestConcentrationInWaterUnit(object):
                               (10.0, u'g/m\xb3'),
                               (10.0, u'kg/m\xb3'),
                               (10.0, u'lb/ft\xb3'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         cw_unit = ConcentrationInWaterUnit(value=value, unit=unit)
@@ -253,9 +253,9 @@ class TestDensityUnit(object):
                               (10.0, u'lb/ft\xb3'),
                               (10.0, u'g/cm\xb3'),
                               (10.0, u'kg/m\xb3'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         density_unit = DensityUnit(value=value, unit=unit)
@@ -311,9 +311,9 @@ class TestDischargeUnit(object):
                               (10.0, u'm\xb3/hr'),
                               (10.0, u'm\xb3/min'),
                               (10.0, u'm\xb3/s'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         discharge_unit = DischargeUnit(value=value, unit=unit)
@@ -356,9 +356,9 @@ class TestKinematicViscosityUnit(object):
                               (10.0, u'in\xb2/s'),
                               (10.0, u'mm\xb2/s'),
                               (10.0, u'm\xb2/s'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         kvis_unit = KinematicViscosityUnit(value=value, unit=unit)
@@ -413,9 +413,9 @@ class TestLengthUnit(object):
                               (10.0, 'yard'),
                               (10.0, 'yards'),
                               (10.0, 'yrd'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         length_unit = LengthUnit(value=value, unit=unit)
@@ -459,9 +459,9 @@ class TestMassUnit(object):
                               (10.0, 'tons'),
                               (10.0, 'ukton'),
                               (10.0, 'uston'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         mass_unit = MassUnit(value=value, unit=unit)
@@ -499,9 +499,9 @@ class TestOilConcentrationUnit(object):
                               (10.0, 'mm'),
                               (10.0, u'bbl/mile\xb2'),
                               (10.0, u'm\xb3/km\xb2'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         oc_unit = OilConcentrationUnit(value=value, unit=unit)
@@ -538,9 +538,9 @@ class TestTemperatureUnit(object):
                               (10.0, 'deg c'),
                               (10.0, 'degrees kelvin'),
                               (10.0, 'deg f'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         temp_unit = TemperatureUnit(value=value, unit=unit)
@@ -571,9 +571,9 @@ class TestTimeUnit(object):
                               (10.0, 'sec'),
                               (10.0, 'second'),
                               (10.0, 'seconds'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         time_unit = TimeUnit(value=value, unit=unit)
@@ -625,9 +625,9 @@ class TestVelocityUnit(object):
                               (10.0, 'miles per hour'),
                               (10.0, 'mph'),
                               (10.0, 'mps'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
         velocity_unit = VelocityUnit(value=value, unit=unit)
@@ -700,9 +700,10 @@ class TestVolumeUnit(object):
                               (10.0, u'km\xb3'),
                               (10.0, u'm\xb3'),
                               (10.0, u'yd\xb3'),
-                              pytest.mark.raises((10.0,
-                                                  'hogsheads per fortnight'),
-                                                 exception=ValidationError),
+                              pytest.param(
+                                  10.0, 'hogsheads per fortnight',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
+
                               ])
     def test_init(self, value, unit):
         volume_unit = VolumeUnit(value=value, unit=unit)

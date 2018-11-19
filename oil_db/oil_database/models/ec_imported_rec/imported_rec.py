@@ -23,6 +23,7 @@ from .emulsion import Emulsion
 from .sulfur import Sulfur
 from .water import Water
 from .benzene import Benzene
+from .biomarkers import Biomarkers
 from .wax import Wax
 
 
@@ -52,8 +53,7 @@ class ECImportedRecord(MongoModel):
         - Add CCME fractions
         - Add saturates and aromatics CXX analysis
         - Add n-Alkanes
-        - Add blkylated total aromatic hydrocarbons
-        - Add biomarkers
+        - Add alkylated total aromatic hydrocarbons
     '''
     oil_id = CharField(max_length=16)
     oil_name = CharField(max_length=100)
@@ -94,6 +94,7 @@ class ECImportedRecord(MongoModel):
     sulphur = EmbeddedDocumentListField(Sulfur, blank=True)
     water = EmbeddedDocumentListField(Water, blank=True)
     benzene = EmbeddedDocumentListField(Benzene, blank=True)
+    biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
     wax_content = EmbeddedDocumentListField(Wax, blank=True)
 
     sara_total_fractions = EmbeddedDocumentListField(SARAFraction, blank=True)
@@ -146,6 +147,7 @@ class ECImportedRecord(MongoModel):
         self.sulphur = []
         self.water = []
         self.benzene = []
+        self.biomarkers = []
         self.wax_content = []
         self.saturates = []
         self.aromatics = []
@@ -187,6 +189,8 @@ class ECImportedRecord(MongoModel):
         rec.water.extend([Water(**args) for args in parser.water_content])
         rec.benzene.extend([Benzene(**args)
                             for args in parser.benzene_content])
+        rec.biomarkers.extend([Biomarkers(**args)
+                               for args in parser.biomarkers])
         rec.wax_content.extend([Wax(**args) for args in parser.wax_content])
         rec.sara_total_fractions.extend([SARAFraction(**args)
                                          for args

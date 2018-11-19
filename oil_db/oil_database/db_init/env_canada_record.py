@@ -250,6 +250,93 @@ def test_alaminos(rec):
                        [510L, 460L, 130L, 0L],
                        rtol=0.0001)
 
+    print 'biomarkers:'
+    pp.pprint(rec.biomarkers)
+
+    assert np.allclose([b['_14ss_h_17ss_h_20_cholestane_c27assss_ppm']
+                        for b in rec.biomarkers],
+                       [100L, 116L, 123L, 125L])
+
+    assert np.allclose([b['_14ss_h_17ss_h_20_ethylcholestane_c29assss_ppm']
+                        for b in rec.biomarkers],
+                       [116L, 134L, 139L, 151L])
+
+    assert np.allclose([b['_14ss_h_17ss_h_20_methylcholestane_c28assss_ppm']
+                        for b in rec.biomarkers],
+                       [127L, 144L, 159L, 172L])
+
+    assert np.allclose([b['_17a_h_22_29_30_trisnorhopane_c27tm_ppm']
+                        for b in rec.biomarkers],
+                       [36.6, 43.2, 46.1, 47.4])
+
+    assert np.allclose([b['_18a_22_29_30_trisnorneohopane_c27ts_ppm']
+                        for b in rec.biomarkers],
+                       [28.2, 33.8, 35.9, 36L])
+
+    assert np.allclose([b['_30_31_bishomohopane_22r_h32r_ppm']
+                        for b in rec.biomarkers],
+                       [21.3, 24.3, 26L, 27.3])
+
+    assert np.allclose([b['_30_31_bishomohopane_22s_h32s_ppm']
+                        for b in rec.biomarkers],
+                       [27L, 30.6, 32.8, 33.8])
+
+    assert np.allclose([b['_30_31_trishomohopane_22r_h33r_ppm']
+                        for b in rec.biomarkers],
+                       [12.1, 13.5, 14.2, 15.1])
+
+    assert np.allclose([b['_30_31_trishomohopane_22s_h33s_ppm']
+                        for b in rec.biomarkers],
+                       [18.6, 22.2, 23.5, 24.8])
+
+    assert np.allclose([b['_30_homohopane_22r_h31r_ppm']
+                        for b in rec.biomarkers],
+                       [37.6, 43.5, 45.4, 48.7])
+
+    assert np.allclose([b['_30_homohopane_22s_h31s_ppm']
+                        for b in rec.biomarkers],
+                       [45.6, 52.5, 58.7, 64L])
+
+    assert np.allclose([b['_30_norhopane_h29_ppm']
+                        for b in rec.biomarkers],
+                       [94.9, 113L, 118L, 143L])
+
+    assert np.allclose([b['c21_tricyclic_terpane_c21t_ppm']
+                        for b in rec.biomarkers],
+                       [8.1, 10.2, 10.7, 11.6])
+
+    assert np.allclose([b['c22_tricyclic_terpane_c22t_ppm']
+                        for b in rec.biomarkers],
+                       [3.93, 4.41, 4.35, 5.2])
+
+    assert np.allclose([b['c23_tricyclic_terpane_c23t_ppm']
+                        for b in rec.biomarkers],
+                       [15.4, 17.1, 20.3, 20.5])
+
+    assert np.allclose([b['c24_tricyclic_terpane_c24t_ppm']
+                        for b in rec.biomarkers],
+                       [10.8, 12.2, 12.4, 12.9])
+
+    assert np.allclose([b['hopane_h30_ppm']
+                        for b in rec.biomarkers],
+                       [132L, 147L, 161L, 162L])
+
+    assert np.allclose([b['pentakishomohopane_22r_h35r_ppm']
+                        for b in rec.biomarkers],
+                       [8.12, 8.53, 9.39, 9.58])
+
+    assert np.allclose([b['pentakishomohopane_22s_h35s_ppm']
+                        for b in rec.biomarkers],
+                       [7.26, 8.58, 9.63, 9.13])
+
+    assert np.allclose([b['tetrakishomohopane_22r_h34r_ppm']
+                        for b in rec.biomarkers],
+                       [6.87, 8.45, 8.5, 8.63])
+
+    assert np.allclose([b['tetrakishomohopane_22s_h34s_ppm']
+                        for b in rec.biomarkers],
+                       [14.2, 16.7, 17.6, 18.8])
+
     print 'sara total fractions:'
     pp.pprint(rec.sara_total_fractions)
 
