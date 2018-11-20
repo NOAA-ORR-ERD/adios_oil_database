@@ -943,6 +943,40 @@ class EnvCanadaRecordParser(object):
                 if e['water_content_fraction'] is not None]
 
     @property
+    def corexit(self):
+        '''
+            The Evironment Canada data sheet contains data for chemical
+            dispersability with Corexit 9500, which we will try to capture.
+            Dimensional parameters are (weathering).
+        '''
+        corexit = []
+        props = self.get_props_by_category('chemical_dispersibility_with_'
+                                           'corexit_9500_dispersant_'
+                                           'swirling_flask_test_'
+                                           'astm_f2059')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+
+            add_props = {'weathering': w}
+            rename_props = {
+                'dispersant_effectiveness': 'dispersant_effectiveness_fraction'
+            }
+            op_and_value = {'dispersant_effectiveness_fraction'}
+            to_fraction = {'dispersant_effectiveness_fraction'}
+
+            kwargs = self._build_kwargs(props_i,
+                                        add_props=add_props,
+                                        rename_props=rename_props,
+                                        op_and_value=op_and_value,
+                                        to_fraction=to_fraction)
+
+            corexit.append(kwargs)
+
+        return [c for c in corexit
+                if c['dispersant_effectiveness_fraction'] is not None]
+
+    @property
     def sulfur_content(self):
         '''
             Getting the sulfur content is very straightforward.  Just get the

@@ -20,6 +20,7 @@ from .pour_point import PourPoint
 from .adhesion import Adhesion
 from .evaporation_eq import EvaporationEq
 from .emulsion import Emulsion
+from .corexit import Corexit9500
 from .sulfur import Sulfur
 from .water import Water
 from .benzene import Benzene
@@ -47,7 +48,6 @@ class ECImportedRecord(MongoModel):
               handle them when we go through our estimations.
 
         TODO:
-        - Add field for dispersibility with Corexit
         - Add headspace analysis
         - Add gas chromatography
         - Add CCME fractions
@@ -90,6 +90,7 @@ class ECImportedRecord(MongoModel):
     evaporation_eqs = EmbeddedDocumentListField(EvaporationEq, blank=True)
 
     emulsions = EmbeddedDocumentListField(Emulsion, blank=True)
+    corexit = EmbeddedDocumentListField(Corexit9500, blank=True)
 
     sulphur = EmbeddedDocumentListField(Sulfur, blank=True)
     water = EmbeddedDocumentListField(Water, blank=True)
@@ -144,6 +145,7 @@ class ECImportedRecord(MongoModel):
         self.adhesions = []
         self.evaporation_eqs = []
         self.emulsions = []
+        self.corexit = []
         self.sulphur = []
         self.water = []
         self.benzene = []
@@ -173,6 +175,7 @@ class ECImportedRecord(MongoModel):
         rec.api.extend(parser.api)
         rec.dvis.extend([DVis(**args) for args in parser.viscosities])
         rec.cuts.extend([Cut(**args) for args in parser.distillation_cuts])
+
         rec.flash_points.extend([FlashPoint(**args)
                                  for args in parser.flash_points])
         rec.pour_points.extend([PourPoint(**args)
@@ -182,16 +185,23 @@ class ECImportedRecord(MongoModel):
                         for args in parser.interfacial_tensions])
 
         rec.adhesions.extend([Adhesion(**args) for args in parser.adhesions])
+
         rec.evaporation_eqs.extend([EvaporationEq(**args)
                                     for args in parser.evaporation_eqs])
+
         rec.emulsions.extend([Emulsion(**args) for args in parser.emulsions])
+        rec.corexit.extend([Corexit9500(**args) for args in parser.corexit])
         rec.sulphur.extend([Sulfur(**args) for args in parser.sulfur_content])
         rec.water.extend([Water(**args) for args in parser.water_content])
+
         rec.benzene.extend([Benzene(**args)
                             for args in parser.benzene_content])
+
         rec.biomarkers.extend([Biomarkers(**args)
                                for args in parser.biomarkers])
+
         rec.wax_content.extend([Wax(**args) for args in parser.wax_content])
+
         rec.sara_total_fractions.extend([SARAFraction(**args)
                                          for args
                                          in parser.sara_total_fractions])

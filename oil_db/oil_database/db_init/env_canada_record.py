@@ -215,6 +215,10 @@ def test_alaminos(rec):
     pp.pprint(rec.emulsions)
     # no data to test here for this record.
 
+    print 'corexit:'
+    pp.pprint(rec.corexit)
+    # no data to test here for this record.
+
     print 'sulfur content:'
     pp.pprint(rec.sulfur_content)
 
@@ -400,6 +404,21 @@ def test_access_west(rec):
     assert np.allclose([d['ref_temp_k'] for d in rec.emulsions],
                        [288.15] * 8,
                        rtol=0.0001)
+
+    print 'corexit:'
+    pp.pprint(rec.corexit)
+
+    assert np.allclose([d['dispersant_effectiveness_fraction']
+                        for d in rec.corexit],
+                       [0.103994, 0.1])
+
+    assert np.allclose([d['replicates']
+                        for d in rec.corexit],
+                       [6L, 6L])
+
+    assert np.allclose([d['standard_deviation']
+                        for d in rec.corexit],
+                       [1.8703, 1.2511])
 
     for label in ('water_content_w_w',):
         assert all([label not in v
