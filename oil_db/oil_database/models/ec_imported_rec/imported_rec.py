@@ -24,6 +24,7 @@ from .corexit import Corexit9500
 from .sulfur import Sulfur
 from .water import Water
 from .benzene import Benzene
+from .headspace import Headspace
 from .biomarkers import Biomarkers
 from .wax import Wax
 
@@ -95,6 +96,7 @@ class ECImportedRecord(MongoModel):
     sulphur = EmbeddedDocumentListField(Sulfur, blank=True)
     water = EmbeddedDocumentListField(Water, blank=True)
     benzene = EmbeddedDocumentListField(Benzene, blank=True)
+    headspace = EmbeddedDocumentListField(Headspace, blank=True)
     biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
     wax_content = EmbeddedDocumentListField(Wax, blank=True)
 
@@ -149,6 +151,7 @@ class ECImportedRecord(MongoModel):
         self.sulphur = []
         self.water = []
         self.benzene = []
+        self.headspace = []
         self.biomarkers = []
         self.wax_content = []
         self.saturates = []
@@ -196,6 +199,9 @@ class ECImportedRecord(MongoModel):
 
         rec.benzene.extend([Benzene(**args)
                             for args in parser.benzene_content])
+
+        rec.headspace.extend([Headspace(**args)
+                              for args in parser.headspace])
 
         rec.biomarkers.extend([Biomarkers(**args)
                                for args in parser.biomarkers])

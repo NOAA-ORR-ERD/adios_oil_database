@@ -1233,6 +1233,40 @@ class EnvCanadaRecordParser(object):
         return benzenes
 
     @property
+    def headspace(self):
+        '''
+            The Evironment Canada data sheet contains data for headspace
+            analysis, which we will try to capture.
+            We have a single property group in this case.
+            - Dimensional parameters are (weathering).
+            - Values Units are all mg/g as far as I can tell.
+            - We will rename the properties all with a '_mg_g' suffix to
+              indicate the units.
+            - lots of oils have no headspace measurements at all.  If all of
+              the properties are empty for a particular weathered sample,
+              we will not include it.
+        '''
+        headspace = []
+
+        hs_props = self.get_props_by_category('headspace_analysis_mg_g_oil_'
+                                              'ests_2002b')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in hs_props.iteritems()])
+            kwargs = props_i
+
+            [self._rename_prop(kwargs, lbl, lbl + '_mg_g')
+             for lbl in kwargs.keys()]
+
+            kwargs['weathering'] = w
+
+            headspace.append(kwargs)
+
+        return [h for h in headspace
+                if any([h[p] is not None for p in h
+                        if p != 'weathering'])]
+
+    @property
     def biomarkers(self):
         '''
             The Evironment Canada data sheet contains data for biomarkers,

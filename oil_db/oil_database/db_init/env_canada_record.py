@@ -67,36 +67,37 @@ def add_ec_record(field_indexes, values):
     # For now, we will debug only certain records.
     # TODO: we need to turn this into a suite of pytests
     if name == 'Alaminos Canyon Block 25':
-        print u'testing {}: "{}"'.format(name, parser.ec_oil_id)
-        test_alaminos(parser)
+        test_oil_record(parser)
     elif name == 'Access West Winter Blend':
-        print u'testing {}: "{}"'.format(name, parser.ec_oil_id)
         test_access_west(parser)
+    elif name == 'Cook Inlet [2003]':
+        test_cook_inlet(parser)
 
     model_rec = ECImportedRecord.from_record_parser(parser)
     model_rec.save()
 
 
-def test_alaminos(rec):
+def test_oil_record(parser):
     '''
         Test an Environment Canada Record ('Alaminos Canyon Block 25')
     '''
     print
-    print 'name: {}'.format(rec.name)
-    print 'ESTS codes: {}'.format(rec.ests_codes)
-    print 'weathered: {}'.format(rec.weathering)
-    print 'reference: {}'.format(rec.reference)
-    print 'reference date: {}'.format(rec.reference_date)
-    print 'comments: {}'.format(rec.comments)
-    print 'EC Oil ID: {}'.format(rec.ec_oil_id)
-    print 'location: {}'.format(rec.location)
+    print '--- Testing Oil Record ---'
+    print 'name: {}'.format(parser.name)
+    print 'ESTS codes: {}'.format(parser.ests_codes)
+    print 'weathered: {}'.format(parser.weathering)
+    print 'reference: {}'.format(parser.reference)
+    print 'reference date: {}'.format(parser.reference_date)
+    print 'comments: {}'.format(parser.comments)
+    print 'EC Oil ID: {}'.format(parser.ec_oil_id)
+    print 'location: {}'.format(parser.location)
 
-    print 'oil API: {}'.format(rec.api)
+    print 'oil API: {}'.format(parser.api)
 
     print 'densities:'
-    pp.pprint(rec.densities)
+    pp.pprint(parser.densities)
 
-    assert np.allclose([d['kg_m_3'] for d in rec.densities],
+    assert np.allclose([d['kg_m_3'] for d in parser.densities],
                        [892.1, 912.65, 941.667, 871.367,
                         885.867, 897.9, 932.0],
                        rtol=0.0001)
@@ -104,30 +105,30 @@ def test_alaminos(rec):
                   'density_5_c_g_ml',
                   'density_15_c_g_ml'):
         assert all([label not in v
-                    for v in rec.viscosities])
+                    for v in parser.viscosities])
 
     print 'viscosities:'
-    pp.pprint(rec.viscosities)
+    pp.pprint(parser.viscosities)
 
-    assert np.allclose([v['kg_ms'] for v in rec.viscosities],
+    assert np.allclose([v['kg_ms'] for v in parser.viscosities],
                        [0.0552867, 0.1799333, 0.6034667, 2.77,
                         0.03, 0.07509, 0.2057, 0.6874],
                        rtol=0.0001)
     assert all([m1 == m2
                 for m1, m2
-                in zip([t['method'] for t in rec.viscosities],
+                in zip([t['method'] for t in parser.viscosities],
                        ['ESTS 2003'] * 8)])
 
     for label in ('viscosity_at_0_c_mpa_s',
                   'viscosity_at_5_c_mpa_s',
                   'viscosity_at_15_c_mpa_s'):
         assert all([label not in v
-                    for v in rec.viscosities])
+                    for v in parser.viscosities])
 
     print 'interfacial tensions:'
-    pp.pprint(rec.interfacial_tensions)
+    pp.pprint(parser.interfacial_tensions)
 
-    assert np.allclose([t['n_m'] for t in rec.interfacial_tensions],
+    assert np.allclose([t['n_m'] for t in parser.interfacial_tensions],
                        [0.028255, 0.025587, 0.024750, 0.028987,
                         0.026423, 0.026486, 0.030956, 0.024932,
                         0.023723, 0.032463, 0.027856, 0.023025,
@@ -138,21 +139,21 @@ def test_alaminos(rec):
 
     assert all([m1 == m2
                 for m1, m2
-                in zip([t['method'] for t in rec.interfacial_tensions],
+                in zip([t['method'] for t in parser.interfacial_tensions],
                        ['ASTM D971 mod.'] * 22)])
 
     for label in ('surface_tension_15_c_oil_air',
                   'interfacial_tension_15_c_oil_water',
                   'interfacial_tension_15_c_oil_salt_water_3_3_nacl'):
         assert all([label not in v
-                    for v in rec.viscosities])
+                    for v in parser.viscosities])
 
     print 'flash points:'
-    pp.pprint(rec.flash_points)
+    pp.pprint(parser.flash_points)
 
     assert np.allclose([(f['min_temp_k'],
                          np.nan if f['max_temp_k'] is None else f['max_temp_k'])
-                        for f in rec.flash_points],
+                        for f in parser.flash_points],
                        [(273.15, np.nan),
                         (308.65, 308.65),
                         (348.15, 348.15),
@@ -161,13 +162,13 @@ def test_alaminos(rec):
 
     for label in ('flash_point',):
         assert all([label not in v
-                    for v in rec.viscosities])
+                    for v in parser.viscosities])
 
     print 'pour points:'
-    pp.pprint(rec.pour_points)
+    pp.pprint(parser.pour_points)
 
     assert np.allclose([(p['min_temp_k'], p['max_temp_k'])
-                        for p in rec.pour_points],
+                        for p in parser.pour_points],
                        [(201.15, 201.15),
                         (222.65, 222.65),
                         (233.15, 233.15),
@@ -176,12 +177,12 @@ def test_alaminos(rec):
 
     for label in ('pour_point',):
         assert all([label not in v
-                    for v in rec.viscosities])
+                    for v in parser.viscosities])
 
     print 'distillation cuts:'
-    pp.pprint(rec.distillation_cuts)
+    pp.pprint(parser.distillation_cuts)
 
-    assert np.allclose([c['fraction'] for c in rec.distillation_cuts],
+    assert np.allclose([c['fraction'] for c in parser.distillation_cuts],
                        [2.32, 2.97, 5.44, 7.14, 9.04, 11.24, 13.84, 16.54, 18.94, 25.64,
                         33.14, 41.14, 48.94, 57.24, 64.34, 70.44, 75.54, 80.04,
                         0L, 0L, 0.78, 1.68, 3.08, 4.98, 7.48, 10.18, 12.68, 19.88,
@@ -193,174 +194,177 @@ def test_alaminos(rec):
                        rtol=0.0001)
 
     print 'adhesions:'
-    pp.pprint(rec.adhesions)
+    pp.pprint(parser.adhesions)
 
-    assert np.allclose([a['kg_m_2'] for a in rec.adhesions],
+    assert np.allclose([a['kg_m_2'] for a in parser.adhesions],
                        [400L, 300L, 249.205, 400L],
                        rtol=0.0001)
 
     for label in ('adhesion',):
         assert all([label not in v
-                    for v in rec.adhesions])
+                    for v in parser.adhesions])
 
     print 'evaporation eqs:'
-    pp.pprint(rec.evaporation_eqs)
+    pp.pprint(parser.evaporation_eqs)
 
-    assert np.allclose((rec.evaporation_eqs[0]['a'],
-                        rec.evaporation_eqs[0]['b']),
+    assert np.allclose((parser.evaporation_eqs[0]['a'],
+                        parser.evaporation_eqs[0]['b']),
                        (2.01, 0.045),
                        rtol=0.0001)
 
     print 'emulsions:'
-    pp.pprint(rec.emulsions)
+    pp.pprint(parser.emulsions)
     # no data to test here for this record.
 
     print 'corexit:'
-    pp.pprint(rec.corexit)
+    pp.pprint(parser.corexit)
     # no data to test here for this record.
 
     print 'sulfur content:'
-    pp.pprint(rec.sulfur_content)
+    pp.pprint(parser.sulfur_content)
 
-    assert np.allclose([c['fraction'] for c in rec.sulfur_content],
+    assert np.allclose([c['fraction'] for c in parser.sulfur_content],
                        [0.009081, 0.012306, 0.013447, 0.014945],
                        rtol=0.0001)
 
     print 'water content:'
-    pp.pprint(rec.water_content)
+    pp.pprint(parser.water_content)
 
-    assert np.allclose([c['fraction'] for c in rec.water_content],
+    assert np.allclose([c['fraction'] for c in parser.water_content],
                        [0.002, 0.001, 0.001, 0.001],
                        rtol=0.0001)
 
     print 'wax content:'
-    pp.pprint(rec.wax_content)
-    assert np.allclose([c['fraction'] for c in rec.wax_content],
+    pp.pprint(parser.wax_content)
+    assert np.allclose([c['fraction'] for c in parser.wax_content],
                        [0.00504, 0.00641, 0.00594, 0.00533],
                        rtol=0.0001)
 
     print 'benzene content:'
-    pp.pprint(rec.benzene_content)
+    pp.pprint(parser.benzene_content)
 
-    assert np.allclose([c['benzene_ppm'] for c in rec.benzene_content],
+    assert np.allclose([c['benzene_ppm'] for c in parser.benzene_content],
                        [130L, 50L, 10L, 0L],
                        rtol=0.0001)
 
-    assert np.allclose([c['toluene_ppm'] for c in rec.benzene_content],
+    assert np.allclose([c['toluene_ppm'] for c in parser.benzene_content],
                        [1170L, 830L, 40L, 0L],
                        rtol=0.0001)
 
-    assert np.allclose([c['ethylbenzene_ppm'] for c in rec.benzene_content],
+    assert np.allclose([c['ethylbenzene_ppm'] for c in parser.benzene_content],
                        [510L, 460L, 130L, 0L],
                        rtol=0.0001)
 
+    print 'headspace:'
+    pp.pprint(parser.headspace)
+
     print 'biomarkers:'
-    pp.pprint(rec.biomarkers)
+    pp.pprint(parser.biomarkers)
 
     assert np.allclose([b['_14ss_h_17ss_h_20_cholestane_c27assss_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [100L, 116L, 123L, 125L])
 
     assert np.allclose([b['_14ss_h_17ss_h_20_ethylcholestane_c29assss_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [116L, 134L, 139L, 151L])
 
     assert np.allclose([b['_14ss_h_17ss_h_20_methylcholestane_c28assss_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [127L, 144L, 159L, 172L])
 
     assert np.allclose([b['_17a_h_22_29_30_trisnorhopane_c27tm_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [36.6, 43.2, 46.1, 47.4])
 
     assert np.allclose([b['_18a_22_29_30_trisnorneohopane_c27ts_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [28.2, 33.8, 35.9, 36L])
 
     assert np.allclose([b['_30_31_bishomohopane_22r_h32r_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [21.3, 24.3, 26L, 27.3])
 
     assert np.allclose([b['_30_31_bishomohopane_22s_h32s_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [27L, 30.6, 32.8, 33.8])
 
     assert np.allclose([b['_30_31_trishomohopane_22r_h33r_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [12.1, 13.5, 14.2, 15.1])
 
     assert np.allclose([b['_30_31_trishomohopane_22s_h33s_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [18.6, 22.2, 23.5, 24.8])
 
     assert np.allclose([b['_30_homohopane_22r_h31r_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [37.6, 43.5, 45.4, 48.7])
 
     assert np.allclose([b['_30_homohopane_22s_h31s_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [45.6, 52.5, 58.7, 64L])
 
     assert np.allclose([b['_30_norhopane_h29_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [94.9, 113L, 118L, 143L])
 
     assert np.allclose([b['c21_tricyclic_terpane_c21t_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [8.1, 10.2, 10.7, 11.6])
 
     assert np.allclose([b['c22_tricyclic_terpane_c22t_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [3.93, 4.41, 4.35, 5.2])
 
     assert np.allclose([b['c23_tricyclic_terpane_c23t_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [15.4, 17.1, 20.3, 20.5])
 
     assert np.allclose([b['c24_tricyclic_terpane_c24t_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [10.8, 12.2, 12.4, 12.9])
 
     assert np.allclose([b['hopane_h30_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [132L, 147L, 161L, 162L])
 
     assert np.allclose([b['pentakishomohopane_22r_h35r_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [8.12, 8.53, 9.39, 9.58])
 
     assert np.allclose([b['pentakishomohopane_22s_h35s_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [7.26, 8.58, 9.63, 9.13])
 
     assert np.allclose([b['tetrakishomohopane_22r_h34r_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [6.87, 8.45, 8.5, 8.63])
 
     assert np.allclose([b['tetrakishomohopane_22s_h34s_ppm']
-                        for b in rec.biomarkers],
+                        for b in parser.biomarkers],
                        [14.2, 16.7, 17.6, 18.8])
 
     print 'sara total fractions:'
-    pp.pprint(rec.sara_total_fractions)
+    pp.pprint(parser.sara_total_fractions)
 
     assert np.allclose([f['fraction']
-                        for f in rec.sara_total_fractions
+                        for f in parser.sara_total_fractions
                         if f['sara_type'] == 'Saturates'],
                        [0.7901, 0.7845, 0.7704, 0.7412],
                        rtol=0.0001)
     assert np.allclose([f['fraction']
-                        for f in rec.sara_total_fractions
+                        for f in parser.sara_total_fractions
                         if f['sara_type'] == 'Aromatics'],
                        [0.13160, 0.13261, 0.134498, 0.134399],
                        rtol=0.0001)
     assert np.allclose([f['fraction']
-                        for f in rec.sara_total_fractions
+                        for f in parser.sara_total_fractions
                         if f['sara_type'] == 'Resins'],
                        [0.071415, 0.076691, 0.088457, 0.11271],
                        rtol=0.0001)
     assert np.allclose([f['fraction']
-                        for f in rec.sara_total_fractions
+                        for f in parser.sara_total_fractions
                         if f['sara_type'] == 'Asphaltenes'],
                        [0.0068768, 0.0061916, 0.0066182, 0.011667],
                        rtol=0.0001)
@@ -377,7 +381,7 @@ def test_alaminos(rec):
     print
 
 
-def test_access_west(rec):
+def test_access_west(parser):
     '''
         Test an Environment Canada Record ('Access West Winter Blend')
 
@@ -385,41 +389,95 @@ def test_access_west(rec):
         record has no emulsion information.
     '''
     print
-    print 'name: {}'.format(rec.name)
-    print 'weathered: {}'.format(rec.weathering)
-    print 'reference: {}'.format(rec.reference)
+    print 'name: {}'.format(parser.name)
+    print 'weathered: {}'.format(parser.weathering)
+    print 'reference: {}'.format(parser.reference)
 
     print 'emulsions:'
-    pp.pprint(rec.emulsions)
+    pp.pprint(parser.emulsions)
 
-    assert np.allclose([d['water_content_fraction'] for d in rec.emulsions],
+    assert np.allclose([d['water_content_fraction'] for d in parser.emulsions],
                        [0.397867, 0.350256, 0.3, 0.0640556,
                         0.1559222, 0.2417778, 0.2997333, 0.0601167],
                        rtol=0.0001)
 
-    assert np.allclose([d['age_days'] for d in rec.emulsions],
+    assert np.allclose([d['age_days'] for d in parser.emulsions],
                        [0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0, 7.0],
                        rtol=0.0001)
 
-    assert np.allclose([d['ref_temp_k'] for d in rec.emulsions],
+    assert np.allclose([d['ref_temp_k'] for d in parser.emulsions],
                        [288.15] * 8,
                        rtol=0.0001)
 
     print 'corexit:'
-    pp.pprint(rec.corexit)
+    pp.pprint(parser.corexit)
 
     assert np.allclose([d['dispersant_effectiveness_fraction']
-                        for d in rec.corexit],
+                        for d in parser.corexit],
                        [0.103994, 0.1])
 
     assert np.allclose([d['replicates']
-                        for d in rec.corexit],
+                        for d in parser.corexit],
                        [6L, 6L])
 
     assert np.allclose([d['standard_deviation']
-                        for d in rec.corexit],
+                        for d in parser.corexit],
                        [1.8703, 1.2511])
 
     for label in ('water_content_w_w',):
         assert all([label not in v
-                    for v in rec.emulsions])
+                    for v in parser.emulsions])
+
+
+def test_cook_inlet(parser):
+    '''
+        Test an Environment Canada Record ('Cook Inlet [2003]')
+
+        We added testing for this record specifically because the Alaminos
+        record has no headspace information.
+    '''
+    print
+    print 'name: {}'.format(parser.name)
+    print 'weathered: {}'.format(parser.weathering)
+    print 'reference: {}'.format(parser.reference)
+
+    print 'headspace:'
+    pp.pprint(parser.headspace)
+
+    assert np.allclose([np.nan if h['n_c5_mg_g'] is None else h['n_c5_mg_g']
+                        for h in parser.headspace],
+                       [16.689, 2.59228, 0L, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if h['n_c6_mg_g'] is None else h['n_c6_mg_g']
+                        for h in parser.headspace],
+                       [9.19397, 6.52227, 0L, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if h['n_c7_mg_g'] is None else h['n_c7_mg_g']
+                        for h in parser.headspace],
+                       [5.0631, 0.159752, 0L, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if h['n_c8_mg_g'] is None else h['n_c8_mg_g']
+                        for h in parser.headspace],
+                       [5.43, 4.946, 0.266, 0L],
+                       equal_nan=True)
+
+    assert np.allclose([(np.nan if h['c5_group_mg_g'] is None
+                         else h['c5_group_mg_g'])
+                        for h in parser.headspace],
+                       [49.414, 1.692977, 0L, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([(np.nan if h['c6_group_mg_g'] is None
+                         else h['c6_group_mg_g'])
+                        for h in parser.headspace],
+                       [54.82347, 29.7478, 0L, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([(np.nan if h['c7_group_mg_g'] is None
+                         else h['c7_group_mg_g'])
+                        for h in parser.headspace],
+                       [29.2017, 26.65767, 0L, np.nan],
+                       equal_nan=True)

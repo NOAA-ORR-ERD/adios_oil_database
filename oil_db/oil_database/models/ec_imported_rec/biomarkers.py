@@ -1,15 +1,16 @@
 #
-# PyMODM model class for Environment Canada's emulsion
+# PyMODM model class for Environment Canada's biomarker
 # oil properties.
 #
 from pymodm import EmbeddedMongoModel
-from pymodm.fields import FloatField, CharField
+from pymodm.fields import FloatField
 
 
 class Biomarkers(EmbeddedMongoModel):
     '''
         Note: some of the attribute fields coming from the spreadsheet contain
-              very weird unicode characters, hence their weird slugified names.
+              greek & latin unicode characters, hence their weird slugified
+              names.
               - 0xceb1 => greek small alpha => a
               - 0xc39f => latin small sharp s => ss
     '''
@@ -83,10 +84,3 @@ class Biomarkers(EmbeddedMongoModel):
                 '_14ss_h_17ss_h_20_ethylcholestane_c29assss={0._14ss_h_17ss_h_20_ethylcholestane_c29assss_ppm}, '
                 'weathering={0.weathering})>'
                 .format(self))
-
-
-
-
-
-
-
