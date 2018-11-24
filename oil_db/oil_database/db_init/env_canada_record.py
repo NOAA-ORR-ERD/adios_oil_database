@@ -263,6 +263,138 @@ def test_oil_record(parser):
     pp.pprint(parser.ccme)
     # no data to test here for this record.
 
+    print 'n-Alkanes:'
+    pp.pprint(parser.alkanes)
+
+    assert np.allclose([a['pristane_ug_g'] for a in parser.alkanes],
+                       [1080L, 1120L, 1410L, 1330L])
+
+    assert np.allclose([a['phytane_ug_g'] for a in parser.alkanes],
+                       [920L, 1020L, 1170L, 1180L])
+
+    assert np.allclose([a['c8_ug_g'] for a in parser.alkanes],
+                       [3940L, 3160L, 380L, 360L])
+
+    assert np.allclose([a['c9_ug_g'] for a in parser.alkanes],
+                       [2980L, 2910L, 1430L, 1430L])
+
+    assert np.allclose([a['c10_ug_g'] for a in parser.alkanes],
+                       [2220L, 2220L, 1910L, 1890L])
+
+    assert np.allclose([a['c11_ug_g'] for a in parser.alkanes],
+                       [2050L, 2170L, 2260L, 2200L])
+
+    assert np.allclose([a['c12_ug_g'] for a in parser.alkanes],
+                       [1630L, 1910L, 2060L, 1980L])
+
+    assert np.allclose([a['c13_ug_g'] for a in parser.alkanes],
+                       [1280L, 1580L, 1610L, 1770L])
+
+    assert np.allclose([a['c14_ug_g'] for a in parser.alkanes],
+                       [1110L, 1110L, 1240L, 1200L])
+
+    assert np.allclose([a['c15_ug_g'] for a in parser.alkanes],
+                       [720L, 820L, 930L, 900L])
+
+    assert np.allclose([a['c16_ug_g'] for a in parser.alkanes],
+                       [420L, 480L, 520L, 480L])
+
+    assert np.allclose([a['c17_ug_g'] for a in parser.alkanes],
+                       [290L, 280L, 390L, 340L])
+
+    assert np.allclose([a['c18_ug_g'] for a in parser.alkanes],
+                       [370L, 380L, 490L, 450L])
+
+    assert np.allclose([a['c19_ug_g'] for a in parser.alkanes],
+                       [180L, 190L, 190L, 220L])
+
+    assert np.allclose([a['c20_ug_g'] for a in parser.alkanes],
+                       [320L, 350L, 400L, 430L])
+
+    assert np.allclose([a['c21_ug_g'] for a in parser.alkanes],
+                       [260L, 300L, 310L, 340L])
+
+    assert np.allclose([a['c22_ug_g'] for a in parser.alkanes],
+                       [250L, 290L, 300L, 310L])
+
+    assert np.allclose([a['c23_ug_g'] for a in parser.alkanes],
+                       [230L, 250L, 290L, 310L])
+
+    assert np.allclose([a['c24_ug_g'] for a in parser.alkanes],
+                       [280L, 230L, 300L, 320L])
+
+    assert np.allclose([a['c25_ug_g'] for a in parser.alkanes],
+                       [280L, 320L, 320L, 330L])
+
+    assert np.allclose([a['c26_ug_g'] for a in parser.alkanes],
+                       [260L, 270L, 290L, 320L])
+
+    assert np.allclose([a['c27_ug_g'] for a in parser.alkanes],
+                       [220L, 240L, 290L, 280L])
+
+    assert np.allclose([a['c28_ug_g'] for a in parser.alkanes],
+                       [150L, 190L, 290L, 140L])
+
+    assert np.allclose([a['c29_ug_g'] for a in parser.alkanes],
+                       [170L, 180L, 230L, 220L])
+
+    assert np.allclose([a['c30_ug_g'] for a in parser.alkanes],
+                       [170L, 190L, 270L, 240L])
+
+    assert np.allclose([a['c31_ug_g'] for a in parser.alkanes],
+                       [140L, 170L, 190L, 190L])
+
+    assert np.allclose([a['c32_ug_g'] for a in parser.alkanes],
+                       [120L, 120L, 140L, 130L])
+
+    assert np.allclose([a['c33_ug_g'] for a in parser.alkanes],
+                       [90L, 90L, 120L, 130L])
+
+    assert np.allclose([a['c34_ug_g'] for a in parser.alkanes],
+                       [80L, 80L, 110L, 120L])
+
+    assert np.allclose([a['c35_ug_g'] for a in parser.alkanes],
+                       [70L, 90L, 110L, 110L])
+
+    assert np.allclose([a['c36_ug_g'] for a in parser.alkanes],
+                       [40L, 50L, 60L, 70L])
+
+    assert np.allclose([a['c37_ug_g'] for a in parser.alkanes],
+                       [30L, 40L, 40L, 40L])
+
+    assert np.allclose([a['c38_ug_g'] for a in parser.alkanes],
+                       [30L, 30L, 40L, 50L])
+
+    assert np.allclose([np.nan if a['c39_ug_g'] is None else a['c39_ug_g']
+                        for a in parser.alkanes],
+                       [np.nan, np.nan, 30L, 40L],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if a['c40_ug_g'] is None else a['c40_ug_g']
+                        for a in parser.alkanes],
+                       [np.nan, np.nan, np.nan, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if a['c41_ug_g'] is None else a['c41_ug_g']
+                        for a in parser.alkanes],
+                       [np.nan, np.nan, np.nan, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if a['c42_ug_g'] is None else a['c42_ug_g']
+                        for a in parser.alkanes],
+                       [np.nan, np.nan, np.nan, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if a['c43_ug_g'] is None else a['c43_ug_g']
+                        for a in parser.alkanes],
+                       [np.nan, np.nan, np.nan, np.nan],
+                       equal_nan=True)
+
+    assert np.allclose([np.nan if a['c44_ug_g'] is None else a['c44_ug_g']
+                        for a in parser.alkanes],
+                       [np.nan, np.nan, np.nan, np.nan],
+                       equal_nan=True)
+
     print 'biomarkers:'
     pp.pprint(parser.biomarkers)
 

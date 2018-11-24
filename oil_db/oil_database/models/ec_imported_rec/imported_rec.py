@@ -28,6 +28,7 @@ from .headspace import Headspace
 from .ccme import CCMEFraction
 from .biomarkers import Biomarkers
 from .wax import Wax
+from .alkanes import NAlkane
 
 
 class ECImportedRecord(MongoModel):
@@ -52,7 +53,6 @@ class ECImportedRecord(MongoModel):
         TODO:
         - Add gas chromatography
         - Add saturates and aromatics CXX analysis
-        - Add n-Alkanes
         - Add alkylated total aromatic hydrocarbons
     '''
     oil_id = CharField(max_length=16)
@@ -97,6 +97,7 @@ class ECImportedRecord(MongoModel):
     ccme = EmbeddedDocumentListField(CCMEFraction, blank=True)
     biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
     wax_content = EmbeddedDocumentListField(Wax, blank=True)
+    alkanes = EmbeddedDocumentListField(NAlkane, blank=True)
 
     sara_total_fractions = EmbeddedDocumentListField(SARAFraction, blank=True)
 
@@ -153,6 +154,7 @@ class ECImportedRecord(MongoModel):
         self.ccme = []
         self.biomarkers = []
         self.wax_content = []
+        self.alkanes = []
         self.saturates = []
         self.aromatics = []
         self.resins = []
@@ -206,6 +208,7 @@ class ECImportedRecord(MongoModel):
                                for args in parser.biomarkers])
 
         rec.wax_content.extend([Wax(**args) for args in parser.wax_content])
+        rec.alkanes.extend([NAlkane(**args) for args in parser.alkanes])
 
         rec.sara_total_fractions.extend([SARAFraction(**args)
                                          for args

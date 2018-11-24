@@ -1301,6 +1301,46 @@ class EnvCanadaRecordParser(object):
                         if p != 'weathering'])]
 
     @property
+    def alkanes(self):
+        '''
+            The Evironment Canada data sheet contains data for n-Alkanes,
+            which we will try to capture.
+            We have a single property group in this case.
+            - Dimensional parameters are (weathering).
+            - Values Units are all ug/g as far as I can tell.
+            - We will rename the properties all with a '_ug_g' suffix to
+              indicate the units.
+            - lots of oils have no CCME measurements at all.  If all of
+              the properties are empty for a particular weathered sample,
+              we will not include it.
+            Note: One record has a couple of fields containing '/'.  Not really
+                  sure what that means, but we will nullify it for now.
+        '''
+        ccme_fractions = []
+
+        ccme_props = self.get_props_by_category('n_alkanes_ug_g_oil_'
+                                                'ests_2002a')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            kwargs = props_i
+
+            [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
+             for lbl in kwargs.keys()]
+
+            for lbl in kwargs.keys():
+                if kwargs[lbl] in ('/', ' '):
+                    kwargs[lbl] = None
+
+            kwargs['weathering'] = w
+
+            ccme_fractions.append(kwargs)
+
+        return [c for c in ccme_fractions
+                if any([c[p] is not None for p in c
+                        if p != 'weathering'])]
+
+    @property
     def biomarkers(self):
         '''
             The Evironment Canada data sheet contains data for biomarkers,
