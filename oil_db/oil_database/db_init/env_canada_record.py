@@ -257,6 +257,11 @@ def test_oil_record(parser):
 
     print 'headspace:'
     pp.pprint(parser.headspace)
+    # no data to test here for this record.
+
+    print 'CCME Fractions:'
+    pp.pprint(parser.ccme)
+    # no data to test here for this record.
 
     print 'biomarkers:'
     pp.pprint(parser.biomarkers)
@@ -385,8 +390,8 @@ def test_access_west(parser):
     '''
         Test an Environment Canada Record ('Access West Winter Blend')
 
-        We added testing for this record specifically because the Alaminos
-        record has no emulsion information.
+        We added testing for this record specifically to cover content that
+        the Alaminos record is missing.
     '''
     print
     print 'name: {}'.format(parser.name)
@@ -428,13 +433,28 @@ def test_access_west(parser):
         assert all([label not in v
                     for v in parser.emulsions])
 
+    print 'CCME Fractions:'
+    pp.pprint(parser.ccme)
+
+    assert np.allclose([c['ccme_f1_mg_g'] for c in parser.ccme],
+                       [15.5836, 15.5019, 15.3019, 1.62313, 1.59845])
+
+    assert np.allclose([c['ccme_f2_mg_g'] for c in parser.ccme],
+                       [50.0558, 53.2612, 60.108, 28.1604, 14.829])
+
+    assert np.allclose([c['ccme_f3_mg_g'] for c in parser.ccme],
+                       [193.131, 207.703, 248.135, 251.512, 248.196])
+
+    assert np.allclose([c['ccme_f4_mg_g'] for c in parser.ccme],
+                       [40.2255, 40.8225, 32.7845, 31.4471, 36.232])
+
 
 def test_cook_inlet(parser):
     '''
         Test an Environment Canada Record ('Cook Inlet [2003]')
 
-        We added testing for this record specifically because the Alaminos
-        record has no headspace information.
+        We added testing for this record specifically because neither the
+        Alaminos nor the Access West record has headspace information.
     '''
     print
     print 'name: {}'.format(parser.name)

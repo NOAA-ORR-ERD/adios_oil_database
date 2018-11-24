@@ -25,6 +25,7 @@ from .sulfur import Sulfur
 from .water import Water
 from .benzene import Benzene
 from .headspace import Headspace
+from .ccme import CCMEFraction
 from .biomarkers import Biomarkers
 from .wax import Wax
 
@@ -49,9 +50,7 @@ class ECImportedRecord(MongoModel):
               handle them when we go through our estimations.
 
         TODO:
-        - Add headspace analysis
         - Add gas chromatography
-        - Add CCME fractions
         - Add saturates and aromatics CXX analysis
         - Add n-Alkanes
         - Add alkylated total aromatic hydrocarbons
@@ -89,14 +88,13 @@ class ECImportedRecord(MongoModel):
 
     adhesions = EmbeddedDocumentListField(Adhesion, blank=True)
     evaporation_eqs = EmbeddedDocumentListField(EvaporationEq, blank=True)
-
     emulsions = EmbeddedDocumentListField(Emulsion, blank=True)
     corexit = EmbeddedDocumentListField(Corexit9500, blank=True)
-
     sulphur = EmbeddedDocumentListField(Sulfur, blank=True)
     water = EmbeddedDocumentListField(Water, blank=True)
     benzene = EmbeddedDocumentListField(Benzene, blank=True)
     headspace = EmbeddedDocumentListField(Headspace, blank=True)
+    ccme = EmbeddedDocumentListField(CCMEFraction, blank=True)
     biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
     wax_content = EmbeddedDocumentListField(Wax, blank=True)
 
@@ -152,6 +150,7 @@ class ECImportedRecord(MongoModel):
         self.water = []
         self.benzene = []
         self.headspace = []
+        self.ccme = []
         self.biomarkers = []
         self.wax_content = []
         self.saturates = []
@@ -200,8 +199,8 @@ class ECImportedRecord(MongoModel):
         rec.benzene.extend([Benzene(**args)
                             for args in parser.benzene_content])
 
-        rec.headspace.extend([Headspace(**args)
-                              for args in parser.headspace])
+        rec.headspace.extend([Headspace(**args) for args in parser.headspace])
+        rec.ccme.extend([CCMEFraction(**args) for args in parser.ccme])
 
         rec.biomarkers.extend([Biomarkers(**args)
                                for args in parser.biomarkers])
