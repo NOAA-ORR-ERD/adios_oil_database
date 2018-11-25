@@ -1301,6 +1301,100 @@ class EnvCanadaRecordParser(object):
                         if p != 'weathering'])]
 
     @property
+    def ccme_f1(self):
+        '''
+            The Evironment Canada data sheet contains data for CCME Fractions,
+            which we will try to capture.  Specifically here, we grab the F1
+            Saturate CXX values.
+            - We have a single property group in this case.
+            - Dimensional parameters are (weathering).
+            - Values Units are not specified.
+            - We will not append a suffix to the properties.
+            - lots of oils have no CCME measurements at all.  If all of
+              the properties are empty for a particular weathered sample,
+              we will not include it.
+        '''
+        ccme_saturates = []
+
+        ccme_props = self.get_props_by_category('saturates_f1_'
+                                                'ests_2002a')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            kwargs = props_i
+
+            kwargs['weathering'] = w
+
+            ccme_saturates.append(kwargs)
+
+        return [c for c in ccme_saturates
+                if any([c[p] is not None for p in c
+                        if p != 'weathering'])]
+
+    @property
+    def ccme_f2(self):
+        '''
+            The Evironment Canada data sheet contains data for CCME Fractions,
+            which we will try to capture.  Specifically here, we grab the F2
+            Aromatic CXX values.
+            - We have a single property group in this case.
+            - Dimensional parameters are (weathering).
+            - Values Units are not specified.
+            - We will not append a suffix to the properties.
+            - lots of oils have no CCME measurements at all.  If all of
+              the properties are empty for a particular weathered sample,
+              we will not include it.
+        '''
+        ccme_aromatics = []
+
+        ccme_props = self.get_props_by_category('aromatics_f2_'
+                                                'ests_2002a')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            kwargs = props_i
+
+            kwargs['weathering'] = w
+
+            ccme_aromatics.append(kwargs)
+
+        return [c for c in ccme_aromatics
+                if any([c[p] is not None for p in c
+                        if p != 'weathering'])]
+
+    @property
+    def ccme_tph(self):
+        '''
+            The Evironment Canada data sheet contains data for CCME Fractions,
+            which we will try to capture.  Specifically here, we grab the
+            GC-TPH (Gas Chromatography - Total Petroleum Hydrocarbons)
+            CXX values.
+            - We have a single property group in this case.
+            - Dimensional parameters are (weathering).
+            - Values Units are not specified.
+            - We will not append a suffix to the properties.
+            - lots of oils have no CCME measurements at all.  If all of
+              the properties are empty for a particular weathered sample,
+              we will not include it.
+        '''
+        ccme_tph = []
+
+        ccme_props = self.get_props_by_category('gc_tph_f1_f2_'
+                                                'ests_2002a')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            kwargs = props_i
+
+            kwargs['weathering'] = w
+
+            ccme_tph.append(kwargs)
+
+        return [c for c in ccme_tph
+                if any([c[p] is not None for p in c
+                        if p != 'weathering'])]
+
+    @property
     def alkanes(self):
         '''
             The Evironment Canada data sheet contains data for n-Alkanes,

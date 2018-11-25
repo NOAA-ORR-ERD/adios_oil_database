@@ -263,6 +263,18 @@ def test_oil_record(parser):
     pp.pprint(parser.ccme)
     # no data to test here for this record.
 
+    print 'CCME F1 Saturates:'
+    pp.pprint(parser.ccme_f1)
+    # no data to test here for this record.
+
+    print 'CCME F2 Aromatics:'
+    pp.pprint(parser.ccme_f2)
+    # no data to test here for this record.
+
+    print 'CCME GC-TPH:'
+    pp.pprint(parser.ccme_tph)
+    # no data to test here for this record.
+
     print 'n-Alkanes:'
     pp.pprint(parser.alkanes)
 
@@ -579,6 +591,91 @@ def test_access_west(parser):
 
     assert np.allclose([c['ccme_f4_mg_g'] for c in parser.ccme],
                        [40.2255, 40.8225, 32.7845, 31.4471, 36.232])
+
+    print 'CCME F1 Saturates:'
+    pp.pprint(parser.ccme_f1)
+
+    assert np.allclose([c['n_c8_to_n_c10'] for c in parser.ccme_f1],
+                       [18.35, 17.54, 15.98, 1.89, 1.73])
+
+    assert np.allclose([c['n_c10_to_n_c12'] for c in parser.ccme_f1],
+                       [10.82, 11.15, 12.19, 0.69, 0.5])
+
+    assert np.allclose([c['n_c12_to_n_c16'] for c in parser.ccme_f1],
+                       [29.75, 30.97, 35.75, 18.08, 7.93])
+
+    assert np.allclose([c['n_c16_to_n_c20'] for c in parser.ccme_f1],
+                       [30.84, 32.12, 37.47, 37.54, 34.77])
+
+    assert np.allclose([c['n_c20_to_n_c24'] for c in parser.ccme_f1],
+                       [21.56, 22.89, 26.19, 28.3, 29.69])
+
+    assert np.allclose([c['n_c24_to_n_c28'] for c in parser.ccme_f1],
+                       [16.03, 17.29, 19.77, 22.05, 23L])
+
+    assert np.allclose([c['n_c28_to_n_c34'] for c in parser.ccme_f1],
+                       [22.23, 24.1, 28.29, 32.11, 33.36])
+
+    assert np.allclose([c['n_c34'] for c in parser.ccme_f1],
+                       [14.79, 17.36, 14.05, 16.9, 18.57])
+
+    print 'CCME F2 Aromatics:'
+    pp.pprint(parser.ccme_f2)
+
+    assert np.allclose([c['n_c8_to_n_c10'] for c in parser.ccme_f2],
+                       [3.72, 3.9, 5.04, 1.51, 1.27])
+
+    assert np.allclose([c['n_c10_to_n_c12'] for c in parser.ccme_f2],
+                       [2.17, 2.52, 3.05, 0.95, 0.71])
+
+    assert np.allclose([c['n_c12_to_n_c16'] for c in parser.ccme_f2],
+                       [5.56, 6.42, 6.9, 5.21, 2.9])
+
+    assert np.allclose([c['n_c16_to_n_c20'] for c in parser.ccme_f2],
+                       [17.05, 18.88, 22.19, 20.95, 19.06])
+
+    assert np.allclose([c['n_c20_to_n_c24'] for c in parser.ccme_f2],
+                       [23.43, 26.01, 30.57, 29.7, 29.61])
+
+    assert np.allclose([c['n_c24_to_n_c28'] for c in parser.ccme_f2],
+                       [23.11, 25.9, 30.79, 30.45, 30.68])
+
+    assert np.allclose([c['n_c28_to_n_c34'] for c in parser.ccme_f2],
+                       [33L, 36.71, 43.91, 42.48, 42.32])
+
+    assert np.allclose([c['n_c34'] for c in parser.ccme_f2],
+                       [26.59, 23.52, 24.19, 23.92, 24.75])
+
+    print 'CCME GC-TPH:'
+    pp.pprint(parser.ccme_tph)
+
+    assert np.allclose([c['n_c8_to_n_c10'] for c in parser.ccme_tph],
+                       [15.24, 15.77, 14.66, 2.5, 1.88])
+
+    assert np.allclose([c['n_c10_to_n_c12'] for c in parser.ccme_tph],
+                       [14.17, 14.93, 15.96, 1.97, 1.11])
+
+    assert np.allclose([c['n_c12_to_n_c16'] for c in parser.ccme_tph],
+                       [37.59, 40.35, 46.13, 25.23, 11.35])
+
+    assert np.allclose([c['n_c16_to_n_c20'] for c in parser.ccme_tph],
+                       [48.43, 52.68, 60.89, 59.07, 54.53])
+
+    assert np.allclose([c['n_c20_to_n_c24'] for c in parser.ccme_tph],
+                       [45.4, 50.12, 57.96, 58.62, 60.92])
+
+    assert np.allclose([c['n_c24_to_n_c28'] for c in parser.ccme_tph],
+                       [40.4, 44.24, 52.64, 54.19, 55.03])
+
+    assert np.allclose([c['n_c28_to_n_c34'] for c in parser.ccme_tph],
+                       [58.12, 63.67, 73.49, 75.22, 73.02])
+
+    assert np.allclose([c['n_c34'] for c in parser.ccme_tph],
+                       [39.67, 35.52, 34.61, 35.95, 43.01])
+
+    assert np.allclose([c['total_tph_gc_detected_tph_undetected_tph']
+                        for c in parser.ccme_tph],
+                       [690L, 680L, 640L, 540L, 460L])
 
 
 def test_cook_inlet(parser):

@@ -25,7 +25,10 @@ from .sulfur import Sulfur
 from .water import Water
 from .benzene import Benzene
 from .headspace import Headspace
-from .ccme import CCMEFraction
+from .ccme import (CCMEFraction,
+                   CCMESaturateCxx,
+                   CCMEAromaticCxx,
+                   CCMETotalPetroleumCxx)
 from .biomarkers import Biomarkers
 from .wax import Wax
 from .alkanes import NAlkane
@@ -52,7 +55,6 @@ class ECImportedRecord(MongoModel):
 
         TODO:
         - Add gas chromatography
-        - Add saturates and aromatics CXX analysis
         - Add alkylated total aromatic hydrocarbons
     '''
     oil_id = CharField(max_length=16)
@@ -94,7 +96,12 @@ class ECImportedRecord(MongoModel):
     water = EmbeddedDocumentListField(Water, blank=True)
     benzene = EmbeddedDocumentListField(Benzene, blank=True)
     headspace = EmbeddedDocumentListField(Headspace, blank=True)
+
     ccme = EmbeddedDocumentListField(CCMEFraction, blank=True)
+    ccme_f1 = EmbeddedDocumentListField(CCMESaturateCxx, blank=True)
+    ccme_f2 = EmbeddedDocumentListField(CCMEAromaticCxx, blank=True)
+    ccme_tph = EmbeddedDocumentListField(CCMETotalPetroleumCxx, blank=True)
+
     biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
     wax_content = EmbeddedDocumentListField(Wax, blank=True)
     alkanes = EmbeddedDocumentListField(NAlkane, blank=True)
@@ -152,6 +159,9 @@ class ECImportedRecord(MongoModel):
         self.benzene = []
         self.headspace = []
         self.ccme = []
+        self.ccme_f1 = []
+        self.ccme_f2 = []
+        self.ccme_tph = []
         self.biomarkers = []
         self.wax_content = []
         self.alkanes = []
@@ -202,7 +212,14 @@ class ECImportedRecord(MongoModel):
                             for args in parser.benzene_content])
 
         rec.headspace.extend([Headspace(**args) for args in parser.headspace])
+
         rec.ccme.extend([CCMEFraction(**args) for args in parser.ccme])
+        rec.ccme_f1.extend([CCMESaturateCxx(**args)
+                            for args in parser.ccme_f1])
+        rec.ccme_f2.extend([CCMEAromaticCxx(**args)
+                            for args in parser.ccme_f2])
+        rec.ccme_tph.extend([CCMETotalPetroleumCxx(**args)
+                            for args in parser.ccme_tph])
 
         rec.biomarkers.extend([Biomarkers(**args)
                                for args in parser.biomarkers])
