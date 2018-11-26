@@ -72,6 +72,8 @@ def add_ec_record(field_indexes, values):
         test_access_west(parser)
     elif name == 'Cook Inlet [2003]':
         test_cook_inlet(parser)
+    elif name == 'Alaska North Slope [2015]':
+        test_ans_2015(parser)
 
     model_rec = ECImportedRecord.from_record_parser(parser)
     model_rec.save()
@@ -152,7 +154,8 @@ def test_oil_record(parser):
     pp.pprint(parser.flash_points)
 
     assert np.allclose([(f['min_temp_k'],
-                         np.nan if f['max_temp_k'] is None else f['max_temp_k'])
+                         np.nan if f['max_temp_k'] is None else f['max_temp_k']
+                         )
                         for f in parser.flash_points],
                        [(273.15, np.nan),
                         (308.65, 308.65),
@@ -730,3 +733,158 @@ def test_cook_inlet(parser):
                         for h in parser.headspace],
                        [29.2017, 26.65767, 0L, np.nan],
                        equal_nan=True)
+
+
+def test_ans_2015(parser):
+    '''
+        Test an Environment Canada Record ('Alaska North Slope [2015]')
+
+        We added testing for this record specifically because neither the
+        Alaminos nor the Access West record has full information regarding
+        Alkylated Total Aromatic Hydrocarbons.
+    '''
+    print
+    print 'name: {}'.format(parser.name)
+    print 'weathered: {}'.format(parser.weathering)
+    print 'reference: {}'.format(parser.reference)
+
+    print 'Alkylated Total PAHs:'
+    pp.pprint(parser.alkylated_pahs)
+
+    assert np.allclose([h['c0_n_ug_g'] for h in parser.alkylated_pahs],
+                       [501.23, 497.062, 562.063, 18.5798])
+
+    assert np.allclose([h['c1_n_ug_g'] for h in parser.alkylated_pahs],
+                       [1377.407, 1429.605, 1644.595, 651.429])
+
+    assert np.allclose([h['c2_n_ug_g'] for h in parser.alkylated_pahs],
+                       [2071.42, 2163.03, 2550.04, 2074.01])
+
+    assert np.allclose([h['c3_n_ug_g'] for h in parser.alkylated_pahs],
+                       [1808.576, 1877.226, 2253.36, 2358.36])
+
+    assert np.allclose([h['c4_n_ug_g'] for h in parser.alkylated_pahs],
+                       [960.668, 1034.37, 1232.17, 1361.22])
+
+    assert np.allclose([h['c0_p_ug_g'] for h in parser.alkylated_pahs],
+                       [177.176, 189.358, 222.785, 258.948])
+
+    assert np.allclose([h['c1_p_ug_g'] for h in parser.alkylated_pahs],
+                       [485.636, 512.634, 609.898, 698.426])
+
+    assert np.allclose([h['c2_p_ug_g'] for h in parser.alkylated_pahs],
+                       [509.739, 554.978, 650.53, 772.55])
+
+    assert np.allclose([h['c3_p_ug_g'] for h in parser.alkylated_pahs],
+                       [378.276, 418.961, 481.161, 591.442])
+
+    assert np.allclose([h['c4_p_ug_g'] for h in parser.alkylated_pahs],
+                       [176.294, 200.781, 235.131, 273.867])
+
+    assert np.allclose([h['c0_d_ug_g'] for h in parser.alkylated_pahs],
+                       [107.189, 114.282, 135.77, 155.018])
+
+    assert np.allclose([h['c1_d_ug_g'] for h in parser.alkylated_pahs],
+                       [223.272, 241.593, 285.102, 325.055])
+
+    assert np.allclose([h['c2_d_ug_g'] for h in parser.alkylated_pahs],
+                       [313.63, 328.997, 400.048, 466.152])
+
+    assert np.allclose([h['c3_d_ug_g'] for h in parser.alkylated_pahs],
+                       [259.229, 297.112, 354.178, 415.56])
+
+    assert np.allclose([h['c0_f_ug_g'] for h in parser.alkylated_pahs],
+                       [66.1633, 69.7722, 83.6901, 87.9503])
+
+    assert np.allclose([h['c1_f_ug_g'] for h in parser.alkylated_pahs],
+                       [151.852, 166.117, 188.579, 223.168])
+
+    assert np.allclose([h['c2_f_ug_g'] for h in parser.alkylated_pahs],
+                       [220.254, 242.161, 300.657, 333.752])
+
+    assert np.allclose([h['c3_f_ug_g'] for h in parser.alkylated_pahs],
+                       [233.985, 241.092, 289.031, 341.103])
+
+    assert np.allclose([h['c0_b_ug_g'] for h in parser.alkylated_pahs],
+                       [41.1182, 43.0031, 52.2015, 62.1426])
+
+    assert np.allclose([h['c1_b_ug_g'] for h in parser.alkylated_pahs],
+                       [136.905, 147.923, 178.183, 211.189])
+
+    assert np.allclose([h['c2_b_ug_g'] for h in parser.alkylated_pahs],
+                       [107.873, 115.732, 111.617, 127.963])
+
+    assert np.allclose([h['c3_b_ug_g'] for h in parser.alkylated_pahs],
+                       [173.735, 190.604, 225.836, 262.165])
+
+    assert np.allclose([h['c4_b_ug_g'] for h in parser.alkylated_pahs],
+                       [114.997, 128.406, 146.39, 170.599])
+
+    assert np.allclose([h['c0_c_ug_g'] for h in parser.alkylated_pahs],
+                       [574.627, 625.668, 714.228, 834.058])
+
+    assert np.allclose([h['c1_c_ug_g'] for h in parser.alkylated_pahs],
+                       [29.7264, 32.6557, 39.862, 44.8881])
+
+    assert np.allclose([h['c2_c_ug_g'] for h in parser.alkylated_pahs],
+                       [53.4625, 58.8883, 71.4333, 84.3131])
+
+    assert np.allclose([h['c3_c_ug_g'] for h in parser.alkylated_pahs],
+                       [78.9531, 81.3385, 96.9209, 118.691])
+
+    assert np.allclose([h['biphenyl_bph_ug_g'] for h in parser.alkylated_pahs],
+                       [125.193, 127.387, 150.938, 124.327])
+
+    assert np.allclose([h['acenaphthylene_acl_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [13.5818, 13.8726, 16.6042, 13.5393])
+
+    assert np.allclose([h['acenaphthene_ace_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [14.7703, 13.8242, 18.4567, 13.4921])
+
+    assert np.allclose([h['anthracene_an_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [3.31707, 4.25782, 4.27322, 4.15553])
+
+    assert np.allclose([h['fluoranthene_fl_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [5.18091, 5.65486, 6.36007, 5.51901])
+
+    assert np.allclose([h['pyrene_py_ug_g'] for h in parser.alkylated_pahs],
+                       [15.7844, 16.6814, 18.7447, 16.2806])
+
+    assert np.allclose([h['benz_a_anthracene_baa_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [2.81146, 2.98094, 4.02102, 2.90932])
+
+    assert np.allclose([h['benzo_b_fluoranthene_bbf_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [4.74018, 5.31054, 6.19647, 5.18296])
+
+    assert np.allclose([h['benzo_k_fluoranthene_bkf_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [0L, 0L, 0L, 0L])
+
+    assert np.allclose([h['benzo_e_pyrene_bep_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [7.57495, 8.31579, 9.94075, 8.11601])
+
+    assert np.allclose([h['benzo_a_pyrene_bap_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [2.08305, 1.70048, 2.0069, 1.65963])
+
+    assert np.allclose([h['perylene_pe_ug_g'] for h in parser.alkylated_pahs],
+                       [3.28575, 4.03732, 4.81567, 3.94033])
+
+    assert np.allclose([h['indeno_1_2_3_cd_pyrene_ip_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [0.556584, 0.604304, 0.85581, 0.589786])
+
+    assert np.allclose([h['dibenzo_ah_anthracene_da_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [1.18671, 1.35951, 1.53821, 1.32685])
+
+    assert np.allclose([h['benzo_ghi_perylene_bgp_ug_g']
+                        for h in parser.alkylated_pahs],
+                       [2.93752, 3.09327, 3.7366, 3.01896])

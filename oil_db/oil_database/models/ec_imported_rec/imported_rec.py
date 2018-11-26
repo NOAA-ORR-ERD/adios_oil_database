@@ -29,6 +29,7 @@ from .ccme import (CCMEFraction,
                    CCMESaturateCxx,
                    CCMEAromaticCxx,
                    CCMETotalPetroleumCxx)
+from .alkylated_pah import AlkylatedTotalPAH
 from .biomarkers import Biomarkers
 from .wax import Wax
 from .alkanes import NAlkane
@@ -55,7 +56,6 @@ class ECImportedRecord(MongoModel):
 
         TODO:
         - Add gas chromatography
-        - Add alkylated total aromatic hydrocarbons
     '''
     oil_id = CharField(max_length=16)
     oil_name = CharField(max_length=100)
@@ -101,6 +101,8 @@ class ECImportedRecord(MongoModel):
     ccme_f1 = EmbeddedDocumentListField(CCMESaturateCxx, blank=True)
     ccme_f2 = EmbeddedDocumentListField(CCMEAromaticCxx, blank=True)
     ccme_tph = EmbeddedDocumentListField(CCMETotalPetroleumCxx, blank=True)
+
+    alkylated_pahs = EmbeddedDocumentListField(AlkylatedTotalPAH, blank=True)
 
     biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
     wax_content = EmbeddedDocumentListField(Wax, blank=True)
@@ -162,6 +164,7 @@ class ECImportedRecord(MongoModel):
         self.ccme_f1 = []
         self.ccme_f2 = []
         self.ccme_tph = []
+        self.alkylated_pahs = []
         self.biomarkers = []
         self.wax_content = []
         self.alkanes = []
@@ -220,6 +223,9 @@ class ECImportedRecord(MongoModel):
                             for args in parser.ccme_f2])
         rec.ccme_tph.extend([CCMETotalPetroleumCxx(**args)
                             for args in parser.ccme_tph])
+
+        rec.alkylated_pahs.extend([AlkylatedTotalPAH(**args)
+                                   for args in parser.alkylated_pahs])
 
         rec.biomarkers.extend([Biomarkers(**args)
                                for args in parser.biomarkers])

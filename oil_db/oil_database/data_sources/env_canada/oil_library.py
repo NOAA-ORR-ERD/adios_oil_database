@@ -1395,6 +1395,88 @@ class EnvCanadaRecordParser(object):
                         if p != 'weathering'])]
 
     @property
+    def alkylated_pahs(self):
+        '''
+            The Evironment Canada data sheet contains data for Alkylated Total
+            Aromatic Hydrocarbons (PAHs), which we will try to capture.
+            - We have seven property groups in this case, which we will merge.
+              - Naphthalenes
+              - Phenanthrenes
+              - Dibenzothiophenes
+              - Fluorenes
+              - Benzonaphthothiophenes
+              - Chrysenes
+              - Other Priority PAHs
+            - Dimensional parameters are (weathering).
+            - Values Units are ug/g
+            - We will append a suffix '_ug_g' to the properties.
+            - lots of oils have no CCME measurements at all.  If all of
+              the properties are empty for a particular weathered sample,
+              we will not include it.
+        '''
+        alkylated_pahs = []
+
+        naphthalene_props = self.get_props_by_category('naphthalenes')
+        phenanthrene_props = self.get_props_by_category('phenanthrenes')
+
+        dibenzothiophene_props = self.get_props_by_category(
+            'dibenzothiophenes'
+        )
+
+        fluorene_props = self.get_props_by_category('fluorenes')
+
+        benzonaphthothiophene_props = self.get_props_by_category(
+            'benzonaphthothiophenes'
+        )
+
+        chrysene_props = self.get_props_by_category('chrysenes')
+
+        other_props = self.get_props_by_category(
+            'other_priority_pahs_ug_g_oil'
+        )
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i])
+                            for k, v in naphthalene_props.iteritems()])
+            kwargs = props_i
+
+            props_i = dict([(k, v[0][i])
+                            for k, v in phenanthrene_props.iteritems()])
+            kwargs.update(props_i)
+
+            props_i = dict([(k, v[0][i])
+                            for k, v in dibenzothiophene_props.iteritems()])
+            kwargs.update(props_i)
+
+            props_i = dict([(k, v[0][i])
+                            for k, v in fluorene_props.iteritems()])
+            kwargs.update(props_i)
+
+            props_i = dict([(k, v[0][i])
+                            for k, v
+                            in benzonaphthothiophene_props.iteritems()])
+            kwargs.update(props_i)
+
+            props_i = dict([(k, v[0][i])
+                            for k, v in chrysene_props.iteritems()])
+            kwargs.update(props_i)
+
+            props_i = dict([(k, v[0][i])
+                            for k, v in other_props.iteritems()])
+            kwargs.update(props_i)
+
+            [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
+             for lbl in kwargs.keys()]
+
+            kwargs['weathering'] = w
+
+            alkylated_pahs.append(kwargs)
+
+        return [c for c in alkylated_pahs
+                if any([c[p] is not None for p in c
+                        if p != 'weathering'])]
+
+    @property
     def alkanes(self):
         '''
             The Evironment Canada data sheet contains data for n-Alkanes,
