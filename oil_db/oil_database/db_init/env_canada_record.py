@@ -580,6 +580,30 @@ def test_access_west(parser):
         assert all([label not in v
                     for v in parser.emulsions])
 
+    print 'Gas Chromatography:'
+    pp.pprint(parser.chromatography)
+
+    assert np.allclose([c['gc_tph_mg_g'] for c in parser.chromatography],
+                       [298.995, 317.289, 356.33, 312.743, 300.856])
+
+    assert np.allclose([c['gc_tsh_mg_g'] for c in parser.chromatography],
+                       [164.375, 173.43, 189.687, 157.561, 149.557])
+
+    assert np.allclose([c['gc_tah_mg_g'] for c in parser.chromatography],
+                       [134.62, 143.859, 166.642, 155.182, 151.299])
+
+    assert np.allclose([c['gc_tsh_gc_tph_fraction']
+                        for c in parser.chromatography],
+                       [0.549936, 0.546794, 0.532318, 0.503816, 0.497064])
+
+    assert np.allclose([c['gc_tah_gc_tph_fraction']
+                        for c in parser.chromatography],
+                       [0.450064, 0.453206, 0.467682, 0.496184, 0.502936])
+
+    assert np.allclose([c['resolved_peaks_tph_fraction']
+                        for c in parser.chromatography],
+                       [0.0908212, 0.0894568, 0.0875669, 0.0727187, 0.061306])
+
     print 'CCME Fractions:'
     pp.pprint(parser.ccme)
 

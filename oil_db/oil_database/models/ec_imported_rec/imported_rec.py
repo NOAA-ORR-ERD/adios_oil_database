@@ -25,6 +25,7 @@ from .sulfur import Sulfur
 from .water import Water
 from .benzene import Benzene
 from .headspace import Headspace
+from .chromatography import GasChromatography
 from .ccme import (CCMEFraction,
                    CCMESaturateCxx,
                    CCMEAromaticCxx,
@@ -96,6 +97,7 @@ class ECImportedRecord(MongoModel):
     water = EmbeddedDocumentListField(Water, blank=True)
     benzene = EmbeddedDocumentListField(Benzene, blank=True)
     headspace = EmbeddedDocumentListField(Headspace, blank=True)
+    chromatography = EmbeddedDocumentListField(GasChromatography, blank=True)
 
     ccme = EmbeddedDocumentListField(CCMEFraction, blank=True)
     ccme_f1 = EmbeddedDocumentListField(CCMESaturateCxx, blank=True)
@@ -160,6 +162,7 @@ class ECImportedRecord(MongoModel):
         self.water = []
         self.benzene = []
         self.headspace = []
+        self.chromatography = []
         self.ccme = []
         self.ccme_f1 = []
         self.ccme_f2 = []
@@ -215,6 +218,9 @@ class ECImportedRecord(MongoModel):
                             for args in parser.benzene_content])
 
         rec.headspace.extend([Headspace(**args) for args in parser.headspace])
+
+        rec.chromatography.extend([GasChromatography(**args)
+                                   for args in parser.chromatography])
 
         rec.ccme.extend([CCMEFraction(**args) for args in parser.ccme])
         rec.ccme_f1.extend([CCMESaturateCxx(**args)

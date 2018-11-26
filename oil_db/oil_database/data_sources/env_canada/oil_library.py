@@ -1267,6 +1267,70 @@ class EnvCanadaRecordParser(object):
                         if p != 'weathering'])]
 
     @property
+    def chromatography(self):
+        '''
+            The Evironment Canada data sheet contains data for gas
+            chromatography analysis, which we will try to capture.
+            - We have four property groups in this case, which we will merge.
+              - GC-TPH
+              - GC-TSH
+              - GC-TAH
+              - Hydrocarbon Content Ratio
+            - Dimensional parameters are (weathering).
+            - Values Units are split between mg/g and percent.
+            - We will append the appropriate unit suffix to each property.
+            - lots of oils have no chromatography measurements at all.
+              If all of the properties are empty for a particular weathered
+              sample, we will not include it.
+        '''
+        gas_chromatography = []
+
+        gc_tph = self.get_props_by_category('gc_tph_mg_g_oil_ests_2002a')
+        gc_tsh = self.get_props_by_category('gc_tsh_mg_g_oil_ests_2002a')
+        gc_tah = self.get_props_by_category('gc_tah_mg_g_oil_ests_2002a')
+        gc_hcr = self.get_props_by_category('hydrocarbon_content_ratio_'
+                                            'ests_2002a')
+
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[0][i]) for k, v in gc_tph.iteritems()])
+            kwargs = props_i
+
+            props_i = dict([(k, v[0][i]) for k, v in gc_tsh.iteritems()])
+            kwargs.update(props_i)
+
+            props_i = dict([(k, v[0][i]) for k, v in gc_tah.iteritems()])
+            kwargs.update(props_i)
+
+            props_i = dict([(k, v[0][i]) for k, v in gc_hcr.iteritems()])
+            kwargs.update(props_i)
+
+            add_props = {'weathering': w}
+            rename_props = {
+                'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'gc_tph_mg_g',
+                'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'gc_tsh_mg_g',
+                'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'gc_tah_mg_g',
+                'gc_tsh_gc_tph': 'gc_tsh_gc_tph_fraction',
+                'gc_tah_gc_tph': 'gc_tah_gc_tph_fraction',
+                'resolved_peaks_tph': 'resolved_peaks_tph_fraction',
+            }
+            to_fraction = {'gc_tsh_gc_tph_fraction',
+                           'gc_tah_gc_tph_fraction',
+                           'resolved_peaks_tph_fraction'}
+
+            # TODO: this is starting to look a bit clunky.  Maybe just update
+            #       the dict in-place.
+            kwargs = self._build_kwargs(kwargs,
+                                        add_props=add_props,
+                                        rename_props=rename_props,
+                                        to_fraction=to_fraction)
+
+            gas_chromatography.append(kwargs)
+
+        return [g for g in gas_chromatography
+                if any([g[p] is not None for p in g
+                        if p != 'weathering'])]
+
+    @property
     def ccme(self):
         '''
             The Evironment Canada data sheet contains data for CCME Fractions,
@@ -1410,9 +1474,9 @@ class EnvCanadaRecordParser(object):
             - Dimensional parameters are (weathering).
             - Values Units are ug/g
             - We will append a suffix '_ug_g' to the properties.
-            - lots of oils have no CCME measurements at all.  If all of
-              the properties are empty for a particular weathered sample,
-              we will not include it.
+            - lots of oils have no alkylated PAH measurements at all.
+              If all of the properties are empty for a particular weathered
+              sample, we will not include it.
         '''
         alkylated_pahs = []
 
@@ -1486,7 +1550,7 @@ class EnvCanadaRecordParser(object):
             - Values Units are all ug/g as far as I can tell.
             - We will rename the properties all with a '_ug_g' suffix to
               indicate the units.
-            - lots of oils have no CCME measurements at all.  If all of
+            - lots of oils have no n-Alkane measurements at all.  If all of
               the properties are empty for a particular weathered sample,
               we will not include it.
             Note: One record has a couple of fields containing '/'.  Not really

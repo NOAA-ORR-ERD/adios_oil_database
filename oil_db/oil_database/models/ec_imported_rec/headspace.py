@@ -36,7 +36,7 @@ class Headspace(EmbeddedMongoModel):
         super(Headspace, self).__init__(**kwargs)
 
     def __repr__(self):
-        return ('<Headspace('
+        return ('<{0.__class__.__name__}('
                 'n_c5={0.n_c5_mg_g}, '
                 'n_c6={0.n_c6_mg_g}, '
                 'n_c7={0.n_c7_mg_g}, '
