@@ -162,7 +162,7 @@ def add_hopane_cells(sheet, row, ec_rec):
 
     for b in ec_rec.biomarkers:
         ret.extend((b.weathering,
-                    b.hopane_h30_ppm))
+                    b.hopane_ug_g))
 
     for i, d in enumerate(ret):
         # we start on the second row
