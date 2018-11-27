@@ -413,87 +413,87 @@ def test_oil_record(parser):
     print 'biomarkers:'
     pp.pprint(parser.biomarkers)
 
-    assert np.allclose([b['_14ss_h_17ss_h_20_cholestane_c27assss_ppm']
+    assert np.allclose([b['_14b_h_17b_h_20_cholestane_ug_g']
                         for b in parser.biomarkers],
                        [100L, 116L, 123L, 125L])
 
-    assert np.allclose([b['_14ss_h_17ss_h_20_ethylcholestane_c29assss_ppm']
+    assert np.allclose([b['_14b_h_17b_h_20_ethylcholestane_ug_g']
                         for b in parser.biomarkers],
                        [116L, 134L, 139L, 151L])
 
-    assert np.allclose([b['_14ss_h_17ss_h_20_methylcholestane_c28assss_ppm']
+    assert np.allclose([b['_14b_h_17b_h_20_methylcholestane_ug_g']
                         for b in parser.biomarkers],
                        [127L, 144L, 159L, 172L])
 
-    assert np.allclose([b['_17a_h_22_29_30_trisnorhopane_c27tm_ppm']
+    assert np.allclose([b['_17a_h_22_29_30_trisnorhopane_ug_g']
                         for b in parser.biomarkers],
                        [36.6, 43.2, 46.1, 47.4])
 
-    assert np.allclose([b['_18a_22_29_30_trisnorneohopane_c27ts_ppm']
+    assert np.allclose([b['_18a_22_29_30_trisnorneohopane_ug_g']
                         for b in parser.biomarkers],
                        [28.2, 33.8, 35.9, 36L])
 
-    assert np.allclose([b['_30_31_bishomohopane_22r_h32r_ppm']
+    assert np.allclose([b['_30_31_bishomohopane_22r_ug_g']
                         for b in parser.biomarkers],
                        [21.3, 24.3, 26L, 27.3])
 
-    assert np.allclose([b['_30_31_bishomohopane_22s_h32s_ppm']
+    assert np.allclose([b['_30_31_bishomohopane_22s_ug_g']
                         for b in parser.biomarkers],
                        [27L, 30.6, 32.8, 33.8])
 
-    assert np.allclose([b['_30_31_trishomohopane_22r_h33r_ppm']
+    assert np.allclose([b['_30_31_trishomohopane_22r_ug_g']
                         for b in parser.biomarkers],
                        [12.1, 13.5, 14.2, 15.1])
 
-    assert np.allclose([b['_30_31_trishomohopane_22s_h33s_ppm']
+    assert np.allclose([b['_30_31_trishomohopane_22s_ug_g']
                         for b in parser.biomarkers],
                        [18.6, 22.2, 23.5, 24.8])
 
-    assert np.allclose([b['_30_homohopane_22r_h31r_ppm']
+    assert np.allclose([b['_30_homohopane_22r_ug_g']
                         for b in parser.biomarkers],
                        [37.6, 43.5, 45.4, 48.7])
 
-    assert np.allclose([b['_30_homohopane_22s_h31s_ppm']
+    assert np.allclose([b['_30_homohopane_22s_ug_g']
                         for b in parser.biomarkers],
                        [45.6, 52.5, 58.7, 64L])
 
-    assert np.allclose([b['_30_norhopane_h29_ppm']
+    assert np.allclose([b['_30_norhopane_ug_g']
                         for b in parser.biomarkers],
                        [94.9, 113L, 118L, 143L])
 
-    assert np.allclose([b['c21_tricyclic_terpane_c21t_ppm']
+    assert np.allclose([b['c21_tricyclic_terpane_ug_g']
                         for b in parser.biomarkers],
                        [8.1, 10.2, 10.7, 11.6])
 
-    assert np.allclose([b['c22_tricyclic_terpane_c22t_ppm']
+    assert np.allclose([b['c22_tricyclic_terpane_ug_g']
                         for b in parser.biomarkers],
                        [3.93, 4.41, 4.35, 5.2])
 
-    assert np.allclose([b['c23_tricyclic_terpane_c23t_ppm']
+    assert np.allclose([b['c23_tricyclic_terpane_ug_g']
                         for b in parser.biomarkers],
                        [15.4, 17.1, 20.3, 20.5])
 
-    assert np.allclose([b['c24_tricyclic_terpane_c24t_ppm']
+    assert np.allclose([b['c24_tricyclic_terpane_ug_g']
                         for b in parser.biomarkers],
                        [10.8, 12.2, 12.4, 12.9])
 
-    assert np.allclose([b['hopane_h30_ppm']
+    assert np.allclose([b['hopane_ug_g']
                         for b in parser.biomarkers],
                        [132L, 147L, 161L, 162L])
 
-    assert np.allclose([b['pentakishomohopane_22r_h35r_ppm']
+    assert np.allclose([b['pentakishomohopane_22r_ug_g']
                         for b in parser.biomarkers],
                        [8.12, 8.53, 9.39, 9.58])
 
-    assert np.allclose([b['pentakishomohopane_22s_h35s_ppm']
+    assert np.allclose([b['pentakishomohopane_22s_ug_g']
                         for b in parser.biomarkers],
                        [7.26, 8.58, 9.63, 9.13])
 
-    assert np.allclose([b['tetrakishomohopane_22r_h34r_ppm']
+    assert np.allclose([b['tetrakishomohopane_22r_ug_g']
                         for b in parser.biomarkers],
                        [6.87, 8.45, 8.5, 8.63])
 
-    assert np.allclose([b['tetrakishomohopane_22s_h34s_ppm']
+    assert np.allclose([b['tetrakishomohopane_22s_ug_g']
                         for b in parser.biomarkers],
                        [14.2, 16.7, 17.6, 18.8])
 
@@ -583,20 +583,20 @@ def test_access_west(parser):
     print 'Gas Chromatography:'
     pp.pprint(parser.chromatography)
 
-    assert np.allclose([c['gc_tph_mg_g'] for c in parser.chromatography],
+    assert np.allclose([c['tph_mg_g'] for c in parser.chromatography],
                        [298.995, 317.289, 356.33, 312.743, 300.856])
 
-    assert np.allclose([c['gc_tsh_mg_g'] for c in parser.chromatography],
+    assert np.allclose([c['tsh_mg_g'] for c in parser.chromatography],
                        [164.375, 173.43, 189.687, 157.561, 149.557])
 
-    assert np.allclose([c['gc_tah_mg_g'] for c in parser.chromatography],
+    assert np.allclose([c['tah_mg_g'] for c in parser.chromatography],
                        [134.62, 143.859, 166.642, 155.182, 151.299])
 
-    assert np.allclose([c['gc_tsh_gc_tph_fraction']
+    assert np.allclose([c['tsh_tph_fraction']
                         for c in parser.chromatography],
                        [0.549936, 0.546794, 0.532318, 0.503816, 0.497064])
 
-    assert np.allclose([c['gc_tah_gc_tph_fraction']
+    assert np.allclose([c['tah_tph_fraction']
                         for c in parser.chromatography],
                        [0.450064, 0.453206, 0.467682, 0.496184, 0.502936])
 
@@ -856,59 +856,56 @@ def test_ans_2015(parser):
     assert np.allclose([h['c3_c_ug_g'] for h in parser.alkylated_pahs],
                        [78.9531, 81.3385, 96.9209, 118.691])
 
-    assert np.allclose([h['biphenyl_bph_ug_g'] for h in parser.alkylated_pahs],
+    assert np.allclose([h['biphenyl_ug_g'] for h in parser.alkylated_pahs],
                        [125.193, 127.387, 150.938, 124.327])
 
-    assert np.allclose([h['acenaphthylene_acl_ug_g']
+    assert np.allclose([h['acenaphthylene_ug_g']
                         for h in parser.alkylated_pahs],
                        [13.5818, 13.8726, 16.6042, 13.5393])
 
-    assert np.allclose([h['acenaphthene_ace_ug_g']
-                        for h in parser.alkylated_pahs],
+    assert np.allclose([h['acenaphthene_ug_g'] for h in parser.alkylated_pahs],
                        [14.7703, 13.8242, 18.4567, 13.4921])
 
-    assert np.allclose([h['anthracene_an_ug_g']
-                        for h in parser.alkylated_pahs],
+    assert np.allclose([h['anthracene_ug_g'] for h in parser.alkylated_pahs],
                        [3.31707, 4.25782, 4.27322, 4.15553])
 
-    assert np.allclose([h['fluoranthene_fl_ug_g']
-                        for h in parser.alkylated_pahs],
+    assert np.allclose([h['fluoranthene_ug_g'] for h in parser.alkylated_pahs],
                        [5.18091, 5.65486, 6.36007, 5.51901])
 
-    assert np.allclose([h['pyrene_py_ug_g'] for h in parser.alkylated_pahs],
+    assert np.allclose([h['pyrene_ug_g'] for h in parser.alkylated_pahs],
                        [15.7844, 16.6814, 18.7447, 16.2806])
 
-    assert np.allclose([h['benz_a_anthracene_baa_ug_g']
+    assert np.allclose([h['benz_a_anthracene_ug_g']
                         for h in parser.alkylated_pahs],
                        [2.81146, 2.98094, 4.02102, 2.90932])
 
-    assert np.allclose([h['benzo_b_fluoranthene_bbf_ug_g']
+    assert np.allclose([h['benzo_b_fluoranthene_ug_g']
                         for h in parser.alkylated_pahs],
                        [4.74018, 5.31054, 6.19647, 5.18296])
 
-    assert np.allclose([h['benzo_k_fluoranthene_bkf_ug_g']
+    assert np.allclose([h['benzo_k_fluoranthene_ug_g']
                         for h in parser.alkylated_pahs],
                        [0L, 0L, 0L, 0L])
 
-    assert np.allclose([h['benzo_e_pyrene_bep_ug_g']
+    assert np.allclose([h['benzo_e_pyrene_ug_g']
                         for h in parser.alkylated_pahs],
                        [7.57495, 8.31579, 9.94075, 8.11601])
 
-    assert np.allclose([h['benzo_a_pyrene_bap_ug_g']
+    assert np.allclose([h['benzo_a_pyrene_ug_g']
                         for h in parser.alkylated_pahs],
                        [2.08305, 1.70048, 2.0069, 1.65963])
 
-    assert np.allclose([h['perylene_pe_ug_g'] for h in parser.alkylated_pahs],
+    assert np.allclose([h['perylene_ug_g'] for h in parser.alkylated_pahs],
                        [3.28575, 4.03732, 4.81567, 3.94033])
 
-    assert np.allclose([h['indeno_1_2_3_cd_pyrene_ip_ug_g']
+    assert np.allclose([h['indeno_123_cd_pyrene_ug_g']
                         for h in parser.alkylated_pahs],
                        [0.556584, 0.604304, 0.85581, 0.589786])
 
-    assert np.allclose([h['dibenzo_ah_anthracene_da_ug_g']
+    assert np.allclose([h['dibenzo_ah_anthracene_ug_g']
                         for h in parser.alkylated_pahs],
                        [1.18671, 1.35951, 1.53821, 1.32685])
 
-    assert np.allclose([h['benzo_ghi_perylene_bgp_ug_g']
+    assert np.allclose([h['benzo_ghi_perylene_ug_g']
                         for h in parser.alkylated_pahs],
                        [2.93752, 3.09327, 3.7366, 3.01896])

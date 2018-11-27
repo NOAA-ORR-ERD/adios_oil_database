@@ -53,23 +53,23 @@ class AlkylatedTotalPAH(EmbeddedMongoModel):
     c3_c_ug_g = FloatField(blank=True)
 
     # Other Priority PAHs
-    biphenyl_bph_ug_g = FloatField(blank=True)
-    acenaphthylene_acl_ug_g = FloatField(blank=True)
-    acenaphthene_ace_ug_g = FloatField(blank=True)
-    anthracene_an_ug_g = FloatField(blank=True)
-    fluoranthene_fl_ug_g = FloatField(blank=True)
-    pyrene_py_ug_g = FloatField(blank=True)
+    biphenyl_ug_g = FloatField(blank=True)
+    acenaphthylene_ug_g = FloatField(blank=True)
+    acenaphthene_ug_g = FloatField(blank=True)
+    anthracene_ug_g = FloatField(blank=True)
+    fluoranthene_ug_g = FloatField(blank=True)
+    pyrene_ug_g = FloatField(blank=True)
 
-    benz_a_anthracene_baa_ug_g = FloatField(blank=True)
-    benzo_b_fluoranthene_bbf_ug_g = FloatField(blank=True)
-    benzo_k_fluoranthene_bkf_ug_g = FloatField(blank=True)
-    benzo_e_pyrene_bep_ug_g = FloatField(blank=True)
-    benzo_a_pyrene_bap_ug_g = FloatField(blank=True)
+    benz_a_anthracene_ug_g = FloatField(blank=True)
+    benzo_b_fluoranthene_ug_g = FloatField(blank=True)
+    benzo_k_fluoranthene_ug_g = FloatField(blank=True)
+    benzo_e_pyrene_ug_g = FloatField(blank=True)
+    benzo_a_pyrene_ug_g = FloatField(blank=True)
 
-    perylene_pe_ug_g = FloatField(blank=True)
-    indeno_1_2_3_cd_pyrene_ip_ug_g = FloatField(blank=True)
-    dibenzo_ah_anthracene_da_ug_g = FloatField(blank=True)
-    benzo_ghi_perylene_bgp_ug_g = FloatField(blank=True)
+    perylene_ug_g = FloatField(blank=True)
+    indeno_1_2_3_cd_pyrene_ug_g = FloatField(blank=True)
+    dibenzo_ah_anthracene_ug_g = FloatField(blank=True)
+    benzo_ghi_perylene_ug_g = FloatField(blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members

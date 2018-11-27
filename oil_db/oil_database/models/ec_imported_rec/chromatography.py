@@ -16,12 +16,12 @@ class GasChromatography(EmbeddedMongoModel):
     '''
     weathering = FloatField(default=0.0)
 
-    gc_tph_mg_g = FloatField(blank=True)
-    gc_tsh_mg_g = FloatField(blank=True)
-    gc_tah_mg_g = FloatField(blank=True)
+    tph_mg_g = FloatField(blank=True)
+    tsh_mg_g = FloatField(blank=True)
+    tah_mg_g = FloatField(blank=True)
 
-    gc_tsh_gc_tph_fraction = FloatField(blank=True)
-    gc_tah_gc_tph_fraction = FloatField(blank=True)
+    tsh_tph_fraction = FloatField(blank=True)
+    tah_tph_fraction = FloatField(blank=True)
     resolved_peaks_tph_fraction = FloatField(blank=True)
 
     def __init__(self, **kwargs):
@@ -40,11 +40,11 @@ class GasChromatography(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
-                'gc_tph_mg_g={0.gc_tph_mg_g}, '
-                'gc_tsh_mg_g={0.gc_tsh_mg_g}, '
-                'gc_tah_mg_g={0.gc_tah_mg_g}, '
-                'gc_tsh_gc_tph_fraction={0.gc_tsh_gc_tph_fraction}, '
-                'gc_tah_gc_tph_fraction={0.gc_tah_gc_tph_fraction}, '
+                'tph_mg_g={0.tph_mg_g}, '
+                'tsh_mg_g={0.tsh_mg_g}, '
+                'tah_mg_g={0.tah_mg_g}, '
+                'tsh_tph_fraction={0.tsh_tph_fraction}, '
+                'tah_tph_fraction={0.tah_tph_fraction}, '
                 'resolved_peaks_tph_fraction={0.resolved_peaks_tph_fraction}, '
                 'weathering={0.weathering})>'
                 .format(self))

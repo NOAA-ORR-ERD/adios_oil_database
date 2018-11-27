@@ -56,7 +56,7 @@ class ECImportedRecord(MongoModel):
               handle them when we go through our estimations.
 
         TODO:
-        - Add gas chromatography
+        -
     '''
     oil_id = CharField(max_length=16)
     oil_name = CharField(max_length=100)

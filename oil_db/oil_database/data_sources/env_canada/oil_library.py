@@ -1306,15 +1306,15 @@ class EnvCanadaRecordParser(object):
 
             add_props = {'weathering': w}
             rename_props = {
-                'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'gc_tph_mg_g',
-                'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'gc_tsh_mg_g',
-                'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'gc_tah_mg_g',
-                'gc_tsh_gc_tph': 'gc_tsh_gc_tph_fraction',
-                'gc_tah_gc_tph': 'gc_tah_gc_tph_fraction',
+                'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'tph_mg_g',
+                'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'tsh_mg_g',
+                'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'tah_mg_g',
+                'gc_tsh_gc_tph': 'tsh_tph_fraction',
+                'gc_tah_gc_tph': 'tah_tph_fraction',
                 'resolved_peaks_tph': 'resolved_peaks_tph_fraction',
             }
-            to_fraction = {'gc_tsh_gc_tph_fraction',
-                           'gc_tah_gc_tph_fraction',
+            to_fraction = {'tsh_tph_fraction',
+                           'tah_tph_fraction',
                            'resolved_peaks_tph_fraction'}
 
             # TODO: this is starting to look a bit clunky.  Maybe just update
@@ -1529,10 +1529,30 @@ class EnvCanadaRecordParser(object):
                             for k, v in other_props.iteritems()])
             kwargs.update(props_i)
 
+            rename_props = {
+                'biphenyl_bph': 'biphenyl',
+                'acenaphthylene_acl': 'acenaphthylene',
+                'acenaphthene_ace': 'acenaphthene',
+                'anthracene_an': 'anthracene',
+                'fluoranthene_fl': 'fluoranthene',
+                'pyrene_py': 'pyrene',
+                'benz_a_anthracene_baa': 'benz_a_anthracene',
+                'benzo_b_fluoranthene_bbf': 'benzo_b_fluoranthene',
+                'benzo_k_fluoranthene_bkf': 'benzo_k_fluoranthene',
+                'benzo_e_pyrene_bep': 'benzo_e_pyrene',
+                'benzo_a_pyrene_bap': 'benzo_a_pyrene',
+                'perylene_pe': 'perylene',
+                'indeno_1_2_3_cd_pyrene_ip': 'indeno_123_cd_pyrene',
+                'dibenzo_ah_anthracene_da': 'dibenzo_ah_anthracene',
+                'benzo_ghi_perylene_bgp': 'benzo_ghi_perylene',
+            }
+
+            kwargs = self._build_kwargs(kwargs, rename_props=rename_props)
+
             [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
              for lbl in kwargs.keys()]
 
-            kwargs['weathering'] = w
+            kwargs.update({'weathering': w})
 
             alkylated_pahs.append(kwargs)
 
@@ -1601,7 +1621,33 @@ class EnvCanadaRecordParser(object):
             props_i = dict([(k, v[0][i]) for k, v in bio_props.iteritems()])
             kwargs = props_i
 
-            [self._rename_prop(kwargs, lbl, lbl + '_ppm')
+            rename_props = {
+                'c21_tricyclic_terpane_c21t': 'c21_tricyclic_terpane',
+                'c22_tricyclic_terpane_c22t': 'c22_tricyclic_terpane',
+                'c23_tricyclic_terpane_c23t': 'c23_tricyclic_terpane',
+                'c24_tricyclic_terpane_c24t': 'c24_tricyclic_terpane',
+                '30_norhopane_h29': '30_norhopane',
+                'hopane_h30': 'hopane',
+                '30_homohopane_22s_h31s': '30_homohopane_22s',
+                '30_homohopane_22r_h31r': '30_homohopane_22r',
+                '30_31_bishomohopane_22s_h32s': '30_31_bishomohopane_22s',
+                '30_31_bishomohopane_22r_h32r': '30_31_bishomohopane_22r',
+                '30_31_trishomohopane_22s_h33s': '30_31_trishomohopane_22s',
+                '30_31_trishomohopane_22r_h33r': '30_31_trishomohopane_22r',
+                'tetrakishomohopane_22s_h34s': 'tetrakishomohopane_22s',
+                'tetrakishomohopane_22r_h34r': 'tetrakishomohopane_22r',
+                'pentakishomohopane_22s_h35s': 'pentakishomohopane_22s',
+                'pentakishomohopane_22r_h35r': 'pentakishomohopane_22r',
+                '18a_22_29_30_trisnorneohopane_c27ts': '18a_22_29_30_trisnorneohopane',
+                '17a_h_22_29_30_trisnorhopane_c27tm': '17a_h_22_29_30_trisnorhopane',
+                '14ss_h_17ss_h_20_cholestane_c27assss': '14b_h_17b_h_20_cholestane',
+                '14ss_h_17ss_h_20_methylcholestane_c28assss': '14b_h_17b_h_20_methylcholestane',
+                '14ss_h_17ss_h_20_ethylcholestane_c29assss': '14b_h_17b_h_20_ethylcholestane',
+            }
+
+            kwargs = self._build_kwargs(kwargs, rename_props=rename_props)
+
+            [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
              for lbl in kwargs.keys()]
 
             self._prepend_underscores(kwargs)
