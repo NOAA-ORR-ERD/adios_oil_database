@@ -28,6 +28,6 @@ def add_all_imported_records(settings):
         Note: we will probably want a more modular, pluggable, method for
               managing our data sources in the future.
     '''
-    # add_imported_records(settings)
+    add_imported_records(settings)
     add_ec_records(settings)
     # add_exxon_records(settings)

@@ -97,11 +97,8 @@ def create_help_feedback(request):
 
 def get_help_dir_from_config(request):
     help_dir = request.registry.settings['help_dir']
+    here = request.registry.settings['install_path']
 
-    if help_dir[0] == sep:
-        full_path = help_dir
-    else:
-        here = request.registry.settings['install_path']
-        full_path = join(here, help_dir)
+    full_path = join(here, help_dir)
 
     return full_path

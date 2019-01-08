@@ -6,7 +6,7 @@ import ujson
 from pyramid.config import Configurator
 from pyramid.renderers import JSON as JSONRenderer
 
-from oil_database.util.db_connection import connect_modb
+from oil_database.util.db_connection import connect_modm
 
 from common.views import cors_policy
 
@@ -26,7 +26,7 @@ def main(global_config, **settings):
     load_cors_origins(settings, 'cors_policy.origins')
 
     config = Configurator(settings=settings)
-    connect_modb(settings)
+    connect_modm(settings)
 
     config.add_request_method(get_json, 'json', reify=True)
     renderer = JSONRenderer(serializer=lambda v, **kw: ujson.dumps(v))

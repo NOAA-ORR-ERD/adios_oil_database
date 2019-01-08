@@ -4,7 +4,7 @@ import re
 import logging
 
 from cornice import Service
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPNotImplemented
 
 from pymodm.errors import DoesNotExist
 from bson.errors import InvalidId
@@ -12,7 +12,11 @@ from bson.errors import InvalidId
 from ..common.views import cors_policy, obj_id_from_url
 
 from oil_database.util.json import fix_bson_ids
+
+from oil_database.models.imported_rec import ImportedRecord
+from oil_database.models.ec_imported_rec import ECImportedRecord
 from oil_database.models.oil import Oil
+
 from oil_database.models.oil_props import OilProps
 from oil_database.models.category import Category
 
@@ -22,29 +26,35 @@ oil_api = Service(name='oil', path='/oil*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
-def memoize_oil_arg(func):
-    res = {}
-
-    def memoized_func(oil):
-        if oil.adios_oil_id not in res:
-            res[oil.adios_oil_id] = func(oil)
-
-        return res[oil.adios_oil_id]
-
-    return memoized_func
-
-
 @oil_api.get()
 def get_oils(request):
     '''
-        Return the searchable fields for all oils in JSON format.
+        We will do one of two possible things here.
+        1. Return the searchable fields for all oils in JSON format.
+        2. Return the JSON record of a particular oil.
+
+        Searchable fields:
+          Ok, we would like to retrieve multiple types of oil records.
+          For now, we wil request a particular oil record type, which will be
+          specified in the GET parameters.
+          - Oil (default)
+          - ImportedRecord
+          - ECImportedRecord
+
+        Specified Record:
+          Ok, the oil record could be in one of many possible collections,
+          so we will search in each of the databases for it.  We will return
+          all records matching the ID.
+          (TODO: soon, we will probably simply implement the JSON-based query
+           capabilities
     '''
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
-        try:
-            return get_oil_dict({'adios_oil_id': obj_id})
-        except DoesNotExist:
+        res = get_oil_dict(obj_id)
+        if len(res) > 0:
+            return res
+        else:
             raise HTTPNotFound()
     elif len(request.GET) > 0:
         try:
@@ -55,12 +65,44 @@ def get_oils(request):
         return [get_oil_searchable_fields(o) for o in Oil.objects.all()]
 
 
-def get_oil_dict(query_set):
+@oil_api.post()
+def insert_oil(request):
+    raise HTTPNotImplemented
+
+
+@oil_api.put()
+def update_oil(request):
+    raise HTTPNotImplemented
+
+
+@oil_api.delete()
+def delete_oil(request):
+    raise HTTPNotImplemented
+
+
+def get_oil_dict(obj_id):
+    ret = []
     # We will let the caller handle any exceptions
-    oil = Oil.objects.get(query_set)
+    for klass, query_set in ((ImportedRecord, {'adios_oil_id': obj_id}),
+                             (ECImportedRecord, {'oil_id': obj_id}),
+                             (Oil, {'adios_oil_id': obj_id})):
+        try:
+            result = klass.objects.get(query_set)
+        except (DoesNotExist, InvalidId):
+            continue
+
+        if isinstance(result, klass):
+            ret.append(jsonify_oil_record(result))
+        else:
+            ret.extend([jsonify_oil_record(o) for o in result])
+
+    return ret
+
+
+def jsonify_oil_record(oil):
     oil_dict = oil.to_son().to_dict()
 
-    get_oil_non_embedded_docs(oil_dict)
+    # get_oil_non_embedded_docs(oil_dict)
 
     fix_bson_ids(oil_dict)
 
@@ -80,7 +122,6 @@ def get_oil_non_embedded_docs(oil_dict):
                                      .to_son().to_dict())
 
 
-@memoize_oil_arg
 def get_oil_searchable_fields(oil):
         return {'adios_oil_id': oil.adios_oil_id,
                 'name': oil.name,
