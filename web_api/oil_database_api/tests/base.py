@@ -25,6 +25,11 @@ class GnomeTestCase(TestCase):
                     'pyramid.debug_routematch': 'false',
                     'pyramid.debug_authorization': 'false',
                     'pyramid.reload_templates': 'true',
+                    'mongodb.host': 'localhost',
+                    'mongodb.port': '27017',
+                    'mongodb.database': 'oil_database',
+                    'mongodb.alias': 'oil-db-app',
+                    'caps.can_modify_db': 'false',
                     }
 
         return settings
