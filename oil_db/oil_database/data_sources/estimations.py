@@ -623,7 +623,8 @@ class ImportedRecordWithEstimation(object):
 
     @classmethod
     def estimate_component_mol_wt(cls, boiling_points):
-        mw_list = np.append([est.resin_mol_wt(), est.asphaltene_mol_wt()],
+        mw_list = np.append([est.resin_mol_wt(boiling_points),
+                             est.asphaltene_mol_wt(boiling_points)],
                             zip(est.saturate_mol_wt(boiling_points),
                                 est.aromatic_mol_wt(boiling_points)))
 
@@ -636,7 +637,8 @@ class ImportedRecordWithEstimation(object):
 
     @classmethod
     def estimate_component_densities(cls, boiling_points):
-        rho_list = np.append([est.resin_density(), est.asphaltene_density()],
+        rho_list = np.append([est.resin_densities(boiling_points),
+                              est.asphaltene_densities(boiling_points)],
                              zip(est.saturate_densities(boiling_points),
                                  est.aromatic_densities(boiling_points)))
 

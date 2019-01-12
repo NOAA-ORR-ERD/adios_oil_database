@@ -7,6 +7,18 @@
 from bson.objectid import ObjectId
 
 
+def jsonify_oil_record(oil):
+    try:
+        # if we are a PyMODM object, we transform it to a dict
+        oil_dict = oil.to_son().to_dict()
+    except Exception:
+        oil_dict = oil
+
+    fix_bson_ids(oil_dict)
+
+    return oil_dict
+
+
 def fix_bson_ids(json_data):
     '''
         JSON, specifically the ujson package, is having problems representing

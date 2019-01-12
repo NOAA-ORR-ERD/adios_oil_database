@@ -11,7 +11,7 @@ from bson.errors import InvalidId
 
 from ..common.views import cors_policy, obj_id_from_url
 
-from oil_database.util.json import fix_bson_ids
+from oil_database.util.json import jsonify_oil_record
 
 from oil_database.models.imported_rec import ImportedRecord
 from oil_database.models.ec_imported_rec import ECImportedRecord
@@ -97,16 +97,6 @@ def get_oil_dict(obj_id):
             ret.extend([jsonify_oil_record(o) for o in result])
 
     return ret
-
-
-def jsonify_oil_record(oil):
-    oil_dict = oil.to_son().to_dict()
-
-    # get_oil_non_embedded_docs(oil_dict)
-
-    fix_bson_ids(oil_dict)
-
-    return oil_dict
 
 
 def get_oil_non_embedded_docs(oil_dict):

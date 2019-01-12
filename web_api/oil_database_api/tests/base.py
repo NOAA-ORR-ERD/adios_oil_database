@@ -9,11 +9,7 @@ from webtest import TestApp
 from oil_database_api import main
 
 
-class GnomeTestCase(TestCase):
-    def setUp(self):
-        here = os.path.dirname(__file__)
-        self.project_root = os.path.abspath(os.path.dirname(here))
-
+class FunctionalTestBase(TestCase):
     def get_settings(self):
 
         settings = {'cors_policy.origins': ('http://0.0.0.0:8080\n'
@@ -34,10 +30,9 @@ class GnomeTestCase(TestCase):
 
         return settings
 
-
-class FunctionalTestBase(GnomeTestCase):
     def setUp(self):
-        super(FunctionalTestBase, self).setUp()
+        here = os.path.dirname(__file__)
+        self.project_root = os.path.abspath(os.path.dirname(here))
 
         self.settings = self.get_settings()
         app = main(None, **self.settings)
