@@ -73,3 +73,21 @@ class OilTests(FunctionalTestBase):
                           'ref_temp_k',
                           'weathering'):
                     assert k in kvis
+
+    def test_post_oil(self):
+        '''
+            Not implemented yet.
+        '''
+        self.testapp.post('/oil', status=501)
+
+    def test_put_oil(self):
+        '''
+            Not implemented yet.
+        '''
+        self.testapp.put('/oil', status=501)
+
+    def test_delete_oil(self):
+        '''
+            Not implemented yet.
+        '''
+        self.testapp.delete('/oil', status=501)
