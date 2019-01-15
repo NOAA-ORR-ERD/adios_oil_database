@@ -52,23 +52,21 @@ def get_help(request):
     elif isdir(requested_file) and requested_dir is '':
         aggregate = []
         for path, _dirnames, filenames in walk(requested_file):
-            # exclude location file user guides
-            if path.count(join('model', 'locations')) == 0:
-                for fname in filenames:
-                    text = ''
-                    with open(join(path, fname), 'r') as f:
-                        text = f.read()
+            for fname in filenames:
+                text = ''
+                with open(join(path, fname), 'r') as f:
+                    text = f.read()
 
-                    parts_whole = publish_parts(text)
-                    parts = publish_parts(text, writer_name='html')
+                parts_whole = publish_parts(text)
+                parts = publish_parts(text, writer_name='html')
 
-                    html = parts['html_body']
-                    keywords = iter_keywords(parts_whole['whole'])
+                html = parts['html_body']
+                keywords = iter_keywords(parts_whole['whole'])
 
-                    aggregate.append({'path': join(path,
-                                                   fname.replace('.rst', '')),
-                                      'html': html,
-                                      'keywords': keywords})
+                aggregate.append({'path': join(path,
+                                               fname.replace('.rst', '')),
+                                  'html': html,
+                                  'keywords': keywords})
 
         return aggregate
     else:
@@ -85,7 +83,12 @@ def create_help_feedback(request):
         raise cors_exception(request, HTTPBadRequest)
 
     json_request['ts'] = int(time.time())
-    client = redis.Redis('localhost')
+
+    # find redis using redis sessions config
+    rhost = request.registry.settings.get('redis.sessions.host', 'localhost')
+    rport = request.registry.settings.get('redis.sessions.port', 6379)
+
+    client = redis.Redis(host=rhost, port=rport)
 
     if 'index' not in json_request:
         json_request['index'] = client.incr('index')
@@ -96,8 +99,15 @@ def create_help_feedback(request):
 
 
 def get_help_dir_from_config(request):
-    help_dir = request.registry.settings['help_dir']
+    '''
+        Here we try to make the configs flexible enough to reasonably handle
+        absolute & relative paths.
+        - install path should be an absolute path
+        - help_dir can be an absolute or relative path.  If relative, we will
+          prepend the install_dir.  (builtin join method should handle this)
+    '''
     here = request.registry.settings['install_path']
+    help_dir = request.registry.settings['help_dir']
 
     full_path = join(here, help_dir)
 

@@ -26,6 +26,8 @@ class FunctionalTestBase(TestCase):
                     'mongodb.database': 'oil_database',
                     'mongodb.alias': 'oil-db-app',
                     'caps.can_modify_db': 'false',
+                    'install_path': '.',
+                    'help_dir': './help'
                     }
 
         return settings
