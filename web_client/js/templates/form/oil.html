@@ -1,0 +1,29 @@
+<div class="oilContainer">
+	<form class="form-horizontal oil-form" role="form">
+		<div class="form-group">
+			<label for="search" class="col-sm-2 control-label">Search:</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="search" value="">
+			</div>
+			<label for="category" class="col-sm-2 control-label">Category:</label>
+			<div class="col-sm-3">
+				<select id="category" class="chosen-select">
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group" id="api">
+			<label for="api" class="col-sm-2 control-label">API:</label>
+			<div class="col-sm-3"><div class="sliders slider-all slider-api"></div></div>
+		</div>
+
+	</form>
+	<div class="clearfix">
+		<sup class="resultsLength">Number of results: {{ results }}</sup>
+	</div>
+	<div class="panel panel-default oilTable">
+		{{ oilTable }}
+	</div>
+</div>
+
+<div id="specificOilContainer"></div>

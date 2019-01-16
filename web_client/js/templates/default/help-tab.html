@@ -1,0 +1,26 @@
+<button type="button" class="close" data-dismiss="alert">×</button>
+
+<ul class="nav nav-tabs" role="tablist">
+    {{ tabs }}
+</ul>
+
+<div class="tab-content">
+    {{ html }}
+</div>
+
+<div class="feedback">
+    <div class="helpful">
+        Was this helpful? 
+        <a data-helpful="true" class="yes"><span></span> Yes</a>
+        <a data-helpful="false" class="no"><span></span> No</a>
+    </div>
+    <div class="response">
+        <textarea name="response"
+                  class="form-control"
+                  rows="3"
+                  placeholder="What could we do better?">
+        </textarea>
+        <a class="btn btn-primary send">Send</a>
+    </div>
+    <div class="thankyou">Thank you for your feedback!</div>
+</div>

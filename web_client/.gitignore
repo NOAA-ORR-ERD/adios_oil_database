@@ -1,0 +1,14 @@
+node_modules
+build.js
+js/lib
+dist
+style.css
+config.json
+/doc/_build
+/doc/_static
+/doc/_templates
+
+.DS_Store
+
+npm-debug.log
+*.swp
