@@ -8,11 +8,12 @@ define([
     'views/default/overview',
     'views/default/faq',
     'views/default/notfound',
-    'views/form/oil/library'
+    'views/form/oil/library',
+    'views/oil/oil_info'
 ], function($, _, Backbone,
             IndexView, MenuView, FooterView,
             OverviewView, FAQView, NotFoundView,
-            OilLibraryView) {
+            OilLibraryView, OilInfoView) {
     'use strict';
     var Router = Backbone.Router.extend({
         views: [],
@@ -26,6 +27,10 @@ define([
             
             'query': 'query',
 
+            'imported_record/:id': 'importedRecord',
+            'ec_imported_record/:id': 'ecImportedRecord',
+            'oil/:id': 'oil',
+
             '*actions': 'notfound'
         },
 
@@ -34,15 +39,12 @@ define([
                 $('.tooltip').remove();
                 this.views[view].close();
             }
+
             this.views = [];
 
             if (callback) { callback.apply(this, args); }
 
-            if (window.location.href.indexOf('trajectory') === -1 ||
-                    weboillib.model.get('mode') === 'adios' ||
-                    weboillib.model.get('mode') === 'roc') {
-                this.views.push(new FooterView());
-            }
+            this.views.push(new FooterView());
         },
 
         index: function() {
@@ -50,32 +52,51 @@ define([
             this.views.push(new IndexView());
         },
 
-        overview: function(){
+        overview: function() {
             this.menu('add');
             this.views.push(new OverviewView());
         },
 
-        faq: function(title){
+        faq: function(title) {
             this.menu('remove');
-            if (!_.isUndefined(title)){
+
+            if (!_.isUndefined(title)) {
                 this.views.push(new FAQView({topic: title}));
-            } else {
+            }
+            else {
                 this.views.push(new FAQView());
             }
         },
 
-        query: function(){
+        query: function() {
             this.menu('add');
             this.views.push(new OilLibraryView());
+            console.log('router:query...')
         },
 
-        notfound: function(actions){
+        importedRecord: function(id) {
+            console.log('Router: NOAA Filemaker Imported Record ID: ' + id);
+            this.menu('add');
+        },
+
+        ecImportedRecord: function(id) {
+            console.log('Router: Environment Canada Imported Record ID: ' + id);
+            this.menu('add');
+        },
+
+        oil: function(id) {
+            console.log('Router: Oil ID: ' + id);
+            this.menu('add');
+            this.views.push(new OilInfoView({adios_oil_id: id}));
+        },
+
+        notfound: function(actions) {
             this.menu('add');
             this.views.push(new NotFoundView());
             console.log('Not found:', actions);
         },
 
-        menu: function(action){
+        menu: function(action) {
             switch (action){
                 case 'add':
                     if (!this.menuView) {

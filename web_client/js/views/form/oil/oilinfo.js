@@ -22,10 +22,12 @@ define([
        },
 
        initialize: function(options, substanceModel) {
-          var containerClass = options.containerClass;
-          this.specificOilView = new SpecificOilView({infoMode: true, containerClass: containerClass, model: substanceModel});
+          this.specificOilView = new SpecificOilView({infoMode: true,
+                                                      model: substanceModel});
+
           this.on('wizardclose', this.hide, this);
           this.on('hidden', this.close, this);
+
           this.render();
        },
 
@@ -33,7 +35,6 @@ define([
           this.body = _.template(OilInfoTemplate);
           FormModal.prototype.render.call(this, options);
        }
-
     });
 
     return oilInfo;

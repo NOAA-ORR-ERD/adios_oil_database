@@ -56,7 +56,7 @@ define([
             'click .view-toggle .view': 'toggleView'
         },
 
-        toggleView: function(e){
+        toggleView: function(e) {
             var view;
 
             if (_.isObject(e)) {
@@ -64,7 +64,8 @@ define([
                 this.$('.view-toggle .switch').attr('class', 'switch ' + view);
 
                 weboillib.router.navigate(view, true);
-            } else {
+            }
+            else {
                 view = e;
                 this.$('.view-toggle .switch').attr('class', 'switch ' + e);
             }
@@ -74,73 +75,77 @@ define([
                                                     .data('original-title'));
         },
 
-        openAppMenu: function(event){
+        openAppMenu: function(event) {
             event.preventDefault();
+
             this.$('.app-menu').addClass('open');
             this.$('.app-menu-close').addClass('open');
             this.$('.app-menu').focus();
         },
 
-        closeAppMenu: function(){
+        closeAppMenu: function() {
             this.$('.app-menu').removeClass('open');
             this.$('.app-menu-close').removeClass('open');
         },
 
-        nothing: function(event){
+        nothing: function(event) {
             event.preventDefault();
         },
 
-        home: function(event){
+        home: function(event) {
             event.preventDefault();
             weboillib.router.navigate('', true);
         },
 
-        debugView: function(event){
+        debugView: function(event) {
             event.preventDefault();
             var checkbox = this.$('input[type="checkbox"]');
+
             if (checkbox.prop('checked')) {
                 checkbox.prop('checked', false);
-            } else {
+            }
+            else {
                 checkbox.prop('checked', true);
                 //this.trigger('debugTreeOn');
             }
+
             this.trigger('debugTreeToggle');
         },
 
-        about: function(event){
+        about: function(event) {
             event.preventDefault();
             new AboutModal().render();
         },
 
-        doc: function(event){
+        doc: function(event) {
             event.preventDefault();
             window.open("doc/");
         },
 
-        faq: function(event){
+        faq: function(event) {
             event.preventDefault();
             window.open("#faq");
         },
 
-        hotkeys: function(event){
+        hotkeys: function(event) {
             event.preventDefault();
             new HotkeysModal().render();
         },
 
-        enableMenuItem: function(item){
+        enableMenuItem: function(item) {
             this.$el.find('.' + item).show();
         },
 
-        disableMenuItem: function(item){
+        disableMenuItem: function(item) {
             this.$el.find('.' + item).hide();
         },
 
-        contextualize: function(){
+        contextualize: function() {
             this.enableMenuItem('save');
             this.enableMenuItem('edit');
         },
 
-        render: function(){
+        render: function() {
             var compiled = _.template(MenuTemplate);
             $('body').append(this.$el.html(compiled({'can_persist': weboillib.config.can_persist})));
 
@@ -159,7 +164,7 @@ define([
             });
         },
 
-        close: function(){
+        close: function() {
             $('.sweet-overlay').remove();
             $('.sweet-alert').remove();
 
