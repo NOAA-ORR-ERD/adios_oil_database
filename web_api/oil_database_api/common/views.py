@@ -13,10 +13,20 @@ logger = logging.getLogger(__name__)
 
 
 def obj_id_from_url(request):
-    # the pyramid URL parser returns a tuple of 0 or more
-    # matching items, at least when using the * wild card
+    '''
+        Get an object ID from the request URL
+        - The ID could be contained in link (/object/<id>)
+          The pyramid URL parser returns a tuple of 0 or more matching items,
+          at least when using the * wild card
+        - The ID could also be contained in GET param (/object?id=<id>)
+    '''
     obj_id = request.matchdict.get('obj_id')
-    return obj_id[0] if obj_id else None
+    obj_id = obj_id[0] if len(obj_id) > 0 else None
+
+    if obj_id is None:
+        obj_id = request.GET.get('id', None)
+
+    return obj_id
 
 
 def obj_id_from_req_payload(json_request):

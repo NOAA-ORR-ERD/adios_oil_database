@@ -3,6 +3,8 @@
 import re
 import logging
 
+import pdb
+
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPNotImplemented
 
@@ -45,8 +47,6 @@ def get_oils(request):
           Ok, the oil record could be in one of many possible collections,
           so we will search in each of the databases for it.  We will return
           all records matching the ID.
-          (TODO: soon, we will probably simply implement the JSON-based query
-           capabilities
     '''
     obj_id = obj_id_from_url(request)
 
