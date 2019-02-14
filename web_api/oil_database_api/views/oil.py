@@ -3,8 +3,6 @@
 import re
 import logging
 
-import pdb
-
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPNotImplemented
 
@@ -15,8 +13,6 @@ from ..common.views import cors_policy, obj_id_from_url
 
 from oil_database.util.json import jsonify_oil_record
 
-from oil_database.models.imported_rec import ImportedRecord
-from oil_database.models.ec_imported_rec import ECImportedRecord
 from oil_database.models.oil import Oil
 
 from oil_database.models.oil_props import OilProps
@@ -34,35 +30,19 @@ def get_oils(request):
         We will do one of two possible things here.
         1. Return the searchable fields for all oils in JSON format.
         2. Return the JSON record of a particular oil.
-
-        Searchable fields:
-          Ok, we would like to retrieve multiple types of oil records.
-          For now, we wil request a particular oil record type, which will be
-          specified in the GET parameters.
-          - Oil (default)
-          - ImportedRecord
-          - ECImportedRecord
-
-        Specified Record:
-          Ok, the oil record could be in one of many possible collections,
-          so we will search in each of the databases for it.  We will return
-          all records matching the ID.
     '''
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
         res = get_oil_dict(obj_id)
-        if len(res) > 0:
+
+        if res is not None:
             return res
         else:
             raise HTTPNotFound()
-    elif len(request.GET) > 0:
-        try:
-            return get_oil_dict(dict(request.GET))
-        except (DoesNotExist, InvalidId):
-            raise HTTPNotFound()
     else:
-        return [get_oil_searchable_fields(o) for o in Oil.objects.all()]
+        return [get_oil_searchable_fields(o)
+                for o in Oil.objects.all()]
 
 
 @oil_api.post()
@@ -81,22 +61,17 @@ def delete_oil(request):
 
 
 def get_oil_dict(obj_id):
-    ret = []
-    # We will let the caller handle any exceptions
-    for klass, query_set in ((ImportedRecord, {'adios_oil_id': obj_id}),
-                             (ECImportedRecord, {'oil_id': obj_id}),
-                             (Oil, {'adios_oil_id': obj_id})):
-        try:
-            result = klass.objects.get(query_set)
-        except (DoesNotExist, InvalidId):
-            continue
+    klass, query_set = Oil, {'adios_oil_id': obj_id}
 
-        if isinstance(result, klass):
-            ret.append(jsonify_oil_record(result))
-        else:
-            ret.extend([jsonify_oil_record(o) for o in result])
+    try:
+        result = klass.objects.get(query_set)
+    except (DoesNotExist, InvalidId):
+        return None
 
-    return ret
+    if isinstance(result, klass):
+        return jsonify_oil_record(result)
+    elif len(result) > 0:
+        return jsonify_oil_record(result[0])
 
 
 def get_oil_non_embedded_docs(oil_dict):
