@@ -34,7 +34,7 @@ define([
             $.ajaxPrefilter(_.bind(function(options, originalOptions, jqxhr) {
                 if (options.url.indexOf('http://') === -1 &&
                         options.url.indexOf('https://') === -1) {
-                    options.url = weboillib.config.oil_api + options.url;
+                    options.url = weboildb.config.oil_api + options.url;
                     // add a little cache busting so IE doesn't cache everything...
                     options.url += '?' + (Math.random()*10000000000000000);
                 }
@@ -97,11 +97,10 @@ define([
             // TODO: get the session api working on the oil api server
             //new SessionModel(function() {
             //    Backbone.history.start();
-            //    weboillib.router.navigate('overview', true);
+            //    weboildb.router.navigate('overview', true);
             //});
 
             Backbone.history.start();
-            weboillib.router.navigate('', true);
         },
 
         configure: function() {
@@ -459,10 +458,10 @@ define([
         },
 
         hasModel: function() {
-            if (_.has(weboillib, 'model') &&
-                    !_.isUndefined(weboillib.model) &&
-                    _.isObject(weboillib.model) &&
-                    !_.isUndefined(weboillib.model.get('id')))
+            if (_.has(weboildb, 'model') &&
+                    !_.isUndefined(weboildb.model) &&
+                    _.isObject(weboildb.model) &&
+                    !_.isUndefined(weboildb.model.get('id')))
             {
                 return true;
             }
@@ -474,8 +473,8 @@ define([
         },
 
         validModel: function() {
-            if (weboillib.hasModel()) {
-                if (weboillib.model.isValid()) {
+            if (weboildb.hasModel()) {
+                if (weboildb.model.isValid()) {
                     return true;
                 }
             }

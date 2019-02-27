@@ -35,6 +35,8 @@ define([
         },
 
         execute: function(callback, args) {
+            var routerThis = this;
+
             for (var view in this.views) {
                 $('.tooltip').remove();
                 this.views[view].close();
@@ -42,9 +44,14 @@ define([
 
             this.views = [];
 
-            if (callback) { callback.apply(this, args); }
+            if (callback) {
+                callback.apply(this, args);
+            }
 
-            this.views.push(new FooterView());
+            setTimeout(function() {
+                routerThis.views.push(new FooterView());
+            }, 1000);
+
         },
 
         index: function() {
@@ -71,7 +78,7 @@ define([
         query: function() {
             this.menu('add');
             this.views.push(new OilLibraryView());
-            console.log('router:query...')
+            console.log('router:query...');
         },
 
         importedRecord: function(id) {
@@ -114,7 +121,7 @@ define([
         
         _cleanup: function() {
             // Cleans up parts of the website (such as trajectory view) when necessary
-            if (!_.isUndefined(weboillib.router.trajView)) {
+            if (!_.isUndefined(weboildb.router.trajView)) {
                 this.trajView.viewer.destroy();
                 this.trajView.stopListening();
                 this.trajView.remove();

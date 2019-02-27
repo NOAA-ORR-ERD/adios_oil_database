@@ -159,18 +159,18 @@ define([
             }
 
             var encodedUrl = encodeURI(target);
-            weboillib.router.navigate('faq/' + encodedUrl);
+            weboildb.router.navigate('faq/' + encodedUrl);
         },
 
         back: function() {
             this.restoreDefault();
             this.$('.chosen-select').val('');
-            //weboillib.router.navigate('faq', {trigger: true});
+            //weboildb.router.navigate('faq', {trigger: true});
         },
 
         restoreDefault: function(clear) {
             this.defaultView = new DefaultView({topics: this.parsedData});
-            weboillib.router.navigate('faq');
+            weboildb.router.navigate('faq');
         }
     });
 

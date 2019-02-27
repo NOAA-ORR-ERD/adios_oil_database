@@ -265,13 +265,7 @@ define([
             if (this.oilId) {
                 this.$('.oilContainer').hide();
                 this.oilTable.oilLib.fetchOil(this.oilId, _.bind(function(model) {
-                    var oilModels = model.values().filter((oil) => {
-                        return (!_.isUndefined(oil._cls) && oil._cls.endsWith(".Oil"));
-                    });
-
-                    if (oilModels.length > 0) {
-                        this.specificOil = new SpecificOil({model: oilModels[0]});
-                    }
+                    this.specificOil = new SpecificOil({model: model});
                 }, this));
             }
 

@@ -10,7 +10,7 @@ define([
     var aboutModal = BaseModal.extend({
         name: 'about',
         size: 'sm',
-        title: 'About WebOilLibrary&reg;',
+        title: 'About WebOilDB&reg;',
         buttons: '<button type="button" class="cancel" data-dismiss="modal">Ok</button>',
 
         initialize: function() {

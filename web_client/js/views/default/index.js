@@ -26,7 +26,7 @@ define([
 
         query: function(event) {
             event.preventDefault();
-            weboillib.router.navigate('query', true);
+            weboildb.router.navigate('query', true);
         },
 
         oillib: function(e) {

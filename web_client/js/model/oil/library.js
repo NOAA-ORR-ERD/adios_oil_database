@@ -22,7 +22,7 @@ define([
         },
 
         url: function() {
-            return weboillib.config.oil_api + '/oil';
+            return weboildb.config.oil_api + '/oil';
         },
 
         fetchOil: function(id, cb) {

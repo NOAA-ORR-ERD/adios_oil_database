@@ -83,7 +83,7 @@ define([
             if (el.is('input[type="text"]') &&
                     _.isString(val) &&
                     val.match(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d$/) !== null) {
-                el.val(moment(val).format(weboillib.config.date_format.moment));
+                el.val(moment(val).format(weboildb.config.date_format.moment));
             }
             else if (el.is('textarea') ||
                      el.is('input[type="number"]') ||

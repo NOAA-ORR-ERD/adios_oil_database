@@ -6,7 +6,7 @@ define([
     'use strict';
     var Substance = BaseModel.extend({
         url: function() {
-            return (weboillib.config.oil_api +
+            return (weboildb.config.oil_api +
                     '/oil/?adios_oil_id=' +
                     this.get('adios_oil_id'));
         },

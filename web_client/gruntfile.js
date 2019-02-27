@@ -114,7 +114,7 @@ module.exports = function(grunt){
                 "eqeqeq": true,
                 "undef": true,
                 "globals": {
-                    "weboillib": true,
+                    "weboildb": true,
                     "console": true,
                     "alert": true,
                     "define": true,

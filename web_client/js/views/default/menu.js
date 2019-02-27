@@ -28,7 +28,7 @@ define([
         initialize: function() {
             this.render();
             this.contextualize();
-            this.listenTo(weboillib.router, 'route', this.contextualize);
+            this.listenTo(weboildb.router, 'route', this.contextualize);
         },
 
         events: {
@@ -63,7 +63,7 @@ define([
                 view = this.$(e.target).attr('class').replace('view ', '');
                 this.$('.view-toggle .switch').attr('class', 'switch ' + view);
 
-                weboillib.router.navigate(view, true);
+                weboildb.router.navigate(view, true);
             }
             else {
                 view = e;
@@ -94,7 +94,7 @@ define([
 
         home: function(event) {
             event.preventDefault();
-            weboillib.router.navigate('', true);
+            weboildb.router.navigate('', true);
         },
 
         debugView: function(event) {
@@ -147,7 +147,7 @@ define([
 
         render: function() {
             var compiled = _.template(MenuTemplate);
-            $('body').append(this.$el.html(compiled({'can_persist': weboillib.config.can_persist})));
+            $('body').append(this.$el.html(compiled({'can_persist': weboildb.config.can_persist})));
 
             this.$('a').tooltip({
                 placement: 'right',

@@ -8,7 +8,7 @@ define([
         idAttribute: "adios_oil_id",
 
         url: function() {
-            return (weboillib.config.oil_api + '/oil/' +
+            return (weboildb.config.oil_api + '/oil/' +
                     this.get('adios_oil_id'));
         },
 

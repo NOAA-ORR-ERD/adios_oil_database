@@ -3,6 +3,6 @@ require([
     'app'
 ], function(App){
     'use strict';
-    window.weboillib = App;
-    weboillib.initialize();
+    window.weboildb = App;
+    weboildb.initialize();
 });

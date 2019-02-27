@@ -14,7 +14,7 @@ define([
 
         render: function(){
             var compiled = _.template(NotFoundTemplate,
-                                      {email: weboillib.config.helpdesk});
+                                      {email: weboildb.config.helpdesk});
             $('body').append(this.$el.html(compiled));
         }
     });

@@ -13,7 +13,7 @@ define([
         },
         
         url: function() {
-            return weboillib.config.oil_api + '/distinct';
+            return weboildb.config.oil_api + '/distinct';
         },
 
         setReady: function() {

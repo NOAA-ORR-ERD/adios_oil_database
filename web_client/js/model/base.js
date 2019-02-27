@@ -76,7 +76,7 @@ define([
 
 
         // override default sync method to add a promise that will register
-        // objects with weboillib.obj_ref if it's available and the object
+        // objects with weboildb.obj_ref if it's available and the object
         // actually has an id.
         //
         // TODO: this will probably need to be changed when going to MongoDB
@@ -90,8 +90,8 @@ define([
                                                          options);
 
             xhr.always(function() {
-                if (weboillib && weboillib.obj_ref && model.get('id')) {
-                    weboillib.obj_ref[model.get('id')] = model;
+                if (weboildb && weboildb.obj_ref && model.get('id')) {
+                    weboildb.obj_ref[model.get('id')] = model;
                 }
             });
 
@@ -99,8 +99,8 @@ define([
         },
 
         setChild: function(Cls, data) {
-            if(!_.isUndefined(data) && _.has(weboillib.obj_ref, data.id)){
-                var cached_obj = weboillib.obj_ref[data.id];
+            if(!_.isUndefined(data) && _.has(weboildb.obj_ref, data.id)){
+                var cached_obj = weboildb.obj_ref[data.id];
                 return cached_obj.set(cached_obj.parse(data));
             }
 
@@ -109,7 +109,7 @@ define([
             }
 
             var obj = new Cls(data, {parse: true});
-            weboillib.obj_ref[data.id] = obj;
+            weboildb.obj_ref[data.id] = obj;
             return obj;
         },
 

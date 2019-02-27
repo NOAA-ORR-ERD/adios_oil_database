@@ -1,24 +1,26 @@
-<div id="OilInfoContainer">
+<div id="container">
     <div class="row">
         <div class="col-md-12">
             <h4>{{ data.name }}</h4>
         </div>
     </div>
+
     <div>
         <div class="pull-right estimated">
             <code>Estimated values are in red</code>
         </div>
-    	<ul class="nav nav-tabs" id="oiltabs">
-    	    <li class="generalinfo active">
-    	        <a href="#generalinfo-oil_{{ viewName }}" data-toggle="tab">General Info</a>
-    	    </li>
-    	    <li class="properties">
-    	        <a href="#properties_{{ viewName }}" data-toggle="tab">Properties</a>
-    	    </li>
-    	    <li class="distillation">
-    	        <a href="#distillation_{{ viewName }}" data-toggle="tab">Distillation</a>
-    	    </li>
-    	</ul>
+
+        	<ul class="nav nav-tabs" id="oiltabs">
+        	    <li class="generalinfo active">
+        	        <a href="#generalinfo-oil_{{ viewName }}" data-toggle="tab">General Info</a>
+        	    </li>
+        	    <li class="properties">
+        	        <a href="#properties_{{ viewName }}" data-toggle="tab">Properties</a>
+        	    </li>
+        	    <li class="distillation">
+        	        <a href="#distillation_{{ viewName }}" data-toggle="tab">Distillation</a>
+        	    </li>
+        	</ul>
 
     	<div class="tab-content">
     		<div class="tab-pane active" id="generalinfo-oil_{{ viewName }}">

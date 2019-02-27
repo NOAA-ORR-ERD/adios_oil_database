@@ -45,7 +45,7 @@ define([
                 }
             }
 
-            weboillib.router.on('route', this.close, this);
+            weboildb.router.on('route', this.close, this);
         },
 
         events: {
@@ -158,7 +158,7 @@ define([
         },
 
         close: function() {
-            weboillib.router.off('route', this.close, this);
+            weboildb.router.off('route', this.close, this);
             Backbone.View.prototype.close.call(this);
         }
     });

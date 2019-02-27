@@ -5,7 +5,7 @@ function(_, Backbone, swal) {
     'use strict';
     var sessionModel = Backbone.Model.extend({
         url: function() {
-            return weboillib.config.oil_api + '/session';
+            return weboildb.config.oil_api + '/session';
         },
         defaults: {
             'id': null,
