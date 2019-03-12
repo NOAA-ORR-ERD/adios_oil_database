@@ -30,7 +30,7 @@ class ImportedRecord(MongoModel):
               But we will go ahead and accept the record for import, and then
               handle them when we go through our estimations.
     '''
-    adios_oil_id = CharField(max_length=16)
+    oil_id = CharField(max_length=16)
     oil_name = CharField(max_length=100)
 
     custom = BooleanField(default=False)
@@ -86,7 +86,7 @@ class ImportedRecord(MongoModel):
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'oil-db-app'
-        indexes = [IndexModel([('adios_oil_id', ASCENDING)],
+        indexes = [IndexModel([('oil_id', ASCENDING)],
                               unique=True),
                    IndexModel([('oil_name', ASCENDING),
                                ('location', ASCENDING),

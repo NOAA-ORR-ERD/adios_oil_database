@@ -3,6 +3,7 @@ import logging
 import numpy as np
 
 from ..models.imported_rec import ImportedRecord
+from ..models.ec_imported_rec import ECImportedRecord
 from ..models.oil import Oil
 from ..models.common_props import (Cut, SARAFraction, SARADensity,
                                    MolecularWeight)
@@ -65,14 +66,7 @@ def process_oils():
         product.  We want it to be easy to analyze the original source
         information, so we want to keep this around unmodified.
 
-        We also want to have an oil object that has a rich set of property
-        information, including some properties that will need to be estimated.
-        This process of estimation could modify some of the original
-        information that was supplied by the source.
-
-        So we build a new record that takes the imported data and performs
-        operations to normalize the source information if necessary, and
-        fill out any missing oil property items.
+        We also want to have an oil table that contains all records.
     '''
     logger.info('Adding Oil objects...')
     for rec in ImportedRecord.objects.all():
@@ -81,19 +75,54 @@ def process_oils():
         except OilRejected as e:
             logger.warning(repr(e))
 
+    logger.info('Adding Environment Canada Oil objects...')
+    for rec in ECImportedRecord.objects.all():
+        try:
+            add_oil(rec)
+        except OilRejected as e:
+            logger.warning(repr(e))
+
 
 def add_oil(record):
+    '''
+        Originally, we wanted to populate the oil table with generalized oil
+        objects that had rich sets of properties, including estimations of
+        any necessary properties that were missing.
+
+        Our strategy has changed a bit, however.  Now we would like to simply
+        populate the table with the records directly, for better or worse.
+
+        Later, when we want to use a richly constructed record, we will do so
+        on-demand.
+    '''
+    reject_imported_record_if_requirements_not_met(record)
+
+    oil_collection = Oil._mongometa.collection
+
+    oil_collection.insert_one(record.to_son().to_dict())
+
+
+def add_oil_old(record):
+    '''
+        Note: We are no longer doing this during the database initialization,
+              but we will keep this function around to document the process.
+              We may want to do something similar when a rich oil record
+              is requested.
+    '''
     reject_imported_record_if_requirements_not_met(record)
 
     oil = generate_oil(record)
 
     reject_oil_if_bad(oil)
-
     oil.imported = record
     oil.save()
 
 
 def generate_oil(imported_rec):
+    '''
+        This is the method for creating a rich Oil record from a NOAA filemaker
+        imported record.
+    '''
     logger.info('Begin estimations for {0}'
                 .format(imported_rec.adios_oil_id))
     oil = Oil()
@@ -388,7 +417,12 @@ def reject_imported_record_if_requirements_not_met(imported_rec):
         errors.append('Imported Record has insufficient cut data')
 
     if len(errors) > 0:
-        raise OilRejected(errors, imported_rec.adios_oil_id)
+        try:
+            oil_id = imported_rec.adios_oil_id
+        except AttributeError:
+            oil_id = imported_rec.oil_id
+
+        raise OilRejected(errors, oil_id)
 
 
 def manually_rejected(imported_rec):
@@ -401,8 +435,12 @@ def manually_rejected(imported_rec):
         We should also revisit this list as we add methods to detect flaws
         in our oil record.
     '''
-    adios_oil_id = imported_rec.adios_oil_id
-    if adios_oil_id in (None,):
+    try:
+        oil_id = imported_rec.adios_oil_id
+    except AttributeError:
+        oil_id = imported_rec.oil_id
+
+    if oil_id in (None,):
         return True
 
     return False
@@ -429,9 +467,20 @@ def has_api_or_densities(imported_rec):
         This is just a primitive test, so we do not evaluate the quantities,
         simply that some kind of value exists.
     '''
-    if imported_rec.api is not None:
+    if has_api(imported_rec):
         return True
     elif len(imported_rec.densities) > 0:
+        return True
+    else:
+        return False
+
+
+def has_api(imported_rec):
+    '''
+        Env Canada record has multiple weathered APIs, so we need to account
+        for that.
+    '''
+    if (imported_rec.api is not None and imported_rec.api != []):
         return True
     else:
         return False
@@ -445,9 +494,9 @@ def has_viscosities(imported_rec):
         This is just a primitive test, so we do not evaluate the quantities,
         simply that some kind of value exists.
     '''
-    if len(imported_rec.kvis) > 0:
+    if hasattr(imported_rec, 'kvis') and len(imported_rec.kvis) > 0:
         return True
-    elif len(imported_rec.dvis) > 0:
+    elif hasattr(imported_rec, 'dvis') and len(imported_rec.dvis) > 0:
         return True
     else:
         return False
@@ -468,8 +517,7 @@ def has_distillation_cuts(imported_rec):
     if (imported_rec.product_type is not None and
             imported_rec.product_type.lower() == 'crude'):
         if (len(imported_rec.cuts) >= 3 or
-                imported_rec.api is not None or
-                len(imported_rec.densities) > 0):
+                has_api_or_densities(imported_rec)):
             return True  # cuts can be estimated if not present
         else:
             return False
@@ -507,8 +555,13 @@ def has_densities_below_pour_point(imported_rec):
             rho_temps.append(288.15)
 
         if any([(t < pour_point) for t in rho_temps]):
-            print ('\tadios_id: {}, pour_point: {}, rho_temps: {}, lt: {}'
-                   .format(imported_rec.adios_oil_id, pour_point, rho_temps,
+            try:
+                oil_id = imported_rec.adios_oil_id
+            except AttributeError:
+                oil_id = imported_rec.oil_id
+
+            print ('\toil_id: {}, pour_point: {}, rho_temps: {}, lt: {}'
+                   .format(oil_id, pour_point, rho_temps,
                            [(t < pour_point) for t in rho_temps]))
             return True
 
@@ -536,7 +589,12 @@ def reject_oil_if_bad(oil):
         errors.append('Oil API does not match its density')
 
     if len(errors) > 0:
-        raise OilRejected(errors, oil.adios_oil_id)
+        try:
+            oil_id = oil.adios_oil_id
+        except AttributeError:
+            oil_id = oil.oil_id
+
+        raise OilRejected(errors, oil_id)
 
 
 def oil_has_kvis(oil):

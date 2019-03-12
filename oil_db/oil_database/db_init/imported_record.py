@@ -71,6 +71,7 @@ def add_imported_record(file_columns, row_data):
                     for c in file_columns]
     row_dict = dict(zip(file_columns, row_data))
 
+    fix_id(row_dict)
     fix_name(row_dict)
 
     fix_location(row_dict)
@@ -92,6 +93,11 @@ def add_imported_record(file_columns, row_data):
     add_toxicity_lethal_concentrations(ir, row_dict)
 
     ir.save()
+
+
+def fix_id(kwargs):
+    kwargs['oil_id'] = kwargs['adios_oil_id'].strip()
+    del kwargs['adios_oil_id']
 
 
 def fix_name(kwargs):

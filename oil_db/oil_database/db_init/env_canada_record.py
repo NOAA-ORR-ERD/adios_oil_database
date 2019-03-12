@@ -76,7 +76,45 @@ def add_ec_record(field_indexes, values):
         test_ans_2015(parser)
 
     model_rec = ECImportedRecord.from_record_parser(parser)
+
+    set_product_type(model_rec)
+
     model_rec.save()
+
+
+def set_product_type(record):
+    if product_type_is_probably_refined(record):
+        record.product_type = 'refined'
+    else:
+        record.product_type = 'crude'
+
+
+def product_type_is_probably_refined(record):
+    '''
+        We don't have a lot of options determining what product type the
+        Env Canada records are.  The Source, Comments, and Reference fields
+        might be used, but they are pretty unreliable.
+
+        But we might be able to make some guesses based on the name of the
+        product.  This is definitely not a great way to do it, but we need
+        to make a determination somehow.  Just be careful about generating
+        false-positives and false-negatives.
+    '''
+    name = record.oil_name.lower().split()
+
+    for word in name:
+        # if these words appear anywhere in the name, we will assume refined
+        if word in ('fuel', 'diesel', 'biodiesel',
+                    'ifo', 'hfo', 'lube'):
+            return True
+
+    # check for specific 2-word tokens
+    for token in zip(name, name[1:]):
+        if token in (('bunker', 'c'),
+                     ('swepco', '737')):
+            return True
+
+    return False
 
 
 def test_oil_record(parser):

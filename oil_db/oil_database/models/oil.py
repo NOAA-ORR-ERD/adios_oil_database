@@ -18,7 +18,7 @@ class Oil(MongoModel):
     '''
         This is the main oil object that is built from an imported record.
     '''
-    adios_oil_id = CharField(max_length=16)
+    oil_id = CharField(max_length=16)
     name = CharField(max_length=100)
 
     api = FloatField(blank=True)
@@ -76,7 +76,7 @@ class Oil(MongoModel):
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'oil-db-app'
-        indexes = [IndexModel([('adios_oil_id', ASCENDING)],
+        indexes = [IndexModel([('oil_id', ASCENDING)],
                               unique=True)]
 
     def __init__(self, **kwargs):
