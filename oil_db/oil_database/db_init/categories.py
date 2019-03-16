@@ -30,7 +30,7 @@ from ..models.category import Category
 
 
 from ..data_sources.estimations import ImportedRecordWithEstimation
-from ..data_sources.oil_library import OilLibraryFile
+from ..data_sources.oil_library import OilLibraryCsvFile
 
 logger = logging.getLogger(__name__)
 
@@ -370,7 +370,7 @@ def manually_recategorize_oils(settings):
         processes have completed.
     '''
     fn = settings['blacklist.file']
-    fd = OilLibraryFile(fn)
+    fd = OilLibraryCsvFile(fn)
     logger.info('blacklist file version: {}'.format(fd.__version__))
 
     logger.info('Re-categorizing oils in our blacklist')

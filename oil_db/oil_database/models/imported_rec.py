@@ -6,9 +6,7 @@ from pymongo.write_concern import WriteConcern
 from pymongo import IndexModel, ASCENDING
 
 from pymodm import MongoModel
-from pymodm.fields import (CharField,
-                           BooleanField,
-                           FloatField,
+from pymodm.fields import (MongoBaseField, CharField, BooleanField, FloatField,
                            EmbeddedDocumentListField)
 
 from .common_props import Synonym, Density, KVis, DVis, Cut, Toxicity
@@ -33,47 +31,54 @@ class ImportedRecord(MongoModel):
     oil_id = CharField(max_length=16)
     oil_name = CharField(max_length=100)
 
-    custom = BooleanField(default=False)
+    product_type = CharField(choices=('crude', 'refined'), blank=True)
     location = CharField(max_length=64, blank=True)
     field_name = CharField(max_length=64)
     reference = CharField(max_length=80 * 20, blank=True)
-    reference_date = CharField(max_length=22)
-    api = FloatField(blank=True)
-    pour_point_min_k = FloatField(blank=True)
-    pour_point_max_k = FloatField(blank=True)
-    product_type = CharField(max_length=16, blank=True)
+    reference_date = CharField(max_length=10, blank=True)
     comments = CharField(max_length=80 * 5, blank=True)
-    asphaltenes = FloatField(blank=True)
-    wax_content = FloatField(blank=True)
-    aromatics = FloatField(blank=True)
-    water_content_emulsion = FloatField(blank=True)
-    emuls_constant_min = FloatField(blank=True)
-    emuls_constant_max = FloatField(blank=True)
+
+    cut_units = CharField(choices=('weight', 'volume'), blank=True)
+    oil_class = CharField(choices=('group 1', 'group 2', 'group 3', 'group 4'),
+                          blank=True)
+    preferred_oils = BooleanField(default=False)
+
+    api = FloatField(blank=True)
+
     flash_point_min_k = FloatField(blank=True)
     flash_point_max_k = FloatField(blank=True)
+    pour_point_min_k = FloatField(blank=True)
+    pour_point_max_k = FloatField(blank=True)
+
     oil_water_interfacial_tension_n_m = FloatField(blank=True)
     oil_water_interfacial_tension_ref_temp_k = FloatField(blank=True)
     oil_seawater_interfacial_tension_n_m = FloatField(blank=True)
     oil_seawater_interfacial_tension_ref_temp_k = FloatField(blank=True)
-    cut_units = CharField(max_length=16, blank=True)
-    oil_class = CharField(max_length=16, blank=True)
-    adhesion = FloatField(blank=True)
+
+    saturates = FloatField(blank=True)
+    aromatics = FloatField(blank=True)
+    resins = FloatField(blank=True)
+    asphaltenes = FloatField(blank=True)
+
+    wax_content = FloatField(blank=True)
+    paraffins = FloatField(blank=True)
     benzene = FloatField(blank=True)
     naphthenes = FloatField(blank=True)
-    paraffins = FloatField(blank=True)
     polars = FloatField(blank=True)
-    resins = FloatField(blank=True)
-    saturates = FloatField(blank=True)
     sulphur = FloatField(blank=True)
-    reid_vapor_pressure = FloatField(blank=True)
-    viscosity_multiplier = FloatField(blank=True)
     nickel = FloatField(blank=True)
     vanadium = FloatField(blank=True)
+
+    adhesion = FloatField(blank=True)
+    dispersability_temp_k = FloatField(blank=True)
+    viscosity_multiplier = FloatField(blank=True)
+    emuls_constant_min = FloatField(blank=True)
+    emuls_constant_max = FloatField(blank=True)
+    water_content_emulsion = FloatField(blank=True)
+    reid_vapor_pressure = FloatField(blank=True)
     conrandson_residuum = FloatField(blank=True)
     conrandson_crude = FloatField(blank=True)
-    dispersability_temp_k = FloatField(blank=True)
-    preferred_oils = BooleanField(default=False)
-    k0y = FloatField()
+    k0y = FloatField(blank=True)
 
     # relationship fields
     synonyms = EmbeddedDocumentListField(Synonym, blank=True)
@@ -103,25 +108,57 @@ class ImportedRecord(MongoModel):
 
         super(ImportedRecord, self).__init__(**kwargs)
 
-        # It's amazing that PyMODM wouldn't do this for you automatically.
-        # Basically, attributes of type EmbeddedDocumentListField kinda don't
-        # exist until they are assigned a value.  You can print these
-        # attributes, and they look like an empty list that you can use.
-        # But try appending something to them and nothing happens.
-        # The trick is you have to assign a list [] to them before they
-        # can be used.
-        # I have seen some projects pass in a default=[] argument to the
-        # constructor of EmbeddedDocumentListField, but that's an almost
-        # guaranteed source of bugs in Python.  You should almost never choose
-        # a container type for a default argument to a function.  In fact,
-        # I tried it and got some crazy distillation cuts on a few records.
-        # So we make the inital assignment here.
-        self.synonyms = []
-        self.densities = []
-        self.kvis = []
-        self.dvis = []
-        self.cuts = []
-        self.toxicities = []
+    @classmethod
+    def from_record_parser(cls, parser):
+        '''
+            It is intended that the database object constructor need not know
+            how to build properties from the raw record data coming from a
+            data source.  That is the job of the record parser.
+
+            The parser takes a set of record data and exposes a set of suitable
+            properties for building our class.
+        '''
+        kwargs = {}
+
+        cls._set_scalar_properties(kwargs, parser)
+        cls._set_embedded_list_properties(kwargs, parser)
+
+        rec = cls(**kwargs)
+
+        return rec
+
+    @classmethod
+    def _set_scalar_properties(cls, kwargs, parser):
+        '''
+            Here, we handle the parser properties that contain a single
+            scalar value.
+        '''
+        parser_api = parser.get_interface_properties()
+
+        for attr, value in cls.__dict__.iteritems():
+            if (attr in parser_api and
+                    isinstance(value, MongoBaseField) and
+                    not isinstance(value, EmbeddedDocumentListField)):
+                kwargs[attr] = getattr(parser, attr)
+
+    @classmethod
+    def _set_embedded_list_properties(cls, kwargs, parser):
+        '''
+            Here, we handle the parser properties that contain a list of
+            embedded documents.
+        '''
+        parser_api = parser.get_interface_properties()
+
+        for attr, value in cls.__dict__.iteritems():
+            if (attr in parser_api and
+                    isinstance(value, EmbeddedDocumentListField)):
+                embedded_model = value.related_model
+
+                if getattr(parser, attr) is None:
+                    kwargs[attr] = None
+                else:
+                    kwargs[attr] = [embedded_model(**sub_kwargs)
+                                    for sub_kwargs in getattr(parser, attr)]
 
     def __repr__(self):
         return "<ImportedRecord('{}')>".format(self.oil_name)

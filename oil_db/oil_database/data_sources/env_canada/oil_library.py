@@ -139,7 +139,7 @@ class EnvCanadaOilExcelFile(object):
             one.
         '''
         for name in self.col_indexes:
-            yield self.get_record(name)
+            yield self.field_indexes, self.get_record(name)
 
 
 class EnvCanadaRecordParser(object):

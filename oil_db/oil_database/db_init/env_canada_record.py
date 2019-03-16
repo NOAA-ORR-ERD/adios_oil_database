@@ -35,19 +35,17 @@ def add_ec_records(settings):
         print('Adding new records to database')
 
         rowcount = 0
-        for rec in fd.get_records():
+        for record_data in fd.get_records():
+            parser = EnvCanadaRecordParser(*record_data)
+
             try:
-                add_ec_record(fd.field_indexes, rec)
+                add_ec_record(parser)
             except ValidationError as e:
-                parser = EnvCanadaRecordParser(fd.field_indexes, rec)
-                rec_id = tc.change(parser.ec_oil_id, 'red')
-
-                print ('validation failed for {}: {}'.format(rec_id, e))
+                print ('validation failed for {}: {}'
+                       .format(tc.change(parser.ec_oil_id, 'red'), e))
             except DuplicateKeyError as e:
-                parser = EnvCanadaRecordParser(fd.field_indexes, rec)
-                rec_id = tc.change(parser.ec_oil_id, 'red')
-
-                print ('duplicate fields for {}: {}'.format(rec_id, e))
+                print ('duplicate fields for {}: {}'
+                       .format(tc.change(parser.ec_oil_id, 'red'), e))
 
             if rowcount % 100 == 0:
                 sys.stderr.write('.')
@@ -57,23 +55,12 @@ def add_ec_records(settings):
         print('finished!!!  {0} rows processed.'.format(rowcount))
 
 
-def add_ec_record(field_indexes, values):
+def add_ec_record(parser):
     '''
         Add an Environment Canada Record
     '''
-    parser = EnvCanadaRecordParser(field_indexes, values)
-    name = parser.name
-
-    # For now, we will debug only certain records.
-    # TODO: we need to turn this into a suite of pytests
-    if name == 'Alaminos Canyon Block 25':
-        test_oil_record(parser)
-    elif name == 'Access West Winter Blend':
-        test_access_west(parser)
-    elif name == 'Cook Inlet [2003]':
-        test_cook_inlet(parser)
-    elif name == 'Alaska North Slope [2015]':
-        test_ans_2015(parser)
+    # diagnostic only to test the parser is doing the right things.
+    test_parser(parser)
 
     model_rec = ECImportedRecord.from_record_parser(parser)
 
@@ -115,6 +102,21 @@ def product_type_is_probably_refined(record):
             return True
 
     return False
+
+
+def test_parser(parser):
+    name = parser.name
+
+    # For now, we will debug only certain records.
+    # TODO: we need to turn this into a suite of pytests
+    if name == 'Alaminos Canyon Block 25':
+        test_oil_record(parser)
+    elif name == 'Access West Winter Blend':
+        test_access_west(parser)
+    elif name == 'Cook Inlet [2003]':
+        test_cook_inlet(parser)
+    elif name == 'Alaska North Slope [2015]':
+        test_ans_2015(parser)
 
 
 def test_oil_record(parser):
