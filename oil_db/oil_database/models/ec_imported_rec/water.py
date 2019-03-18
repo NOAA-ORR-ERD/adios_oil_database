@@ -28,8 +28,11 @@ class Water(EmbeddedMongoModel):
 
         super(Water, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return ('<Water('
                 'fraction={0.fraction}, '
-                'weathering={0.weathering})>'
+                'w={0.weathering})>'
                 .format(self))

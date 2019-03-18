@@ -32,8 +32,11 @@ class Corexit9500(EmbeddedMongoModel):
 
         super(Corexit9500, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return ('<Corexit9500('
                 'effectiveness={0.dispersant_effectiveness_fraction:0.3g}, '
-                'weathering={0.weathering})>'
+                'w={0.weathering})>'
                 .format(self))

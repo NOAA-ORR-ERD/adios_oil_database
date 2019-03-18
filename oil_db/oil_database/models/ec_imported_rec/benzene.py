@@ -44,8 +44,11 @@ class Benzene(EmbeddedMongoModel):
 
         super(Benzene, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return ('<Benzene('
                 'benzene={0.benzene_ppm}ppm, '
-                'weathering={0.weathering})>'
+                'w={0.weathering})>'
                 .format(self))

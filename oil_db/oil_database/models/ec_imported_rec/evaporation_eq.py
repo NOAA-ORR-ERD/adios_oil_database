@@ -47,8 +47,11 @@ class EvaporationEq(EmbeddedMongoModel):
     def calculate_mass_loss2(self, t, T):
         return self.a + self.b * np.log(t + self.c)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return ('<EvaporationEq(a={0.a}, b={0.b}, c={0.c}, '
                 'eq="{0.equation}", '
-                'weathering={0.weathering})>'
+                'w={0.weathering})>'
                 .format(self))

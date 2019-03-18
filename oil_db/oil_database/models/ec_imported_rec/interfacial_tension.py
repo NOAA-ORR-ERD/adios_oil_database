@@ -32,7 +32,10 @@ class InterfacialTension(EmbeddedMongoModel):
 
         super(InterfacialTension, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return ('<InterfacialTension({0.n_m} N/m at {0.ref_temp_k}K, '
-                'if={0.interface})>'
+                'if={0.interface}, w={0.weathering})>'
                 .format(self))

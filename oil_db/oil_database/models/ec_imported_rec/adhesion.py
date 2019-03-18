@@ -28,6 +28,9 @@ class Adhesion(EmbeddedMongoModel):
 
         super(Adhesion, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
-        return ('<Adhesion({0.kg_m_2} kg/m^2, weathering={0.weathering})>'
+        return ('<Adhesion({0.kg_m_2} kg/m^2, w={0.weathering})>'
                 .format(self))

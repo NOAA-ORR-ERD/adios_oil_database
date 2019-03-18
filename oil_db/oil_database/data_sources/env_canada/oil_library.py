@@ -191,7 +191,17 @@ class EnvCanadaRecordParser(object):
         cat_fields = self.prop_idx[category]
 
         for f, idxs in cat_fields.iteritems():
-            ret[f] = [self.values[i] for i in idxs]
+            values_i = [self.values[i] for i in idxs]
+
+            if len(idxs) == 1:
+                # flatten the list
+                values_i = [i for sub in values_i for i in sub]
+                pass
+            else:
+                # transpose the list
+                values_i = zip(*values_i)
+
+            ret[f] = values_i
 
         return ret
 
@@ -203,6 +213,20 @@ class EnvCanadaRecordParser(object):
               single oil, but this is not enforced.
         '''
         return [self.values[i] for i in self.prop_idx[category][name]]
+
+    def get_interface_properties(self):
+        '''
+            These are all the property names that define the data in an
+            Environment Canada record.
+            Our source data cannot be directly mapped to our object dict, so
+            we don't directly map any data items.  We will simply roll up
+            all the defined properties.
+        '''
+        props = set([p for p in dir(self.__class__)
+                     if isinstance(getattr(self.__class__, p),
+                                   property)])
+
+        return props
 
     @property
     def name(self):
@@ -221,7 +245,7 @@ class EnvCanadaRecordParser(object):
                                       'and_technologies_code')[0]
 
     @property
-    def ec_oil_id(self):
+    def oil_id(self):
         '''
             We will use the ESTS codes in the record as the identifier.
 
@@ -321,6 +345,38 @@ class EnvCanadaRecordParser(object):
                          if n is not None])
 
     @property
+    def product_type(self):
+        if self.product_type_is_probably_refined():
+            return 'refined'
+        else:
+            return 'crude'
+
+    def product_type_is_probably_refined(self):
+        '''
+            We don't have a lot of options determining what product type the
+            Env Canada records are.  The Source, Comments, and Reference fields
+            might be used, but they are pretty unreliable.
+
+            But we might be able to make some guesses based on the name of the
+            product.  This is definitely not a great way to do it, but we need
+            to make a determination somehow.
+        '''
+        for word in self.name:
+            # if these words appear anywhere in the name, we will assume
+            # it is refined
+            if word in ('fuel', 'diesel', 'biodiesel',
+                        'ifo', 'hfo', 'lube'):
+                return True
+
+        # check for specific 2-word tokens
+        for token in zip(self.name, self.name[1:]):
+            if token in (('bunker', 'c'),
+                         ('swepco', '737')):
+                return True
+
+        return False
+
+    @property
     def api(self):
         return [n for n
                 in self.get_props_by_name('api_gravity',
@@ -347,7 +403,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a density object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 15.0}
             rename_props = {'density_15_c_g_ml': 'kg_m_3'}
@@ -368,7 +424,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a density object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 5.0}
             prune_props = {'density_0_c_g_ml'}
@@ -391,7 +447,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a density object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15}
             prune_props = {'density_5_c_g_ml'}
@@ -411,7 +467,7 @@ class EnvCanadaRecordParser(object):
         return [d for d in densities if d['kg_m_3'] not in (None, 0.0)]
 
     @property
-    def viscosities(self):
+    def dvis(self):
         '''
             Getting viscosities out of this datasheet is more tricky than it
             should be.  There are two categories, viscosity at 15C, and
@@ -439,7 +495,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 15.0}
             rename_props = {'viscosity_at_15_c_mpa_s': 'kg_ms'}
@@ -462,7 +518,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 5.0}
             prune_props = {'viscosity_at_0_c_mpa_s'}
@@ -487,7 +543,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15}
             prune_props = {'viscosity_at_5_c_mpa_s'}
@@ -507,7 +563,7 @@ class EnvCanadaRecordParser(object):
         return [v for v in viscosities if v['kg_ms'] not in (None, 0.0)]
 
     @property
-    def interfacial_tensions(self):
+    def ifts(self):
         '''
             Getting interfacial tensions out of this datasheet is a bit tricky,
             but understandably so since we are dealing with a number of
@@ -515,12 +571,18 @@ class EnvCanadaRecordParser(object):
             There are two categories, surface/interfacial tension at 15C, and
             surface/interfacial tension at 0/5C.
             I still think it could have been organized more orthogonally.
-        '''
-        tensions = self._get_tensions_at_0c()
-        tensions.extend(self._get_tensions_at_5c())
-        tensions.extend(self._get_tensions_at_15c())
 
-        return tensions
+            TODO: we are having problems matching up the standard deviation
+                  and replicates because they are duplicated within a category.
+                  We need to rethink the indexing to at least allow for the
+                  case of duplicate properties.  I don't think we need to
+                  throw away what we have, but this needs to be addressed.
+        '''
+        ifts = self._get_tensions_at_0c()
+        ifts.extend(self._get_tensions_at_5c())
+        ifts.extend(self._get_tensions_at_15c())
+
+        return ifts
 
     def _get_tensions_at_15c(self):
         tensions = []
@@ -529,7 +591,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             ref_temp_k = 273.15 + 15.0
             labels = ('surface_tension_15_c_oil_air',
@@ -537,13 +599,19 @@ class EnvCanadaRecordParser(object):
                       'interfacial_tension_15_c_oil_salt_water_3_3_nacl')
             if_types = ('air', 'water', 'seawater')
 
-            for label, if_type in zip(labels, if_types):
+            for idx, (label, if_type) in enumerate(zip(labels, if_types)):
                 add_props = {'weathering': w,
                              'ref_temp_k': ref_temp_k,
                              'interface': if_type}
                 prune_props = {i for i in labels if i != label}
                 rename_props = {label: 'n_m'}
                 to_n_m = {'n_m'}
+
+                # We have a couple duplicate labels, one for each if_type
+                # and they are all here contained in a list.  We need to
+                # choose the right one.
+                for dup_lbl in ('standard_deviation', 'replicates'):
+                    add_props[dup_lbl] = props_i[dup_lbl][idx]
 
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
@@ -564,7 +632,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             ref_temp_k = 273.15 + 5.0
             labels = ('surface_tension_5_c_oil_air',
@@ -575,7 +643,7 @@ class EnvCanadaRecordParser(object):
                            'interfacial_tension_0_c_oil_salt_water_3_3_nacl')
             if_types = ('air', 'water', 'seawater')
 
-            for label, if_type in zip(labels, if_types):
+            for idx, (label, if_type) in enumerate(zip(labels, if_types)):
                 add_props = {'weathering': w,
                              'ref_temp_k': ref_temp_k,
                              'interface': if_type}
@@ -583,6 +651,12 @@ class EnvCanadaRecordParser(object):
                                if i != label}
                 rename_props = {label: 'n_m'}
                 to_n_m = {'n_m'}
+
+                # We have a couple duplicate labels, one for each if_type
+                # and they are all here contained in a list.  We need to
+                # choose the right one.
+                for dup_lbl in ('standard_deviation', 'replicates'):
+                    add_props[dup_lbl] = props_i[dup_lbl][idx]
 
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
@@ -603,7 +677,7 @@ class EnvCanadaRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             ref_temp_k = 273.15
             labels = ('surface_tension_0_c_oil_air',
@@ -614,7 +688,7 @@ class EnvCanadaRecordParser(object):
                            'interfacial_tension_5_c_oil_salt_water_3_3_nacl')
             if_types = ('air', 'water', 'seawater')
 
-            for label, if_type in zip(labels, if_types):
+            for idx, (label, if_type) in enumerate(zip(labels, if_types)):
                 add_props = {'weathering': w,
                              'ref_temp_k': ref_temp_k,
                              'interface': if_type}
@@ -622,6 +696,12 @@ class EnvCanadaRecordParser(object):
                                if i != label}
                 rename_props = {label: 'n_m'}
                 to_n_m = {'n_m'}
+
+                # We have a couple duplicate labels, one for each if_type
+                # and they are all here contained in a list.  We need to
+                # choose the right one.
+                for dup_lbl in ('standard_deviation', 'replicates'):
+                    add_props[dup_lbl] = props_i[dup_lbl][idx]
 
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
@@ -641,7 +721,7 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('flash_point_c')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             flash_point_obj = self.build_flash_point_kwargs(props_i, w)
             flash_points.append(flash_point_obj)
@@ -663,7 +743,7 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('pour_point_c')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             pour_point_obj = self._build_pour_point_kwargs(props_i, w)
             pour_points.append(pour_point_obj)
@@ -674,7 +754,7 @@ class EnvCanadaRecordParser(object):
                 if p['min_temp_k'] is not None or p['max_temp_k'] is not None]
 
     @property
-    def distillation_cuts(self):
+    def cuts(self):
         '''
             There are two distinct sets of distillation cut data in the EC
             spreadsheet. They are:
@@ -701,7 +781,7 @@ class EnvCanadaRecordParser(object):
                                            'distribution_temperature_c')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
             cuts_i = self._build_cuts_from_dist_data(props_i, w)
 
             cuts.extend(cuts_i)
@@ -744,7 +824,7 @@ class EnvCanadaRecordParser(object):
                                            'cumulative_weight_fraction')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
             cuts_i = self._build_cuts_from_cumulative_fraction(props_i, w)
 
             cuts.extend(cuts_i)
@@ -800,7 +880,7 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('adhesion_g_cm2_ests_1996')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w}
             rename_props = {'adhesion': 'kg_m_2'}
@@ -836,7 +916,7 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('evaporation_ests_1998_1')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             evap_kwargs = self._build_evaporation_kwargs(props_i, w,
                                                          '(A + BT) ln t',
@@ -853,7 +933,7 @@ class EnvCanadaRecordParser(object):
                                            'evaporation_equation_mass_loss')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             evap_kwargs = self._build_evaporation_kwargs(props_i, w,
                                                          '(A + BT) sqrt(t)',
@@ -870,7 +950,7 @@ class EnvCanadaRecordParser(object):
                                            'evaporation_equation_mass_loss')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             evap_kwargs = self._build_evaporation_kwargs(props_i, w,
                                                          'A + B ln (t + C)',
@@ -899,13 +979,21 @@ class EnvCanadaRecordParser(object):
                                            'ests_1998_2')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w,
                          'ref_temp_k': 273.15 + 15.0,
                          'age_days': 0.0}
             rename_props = {'water_content_w_w': 'water_content_fraction'}
             to_fraction = {'water_content_fraction'}
+
+            sd_types = ('cm', 'sm', 'lm', 'td', 'cv', 'wc')
+            for idx, sd_type in enumerate(sd_types):
+                sd_label = '{}_standard_deviation'.format(sd_type)
+                add_props[sd_label] = props_i['standard_deviation'][idx]
+
+            add_props['mod_replicates'] = props_i['replicates'][0]
+            add_props['wc_replicates'] = props_i['replicates'][1]
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
@@ -924,13 +1012,21 @@ class EnvCanadaRecordParser(object):
                                            'ests_1998b')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w,
                          'ref_temp_k': 273.15 + 15.0,
                          'age_days': 7.0}
             rename_props = {'water_content_w_w': 'water_content_fraction'}
             to_fraction = {'water_content_fraction'}
+
+            sd_types = ('cm', 'sm', 'lm', 'td', 'cv', 'wc')
+            for idx, sd_type in enumerate(sd_types):
+                sd_label = '{}_standard_deviation'.format(sd_type)
+                add_props[sd_label] = props_i['standard_deviation'][idx]
+
+            add_props['mod_replicates'] = props_i['replicates'][0]
+            add_props['wc_replicates'] = props_i['replicates'][1]
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
@@ -956,7 +1052,7 @@ class EnvCanadaRecordParser(object):
                                            'astm_f2059')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w}
             rename_props = {
@@ -977,7 +1073,7 @@ class EnvCanadaRecordParser(object):
                 if c['dispersant_effectiveness_fraction'] is not None]
 
     @property
-    def sulfur_content(self):
+    def sulfur(self):
         '''
             Getting the sulfur content is very straightforward.  Just get the
             float value.
@@ -986,7 +1082,7 @@ class EnvCanadaRecordParser(object):
         return self._get_sulfur_content_by_weathering()
 
     @property
-    def water_content(self):
+    def water(self):
         '''
             Dimensional parameters are (weathering).
         '''
@@ -1024,7 +1120,7 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('sulfur_content_astm_d4294')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w}
             rename_props = {'sulfur_content': 'fraction'}
@@ -1045,7 +1141,7 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('water_content_astm_e203')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w}
             rename_props = {'water_content': 'fraction'}
@@ -1068,7 +1164,7 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('wax_content_ests_1994')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w}
             rename_props = {'waxes': 'fraction'}
@@ -1089,12 +1185,16 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'sara_type': 'Saturates'}
             prune_props = {'aromatics', 'resin', 'asphaltene'}
             rename_props = {'saturates': 'fraction'}
             to_fraction = {'fraction'}
+
+            add_props['standard_deviation'] = props_i['standard_deviation'][0]
+            add_props['replicates'] = props_i['replicates'][0]
+            add_props['method'] = props_i['method'][0]
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
@@ -1113,12 +1213,16 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'sara_type': 'Aromatics'}
             prune_props = {'saturates', 'resin', 'asphaltene'}
             rename_props = {'aromatics': 'fraction'}
             to_fraction = {'fraction'}
+
+            add_props['standard_deviation'] = props_i['standard_deviation'][0]
+            add_props['replicates'] = props_i['replicates'][0]
+            add_props['method'] = props_i['method'][0]
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
@@ -1137,12 +1241,16 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'sara_type': 'Resins'}
             prune_props = {'saturates', 'aromatics', 'asphaltene'}
             rename_props = {'resin': 'fraction'}
             to_fraction = {'fraction'}
+
+            add_props['standard_deviation'] = props_i['standard_deviation'][0]
+            add_props['replicates'] = props_i['replicates'][0]
+            add_props['method'] = props_i['method'][0]
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
@@ -1161,12 +1269,16 @@ class EnvCanadaRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
             add_props = {'weathering': w, 'sara_type': 'Asphaltenes'}
             prune_props = {'saturates', 'aromatics', 'resin'}
             rename_props = {'asphaltene': 'fraction'}
             to_fraction = {'fraction'}
+
+            add_props['standard_deviation'] = props_i['standard_deviation'][1]
+            add_props['replicates'] = props_i['replicates'][1]
+            add_props['method'] = props_i['method'][1]
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
@@ -1180,7 +1292,7 @@ class EnvCanadaRecordParser(object):
                 if f['fraction'] is not None]
 
     @property
-    def benzene_content(self):
+    def benzene(self):
         '''
             The Evironment Canada data sheet contains data for Benzene content,
             which we will try to capture.
@@ -1206,13 +1318,13 @@ class EnvCanadaRecordParser(object):
                                               'ests_2002b')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in benz_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in benz_props.iteritems()])
             kwargs = props_i
 
-            props_i = dict([(k, v[0][i]) for k, v in btex_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in btex_props.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i]) for k, v in c4_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in c4_props.iteritems()])
             kwargs.update(props_i)
 
             [self._rename_prop(kwargs, lbl, lbl + '_ppm')
@@ -1228,7 +1340,10 @@ class EnvCanadaRecordParser(object):
             kwargs['weathering'] = w
             kwargs['method'] = 'ESTS 2002b'
 
-            benzenes.append(kwargs)
+            if not all([(v is None)
+                        for k, v in kwargs.iteritems()
+                        if k not in ('weathering', 'method')]):
+                benzenes.append(kwargs)
 
         return benzenes
 
@@ -1252,7 +1367,7 @@ class EnvCanadaRecordParser(object):
                                               'ests_2002b')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in hs_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in hs_props.iteritems()])
             kwargs = props_i
 
             [self._rename_prop(kwargs, lbl, lbl + '_mg_g')
@@ -1292,16 +1407,16 @@ class EnvCanadaRecordParser(object):
                                             'ests_2002a')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in gc_tph.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in gc_tph.iteritems()])
             kwargs = props_i
 
-            props_i = dict([(k, v[0][i]) for k, v in gc_tsh.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in gc_tsh.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i]) for k, v in gc_tah.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in gc_tah.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i]) for k, v in gc_hcr.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in gc_hcr.iteritems()])
             kwargs.update(props_i)
 
             add_props = {'weathering': w}
@@ -1350,7 +1465,7 @@ class EnvCanadaRecordParser(object):
                                                 'ests_2002a')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in ccme_props.iteritems()])
             kwargs = props_i
 
             [self._rename_prop(kwargs, lbl, lbl + '_mg_g')
@@ -1384,7 +1499,7 @@ class EnvCanadaRecordParser(object):
                                                 'ests_2002a')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in ccme_props.iteritems()])
             kwargs = props_i
 
             kwargs['weathering'] = w
@@ -1415,7 +1530,7 @@ class EnvCanadaRecordParser(object):
                                                 'ests_2002a')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in ccme_props.iteritems()])
             kwargs = props_i
 
             kwargs['weathering'] = w
@@ -1447,7 +1562,7 @@ class EnvCanadaRecordParser(object):
                                                 'ests_2002a')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in ccme_props.iteritems()])
             kwargs = props_i
 
             kwargs['weathering'] = w
@@ -1500,32 +1615,32 @@ class EnvCanadaRecordParser(object):
         )
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i])
+            props_i = dict([(k, v[i])
                             for k, v in naphthalene_props.iteritems()])
             kwargs = props_i
 
-            props_i = dict([(k, v[0][i])
+            props_i = dict([(k, v[i])
                             for k, v in phenanthrene_props.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i])
+            props_i = dict([(k, v[i])
                             for k, v in dibenzothiophene_props.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i])
+            props_i = dict([(k, v[i])
                             for k, v in fluorene_props.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i])
+            props_i = dict([(k, v[i])
                             for k, v
                             in benzonaphthothiophene_props.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i])
+            props_i = dict([(k, v[i])
                             for k, v in chrysene_props.iteritems()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i])
+            props_i = dict([(k, v[i])
                             for k, v in other_props.iteritems()])
             kwargs.update(props_i)
 
@@ -1582,7 +1697,7 @@ class EnvCanadaRecordParser(object):
                                                 'ests_2002a')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in ccme_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in ccme_props.iteritems()])
             kwargs = props_i
 
             [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
@@ -1618,7 +1733,7 @@ class EnvCanadaRecordParser(object):
                                                'ests_2002a')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in bio_props.iteritems()])
+            props_i = dict([(k, v[i]) for k, v in bio_props.iteritems()])
             kwargs = props_i
 
             rename_props = {

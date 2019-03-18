@@ -40,7 +40,15 @@ class FlashPoint(EmbeddedMongoModel):
 
         super(FlashPoint, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
-        return ('<FlashPoint([{0.min_temp_k}K - {0.max_temp_k}K], '
-                'weathering={0.weathering})>'
-                .format(self))
+        min_temp = self.min_temp_k
+        max_temp = self.max_temp_k
+        w = self.weathering
+
+        return ('<FlashPoint([{}{} - {}{}], w={})>'
+                .format(min_temp, '' if min_temp is None else 'K',
+                        max_temp, '' if max_temp is None else 'K',
+                        w))

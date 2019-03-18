@@ -168,6 +168,9 @@ class Density(EmbeddedMongoModel):
     ref_temp_k = FloatField()
     weathering = FloatField(default=0.0)
 
+    replicates = FloatField(blank=True)
+    standard_deviation = FloatField(blank=True)
+
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
         # of this class
@@ -213,6 +216,10 @@ class DVis(EmbeddedMongoModel):
     ref_temp_k = FloatField()
     weathering = FloatField(default=0.0)
 
+    method = CharField(max_length=20, blank=True)
+    replicates = FloatField(blank=True)
+    standard_deviation = FloatField(blank=True)
+
     def __init__(self, **kwargs):
         for a, _v in kwargs.items():
             if (a not in self.__class__.__dict__):
@@ -246,11 +253,14 @@ class Cut(EmbeddedMongoModel):
 
         super(Cut, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
-        lt = '{0}K'.format(self.liquid_temp_k) if self.liquid_temp_k else None
-        vt = '{0}K'.format(self.vapor_temp_k) if self.vapor_temp_k else None
-        return ('<Cut(liquid_temp={0}, vapor_temp={1}, fraction={2})>'
-                .format(lt, vt, self.fraction))
+        lt = '{}K'.format(self.liquid_temp_k) if self.liquid_temp_k else None
+        vt = '{}K'.format(self.vapor_temp_k) if self.vapor_temp_k else None
+        return ('<Cut(liquid_temp={}, vapor_temp={}, fraction={}, w={})>'
+                .format(lt, vt, self.fraction, self.weathering))
 
 
 class Toxicity(EmbeddedMongoModel):
@@ -298,8 +308,12 @@ class SARAFraction(EmbeddedMongoModel):
 
         super(SARAFraction, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
-        return ('<SARAFraction({0.sara_type}={0.fraction} at {0.ref_temp_k}K)>'
+        return ('<SARAFraction({0.sara_type}={0.fraction} '
+                'at {0.ref_temp_k}K, w={0.weathering})>'
                 .format(self))
 
 

@@ -390,8 +390,9 @@ class OilLibraryRecordParser(object):
                 <sub_attr> = The name of an attribute contained within an
                              instance of the list.
 
-            Basically we will return any object set that has a defined set of
-            required argument attributes.
+            Basically we will return a set of object properties for each
+            instance that contains a defined set of required argument
+            attributes.
         '''
         ret = []
 

@@ -6,11 +6,8 @@ from pymongo.write_concern import WriteConcern
 from pymongo import IndexModel, ASCENDING
 
 from pymodm import MongoModel
-from pymodm.fields import (CharField,
-                           FloatField,
-                           ListField,
-                           DateTimeField,
-                           EmbeddedDocumentListField)
+from pymodm.fields import (MongoBaseField, CharField, FloatField, ListField,
+                           DateTimeField, EmbeddedDocumentListField)
 
 from ..common_props import Synonym, Density, DVis, Cut, SARAFraction
 
@@ -34,6 +31,9 @@ from .alkylated_pah import AlkylatedTotalPAH
 from .biomarkers import Biomarkers
 from .wax import Wax
 from .alkanes import NAlkane
+
+from pprint import PrettyPrinter
+pp = PrettyPrinter(indent=2, width=120)
 
 
 class ECImportedRecord(MongoModel):
@@ -59,7 +59,7 @@ class ECImportedRecord(MongoModel):
         -
     '''
     oil_id = CharField(max_length=16)
-    oil_name = CharField(max_length=100)
+    name = CharField(max_length=100)
 
     # EC location data is primarily in the 'source' field, with very infrequent
     # specifications of location in the 'comments' field.  It doesn't really
@@ -82,7 +82,7 @@ class ECImportedRecord(MongoModel):
 
     dvis = EmbeddedDocumentListField(DVis, blank=True)
 
-    ift = EmbeddedDocumentListField(InterfacialTension, blank=True)
+    ifts = EmbeddedDocumentListField(InterfacialTension, blank=True)
 
     flash_points = EmbeddedDocumentListField(FlashPoint, blank=True)
     pour_points = EmbeddedDocumentListField(PourPoint, blank=True)
@@ -93,7 +93,10 @@ class ECImportedRecord(MongoModel):
     evaporation_eqs = EmbeddedDocumentListField(EvaporationEq, blank=True)
     emulsions = EmbeddedDocumentListField(Emulsion, blank=True)
     corexit = EmbeddedDocumentListField(Corexit9500, blank=True)
-    sulphur = EmbeddedDocumentListField(Sulfur, blank=True)
+
+    # Note: this is how they spell sulphur in the Env Canada datasheet
+    sulfur = EmbeddedDocumentListField(Sulfur, blank=True)
+
     water = EmbeddedDocumentListField(Water, blank=True)
     benzene = EmbeddedDocumentListField(Benzene, blank=True)
     headspace = EmbeddedDocumentListField(Headspace, blank=True)
@@ -120,7 +123,7 @@ class ECImportedRecord(MongoModel):
         connection_alias = 'oil-db-app'
         indexes = [IndexModel([('oil_id', ASCENDING)],
                               unique=True),
-                   IndexModel([('oil_name', ASCENDING),
+                   IndexModel([('name', ASCENDING),
                                ('location', ASCENDING),
                                ('reference_date', ASCENDING)],
                               unique=True)]
@@ -134,51 +137,77 @@ class ECImportedRecord(MongoModel):
 
         super(ECImportedRecord, self).__init__(**kwargs)
 
-        # It's amazing that PyMODM wouldn't do this for you automatically.
-        # Basically, attributes of type EmbeddedDocumentListField kinda don't
-        # exist until they are assigned a value.  You can print these
-        # attributes, and they look like an empty list that you can use.
-        # But try appending something to them and nothing happens.
-        # The trick is you have to assign a list [] to them before they
-        # can be used.
-        # I have seen some projects pass in a default=[] argument to the
-        # constructor of EmbeddedDocumentListField, but that's an almost
-        # guaranteed source of bugs in Python.  You should almost never choose
-        # a container type for a default argument to a function.  In fact,
-        # I tried it and got some crazy distillation cuts on a few records.
-        # So we make the inital assignment here.
-        self.densities = []
-        self.api = []
-        self.dvis = []
-        self.ift = []
-        self.flash_points = []
-        self.pour_points = []
-        self.cuts = []
-        self.adhesions = []
-        self.evaporation_eqs = []
-        self.emulsions = []
-        self.corexit = []
-        self.sulphur = []
-        self.water = []
-        self.benzene = []
-        self.headspace = []
-        self.chromatography = []
-        self.ccme = []
-        self.ccme_f1 = []
-        self.ccme_f2 = []
-        self.ccme_tph = []
-        self.alkylated_pahs = []
-        self.biomarkers = []
-        self.wax_content = []
-        self.alkanes = []
-        self.saturates = []
-        self.aromatics = []
-        self.resins = []
-        self.asphaltenes = []
-        self.synonyms = []
-
     @classmethod
     def from_record_parser(cls, parser):
+        '''
+            It is intended that the database object constructor need not know
+            how to build properties from the raw record data coming from a
+            data source.  That is the job of the record parser.
+
+            The parser takes a set of record data and exposes a set of suitable
+            properties for building our class.
+        '''
+        kwargs = {}
+
+        print '\n\nparser.oil_id: ', parser.oil_id
+        print 'parser.name: ', parser.name
+        print 'parser.emulsions: '
+        pp.pprint(parser.emulsions)
+
+        cls._set_scalar_properties(kwargs, parser)
+        cls._set_embedded_list_properties(kwargs, parser)
+
+        rec = cls(**kwargs)
+
+        print 'rec.emulsions: '
+        for a in sorted(rec.emulsions, key=lambda r: (r.weathering)):
+            print '\t', a
+
+        return rec
+
+    @classmethod
+    def _set_scalar_properties(cls, kwargs, parser):
+        '''
+            Here, we handle the parser properties that contain a single
+            scalar value.
+        '''
+        parser_api = parser.get_interface_properties()
+
+        for attr, value in cls.__dict__.iteritems():
+            if (attr in parser_api and
+                    isinstance(value, MongoBaseField) and
+                    not isinstance(value, EmbeddedDocumentListField)):
+                kwargs[attr] = getattr(parser, attr)
+
+    @classmethod
+    def _set_embedded_list_properties(cls, kwargs, parser):
+        '''
+            Here, we handle the parser properties that contain a list of
+            embedded documents.
+        '''
+        parser_api = parser.get_interface_properties()
+
+        for attr, value in cls.__dict__.iteritems():
+            if (attr in parser_api and
+                    isinstance(value, EmbeddedDocumentListField)):
+                embedded_model = value.related_model
+
+                if getattr(parser, attr) is None:
+                    kwargs[attr] = None
+                else:
+                    kwargs[attr] = [embedded_model(**sub_kwargs)
+                                    for sub_kwargs in getattr(parser, attr)]
+
+    @classmethod
+    def from_record_parser_old(cls, parser):
+        '''
+            It is intended that the database object constructor need not know
+            how to build properties from the raw record data coming from a
+            data source.  That is the job of the record parser.
+
+            The parser takes a set of record data and exposes a set of suitable
+            properties for building our class.
+        '''
         kwargs = {}
         kwargs['oil_id'] = parser.ec_oil_id
         kwargs['oil_name'] = parser.name

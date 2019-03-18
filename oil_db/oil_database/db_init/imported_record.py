@@ -12,6 +12,7 @@ from pymongo.errors import DuplicateKeyError
 from pymodm.errors import ValidationError
 
 from ..util.term import TermColor as tc
+
 from ..data_sources.oil_library import (OilLibraryCsvFile,
                                         OilLibraryRecordParser)
 
