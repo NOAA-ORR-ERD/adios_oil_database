@@ -37,7 +37,7 @@ class CCMEFraction(EmbeddedMongoModel):
                 'ccme_f2={0.ccme_f2_mg_g}, '
                 'ccme_f3={0.ccme_f3_mg_g}, '
                 'ccme_f4={0.ccme_f4_mg_g}, '
-                'weathering={0.weathering})>'
+                'w={0.weathering})>'
                 .format(self))
 
 
@@ -77,15 +77,15 @@ class CCMESaturateCxx(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
-                'n_c8_to_c10={0.n_c8_to_c10}, '
-                'n_c10_to_c12={0.n_c10_to_c12}, '
-                'n_c12_to_c16={0.n_c12_to_c16}, '
-                'n_c16_to_c20={0.n_c16_to_c20}, '
-                'n_c20_to_c24={0.n_c20_to_c24}, '
-                'n_c24_to_c28={0.n_c24_to_c28}, '
-                'n_c28_to_c34={0.n_c28_to_c34}, '
+                'n_c8_to_c10={0.n_c8_to_n_c10}, '
+                'n_c10_to_c12={0.n_c10_to_n_c12}, '
+                'n_c12_to_c16={0.n_c12_to_n_c16}, '
+                'n_c16_to_c20={0.n_c16_to_n_c20}, '
+                'n_c20_to_c24={0.n_c20_to_n_c24}, '
+                'n_c24_to_c28={0.n_c24_to_n_c28}, '
+                'n_c28_to_c34={0.n_c28_to_n_c34}, '
                 'n_c34={0.n_c34}, '
-                'weathering={0.weathering})>'
+                'w={0.weathering})>'
                 .format(self))
 
 
@@ -108,14 +108,14 @@ class CCMETotalPetroleumCxx(CCMESaturateCxx):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
-                'n_c8_to_c10={0.n_c8_to_c10}, '
-                'n_c10_to_c12={0.n_c10_to_c12}, '
-                'n_c12_to_c16={0.n_c12_to_c16}, '
-                'n_c16_to_c20={0.n_c16_to_c20}, '
-                'n_c20_to_c24={0.n_c20_to_c24}, '
-                'n_c24_to_c28={0.n_c24_to_c28}, '
-                'n_c28_to_c34={0.n_c28_to_c34}, '
+                'n_c8_to_c10={0.n_c8_to_n_c10}, '
+                'n_c10_to_c12={0.n_c10_to_n_c12}, '
+                'n_c12_to_c16={0.n_c12_to_n_c16}, '
+                'n_c16_to_c20={0.n_c16_to_n_c20}, '
+                'n_c20_to_c24={0.n_c20_to_n_c24}, '
+                'n_c24_to_c28={0.n_c24_to_n_c28}, '
+                'n_c28_to_c34={0.n_c28_to_n_c34}, '
                 'n_c34={0.n_c34}, '
-                'total_tph={0.total_tph_gc_detected_tph_undetected_tph}'
-                'weathering={0.weathering})>'
+                'total_tph={0.total_tph_gc_detected_tph_undetected_tph}, '
+                'w={0.weathering})>'
                 .format(self))

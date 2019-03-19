@@ -1184,6 +1184,11 @@ class EnvCanadaRecordParser(object):
 
         props = self.get_props_by_category('hydrocarbon_group_content')
 
+        # the method cells are merged into a single wide one across all
+        # weathered samples for an oil, so we only see a value in the
+        # first cell here.  But it applies to all samples.
+        props['method'] = [props['method'][0] for _m in props['method']]
+
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
@@ -1211,6 +1216,11 @@ class EnvCanadaRecordParser(object):
         aromatics_fractions = []
 
         props = self.get_props_by_category('hydrocarbon_group_content')
+
+        # the method cells are merged into a single wide one across all
+        # weathered samples for an oil, so we only see a value in the
+        # first cell here.  But it applies to all samples.
+        props['method'] = [props['method'][0] for _m in props['method']]
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
@@ -1240,6 +1250,11 @@ class EnvCanadaRecordParser(object):
 
         props = self.get_props_by_category('hydrocarbon_group_content')
 
+        # the method cells are merged into a single wide one across all
+        # weathered samples for an oil, so we only see a value in the
+        # first cell here.  But it applies to all samples.
+        props['method'] = [props['method'][0] for _m in props['method']]
+
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
@@ -1267,6 +1282,11 @@ class EnvCanadaRecordParser(object):
         asphaltenes_fractions = []
 
         props = self.get_props_by_category('hydrocarbon_group_content')
+
+        # the method cells are merged into a single wide one across all
+        # weathered samples for an oil, so we only see a value in the
+        # first cell here.  But it applies to all samples.
+        props['method'] = [props['method'][0] for _m in props['method']]
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
@@ -1375,7 +1395,10 @@ class EnvCanadaRecordParser(object):
 
             kwargs['weathering'] = w
 
-            headspace.append(kwargs)
+            if not all([(v is None)
+                        for k, v in kwargs.iteritems()
+                        if k not in ('weathering',)]):
+                headspace.append(kwargs)
 
         return [h for h in headspace
                 if any([h[p] is not None for p in h
@@ -1657,7 +1680,7 @@ class EnvCanadaRecordParser(object):
                 'benzo_e_pyrene_bep': 'benzo_e_pyrene',
                 'benzo_a_pyrene_bap': 'benzo_a_pyrene',
                 'perylene_pe': 'perylene',
-                'indeno_1_2_3_cd_pyrene_ip': 'indeno_123_cd_pyrene',
+                'indeno_1_2_3_cd_pyrene_ip': 'indeno_1_2_3_cd_pyrene',
                 'dibenzo_ah_anthracene_da': 'dibenzo_ah_anthracene',
                 'benzo_ghi_perylene_bgp': 'benzo_ghi_perylene',
             }

@@ -149,19 +149,10 @@ class ECImportedRecord(MongoModel):
         '''
         kwargs = {}
 
-        print '\n\nparser.oil_id: ', parser.oil_id
-        print 'parser.name: ', parser.name
-        print 'parser.emulsions: '
-        pp.pprint(parser.emulsions)
-
         cls._set_scalar_properties(kwargs, parser)
         cls._set_embedded_list_properties(kwargs, parser)
 
         rec = cls(**kwargs)
-
-        print 'rec.emulsions: '
-        for a in sorted(rec.emulsions, key=lambda r: (r.weathering)):
-            print '\t', a
 
         return rec
 
