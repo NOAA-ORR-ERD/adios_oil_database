@@ -11,7 +11,6 @@ import unit_conversion as uc
 
 from ..util.db_connection import connect_modm
 
-
 logger = logging.getLogger(__name__)
 
 

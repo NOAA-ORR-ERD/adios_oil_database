@@ -29,7 +29,7 @@ from ..models.oil import Oil
 from ..models.category import Category
 
 
-from ..data_sources.estimations import ImportedRecordWithEstimation
+from ..data_sources.oil_library import ImportedRecordWithEstimation
 from ..data_sources.oil_library import OilLibraryCsvFile
 
 logger = logging.getLogger(__name__)

@@ -10,8 +10,8 @@ from pymodm.errors import ValidationError
 
 from ..util.term import TermColor as tc
 
-from ..data_sources.env_canada.oil_library import (EnvCanadaOilExcelFile,
-                                                   EnvCanadaRecordParser)
+from ..data_sources.env_canada import (EnvCanadaOilExcelFile,
+                                       EnvCanadaRecordParser)
 
 from ..models.ec_imported_rec import ECImportedRecord
 

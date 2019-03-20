@@ -10,8 +10,8 @@ from ..models.common_props import (Cut, SARAFraction, SARADensity,
 
 from ..util.estimations import api_from_density
 
-from ..data_sources.estimations import ImportedRecordWithEstimation
-from ..data_sources.scoring import ImportedRecordWithScore
+from ..data_sources.oil_library import ImportedRecordWithEstimation
+from ..data_sources.oil_library import ImportedRecordWithScore
 
 
 from pprint import PrettyPrinter
