@@ -9,7 +9,7 @@ from pymodm import MongoModel
 from pymodm.fields import (MongoBaseField, CharField, BooleanField, FloatField,
                            EmbeddedDocumentListField)
 
-from .common_props import Synonym, Density, KVis, DVis, Cut, Toxicity
+from .common.common_props import Synonym, Density, KVis, DVis, Cut, Toxicity
 
 
 class ImportedRecord(MongoModel):

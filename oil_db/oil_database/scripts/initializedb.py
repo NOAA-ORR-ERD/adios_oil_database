@@ -1,12 +1,12 @@
 import logging
 
 
-from ..db_init.imported_record import add_imported_records
-from ..db_init.env_canada_record import add_ec_records
-from ..db_init.exxon_record import add_exxon_records
+from oil_database.db_init.imported_record import add_imported_records
+from oil_database.db_init.env_canada_record import add_ec_records
+from oil_database.db_init.exxon_record import add_exxon_records
 
-from ..db_init.oil import process_oils
-from ..db_init.categories import process_categories
+from oil_database.db_init.oil import process_oils
+from oil_database.db_init.categories import process_categories
 
 logger = logging.getLogger(__name__)
 

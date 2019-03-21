@@ -9,7 +9,7 @@ from pymodm import MongoModel
 from pymodm.fields import (MongoBaseField, CharField, FloatField, ListField,
                            DateTimeField, EmbeddedDocumentListField)
 
-from ..common_props import Synonym, Density, DVis, Cut, SARAFraction
+from ..common.common_props import Synonym, Density, DVis, Cut, SARAFraction
 
 from .interfacial_tension import InterfacialTension
 from .flash_point import FlashPoint

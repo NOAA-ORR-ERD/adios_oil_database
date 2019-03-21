@@ -8,12 +8,10 @@ import logging
 from pymongo.errors import DuplicateKeyError
 from pymodm.errors import ValidationError
 
-from ..util.term import TermColor as tc
-
-from ..data_sources.env_canada import (EnvCanadaOilExcelFile,
-                                       EnvCanadaRecordParser)
-
-from ..models.ec_imported_rec import ECImportedRecord
+from oil_database.util.term import TermColor as tc
+from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
+                                                  EnvCanadaRecordParser)
+from oil_database.models.ec_imported_rec import ECImportedRecord
 
 logger = logging.getLogger(__name__)
 

@@ -2,17 +2,18 @@ import logging
 
 import numpy as np
 
-from ..models.imported_rec import ImportedRecord
-from ..models.ec_imported_rec import ECImportedRecord
-from ..models.oil import Oil
-from ..models.common_props import (Cut, SARAFraction, SARADensity,
-                                   MolecularWeight)
+from oil_database.models.imported_rec import ImportedRecord
+from oil_database.models.ec_imported_rec import ECImportedRecord
+from oil_database.models.oil import Oil
+from oil_database.models.common.common_props import (Cut,
+                                                     SARAFraction,
+                                                     SARADensity,
+                                                     MolecularWeight)
 
-from ..util.estimations import api_from_density
+from oil_database.util.estimations import api_from_density
 
-from ..data_sources.oil_library import ImportedRecordWithEstimation
-from ..data_sources.oil_library import ImportedRecordWithScore
-
+from oil_database.data_sources.noaa_fm import (ImportedRecordWithEstimation,
+                                               ImportedRecordWithScore)
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)

@@ -11,12 +11,10 @@ import logging
 from pymongo.errors import DuplicateKeyError
 from pymodm.errors import ValidationError
 
-from ..util.term import TermColor as tc
-
-from ..data_sources.oil_library import (OilLibraryCsvFile,
-                                        OilLibraryRecordParser)
-
-from ..models.imported_rec import ImportedRecord
+from oil_database.util.term import TermColor as tc
+from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
+                                               OilLibraryRecordParser)
+from oil_database.models.imported_rec import ImportedRecord
 
 logger = logging.getLogger(__name__)
 

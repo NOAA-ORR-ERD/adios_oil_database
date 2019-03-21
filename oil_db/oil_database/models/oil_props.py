@@ -10,7 +10,7 @@ from itertools import groupby, chain, izip_longest
 from repoze.lru import lru_cache
 import numpy as np
 
-from ..data_sources.estimations import ImportedRecordWithEstimation
+from oil_database.data_sources.noaa_fm import ImportedRecordWithEstimation
 
 
 # create a dtype for storing sara information in numpy array

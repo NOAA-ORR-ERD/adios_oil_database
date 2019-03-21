@@ -9,7 +9,7 @@ from openpyxl import Workbook
 
 import unit_conversion as uc
 
-from ..util.db_connection import connect_modm
+from oil_database.util.db_connection import connect_modm
 
 logger = logging.getLogger(__name__)
 

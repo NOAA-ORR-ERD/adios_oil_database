@@ -8,8 +8,8 @@ from pymodm import MongoModel
 from pymodm.fields import (CharField, FloatField, DictField, ReferenceField,
                            EmbeddedDocumentListField, ListField)
 
-from .common_props import (Density, KVis, Cut,
-                           SARAFraction, SARADensity, MolecularWeight)
+from .common.common_props import (Density, KVis, Cut,
+                                  SARAFraction, SARADensity, MolecularWeight)
 from .imported_rec import ImportedRecord
 from .category import Category
 

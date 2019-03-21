@@ -10,13 +10,15 @@ import numpy as np
 from pymongo.errors import DuplicateKeyError
 from pymodm.errors import ValidationError
 
-from ..util.term import TermColor as tc
+from oil_database.util.term import TermColor as tc
 
-from ..util.csv import CSVFileWithHeader
-from ..data_sources.exxon_assays.oil_library import (ExxonOilExcelFile,
-                                                     ExxonRecordParser)
+from oil_database.util.csv import CSVFileWithHeader
 
-from ..models.ec_imported_rec import ECImportedRecord
+from oil_database.data_sources.exxon_assays import (ExxonOilExcelFile,
+                                                    ExxonRecordParser)
+
+
+from oil_database.models.ec_imported_rec import ECImportedRecord
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
