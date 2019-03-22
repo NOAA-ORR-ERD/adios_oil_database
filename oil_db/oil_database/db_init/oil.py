@@ -5,10 +5,10 @@ import numpy as np
 from oil_database.models.imported_rec import ImportedRecord
 from oil_database.models.ec_imported_rec import ECImportedRecord
 from oil_database.models.oil import Oil
-from oil_database.models.common.common_props import (Cut,
-                                                     SARAFraction,
+from oil_database.models.common.common_props import (SARAFraction,
                                                      SARADensity,
                                                      MolecularWeight)
+from oil_database.models.common.noaa_fm_props import NoaaFmCut
 
 from oil_database.util.estimations import api_from_density
 
@@ -228,7 +228,7 @@ def add_volatile_fractions(imp_rec_obj, oil):
 
 def add_distillation_cuts(imp_rec_obj, oil):
     for T_i, f_evap_i in zip(*imp_rec_obj.normalized_cut_values()):
-        oil.cuts.append(Cut(vapor_temp_k=T_i, fraction=f_evap_i))
+        oil.cuts.append(NoaaFmCut(vapor_temp_k=T_i, fraction=f_evap_i))
 
 
 def add_component_mol_wt(imp_rec_obj, oil):

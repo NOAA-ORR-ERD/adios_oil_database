@@ -8,8 +8,9 @@ from pymodm import MongoModel
 from pymodm.fields import (CharField, FloatField, DictField, ReferenceField,
                            EmbeddedDocumentListField, ListField)
 
-from .common.common_props import (Density, KVis, Cut,
-                                  SARAFraction, SARADensity, MolecularWeight)
+from .common.common_props import SARAFraction, SARADensity, MolecularWeight
+from .common.noaa_fm_props import NoaaFmDensity, NoaaFmKVis, NoaaFmCut
+
 from .imported_rec import ImportedRecord
 from .category import Category
 
@@ -59,9 +60,9 @@ class Oil(MongoModel):
 
     quality_index = FloatField(blank=True)
 
-    densities = EmbeddedDocumentListField(Density, blank=True)
-    kvis = EmbeddedDocumentListField(KVis, blank=True)
-    cuts = EmbeddedDocumentListField(Cut, blank=True)
+    densities = EmbeddedDocumentListField(NoaaFmDensity, blank=True)
+    kvis = EmbeddedDocumentListField(NoaaFmKVis, blank=True)
+    cuts = EmbeddedDocumentListField(NoaaFmCut, blank=True)
     sara_fractions = EmbeddedDocumentListField(SARAFraction, blank=True)
     sara_densities = EmbeddedDocumentListField(SARADensity, blank=True)
     molecular_weights = EmbeddedDocumentListField(MolecularWeight, blank=True)

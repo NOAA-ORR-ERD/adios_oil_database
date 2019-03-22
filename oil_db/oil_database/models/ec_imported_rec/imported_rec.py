@@ -9,7 +9,8 @@ from pymodm import MongoModel
 from pymodm.fields import (MongoBaseField, CharField, FloatField, ListField,
                            DateTimeField, EmbeddedDocumentListField)
 
-from ..common.common_props import Synonym, Density, DVis, Cut, SARAFraction
+from ..common.common_props import Synonym, SARAFraction
+from ..common.noaa_fm_props import NoaaFmDensity, NoaaFmDVis, NoaaFmCut
 
 from .interfacial_tension import InterfacialTension
 from .flash_point import FlashPoint
@@ -32,9 +33,6 @@ from .biomarkers import Biomarkers
 from .wax import Wax
 from .alkanes import NAlkane
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
-
 
 class ECImportedRecord(MongoModel):
     '''
@@ -53,10 +51,7 @@ class ECImportedRecord(MongoModel):
               - viscosities
               - cuts
               But we will go ahead and accept the record for import, and then
-              handle them when we go through our estimations.
-
-        TODO:
-        -
+              handle them when we are ready to load it into the main Oil table.
     '''
     oil_id = CharField(max_length=16)
     name = CharField(max_length=100)
@@ -77,17 +72,17 @@ class ECImportedRecord(MongoModel):
     # to know should the need arise for estimating any properties.
     product_type = CharField(max_length=16, blank=True)
 
-    densities = EmbeddedDocumentListField(Density, blank=True)
+    densities = EmbeddedDocumentListField(NoaaFmDensity, blank=True)
     api = ListField(FloatField(), blank=True, default=[])
 
-    dvis = EmbeddedDocumentListField(DVis, blank=True)
+    dvis = EmbeddedDocumentListField(NoaaFmDVis, blank=True)
 
     ifts = EmbeddedDocumentListField(InterfacialTension, blank=True)
 
     flash_points = EmbeddedDocumentListField(FlashPoint, blank=True)
     pour_points = EmbeddedDocumentListField(PourPoint, blank=True)
 
-    cuts = EmbeddedDocumentListField(Cut, blank=True)
+    cuts = EmbeddedDocumentListField(NoaaFmCut, blank=True)
 
     adhesions = EmbeddedDocumentListField(Adhesion, blank=True)
     evaporation_eqs = EmbeddedDocumentListField(EvaporationEq, blank=True)
@@ -188,82 +183,6 @@ class ECImportedRecord(MongoModel):
                 else:
                     kwargs[attr] = [embedded_model(**sub_kwargs)
                                     for sub_kwargs in getattr(parser, attr)]
-
-    @classmethod
-    def from_record_parser_old(cls, parser):
-        '''
-            It is intended that the database object constructor need not know
-            how to build properties from the raw record data coming from a
-            data source.  That is the job of the record parser.
-
-            The parser takes a set of record data and exposes a set of suitable
-            properties for building our class.
-        '''
-        kwargs = {}
-        kwargs['oil_id'] = parser.ec_oil_id
-        kwargs['oil_name'] = parser.name
-        kwargs['location'] = parser.location
-        kwargs['reference'] = parser.reference
-        kwargs['reference_date'] = parser.reference_date
-        kwargs['comments'] = parser.comments
-
-        # kwargs['product_type'] = parser.product_type
-
-        rec = cls(**kwargs)
-
-        rec.densities.extend([Density(**args) for args in parser.densities])
-        rec.api.extend(parser.api)
-        rec.dvis.extend([DVis(**args) for args in parser.viscosities])
-        rec.cuts.extend([Cut(**args) for args in parser.distillation_cuts])
-
-        rec.flash_points.extend([FlashPoint(**args)
-                                 for args in parser.flash_points])
-        rec.pour_points.extend([PourPoint(**args)
-                                for args in parser.pour_points])
-
-        rec.ift.extend([InterfacialTension(**args)
-                        for args in parser.interfacial_tensions])
-
-        rec.adhesions.extend([Adhesion(**args) for args in parser.adhesions])
-
-        rec.evaporation_eqs.extend([EvaporationEq(**args)
-                                    for args in parser.evaporation_eqs])
-
-        rec.emulsions.extend([Emulsion(**args) for args in parser.emulsions])
-        rec.corexit.extend([Corexit9500(**args) for args in parser.corexit])
-        rec.sulphur.extend([Sulfur(**args) for args in parser.sulfur_content])
-        rec.water.extend([Water(**args) for args in parser.water_content])
-
-        rec.benzene.extend([Benzene(**args)
-                            for args in parser.benzene_content])
-
-        rec.headspace.extend([Headspace(**args) for args in parser.headspace])
-
-        rec.chromatography.extend([GasChromatography(**args)
-                                   for args in parser.chromatography])
-
-        rec.ccme.extend([CCMEFraction(**args) for args in parser.ccme])
-        rec.ccme_f1.extend([CCMESaturateCxx(**args)
-                            for args in parser.ccme_f1])
-        rec.ccme_f2.extend([CCMEAromaticCxx(**args)
-                            for args in parser.ccme_f2])
-        rec.ccme_tph.extend([CCMETotalPetroleumCxx(**args)
-                            for args in parser.ccme_tph])
-
-        rec.alkylated_pahs.extend([AlkylatedTotalPAH(**args)
-                                   for args in parser.alkylated_pahs])
-
-        rec.biomarkers.extend([Biomarkers(**args)
-                               for args in parser.biomarkers])
-
-        rec.wax_content.extend([Wax(**args) for args in parser.wax_content])
-        rec.alkanes.extend([NAlkane(**args) for args in parser.alkanes])
-
-        rec.sara_total_fractions.extend([SARAFraction(**args)
-                                         for args
-                                         in parser.sara_total_fractions])
-
-        return rec
 
     def __repr__(self):
         return "<ImportedRecord('{}')>".format(self.oil_name)

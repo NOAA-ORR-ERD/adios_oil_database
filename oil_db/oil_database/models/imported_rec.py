@@ -9,7 +9,12 @@ from pymodm import MongoModel
 from pymodm.fields import (MongoBaseField, CharField, BooleanField, FloatField,
                            EmbeddedDocumentListField)
 
-from .common.common_props import Synonym, Density, KVis, DVis, Cut, Toxicity
+from .common.common_props import Synonym
+from .common.noaa_fm_props import (NoaaFmDensity,
+                                   NoaaFmKVis,
+                                   NoaaFmDVis,
+                                   NoaaFmCut,
+                                   NoaaFmToxicity)
 
 
 class ImportedRecord(MongoModel):
@@ -82,11 +87,11 @@ class ImportedRecord(MongoModel):
 
     # relationship fields
     synonyms = EmbeddedDocumentListField(Synonym, blank=True)
-    densities = EmbeddedDocumentListField(Density, blank=True)
-    kvis = EmbeddedDocumentListField(KVis, blank=True)
-    dvis = EmbeddedDocumentListField(DVis, blank=True)
-    cuts = EmbeddedDocumentListField(Cut, blank=True)
-    toxicities = EmbeddedDocumentListField(Toxicity, blank=True)
+    densities = EmbeddedDocumentListField(NoaaFmDensity, blank=True)
+    kvis = EmbeddedDocumentListField(NoaaFmKVis, blank=True)
+    dvis = EmbeddedDocumentListField(NoaaFmDVis, blank=True)
+    cuts = EmbeddedDocumentListField(NoaaFmCut, blank=True)
+    toxicities = EmbeddedDocumentListField(NoaaFmToxicity, blank=True)
 
     class Meta:
         write_concern = WriteConcern(j=True)

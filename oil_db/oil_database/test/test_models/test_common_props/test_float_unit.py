@@ -6,20 +6,20 @@ import pytest
 
 from pymodm.errors import ValidationError
 
-from oil_database.models.common.common_props import (FloatUnit,
-                                                     AngularMeasureUnit,
-                                                     AreaUnit,
-                                                     ConcentrationInWaterUnit,
-                                                     DensityUnit,
-                                                     DischargeUnit,
-                                                     KinematicViscosityUnit,
-                                                     LengthUnit,
-                                                     MassUnit,
-                                                     OilConcentrationUnit,
-                                                     TemperatureUnit,
-                                                     TimeUnit,
-                                                     VelocityUnit,
-                                                     VolumeUnit)
+from oil_database.models.common.float_unit import (FloatUnit,
+                                                   AngularMeasureUnit,
+                                                   AreaUnit,
+                                                   ConcentrationInWaterUnit,
+                                                   DensityUnit,
+                                                   DischargeUnit,
+                                                   KinematicViscosityUnit,
+                                                   LengthUnit,
+                                                   MassUnit,
+                                                   OilConcentrationUnit,
+                                                   TemperatureUnit,
+                                                   TimeUnit,
+                                                   VelocityUnit,
+                                                   VolumeUnit)
 
 
 class TestFloatUnit(object):

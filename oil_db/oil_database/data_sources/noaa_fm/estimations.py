@@ -8,7 +8,9 @@
 import numpy as np
 from scipy.optimize import curve_fit
 
-from oil_database.models.common.common_props import KVis, DVis, Density
+from oil_database.models.common.noaa_fm_props import (NoaaFmKVis,
+                                                      NoaaFmDVis,
+                                                      NoaaFmDensity)
 
 from oil_database.util import estimations as est
 
@@ -205,9 +207,9 @@ class ImportedRecordWithEstimation(object):
                      if np.isclose(d.ref_temp_k, 288.0, atol=1.0)]) == 0):
             kg_m_3, ref_temp_k = est.density_from_api(self.record.api)
 
-            densities.append(Density(kg_m_3=kg_m_3,
-                                     ref_temp_k=ref_temp_k,
-                                     weathering=0.0))
+            densities.append(NoaaFmDensity(kg_m_3=kg_m_3,
+                                           ref_temp_k=ref_temp_k,
+                                           weathering=0.0))
 
         return sorted(densities, key=lambda d: d.ref_temp_k)
 
@@ -350,9 +352,9 @@ class ImportedRecordWithEstimation(object):
 
         non_redundant_keys = set(dvis_dict.keys()).difference(kvis_dict.keys())
         for k in sorted(non_redundant_keys):
-            yield DVis(ref_temp_k=k[1],
-                       weathering=k[0],
-                       kg_ms=dvis_dict[k])
+            yield NoaaFmDVis(ref_temp_k=k[1],
+                             weathering=k[0],
+                             kg_ms=dvis_dict[k])
 
     def dvis_to_kvis(self, kg_ms, ref_temp_k):
         density = self.density_at_temp(ref_temp_k)
@@ -366,9 +368,9 @@ class ImportedRecordWithEstimation(object):
     def dvis_obj_to_kvis_obj(cls, dvis_obj, density):
         viscosity = est.dvis_to_kvis(dvis_obj.kg_ms, density)
 
-        return KVis(ref_temp_k=dvis_obj.ref_temp_k,
-                    weathering=dvis_obj.weathering,
-                    m_2_s=viscosity)
+        return NoaaFmKVis(ref_temp_k=dvis_obj.ref_temp_k,
+                          weathering=dvis_obj.weathering,
+                          m_2_s=viscosity)
 
     def aggregate_kvis(self):
         kvis_list = [((k.ref_temp_k, k.weathering), (k.m_2_s, False))
@@ -388,7 +390,7 @@ class ImportedRecordWithEstimation(object):
         else:
             agg = dict(kvis_list)
 
-        return zip(*[(KVis(m_2_s=k, ref_temp_k=t, weathering=w), e)
+        return zip(*[(NoaaFmKVis(m_2_s=k, ref_temp_k=t, weathering=w), e)
                      for (t, w), (k, e) in sorted(agg.iteritems())])
 
     def kvis_at_temp(self, temp_k=288.15, weathering=0.0):
