@@ -7,10 +7,10 @@ from pymodm.fields import (CharField,
                            FloatField)
 
 
-class InterfacialTension(EmbeddedMongoModel):
-    interface = CharField(choices=('air', 'water', 'seawater'))
-    n_m = FloatField()
+class ECInterfacialTension(EmbeddedMongoModel):
+    dynes_cm = FloatField()
     ref_temp_k = FloatField()
+    interface = CharField(choices=('air', 'water', 'seawater'))
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -30,12 +30,13 @@ class InterfacialTension(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(InterfacialTension, self).__init__(**kwargs)
+        super(ECInterfacialTension, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<InterfacialTension({0.n_m} N/m at {0.ref_temp_k}K, '
+        return ('<ECInterfacialTension({0.dynes_cm} dynes/cm '
+                'at {0.ref_temp_k}K, '
                 'if={0.interface}, w={0.weathering})>'
                 .format(self))
