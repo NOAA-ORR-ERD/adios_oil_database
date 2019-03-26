@@ -1,18 +1,13 @@
 #
-# PyMODM model class for Environment Canada's water content
-# oil properties.
+# PyMODM Model class definitions for embedded content in our oil records
 #
 from pymodm import EmbeddedMongoModel
 from pymodm.fields import FloatField
 
 
-class ECWater(EmbeddedMongoModel):
-    percent = FloatField()
+class ECApiGravity(EmbeddedMongoModel):
+    gravity = FloatField()
     weathering = FloatField(default=0.0)
-
-    # may as well keep the extra stuff
-    replicates = FloatField(blank=True)
-    standard_deviation = FloatField(blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -26,12 +21,11 @@ class ECWater(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(ECWater, self).__init__(**kwargs)
+        super(ECApiGravity, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}({}%, w={})>'
-                .format(self.__class__.__name__,
-                        self.percent, self.weathering))
+        return ('<ECApiGravity(g={0.gravity}, w={0.weathering})>'
+                .format(self))

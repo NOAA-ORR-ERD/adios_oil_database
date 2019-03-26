@@ -13,6 +13,9 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser)
 from oil_database.models.ec_imported_rec import ECImportedRecord
 
+from pprint import PrettyPrinter
+pp = PrettyPrinter(indent=2, width=120)
+
 logger = logging.getLogger(__name__)
 
 
@@ -52,6 +55,19 @@ def add_ec_record(parser):
     '''
         Add an Environment Canada Record
     '''
+    debug = False
+    if debug:
+        print ('\nparser.oil_id: {}, parser.name: {}'
+               .format(parser.oil_id, parser.name))
+
+        print 'parser.dvis: '
+        pp.pprint(parser.dvis)
+
     model_rec = ECImportedRecord.from_record_parser(parser)
+
+    if debug:
+        print 'rec.dvis: '
+        for i in model_rec.dvis:
+            print '\t', i
 
     model_rec.save()

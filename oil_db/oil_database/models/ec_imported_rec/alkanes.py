@@ -3,14 +3,15 @@
 # oil properties.
 #
 from pymodm import EmbeddedMongoModel
-from pymodm.fields import FloatField
+from pymodm.fields import CharField, FloatField
 
 
-class NAlkane(EmbeddedMongoModel):
+class ECNAlkanes(EmbeddedMongoModel):
     '''
         n-Alkanes (ug/g oil) (ESTS 2002a)
     '''
     weathering = FloatField(default=0.0)
+    method = CharField(max_length=16, blank=True)
 
     pristane_ug_g = FloatField(blank=True)
     phytane_ug_g = FloatField(blank=True)
@@ -64,10 +65,13 @@ class NAlkane(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(NAlkane, self).__init__(**kwargs)
+        super(ECNAlkanes, self).__init__(**kwargs)
+
+    def __str__(self):
+        return self.__repr__()
 
     def __repr__(self):
-        return ('<NAlkane('
+        return ('<ECNAlkanes('
                 'pristane={0.pristane_ug_g}, '
                 'phytane={0.phytane_ug_g}, '
                 'c8={0.c8_ug_g}, '

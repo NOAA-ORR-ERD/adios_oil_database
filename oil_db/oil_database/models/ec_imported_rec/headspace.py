@@ -3,14 +3,15 @@
 # oil properties.
 #
 from pymodm import EmbeddedMongoModel
-from pymodm.fields import FloatField
+from pymodm.fields import CharField, FloatField
 
 
-class Headspace(EmbeddedMongoModel):
+class ECHeadspace(EmbeddedMongoModel):
     '''
         Headspace Analysis (mg/g oil) (ESTS 2002b)
     '''
     weathering = FloatField(default=0.0)
+    method = CharField(max_length=16, blank=True)
 
     n_c5_mg_g = FloatField(blank=True)
     n_c6_mg_g = FloatField(blank=True)
@@ -33,7 +34,10 @@ class Headspace(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(Headspace, self).__init__(**kwargs)
+        super(ECHeadspace, self).__init__(**kwargs)
+
+    def __str__(self):
+        return self.__repr__()
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
@@ -44,5 +48,5 @@ class Headspace(EmbeddedMongoModel):
                 'c5_group={0.c5_group_mg_g}, '
                 'c6_group={0.c6_group_mg_g}, '
                 'c7_group={0.c7_group_mg_g}, '
-                'weathering={0.weathering})>'
+                'w={0.weathering})>'
                 .format(self))

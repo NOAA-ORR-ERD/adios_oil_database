@@ -3,14 +3,15 @@
 # oil properties.
 #
 from pymodm import EmbeddedMongoModel
-from pymodm.fields import FloatField
+from pymodm.fields import CharField, FloatField
 
 
-class Biomarkers(EmbeddedMongoModel):
+class ECBiomarkers(EmbeddedMongoModel):
     '''
         Biomarkers (ug/g) (ESTS 2002a)
     '''
     weathering = FloatField(default=0.0)
+    method = CharField(max_length=16, blank=True)
 
     c21_tricyclic_terpane_ug_g = FloatField(blank=True)
     c22_tricyclic_terpane_ug_g = FloatField(blank=True)
@@ -53,10 +54,13 @@ class Biomarkers(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(Biomarkers, self).__init__(**kwargs)
+        super(ECBiomarkers, self).__init__(**kwargs)
+
+    def __str__(self):
+        return self.__repr__()
 
     def __repr__(self):
-        return ('<Biomarkers('
+        return ('<{0.__class__.__name__}('
                 'c21_tricyclic_terpane={0.c21_tricyclic_terpane_ug_g}, '
                 'c22_tricyclic_terpane={0.c22_tricyclic_terpane_ug_g}, '
                 'c23_tricyclic_terpane={0.c23_tricyclic_terpane_ug_g}, '

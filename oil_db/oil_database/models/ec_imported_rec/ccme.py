@@ -3,19 +3,20 @@
 # oil properties.
 #
 from pymodm import EmbeddedMongoModel
-from pymodm.fields import FloatField
+from pymodm.fields import CharField, FloatField
 
 
-class CCMEFraction(EmbeddedMongoModel):
+class EcCCMEFraction(EmbeddedMongoModel):
     '''
         CCME Fractions (mg/g oil) (ESTS 2002a)
     '''
     weathering = FloatField(default=0.0)
+    method = CharField(max_length=16, blank=True)
 
-    ccme_f1_mg_g = FloatField(blank=True)
-    ccme_f2_mg_g = FloatField(blank=True)
-    ccme_f3_mg_g = FloatField(blank=True)
-    ccme_f4_mg_g = FloatField(blank=True)
+    f1_mg_g = FloatField(blank=True)
+    f2_mg_g = FloatField(blank=True)
+    f3_mg_g = FloatField(blank=True)
+    f4_mg_g = FloatField(blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -29,28 +30,31 @@ class CCMEFraction(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(CCMEFraction, self).__init__(**kwargs)
+        super(EcCCMEFraction, self).__init__(**kwargs)
+
+    def __str__(self):
+        return self.__repr__()
 
     def __repr__(self):
         return ('<CCMEFraction('
-                'ccme_f1={0.ccme_f1_mg_g}, '
-                'ccme_f2={0.ccme_f2_mg_g}, '
-                'ccme_f3={0.ccme_f3_mg_g}, '
-                'ccme_f4={0.ccme_f4_mg_g}, '
+                'f1={0.f1_mg_g}, '
+                'f2={0.f2_mg_g}, '
+                'f3={0.f3_mg_g}, '
+                'f4={0.f4_mg_g}, '
                 'w={0.weathering})>'
                 .format(self))
 
 
-class CCMESaturateCxx(EmbeddedMongoModel):
+class CarbonNumberDistribution(EmbeddedMongoModel):
     '''
-        Saturates (F1) (ESTS 2002a)
+        We have a couple different groups that have similar properties,
+        so we will define them here an subclass the groups.
 
-        Note: This property group seems to be associated to the CCME Fractions,
-              so we will define it in the same namespace.
         Note: I am not sure what the units are here, so we don't add any
               suffix to the properties
     '''
     weathering = FloatField(default=0.0)
+    method = CharField(max_length=16, blank=True)
 
     n_c8_to_n_c10 = FloatField(blank=True)
     n_c10_to_n_c12 = FloatField(blank=True)
@@ -73,7 +77,10 @@ class CCMESaturateCxx(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(CCMESaturateCxx, self).__init__(**kwargs)
+        super(CarbonNumberDistribution, self).__init__(**kwargs)
+
+    def __str__(self):
+        return self.__repr__()
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
@@ -89,7 +96,18 @@ class CCMESaturateCxx(EmbeddedMongoModel):
                 .format(self))
 
 
-class CCMEAromaticCxx(CCMESaturateCxx):
+class CCMESaturateCxx(CarbonNumberDistribution):
+    '''
+        Saturates (F1) (ESTS 2002a)
+
+        Note: The Cxx property groups seem to be associated with the
+              CCME Fractions, so we will define them in the same namespace.
+    '''
+    def __init__(self, **kwargs):
+        super(CCMESaturateCxx, self).__init__(**kwargs)
+
+
+class CCMEAromaticCxx(CarbonNumberDistribution):
     '''
         Aromatics (F2) (ESTS 2002a)
     '''
@@ -97,7 +115,7 @@ class CCMEAromaticCxx(CCMESaturateCxx):
         super(CCMEAromaticCxx, self).__init__(**kwargs)
 
 
-class CCMETotalPetroleumCxx(CCMESaturateCxx):
+class CCMETotalPetroleumCxx(CarbonNumberDistribution):
     '''
         GC-TPH (F1 + F2) (ESTS 2002a)
     '''
@@ -105,17 +123,3 @@ class CCMETotalPetroleumCxx(CCMESaturateCxx):
 
     def __init__(self, **kwargs):
         super(CCMETotalPetroleumCxx, self).__init__(**kwargs)
-
-    def __repr__(self):
-        return ('<{0.__class__.__name__}('
-                'n_c8_to_c10={0.n_c8_to_n_c10}, '
-                'n_c10_to_c12={0.n_c10_to_n_c12}, '
-                'n_c12_to_c16={0.n_c12_to_n_c16}, '
-                'n_c16_to_c20={0.n_c16_to_n_c20}, '
-                'n_c20_to_c24={0.n_c20_to_n_c24}, '
-                'n_c24_to_c28={0.n_c24_to_n_c28}, '
-                'n_c28_to_c34={0.n_c28_to_n_c34}, '
-                'n_c34={0.n_c34}, '
-                'total_tph={0.total_tph_gc_detected_tph_undetected_tph}, '
-                'w={0.weathering})>'
-                .format(self))

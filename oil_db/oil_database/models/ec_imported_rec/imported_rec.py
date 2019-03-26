@@ -9,29 +9,33 @@ from pymodm import MongoModel
 from pymodm.fields import (MongoBaseField, CharField, FloatField, ListField,
                            DateTimeField, EmbeddedDocumentListField)
 
-from ..common.common_props import Synonym, SARAFraction
-from ..common.noaa_fm_props import NoaaFmDensity, NoaaFmDVis, NoaaFmCut
+from ..common.common_props import Synonym
 
-from .interfacial_tension import InterfacialTension
-from .flash_point import FlashPoint
-from .pour_point import PourPoint
-from .adhesion import Adhesion
+from .density import ECDensity
+from .api import ECApiGravity
+from .dvis import ECDVis
+from .cut import ECCut
+from .interfacial_tension import ECInterfacialTension
+from .flash_point import ECFlashPoint
+from .pour_point import ECPourPoint
+from .adhesion import ECAdhesion
 from .evaporation_eq import EvaporationEq
-from .emulsion import Emulsion
-from .corexit import Corexit9500
-from .sulfur import Sulfur
-from .water import Water
-from .benzene import Benzene
-from .headspace import Headspace
-from .chromatography import GasChromatography
-from .ccme import (CCMEFraction,
+from .emulsion import ECEmulsion
+from .corexit import ECCorexit9500
+from .sulfur import ECSulfur
+from .water import ECWater
+from .wax import ECWax
+from .benzene import ECBenzene
+from .headspace import ECHeadspace
+from .chromatography import ECGasChromatography
+from .ccme import (EcCCMEFraction,
                    CCMESaturateCxx,
                    CCMEAromaticCxx,
                    CCMETotalPetroleumCxx)
-from .alkylated_pah import AlkylatedTotalPAH
-from .biomarkers import Biomarkers
-from .wax import Wax
-from .alkanes import NAlkane
+from .alkylated_pah import ECAlkylatedTotalPAH
+from .sara_fraction import ECSARAFraction
+from .biomarkers import ECBiomarkers
+from .alkanes import ECNAlkanes
 
 
 class ECImportedRecord(MongoModel):
@@ -72,43 +76,44 @@ class ECImportedRecord(MongoModel):
     # to know should the need arise for estimating any properties.
     product_type = CharField(max_length=16, blank=True)
 
-    densities = EmbeddedDocumentListField(NoaaFmDensity, blank=True)
-    api = ListField(FloatField(), blank=True, default=[])
+    densities = EmbeddedDocumentListField(ECDensity, blank=True)
+    apis = EmbeddedDocumentListField(ECApiGravity, blank=True)
 
-    dvis = EmbeddedDocumentListField(NoaaFmDVis, blank=True)
+    dvis = EmbeddedDocumentListField(ECDVis, blank=True)
 
-    ifts = EmbeddedDocumentListField(InterfacialTension, blank=True)
+    ifts = EmbeddedDocumentListField(ECInterfacialTension, blank=True)
 
-    flash_points = EmbeddedDocumentListField(FlashPoint, blank=True)
-    pour_points = EmbeddedDocumentListField(PourPoint, blank=True)
+    flash_points = EmbeddedDocumentListField(ECFlashPoint, blank=True)
+    pour_points = EmbeddedDocumentListField(ECPourPoint, blank=True)
 
-    cuts = EmbeddedDocumentListField(NoaaFmCut, blank=True)
+    cuts = EmbeddedDocumentListField(ECCut, blank=True)
 
-    adhesions = EmbeddedDocumentListField(Adhesion, blank=True)
+    adhesions = EmbeddedDocumentListField(ECAdhesion, blank=True)
     evaporation_eqs = EmbeddedDocumentListField(EvaporationEq, blank=True)
-    emulsions = EmbeddedDocumentListField(Emulsion, blank=True)
-    corexit = EmbeddedDocumentListField(Corexit9500, blank=True)
+    emulsions = EmbeddedDocumentListField(ECEmulsion, blank=True)
+    corexit = EmbeddedDocumentListField(ECCorexit9500, blank=True)
 
     # Note: this is how they spell sulphur in the Env Canada datasheet
-    sulfur = EmbeddedDocumentListField(Sulfur, blank=True)
+    sulfur = EmbeddedDocumentListField(ECSulfur, blank=True)
 
-    water = EmbeddedDocumentListField(Water, blank=True)
-    benzene = EmbeddedDocumentListField(Benzene, blank=True)
-    headspace = EmbeddedDocumentListField(Headspace, blank=True)
-    chromatography = EmbeddedDocumentListField(GasChromatography, blank=True)
+    water = EmbeddedDocumentListField(ECWater, blank=True)
+    benzene = EmbeddedDocumentListField(ECBenzene, blank=True)
+    headspace = EmbeddedDocumentListField(ECHeadspace, blank=True)
+    chromatography = EmbeddedDocumentListField(ECGasChromatography, blank=True)
 
-    ccme = EmbeddedDocumentListField(CCMEFraction, blank=True)
+    ccme = EmbeddedDocumentListField(EcCCMEFraction, blank=True)
     ccme_f1 = EmbeddedDocumentListField(CCMESaturateCxx, blank=True)
     ccme_f2 = EmbeddedDocumentListField(CCMEAromaticCxx, blank=True)
     ccme_tph = EmbeddedDocumentListField(CCMETotalPetroleumCxx, blank=True)
 
-    alkylated_pahs = EmbeddedDocumentListField(AlkylatedTotalPAH, blank=True)
+    alkylated_pahs = EmbeddedDocumentListField(ECAlkylatedTotalPAH, blank=True)
 
-    biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
-    wax_content = EmbeddedDocumentListField(Wax, blank=True)
-    alkanes = EmbeddedDocumentListField(NAlkane, blank=True)
+    biomarkers = EmbeddedDocumentListField(ECBiomarkers, blank=True)
+    wax_content = EmbeddedDocumentListField(ECWax, blank=True)
+    alkanes = EmbeddedDocumentListField(ECNAlkanes, blank=True)
 
-    sara_total_fractions = EmbeddedDocumentListField(SARAFraction, blank=True)
+    sara_total_fractions = EmbeddedDocumentListField(ECSARAFraction,
+                                                     blank=True)
 
     # relationship fields
     synonyms = EmbeddedDocumentListField(Synonym, blank=True)

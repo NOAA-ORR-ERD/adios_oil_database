@@ -6,12 +6,12 @@ from pymodm import EmbeddedMongoModel
 from pymodm.fields import FloatField
 
 
-class Corexit9500(EmbeddedMongoModel):
+class ECCorexit9500(EmbeddedMongoModel):
     '''
         Chemical dispersability with Corexit 9500 Dispersant (swirling flask
         test) (ASTM F2059)
     '''
-    dispersant_effectiveness_fraction = FloatField()
+    effectiveness_percent = FloatField()
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -30,13 +30,12 @@ class Corexit9500(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(Corexit9500, self).__init__(**kwargs)
+        super(ECCorexit9500, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<Corexit9500('
-                'effectiveness={0.dispersant_effectiveness_fraction:0.3g}, '
-                'w={0.weathering})>'
-                .format(self))
+        return ('<{}(effectiveness={}%, w={})>'
+                .format(self.__class__.__name__,
+                        self.effectiveness_percent, self.weathering))

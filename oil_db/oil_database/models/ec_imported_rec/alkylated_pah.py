@@ -3,50 +3,51 @@
 # hydrocarbon oil properties.
 #
 from pymodm import EmbeddedMongoModel
-from pymodm.fields import FloatField
+from pymodm.fields import CharField, FloatField
 
 
-class AlkylatedTotalPAH(EmbeddedMongoModel):
+class ECAlkylatedTotalPAH(EmbeddedMongoModel):
     '''
         Alkylated Total Aromatic Hydrocarbons (PAHs) (ug/g oil)
         (ESTS 2002a)
+        - c[0-4]_n_ug_g = Naphthalenes
+        - c[0-4]_p_ug_g = Phenanthrenes
+        - c[0-4]_d_ug_g = Dibenzothiophenes
+        - c[0-4]_f_ug_g = Fluorenes
+        - c[0-4]_b_ug_g = Benzonaphthothiophenes
+        - c[0-4]_c_ug_g = Chrysenes
     '''
     weathering = FloatField(default=0.0)
+    method = CharField(max_length=16, blank=True)
 
-    # Naphthalenes
     c0_n_ug_g = FloatField(blank=True)
     c1_n_ug_g = FloatField(blank=True)
     c2_n_ug_g = FloatField(blank=True)
     c3_n_ug_g = FloatField(blank=True)
     c4_n_ug_g = FloatField(blank=True)
 
-    # Phenanthrenes
     c0_p_ug_g = FloatField(blank=True)
     c1_p_ug_g = FloatField(blank=True)
     c2_p_ug_g = FloatField(blank=True)
     c3_p_ug_g = FloatField(blank=True)
     c4_p_ug_g = FloatField(blank=True)
 
-    # Dibenzothiophenes
     c0_d_ug_g = FloatField(blank=True)
     c1_d_ug_g = FloatField(blank=True)
     c2_d_ug_g = FloatField(blank=True)
     c3_d_ug_g = FloatField(blank=True)
 
-    # Fluorenes
     c0_f_ug_g = FloatField(blank=True)
     c1_f_ug_g = FloatField(blank=True)
     c2_f_ug_g = FloatField(blank=True)
     c3_f_ug_g = FloatField(blank=True)
 
-    # Benzonaphthothiophenes
     c0_b_ug_g = FloatField(blank=True)
     c1_b_ug_g = FloatField(blank=True)
     c2_b_ug_g = FloatField(blank=True)
     c3_b_ug_g = FloatField(blank=True)
     c4_b_ug_g = FloatField(blank=True)
 
-    # Chrysenes
     c0_c_ug_g = FloatField(blank=True)
     c1_c_ug_g = FloatField(blank=True)
     c2_c_ug_g = FloatField(blank=True)
@@ -83,7 +84,10 @@ class AlkylatedTotalPAH(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(AlkylatedTotalPAH, self).__init__(**kwargs)
+        super(ECAlkylatedTotalPAH, self).__init__(**kwargs)
+
+    def __str__(self):
+        return self.__repr__()
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

@@ -1,25 +1,25 @@
 from .imported_rec import ECImportedRecord
 
-from .interfacial_tension import InterfacialTension
-from .flash_point import FlashPoint
-from .pour_point import PourPoint
-from .adhesion import Adhesion
+from .interfacial_tension import ECInterfacialTension
+from .flash_point import ECFlashPoint
+from .pour_point import ECPourPoint
+from .adhesion import ECAdhesion
 from .evaporation_eq import EvaporationEq
-from .emulsion import Emulsion
-from .sulfur import Sulfur
-from .water import Water
-from .benzene import Benzene
-from .wax import Wax
+from .emulsion import ECEmulsion
+from .sulfur import ECSulfur
+from .water import ECWater
+from .benzene import ECBenzene
+from .wax import ECWax
 
 
 __all__ = [ECImportedRecord,
-           InterfacialTension,
-           FlashPoint,
-           PourPoint,
-           Adhesion,
+           ECInterfacialTension,
+           ECFlashPoint,
+           ECPourPoint,
+           ECAdhesion,
            EvaporationEq,
-           Emulsion,
-           Sulfur,
-           Water,
-           Benzene,
-           Wax]
+           ECEmulsion,
+           ECSulfur,
+           ECWater,
+           ECBenzene,
+           ECWax]

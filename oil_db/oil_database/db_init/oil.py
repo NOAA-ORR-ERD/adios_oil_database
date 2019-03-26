@@ -481,7 +481,12 @@ def has_api(imported_rec):
         Env Canada record has multiple weathered APIs, so we need to account
         for that.
     '''
-    if (imported_rec.api is not None and imported_rec.api != []):
+    try:
+        apis = imported_rec.api
+    except Exception:
+        apis = imported_rec.apis
+
+    if (apis is not None and apis != []):
         return True
     else:
         return False

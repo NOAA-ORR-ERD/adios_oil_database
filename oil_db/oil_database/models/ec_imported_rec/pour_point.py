@@ -2,15 +2,14 @@
 # PyMODM model class for Environment Canada's pour point
 # oil properties.
 #
-from pymodm.errors import ValidationError
 from pymodm import EmbeddedMongoModel
 from pymodm.fields import (CharField,
                            FloatField)
 
 
-class PourPoint(EmbeddedMongoModel):
-    min_temp_k = FloatField(blank=True)
-    max_temp_k = FloatField(blank=True)
+class ECPourPoint(EmbeddedMongoModel):
+    min_temp_c = FloatField(blank=True)
+    max_temp_c = FloatField(blank=True)
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -31,21 +30,18 @@ class PourPoint(EmbeddedMongoModel):
                 # None values?
                 kwargs['weathering'] = 0.0
 
-            if kwargs['min_temp_k'] is None and kwargs['max_temp_k'] is None:
-                raise ValidationError('PourPoint obj needs at least one valid '
-                                      'temperature, either min or max')
-
-        super(PourPoint, self).__init__(**kwargs)
+        super(ECPourPoint, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        min_temp = self.min_temp_k
-        max_temp = self.max_temp_k
+        min_temp = self.min_temp_c
+        max_temp = self.max_temp_c
         w = self.weathering
 
-        return ('<PourPoint([{}{} - {}{}], w={})>'
-                .format(min_temp, '' if min_temp is None else 'K',
-                        max_temp, '' if max_temp is None else 'K',
+        return ('<{}([{}{}, {}{}], w={})>'
+                .format(self.__class__.__name__,
+                        min_temp, '' if min_temp is None else 'C',
+                        max_temp, '' if max_temp is None else 'C',
                         w))

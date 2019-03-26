@@ -6,8 +6,8 @@ from pymodm import EmbeddedMongoModel
 from pymodm.fields import FloatField, CharField
 
 
-class Emulsion(EmbeddedMongoModel):
-    water_content_fraction = FloatField()
+class ECEmulsion(EmbeddedMongoModel):
+    water_content_percent = FloatField()
     wc_standard_deviation = FloatField(blank=True)
     wc_replicates = FloatField(blank=True)
 
@@ -52,15 +52,13 @@ class Emulsion(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(Emulsion, self).__init__(**kwargs)
+        super(ECEmulsion, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<Emulsion('
-                'water_content={0.water_content_fraction:0.3g}, '
-                'temp={0.ref_temp_k}K, '
-                'age={0.age_days} days, '
-                'w={0.weathering})>'
-                .format(self))
+        return ('<{}(water_percent={}, temp={}K, age={} days, w={})>'
+                .format(self.__class__.__name__,
+                        self.water_content_percent,
+                        self.ref_temp_k, self.age_days, self.weathering))

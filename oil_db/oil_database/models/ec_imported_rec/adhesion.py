@@ -6,13 +6,13 @@ from pymodm import EmbeddedMongoModel
 from pymodm.fields import FloatField
 
 
-class Adhesion(EmbeddedMongoModel):
-    kg_m_2 = FloatField()
+class ECAdhesion(EmbeddedMongoModel):
+    g_cm_2 = FloatField()
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
-    standard_deviation = FloatField(blank=True)
     replicates = FloatField(blank=True)
+    standard_deviation = FloatField(blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -26,11 +26,11 @@ class Adhesion(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(Adhesion, self).__init__(**kwargs)
+        super(ECAdhesion, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<Adhesion({0.kg_m_2} kg/m^2, w={0.weathering})>'
-                .format(self))
+        return ('<{}({} g/cm^2, w={})>'
+                .format(self.__class__.__name__, self.g_cm_2, self.weathering))

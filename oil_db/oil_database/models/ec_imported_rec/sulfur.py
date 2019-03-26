@@ -6,13 +6,13 @@ from pymodm import EmbeddedMongoModel
 from pymodm.fields import FloatField
 
 
-class Sulfur(EmbeddedMongoModel):
-    fraction = FloatField()
+class ECSulfur(EmbeddedMongoModel):
+    percent = FloatField()
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
-    standard_deviation = FloatField(blank=True)
     replicates = FloatField(blank=True)
+    standard_deviation = FloatField(blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -26,13 +26,12 @@ class Sulfur(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(Sulfur, self).__init__(**kwargs)
+        super(ECSulfur, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<Sulfur('
-                'fraction={0.fraction}, '
-                'w={0.weathering})>'
-                .format(self))
+        return ('<{}({}%, w={})>'
+                .format(self.__class__.__name__,
+                        self.percent, self.weathering))
