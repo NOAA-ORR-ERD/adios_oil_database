@@ -11,112 +11,106 @@ from pymodm.fields import (MongoBaseField, CharField,
 
 from oil_database.models.common import Synonym
 
-from .density import ECDensity
-from .api import ECApiGravity
-from .dvis import ECDVis
-from .cut import ECCut
-from .interfacial_tension import ECInterfacialTension
-from .flash_point import ECFlashPoint
-from .pour_point import ECPourPoint
-from .adhesion import ECAdhesion
+from .density import Density
+from .api import ApiGravity
+from .dvis import DVis
+from .kvis import KVis
+from .cut import Cut
+from .interfacial_tension import InterfacialTension
+from .flash_point import FlashPoint
+from .pour_point import PourPoint
+from .adhesion import Adhesion
 from .evaporation_eq import EvaporationEq
-from .emulsion import ECEmulsion
-from .corexit import ECCorexit9500
-from .sulfur import ECSulfur
-from .water import ECWater
-from .wax import ECWax
-from .benzene import ECBenzene
-from .headspace import ECHeadspace
-from .chromatography import ECGasChromatography
-from .ccme import (EcCCMEFraction,
+from .emulsion import Emulsion
+from .corexit import Corexit9500
+from .sulfur import Sulfur
+from .water import Water
+from .wax import Wax
+from .benzene import Benzene
+from .headspace import Headspace
+from .chromatography import GasChromatography
+from .ccme import (CCMEFraction,
                    CCMESaturateCxx,
                    CCMEAromaticCxx,
                    CCMETotalPetroleumCxx)
-from .alkylated_pah import ECAlkylatedTotalPAH
-from .sara_fraction import ECSARAFraction
-from .biomarkers import ECBiomarkers
-from .alkanes import ECNAlkanes
+from .alkylated_pah import AlkylatedTotalPAH
+from .sara_fraction import SARAFraction
+from .biomarkers import Biomarkers
+from .alkanes import NAlkanes
 
 
-class ECImportedRecord(MongoModel):
+class Oil(MongoModel):
     '''
         This class, and its related objects, represents a single record inside
-        the Environment Canada source data spreadsheet.
+        the NOAA oil database.
 
-        The EC source data is a two dimensional tabular spreadsheet, but it
-        contains an implied third dimension, that of weathering.  So for each
-        record, most properties will be lists of properties indexed by their
-        associated weathered amount.
+        It is modeled with a similar structure as the Environment Canada
+        source data, it having the richest set of attributes.  But it is
+        intended to support other sources, such as the NOAA Filemaker oil
+        library, and the Exxon oil assays.
 
-        Note: There are fields here that should probably be required, such as:
-              - reference
-              - product_type
-              - densities/API
-              - viscosities
-              - cuts
-              But we will go ahead and accept the record for import, and then
-              handle them when we are ready to load it into the main Oil table.
+        There are a few fields that are required in order to be accepted into
+        the NOAA oil database:
+        - unique identifier
+        - oil name
+        - reference (not sure how strict we should be about this)
+        - reference_date
+        - product_type
+        - densities/API
+        - viscosities
+        - distillation cuts
     '''
     oil_id = CharField(max_length=16)
     name = CharField(max_length=100)
 
-    # EC location data is primarily in the 'source' field, with very infrequent
-    # specifications of location in the 'comments' field.  It doesn't really
-    # specify a field name, Just a region or sovereign state.
     location = CharField(max_length=64, blank=True)
-
-    # EC reference field exists, and most records have a reliable sample date
-    # that we could use here as a reference date.
     reference = CharField(max_length=80 * 20, blank=True)
     reference_date = DateTimeField(blank=True)
-
     comments = CharField(max_length=80 * 5, blank=True)
-
-    # EC data doesn't really have a field for this, but this is kinda important
-    # to know should the need arise for estimating any properties.
     product_type = CharField(max_length=16, blank=True)
 
-    densities = EmbeddedDocumentListField(ECDensity, blank=True)
-    apis = EmbeddedDocumentListField(ECApiGravity, blank=True)
+    synonyms = EmbeddedDocumentListField(Synonym, blank=True)
 
-    dvis = EmbeddedDocumentListField(ECDVis, blank=True)
+    densities = EmbeddedDocumentListField(Density, blank=True)
+    apis = EmbeddedDocumentListField(ApiGravity, blank=True)
 
-    ifts = EmbeddedDocumentListField(ECInterfacialTension, blank=True)
+    # not sure if we are going to deal with DVis. might be KVis only
+    dvis = EmbeddedDocumentListField(DVis, blank=True)
+    kvis = EmbeddedDocumentListField(KVis, blank=True)
 
-    flash_points = EmbeddedDocumentListField(ECFlashPoint, blank=True)
-    pour_points = EmbeddedDocumentListField(ECPourPoint, blank=True)
+    ifts = EmbeddedDocumentListField(InterfacialTension, blank=True)
 
-    cuts = EmbeddedDocumentListField(ECCut, blank=True)
+    flash_points = EmbeddedDocumentListField(FlashPoint, blank=True)
+    pour_points = EmbeddedDocumentListField(PourPoint, blank=True)
 
-    adhesions = EmbeddedDocumentListField(ECAdhesion, blank=True)
+    cuts = EmbeddedDocumentListField(Cut, blank=True)
+
+    adhesions = EmbeddedDocumentListField(Adhesion, blank=True)
     evaporation_eqs = EmbeddedDocumentListField(EvaporationEq, blank=True)
-    emulsions = EmbeddedDocumentListField(ECEmulsion, blank=True)
-    corexit = EmbeddedDocumentListField(ECCorexit9500, blank=True)
+    emulsions = EmbeddedDocumentListField(Emulsion, blank=True)
+    corexit = EmbeddedDocumentListField(Corexit9500, blank=True)
 
     # Note: this is how they spell sulphur in the Env Canada datasheet
-    sulfur = EmbeddedDocumentListField(ECSulfur, blank=True)
+    sulfur = EmbeddedDocumentListField(Sulfur, blank=True)
 
-    water = EmbeddedDocumentListField(ECWater, blank=True)
-    benzene = EmbeddedDocumentListField(ECBenzene, blank=True)
-    headspace = EmbeddedDocumentListField(ECHeadspace, blank=True)
-    chromatography = EmbeddedDocumentListField(ECGasChromatography, blank=True)
+    water = EmbeddedDocumentListField(Water, blank=True)
+    benzene = EmbeddedDocumentListField(Benzene, blank=True)
+    headspace = EmbeddedDocumentListField(Headspace, blank=True)
+    chromatography = EmbeddedDocumentListField(GasChromatography, blank=True)
 
-    ccme = EmbeddedDocumentListField(EcCCMEFraction, blank=True)
+    ccme = EmbeddedDocumentListField(CCMEFraction, blank=True)
     ccme_f1 = EmbeddedDocumentListField(CCMESaturateCxx, blank=True)
     ccme_f2 = EmbeddedDocumentListField(CCMEAromaticCxx, blank=True)
     ccme_tph = EmbeddedDocumentListField(CCMETotalPetroleumCxx, blank=True)
 
-    alkylated_pahs = EmbeddedDocumentListField(ECAlkylatedTotalPAH, blank=True)
+    alkylated_pahs = EmbeddedDocumentListField(AlkylatedTotalPAH, blank=True)
 
-    biomarkers = EmbeddedDocumentListField(ECBiomarkers, blank=True)
-    wax_content = EmbeddedDocumentListField(ECWax, blank=True)
-    alkanes = EmbeddedDocumentListField(ECNAlkanes, blank=True)
+    biomarkers = EmbeddedDocumentListField(Biomarkers, blank=True)
+    wax_content = EmbeddedDocumentListField(Wax, blank=True)
+    alkanes = EmbeddedDocumentListField(NAlkanes, blank=True)
 
-    sara_total_fractions = EmbeddedDocumentListField(ECSARAFraction,
+    sara_total_fractions = EmbeddedDocumentListField(SARAFraction,
                                                      blank=True)
-
-    # relationship fields
-    synonyms = EmbeddedDocumentListField(Synonym, blank=True)
 
     class Meta:
         write_concern = WriteConcern(j=True)
@@ -135,7 +129,7 @@ class ECImportedRecord(MongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(ECImportedRecord, self).__init__(**kwargs)
+        super(Oil, self).__init__(**kwargs)
 
     @classmethod
     def from_record_parser(cls, parser):

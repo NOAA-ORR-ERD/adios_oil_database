@@ -8,9 +8,9 @@
 import numpy as np
 from scipy.optimize import curve_fit
 
-from oil_database.models.common.noaa_fm_props import (NoaaFmKVis,
-                                                      NoaaFmDVis,
-                                                      NoaaFmDensity)
+from oil_database.models.noaa_fm import (NoaaFmKVis,
+                                         NoaaFmDVis,
+                                         NoaaFmDensity)
 
 from oil_database.util import estimations as est
 

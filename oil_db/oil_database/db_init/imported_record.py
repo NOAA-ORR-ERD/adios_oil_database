@@ -14,7 +14,7 @@ from pymodm.errors import ValidationError
 from oil_database.util.term import TermColor as tc
 from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
                                                OilLibraryRecordParser)
-from oil_database.models.imported_rec import ImportedRecord
+from oil_database.models.noaa_fm import ImportedRecord
 
 logger = logging.getLogger(__name__)
 

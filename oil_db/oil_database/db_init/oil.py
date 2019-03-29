@@ -2,13 +2,19 @@ import logging
 
 import numpy as np
 
-from oil_database.models.imported_rec import ImportedRecord
+from pymongo.errors import DuplicateKeyError
+from pymodm.errors import ValidationError
+
+from oil_database.util.term import TermColor as tc
+
+from oil_database.models.noaa_fm import ImportedRecord
 from oil_database.models.ec_imported_rec import ECImportedRecord
-from oil_database.models.oil import Oil
-from oil_database.models.common.common_props import (SARAFraction,
-                                                     SARADensity,
-                                                     MolecularWeight)
-from oil_database.models.common.noaa_fm_props import NoaaFmCut
+from oil_database.models.oil_old import Oil
+from oil_database.models.common import (SARAFraction,
+                                        SARADensity,
+                                        MolecularWeight)
+
+from oil_database.models.noaa_fm import NoaaFmCut
 
 from oil_database.util.estimations import api_from_density
 
@@ -75,6 +81,12 @@ def process_oils():
             add_oil(rec)
         except OilRejected as e:
             logger.warning(repr(e))
+        except ValidationError as e:
+            logger.warning(u'validation failed for {}: {}'
+                           .format(tc.change(rec.oil_id, 'red'), e))
+        except DuplicateKeyError as e:
+            logger.warning(u'duplicate fields for {}: {}'
+                           .format(tc.change(rec.oil_id, 'red'), e))
 
     logger.info('Adding Environment Canada Oil objects...')
     for rec in ECImportedRecord.objects.all():
@@ -82,6 +94,12 @@ def process_oils():
             add_oil(rec)
         except OilRejected as e:
             logger.warning(repr(e))
+        except ValidationError as e:
+            logger.warning(u'validation failed for {}: {}'
+                           .format(tc.change(rec.oil_id, 'red'), e))
+        except DuplicateKeyError as e:
+            logger.warning(u'duplicate fields for {}: {}'
+                           .format(tc.change(rec.oil_id, 'red'), e))
 
 
 def add_oil(record):
@@ -96,6 +114,9 @@ def add_oil(record):
         Later, when we want to use a richly constructed record, we will do so
         on-demand.
     '''
+    print ('Adding {} Record: id = {}'
+           .format(record.__class__.__name__, record.oil_id))
+
     reject_imported_record_if_requirements_not_met(record)
 
     oil_collection = Oil._mongometa.collection

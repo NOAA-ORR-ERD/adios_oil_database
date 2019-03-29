@@ -8,11 +8,14 @@ from pymodm import MongoModel
 from pymodm.fields import (CharField, FloatField, DictField, ReferenceField,
                            EmbeddedDocumentListField, ListField)
 
-from .common.common_props import SARAFraction, SARADensity, MolecularWeight
-from .common.noaa_fm_props import NoaaFmDensity, NoaaFmKVis, NoaaFmCut
-
-from .imported_rec import ImportedRecord
-from .category import Category
+from oil_database.models.common import (SARAFraction,
+                                        SARADensity,
+                                        MolecularWeight)
+from oil_database.models.noaa_fm import (ImportedRecord,
+                                         NoaaFmDensity,
+                                         NoaaFmKVis,
+                                         NoaaFmCut)
+from oil_database.models.common import Category
 
 
 class Oil(MongoModel):

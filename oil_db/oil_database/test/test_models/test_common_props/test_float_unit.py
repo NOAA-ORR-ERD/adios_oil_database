@@ -6,23 +6,8 @@ import pytest
 
 from pymodm.errors import ValidationError
 
-from oil_database.models.common.float_unit import (FloatUnit,
-                                                   AngularMeasureUnit,
-                                                   AreaUnit,
-                                                   ConcentrationInWaterUnit,
-                                                   DensityUnit,
-                                                   DischargeUnit,
-                                                   KinematicViscosityUnit,
-                                                   LengthUnit,
-                                                   MassUnit,
-                                                   OilConcentrationUnit,
-                                                   TemperatureUnit,
-                                                   TimeUnit,
-                                                   VelocityUnit,
-                                                   VolumeUnit)
 
-
-class TestFloatUnit(object):
+class TestFloatUnit():
     @pytest.mark.parametrize('value, unit',
                              [
                               (10.0, 'kg/m^3'),
@@ -30,6 +15,16 @@ class TestFloatUnit(object):
                               (10.0, 'hogsheads per fortnight'),
                               ])
     def test_init(self, value, unit):
+        '''
+            Note: PyMODM model classes are a bit inconvenient to use because
+                  they implement a strict early binding that requires a MongoDB
+                  connection before you can even import them.
+                  So in addition to a pytest fixture that starts a connection,
+                  we cannot import our model classes at the top of the file,
+                  but rather inside the functions, all to ensure we haven't
+                  imported our classes too early.
+        '''
+        from oil_database.models.common.float_unit import FloatUnit
         float_unit = FloatUnit(value=value, unit=unit)
 
         assert float_unit.value == value
@@ -50,6 +45,8 @@ class TestFloatUnit(object):
                               ('concentrationInWater', ['In', 'Water']),
                               ])
     def test_camelcase(self, value, expected):
+        from oil_database.models.common.float_unit import FloatUnit
+
         words = FloatUnit.__metaclass__.separate_camelcase(value)
 
         assert words == expected
@@ -68,6 +65,8 @@ class TestFloatUnit(object):
                               ('concentrationInWater', True, 'in water'),
                               ])
     def test_camelcase_to_space(self, value, lower, expected):
+        from oil_database.models.common.float_unit import FloatUnit
+
         words = FloatUnit.__metaclass__.camelcase_to_space(value, lower=lower)
 
         assert words == expected
@@ -86,6 +85,8 @@ class TestFloatUnit(object):
                               ('concentrationInWater', True, 'in_water'),
                               ])
     def test_camelcase_to_underscore(self, value, lower, expected):
+        from oil_database.models.common.float_unit import FloatUnit
+
         words = FloatUnit.__metaclass__.camelcase_to_underscore(value,
                                                                 lower=lower)
 
@@ -106,8 +107,9 @@ class TestAngularMeasureUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        am_unit = AngularMeasureUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import AngularMeasureUnit
 
+        am_unit = AngularMeasureUnit(value=value, unit=unit)
         am_unit.clean_fields()
 
         assert repr(am_unit) == (u'<AngularMeasureUnit({} {})>'
@@ -162,8 +164,9 @@ class TestAreaUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        area_unit = AreaUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import AreaUnit
 
+        area_unit = AreaUnit(value=value, unit=unit)
         area_unit .clean_fields()
 
         assert repr(area_unit) == (u'<AreaUnit({} {})>'
@@ -220,8 +223,9 @@ class TestConcentrationInWaterUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        cw_unit = ConcentrationInWaterUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
+        cw_unit = ConcentrationInWaterUnit(value=value, unit=unit)
         cw_unit.clean_fields()
 
         assert repr(cw_unit) == (u'<ConcentrationInWaterUnit({} {})>'
@@ -258,8 +262,9 @@ class TestDensityUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        density_unit = DensityUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import DensityUnit
 
+        density_unit = DensityUnit(value=value, unit=unit)
         density_unit.clean_fields()
 
         assert repr(density_unit) == (u'<DensityUnit({} {})>'
@@ -316,8 +321,9 @@ class TestDischargeUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        discharge_unit = DischargeUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import DischargeUnit
 
+        discharge_unit = DischargeUnit(value=value, unit=unit)
         discharge_unit.clean_fields()
 
         assert repr(discharge_unit) == (u'<DischargeUnit({} {})>'
@@ -361,8 +367,9 @@ class TestKinematicViscosityUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        kvis_unit = KinematicViscosityUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import KinematicViscosityUnit
 
+        kvis_unit = KinematicViscosityUnit(value=value, unit=unit)
         kvis_unit.clean_fields()
 
         assert repr(kvis_unit) == (u'<KinematicViscosityUnit({} {})>'
@@ -418,8 +425,9 @@ class TestLengthUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        length_unit = LengthUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import LengthUnit
 
+        length_unit = LengthUnit(value=value, unit=unit)
         length_unit.clean_fields()
 
         assert repr(length_unit) == (u'<LengthUnit({} {})>'
@@ -464,8 +472,9 @@ class TestMassUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        mass_unit = MassUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import MassUnit
 
+        mass_unit = MassUnit(value=value, unit=unit)
         mass_unit.clean_fields()
 
         assert repr(mass_unit) == (u'<MassUnit({} {})>'
@@ -504,8 +513,9 @@ class TestOilConcentrationUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        oc_unit = OilConcentrationUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import OilConcentrationUnit
 
+        oc_unit = OilConcentrationUnit(value=value, unit=unit)
         oc_unit.clean_fields()
 
         assert repr(oc_unit) == (u'<OilConcentrationUnit({} {})>'
@@ -543,6 +553,7 @@ class TestTemperatureUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
+        from oil_database.models.common.float_unit import TemperatureUnit
         temp_unit = TemperatureUnit(value=value, unit=unit)
 
         temp_unit.clean_fields()
@@ -576,8 +587,9 @@ class TestTimeUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        time_unit = TimeUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import TimeUnit
 
+        time_unit = TimeUnit(value=value, unit=unit)
         time_unit.clean_fields()
 
         assert repr(time_unit) == (u'<TimeUnit({} {})>'
@@ -630,8 +642,9 @@ class TestVelocityUnit(object):
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init(self, value, unit):
-        velocity_unit = VelocityUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import VelocityUnit
 
+        velocity_unit = VelocityUnit(value=value, unit=unit)
         velocity_unit.clean_fields()
 
         assert repr(velocity_unit) == (u'<VelocityUnit({} {})>'
@@ -706,8 +719,9 @@ class TestVolumeUnit(object):
 
                               ])
     def test_init(self, value, unit):
-        volume_unit = VolumeUnit(value=value, unit=unit)
+        from oil_database.models.common.float_unit import VolumeUnit
 
+        volume_unit = VolumeUnit(value=value, unit=unit)
         volume_unit.clean_fields()
 
         assert repr(volume_unit) == (u'<VolumeUnit({} {})>'

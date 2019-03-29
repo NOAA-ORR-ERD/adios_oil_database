@@ -5,22 +5,6 @@ from pymodm import EmbeddedMongoModel
 from pymodm.fields import CharField, FloatField
 
 
-class Synonym(EmbeddedMongoModel):
-    name = CharField(max_length=40)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a, _v in kwargs.items():
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        super(Synonym, self).__init__(**kwargs)
-
-    def __repr__(self):
-        return "<Synonym('%s')>" % (self.name)
-
-
 class SARAFraction(EmbeddedMongoModel):
     sara_type = CharField(choices=('Saturates', 'Aromatics',
                                    'Resins', 'Asphaltenes'))

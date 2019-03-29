@@ -25,10 +25,10 @@ from pymodm.errors import MultipleObjectsReturned, DoesNotExist
 
 import unit_conversion as uc
 
-from oil_database.models.oil import Oil
-from oil_database.models.category import Category
+from oil_database.models.common import Category
 from oil_database.data_sources.noaa_fm import (ImportedRecordWithEstimation,
                                                OilLibraryCsvFile)
+from oil_database.models.oil import Oil
 
 logger = logging.getLogger(__name__)
 

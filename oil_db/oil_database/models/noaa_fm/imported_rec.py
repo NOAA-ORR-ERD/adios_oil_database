@@ -9,12 +9,13 @@ from pymodm import MongoModel
 from pymodm.fields import (MongoBaseField, CharField, BooleanField, FloatField,
                            EmbeddedDocumentListField)
 
-from .common.common_props import Synonym
-from .common.noaa_fm_props import (NoaaFmDensity,
-                                   NoaaFmKVis,
-                                   NoaaFmDVis,
-                                   NoaaFmCut,
-                                   NoaaFmToxicity)
+from oil_database.models.common import Synonym
+
+from .density import NoaaFmDensity
+from .kvis import NoaaFmKVis
+from .dvis import NoaaFmDVis
+from .cut import NoaaFmCut
+from .toxicity import NoaaFmToxicity
 
 
 class ImportedRecord(MongoModel):
