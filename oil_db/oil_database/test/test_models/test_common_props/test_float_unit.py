@@ -8,13 +8,20 @@ from pymodm.errors import ValidationError
 
 
 class TestFloatUnit():
-    @pytest.mark.parametrize('value, unit',
+    @pytest.mark.parametrize('value, unit, expected',
                              [
-                              (10.0, 'kg/m^3'),
-                              (10.0, 'g/cm^3'),
-                              (10.0, 'hogsheads per fortnight'),
+                              (10.0, '%', '10.0 %'),
+                              (10.0, '1', '10.0'),
+                              (10.0, 'hogsheads per fortnight',
+                               '10.0 hogsheads per fortnight'),
+                              pytest.param(
+                                  10.0, '', 'N/A',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
+                              pytest.param(
+                                  10.0, None, 'N/A',
+                                  marks=pytest.mark.raises(exception=ValidationError)),
                               ])
-    def test_init(self, value, unit):
+    def test_init(self, value, unit, expected):
         '''
             Note: PyMODM model classes are a bit inconvenient to use because
                   they implement a strict early binding that requires a MongoDB
@@ -32,8 +39,8 @@ class TestFloatUnit():
 
         float_unit.clean_fields()
 
-        assert repr(float_unit) == (u'<FloatUnit({} {})>'
-                                    .format(float_unit.value, float_unit.unit))
+        assert repr(float_unit) == (u'<FloatUnit({})>'
+                                    .format(expected))
 
     @pytest.mark.parametrize('value, expected',
                              [
@@ -115,7 +122,7 @@ class TestAngularMeasureUnit(object):
         assert repr(am_unit) == (u'<AngularMeasureUnit({} {})>'
                                  .format(value, unit)
                                  .encode('utf-8'))
-        assert str(am_unit) == (u'<AngularMeasureUnit({} {})>'
+        assert str(am_unit) == (u'{} {}'
                                 .format(value, unit)
                                 .encode('utf-8'))
 
@@ -172,7 +179,7 @@ class TestAreaUnit(object):
         assert repr(area_unit) == (u'<AreaUnit({} {})>'
                                    .format(value, unit)
                                    .encode('utf-8'))
-        assert str(area_unit) == (u'<AreaUnit({} {})>'
+        assert str(area_unit) == (u'{} {}'
                                   .format(value, unit)
                                   .encode('utf-8'))
 
@@ -231,7 +238,7 @@ class TestConcentrationInWaterUnit(object):
         assert repr(cw_unit) == (u'<ConcentrationInWaterUnit({} {})>'
                                  .format(value, unit)
                                  .encode('utf-8'))
-        assert str(cw_unit) == (u'<ConcentrationInWaterUnit({} {})>'
+        assert str(cw_unit) == (u'{} {}'
                                 .format(value, unit)
                                 .encode('utf-8'))
 
@@ -270,7 +277,7 @@ class TestDensityUnit(object):
         assert repr(density_unit) == (u'<DensityUnit({} {})>'
                                       .format(value, unit)
                                       .encode('utf-8'))
-        assert str(density_unit) == (u'<DensityUnit({} {})>'
+        assert str(density_unit) == (u'{} {}'
                                      .format(value, unit)
                                      .encode('utf-8'))
 
@@ -329,7 +336,7 @@ class TestDischargeUnit(object):
         assert repr(discharge_unit) == (u'<DischargeUnit({} {})>'
                                         .format(value, unit)
                                         .encode('utf-8'))
-        assert str(discharge_unit) == (u'<DischargeUnit({} {})>'
+        assert str(discharge_unit) == (u'{} {}'
                                        .format(value, unit)
                                        .encode('utf-8'))
 
@@ -375,7 +382,7 @@ class TestKinematicViscosityUnit(object):
         assert repr(kvis_unit) == (u'<KinematicViscosityUnit({} {})>'
                                    .format(value, unit)
                                    .encode('utf-8'))
-        assert str(kvis_unit) == (u'<KinematicViscosityUnit({} {})>'
+        assert str(kvis_unit) == (u'{} {}'
                                   .format(value, unit)
                                   .encode('utf-8'))
 
@@ -433,7 +440,7 @@ class TestLengthUnit(object):
         assert repr(length_unit) == (u'<LengthUnit({} {})>'
                                      .format(value, unit)
                                      .encode('utf-8'))
-        assert str(length_unit) == (u'<LengthUnit({} {})>'
+        assert str(length_unit) == (u'{} {}'
                                     .format(value, unit)
                                     .encode('utf-8'))
 
@@ -480,7 +487,7 @@ class TestMassUnit(object):
         assert repr(mass_unit) == (u'<MassUnit({} {})>'
                                    .format(value, unit)
                                    .encode('utf-8'))
-        assert str(mass_unit) == (u'<MassUnit({} {})>'
+        assert str(mass_unit) == (u'{} {}'
                                   .format(value, unit)
                                   .encode('utf-8'))
 
@@ -521,7 +528,7 @@ class TestOilConcentrationUnit(object):
         assert repr(oc_unit) == (u'<OilConcentrationUnit({} {})>'
                                  .format(value, unit)
                                  .encode('utf-8'))
-        assert str(oc_unit) == (u'<OilConcentrationUnit({} {})>'
+        assert str(oc_unit) == (u'{} {}'
                                 .format(value, unit)
                                 .encode('utf-8'))
 
@@ -561,7 +568,7 @@ class TestTemperatureUnit(object):
         assert repr(temp_unit) == (u'<TemperatureUnit({} {})>'
                                    .format(value, unit)
                                    .encode('utf-8'))
-        assert str(temp_unit) == (u'<TemperatureUnit({} {})>'
+        assert str(temp_unit) == (u'{} {}'
                                   .format(value, unit)
                                   .encode('utf-8'))
 
@@ -595,7 +602,7 @@ class TestTimeUnit(object):
         assert repr(time_unit) == (u'<TimeUnit({} {})>'
                                    .format(value, unit)
                                    .encode('utf-8'))
-        assert str(time_unit) == (u'<TimeUnit({} {})>'
+        assert str(time_unit) == (u'{} {}'
                                   .format(value, unit)
                                   .encode('utf-8'))
 
@@ -650,7 +657,7 @@ class TestVelocityUnit(object):
         assert repr(velocity_unit) == (u'<VelocityUnit({} {})>'
                                        .format(value, unit)
                                        .encode('utf-8'))
-        assert str(velocity_unit) == (u'<VelocityUnit({} {})>'
+        assert str(velocity_unit) == (u'{} {}'
                                       .format(value, unit)
                                       .encode('utf-8'))
 
@@ -727,6 +734,6 @@ class TestVolumeUnit(object):
         assert repr(volume_unit) == (u'<VolumeUnit({} {})>'
                                      .format(value, unit)
                                      .encode('utf-8'))
-        assert str(volume_unit) == (u'<VolumeUnit({} {})>'
+        assert str(volume_unit) == (u'{} {}'
                                     .format(value, unit)
                                     .encode('utf-8'))

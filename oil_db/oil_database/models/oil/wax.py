@@ -2,12 +2,14 @@
 # PyMODM model class for Environment Canada's wax
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+from oil_database.models.common.float_unit import FloatUnit
 
 
 class Wax(EmbeddedMongoModel):
-    percent = FloatField()
+    fraction = EmbeddedDocumentField(FloatUnit)
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -33,6 +35,6 @@ class Wax(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}({}%, w={})>'
+        return ('<{}({}, w={})>'
                 .format(self.__class__.__name__,
-                        self.percent, self.weathering))
+                        self.fraction, self.weathering))

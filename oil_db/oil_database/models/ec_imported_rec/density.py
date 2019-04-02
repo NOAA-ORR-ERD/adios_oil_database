@@ -7,7 +7,7 @@ from pymodm.fields import FloatField
 
 class ECDensity(EmbeddedMongoModel):
     g_ml = FloatField()
-    ref_temp_k = FloatField()
+    ref_temp_c = FloatField()
     weathering = FloatField(default=0.0)
 
     replicates = FloatField(blank=True)
@@ -31,6 +31,6 @@ class ECDensity(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<ECDensity({0.g_ml} g/mL at {0.ref_temp_k}K, '
+        return ('<ECDensity({0.g_ml} g/mL at {0.ref_temp_c}C, '
                 'w={0.weathering})>'
                 .format(self))

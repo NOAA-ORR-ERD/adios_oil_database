@@ -1,15 +1,17 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+from oil_database.models.common.float_unit import FloatUnit
 
 
 class SARAFraction(EmbeddedMongoModel):
     sara_type = CharField(choices=('Saturates', 'Aromatics',
                                    'Resins', 'Asphaltenes'))
-    percent = FloatField()
     weathering = FloatField(default=0.0)
+    fraction = EmbeddedDocumentField(FloatUnit)
 
     standard_deviation = FloatField(blank=True)
     replicates = FloatField(blank=True)
@@ -30,6 +32,6 @@ class SARAFraction(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}({}={}% w={})>'
+        return ('<{}({}={} w={})>'
                 .format(self.__class__.__name__,
-                        self.sara_type, self.percent, self.weathering))
+                        self.sara_type, self.fraction, self.weathering))

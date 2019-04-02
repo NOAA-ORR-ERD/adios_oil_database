@@ -2,8 +2,12 @@
 # PyMODM model class for Environment Canada's alkylated total aromatic
 # hydrocarbon oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+# we are probably not talking about concentrations in water here,
+# but the units we are dealing with are the same.
+from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
 class AlkylatedTotalPAH(EmbeddedMongoModel):
@@ -20,57 +24,66 @@ class AlkylatedTotalPAH(EmbeddedMongoModel):
     weathering = FloatField(default=0.0)
     method = CharField(max_length=16, blank=True)
 
-    c0_n_ug_g = FloatField(blank=True)
-    c1_n_ug_g = FloatField(blank=True)
-    c2_n_ug_g = FloatField(blank=True)
-    c3_n_ug_g = FloatField(blank=True)
-    c4_n_ug_g = FloatField(blank=True)
+    c0_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c1_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c2_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c3_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c4_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    c0_p_ug_g = FloatField(blank=True)
-    c1_p_ug_g = FloatField(blank=True)
-    c2_p_ug_g = FloatField(blank=True)
-    c3_p_ug_g = FloatField(blank=True)
-    c4_p_ug_g = FloatField(blank=True)
+    c0_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c1_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c2_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c3_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c4_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    c0_d_ug_g = FloatField(blank=True)
-    c1_d_ug_g = FloatField(blank=True)
-    c2_d_ug_g = FloatField(blank=True)
-    c3_d_ug_g = FloatField(blank=True)
+    c0_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c1_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c2_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c3_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    c0_f_ug_g = FloatField(blank=True)
-    c1_f_ug_g = FloatField(blank=True)
-    c2_f_ug_g = FloatField(blank=True)
-    c3_f_ug_g = FloatField(blank=True)
+    c0_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c1_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c2_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c3_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    c0_b_ug_g = FloatField(blank=True)
-    c1_b_ug_g = FloatField(blank=True)
-    c2_b_ug_g = FloatField(blank=True)
-    c3_b_ug_g = FloatField(blank=True)
-    c4_b_ug_g = FloatField(blank=True)
+    c0_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c1_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c2_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c3_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c4_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    c0_c_ug_g = FloatField(blank=True)
-    c1_c_ug_g = FloatField(blank=True)
-    c2_c_ug_g = FloatField(blank=True)
-    c3_c_ug_g = FloatField(blank=True)
+    c0_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c1_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c2_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c3_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
     # Other Priority PAHs
-    biphenyl_ug_g = FloatField(blank=True)
-    acenaphthylene_ug_g = FloatField(blank=True)
-    acenaphthene_ug_g = FloatField(blank=True)
-    anthracene_ug_g = FloatField(blank=True)
-    fluoranthene_ug_g = FloatField(blank=True)
-    pyrene_ug_g = FloatField(blank=True)
+    biphenyl = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    acenaphthylene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                           blank=True)
+    acenaphthene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    anthracene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    fluoranthene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    benz_a_anthracene_ug_g = FloatField(blank=True)
-    benzo_b_fluoranthene_ug_g = FloatField(blank=True)
-    benzo_k_fluoranthene_ug_g = FloatField(blank=True)
-    benzo_e_pyrene_ug_g = FloatField(blank=True)
-    benzo_a_pyrene_ug_g = FloatField(blank=True)
+    benz_a_anthracene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                              blank=True)
+    benzo_b_fluoranthene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                 blank=True)
+    benzo_k_fluoranthene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                 blank=True)
+    benzo_e_pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                           blank=True)
+    benzo_a_pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                           blank=True)
 
-    perylene_ug_g = FloatField(blank=True)
-    indeno_1_2_3_cd_pyrene_ug_g = FloatField(blank=True)
-    dibenzo_ah_anthracene_ug_g = FloatField(blank=True)
-    benzo_ghi_perylene_ug_g = FloatField(blank=True)
+    perylene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    indeno_1_2_3_cd_pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                   blank=True)
+    dibenzo_ah_anthracene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                  blank=True)
+    benzo_ghi_perylene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                               blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -92,37 +105,37 @@ class AlkylatedTotalPAH(EmbeddedMongoModel):
     def __repr__(self):
         return ('<{0.__class__.__name__}('
                 'Naphthalenes='
-                '[{0.c0_n_ug_g}, '
-                '{0.c1_n_ug_g}, '
-                '{0.c2_n_ug_g}, '
-                '{0.c3_n_ug_g}, '
-                '{0.c4_n_ug_g}], '
+                '[{0.c0_n}, '
+                '{0.c1_n}, '
+                '{0.c2_n}, '
+                '{0.c3_n}, '
+                '{0.c4_n}], '
                 'Phenanthrenes='
-                '[{0.c0_p_ug_g}, '
-                '{0.c1_p_ug_g}, '
-                '{0.c2_p_ug_g}, '
-                '{0.c3_p_ug_g}, '
-                '{0.c4_p_ug_g}], '
+                '[{0.c0_p}, '
+                '{0.c1_p}, '
+                '{0.c2_p}, '
+                '{0.c3_p}, '
+                '{0.c4_p}], '
                 'Dibenzothiophenes='
-                '[{0.c0_d_ug_g}, '
-                '{0.c1_d_ug_g}, '
-                '{0.c2_d_ug_g}, '
-                '{0.c3_d_ug_g}], '
+                '[{0.c0_d}, '
+                '{0.c1_d}, '
+                '{0.c2_d}, '
+                '{0.c3_d}], '
                 'Fluorenes='
-                '[{0.c0_f_ug_g}, '
-                '{0.c1_f_ug_g}, '
-                '{0.c2_f_ug_g}, '
-                '{0.c3_f_ug_g}], '
+                '[{0.c0_f}, '
+                '{0.c1_f}, '
+                '{0.c2_f}, '
+                '{0.c3_f}], '
                 'Benzonaphthothiophenes='
-                '[{0.c0_b_ug_g}, '
-                '{0.c1_b_ug_g}, '
-                '{0.c2_b_ug_g}, '
-                '{0.c3_b_ug_g}, '
-                '{0.c4_b_ug_g}], '
+                '[{0.c0_b}, '
+                '{0.c1_b}, '
+                '{0.c2_b}, '
+                '{0.c3_b}, '
+                '{0.c4_b}], '
                 'Chrysenes='
-                '[{0.c0_c_ug_g}, '
-                '{0.c1_c_ug_g}, '
-                '{0.c2_c_ug_g}, '
-                '{0.c3_c_ug_g}], '
+                '[{0.c0_c}, '
+                '{0.c1_c}, '
+                '{0.c2_c}, '
+                '{0.c3_c}], '
                 'weathering={0.weathering})>'
                 .format(self))

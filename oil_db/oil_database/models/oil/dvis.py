@@ -1,13 +1,15 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+from oil_database.models.common.float_unit import TemperatureUnit
 
 
 class DVis(EmbeddedMongoModel):
     mpa_s = FloatField()
-    ref_temp_k = FloatField()
+    ref_temp = EmbeddedDocumentField(TemperatureUnit)
     weathering = FloatField(default=0.0)
 
     method = CharField(max_length=32, blank=True)
@@ -29,5 +31,5 @@ class DVis(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}'
-                '({0.mpa_s} mPa.s at {0.ref_temp_k}K, w={0.weathering})>'
+                '({0.mpa_s} mPa.s at {0.ref_temp}, w={0.weathering})>'
                 .format(self))

@@ -2,8 +2,12 @@
 # PyMODM model class for Environment Canada's CCME Fractional
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+# we are probably not talking about concentrations in water here,
+# but the units we are dealing with are the same.
+from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
 class CCMEFraction(EmbeddedMongoModel):
@@ -13,10 +17,10 @@ class CCMEFraction(EmbeddedMongoModel):
     weathering = FloatField(default=0.0)
     method = CharField(max_length=16, blank=True)
 
-    f1_mg_g = FloatField(blank=True)
-    f2_mg_g = FloatField(blank=True)
-    f3_mg_g = FloatField(blank=True)
-    f4_mg_g = FloatField(blank=True)
+    f1 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    f2 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    f3 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    f4 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -30,17 +34,17 @@ class CCMEFraction(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(EcCCMEFraction, self).__init__(**kwargs)
+        super(CCMEFraction, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
         return ('<CCMEFraction('
-                'f1={0.f1_mg_g}, '
-                'f2={0.f2_mg_g}, '
-                'f3={0.f3_mg_g}, '
-                'f4={0.f4_mg_g}, '
+                'f1={0.f1}, '
+                'f2={0.f2}, '
+                'f3={0.f3}, '
+                'f4={0.f4}, '
                 'w={0.weathering})>'
                 .format(self))
 

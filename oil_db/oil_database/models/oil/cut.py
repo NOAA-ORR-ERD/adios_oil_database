@@ -1,13 +1,16 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+from oil_database.models.common.float_unit import TemperatureUnit, FloatUnit
 
 
 class Cut(EmbeddedMongoModel):
-    temp_c = FloatField(blank=True)
-    percent = FloatField()
+    fraction = EmbeddedDocumentField(FloatUnit)
+    liquid_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
+    vapor_temp = EmbeddedDocumentField(TemperatureUnit)
     weathering = FloatField(default=0.0)
 
     method = CharField(max_length=48, blank=True)
@@ -28,6 +31,8 @@ class Cut(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}({}% at {}C, w={})>'
-                .format(self.__class__.__name__,
-                        self.percent, self.temp_c, self.weathering))
+        return ('<{0.__class__.__name__}('
+                'liquid_temp={0.liquid_temp}, '
+                'vapor_temp={0.vapor_temp}, '
+                'f={0.fraction}, w={0.weathering})>'
+                .format(self))

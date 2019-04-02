@@ -3,6 +3,7 @@
 #
 from itertools import izip_longest
 
+from unit_conversion import convert
 from unit_conversion.unit_data import ConvertDataUnits
 
 from pymodm.base.models import MongoModelMetaclass
@@ -15,17 +16,20 @@ class UnitMeta(MongoModelMetaclass):
         # we will only try this if we are a 'Unit' type class
         max_length = 32
 
+        dct['unit_type'] = None
+
         if name.endswith('Unit'):
-            unit_field = cls.camelcase_to_space(name[:-4])
+            unit_type = cls.camelcase_to_space(name[:-4])
             try:
                 all_units = [[k] + v[1]
                              for k, v
-                             in ConvertDataUnits[unit_field].iteritems()]
+                             in ConvertDataUnits[unit_type].iteritems()]
                 flattened_units = tuple(set([i for sub in all_units
                                              for i in sub]))
 
                 dct['unit'] = CharField(max_length=max_length,
                                         choices=flattened_units)
+                dct['unit_type'] = unit_type
             except KeyError:
                 dct['unit'] = CharField(max_length=max_length)
         else:
@@ -74,24 +78,48 @@ class FloatUnit(EmbeddedMongoModel):
     value = FloatField()
 
     def __init__(self, **kwargs):
+        '''
+            Input args with defaults:
+
+            :param value: A numeric value
+            :param unit: A representation of units that the value is to
+                         describe.
+            :param from_unit=None: The unit representation of the incoming
+                                   value if the value is to be converted
+                                   before storage in the class
+        '''
+        if 'from_unit' in kwargs and kwargs['from_unit'] is not None:
+            self._convert_value_arg(kwargs)
+
         for a, _v in kwargs.items():
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
         super(FloatUnit, self).__init__(**kwargs)
 
+    def _convert_value_arg(self, kwargs):
+        value = kwargs['value']
+        from_unit, unit = kwargs['from_unit'], kwargs['unit']
+
+        if not (from_unit in self.__class__.unit.choices and
+                unit in self.__class__.unit.choices):
+            raise ValueError('Invalid conversion from {} to {}'
+                             .format(from_unit, unit))
+
+        kwargs['value'] = convert(self.unit_type, from_unit, unit, value)
+
     def __str__(self):
-        return self.__repr__()
+        if self.unit == '1':
+            return '{}'.format(self.value)
+        else:
+            return '{} {}'.format(self.value, self.unit.encode('utf-8'))
 
     def __repr__(self):
-        if self.unit in (None, '1'):
-            return (u'<{}({})>'
-                    .format(self.__class__.__name__, self.value)
-                    .encode('utf-8'))
-        else:
-            return (u'<{}({} {})>'
-                    .format(self.__class__.__name__, self.value, self.unit)
-                    .encode('utf-8'))
+        return '<{}({})>'.format(self.__class__.__name__, self.__str__())
+
+
+class AdhesionUnit(FloatUnit):
+    pass
 
 
 class AngularMeasureUnit(FloatUnit):
@@ -111,6 +139,14 @@ class DensityUnit(FloatUnit):
 
 
 class DischargeUnit(FloatUnit):
+    pass
+
+
+class DynamicViscosityUnit(FloatUnit):
+    pass
+
+
+class InterfacialTensionUnit(FloatUnit):
     pass
 
 

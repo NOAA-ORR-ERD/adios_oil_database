@@ -6,20 +6,14 @@ from pymongo.errors import DuplicateKeyError
 from pymodm.errors import ValidationError
 
 from oil_database.util.term import TermColor as tc
+from oil_database.util.estimations import api_from_density
 
 from oil_database.models.noaa_fm import ImportedRecord
 from oil_database.models.ec_imported_rec import ECImportedRecord
-from oil_database.models.oil_old import Oil
-from oil_database.models.common import (SARAFraction,
-                                        SARADensity,
-                                        MolecularWeight)
 
-from oil_database.models.noaa_fm import NoaaFmCut
+from oil_database.models.oil import Oil
 
-from oil_database.util.estimations import api_from_density
-
-from oil_database.data_sources.noaa_fm import (ImportedRecordWithEstimation,
-                                               ImportedRecordWithScore)
+from oil_database.data_sources.env_canada import EnvCanadaAttributeMapper
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -47,23 +41,6 @@ class OilRejected(Exception):
         return '{0}(oil={1}, errors={2})'.format(self.__class__.__name__,
                                                  self.oil_name,
                                                  self.message)
-
-
-class ImportedRecordInitialize(ImportedRecordWithEstimation,
-                               ImportedRecordWithScore):
-    pass
-
-
-def pprint_for_one_oil(oil, *args):
-    '''
-        Just a simple diagnostic printing routine.
-        The idea is to print messages for just one oil record
-        to reduce verboseness when diagnosing these routines.
-    '''
-    adios_oil_id = 'AD02434'
-
-    if hasattr(oil, 'adios_oil_id') and oil.adios_oil_id == adios_oil_id:
-        pp.pprint(args)
 
 
 def process_oils():
@@ -108,304 +85,25 @@ def add_oil(record):
         objects that had rich sets of properties, including estimations of
         any necessary properties that were missing.
 
-        Our strategy has changed a bit, however.  Now we would like to simply
-        populate the table with the records directly, for better or worse.
+        Our strategy has changed a bit, however.  We still have a generalized
+        oil object, but we will forego the estimations.
 
-        Later, when we want to use a richly constructed record, we will do so
-        on-demand.
+        Later, when we want to use a richly constructed record, we will perform
+        estimations on-demand.
     '''
-    print ('Adding {} Record: id = {}'
-           .format(record.__class__.__name__, record.oil_id))
+    print ('\n\nAdding {} Record: id = {}, name = {}'
+           .format(record.__class__.__name__, record.oil_id, record.name))
 
-    reject_imported_record_if_requirements_not_met(record)
+    oil_obj = Oil.from_record_parser(EnvCanadaAttributeMapper(record))
 
-    oil_collection = Oil._mongometa.collection
+    print ('\tOil.densities:')
+    for i in oil_obj.densities:
+        print '\t', (i)
 
-    oil_collection.insert_one(record.to_son().to_dict())
+    # TODO: We will need to reject oils that are not good before deciding to
+    #       save them.  Just save them for now though.
 
-
-def add_oil_old(record):
-    '''
-        Note: We are no longer doing this during the database initialization,
-              but we will keep this function around to document the process.
-              We may want to do something similar when a rich oil record
-              is requested.
-    '''
-    reject_imported_record_if_requirements_not_met(record)
-
-    oil = generate_oil(record)
-
-    reject_oil_if_bad(oil)
-    oil.imported = record
-    oil.save()
-
-
-def generate_oil(imported_rec):
-    '''
-        This is the method for creating a rich Oil record from a NOAA filemaker
-        imported record.
-    '''
-    logger.info('Begin estimations for {0}'
-                .format(imported_rec.adios_oil_id))
-    oil = Oil()
-    imp_rec_obj = ImportedRecordInitialize(imported_rec)
-
-    add_demographics(imp_rec_obj, oil)
-
-    # Core estimations
-    add_densities(imp_rec_obj, oil)
-    add_viscosities(imp_rec_obj, oil)
-
-    # Distillation estimations
-    add_inert_fractions(imp_rec_obj, oil)
-    add_volatile_fractions(imp_rec_obj, oil)
-    add_distillation_cuts(imp_rec_obj, oil)
-
-    # Component Fractional estimations
-    add_component_mol_wt(imp_rec_obj, oil)
-    add_component_mass_fractions(imp_rec_obj, oil)
-    add_component_densities(imp_rec_obj, oil)
-
-    # Miscellaneous estimations
-    add_oil_water_interfacial_tension(imp_rec_obj, oil)
-    add_oil_seawater_interfacial_tension(imp_rec_obj, oil)
-    add_pour_point(imp_rec_obj, oil)
-    add_flash_point(imp_rec_obj, oil)
-    add_max_water_fraction_of_emulsion(imp_rec_obj, oil)
-    add_bullwinkle_fractions(imp_rec_obj, oil)
-    add_solubility(imp_rec_obj, oil)
-    add_adhesion(imp_rec_obj, oil)
-    add_sulphur_mass_fraction(imp_rec_obj, oil)
-
-    # estimations not in the document, but needed
-    add_metals(imp_rec_obj, oil)
-    add_aggregate_volatile_fractions(oil)
-    add_misc_fractions(imp_rec_obj, oil)
-    add_product_type(imp_rec_obj, oil)
-    add_k0y(imp_rec_obj, oil)
-
-    oil.quality_index = imp_rec_obj.score()
-
-    return oil
-
-
-def add_demographics(imp_rec_obj, oil):
-    oil.name = imp_rec_obj.record.oil_name
-    oil.adios_oil_id = imp_rec_obj.record.adios_oil_id
-
-
-def add_densities(imp_rec_obj, oil):
-    try:
-        oil.densities = imp_rec_obj.get_densities()
-        oil.api = imp_rec_obj.get_api()
-    except Exception as e:
-        logger.warning('Exception: record {}\n'
-                       '{}\n'
-                       'check for valid api and densities.'
-                       .format(imp_rec_obj.record.adios_oil_id, e))
-
-
-def add_viscosities(imp_rec_obj, oil):
-    kvis, estimated = imp_rec_obj.aggregate_kvis()
-
-    for k in kvis:
-        oil.kvis.append(k)
-
-    if any(estimated):
-        oil.estimated['viscosities'] = estimated
-
-
-def add_inert_fractions(imp_rec_obj, oil):
-    '''
-        Add the resin and asphaltene fractions to our oil
-        This does not include the component resins & asphaltenes
-    '''
-    f_res, f_asph, est_res, est_asph = imp_rec_obj.inert_fractions()
-
-    oil.resins_fraction, oil.asphaltenes_fraction = f_res, f_asph
-
-    if est_res:
-        oil.estimated['resins_fraction'] = est_res
-
-    if est_asph:
-        oil.estimated['asphaltenes_fraction'] = est_asph
-
-
-def add_volatile_fractions(imp_rec_obj, oil):
-    '''
-        Add the saturates and aromatics fractions to our oil
-        This does not include the component saturates & aromatics
-    '''
-    f_sat, f_arom, est_sat, est_arom = imp_rec_obj.volatile_fractions()
-
-    oil.saturates_fraction, oil.aromatics_fraction = f_sat, f_arom
-
-    if est_sat:
-        oil.estimated['saturates_fraction'] = est_sat
-
-    if est_arom:
-        oil.estimated['aromatics_fraction'] = est_arom
-
-
-def add_distillation_cuts(imp_rec_obj, oil):
-    for T_i, f_evap_i in zip(*imp_rec_obj.normalized_cut_values()):
-        oil.cuts.append(NoaaFmCut(vapor_temp_k=T_i, fraction=f_evap_i))
-
-
-def add_component_mol_wt(imp_rec_obj, oil):
-    temps = imp_rec_obj.component_temps()
-    mol_wts = imp_rec_obj.component_mol_wt()
-    c_types = imp_rec_obj.component_types()
-
-    for T_i, mol_wt_i, c_type in zip(temps, mol_wts, c_types):
-        oil.molecular_weights.append(MolecularWeight(sara_type=c_type,
-                                                     g_mol=mol_wt_i,
-                                                     ref_temp_k=T_i))
-
-
-def add_component_mass_fractions(imp_rec_obj, oil):
-    temps = imp_rec_obj.component_temps()
-    fracs = imp_rec_obj.component_mass_fractions()
-    c_types = imp_rec_obj.component_types()
-
-    for T_i, f_i, c_type in zip(temps, fracs, c_types):
-        oil.sara_fractions.append(SARAFraction(sara_type=c_type,
-                                               fraction=f_i,
-                                               ref_temp_k=T_i))
-
-
-def add_component_densities(imp_rec_obj, oil):
-    densities = imp_rec_obj.component_densities()
-    fracs = imp_rec_obj.component_mass_fractions()
-    temps = imp_rec_obj.component_temps()
-    c_types = imp_rec_obj.component_types()
-
-    # we need to scale our densities to match our aggregate density
-    rho0_oil = imp_rec_obj.density_at_temp(273.15 + 15)
-    Cf_dens = (rho0_oil / np.sum(fracs * densities))
-
-    densities *= Cf_dens
-
-    for T_i, rho, c_type in zip(temps, densities, c_types):
-        oil.sara_densities.append(SARADensity(sara_type=c_type,
-                                              kg_m_3=rho,
-                                              ref_temp_k=T_i))
-
-
-def add_oil_water_interfacial_tension(imp_rec_obj, oil):
-    (ow_st, ref_temp_k, estimated) = imp_rec_obj.oil_water_surface_tension()
-
-    oil.oil_water_interfacial_tension_n_m = ow_st
-    oil.oil_water_interfacial_tension_ref_temp_k = ref_temp_k
-
-    if estimated:
-        oil.estimated['oil_water_interfacial_tension_n_m'] = estimated
-        oil.estimated['oil_water_interfacial_tension_ref_temp_k'] = estimated
-
-
-def add_oil_seawater_interfacial_tension(imp_rec_obj, oil):
-    (osw_st, ref_temp_k, estimated) = imp_rec_obj.oil_seawater_surface_tension()
-
-    oil.oil_seawater_interfacial_tension_n_m = osw_st
-    oil.oil_seawater_interfacial_tension_ref_temp_k = ref_temp_k
-
-    if estimated:
-        oil.estimated['oil_seawater_interfacial_tension_n_m'] = estimated
-        oil.estimated['oil_seawater_interfacial_tension_ref_temp_k'] = estimated
-
-
-def add_pour_point(imp_rec_obj, oil):
-    min_k, max_k, estimated = imp_rec_obj.pour_point()
-
-    oil.pour_point_min_k = min_k
-    oil.pour_point_max_k = max_k
-
-    if estimated:
-        oil.estimated['pour_point_min_k'] = estimated
-        oil.estimated['pour_point_max_k'] = estimated
-
-
-def add_flash_point(imp_rec_obj, oil):
-    min_k, max_k, estimated = imp_rec_obj.flash_point()
-
-    oil.flash_point_min_k = min_k
-    oil.flash_point_max_k = max_k
-
-    if estimated:
-        oil.estimated['flash_point_min_k'] = estimated
-        oil.estimated['flash_point_max_k'] = estimated
-
-
-def add_max_water_fraction_of_emulsion(imp_rec_obj, oil):
-    f_w_max = imp_rec_obj.max_water_fraction_emulsion()
-
-    oil.emulsion_water_fraction_max = f_w_max
-    oil.estimated['emulsion_water_fraction_max'] = True
-
-
-def add_bullwinkle_fractions(imp_rec_obj, oil):
-    bull_frac, estimated = imp_rec_obj.bullwinkle_fraction()
-
-    oil.bullwinkle_fraction = bull_frac
-
-    if estimated:
-        oil.estimated['bullwinkle_fraction'] = estimated
-
-
-def add_solubility(imp_rec_obj, oil):
-    oil.solubility = imp_rec_obj.solubility()
-
-
-def add_adhesion(imp_rec_obj, oil):
-    omega_a, estimated = imp_rec_obj.adhesion()
-
-    oil.adhesion_kg_m_2 = omega_a
-
-    if estimated:
-        oil.estimated['adhesion_kg_m_2'] = estimated
-
-
-def add_sulphur_mass_fraction(imp_rec_obj, oil):
-    oil.sulphur_fraction = imp_rec_obj.sulphur_fraction()
-
-
-def add_metals(imp_rec_obj, oil):
-    oil.nickel_ppm = imp_rec_obj.record.nickel
-    oil.vanadium_ppm = imp_rec_obj.record.vanadium
-
-
-def add_aggregate_volatile_fractions(oil):
-    '''
-        for this we need an oil record that already has
-        the component mass fractions estimated.
-        don't estimate if the record has the totals
-        or if we already have a 'good' estimate
-    '''
-    if np.isnan(oil.saturates_fraction):
-        oil.saturates_fraction = np.sum([f.fraction
-                                         for f in oil.sara_fractions
-                                         if f.sara_type == 'Saturates'])
-        oil.aromatics_fraction = np.sum([f.fraction
-                                         for f in oil.sara_fractions
-                                         if f.sara_type == 'Aromatics'])
-
-
-def add_misc_fractions(imp_rec_obj, oil):
-    oil.polars_fraction = imp_rec_obj.record.polars
-    oil.benzene_fraction = imp_rec_obj.record.benzene
-    oil.paraffins_fraction = imp_rec_obj.record.paraffins
-    oil.wax_content_fraction = imp_rec_obj.record.wax_content
-
-
-def add_product_type(imp_rec_obj, oil):
-    oil.product_type = imp_rec_obj.record.product_type
-
-
-def add_k0y(imp_rec_obj, oil):
-    if imp_rec_obj.record.k0y is not None:
-        oil.k0y = imp_rec_obj.record.k0y
-    else:
-        oil.k0y = 2.02e-06
+    oil_obj.save()
 
 
 #
@@ -413,7 +111,6 @@ def add_k0y(imp_rec_obj, oil):
 # ### Oil Quality checks
 #
 #
-
 def reject_imported_record_if_requirements_not_met(imported_rec):
     '''
         Here, we have an imported oil record for which we would like to
@@ -676,15 +373,7 @@ def oil_has_heavy_sa_components(oil):
 def oil_api_matches_density(oil):
     '''
         The oil API should pretty closely match its density at 15C.
+
+        Note: we will need to rework this function.  Return True for now.
     '''
-    oil_estimations = ImportedRecordWithEstimation(oil)
-
-    d_0 = oil_estimations.density_at_temp(273.15 + 15)
-    api = api_from_density(d_0)
-
-    if np.isclose(oil.api, api, rtol=0.05):
-        return True
-
-    logger.info('(oil.api, api_from_density) = ({}, {}), rtol={:0.3f}'
-                .format(oil.api, api, np.abs(oil.api - api) / np.abs(api)))
-    return False
+    return True

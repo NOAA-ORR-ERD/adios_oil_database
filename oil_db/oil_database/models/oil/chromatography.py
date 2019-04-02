@@ -1,9 +1,13 @@
 #
-# PyMODM model class for Environment Canada's gas chromatography
-# oil properties.
+# PyMODM model class for gas chromatography oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+# we are probably not talking about concentrations in water here,
+# but the units we are dealing with are the same.
+from oil_database.models.common.float_unit import (FloatUnit,
+                                                   ConcentrationInWaterUnit)
 
 
 class GasChromatography(EmbeddedMongoModel):
@@ -17,13 +21,13 @@ class GasChromatography(EmbeddedMongoModel):
     weathering = FloatField(default=0.0)
     method = CharField(max_length=16, blank=True)
 
-    tph_mg_g = FloatField(blank=True)
-    tsh_mg_g = FloatField(blank=True)
-    tah_mg_g = FloatField(blank=True)
+    tph = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    tsh = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    tah = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    tsh_tph_percent = FloatField(blank=True)
-    tah_tph_percent = FloatField(blank=True)
-    resolved_peaks_tph_percent = FloatField(blank=True)
+    tsh_tph = EmbeddedDocumentField(FloatUnit, blank=True)
+    tah_tph = EmbeddedDocumentField(FloatUnit, blank=True)
+    resolved_peaks_tph = EmbeddedDocumentField(FloatUnit, blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -44,11 +48,11 @@ class GasChromatography(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
-                'tph={0.tph_mg_g} mg/g, '
-                'tsh={0.tsh_mg_g} mg/g, '
-                'tah={0.tah_mg_g} mg/g, '
-                'tsh_tph={0.tsh_tph_percent}%, '
-                'tah_tph={0.tah_tph_percent}%, '
-                'resolved_peaks_tph={0.resolved_peaks_tph_percent}%, '
+                'tph={0.tph}, '
+                'tsh={0.tsh}, '
+                'tah={0.tah}, '
+                'tsh_tph={0.tsh_tph}, '
+                'tah_tph={0.tah_tph}, '
+                'resolved_peaks_tph={0.resolved_peaks_tph}, '
                 'weathering={0.weathering})>'
                 .format(self))

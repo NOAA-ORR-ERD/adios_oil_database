@@ -28,6 +28,7 @@ import unit_conversion as uc
 from oil_database.models.common import Category
 from oil_database.data_sources.noaa_fm import (ImportedRecordWithEstimation,
                                                OilLibraryCsvFile)
+
 from oil_database.models.oil import Oil
 
 logger = logging.getLogger(__name__)
@@ -124,6 +125,7 @@ def link_crude_light_oils():
 
     count = 0
     for o in oils:
+        print 'updating categories for oil: ', o
         o.categories.extend(categories)
         o.save()
         count += 1
@@ -521,6 +523,7 @@ def get_oils_by_api(product_type, api_min=None, api_max=None):
     '''
     query_args = {'product_type': product_type}
 
+    # this is wrong.  api gets clobbered.
     if api_max is not None:
         query_args.update({"api": {"$lte": api_max}})
 

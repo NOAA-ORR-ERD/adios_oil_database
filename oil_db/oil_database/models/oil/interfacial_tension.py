@@ -1,15 +1,19 @@
-#
-# PyMODM model class for Environment Canada's interfacial tension
-# oil properties.
-#
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import (CharField,
                            FloatField)
 
+from oil_database.models.common.float_unit import (TemperatureUnit,
+                                                   InterfacialTensionUnit)
+
 
 class InterfacialTension(EmbeddedMongoModel):
-    dynes_cm = FloatField()
-    ref_temp_k = FloatField()
+    '''
+        TODO: The unit conversion package doesn't have any unit conversions
+              for interfacial tension.  We will continue to use a float field
+              for now, but we need to add an InterfacialTensionUnit type soon.
+    '''
+    tension = EmbeddedDocumentField(InterfacialTensionUnit)
+    ref_temp = EmbeddedDocumentField(TemperatureUnit)
     interface = CharField(choices=('air', 'water', 'seawater'))
     weathering = FloatField(default=0.0)
 
@@ -37,6 +41,6 @@ class InterfacialTension(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}'
-                '({0.dynes_cm} dynes/cm at {0.ref_temp_k}K, '
+                '({0.tension} at {0.ref_temp}, '
                 'if={0.interface}, w={0.weathering})>'
                 .format(self))

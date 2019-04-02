@@ -13,7 +13,7 @@ from oil_database.models.common import Synonym
 
 from .density import Density
 from .api import ApiGravity
-from .dvis import DVis
+#from .dvis import DVis
 from .kvis import KVis
 from .cut import Cut
 from .interfacial_tension import InterfacialTension
@@ -75,7 +75,7 @@ class Oil(MongoModel):
     apis = EmbeddedDocumentListField(ApiGravity, blank=True)
 
     # not sure if we are going to deal with DVis. might be KVis only
-    dvis = EmbeddedDocumentListField(DVis, blank=True)
+    # dvis = EmbeddedDocumentListField(DVis, blank=True)
     kvis = EmbeddedDocumentListField(KVis, blank=True)
 
     ifts = EmbeddedDocumentListField(InterfacialTension, blank=True)
@@ -109,8 +109,7 @@ class Oil(MongoModel):
     wax_content = EmbeddedDocumentListField(Wax, blank=True)
     alkanes = EmbeddedDocumentListField(NAlkanes, blank=True)
 
-    sara_total_fractions = EmbeddedDocumentListField(SARAFraction,
-                                                     blank=True)
+    sara_total_fractions = EmbeddedDocumentListField(SARAFraction, blank=True)
 
     class Meta:
         write_concern = WriteConcern(j=True)
@@ -183,5 +182,8 @@ class Oil(MongoModel):
                     kwargs[attr] = [embedded_model(**sub_kwargs)
                                     for sub_kwargs in getattr(parser, attr)]
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
-        return "<ImportedRecord('{}')>".format(self.oil_name)
+        return "<Oil('{}')>".format(self.name)

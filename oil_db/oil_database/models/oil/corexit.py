@@ -2,8 +2,10 @@
 # PyMODM model class for Environment Canada's emulsion
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import FloatField
+
+from oil_database.models.common.float_unit import FloatUnit
 
 
 class Corexit9500(EmbeddedMongoModel):
@@ -11,7 +13,7 @@ class Corexit9500(EmbeddedMongoModel):
         Chemical dispersability with Corexit 9500 Dispersant (swirling flask
         test) (ASTM F2059)
     '''
-    effectiveness_percent = FloatField()
+    effectiveness = EmbeddedDocumentField(FloatUnit)
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -36,6 +38,6 @@ class Corexit9500(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}(effectiveness={}%, w={})>'
+        return ('<{}(effectiveness={}, w={})>'
                 .format(self.__class__.__name__,
-                        self.effectiveness_percent, self.weathering))
+                        self.effectiveness, self.weathering))

@@ -1,13 +1,15 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import FloatField
+
+from oil_database.models.common.float_unit import DensityUnit, TemperatureUnit
 
 
 class Density(EmbeddedMongoModel):
-    g_ml = FloatField()
-    ref_temp_k = FloatField()
+    density = EmbeddedDocumentField(DensityUnit)
+    ref_temp = EmbeddedDocumentField(TemperatureUnit)
     weathering = FloatField(default=0.0)
 
     replicates = FloatField(blank=True)
@@ -32,5 +34,5 @@ class Density(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}'
-                '({0.g_ml} g/mL at {0.ref_temp_k}K, w={0.weathering})>'
+                '({0.density} at {0.ref_temp}, w={0.weathering})>'
                 .format(self))

@@ -1,34 +1,48 @@
 #
-# PyMODM model class for Environment Canada's benzene
-# oil properties.
+# PyMODM model class for benzene oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import FloatField, CharField
+
+# we are probably not talking about concentrations of benzene in water here,
+# but the units we are dealing with are the same.
+from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
 class Benzene(EmbeddedMongoModel):
     weathering = FloatField(default=0.0)
     method = CharField(max_length=16, blank=True)
 
-    benzene_ug_g = FloatField(blank=True)
-    toluene_ug_g = FloatField(blank=True)
-    ethylbenzene_ug_g = FloatField(blank=True)
-    m_p_xylene_ug_g = FloatField(blank=True)
-    o_xylene_ug_g = FloatField(blank=True)
+    benzene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    toluene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    ethylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    m_p_xylene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    o_xylene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
 
-    isopropylbenzene_ug_g = FloatField(blank=True)
-    propylebenzene_ug_g = FloatField(blank=True)
-    isobutylbenzene_ug_g = FloatField(blank=True)
-    amylbenzene_ug_g = FloatField(blank=True)
-    n_hexylbenzene_ug_g = FloatField(blank=True)
+    isopropylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                             blank=True)
+    propylebenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                           blank=True)
+    isobutylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                            blank=True)
+    amylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    n_hexylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                           blank=True)
 
-    _1_2_3_trimethylbenzene_ug_g = FloatField(blank=True)
-    _1_2_4_trimethylbenzene_ug_g = FloatField(blank=True)
-    _1_2_dimethyl_4_ethylbenzene_ug_g = FloatField(blank=True)
-    _1_3_5_trimethylbenzene_ug_g = FloatField(blank=True)
-    _1_methyl_2_isopropylbenzene_ug_g = FloatField(blank=True)
-    _2_ethyltoluene_ug_g = FloatField(blank=True)
-    _3_4_ethyltoluene_ug_g = FloatField(blank=True)
+    _1_2_3_trimethylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                    blank=True)
+    _1_2_4_trimethylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                    blank=True)
+    _1_2_dimethyl_4_ethylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                         blank=True)
+    _1_3_5_trimethylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                    blank=True)
+    _1_methyl_2_isopropylbenzene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                                         blank=True)
+    _2_ethyltoluene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                            blank=True)
+    _3_4_ethyltoluene = EmbeddedDocumentField(ConcentrationInWaterUnit,
+                                              blank=True)
 
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
@@ -48,6 +62,6 @@ class Benzene(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}(benzene={} ug/g, w={})>'
+        return ('<{}(benzene={}, w={})>'
                 .format(self.__class__.__name__,
-                        self.benzene_ug_g, self.weathering))
+                        self.benzene, self.weathering))

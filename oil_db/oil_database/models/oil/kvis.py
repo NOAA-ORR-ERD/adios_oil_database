@@ -1,13 +1,16 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import FloatField
+
+from oil_database.models.common.float_unit import (KinematicViscosityUnit,
+                                                   TemperatureUnit)
 
 
 class KVis(EmbeddedMongoModel):
-    m_2_s = FloatField()
-    ref_temp_k = FloatField()
+    viscosity = EmbeddedDocumentField(KinematicViscosityUnit)
+    ref_temp = EmbeddedDocumentField(TemperatureUnit)
     weathering = FloatField(default=0.0)
 
     def __init__(self, **kwargs):
@@ -22,5 +25,5 @@ class KVis(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<{0.__class__.__name__}'
-                '({0.m_2_s} m^2/s at {0.ref_temp_k}K, w={0.weathering})>'
+                '({0.viscosity} at {0.ref_temp}, w={0.weathering})>'
                 .format(self))

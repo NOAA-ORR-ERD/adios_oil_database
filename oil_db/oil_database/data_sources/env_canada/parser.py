@@ -236,7 +236,9 @@ class EnvCanadaRecordParser(object):
             product.  This is definitely not a great way to do it, but we need
             to make a determination somehow.
         '''
-        for word in self.name:
+        words = self.name.lower().split()
+
+        for word in words:
             # if these words appear anywhere in the name, we will assume
             # it is refined
             if word in ('fuel', 'diesel', 'biodiesel',
@@ -244,7 +246,7 @@ class EnvCanadaRecordParser(object):
                 return True
 
         # check for specific 2-word tokens
-        for token in zip(self.name, self.name[1:]):
+        for token in zip(words, words[1:]):
             if token in (('bunker', 'c'),
                          ('swepco', '737')):
                 return True
@@ -292,7 +294,7 @@ class EnvCanadaRecordParser(object):
             # we want to create a density object for each weathering value
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
-            add_props = {'weathering': w, 'ref_temp_k': 273.15 + 15.0}
+            add_props = {'weathering': w, 'ref_temp_c': 15.0}
             rename_props = {'density_15_c_g_ml': 'g_ml'}
 
             kwargs = self._build_kwargs(props_i,
@@ -312,7 +314,7 @@ class EnvCanadaRecordParser(object):
             # we want to create a density object for each weathering value
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
-            add_props = {'weathering': w, 'ref_temp_k': 273.15 + 5.0}
+            add_props = {'weathering': w, 'ref_temp_c': 5.0}
             prune_props = {'density_0_c_g_ml'}
             rename_props = {'density_5_c_g_ml': 'g_ml'}
 
@@ -334,7 +336,7 @@ class EnvCanadaRecordParser(object):
             # we want to create a density object for each weathering value
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
-            add_props = {'weathering': w, 'ref_temp_k': 273.15}
+            add_props = {'weathering': w, 'ref_temp_c': 0.0}
             prune_props = {'density_5_c_g_ml'}
             rename_props = {'density_0_c_g_ml': 'g_ml'}
             op_and_value = {'g_ml'}

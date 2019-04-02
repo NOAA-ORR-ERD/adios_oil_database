@@ -2,17 +2,23 @@
 # PyMODM model class for Environment Canada's emulsion
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import FloatField, CharField
+
+from oil_database.models.common.float_unit import (FloatUnit,
+                                                   TimeUnit,
+                                                   TemperatureUnit,
+                                                   AdhesionUnit,
+                                                   KinematicViscosityUnit)
 
 
 class Emulsion(EmbeddedMongoModel):
-    water_content_percent = FloatField()
+    water_content = EmbeddedDocumentField(FloatUnit)
     wc_standard_deviation = FloatField(blank=True)
     wc_replicates = FloatField(blank=True)
 
-    age_days = FloatField()
-    ref_temp_k = FloatField()
+    age = EmbeddedDocumentField(TimeUnit)
+    ref_temp = EmbeddedDocumentField(TemperatureUnit)
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -23,19 +29,20 @@ class Emulsion(EmbeddedMongoModel):
                                           'Meso-stable'),
                                  blank=True)
 
-    complex_modulus_pa = FloatField(blank=True)
+    complex_modulus = EmbeddedDocumentField(AdhesionUnit, blank=True)
     cm_standard_deviation = FloatField(blank=True)
 
-    storage_modulus_pa = FloatField(blank=True)
+    storage_modulus = EmbeddedDocumentField(AdhesionUnit, blank=True)
     sm_standard_deviation = FloatField(blank=True)
 
-    loss_modulus_pa = FloatField(blank=True)
+    loss_modulus = EmbeddedDocumentField(AdhesionUnit, blank=True)
     lm_standard_deviation = FloatField(blank=True)
 
     tan_delta_v_e = FloatField(blank=True)
     td_standard_deviation = FloatField(blank=True)
 
-    complex_viscosity_pa_s = FloatField(blank=True)
+    complex_viscosity = EmbeddedDocumentField(KinematicViscosityUnit,
+                                              blank=True)
     cv_standard_deviation = FloatField(blank=True)
 
     mod_replicates = FloatField(blank=True)
@@ -58,7 +65,7 @@ class Emulsion(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}(water_percent={}, temp={}K, age={} days, w={})>'
+        return ('<{}(water_content={}, temp={}, age={}, w={})>'
                 .format(self.__class__.__name__,
-                        self.water_content_percent,
-                        self.ref_temp_k, self.age_days, self.weathering))
+                        self.water_content,
+                        self.ref_temp, self.age, self.weathering))
