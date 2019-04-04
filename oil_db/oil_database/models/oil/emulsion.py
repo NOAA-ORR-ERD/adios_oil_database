@@ -9,7 +9,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    TimeUnit,
                                                    TemperatureUnit,
                                                    AdhesionUnit,
-                                                   KinematicViscosityUnit)
+                                                   DynamicViscosityUnit)
 
 
 class Emulsion(EmbeddedMongoModel):
@@ -41,7 +41,7 @@ class Emulsion(EmbeddedMongoModel):
     tan_delta_v_e = FloatField(blank=True)
     td_standard_deviation = FloatField(blank=True)
 
-    complex_viscosity = EmbeddedDocumentField(KinematicViscosityUnit,
+    complex_viscosity = EmbeddedDocumentField(DynamicViscosityUnit,
                                               blank=True)
     cv_standard_deviation = FloatField(blank=True)
 

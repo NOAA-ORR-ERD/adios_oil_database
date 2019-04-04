@@ -4,7 +4,6 @@ from .interfacial_tension import ECInterfacialTension
 from .flash_point import ECFlashPoint
 from .pour_point import ECPourPoint
 from .adhesion import ECAdhesion
-from .evaporation_eq import EvaporationEq
 from .emulsion import ECEmulsion
 from .sulfur import ECSulfur
 from .water import ECWater
@@ -17,7 +16,6 @@ __all__ = [ECImportedRecord,
            ECFlashPoint,
            ECPourPoint,
            ECAdhesion,
-           EvaporationEq,
            ECEmulsion,
            ECSulfur,
            ECWater,

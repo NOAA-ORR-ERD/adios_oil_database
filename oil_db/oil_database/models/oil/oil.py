@@ -13,7 +13,7 @@ from oil_database.models.common import Synonym
 
 from .density import Density
 from .api import ApiGravity
-#from .dvis import DVis
+from .dvis import DVis
 from .kvis import KVis
 from .cut import Cut
 from .interfacial_tension import InterfacialTension
@@ -75,7 +75,7 @@ class Oil(MongoModel):
     apis = EmbeddedDocumentListField(ApiGravity, blank=True)
 
     # not sure if we are going to deal with DVis. might be KVis only
-    # dvis = EmbeddedDocumentListField(DVis, blank=True)
+    dvis = EmbeddedDocumentListField(DVis, blank=True)
     kvis = EmbeddedDocumentListField(KVis, blank=True)
 
     ifts = EmbeddedDocumentListField(InterfacialTension, blank=True)

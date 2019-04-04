@@ -91,14 +91,10 @@ def add_oil(record):
         Later, when we want to use a richly constructed record, we will perform
         estimations on-demand.
     '''
-    print ('\n\nAdding {} Record: id = {}, name = {}'
+    print ('Adding {}: id = {}, name = {}'
            .format(record.__class__.__name__, record.oil_id, record.name))
 
     oil_obj = Oil.from_record_parser(EnvCanadaAttributeMapper(record))
-
-    print ('\tOil.densities:')
-    for i in oil_obj.densities:
-        print '\t', (i)
 
     # TODO: We will need to reject oils that are not good before deciding to
     #       save them.  Just save them for now though.

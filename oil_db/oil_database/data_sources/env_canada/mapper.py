@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 import logging
 
-from oil_database.models.common.float_unit import TemperatureUnit, DensityUnit
+from oil_database.models.common.float_unit import (FloatUnit,
+                                                   TimeUnit,
+                                                   TemperatureUnit,
+                                                   DensityUnit,
+                                                   DynamicViscosityUnit,
+                                                   InterfacialTensionUnit,
+                                                   AdhesionUnit,
+                                                   ConcentrationInWaterUnit)
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -110,43 +117,95 @@ class EnvCanadaAttributeMapper(object):
     def densities(self):
         for d in self.record.densities:
             kwargs = self._get_kwargs(d)
-            print 'kwargs: ', kwargs
+
             kwargs['density'] = DensityUnit(value=kwargs['g_ml'],
-                                            unit='kg/m^3', from_unit='g/mL')
+                                            from_unit='g/mL', unit='kg/m^3')
             kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                 unit='K', from_unit='C')
+                                                 from_unit='C', unit='K')
 
             yield kwargs
 
     @property
     def dvis(self):
         for d in self.record.dvis:
-            yield self._get_kwargs(d)
+            kwargs = self._get_kwargs(d)
+
+            kwargs['viscosity'] = DynamicViscosityUnit(value=kwargs['mpa_s'],
+                                                       from_unit='mPa.s',
+                                                       unit='kg/(m s)')
+            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
+                                                 from_unit='C', unit='K')
+
+            yield kwargs
 
     @property
     def ifts(self):
         for i in self.record.ifts:
-            yield self._get_kwargs(i)
+            kwargs = self._get_kwargs(i)
+
+            kwargs['tension'] = InterfacialTensionUnit(value=kwargs['dynes_cm'],
+                                                       from_unit='dyne/cm',
+                                                       unit='N/m')
+            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
+                                                 from_unit='C', unit='K')
+
+            yield kwargs
 
     @property
     def flash_points(self):
         for f in self.record.flash_points:
-            yield self._get_kwargs(f)
+            kwargs = self._get_kwargs(f)
+
+            min_temp, max_temp = kwargs['min_temp_c'], kwargs['max_temp_c']
+
+            if min_temp is not None:
+                kwargs['min_temp'] = TemperatureUnit(value=min_temp,
+                                                     from_unit='C', unit='K')
+
+            if max_temp is not None:
+                kwargs['max_temp'] = TemperatureUnit(value=max_temp,
+                                                     from_unit='C', unit='K')
+
+            yield kwargs
 
     @property
     def pour_points(self):
         for p in self.record.pour_points:
-            yield self._get_kwargs(p)
+            kwargs = self._get_kwargs(p)
+
+            min_temp, max_temp = kwargs['min_temp_c'], kwargs['max_temp_c']
+
+            if min_temp is not None:
+                kwargs['min_temp'] = TemperatureUnit(value=min_temp,
+                                                     from_unit='C', unit='K')
+
+            if max_temp is not None:
+                kwargs['max_temp'] = TemperatureUnit(value=max_temp,
+                                                     from_unit='C', unit='K')
+
+            yield kwargs
 
     @property
     def cuts(self):
         for c in self.record.cuts:
-            yield self._get_kwargs(c)
+            kwargs = self._get_kwargs(c)
+
+            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
+                                           unit='1')
+            kwargs['vapor_temp'] = TemperatureUnit(value=kwargs['temp_c'],
+                                                   from_unit='C', unit='K')
+
+            yield kwargs
 
     @property
     def adhesions(self):
         for a in self.record.adhesions:
-            yield self._get_kwargs(a)
+            kwargs = self._get_kwargs(a)
+
+            kwargs['adhesion'] = AdhesionUnit(value=kwargs['g_cm_2'],
+                                              from_unit='g/cm^2', unit='N/m^2')
+
+            yield kwargs
 
     @property
     def evaporation_eqs(self):
@@ -156,52 +215,176 @@ class EnvCanadaAttributeMapper(object):
     @property
     def emulsions(self):
         for e in self.record.emulsions:
-            yield self._get_kwargs(e)
+            kwargs = self._get_kwargs(e)
+
+            kwargs['water_content'] = FloatUnit(value=kwargs['water_content_percent'] / 100.0,
+                                                unit='1')
+            kwargs['age'] = TimeUnit(value=kwargs['age_days'],
+                                     from_unit='day', unit='s')
+            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
+                                                 from_unit='C', unit='K')
+
+            # the different modulus values have similar units of measure
+            # to adhesion, so this is what we will go with
+            for mod_lbl in ('complex_modulus_pa',
+                            'storage_modulus_pa',
+                            'loss_modulus_pa'):
+                value = kwargs[mod_lbl]
+                new_lbl = mod_lbl[:-3]
+
+                if value is not None:
+                    kwargs[new_lbl] = AdhesionUnit(value=value,
+                                                   from_unit='Pa',
+                                                   unit='N/m^2')
+
+            for visc_lbl in ('complex_viscosity_pa_s',):
+                value = kwargs[visc_lbl]
+                new_lbl = visc_lbl[:-5]
+
+                if value is not None:
+                    kwargs[new_lbl] = DynamicViscosityUnit(value=value,
+                                                           from_unit='Pa.s',
+                                                           unit='kg/(m s)')
+
+            yield kwargs
 
     @property
     def corexit(self):
         for c in self.record.corexit:
-            yield self._get_kwargs(c)
+            kwargs = self._get_kwargs(c)
+
+            kwargs['effectiveness'] = FloatUnit(value=kwargs['effectiveness_percent'] / 100.0,
+                                                unit='1')
+
+            yield kwargs
 
     @property
     def sulfur(self):
         for s in self.record.sulfur:
-            yield self._get_kwargs(s)
+            kwargs = self._get_kwargs(s)
+
+            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
+                                           unit='1')
+
+            yield kwargs
 
     @property
     def water(self):
         for w in self.record.water:
-            yield self._get_kwargs(w)
+            kwargs = self._get_kwargs(w)
+
+            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
+                                           unit='1')
+
+            yield kwargs
 
     @property
     def wax_content(self):
         for w in self.record.wax_content:
-            yield self._get_kwargs(w)
+            kwargs = self._get_kwargs(w)
 
-    @property
-    def sara_total_fractions(self):
-        for f in self.record.sara_total_fractions:
-            yield self._get_kwargs(f)
+            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
+                                           unit='1')
+
+            yield kwargs
 
     @property
     def benzene(self):
         for b in self.record.benzene:
-            yield self._get_kwargs(b)
+            kwargs = self._get_kwargs(b)
+
+            for lbl in ('benzene_ug_g',
+                        'toluene_ug_g',
+                        'ethylbenzene_ug_g',
+                        'm_p_xylene_ug_g',
+                        'o_xylene_ug_g',
+                        'isopropylbenzene_ug_g',
+                        'propylebenzene_ug_g',
+                        'isobutylbenzene_ug_g',
+                        'amylbenzene_ug_g',
+                        'n_hexylbenzene_ug_g',
+                        '_1_2_3_trimethylbenzene_ug_g',
+                        '_1_2_4_trimethylbenzene_ug_g',
+                        '_1_2_dimethyl_4_ethylbenzene_ug_g',
+                        '_1_3_5_trimethylbenzene_ug_g',
+                        '_1_methyl_2_isopropylbenzene_ug_g',
+                        '_2_ethyltoluene_ug_g',
+                        '_3_4_ethyltoluene_ug_g'):
+                value = kwargs[lbl]
+                new_lbl = lbl[:-5]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='ug/g',
+                                                               unit='ppm')
+
+            yield kwargs
 
     @property
     def headspace(self):
         for h in self.record.headspace:
-            yield self._get_kwargs(h)
+            kwargs = self._get_kwargs(h)
+
+            for lbl in ('n_c5_mg_g',
+                        'n_c6_mg_g',
+                        'n_c7_mg_g',
+                        'n_c8_mg_g',
+                        'c5_group_mg_g',
+                        'c6_group_mg_g',
+                        'c7_group_mg_g'):
+                value = kwargs[lbl]
+                new_lbl = lbl[:-5]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='mg/g',
+                                                               unit='ppm')
+
+            yield kwargs
 
     @property
     def chromatography(self):
         for c in self.record.chromatography:
-            yield self._get_kwargs(c)
+            kwargs = self._get_kwargs(c)
+
+            for lbl in ('tph_mg_g',
+                        'tsh_mg_g',
+                        'tah_mg_g'):
+                value = kwargs[lbl]
+                new_lbl = lbl[:-5]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='mg/g',
+                                                               unit='1')
+
+            for lbl in ('tsh_tph_percent',
+                        'tah_tph_percent',
+                        'resolved_peaks_tph_percent'):
+                value = kwargs[lbl]
+                new_lbl = lbl[:-8]
+
+                if value is not None:
+                    kwargs[new_lbl] = FloatUnit(value=value / 100.0,
+                                                unit='1')
+
+            yield kwargs
 
     @property
     def ccme(self):
         for c in self.record.ccme:
-            yield self._get_kwargs(c)
+            kwargs = self._get_kwargs(c)
+
+            for n in range(1, 5):
+                lbl, new_lbl = 'f{}_mg_g'.format(n), 'f{}'.format(n)
+                value = kwargs[lbl]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='mg/g',
+                                                               unit='1')
+
+            yield kwargs
 
     @property
     def ccme_f1(self):
@@ -219,16 +402,112 @@ class EnvCanadaAttributeMapper(object):
             yield self._get_kwargs(c)
 
     @property
-    def alkylated_pahs(self):
-        for a in self.record.alkylated_pahs:
-            yield self._get_kwargs(a)
+    def sara_total_fractions(self):
+        for f in self.record.sara_total_fractions:
+            kwargs = self._get_kwargs(f)
+
+            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
+                                           unit='1')
+
+            yield kwargs
 
     @property
     def alkanes(self):
         for a in self.record.alkanes:
-            yield self._get_kwargs(a)
+            kwargs = self._get_kwargs(a)
+
+            for lbl in ('pristane_ug_g', 'phytane_ug_g'):
+                value = kwargs[lbl]
+                new_lbl = lbl[:-5]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='ug/g',
+                                                               unit='ppm')
+
+            for n in range(8, 45):
+                lbl, new_lbl = 'c{}_ug_g'.format(n), 'c{}'.format(n)
+                value = kwargs[lbl]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='ug/g',
+                                                               unit='ppm')
+
+            yield kwargs
+
+    @property
+    def alkylated_pahs(self):
+        for a in self.record.alkylated_pahs:
+            kwargs = self._get_kwargs(a)
+
+            for i, g in [(i, g) for g in 'npdfbc' for i in range(5)]:
+                lbl, new_lbl = ('c{}_{}_ug_g'.format(i, g),
+                                'c{}_{}'.format(i, g))
+                value = kwargs.get(lbl, None)
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='ug/g',
+                                                               unit='ppm')
+
+            for lbl in ('biphenyl_ug_g',
+                        'acenaphthylene_ug_g',
+                        'acenaphthene_ug_g',
+                        'anthracene_ug_g',
+                        'fluoranthene_ug_g',
+                        'pyrene_ug_g',
+                        'benz_a_anthracene_ug_g',
+                        'benzo_b_fluoranthene_ug_g',
+                        'benzo_k_fluoranthene_ug_g',
+                        'benzo_e_pyrene_ug_g',
+                        'benzo_a_pyrene_ug_g',
+                        'perylene_ug_g',
+                        'indeno_1_2_3_cd_pyrene_ug_g',
+                        'dibenzo_ah_anthracene_ug_g',
+                        'benzo_ghi_perylene_ug_g'):
+                value = kwargs[lbl]
+                new_lbl = lbl[:-5]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='ug/g',
+                                                               unit='ppm')
+
+            yield kwargs
 
     @property
     def biomarkers(self):
         for b in self.record.biomarkers:
-            yield self._get_kwargs(b)
+            kwargs = self._get_kwargs(b)
+
+            for lbl in ('c21_tricyclic_terpane_ug_g',
+                        'c22_tricyclic_terpane_ug_g',
+                        'c23_tricyclic_terpane_ug_g',
+                        'c24_tricyclic_terpane_ug_g',
+                        '_30_norhopane_ug_g',
+                        'hopane_ug_g',
+                        '_30_homohopane_22s_ug_g',
+                        '_30_homohopane_22r_ug_g',
+                        '_30_31_bishomohopane_22s_ug_g',
+                        '_30_31_bishomohopane_22r_ug_g',
+                        '_30_31_trishomohopane_22s_ug_g',
+                        '_30_31_trishomohopane_22r_ug_g',
+                        'tetrakishomohopane_22s_ug_g',
+                        'tetrakishomohopane_22r_ug_g',
+                        'pentakishomohopane_22s_ug_g',
+                        'pentakishomohopane_22r_ug_g',
+                        '_18a_22_29_30_trisnorneohopane_ug_g',
+                        '_17a_h_22_29_30_trisnorhopane_ug_g',
+                        '_14b_h_17b_h_20_cholestane_ug_g',
+                        '_14b_h_17b_h_20_methylcholestane_ug_g',
+                        '_14b_h_17b_h_20_ethylcholestane_ug_g'):
+                value = kwargs[lbl]
+                new_lbl = lbl[:-5]
+
+                if value is not None:
+                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
+                                                               from_unit='ug/g',
+                                                               unit='ppm')
+
+            yield kwargs

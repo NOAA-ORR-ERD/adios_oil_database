@@ -10,7 +10,9 @@ from .sulfur import Sulfur
 from .water import Water
 from .benzene import Benzene
 from .wax import Wax
-
+from .ccme import (CCMESaturateCxx,
+                   CCMEAromaticCxx,
+                   CCMETotalPetroleumCxx)
 
 __all__ = [Oil,
            InterfacialTension,
@@ -22,4 +24,7 @@ __all__ = [Oil,
            Sulfur,
            Water,
            Benzene,
-           Wax]
+           Wax,
+           CCMESaturateCxx,
+           CCMEAromaticCxx,
+           CCMETotalPetroleumCxx]

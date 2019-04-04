@@ -12,7 +12,7 @@ class ECEmulsion(EmbeddedMongoModel):
     wc_replicates = FloatField(blank=True)
 
     age_days = FloatField()
-    ref_temp_k = FloatField()
+    ref_temp_c = FloatField()
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -58,7 +58,7 @@ class ECEmulsion(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}(water_percent={}, temp={}K, age={} days, w={})>'
+        return ('<{}(water_percent={}, temp={}C, age={} days, w={})>'
                 .format(self.__class__.__name__,
                         self.water_content_percent,
-                        self.ref_temp_k, self.age_days, self.weathering))
+                        self.ref_temp_c, self.age_days, self.weathering))

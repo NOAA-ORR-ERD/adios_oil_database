@@ -7,7 +7,7 @@ from pymodm.fields import CharField, FloatField
 
 class ECDVis(EmbeddedMongoModel):
     mpa_s = FloatField()
-    ref_temp_k = FloatField()
+    ref_temp_c = FloatField()
     weathering = FloatField(default=0.0)
 
     method = CharField(max_length=32, blank=True)
@@ -28,6 +28,6 @@ class ECDVis(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<ECDVis({0.mpa_s} mPa.s at {0.ref_temp_k}K, '
+        return ('<ECDVis({0.mpa_s} mPa.s at {0.ref_temp_c}C, '
                 'w={0.weathering})>'
                 .format(self))

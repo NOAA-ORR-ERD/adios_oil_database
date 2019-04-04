@@ -10,6 +10,10 @@ from pymodm.fields import (MongoBaseField, CharField,
                            DateTimeField, EmbeddedDocumentListField)
 
 from oil_database.models.common import Synonym
+from oil_database.models.oil import EvaporationEq
+from oil_database.models.oil import (CCMESaturateCxx,
+                                     CCMEAromaticCxx,
+                                     CCMETotalPetroleumCxx)
 
 from .density import ECDensity
 from .api import ECApiGravity
@@ -19,7 +23,6 @@ from .interfacial_tension import ECInterfacialTension
 from .flash_point import ECFlashPoint
 from .pour_point import ECPourPoint
 from .adhesion import ECAdhesion
-from .evaporation_eq import EvaporationEq
 from .emulsion import ECEmulsion
 from .corexit import ECCorexit9500
 from .sulfur import ECSulfur
@@ -28,10 +31,7 @@ from .wax import ECWax
 from .benzene import ECBenzene
 from .headspace import ECHeadspace
 from .chromatography import ECGasChromatography
-from .ccme import (EcCCMEFraction,
-                   CCMESaturateCxx,
-                   CCMEAromaticCxx,
-                   CCMETotalPetroleumCxx)
+from .ccme import EcCCMEFraction
 from .alkylated_pah import ECAlkylatedTotalPAH
 from .sara_fraction import ECSARAFraction
 from .biomarkers import ECBiomarkers

@@ -9,7 +9,7 @@ from pymodm.fields import (CharField,
 
 class ECInterfacialTension(EmbeddedMongoModel):
     dynes_cm = FloatField()
-    ref_temp_k = FloatField()
+    ref_temp_c = FloatField()
     interface = CharField(choices=('air', 'water', 'seawater'))
     weathering = FloatField(default=0.0)
 
@@ -37,6 +37,6 @@ class ECInterfacialTension(EmbeddedMongoModel):
 
     def __repr__(self):
         return ('<ECInterfacialTension({0.dynes_cm} dynes/cm '
-                'at {0.ref_temp_k}K, '
+                'at {0.ref_temp_c}C, '
                 'if={0.interface}, w={0.weathering})>'
                 .format(self))

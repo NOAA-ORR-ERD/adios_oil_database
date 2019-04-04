@@ -8,8 +8,8 @@ from pymodm.fields import CharField, FloatField
 class ECSARAFraction(EmbeddedMongoModel):
     sara_type = CharField(choices=('Saturates', 'Aromatics',
                                    'Resins', 'Asphaltenes'))
-    percent = FloatField()
     weathering = FloatField(default=0.0)
+    percent = FloatField()
 
     standard_deviation = FloatField(blank=True)
     replicates = FloatField(blank=True)

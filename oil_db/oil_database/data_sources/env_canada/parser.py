@@ -381,7 +381,7 @@ class EnvCanadaRecordParser(object):
             # we want to create a viscosity object for each weathering value
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
-            add_props = {'weathering': w, 'ref_temp_k': 273.15 + 15.0}
+            add_props = {'weathering': w, 'ref_temp_c': 15.0}
             rename_props = {'viscosity_at_15_c_mpa_s': 'mpa_s'}
             op_and_value = {'mpa_s'}
 
@@ -403,7 +403,7 @@ class EnvCanadaRecordParser(object):
             # we want to create a viscosity object for each weathering value
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
-            add_props = {'weathering': w, 'ref_temp_k': 273.15 + 5.0}
+            add_props = {'weathering': w, 'ref_temp_c': 5.0}
             prune_props = {'viscosity_at_0_c_mpa_s'}
             rename_props = {'viscosity_at_5_c_mpa_s': 'mpa_s'}
             op_and_value = {'mpa_s'}
@@ -427,7 +427,7 @@ class EnvCanadaRecordParser(object):
             # we want to create a viscosity object for each weathering value
             props_i = dict([(k, v[i]) for k, v in props.iteritems()])
 
-            add_props = {'weathering': w, 'ref_temp_k': 273.15}
+            add_props = {'weathering': w, 'ref_temp_c': 0.0}
             prune_props = {'viscosity_at_5_c_mpa_s'}
             rename_props = {'viscosity_at_0_c_mpa_s': 'mpa_s'}
             op_and_value = {'mpa_s'}
@@ -487,7 +487,7 @@ class EnvCanadaRecordParser(object):
 
                 if props_i_label not in (None, 0.0):
                     add_props = {'weathering': w,
-                                 'ref_temp_k': 273.15 + 15.0,
+                                 'ref_temp_c': 15.0,
                                  'interface': if_type}
                     prune_props = {i for i in labels if i != label}
                     rename_props = {label: 'dynes_cm'}
@@ -534,7 +534,7 @@ class EnvCanadaRecordParser(object):
 
                 if props_i_label not in (None, 0.0):
                     add_props = {'weathering': w,
-                                 'ref_temp_k': 273.15 + 5.0,
+                                 'ref_temp_c': 5.0,
                                  'interface': if_type}
                     prune_props = {i for i in labels + xtra_labels
                                    if i != label}
@@ -582,7 +582,7 @@ class EnvCanadaRecordParser(object):
 
                 if props_i_label not in (None, 0.0):
                     add_props = {'weathering': w,
-                                 'ref_temp_k': 273.15,
+                                 'ref_temp_c': 0.0,
                                  'interface': if_type}
                     prune_props = {i for i in labels + xtra_labels
                                    if i != label}
@@ -900,7 +900,7 @@ class EnvCanadaRecordParser(object):
 
             if props_i['water_content_w_w'] is not None:
                 add_props = {'weathering': w,
-                             'ref_temp_k': 273.15 + 15.0,
+                             'ref_temp_c': 15.0,
                              'age_days': 0.0}
                 rename_props = {'water_content_w_w': 'water_content_percent'}
 
@@ -931,7 +931,7 @@ class EnvCanadaRecordParser(object):
 
             if props_i['water_content_w_w'] is not None:
                 add_props = {'weathering': w,
-                             'ref_temp_k': 273.15 + 15.0,
+                             'ref_temp_c': 15.0,
                              'age_days': 7.0}
                 rename_props = {'water_content_w_w': 'water_content_percent'}
 
