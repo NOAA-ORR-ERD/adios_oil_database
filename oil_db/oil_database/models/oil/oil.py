@@ -35,8 +35,10 @@ from .ccme import (CCMEFraction,
                    CCMETotalPetroleumCxx)
 from .alkylated_pah import AlkylatedTotalPAH
 from .sara_fraction import SARAFraction
-from .biomarkers import Biomarkers
 from .alkanes import NAlkanes
+from .biomarkers import Biomarkers
+from .toxicity import Toxicity
+from .conradson import Conradson
 
 
 class Oil(MongoModel):
@@ -110,6 +112,10 @@ class Oil(MongoModel):
     alkanes = EmbeddedDocumentListField(NAlkanes, blank=True)
 
     sara_total_fractions = EmbeddedDocumentListField(SARAFraction, blank=True)
+
+    # The following attributes are unique to the NOAA Filemaker records
+    toxicities = EmbeddedDocumentListField(Toxicity, blank=True)
+    conradson = EmbeddedDocumentListField(Conradson, blank=True)
 
     class Meta:
         write_concern = WriteConcern(j=True)

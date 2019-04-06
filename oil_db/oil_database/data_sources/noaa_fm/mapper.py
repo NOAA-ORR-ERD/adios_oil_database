@@ -65,7 +65,7 @@ class OilLibraryAttributeMapper(object):
         try:
             return getattr(self.record, attr)
         except Exception:
-            return self.record.get(attr, None)
+            return self.record.get(attr)
 
     @property
     def name(self):
@@ -221,9 +221,9 @@ class OilLibraryAttributeMapper(object):
         for c in self.record.cuts:
             kwargs = self._get_kwargs(c)
 
-            liquid_temp = kwargs.get('liquid_temp_k', None)
-            vapor_temp = kwargs.get('vapor_temp_k', None)
-            fraction = kwargs.get('fraction', None)
+            liquid_temp = kwargs.get('liquid_temp_k')
+            vapor_temp = kwargs.get('vapor_temp_k')
+            fraction = kwargs.get('fraction')
 
             kwargs['fraction'] = FloatUnit(value=fraction, unit='1')
             kwargs['vapor_temp'] = TemperatureUnit(value=vapor_temp, unit='K')
@@ -301,8 +301,7 @@ class OilLibraryAttributeMapper(object):
         if sulfur is not None:
             kwargs = {}
 
-            kwargs['fraction'] = FloatUnit(value=sulfur,
-                                           unit='1')
+            kwargs['fraction'] = FloatUnit(value=sulfur, unit='1')
 
             yield kwargs
 
@@ -380,10 +379,16 @@ class OilLibraryAttributeMapper(object):
 
     @property
     def sara_total_fractions(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        pass
+        for sara_type in ('Saturates', 'Aromatics', 'Resins', 'Asphaltenes'):
+            fraction = self._get_record_attr(sara_type.lower())
+
+            if fraction is not None:
+                kwargs = {}
+
+                kwargs['fraction'] = FloatUnit(value=fraction, unit='1')
+                kwargs['sara_type'] = sara_type
+
+                yield kwargs
 
     @property
     def alkanes(self):
@@ -405,3 +410,41 @@ class OilLibraryAttributeMapper(object):
             N/A. Oil Library records don't have this.
         '''
         pass
+
+    @property
+    def toxicities(self):
+        '''
+            This is unique to the NOAA Filemaker records
+        '''
+        for tox in self.record.toxicities:
+            kwargs = self._get_kwargs(tox)
+
+            # Note: we will maybe want to specify the units of concentration,
+            #       but I am not sure what the units are.  PPM maybe?
+            #       For now, we will just store the numbers.
+
+            after_24h = kwargs.get('after_24h')
+            after_48h = kwargs.get('after_48h')
+            after_96h = kwargs.get('after_96h')
+
+            if any([c is not None
+                    for c in (after_24h, after_48h, after_96h)]):
+                yield kwargs
+
+    @property
+    def conradson(self):
+        '''
+            This is unique to the NOAA Filemaker records
+        '''
+        residue = self._get_record_attr('conrandson_residuum')
+        crude = self._get_record_attr('conrandson_crude')
+
+        if any([a is not None for a in (residue, crude)]):
+            kwargs = {}
+            if residue is not None:
+                kwargs['residue'] = FloatUnit(value=residue, unit='1')
+
+            if crude is not None:
+                kwargs['crude'] = FloatUnit(value=crude, unit='1')
+
+            yield kwargs

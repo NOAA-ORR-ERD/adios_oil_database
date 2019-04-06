@@ -98,8 +98,8 @@ def add_oil(mapper):
 
     oil_obj = Oil.from_record_parser(mapper)
 
-    print 'oil.benzene:'
-    for a in oil_obj.benzene:
+    print 'oil.conradson:'
+    for a in oil_obj.conradson:
         print '\t', a
 
     # TODO: We will need to reject oils that are not good before deciding to

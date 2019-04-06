@@ -44,18 +44,12 @@ class ImportedRecord(MongoModel):
     reference_date = CharField(max_length=10, blank=True)
     comments = CharField(max_length=80 * 5, blank=True)
 
-    cut_units = CharField(choices=('weight', 'volume'), blank=True)
-    oil_class = CharField(choices=('group 1', 'group 2', 'group 3', 'group 4'),
-                          blank=True)
-    preferred_oils = BooleanField(default=False)
-
     api = FloatField(blank=True)
 
     flash_point_min_k = FloatField(blank=True)
     flash_point_max_k = FloatField(blank=True)
     pour_point_min_k = FloatField(blank=True)
     pour_point_max_k = FloatField(blank=True)
-
     oil_water_interfacial_tension_n_m = FloatField(blank=True)
     oil_water_interfacial_tension_ref_temp_k = FloatField(blank=True)
     oil_seawater_interfacial_tension_n_m = FloatField(blank=True)
@@ -66,33 +60,43 @@ class ImportedRecord(MongoModel):
     resins = FloatField(blank=True)
     asphaltenes = FloatField(blank=True)
 
-    wax_content = FloatField(blank=True)
-    paraffins = FloatField(blank=True)
-    benzene = FloatField(blank=True)
-    naphthenes = FloatField(blank=True)
-    polars = FloatField(blank=True)
     sulphur = FloatField(blank=True)
-    nickel = FloatField(blank=True)
-    vanadium = FloatField(blank=True)
+    wax_content = FloatField(blank=True)
+    benzene = FloatField(blank=True)
 
     adhesion = FloatField(blank=True)
-    dispersability_temp_k = FloatField(blank=True)
-    viscosity_multiplier = FloatField(blank=True)
     emuls_constant_min = FloatField(blank=True)
     emuls_constant_max = FloatField(blank=True)
     water_content_emulsion = FloatField(blank=True)
-    reid_vapor_pressure = FloatField(blank=True)
     conrandson_residuum = FloatField(blank=True)
     conrandson_crude = FloatField(blank=True)
-    k0y = FloatField(blank=True)
 
     # relationship fields
     synonyms = EmbeddedDocumentListField(Synonym, blank=True)
     densities = EmbeddedDocumentListField(NoaaFmDensity, blank=True)
-    kvis = EmbeddedDocumentListField(NoaaFmKVis, blank=True)
     dvis = EmbeddedDocumentListField(NoaaFmDVis, blank=True)
+    kvis = EmbeddedDocumentListField(NoaaFmKVis, blank=True)
     cuts = EmbeddedDocumentListField(NoaaFmCut, blank=True)
     toxicities = EmbeddedDocumentListField(NoaaFmToxicity, blank=True)
+
+    #
+    # these attributes haven't been mapped to the main Oil object
+    #
+    cut_units = CharField(choices=('weight', 'volume'), blank=True)
+    oil_class = CharField(choices=('group 1', 'group 2', 'group 3', 'group 4'),
+                          blank=True)
+    preferred_oils = BooleanField(default=False)
+
+    paraffins = FloatField(blank=True)
+    naphthenes = FloatField(blank=True)
+    polars = FloatField(blank=True)
+    nickel = FloatField(blank=True)
+    vanadium = FloatField(blank=True)
+
+    dispersability_temp_k = FloatField(blank=True)
+    viscosity_multiplier = FloatField(blank=True)
+    reid_vapor_pressure = FloatField(blank=True)
+    k0y = FloatField(blank=True)
 
     class Meta:
         write_concern = WriteConcern(j=True)
