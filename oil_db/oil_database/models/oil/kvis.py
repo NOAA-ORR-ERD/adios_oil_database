@@ -23,6 +23,9 @@ class KVis(EmbeddedMongoModel):
 
         super(KVis, self).__init__(**kwargs)
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return ('<{0.__class__.__name__}'
                 '({0.viscosity} at {0.ref_temp}, w={0.weathering})>'

@@ -14,6 +14,7 @@ from oil_database.models.ec_imported_rec import ECImportedRecord
 from oil_database.models.oil import Oil
 
 from oil_database.data_sources.env_canada import EnvCanadaAttributeMapper
+from oil_database.data_sources.noaa_fm import OilLibraryAttributeMapper
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -55,7 +56,7 @@ def process_oils():
     logger.info('Adding Oil objects...')
     for rec in ImportedRecord.objects.all():
         try:
-            add_oil(rec)
+            add_oil(OilLibraryAttributeMapper(rec))
         except OilRejected as e:
             logger.warning(repr(e))
         except ValidationError as e:
@@ -68,7 +69,7 @@ def process_oils():
     logger.info('Adding Environment Canada Oil objects...')
     for rec in ECImportedRecord.objects.all():
         try:
-            add_oil(rec)
+            add_oil(EnvCanadaAttributeMapper(rec))
         except OilRejected as e:
             logger.warning(repr(e))
         except ValidationError as e:
@@ -79,7 +80,7 @@ def process_oils():
                            .format(tc.change(rec.oil_id, 'red'), e))
 
 
-def add_oil(record):
+def add_oil(mapper):
     '''
         Originally, we wanted to populate the oil table with generalized oil
         objects that had rich sets of properties, including estimations of
@@ -91,10 +92,15 @@ def add_oil(record):
         Later, when we want to use a richly constructed record, we will perform
         estimations on-demand.
     '''
-    print ('Adding {}: id = {}, name = {}'
-           .format(record.__class__.__name__, record.oil_id, record.name))
+    print ('\n\nAdding {}: id = {}, name = {}'
+           .format(mapper.record.__class__.__name__,
+                   mapper.oil_id, mapper.name))
 
-    oil_obj = Oil.from_record_parser(EnvCanadaAttributeMapper(record))
+    oil_obj = Oil.from_record_parser(mapper)
+
+    print 'oil.benzene:'
+    for a in oil_obj.benzene:
+        print '\t', a
 
     # TODO: We will need to reject oils that are not good before deciding to
     #       save them.  Just save them for now though.

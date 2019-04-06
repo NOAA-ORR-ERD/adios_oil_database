@@ -9,8 +9,8 @@ from oil_database.models.common.float_unit import TemperatureUnit, FloatUnit
 
 class Cut(EmbeddedMongoModel):
     fraction = EmbeddedDocumentField(FloatUnit)
-    liquid_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
     vapor_temp = EmbeddedDocumentField(TemperatureUnit)
+    liquid_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
     weathering = FloatField(default=0.0)
 
     method = CharField(max_length=48, blank=True)
