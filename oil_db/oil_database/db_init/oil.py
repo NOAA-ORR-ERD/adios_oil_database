@@ -92,15 +92,11 @@ def add_oil(mapper):
         Later, when we want to use a richly constructed record, we will perform
         estimations on-demand.
     '''
-    print ('\n\nAdding {}: id = {}, name = {}'
+    print ('Adding {}: id = {}, name = {}'
            .format(mapper.record.__class__.__name__,
                    mapper.oil_id, mapper.name))
 
     oil_obj = Oil.from_record_parser(mapper)
-
-    print 'oil.conradson:'
-    for a in oil_obj.conradson:
-        print '\t', a
 
     # TODO: We will need to reject oils that are not good before deciding to
     #       save them.  Just save them for now though.

@@ -6,10 +6,12 @@ from pymongo.write_concern import WriteConcern
 from pymongo import IndexModel, ASCENDING
 
 from pymodm import MongoModel
-from pymodm.fields import (MongoBaseField, CharField,
-                           DateTimeField, EmbeddedDocumentListField)
+from pymodm.fields import (MongoBaseField, CharField, DateTimeField,
+                           ListField, EmbeddedDocumentListField,
+                           ReferenceField)
 
 from oil_database.models.common import Synonym
+from oil_database.models.common import Category
 
 from .density import Density
 from .api import ApiGravity
@@ -70,6 +72,7 @@ class Oil(MongoModel):
     reference_date = DateTimeField(blank=True)
     comments = CharField(max_length=80 * 5, blank=True)
     product_type = CharField(max_length=16, blank=True)
+    categories = ListField(ReferenceField(Category), blank=True, default=[])
 
     synonyms = EmbeddedDocumentListField(Synonym, blank=True)
 

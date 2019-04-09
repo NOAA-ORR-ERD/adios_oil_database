@@ -108,6 +108,13 @@ class FloatUnit(EmbeddedMongoModel):
 
         kwargs['value'] = convert(self.unit_type, from_unit, unit, value)
 
+    def to_unit(self, new_unit):
+        if new_unit not in self.__class__.unit.choices:
+            raise ValueError('Invalid conversion from {} to {}'
+                             .format(self.unit, new_unit))
+
+        return convert(self.unit_type, self.unit, new_unit, self.value)
+
     def __str__(self):
         if self.unit == '1':
             return '{}'.format(self.value)

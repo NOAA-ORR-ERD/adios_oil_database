@@ -121,7 +121,8 @@ def link_crude_light_oils():
     # our category
     top, categories = get_categories_by_names('Crude', ('Light',))
 
-    oils = get_oils_by_api('Crude', api_min=31.1)
+    oils = get_oils_by_api('crude', api_min=31.1)
+    print '\tfound {} crude light oils...'.format(oils.count())
 
     count = 0
     for o in oils:
@@ -138,7 +139,7 @@ def link_crude_medium_oils():
     # our category
     top, categories = get_categories_by_names('Crude', ('Medium',))
 
-    oils = get_oils_by_api('Crude', api_min=22.3, api_max=31.1)
+    oils = get_oils_by_api('crude', api_min=22.3, api_max=31.1)
 
     count = 0
     for o in oils:
@@ -153,7 +154,7 @@ def link_crude_medium_oils():
 def link_crude_heavy_oils():
     top, categories = get_categories_by_names('Crude', ('Heavy',))
 
-    oils = get_oils_by_api('Crude', api_max=22.3)
+    oils = get_oils_by_api('crude', api_max=22.3)
 
     count = 0
     for o in oils:
@@ -203,7 +204,7 @@ def link_refined_fuel_oil_1():
                                                'Gasoline',
                                                'Kerosene'))
 
-    oils = get_oils_by_api('Refined', api_min=35.0)
+    oils = get_oils_by_api('refined', api_min=35.0)
 
     count = 0
     for o in oils:
@@ -234,7 +235,7 @@ def link_refined_fuel_oil_2():
                                                'Diesel',
                                                'Heating Oil'))
 
-    oils = get_oils_by_api('Refined', api_min=30.0, api_max=39.0)
+    oils = get_oils_by_api('refined', api_min=30.0, api_max=39.0)
 
     count = 0
     for o in oils:
@@ -263,7 +264,7 @@ def link_refined_ifo():
     top, categories = get_categories_by_names('Refined',
                                               ('Intermediate Fuel Oil',))
 
-    oils = get_oils_by_api('Refined', api_min=15.0, api_max=30.0)
+    oils = get_oils_by_api('refined', api_min=15.0, api_max=30.0)
 
     count = 0
     for o in oils:
@@ -294,7 +295,7 @@ def link_refined_fuel_oil_6():
                                                'Heavy Fuel Oil',
                                                'Group V'))
 
-    oils = get_oils_by_api('Refined', api_min=0.0, api_max=15.0)
+    oils = get_oils_by_api('refined', api_min=0.0, api_max=15.0)
 
     count = 0
     for o in oils:
@@ -521,14 +522,14 @@ def get_oils_by_api(product_type, api_min=None, api_max=None):
         After we have performed our Oil estimations, all oils should have a
         valid API value.
     '''
-    query_args = {'product_type': product_type}
+    query_args = {'product_type': product_type.lower(),
+                  'apis.weathering': 0.0}
 
     # this is wrong.  api gets clobbered.
     if api_max is not None:
-        query_args.update({"api": {"$lte": api_max}})
-
+        query_args.update({'apis.gravity': {'$lte': api_max}})
     if api_min is not None:
-        query_args.update({"api": {"$gt": api_min}})
+        query_args.update({'apis.gravity': {'$gt': api_min}})
 
     return Oil.objects.raw(query_args).all()
 

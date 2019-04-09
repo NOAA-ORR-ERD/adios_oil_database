@@ -29,5 +29,5 @@ def add_all_imported_records(settings):
               managing our data sources in the future.
     '''
     add_imported_records(settings)
-    #add_ec_records(settings)
+    add_ec_records(settings)
     # add_exxon_records(settings)
