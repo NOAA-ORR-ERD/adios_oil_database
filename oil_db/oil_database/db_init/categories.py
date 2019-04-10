@@ -525,11 +525,14 @@ def get_oils_by_api(product_type, api_min=None, api_max=None):
     query_args = {'product_type': product_type.lower(),
                   'apis.weathering': 0.0}
 
-    # this is wrong.  api gets clobbered.
-    if api_max is not None:
-        query_args.update({'apis.gravity': {'$lte': api_max}})
-    if api_min is not None:
-        query_args.update({'apis.gravity': {'$gt': api_min}})
+    if api_min is not None or api_max is not None:
+        query_args.update({'apis.gravity': {}})
+
+        if api_min is not None:
+            query_args['apis.gravity'].update({'$gt': api_min})
+
+        if api_max is not None:
+            query_args['apis.gravity'].update({'$lte': api_max})
 
     return Oil.objects.raw(query_args).all()
 

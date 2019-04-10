@@ -1,18 +1,18 @@
 '''
-    Imported Oil record utility functions.
-
     These are functions to be used primarily for estimating oil
-    properties that are contained within an imported record from the
-    NOAA Filemaker oil library database.
+    properties that are contained within an oil record that has been
+    queried from the oil database.
 '''
 import numpy as np
 from scipy.optimize import curve_fit
 
-from oil_database.models.noaa_fm import (NoaaFmKVis,
-                                         NoaaFmDVis,
-                                         NoaaFmDensity)
-
 from oil_database.util import estimations as est
+
+from oil_database.models.common.float_unit import (TemperatureUnit,
+                                                   DensityUnit,
+                                                   DynamicViscosityUnit,
+                                                   KinematicViscosityUnit)
+from oil_database.models.oil import Density, KVis, DVis
 
 
 def _linear_curve(x, a, b):
@@ -41,7 +41,15 @@ def clamp(x, M, zeta=0.03):
             (M / (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 - zeta))))
 
 
-class ImportedRecordWithEstimation(object):
+# In order to provide minimal overhead, we will be setting this up as a group
+# of interface classes that can be used a la carte.  There will of course be
+# some dependency between these, which we will attempt to document.
+#
+# All interfaces assume a self.record member, which is the contained
+# oil object.
+
+
+class OilEstimation(object):
     def __init__(self, imported_rec):
         self.record = imported_rec
         self._k_v2 = None
@@ -59,11 +67,11 @@ class ImportedRecordWithEstimation(object):
         '''
             General utility function.
 
-            From a list of objects containing a ref_temp_k attribute,
+            From a list of objects containing a ref_temp attribute,
             return the object that has the lowest temperature
         '''
         if len(obj_list) > 0:
-            return sorted(obj_list, key=lambda d: d.ref_temp_k)[0]
+            return sorted(obj_list, key=lambda d: d.ref_temp.value)[0]
         else:
             return None
 
@@ -72,7 +80,7 @@ class ImportedRecordWithEstimation(object):
         '''
             General Utility Function
 
-            From a list of objects containing a ref_temp_k attribute,
+            From a list of objects containing a ref_temp attribute,
             return the object(s) that are closest to the specified
             temperature(s)
 
@@ -86,7 +94,7 @@ class ImportedRecordWithEstimation(object):
         if num >= len(obj_list):
             num = len(obj_list) - 1
 
-        temp_diffs = np.array([abs(obj.ref_temp_k - temperature)
+        temp_diffs = np.array([abs(obj.ref_temp.to_unit('K') - temperature)
                                for obj in obj_list]).T
 
         if len(obj_list) <= 1:
@@ -104,12 +112,12 @@ class ImportedRecordWithEstimation(object):
             try:
                 # sequence of temperatures result
                 closest = [sorted([obj_list[i] for i in r],
-                                  key=lambda x: x.ref_temp_k)
+                                  key=lambda x: x.ref_temp.to_unit('K'))
                            for r in closest_idx]
             except TypeError:
                 # single temperature result
                 closest = sorted([obj_list[i] for i in closest_idx],
-                                 key=lambda x: x.ref_temp_k)
+                                 key=lambda x: x.ref_temp.to_unit('K'))
 
             return closest
 
@@ -118,7 +126,7 @@ class ImportedRecordWithEstimation(object):
         '''
             General Utility Function
 
-            From a list of objects containing a ref_temp_k attribute,
+            From a list of objects containing a ref_temp attribute,
             return the object(s) that are closest to the specified
             temperature(s)
             specifically:
@@ -138,7 +146,8 @@ class ImportedRecordWithEstimation(object):
             # range where the lowest and highest are basically the same.
             obj_list *= 2
 
-        geq_temps = temperature >= [obj.ref_temp_k for obj in obj_list]
+        geq_temps = temperature >= [obj.ref_temp.to_unit('K')
+                                    for obj in obj_list]
 
         high_and_oob = np.all(geq_temps, axis=1)
         low_and_oob = np.all(geq_temps ^ True, axis=1)
@@ -153,41 +162,82 @@ class ImportedRecordWithEstimation(object):
         return zip([obj_list[i] for i in rho_idxs0],
                    [obj_list[i] for i in rho_idxs1])
 
-    def culled_measurement(self, attr_name, non_null_attrs):
+    def pour_point(self, weathering=0.0, estimate_if_none=True):
         '''
-            General utility function for returning a common class of
-            one-to-many Oil record relationships.
+            Note: there is a catch-22 which puts us in an infinite loop
+                  in some cases:
+                  - to estimate pour point, we need viscosities
+                  - if we need to convert dynamic viscosities to
+                    kinematic, we need density at 15C
+                  - to estimate density at temp, we need to estimate pour point
+                  - ...and then we recurse
 
-            A certain grouping of sub-objects of the Oil class, such as
-            Density, KVis, and DVis, contain a measured value, a reference
-            temperature at which the value was measured, and a measure of
-            how much the oil was weathered.
-
-            We iterate over this list of sub-objects, and only return the
-            ones that have a non-null measured value and reference temperature.
-            The weathering property is optional, and will default to 0.0.
+                  For this case we need to make an exception.  I think we can
+                  add a flag here to bypass estimation and just give the
+                  data values.  This flag will default to True, since most
+                  users will want to estimate values if none are present.
+                  But internally, we will want the option to turn estimation
+                  off.
         '''
-        if hasattr(self.record, attr_name):
-            obj_list = [o for o in getattr(self.record, attr_name)
-                        if all([(getattr(o, attr) is not None)
-                                for attr in non_null_attrs])]
+        min_k = max_k = None
 
-            for o in obj_list:
-                if o.weathering is None:
-                    o.weathering = 0.0
+        pps = [p for p in self.record.pour_points
+               if np.isclose(p.weathering, weathering)]
+
+        if len(pps) > 0:
+            if pps[0].min_temp is not None:
+                min_k = pps[0].min_temp.to_unit('K')
+            if pps[0].max_temp is not None:
+                max_k = pps[0].max_temp.to_unit('K')
+
+        if (min_k is None and max_k is None and estimate_if_none is True):
+            lowest_kvis = self.lowest_temperature(self.aggregate_kvis())
+            if lowest_kvis is not None:
+                max_k = est.pour_point_from_kvis(lowest_kvis.viscosity.to_unit('m^2/s'),
+                                                 lowest_kvis.ref_temp.to_unit('K'))
+
+        return min_k, max_k
+
+    def flash_point(self, weathering=0.0):
+        min_k = max_k = None
+
+        fps = [f for f in self.record.flash_points
+               if np.isclose(f.weathering, weathering)]
+
+        if len(fps) > 0:
+            if fps[0].min_temp is not None:
+                min_k = fps[0].min_temp.to_unit('K')
+            if fps[0].max_temp is not None:
+                max_k = fps[0].max_temp.to_unit('K')
+
+        if (min_k is not None or max_k is not None):
+            pass
+        elif len(list(self.record.cuts)) > 2:
+            cut_temps = self.get_cut_temps()
+            max_k = est.flash_point_from_bp(cut_temps[0])
+        elif self.record.api is not None:
+            max_k = est.flash_point_from_api(self.record.api)
         else:
-            obj_list = []
+            est_api = est.api_from_density(self.density_at_temp(288.15))
+            max_k = est.flash_point_from_api(est_api)
 
-        return obj_list
+        return min_k, max_k
 
-    def culled_densities(self):
-        return self.culled_measurement('densities', ['kg_m_3', 'ref_temp_k'])
+    def get_api(self, weathering=0.0):
+        '''
+            There should only be a single API value per weathered sample.
+            We return the object, not just the value
+        '''
+        apis = [a for a in self.record.apis
+                if np.isclose(a.weathering, weathering)]
 
-    def culled_kvis(self):
-        return self.culled_measurement('kvis', ['m_2_s', 'ref_temp_k'])
+        return apis[0] if len(apis) > 0 else None
 
-    def culled_dvis(self):
-        return self.culled_measurement('dvis', ['kg_ms', 'ref_temp_k'])
+    def get_api_from_densities(self):
+        if len(self.get_densities()) > 0:
+            return est.api_from_density(self.density_at_temp(273.15 + 15))
+        else:
+            return None
 
     def get_densities(self, weathering=0.0):
         '''
@@ -198,20 +248,22 @@ class ImportedRecordWithEstimation(object):
             - the culled list of densities does not contain a measurement
               at 15C
         '''
-        densities = [d for d in self.culled_densities()
-                     if d.weathering == weathering]
+        densities = [d for d in self.record.densities
+                     if np.isclose(d.weathering, weathering)]
+        api = self.get_api(weathering)
 
-        if (weathering == 0.0 and
-                self.record.api is not None and
+        if (api is not None and
                 len([d for d in densities
-                     if np.isclose(d.ref_temp_k, 288.0, atol=1.0)]) == 0):
-            kg_m_3, ref_temp_k = est.density_from_api(self.record.api)
+                     if np.isclose(d.ref_temp.value, 288.0, atol=1.0)]) == 0):
+            kg_m_3, ref_temp_k = est.density_from_api(api.gravity)
 
-            densities.append(NoaaFmDensity(kg_m_3=kg_m_3,
-                                           ref_temp_k=ref_temp_k,
-                                           weathering=0.0))
+            densities.append(Density(density=DensityUnit(value=kg_m_3,
+                                                         unit='kg/m^3'),
+                                     ref_temp=TemperatureUnit(value=ref_temp_k,
+                                                              unit='K'),
+                                     weathering=0.0))
 
-        return sorted(densities, key=lambda d: d.ref_temp_k)
+        return sorted(densities, key=lambda d: d.ref_temp.value)
 
     def density_at_temp(self, temperature=288.15, weathering=0.0):
         '''
@@ -224,7 +276,9 @@ class ImportedRecordWithEstimation(object):
                     kinematic, we need density at 15C
                   - to estimate density at temp, we need to estimate pour point
                   - ...and then we recurse
-                  For this case we need to make an exception.
+                  For this case we need to make an exception.  I think we can
+                  add a flag to self.pour_point() to bypass estimation and just
+                  give the data values.
             Note: If we have a pour point that is higher than one or more
                   of our reference temperatures, then the lowest reference
                   temperature will become our minimum temperature.
@@ -232,23 +286,26 @@ class ImportedRecordWithEstimation(object):
         shape = None
         densities = self.get_densities(weathering=weathering)
 
+        pp_min_k, pp_max_k = self.pour_point(weathering=weathering,
+                                             estimate_if_none=False)
+
         # set the minimum temperature to be the oil's pour point
-        if (self.record.pour_point_min_k is None and
-                self.record.pour_point_max_k is None and
+        if (pp_min_k is None and pp_max_k is None and
                 hasattr(self.record, 'dvis') and
                 len(self.record.dvis) > 0):
-            min_temp = 0.0  # effectively no restriction
+            min_k = 0.0  # effectively no restriction
         else:
-            min_temp = np.min([d.ref_temp_k for d in densities] +
-                              [pp for pp in self.pour_point()[:2]
-                               if pp is not None])
+            min_k = np.min([d.ref_temp.to_unit('K')
+                            for d in densities] +
+                           [pp for pp in (pp_min_k, pp_max_k)
+                            if pp is not None])
 
         if hasattr(temperature, '__iter__'):
-            temperature = np.clip(temperature, min_temp, 1000.0)
+            temperature = np.clip(temperature, min_k, 1000.0)
             shape = temperature.shape
             temperature = temperature.reshape(-1)
         else:
-            temperature = min_temp if temperature < min_temp else temperature
+            temperature = min_k if temperature < min_k else temperature
 
         ref_density, ref_temp_k = self._get_reference_densities(densities,
                                                                 temperature)
@@ -272,45 +329,12 @@ class ImportedRecordWithEstimation(object):
         '''
         return self.density_at_temp()
 
-    def _get_reference_densities(self, densities, temperature):
-        '''
-            Given a temperature, we return the best measured density,
-            and its reference temperature, to be used in calculation.
-
-            For our purposes, it is the density closest to the given
-            temperature.
-        '''
-        closest_densities = self.bounding_temperatures(densities, temperature)
-
-        try:
-            # sequence of ranges
-            density_values = np.array([[d.kg_m_3 for d in r]
-                                       for r in closest_densities])
-            ref_temp_values = np.array([[d.ref_temp_k for d in r]
-                                        for r in closest_densities])
-
-            greater_than = np.all((temperature > ref_temp_values.T).T, axis=1)
-
-            density_values[greater_than, 0] = density_values[greater_than, 1]
-            ref_temp_values[greater_than, 0] = ref_temp_values[greater_than, 1]
-
-            return density_values[:, 0], ref_temp_values[:, 0]
-        except TypeError:
-            # single range
-            density_values = np.array([d.kg_m_3 for d in closest_densities])
-            ref_temp_values = np.array([d.ref_temp_k
-                                        for d in closest_densities])
-
-            if np.all(temperature > ref_temp_values):
-                return density_values[1], ref_temp_values[1]
-            else:
-                return density_values[0], ref_temp_values[0]
-
     def _vol_expansion_coeff(self, densities, temperature):
         closest_densities = self.bounding_temperatures(densities, temperature)
 
         temperature = np.array(temperature)
-        closest_values = np.array([[(d.kg_m_3, d.ref_temp_k)
+        closest_values = np.array([[(d.density.to_unit('kg/m^3'),
+                                     d.ref_temp.to_unit('K'))
                                     for d in r]
                                    for r in closest_densities])
 
@@ -324,7 +348,9 @@ class ImportedRecordWithEstimation(object):
         less_than = np.all((temperature < closest_values[:, :, 1].T).T,
                            axis=1)
 
-        if self.record.api > 30:
+        api = self.get_api()
+
+        if api is not None and api > 30:
             k_rho_default = 0.0009
         else:
             k_rho_default = 0.0008
@@ -336,25 +362,56 @@ class ImportedRecordWithEstimation(object):
         else:
             return k_rho_t
 
-    def get_api(self):
-        if self.record.api is not None:
-            return self.record.api
-        elif len(self.get_densities()) > 0:
-            return est.api_from_density(self.density_at_temp(273.15 + 15))
-        else:
-            return None
+    def _get_reference_densities(self, densities, temperature):
+        '''
+            Given a temperature, we return the best measured density,
+            and its reference temperature, to be used in calculation.
+
+            For our purposes, it is the density closest to the given
+            temperature.
+        '''
+        closest_densities = self.bounding_temperatures(densities, temperature)
+
+        try:
+            # sequence of ranges
+            densities = np.array([[d.density.to_unit('kg/m^3') for d in r]
+                                  for r in closest_densities])
+            ref_temps = np.array([[d.ref_temp.to_unit('K') for d in r]
+                                  for r in closest_densities])
+
+            greater_than = np.all((temperature > ref_temps.T).T, axis=1)
+
+            densities[greater_than, 0] = densities[greater_than, 1]
+            ref_temps[greater_than, 0] = ref_temps[greater_than, 1]
+
+            return densities[:, 0], ref_temps[:, 0]
+        except TypeError:
+            # single range
+            densities = np.array([d.density.to_unit('kg/m^3')
+                                  for d in closest_densities])
+            ref_temps = np.array([d.ref_temp.to_unit('K')
+                                  for d in closest_densities])
+
+            if np.all(temperature > ref_temps):
+                return densities[1], ref_temps[1]
+            else:
+                return densities[0], ref_temps[0]
 
     def non_redundant_dvis(self):
-        kvis_dict = dict([((k.weathering, k.ref_temp_k), k.m_2_s)
-                          for k in self.culled_kvis()])
-        dvis_dict = dict([((d.weathering, d.ref_temp_k), d.kg_ms)
-                          for d in self.culled_dvis()])
+        kvis_dict = dict([((k.weathering, k.ref_temp.to_unit('K')),
+                           k.viscosity.to_unit('m^2/s'))
+                          for k in self.record.kvis])
+        dvis_dict = dict([((d.weathering, d.ref_temp.to_unit('K')),
+                           d.viscosity.to_unit('kg/(m s)'))
+                          for d in self.record.dvis])
 
         non_redundant_keys = set(dvis_dict.keys()).difference(kvis_dict.keys())
+
         for k in sorted(non_redundant_keys):
-            yield NoaaFmDVis(ref_temp_k=k[1],
-                             weathering=k[0],
-                             kg_ms=dvis_dict[k])
+            yield DVis(ref_temp=TemperatureUnit(value=k[1], unit='K'),
+                       viscosity=DynamicViscosityUnit(value=dvis_dict[k],
+                                                      unit='kg/(m s)'),
+                       weathering=k[0])
 
     def dvis_to_kvis(self, kg_ms, ref_temp_k):
         density = self.density_at_temp(ref_temp_k)
@@ -368,20 +425,20 @@ class ImportedRecordWithEstimation(object):
     def dvis_obj_to_kvis_obj(cls, dvis_obj, density):
         viscosity = est.dvis_to_kvis(dvis_obj.kg_ms, density)
 
-        return NoaaFmKVis(ref_temp_k=dvis_obj.ref_temp_k,
-                          weathering=dvis_obj.weathering,
-                          m_2_s=viscosity)
+        return KVis(ref_temp=dvis_obj.ref_temp,
+                    viscosity=KinematicViscosityUnit(value=viscosity,
+                                                     unit='m^2/s'),
+                    weathering=dvis_obj.weathering)
 
     def aggregate_kvis(self):
-        kvis_list = [((k.ref_temp_k, k.weathering), (k.m_2_s, False))
-                     for k in self.culled_kvis()]
+        kvis_list = [((k.ref_temp.to_unit('K'), k.weathering),
+                      k.viscosity.to_unit('m^2/s'))
+                     for k in self.record.kvis]
 
         if hasattr(self.record, 'dvis'):
-            dvis_list = [((d.ref_temp_k, d.weathering),
-                          (est.dvis_to_kvis(d.kg_ms,
-                                            self.density_at_temp(d.ref_temp_k)
-                                            ),
-                           True)
+            dvis_list = [((d.ref_temp.to_unit('K'), d.weathering),
+                          est.dvis_to_kvis(d.viscosity.to_unit('kg/(m s)'),
+                                           self.density_at_temp(d.ref_temp.to_unit('K')))
                           )
                          for d in list(self.non_redundant_dvis())]
 
@@ -390,8 +447,11 @@ class ImportedRecordWithEstimation(object):
         else:
             agg = dict(kvis_list)
 
-        return zip(*[(NoaaFmKVis(m_2_s=k, ref_temp_k=t, weathering=w), e)
-                     for (t, w), (k, e) in sorted(agg.iteritems())])
+        return [KVis(viscosity=KinematicViscosityUnit(value=k,
+                                                      unit='m^2/s'),
+                     ref_temp=TemperatureUnit(value=t, unit='K',
+                                              weathering=w))
+                for (t, w), k in sorted(agg.iteritems())]
 
     def kvis_at_temp(self, temp_k=288.15, weathering=0.0):
         shape = None
@@ -402,7 +462,7 @@ class ImportedRecordWithEstimation(object):
             shape = temp_k.shape
             temp_k = temp_k.reshape(-1)
 
-        kvis_list = [kv for kv in self.aggregate_kvis()[0]
+        kvis_list = [kv for kv in self.aggregate_kvis()
                      if (kv.weathering == weathering)]
         closest_kvis = self.closest_to_temperature(kvis_list, temp_k)
 
@@ -453,7 +513,7 @@ class ImportedRecordWithEstimation(object):
             return a * np.exp(k_v2 / temp_k)
 
         if kvis_list is None:
-            kvis_list = [kv for kv in self.aggregate_kvis()[0]
+            kvis_list = [kv for kv in self.aggregate_kvis()
                          if (kv.weathering in (None, 0.0))]
 
         if len(kvis_list) < 2:
@@ -540,24 +600,9 @@ class ImportedRecordWithEstimation(object):
 
         return f_sat, f_arom, estimated_sat, estimated_arom
 
-    def culled_cuts(self):
-        prev_temp = prev_fraction = 0.0
-
-        for c in self.record.cuts:
-            if c.vapor_temp_k < prev_temp:
-                continue
-
-            if c.fraction < prev_fraction:
-                continue
-
-            prev_temp = c.vapor_temp_k
-            prev_fraction = c.fraction
-
-            yield c
-
     def normalized_cut_values(self, N=10):
         f_res, f_asph, _estimated_res, _estimated_asph = self.inert_fractions()
-        cuts = list(self.culled_cuts())
+        cuts = list(self.record.cuts)
 
         if len(cuts) == 0:
             if self.record.api is not None:
@@ -789,45 +834,6 @@ class ImportedRecordWithEstimation(object):
             # we currently don't have an estimation for this one.
             return None, None, False
 
-    def pour_point(self):
-        min_k = max_k = None
-        estimated = False
-
-        if (self.record.pour_point_min_k is not None or
-                self.record.pour_point_max_k is not None):
-            # we have values to copy over
-            min_k = self.record.pour_point_min_k
-            max_k = self.record.pour_point_max_k
-        else:
-            lowest_kvis = self.lowest_temperature(self.aggregate_kvis()[0])
-            max_k = est.pour_point_from_kvis(lowest_kvis.m_2_s,
-                                             lowest_kvis.ref_temp_k)
-            estimated = True
-
-        return min_k, max_k, estimated
-
-    def flash_point(self):
-        min_k = max_k = None
-        estimated = False
-
-        if (self.record.flash_point_min_k is not None or
-                self.record.flash_point_max_k is not None):
-            min_k = self.record.flash_point_min_k
-            max_k = self.record.flash_point_max_k
-        elif len(list(self.culled_cuts())) > 2:
-            cut_temps = self.get_cut_temps()
-            max_k = est.flash_point_from_bp(cut_temps[0])
-            estimated = True
-        elif self.record.api is not None:
-            max_k = est.flash_point_from_api(self.record.api)
-            estimated = True
-        else:
-            est_api = est.api_from_density(self.density_at_temp(288.15))
-            max_k = est.flash_point_from_api(est_api)
-            estimated = True
-
-        return min_k, max_k, estimated
-
     def max_water_fraction_emulsion(self):
         if self.record.product_type == 'Crude':
             return 0.9
@@ -938,6 +944,7 @@ class ImportedRecordWithEstimation(object):
 
     def adhesion(self):
         estimated = False
+
         if self.record.adhesion is not None:
             omega_a = self.record.adhesion
         else:
