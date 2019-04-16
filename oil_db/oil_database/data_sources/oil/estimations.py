@@ -193,8 +193,9 @@ class OilEstimation(object):
         if (min_k is None and max_k is None and estimate_if_none is True):
             lowest_kvis = self.lowest_temperature(self.aggregate_kvis())
             if lowest_kvis is not None:
-                max_k = est.pour_point_from_kvis(lowest_kvis.viscosity.to_unit('m^2/s'),
-                                                 lowest_kvis.ref_temp.to_unit('K'))
+                kvis, temp_k = (lowest_kvis.viscosity.to_unit('m^2/s'),
+                                lowest_kvis.ref_temp.to_unit('K'))
+                max_k = est.pour_point_from_kvis(kvis, temp_k)
 
         return min_k, max_k
 
@@ -203,25 +204,35 @@ class OilEstimation(object):
 
         fps = [f for f in self.record.flash_points
                if np.isclose(f.weathering, weathering)]
+        fp = fps[0] if len(fps) > 0 else None
 
-        if len(fps) > 0:
-            if fps[0].min_temp is not None:
-                min_k = fps[0].min_temp.to_unit('K')
-            if fps[0].max_temp is not None:
-                max_k = fps[0].max_temp.to_unit('K')
+        if fp is not None:
+            min_k = None if fp.min_temp is None else fp.min_temp.to_unit('K')
+            max_k = None if fp.max_temp is None else fp.max_temp.to_unit('K')
 
-        if (min_k is not None or max_k is not None):
-            pass
-        elif len(list(self.record.cuts)) > 2:
-            cut_temps = self.get_cut_temps()
-            max_k = est.flash_point_from_bp(cut_temps[0])
-        elif self.record.api is not None:
-            max_k = est.flash_point_from_api(self.record.api)
-        else:
-            est_api = est.api_from_density(self.density_at_temp(288.15))
-            max_k = est.flash_point_from_api(est_api)
+        if min_k is None and max_k is None:
+            max_k = self.flash_point_from_bp()
+
+            if max_k is None:
+                max_k = self.flash_point_from_api()
 
         return min_k, max_k
+
+    def flash_point_from_bp(self):
+        if len(self.record.cuts) > 2:
+            cut_temps = self.get_cut_temps()
+            return est.flash_point_from_bp(cut_temps[0])
+        else:
+            return None
+
+    def flash_point_from_api(self):
+        if len(self.record.apis) > 0:
+            return est.flash_point_from_api(self.get_api().gravity)
+        if len(self.get_densities()) > 0:
+            est_api = est.api_from_density(self.density_at_temp(273.15 + 15))
+            return est.flash_point_from_api(est_api)
+        else:
+            return None
 
     def get_api(self, weathering=0.0):
         '''
@@ -286,19 +297,22 @@ class OilEstimation(object):
         shape = None
         densities = self.get_densities(weathering=weathering)
 
+        if len(densities) == 0:
+            return None
+
         pp_min_k, pp_max_k = self.pour_point(weathering=weathering,
                                              estimate_if_none=False)
 
         # set the minimum temperature to be the oil's pour point
-        if (pp_min_k is None and pp_max_k is None and
-                hasattr(self.record, 'dvis') and
-                len(self.record.dvis) > 0):
-            min_k = 0.0  # effectively no restriction
-        else:
+        if pp_min_k is not None or pp_max_k is not None:
             min_k = np.min([d.ref_temp.to_unit('K')
                             for d in densities] +
                            [pp for pp in (pp_min_k, pp_max_k)
                             if pp is not None])
+        elif (hasattr(self.record, 'dvis') and len(self.record.dvis) > 0):
+            min_k = 0.0  # effectively no restriction
+        else:
+            min_k = 0.0  # effectively no restriction
 
         if hasattr(temperature, '__iter__'):
             temperature = np.clip(temperature, min_k, 1000.0)
@@ -464,12 +478,17 @@ class OilEstimation(object):
 
         kvis_list = [kv for kv in self.aggregate_kvis()
                      if (kv.weathering == weathering)]
+
+        if len(kvis_list) == 0:
+            return None
+
         closest_kvis = self.closest_to_temperature(kvis_list, temp_k)
 
         if closest_kvis is not None:
             try:
                 # treat as a list
-                ref_kvis, ref_temp_k = zip(*[(kv[0].m_2_s, kv[0].ref_temp_k)
+                ref_kvis, ref_temp_k = zip(*[(kv.viscosity.to_unit('m^2/s'),
+                                              kv.ref_temp.to_unit('K'))
                                              for kv in closest_kvis])
                 if len(closest_kvis) > 1:
                     ref_kvis = np.array(ref_kvis).reshape(temp_k.shape)
@@ -478,8 +497,8 @@ class OilEstimation(object):
                     ref_kvis, ref_temp_k = ref_kvis[0], ref_temp_k[0]
             except TypeError:
                 # treat as a scalar
-                ref_kvis, ref_temp_k = (closest_kvis[0].m_2_s,
-                                        closest_kvis[0].ref_temp_k)
+                ref_kvis, ref_temp_k = (closest_kvis.viscosity.to_unit('m^2/s'),
+                                        closest_kvis.ref_temp.to_unit('K'))
         else:
             return None
 
@@ -519,7 +538,8 @@ class OilEstimation(object):
         if len(kvis_list) < 2:
             return
 
-        ref_temp_k, ref_kvis = zip(*[(k.ref_temp_k, k.m_2_s)
+        ref_temp_k, ref_kvis = zip(*[(k.ref_temp.to_unit('K'),
+                                      k.viscosity.to_unit('m^2/s'))
                                      for k in kvis_list])
 
         for k in np.logspace(3.6, 4.5, num=8):
@@ -550,29 +570,26 @@ class OilEstimation(object):
     # Oil Distillation Fractional Properties
     #
     def inert_fractions(self):
-        try:
-            f_res, f_asph = self.record.resins, self.record.asphaltenes
-        except AttributeError:
-            f_res, f_asph = (self.record.resins_fraction,
-                             self.record.asphaltenes_fraction)
+        f_res = f_asph = None
 
-        estimated_res = estimated_asph = False
+        for f in self.record.sara_total_fractions:
+            if f.sara_type.lower() == 'resins':
+                f_res = f.fraction.value
 
-        if f_res is not None and f_asph is not None:
-            return f_res, f_asph, estimated_res, estimated_asph
-        else:
+            if f.sara_type.lower() == 'asphaltenes':
+                f_asph = f.fraction.value
+
+        if f_res is None or f_asph is None:
             density = self.density_at_temp(288.15)
             viscosity = self.kvis_at_temp(288.15)
 
         if f_res is None:
             f_res = est.resin_fraction(density, viscosity)
-            estimated_res = True
 
         if f_asph is None:
             f_asph = est.asphaltene_fraction(density, viscosity, f_res)
-            estimated_asph = True
 
-        return f_res, f_asph, estimated_res, estimated_asph
+        return f_res, f_asph
 
     def volatile_fractions(self):
         try:
@@ -601,7 +618,7 @@ class OilEstimation(object):
         return f_sat, f_arom, estimated_sat, estimated_arom
 
     def normalized_cut_values(self, N=10):
-        f_res, f_asph, _estimated_res, _estimated_asph = self.inert_fractions()
+        f_res, f_asph = self.inert_fractions()
         cuts = list(self.record.cuts)
 
         if len(cuts) == 0:
@@ -614,7 +631,8 @@ class OilEstimation(object):
             BP_i = est.cut_temps_from_api(oil_api)
             fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
         else:
-            BP_i, fevap_i = zip(*[(c.vapor_temp_k, c.fraction) for c in cuts])
+            BP_i, fevap_i = zip(*[(c.vapor_temp.to_unit('K'), c.fraction.value)
+                                  for c in cuts])
 
         popt, _pcov = curve_fit(_linear_curve, BP_i, fevap_i)
         f_cutoff = _linear_curve(732.0, *popt)  # center of asymptote (< 739)

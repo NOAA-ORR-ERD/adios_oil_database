@@ -2,5 +2,4 @@ from reader import OilLibraryCsvFile
 from parser import OilLibraryRecordParser
 from mapper import OilLibraryAttributeMapper
 
-from estimations import ImportedRecordWithEstimation
 from scoring import ImportedRecordWithScore

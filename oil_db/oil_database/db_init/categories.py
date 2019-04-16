@@ -26,8 +26,8 @@ from pymodm.errors import MultipleObjectsReturned, DoesNotExist
 import unit_conversion as uc
 
 from oil_database.models.common import Category
-from oil_database.data_sources.noaa_fm import (ImportedRecordWithEstimation,
-                                               OilLibraryCsvFile)
+from oil_database.data_sources.noaa_fm import OilLibraryCsvFile
+from oil_database.data_sources.oil import OilEstimation
 
 from oil_database.models.oil import Oil
 
@@ -126,7 +126,6 @@ def link_crude_light_oils():
 
     count = 0
     for o in oils:
-        print 'updating categories for oil: ', o
         o.categories.extend(categories)
         o.save()
         count += 1
@@ -496,7 +495,7 @@ def show_uncategorized_oils():
     logger.info('{0} oils uncategorized.'.format(oils.count()))
 
     for o in oils:
-        o_estim = ImportedRecordWithEstimation(o)
+        o_estim = OilEstimation(o)
         if o.api >= 0:
             if o.api < 15:
                 category_temp = 273.15 + 50
@@ -570,7 +569,11 @@ def get_categories_by_names(top_name, child_names):
 def oil_within_viscosity_range(oil_obj, kvis_min=None, kvis_max=None):
     category_temp = 273.15 + 38
 
-    o_estim = ImportedRecordWithEstimation(oil_obj)
+    o_estim = OilEstimation(oil_obj)
+
+    if o_estim.kvis_at_temp(category_temp) is None:
+        return False
+
     viscosity = uc.convert('Kinematic Viscosity', 'm^2/s', 'cSt',
                            o_estim.kvis_at_temp(category_temp))
 
