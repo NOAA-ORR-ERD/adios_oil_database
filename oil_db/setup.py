@@ -22,9 +22,6 @@ pkg_version = '0.0.1'
 db_name = 'oil_database'
 connection_alias = 'oil-db-app'  # specific to PyMODM
 
-db_init_script_name = 'initialize_oil_db'
-
-
 def clean_files():
     src = os.path.join(here, r'oil_database')
 
@@ -79,8 +76,8 @@ class make_db(Command):
             TODO: We will maybe want to specify where our database is in a
                   config instead of just using the defaults.
         '''
-        oillib_files = '\n'.join([os.path.join(here, 'data', fn)
-                                  for fn in ('OilLib.txt',)])
+        fm_files = '\n'.join([os.path.join(here, 'data', fn)
+                              for fn in ('OilLib.txt',)])
         ec_files = '\n'.join([os.path.join(here, 'data', 'env_canada', fn)
                               for fn in ('Physiochemical properties of '
                                          'petroleum products-EN.xlsx',)])
@@ -88,9 +85,9 @@ class make_db(Command):
 
         blacklist_file = os.path.join(here, 'data', 'blacklist_whitelist.txt')
 
-        self.settings = {'oillib.files': oillib_files,
-                         'oillib.ec_files': ec_files,
-                         'oillib.exxon_files': exxon_files,
+        self.settings = {'oildb.fm_files': fm_files,
+                         'oildb.ec_files': ec_files,
+                         'oildb.exxon_files': exxon_files,
                          'blacklist.file': blacklist_file,
                          'mongodb.host': 'localhost',
                          'mongodb.port': 27017,
@@ -158,13 +155,8 @@ class make_db(Command):
 
     def load_database(self):
         try:
-            # we can't import at the top of the file because the package
-            # might not be built yet
-            from oil_database.util.db_connection import connect_modm
-            connect_modm(self.settings)
-
-            from oil_database.scripts.initializedb import load_db
-            load_db(self.settings)
+            from oil_database.scripts.db_initialize import init_db
+            init_db(self.settings)
             print 'Oil database successfully generated from file!'
         except Exception:
             print 'Oil database generation failed'
@@ -210,9 +202,12 @@ setup(name=pkg_name,
                 'cleanall': cleanall,
                 'test': PyTest,
                 },
-      entry_points={'console_scripts': [('{} = oil_database.initializedb'
-                                         ':make_db'
-                                         .format(db_init_script_name)),
+      entry_points={'console_scripts': [('oil_db_init = '
+                                         'oil_database.scripts.db_initialize'
+                                         ':init_db_cmd'),
+                                        ('oil_db_import = '
+                                         'oil_database.scripts.db_import'
+                                         ':import_db_cmd'),
                                         ('export_ec = '
                                          'oil_database.scripts.export_to_csv'
                                          ':export_to_csv_cmd'),

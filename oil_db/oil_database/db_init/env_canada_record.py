@@ -24,11 +24,9 @@ def add_ec_records(settings):
         Add the records from the Environment Canada Excel spreadsheet
         of oil properties.
     '''
-    for fn in settings['oillib.ec_files'].split('\n'):
+    for fn in settings['oildb.ec_files'].split('\n'):
         logger.info('opening file: {0} ...'.format(fn))
         fd = EnvCanadaOilExcelFile(fn)
-
-        print('Adding new records to database')
 
         rowcount = 0
         for record_data in fd.get_records():
@@ -48,7 +46,7 @@ def add_ec_records(settings):
 
             rowcount += 1
 
-        print('finished!!!  {0} rows processed.'.format(rowcount))
+        print('finished!!!  {} rows processed.'.format(rowcount))
 
 
 def add_ec_record(parser):

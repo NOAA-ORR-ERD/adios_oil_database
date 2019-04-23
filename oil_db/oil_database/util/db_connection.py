@@ -41,7 +41,9 @@ def connect_modm(settings):
 
     connect('mongodb://{}:{}/{}'.format(host, port, db_name), connection_alias)
 
+    return get_modm_connection(settings)
+
 
 def get_modm_connection(settings):
     alias = settings['mongodb.alias']
-    return _get_connection(alias)
+    return _get_connection(alias).database.client

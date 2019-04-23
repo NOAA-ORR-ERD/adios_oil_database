@@ -24,7 +24,7 @@ def add_imported_records(settings):
         Add our imported records from their associated data sources.
         Right now the only data source is the OilLib file.
     '''
-    for fn in settings['oillib.files'].split('\n'):
+    for fn in settings['oildb.fm_files'].split('\n'):
         logger.info('opening file: {0} ...'.format(fn))
         fd = OilLibraryCsvFile(fn)
         logger.info('file version: {}'.format(fd.__version__))
@@ -49,7 +49,7 @@ def add_imported_records(settings):
 
             rowcount += 1
 
-        print('finished!!!  {0} rows processed.'.format(rowcount))
+        print('finished!!!  {} rows processed.'.format(rowcount))
 
 
 def add_imported_record(parser):

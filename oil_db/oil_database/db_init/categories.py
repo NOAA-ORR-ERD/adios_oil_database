@@ -39,20 +39,20 @@ def process_categories(settings):
     load_categories()
     logger.info('Finished!!!')
 
-    logger.info('Here are our newly built categories...')
-    for parent in Category.objects.raw({'parent': None}):
-        for child in list_categories(parent):
-            logger.info(child)
+    print_all_categories()
 
     link_oils_to_categories(settings)
 
 
 def load_categories():
-    # Note: When saving a PyMODM object, any attributes that contain
-    #       document references will be checked for the saved state of the
-    #       referenced object.  And because we are working with doubly linked
-    #       parent/child relationships here, it is important to save the object
-    #       early before any links are established.
+    '''
+        Note: When saving a PyMODM object, any attributes that contain
+              document references will be checked for the saved state of the
+              referenced object.
+              And because we are working with doubly linked parent/child
+              relationships here, it is important to save the object early
+              before any links are established.
+    '''
     crude = Category(name='Crude').save()
     refined = Category(name='Refined').save()
     other = Category(name='Other').save()
@@ -83,6 +83,14 @@ def load_categories():
     crude.save()
     refined.save()
     other.save()
+
+
+def print_all_categories():
+    logger.info('Here are our newly built categories...')
+
+    for parent in Category.objects.raw({'parent': None}):
+        for child in list_categories(parent):
+            logger.info(child)
 
 
 def list_categories(category, indent=0):
@@ -122,7 +130,6 @@ def link_crude_light_oils():
     top, categories = get_categories_by_names('Crude', ('Light',))
 
     oils = get_oils_by_api('crude', api_min=31.1)
-    print '\tfound {} crude light oils...'.format(oils.count())
 
     count = 0
     for o in oils:
@@ -574,6 +581,11 @@ def oil_within_viscosity_range(oil_obj, kvis_min=None, kvis_max=None):
     if o_estim.kvis_at_temp(category_temp) is None:
         return False
 
+    # TODO: It seems clunky to have to convert using the unit_conversion
+    #       package directly.  It seems that maybe we want kvis_at_temp()
+    #       to return a KinematicViscosityUnit type.
+    #       We should maybe define the API of the estimation object more
+    #       consistently.
     viscosity = uc.convert('Kinematic Viscosity', 'm^2/s', 'cSt',
                            o_estim.kvis_at_temp(category_temp))
 

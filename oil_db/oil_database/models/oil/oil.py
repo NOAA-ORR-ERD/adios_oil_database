@@ -6,7 +6,8 @@ from pymongo.write_concern import WriteConcern
 from pymongo import IndexModel, ASCENDING
 
 from pymodm import MongoModel
-from pymodm.fields import (MongoBaseField, CharField, DateTimeField,
+from pymodm.fields import (MongoBaseField,
+                           CharField, BooleanField, DateTimeField,
                            ListField, EmbeddedDocumentListField,
                            ReferenceField)
 
@@ -73,6 +74,8 @@ class Oil(MongoModel):
     comments = CharField(max_length=80 * 5, blank=True)
     product_type = CharField(max_length=16, blank=True)
     categories = ListField(ReferenceField(Category), blank=True, default=[])
+
+    status = ListField(CharField(max_length=64), blank=True, default=[])
 
     synonyms = EmbeddedDocumentListField(Synonym, blank=True)
 

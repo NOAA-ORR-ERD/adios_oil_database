@@ -170,5 +170,8 @@ class ImportedRecord(MongoModel):
                     kwargs[attr] = [embedded_model(**sub_kwargs)
                                     for sub_kwargs in getattr(parser, attr)]
 
+    def __str__(self):
+        return self.__repr__()
+
     def __repr__(self):
         return "<ImportedRecord('{}')>".format(self.oil_name)
