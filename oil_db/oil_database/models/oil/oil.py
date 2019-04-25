@@ -65,7 +65,7 @@ class Oil(MongoModel):
         - viscosities
         - distillation cuts
     '''
-    oil_id = CharField(max_length=16)
+    oil_id = CharField(max_length=16, primary_key=True)
     name = CharField(max_length=100)
 
     location = CharField(max_length=64, blank=True)
@@ -126,9 +126,7 @@ class Oil(MongoModel):
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'oil-db-app'
-        indexes = [IndexModel([('oil_id', ASCENDING)],
-                              unique=True),
-                   IndexModel([('name', ASCENDING),
+        indexes = [IndexModel([('name', ASCENDING),
                                ('location', ASCENDING),
                                ('reference_date', ASCENDING)],
                               unique=True)]

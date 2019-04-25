@@ -57,7 +57,7 @@ class ECImportedRecord(MongoModel):
               But we will go ahead and accept the record for import, and then
               handle them when we are ready to load it into the main Oil table.
     '''
-    oil_id = CharField(max_length=16)
+    oil_id = CharField(max_length=16, primary_key=True)
     name = CharField(max_length=100)
 
     # EC location data is primarily in the 'source' field, with very infrequent
@@ -121,9 +121,7 @@ class ECImportedRecord(MongoModel):
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'oil-db-app'
-        indexes = [IndexModel([('oil_id', ASCENDING)],
-                              unique=True),
-                   IndexModel([('name', ASCENDING),
+        indexes = [IndexModel([('name', ASCENDING),
                                ('location', ASCENDING),
                                ('reference_date', ASCENDING)],
                               unique=True)]
