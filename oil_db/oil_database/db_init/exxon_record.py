@@ -44,17 +44,17 @@ def add_exxon_records(settings):
 #             except ValidationError as e:
 #                 parser = ExxonRecordParser(fd.field_indexes, rec)
 #                 rec_id = tc.change(parser.ec_oil_id, 'red')
-#    
+#
 #                 print ('validation failed for {}: {}'.format(rec_id, e))
 #             except DuplicateKeyError as e:
 #                 parser = ExxonRecordParser(fd.field_indexes, rec)
 #                 rec_id = tc.change(parser.ec_oil_id, 'red')
-#    
+#
 #                 print ('duplicate fields for {}: {}'.format(rec_id, e))
-#    
+#
 #             if rowcount % 100 == 0:
 #                 sys.stderr.write('.')
-#  
+#
 #             rowcount += 1
 #
 #        print ('finished!!!  {0} rows processed.'.format(rowcount))

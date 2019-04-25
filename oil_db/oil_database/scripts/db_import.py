@@ -1,6 +1,7 @@
 import sys
 import os
 import logging
+from datetime import datetime
 
 from pymongo.errors import DuplicateKeyError
 from pymodm.errors import ValidationError
@@ -23,7 +24,7 @@ from oil_database.models.oil import Oil
 
 from oil_database.db_init.validation import oil_record_validation
 
-from oil_database.db_init.categories import process_categories
+from oil_database.db_init.categories import link_oil_to_categories
 
 logger = logging.getLogger(__name__)
 
@@ -135,8 +136,12 @@ def import_db(settings):
                  record_cls, reader_cls, parser_cls, mapper_cls) = chosen
                 print ('\tYour choice: {}'.format(label))
 
+                begin = datetime.now()
                 import_records(settings[config],
                                record_cls, reader_cls, parser_cls, mapper_cls)
+                end = datetime.now()
+
+                print ('time elapsed: {}'.format(end - begin))
 
     print ('quitting the import...')
 
@@ -206,10 +211,10 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
 
                 oil_obj = Oil.from_record_parser(mapper_cls(rec))
 
-                # TODO: validate the oil
                 oil_obj.status = oil_record_validation(oil_obj)
 
-                # TODO: if the oil is valid, we categorize
+                if len(oil_obj.status) == 0:
+                    link_oil_to_categories(oil_obj)
 
                 oil_obj.save()
             except ValidationError as e:
@@ -224,7 +229,7 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
 
             rowcount += 1
 
-        print('finished!!!  {} rows processed.'.format(rowcount))
+        print ('finished!!!  {} rows processed.'.format(rowcount))
 
 
 def _add_datafiles(settings):
