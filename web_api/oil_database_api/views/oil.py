@@ -15,8 +15,8 @@ from oil_database.util.json import jsonify_oil_record
 
 from oil_database.models.oil import Oil
 
-from oil_database.models.oil_props import OilProps
-from oil_database.models.category import Category
+from oil_database.models.common import Category
+from oil_database.data_sources.oil import OilEstimation
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +61,7 @@ def delete_oil(request):
 
 
 def get_oil_dict(obj_id):
-    klass, query_set = Oil, {'adios_oil_id': obj_id}
+    klass, query_set = Oil, {'_id': obj_id}
 
     try:
         result = klass.objects.get(query_set)
@@ -88,24 +88,23 @@ def get_oil_non_embedded_docs(oil_dict):
 
 
 def get_oil_searchable_fields(oil):
-        return {'adios_oil_id': oil.adios_oil_id,
+        oil_estimation = OilEstimation(oil)
+
+        return {'oil_id': oil.oil_id,
                 'name': oil.name,
-                'location': oil.imported.location,
-                'field_name': oil.imported.field_name,
-                'product_type': oil.imported.product_type,
-                'oil_class': oil.imported.oil_class,
-                'api': oil.api,
-                'pour_point': get_pour_point(oil),
-                'viscosity': get_oil_viscosity(oil),
+                'location': oil.location,
+                'product_type': oil.product_type,
+                'apis': [a.to_son().to_dict() for a in oil.apis],
+                'pour_point': oil_estimation.pour_point(),
+                'viscosity': oil_estimation.kvis_at_temp(273.15 + 38),
                 'categories': get_category_paths(oil),
                 'categories_str': get_category_paths_str(oil),
-                'synonyms': get_synonyms(oil),
-                'quality_index': oil.quality_index
+                'status': oil.status,
                 }
 
 
 def get_category_paths_str(oil, sep=','):
-    regex = re.compile(r'\b(Crude-|Refined-)\b')
+    regex = re.compile(r'\b(Crude-|Refined-|Other-)\b')
 
     cat_str = sep.join(sorted(set(get_category_paths(oil))))
 
@@ -135,18 +134,6 @@ def get_category_ancestors(category):
 
 
 def get_synonyms(oil, sep=','):
-    syn_list = [s.name for s in oil.imported.synonyms]
+    syn_list = [s.name for s in oil.synonyms]
 
     return sep.join(syn_list)
-
-
-def get_pour_point(oil):
-    return [oil.pour_point_min_k, oil.pour_point_max_k]
-
-
-def get_oil_viscosity(oil):
-    if oil.api >= 0 and len(oil.kvis) > 0:
-        oil_props = OilProps(oil)
-        return oil_props.kvis_at_temp(273.15 + 38)
-    else:
-        return None

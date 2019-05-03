@@ -12,7 +12,7 @@ from ..common.views import cors_policy, obj_id_from_url
 
 from oil_database.util.json import jsonify_oil_record
 
-from oil_database.models.imported_rec import ImportedRecord
+from oil_database.models.noaa_fm import ImportedRecord
 
 logger = logging.getLogger(__name__)
 

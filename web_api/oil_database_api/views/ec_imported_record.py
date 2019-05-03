@@ -1,6 +1,5 @@
 """ Cornice services.
 """
-import re
 import logging
 
 from cornice import Service
@@ -14,7 +13,7 @@ from ..common.views import cors_policy, obj_id_from_url
 from oil_database.util.json import jsonify_oil_record
 
 from oil_database.models.ec_imported_rec import ECImportedRecord
-from oil_database.models.category import Category
+from oil_database.models.common import Category
 
 logger = logging.getLogger(__name__)
 

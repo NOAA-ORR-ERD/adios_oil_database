@@ -6,8 +6,8 @@ from cornice import Service
 
 from ..common.views import cors_policy
 
-from oil_database.models.imported_rec import ImportedRecord
-from oil_database.models.category import Category
+from oil_database.models.noaa_fm import ImportedRecord
+from oil_database.models.common import Category
 
 distinct_api = Service(name='distinct', path='/distinct',
                        description=('List the distinct values of the '
