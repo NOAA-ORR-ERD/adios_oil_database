@@ -8,6 +8,9 @@ from bson.objectid import ObjectId
 
 
 def jsonify_oil_record(oil):
+    if oil is None:
+        return oil
+
     try:
         # if we are a PyMODM object, we transform it to a dict
         oil_dict = oil.to_son().to_dict()

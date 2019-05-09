@@ -3,8 +3,13 @@
 import re
 import logging
 
+import ujson
+
 from cornice import Service
-from pyramid.httpexceptions import HTTPNotFound, HTTPNotImplemented
+from pyramid.httpexceptions import (HTTPBadRequest,
+                                    HTTPNotFound,
+                                    HTTPNotImplemented,
+                                    HTTPUnsupportedMediaType)
 
 from pymodm.errors import DoesNotExist
 from bson.errors import InvalidId
@@ -47,20 +52,79 @@ def get_oils(request):
 
 @oil_api.post()
 def insert_oil(request):
-    raise HTTPNotImplemented
+    try:
+        oil_json = ujson.loads(request.body)
+    except Exception:
+        raise HTTPBadRequest
+
+    try:
+        fix_oil_id(oil_json)
+        oil_obj = Oil(**oil_json)
+        oil_obj.save()
+    except Exception as e:
+        print e
+        raise HTTPUnsupportedMediaType(detail=e)
+
+    return oil_obj.to_son().to_dict()
 
 
 @oil_api.put()
 def update_oil(request):
-    raise HTTPNotImplemented
+    '''
+        The mongo model classes implement 'upsert' behavior, which is to say
+        that if the record exists, it is updated, and if it does not exist,
+        then it is inserted.
+        So this function, although separate, looks very similar to the insert
+        function.
+    '''
+    try:
+        oil_json = ujson.loads(request.body)
+    except Exception:
+        raise HTTPBadRequest
+
+    try:
+        fix_oil_id(oil_json)
+        oil_obj = Oil(**oil_json)
+        oil_obj.save()
+    except Exception as e:
+        print e
+        raise HTTPUnsupportedMediaType(detail=e)
+
+    return oil_obj.to_son().to_dict()
 
 
 @oil_api.delete()
 def delete_oil(request):
-    raise HTTPNotImplemented
+    obj_id = obj_id_from_url(request)
+
+    if obj_id is not None:
+        res = get_one_oil(obj_id)
+
+        if res is None:
+            raise HTTPNotFound()
+        else:
+            # should maybe wrap this in a try, and return any failure response
+            return res.delete()
+    else:
+        raise HTTPBadRequest
 
 
-def get_oil_dict(obj_id):
+def fix_oil_id(oil_json):
+    '''
+        Okay, this is some weirdness with the PyMODM models.  You can use a
+        custom field as a primary key, and we have done this with the oil_id
+        field.  But when the object is retrieved, the primary key field will
+        always be '_id', not the custom field name.
+        And if we assume an insert/update return trip workflow, we can also
+        assume in those cases that the oil_id will have been renamed.
+        So we will rename it back to 'oil_id'.
+    '''
+    if '_id' in oil_json:
+        oil_json['oil_id'] = oil_json['_id']
+        del oil_json['_id']
+
+
+def get_one_oil(obj_id):
     klass, query_set = Oil, {'_id': obj_id}
 
     try:
@@ -69,9 +133,13 @@ def get_oil_dict(obj_id):
         return None
 
     if isinstance(result, klass):
-        return jsonify_oil_record(result)
+        return result
     elif len(result) > 0:
-        return jsonify_oil_record(result[0])
+        return result[0]
+
+
+def get_oil_dict(obj_id):
+    return jsonify_oil_record(get_one_oil(obj_id))
 
 
 def get_oil_non_embedded_docs(oil_dict):

@@ -1,7 +1,9 @@
 """
 Functional tests for the Model Web API
 """
+import copy
 from base import FunctionalTestBase
+from sample_oils import basic_noaa_fm
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2)
@@ -110,9 +112,6 @@ class OilTestBase(FunctionalTestBase):
                   'ref_temp',
                   'interface',
                   'weathering',
-                  # 'method',  # can be blank
-                  # 'replicates',  # can be blank
-                  # 'standard_deviation'  # can be blank
                   ):
             if k not in ift:
                 return False
@@ -151,18 +150,23 @@ class OilTestBase(FunctionalTestBase):
 
     def flash_point_valid(self, fp):
         for k in ('_cls',
-                  'min_temp',
-                  'max_temp',
                   'weathering',
                   ):
             if k not in fp:
                 return False
 
-        if not self.ref_temp_valid(fp['min_temp']):
+        # these attrs can be optionally blank, but not all of them
+        if not any([k in fp
+                    for k in ('min_temp', 'max_temp')]):
             return False
 
-        if not self.ref_temp_valid(fp['max_temp']):
-            return False
+        if 'min_temp' in fp:
+            if not self.ref_temp_valid(fp['min_temp']):
+                return False
+
+        if 'max_temp' in fp:
+            if not self.ref_temp_valid(fp['max_temp']):
+                return False
 
         if not isinstance(fp['weathering'], (float)):
             return False
@@ -171,15 +175,19 @@ class OilTestBase(FunctionalTestBase):
 
     def pour_point_valid(self, pp):
         for k in ('_cls',
-                  'min_temp',
-                  'max_temp',
                   'weathering',
                   ):
             if k not in pp:
                 return False
 
-        if not self.ref_temp_valid(pp['min_temp']):
+        # these attrs can be optionally blank, but not all of them
+        if not any([k in pp
+                    for k in ('min_temp', 'max_temp')]):
             return False
+
+        if 'min_temp' in pp:
+            if not self.ref_temp_valid(pp['min_temp']):
+                return False
 
         if not self.ref_temp_valid(pp['max_temp']):
             return False
@@ -314,7 +322,9 @@ class OilTests(OilTestBase):
         for oil_id in ('AD00009',
                        'AD00020',
                        'AD00025',
-                       'AD01759'):
+                       'AD01759',
+                       'EC002234',
+                       'EC000506'):
             resp = self.testapp.get('/oil/{0}'.format(oil_id))
             oil = resp.json_body
 
@@ -336,7 +346,7 @@ class OilTests(OilTestBase):
                      'apis',
                      'densities',
                      'dvis',
-                     'kvis',
+                     # 'kvis',
                      'cuts',
                      'ifts',
                      'pour_points',
@@ -351,14 +361,14 @@ class OilTests(OilTestBase):
                      'ccme_f2',
                      'ccme_tph',
                      'chromatography',
-                     'conradson',
+                     # 'conradson',
                      'corexit',
                      'emulsions',
                      'evaporation_eqs',
                      'headspace',
                      'sara_total_fractions',
                      'sulfur',
-                     'toxicities',
+                     # 'toxicities',
                      'water',
                      'wax_content']
 
@@ -374,8 +384,9 @@ class OilTests(OilTestBase):
             for dvis in oil['dvis']:
                 assert self.dvis_valid(dvis)
 
-            for kvis in oil['kvis']:
-                assert self.kvis_valid(kvis)
+            if 'kvis' in oil:
+                for kvis in oil['kvis']:
+                    assert self.kvis_valid(kvis)
 
             for c in oil['cuts']:
                 assert self.cut_valid(c)
@@ -395,23 +406,74 @@ class OilTests(OilTestBase):
             for a in oil['adhesions']:
                 assert self.adhesion_valid(a)
 
-            for t in oil['toxicities']:
-                assert self.toxicity_valid(t)
+            if 'toxicities' in oil:
+                for t in oil['toxicities']:
+                    assert self.toxicity_valid(t)
 
-    def test_post_oil(self):
-        '''
-            Not implemented yet.
-        '''
-        self.testapp.post('/oil', status=501)
+    def test_post_no_payload(self):
+        self.testapp.post_json('/oil', status=400)
 
-    def test_put_oil(self):
-        '''
-            Not implemented yet.
-        '''
-        self.testapp.put('/oil', status=501)
+    def test_put_no_payload(self):
+        self.testapp.put_json('/oil', status=400)
 
-    def test_delete_oil(self):
-        '''
-            Not implemented yet.
-        '''
-        self.testapp.delete('/oil', status=501)
+    def test_post_bad_req(self):
+        self.testapp.post_json('/oil', params=[], status=415)
+        self.testapp.post_json('/oil', params='', status=415)
+        self.testapp.post_json('/oil', params='{"killme":}', status=400)
+
+    def test_delete_bad_req(self):
+        self.testapp.delete('/oil/{}'.format('bogus_id'), status=404)
+
+    def test_crud(self):
+        oil_json = copy.deepcopy(basic_noaa_fm)
+
+        # we probably don't need this, but we will make sure the record
+        # does not exist.
+        # self.testapp.delete('/oil/{}'.format(oil_json['oil_id']), status=404)
+
+        #
+        # test not inserted
+        #
+        self.testapp.get('/oil/{}'.format(oil_json['oil_id']), status=404)
+
+        #
+        # insert
+        #
+        resp = self.testapp.post_json('/oil', params=oil_json)
+
+        #
+        # test inserted
+        #
+        oil_json = resp.json_body
+        assert oil_json['_id'] == 'AD99999'
+        assert oil_json['apis'][0]['gravity'] == 28.0
+
+        resp = self.testapp.get('/oil/{0}'.format(oil_json['_id']))
+        oil_json = resp.json_body
+
+        assert oil_json['_id'] == 'AD99999'
+        assert oil_json['apis'][0]['gravity'] == 28.0
+
+        #
+        # update
+        #
+        oil_json['apis'][0]['gravity'] = 33.0
+
+        resp = self.testapp.put_json('/oil', params=oil_json)
+
+        #
+        # test updated
+        #
+        oil_json = resp.json_body
+        assert oil_json['_id'] == 'AD99999'
+        assert oil_json['apis'][0]['gravity'] == 33.0
+
+        #
+        # delete
+        #
+        self.testapp.delete('/oil/{}'.format(oil_json['_id']))
+
+        #
+        # test deleted
+        #
+        self.testapp.get('/oil/{}'.format(oil_json['_id']), status=404)
