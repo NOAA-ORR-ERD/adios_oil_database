@@ -18,7 +18,7 @@ def load_cors_origins(settings, key):
 
 
 def get_json(request):
-    return ujson.loads(request.text)
+    return ujson.loads(request.text, ensure_ascii=False)
 
 
 def main(global_config, **settings):

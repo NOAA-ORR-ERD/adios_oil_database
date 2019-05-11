@@ -2,6 +2,9 @@
 Functional tests for the Model Web API
 """
 import copy
+
+import ujson
+
 from base import FunctionalTestBase
 from sample_oils import basic_noaa_fm
 
@@ -328,8 +331,8 @@ class OilTests(OilTestBase):
             resp = self.testapp.get('/oil/{0}'.format(oil_id))
             oil = resp.json_body
 
-            print ('oil:')
-            pp.pprint(oil)
+            # print ('oil:')
+            # print (ujson.dumps(oil, indent=4, ensure_ascii=False))
 
             # the oil_database module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
@@ -417,19 +420,22 @@ class OilTests(OilTestBase):
         self.testapp.put_json('/oil', status=400)
 
     def test_post_bad_req(self):
-        self.testapp.post_json('/oil', params=[], status=415)
-        self.testapp.post_json('/oil', params='', status=415)
-        self.testapp.post_json('/oil', params='{"killme":}', status=400)
+        self.testapp.post_json('/oil', params=[], status=400)
+        self.testapp.post_json('/oil', params=1, status=400)
+        self.testapp.post_json('/oil', params='asdf', status=400)
+
+        self.testapp.request('/oil', method='POST',
+                             body='{"malformed":',
+                             headers={'Content-Type': 'application/json'},
+                             status=400)
+
+        self.testapp.post_json('/oil', params={"bad": 'attr'}, status=415)
 
     def test_delete_bad_req(self):
         self.testapp.delete('/oil/{}'.format('bogus_id'), status=404)
 
     def test_crud(self):
         oil_json = copy.deepcopy(basic_noaa_fm)
-
-        # we probably don't need this, but we will make sure the record
-        # does not exist.
-        # self.testapp.delete('/oil/{}'.format(oil_json['oil_id']), status=404)
 
         #
         # test not inserted
@@ -440,14 +446,14 @@ class OilTests(OilTestBase):
         # insert
         #
         resp = self.testapp.post_json('/oil', params=oil_json)
+        oil_json = resp.json_body
+
+        assert oil_json['_id'] == 'AD99999'
+        assert oil_json['apis'][0]['gravity'] == 28.0
 
         #
         # test inserted
         #
-        oil_json = resp.json_body
-        assert oil_json['_id'] == 'AD99999'
-        assert oil_json['apis'][0]['gravity'] == 28.0
-
         resp = self.testapp.get('/oil/{0}'.format(oil_json['_id']))
         oil_json = resp.json_body
 
@@ -460,12 +466,16 @@ class OilTests(OilTestBase):
         oil_json['apis'][0]['gravity'] = 33.0
 
         resp = self.testapp.put_json('/oil', params=oil_json)
+        oil_json = resp.json_body
+
+        assert oil_json['apis'][0]['gravity'] == 33.0
 
         #
         # test updated
         #
+        resp = self.testapp.get('/oil/{0}'.format(oil_json['_id']))
         oil_json = resp.json_body
-        assert oil_json['_id'] == 'AD99999'
+
         assert oil_json['apis'][0]['gravity'] == 33.0
 
         #

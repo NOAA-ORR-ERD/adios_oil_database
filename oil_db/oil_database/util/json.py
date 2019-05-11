@@ -33,6 +33,12 @@ def fix_bson_ids(json_data):
         return str(json_data)
     elif isinstance(json_data, dict):
         for k, v in json_data.iteritems():
+            if k == '_cls':
+                # chris doesn't want to expose the entire python module path
+                # not sure if this is a good idea, might make it harder to
+                # reconstruct the objects on a round trip.
+                v = v.split('.')[-1]
+
             json_data[k] = fix_bson_ids(v)
 
         return json_data

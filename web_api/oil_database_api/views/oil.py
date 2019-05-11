@@ -8,20 +8,18 @@ import ujson
 from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound,
-                                    HTTPNotImplemented,
                                     HTTPUnsupportedMediaType)
 
 from pymodm.errors import DoesNotExist
 from bson.errors import InvalidId
 
-from ..common.views import cors_policy, obj_id_from_url
-
 from oil_database.util.json import jsonify_oil_record
-
+from oil_database.data_sources.oil import OilEstimation
+from oil_database.models.common import Category
 from oil_database.models.oil import Oil
 
-from oil_database.models.common import Category
-from oil_database.data_sources.oil import OilEstimation
+from oil_database_api.common.views import cors_policy, obj_id_from_url
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,8 +52,13 @@ def get_oils(request):
 def insert_oil(request):
     try:
         oil_json = ujson.loads(request.body)
-    except Exception:
-        raise HTTPBadRequest
+
+        # Since we are only expecting a dictionary struct here, let's raise
+        # an exception in any other case.
+        if not isinstance(oil_json, dict):
+            raise ValueError('JSON dict is the only acceptable payload')
+    except Exception as e:
+        raise HTTPBadRequest(e)
 
     try:
         fix_oil_id(oil_json)
