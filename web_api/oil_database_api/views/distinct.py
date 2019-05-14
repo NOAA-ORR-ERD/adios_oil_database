@@ -4,9 +4,9 @@ from collections import defaultdict
 
 from cornice import Service
 
-from ..common.views import cors_policy
+from oil_database_api.common.views import cors_policy
 
-from oil_database.models.noaa_fm import ImportedRecord
+from oil_database.models.oil import Oil
 from oil_database.models.common import Category
 
 distinct_api = Service(name='distinct', path='/distinct',
@@ -26,10 +26,9 @@ def get_distinct(request):
     '''
     res = defaultdict(set)
 
-    attrs = ('location',
-             'field_name')
+    attrs = ('location',)
 
-    for ir_attrs in ImportedRecord.objects.only(*attrs):
+    for ir_attrs in Oil.objects.only(*attrs):
         for a in attrs:
             res[a].add(getattr(ir_attrs, a))
 

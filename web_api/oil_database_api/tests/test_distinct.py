@@ -13,7 +13,6 @@ class DistinctTests(FunctionalTestBase):
         distinct = resp.json_body
 
         assert 'location' in [f['column'] for f in distinct]
-        assert 'field_name' in [f['column'] for f in distinct]
         assert 'product_type' in [f['column'] for f in distinct]
 
         for v in [f['values'] for f in distinct]:
