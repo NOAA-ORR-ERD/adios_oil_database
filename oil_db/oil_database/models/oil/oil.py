@@ -66,7 +66,7 @@ class Oil(MongoModel):
         - distillation cuts
     '''
     oil_id = CharField(max_length=16, primary_key=True)
-    name = CharField(max_length=100)
+    name = CharField(max_length=100, required=True)
 
     location = CharField(max_length=64, blank=True)
     reference = CharField(max_length=80 * 20, blank=True)

@@ -8,9 +8,8 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPNotImplemented
 from pymodm.errors import DoesNotExist
 from bson.errors import InvalidId
 
-from ..common.views import cors_policy, obj_id_from_url
-
-from oil_database.util.json import jsonify_oil_record
+from oil_database.util.json import jsonify_model_obj
+from oil_database_api.common.views import cors_policy, obj_id_from_url
 
 from oil_database.models.noaa_fm import ImportedRecord
 
@@ -68,9 +67,9 @@ def get_imported_record_dict(obj_id):
         return None
 
     if isinstance(result, klass):
-        return jsonify_oil_record(result)
+        return jsonify_model_obj(result)
     else:
-        return jsonify_oil_record(result[0])
+        return jsonify_model_obj(result[0])
 
 
 def get_imported_record_searchable_fields(oil):

@@ -8,9 +8,6 @@ import ujson
 from base import FunctionalTestBase
 from sample_oils import basic_noaa_fm
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2)
-
 
 class OilTestBase(FunctionalTestBase):
     '''
@@ -297,7 +294,7 @@ class OilTestBase(FunctionalTestBase):
 
 
 class OilTests(OilTestBase):
-    def test_get_oil_no_id(self):
+    def test_get_no_id(self):
         resp = self.testapp.get('/oil')
         oils = resp.json_body
 
@@ -314,10 +311,10 @@ class OilTests(OilTestBase):
                       'categories_str'):
                 assert k in r
 
-    def test_get_oil_invalid_id(self):
+    def test_get_invalid_id(self):
         self.testapp.get('/oil/{}'.format('bogus'), status=404)
 
-    def test_get_oil_valid_id(self):
+    def test_get_valid_id(self):
         '''
             We are basing our tests on webtest(unittest), so parametrization
             doesn't work.
@@ -430,6 +427,18 @@ class OilTests(OilTestBase):
                              status=400)
 
         self.testapp.post_json('/oil', params={"bad": 'attr'}, status=415)
+
+    def test_put_bad_req(self):
+        self.testapp.put_json('/oil', params=[], status=400)
+        self.testapp.put_json('/oil', params=1, status=400)
+        self.testapp.put_json('/oil', params='asdf', status=400)
+
+        self.testapp.request('/oil', method='PUT',
+                             body='{"malformed":',
+                             headers={'Content-Type': 'application/json'},
+                             status=400)
+
+        self.testapp.put_json('/oil', params={"bad": 'attr'}, status=415)
 
     def test_delete_bad_req(self):
         self.testapp.delete('/oil/{}'.format('bogus_id'), status=404)

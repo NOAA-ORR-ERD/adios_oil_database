@@ -20,7 +20,7 @@ class Category(MongoModel):
         Thus, Oil objects will be linked to categories in a many-to-many
         relationship.
     '''
-    name = CharField(max_length=80)
+    name = CharField(max_length=80, required=True)
 
     parent = ReferenceField('Category')
 

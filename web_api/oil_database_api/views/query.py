@@ -6,10 +6,10 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPBadRequest
 
 from oil_database.util.db_connection import get_modm_connection
-from oil_database.util.json import jsonify_oil_record
+from oil_database.util.json import jsonify_model_obj
 
-from ..common.views import (cors_policy,
-                            cors_exception)
+from oil_database_api.common.views import (cors_policy,
+                                           cors_exception)
 
 log = logging.getLogger(__name__)
 
@@ -43,4 +43,4 @@ def query_oils(request):
         raise HTTPBadRequest('Invalid table name!')
 
     log.info('<< ' + log_prefix)
-    return [jsonify_oil_record(o) for o in list(collection.find(query))]
+    return [jsonify_model_obj(o) for o in list(collection.find(query))]

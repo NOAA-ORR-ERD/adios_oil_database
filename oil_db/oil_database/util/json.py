@@ -7,19 +7,19 @@
 from bson.objectid import ObjectId
 
 
-def jsonify_oil_record(oil):
-    if oil is None:
-        return oil
+def jsonify_model_obj(obj):
+    if obj is None:
+        return obj
 
     try:
         # if we are a PyMODM object, we transform it to a dict
-        oil_dict = oil.to_son().to_dict()
+        obj_dict = obj.to_son().to_dict()
     except Exception:
-        oil_dict = oil
+        obj_dict = obj
 
-    fix_bson_ids(oil_dict)
+    fix_bson_ids(obj_dict)
 
-    return oil_dict
+    return obj_dict
 
 
 def fix_bson_ids(json_data):

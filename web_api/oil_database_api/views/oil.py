@@ -13,7 +13,7 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 from pymodm.errors import DoesNotExist
 from bson.errors import InvalidId
 
-from oil_database.util.json import jsonify_oil_record
+from oil_database.util.json import jsonify_model_obj
 from oil_database.data_sources.oil import OilEstimation
 from oil_database.models.common import Category
 from oil_database.models.oil import Oil
@@ -44,31 +44,30 @@ def get_oils(request):
         else:
             raise HTTPNotFound()
     else:
-        return [get_oil_searchable_fields(o)
-                for o in Oil.objects.all()]
+        return [get_oil_searchable_fields(o) for o in Oil.objects.all()]
 
 
 @oil_api.post()
 def insert_oil(request):
     try:
-        oil_json = ujson.loads(request.body)
+        json_obj = ujson.loads(request.body)
 
         # Since we are only expecting a dictionary struct here, let's raise
         # an exception in any other case.
-        if not isinstance(oil_json, dict):
+        if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
     except Exception as e:
         raise HTTPBadRequest(e)
 
     try:
-        fix_oil_id(oil_json)
-        oil_obj = Oil(**oil_json)
-        oil_obj.save()
+        fix_oil_id(json_obj)
+        obj = Oil(**json_obj)
+        obj.save()
     except Exception as e:
         print e
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return oil_obj.to_son().to_dict()
+    return jsonify_model_obj(obj)
 
 
 @oil_api.put()
@@ -81,19 +80,24 @@ def update_oil(request):
         function.
     '''
     try:
-        oil_json = ujson.loads(request.body)
+        json_obj = ujson.loads(request.body)
+
+        # Since we are only expecting a dictionary struct here, let's raise
+        # an exception in any other case.
+        if not isinstance(json_obj, dict):
+            raise ValueError('JSON dict is the only acceptable payload')
     except Exception:
         raise HTTPBadRequest
 
     try:
-        fix_oil_id(oil_json)
-        oil_obj = Oil(**oil_json)
-        oil_obj.save()
+        fix_oil_id(json_obj)
+        obj = Oil(**json_obj)
+        obj.save()
     except Exception as e:
         print e
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return oil_obj.to_son().to_dict()
+    return jsonify_model_obj(obj)
 
 
 @oil_api.delete()
@@ -128,9 +132,8 @@ def fix_oil_id(oil_json):
 
 
 def get_one_oil(obj_id):
-    klass, query_set = Oil, {'_id': obj_id}
-
     try:
+        klass, query_set = Oil, {'_id': obj_id}
         result = klass.objects.get(query_set)
     except (DoesNotExist, InvalidId):
         return None
@@ -142,7 +145,7 @@ def get_one_oil(obj_id):
 
 
 def get_oil_dict(obj_id):
-    return jsonify_oil_record(get_one_oil(obj_id))
+    return jsonify_model_obj(get_one_oil(obj_id))
 
 
 def get_oil_non_embedded_docs(oil_dict):
