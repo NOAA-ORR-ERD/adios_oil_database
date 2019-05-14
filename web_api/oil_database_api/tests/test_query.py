@@ -27,7 +27,7 @@ class QueryTests(FunctionalTestBase):
             If we don't specify a table name, the default table that will be
             queried is the oil table.
         '''
-        params = {'query': {'adios_oil_id': 'AD00009'}
+        params = {'query': {'_id': 'AD00009'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
@@ -35,7 +35,7 @@ class QueryTests(FunctionalTestBase):
         print res
 
         assert len(res) == 1
-        assert res[0]['_cls'].endswith('.Oil')
+        assert res[0]['_cls'].endswith('Oil')
 
     def test_post_query_no_results(self):
         '''
@@ -64,7 +64,7 @@ class QueryTests(FunctionalTestBase):
 
     def test_post_query_oil(self):
         params = {'table': 'oil',
-                  'query': {'adios_oil_id': 'AD00009'}
+                  'query': {'_id': 'AD00009'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
@@ -72,11 +72,11 @@ class QueryTests(FunctionalTestBase):
         print res
 
         assert len(res) == 1
-        assert res[0]['_cls'].endswith('.Oil')
+        assert res[0]['_cls'].endswith('Oil')
 
     def test_post_query_imported_record(self):
         params = {'table': 'imported_record',
-                  'query': {'adios_oil_id': 'AD00009'}
+                  'query': {'_id': 'AD00009'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
@@ -84,11 +84,11 @@ class QueryTests(FunctionalTestBase):
         print res
 
         assert len(res) == 1
-        assert res[0]['_cls'].endswith('.ImportedRecord')
+        assert res[0]['_cls'].endswith('ImportedRecord')
 
     def test_post_query_ec_imported_record(self):
         params = {'table': 'ec_imported_record',
-                  'query': {'oil_id': 'EC002712'}
+                  'query': {'_id': 'EC002712'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
@@ -96,4 +96,4 @@ class QueryTests(FunctionalTestBase):
         print res
 
         assert len(res) == 1
-        assert res[0]['_cls'].endswith('.ECImportedRecord')
+        assert res[0]['_cls'].endswith('ECImportedRecord')

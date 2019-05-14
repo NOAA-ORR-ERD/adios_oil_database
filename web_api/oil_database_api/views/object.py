@@ -7,10 +7,10 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 
 from bson.objectid import ObjectId
 
-from ..common.views import cors_policy, obj_id_from_url
-
 from oil_database.util.json import fix_bson_ids
-from oil_database.util.db_connection import get_modm_connection
+from oil_database.util.db_connection import get_modm_db
+
+from oil_database_api.common.views import cors_policy, obj_id_from_url
 
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def get_object(request):
     if obj_id is None:
         raise HTTPBadRequest('Object ID required')
     else:
-        db = get_modm_connection(request.registry.settings).database
+        db = get_modm_db(request.registry.settings)
 
         for cname in db.collection_names():
             collection = getattr(db, cname)

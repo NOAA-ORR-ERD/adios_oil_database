@@ -2,7 +2,7 @@ import logging
 
 from pymongo import MongoClient
 from pymodm import connect
-from pymodm.connection import _get_connection
+from pymodm.connection import _get_db
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +41,13 @@ def connect_modm(settings):
 
     connect('mongodb://{}:{}/{}'.format(host, port, db_name), connection_alias)
 
-    return get_modm_connection(settings)
+    return get_modm_client(settings)
 
 
-def get_modm_connection(settings):
+def get_modm_db(settings):
     alias = settings['mongodb.alias']
-    return _get_connection(alias).database.client
+    return _get_db(alias)
+
+
+def get_modm_client(settings):
+    return get_modm_db(settings).client
