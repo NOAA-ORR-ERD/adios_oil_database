@@ -11,7 +11,7 @@ class ECCorexit9500(EmbeddedMongoModel):
         Chemical dispersability with Corexit 9500 Dispersant (swirling flask
         test) (ASTM F2059)
     '''
-    effectiveness_percent = FloatField()
+    dispersant_effectiveness = FloatField()
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -38,4 +38,4 @@ class ECCorexit9500(EmbeddedMongoModel):
     def __repr__(self):
         return ('<{}(effectiveness={}%, w={})>'
                 .format(self.__class__.__name__,
-                        self.effectiveness_percent, self.weathering))
+                        self.dispersant_effectiveness, self.weathering))

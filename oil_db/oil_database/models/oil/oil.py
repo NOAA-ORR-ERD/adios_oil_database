@@ -7,7 +7,7 @@ from pymongo import IndexModel, ASCENDING
 
 from pymodm import MongoModel
 from pymodm.fields import (MongoBaseField,
-                           CharField, BooleanField, DateTimeField,
+                           CharField, DateTimeField,
                            ListField, EmbeddedDocumentListField,
                            ReferenceField)
 
@@ -25,7 +25,7 @@ from .pour_point import PourPoint
 from .adhesion import Adhesion
 from .evaporation_eq import EvaporationEq
 from .emulsion import Emulsion
-from .corexit import Corexit9500
+from .dispersibility import ChemicalDispersibility
 from .sulfur import Sulfur
 from .water import Water
 from .wax import Wax
@@ -96,7 +96,8 @@ class Oil(MongoModel):
     adhesions = EmbeddedDocumentListField(Adhesion, blank=True)
     evaporation_eqs = EmbeddedDocumentListField(EvaporationEq, blank=True)
     emulsions = EmbeddedDocumentListField(Emulsion, blank=True)
-    corexit = EmbeddedDocumentListField(Corexit9500, blank=True)
+    chemical_dispersibility = EmbeddedDocumentListField(ChemicalDispersibility,
+                                                        blank=True)
 
     # Note: this is how they spell sulphur in the Env Canada datasheet
     sulfur = EmbeddedDocumentListField(Sulfur, blank=True)

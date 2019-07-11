@@ -3,16 +3,16 @@
 # oil properties.
 #
 from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
-from pymodm.fields import FloatField
+from pymodm.fields import FloatField, CharField
 
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class Corexit9500(EmbeddedMongoModel):
+class ChemicalDispersibility(EmbeddedMongoModel):
     '''
-        Chemical dispersability with Corexit 9500 Dispersant (swirling flask
-        test) (ASTM F2059)
+        Chemical dispersability (swirling flask test) (ASTM F2059)
     '''
+    dispersant = CharField(max_length=20)
     effectiveness = EmbeddedDocumentField(FloatUnit)
     weathering = FloatField(default=0.0)
 
@@ -32,12 +32,12 @@ class Corexit9500(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(Corexit9500, self).__init__(**kwargs)
+        super(ChemicalDispersibility, self).__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}(effectiveness={}, w={})>'
+        return ('<{}({}, effectiveness={}, w={})>'
                 .format(self.__class__.__name__,
-                        self.effectiveness, self.weathering))
+                        self.dispersant, self.effectiveness, self.weathering))

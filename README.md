@@ -1,6 +1,6 @@
 # Oil Database
 
-Place to mange the oil database project funded by BSEE.
+Place to manage the oil database project funded by BSEE.
 
 We may put code in here eventually, but meanwhile, it's a place to keep notes, todo items, etc.
 

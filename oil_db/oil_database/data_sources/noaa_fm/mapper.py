@@ -288,7 +288,7 @@ class OilLibraryAttributeMapper(object):
             yield kwargs
 
     @property
-    def corexit(self):
+    def chemical_dispersibility(self):
         '''
             N/A. Oil Library records don't have this.
         '''

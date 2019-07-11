@@ -10,6 +10,8 @@ from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound,
                                     HTTPUnsupportedMediaType)
 
+from pymongo import ASCENDING, DESCENDING
+
 from pymodm.errors import DoesNotExist
 from bson.errors import InvalidId
 
@@ -23,8 +25,39 @@ from oil_database_api.common.views import cors_policy, obj_id_from_url
 
 logger = logging.getLogger(__name__)
 
-oil_api = Service(name='oil', path='/oil*obj_id',
+oil_api = Service(name='oil', path='/oils*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
+
+
+def memoize_oil_arg(func):
+    results = {}
+
+    def memoized_func(oil):
+        if oil.oil_id not in results:
+            logger.info('loading Key: "{}"'
+                        .format(oil.oil_id))
+            results[oil.oil_id] = func(oil)
+
+        return results[oil.oil_id]
+
+    return memoized_func
+
+
+def decamelize(str_in):
+    words = []
+    start = 0
+
+    try:
+        for i, c in enumerate(str_in):
+            if c.isupper() and i > 0:
+                words.append(str_in[start:i])
+                start = i
+
+        words.append(str_in[start:])
+    except Exception:
+        return None
+
+    return '_'.join([w.lower() for w in words])
 
 
 @oil_api.get()
@@ -33,8 +66,15 @@ def get_oils(request):
         We will do one of two possible things here.
         1. Return the searchable fields for all oils in JSON format.
         2. Return the JSON record of a particular oil.
+
+        GET OPTIIONS:
+        - limit: The max number of result items
+        - page: The page number {0...N} of result items. (pagesize = limit)
     '''
     obj_id = obj_id_from_url(request)
+
+    logger.info('GET /oils: id: {} options: {}'
+                .format(obj_id, request.GET))
 
     if obj_id is not None:
         res = get_oil_dict(obj_id)
@@ -44,7 +84,83 @@ def get_oils(request):
         else:
             raise HTTPNotFound()
     else:
-        return [get_oil_searchable_fields(o) for o in Oil.objects.all()]
+        try:
+            limit, page = [int(o) for o in (request.GET.get('limit', '0'),
+                                            request.GET.get('page', '0'))]
+            start, stop = [limit * i for i in (page, page + 1)]
+            logger.info('start, stop = {}, {}'.format(start, stop))
+        except Exception as e:
+            raise HTTPBadRequest(e)
+
+        try:
+            sort = sort_params(request)
+        except Exception as e:
+            raise HTTPBadRequest(e)
+
+        search_opts = search_params(request)
+
+        if (len(sort) > 0 and
+                sort[0][0] in ('apis', 'categories_str', 'viscosity')):
+            return search_with_post_sort(start, stop, search_opts, sort)
+        else:
+            return search_with_sort(start, stop, search_opts, sort)
+
+
+def search_with_sort(start, stop, search_opts, sort):
+    cursor = Oil.objects.raw(search_opts).order_by(sort)
+
+    logger.info('cursor #rows: {}'.format(cursor.count()))
+
+    return [get_oil_searchable_fields(o)
+            for i, o in enumerate(cursor)
+            if i >= start and i < stop]
+
+
+def search_with_post_sort(start, stop, search_opts, sort):
+    '''
+        Apply our sort options after the database query.  This is very slow
+        compared to simply applying the sort to the database query itself,
+        but is necessary on a couple fields because the value cannot be
+        determined until after the record is fetched.
+    '''
+    logger.info('post-sort...')
+    field, direction = sort[0]
+
+    cursor = Oil.objects.raw(search_opts)
+
+    sorted_res = sorted([get_oil_searchable_fields(o)
+                         for o in cursor],
+                        key=lambda x: x[field],
+                        reverse=(direction == DESCENDING))
+
+    return [o for i, o in enumerate(sorted_res)
+            if i >= start and i < stop]
+
+
+def sort_params(request):
+    sort = decamelize(request.GET.get('sort', None))
+    direction = ({'asc': ASCENDING, 'desc': DESCENDING}
+                 .get(request.GET.get('dir', 'asc')))
+
+    if sort is None:
+        return []
+    else:
+        return [(sort, direction)]
+
+
+def search_params(request):
+    query = request.GET.get('q', '')
+    field_name = decamelize(request.GET.get('qAttr', ''))
+
+    logger.info('(query, field_name): ({}, {})'.format(query, field_name))
+
+    if query != '' and field_name != '':
+        logger.info('full search params')
+        return {field_name: {'$regex': query,
+                             '$options': 'i'}}
+    else:
+        logger.info('empty search params')
+        return {}
 
 
 @oil_api.post()
@@ -161,10 +277,12 @@ def get_oil_non_embedded_docs(oil_dict):
                                      .to_son().to_dict())
 
 
+@memoize_oil_arg
 def get_oil_searchable_fields(oil):
-        oil_estimation = OilEstimation(oil)
+    oil_estimation = OilEstimation(oil)
 
-        return {'oil_id': oil.oil_id,
+    try:
+        return {'_id': oil.oil_id,
                 'name': oil.name,
                 'location': oil.location,
                 'product_type': oil.product_type,
@@ -175,6 +293,10 @@ def get_oil_searchable_fields(oil):
                 'categories_str': get_category_paths_str(oil),
                 'status': oil.status,
                 }
+    except Exception:
+        logger.info('oil failed searchable fields: {}'
+                    .format(oil))
+        raise
 
 
 def get_category_paths_str(oil, sep=','):

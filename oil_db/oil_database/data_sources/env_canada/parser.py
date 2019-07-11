@@ -969,14 +969,10 @@ class EnvCanadaRecordParser(object):
 
             if props_i['dispersant_effectiveness'] is not None:
                 add_props = {'weathering': w}
-                rename_props = {
-                    'dispersant_effectiveness': 'effectiveness_percent'
-                }
-                op_and_value = {'effectiveness_percent'}
+                op_and_value = {'dispersant_effectiveness'}
 
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
-                                            rename_props=rename_props,
                                             op_and_value=op_and_value)
 
                 corexit.append(kwargs)

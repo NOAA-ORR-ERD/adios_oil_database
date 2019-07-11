@@ -249,11 +249,12 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def corexit(self):
+    def chemical_dispersibility(self):
         for c in self.record.corexit:
             kwargs = self._get_kwargs(c)
 
-            kwargs['effectiveness'] = FloatUnit(value=kwargs['effectiveness_percent'] / 100.0,
+            kwargs['dispersant'] = 'Corexit 9500'
+            kwargs['effectiveness'] = FloatUnit(value=kwargs['dispersant_effectiveness'] / 100.0,
                                                 unit='1')
 
             yield kwargs
