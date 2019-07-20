@@ -161,7 +161,7 @@ class EnvCanadaRecordParser(object):
     def reference_date(self):
         '''
             The reference content can have:
-            - no content:  In this case we take the last-modified date of the
+            - no content:  In this case we take the created date of the
                            Excel file.
             - one year (YYYY):  In this case we parse the year as an int and
                                 form a datetime with it.
@@ -224,7 +224,7 @@ class EnvCanadaRecordParser(object):
 
                 return datetime(**tp)
             else:
-                raise ValueError('reference_date "{}" is not parsable'
+                raise ValueError('datetime "{}" is not parsable'
                                  .format(date_str))
 
     @property
