@@ -88,6 +88,13 @@ class EnvCanadaAttributeMapper(object):
         return self.record.reference_date
 
     @property
+    def sample_date(self):
+        '''
+            Nothing special to do here.
+        '''
+        return self.record.sample_date
+
+    @property
     def comments(self):
         '''
             Nothing special to do here.

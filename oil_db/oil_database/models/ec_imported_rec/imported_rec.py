@@ -65,10 +65,9 @@ class ECImportedRecord(MongoModel):
     # specify a field name, Just a region or sovereign state.
     location = CharField(max_length=64, blank=True)
 
-    # EC reference field exists, and most records have a reliable sample date
-    # that we could use here as a reference date.
     reference = CharField(max_length=80 * 20, blank=True)
     reference_date = DateTimeField(blank=True)
+    sample_date = DateTimeField(blank=True)
 
     comments = CharField(max_length=80 * 5, blank=True)
 

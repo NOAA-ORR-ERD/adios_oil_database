@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from os.path import basename
 import logging
 from collections import defaultdict
 
@@ -34,6 +35,10 @@ class EnvCanadaOilExcelFile(object):
 
         self.wb = load_workbook(self.name, data_only=True)
         self.wb.get_sheet_names()
+
+        self.file_props = dict([(e, getattr(self.wb.properties, e))
+                                for e in self.wb.properties.__elements__])
+        self.file_props['name'] = basename(name)
 
         self.db_sheet = self.wb.get_sheet_by_name('Database')
 
@@ -137,4 +142,4 @@ class EnvCanadaOilExcelFile(object):
             one.
         '''
         for name in self.col_indexes:
-            yield self.field_indexes, self.get_record(name)
+            yield (self.field_indexes, self.get_record(name), self.file_props)

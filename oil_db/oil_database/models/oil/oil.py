@@ -69,8 +69,11 @@ class Oil(MongoModel):
     name = CharField(max_length=100, required=True)
 
     location = CharField(max_length=64, blank=True)
+
     reference = CharField(max_length=80 * 20, blank=True)
     reference_date = DateTimeField(blank=True)
+    sample_date = DateTimeField(blank=True)
+
     comments = CharField(max_length=80 * 5, blank=True)
     product_type = CharField(max_length=16, blank=True)
     categories = ListField(ReferenceField(Category), blank=True, default=[])

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import re
 from datetime import datetime
+from pytz import timezone
 import logging
 
 from slugify import Slugify
@@ -44,7 +45,7 @@ class EnvCanadaRecordParser(object):
         r'(?P<tzinfo>Z|[+-]\d{2}(?::?\d{2})?)?\Z'  # Optional timezone
     )
 
-    def __init__(self, property_indexes, values):
+    def __init__(self, property_indexes, values, file_props):
         '''
             :param property_indexes: A lookup dictionary of property index
                                      values.
@@ -53,6 +54,7 @@ class EnvCanadaRecordParser(object):
         '''
         self.prop_idx = property_indexes
         self.values = values
+        self.file_props = file_props
 
     def get_props_by_category(self, category):
         '''
@@ -144,13 +146,38 @@ class EnvCanadaRecordParser(object):
         '''
             We will concatenate all the reference content we see in the
             list, separated with a space.
+            If there is no content in the reference fields, we will use the
+            name of the Excel file.
         '''
-        return ' '.join([n for n
-                         in self.get_props_by_name(None, 'reference')[0]
-                         if n is not None])
+        ref = ' '.join([n for n
+                        in self.get_props_by_name(None, 'reference')[0]
+                        if n is not None])
+        if ref == "":
+            ref = self.file_props['name']
+
+        return ref
 
     @property
     def reference_date(self):
+        '''
+            The reference content can have:
+            - no content:  In this case we take the last-modified date of the
+                           Excel file.
+            - one year (YYYY):  In this case we parse the year as an int and
+                                form a datetime with it.
+            - multiple years (YYYY): In this case we use the highest numeric
+                                     year (most recent) and form a datetime
+                                     with it.
+        '''
+        occurrences = [int(n) for n in
+                       re.compile(r'\d{4}').findall(self.reference)]
+        if len(occurrences) == 0:
+            return self.file_props['created']
+        else:
+            return datetime(max(occurrences), 1, 1, tzinfo=timezone('GMT'))
+
+    @property
+    def sample_date(self):
         '''
             We will concatenate all the reference content we see in the
             list, separated with a space.

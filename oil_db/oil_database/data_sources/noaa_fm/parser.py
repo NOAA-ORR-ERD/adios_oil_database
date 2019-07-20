@@ -95,13 +95,13 @@ class OilLibraryRecordParser(object):
             return None
         else:
             expression = re.compile(r'\d{4}')
-            occurences = expression.findall(self.reference)
+            occurrences = expression.findall(self.reference)
 
-            if len(occurences) == 0:
+            if len(occurrences) == 0:
                 return None
             else:
                 # just return the first one
-                return occurences[0]
+                return occurrences[0]
 
     @property
     def pour_point_min_k(self):
