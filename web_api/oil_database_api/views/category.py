@@ -19,7 +19,7 @@ from oil_database_api.common.views import cors_policy, obj_id_from_url
 
 logger = logging.getLogger(__name__)
 
-category_api = Service(name='category', path='/category*obj_id',
+category_api = Service(name='category', path='/categories*obj_id',
                        description="Category APIs", cors_policy=cors_policy)
 
 

@@ -1715,9 +1715,9 @@ class EnvCanadaRecordParser(object):
 
             self._prepend_underscores(kwargs)
 
-            kwargs.update({'weathering': w, 'method': 'ESTS 2002a'})
-
-            biomarkers.append(kwargs)
+            if any([(v is not None) for v in kwargs.values()]):
+                kwargs.update({'weathering': w, 'method': 'ESTS 2002a'})
+                biomarkers.append(kwargs)
 
         return biomarkers
 
