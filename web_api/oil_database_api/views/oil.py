@@ -289,7 +289,7 @@ def get_oil_searchable_fields(oil):
                 'apis': [a.to_son().to_dict() for a in oil.apis],
                 'pour_point': oil_estimation.pour_point(),
                 'viscosity': oil_estimation.kvis_at_temp(273.15 + 38),
-                'categories': get_category_paths(oil),
+                'categories': get_category_ids(oil),
                 'categories_str': get_category_paths_str(oil),
                 'status': oil.status,
                 }
@@ -297,6 +297,10 @@ def get_oil_searchable_fields(oil):
         logger.info('oil failed searchable fields: {}'
                     .format(oil))
         raise
+
+
+def get_category_ids(oil):
+    return [jsonify_model_obj(c)['_id'] for c in oil.categories]
 
 
 def get_category_paths_str(oil, sep=','):
