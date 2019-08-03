@@ -42,6 +42,40 @@ class TestFloatUnit():
         assert repr(float_unit) == (u'<FloatUnit({})>'
                                     .format(expected))
 
+    @pytest.mark.parametrize('value, min_value, max_value, unit, expected',
+                             [
+                              (10.0, None, None, '1', '10.0'),
+                              (None, 10.0, None, '1', '>10.0'),
+                              (None, None, 10.0, '1', '<10.0'),
+                              (None, 10.0, 20.0, '1', '[10.0\u219220.0]'),
+                              (None, 10.0, 10.0, '1', '10.0'),
+                              (10.0, None, None, 'C', '10.0 C'),
+                              (None, 10.0, None, 'C', '>10.0 C'),
+                              (None, None, 10.0, 'C', '<10.0 C'),
+                              (None, 10.0, 20.0, 'C', '[10.0\u219220.0] C'),
+                              (None, 10.0, 10.0, 'C', '10.0 C'),
+                              (None, None, None, '1', ''),
+                              (None, None, None, 'C', ''),
+                              (10.0, 20.0, 30.0, '1', '10.0'),
+                              (10.0, 20.0, 30.0, 'C', '10.0 C'),
+                              ])
+    def test_interval_init(self, value, min_value, max_value, unit, expected):
+        from oil_database.models.common.float_unit import FloatUnit
+        float_unit = FloatUnit(value=value,
+                               min_value=min_value,
+                               max_value=max_value,
+                               unit=unit)
+
+        assert float_unit.value == value
+        assert float_unit.min_value == min_value
+        assert float_unit.max_value == max_value
+        assert float_unit.unit == unit
+
+        float_unit.clean_fields()
+
+        assert repr(float_unit) == (u'<FloatUnit({})>'
+                                    .format(expected))
+
     @pytest.mark.parametrize('value, expected',
                              [
                               ('Area', ['Area']),

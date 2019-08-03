@@ -75,7 +75,9 @@ class FloatUnit(EmbeddedMongoModel):
               Of course, this would add extra fields
     '''
     __metaclass__ = UnitMeta
-    value = FloatField()
+    value = FloatField(blank=True)
+    min_value = FloatField(blank=True)
+    max_value = FloatField(blank=True)
 
     def __init__(self, **kwargs):
         '''
@@ -98,28 +100,64 @@ class FloatUnit(EmbeddedMongoModel):
         super(FloatUnit, self).__init__(**kwargs)
 
     def _convert_value_arg(self, kwargs):
-        value = kwargs['value']
         from_unit, unit = kwargs['from_unit'], kwargs['unit']
+        value, min_value, max_value = [kwargs.get(a, None)
+                                       for a in ('value',
+                                                 'min_value',
+                                                 'max_value')]
 
         if not (from_unit in self.__class__.unit.choices and
                 unit in self.__class__.unit.choices):
             raise ValueError('Invalid conversion from {} to {}'
                              .format(from_unit, unit))
 
-        kwargs['value'] = convert(self.unit_type, from_unit, unit, value)
+        for a, v in zip(('value', 'min_value', 'max_value'),
+                        (value, min_value, max_value)):
+            if v is not None:
+                kwargs[a] = convert(self.unit_type, from_unit, unit, v)
 
     def to_unit(self, new_unit):
         if new_unit not in self.__class__.unit.choices:
             raise ValueError('Invalid conversion from {} to {}'
                              .format(self.unit, new_unit))
 
-        return convert(self.unit_type, self.unit, new_unit, self.value)
+        if self.value is not None:
+            return convert(self.unit_type, self.unit, new_unit, self.value)
+        elif any([v is not None for v in (self.min_value, self.max_value)]):
+            return [convert(self.unit_type, self.unit, new_unit, v)
+                    for v in (self.min_value, self.max_value)]
+        else:
+            raise RuntimeError('Object has no valid values to convert')
+
+    def __str_unit__(self):
+        if self.unit == '1':
+            return ''
+        else:
+            return ' {}'.format(self.unit.encode('utf-8'))
+
+    def __str_scalar__(self):
+        return '{}{}'.format(self.value, self.__str_unit__())
+
+    def __str_interval__(self):
+        if self.min_value is not None and self.min_value == self.max_value:
+            return '{}{}'.format(self.min_value, self.__str_unit__())
+        if all([v is not None for v in (self.min_value, self.max_value)]):
+            return '[{}\u2192{}]{}'.format(self.min_value, self.max_value,
+                                           self.__str_unit__())
+        elif self.min_value is not None:
+            return '>{}{}'.format(self.min_value, self.__str_unit__())
+        elif self.max_value is not None:
+            return '<{}{}'.format(self.max_value, self.__str_unit__())
+        else:
+            return ''
 
     def __str__(self):
-        if self.unit == '1':
-            return '{}'.format(self.value)
+        if self.value is not None:
+            return self.__str_scalar__()
+        elif any([v is not None for v in (self.min_value, self.max_value)]):
+            return self.__str_interval__()
         else:
-            return '{} {}'.format(self.value, self.unit.encode('utf-8'))
+            return ''
 
     def __repr__(self):
         return '<{}({})>'.format(self.__class__.__name__, self.__str__())
