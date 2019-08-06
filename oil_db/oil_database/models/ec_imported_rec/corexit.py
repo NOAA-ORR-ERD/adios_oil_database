@@ -2,8 +2,10 @@
 # PyMODM model class for Environment Canada's emulsion
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import FloatField
+
+from oil_database.models.common.float_unit import FloatUnit
 
 
 class ECCorexit9500(EmbeddedMongoModel):
@@ -11,7 +13,7 @@ class ECCorexit9500(EmbeddedMongoModel):
         Chemical dispersability with Corexit 9500 Dispersant (swirling flask
         test) (ASTM F2059)
     '''
-    dispersant_effectiveness = FloatField()
+    dispersant_effectiveness = EmbeddedDocumentField(FloatUnit, blank=True)
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff

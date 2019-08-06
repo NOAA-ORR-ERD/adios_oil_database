@@ -189,32 +189,28 @@ class OilLibraryAttributeMapper(object):
         min_temp = self._get_record_attr('flash_point_min_k')
         max_temp = self._get_record_attr('flash_point_max_k')
 
-        if any([v is not None for v in (min_temp, max_temp)]):
-            kwargs = {}
+        kwargs = {}
+        if (min_temp is not None and min_temp == max_temp):
+            kwargs['ref_temp'] = TemperatureUnit(value=min_temp, unit='K')
+        elif any([v is not None for v in (min_temp, max_temp)]):
+            kwargs['ref_temp'] = TemperatureUnit(min_value=min_temp,
+                                                 max_value=max_temp, unit='K')
 
-            if min_temp is not None:
-                kwargs['min_temp'] = TemperatureUnit(value=min_temp, unit='K')
-
-            if max_temp is not None:
-                kwargs['max_temp'] = TemperatureUnit(value=max_temp, unit='K')
-
-            yield kwargs
+        yield kwargs
 
     @property
     def pour_points(self):
         min_temp = self._get_record_attr('pour_point_min_k')
         max_temp = self._get_record_attr('pour_point_max_k')
 
-        if any([v is not None for v in (min_temp, max_temp)]):
-            kwargs = {}
+        kwargs = {}
+        if (min_temp is not None and min_temp == max_temp):
+            kwargs['ref_temp'] = TemperatureUnit(value=min_temp, unit='K')
+        elif any([v is not None for v in (min_temp, max_temp)]):
+            kwargs['ref_temp'] = TemperatureUnit(min_value=min_temp,
+                                                 max_value=max_temp, unit='K')
 
-            if min_temp is not None:
-                kwargs['min_temp'] = TemperatureUnit(value=min_temp, unit='K')
-
-            if max_temp is not None:
-                kwargs['max_temp'] = TemperatureUnit(value=max_temp, unit='K')
-
-            yield kwargs
+        yield kwargs
 
     @property
     def cuts(self):

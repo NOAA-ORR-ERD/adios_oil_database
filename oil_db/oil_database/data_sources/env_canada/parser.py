@@ -328,6 +328,11 @@ class EnvCanadaRecordParser(object):
                                         add_props=add_props,
                                         rename_props=rename_props)
 
+            try:
+                kwargs['g_ml'] = float(kwargs['g_ml'])
+            except Exception:
+                kwargs['g_ml'] = None
+
             if kwargs['g_ml'] not in (None, 0.0):
                 ret.append(kwargs)
 
@@ -350,6 +355,11 @@ class EnvCanadaRecordParser(object):
                                         prune_props=prune_props,
                                         rename_props=rename_props)
 
+            try:
+                kwargs['g_ml'] = float(kwargs['g_ml'])
+            except Exception:
+                kwargs['g_ml'] = None
+
             if kwargs['g_ml'] not in (None, 0.0):
                 ret.append(kwargs)
 
@@ -366,15 +376,19 @@ class EnvCanadaRecordParser(object):
             add_props = {'weathering': w, 'ref_temp_c': 0.0}
             prune_props = {'density_5_c_g_ml'}
             rename_props = {'density_0_c_g_ml': 'g_ml'}
-            op_and_value = {'g_ml'}
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
                                         prune_props=prune_props,
-                                        rename_props=rename_props,
-                                        op_and_value=op_and_value)
+                                        rename_props=rename_props)
+
+            try:
+                kwargs['g_ml'] = float(kwargs['g_ml'])
+            except Exception:
+                kwargs['g_ml'] = None
 
             if kwargs['g_ml'] not in (None, 0.0):
+                print ('density kwargs: {}'.format(kwargs))
                 ret.append(kwargs)
 
         return ret
@@ -416,8 +430,11 @@ class EnvCanadaRecordParser(object):
                                         add_props=add_props,
                                         rename_props=rename_props,
                                         op_and_value=op_and_value)
+            kwargs['mpa_s']['unit'] = 'mPa s'
 
-            if kwargs['mpa_s'] not in (None, 0.0):
+            if any([(l in kwargs['mpa_s'] and
+                     kwargs['mpa_s'][l] not in (None, 0.0))
+                    for l in ('value', 'min_value', 'max_value')]):
                 viscosities.append(kwargs)
 
         return viscosities
@@ -440,8 +457,11 @@ class EnvCanadaRecordParser(object):
                                         prune_props=prune_props,
                                         rename_props=rename_props,
                                         op_and_value=op_and_value)
+            kwargs['mpa_s']['unit'] = 'mPa s'
 
-            if kwargs['mpa_s'] not in (None, 0.0):
+            if any([(l in kwargs['mpa_s'] and
+                     kwargs['mpa_s'][l] not in (None, 0.0))
+                    for l in ('value', 'min_value', 'max_value')]):
                 viscosities.append(kwargs)
 
         return viscosities
@@ -464,8 +484,11 @@ class EnvCanadaRecordParser(object):
                                         prune_props=prune_props,
                                         rename_props=rename_props,
                                         op_and_value=op_and_value)
+            kwargs['mpa_s']['unit'] = 'mPa s'
 
-            if kwargs['mpa_s'] not in (None, 0.0):
+            if any([(l in kwargs['mpa_s'] and
+                     kwargs['mpa_s'][l] not in (None, 0.0))
+                    for l in ('value', 'min_value', 'max_value')]):
                 viscosities.append(kwargs)
 
         return viscosities
@@ -642,8 +665,8 @@ class EnvCanadaRecordParser(object):
 
             kwargs = self.build_flash_point_kwargs(props_i, w)
 
-            if (kwargs['min_temp_c'] is not None or
-                    kwargs['max_temp_c'] is not None):
+            if any([k in kwargs and kwargs[k] is not None
+                    for k in ('ref_temp',)]):
                 flash_points.append(kwargs)
 
         self._propagate_merged_excel_cells(flash_points, ('method',))
@@ -666,8 +689,8 @@ class EnvCanadaRecordParser(object):
 
             kwargs = self._build_pour_point_kwargs(props_i, w)
 
-            if (kwargs['min_temp_c'] is not None or
-                    kwargs['max_temp_c'] is not None):
+            if any([k in kwargs and kwargs[k] is not None
+                    for k in ('ref_temp',)]):
                 pour_points.append(kwargs)
 
         self._propagate_merged_excel_cells(pour_points, ('method',))
@@ -1001,6 +1024,7 @@ class EnvCanadaRecordParser(object):
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
                                             op_and_value=op_and_value)
+                kwargs['dispersant_effectiveness']['unit'] = '%'
 
                 corexit.append(kwargs)
 
@@ -1085,6 +1109,7 @@ class EnvCanadaRecordParser(object):
                                             add_props=add_props,
                                             rename_props=rename_props,
                                             op_and_value=op_and_value)
+                kwargs['percent']['unit'] = '%'
 
                 water_contents.append(kwargs)
 
@@ -1790,8 +1815,16 @@ class EnvCanadaRecordParser(object):
 
         if op_and_value is not None:
             for ov in op_and_value:
-                _op, value = self._get_op_and_value(kwargs[ov])
-                kwargs[ov] = value
+                op, value = self._get_op_and_value(kwargs[ov])
+
+                if op == '<':
+                    kwargs[ov] = {'max_value': value, 'min_value': None,
+                                  'unit': '1'}
+                elif op == '>':
+                    kwargs[ov] = {'max_value': None, 'min_value': value,
+                                  'unit': '1'}
+                else:
+                    kwargs[ov] = {'value': value, 'unit': '1'}
 
         if to_fraction is not None:
             for f in to_fraction:
@@ -1824,13 +1857,26 @@ class EnvCanadaRecordParser(object):
             - weathering: The fractional oil weathering amount.
         '''
         fp_kwargs = props
-
         fp_kwargs['weathering'] = weathering
 
-        fp_kwargs['min_temp_c'] = self._get_min_temp(fp_kwargs['flash_point'])
-        fp_kwargs['max_temp_c'] = self._get_max_temp(fp_kwargs['flash_point'])
-
+        temp_c = fp_kwargs['flash_point']
         del fp_kwargs['flash_point']
+
+        min_temp_c = self._get_min_temp(temp_c)
+        max_temp_c = self._get_max_temp(temp_c)
+
+        try:
+            temp_c = float(temp_c)
+        except Exception:
+            temp_c = None
+
+        fp_kwargs['ref_temp'] = {'unit': 'C'}
+
+        if min_temp_c == max_temp_c:
+            fp_kwargs['ref_temp']['value'] = temp_c
+        else:
+            fp_kwargs['ref_temp']['min_value'] = min_temp_c
+            fp_kwargs['ref_temp']['max_value'] = max_temp_c
 
         return fp_kwargs
 
@@ -1843,13 +1889,26 @@ class EnvCanadaRecordParser(object):
             - weathering: The fractional oil weathering amount.
         '''
         pp_kwargs = props
-
         pp_kwargs['weathering'] = weathering
 
-        pp_kwargs['min_temp_c'] = self._get_min_temp(pp_kwargs['pour_point'])
-        pp_kwargs['max_temp_c'] = self._get_max_temp(pp_kwargs['pour_point'])
-
+        temp_c = pp_kwargs['pour_point']
         del pp_kwargs['pour_point']
+
+        min_temp_c = self._get_min_temp(temp_c)
+        max_temp_c = self._get_max_temp(temp_c)
+
+        try:
+            temp_c = float(temp_c)
+        except Exception:
+            temp_c = None
+
+        pp_kwargs['ref_temp'] = {'unit': 'C'}
+
+        if min_temp_c == max_temp_c:
+            pp_kwargs['ref_temp']['value'] = temp_c
+        else:
+            pp_kwargs['ref_temp']['min_value'] = min_temp_c
+            pp_kwargs['ref_temp']['max_value'] = max_temp_c
 
         return pp_kwargs
 

@@ -2,14 +2,15 @@
 # PyMODM model class for Environment Canada's flash point
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import (CharField,
                            FloatField)
 
+from oil_database.models.common.float_unit import TemperatureUnit
+
 
 class ECFlashPoint(EmbeddedMongoModel):
-    min_temp_c = FloatField(blank=True)
-    max_temp_c = FloatField(blank=True)
+    ref_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -36,12 +37,8 @@ class ECFlashPoint(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        min_temp = self.min_temp_c
-        max_temp = self.max_temp_c
         w = self.weathering
 
-        return ('<{}([{}{}, {}{}], w={})>'
+        return ('<{}({}, w={})>'
                 .format(self.__class__.__name__,
-                        min_temp, '' if min_temp is None else 'C',
-                        max_temp, '' if max_temp is None else 'C',
-                        w))
+                        self.ref_temp, w))

@@ -1,12 +1,14 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pymodm import EmbeddedMongoModel
+from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
+
+from oil_database.models.common.float_unit import (DynamicViscosityUnit)
 
 
 class ECDVis(EmbeddedMongoModel):
-    mpa_s = FloatField()
+    mpa_s = EmbeddedDocumentField(DynamicViscosityUnit)
     ref_temp_c = FloatField()
     weathering = FloatField(default=0.0)
 

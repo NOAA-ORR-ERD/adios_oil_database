@@ -184,11 +184,12 @@ class OilEstimation(object):
         pps = [p for p in self.record.pour_points
                if np.isclose(p.weathering, weathering)]
 
-        if len(pps) > 0:
-            if pps[0].min_temp is not None:
-                min_k = pps[0].min_temp.to_unit('K')
-            if pps[0].max_temp is not None:
-                max_k = pps[0].max_temp.to_unit('K')
+        try:
+            pp_temp = pps[0].ref_temp.to_unit('K')
+            min_k = pp_temp.min_value
+            max_k = pp_temp.max_value
+        except Exception:
+            pass
 
         if (min_k is None and max_k is None and estimate_if_none is True):
             lowest_kvis = self.lowest_temperature(self.aggregate_kvis())
@@ -204,11 +205,13 @@ class OilEstimation(object):
 
         fps = [f for f in self.record.flash_points
                if np.isclose(f.weathering, weathering)]
-        fp = fps[0] if len(fps) > 0 else None
 
-        if fp is not None:
-            min_k = None if fp.min_temp is None else fp.min_temp.to_unit('K')
-            max_k = None if fp.max_temp is None else fp.max_temp.to_unit('K')
+        try:
+            fp_temp = fps[0].ref_temp.to_unit('K')
+            min_k = fp_temp.min_value
+            max_k = fp_temp.max_value
+        except Exception:
+            pass
 
         if min_k is None and max_k is None:
             max_k = self.flash_point_from_bp()

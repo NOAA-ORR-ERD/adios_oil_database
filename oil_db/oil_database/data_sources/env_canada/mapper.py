@@ -137,9 +137,7 @@ class EnvCanadaAttributeMapper(object):
         for d in self.record.dvis:
             kwargs = self._get_kwargs(d)
 
-            kwargs['viscosity'] = DynamicViscosityUnit(value=kwargs['mpa_s'],
-                                                       from_unit='mPa.s',
-                                                       unit='kg/(m s)')
+            kwargs['viscosity'] = kwargs['mpa_s']
             kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
                                                  from_unit='C', unit='K')
 
@@ -161,36 +159,12 @@ class EnvCanadaAttributeMapper(object):
     @property
     def flash_points(self):
         for f in self.record.flash_points:
-            kwargs = self._get_kwargs(f)
-
-            min_temp, max_temp = kwargs['min_temp_c'], kwargs['max_temp_c']
-
-            if min_temp is not None:
-                kwargs['min_temp'] = TemperatureUnit(value=min_temp,
-                                                     from_unit='C', unit='K')
-
-            if max_temp is not None:
-                kwargs['max_temp'] = TemperatureUnit(value=max_temp,
-                                                     from_unit='C', unit='K')
-
-            yield kwargs
+            yield self._get_kwargs(f)
 
     @property
     def pour_points(self):
         for p in self.record.pour_points:
-            kwargs = self._get_kwargs(p)
-
-            min_temp, max_temp = kwargs['min_temp_c'], kwargs['max_temp_c']
-
-            if min_temp is not None:
-                kwargs['min_temp'] = TemperatureUnit(value=min_temp,
-                                                     from_unit='C', unit='K')
-
-            if max_temp is not None:
-                kwargs['max_temp'] = TemperatureUnit(value=max_temp,
-                                                     from_unit='C', unit='K')
-
-            yield kwargs
+            yield self._get_kwargs(p)
 
     @property
     def cuts(self):
@@ -261,8 +235,7 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(c)
 
             kwargs['dispersant'] = 'Corexit 9500'
-            kwargs['effectiveness'] = FloatUnit(value=kwargs['dispersant_effectiveness'] / 100.0,
-                                                unit='1')
+            kwargs['effectiveness'] = kwargs['dispersant_effectiveness']
 
             yield kwargs
 
@@ -281,8 +254,7 @@ class EnvCanadaAttributeMapper(object):
         for w in self.record.water:
             kwargs = self._get_kwargs(w)
 
-            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
-                                           unit='1')
+            kwargs['fraction'] = kwargs['percent']
 
             yield kwargs
 

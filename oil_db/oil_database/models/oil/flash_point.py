@@ -6,8 +6,7 @@ from oil_database.models.common.float_unit import TemperatureUnit
 
 
 class FlashPoint(EmbeddedMongoModel):
-    min_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
-    max_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
+    ref_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
     weathering = FloatField(default=0.0)
 
     # may as well keep the extra stuff
@@ -34,6 +33,6 @@ class FlashPoint(EmbeddedMongoModel):
         return self.__repr__()
 
     def __repr__(self):
-        return ('<{}([{}, {}], w={})>'
+        return ('<{}({}, w={})>'
                 .format(self.__class__.__name__,
-                        self.min_temp, self.max_temp, self.weathering))
+                        self.ref_temp, self.weathering))
