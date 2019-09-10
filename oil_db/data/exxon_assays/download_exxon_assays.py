@@ -13,8 +13,9 @@ import lxml.html
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-main_url = ('http://corporate.exxonmobil.com/en/company/worldwide-operations/'
-            'crude-oils/assays')
+main_host = 'https://corporate.exxonmobil.com'
+main_url = ''.join([main_host, '/en/',
+                    'Crude-oils/Crude-trading/Assays-available-for-download'])
 
 
 def main(destination):
@@ -31,7 +32,10 @@ def main(destination):
 
     htmltree = lxml.html.fromstring(resp.text)
 
-    for li in htmltree.xpath("//ul[@class='downloads component']/li"):
+    for li in htmltree.xpath('//div[@class="'
+                             'articleMedia--relatedContent-item '
+                             'articleMedia--relatedContent-item-file'
+                             '"]/h3'):
         oil_name = li.xpath("a")[0].text
         oil_href = li.xpath("a")[0].get('href')
 
@@ -39,7 +43,8 @@ def main(destination):
             logger.info(u'downloading: {}...'.format(oil_name))
 
             try:
-                file_name = download_file(oil_href, destination)
+                file_name = download_file(''.join([main_host, oil_href]),
+                                          destination)
                 downloaded[oil_name] = file_name
             except IOError as e:
                 logger.error(e)
