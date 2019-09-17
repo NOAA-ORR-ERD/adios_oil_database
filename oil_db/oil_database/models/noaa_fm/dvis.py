@@ -22,7 +22,7 @@ class NoaaFmDVis(EmbeddedMongoModel):
         if 'weathering' not in kwargs or kwargs['weathering'] is None:
             kwargs['weathering'] = 0.0
 
-        super(NoaaFmDVis, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __repr__(self):
         return ('<NoaaFmDVis({0.kg_ms} kg/ms at {0.ref_temp_k}K, '

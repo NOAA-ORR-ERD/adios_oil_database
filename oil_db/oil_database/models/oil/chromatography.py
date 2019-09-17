@@ -45,7 +45,7 @@ class GasChromatography(EmbeddedMongoModel, EmbeddedMongoModelMixin):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(GasChromatography, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()

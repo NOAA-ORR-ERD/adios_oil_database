@@ -27,7 +27,7 @@ class ECWax(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(ECWax, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()

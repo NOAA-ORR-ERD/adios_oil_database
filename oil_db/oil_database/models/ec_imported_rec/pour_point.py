@@ -34,7 +34,7 @@ class ECPourPoint(EmbeddedMongoModel, EmbeddedMongoModelMixin):
                 # None values?
                 kwargs['weathering'] = 0.0
 
-        super(ECPourPoint, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()

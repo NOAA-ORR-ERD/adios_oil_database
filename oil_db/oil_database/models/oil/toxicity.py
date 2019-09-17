@@ -21,7 +21,7 @@ class Toxicity(EmbeddedMongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(Toxicity, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()

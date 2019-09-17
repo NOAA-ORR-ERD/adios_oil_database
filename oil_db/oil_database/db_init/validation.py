@@ -22,7 +22,7 @@ class OilRejected(Exception):
         self.oil_name = oil_name
 
         # allow users initialize misc. arguments as any other builtin Error
-        super(OilRejected, self).__init__(message, oil_name, *args)
+        super().__init__(message, oil_name, *args)
 
     def __repr__(self):
         return '{0}(oil={1}, errors={2})'.format(self.__class__.__name__,

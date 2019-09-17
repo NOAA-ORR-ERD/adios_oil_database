@@ -13,7 +13,4 @@ class EmbeddedMongoModelMixin(object):
                 embedded_model = value.related_model
 
                 if isinstance(kwargs[attr], dict):
-                    #print('create {} from kwargs: {}'
-                    #      .format(embedded_model.__name__, kwargs[attr]))
-
                     kwargs[attr] = embedded_model(**kwargs[attr])

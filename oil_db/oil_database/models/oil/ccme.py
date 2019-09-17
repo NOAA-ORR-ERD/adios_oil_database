@@ -38,7 +38,7 @@ class CCMEFraction(EmbeddedMongoModel, EmbeddedMongoModelMixin):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(CCMEFraction, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
@@ -85,7 +85,7 @@ class CarbonNumberDistribution(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(CarbonNumberDistribution, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
@@ -112,7 +112,7 @@ class CCMESaturateCxx(CarbonNumberDistribution):
               CCME Fractions, so we will define them in the same namespace.
     '''
     def __init__(self, **kwargs):
-        super(CCMESaturateCxx, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class CCMEAromaticCxx(CarbonNumberDistribution):
@@ -120,7 +120,7 @@ class CCMEAromaticCxx(CarbonNumberDistribution):
         Aromatics (F2) (ESTS 2002a)
     '''
     def __init__(self, **kwargs):
-        super(CCMEAromaticCxx, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class CCMETotalPetroleumCxx(CarbonNumberDistribution):
@@ -130,4 +130,4 @@ class CCMETotalPetroleumCxx(CarbonNumberDistribution):
     total_tph_gc_detected_tph_undetected_tph = FloatField(blank=True)
 
     def __init__(self, **kwargs):
-        super(CCMETotalPetroleumCxx, self).__init__(**kwargs)
+        super().__init__(**kwargs)

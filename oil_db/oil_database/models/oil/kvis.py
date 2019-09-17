@@ -24,7 +24,7 @@ class KVis(EmbeddedMongoModel, EmbeddedMongoModelMixin):
         if 'weathering' not in kwargs or kwargs['weathering'] is None:
             kwargs['weathering'] = 0.0
 
-        super(KVis, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()

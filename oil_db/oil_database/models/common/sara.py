@@ -28,7 +28,7 @@ class SARAFraction(EmbeddedMongoModel):
         if 'ref_temp_k' not in kwargs or kwargs['ref_temp_k'] is None:
             kwargs['ref_temp_k'] = 273.15
 
-        super(SARAFraction, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __str__(self):
         return self.__repr__()
@@ -50,7 +50,7 @@ class SARADensity(EmbeddedMongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(SARADensity, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __repr__(self):
         return ('<SARADensity('
@@ -69,7 +69,7 @@ class MolecularWeight(EmbeddedMongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(MolecularWeight, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @property
     def kg_mol(self):

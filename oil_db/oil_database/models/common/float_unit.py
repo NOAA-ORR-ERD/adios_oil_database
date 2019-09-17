@@ -35,7 +35,7 @@ class UnitMeta(MongoModelMetaclass):
         else:
             namespace['unit'] = CharField(max_length=max_length)
 
-        return super(UnitMeta, cls).__new__(cls, name, bases, namespace)
+        return super().__new__(cls, name, bases, namespace)
 
     @classmethod
     def camelcase_to_space(cls, camelcase, lower=False):
@@ -100,7 +100,7 @@ class FloatUnit(EmbeddedMongoModel, metaclass=UnitMeta):
             if (k not in self.__class__.__dict__):
                 del kwargs[k]
 
-        super(FloatUnit, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def _convert_value_arg(self, kwargs):
         from_unit, unit = kwargs['from_unit'], kwargs['unit']

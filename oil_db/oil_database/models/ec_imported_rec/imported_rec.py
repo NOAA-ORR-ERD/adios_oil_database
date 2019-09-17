@@ -132,7 +132,7 @@ class ECImportedRecord(MongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(ECImportedRecord, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @classmethod
     def from_record_parser(cls, parser):

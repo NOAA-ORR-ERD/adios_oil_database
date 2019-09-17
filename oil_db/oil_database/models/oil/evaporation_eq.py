@@ -29,7 +29,7 @@ class EvaporationEq(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(EvaporationEq, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         self.alg = {'(A + BT) ln t': self.calculate_ests_1998,
                     '(A + BT) sqrt(t)': self.calculate_mass_loss1,

@@ -17,7 +17,7 @@ class NoaaFmToxicity(EmbeddedMongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(NoaaFmToxicity, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

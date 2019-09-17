@@ -168,7 +168,7 @@ class CSVFileWithHeader(CSVFile):
         '''
             Get the next row of .csv data, parsed into a sequence of fields.
         '''
-        row = super(CSVFileWithHeader, self).readline()
+        row = super().readline()
 
         if check_row is True:
             self._check_row(row)
@@ -176,6 +176,6 @@ class CSVFileWithHeader(CSVFile):
         return row
 
     def rewind(self):
-        super(CSVFileWithHeader, self).rewind()
+        super().rewind()
 
         self.readline(check_row=False)

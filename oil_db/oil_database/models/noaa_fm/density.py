@@ -25,7 +25,7 @@ class NoaaFmDensity(EmbeddedMongoModel):
             # None values?
             kwargs['weathering'] = 0.0
 
-        super(NoaaFmDensity, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __repr__(self):
         return ('<NoaaFmDensity({0.kg_m_3} kg/m^3 at {0.ref_temp_k}K, '

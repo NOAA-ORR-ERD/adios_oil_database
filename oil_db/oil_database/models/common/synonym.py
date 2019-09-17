@@ -15,7 +15,7 @@ class Synonym(EmbeddedMongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(Synonym, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __repr__(self):
         return "<Synonym('%s')>" % (self.name)

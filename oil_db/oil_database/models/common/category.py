@@ -36,7 +36,7 @@ class Category(MongoModel):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
-        super(Category, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         # Annoying: ListField() doesn't handle container default args
         self.children = []
