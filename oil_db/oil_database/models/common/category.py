@@ -32,7 +32,7 @@ class Category(MongoModel):
         indexes = [IndexModel([('name', ASCENDING)], unique=False)]
 
     def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 

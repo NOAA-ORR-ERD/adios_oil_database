@@ -4,10 +4,11 @@
 from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
 
+from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
 from oil_database.models.common.float_unit import TemperatureUnit, FloatUnit
 
 
-class Cut(EmbeddedMongoModel):
+class Cut(EmbeddedMongoModel, EmbeddedMongoModelMixin):
     fraction = EmbeddedDocumentField(FloatUnit)
     vapor_temp = EmbeddedDocumentField(TemperatureUnit)
     liquid_temp = EmbeddedDocumentField(TemperatureUnit, blank=True)
@@ -16,9 +17,11 @@ class Cut(EmbeddedMongoModel):
     method = CharField(max_length=48, blank=True)
 
     def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
+
+        self._set_embedded_property_args(kwargs)
 
         if 'weathering' not in kwargs or kwargs['weathering'] is None:
             # Seriously?  What good is a default if it can't negotiate

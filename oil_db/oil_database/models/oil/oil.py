@@ -138,7 +138,7 @@ class Oil(MongoModel):
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
         # of this class
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
@@ -171,7 +171,7 @@ class Oil(MongoModel):
         '''
         parser_api = parser.get_interface_properties()
 
-        for attr, value in cls.__dict__.iteritems():
+        for attr, value in cls.__dict__.items():
             if (attr in parser_api and
                     isinstance(value, MongoBaseField) and
                     not isinstance(value, EmbeddedDocumentListField)):
@@ -185,7 +185,7 @@ class Oil(MongoModel):
         '''
         parser_api = parser.get_interface_properties()
 
-        for attr, value in cls.__dict__.iteritems():
+        for attr, value in cls.__dict__.items():
             if (attr in parser_api and
                     isinstance(value, EmbeddedDocumentListField)):
                 embedded_model = value.related_model

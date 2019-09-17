@@ -33,7 +33,7 @@ def init_db_cmd(argv=sys.argv):
     try:
         init_db(settings)
     except Exception:
-        print "{0}() FAILED\n".format(init_db.__name__)
+        print('{0}() FAILED\n'.format(init_db.__name__))
         raise
 
 
@@ -63,36 +63,36 @@ def init_db(settings):
 
     if settings['mongodb.database'] in client.database_names():
         if prompt_drop_db():
-            print 'Alright then...continuing on...'
+            print('Alright then...continuing on...')
         else:
-            print 'Ok, quitting the database initialization now...'
+            print('Ok, quitting the database initialization now...')
             return
 
     drop_db(client, settings['mongodb.database'])
 
     load_categories()
 
-    print ('printing all categories...')
+    print('printing all categories...')
     print_all_categories()
 
 
 def prompt_drop_db():
-    resp = raw_input('This action will permanently delete all data in the '
-                     'existing database!\n'
-                     'Are you sure you want to re-initialize it? (y/n): ')
+    resp = input('This action will permanently delete all data in the '
+                 'existing database!\n'
+                 'Are you sure you want to re-initialize it? (y/n): ')
     return len(resp) > 0 and resp.lower()[0] == 'y'
 
 
 def drop_db(client, db_name):
-    print 'dropping db {}...'.format(db_name)
+    print('dropping db {}...'.format(db_name))
     try:
         if db_name in client.database_names():
-            print 'Dropping database "{}"...'.format(db_name),
+            print('Dropping database "{}"...'.format(db_name), end="")
             client.drop_database(db_name)
-            print 'Dropped'
+            print('Dropped')
     except ConnectionFailure:
-        print 'Could not connect to MongoDB!'
+        print('Could not connect to MongoDB!')
         raise
     except Exception:
-        print 'Failed to drop Oil database!'
+        print('Failed to drop Oil database!')
         raise

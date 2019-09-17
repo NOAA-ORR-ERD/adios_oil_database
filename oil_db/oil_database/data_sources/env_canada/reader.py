@@ -107,13 +107,13 @@ class EnvCanadaOilExcelFile(object):
                 category_name = custom_slugify(row[0].value)
                 row_prev_name = category_name
                 if row[1].value is not None:
-                    field_name = custom_slugify(unicode(row[1].value))
+                    field_name = custom_slugify(str(row[1].value))
                 else:
                     field_name = None
             else:
                 category_name = row_prev_name
                 if row[1].value is not None:
-                    field_name = custom_slugify(unicode(row[1].value))
+                    field_name = custom_slugify(str(row[1].value))
                 else:
                     field_name = None
 
@@ -132,9 +132,9 @@ class EnvCanadaOilExcelFile(object):
                   only a next().  This is why we are using walk method to get
                   our indexed columns.
         '''
-        return zip(*[[cell.value for cell in col]
-                     for i, col in enumerate(self.db_sheet.columns)
-                     if i in self.col_indexes[name]])
+        return list(zip(*[[cell.value for cell in col]
+                          for i, col in enumerate(self.db_sheet.columns)
+                          if i in self.col_indexes[name]]))
 
     def get_records(self):
         '''

@@ -56,10 +56,11 @@ class OilLibraryCsvFile(object):
         self.file_columns_lu = None
         self.num_columns = None
 
-        self.fileobj = open(name, 'rU')
+        self.fileobj = open(name, 'r', encoding='mac_roman')
         self.field_delim = field_delim
 
         self.__version__ = self.readline()
+        print('file version: ', self.__version__)
         self._check_version_hdr(ignore_version)
 
         self._set_table_columns()
@@ -104,18 +105,7 @@ class OilLibraryCsvFile(object):
 
         line = line.strip()
         if len(line) > 0:
-            try:
-                row = line.decode('utf-8')
-            except Exception:
-                # If we fail to encode in utf-8, then it is possible that
-                # our file contains mac_roman characters of which some are
-                # out-of-range.
-                # This is probably about the best we can do to anticipate
-                # our file contents.
-                row = line.decode('mac_roman')
-
-            row = row.encode('utf-8')
-            row = (row.split(self.field_delim))
+            row = (line.split(self.field_delim))
             row = [c.strip('"') for c in row]
             row = [c if len(c) > 0 else None for c in row]
         else:
@@ -141,9 +131,6 @@ class OilLibraryCsvFile(object):
         for r in self.readlines():
             if len(r) < 10:
                 logger.info('got record: {}'.format(r))
-
-            r = [unicode(f, 'utf-8') if f is not None else f
-                 for f in r]
 
             yield self.file_columns, r
 

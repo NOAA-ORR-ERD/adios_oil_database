@@ -4,11 +4,12 @@
 from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
 
+from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
 from oil_database.models.common.float_unit import (TemperatureUnit,
                                                    DynamicViscosityUnit)
 
 
-class DVis(EmbeddedMongoModel):
+class DVis(EmbeddedMongoModel, EmbeddedMongoModelMixin):
     viscosity = EmbeddedDocumentField(DynamicViscosityUnit)
     ref_temp = EmbeddedDocumentField(TemperatureUnit)
     weathering = FloatField(default=0.0)
@@ -18,9 +19,11 @@ class DVis(EmbeddedMongoModel):
     standard_deviation = FloatField(blank=True)
 
     def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
+
+        self._set_embedded_property_args(kwargs)
 
         if 'weathering' not in kwargs or kwargs['weathering'] is None:
             kwargs['weathering'] = 0.0

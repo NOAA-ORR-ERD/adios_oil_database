@@ -2,16 +2,6 @@
 import logging
 from datetime import date
 
-from oil_database.models.common.float_unit import (FloatUnit,
-                                                   TimeUnit,
-                                                   TemperatureUnit,
-                                                   DensityUnit,
-                                                   DynamicViscosityUnit,
-                                                   KinematicViscosityUnit,
-                                                   InterfacialTensionUnit,
-                                                   AdhesionUnit,
-                                                   ConcentrationInWaterUnit)
-
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
@@ -135,10 +125,10 @@ class OilLibraryAttributeMapper(object):
         for d in self.record.densities:
             kwargs = self._get_kwargs(d)
 
-            kwargs['density'] = DensityUnit(value=kwargs['kg_m_3'],
-                                            unit='kg/m^3')
-            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_k'],
-                                                 unit='K')
+            kwargs['density'] = {'value': kwargs['kg_m_3'],
+                                 'unit': 'kg/m^3'}
+            kwargs['ref_temp'] = {'value': kwargs['ref_temp_k'],
+                                  'unit': 'K'}
 
             yield kwargs
 
@@ -147,10 +137,10 @@ class OilLibraryAttributeMapper(object):
         for d in self.record.dvis:
             kwargs = self._get_kwargs(d)
 
-            kwargs['viscosity'] = DynamicViscosityUnit(value=kwargs['kg_ms'],
-                                                       unit='kg/(m s)')
-            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_k'],
-                                                 unit='K')
+            kwargs['viscosity'] = {'value': kwargs['kg_ms'],
+                                   'unit': 'kg/(m s)'}
+            kwargs['ref_temp'] = {'value': kwargs['ref_temp_k'],
+                                  'unit': 'K'}
 
             yield kwargs
 
@@ -159,10 +149,10 @@ class OilLibraryAttributeMapper(object):
         for k in self.record.kvis:
             kwargs = self._get_kwargs(k)
 
-            kwargs['viscosity'] = KinematicViscosityUnit(value=kwargs['m_2_s'],
-                                                         unit='m^2/s')
-            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_k'],
-                                                 unit='K')
+            kwargs['viscosity'] = {'value': kwargs['m_2_s'],
+                                   'unit': 'm^2/s'}
+            kwargs['ref_temp'] = {'value': kwargs['ref_temp_k'],
+                                  'unit': 'K'}
 
             yield kwargs
 
@@ -177,9 +167,8 @@ class OilLibraryAttributeMapper(object):
             if all([v is not None for v in (tension, ref_temp)]):
                 kwargs = {}
 
-                kwargs['tension'] = InterfacialTensionUnit(value=tension,
-                                                           unit='N/m')
-                kwargs['ref_temp'] = TemperatureUnit(value=ref_temp, unit='K')
+                kwargs['tension'] = {'value': tension, 'unit': 'N/m'}
+                kwargs['ref_temp'] = {'value': ref_temp, 'unit': 'K'}
                 kwargs['interface'] = interface
 
                 yield kwargs
@@ -191,10 +180,10 @@ class OilLibraryAttributeMapper(object):
 
         kwargs = {}
         if (min_temp is not None and min_temp == max_temp):
-            kwargs['ref_temp'] = TemperatureUnit(value=min_temp, unit='K')
+            kwargs['ref_temp'] = {'value': min_temp, 'unit': 'K'}
         elif any([v is not None for v in (min_temp, max_temp)]):
-            kwargs['ref_temp'] = TemperatureUnit(min_value=min_temp,
-                                                 max_value=max_temp, unit='K')
+            kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
+                                  'unit': 'K'}
 
         yield kwargs
 
@@ -205,10 +194,10 @@ class OilLibraryAttributeMapper(object):
 
         kwargs = {}
         if (min_temp is not None and min_temp == max_temp):
-            kwargs['ref_temp'] = TemperatureUnit(value=min_temp, unit='K')
+            kwargs['ref_temp'] = {'value': min_temp, 'unit': 'K'}
         elif any([v is not None for v in (min_temp, max_temp)]):
-            kwargs['ref_temp'] = TemperatureUnit(min_value=min_temp,
-                                                 max_value=max_temp, unit='K')
+            kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
+                                  'unit': 'K'}
 
         yield kwargs
 
@@ -221,12 +210,11 @@ class OilLibraryAttributeMapper(object):
             vapor_temp = kwargs.get('vapor_temp_k')
             fraction = kwargs.get('fraction')
 
-            kwargs['fraction'] = FloatUnit(value=fraction, unit='1')
-            kwargs['vapor_temp'] = TemperatureUnit(value=vapor_temp, unit='K')
+            kwargs['fraction'] = {'value': fraction, 'unit': 'fraction'}
+            kwargs['vapor_temp'] = {'value': vapor_temp, 'unit': 'K'}
 
             if liquid_temp is not None:
-                kwargs['liquid_temp'] = TemperatureUnit(value=liquid_temp,
-                                                        unit='K')
+                kwargs['liquid_temp'] = {'value': liquid_temp, 'unit': 'K'}
 
             yield kwargs
 
@@ -246,7 +234,7 @@ class OilLibraryAttributeMapper(object):
         if adhesion is not None:
             kwargs = {}
 
-            kwargs['adhesion'] = AdhesionUnit(value=adhesion, unit='N/m^2')
+            kwargs['adhesion'] = {'value': adhesion, 'unit': 'N/m^2'}
 
             yield kwargs
 
@@ -276,10 +264,11 @@ class OilLibraryAttributeMapper(object):
         if water_content is not None:
             kwargs = {}
 
-            kwargs['water_content'] = FloatUnit(value=water_content, unit='1')
-            kwargs['age'] = TimeUnit(value=0.0, unit='s')
-            kwargs['ref_temp'] = TemperatureUnit(value=15.0,
-                                                 from_unit='C', unit='K')
+            kwargs['water_content'] = {'value': water_content,
+                                       'unit': 'fraction'}
+            kwargs['age'] = {'value': 0.0, 'unit': 's'}
+            kwargs['ref_temp'] = {'value': 15.0,
+                                  'from_unit': 'C', 'unit': 'K'}
 
             yield kwargs
 
@@ -297,7 +286,7 @@ class OilLibraryAttributeMapper(object):
         if sulfur is not None:
             kwargs = {}
 
-            kwargs['fraction'] = FloatUnit(value=sulfur, unit='1')
+            kwargs['fraction'] = {'value': sulfur, 'unit': 'fraction'}
 
             yield kwargs
 
@@ -315,7 +304,7 @@ class OilLibraryAttributeMapper(object):
         if wax is not None:
             kwargs = {}
 
-            kwargs['fraction'] = FloatUnit(value=wax, unit='1')
+            kwargs['fraction'] = {'value': wax, 'unit': 'fraction'}
 
             yield kwargs
 
@@ -326,8 +315,7 @@ class OilLibraryAttributeMapper(object):
         if benzene_content is not None:
             kwargs = {}
 
-            kwargs['benzene'] = ConcentrationInWaterUnit(value=benzene_content,
-                                                         unit='1')
+            kwargs['benzene'] = {'value': benzene_content, 'unit': 'fraction'}
 
             yield kwargs
 
@@ -381,7 +369,7 @@ class OilLibraryAttributeMapper(object):
             if fraction is not None:
                 kwargs = {}
 
-                kwargs['fraction'] = FloatUnit(value=fraction, unit='1')
+                kwargs['fraction'] = {'value': fraction, 'unit': 'fraction'}
                 kwargs['sara_type'] = sara_type
 
                 yield kwargs
@@ -438,9 +426,9 @@ class OilLibraryAttributeMapper(object):
         if any([a is not None for a in (residue, crude)]):
             kwargs = {}
             if residue is not None:
-                kwargs['residue'] = FloatUnit(value=residue, unit='1')
+                kwargs['residue'] = {'value': residue, 'unit': 'fraction'}
 
             if crude is not None:
-                kwargs['crude'] = FloatUnit(value=crude, unit='1')
+                kwargs['crude'] = {'value': crude, 'unit': 'fraction'}
 
             yield kwargs

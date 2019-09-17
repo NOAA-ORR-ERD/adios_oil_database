@@ -11,7 +11,7 @@ class Synonym(EmbeddedMongoModel):
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
         # of this class
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 

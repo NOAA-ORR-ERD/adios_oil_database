@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 import logging
 
-from oil_database.models.common.float_unit import (FloatUnit,
-                                                   TimeUnit,
-                                                   TemperatureUnit,
-                                                   DensityUnit,
-                                                   DynamicViscosityUnit,
-                                                   InterfacialTensionUnit,
-                                                   AdhesionUnit,
-                                                   ConcentrationInWaterUnit)
-
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
@@ -125,10 +116,11 @@ class EnvCanadaAttributeMapper(object):
         for d in self.record.densities:
             kwargs = self._get_kwargs(d)
 
-            kwargs['density'] = DensityUnit(value=kwargs['g_ml'],
-                                            from_unit='g/mL', unit='kg/m^3')
-            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                 from_unit='C', unit='K')
+            kwargs['density'] = {'value': kwargs['g_ml'],
+                                 'from_unit': 'g/mL', 'unit': 'kg/m^3'}
+
+            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
+                                  'from_unit': 'C', 'unit': 'K'}
 
             yield kwargs
 
@@ -138,8 +130,8 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(d)
 
             kwargs['viscosity'] = kwargs['mpa_s']
-            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                 from_unit='C', unit='K')
+            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
+                                  'from_unit': 'C', 'unit': 'K'}
 
             yield kwargs
 
@@ -148,11 +140,11 @@ class EnvCanadaAttributeMapper(object):
         for i in self.record.ifts:
             kwargs = self._get_kwargs(i)
 
-            kwargs['tension'] = InterfacialTensionUnit(value=kwargs['dynes_cm'],
-                                                       from_unit='dyne/cm',
-                                                       unit='N/m')
-            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                 from_unit='C', unit='K')
+            kwargs['tension'] = {'value': kwargs['dynes_cm'],
+                                 'from_unit': 'dyne/cm',
+                                 'unit': 'N/m'}
+            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
+                                  'from_unit': 'C', 'unit': 'K'}
 
             yield kwargs
 
@@ -171,10 +163,10 @@ class EnvCanadaAttributeMapper(object):
         for c in self.record.cuts:
             kwargs = self._get_kwargs(c)
 
-            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
-                                           unit='1')
-            kwargs['vapor_temp'] = TemperatureUnit(value=kwargs['temp_c'],
-                                                   from_unit='C', unit='K')
+            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
+                                  'unit': '1'}
+            kwargs['vapor_temp'] = {'value': kwargs['temp_c'],
+                                    'from_unit': 'C', 'unit': 'K'}
 
             yield kwargs
 
@@ -183,8 +175,8 @@ class EnvCanadaAttributeMapper(object):
         for a in self.record.adhesions:
             kwargs = self._get_kwargs(a)
 
-            kwargs['adhesion'] = AdhesionUnit(value=kwargs['g_cm_2'],
-                                              from_unit='g/cm^2', unit='N/m^2')
+            kwargs['adhesion'] = {'value': kwargs['g_cm_2'],
+                                  'from_unit': 'g/cm^2', 'unit': 'N/m^2'}
 
             yield kwargs
 
@@ -198,12 +190,12 @@ class EnvCanadaAttributeMapper(object):
         for e in self.record.emulsions:
             kwargs = self._get_kwargs(e)
 
-            kwargs['water_content'] = FloatUnit(value=kwargs['water_content_percent'] / 100.0,
-                                                unit='1')
-            kwargs['age'] = TimeUnit(value=kwargs['age_days'],
-                                     from_unit='day', unit='s')
-            kwargs['ref_temp'] = TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                 from_unit='C', unit='K')
+            kwargs['water_content'] = {'value': kwargs['water_content_percent'] / 100.0,
+                                       'unit': '1'}
+            kwargs['age'] = {'value': kwargs['age_days'],
+                             'from_unit': 'day', 'unit': 's'}
+            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
+                                  'from_unit': 'C', 'unit': 'K'}
 
             # the different modulus values have similar units of measure
             # to adhesion, so this is what we will go with
@@ -214,18 +206,16 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = mod_lbl[:-3]
 
                 if value is not None:
-                    kwargs[new_lbl] = AdhesionUnit(value=value,
-                                                   from_unit='Pa',
-                                                   unit='N/m^2')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'Pa', 'unit': 'N/m^2'}
 
             for visc_lbl in ('complex_viscosity_pa_s',):
                 value = kwargs[visc_lbl]
                 new_lbl = visc_lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = DynamicViscosityUnit(value=value,
-                                                           from_unit='Pa.s',
-                                                           unit='kg/(m s)')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'Pa.s', 'unit': 'kg/(m s)'}
 
             yield kwargs
 
@@ -244,8 +234,8 @@ class EnvCanadaAttributeMapper(object):
         for s in self.record.sulfur:
             kwargs = self._get_kwargs(s)
 
-            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
-                                           unit='1')
+            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
+                                  'unit': '1'}
 
             yield kwargs
 
@@ -263,8 +253,8 @@ class EnvCanadaAttributeMapper(object):
         for w in self.record.wax_content:
             kwargs = self._get_kwargs(w)
 
-            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
-                                           unit='1')
+            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
+                                  'unit': '1'}
 
             yield kwargs
 
@@ -294,9 +284,8 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='ug/g',
-                                                               unit='ppm')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'ug/g', 'unit': 'ppm'}
 
             yield kwargs
 
@@ -316,9 +305,8 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='mg/g',
-                                                               unit='ppm')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'mg/g', 'unit': 'ppm'}
 
             yield kwargs
 
@@ -334,9 +322,8 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='mg/g',
-                                                               unit='1')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'mg/g', 'unit': '1'}
 
             for lbl in ('tsh_tph_percent',
                         'tah_tph_percent',
@@ -345,8 +332,8 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-8]
 
                 if value is not None:
-                    kwargs[new_lbl] = FloatUnit(value=value / 100.0,
-                                                unit='1')
+                    kwargs[new_lbl] = {'value': value / 100.0,
+                                       'unit': '1'}
 
             yield kwargs
 
@@ -360,9 +347,8 @@ class EnvCanadaAttributeMapper(object):
                 value = kwargs[lbl]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='mg/g',
-                                                               unit='1')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'mg/g', 'unit': '1'}
 
             yield kwargs
 
@@ -386,8 +372,8 @@ class EnvCanadaAttributeMapper(object):
         for f in self.record.sara_total_fractions:
             kwargs = self._get_kwargs(f)
 
-            kwargs['fraction'] = FloatUnit(value=kwargs['percent'] / 100.0,
-                                           unit='1')
+            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
+                                  'unit': '1'}
 
             yield kwargs
 
@@ -401,18 +387,16 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='ug/g',
-                                                               unit='ppm')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'ug/g', 'unit': 'ppm'}
 
             for n in range(8, 45):
                 lbl, new_lbl = 'c{}_ug_g'.format(n), 'c{}'.format(n)
                 value = kwargs[lbl]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='ug/g',
-                                                               unit='ppm')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'ug/g', 'unit': 'ppm'}
 
             yield kwargs
 
@@ -427,9 +411,8 @@ class EnvCanadaAttributeMapper(object):
                 value = kwargs.get(lbl, None)
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='ug/g',
-                                                               unit='ppm')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'ug/g', 'unit': 'ppm'}
 
             for lbl in ('biphenyl_ug_g',
                         'acenaphthylene_ug_g',
@@ -450,9 +433,8 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='ug/g',
-                                                               unit='ppm')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'ug/g', 'unit': 'ppm'}
 
             yield kwargs
 
@@ -486,8 +468,8 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = ConcentrationInWaterUnit(value=value,
-                                                               from_unit='ug/g',
-                                                               unit='ppm')
+                    kwargs[new_lbl] = {'value': value,
+                                       'from_unit': 'ug/g',
+                                       'unit': 'ppm'}
 
             yield kwargs

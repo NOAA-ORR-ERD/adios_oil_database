@@ -30,7 +30,11 @@ class CSVFile(object):
             :type field_delim: A string or unicode
         '''
         self.name = name
-        self.field_delim = field_delim
+
+        try:
+            self.field_delim = field_delim.decode('utf-8')
+        except Exception:
+            self.field_delim = field_delim
 
     def __enter__(self):
         '''
@@ -41,7 +45,7 @@ class CSVFile(object):
             >>>     pass
             >>> # our file is now closed
         '''
-        self.fileobj = open(self.name, 'rU')
+        self.fileobj = open(self.name, 'r', errors='surrogatepass')
 
         return self
 
@@ -60,15 +64,20 @@ class CSVFile(object):
             :param line: A row of .csv text data
             :type line: string or unicode
         '''
-        if line == '':
+        if line in ('', b''):
             # readline() returns empty string on EOF and '\n' for empty lines
             return None
 
-        line = self.normalize_to_utf8(line).rstrip('\n')
-
         if len(line) > 0:
-            row = (line.split(self.field_delim))
+            try:
+                row = line.rstrip('\n')
+            except Exception:
+                row = line.decode('utf-8').rstrip('\n')
+
+            row = row.split(self.field_delim)
+
             row = [c.strip('"') for c in row]
+
             row = [c if len(c) > 0 else None for c in row]
         else:
             # empty line after stripping the newline character
@@ -76,19 +85,6 @@ class CSVFile(object):
             row = [None]
 
         return row
-
-    def normalize_to_utf8(self, str_in):
-        try:
-            str_out = str_in.decode('utf-8')
-        except Exception:
-            # If we fail to decode in utf-8, then it is possible that
-            # our file contains mac_roman characters of which some are
-            # out-of-range.
-            # This is all we will attempt to do to anticipate our file contents
-            # unless there is a pressing need to do more.
-            str_out = str_in.decode('mac_roman')
-
-        return str_out.encode('utf-8')
 
     def readline(self):
         '''
@@ -135,7 +131,7 @@ class CSVFileWithHeader(CSVFile):
         '''
             Contextually open our file.
         '''
-        self.fileobj = open(self.name, 'rU')
+        self.fileobj = open(self.name, 'r')
         self._set_table_columns()
 
         return self

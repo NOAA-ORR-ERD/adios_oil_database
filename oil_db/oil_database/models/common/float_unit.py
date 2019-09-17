@@ -1,7 +1,7 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from itertools import izip_longest
+from itertools import zip_longest
 
 from unit_conversion import convert
 from unit_conversion.unit_data import ConvertDataUnits
@@ -12,30 +12,30 @@ from pymodm.fields import CharField, FloatField
 
 
 class UnitMeta(MongoModelMetaclass):
-    def __new__(cls, name, bases, dct):
+    def __new__(cls, name, bases, namespace):
         # we will only try this if we are a 'Unit' type class
         max_length = 32
 
-        dct['unit_type'] = None
+        namespace['unit_type'] = None
 
         if name.endswith('Unit'):
             unit_type = cls.camelcase_to_space(name[:-4])
             try:
                 all_units = [[k] + v[1]
                              for k, v
-                             in ConvertDataUnits[unit_type].iteritems()]
+                             in ConvertDataUnits[unit_type].items()]
                 flattened_units = tuple(set([i for sub in all_units
                                              for i in sub]))
 
-                dct['unit'] = CharField(max_length=max_length,
-                                        choices=flattened_units)
-                dct['unit_type'] = unit_type
+                namespace['unit'] = CharField(max_length=max_length,
+                                              choices=flattened_units)
+                namespace['unit_type'] = unit_type
             except KeyError:
-                dct['unit'] = CharField(max_length=max_length)
+                namespace['unit'] = CharField(max_length=max_length)
         else:
-            dct['unit'] = CharField(max_length=max_length)
+            namespace['unit'] = CharField(max_length=max_length)
 
-        return super(UnitMeta, cls).__new__(cls, name, bases, dct)
+        return super(UnitMeta, cls).__new__(cls, name, bases, namespace)
 
     @classmethod
     def camelcase_to_space(cls, camelcase, lower=False):
@@ -59,10 +59,10 @@ class UnitMeta(MongoModelMetaclass):
         idxs = [i for i, c in enumerate(camelcase) if c.isupper()]
 
         return [camelcase[begin:end]
-                for (begin, end) in izip_longest(idxs, idxs[1:])]
+                for (begin, end) in zip_longest(idxs, idxs[1:])]
 
 
-class FloatUnit(EmbeddedMongoModel):
+class FloatUnit(EmbeddedMongoModel, metaclass=UnitMeta):
     '''
         Primitive structure for representing floating point values in
         a defined unit.  This will be used for most oil property values,
@@ -74,7 +74,6 @@ class FloatUnit(EmbeddedMongoModel):
               {'kg/m^3', 'g/cm^3'}
               Of course, this would add extra fields
     '''
-    __metaclass__ = UnitMeta
     value = FloatField(blank=True)
     min_value = FloatField(blank=True)
     max_value = FloatField(blank=True)
@@ -90,17 +89,26 @@ class FloatUnit(EmbeddedMongoModel):
                                    value if the value is to be converted
                                    before storage in the class
         '''
+        if hasattr(kwargs['unit'], 'decode'):
+            # ensure we are working with a unicode unit value
+            kwargs['unit'] = kwargs['unit'].decode('utf-8')
+
         if 'from_unit' in kwargs and kwargs['from_unit'] is not None:
             self._convert_value_arg(kwargs)
 
-        for a, _v in kwargs.items():
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
+        for k in list(kwargs.keys()):
+            if (k not in self.__class__.__dict__):
+                del kwargs[k]
 
         super(FloatUnit, self).__init__(**kwargs)
 
     def _convert_value_arg(self, kwargs):
         from_unit, unit = kwargs['from_unit'], kwargs['unit']
+
+        if hasattr(from_unit, 'decode'):
+            # ensure we are working with a unicode from_unit value
+            from_unit = from_unit.decode('utf-8')
+
         value, min_value, max_value = [kwargs.get(a, None)
                                        for a in ('value',
                                                  'min_value',
@@ -133,7 +141,7 @@ class FloatUnit(EmbeddedMongoModel):
         if self.unit == '1':
             return ''
         else:
-            return ' {}'.format(self.unit.encode('utf-8'))
+            return ' {}'.format(self.unit)
 
     def __str_scalar__(self):
         return '{}{}'.format(self.value, self.__str_unit__())

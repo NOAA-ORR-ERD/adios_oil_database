@@ -42,7 +42,7 @@ def test_mongodb_connect_exceptions():
 def test_connect_modm(mongodb_settings):
     connect_modm(mongodb_settings)
 
-    assert pymodm.connection._CONNECTIONS.keys() == ['oil-db-app']
+    assert list(pymodm.connection._CONNECTIONS.keys()) == ['oil-db-app']
     assert (pymodm.connection._CONNECTIONS['oil-db-app']
             .conn_string == 'mongodb://localhost:27017/oil_database')
 
@@ -59,7 +59,7 @@ def test_connect_modm_bad_host(mongodb_settings):
                   'mongodb.alias': 'oil-db-app'
                   })
 
-    assert pymodm.connection._CONNECTIONS.keys() == ['oil-db-app']
+    assert list(pymodm.connection._CONNECTIONS.keys()) == ['oil-db-app']
     assert (pymodm.connection._CONNECTIONS['oil-db-app']
             .conn_string == 'mongodb://bogushost:27017/oil_database')
 

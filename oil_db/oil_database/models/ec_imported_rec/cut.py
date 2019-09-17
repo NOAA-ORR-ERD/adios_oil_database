@@ -13,7 +13,7 @@ class ECCut(EmbeddedMongoModel):
     method = CharField(max_length=48, blank=True)
 
     def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 

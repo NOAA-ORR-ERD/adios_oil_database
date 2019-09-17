@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import logging
 import re
-from itertools import izip_longest
+from itertools import zip_longest
 
 from slugify import slugify_filename
 
@@ -33,7 +33,7 @@ class OilLibraryRecordParser(object):
                         for c in property_names]
         values = [v.strip() if v is not None else None
                   for v in values]
-        row_dict = dict(izip_longest(file_columns, values))
+        row_dict = dict(zip_longest(file_columns, values))
 
         self._privatize_data_properties(row_dict)
 

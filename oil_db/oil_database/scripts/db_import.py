@@ -1,5 +1,6 @@
 import sys
 import os
+import io
 import logging
 from datetime import datetime
 
@@ -33,7 +34,7 @@ data_path = os.path.sep.join(__file__.split(os.path.sep)[:-3] + ['data'])
 
 
 def not_implemented(_settings):
-    print ('\tImport of this dataset is not implemented!!')
+    print('\tImport of this dataset is not implemented!!')
 
 
 def add_all(settings):
@@ -45,7 +46,7 @@ def add_all(settings):
         if len(item) == 6:
             (label, config,
              record_cls, reader_cls, parser_cls, mapper_cls) = item
-            print ('\tPerforming import on dataset: {}'.format(label))
+            print('\tPerforming import on dataset: {}'.format(label))
 
             import_records(settings[config],
                            record_cls, reader_cls, parser_cls, mapper_cls)
@@ -68,6 +69,10 @@ menu_items = (('NOAA Filemaker', 'oildb.fm_files',
 
 
 def import_db_cmd(argv=sys.argv):
+    # Let's give a round of applause to Python 3 for making stderr buffered.
+    sys.stderr = io.TextIOWrapper(sys.stderr.detach().detach(),
+                                  write_through=True)
+
     logging.basicConfig(level=logging.INFO)
 
     if len(argv) >= 2:
@@ -81,7 +86,7 @@ def import_db_cmd(argv=sys.argv):
     try:
         import_db(settings)
     except Exception:
-        print "{0}() FAILED\n".format(import_db.__name__)
+        print("{0}() FAILED\n".format(import_db.__name__))
         raise
 
 
@@ -125,37 +130,37 @@ def import_db(settings):
             chosen = get_chosen_menu_item(choice)
 
             if chosen is None:
-                print ('\tInvalid Choice...')
+                print('\tInvalid Choice...')
             elif len(chosen) == 2:
                 label, func = chosen
-                print ('\tYour choice: {}'.format(label))
+                print('\tYour choice: {}'.format(label))
 
                 func(settings)
             else:
                 (label, config,
                  record_cls, reader_cls, parser_cls, mapper_cls) = chosen
-                print ('\tYour choice: {}'.format(label))
+                print('\tYour choice: {}'.format(label))
 
                 begin = datetime.now()
                 import_records(settings[config],
                                record_cls, reader_cls, parser_cls, mapper_cls)
                 end = datetime.now()
 
-                print ('time elapsed: {}'.format(end - begin))
+                print('time elapsed: {}'.format(end - begin))
 
-    print ('quitting the import...')
+    print('quitting the import...')
 
 
 def print_menu():
-    print ('\nImportable datasets:')
+    print('\nImportable datasets:')
 
     for idx, item in enumerate(menu_items):
         item_lbl = item[0]
-        print ('\t{} - {}'.format(idx + 1, item_lbl))
+        print('\t{} - {}'.format(idx + 1, item_lbl))
 
 
 def prompt_for_menu_item():
-    resp = (raw_input('Choose a dataset to import or quit (q): ')
+    resp = (input('Choose a dataset to import or quit (q): ')
             .lower().strip())
 
     if resp == '':
@@ -218,18 +223,18 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
 
                 oil_obj.save()
             except ValidationError as e:
-                print ('validation failed for {}: {}'
-                       .format(tc.change(parser.oil_id, 'red'), e))
+                print('validation failed for {}: {}'
+                      .format(tc.change(parser.oil_id, 'red'), e))
             except DuplicateKeyError as e:
-                print ('duplicate fields for {}: {}'
-                       .format(tc.change(parser.oil_id, 'red'), e))
+                print('duplicate fields for {}: {}'
+                      .format(tc.change(parser.oil_id, 'red'), e))
 
             if rowcount % 100 == 0:
                 sys.stderr.write('.')
 
             rowcount += 1
 
-        print ('finished!!!  {} rows processed.'.format(rowcount))
+        print('finished!!!  {} rows processed.'.format(rowcount))
 
 
 def _add_datafiles(settings):

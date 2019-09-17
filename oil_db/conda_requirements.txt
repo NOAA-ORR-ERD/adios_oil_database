@@ -8,24 +8,22 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-python=2.7.*
+python=3.7.*
 gitpython
 numpy>=1.11.1
 scipy>=0.18.1
 
 pymongo>=3.6.0
-pymodm>=0.4.0  # might be pip only
+#pymodm>=0.4.0  # might be pip only
 
 awesome-slugify>=1.6.5
+configparser>=3.7.4
 
 pytest>=3.8.0
 pytest-cov>=2.6.0
 pytest-timeout>=1.2.1
 
-# This package is not released on conda.  You will need to pip install
-# pytest-raises>=0.10
-
 backports.functools_lru_cache>=1.5
-unit_conversion>=2.5.4
 
-
+# this package is a bit old.  The new one is pip installed from GitHub
+#unit_conversion>=2.5.4

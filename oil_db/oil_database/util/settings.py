@@ -1,6 +1,6 @@
 # some common methods for getting some application settings
 # for the oil database
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 
 def default_settings():

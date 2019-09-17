@@ -32,7 +32,7 @@ def fix_bson_ids(json_data):
     if isinstance(json_data, ObjectId):
         return str(json_data)
     elif isinstance(json_data, dict):
-        for k, v in json_data.iteritems():
+        for k, v in json_data.items():
             if k == '_cls':
                 # chris doesn't want to expose the entire python module path
                 # not sure if this is a good idea, might make it harder to
@@ -87,7 +87,7 @@ class ObjFromDict(object):
     '''
     def __init__(self, data):
         try:
-            for name, value in data.iteritems():
+            for name, value in data.items():
                 setattr(self, name, self._wrap(value))
         except AttributeError:
             raise ValueError('Top level of JSON structure must be dict')

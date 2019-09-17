@@ -4,13 +4,15 @@
 from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import CharField, FloatField
 
+from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
+
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    ConcentrationInWaterUnit)
 
 
-class GasChromatography(EmbeddedMongoModel):
+class GasChromatography(EmbeddedMongoModel, EmbeddedMongoModelMixin):
     '''
         Gas Chromatography (ESTS 2002a):
         - Total Petroleum Hydrocarbons (mg/g)
@@ -32,9 +34,11 @@ class GasChromatography(EmbeddedMongoModel):
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
         # of this class
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
+
+        self._set_embedded_property_args(kwargs)
 
         if 'weathering' not in kwargs or kwargs['weathering'] is None:
             # Seriously?  What good is a default if it can't negotiate

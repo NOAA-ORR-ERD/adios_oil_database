@@ -88,7 +88,7 @@ class TestFloatUnit():
     def test_camelcase(self, value, expected):
         from oil_database.models.common.float_unit import FloatUnit
 
-        words = FloatUnit.__metaclass__.separate_camelcase(value)
+        words = FloatUnit.__class__.separate_camelcase(value)
 
         assert words == expected
 
@@ -108,7 +108,7 @@ class TestFloatUnit():
     def test_camelcase_to_space(self, value, lower, expected):
         from oil_database.models.common.float_unit import FloatUnit
 
-        words = FloatUnit.__metaclass__.camelcase_to_space(value, lower=lower)
+        words = FloatUnit.__class__.camelcase_to_space(value, lower=lower)
 
         assert words == expected
 
@@ -128,8 +128,7 @@ class TestFloatUnit():
     def test_camelcase_to_underscore(self, value, lower, expected):
         from oil_database.models.common.float_unit import FloatUnit
 
-        words = FloatUnit.__metaclass__.camelcase_to_underscore(value,
-                                                                lower=lower)
+        words = FloatUnit.__class__.camelcase_to_underscore(value, lower=lower)
 
         assert words == expected
 
@@ -154,11 +153,8 @@ class TestAngularMeasureUnit(object):
         am_unit.clean_fields()
 
         assert repr(am_unit) == (u'<AngularMeasureUnit({} {})>'
-                                 .format(value, unit)
-                                 .encode('utf-8'))
-        assert str(am_unit) == (u'{} {}'
-                                .format(value, unit)
-                                .encode('utf-8'))
+                                 .format(value, unit))
+        assert str(am_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestAreaUnit(object):
@@ -210,12 +206,8 @@ class TestAreaUnit(object):
         area_unit = AreaUnit(value=value, unit=unit)
         area_unit .clean_fields()
 
-        assert repr(area_unit) == (u'<AreaUnit({} {})>'
-                                   .format(value, unit)
-                                   .encode('utf-8'))
-        assert str(area_unit) == (u'{} {}'
-                                  .format(value, unit)
-                                  .encode('utf-8'))
+        assert repr(area_unit) == (u'<AreaUnit({} {})>'.format(value, unit))
+        assert str(area_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestConcentrationInWaterUnit(object):
@@ -270,11 +262,8 @@ class TestConcentrationInWaterUnit(object):
         cw_unit.clean_fields()
 
         assert repr(cw_unit) == (u'<ConcentrationInWaterUnit({} {})>'
-                                 .format(value, unit)
-                                 .encode('utf-8'))
-        assert str(cw_unit) == (u'{} {}'
-                                .format(value, unit)
-                                .encode('utf-8'))
+                                 .format(value, unit))
+        assert str(cw_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestDensityUnit(object):
@@ -309,11 +298,8 @@ class TestDensityUnit(object):
         density_unit.clean_fields()
 
         assert repr(density_unit) == (u'<DensityUnit({} {})>'
-                                      .format(value, unit)
-                                      .encode('utf-8'))
-        assert str(density_unit) == (u'{} {}'
-                                     .format(value, unit)
-                                     .encode('utf-8'))
+                                      .format(value, unit))
+        assert str(density_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestDischargeUnit(object):
@@ -368,11 +354,8 @@ class TestDischargeUnit(object):
         discharge_unit.clean_fields()
 
         assert repr(discharge_unit) == (u'<DischargeUnit({} {})>'
-                                        .format(value, unit)
-                                        .encode('utf-8'))
-        assert str(discharge_unit) == (u'{} {}'
-                                       .format(value, unit)
-                                       .encode('utf-8'))
+                                        .format(value, unit))
+        assert str(discharge_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestKinematicViscosityUnit(object):
@@ -414,11 +397,8 @@ class TestKinematicViscosityUnit(object):
         kvis_unit.clean_fields()
 
         assert repr(kvis_unit) == (u'<KinematicViscosityUnit({} {})>'
-                                   .format(value, unit)
-                                   .encode('utf-8'))
-        assert str(kvis_unit) == (u'{} {}'
-                                  .format(value, unit)
-                                  .encode('utf-8'))
+                                   .format(value, unit))
+        assert str(kvis_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestLengthUnit(object):
@@ -472,11 +452,8 @@ class TestLengthUnit(object):
         length_unit.clean_fields()
 
         assert repr(length_unit) == (u'<LengthUnit({} {})>'
-                                     .format(value, unit)
-                                     .encode('utf-8'))
-        assert str(length_unit) == (u'{} {}'
-                                    .format(value, unit)
-                                    .encode('utf-8'))
+                                     .format(value, unit))
+        assert str(length_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestMassUnit(object):
@@ -518,12 +495,8 @@ class TestMassUnit(object):
         mass_unit = MassUnit(value=value, unit=unit)
         mass_unit.clean_fields()
 
-        assert repr(mass_unit) == (u'<MassUnit({} {})>'
-                                   .format(value, unit)
-                                   .encode('utf-8'))
-        assert str(mass_unit) == (u'{} {}'
-                                  .format(value, unit)
-                                  .encode('utf-8'))
+        assert repr(mass_unit) == (u'<MassUnit({} {})>'.format(value, unit))
+        assert str(mass_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestOilConcentrationUnit(object):
@@ -560,11 +533,8 @@ class TestOilConcentrationUnit(object):
         oc_unit.clean_fields()
 
         assert repr(oc_unit) == (u'<OilConcentrationUnit({} {})>'
-                                 .format(value, unit)
-                                 .encode('utf-8'))
-        assert str(oc_unit) == (u'{} {}'
-                                .format(value, unit)
-                                .encode('utf-8'))
+                                 .format(value, unit))
+        assert str(oc_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestTemperatureUnit(object):
@@ -600,11 +570,8 @@ class TestTemperatureUnit(object):
         temp_unit.clean_fields()
 
         assert repr(temp_unit) == (u'<TemperatureUnit({} {})>'
-                                   .format(value, unit)
-                                   .encode('utf-8'))
-        assert str(temp_unit) == (u'{} {}'
-                                  .format(value, unit)
-                                  .encode('utf-8'))
+                                   .format(value, unit))
+        assert str(temp_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestTimeUnit(object):
@@ -633,12 +600,8 @@ class TestTimeUnit(object):
         time_unit = TimeUnit(value=value, unit=unit)
         time_unit.clean_fields()
 
-        assert repr(time_unit) == (u'<TimeUnit({} {})>'
-                                   .format(value, unit)
-                                   .encode('utf-8'))
-        assert str(time_unit) == (u'{} {}'
-                                  .format(value, unit)
-                                  .encode('utf-8'))
+        assert repr(time_unit) == (u'<TimeUnit({} {})>'.format(value, unit))
+        assert str(time_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestVelocityUnit(object):
@@ -688,72 +651,69 @@ class TestVelocityUnit(object):
         velocity_unit = VelocityUnit(value=value, unit=unit)
         velocity_unit.clean_fields()
 
-        assert repr(velocity_unit) == (u'<VelocityUnit({} {})>'
-                                       .format(value, unit)
-                                       .encode('utf-8'))
-        assert str(velocity_unit) == (u'{} {}'
-                                      .format(value, unit)
-                                      .encode('utf-8'))
+        assert repr(velocity_unit) == (u'<VelocityUnit({} {})>'.format(value,
+                                                                       unit))
+        assert str(velocity_unit) == (u'{} {}'.format(value, unit))
 
 
 class TestVolumeUnit(object):
     @pytest.mark.parametrize('value, unit',
                              [
-                              (10.0, 'barrel'),
-                              (10.0, 'barrel (petroleum)'),
-                              (10.0, 'barrels'),
-                              (10.0, 'bbl'),
-                              (10.0, 'bbls'),
-                              (10.0, 'cc'),
-                              (10.0, 'cm^3'),
-                              (10.0, 'cu cm'),
-                              (10.0, 'cu feet'),
-                              (10.0, 'cu inch'),
-                              (10.0, 'cu km'),
-                              (10.0, 'cu m'),
-                              (10.0, 'cu yard'),
-                              (10.0, 'cubic centimeter'),
-                              (10.0, 'cubic foot'),
-                              (10.0, 'cubic inch'),
-                              (10.0, 'cubic kilometer'),
-                              (10.0, 'cubic kilometers'),
-                              (10.0, 'cubic meter'),
-                              (10.0, 'cubic meters'),
-                              (10.0, 'cubic yard'),
-                              (10.0, 'cubicfeet'),
-                              (10.0, 'cubicinches'),
-                              (10.0, 'cubicyards'),
-                              (10.0, 'fluid ounce'),
-                              (10.0, 'fluid ounce (UK)'),
-                              (10.0, 'fluid oz'),
-                              (10.0, 'fluid oz(uk)'),
-                              (10.0, 'ft^3'),
-                              (10.0, 'gal'),
-                              (10.0, 'gallon'),
-                              (10.0, 'gallon (UK)'),
-                              (10.0, 'gallons'),
-                              (10.0, 'gallons(uk)'),
-                              (10.0, 'in^3'),
-                              (10.0, 'km^3'),
-                              (10.0, 'l'),
-                              (10.0, 'liter'),
-                              (10.0, 'liters'),
-                              (10.0, 'm^3'),
-                              (10.0, 'milgal'),
-                              (10.0, 'million US gallon'),
-                              (10.0, 'milliongallons'),
-                              (10.0, 'ounces(fluid)'),
-                              (10.0, 'oz'),
-                              (10.0, 'ukgal'),
-                              (10.0, 'ukoz'),
-                              (10.0, 'usgal'),
-                              (10.0, 'yd^3'),
-                              (10.0, u'cm\xb3'),
-                              (10.0, u'ft\xb3'),
-                              (10.0, u'in\xb3'),
-                              (10.0, u'km\xb3'),
-                              (10.0, u'm\xb3'),
-                              (10.0, u'yd\xb3'),
+                              (10.0, b'barrel'),
+                              (10.0, b'barrel (petroleum)'),
+                              (10.0, b'barrels'),
+                              (10.0, b'bbl'),
+                              (10.0, b'bbls'),
+                              (10.0, b'cc'),
+                              (10.0, b'cm^3'),
+                              (10.0, b'cu cm'),
+                              (10.0, b'cu feet'),
+                              (10.0, b'cu inch'),
+                              (10.0, b'cu km'),
+                              (10.0, b'cu m'),
+                              (10.0, b'cu yard'),
+                              (10.0, b'cubic centimeter'),
+                              (10.0, b'cubic foot'),
+                              (10.0, b'cubic inch'),
+                              (10.0, b'cubic kilometer'),
+                              (10.0, b'cubic kilometers'),
+                              (10.0, b'cubic meter'),
+                              (10.0, b'cubic meters'),
+                              (10.0, b'cubic yard'),
+                              (10.0, b'cubicfeet'),
+                              (10.0, b'cubicinches'),
+                              (10.0, b'cubicyards'),
+                              (10.0, b'fluid ounce'),
+                              (10.0, b'fluid ounce (UK)'),
+                              (10.0, b'fluid oz'),
+                              (10.0, b'fluid oz(uk)'),
+                              (10.0, b'ft^3'),
+                              (10.0, b'gal'),
+                              (10.0, b'gallon'),
+                              (10.0, b'gallon (UK)'),
+                              (10.0, b'gallons'),
+                              (10.0, b'gallons(uk)'),
+                              (10.0, b'in^3'),
+                              (10.0, b'km^3'),
+                              (10.0, b'l'),
+                              (10.0, b'liter'),
+                              (10.0, b'liters'),
+                              (10.0, b'm^3'),
+                              (10.0, b'milgal'),
+                              (10.0, b'million US gallon'),
+                              (10.0, b'milliongallons'),
+                              (10.0, b'ounces(fluid)'),
+                              (10.0, b'oz'),
+                              (10.0, b'ukgal'),
+                              (10.0, b'ukoz'),
+                              (10.0, b'usgal'),
+                              (10.0, b'yd^3'),
+                              (10.0, 'cm\xb3'),
+                              (10.0, 'ft\xb3'),
+                              (10.0, 'in\xb3'),
+                              (10.0, 'km\xb3'),
+                              (10.0, 'm\xb3'),
+                              (10.0, 'yd\xb3'),
                               pytest.param(
                                   10.0, 'hogsheads per fortnight',
                                   marks=pytest.mark.raises(exception=ValidationError)),
@@ -765,9 +725,8 @@ class TestVolumeUnit(object):
         volume_unit = VolumeUnit(value=value, unit=unit)
         volume_unit.clean_fields()
 
-        assert repr(volume_unit) == (u'<VolumeUnit({} {})>'
-                                     .format(value, unit)
-                                     .encode('utf-8'))
-        assert str(volume_unit) == (u'{} {}'
-                                    .format(value, unit)
-                                    .encode('utf-8'))
+        if hasattr(unit, 'decode'):
+            unit = unit.decode('utf-8')
+
+        assert repr(volume_unit) == ('<VolumeUnit({} {})>'.format(value, unit))
+        assert str(volume_unit) == (u'{} {}'.format(value, unit))

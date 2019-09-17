@@ -99,7 +99,7 @@ def create_index_file(downloaded, destination):
     with open(index_file_name, 'wb') as index_file:
         index_file.write('oil_name\tfile\n')
 
-        for name, fname in sorted(downloaded.iteritems()):
+        for name, fname in sorted(downloaded.items()):
             index_file.write('{}\t{}\n'.format(name, fname))
 
 

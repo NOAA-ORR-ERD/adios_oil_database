@@ -1,1 +1,1 @@
-from estimations import OilEstimation
+from .estimations import OilEstimation

@@ -5,10 +5,11 @@
 from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
 from pymodm.fields import FloatField, CharField
 
+from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class ChemicalDispersibility(EmbeddedMongoModel):
+class ChemicalDispersibility(EmbeddedMongoModel, EmbeddedMongoModelMixin):
     '''
         Chemical dispersability (swirling flask test) (ASTM F2059)
     '''
@@ -23,9 +24,11 @@ class ChemicalDispersibility(EmbeddedMongoModel):
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
         # of this class
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
+
+        self._set_embedded_property_args(kwargs)
 
         if 'weathering' not in kwargs or kwargs['weathering'] is None:
             # Seriously?  What good is a default if it can't negotiate

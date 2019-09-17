@@ -15,7 +15,7 @@ class NoaaFmDVis(EmbeddedMongoModel):
     standard_deviation = FloatField(blank=True)
 
     def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 

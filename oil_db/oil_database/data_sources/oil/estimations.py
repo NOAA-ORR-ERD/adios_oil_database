@@ -159,8 +159,8 @@ class OilEstimation(object):
         rho_idxs1 = (rho_idxs0 + 1).clip(0, len(obj_list) - 1)
         rho_idxs1[low_and_oob] = 0
 
-        return zip([obj_list[i] for i in rho_idxs0],
-                   [obj_list[i] for i in rho_idxs1])
+        return list(zip([obj_list[i] for i in rho_idxs0],
+                        [obj_list[i] for i in rho_idxs1]))
 
     def pour_point(self, weathering=0.0, estimate_if_none=True):
         '''
@@ -367,7 +367,7 @@ class OilEstimation(object):
 
         api = self.get_api()
 
-        if api is not None and api > 30:
+        if api is not None and api.gravity > 30:
             k_rho_default = 0.0009
         else:
             k_rho_default = 0.0008
@@ -468,7 +468,7 @@ class OilEstimation(object):
                                                       unit='m^2/s'),
                      ref_temp=TemperatureUnit(value=t, unit='K',
                                               weathering=w))
-                for (t, w), k in sorted(agg.iteritems())]
+                for (t, w), k in sorted(agg.items())]
 
     def kvis_at_temp(self, temp_k=288.15, weathering=0.0):
         shape = None
@@ -558,7 +558,7 @@ class OilEstimation(object):
                 #   So we will only check for inf values.
                 # - for sample sizes < 3, the covariance is unreliable.
                 if len(ref_kvis) > 2 and np.any(pcov == np.inf):
-                    print 'covariance too high.'
+                    print('covariance too high.')
                     continue
 
                 if popt[1] <= 1.0:

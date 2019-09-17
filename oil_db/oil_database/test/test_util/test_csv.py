@@ -14,8 +14,8 @@ def csv_file(tmpdir_factory):
     fn = tmpdir_factory.mktemp('data').join('test.csv')
 
     with open(str(fn), 'wb') as fd:
-        fd.write('00\t01\n'
-                 '10\t11\n')
+        fd.write(b'00\t01\n'
+                 b'10\t11\n')
 
     return fn
 
@@ -28,9 +28,9 @@ def csv_header_file(tmpdir_factory):
     fn = tmpdir_factory.mktemp('data').join('test_header.csv')
 
     with open(str(fn), 'wb') as fd:
-        fd.write('f1\tf2\n'
-                 '00\t01\n'
-                 '10\t11\n')
+        fd.write(b'f1\tf2\n'
+                 b'00\t01\n'
+                 b'10\t11\n')
 
     return fn
 
@@ -43,8 +43,8 @@ def csv_bad_header_file(tmpdir_factory):
     fn = tmpdir_factory.mktemp('data').join('bad_header.csv')
 
     with open(str(fn), 'wb') as fd:
-        fd.write('f1\tf2\n'
-                 '00\t01\t02\n')
+        fd.write(b'f1\tf2\n'
+                 b'00\t01\t02\n')
 
     return fn
 
@@ -65,24 +65,28 @@ class TestCSVFile(object):
         assert csv_file.field_delim == delim
 
     @pytest.mark.parametrize('delim, line, expected',
-                             [('\t', '', None),
-                              ('\t', '\n', [None]),
-                              ('\t', u'\n', [None]),
-                              ('\t', '\t', [None, None]),
-                              ('\t', '\t\n', [None, None]),
-                              ('\t', u'\t\n', [None, None]),
-                              ('\t', ' ', [' ']),
-                              ('\t', ' \n', [' ']),
-                              ('\t', u' \n', [' ']),
-                              ('\t', ' \t ', [' ',  ' ']),
-                              ('\t', ' \t \n', [' ',  ' ']),
-                              ('\t', '00\t01\n', ['00', '01']),
-                              ('\t', 'f0\tf1', ['f0', 'f1']),
+                             [(b'\t', b'', None),
+                              (b'\t', b'\n', [None]),
+                              (b'\t', '\n', [None]),
+                              (b'\t', b'\t', [None, None]),
+                              (b'\t', b'\t\n', [None, None]),
+                              (b'\t', '\t\n', [None, None]),
+                              (b'\t', b' ', [' ']),
+                              (b'\t', b' \n', [' ']),
+                              (b'\t', ' \n', [' ']),
+                              (b'\t', b' \t ', [' ',  ' ']),
+                              (b'\t', b' \t \n', [' ',  ' ']),
+                              (b'\t', b'00\t01\n', ['00', '01']),
+                              (b'\t', b'f0\tf1', ['f0', 'f1']),
+                              (b'\t', b'f0\tf1\n', ['f0', 'f1']),
+                              (b'\t', 'f0\tf1\n', ['f0', 'f1']),
+                              (b'|', b'f0|f1', ['f0', 'f1']),
+                              (b'|', b'f0|f1\n', ['f0', 'f1']),
+                              (b'|', 'f0|f1\n', ['f0', 'f1']),
+                              ('\t', b'f0\tf1\n', ['f0', 'f1']),
                               ('\t', 'f0\tf1\n', ['f0', 'f1']),
-                              ('\t', u'f0\tf1\n', ['f0', 'f1']),
-                              ('|', 'f0|f1', ['f0', 'f1']),
+                              ('|', b'f0|f1\n', ['f0', 'f1']),
                               ('|', 'f0|f1\n', ['f0', 'f1']),
-                              ('|', u'f0|f1\n', ['f0', 'f1']),
                               ])
     def test_parse_row(self, delim, line, expected):
         csv_obj = CSVFile('test', delim)
@@ -147,6 +151,7 @@ class TestCSVFileWithHeader(object):
 
             for l in csv_obj.readlines():
                 for fieldcount, f in enumerate(l):
+                    print((fieldcount, f))
                     assert f.startswith(str(rowcount))
                     assert f.endswith(str(fieldcount))
 

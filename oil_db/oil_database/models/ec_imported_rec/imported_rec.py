@@ -6,8 +6,8 @@ from pymongo.write_concern import WriteConcern
 from pymongo import IndexModel, ASCENDING
 
 from pymodm import MongoModel
-from pymodm.fields import (MongoBaseField, CharField,
-                           DateTimeField, EmbeddedDocumentListField)
+from pymodm.fields import (MongoBaseField, CharField, DateTimeField,
+                           EmbeddedDocumentListField)
 
 from oil_database.models.common import Synonym
 from oil_database.models.oil import EvaporationEq
@@ -128,7 +128,7 @@ class ECImportedRecord(MongoModel):
     def __init__(self, **kwargs):
         # we will fail on any arguments that are not defined members
         # of this class
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 
@@ -161,7 +161,7 @@ class ECImportedRecord(MongoModel):
         '''
         parser_api = parser.get_interface_properties()
 
-        for attr, value in cls.__dict__.iteritems():
+        for attr, value in cls.__dict__.items():
             if (attr in parser_api and
                     isinstance(value, MongoBaseField) and
                     not isinstance(value, EmbeddedDocumentListField)):
@@ -175,7 +175,7 @@ class ECImportedRecord(MongoModel):
         '''
         parser_api = parser.get_interface_properties()
 
-        for attr, value in cls.__dict__.iteritems():
+        for attr, value in cls.__dict__.items():
             if (attr in parser_api and
                     isinstance(value, EmbeddedDocumentListField)):
                 embedded_model = value.related_model

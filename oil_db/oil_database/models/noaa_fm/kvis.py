@@ -11,7 +11,7 @@ class NoaaFmKVis(EmbeddedMongoModel):
     weathering = FloatField(default=0.0)
 
     def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
+        for a in list(kwargs.keys()):
             if (a not in self.__class__.__dict__):
                 del kwargs[a]
 

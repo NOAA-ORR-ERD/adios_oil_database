@@ -62,7 +62,7 @@ class ExxonRecordParser(object):
         ret = {}
         cat_fields = self.prop_idx[category]
 
-        for f, idxs in cat_fields.iteritems():
+        for f, idxs in cat_fields.items():
             ret[f] = [self.values[i] for i in idxs]
 
         return ret
@@ -162,7 +162,7 @@ class ExxonRecordParser(object):
             match = re.match(self.datetime_pattern, date_str.strip())
 
             if match is not None:
-                tp = {k: int(v) for k, v in match.groupdict().iteritems()
+                tp = {k: int(v) for k, v in match.groupdict().items()
                       if v is not None}
 
                 if tp['month'] > 12:
@@ -219,7 +219,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a density object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 15.0}
             rename_props = {'density_15_c_g_ml': 'kg_m_3'}
@@ -240,7 +240,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a density object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 5.0}
             prune_props = {'density_0_c_g_ml'}
@@ -263,7 +263,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a density object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15}
             prune_props = {'density_5_c_g_ml'}
@@ -311,7 +311,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 15.0}
             rename_props = {'viscosity_at_15_c_mpa_s': 'kg_ms'}
@@ -334,7 +334,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15 + 5.0}
             prune_props = {'viscosity_at_0_c_mpa_s'}
@@ -359,7 +359,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'ref_temp_k': 273.15}
             prune_props = {'viscosity_at_5_c_mpa_s'}
@@ -401,7 +401,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             ref_temp_k = 273.15 + 15.0
             labels = ('surface_tension_15_c_oil_air',
@@ -436,7 +436,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             ref_temp_k = 273.15 + 5.0
             labels = ('surface_tension_5_c_oil_air',
@@ -475,7 +475,7 @@ class ExxonRecordParser(object):
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             ref_temp_k = 273.15
             labels = ('surface_tension_0_c_oil_air',
@@ -513,7 +513,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('flash_point_c')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             flash_point_obj = self.build_flash_point_kwargs(props_i, w)
             flash_points.append(flash_point_obj)
@@ -535,7 +535,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('pour_point_c')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             pour_point_obj = self._build_pour_point_kwargs(props_i, w)
             pour_points.append(pour_point_obj)
@@ -573,7 +573,7 @@ class ExxonRecordParser(object):
                                            'distribution_temperature_c')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
             cuts_i = self._build_cuts_from_dist_data(props_i, w)
 
             cuts.extend(cuts_i)
@@ -616,7 +616,7 @@ class ExxonRecordParser(object):
                                            'cumulative_weight_fraction')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
             cuts_i = self._build_cuts_from_cumulative_fraction(props_i, w)
 
             cuts.extend(cuts_i)
@@ -672,7 +672,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('adhesion_g_cm2_ests_1996')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w}
             rename_props = {'adhesion': 'kg_m_2'}
@@ -708,7 +708,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('evaporation_ests_1998_1')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             evap_kwargs = self._build_evaporation_kwargs(props_i, w,
                                                          '(A + BT) ln t',
@@ -725,7 +725,7 @@ class ExxonRecordParser(object):
                                            'evaporation_equation_mass_loss')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             evap_kwargs = self._build_evaporation_kwargs(props_i, w,
                                                          '(A + BT) sqrt(t)',
@@ -742,7 +742,7 @@ class ExxonRecordParser(object):
                                            'evaporation_equation_mass_loss')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             evap_kwargs = self._build_evaporation_kwargs(props_i, w,
                                                          'A + B ln (t + C)',
@@ -771,7 +771,7 @@ class ExxonRecordParser(object):
                                            'ests_1998_2')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w,
                          'ref_temp_k': 273.15 + 15.0,
@@ -796,7 +796,7 @@ class ExxonRecordParser(object):
                                            'ests_1998b')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w,
                          'ref_temp_k': 273.15 + 15.0,
@@ -862,7 +862,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('sulfur_content_astm_d4294')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w}
             rename_props = {'sulfur_content': 'fraction'}
@@ -883,7 +883,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('water_content_astm_e203')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w}
             rename_props = {'water_content': 'fraction'}
@@ -906,7 +906,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('wax_content_ests_1994')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w}
             rename_props = {'waxes': 'fraction'}
@@ -927,7 +927,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'sara_type': 'Saturates'}
             prune_props = {'aromatics', 'resin', 'asphaltene'}
@@ -951,7 +951,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'sara_type': 'Aromatics'}
             prune_props = {'saturates', 'resin', 'asphaltene'}
@@ -975,7 +975,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'sara_type': 'Resins'}
             prune_props = {'saturates', 'aromatics', 'asphaltene'}
@@ -999,7 +999,7 @@ class ExxonRecordParser(object):
         props = self.get_props_by_category('hydrocarbon_group_content')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in props.items()])
 
             add_props = {'weathering': w, 'sara_type': 'Asphaltenes'}
             prune_props = {'saturates', 'aromatics', 'resin'}
@@ -1044,13 +1044,13 @@ class ExxonRecordParser(object):
                                               'ests_2002b')
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[0][i]) for k, v in benz_props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in benz_props.items()])
             kwargs = props_i
 
-            props_i = dict([(k, v[0][i]) for k, v in btex_props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in btex_props.items()])
             kwargs.update(props_i)
 
-            props_i = dict([(k, v[0][i]) for k, v in c4_props.iteritems()])
+            props_i = dict([(k, v[0][i]) for k, v in c4_props.items()])
             kwargs.update(props_i)
 
             [self._rename_prop(kwargs, lbl, lbl + '_ppm')
@@ -1124,7 +1124,7 @@ class ExxonRecordParser(object):
         kwargs = props.copy()
 
         if add_props is not None:
-            for k, v in add_props.iteritems():
+            for k, v in add_props.items():
                 kwargs[k] = v
 
         if prune_props is not None:
@@ -1132,7 +1132,7 @@ class ExxonRecordParser(object):
                 del kwargs[p]
 
         if rename_props is not None:
-            for old_prop, new_prop in rename_props.iteritems():
+            for old_prop, new_prop in rename_props.items():
                 self._rename_prop(kwargs, old_prop, new_prop)
 
         if op_and_value is not None:

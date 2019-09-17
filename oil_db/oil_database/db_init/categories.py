@@ -19,7 +19,7 @@
 '''
 import logging
 
-from repoze.lru import lru_cache
+from functools import lru_cache
 
 from pymodm.errors import MultipleObjectsReturned, DoesNotExist
 

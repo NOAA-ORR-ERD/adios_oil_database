@@ -14,6 +14,6 @@ def pytest_runtest_setup(item):
     config = SafeConfigParser()
     config.read(config_path)
 
-    settings = dict(config['app:oil_database'].iteritems())
+    settings = dict(config['app:oil_database'].items())
 
     connect_modm(settings)

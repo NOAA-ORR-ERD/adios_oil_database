@@ -29,13 +29,13 @@ db = client.oil_database
 records = db.imported_record
 oils = db.oil
 
-print Oil.objects.first()
+print(Oil.objects.first())
 
 for oil_obj in Oil.objects.raw({'product_type': 'crude'}):
     oil_view = OilEstimation(oil_obj)
 
-    print '\n', oil_view.record.oil_id, oil_view.record.name
-    print '\t', oil_view.pour_point()
+    print('\n', oil_view.record.oil_id, oil_view.record.name)
+    print('\t', oil_view.pour_point())
 
 
 
