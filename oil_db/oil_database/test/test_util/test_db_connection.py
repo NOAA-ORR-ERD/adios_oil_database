@@ -1,8 +1,6 @@
 import pytest
 
-import pymodm
-
-from oil_database.util.db_connection import connect_mongodb, connect_modm
+from oil_database.util.db_connection import connect_mongodb
 
 
 @pytest.fixture
@@ -37,47 +35,3 @@ def test_mongodb_connect_exceptions():
         connect_mongodb({'mongodb.host': 'localhost',
                          'mongodb.port': '27017'  # should be an int
                          })
-
-
-def test_connect_modm(mongodb_settings):
-    connect_modm(mongodb_settings)
-
-    assert list(pymodm.connection._CONNECTIONS.keys()) == ['oil-db-app']
-    assert (pymodm.connection._CONNECTIONS['oil-db-app']
-            .conn_string == 'mongodb://localhost:27017/oil_database')
-
-
-def test_connect_modm_bad_host(mongodb_settings):
-    '''
-        Test a condition of bad host information.
-        It's important to note that we don't really get a failure right away
-        if the host information is wrong.
-    '''
-    connect_modm({'mongodb.host': 'bogushost',
-                  'mongodb.port': 27017,
-                  'mongodb.database': 'oil_database',
-                  'mongodb.alias': 'oil-db-app'
-                  })
-
-    assert list(pymodm.connection._CONNECTIONS.keys()) == ['oil-db-app']
-    assert (pymodm.connection._CONNECTIONS['oil-db-app']
-            .conn_string == 'mongodb://bogushost:27017/oil_database')
-
-
-def test_modm_connect_exceptions():
-    with pytest.raises(KeyError):
-        connect_modm({})
-
-    with pytest.raises(KeyError):
-        connect_modm({'mongodb.host': 'localhost'})
-
-    with pytest.raises(KeyError):
-        connect_modm({'mongodb.host': 'localhost',
-                      'mongodb.port': 27017
-                      })
-
-    with pytest.raises(KeyError):
-        connect_modm({'mongodb.host': 'localhost',
-                      'mongodb.port': 27017,
-                      'mongodb.database': 'oil_database'
-                      })
