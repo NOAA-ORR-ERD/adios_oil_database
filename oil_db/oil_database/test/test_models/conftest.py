@@ -1,8 +1,6 @@
 import os
 
-from configparser import SafeConfigParser
-
-from oil_database.util.db_connection import connect_modm
+from configparser import ConfigParser
 
 
 def pytest_runtest_setup(item):
@@ -11,9 +9,7 @@ def pytest_runtest_setup(item):
                                '..', '..', '..',
                                'config-example.ini')
 
-    config = SafeConfigParser()
+    config = ConfigParser()
     config.read(config_path)
 
     settings = dict(config['app:oil_database'].items())
-
-    connect_modm(settings)

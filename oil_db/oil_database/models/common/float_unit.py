@@ -1,39 +1,38 @@
 #
-# PyMODM Model class definitions for embedded content in our oil records
+# Model class definitions for embedded Float/Unit content pairs
+# in our oil records
 #
+from pydantic.dataclasses import dataclass
 from itertools import zip_longest
 
 from unit_conversion import convert
 from unit_conversion.unit_data import ConvertDataUnits
 
-from pymodm.base.models import MongoModelMetaclass
-from pymodm import EmbeddedMongoModel
-from pymodm.fields import CharField, FloatField
 
-
-class UnitMeta(MongoModelMetaclass):
+class UnitMeta(type):
     def __new__(cls, name, bases, namespace):
         # we will only try this if we are a 'Unit' type class
-        max_length = 32
-
-        namespace['unit_type'] = None
-
+        #
+        # Special Case: the FloatUnit class doesn't have an associated unit
+        #               type stanza in PyNUCOS, so we load it with a few
+        #               generic fractional unit types.
         if name.endswith('Unit'):
             unit_type = cls.camelcase_to_space(name[:-4])
+
             try:
                 all_units = [[k] + v[1]
                              for k, v
                              in ConvertDataUnits[unit_type].items()]
                 flattened_units = tuple(set([i for sub in all_units
                                              for i in sub]))
-
-                namespace['unit'] = CharField(max_length=max_length,
-                                              choices=flattened_units)
-                namespace['unit_type'] = unit_type
             except KeyError:
-                namespace['unit'] = CharField(max_length=max_length)
+                flattened_units = ['1', '%']
+
+            namespace['unit_choices'] = flattened_units
+            namespace['unit_type'] = unit_type
         else:
-            namespace['unit'] = CharField(max_length=max_length)
+            namespace['unit_choices'] = ['1', '%']
+            namespace['unit_type'] = 'Float'
 
         return super().__new__(cls, name, bases, namespace)
 
@@ -62,70 +61,60 @@ class UnitMeta(MongoModelMetaclass):
                 for (begin, end) in zip_longest(idxs, idxs[1:])]
 
 
-class FloatUnit(EmbeddedMongoModel, metaclass=UnitMeta):
+@dataclass
+class FloatUnit(object, metaclass=UnitMeta):
     '''
         Primitive structure for representing floating point values in
         a defined unit.  This will be used for most oil property values,
 
-        Note: In the future, we may want to subclass this to restrict the
-              unit descriptions to a set that makes sense for the particular
-              oil property we are concerned with.  For example, a FloatUnit
-              describing density would be restricted to only unit values
-              {'kg/m^3', 'g/cm^3'}
-              Of course, this would add extra fields
+        In order to perform unit conversions, subclasses of this need to
+        restrict the allowed units to a set that makes sense for the particular
+        oil property we are concerned with.
+        For example, a FloatUnit describing density would be restricted
+        to only unit values
+              {'kg/m^3', 'g/cm^3', ...}
+
+        For this, we make use of a metaclass that adds some extra fields
+        based on a unit type contained in the subclasses name.  For example,
+        a subclass named DensityUnit will grab all the possible density units
+        from the unit data table inside the PyNUCOS package.
     '''
-    value = FloatField(blank=True)
-    min_value = FloatField(blank=True)
-    max_value = FloatField(blank=True)
+    unit: str
+    from_unit: str = None
 
-    def __init__(self, **kwargs):
-        '''
-            Input args with defaults:
+    value: float = None
+    min_value: float = None
+    max_value: float = None
 
-            :param value: A numeric value
-            :param unit: A representation of units that the value is to
-                         describe.
-            :param from_unit=None: The unit representation of the incoming
-                                   value if the value is to be converted
-                                   before storage in the class
-        '''
-        if hasattr(kwargs['unit'], 'decode'):
-            # ensure we are working with a unicode unit value
-            kwargs['unit'] = kwargs['unit'].decode('utf-8')
+    def __post_init__(self):
+        if hasattr(self.unit, 'decode'):
+            self.unit = self.unit.decode('utf-8')
 
-        if 'from_unit' in kwargs and kwargs['from_unit'] is not None:
-            self._convert_value_arg(kwargs)
+        if self.unit not in self.__class__.unit_choices:
+            raise ValueError('{}: Invalid unit passed in {}'
+                             .format(self.__class__.__name__, repr(self.unit)))
 
-        for k in list(kwargs.keys()):
-            if (k not in self.__class__.__dict__):
-                del kwargs[k]
+        if self.from_unit is not None:
+            self._convert_value_arg()
 
-        super().__init__(**kwargs)
-
-    def _convert_value_arg(self, kwargs):
-        from_unit, unit = kwargs['from_unit'], kwargs['unit']
-
-        if hasattr(from_unit, 'decode'):
+    def _convert_value_arg(self):
+        if hasattr(self.from_unit, 'decode'):
             # ensure we are working with a unicode from_unit value
-            from_unit = from_unit.decode('utf-8')
+            self.from_unit = self.from_unit.decode('utf-8')
 
-        value, min_value, max_value = [kwargs.get(a, None)
-                                       for a in ('value',
-                                                 'min_value',
-                                                 'max_value')]
-
-        if not (from_unit in self.__class__.unit.choices and
-                unit in self.__class__.unit.choices):
+        if not (self.from_unit in self.__class__.unit_choices and
+                self.unit in self.__class__.unit_choices):
             raise ValueError('Invalid conversion from {} to {}'
-                             .format(from_unit, unit))
+                             .format(self.from_unit, self.unit))
 
         for a, v in zip(('value', 'min_value', 'max_value'),
-                        (value, min_value, max_value)):
+                        (self.value, self.min_value, self.max_value)):
             if v is not None:
-                kwargs[a] = convert(self.unit_type, from_unit, unit, v)
+                setattr(self, a,
+                        convert(self.unit_type, self.from_unit, self.unit, v))
 
     def to_unit(self, new_unit):
-        if new_unit not in self.__class__.unit.choices:
+        if new_unit not in self.__class__.unit_choices:
             raise ValueError('Invalid conversion from {} to {}'
                              .format(self.unit, new_unit))
 
@@ -169,6 +158,16 @@ class FloatUnit(EmbeddedMongoModel, metaclass=UnitMeta):
 
     def __repr__(self):
         return '<{}({})>'.format(self.__class__.__name__, self.__str__())
+
+    def to_json(self):
+        ret = {'_cls': '{}.{}'.format(self.__class__.__module__,
+                                      self.__class__.__name__)}
+        for k in self.__dataclass_fields__.keys():
+            value = getattr(self, k)
+            if value is not None:
+                ret[k] = value
+
+        return ret
 
 
 class AdhesionUnit(FloatUnit):

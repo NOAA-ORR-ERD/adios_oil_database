@@ -1,75 +1,44 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pymodm import EmbeddedMongoModel
-from pymodm.fields import CharField, FloatField
+from enum import Enum
+
+from pydantic import BaseModel, constr
 
 
-class SARAFraction(EmbeddedMongoModel):
-    sara_type = CharField(choices=('Saturates', 'Aromatics',
-                                   'Resins', 'Asphaltenes'))
-    fraction = FloatField()
-    ref_temp_k = FloatField()
-    weathering = FloatField(default=0.0)
-
-    standard_deviation = FloatField(blank=True)
-    replicates = FloatField(blank=True)
-    method = CharField(max_length=16, blank=True)
-
-    def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        # Seriously?  What good is a default if it can't negotiate None values?
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            kwargs['weathering'] = 0.0
-
-        if 'ref_temp_k' not in kwargs or kwargs['ref_temp_k'] is None:
-            kwargs['ref_temp_k'] = 273.15
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
-        return ('<SARAFraction({0.sara_type}={0.fraction} '
-                'at {0.ref_temp_k}K, w={0.weathering})>'
-                .format(self))
+class SaraTypeEnum(str, Enum):
+    saturates = 'Saturates'
+    aromatics = 'Aromatics'
+    resins = 'Resins'
+    asphaltenes = 'Asphaltenes'
 
 
-class SARADensity(EmbeddedMongoModel):
-    sara_type = CharField(choices=('Saturates', 'Aromatics',
-                                   'Resins', 'Asphaltenes'))
-    kg_m_3 = FloatField()
-    ref_temp_k = FloatField()
+class SARAFraction(BaseModel):
+    sara_type = SaraTypeEnum
 
-    def __init__(self, **kwargs):
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
+    fraction: float
+    ref_temp_k: float = 273.15
+    weathering: float = 0.0
 
-        super().__init__(**kwargs)
-
-    def __repr__(self):
-        return ('<SARADensity('
-                '{0.sara_type}={0.kg_m_3} kg/m^3 at {0.ref_temp_k}K)>'
-                .format(self))
+    standard_deviation: float = None
+    replicates: float = None
+    method: constr(max_length=16) = None
 
 
-class MolecularWeight(EmbeddedMongoModel):
-    sara_type = CharField(choices=('Saturates', 'Aromatics',
-                                   'Resins', 'Asphaltenes'))
-    g_mol = FloatField()
-    ref_temp_k = FloatField()
+class SARADensity(BaseModel):
+    sara_type = SaraTypeEnum
 
-    def __init__(self, **kwargs):
-        for a, _v in kwargs.items():
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
+    kg_m_3: float
+    ref_temp_k: float = 273.15
+    weathering: float = 0.0
 
-        super().__init__(**kwargs)
+
+class MolecularWeight(BaseModel):
+    sara_type = SaraTypeEnum
+
+    g_mol: float
+    ref_temp_k: float = 273.15
+    weathering: float = 0.0
 
     @property
     def kg_mol(self):
@@ -78,8 +47,3 @@ class MolecularWeight(EmbeddedMongoModel):
     @kg_mol.setter
     def length(self, value):
         self.g_mol = value * 1000.0
-
-    def __repr__(self):
-        return ('<MolecularWeight('
-                '{0.sara_type}={0.g_mol} gm/mol at {0.ref_temp_k}K)>'
-                .format(self))
