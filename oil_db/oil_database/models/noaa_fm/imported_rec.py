@@ -1,13 +1,11 @@
 #
-# PyMODM Model class definitions for our imported records that come from
+# Model class definitions for our imported records that come from
 # the Filemaker database.
 #
-from pymongo.write_concern import WriteConcern
-from pymongo import IndexModel, ASCENDING
 
-from pymodm import MongoModel
-from pymodm.fields import (MongoBaseField, CharField, BooleanField, FloatField,
-                           EmbeddedDocumentListField)
+from enum import Enum
+from pydantic import BaseModel, constr
+from typing import List
 
 from oil_database.models.common import Synonym
 
@@ -18,7 +16,24 @@ from .cut import NoaaFmCut
 from .toxicity import NoaaFmToxicity
 
 
-class ImportedRecord(MongoModel):
+class ProductTypeEnum(str, Enum):
+    crude = 'crude'
+    refined = 'refined'
+
+
+class CutUnitEnum(str, Enum):
+    weight = 'weight'
+    volume = 'volume'
+
+
+class OilClassEnum(str, Enum):
+    group_1 = 'group 1'
+    group_2 = 'group 2'
+    group_3 = 'group 3'
+    group_4 = 'group 4'
+
+
+class ImportedRecord(BaseModel):
     '''
         This object, and its related objects, is created from a
         single record inside the OilLib flat file.  The OilLib flat file
@@ -34,87 +49,68 @@ class ImportedRecord(MongoModel):
               But we will go ahead and accept the record for import, and then
               handle them when we go through our estimations.
     '''
-    oil_id = CharField(max_length=16, primary_key=True)
-    oil_name = CharField(max_length=100)
+    oil_id: constr(max_length=16)  # primary key
+    oil_name: constr(max_length=100)
+    field_name: constr(max_length=64)
 
-    product_type = CharField(choices=('crude', 'refined'), blank=True)
-    location = CharField(max_length=64, blank=True)
-    field_name = CharField(max_length=64)
-    reference = CharField(max_length=80 * 20, blank=True)
-    reference_date = CharField(max_length=10, blank=True)
-    comments = CharField(max_length=80 * 5, blank=True)
+    product_type: ProductTypeEnum = None
+    location: constr(max_length=64) = None
+    reference: constr(max_length=80 * 20) = None
+    reference_date: constr(max_length=10) = None  # should this be a datetime?
+    comments: constr(max_length=80 * 5) = None
 
-    api = FloatField(blank=True)
+    api: float = None
 
-    flash_point_min_k = FloatField(blank=True)
-    flash_point_max_k = FloatField(blank=True)
-    pour_point_min_k = FloatField(blank=True)
-    pour_point_max_k = FloatField(blank=True)
-    oil_water_interfacial_tension_n_m = FloatField(blank=True)
-    oil_water_interfacial_tension_ref_temp_k = FloatField(blank=True)
-    oil_seawater_interfacial_tension_n_m = FloatField(blank=True)
-    oil_seawater_interfacial_tension_ref_temp_k = FloatField(blank=True)
+    flash_point_min_k: float = None
+    flash_point_max_k: float = None
+    pour_point_min_k: float = None
+    pour_point_max_k: float = None
+    oil_water_interfacial_tension_n_m: float = None
+    oil_water_interfacial_tension_ref_temp_k: float = None
+    oil_seawater_interfacial_tension_n_m: float = None
+    oil_seawater_interfacial_tension_ref_temp_k: float = None
 
-    saturates = FloatField(blank=True)
-    aromatics = FloatField(blank=True)
-    resins = FloatField(blank=True)
-    asphaltenes = FloatField(blank=True)
+    saturates: float = None
+    aromatics: float = None
+    resins: float = None
+    asphaltenes: float = None
 
-    sulphur = FloatField(blank=True)
-    wax_content = FloatField(blank=True)
-    benzene = FloatField(blank=True)
+    sulphur: float = None
+    wax_content: float = None
+    benzene: float = None
 
-    adhesion = FloatField(blank=True)
-    emuls_constant_min = FloatField(blank=True)
-    emuls_constant_max = FloatField(blank=True)
-    water_content_emulsion = FloatField(blank=True)
-    conrandson_residuum = FloatField(blank=True)
-    conrandson_crude = FloatField(blank=True)
+    adhesion: float = None
+    emuls_constant_min: float = None
+    emuls_constant_max: float = None
+    water_content_emulsion: float = None
+    conrandson_residuum: float = None
+    conrandson_crude: float = None
 
     # relationship fields
-    synonyms = EmbeddedDocumentListField(Synonym, blank=True)
-    densities = EmbeddedDocumentListField(NoaaFmDensity, blank=True)
-    dvis = EmbeddedDocumentListField(NoaaFmDVis, blank=True)
-    kvis = EmbeddedDocumentListField(NoaaFmKVis, blank=True)
-    cuts = EmbeddedDocumentListField(NoaaFmCut, blank=True)
-    toxicities = EmbeddedDocumentListField(NoaaFmToxicity, blank=True)
+    synonyms: List[Synonym] = None
+    densities: List[NoaaFmDensity] = None
+    dvis: List[NoaaFmDVis] = None
+    kvis: List[NoaaFmKVis] = None
+    cuts: List[NoaaFmCut] = None
+    toxicities: List[NoaaFmToxicity] = None
 
     #
     # these attributes haven't been mapped to the main Oil object
     #
-    cut_units = CharField(choices=('weight', 'volume'), blank=True)
-    oil_class = CharField(choices=('group 1', 'group 2', 'group 3', 'group 4'),
-                          blank=True)
-    preferred_oils = BooleanField(default=False)
+    cut_units: CutUnitEnum = None
+    oil_class: OilClassEnum = None
+    preferred_oils: bool = False
 
-    paraffins = FloatField(blank=True)
-    naphthenes = FloatField(blank=True)
-    polars = FloatField(blank=True)
-    nickel = FloatField(blank=True)
-    vanadium = FloatField(blank=True)
+    paraffins: float = None
+    naphthenes: float = None
+    polars: float = None
+    nickel: float = None
+    vanadium: float = None
 
-    dispersability_temp_k = FloatField(blank=True)
-    viscosity_multiplier = FloatField(blank=True)
-    reid_vapor_pressure = FloatField(blank=True)
-    k0y = FloatField(blank=True)
-
-    class Meta:
-        write_concern = WriteConcern(j=True)
-        connection_alias = 'oil-db-app'
-        indexes = [IndexModel([('oil_name', ASCENDING),
-                               ('location', ASCENDING),
-                               ('field_name', ASCENDING),
-                               ('reference_date', ASCENDING)],
-                              unique=True)]
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        super().__init__(**kwargs)
+    dispersability_temp_k: float = None
+    viscosity_multiplier: float = None
+    reid_vapor_pressure: float = None
+    k0y: float = None
 
     @classmethod
     def from_record_parser(cls, parser):
@@ -128,7 +124,7 @@ class ImportedRecord(MongoModel):
         '''
         kwargs = {}
 
-        cls._set_scalar_properties(kwargs, parser)
+        cls._set_properties(kwargs, parser)
         cls._set_embedded_list_properties(kwargs, parser)
 
         rec = cls(**kwargs)
@@ -136,40 +132,16 @@ class ImportedRecord(MongoModel):
         return rec
 
     @classmethod
-    def _set_scalar_properties(cls, kwargs, parser):
+    def _set_properties(cls, kwargs, parser):
         '''
             Here, we handle the parser properties that contain a single
             scalar value.
         '''
         parser_api = parser.get_interface_properties()
 
-        for attr, value in cls.__dict__.items():
-            if (attr in parser_api and
-                    isinstance(value, MongoBaseField) and
-                    not isinstance(value, EmbeddedDocumentListField)):
+        for attr in cls.__fields__.keys():
+            if attr in parser_api:
                 kwargs[attr] = getattr(parser, attr)
-
-    @classmethod
-    def _set_embedded_list_properties(cls, kwargs, parser):
-        '''
-            Here, we handle the parser properties that contain a list of
-            embedded documents.
-        '''
-        parser_api = parser.get_interface_properties()
-
-        for attr, value in cls.__dict__.items():
-            if (attr in parser_api and
-                    isinstance(value, EmbeddedDocumentListField)):
-                embedded_model = value.related_model
-
-                if getattr(parser, attr) is None:
-                    kwargs[attr] = None
-                else:
-                    kwargs[attr] = [embedded_model(**sub_kwargs)
-                                    for sub_kwargs in getattr(parser, attr)]
-
-    def __str__(self):
-        return self.__repr__()
 
     def __repr__(self):
         return "<ImportedRecord('{}')>".format(self.oil_name)

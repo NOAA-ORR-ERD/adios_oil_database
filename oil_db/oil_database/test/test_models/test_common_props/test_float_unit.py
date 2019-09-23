@@ -36,15 +36,6 @@ class TestFloatUnit():
                                   marks=pytest.mark.raises(exception=ValueError)),
                               ])
     def test_init(self, value, unit, expected):
-        '''
-            Note: PyMODM model classes are a bit inconvenient to use because
-                  they implement a strict early binding that requires a MongoDB
-                  connection before you can even import them.
-                  So in addition to a pytest fixture that starts a connection,
-                  we cannot import our model classes at the top of the file,
-                  but rather inside the functions, all to ensure we haven't
-                  imported our classes too early.
-        '''
         float_unit = FloatUnit(value=value, unit=unit)
 
         assert float_unit.value == value

@@ -2,7 +2,7 @@
 # Model class definitions for our category object
 #
 from pydantic import BaseModel
-from typing import Type, List
+from typing import List
 
 
 class Category(BaseModel):
@@ -18,7 +18,7 @@ class Category(BaseModel):
         relationship.
     '''
     name: str
-    parent: 'Category'
+    parent: 'Category' = None
     children: List['Category'] = []
 
     def append(self, child):

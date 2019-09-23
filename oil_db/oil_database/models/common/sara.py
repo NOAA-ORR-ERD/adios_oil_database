@@ -1,8 +1,10 @@
 #
-# PyMODM Model class definitions for embedded content in our oil records
+# Model class definitions for embedded content in our oil records
 #
-from enum import Enum
+# Note: These are deprecated a bit.  An updated SARAFraction is sitting in
+#       models.oil
 
+from enum import Enum
 from pydantic import BaseModel, constr
 
 
@@ -14,7 +16,7 @@ class SaraTypeEnum(str, Enum):
 
 
 class SARAFraction(BaseModel):
-    sara_type = SaraTypeEnum
+    sara_type: SaraTypeEnum
 
     fraction: float
     ref_temp_k: float = 273.15
@@ -26,7 +28,7 @@ class SARAFraction(BaseModel):
 
 
 class SARADensity(BaseModel):
-    sara_type = SaraTypeEnum
+    sara_type: SaraTypeEnum
 
     kg_m_3: float
     ref_temp_k: float = 273.15
@@ -34,7 +36,7 @@ class SARADensity(BaseModel):
 
 
 class MolecularWeight(BaseModel):
-    sara_type = SaraTypeEnum
+    sara_type: SaraTypeEnum
 
     g_mol: float
     ref_temp_k: float = 273.15
