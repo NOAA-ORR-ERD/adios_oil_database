@@ -4,33 +4,24 @@
 #
 import numpy as np
 
-from pymodm import EmbeddedMongoModel
-from pymodm.fields import FloatField, CharField
+from enum import Enum
+from pydantic import BaseModel, constr
 
 
-class EvaporationEq(EmbeddedMongoModel):
-    a = FloatField()
-    b = FloatField()
-    c = FloatField()
-    equation = CharField(choices=('(A + BT) ln t',
-                                  '(A + BT) sqrt(t)',
-                                  'A + B ln (t + C)'))
-    weathering = FloatField(default=0.0)
+class EquationEnum(str, Enum):
+    a_bt_ln_t = '(A + BT) ln t'
+    a_bt_sqrt_t = '(A + BT) sqrt(t)'
+    a_b_ln_t_c = 'A + B ln (t + C)'
 
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
 
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
+class EvaporationEq(BaseModel):
+    a: float
+    b: float
+    c: float
+    equation: EquationEnum
+    weathering: float = 0.0
 
-        super().__init__(**kwargs)
-
+    def __post_init_post_parse__(self):
         self.alg = {'(A + BT) ln t': self.calculate_ests_1998,
                     '(A + BT) sqrt(t)': self.calculate_mass_loss1,
                     'A + B ln (t + C)': self.calculate_mass_loss2}
@@ -46,9 +37,6 @@ class EvaporationEq(EmbeddedMongoModel):
 
     def calculate_mass_loss2(self, t, T):
         return self.a + self.b * np.log(t + self.c)
-
-    def __str__(self):
-        return self.__repr__()
 
     def __repr__(self):
         return ('<EvaporationEq(a={0.a}, b={0.b}, c={0.c}, '

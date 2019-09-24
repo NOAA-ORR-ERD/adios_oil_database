@@ -2,89 +2,48 @@
 # PyMODM model class for Environment Canada's biomarker
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
-from pymodm.fields import CharField, FloatField
-
-from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
+from pydantic import BaseModel, constr
 
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
-class Biomarkers(EmbeddedMongoModel, EmbeddedMongoModelMixin):
+class Biomarkers(BaseModel):
     '''
         Biomarkers (ug/g) (ESTS 2002a)
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    c21_tricyclic_terpane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                  blank=True)
-    c22_tricyclic_terpane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                  blank=True)
-    c23_tricyclic_terpane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                  blank=True)
-    c24_tricyclic_terpane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                  blank=True)
+    c21_tricyclic_terpane: ConcentrationInWaterUnit = None
+    c22_tricyclic_terpane: ConcentrationInWaterUnit = None
+    c23_tricyclic_terpane: ConcentrationInWaterUnit = None
+    c24_tricyclic_terpane: ConcentrationInWaterUnit = None
 
-    _30_norhopane = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    hopane = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    _30_homohopane_22s = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                               blank=True)
-    _30_homohopane_22r = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                               blank=True)
+    _30_norhopane: ConcentrationInWaterUnit = None
+    hopane: ConcentrationInWaterUnit = None
+    _30_homohopane_22s: ConcentrationInWaterUnit = None
+    _30_homohopane_22r: ConcentrationInWaterUnit = None
 
-    _30_31_bishomohopane_22s = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                     blank=True)
-    _30_31_bishomohopane_22r = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                     blank=True)
+    _30_31_bishomohopane_22s: ConcentrationInWaterUnit = None
+    _30_31_bishomohopane_22r: ConcentrationInWaterUnit = None
 
-    _30_31_trishomohopane_22s = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                      blank=True)
-    _30_31_trishomohopane_22r = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                      blank=True)
+    _30_31_trishomohopane_22s: ConcentrationInWaterUnit = None
+    _30_31_trishomohopane_22r: ConcentrationInWaterUnit = None
 
-    tetrakishomohopane_22s = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                   blank=True)
-    tetrakishomohopane_22r = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                   blank=True)
+    tetrakishomohopane_22s: ConcentrationInWaterUnit = None
+    tetrakishomohopane_22r: ConcentrationInWaterUnit = None
 
-    pentakishomohopane_22s = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                   blank=True)
-    pentakishomohopane_22r = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                   blank=True)
+    pentakishomohopane_22s: ConcentrationInWaterUnit = None
+    pentakishomohopane_22r: ConcentrationInWaterUnit = None
 
-    _18a_22_29_30_trisnorneohopane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                           blank=True)
-    _17a_h_22_29_30_trisnorhopane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                          blank=True)
+    _18a_22_29_30_trisnorneohopane: ConcentrationInWaterUnit = None
+    _17a_h_22_29_30_trisnorhopane: ConcentrationInWaterUnit = None
 
-    _14b_h_17b_h_20_cholestane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                       blank=True)
-    _14b_h_17b_h_20_methylcholestane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                             blank=True)
-    _14b_h_17b_h_20_ethylcholestane = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                            blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        self._set_embedded_property_args(kwargs)
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    _14b_h_17b_h_20_cholestane: ConcentrationInWaterUnit = None
+    _14b_h_17b_h_20_methylcholestane: ConcentrationInWaterUnit = None
+    _14b_h_17b_h_20_ethylcholestane: ConcentrationInWaterUnit = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

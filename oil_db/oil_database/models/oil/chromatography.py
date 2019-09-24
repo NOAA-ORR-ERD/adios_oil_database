@@ -1,10 +1,7 @@
 #
 # PyMODM model class for gas chromatography oil properties.
 #
-from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
-from pymodm.fields import CharField, FloatField
-
-from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
+from pydantic import BaseModel, constr
 
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
@@ -12,7 +9,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    ConcentrationInWaterUnit)
 
 
-class GasChromatography(EmbeddedMongoModel, EmbeddedMongoModelMixin):
+class GasChromatography(BaseModel):
     '''
         Gas Chromatography (ESTS 2002a):
         - Total Petroleum Hydrocarbons (mg/g)
@@ -20,35 +17,16 @@ class GasChromatography(EmbeddedMongoModel, EmbeddedMongoModelMixin):
         - Total Aromatic Hydrocarbons (mg/g)
         - Hydrocarbon Content Ratios
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    tph = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    tsh = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    tah = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    tph: ConcentrationInWaterUnit = None
+    tsh: ConcentrationInWaterUnit = None
+    tah: ConcentrationInWaterUnit = None
 
-    tsh_tph = EmbeddedDocumentField(FloatUnit, blank=True)
-    tah_tph = EmbeddedDocumentField(FloatUnit, blank=True)
-    resolved_peaks_tph = EmbeddedDocumentField(FloatUnit, blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        self._set_embedded_property_args(kwargs)
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    tsh_tph: FloatUnit = None
+    tah_tph: FloatUnit = None
+    resolved_peaks_tph: FloatUnit = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

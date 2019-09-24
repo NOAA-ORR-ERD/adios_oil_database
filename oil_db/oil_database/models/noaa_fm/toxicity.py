@@ -1,14 +1,9 @@
 #
 # Model class definitions for embedded content in our oil records
 #
-
-from enum import Enum
 from pydantic import BaseModel, constr
 
-
-class ToxicityTypeEnum(str, Enum):
-    ec = 'EC'
-    lc = 'LC'
+from oil_database.models.common.enum_types import ToxicityTypeEnum
 
 
 class NoaaFmToxicity(BaseModel):

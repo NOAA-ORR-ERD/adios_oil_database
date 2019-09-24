@@ -2,46 +2,24 @@
 # PyMODM model class for Environment Canada's CCME Fractional
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
-from pymodm.fields import CharField, FloatField
-
-from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
+from pydantic import BaseModel, constr
 
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
-class CCMEFraction(EmbeddedMongoModel, EmbeddedMongoModelMixin):
+class CCMEFraction(BaseModel):
     '''
         CCME Fractions (mg/g oil) (ESTS 2002a)
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    f1 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    f2 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    f3 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    f4 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        self._set_embedded_property_args(kwargs)
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    f1: ConcentrationInWaterUnit = None
+    f2: ConcentrationInWaterUnit = None
+    f3: ConcentrationInWaterUnit = None
+    f4: ConcentrationInWaterUnit = None
 
     def __repr__(self):
         return ('<CCMEFraction('
@@ -53,7 +31,7 @@ class CCMEFraction(EmbeddedMongoModel, EmbeddedMongoModelMixin):
                 .format(self))
 
 
-class CarbonNumberDistribution(EmbeddedMongoModel):
+class CarbonNumberDistribution(BaseModel):
     '''
         We have a couple different groups that have similar properties,
         so we will define them here an subclass the groups.
@@ -61,34 +39,17 @@ class CarbonNumberDistribution(EmbeddedMongoModel):
         Note: I am not sure what the units are here, so we don't add any
               suffix to the properties
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    n_c8_to_n_c10 = FloatField(blank=True)
-    n_c10_to_n_c12 = FloatField(blank=True)
-    n_c12_to_n_c16 = FloatField(blank=True)
-    n_c16_to_n_c20 = FloatField(blank=True)
-    n_c20_to_n_c24 = FloatField(blank=True)
-    n_c24_to_n_c28 = FloatField(blank=True)
-    n_c28_to_n_c34 = FloatField(blank=True)
-    n_c34 = FloatField(blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    n_c8_to_n_c10: float = None
+    n_c10_to_n_c12: float = None
+    n_c12_to_n_c16: float = None
+    n_c16_to_n_c20: float = None
+    n_c20_to_n_c24: float = None
+    n_c24_to_n_c28: float = None
+    n_c28_to_n_c34: float = None
+    n_c34: float = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
@@ -127,7 +88,7 @@ class CCMETotalPetroleumCxx(CarbonNumberDistribution):
     '''
         GC-TPH (F1 + F2) (ESTS 2002a)
     '''
-    total_tph_gc_detected_tph_undetected_tph = FloatField(blank=True)
+    total_tph_gc_detected_tph_undetected_tph: float = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

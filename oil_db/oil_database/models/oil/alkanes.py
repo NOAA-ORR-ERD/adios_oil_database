@@ -2,81 +2,59 @@
 # PyMODM model class for Environment Canada's n-Alkane
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
-from pymodm.fields import CharField, FloatField
-
-from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
+from pydantic import BaseModel, constr
 
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
-class NAlkanes(EmbeddedMongoModel, EmbeddedMongoModelMixin):
+class NAlkanes(BaseModel):
     '''
         n-Alkanes (ug/g oil) (ESTS 2002a)
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    pristane = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    phytane = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c8 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c9 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c10 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c11 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c12 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c13 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c14 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c15 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c16 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c17 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c18 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c19 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c20 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c21 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c22 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c23 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c24 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c25 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c26 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c27 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c28 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c29 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c30 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c31 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c32 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c33 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c34 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c35 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c36 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c37 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c38 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c39 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c40 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c41 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c42 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c43 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c44 = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        self._set_embedded_property_args(kwargs)
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    pristane: ConcentrationInWaterUnit = None
+    phytane: ConcentrationInWaterUnit = None
+    c8: ConcentrationInWaterUnit = None
+    c9: ConcentrationInWaterUnit = None
+    c10: ConcentrationInWaterUnit = None
+    c11: ConcentrationInWaterUnit = None
+    c12: ConcentrationInWaterUnit = None
+    c13: ConcentrationInWaterUnit = None
+    c14: ConcentrationInWaterUnit = None
+    c15: ConcentrationInWaterUnit = None
+    c16: ConcentrationInWaterUnit = None
+    c17: ConcentrationInWaterUnit = None
+    c18: ConcentrationInWaterUnit = None
+    c19: ConcentrationInWaterUnit = None
+    c20: ConcentrationInWaterUnit = None
+    c21: ConcentrationInWaterUnit = None
+    c22: ConcentrationInWaterUnit = None
+    c23: ConcentrationInWaterUnit = None
+    c24: ConcentrationInWaterUnit = None
+    c25: ConcentrationInWaterUnit = None
+    c26: ConcentrationInWaterUnit = None
+    c27: ConcentrationInWaterUnit = None
+    c28: ConcentrationInWaterUnit = None
+    c29: ConcentrationInWaterUnit = None
+    c30: ConcentrationInWaterUnit = None
+    c31: ConcentrationInWaterUnit = None
+    c32: ConcentrationInWaterUnit = None
+    c33: ConcentrationInWaterUnit = None
+    c34: ConcentrationInWaterUnit = None
+    c35: ConcentrationInWaterUnit = None
+    c36: ConcentrationInWaterUnit = None
+    c37: ConcentrationInWaterUnit = None
+    c38: ConcentrationInWaterUnit = None
+    c39: ConcentrationInWaterUnit = None
+    c40: ConcentrationInWaterUnit = None
+    c41: ConcentrationInWaterUnit = None
+    c42: ConcentrationInWaterUnit = None
+    c43: ConcentrationInWaterUnit = None
+    c44: ConcentrationInWaterUnit = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

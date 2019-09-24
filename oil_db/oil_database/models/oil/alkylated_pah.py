@@ -2,17 +2,14 @@
 # PyMODM model class for Environment Canada's alkylated total aromatic
 # hydrocarbon oil properties.
 #
-from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
-from pymodm.fields import CharField, FloatField
-
-from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
+from pydantic import BaseModel, constr
 
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
-class AlkylatedTotalPAH(EmbeddedMongoModel, EmbeddedMongoModelMixin):
+class AlkylatedTotalPAH(BaseModel):
     '''
         Alkylated Total Aromatic Hydrocarbons (PAHs) (ug/g oil)
         (ESTS 2002a)
@@ -23,88 +20,60 @@ class AlkylatedTotalPAH(EmbeddedMongoModel, EmbeddedMongoModelMixin):
         - c[0-4]_b_ug_g = Benzonaphthothiophenes
         - c[0-4]_c_ug_g = Chrysenes
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    c0_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c1_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c2_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c3_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c4_n = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c0_n: ConcentrationInWaterUnit = None
+    c1_n: ConcentrationInWaterUnit = None
+    c2_n: ConcentrationInWaterUnit = None
+    c3_n: ConcentrationInWaterUnit = None
+    c4_n: ConcentrationInWaterUnit = None
 
-    c0_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c1_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c2_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c3_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c4_p = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c0_p: ConcentrationInWaterUnit = None
+    c1_p: ConcentrationInWaterUnit = None
+    c2_p: ConcentrationInWaterUnit = None
+    c3_p: ConcentrationInWaterUnit = None
+    c4_p: ConcentrationInWaterUnit = None
 
-    c0_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c1_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c2_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c3_d = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c0_d: ConcentrationInWaterUnit = None
+    c1_d: ConcentrationInWaterUnit = None
+    c2_d: ConcentrationInWaterUnit = None
+    c3_d: ConcentrationInWaterUnit = None
 
-    c0_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c1_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c2_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c3_f = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c0_f: ConcentrationInWaterUnit = None
+    c1_f: ConcentrationInWaterUnit = None
+    c2_f: ConcentrationInWaterUnit = None
+    c3_f: ConcentrationInWaterUnit = None
 
-    c0_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c1_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c2_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c3_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c4_b = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c0_b: ConcentrationInWaterUnit = None
+    c1_b: ConcentrationInWaterUnit = None
+    c2_b: ConcentrationInWaterUnit = None
+    c3_b: ConcentrationInWaterUnit = None
+    c4_b: ConcentrationInWaterUnit = None
 
-    c0_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c1_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c2_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    c3_c = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    c0_c: ConcentrationInWaterUnit = None
+    c1_c: ConcentrationInWaterUnit = None
+    c2_c: ConcentrationInWaterUnit = None
+    c3_c: ConcentrationInWaterUnit = None
 
     # Other Priority PAHs
-    biphenyl = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    acenaphthylene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                           blank=True)
-    acenaphthene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    anthracene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    fluoranthene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
+    biphenyl: ConcentrationInWaterUnit = None
+    acenaphthylene: ConcentrationInWaterUnit = None
+    acenaphthene: ConcentrationInWaterUnit = None
+    anthracene: ConcentrationInWaterUnit = None
+    fluoranthene: ConcentrationInWaterUnit = None
+    pyrene: ConcentrationInWaterUnit = None
 
-    benz_a_anthracene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                              blank=True)
-    benzo_b_fluoranthene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                 blank=True)
-    benzo_k_fluoranthene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                 blank=True)
-    benzo_e_pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                           blank=True)
-    benzo_a_pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                           blank=True)
+    benz_a_anthracene: ConcentrationInWaterUnit = None
+    benzo_b_fluoranthene: ConcentrationInWaterUnit = None
+    benzo_k_fluoranthene: ConcentrationInWaterUnit = None
+    benzo_e_pyrene: ConcentrationInWaterUnit = None
+    benzo_a_pyrene: ConcentrationInWaterUnit = None
 
-    perylene = EmbeddedDocumentField(ConcentrationInWaterUnit, blank=True)
-    indeno_1_2_3_cd_pyrene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                   blank=True)
-    dibenzo_ah_anthracene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                                  blank=True)
-    benzo_ghi_perylene = EmbeddedDocumentField(ConcentrationInWaterUnit,
-                                               blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        self._set_embedded_property_args(kwargs)
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    perylene: ConcentrationInWaterUnit = None
+    indeno_1_2_3_cd_pyrene: ConcentrationInWaterUnit = None
+    dibenzo_ah_anthracene: ConcentrationInWaterUnit = None
+    benzo_ghi_perylene: ConcentrationInWaterUnit = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

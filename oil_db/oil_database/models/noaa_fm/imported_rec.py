@@ -8,17 +8,13 @@ from pydantic import BaseModel, constr
 from typing import List
 
 from oil_database.models.common import Synonym
+from oil_database.models.common.enum_types import ProductTypeEnum
 
 from .density import NoaaFmDensity
 from .kvis import NoaaFmKVis
 from .dvis import NoaaFmDVis
 from .cut import NoaaFmCut
 from .toxicity import NoaaFmToxicity
-
-
-class ProductTypeEnum(str, Enum):
-    crude = 'crude'
-    refined = 'refined'
 
 
 class CutUnitEnum(str, Enum):
@@ -125,7 +121,6 @@ class ImportedRecord(BaseModel):
         kwargs = {}
 
         cls._set_properties(kwargs, parser)
-        cls._set_embedded_list_properties(kwargs, parser)
 
         rec = cls(**kwargs)
 
@@ -134,8 +129,7 @@ class ImportedRecord(BaseModel):
     @classmethod
     def _set_properties(cls, kwargs, parser):
         '''
-            Here, we handle the parser properties that contain a single
-            scalar value.
+            Here, we handle the parser properties.
         '''
         parser_api = parser.get_interface_properties()
 

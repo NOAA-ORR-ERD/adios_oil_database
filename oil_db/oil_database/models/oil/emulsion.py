@@ -2,10 +2,9 @@
 # PyMODM model class for Environment Canada's emulsion
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel, EmbeddedDocumentField
-from pymodm.fields import FloatField, CharField
+from pydantic import BaseModel, constr
 
-from oil_database.models.common.model_mixin import EmbeddedMongoModelMixin
+from oil_database.models.common.enum_types import VisualStabilityEnum
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    TimeUnit,
                                                    TemperatureUnit,
@@ -13,59 +12,34 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    DynamicViscosityUnit)
 
 
-class Emulsion(EmbeddedMongoModel, EmbeddedMongoModelMixin):
-    water_content = EmbeddedDocumentField(FloatUnit)
-    wc_standard_deviation = FloatField(blank=True)
-    wc_replicates = FloatField(blank=True)
+class Emulsion(BaseModel):
+    water_content: FloatUnit
+    age: TimeUnit
+    ref_temp: TemperatureUnit
 
-    age = EmbeddedDocumentField(TimeUnit)
-    ref_temp = EmbeddedDocumentField(TemperatureUnit)
-    weathering = FloatField(default=0.0)
+    weathering: float = 0.0
+    wc_standard_deviation: float = None
+    wc_replicates: float = None
 
     # may as well keep the extra stuff
-    visual_stability = CharField(choices=('Entrained',
-                                          'Did not form',
-                                          'Unstable',
-                                          'Stable',
-                                          'Meso-stable'),
-                                 blank=True)
+    visual_stability: VisualStabilityEnum = None
 
-    complex_modulus = EmbeddedDocumentField(AdhesionUnit, blank=True)
-    cm_standard_deviation = FloatField(blank=True)
+    complex_modulus: AdhesionUnit = None
+    cm_standard_deviation: float = None
 
-    storage_modulus = EmbeddedDocumentField(AdhesionUnit, blank=True)
-    sm_standard_deviation = FloatField(blank=True)
+    storage_modulus: AdhesionUnit = None
+    sm_standard_deviation: float = None
 
-    loss_modulus = EmbeddedDocumentField(AdhesionUnit, blank=True)
-    lm_standard_deviation = FloatField(blank=True)
+    loss_modulus: AdhesionUnit = None
+    lm_standard_deviation: float = None
 
-    tan_delta_v_e = FloatField(blank=True)
-    td_standard_deviation = FloatField(blank=True)
+    tan_delta_v_e: float = None
+    td_standard_deviation: float = None
 
-    complex_viscosity = EmbeddedDocumentField(DynamicViscosityUnit,
-                                              blank=True)
-    cv_standard_deviation = FloatField(blank=True)
+    complex_viscosity: DynamicViscosityUnit = None
+    cv_standard_deviation: float = None
 
-    mod_replicates = FloatField(blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        self._set_embedded_property_args(kwargs)
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    mod_replicates: float = None
 
     def __repr__(self):
         return ('<{}(water_content={}, temp={}, age={}, w={})>'

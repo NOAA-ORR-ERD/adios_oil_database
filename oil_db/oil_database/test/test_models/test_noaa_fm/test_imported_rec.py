@@ -319,11 +319,3 @@ class TestNoaaImportedRecord():
             assert obj.toxicities[i].after_24h is None
             assert obj.toxicities[i].after_48h is None
             assert obj.toxicities[i].after_96h is None
-
-
-
-
-
-
-
-
