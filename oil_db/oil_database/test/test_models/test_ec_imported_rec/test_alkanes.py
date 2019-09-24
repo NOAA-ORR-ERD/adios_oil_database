@@ -69,8 +69,7 @@ class TestECNAlkanes():
     def test_init_optional(self, weathering, method):
         # we will not test every attribute, just the ones that have
         # constraints
-        obj = ECNAlkanes(g_cm_2=10.0,
-                         weathering=weathering,
+        obj = ECNAlkanes(weathering=weathering,
                          method=method)
 
         assert obj.weathering == float(weathering)
