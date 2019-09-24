@@ -1,23 +1,27 @@
-from .imported_rec import ECImportedRecord
-
+from .adhesion import ECAdhesion
+from .alkanes import ECNAlkanes
 from .interfacial_tension import ECInterfacialTension
 from .flash_point import ECFlashPoint
 from .pour_point import ECPourPoint
-from .adhesion import ECAdhesion
 from .emulsion import ECEmulsion
 from .sulfur import ECSulfur
 from .water import ECWater
 from .benzene import ECBenzene
 from .wax import ECWax
 
+from .imported_rec import ECImportedRecord
 
-__all__ = [ECImportedRecord,
+
+__all__ = [
+           ECAdhesion,
+           ECNAlkanes,
            ECInterfacialTension,
            ECFlashPoint,
            ECPourPoint,
-           ECAdhesion,
            ECEmulsion,
            ECSulfur,
            ECWater,
            ECBenzene,
-           ECWax]
+           ECWax,
+           ECImportedRecord,
+           ]

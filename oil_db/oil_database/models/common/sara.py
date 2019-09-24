@@ -4,15 +4,9 @@
 # Note: These are deprecated a bit.  An updated SARAFraction is sitting in
 #       models.oil
 
-from enum import Enum
 from pydantic import BaseModel, constr
 
-
-class SaraTypeEnum(str, Enum):
-    saturates = 'Saturates'
-    aromatics = 'Aromatics'
-    resins = 'Resins'
-    asphaltenes = 'Asphaltenes'
+from .enum_types import SaraTypeEnum
 
 
 class SARAFraction(BaseModel):

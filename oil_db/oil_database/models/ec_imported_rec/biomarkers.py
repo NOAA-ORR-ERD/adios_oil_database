@@ -1,63 +1,45 @@
 #
-# PyMODM model class for Environment Canada's biomarker
+# Model class for Environment Canada's biomarker
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
-from pymodm.fields import CharField, FloatField
+from pydantic import BaseModel, constr
 
 
-class ECBiomarkers(EmbeddedMongoModel):
+class ECBiomarkers(BaseModel):
     '''
         Biomarkers (ug/g) (ESTS 2002a)
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    c21_tricyclic_terpane_ug_g = FloatField(blank=True)
-    c22_tricyclic_terpane_ug_g = FloatField(blank=True)
-    c23_tricyclic_terpane_ug_g = FloatField(blank=True)
-    c24_tricyclic_terpane_ug_g = FloatField(blank=True)
+    c21_tricyclic_terpane_ug_g: float = None
+    c22_tricyclic_terpane_ug_g: float = None
+    c23_tricyclic_terpane_ug_g: float = None
+    c24_tricyclic_terpane_ug_g: float = None
 
-    _30_norhopane_ug_g = FloatField(blank=True)
-    hopane_ug_g = FloatField(blank=True)
-    _30_homohopane_22s_ug_g = FloatField(blank=True)
-    _30_homohopane_22r_ug_g = FloatField(blank=True)
+    _30_norhopane_ug_g: float = None
+    hopane_ug_g: float = None
+    _30_homohopane_22s_ug_g: float = None
+    _30_homohopane_22r_ug_g: float = None
 
-    _30_31_bishomohopane_22s_ug_g = FloatField(blank=True)
-    _30_31_bishomohopane_22r_ug_g = FloatField(blank=True)
+    _30_31_bishomohopane_22s_ug_g: float = None
+    _30_31_bishomohopane_22r_ug_g: float = None
 
-    _30_31_trishomohopane_22s_ug_g = FloatField(blank=True)
-    _30_31_trishomohopane_22r_ug_g = FloatField(blank=True)
+    _30_31_trishomohopane_22s_ug_g: float = None
+    _30_31_trishomohopane_22r_ug_g: float = None
 
-    tetrakishomohopane_22s_ug_g = FloatField(blank=True)
-    tetrakishomohopane_22r_ug_g = FloatField(blank=True)
+    tetrakishomohopane_22s_ug_g: float = None
+    tetrakishomohopane_22r_ug_g: float = None
 
-    pentakishomohopane_22s_ug_g = FloatField(blank=True)
-    pentakishomohopane_22r_ug_g = FloatField(blank=True)
+    pentakishomohopane_22s_ug_g: float = None
+    pentakishomohopane_22r_ug_g: float = None
 
-    _18a_22_29_30_trisnorneohopane_ug_g = FloatField(blank=True)
-    _17a_h_22_29_30_trisnorhopane_ug_g = FloatField(blank=True)
+    _18a_22_29_30_trisnorneohopane_ug_g: float = None
+    _17a_h_22_29_30_trisnorhopane_ug_g: float = None
 
-    _14b_h_17b_h_20_cholestane_ug_g = FloatField(blank=True)
-    _14b_h_17b_h_20_methylcholestane_ug_g = FloatField(blank=True)
-    _14b_h_17b_h_20_ethylcholestane_ug_g = FloatField(blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    _14b_h_17b_h_20_cholestane_ug_g: float = None
+    _14b_h_17b_h_20_methylcholestane_ug_g: float = None
+    _14b_h_17b_h_20_ethylcholestane_ug_g: float = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

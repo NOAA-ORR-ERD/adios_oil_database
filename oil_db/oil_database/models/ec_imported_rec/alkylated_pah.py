@@ -1,12 +1,11 @@
 #
-# PyMODM model class for Environment Canada's alkylated total aromatic
+# Model class for Environment Canada's alkylated total aromatic
 # hydrocarbon oil properties.
 #
-from pymodm import EmbeddedMongoModel
-from pymodm.fields import CharField, FloatField
+from pydantic import BaseModel, constr
 
 
-class ECAlkylatedTotalPAH(EmbeddedMongoModel):
+class ECAlkylatedTotalPAH(BaseModel):
     '''
         Alkylated Total Aromatic Hydrocarbons (PAHs) (ug/g oil)
         (ESTS 2002a)
@@ -17,77 +16,60 @@ class ECAlkylatedTotalPAH(EmbeddedMongoModel):
         - c[0-4]_b_ug_g = Benzonaphthothiophenes
         - c[0-4]_c_ug_g = Chrysenes
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    c0_n_ug_g = FloatField(blank=True)
-    c1_n_ug_g = FloatField(blank=True)
-    c2_n_ug_g = FloatField(blank=True)
-    c3_n_ug_g = FloatField(blank=True)
-    c4_n_ug_g = FloatField(blank=True)
+    c0_n_ug_g: float = None
+    c1_n_ug_g: float = None
+    c2_n_ug_g: float = None
+    c3_n_ug_g: float = None
+    c4_n_ug_g: float = None
 
-    c0_p_ug_g = FloatField(blank=True)
-    c1_p_ug_g = FloatField(blank=True)
-    c2_p_ug_g = FloatField(blank=True)
-    c3_p_ug_g = FloatField(blank=True)
-    c4_p_ug_g = FloatField(blank=True)
+    c0_p_ug_g: float = None
+    c1_p_ug_g: float = None
+    c2_p_ug_g: float = None
+    c3_p_ug_g: float = None
+    c4_p_ug_g: float = None
 
-    c0_d_ug_g = FloatField(blank=True)
-    c1_d_ug_g = FloatField(blank=True)
-    c2_d_ug_g = FloatField(blank=True)
-    c3_d_ug_g = FloatField(blank=True)
+    c0_d_ug_g: float = None
+    c1_d_ug_g: float = None
+    c2_d_ug_g: float = None
+    c3_d_ug_g: float = None
 
-    c0_f_ug_g = FloatField(blank=True)
-    c1_f_ug_g = FloatField(blank=True)
-    c2_f_ug_g = FloatField(blank=True)
-    c3_f_ug_g = FloatField(blank=True)
+    c0_f_ug_g: float = None
+    c1_f_ug_g: float = None
+    c2_f_ug_g: float = None
+    c3_f_ug_g: float = None
 
-    c0_b_ug_g = FloatField(blank=True)
-    c1_b_ug_g = FloatField(blank=True)
-    c2_b_ug_g = FloatField(blank=True)
-    c3_b_ug_g = FloatField(blank=True)
-    c4_b_ug_g = FloatField(blank=True)
+    c0_b_ug_g: float = None
+    c1_b_ug_g: float = None
+    c2_b_ug_g: float = None
+    c3_b_ug_g: float = None
+    c4_b_ug_g: float = None
 
-    c0_c_ug_g = FloatField(blank=True)
-    c1_c_ug_g = FloatField(blank=True)
-    c2_c_ug_g = FloatField(blank=True)
-    c3_c_ug_g = FloatField(blank=True)
+    c0_c_ug_g: float = None
+    c1_c_ug_g: float = None
+    c2_c_ug_g: float = None
+    c3_c_ug_g: float = None
 
     # Other Priority PAHs
-    biphenyl_ug_g = FloatField(blank=True)
-    acenaphthylene_ug_g = FloatField(blank=True)
-    acenaphthene_ug_g = FloatField(blank=True)
-    anthracene_ug_g = FloatField(blank=True)
-    fluoranthene_ug_g = FloatField(blank=True)
-    pyrene_ug_g = FloatField(blank=True)
+    biphenyl_ug_g: float = None
+    acenaphthylene_ug_g: float = None
+    acenaphthene_ug_g: float = None
+    anthracene_ug_g: float = None
+    fluoranthene_ug_g: float = None
+    pyrene_ug_g: float = None
 
-    benz_a_anthracene_ug_g = FloatField(blank=True)
-    benzo_b_fluoranthene_ug_g = FloatField(blank=True)
-    benzo_k_fluoranthene_ug_g = FloatField(blank=True)
-    benzo_e_pyrene_ug_g = FloatField(blank=True)
-    benzo_a_pyrene_ug_g = FloatField(blank=True)
+    benz_a_anthracene_ug_g: float = None
+    benzo_b_fluoranthene_ug_g: float = None
+    benzo_k_fluoranthene_ug_g: float = None
+    benzo_e_pyrene_ug_g: float = None
+    benzo_a_pyrene_ug_g: float = None
 
-    perylene_ug_g = FloatField(blank=True)
-    indeno_1_2_3_cd_pyrene_ug_g = FloatField(blank=True)
-    dibenzo_ah_anthracene_ug_g = FloatField(blank=True)
-    benzo_ghi_perylene_ug_g = FloatField(blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    perylene_ug_g: float = None
+    indeno_1_2_3_cd_pyrene_ug_g: float = None
+    dibenzo_ah_anthracene_ug_g: float = None
+    benzo_ghi_perylene_ug_g: float = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('

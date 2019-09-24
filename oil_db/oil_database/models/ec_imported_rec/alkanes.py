@@ -1,74 +1,56 @@
 #
-# PyMODM model class for Environment Canada's n-Alkane
+# Model class for Environment Canada's n-Alkane
 # oil properties.
 #
-from pymodm import EmbeddedMongoModel
-from pymodm.fields import CharField, FloatField
+from pydantic import BaseModel, constr
 
 
-class ECNAlkanes(EmbeddedMongoModel):
+class ECNAlkanes(BaseModel):
     '''
         n-Alkanes (ug/g oil) (ESTS 2002a)
     '''
-    weathering = FloatField(default=0.0)
-    method = CharField(max_length=16, blank=True)
+    weathering: float = 0.0
+    method: constr(max_length=16) = None
 
-    pristane_ug_g = FloatField(blank=True)
-    phytane_ug_g = FloatField(blank=True)
-    c8_ug_g = FloatField(blank=True)
-    c9_ug_g = FloatField(blank=True)
-    c10_ug_g = FloatField(blank=True)
-    c11_ug_g = FloatField(blank=True)
-    c12_ug_g = FloatField(blank=True)
-    c13_ug_g = FloatField(blank=True)
-    c14_ug_g = FloatField(blank=True)
-    c15_ug_g = FloatField(blank=True)
-    c16_ug_g = FloatField(blank=True)
-    c17_ug_g = FloatField(blank=True)
-    c18_ug_g = FloatField(blank=True)
-    c19_ug_g = FloatField(blank=True)
-    c20_ug_g = FloatField(blank=True)
-    c21_ug_g = FloatField(blank=True)
-    c22_ug_g = FloatField(blank=True)
-    c23_ug_g = FloatField(blank=True)
-    c24_ug_g = FloatField(blank=True)
-    c25_ug_g = FloatField(blank=True)
-    c26_ug_g = FloatField(blank=True)
-    c27_ug_g = FloatField(blank=True)
-    c28_ug_g = FloatField(blank=True)
-    c29_ug_g = FloatField(blank=True)
-    c30_ug_g = FloatField(blank=True)
-    c31_ug_g = FloatField(blank=True)
-    c32_ug_g = FloatField(blank=True)
-    c33_ug_g = FloatField(blank=True)
-    c34_ug_g = FloatField(blank=True)
-    c35_ug_g = FloatField(blank=True)
-    c36_ug_g = FloatField(blank=True)
-    c37_ug_g = FloatField(blank=True)
-    c38_ug_g = FloatField(blank=True)
-    c39_ug_g = FloatField(blank=True)
-    c40_ug_g = FloatField(blank=True)
-    c41_ug_g = FloatField(blank=True)
-    c42_ug_g = FloatField(blank=True)
-    c43_ug_g = FloatField(blank=True)
-    c44_ug_g = FloatField(blank=True)
-
-    def __init__(self, **kwargs):
-        # we will fail on any arguments that are not defined members
-        # of this class
-        for a in list(kwargs.keys()):
-            if (a not in self.__class__.__dict__):
-                del kwargs[a]
-
-        if 'weathering' not in kwargs or kwargs['weathering'] is None:
-            # Seriously?  What good is a default if it can't negotiate
-            # None values?
-            kwargs['weathering'] = 0.0
-
-        super().__init__(**kwargs)
-
-    def __str__(self):
-        return self.__repr__()
+    pristane_ug_g: float = None
+    phytane_ug_g: float = None
+    c8_ug_g: float = None
+    c9_ug_g: float = None
+    c10_ug_g: float = None
+    c11_ug_g: float = None
+    c12_ug_g: float = None
+    c13_ug_g: float = None
+    c14_ug_g: float = None
+    c15_ug_g: float = None
+    c16_ug_g: float = None
+    c17_ug_g: float = None
+    c18_ug_g: float = None
+    c19_ug_g: float = None
+    c20_ug_g: float = None
+    c21_ug_g: float = None
+    c22_ug_g: float = None
+    c23_ug_g: float = None
+    c24_ug_g: float = None
+    c25_ug_g: float = None
+    c26_ug_g: float = None
+    c27_ug_g: float = None
+    c28_ug_g: float = None
+    c29_ug_g: float = None
+    c30_ug_g: float = None
+    c31_ug_g: float = None
+    c32_ug_g: float = None
+    c33_ug_g: float = None
+    c34_ug_g: float = None
+    c35_ug_g: float = None
+    c36_ug_g: float = None
+    c37_ug_g: float = None
+    c38_ug_g: float = None
+    c39_ug_g: float = None
+    c40_ug_g: float = None
+    c41_ug_g: float = None
+    c42_ug_g: float = None
+    c43_ug_g: float = None
+    c44_ug_g: float = None
 
     def __repr__(self):
         return ('<ECNAlkanes('
