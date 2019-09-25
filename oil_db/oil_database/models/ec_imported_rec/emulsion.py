@@ -9,12 +9,12 @@ from oil_database.models.common.enum_types import VisualStabilityEnum
 
 class ECEmulsion(BaseModel):
     water_content_percent: float
+    ref_temp_c: float
+    age_days: float
+
+    weathering: float = 0.0
     wc_standard_deviation: float = None
     wc_replicates: float = None
-
-    age_days: float
-    ref_temp_c: float
-    weathering: float = 0.0
 
     # may as well keep the extra stuff
     visual_stability: VisualStabilityEnum = None

@@ -10,9 +10,9 @@ class ECWax(BaseModel):
     weathering: float = 0.0
 
     # may as well keep the extra stuff
+    method: constr(max_length=16) = None
     replicates: float = None
     standard_deviation: float = None
-    method: constr(max_length=16) = None
 
     def __repr__(self):
         return ('<{}({}%, w={})>'

@@ -11,9 +11,9 @@ class ECSARAFraction(BaseModel):
     percent: float
     weathering: float = 0.0
 
-    standard_deviation: float = None
-    replicates: float = None
     method: constr(max_length=16) = None
+    replicates: float = None
+    standard_deviation: float = None
 
     def __repr__(self):
         return ('<{}({}={}% w={})>'
