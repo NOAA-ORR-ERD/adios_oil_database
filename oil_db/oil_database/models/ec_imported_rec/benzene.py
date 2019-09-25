@@ -21,13 +21,13 @@ class ECBenzene(BaseModel):
     amylbenzene_ug_g: float = None
     n_hexylbenzene_ug_g: float = None
 
-    _1_2_3_trimethylbenzene_ug_g: float = None
-    _1_2_4_trimethylbenzene_ug_g: float = None
-    _1_2_dimethyl_4_ethylbenzene_ug_g: float = None
-    _1_3_5_trimethylbenzene_ug_g: float = None
-    _1_methyl_2_isopropylbenzene_ug_g: float = None
-    _2_ethyltoluene_ug_g: float = None
-    _3_4_ethyltoluene_ug_g: float = None
+    x1_2_3_trimethylbenzene_ug_g: float = None
+    x1_2_4_trimethylbenzene_ug_g: float = None
+    x1_2_dimethyl_4_ethylbenzene_ug_g: float = None
+    x1_3_5_trimethylbenzene_ug_g: float = None
+    x1_methyl_2_isopropylbenzene_ug_g: float = None
+    x2_ethyltoluene_ug_g: float = None
+    x3_4_ethyltoluene_ug_g: float = None
 
     def __repr__(self):
         return ('<{}(benzene={} ug/g, w={})>'

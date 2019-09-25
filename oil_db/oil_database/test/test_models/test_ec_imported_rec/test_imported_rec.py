@@ -367,7 +367,9 @@ class TestECImportedRecord():
 
     @pytest.mark.parametrize('benzene',
                              [
-                              [{'benzene_ug_g': 10.0, 'toluene_ug_g': 5.0}],
+                              [{'benzene_ug_g': 10.0,
+                                'toluene_ug_g': 15.0,
+                                'x2_ethyltoluene_ug_g': 20.0}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
@@ -378,6 +380,7 @@ class TestECImportedRecord():
 
         assert obj.benzene[0].benzene_ug_g == benzene[0]['benzene_ug_g']
         assert obj.benzene[0].toluene_ug_g == benzene[0]['toluene_ug_g']
+        assert obj.benzene[0].x2_ethyltoluene_ug_g == benzene[0]['x2_ethyltoluene_ug_g']
 
     @pytest.mark.parametrize('headspace',
                              [

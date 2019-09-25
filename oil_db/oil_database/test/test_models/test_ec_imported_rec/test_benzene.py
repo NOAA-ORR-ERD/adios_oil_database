@@ -27,28 +27,33 @@ class TestECBenzene():
         assert obj.amylbenzene_ug_g is None
         assert obj.n_hexylbenzene_ug_g is None
 
-        assert obj._1_2_3_trimethylbenzene_ug_g is None
-        assert obj._1_2_4_trimethylbenzene_ug_g is None
-        assert obj._1_2_dimethyl_4_ethylbenzene_ug_g is None
-        assert obj._1_3_5_trimethylbenzene_ug_g is None
-        assert obj._1_methyl_2_isopropylbenzene_ug_g is None
-        assert obj._2_ethyltoluene_ug_g is None
-        assert obj._3_4_ethyltoluene_ug_g is None
+        assert obj.x1_2_3_trimethylbenzene_ug_g is None
+        assert obj.x1_2_4_trimethylbenzene_ug_g is None
+        assert obj.x1_2_dimethyl_4_ethylbenzene_ug_g is None
+        assert obj.x1_3_5_trimethylbenzene_ug_g is None
+        assert obj.x1_methyl_2_isopropylbenzene_ug_g is None
+        assert obj.x2_ethyltoluene_ug_g is None
+        assert obj.x3_4_ethyltoluene_ug_g is None
 
-    @pytest.mark.parametrize('weathering, method',
+    @pytest.mark.parametrize('weathering, method, x2_ethyltoluene_ug_g',
                              [
-                              (0.1, 'Method'),
-                              ('0.1', 0xdeadbeef),
+                              (0.1, 'Method', 10.0),
+                              ('0.1', 0xdeadbeef, '10.0'),
                               pytest.param(
-                                  'nope', 'Method',
+                                  'nope', 'Method', 10.0,
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               pytest.param(
-                                  0.1, 'MethodNameTooLong',
+                                  0.1, 'MethodNameTooLong', 10.0,
+                                  marks=pytest.mark.raises(exception=ValidationError)),
+                              pytest.param(
+                                  0.1, 'Method', 'nope',
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
-    def test_init_optional(self, weathering, method):
+    def test_init_optional(self, weathering, method, x2_ethyltoluene_ug_g):
         obj = ECBenzene(weathering=weathering,
-                        method=method)
+                        method=method,
+                        x2_ethyltoluene_ug_g=x2_ethyltoluene_ug_g)
 
         assert obj.weathering == float(weathering)
         assert obj.method == str(method)
+        assert obj.x2_ethyltoluene_ug_g == float(x2_ethyltoluene_ug_g)
