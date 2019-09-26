@@ -1,5 +1,5 @@
 '''
-    Test our Environment Canada CCME Fraction model class
+    Test our Environment Canada Cut model class
 '''
 import pytest
 

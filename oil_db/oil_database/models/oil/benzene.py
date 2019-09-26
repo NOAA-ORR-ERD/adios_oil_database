@@ -24,13 +24,13 @@ class Benzene(BaseModel):
     amylbenzene: ConcentrationInWaterUnit = None
     n_hexylbenzene: ConcentrationInWaterUnit = None
 
-    _1_2_3_trimethylbenzene: ConcentrationInWaterUnit = None
-    _1_2_4_trimethylbenzene: ConcentrationInWaterUnit = None
-    _1_2_dimethyl_4_ethylbenzene: ConcentrationInWaterUnit = None
-    _1_3_5_trimethylbenzene: ConcentrationInWaterUnit = None
-    _1_methyl_2_isopropylbenzene: ConcentrationInWaterUnit = None
-    _2_ethyltoluene: ConcentrationInWaterUnit = None
-    _3_4_ethyltoluene: ConcentrationInWaterUnit = None
+    x1_2_3_trimethylbenzene: ConcentrationInWaterUnit = None
+    x1_2_4_trimethylbenzene: ConcentrationInWaterUnit = None
+    x1_2_dimethyl_4_ethylbenzene: ConcentrationInWaterUnit = None
+    x1_3_5_trimethylbenzene: ConcentrationInWaterUnit = None
+    x1_methyl_2_isopropylbenzene: ConcentrationInWaterUnit = None
+    x2_ethyltoluene: ConcentrationInWaterUnit = None
+    x3_4_ethyltoluene: ConcentrationInWaterUnit = None
 
     def __repr__(self):
         return ('<{}(benzene={}, w={})>'

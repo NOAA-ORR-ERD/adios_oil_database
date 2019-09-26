@@ -21,6 +21,13 @@ class EvaporationEq(BaseModel):
     equation: EquationEnum
     weathering: float = 0.0
 
+    alg: dict = None
+
+    def __init__(self, **data):
+        super().__init__(**data)
+
+        self.__post_init_post_parse__()
+
     def __post_init_post_parse__(self):
         self.alg = {'(A + BT) ln t': self.calculate_ests_1998,
                     '(A + BT) sqrt(t)': self.calculate_mass_loss1,

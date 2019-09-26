@@ -21,16 +21,16 @@ class Biomarkers(BaseModel):
     c23_tricyclic_terpane: ConcentrationInWaterUnit = None
     c24_tricyclic_terpane: ConcentrationInWaterUnit = None
 
-    _30_norhopane: ConcentrationInWaterUnit = None
+    x30_norhopane: ConcentrationInWaterUnit = None
     hopane: ConcentrationInWaterUnit = None
-    _30_homohopane_22s: ConcentrationInWaterUnit = None
-    _30_homohopane_22r: ConcentrationInWaterUnit = None
+    x30_homohopane_22s: ConcentrationInWaterUnit = None
+    x30_homohopane_22r: ConcentrationInWaterUnit = None
 
-    _30_31_bishomohopane_22s: ConcentrationInWaterUnit = None
-    _30_31_bishomohopane_22r: ConcentrationInWaterUnit = None
+    x30_31_bishomohopane_22s: ConcentrationInWaterUnit = None
+    x30_31_bishomohopane_22r: ConcentrationInWaterUnit = None
 
-    _30_31_trishomohopane_22s: ConcentrationInWaterUnit = None
-    _30_31_trishomohopane_22r: ConcentrationInWaterUnit = None
+    x30_31_trishomohopane_22s: ConcentrationInWaterUnit = None
+    x30_31_trishomohopane_22r: ConcentrationInWaterUnit = None
 
     tetrakishomohopane_22s: ConcentrationInWaterUnit = None
     tetrakishomohopane_22r: ConcentrationInWaterUnit = None
@@ -38,12 +38,12 @@ class Biomarkers(BaseModel):
     pentakishomohopane_22s: ConcentrationInWaterUnit = None
     pentakishomohopane_22r: ConcentrationInWaterUnit = None
 
-    _18a_22_29_30_trisnorneohopane: ConcentrationInWaterUnit = None
-    _17a_h_22_29_30_trisnorhopane: ConcentrationInWaterUnit = None
+    x18a_22_29_30_trisnorneohopane: ConcentrationInWaterUnit = None
+    x17a_h_22_29_30_trisnorhopane: ConcentrationInWaterUnit = None
 
-    _14b_h_17b_h_20_cholestane: ConcentrationInWaterUnit = None
-    _14b_h_17b_h_20_methylcholestane: ConcentrationInWaterUnit = None
-    _14b_h_17b_h_20_ethylcholestane: ConcentrationInWaterUnit = None
+    x14b_h_17b_h_20_cholestane: ConcentrationInWaterUnit = None
+    x14b_h_17b_h_20_methylcholestane: ConcentrationInWaterUnit = None
+    x14b_h_17b_h_20_ethylcholestane: ConcentrationInWaterUnit = None
 
     def __repr__(self):
         return ('<{0.__class__.__name__}('
