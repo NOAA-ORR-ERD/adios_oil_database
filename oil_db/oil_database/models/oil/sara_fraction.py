@@ -9,8 +9,8 @@ from oil_database.models.common.float_unit import FloatUnit
 
 class SARAFraction(BaseModel):
     sara_type: SaraTypeEnum
-    weathering: float = 0.0
     fraction: FloatUnit
+    weathering: float = 0.0
 
     standard_deviation: float = None
     replicates: float = None

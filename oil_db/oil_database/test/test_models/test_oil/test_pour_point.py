@@ -1,17 +1,17 @@
 '''
-    Test our Environment Canada Flash Point model class
+    Test our main Pour Point model class
 '''
 import pytest
 
 from pydantic import ValidationError
 
-from oil_database.models.ec_imported_rec import ECFlashPoint
+from oil_database.models.oil import PourPoint
 
 
-class TestECFlashPoint():
+class TestPourPoint():
     def test_init_defaults(self):
         # basically everything has a default
-        obj = ECFlashPoint()
+        obj = PourPoint()
 
         assert obj.ref_temp is None
         assert obj.weathering == 0.0
@@ -37,9 +37,9 @@ class TestECFlashPoint():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_optional(self, ref_temp, weathering, method):
-        obj = ECFlashPoint(ref_temp=ref_temp,
-                           weathering=weathering,
-                           method=method)
+        obj = PourPoint(ref_temp=ref_temp,
+                        weathering=weathering,
+                        method=method)
 
         assert obj.ref_temp.value == float(ref_temp['value'])
         assert obj.ref_temp.unit == str(ref_temp['unit'])
