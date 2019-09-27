@@ -1,5 +1,5 @@
 '''
-    Test our Environment Canada Imported Record model class
+    Test our main Oil Record model class
 '''
 from datetime import datetime, timezone
 
@@ -7,10 +7,10 @@ import pytest
 
 from pydantic import ValidationError
 
-from oil_database.models.ec_imported_rec import ECImportedRecord
+from oil_database.models.oil import Oil
 
 
-class TestECImportedRecord():
+class TestOil():
     @pytest.mark.parametrize('oil_id, name',
                              [
                               ('EC000001', 'Oil Name'),
@@ -36,20 +36,20 @@ class TestECImportedRecord():
                               ])
     def test_init_required(self, oil_id, name):
         if oil_id is None and name is None:
-            obj = ECImportedRecord()
+            obj = Oil()
         elif name is None:
-            obj = ECImportedRecord(oil_id=oil_id)
+            obj = Oil(oil_id=oil_id)
         elif oil_id is None:
-            obj = ECImportedRecord(name=name)
+            obj = Oil(name=name)
         else:
-            obj = ECImportedRecord(oil_id=oil_id, name=name)
+            obj = Oil(oil_id=oil_id, name=name)
 
         assert obj.oil_id == str(oil_id)
         assert obj.name == str(name)
 
     def test_init_defaults(self):
         # everything has a default
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name')
+        obj = Oil(oil_id='EC000001', name='Oil Name')
 
         assert obj.location is None
         assert obj.reference is None
@@ -57,6 +57,46 @@ class TestECImportedRecord():
         assert obj.sample_date is None
         assert obj.comments is None
         assert obj.product_type is None
+
+        assert obj.categories is None
+        assert obj.status is None
+        assert obj.synonyms is None
+        assert obj.densities is None
+
+        assert obj.apis is None
+        assert obj.dvis is None
+        assert obj.kvis is None
+        assert obj.ifts is None
+
+        assert obj.flash_points is None
+        assert obj.pour_points is None
+
+        assert obj.cuts is None
+
+        assert obj.adhesions is None
+        assert obj.evaporation_eqs is None
+        assert obj.emulsions is None
+        assert obj.chemical_dispersibility is None
+
+        assert obj.sulfur is None
+        assert obj.water is None
+        assert obj.benzene is None
+        assert obj.headspace is None
+        assert obj.chromatography is None
+
+        assert obj.ccme is None
+        assert obj.ccme_f1 is None
+        assert obj.ccme_f2 is None
+        assert obj.ccme_tph is None
+
+        assert obj.alkylated_pahs is None
+        assert obj.biomarkers is None
+        assert obj.wax_content is None
+        assert obj.alkanes is None
+
+        assert obj.sara_total_fractions is None
+        assert obj.toxicities is None
+        assert obj.conradson is None
 
     @pytest.mark.parametrize('location, reference, comments',
                              [
@@ -128,10 +168,10 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_optional(self, location, reference, comments):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               location=location,
-                               reference=reference,
-                               comments=comments)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  location=location,
+                  reference=reference,
+                  comments=comments)
 
         assert obj.location == str(location)
         assert obj.reference == str(reference)
@@ -154,9 +194,9 @@ class TestECImportedRecord():
     def test_init_datetimes(self, reference_date, sample_date):
         # it looks like the date parsing is limited to either a timestamp
         # or an ISO 8601 string
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               reference_date=reference_date,
-                               sample_date=sample_date)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  reference_date=reference_date,
+                  sample_date=sample_date)
 
         try:
             int(reference_date)
@@ -177,17 +217,21 @@ class TestECImportedRecord():
 
     @pytest.mark.parametrize('densities',
                              [
-                              [{'g_ml': 1.0, 'ref_temp_c': 0.0}],
+                              [{'density': {'value': 1.0, 'unit': 'g/mL'},
+                                'ref_temp': {'value': 0.0, 'unit': 'C'}}],
                               pytest.param(
                                   '1.0',
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_densities(self, densities):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               densities=densities)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  densities=densities)
 
-        assert obj.densities[0].g_ml == densities[0]['g_ml']
-        assert obj.densities[0].ref_temp_c == densities[0]['ref_temp_c']
+        assert obj.densities[0].density.value == densities[0]['density']['value']
+        assert obj.densities[0].density.unit == densities[0]['density']['unit']
+
+        assert obj.densities[0].ref_temp.value == densities[0]['ref_temp']['value']
+        assert obj.densities[0].ref_temp.unit == densities[0]['ref_temp']['unit']
 
     @pytest.mark.parametrize('apis',
                              [
@@ -197,42 +241,48 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_apis(self, apis):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               apis=apis)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  apis=apis)
 
         assert obj.apis[0].gravity == apis[0]['gravity']
 
     @pytest.mark.parametrize('dvis',
                              [
-                              [{'mpa_s': {'value': 10.0, 'unit': 'mPa s'},
-                                'ref_temp_c': 0.0}],
+                              [{'viscosity': {'value': 10.0, 'unit': 'mPa s'},
+                                'ref_temp': {'value': 0.0, 'unit': 'C'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_dvis(self, dvis):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               dvis=dvis)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  dvis=dvis)
 
-        assert obj.dvis[0].mpa_s.value == dvis[0]['mpa_s']['value']
-        assert obj.dvis[0].mpa_s.unit == dvis[0]['mpa_s']['unit']
-        assert obj.dvis[0].ref_temp_c == dvis[0]['ref_temp_c']
+        assert obj.dvis[0].viscosity.value == dvis[0]['viscosity']['value']
+        assert obj.dvis[0].viscosity.unit == dvis[0]['viscosity']['unit']
+
+        assert obj.dvis[0].ref_temp.value == dvis[0]['ref_temp']['value']
+        assert obj.dvis[0].ref_temp.unit == dvis[0]['ref_temp']['unit']
 
     @pytest.mark.parametrize('ifts',
                              [
-                              [{'dynes_cm': 10.0,
-                                'ref_temp_c': 0.0,
+                              [{'tension': {'value': 10.0, 'unit': 'dyne/cm'},
+                                'ref_temp': {'value': 0.0, 'unit': 'C'},
                                 'interface': 'water'}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_ifts(self, ifts):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               ifts=ifts)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  ifts=ifts)
 
-        assert obj.ifts[0].dynes_cm == ifts[0]['dynes_cm']
-        assert obj.ifts[0].ref_temp_c == ifts[0]['ref_temp_c']
+        assert obj.ifts[0].tension.value == ifts[0]['tension']['value']
+        assert obj.ifts[0].tension.unit == ifts[0]['tension']['unit']
+
+        assert obj.ifts[0].ref_temp.value == ifts[0]['ref_temp']['value']
+        assert obj.ifts[0].ref_temp.unit == ifts[0]['ref_temp']['unit']
+
         assert obj.ifts[0].interface == ifts[0]['interface']
 
     @pytest.mark.parametrize('flash_points',
@@ -243,8 +293,8 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_flash_points(self, flash_points):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               flash_points=flash_points)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  flash_points=flash_points)
 
         assert obj.flash_points[0].ref_temp.value == flash_points[0]['ref_temp']['value']
         assert obj.flash_points[0].ref_temp.unit == flash_points[0]['ref_temp']['unit']
@@ -257,38 +307,43 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_pour_points(self, pour_points):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               pour_points=pour_points)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  pour_points=pour_points)
 
         assert obj.pour_points[0].ref_temp.value == pour_points[0]['ref_temp']['value']
         assert obj.pour_points[0].ref_temp.unit == pour_points[0]['ref_temp']['unit']
 
     @pytest.mark.parametrize('cuts',
                              [
-                              [{'percent': 0.1, 'temp_c': 0.0}],
+                              [{'fraction': {'value': 0.1, 'unit': '1'},
+                                'vapor_temp': {'value': 0.0, 'unit': 'C'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_cuts(self, cuts):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               cuts=cuts)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  cuts=cuts)
 
-        assert obj.cuts[0].percent == cuts[0]['percent']
-        assert obj.cuts[0].temp_c == cuts[0]['temp_c']
+        assert obj.cuts[0].fraction.value == cuts[0]['fraction']['value']
+        assert obj.cuts[0].fraction.unit == cuts[0]['fraction']['unit']
+
+        assert obj.cuts[0].vapor_temp.value == cuts[0]['vapor_temp']['value']
+        assert obj.cuts[0].vapor_temp.unit == cuts[0]['vapor_temp']['unit']
 
     @pytest.mark.parametrize('adhesions',
                              [
-                              [{'g_cm_2': 1.0}],
+                              [{'adhesion': {'value': 1.0, 'unit': 'g/cm^2'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_adhesions(self, adhesions):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               adhesions=adhesions)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  adhesions=adhesions)
 
-        assert obj.adhesions[0].g_cm_2 == adhesions[0]['g_cm_2']
+        assert obj.adhesions[0].adhesion.value == adhesions[0]['adhesion']['value']
+        assert obj.adhesions[0].adhesion.unit == adhesions[0]['adhesion']['unit']
 
     @pytest.mark.parametrize('evaporation_eqs',
                              [
@@ -299,8 +354,8 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_evaporation_eqs(self, evaporation_eqs):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               evaporation_eqs=evaporation_eqs)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  evaporation_eqs=evaporation_eqs)
 
         assert obj.evaporation_eqs[0].a == evaporation_eqs[0]['a']
         assert obj.evaporation_eqs[0].b == evaporation_eqs[0]['b']
@@ -309,120 +364,147 @@ class TestECImportedRecord():
 
     @pytest.mark.parametrize('emulsions',
                              [
-                              [{'water_content_percent': 10.0,
-                                'ref_temp_c': 0.0,
-                                'age_days': 7.0}],
+                              [{'water_content': {'value': 10.0, 'unit': '%'},
+                                'ref_temp': {'value': 0.0, 'unit': 'C'},
+                                'age': {'value': 7.0, 'unit': 'days'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_emulsions(self, emulsions):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               emulsions=emulsions)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  emulsions=emulsions)
 
-        assert obj.emulsions[0].water_content_percent == emulsions[0]['water_content_percent']
-        assert obj.emulsions[0].ref_temp_c == emulsions[0]['ref_temp_c']
-        assert obj.emulsions[0].age_days == emulsions[0]['age_days']
+        assert obj.emulsions[0].water_content.value == emulsions[0]['water_content']['value']
+        assert obj.emulsions[0].water_content.unit == emulsions[0]['water_content']['unit']
 
-    @pytest.mark.parametrize('corexit',
+        assert obj.emulsions[0].ref_temp.value == emulsions[0]['ref_temp']['value']
+        assert obj.emulsions[0].ref_temp.unit == emulsions[0]['ref_temp']['unit']
+
+        assert obj.emulsions[0].age.value == emulsions[0]['age']['value']
+        assert obj.emulsions[0].age.unit == emulsions[0]['age']['unit']
+
+    @pytest.mark.parametrize('chemical_dispersibility',
                              [
-                              [{'dispersant_effectiveness': {'value': 0.1, 'unit': '1'}}],
+                              [{'dispersant': 'Corexit 9500',
+                                'effectiveness': {'value': 0.1, 'unit': '1'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
-    def test_init_corexit(self, corexit):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               corexit=corexit)
+    def test_init_chemical_dispersibility(self, chemical_dispersibility):
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  chemical_dispersibility=chemical_dispersibility)
 
-        assert obj.corexit[0].dispersant_effectiveness.value == corexit[0]['dispersant_effectiveness']['value']
-        assert obj.corexit[0].dispersant_effectiveness.unit == corexit[0]['dispersant_effectiveness']['unit']
+        assert obj.chemical_dispersibility[0].dispersant == chemical_dispersibility[0]['dispersant']
+
+        assert obj.chemical_dispersibility[0].effectiveness.value == chemical_dispersibility[0]['effectiveness']['value']
+        assert obj.chemical_dispersibility[0].effectiveness.unit == chemical_dispersibility[0]['effectiveness']['unit']
 
     @pytest.mark.parametrize('sulfur',
                              [
-                              [{'percent': 10.0}],
+                              [{'fraction': {'value': 0.1, 'unit': '1'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_sulfur(self, sulfur):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               sulfur=sulfur)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  sulfur=sulfur)
 
-        assert obj.sulfur[0].percent == sulfur[0]['percent']
+        assert obj.sulfur[0].fraction.value == sulfur[0]['fraction']['value']
+        assert obj.sulfur[0].fraction.unit == sulfur[0]['fraction']['unit']
 
     @pytest.mark.parametrize('water',
                              [
-                              [{'percent': {'value': 10.0, 'unit': '%'}}],
+                              [{'fraction': {'value': 10.0, 'unit': '%'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_water(self, water):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               water=water)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  water=water)
 
-        assert obj.water[0].percent.value == water[0]['percent']['value']
-        assert obj.water[0].percent.unit == water[0]['percent']['unit']
+        assert obj.water[0].fraction.value == water[0]['fraction']['value']
+        assert obj.water[0].fraction.unit == water[0]['fraction']['unit']
 
     @pytest.mark.parametrize('benzene',
                              [
-                              [{'benzene_ug_g': 10.0,
-                                'toluene_ug_g': 15.0,
-                                'x2_ethyltoluene_ug_g': 20.0}],
+                              [{'benzene': {'value': 10.0, 'unit': 'ug/g'},
+                                'toluene': {'value': 15.0, 'unit': 'ug/g'},
+                                'x2_ethyltoluene': {'value': 20.0,
+                                                    'unit': 'ug/g'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_benzene(self, benzene):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               benzene=benzene)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  benzene=benzene)
 
-        assert obj.benzene[0].benzene_ug_g == benzene[0]['benzene_ug_g']
-        assert obj.benzene[0].toluene_ug_g == benzene[0]['toluene_ug_g']
-        assert obj.benzene[0].x2_ethyltoluene_ug_g == benzene[0]['x2_ethyltoluene_ug_g']
+        assert obj.benzene[0].benzene.value == benzene[0]['benzene']['value']
+        assert obj.benzene[0].benzene.unit == benzene[0]['benzene']['unit']
+
+        assert obj.benzene[0].toluene.value == benzene[0]['toluene']['value']
+        assert obj.benzene[0].toluene.unit == benzene[0]['toluene']['unit']
+
+        assert obj.benzene[0].x2_ethyltoluene.value == benzene[0]['x2_ethyltoluene']['value']
+        assert obj.benzene[0].x2_ethyltoluene.unit == benzene[0]['x2_ethyltoluene']['unit']
 
     @pytest.mark.parametrize('headspace',
                              [
-                              [{'n_c5_mg_g': 5.0, 'n_c6_mg_g': 6.0}],
+                              [{'n_c5': {'value': 5.0, 'unit': 'mg/g'},
+                                'n_c6': {'value': 6.0, 'unit': 'mg/g'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_headspace(self, headspace):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               headspace=headspace)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  headspace=headspace)
 
-        assert obj.headspace[0].n_c5_mg_g == headspace[0]['n_c5_mg_g']
-        assert obj.headspace[0].n_c6_mg_g == headspace[0]['n_c6_mg_g']
+        assert obj.headspace[0].n_c5.value == headspace[0]['n_c5']['value']
+        assert obj.headspace[0].n_c5.unit == headspace[0]['n_c5']['unit']
+
+        assert obj.headspace[0].n_c6.value == headspace[0]['n_c6']['value']
+        assert obj.headspace[0].n_c6.unit == headspace[0]['n_c6']['unit']
 
     @pytest.mark.parametrize('chromatography',
                              [
-                              [{'tph_mg_g': 10.0, 'tsh_mg_g': 5.0}],
+                              [{'tph': {'value': 10.0, 'unit': 'mg/g'},
+                                'tsh': {'value': 5.0, 'unit': 'mg/g'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_chromatography(self, chromatography):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               chromatography=chromatography)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  chromatography=chromatography)
 
-        assert obj.chromatography[0].tph_mg_g == chromatography[0]['tph_mg_g']
-        assert obj.chromatography[0].tsh_mg_g == chromatography[0]['tsh_mg_g']
+        assert obj.chromatography[0].tph.value == chromatography[0]['tph']['value']
+        assert obj.chromatography[0].tph.unit == chromatography[0]['tph']['unit']
+
+        assert obj.chromatography[0].tsh.value == chromatography[0]['tsh']['value']
+        assert obj.chromatography[0].tsh.unit == chromatography[0]['tsh']['unit']
 
     @pytest.mark.parametrize('ccme',
                              [
-                              [{'f1_mg_g': 10.0, 'f2_mg_g': 5.0}],
+                              [{'f1': {'value': 10.0, 'unit': 'mg/g'},
+                                'f2': {'value': 5.0, 'unit': 'mg/g'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_ccme(self, ccme):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               ccme=ccme)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  ccme=ccme)
 
-        assert obj.ccme[0].f1_mg_g == ccme[0]['f1_mg_g']
-        assert obj.ccme[0].f2_mg_g == ccme[0]['f2_mg_g']
+        assert obj.ccme[0].f1.value == ccme[0]['f1']['value']
+        assert obj.ccme[0].f1.unit == ccme[0]['f1']['unit']
+
+        assert obj.ccme[0].f2.value == ccme[0]['f2']['value']
+        assert obj.ccme[0].f2.unit == ccme[0]['f2']['unit']
 
     @pytest.mark.parametrize('ccme_f1',
                              [
@@ -433,8 +515,8 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_ccme_f1(self, ccme_f1):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               ccme_f1=ccme_f1)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  ccme_f1=ccme_f1)
 
         assert obj.ccme_f1[0].n_c8_to_n_c10 == ccme_f1[0]['n_c8_to_n_c10']
         assert obj.ccme_f1[0].n_c10_to_n_c12 == ccme_f1[0]['n_c10_to_n_c12']
@@ -448,8 +530,8 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_ccme_f2(self, ccme_f2):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               ccme_f2=ccme_f2)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  ccme_f2=ccme_f2)
 
         assert obj.ccme_f2[0].n_c8_to_n_c10 == ccme_f2[0]['n_c8_to_n_c10']
         assert obj.ccme_f2[0].n_c10_to_n_c12 == ccme_f2[0]['n_c10_to_n_c12']
@@ -463,91 +545,108 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_ccme_tph(self, ccme_tph):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               ccme_tph=ccme_tph)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  ccme_tph=ccme_tph)
 
         assert obj.ccme_tph[0].n_c8_to_n_c10 == ccme_tph[0]['n_c8_to_n_c10']
         assert obj.ccme_tph[0].n_c10_to_n_c12 == ccme_tph[0]['n_c10_to_n_c12']
 
     @pytest.mark.parametrize('alkylated_pahs',
                              [
-                              [{'c0_n_ug_g': 10.0,
-                                'c1_n_ug_g': 5.0}],
+                              [{'c0_n': {'value': 10.0, 'unit': 'ug/g'},
+                                'c1_n': {'value': 5.0, 'unit': 'ug/g'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_alkylated_pahs(self, alkylated_pahs):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               alkylated_pahs=alkylated_pahs)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  alkylated_pahs=alkylated_pahs)
 
-        assert obj.alkylated_pahs[0].c0_n_ug_g == alkylated_pahs[0]['c0_n_ug_g']
-        assert obj.alkylated_pahs[0].c1_n_ug_g == alkylated_pahs[0]['c1_n_ug_g']
+        assert obj.alkylated_pahs[0].c0_n.value == alkylated_pahs[0]['c0_n']['value']
+        assert obj.alkylated_pahs[0].c0_n.unit == alkylated_pahs[0]['c0_n']['unit']
+
+        assert obj.alkylated_pahs[0].c1_n.value == alkylated_pahs[0]['c1_n']['value']
+        assert obj.alkylated_pahs[0].c1_n.unit == alkylated_pahs[0]['c1_n']['unit']
 
     @pytest.mark.parametrize('biomarkers',
                              [
-                              [{'x30_norhopane_ug_g': 10.0,
-                                'hopane_ug_g': 5.0}],
+                              [{'x30_norhopane': {'value': 10.0,
+                                                  'unit': 'ug/g'},
+                                'hopane': {'value': 5.0, 'unit': 'ug/g'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_biomarkers(self, biomarkers):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               biomarkers=biomarkers)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  biomarkers=biomarkers)
 
-        assert obj.biomarkers[0].x30_norhopane_ug_g == biomarkers[0]['x30_norhopane_ug_g']
-        assert obj.biomarkers[0].hopane_ug_g == biomarkers[0]['hopane_ug_g']
+        assert obj.biomarkers[0].x30_norhopane.value == biomarkers[0]['x30_norhopane']['value']
+        assert obj.biomarkers[0].x30_norhopane.unit == biomarkers[0]['x30_norhopane']['unit']
+
+        assert obj.biomarkers[0].hopane.value == biomarkers[0]['hopane']['value']
+        assert obj.biomarkers[0].hopane.unit == biomarkers[0]['hopane']['unit']
 
     @pytest.mark.parametrize('wax_content',
                              [
-                              [{'percent': 10.0}],
+                              [{'fraction': {'value': 10.0, 'unit': '%'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_wax_content(self, wax_content):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               wax_content=wax_content)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  wax_content=wax_content)
 
-        assert obj.wax_content[0].percent == wax_content[0]['percent']
+        assert obj.wax_content[0].fraction.value == wax_content[0]['fraction']['value']
+        assert obj.wax_content[0].fraction.unit == wax_content[0]['fraction']['unit']
 
     @pytest.mark.parametrize('alkanes',
                              [
-                              [{'pristane_ug_g': 10.0,
-                                'phytane_ug_g': 15.0,
-                                'c8_ug_g': 20.0}],
+                              [{'pristane': {'value': 10.0, 'unit': 'ug/g'},
+                                'phytane': {'value': 15.0, 'unit': 'ug/g'},
+                                'c8': {'value': 20.0, 'unit': 'ug/g'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_alkanes(self, alkanes):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               alkanes=alkanes)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  alkanes=alkanes)
 
-        assert obj.alkanes[0].pristane_ug_g == alkanes[0]['pristane_ug_g']
-        assert obj.alkanes[0].phytane_ug_g == alkanes[0]['phytane_ug_g']
-        assert obj.alkanes[0].c8_ug_g == alkanes[0]['c8_ug_g']
+        assert obj.alkanes[0].pristane.value == alkanes[0]['pristane']['value']
+        assert obj.alkanes[0].pristane.value == alkanes[0]['pristane']['value']
+
+        assert obj.alkanes[0].phytane.value == alkanes[0]['phytane']['value']
+        assert obj.alkanes[0].phytane.value == alkanes[0]['phytane']['value']
+
+        assert obj.alkanes[0].c8.value == alkanes[0]['c8']['value']
+        assert obj.alkanes[0].c8.value == alkanes[0]['c8']['value']
 
     @pytest.mark.parametrize('sara_total_fractions',
                              [
                               [{'sara_type': 'Saturates',
-                                'percent': 10.0},
+                                'fraction': {'value': 10.0, 'unit': '%'}},
                                {'sara_type': 'Aromatics',
-                                'percent': 15.0}],
+                                'fraction': {'value': 15.0, 'unit': '%'}}],
                               pytest.param(
                                   ['10.0'],
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_sara_total_fractions(self, sara_total_fractions):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               sara_total_fractions=sara_total_fractions)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  sara_total_fractions=sara_total_fractions)
 
         assert obj.sara_total_fractions[0].sara_type == sara_total_fractions[0]['sara_type']
-        assert obj.sara_total_fractions[0].percent == sara_total_fractions[0]['percent']
+
+        assert obj.sara_total_fractions[0].fraction.value == sara_total_fractions[0]['fraction']['value']
+        assert obj.sara_total_fractions[0].fraction.unit == sara_total_fractions[0]['fraction']['unit']
 
         assert obj.sara_total_fractions[1].sara_type == sara_total_fractions[1]['sara_type']
-        assert obj.sara_total_fractions[1].percent == sara_total_fractions[1]['percent']
+
+        assert obj.sara_total_fractions[1].fraction.value == sara_total_fractions[1]['fraction']['value']
+        assert obj.sara_total_fractions[1].fraction.unit == sara_total_fractions[1]['fraction']['unit']
 
     @pytest.mark.parametrize('synonyms',
                              [
@@ -558,8 +657,8 @@ class TestECImportedRecord():
                                   marks=pytest.mark.raises(exception=ValidationError)),
                               ])
     def test_init_synonyms(self, synonyms):
-        obj = ECImportedRecord(oil_id='EC000001', name='Oil Name',
-                               synonyms=synonyms)
+        obj = Oil(oil_id='EC000001', name='Oil Name',
+                  synonyms=synonyms)
 
         assert obj.synonyms[0].name == synonyms[0]['name']
         assert obj.synonyms[1].name == synonyms[1]['name']

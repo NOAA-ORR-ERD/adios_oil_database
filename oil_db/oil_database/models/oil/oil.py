@@ -72,7 +72,7 @@ class Oil(BaseModel):
     comments: constr(max_length=80 * 5) = None
     product_type: constr(max_length=16) = None
 
-    categories: List[Category] = []
+    categories: List[Category] = None
 
     status: List[constr(max_length=64)] = None
 
