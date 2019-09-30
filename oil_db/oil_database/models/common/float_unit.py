@@ -3,10 +3,11 @@
 # in our oil records
 #
 from pydantic.dataclasses import dataclass
-from itertools import zip_longest
 
 from unit_conversion import convert
 from unit_conversion.unit_data import ConvertDataUnits
+
+from oil_database.util.decamelize import camelcase_to_space
 
 
 class UnitMeta(type):
@@ -17,7 +18,7 @@ class UnitMeta(type):
         #               type stanza in PyNUCOS, so we load it with a few
         #               generic fractional unit types.
         if name.endswith('Unit'):
-            unit_type = cls.camelcase_to_space(name[:-4])
+            unit_type = camelcase_to_space(name[:-4])
 
             try:
                 all_units = [[k] + v[1]
@@ -35,30 +36,6 @@ class UnitMeta(type):
             namespace['unit_type'] = 'Float'
 
         return super().__new__(cls, name, bases, namespace)
-
-    @classmethod
-    def camelcase_to_space(cls, camelcase, lower=False):
-        return cls.camelcase_to_sep(camelcase, lower=lower)
-
-    @classmethod
-    def camelcase_to_underscore(cls, camelcase, lower=False):
-        return cls.camelcase_to_sep(camelcase, sep='_', lower=lower)
-
-    @classmethod
-    def camelcase_to_sep(cls, camelcase, sep=' ', lower=False):
-        ret = sep.join(cls.separate_camelcase(camelcase))
-
-        if lower:
-            return ret.lower()
-        else:
-            return ret
-
-    @classmethod
-    def separate_camelcase(cls, camelcase):
-        idxs = [i for i, c in enumerate(camelcase) if c.isupper()]
-
-        return [camelcase[begin:end]
-                for (begin, end) in zip_longest(idxs, idxs[1:])]
 
 
 @dataclass

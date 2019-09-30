@@ -1,11 +1,12 @@
 #
 # Model class definitions for our category object
 #
-from pydantic import BaseModel
 from typing import List
 
+from .base_model import PydObjectId, MongoBaseModel
 
-class Category(BaseModel):
+
+class Category(MongoBaseModel):
     '''
         This is a self referential object suitable for building a
         hierarchy of nodes.  The relationship will be one-to-many
@@ -17,13 +18,17 @@ class Category(BaseModel):
         Thus, Oil objects will be linked to categories in a many-to-many
         relationship.
     '''
+    _id: PydObjectId = None
     name: str
-    parent: 'Category' = None
-    children: List['Category'] = []
+    parent: PydObjectId = None
+    children: List[PydObjectId] = []
 
     def append(self, child):
-        child.parent = self
-        self.children.append(child)
+        child.parent = self._id
+        self.children.append(child._id)
+
+        child.save()
+        self.save()
 
         return self
 

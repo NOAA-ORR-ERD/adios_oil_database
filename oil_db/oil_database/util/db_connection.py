@@ -10,6 +10,6 @@ def connect_mongodb(settings):
         We are using MongoDB via pymongo for our database
     '''
     host = settings['mongodb.host']
-    port = settings['mongodb.port']
+    port = int(settings['mongodb.port'])
 
     return MongoClient(host=host, port=port)

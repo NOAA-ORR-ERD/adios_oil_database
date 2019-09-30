@@ -49,7 +49,7 @@ class OilLibraryAttributeMapper(object):
         if isinstance(obj, dict):
             return obj
         else:
-            return obj.to_son().to_dict()
+            return obj.dict()
 
     def _get_record_attr(self, attr):
         try:

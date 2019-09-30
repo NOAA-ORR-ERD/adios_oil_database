@@ -4,11 +4,12 @@
 #
 
 from enum import Enum
-from pydantic import BaseModel, constr
+from pydantic import constr
 from typing import List
 
-from oil_database.models.common import Synonym
 from oil_database.models.common.enum_types import ProductTypeEnum
+from oil_database.models.common.base_model import PydObjectId, MongoBaseModel
+from oil_database.models.common import Synonym
 
 from .density import NoaaFmDensity
 from .kvis import NoaaFmKVis
@@ -29,7 +30,7 @@ class OilClassEnum(str, Enum):
     group_4 = 'group 4'
 
 
-class ImportedRecord(BaseModel):
+class ImportedRecord(MongoBaseModel):
     '''
         This object, and its related objects, is created from a
         single record inside the OilLib flat file.  The OilLib flat file

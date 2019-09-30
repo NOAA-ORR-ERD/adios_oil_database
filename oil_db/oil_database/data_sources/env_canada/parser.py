@@ -9,8 +9,7 @@ from slugify import Slugify
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
-custom_slugify = Slugify(to_lower=True)
-custom_slugify.separator = '_'
+custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 

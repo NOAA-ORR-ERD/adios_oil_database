@@ -30,8 +30,3 @@ def test_mongodb_connect_exceptions():
 
     with pytest.raises(KeyError):
         connect_mongodb({'mongodb.host': 'localhost'})  # port setting missing
-
-    with pytest.raises(TypeError):
-        connect_mongodb({'mongodb.host': 'localhost',
-                         'mongodb.port': '27017'  # should be an int
-                         })

@@ -4,11 +4,12 @@ import io
 import logging
 from datetime import datetime
 
+from pydantic import ValidationError
+
 from pymongo.errors import DuplicateKeyError
-from pymodm.errors import ValidationError
 
 from oil_database.util.term import TermColor as tc
-from oil_database.util.db_connection import connect_modm
+from oil_database.util.db_connection import connect_mongodb
 from oil_database.util.settings import file_settings, default_settings
 
 from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
@@ -117,7 +118,12 @@ def import_db(settings):
     quit_app = False
 
     logger.info('connect_modm()...')
-    connect_modm(settings)
+    client = connect_mongodb(settings)
+    db = getattr(client, settings['mongodb.database'])
+    print('our database: ', db)
+
+    # [m.attach(db) for m in (ImportedRecord, ECImportedRecord, Oil)]
+    [m.attach(db) for m in (ImportedRecord,)]
 
     while quit_app is False:
         print_menu()
@@ -213,6 +219,7 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
             try:
                 rec = record_cls.from_record_parser(parser)
                 rec.save()
+                print('record saved.  Id: ', rec._id)
 
                 oil_obj = Oil.from_record_parser(mapper_cls(rec))
 

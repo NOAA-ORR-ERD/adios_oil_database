@@ -75,56 +75,6 @@ class TestFloatUnit():
         assert repr(float_unit) == (u'<FloatUnit({})>'
                                     .format(expected))
 
-    @pytest.mark.parametrize('value, expected',
-                             [
-                              ('Area', ['Area']),
-                              ('OilConcentration', ['Oil', 'Concentration']),
-                              ('ConcentrationInWater', ['Concentration',
-                                                        'In',
-                                                        'Water']),
-                              ('concentrationInWater', ['In', 'Water']),
-                              ])
-    def test_camelcase(self, value, expected):
-        words = FloatUnit.__class__.separate_camelcase(value)
-
-        assert words == expected
-
-    @pytest.mark.parametrize('value, lower, expected',
-                             [
-                              ('Area', False, 'Area'),
-                              ('OilConcentration', False, 'Oil Concentration'),
-                              ('ConcentrationInWater', False,
-                               'Concentration In Water'),
-                              ('concentrationInWater', False, 'In Water'),
-                              ('Area', True, 'area'),
-                              ('OilConcentration', True, 'oil concentration'),
-                              ('ConcentrationInWater', True,
-                               'concentration in water'),
-                              ('concentrationInWater', True, 'in water'),
-                              ])
-    def test_camelcase_to_space(self, value, lower, expected):
-        words = FloatUnit.__class__.camelcase_to_space(value, lower=lower)
-
-        assert words == expected
-
-    @pytest.mark.parametrize('value, lower, expected',
-                             [
-                              ('Area', False, 'Area'),
-                              ('OilConcentration', False, 'Oil_Concentration'),
-                              ('ConcentrationInWater', False,
-                               'Concentration_In_Water'),
-                              ('concentrationInWater', False, 'In_Water'),
-                              ('Area', True, 'area'),
-                              ('OilConcentration', True, 'oil_concentration'),
-                              ('ConcentrationInWater', True,
-                               'concentration_in_water'),
-                              ('concentrationInWater', True, 'in_water'),
-                              ])
-    def test_camelcase_to_underscore(self, value, lower, expected):
-        words = FloatUnit.__class__.camelcase_to_underscore(value, lower=lower)
-
-        assert words == expected
-
 
 class TestAngularMeasureUnit(object):
     @pytest.mark.parametrize('value, unit',

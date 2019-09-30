@@ -21,8 +21,6 @@ import logging
 
 from functools import lru_cache
 
-from pymodm.errors import MultipleObjectsReturned, DoesNotExist
-
 import unit_conversion as uc
 
 from oil_database.models.common import Category
@@ -44,32 +42,28 @@ def load_categories():
     refined = Category(name='Refined').save()
     other = Category(name='Other').save()
 
-    crude.append(Category(name='Condensate'))
-    crude.append(Category(name='Light'))
-    crude.append(Category(name='Medium'))
-    crude.append(Category(name='Heavy'))
+    crude.append(Category(name='Condensate').save())
+    crude.append(Category(name='Light').save())
+    crude.append(Category(name='Medium').save())
+    crude.append(Category(name='Heavy').save())
 
-    refined.append(Category(name='Light Products (Fuel Oil 1)'))
-    refined.append(Category(name='Gasoline'))
-    refined.append(Category(name='Kerosene'))
+    refined.append(Category(name='Light Products (Fuel Oil 1)').save())
+    refined.append(Category(name='Gasoline').save())
+    refined.append(Category(name='Kerosene').save())
 
-    refined.append(Category(name='Fuel Oil 2'))
-    refined.append(Category(name='Diesel'))
-    refined.append(Category(name='Heating Oil'))
+    refined.append(Category(name='Fuel Oil 2').save())
+    refined.append(Category(name='Diesel').save())
+    refined.append(Category(name='Heating Oil').save())
 
-    refined.append(Category(name='Intermediate Fuel Oil'))
+    refined.append(Category(name='Intermediate Fuel Oil').save())
 
-    refined.append(Category(name='Fuel Oil 6 (HFO)'))
-    refined.append(Category(name='Bunker'))
-    refined.append(Category(name='Heavy Fuel Oil'))
-    refined.append(Category(name='Group V'))
+    refined.append(Category(name='Fuel Oil 6 (HFO)').save())
+    refined.append(Category(name='Bunker').save())
+    refined.append(Category(name='Heavy Fuel Oil').save())
+    refined.append(Category(name='Group V').save())
 
-    other.append(Category(name='Other'))
-    other.append(Category(name='Generic'))
-
-    crude.save()
-    refined.save()
-    other.save()
+    other.append(Category(name='Other').save())
+    other.append(Category(name='Generic').save())
 
 
 def list_categories(category, indent=0):
@@ -77,9 +71,9 @@ def list_categories(category, indent=0):
         This is a recursive method to print out our categories
         showing the nesting with tabbed indentation.
     '''
-    yield '{0}{1}'.format(' ' * indent, category.name)
+    yield ('{}{}'.format(' ' * indent, category.name))
 
-    for c in category.children:
+    for c in category.expand('children'):
         for y in list_categories(c, indent + 4):
             yield y
 
@@ -87,7 +81,7 @@ def list_categories(category, indent=0):
 def print_all_categories():
     logger.info('Here are our newly built categories...')
 
-    for parent in Category.objects.raw({'parent': None}):
+    for parent in Category.find(filter={'parent': None}):
         for child in list_categories(parent):
             logger.info(child)
 
@@ -98,20 +92,10 @@ def get_categories_by_names(top_name, child_names):
         Get the top level category by name, and a list of child categories
         directly underneath it by their names.
     '''
-    try:
-        top_category = Category.objects.get({'parent': None,
-                                             'name': top_name})
-    except MultipleObjectsReturned as ex:
-        ex.message = ('Multiple top categories named "{}" found.'
-                      .format(top_name))
-        ex.args = (ex.message, )
+    top_category = Category.find_one({'parent': None, 'name': top_name})
 
-        raise ex
-    except DoesNotExist:
-        ex.message = ('Top category "{}" not found.'.format(top_name))
-        ex.args = (ex.message, )
-
-        raise ex
+    if top_category is None:
+        return None
 
     child_categories = [c for c in top_category.children
                         if c.name in child_names]

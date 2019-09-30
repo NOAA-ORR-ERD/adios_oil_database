@@ -5,9 +5,10 @@ from pprint import PrettyPrinter
 
 from pymongo.errors import ConnectionFailure
 
-from oil_database.util.db_connection import connect_modm
+from oil_database.util.db_connection import connect_mongodb
 from oil_database.util.settings import file_settings, default_settings
 
+from oil_database.models.common import Category
 from oil_database.db_init.categories import (load_categories,
                                              print_all_categories)
 
@@ -59,7 +60,7 @@ def init_db(settings):
 
     '''
     logger.info('connect_modm()...')
-    client = connect_modm(settings)
+    client = connect_mongodb(settings)
 
     if settings['mongodb.database'] in client.database_names():
         if prompt_drop_db():
@@ -69,6 +70,9 @@ def init_db(settings):
             return
 
     drop_db(client, settings['mongodb.database'])
+
+    db = getattr(client, settings['mongodb.database'])
+    Category.attach(db)
 
     load_categories()
 
