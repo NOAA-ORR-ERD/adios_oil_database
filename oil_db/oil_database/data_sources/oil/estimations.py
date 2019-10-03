@@ -415,12 +415,19 @@ class OilEstimation(object):
                 return densities[0], ref_temps[0]
 
     def non_redundant_dvis(self):
-        kvis_dict = dict([((k.weathering, k.ref_temp.to_unit('K')),
-                           k.viscosity.to_unit('m^2/s'))
-                          for k in self.record.kvis])
-        dvis_dict = dict([((d.weathering, d.ref_temp.to_unit('K')),
-                           d.viscosity.to_unit('kg/(m s)'))
-                          for d in self.record.dvis])
+        if self.record.kvis is None:
+            kvis_dict = {}
+        else:
+            kvis_dict = dict([((k.weathering, k.ref_temp.to_unit('K')),
+                               k.viscosity.to_unit('m^2/s'))
+                              for k in self.record.kvis])
+
+        if self.record.dvis is None:
+            dvis_dict = {}
+        else:
+            dvis_dict = dict([((d.weathering, d.ref_temp.to_unit('K')),
+                               d.viscosity.to_unit('kg/(m s)'))
+                              for d in self.record.dvis])
 
         non_redundant_keys = set(dvis_dict.keys()).difference(kvis_dict.keys())
 
@@ -448,9 +455,12 @@ class OilEstimation(object):
                     weathering=dvis_obj.weathering)
 
     def aggregate_kvis(self):
-        kvis_list = [((k.ref_temp.to_unit('K'), k.weathering),
-                      k.viscosity.to_unit('m^2/s'))
-                     for k in self.record.kvis]
+        if self.record.kvis is None:
+            kvis_list = []
+        else:
+            kvis_list = [((k.ref_temp.to_unit('K'), k.weathering),
+                          k.viscosity.to_unit('m^2/s'))
+                         for k in self.record.kvis]
 
         if hasattr(self.record, 'dvis'):
             dvis_list = [((d.ref_temp.to_unit('K'), d.weathering),
@@ -466,8 +476,8 @@ class OilEstimation(object):
 
         return [KVis(viscosity=KinematicViscosityUnit(value=k,
                                                       unit='m^2/s'),
-                     ref_temp=TemperatureUnit(value=t, unit='K',
-                                              weathering=w))
+                     ref_temp=TemperatureUnit(value=t, unit='K'),
+                     weathering=w)
                 for (t, w), k in sorted(agg.items())]
 
     def kvis_at_temp(self, temp_k=288.15, weathering=0.0):

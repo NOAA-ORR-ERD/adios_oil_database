@@ -2,12 +2,13 @@
 # PyMODM model class for Environment Canada's emulsion
 # oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class ChemicalDispersibility(BaseModel):
+class ChemicalDispersibility(MongoBaseModel):
     '''
         Chemical dispersability (swirling flask test) (ASTM F2059)
     '''

@@ -2,12 +2,11 @@
 # Model class for Environment Canada's emulsion
 # oil properties.
 #
-from pydantic import BaseModel
-
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class ECCorexit9500(BaseModel):
+class ECCorexit9500(MongoBaseModel):
     '''
         Chemical dispersability with Corexit 9500 Dispersant (swirling flask
         test) (ASTM F2059)

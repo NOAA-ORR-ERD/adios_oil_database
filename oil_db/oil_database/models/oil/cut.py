@@ -1,12 +1,13 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import TemperatureUnit, FloatUnit
 
 
-class Cut(BaseModel):
+class Cut(MongoBaseModel):
     fraction: FloatUnit
     vapor_temp: TemperatureUnit
     liquid_temp: TemperatureUnit = None

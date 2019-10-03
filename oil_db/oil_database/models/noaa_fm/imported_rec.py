@@ -8,8 +8,7 @@ from pydantic import constr
 from typing import List
 
 from oil_database.models.common.enum_types import ProductTypeEnum
-from oil_database.models.common.base_model import PydObjectId, MongoBaseModel
-from oil_database.models.common import Synonym
+from oil_database.models.common import MongoBaseModel, PydObjectId, Synonym
 
 from .density import NoaaFmDensity
 from .kvis import NoaaFmKVis

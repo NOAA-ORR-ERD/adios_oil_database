@@ -2,14 +2,15 @@
 # PyMODM model class for Environment Canada's CCME Fractional
 # oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
-class CCMEFraction(BaseModel):
+class CCMEFraction(MongoBaseModel):
     '''
         CCME Fractions (mg/g oil) (ESTS 2002a)
     '''
@@ -31,7 +32,7 @@ class CCMEFraction(BaseModel):
                 .format(self))
 
 
-class CarbonNumberDistribution(BaseModel):
+class CarbonNumberDistribution(MongoBaseModel):
     '''
         We have a couple different groups that have similar properties,
         so we will define them here an subclass the groups.

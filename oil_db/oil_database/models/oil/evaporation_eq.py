@@ -17,11 +17,11 @@ class EquationEnum(str, Enum):
 class EvaporationEq(BaseModel):
     a: float
     b: float
-    c: float
+    c: float = None
     equation: EquationEnum
     weathering: float = 0.0
 
-    alg: dict = None
+    _alg: dict = None
 
     def __init__(self, **data):
         super().__init__(**data)
@@ -29,12 +29,25 @@ class EvaporationEq(BaseModel):
         self.__post_init_post_parse__()
 
     def __post_init_post_parse__(self):
-        self.alg = {'(A + BT) ln t': self.calculate_ests_1998,
-                    '(A + BT) sqrt(t)': self.calculate_mass_loss1,
-                    'A + B ln (t + C)': self.calculate_mass_loss2}
+        self._alg = {'(A + BT) ln t': self.calculate_ests_1998,
+                     '(A + BT) sqrt(t)': self.calculate_mass_loss1,
+                     'A + B ln (t + C)': self.calculate_mass_loss2}
+
+    def __setattr__(self, name, value):
+        '''
+            Are there any dataclass packages that don't have at least one
+            annoyance?
+            pydantic doesn't accept attributes as fields if they start with
+            an underscore.
+            This sucks for PyMongo, since the default identifier is _id
+        '''
+        if name == '_alg':
+            self.__dict__[name] = value
+        else:
+            super().__setattr__(name, value)
 
     def calculate(self, t, T=None):
-        return self.alg[self.equation](t, T)
+        return self._alg[self.equation](t, T)
 
     def calculate_ests_1998(self, t, T):
         return (self.a + self.b * T) * np.log(t)
@@ -44,6 +57,18 @@ class EvaporationEq(BaseModel):
 
     def calculate_mass_loss2(self, t, T):
         return self.a + self.b * np.log(t + self.c)
+
+    def dict(self, **kwargs) -> 'DictStrAny':
+        '''
+            Overloaded version of BaseModel.dict(), which adds the
+            expand_refs argument.
+        '''
+        res = super().dict(**kwargs)
+        res['_cls'] = '{}.{}'.format(self.__class__.__module__,
+                                     self.__class__.__name__)
+        del res['_alg']
+
+        return res
 
     def __repr__(self):
         return ('<EvaporationEq(a={0.a}, b={0.b}, c={0.c}, '

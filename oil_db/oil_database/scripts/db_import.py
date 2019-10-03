@@ -20,6 +20,7 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
                                                   EnvCanadaAttributeMapper)
 
+from oil_database.models.common import Category
 from oil_database.models.noaa_fm import ImportedRecord
 from oil_database.models.ec_imported_rec import ECImportedRecord
 from oil_database.models.oil import Oil
@@ -117,13 +118,12 @@ def import_db(settings):
     '''
     quit_app = False
 
-    logger.info('connect_modm()...')
+    logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
     db = getattr(client, settings['mongodb.database'])
-    print('our database: ', db)
 
     # [m.attach(db) for m in (ImportedRecord, ECImportedRecord, Oil)]
-    [m.attach(db) for m in (ImportedRecord,)]
+    [m.attach(db) for m in (Category, ImportedRecord, ECImportedRecord, Oil)]
 
     while quit_app is False:
         print_menu()
@@ -212,14 +212,16 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
         logger.info('opening file: {0} ...'.format(fn))
         fd = reader_cls(fn)
 
-        rowcount = 0
+        total_count = 0
+        success_count = 0
+        error_count = 0
         for record_data in fd.get_records():
+            total_count += 1
             parser = parser_cls(*record_data)
 
             try:
                 rec = record_cls.from_record_parser(parser)
                 rec.save()
-                print('record saved.  Id: ', rec._id)
 
                 oil_obj = Oil.from_record_parser(mapper_cls(rec))
 
@@ -229,19 +231,32 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
                     link_oil_to_categories(oil_obj)
 
                 oil_obj.save()
-            except ValidationError as e:
-                print('validation failed for {}: {}'
-                      .format(tc.change(parser.oil_id, 'red'), e))
+            except ValidationError as error:
+                print('validation failed for <{}("{}")>:'
+                      .format(error.model.__name__,
+                              tc.change(parser.oil_id, 'red')))
+
+                for e in error.errors():
+                    loc, msg = e['loc'], e['msg']
+                    print('\t{}: {}'
+                          .format('->'.join([str(l) for l in loc]), msg))
+
+                error_count += 1
             except DuplicateKeyError as e:
                 print('duplicate fields for {}: {}'
                       .format(tc.change(parser.oil_id, 'red'), e))
+                error_count += 1
+            else:
+                success_count += 1
 
-            if rowcount % 100 == 0:
+            if total_count % 100 == 0:
                 sys.stderr.write('.')
 
-            rowcount += 1
-
-        print('finished!!!  {} rows processed.'.format(rowcount))
+        print('finished!!!  '
+              '{} records processed, '
+              '{} records succeeded, '
+              '{} records failed,'
+              .format(total_count, success_count, error_count))
 
 
 def _add_datafiles(settings):

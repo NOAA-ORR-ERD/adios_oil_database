@@ -48,7 +48,7 @@ class EnvCanadaAttributeMapper(object):
         if isinstance(obj, dict):
             return obj
         else:
-            return obj.to_son().to_dict()
+            return obj.dict()
 
     @property
     def name(self):
@@ -130,6 +130,8 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(d)
 
             kwargs['viscosity'] = kwargs['mpa_s']
+            del kwargs['viscosity']['_cls']
+
             kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
                                   'from_unit': 'C', 'unit': 'K'}
 
@@ -151,12 +153,18 @@ class EnvCanadaAttributeMapper(object):
     @property
     def flash_points(self):
         for f in self.record.flash_points:
-            yield self._get_kwargs(f)
+            kwargs = self._get_kwargs(f)
+            del kwargs['ref_temp']['_cls']
+
+            yield kwargs
 
     @property
     def pour_points(self):
         for p in self.record.pour_points:
-            yield self._get_kwargs(p)
+            kwargs = self._get_kwargs(p)
+            del kwargs['ref_temp']['_cls']
+
+            yield kwargs
 
     @property
     def cuts(self):
@@ -226,6 +234,7 @@ class EnvCanadaAttributeMapper(object):
 
             kwargs['dispersant'] = 'Corexit 9500'
             kwargs['effectiveness'] = kwargs['dispersant_effectiveness']
+            del kwargs['effectiveness']['_cls']
 
             yield kwargs
 
@@ -245,6 +254,7 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(w)
 
             kwargs['fraction'] = kwargs['percent']
+            del kwargs['fraction']['_cls']
 
             yield kwargs
 
@@ -273,13 +283,13 @@ class EnvCanadaAttributeMapper(object):
                         'isobutylbenzene_ug_g',
                         'amylbenzene_ug_g',
                         'n_hexylbenzene_ug_g',
-                        '_1_2_3_trimethylbenzene_ug_g',
-                        '_1_2_4_trimethylbenzene_ug_g',
-                        '_1_2_dimethyl_4_ethylbenzene_ug_g',
-                        '_1_3_5_trimethylbenzene_ug_g',
-                        '_1_methyl_2_isopropylbenzene_ug_g',
-                        '_2_ethyltoluene_ug_g',
-                        '_3_4_ethyltoluene_ug_g'):
+                        'x1_2_3_trimethylbenzene_ug_g',
+                        'x1_2_4_trimethylbenzene_ug_g',
+                        'x1_2_dimethyl_4_ethylbenzene_ug_g',
+                        'x1_3_5_trimethylbenzene_ug_g',
+                        'x1_methyl_2_isopropylbenzene_ug_g',
+                        'x2_ethyltoluene_ug_g',
+                        'x3_4_ethyltoluene_ug_g'):
                 value = kwargs[lbl]
                 new_lbl = lbl[:-5]
 
@@ -447,23 +457,23 @@ class EnvCanadaAttributeMapper(object):
                         'c22_tricyclic_terpane_ug_g',
                         'c23_tricyclic_terpane_ug_g',
                         'c24_tricyclic_terpane_ug_g',
-                        '_30_norhopane_ug_g',
+                        'x30_norhopane_ug_g',
                         'hopane_ug_g',
-                        '_30_homohopane_22s_ug_g',
-                        '_30_homohopane_22r_ug_g',
-                        '_30_31_bishomohopane_22s_ug_g',
-                        '_30_31_bishomohopane_22r_ug_g',
-                        '_30_31_trishomohopane_22s_ug_g',
-                        '_30_31_trishomohopane_22r_ug_g',
+                        'x30_homohopane_22s_ug_g',
+                        'x30_homohopane_22r_ug_g',
+                        'x30_31_bishomohopane_22s_ug_g',
+                        'x30_31_bishomohopane_22r_ug_g',
+                        'x30_31_trishomohopane_22s_ug_g',
+                        'x30_31_trishomohopane_22r_ug_g',
                         'tetrakishomohopane_22s_ug_g',
                         'tetrakishomohopane_22r_ug_g',
                         'pentakishomohopane_22s_ug_g',
                         'pentakishomohopane_22r_ug_g',
-                        '_18a_22_29_30_trisnorneohopane_ug_g',
-                        '_17a_h_22_29_30_trisnorhopane_ug_g',
-                        '_14b_h_17b_h_20_cholestane_ug_g',
-                        '_14b_h_17b_h_20_methylcholestane_ug_g',
-                        '_14b_h_17b_h_20_ethylcholestane_ug_g'):
+                        'x18a_22_29_30_trisnorneohopane_ug_g',
+                        'x17a_h_22_29_30_trisnorhopane_ug_g',
+                        'x14b_h_17b_h_20_cholestane_ug_g',
+                        'x14b_h_17b_h_20_methylcholestane_ug_g',
+                        'x14b_h_17b_h_20_ethylcholestane_ug_g'):
                 value = kwargs[lbl]
                 new_lbl = lbl[:-5]
 

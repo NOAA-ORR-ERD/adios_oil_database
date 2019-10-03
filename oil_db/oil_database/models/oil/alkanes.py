@@ -2,14 +2,15 @@
 # PyMODM model class for Environment Canada's n-Alkane
 # oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
-class NAlkanes(BaseModel):
+class NAlkanes(MongoBaseModel):
     '''
         n-Alkanes (ug/g oil) (ESTS 2002a)
     '''

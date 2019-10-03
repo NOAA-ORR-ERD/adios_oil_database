@@ -1,12 +1,11 @@
 #
 # PyMODM model class for water content oil properties.
 #
-from pydantic import BaseModel
-
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class Water(BaseModel):
+class Water(MongoBaseModel):
     fraction: FloatUnit
     weathering: float = 0.0
 

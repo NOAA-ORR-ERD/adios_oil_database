@@ -3,12 +3,13 @@
 # that come from the EC spreadsheet (or possibly the .csv file).
 #
 from datetime import datetime
-from pydantic import BaseModel, constr
+from pydantic import constr
 from typing import List
 
-from oil_database.models.common import Synonym
-from oil_database.models.oil import EvaporationEq
-from oil_database.models.oil import (CCMESaturateCxx,
+from oil_database.models.common import MongoBaseModel, Synonym
+
+from oil_database.models.oil import (EvaporationEq,
+                                     CCMESaturateCxx,
                                      CCMEAromaticCxx,
                                      CCMETotalPetroleumCxx)
 
@@ -33,10 +34,9 @@ from .alkylated_pah import ECAlkylatedTotalPAH
 from .sara_fraction import ECSARAFraction
 from .biomarkers import ECBiomarkers
 from .alkanes import ECNAlkanes
-from more_itertools.more import circular_shifts
 
 
-class ECImportedRecord(BaseModel):
+class ECImportedRecord(MongoBaseModel):
     '''
         This class, and its related objects, represents a single record inside
         the Environment Canada source data spreadsheet.

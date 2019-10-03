@@ -1,14 +1,15 @@
 #
 # PyMODM model class for benzene oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 # we are probably not talking about concentrations of benzene in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import ConcentrationInWaterUnit
 
 
-class Benzene(BaseModel):
+class Benzene(MongoBaseModel):
     weathering: float = 0.0
     method: constr(max_length=16) = None
 

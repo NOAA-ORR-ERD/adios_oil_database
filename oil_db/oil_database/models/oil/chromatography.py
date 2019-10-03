@@ -1,15 +1,16 @@
 #
 # PyMODM model class for gas chromatography oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 # we are probably not talking about concentrations in water here,
 # but the units we are dealing with are the same.
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    ConcentrationInWaterUnit)
 
 
-class GasChromatography(BaseModel):
+class GasChromatography(MongoBaseModel):
     '''
         Gas Chromatography (ESTS 2002a):
         - Total Petroleum Hydrocarbons (mg/g)

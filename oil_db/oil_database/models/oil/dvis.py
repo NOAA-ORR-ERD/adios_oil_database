@@ -1,13 +1,14 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import (TemperatureUnit,
                                                    DynamicViscosityUnit)
 
 
-class DVis(BaseModel):
+class DVis(MongoBaseModel):
     viscosity: DynamicViscosityUnit
     ref_temp: TemperatureUnit
     weathering: float = 0.0

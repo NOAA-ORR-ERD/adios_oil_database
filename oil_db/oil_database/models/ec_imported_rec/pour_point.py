@@ -2,12 +2,13 @@
 # Model class for Environment Canada's pour point
 # oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import TemperatureUnit
 
 
-class ECPourPoint(BaseModel):
+class ECPourPoint(MongoBaseModel):
     ref_temp: TemperatureUnit = None
     weathering: float = 0.0
 

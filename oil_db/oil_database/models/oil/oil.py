@@ -3,11 +3,10 @@
 # that come from the EC spreadsheet (or possibly the .csv file).
 #
 from datetime import datetime
-from pydantic import BaseModel, constr
+from pydantic import constr
 from typing import List
 
-from oil_database.models.common import Synonym
-from oil_database.models.common import Category
+from oil_database.models.common import MongoBaseModel, Synonym, Category
 
 from .density import Density
 from .api import ApiGravity
@@ -39,7 +38,7 @@ from .toxicity import Toxicity
 from .conradson import Conradson
 
 
-class Oil(BaseModel):
+class Oil(MongoBaseModel):
     '''
         This class, and its related objects, represents a single record inside
         the NOAA oil database.

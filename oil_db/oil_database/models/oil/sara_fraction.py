@@ -1,13 +1,14 @@
 #
 # PyMODM Model class definitions for embedded content in our oil records
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.enum_types import SaraTypeEnum
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class SARAFraction(BaseModel):
+class SARAFraction(MongoBaseModel):
     sara_type: SaraTypeEnum
     fraction: FloatUnit
     weathering: float = 0.0

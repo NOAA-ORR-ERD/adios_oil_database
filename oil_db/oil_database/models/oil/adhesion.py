@@ -2,12 +2,13 @@
 # PyMODM model class for Environment Canada's adhesion
 # oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import AdhesionUnit
 
 
-class Adhesion(BaseModel):
+class Adhesion(MongoBaseModel):
     adhesion: AdhesionUnit
     weathering: float = 0.0
 

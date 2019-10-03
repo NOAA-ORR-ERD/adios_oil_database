@@ -2,6 +2,7 @@
 # Model class definitions for embedded Float/Unit content pairs
 # in our oil records
 #
+import json
 from pydantic.dataclasses import dataclass
 
 from unit_conversion import convert
@@ -27,12 +28,12 @@ class UnitMeta(type):
                 flattened_units = tuple(set([i for sub in all_units
                                              for i in sub]))
             except KeyError:
-                flattened_units = ['1', '%']
+                flattened_units = ['1', '%', 'fraction']
 
             namespace['unit_choices'] = flattened_units
             namespace['unit_type'] = unit_type
         else:
-            namespace['unit_choices'] = ['1', '%']
+            namespace['unit_choices'] = ['1', '%', 'fraction']
             namespace['unit_type'] = 'Float'
 
         return super().__new__(cls, name, bases, namespace)
@@ -136,7 +137,7 @@ class FloatUnit(object, metaclass=UnitMeta):
     def __repr__(self):
         return '<{}({})>'.format(self.__class__.__name__, self.__str__())
 
-    def to_json(self):
+    def dict(self):
         ret = {'_cls': '{}.{}'.format(self.__class__.__module__,
                                       self.__class__.__name__)}
         for k in self.__dataclass_fields__.keys():
@@ -145,6 +146,9 @@ class FloatUnit(object, metaclass=UnitMeta):
                 ret[k] = value
 
         return ret
+
+    def json(self) -> str:
+        return json.dumps(self.dict())
 
 
 class AdhesionUnit(FloatUnit):

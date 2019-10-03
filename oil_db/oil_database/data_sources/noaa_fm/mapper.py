@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import logging
-from datetime import date
+from datetime import datetime
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -88,8 +88,8 @@ class OilLibraryAttributeMapper(object):
         rd = self.record.reference_date
 
         if rd is not None:
-            return date(year=int(self.record.reference_date),
-                        month=1, day=1)
+            return datetime(year=int(self.record.reference_date),
+                            month=1, day=1)
 
     @property
     def comments(self):
@@ -129,6 +129,9 @@ class OilLibraryAttributeMapper(object):
                                  'unit': 'kg/m^3'}
             kwargs['ref_temp'] = {'value': kwargs['ref_temp_k'],
                                   'unit': 'K'}
+
+            del kwargs['kg_m_3'],
+            del kwargs['ref_temp_k'],
 
             yield kwargs
 

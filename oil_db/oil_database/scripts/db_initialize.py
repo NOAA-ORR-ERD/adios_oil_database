@@ -59,7 +59,7 @@ def init_db(settings):
                 - Categories
 
     '''
-    logger.info('connect_modm()...')
+    logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
 
     if settings['mongodb.database'] in client.database_names():

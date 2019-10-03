@@ -1,9 +1,9 @@
-from pydantic import BaseModel
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class Conradson(BaseModel):
+class Conradson(MongoBaseModel):
     weathering: float = 0.0
 
     residue: FloatUnit = None

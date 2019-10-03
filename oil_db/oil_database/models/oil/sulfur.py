@@ -2,12 +2,11 @@
 # PyMODM model class for Environment Canada's sulfur
 # oil properties.
 #
-from pydantic import BaseModel
-
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import FloatUnit
 
 
-class Sulfur(BaseModel):
+class Sulfur(MongoBaseModel):
     fraction: FloatUnit
     weathering: float = 0.0
 

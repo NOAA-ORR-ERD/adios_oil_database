@@ -1,9 +1,10 @@
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.float_unit import TemperatureUnit
 
 
-class FlashPoint(BaseModel):
+class FlashPoint(MongoBaseModel):
     ref_temp: TemperatureUnit = None
     weathering: float = 0.0
 

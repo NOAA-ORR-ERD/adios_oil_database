@@ -1,11 +1,12 @@
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.enum_types import InterfaceTypeEnum
 from oil_database.models.common.float_unit import (TemperatureUnit,
                                                    InterfacialTensionUnit)
 
 
-class InterfacialTension(BaseModel):
+class InterfacialTension(MongoBaseModel):
     '''
         Interfacial tension model.
     '''

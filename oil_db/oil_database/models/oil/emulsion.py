@@ -2,8 +2,9 @@
 # PyMODM model class for Environment Canada's emulsion
 # oil properties.
 #
-from pydantic import BaseModel, constr
+from pydantic import constr
 
+from oil_database.models.common import MongoBaseModel
 from oil_database.models.common.enum_types import VisualStabilityEnum
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    TimeUnit,
@@ -12,7 +13,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    DynamicViscosityUnit)
 
 
-class Emulsion(BaseModel):
+class Emulsion(MongoBaseModel):
     water_content: FloatUnit
     age: TimeUnit
     ref_temp: TemperatureUnit

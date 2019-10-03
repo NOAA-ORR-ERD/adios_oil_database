@@ -9,6 +9,8 @@ from typing import Any, Optional, Callable, Union, cast
 
 from oil_database.util.decamelize import camelcase_to_underscore
 
+from oil_database.models.common.float_unit import FloatUnit
+
 
 class PydObjectId(ObjectId):
     '''
@@ -119,6 +121,20 @@ class MongoBaseModel(BaseModel):
 
         return attrs
 
+    def expanded_float_unit_attrs(self):
+        attrs = {}
+
+        for k in self.fields:
+            attr = getattr(self, k)
+
+            if isinstance(attr, FloatUnit):
+                attrs[k] = attr.dict()
+            elif (isinstance(attr, list) and
+                    any([isinstance(i, FloatUnit) for i in attr])):
+                attrs[k] = [i.dict() for i in attr]
+
+        return attrs
+
     def dict(self, *, expand_refs=False, **kwargs) -> 'DictStrAny':
         '''
             Overloaded version of BaseModel.dict(), which adds the
@@ -132,6 +148,8 @@ class MongoBaseModel(BaseModel):
                 self.get_collection() is not None):
             expanded_attrs = self.expanded_ref_attrs()
             res.update(expanded_attrs)
+
+        res.update(self.expanded_float_unit_attrs())
 
         return res
 
@@ -166,6 +184,7 @@ class MongoBaseModel(BaseModel):
         return self
 
     def insert(self):
+
         self._id = self.get_collection().insert_one(self.dict()).inserted_id
 
     def replace(self):

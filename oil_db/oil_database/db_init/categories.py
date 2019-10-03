@@ -97,7 +97,7 @@ def get_categories_by_names(top_name, child_names):
     if top_category is None:
         return None
 
-    child_categories = [c for c in top_category.children
+    child_categories = [c for c in top_category.expand('children')
                         if c.name in child_names]
 
     return child_categories
