@@ -56,9 +56,7 @@ class MongoBaseModel(BaseModel):
         if db is not None:
             if ('__collection__' in cls.__dict__ and
                     cls.__collection__ is not None):
-                print('Warning: collection name already set for class {}, '
-                      'but we will set it anyway'
-                      .format(cls.__name__))
+                pass
             else:
                 collection_name = camelcase_to_underscore(cls.__name__,
                                                           lower=True)

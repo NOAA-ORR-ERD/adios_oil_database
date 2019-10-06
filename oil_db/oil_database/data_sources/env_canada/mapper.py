@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 import logging
 
+from oil_database.models.common.float_unit import (FloatUnit,
+                                                   TemperatureUnit,
+                                                   TimeUnit,
+                                                   DensityUnit,
+                                                   DynamicViscosityUnit,
+                                                   InterfacialTensionUnit,
+                                                   AdhesionUnit,
+                                                   ConcentrationInWaterUnit)
+
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
@@ -38,6 +47,22 @@ class EnvCanadaAttributeMapper(object):
                                    property)])
 
         return props
+
+    def dict(self):
+        items = []
+
+        for p in self.get_interface_properties():
+            k, v = p, getattr(self, p)
+
+            if hasattr(v, '__iter__') and not hasattr(v, '__len__'):
+                v = list(v)
+
+            items.append((k, v))
+
+        return dict(items)
+
+    def _class_path(self, class_obj):
+        return '{}.{}'.format(class_obj.__module__, class_obj.__name__)
 
     def _get_kwargs(self, obj):
         '''
@@ -117,10 +142,15 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(d)
 
             kwargs['density'] = {'value': kwargs['g_ml'],
-                                 'from_unit': 'g/mL', 'unit': 'kg/m^3'}
+                                 'from_unit': 'g/mL', 'unit': 'kg/m^3',
+                                 '_cls': self._class_path(DensityUnit)}
 
             kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
-                                  'from_unit': 'C', 'unit': 'K'}
+                                  'from_unit': 'C', 'unit': 'K',
+                                  '_cls': self._class_path(TemperatureUnit)}
+
+            del kwargs['g_ml']
+            del kwargs['ref_temp_c']
 
             yield kwargs
 
@@ -130,23 +160,45 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(d)
 
             kwargs['viscosity'] = kwargs['mpa_s']
-            del kwargs['viscosity']['_cls']
+            kwargs['viscosity']['_cls'] = self._class_path(DynamicViscosityUnit)
 
-            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
-                                  'from_unit': 'C', 'unit': 'K'}
+            kwargs['ref_temp'] = {
+                'value': kwargs['ref_temp_c'],
+                'from_unit': 'C', 'unit': 'K',
+                '_cls': self._class_path(TemperatureUnit)
+            }
+
+            del kwargs['mpa_s']
+            del kwargs['ref_temp_c']
 
             yield kwargs
+
+    @property
+    def kvis(self):
+        '''
+            N/A. Env. Canada records don't have this.
+        '''
+        if False:
+            yield None
 
     @property
     def ifts(self):
         for i in self.record.ifts:
             kwargs = self._get_kwargs(i)
 
-            kwargs['tension'] = {'value': kwargs['dynes_cm'],
-                                 'from_unit': 'dyne/cm',
-                                 'unit': 'N/m'}
-            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
-                                  'from_unit': 'C', 'unit': 'K'}
+            kwargs['tension'] = {
+                'value': kwargs['dynes_cm'],
+                'from_unit': 'dyne/cm', 'unit': 'N/m',
+                '_cls': self._class_path(InterfacialTensionUnit)
+            }
+            kwargs['ref_temp'] = {
+                'value': kwargs['ref_temp_c'],
+                'from_unit': 'C', 'unit': 'K',
+                '_cls': self._class_path(TemperatureUnit)
+            }
+
+            del kwargs['dynes_cm']
+            del kwargs['ref_temp_c']
 
             yield kwargs
 
@@ -154,7 +206,7 @@ class EnvCanadaAttributeMapper(object):
     def flash_points(self):
         for f in self.record.flash_points:
             kwargs = self._get_kwargs(f)
-            del kwargs['ref_temp']['_cls']
+            kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)
 
             yield kwargs
 
@@ -162,7 +214,7 @@ class EnvCanadaAttributeMapper(object):
     def pour_points(self):
         for p in self.record.pour_points:
             kwargs = self._get_kwargs(p)
-            del kwargs['ref_temp']['_cls']
+            kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)
 
             yield kwargs
 
@@ -171,10 +223,14 @@ class EnvCanadaAttributeMapper(object):
         for c in self.record.cuts:
             kwargs = self._get_kwargs(c)
 
-            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
-                                  'unit': '1'}
+            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
+                                  '_cls': self._class_path(FloatUnit)}
             kwargs['vapor_temp'] = {'value': kwargs['temp_c'],
-                                    'from_unit': 'C', 'unit': 'K'}
+                                    'from_unit': 'C', 'unit': 'K',
+                                    '_cls': self._class_path(TemperatureUnit)}
+
+            del kwargs['percent']
+            del kwargs['temp_c']
 
             yield kwargs
 
@@ -184,7 +240,10 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(a)
 
             kwargs['adhesion'] = {'value': kwargs['g_cm_2'],
-                                  'from_unit': 'g/cm^2', 'unit': 'N/m^2'}
+                                  'from_unit': 'g/cm^2', 'unit': 'N/m^2',
+                                  '_cls': self._class_path(AdhesionUnit)}
+
+            del kwargs['g_cm_2']
 
             yield kwargs
 
@@ -198,12 +257,18 @@ class EnvCanadaAttributeMapper(object):
         for e in self.record.emulsions:
             kwargs = self._get_kwargs(e)
 
-            kwargs['water_content'] = {'value': kwargs['water_content_percent'] / 100.0,
-                                       'unit': '1'}
-            kwargs['age'] = {'value': kwargs['age_days'],
-                             'from_unit': 'day', 'unit': 's'}
-            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
-                                  'from_unit': 'C', 'unit': 'K'}
+            kwargs['water_content'] = {
+                'value': kwargs['water_content_percent'], 'unit': '%',
+                '_cls': self._class_path(FloatUnit)
+            }
+            kwargs['age'] = {
+                'value': kwargs['age_days'], 'from_unit': 'day', 'unit': 's',
+                '_cls': self._class_path(TimeUnit)
+            }
+            kwargs['ref_temp'] = {
+                'value': kwargs['ref_temp_c'], 'from_unit': 'C', 'unit': 'K',
+                '_cls': self._class_path(TemperatureUnit)
+            }
 
             # the different modulus values have similar units of measure
             # to adhesion, so this is what we will go with
@@ -214,16 +279,30 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = mod_lbl[:-3]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'Pa', 'unit': 'N/m^2'}
+                    kwargs[new_lbl] = {
+                        'value': value,
+                        'from_unit': 'Pa', 'unit': 'N/m^2',
+                        '_cls': self._class_path(AdhesionUnit)
+                    }
 
             for visc_lbl in ('complex_viscosity_pa_s',):
                 value = kwargs[visc_lbl]
                 new_lbl = visc_lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'Pa.s', 'unit': 'kg/(m s)'}
+                    kwargs[new_lbl] = {
+                        'value': value,
+                        'from_unit': 'Pa.s', 'unit': 'kg/(m s)',
+                        '_cls': self._class_path(DynamicViscosityUnit)
+                    }
+
+            del kwargs['water_content_percent']
+            del kwargs['age_days']
+            del kwargs['ref_temp_c']
+            del kwargs['complex_modulus_pa']
+            del kwargs['storage_modulus_pa']
+            del kwargs['loss_modulus_pa']
+            del kwargs['complex_viscosity_pa_s']
 
             yield kwargs
 
@@ -234,7 +313,9 @@ class EnvCanadaAttributeMapper(object):
 
             kwargs['dispersant'] = 'Corexit 9500'
             kwargs['effectiveness'] = kwargs['dispersant_effectiveness']
-            del kwargs['effectiveness']['_cls']
+            kwargs['effectiveness']['_cls'] = self._class_path(FloatUnit)
+
+            del kwargs['dispersant_effectiveness']
 
             yield kwargs
 
@@ -243,8 +324,10 @@ class EnvCanadaAttributeMapper(object):
         for s in self.record.sulfur:
             kwargs = self._get_kwargs(s)
 
-            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
-                                  'unit': '1'}
+            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
+                                  '_cls': self._class_path(FloatUnit)}
+
+            del kwargs['percent']
 
             yield kwargs
 
@@ -254,7 +337,9 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(w)
 
             kwargs['fraction'] = kwargs['percent']
-            del kwargs['fraction']['_cls']
+            kwargs['fraction']['_cls'] = self._class_path(FloatUnit)
+
+            del kwargs['percent']
 
             yield kwargs
 
@@ -263,8 +348,10 @@ class EnvCanadaAttributeMapper(object):
         for w in self.record.wax_content:
             kwargs = self._get_kwargs(w)
 
-            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
-                                  'unit': '1'}
+            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
+                                  '_cls': self._class_path(FloatUnit)}
+
+            del kwargs['percent']
 
             yield kwargs
 
@@ -283,19 +370,23 @@ class EnvCanadaAttributeMapper(object):
                         'isobutylbenzene_ug_g',
                         'amylbenzene_ug_g',
                         'n_hexylbenzene_ug_g',
-                        'x1_2_3_trimethylbenzene_ug_g',
-                        'x1_2_4_trimethylbenzene_ug_g',
-                        'x1_2_dimethyl_4_ethylbenzene_ug_g',
-                        'x1_3_5_trimethylbenzene_ug_g',
-                        'x1_methyl_2_isopropylbenzene_ug_g',
-                        'x2_ethyltoluene_ug_g',
-                        'x3_4_ethyltoluene_ug_g'):
+                        '_1_2_3_trimethylbenzene_ug_g',
+                        '_1_2_4_trimethylbenzene_ug_g',
+                        '_1_2_dimethyl_4_ethylbenzene_ug_g',
+                        '_1_3_5_trimethylbenzene_ug_g',
+                        '_1_methyl_2_isopropylbenzene_ug_g',
+                        '_2_ethyltoluene_ug_g',
+                        '_3_4_ethyltoluene_ug_g'):
                 value = kwargs[lbl]
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'ug/g', 'unit': 'ppm'}
+                    kwargs[new_lbl] = {
+                        'value': value, 'from_unit': 'ug/g', 'unit': 'ppm',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                del kwargs[lbl]
 
             yield kwargs
 
@@ -315,8 +406,12 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'mg/g', 'unit': 'ppm'}
+                    kwargs[new_lbl] = {
+                        'value': value, 'from_unit': 'mg/g', 'unit': 'ppm',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                del kwargs[lbl]
 
             yield kwargs
 
@@ -332,8 +427,11 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'mg/g', 'unit': '1'}
+                    kwargs[new_lbl] = {
+                        'value': value, 'unit': 'mg/g',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)}
+
+                del kwargs[lbl]
 
             for lbl in ('tsh_tph_percent',
                         'tah_tph_percent',
@@ -342,8 +440,10 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-8]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value / 100.0,
-                                       'unit': '1'}
+                    kwargs[new_lbl] = {'value': value, 'unit': '%',
+                                       '_cls': self._class_path(FloatUnit)}
+
+                del kwargs[lbl]
 
             yield kwargs
 
@@ -357,8 +457,12 @@ class EnvCanadaAttributeMapper(object):
                 value = kwargs[lbl]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'mg/g', 'unit': '1'}
+                    kwargs[new_lbl] = {
+                        'value': value, 'unit': 'mg/g',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                del kwargs[lbl]
 
             yield kwargs
 
@@ -382,8 +486,8 @@ class EnvCanadaAttributeMapper(object):
         for f in self.record.sara_total_fractions:
             kwargs = self._get_kwargs(f)
 
-            kwargs['fraction'] = {'value': kwargs['percent'] / 100.0,
-                                  'unit': '1'}
+            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
+                                  '_cls': self._class_path(FloatUnit)}
 
             yield kwargs
 
@@ -397,16 +501,26 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'ug/g', 'unit': 'ppm'}
+                    kwargs[new_lbl] = {
+                        'value': value,
+                        'from_unit': 'ug/g', 'unit': 'ppm',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                del kwargs[lbl]
 
             for n in range(8, 45):
                 lbl, new_lbl = 'c{}_ug_g'.format(n), 'c{}'.format(n)
                 value = kwargs[lbl]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'ug/g', 'unit': 'ppm'}
+                    kwargs[new_lbl] = {
+                        'value': value,
+                        'from_unit': 'ug/g', 'unit': 'ppm',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                del kwargs[lbl]
 
             yield kwargs
 
@@ -421,8 +535,14 @@ class EnvCanadaAttributeMapper(object):
                 value = kwargs.get(lbl, None)
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'ug/g', 'unit': 'ppm'}
+                    kwargs[new_lbl] = {
+                        'value': value,
+                        'from_unit': 'ug/g', 'unit': 'ppm',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                if lbl in kwargs:
+                    del kwargs[lbl]
 
             for lbl in ('biphenyl_ug_g',
                         'acenaphthylene_ug_g',
@@ -443,8 +563,13 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'ug/g', 'unit': 'ppm'}
+                    kwargs[new_lbl] = {
+                        'value': value,
+                        'from_unit': 'ug/g', 'unit': 'ppm',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                del kwargs[lbl]
 
             yield kwargs
 
@@ -457,29 +582,33 @@ class EnvCanadaAttributeMapper(object):
                         'c22_tricyclic_terpane_ug_g',
                         'c23_tricyclic_terpane_ug_g',
                         'c24_tricyclic_terpane_ug_g',
-                        'x30_norhopane_ug_g',
+                        '_30_norhopane_ug_g',
                         'hopane_ug_g',
-                        'x30_homohopane_22s_ug_g',
-                        'x30_homohopane_22r_ug_g',
-                        'x30_31_bishomohopane_22s_ug_g',
-                        'x30_31_bishomohopane_22r_ug_g',
-                        'x30_31_trishomohopane_22s_ug_g',
-                        'x30_31_trishomohopane_22r_ug_g',
+                        '_30_homohopane_22s_ug_g',
+                        '_30_homohopane_22r_ug_g',
+                        '_30_31_bishomohopane_22s_ug_g',
+                        '_30_31_bishomohopane_22r_ug_g',
+                        '_30_31_trishomohopane_22s_ug_g',
+                        '_30_31_trishomohopane_22r_ug_g',
                         'tetrakishomohopane_22s_ug_g',
                         'tetrakishomohopane_22r_ug_g',
                         'pentakishomohopane_22s_ug_g',
                         'pentakishomohopane_22r_ug_g',
-                        'x18a_22_29_30_trisnorneohopane_ug_g',
-                        'x17a_h_22_29_30_trisnorhopane_ug_g',
-                        'x14b_h_17b_h_20_cholestane_ug_g',
-                        'x14b_h_17b_h_20_methylcholestane_ug_g',
-                        'x14b_h_17b_h_20_ethylcholestane_ug_g'):
+                        '_18a_22_29_30_trisnorneohopane_ug_g',
+                        '_17a_h_22_29_30_trisnorhopane_ug_g',
+                        '_14b_h_17b_h_20_cholestane_ug_g',
+                        '_14b_h_17b_h_20_methylcholestane_ug_g',
+                        '_14b_h_17b_h_20_ethylcholestane_ug_g'):
                 value = kwargs[lbl]
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value,
-                                       'from_unit': 'ug/g',
-                                       'unit': 'ppm'}
+                    kwargs[new_lbl] = {
+                        'value': value,
+                        'from_unit': 'ug/g', 'unit': 'ppm',
+                        '_cls': self._class_path(ConcentrationInWaterUnit)
+                    }
+
+                del kwargs[lbl]
 
             yield kwargs

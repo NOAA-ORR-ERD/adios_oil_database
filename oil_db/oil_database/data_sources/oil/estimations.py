@@ -3,16 +3,21 @@
     properties that are contained within an oil record that has been
     queried from the oil database.
 '''
+from importlib import import_module
+
 import numpy as np
 from scipy.optimize import curve_fit
 
 from oil_database.util import estimations as est
+from oil_database.util.json import ObjFromDict
 
 from oil_database.models.common.float_unit import (TemperatureUnit,
                                                    DensityUnit,
                                                    DynamicViscosityUnit,
                                                    KinematicViscosityUnit)
-from oil_database.models.oil import Density, KVis, DVis
+
+from pprint import PrettyPrinter
+pp = PrettyPrinter(indent=2, width=120)
 
 
 def _linear_curve(x, a, b):
@@ -51,7 +56,15 @@ def clamp(x, M, zeta=0.03):
 
 class OilEstimation(object):
     def __init__(self, imported_rec):
-        self.record = imported_rec
+        if hasattr(imported_rec, 'dict'):
+            # we are dealing with a mapper object, convert to data object
+            self.record = imported_rec.dict()
+        else:
+            self.record = imported_rec
+
+        # convert our record dict into an obj with attributes
+        self.record = ObjFromDict(self._add_float_units(self.record))
+
         self._k_v2 = None
 
     def __repr__(self):
@@ -61,6 +74,40 @@ class OilEstimation(object):
         except Exception:
             return ('<{0}({1.oil_name})>'
                     .format(self.__class__.__name__, self.record))
+
+    def _add_float_units(self, data):
+        if isinstance(data, (tuple, list, set, frozenset)):
+            return type(data)([self._add_float_units(v) for v in data])
+        if (isinstance(data, dict) and
+                '_cls' in data and
+                any([(k in data)
+                     for k in ('value', 'max_value', 'min_value')])):
+            # create a FloatUnit type from our struct
+            class_name = data['_cls']
+            del data['_cls']
+            py_class = self.py_class_from_name(class_name)
+            return py_class(**data)
+        elif isinstance(data, dict):
+            return dict([(k, self._add_float_units(v))
+                         for k, v in data.items()])
+        else:
+            return data
+
+    def py_class_from_name(self, fully_qualified_name):
+        name, scope = self.fq_name_to_name_and_scope(fully_qualified_name)
+        module = import_module(scope)
+
+        return getattr(module, name)
+
+    def fq_name_to_name_and_scope(self, fully_qualified_name):
+        fqn = fully_qualified_name
+
+        return (list(reversed(fqn.rsplit('.', 1)))
+                if fqn.find('.') >= 0
+                else [fqn, ''])
+
+    def __getattr__(self, name):
+        return getattr(self.record, name)
 
     @classmethod
     def lowest_temperature(cls, obj_list):
@@ -271,11 +318,11 @@ class OilEstimation(object):
                      if np.isclose(d.ref_temp.value, 288.0, atol=1.0)]) == 0):
             kg_m_3, ref_temp_k = est.density_from_api(api.gravity)
 
-            densities.append(Density(density=DensityUnit(value=kg_m_3,
-                                                         unit='kg/m^3'),
-                                     ref_temp=TemperatureUnit(value=ref_temp_k,
-                                                              unit='K'),
-                                     weathering=0.0))
+            densities.append({'density': DensityUnit(value=kg_m_3,
+                                                     unit='kg/m^3'),
+                              'ref_temp': TemperatureUnit(value=ref_temp_k,
+                                                          unit='K'),
+                              'weathering': 0.0})
 
         return sorted(densities, key=lambda d: d.ref_temp.value)
 
@@ -418,7 +465,8 @@ class OilEstimation(object):
         if self.record.kvis is None:
             kvis_dict = {}
         else:
-            kvis_dict = dict([((k.weathering, k.ref_temp.to_unit('K')),
+            kvis_dict = dict([((k.weathering,
+                                k.ref_temp.to_unit('K')),
                                k.viscosity.to_unit('m^2/s'))
                               for k in self.record.kvis])
 
@@ -432,10 +480,11 @@ class OilEstimation(object):
         non_redundant_keys = set(dvis_dict.keys()).difference(kvis_dict.keys())
 
         for k in sorted(non_redundant_keys):
-            yield DVis(ref_temp=TemperatureUnit(value=k[1], unit='K'),
-                       viscosity=DynamicViscosityUnit(value=dvis_dict[k],
-                                                      unit='kg/(m s)'),
-                       weathering=k[0])
+            yield ObjFromDict({'ref_temp': TemperatureUnit(value=k[1],
+                                                           unit='K'),
+                               'viscosity': DynamicViscosityUnit(value=dvis_dict[k],
+                                                                 unit='kg/(m s)'),
+                               'weathering': k[0]})
 
     def dvis_to_kvis(self, kg_ms, ref_temp_k):
         density = self.density_at_temp(ref_temp_k)
@@ -449,17 +498,18 @@ class OilEstimation(object):
     def dvis_obj_to_kvis_obj(cls, dvis_obj, density):
         viscosity = est.dvis_to_kvis(dvis_obj.kg_ms, density)
 
-        return KVis(ref_temp=dvis_obj.ref_temp,
-                    viscosity=KinematicViscosityUnit(value=viscosity,
-                                                     unit='m^2/s'),
-                    weathering=dvis_obj.weathering)
+        return {'viscosity': KinematicViscosityUnit(value=viscosity,
+                                                    unit='m^2/s'),
+                'ref_temp': dvis_obj.ref_temp,
+                'weathering': dvis_obj.weathering}
 
     def aggregate_kvis(self):
         if self.record.kvis is None:
             kvis_list = []
         else:
             kvis_list = [((k.ref_temp.to_unit('K'), k.weathering),
-                          k.viscosity.to_unit('m^2/s'))
+                          k.viscosity.to_unit('m^2/s')
+                          )
                          for k in self.record.kvis]
 
         if hasattr(self.record, 'dvis'):
@@ -474,10 +524,10 @@ class OilEstimation(object):
         else:
             agg = dict(kvis_list)
 
-        return [KVis(viscosity=KinematicViscosityUnit(value=k,
-                                                      unit='m^2/s'),
-                     ref_temp=TemperatureUnit(value=t, unit='K'),
-                     weathering=w)
+        return [ObjFromDict({'viscosity': KinematicViscosityUnit(value=k,
+                                                                 unit='m^2/s'),
+                             'ref_temp': TemperatureUnit(value=t, unit='K'),
+                             'weathering': w})
                 for (t, w), k in sorted(agg.items())]
 
     def kvis_at_temp(self, temp_k=288.15, weathering=0.0):

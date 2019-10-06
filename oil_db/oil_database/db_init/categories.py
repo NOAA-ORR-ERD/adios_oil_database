@@ -19,88 +19,48 @@
 '''
 import logging
 
-from functools import lru_cache
-
 import unit_conversion as uc
 
-from oil_database.models.common import Category
 from oil_database.data_sources.oil import OilEstimation
 
 logger = logging.getLogger(__name__)
 
 
-def load_categories():
+def load_categories(db):
     '''
-        Note: When saving a PyMODM object, any attributes that contain
-              document references will be checked for the saved state of the
-              referenced object.
-              And because we are working with doubly linked parent/child
-              relationships here, it is important to save the object early
-              before any links are established.
+        It has been decided that our categories will operate in a similar
+        manner to a simple tagging system.
+        So there are no longer any parent/child relationships.  This will
+        simply be a collection of tag names
+
     '''
-    crude = Category(name='Crude').save()
-    refined = Category(name='Refined').save()
-    other = Category(name='Other').save()
-
-    crude.append(Category(name='Condensate').save())
-    crude.append(Category(name='Light').save())
-    crude.append(Category(name='Medium').save())
-    crude.append(Category(name='Heavy').save())
-
-    refined.append(Category(name='Light Products (Fuel Oil 1)').save())
-    refined.append(Category(name='Gasoline').save())
-    refined.append(Category(name='Kerosene').save())
-
-    refined.append(Category(name='Fuel Oil 2').save())
-    refined.append(Category(name='Diesel').save())
-    refined.append(Category(name='Heating Oil').save())
-
-    refined.append(Category(name='Intermediate Fuel Oil').save())
-
-    refined.append(Category(name='Fuel Oil 6 (HFO)').save())
-    refined.append(Category(name='Bunker').save())
-    refined.append(Category(name='Heavy Fuel Oil').save())
-    refined.append(Category(name='Group V').save())
-
-    other.append(Category(name='Other').save())
-    other.append(Category(name='Generic').save())
+    for name in ('Crude',
+                 'Refined',
+                 'Condensate',
+                 'Light',
+                 'Medium',
+                 'Intermediate',
+                 'Heavy',
+                 'Gasoline',
+                 'Kerosene',
+                 'Fuel Oil',
+                 'Fuel Oil 1',
+                 'Fuel Oil 2',
+                 'Fuel Oil 6',
+                 'HFO',
+                 'Diesel',
+                 'Heating Oil',
+                 'Bunker',
+                 'Group V',
+                 'Other'):
+        db.category.insert_one({'name': name})
 
 
-def list_categories(category, indent=0):
-    '''
-        This is a recursive method to print out our categories
-        showing the nesting with tabbed indentation.
-    '''
-    yield ('{}{}'.format(' ' * indent, category.name))
+def print_all_categories(db):
+    logger.info('Categories in the database...')
 
-    for c in category.expand('children'):
-        for y in list_categories(c, indent + 4):
-            yield y
-
-
-def print_all_categories():
-    logger.info('Here are our newly built categories...')
-
-    for parent in Category.find(filter={'parent': None}):
-        for child in list_categories(parent):
-            logger.info(child)
-
-
-@lru_cache(maxsize=128)
-def get_categories_by_names(top_name, child_names):
-    '''
-        Get the top level category by name, and a list of child categories
-        directly underneath it by their names.
-    '''
-    top_category = Category.find_one({'parent': None, 'name': top_name})
-
-    if top_category is None:
-        return None
-
-    child_categories = [c for c in top_category.expand('children')
-                        if c.name in child_names]
-
-    return child_categories
+    for category in db.category.find({}):
+        logger.info('\t{}'.format(category['name']))
 
 
 def link_oil_to_categories(oil):
@@ -110,53 +70,57 @@ def link_oil_to_categories(oil):
         This is similar to the batch processing function above.
     '''
     oil.categories = []
+    oil_est = OilEstimation(oil)
 
-    if is_crude_light(oil):
+    if is_crude_light(oil_est):
         # add crude->light
-        categories = get_categories_by_names('Crude', ('Light',))
+        categories = ['Crude', 'Light']
         oil.categories.extend(categories)
 
-    if is_crude_medium(oil):
-        categories = get_categories_by_names('Crude', ('Medium',))
+    if is_crude_medium(oil_est):
+        categories = ['Crude', 'Medium']
         oil.categories.extend(categories)
 
-    if is_crude_heavy(oil):
-        categories = get_categories_by_names('Crude', ('Heavy',))
+    if is_crude_heavy(oil_est):
+        categories = ['Crude', 'Heavy']
         oil.categories.extend(categories)
 
-    if is_refined_fuel_oil_1(oil):
-        categories = get_categories_by_names('Refined',
-                                             ('Light Products (Fuel Oil 1)',
-                                              'Gasoline',
-                                              'Kerosene'))
+    if is_refined_fuel_oil_1(oil_est):
+        categories = ['Refined',
+                      'Light',
+                      'Fuel Oil 1',
+                      'Gasoline',
+                      'Kerosene']
         oil.categories.extend(categories)
 
-    if is_refined_fuel_oil_2(oil):
-        categories = get_categories_by_names('Refined',
-                                             ('Fuel Oil 2',
-                                              'Diesel',
-                                              'Heating Oil'))
+    if is_refined_fuel_oil_2(oil_est):
+        categories = ['Refined',
+                      'Fuel Oil 2',
+                      'Diesel',
+                      'Heating Oil']
         oil.categories.extend(categories)
 
-    if is_refined_ifo(oil):
-        categories = get_categories_by_names('Refined',
-                                             ('Intermediate Fuel Oil',))
+    if is_refined_ifo(oil_est):
+        categories = ['Refined',
+                      'Intermediate',
+                      'Fuel Oil']
         oil.categories.extend(categories)
 
-    if is_refined_fuel_oil_6(oil):
-        categories = get_categories_by_names('Refined',
-                                             ('Fuel Oil 6 (HFO)',
-                                              'Bunker',
-                                              'Heavy Fuel Oil',
-                                              'Group V'))
+    if is_refined_fuel_oil_6(oil_est):
+        categories = ['Refined',
+                      'Heavy',
+                      'Fuel Oil 6',
+                      'HFO',
+                      'Bunker',
+                      'Group V']
         oil.categories.extend(categories)
 
-    if is_generic(oil):
-        categories = get_categories_by_names('Other', ('Generic',))
+    if is_generic(oil_est):
+        categories = ['Other', 'Generic']
         oil.categories.extend(categories)
 
     if len(oil.categories) == 0:
-        categories = get_categories_by_names('Other', ('Other',))
+        categories = ['Other']
         oil.categories.extend(categories)
 
 
@@ -302,18 +266,10 @@ def is_generic(oil):
 def is_within_viscosity_range(oil_obj, kvis_min=None, kvis_max=None):
     category_temp = 273.15 + 38
 
-    o_estim = OilEstimation(oil_obj)
-
-    if o_estim.kvis_at_temp(category_temp) is None:
+    if oil_obj.kvis_at_temp(category_temp) is None:
         return False
 
-    # TODO: It seems clunky to have to convert using the unit_conversion
-    #       package directly.  It seems that maybe we want kvis_at_temp()
-    #       to return a KinematicViscosityUnit type.
-    #       We should maybe define the API of the estimation object more
-    #       consistently.
-    viscosity = uc.convert('Kinematic Viscosity', 'm^2/s', 'cSt',
-                           o_estim.kvis_at_temp(category_temp))
+    viscosity = oil_obj.kvis_at_temp(category_temp)
 
     if kvis_min is not None and kvis_max is not None:
         return (viscosity > kvis_min) and (viscosity <= kvis_max)

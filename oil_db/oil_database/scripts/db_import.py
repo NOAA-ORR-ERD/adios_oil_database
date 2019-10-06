@@ -4,8 +4,6 @@ import io
 import logging
 from datetime import datetime
 
-from pydantic import ValidationError
-
 from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.term import TermColor as tc
@@ -20,13 +18,7 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
                                                   EnvCanadaAttributeMapper)
 
-from oil_database.models.common import Category
-from oil_database.models.noaa_fm import ImportedRecord
-from oil_database.models.ec_imported_rec import ECImportedRecord
-from oil_database.models.oil import Oil
-
 from oil_database.db_init.validation import oil_record_validation
-
 from oil_database.db_init.categories import link_oil_to_categories
 
 logger = logging.getLogger(__name__)
@@ -54,19 +46,19 @@ def add_all(settings):
                            record_cls, reader_cls, parser_cls, mapper_cls)
 
 
-menu_items = (('NOAA Filemaker', 'oildb.fm_files',
-               ImportedRecord,
+menu_items = (['NOAA Filemaker', 'oildb.fm_files',
+               None,
                OilLibraryCsvFile,
                OilLibraryRecordParser,
-               OilLibraryAttributeMapper),
-              ('Environment Canada', 'oildb.ec_files',
-               ECImportedRecord,
+               OilLibraryAttributeMapper],
+              ['Environment Canada', 'oildb.ec_files',
+               None,
                EnvCanadaOilExcelFile,
                EnvCanadaRecordParser,
-               EnvCanadaAttributeMapper),
+               EnvCanadaAttributeMapper],
               # ('Exxon Assays', add_exxon_records)
-              ('Exxon Assays', not_implemented),
-              ('All datasets', add_all)
+              ['Exxon Assays', not_implemented],
+              ['All datasets', add_all]
               )
 
 
@@ -120,10 +112,8 @@ def import_db(settings):
 
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
-    db = getattr(client, settings['mongodb.database'])
 
-    # [m.attach(db) for m in (ImportedRecord, ECImportedRecord, Oil)]
-    [m.attach(db) for m in (Category, ImportedRecord, ECImportedRecord, Oil)]
+    init_menu_item_collections(client, settings)
 
     while quit_app is False:
         print_menu()
@@ -143,18 +133,29 @@ def import_db(settings):
 
                 func(settings)
             else:
-                (label, config,
-                 record_cls, reader_cls, parser_cls, mapper_cls) = chosen
+                (label, config, oil_collection,
+                 reader_cls, parser_cls, mapper_cls) = chosen
                 print('\tYour choice: {}'.format(label))
 
                 begin = datetime.now()
-                import_records(settings[config],
-                               record_cls, reader_cls, parser_cls, mapper_cls)
+                import_records(settings[config], oil_collection,
+                               reader_cls, parser_cls, mapper_cls)
                 end = datetime.now()
 
                 print('time elapsed: {}'.format(end - begin))
 
     print('quitting the import...')
+
+
+def init_menu_item_collections(client, settings):
+    '''
+        We will be loading everything into the same collection, so we set
+        all items to the same place.
+    '''
+    oil_collection = getattr(client, settings['mongodb.database']).oil
+    [i.__setitem__(2, oil_collection)
+     for i in menu_items
+     if len(i) >= 3]
 
 
 def print_menu():
@@ -182,7 +183,7 @@ def get_chosen_menu_item(choice):
         return None
 
 
-def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
+def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
     '''
         Add the records from a data source.
         the config value should be a file list.
@@ -195,8 +196,7 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
                        of files containing the data to import.
         :type config: string or unicode
 
-        :param record_cls: A database record storage class with a construction
-                           method from_record_parser()
+        :param oil_collection: A database oil collection (table)
 
         :param reader_cls: A file reader class capable of iterating the records
                            in a data file of a specified type.
@@ -217,34 +217,19 @@ def import_records(config, record_cls, reader_cls, parser_cls, mapper_cls):
         error_count = 0
         for record_data in fd.get_records():
             total_count += 1
-            parser = parser_cls(*record_data)
 
             try:
-                rec = record_cls.from_record_parser(parser)
-                rec.save()
-
-                oil_obj = Oil.from_record_parser(mapper_cls(rec))
+                oil_obj = mapper_cls(parser_cls(*record_data))
 
                 oil_obj.status = oil_record_validation(oil_obj)
 
                 if len(oil_obj.status) == 0:
                     link_oil_to_categories(oil_obj)
 
-                oil_obj.save()
-            except ValidationError as error:
-                print('validation failed for <{}("{}")>:'
-                      .format(error.model.__name__,
-                              tc.change(parser.oil_id, 'red')))
-
-                for e in error.errors():
-                    loc, msg = e['loc'], e['msg']
-                    print('\t{}: {}'
-                          .format('->'.join([str(l) for l in loc]), msg))
-
-                error_count += 1
+                oil_collection.insert_one(oil_obj.dict())
             except DuplicateKeyError as e:
                 print('duplicate fields for {}: {}'
-                      .format(tc.change(parser.oil_id, 'red'), e))
+                      .format(tc.change(oil_obj.oil_id, 'red'), e))
                 error_count += 1
             else:
                 success_count += 1

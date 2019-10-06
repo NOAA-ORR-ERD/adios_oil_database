@@ -2,6 +2,15 @@
 import logging
 from datetime import datetime
 
+from oil_database.models.common.float_unit import (FloatUnit,
+                                                   TemperatureUnit,
+                                                   TimeUnit,
+                                                   DensityUnit,
+                                                   KinematicViscosityUnit,
+                                                   DynamicViscosityUnit,
+                                                   InterfacialTensionUnit,
+                                                   AdhesionUnit)
+
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
@@ -25,6 +34,8 @@ class OilLibraryAttributeMapper(object):
                                     and associated index values into the data.
         '''
         self.record = record
+        self._status = None
+        self._categories = None
 
     def get_interface_properties(self):
         '''
@@ -39,6 +50,22 @@ class OilLibraryAttributeMapper(object):
                                    property)])
 
         return props
+
+    def dict(self):
+        items = []
+
+        for p in self.get_interface_properties():
+            k, v = p, getattr(self, p)
+
+            if hasattr(v, '__iter__') and not hasattr(v, '__len__'):
+                v = list(v)
+
+            items.append((k, v))
+
+        return dict(items)
+
+    def _class_path(self, class_obj):
+        return '{}.{}'.format(class_obj.__module__, class_obj.__name__)
 
     def _get_kwargs(self, obj):
         '''
@@ -58,6 +85,30 @@ class OilLibraryAttributeMapper(object):
             return self.record.get(attr)
 
     @property
+    def status(self):
+        '''
+            The parser does not have this, but we will want to get/set
+            this property.
+        '''
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        self._status = value
+
+    @property
+    def categories(self):
+        '''
+            The parser does not have this, but we will want to get/set
+            this property.
+        '''
+        return self._categories
+
+    @categories.setter
+    def categories(self, value):
+        self._categories = value
+
+    @property
     def name(self):
         '''
             Nothing special to do here.
@@ -70,6 +121,13 @@ class OilLibraryAttributeMapper(object):
             Nothing special to do here.
         '''
         return self.record.oil_id
+
+    @property
+    def _id(self):
+        '''
+            Nothing special to do here.
+        '''
+        return self.oil_id
 
     @property
     def reference(self):
@@ -118,7 +176,7 @@ class OilLibraryAttributeMapper(object):
             NOAA Filemaker has only one api value, and it is just a float
         '''
         if self.record.api is not None:
-            yield {'gravity': self.record.api}
+            yield {'gravity': float(self.record.api), 'weathering': 0.0}
 
     @property
     def densities(self):
@@ -126,9 +184,12 @@ class OilLibraryAttributeMapper(object):
             kwargs = self._get_kwargs(d)
 
             kwargs['density'] = {'value': kwargs['kg_m_3'],
-                                 'unit': 'kg/m^3'}
+                                 'unit': 'kg/m^3',
+                                 '_cls': self._class_path(DensityUnit)}
             kwargs['ref_temp'] = {'value': kwargs['ref_temp_k'],
-                                  'unit': 'K'}
+                                  'unit': 'K',
+                                  '_cls': self._class_path(TemperatureUnit)}
+            kwargs['weathering'] = float(kwargs.get('weathering', 0.0))
 
             del kwargs['kg_m_3'],
             del kwargs['ref_temp_k'],
@@ -140,10 +201,18 @@ class OilLibraryAttributeMapper(object):
         for d in self.record.dvis:
             kwargs = self._get_kwargs(d)
 
-            kwargs['viscosity'] = {'value': kwargs['kg_ms'],
-                                   'unit': 'kg/(m s)'}
-            kwargs['ref_temp'] = {'value': kwargs['ref_temp_k'],
-                                  'unit': 'K'}
+            kwargs['viscosity'] = {
+                'value': kwargs['kg_ms'],
+                'unit': 'kg/(m s)',
+                '_cls': self._class_path(DynamicViscosityUnit)}
+            kwargs['ref_temp'] = {
+                'value': kwargs['ref_temp_k'],
+                'unit': 'K',
+                '_cls': self._class_path(TemperatureUnit)}
+            kwargs['weathering'] = float(kwargs.get('weathering', 0.0))
+
+            del kwargs['kg_ms']
+            del kwargs['ref_temp_k']
 
             yield kwargs
 
@@ -152,10 +221,18 @@ class OilLibraryAttributeMapper(object):
         for k in self.record.kvis:
             kwargs = self._get_kwargs(k)
 
-            kwargs['viscosity'] = {'value': kwargs['m_2_s'],
-                                   'unit': 'm^2/s'}
-            kwargs['ref_temp'] = {'value': kwargs['ref_temp_k'],
-                                  'unit': 'K'}
+            kwargs['viscosity'] = {
+                'value': kwargs['m_2_s'],
+                'unit': 'm^2/s',
+                '_cls': self._class_path(KinematicViscosityUnit)}
+            kwargs['ref_temp'] = {
+                'value': kwargs['ref_temp_k'],
+                'unit': 'K',
+                '_cls': self._class_path(TemperatureUnit)}
+            kwargs['weathering'] = float(kwargs.get('weathering', 0.0))
+
+            del kwargs['m_2_s']
+            del kwargs['ref_temp_k']
 
             yield kwargs
 
@@ -170,8 +247,12 @@ class OilLibraryAttributeMapper(object):
             if all([v is not None for v in (tension, ref_temp)]):
                 kwargs = {}
 
-                kwargs['tension'] = {'value': tension, 'unit': 'N/m'}
-                kwargs['ref_temp'] = {'value': ref_temp, 'unit': 'K'}
+                kwargs['tension'] = {
+                    'value': tension, 'unit': 'N/m',
+                    '_cls': self._class_path(InterfacialTensionUnit)}
+                kwargs['ref_temp'] = {
+                    'value': ref_temp, 'unit': 'K',
+                    '_cls': self._class_path(TemperatureUnit)}
                 kwargs['interface'] = interface
 
                 yield kwargs
@@ -183,12 +264,16 @@ class OilLibraryAttributeMapper(object):
 
         kwargs = {}
         if (min_temp is not None and min_temp == max_temp):
-            kwargs['ref_temp'] = {'value': min_temp, 'unit': 'K'}
+            kwargs['ref_temp'] = {'value': min_temp, 'unit': 'K',
+                                  '_cls': self._class_path(TemperatureUnit)}
         elif any([v is not None for v in (min_temp, max_temp)]):
             kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
-                                  'unit': 'K'}
+                                  'unit': 'K',
+                                  '_cls': self._class_path(TemperatureUnit)}
+        kwargs['weathering'] = 0.0
 
-        yield kwargs
+        if len(kwargs.keys()) > 0:
+            yield kwargs
 
     @property
     def pour_points(self):
@@ -197,12 +282,16 @@ class OilLibraryAttributeMapper(object):
 
         kwargs = {}
         if (min_temp is not None and min_temp == max_temp):
-            kwargs['ref_temp'] = {'value': min_temp, 'unit': 'K'}
+            kwargs['ref_temp'] = {'value': min_temp, 'unit': 'K',
+                                  '_cls': self._class_path(TemperatureUnit)}
         elif any([v is not None for v in (min_temp, max_temp)]):
             kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
-                                  'unit': 'K'}
+                                  'unit': 'K',
+                                  '_cls': self._class_path(TemperatureUnit)}
+        kwargs['weathering'] = 0.0
 
-        yield kwargs
+        if len(kwargs.keys()) > 0:
+            yield kwargs
 
     @property
     def cuts(self):
@@ -213,8 +302,10 @@ class OilLibraryAttributeMapper(object):
             vapor_temp = kwargs.get('vapor_temp_k')
             fraction = kwargs.get('fraction')
 
-            kwargs['fraction'] = {'value': fraction, 'unit': 'fraction'}
-            kwargs['vapor_temp'] = {'value': vapor_temp, 'unit': 'K'}
+            kwargs['fraction'] = {'value': fraction, 'unit': 'fraction',
+                                  '_cls': self._class_path(FloatUnit)}
+            kwargs['vapor_temp'] = {'value': vapor_temp, 'unit': 'K',
+                                    '_cls': self._class_path(TemperatureUnit)}
 
             if liquid_temp is not None:
                 kwargs['liquid_temp'] = {'value': liquid_temp, 'unit': 'K'}
@@ -237,7 +328,8 @@ class OilLibraryAttributeMapper(object):
         if adhesion is not None:
             kwargs = {}
 
-            kwargs['adhesion'] = {'value': adhesion, 'unit': 'N/m^2'}
+            kwargs['adhesion'] = {'value': adhesion, 'unit': 'N/m^2',
+                                  '_cls': self._class_path(AdhesionUnit)}
 
             yield kwargs
 
@@ -246,7 +338,8 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def emulsions(self):
@@ -268,10 +361,13 @@ class OilLibraryAttributeMapper(object):
             kwargs = {}
 
             kwargs['water_content'] = {'value': water_content,
-                                       'unit': 'fraction'}
-            kwargs['age'] = {'value': 0.0, 'unit': 's'}
+                                       'unit': 'fraction',
+                                       '_cls': self._class_path(FloatUnit)}
+            kwargs['age'] = {'value': 0.0, 'unit': 's',
+                             '_cls': self._class_path(TimeUnit)}
             kwargs['ref_temp'] = {'value': 15.0,
-                                  'from_unit': 'C', 'unit': 'K'}
+                                  'from_unit': 'C', 'unit': 'K',
+                                  '_cls': self._class_path(TemperatureUnit)}
 
             yield kwargs
 
@@ -280,7 +376,8 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def sulfur(self):
@@ -289,7 +386,8 @@ class OilLibraryAttributeMapper(object):
         if sulfur is not None:
             kwargs = {}
 
-            kwargs['fraction'] = {'value': sulfur, 'unit': 'fraction'}
+            kwargs['fraction'] = {'value': sulfur, 'unit': 'fraction',
+                                  '_cls': self._class_path(FloatUnit)}
 
             yield kwargs
 
@@ -298,7 +396,8 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def wax_content(self):
@@ -307,7 +406,8 @@ class OilLibraryAttributeMapper(object):
         if wax is not None:
             kwargs = {}
 
-            kwargs['fraction'] = {'value': wax, 'unit': 'fraction'}
+            kwargs['fraction'] = {'value': wax, 'unit': 'fraction',
+                                  '_cls': self._class_path(FloatUnit)}
 
             yield kwargs
 
@@ -318,51 +418,59 @@ class OilLibraryAttributeMapper(object):
         if benzene_content is not None:
             kwargs = {}
 
-            kwargs['benzene'] = {'value': benzene_content, 'unit': 'fraction'}
+            kwargs['benzene'] = {'value': benzene_content, 'unit': 'fraction',
+                                 '_cls': self._class_path(FloatUnit)}
 
             yield kwargs
 
     @property
     def headspace(self):
         '''
-            N/A. Oil Library records don't have this.
+            N/A. Oil Library records don't have this.  So we form a generator
+            function that returns an empty iterator
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def chromatography(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def ccme(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def ccme_f1(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def ccme_f2(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def ccme_tph(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def sara_total_fractions(self):
@@ -372,7 +480,8 @@ class OilLibraryAttributeMapper(object):
             if fraction is not None:
                 kwargs = {}
 
-                kwargs['fraction'] = {'value': fraction, 'unit': 'fraction'}
+                kwargs['fraction'] = {'value': fraction, 'unit': 'fraction',
+                                      '_cls': self._class_path(FloatUnit)}
                 kwargs['sara_type'] = sara_type
 
                 yield kwargs
@@ -382,21 +491,24 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def alkylated_pahs(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def biomarkers(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        pass
+        if False:
+            yield None
 
     @property
     def toxicities(self):
@@ -429,9 +541,11 @@ class OilLibraryAttributeMapper(object):
         if any([a is not None for a in (residue, crude)]):
             kwargs = {}
             if residue is not None:
-                kwargs['residue'] = {'value': residue, 'unit': 'fraction'}
+                kwargs['residue'] = {'value': residue, 'unit': 'fraction',
+                                     '_cls': self._class_path(FloatUnit)}
 
             if crude is not None:
-                kwargs['crude'] = {'value': crude, 'unit': 'fraction'}
+                kwargs['crude'] = {'value': crude, 'unit': 'fraction',
+                                   '_cls': self._class_path(FloatUnit)}
 
             yield kwargs

@@ -79,7 +79,7 @@ def has_api_or_densities(oil):
     '''
     if has_api(oil):
         return True
-    elif len(oil.densities) > 0:
+    elif len(list(oil.densities)) > 0:
         return True
     else:
         return False
@@ -90,7 +90,7 @@ def has_api(oil):
         Env Canada record has multiple weathered APIs, so we need to account
         for that.
     '''
-    if oil.apis is not None and len(oil.apis) > 0:
+    if oil.apis is not None and len(list(oil.apis)) > 0:
         return True
     else:
         return False
@@ -104,9 +104,13 @@ def has_viscosities(oil):
         This is just a primitive test, so we do not evaluate the quantities,
         simply that some kind of value exists.
     '''
-    if oil.kvis is not None and len(oil.kvis) > 0:
+    if (hasattr(oil, 'kvis') and
+            oil.kvis is not None and
+            len(list(oil.kvis)) > 0):
         return True
-    elif oil.dvis is not None and len(oil.dvis) > 0:
+    elif (hasattr(oil, 'dvis') and
+            oil.dvis is not None and
+            len(list(oil.dvis)) > 0):
         return True
     else:
         return False
@@ -126,13 +130,13 @@ def has_distillation_cuts(oil):
     '''
     if (oil.product_type is not None and
             oil.product_type.lower() == 'crude'):
-        if (len(oil.cuts) >= 3 or
+        if (len(list(oil.cuts)) >= 3 or
                 has_api_or_densities(oil)):
             return True  # cuts can be estimated if not present
         else:
             return False
     else:
-        if len(oil.cuts) >= 3:
+        if len(list(oil.cuts)) >= 3:
             return True
         else:
             return False

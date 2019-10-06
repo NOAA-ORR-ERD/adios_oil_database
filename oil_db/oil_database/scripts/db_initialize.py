@@ -3,12 +3,12 @@ import os
 import logging
 from pprint import PrettyPrinter
 
+from pymongo import ASCENDING
 from pymongo.errors import ConnectionFailure
 
 from oil_database.util.db_connection import connect_mongodb
 from oil_database.util.settings import file_settings, default_settings
 
-from oil_database.models.common import Category
 from oil_database.db_init.categories import (load_categories,
                                              print_all_categories)
 
@@ -62,7 +62,7 @@ def init_db(settings):
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
 
-    if settings['mongodb.database'] in client.database_names():
+    if settings['mongodb.database'] in client.list_database_names():
         if prompt_drop_db():
             print('Alright then...continuing on...')
         else:
@@ -72,12 +72,15 @@ def init_db(settings):
     drop_db(client, settings['mongodb.database'])
 
     db = getattr(client, settings['mongodb.database'])
-    Category.attach(db)
 
-    load_categories()
+    print()
+    load_categories(db)
 
-    print('printing all categories...')
-    print_all_categories()
+    print_all_categories(db)
+
+    create_indices(db)
+
+    print('\nDatabase initialization done!\n')
 
 
 def prompt_drop_db():
@@ -88,7 +91,7 @@ def prompt_drop_db():
 
 
 def drop_db(client, db_name):
-    print('dropping db {}...'.format(db_name))
+    print('\nDropping db {}...'.format(db_name))
     try:
         if db_name in client.database_names():
             print('Dropping database "{}"...'.format(db_name), end="")
@@ -100,3 +103,22 @@ def drop_db(client, db_name):
     except Exception:
         print('Failed to drop Oil database!')
         raise
+
+
+def create_indices(db):
+    print('\ncreating indices on db {}...'.format(db.name))
+
+    try:
+        db.oil.create_index([('name', ASCENDING),
+                             ('location', ASCENDING),
+                             ('reference_date', ASCENDING)],
+                            unique=True)
+        print('Oil collection indices: {}'
+              .format(list(db.oil.index_information().keys())))
+    except ConnectionFailure:
+        print('Could not connect to MongoDB!')
+        raise
+    except Exception:
+        print('Failed to drop Oil database!')
+        raise
+

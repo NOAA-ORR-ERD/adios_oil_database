@@ -16,6 +16,10 @@ class TestCamelCase(object):
                                                         'In',
                                                         'Water']),
                               ('concentrationInWater', ['In', 'Water']),
+                              ('ABCImportedRecordDEF', ['ABC',
+                                                        'Imported',
+                                                        'Record',
+                                                        'DEF']),
                               ])
     def test_separate_camelcase(self, value, expected):
         words = separate_camelcase(value)
