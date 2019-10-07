@@ -7,7 +7,6 @@ from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound,
                                     HTTPUnsupportedMediaType)
 
-from pymodm.errors import DoesNotExist
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
@@ -40,7 +39,7 @@ def get_categories(request):
         else:
             raise HTTPNotFound()
     else:
-        return [get_category_dict(c._id) for c in Category.objects.all()]
+        return [get_category_dict(c._id) for c in Category.find({})]
 
 
 @category_api.post()
@@ -59,7 +58,6 @@ def insert_category(request):
         obj = Category(**json_obj)
         obj.save()
     except Exception as e:
-        print e
         raise HTTPUnsupportedMediaType(detail=e)
 
     return jsonify_model_obj(obj)
@@ -90,7 +88,6 @@ def update_category(request):
         obj.save()
         print('put category success!!')
     except Exception as e:
-        print e
         raise HTTPUnsupportedMediaType(detail=e)
 
     return jsonify_model_obj(obj)
@@ -114,12 +111,11 @@ def delete_oil(request):
 
 def get_one_category(obj_id):
     try:
-        klass, query_set = Category, {'_id': ObjectId(obj_id)}
-        result = klass.objects.get(query_set)
-    except (DoesNotExist, InvalidId):
+        result = Category.find_one({'_id': ObjectId(obj_id)})
+    except InvalidId:
         return None
 
-    if isinstance(result, klass):
+    if isinstance(result, Category):
         return result
     elif len(result) > 0:
         return result[0]

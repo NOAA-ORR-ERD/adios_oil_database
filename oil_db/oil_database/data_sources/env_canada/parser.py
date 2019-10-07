@@ -138,7 +138,23 @@ class EnvCanadaRecordParser(object):
 
     @property
     def weathering(self):
-        return self.get_props_by_name(None, 'weathered')[0]
+        weathered_subsamples = self.get_props_by_name(None, 'weathered')[0]
+
+        # this is a minor exception to the weathering.  If there is just one
+        # weathered sample and it is a None value, we can probably assume
+        # it is 0.0 (fresh)
+        if len(weathered_subsamples) == 1 and weathered_subsamples[0] is None:
+            weathered_subsamples = (0.0,)
+
+        # Otherwise, we expect our Env Canada records to have fractionally
+        # weathered samples.
+        try:
+            for w in weathered_subsamples:
+                float(w)
+        except ValueError:
+            raise ValueError('Bad weathering value: "{}"'.format(w))
+
+        return weathered_subsamples
 
     @property
     def reference(self):

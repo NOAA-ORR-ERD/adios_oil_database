@@ -228,7 +228,11 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
 
                 oil_collection.insert_one(oil_obj.dict())
             except DuplicateKeyError as e:
-                print('duplicate fields for {}: {}'
+                print('Duplicate fields for {}: {}'
+                      .format(tc.change(oil_obj.oil_id, 'red'), e))
+                error_count += 1
+            except ValueError as e:
+                print('Value error for {}: {}'
                       .format(tc.change(oil_obj.oil_id, 'red'), e))
                 error_count += 1
             else:

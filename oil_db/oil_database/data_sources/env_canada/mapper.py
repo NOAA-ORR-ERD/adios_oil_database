@@ -33,6 +33,8 @@ class EnvCanadaAttributeMapper(object):
                                     and associated index values into the data.
         '''
         self.record = record
+        self._status = None
+        self._categories = None
 
     def get_interface_properties(self):
         '''
@@ -74,6 +76,30 @@ class EnvCanadaAttributeMapper(object):
             return obj
         else:
             return obj.dict()
+
+    @property
+    def status(self):
+        '''
+            The parser does not have this, but we will want to get/set
+            this property.
+        '''
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        self._status = value
+
+    @property
+    def categories(self):
+        '''
+            The parser does not have this, but we will want to get/set
+            this property.
+        '''
+        return self._categories
+
+    @categories.setter
+    def categories(self, value):
+        self._categories = value
 
     @property
     def name(self):

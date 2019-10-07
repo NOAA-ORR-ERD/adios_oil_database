@@ -11,17 +11,16 @@ from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPUnsupportedMediaType)
 
 from pymongo import ASCENDING, DESCENDING
-
-from pymodm.errors import DoesNotExist
 from bson.errors import InvalidId
 
-from oil_database.util.json import jsonify_model_obj
+from oil_database.util.json import jsonify_model_obj, ObjFromDict
 from oil_database.data_sources.oil import OilEstimation
-from oil_database.models.common import Category
-from oil_database.models.oil import Oil
 
-from oil_database_api.common.views import cors_policy, obj_id_from_url
+from oil_database_api.common.views import (cors_policy,
+                                           obj_id_from_url)
 
+from pprint import PrettyPrinter
+pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
@@ -30,15 +29,19 @@ oil_api = Service(name='oil', path='/oils*obj_id',
 
 
 def memoize_oil_arg(func):
+    '''
+        Decorator function to cache function results by oil_id
+    '''
     results = {}
 
     def memoized_func(oil):
-        if oil.oil_id not in results:
-            logger.info('loading Key: "{}"'
-                        .format(oil.oil_id))
-            results[oil.oil_id] = func(oil)
+        key = oil['oil_id']
 
-        return results[oil.oil_id]
+        if key not in results:
+            logger.info('loading Key: "{}"'.format(key))
+            results[key] = func(oil)
+
+        return results[key]
 
     return memoized_func
 
@@ -76,8 +79,10 @@ def get_oils(request):
     logger.info('GET /oils: id: {} options: {}'
                 .format(obj_id, request.GET))
 
+    oils = request.db.oil_database.oil
+
     if obj_id is not None:
-        res = get_oil_dict(obj_id)
+        res = get_oil_dict(oils, obj_id)
 
         if res is not None:
             return res
@@ -92,22 +97,25 @@ def get_oils(request):
         except Exception as e:
             raise HTTPBadRequest(e)
 
-        try:
-            sort = sort_params(request)
-        except Exception as e:
-            raise HTTPBadRequest(e)
-
         search_opts = search_params(request)
+        sort = sort_params(request)
 
         if (len(sort) > 0 and
                 sort[0][0] in ('apis', 'categories_str', 'viscosity')):
-            return search_with_post_sort(start, stop, search_opts, sort)
+            return list(search_with_post_sort(oils,
+                                              start, stop,
+                                              search_opts, sort))
         else:
-            return search_with_sort(start, stop, search_opts, sort)
+            return list(search_with_sort(oils,
+                                         start, stop,
+                                         search_opts, sort))
 
 
-def search_with_sort(start, stop, search_opts, sort):
-    cursor = Oil.objects.raw(search_opts).order_by(sort)
+def search_with_sort(oils, start, stop, search_opts, sort_opts):
+    cursor = oils.find(search_opts)
+
+    if len(sort_opts) > 0:
+        cursor = cursor.sort(sort_opts)
 
     logger.info('cursor #rows: {}'.format(cursor.count()))
 
@@ -116,7 +124,7 @@ def search_with_sort(start, stop, search_opts, sort):
             if i >= start and i < stop]
 
 
-def search_with_post_sort(start, stop, search_opts, sort):
+def search_with_post_sort(oils, start, stop, search_opts, sort):
     '''
         Apply our sort options after the database query.  This is very slow
         compared to simply applying the sort to the database query itself,
@@ -126,7 +134,7 @@ def search_with_post_sort(start, stop, search_opts, sort):
     logger.info('post-sort...')
     field, direction = sort[0]
 
-    cursor = Oil.objects.raw(search_opts)
+    cursor = oils.find(search_opts)
 
     sorted_res = sorted([get_oil_searchable_fields(o)
                          for o in cursor],
@@ -139,8 +147,11 @@ def search_with_post_sort(start, stop, search_opts, sort):
 
 def sort_params(request):
     sort = decamelize(request.GET.get('sort', None))
-    direction = ({'asc': ASCENDING, 'desc': DESCENDING}
-                 .get(request.GET.get('dir', 'asc')))
+    direction = ({'asc': ASCENDING,
+                  'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
+                                          ASCENDING))
+
+    logger.info('(sort, direction): ({}, {})'.format(sort, direction))
 
     if sort is None:
         return []
@@ -180,7 +191,6 @@ def insert_oil(request):
         obj = Oil(**json_obj)
         obj.save()
     except Exception as e:
-        print e
         raise HTTPUnsupportedMediaType(detail=e)
 
     return jsonify_model_obj(obj)
@@ -210,7 +220,6 @@ def update_oil(request):
         obj = Oil(**json_obj)
         obj.save()
     except Exception as e:
-        print e
         raise HTTPUnsupportedMediaType(detail=e)
 
     return jsonify_model_obj(obj)
@@ -249,12 +258,11 @@ def fix_oil_id(oil_json):
 
 def get_one_oil(obj_id):
     try:
-        klass, query_set = Oil, {'_id': obj_id}
-        result = klass.objects.get(query_set)
-    except (DoesNotExist, InvalidId):
+        result = Oil.find_one({'oil_id': obj_id})
+    except InvalidId:
         return None
 
-    if isinstance(result, klass):
+    if isinstance(result, Oil):
         return result
     elif len(result) > 0:
         return result[0]
@@ -273,29 +281,28 @@ def get_oil_non_embedded_docs(oil_dict):
         - categories
     '''
     for i, c in enumerate(oil_dict['categories']):
-        oil_dict['categories'][i] = (Category.objects.get({'_id': c})
-                                     .to_son().to_dict())
+        oil_dict['categories'][i] = (Category.find_one({'_id': c}).dict())
 
 
 @memoize_oil_arg
 def get_oil_searchable_fields(oil):
-    oil_estimation = OilEstimation(oil)
+    pp.pprint(oil)
+    oil = OilEstimation(oil)
 
     try:
         return {'_id': oil.oil_id,
                 'name': oil.name,
                 'location': oil.location,
                 'product_type': oil.product_type,
-                'apis': [a.to_son().to_dict() for a in oil.apis],
-                'pour_point': oil_estimation.pour_point(),
-                'viscosity': oil_estimation.kvis_at_temp(273.15 + 38),
-                'categories': get_category_ids(oil),
-                'categories_str': get_category_paths_str(oil),
+                'apis': [a for a in oil.apis],
+                'pour_point': oil.pour_point(),
+                'viscosity': oil.kvis_at_temp(273.15 + 38),
+                'categories': oil.categories,
                 'status': oil.status,
                 }
     except Exception:
-        logger.info('oil failed searchable fields: {}'
-                    .format(oil))
+        logger.info('oil failed searchable fields: {}: {}'
+                    .format(oil.oil_id, oil.name))
         raise
 
 

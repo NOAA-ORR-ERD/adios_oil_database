@@ -16,6 +16,6 @@ class RootUrlTests(FunctionalTestBase):
         resp = self.testapp.get('/')
         root = resp.json_body
 
-        print root
+        print(root)
 
         assert root['Hello'] == ', welcome to the Oil Database API!!'

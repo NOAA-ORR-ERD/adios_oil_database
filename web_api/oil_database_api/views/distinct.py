@@ -6,9 +6,6 @@ from cornice import Service
 
 from oil_database_api.common.views import cors_policy
 
-from oil_database.models.oil import Oil
-from oil_database.models.common import Category
-
 distinct_api = Service(name='distinct', path='/distinct',
                        description=('List the distinct values of the '
                                     'searchable fields in the Oil database'),
@@ -27,6 +24,9 @@ def get_distinct(request):
     res = defaultdict(set)
 
     attrs = ('location',)
+
+    oils = request.db_oil.oil
+    categories = request.db_oil.category
 
     for ir_attrs in Oil.objects.only(*attrs):
         for a in attrs:

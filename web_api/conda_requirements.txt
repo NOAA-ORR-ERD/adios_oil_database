@@ -1,0 +1,29 @@
+# conda requirements file for the oil_database_api package.
+
+# These should all be in one of the following channels:
+# 1: conda-forge
+# 2: NOAA-ORR-ERD channel
+# 3: defaults
+# 
+# It would be best to have these channels configured the order of precedence
+# outlined above in your conda configuration.
+
+pymongo>=3.6.0
+#pymodm>=0.4.0  # pip only
+
+redis
+redis-py
+
+pyramid>=1.10.1
+pyramid_tm
+cornice>=3.4.4
+paste
+waitress
+ujson
+
+pytest
+WebTest
+
+# The oil database is required, but is located within this project
+# at OilDatabase/oil_db
+# oil_database

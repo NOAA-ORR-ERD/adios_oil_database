@@ -27,12 +27,12 @@ class QueryTests(FunctionalTestBase):
             If we don't specify a table name, the default table that will be
             queried is the oil table.
         '''
-        params = {'query': {'_id': 'AD00009'}
+        params = {'query': {'oil_id': 'AD00009'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
 
-        print res
+        print(res)
 
         assert len(res) == 1
         assert res[0]['_cls'].endswith('Oil')
@@ -46,7 +46,7 @@ class QueryTests(FunctionalTestBase):
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
 
-        print res
+        print(res)
 
         assert len(res) == 0
 
@@ -64,36 +64,36 @@ class QueryTests(FunctionalTestBase):
 
     def test_post_query_oil(self):
         params = {'table': 'oil',
-                  'query': {'_id': 'AD00009'}
+                  'query': {'oil_id': 'AD00009'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
 
-        print res
+        print(res)
 
         assert len(res) == 1
         assert res[0]['_cls'].endswith('Oil')
 
     def test_post_query_imported_record(self):
         params = {'table': 'imported_record',
-                  'query': {'_id': 'AD00009'}
+                  'query': {'oil_id': 'AD00009'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
 
-        print res
+        print(res)
 
         assert len(res) == 1
         assert res[0]['_cls'].endswith('ImportedRecord')
 
     def test_post_query_ec_imported_record(self):
         params = {'table': 'ec_imported_record',
-                  'query': {'_id': 'EC002712'}
+                  'query': {'oil_id': 'EC002712'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
 
-        print res
+        print(res)
 
         assert len(res) == 1
         assert res[0]['_cls'].endswith('ECImportedRecord')

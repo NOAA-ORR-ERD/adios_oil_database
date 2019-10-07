@@ -16,7 +16,8 @@ class FunctionalTestBase(TestCase):
                                             'http://localhost:8080'),
                     'pyramid.default_locale_name': 'en',
                     'pyramid.includes': ('pyramid_tm\n'
-                                         'cornice'),
+                                         'cornice\n'
+                                         'pyramid_mongodb2'),
                     'pyramid.debug_notfound': 'false',
                     'pyramid.debug_routematch': 'false',
                     'pyramid.debug_authorization': 'false',
@@ -38,6 +39,7 @@ class FunctionalTestBase(TestCase):
 
         self.settings = self.get_settings()
         app = main(None, **self.settings)
+
         self.testapp = TestApp(app)
 
     def tearDown(self):

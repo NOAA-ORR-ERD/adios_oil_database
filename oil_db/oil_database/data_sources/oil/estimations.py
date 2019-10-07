@@ -107,7 +107,7 @@ class OilEstimation(object):
                 else [fqn, ''])
 
     def __getattr__(self, name):
-        return getattr(self.record, name)
+        return getattr(self.record, name, None)
 
     @classmethod
     def lowest_temperature(cls, obj_list):
@@ -318,11 +318,11 @@ class OilEstimation(object):
                      if np.isclose(d.ref_temp.value, 288.0, atol=1.0)]) == 0):
             kg_m_3, ref_temp_k = est.density_from_api(api.gravity)
 
-            densities.append({'density': DensityUnit(value=kg_m_3,
-                                                     unit='kg/m^3'),
-                              'ref_temp': TemperatureUnit(value=ref_temp_k,
-                                                          unit='K'),
-                              'weathering': 0.0})
+            densities.append(ObjFromDict({'density': DensityUnit(value=kg_m_3,
+                                                                 unit='kg/m^3'),
+                                          'ref_temp': TemperatureUnit(value=ref_temp_k,
+                                                                      unit='K'),
+                                          'weathering': 0.0}))
 
         return sorted(densities, key=lambda d: d.ref_temp.value)
 
