@@ -3,8 +3,6 @@ Functional tests for the Model Web API
 """
 import copy
 
-import ujson
-
 from .base import FunctionalTestBase
 from .sample_oils import basic_noaa_fm
 
@@ -16,9 +14,7 @@ class OilTestBase(FunctionalTestBase):
         valid status.
     '''
     def api_valid(self, api_gravity):
-        for k in ('_cls',
-                  'gravity',
-                  'weathering'):
+        for k in ('gravity', 'weathering'):
             if k not in api_gravity:
                 return False
 
@@ -31,10 +27,7 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def densitiy_valid(self, density):
-        for k in ('_cls',
-                  'ref_temp',
-                  'density',
-                  'weathering'):
+        for k in ('ref_temp', 'density', 'weathering'):
             if k not in density:
                 return False
 
@@ -50,10 +43,7 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def dvis_valid(self, dvis):
-        for k in ('_cls',
-                  'ref_temp',
-                  'viscosity',
-                  'weathering'):
+        for k in ('ref_temp', 'viscosity', 'weathering'):
             if k not in dvis:
                 return False
 
@@ -69,10 +59,7 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def kvis_valid(self, kvis):
-        for k in ('_cls',
-                  'ref_temp',
-                  'viscosity',
-                  'weathering'):
+        for k in ('ref_temp', 'viscosity', 'weathering'):
             if k not in kvis:
                 return False
 
@@ -88,14 +75,11 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def cut_valid(self, cut):
-        for k in ('_cls',
-                  'fraction',
-                  'vapor_temp',
-                  'weathering'):
+        for k in ('fraction', 'vapor_temp', 'weathering'):
             if k not in cut:
                 return False
 
-        if not self.unit_value_valid(cut['fraction'], ('1',)):
+        if not self.unit_value_valid(cut['fraction'], ('1', 'fraction', '%')):
             return False
 
         if not self.ref_temp_valid(cut['vapor_temp']):
@@ -107,12 +91,7 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def ift_valid(self, ift):
-        for k in ('_cls',
-                  'tension',
-                  'ref_temp',
-                  'interface',
-                  'weathering',
-                  ):
+        for k in ('tension', 'ref_temp', 'interface', 'weathering'):
             if k not in ift:
                 return False
 
@@ -133,14 +112,12 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def sulfur_valid(self, sulfur):
-        for k in ('_cls',
-                  'fraction',
-                  'weathering',
-                  ):
+        for k in ('fraction', 'weathering'):
             if k not in sulfur:
                 return False
 
-        if not self.unit_value_valid(sulfur['fraction'], ('1',)):
+        if not self.unit_value_valid(sulfur['fraction'],
+                                     ('1', 'fraction', '%')):
             return False
 
         if not isinstance(sulfur['weathering'], (float)):
@@ -149,24 +126,12 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def flash_point_valid(self, fp):
-        for k in ('_cls',
-                  'weathering',
-                  ):
+        for k in ('ref_temp', 'weathering'):
             if k not in fp:
                 return False
 
-        # these attrs can be optionally blank, but not all of them
-        if not any([k in fp
-                    for k in ('min_temp', 'max_temp')]):
+        if not self.ref_temp_valid(fp['ref_temp']):
             return False
-
-        if 'min_temp' in fp:
-            if not self.ref_temp_valid(fp['min_temp']):
-                return False
-
-        if 'max_temp' in fp:
-            if not self.ref_temp_valid(fp['max_temp']):
-                return False
 
         if not isinstance(fp['weathering'], (float)):
             return False
@@ -174,22 +139,11 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def pour_point_valid(self, pp):
-        for k in ('_cls',
-                  'weathering',
-                  ):
+        for k in ('ref_temp', 'weathering'):
             if k not in pp:
                 return False
 
-        # these attrs can be optionally blank, but not all of them
-        if not any([k in pp
-                    for k in ('min_temp', 'max_temp')]):
-            return False
-
-        if 'min_temp' in pp:
-            if not self.ref_temp_valid(pp['min_temp']):
-                return False
-
-        if not self.ref_temp_valid(pp['max_temp']):
+        if not self.ref_temp_valid(pp['ref_temp']):
             return False
 
         if not isinstance(pp['weathering'], (float)):
@@ -198,10 +152,7 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def adhesion_valid(self, adhesion):
-        for k in ('_cls',
-                  'adhesion',
-                  'weathering',
-                  ):
+        for k in ('adhesion', 'weathering'):
             if k not in adhesion:
                 return False
 
@@ -214,10 +165,7 @@ class OilTestBase(FunctionalTestBase):
         return True
 
     def toxicity_valid(self, toxicity):
-        for k in ('_cls',
-                  'species',
-                  'tox_type',
-                  ):
+        for k in ('species', 'tox_type'):
             if k not in toxicity:
                 return False
 
@@ -280,15 +228,20 @@ class OilTestBase(FunctionalTestBase):
             Generic test of our unit/value objects.  We have a lot of them,
             so this should cover the general testing criteria.
         '''
-        for k in ['_cls', 'value', 'unit']:
+        for k in ['_cls', 'unit']:
             if k not in obj:
                 return False
+
+        if not ('value' in obj or
+                all(l in obj for l in ('min_value', 'max_value'))):
+            return False
 
         if obj['unit'] not in units:
             return False
 
-        if not isinstance(obj['value'], (float)):
-            return False
+        for k in ['value', 'min_value', 'max_value']:
+            if k in obj and not isinstance(obj[k], (float, int)):
+                return False
 
         return True
 
@@ -328,13 +281,13 @@ class OilTests(OilTestBase):
             resp = self.testapp.get('/oils/{0}'.format(oil_id))
             oil = resp.json_body
 
-            # print ('oil:')
+            print('oil: ', oil['_id'])
+
             # print (ujson.dumps(oil, indent=4, ensure_ascii=False))
 
             # the oil_database module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
-            attrs = ['_cls',
-                     '_id',
+            attrs = ['_id',
                      'name',
                      'location',
                      'comments',
@@ -362,7 +315,7 @@ class OilTests(OilTestBase):
                      'ccme_tph',
                      'chromatography',
                      # 'conradson',
-                     'corexit',
+                     'chemical_dispersibility',
                      'emulsions',
                      'evaporation_eqs',
                      'headspace',

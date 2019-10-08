@@ -149,10 +149,10 @@ class EnvCanadaRecordParser(object):
         # Otherwise, we expect our Env Canada records to have fractionally
         # weathered samples.
         try:
-            for w in weathered_subsamples:
-                float(w)
+            weathered_subsamples = [float(w) for w in weathered_subsamples]
         except ValueError:
-            raise ValueError('Bad weathering value: "{}"'.format(w))
+            raise ValueError('Bad weathering value: "{}"'
+                             .format(weathered_subsamples))
 
         return weathered_subsamples
 

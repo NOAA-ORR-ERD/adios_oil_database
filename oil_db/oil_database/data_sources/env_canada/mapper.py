@@ -103,58 +103,38 @@ class EnvCanadaAttributeMapper(object):
 
     @property
     def name(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.name
 
     @property
     def oil_id(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.oil_id
 
     @property
+    def _id(self):
+        return self.oil_id
+
+    @property
     def reference(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.reference
 
     @property
     def reference_date(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.reference_date
 
     @property
     def sample_date(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.sample_date
 
     @property
     def comments(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.comments
 
     @property
     def location(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.location
 
     @property
     def product_type(self):
-        '''
-            Nothing special to do here.
-        '''
         return self.record.product_type
 
     @property

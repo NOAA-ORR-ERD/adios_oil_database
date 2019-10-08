@@ -3,8 +3,8 @@ Functional tests for the Model Web API
 """
 import copy
 
-from base import FunctionalTestBase
-from sample_oils import basic_noaa_fm
+from .base import FunctionalTestBase
+from .sample_oils import basic_noaa_fm
 
 
 class CategoryTestBase(FunctionalTestBase):

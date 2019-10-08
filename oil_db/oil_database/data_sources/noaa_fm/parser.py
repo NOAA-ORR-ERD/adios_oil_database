@@ -267,6 +267,7 @@ class OilLibraryRecordParser(object):
         for t in all_tox:
             for d in ('24h', '48h', '96h'):
                 if d in t:
-                    t['after_{}'.format(d)] = t[d]
+                    t['after_{}'.format(d)] = float(t[d])
+                    t.pop(d, None)
 
         return all_tox

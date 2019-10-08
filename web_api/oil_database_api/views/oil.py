@@ -1,6 +1,5 @@
 """ Cornice services.
 """
-import re
 import logging
 
 import ujson
@@ -11,9 +10,8 @@ from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPUnsupportedMediaType)
 
 from pymongo import ASCENDING, DESCENDING
-from bson.errors import InvalidId
 
-from oil_database.util.json import jsonify_model_obj, ObjFromDict
+from oil_database.util.json import fix_bson_ids
 from oil_database.data_sources.oil import OilEstimation
 
 from oil_database_api.common.views import (cors_policy,
@@ -82,7 +80,7 @@ def get_oils(request):
     oils = request.db.oil_database.oil
 
     if obj_id is not None:
-        res = get_oil_dict(oils, obj_id)
+        res = oils.find_one({'_id': obj_id})
 
         if res is not None:
             return res
@@ -188,12 +186,14 @@ def insert_oil(request):
 
     try:
         fix_oil_id(json_obj)
-        obj = Oil(**json_obj)
-        obj.save()
+
+        json_obj['_id'] = (request.db.oil_database.oil
+                           .insert_one(json_obj)
+                           .inserted_id)
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return jsonify_model_obj(obj)
+    return fix_bson_ids(json_obj)
 
 
 @oil_api.put()
@@ -217,12 +217,13 @@ def update_oil(request):
 
     try:
         fix_oil_id(json_obj)
-        obj = Oil(**json_obj)
-        obj.save()
+
+        (request.db.oil_database.oil
+         .replace_one({'_id': json_obj['_id']}, json_obj))
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return jsonify_model_obj(obj)
+    return fix_bson_ids(json_obj)
 
 
 @oil_api.delete()
@@ -230,58 +231,30 @@ def delete_oil(request):
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
-        res = get_one_oil(obj_id)
 
-        if res is None:
+        res = (request.db.oil_database.oil
+               .delete_one({'_id': obj_id}))
+
+        if res.deleted_count == 0:
             raise HTTPNotFound()
-        else:
-            # should maybe wrap this in a try, and return any failure response
-            return res.delete()
+
+        return res
     else:
         raise HTTPBadRequest
 
 
 def fix_oil_id(oil_json):
     '''
-        Okay, this is some weirdness with the PyMODM models.  You can use a
-        custom field as a primary key, and we have done this with the oil_id
-        field.  But when the object is retrieved, the primary key field will
-        always be '_id', not the custom field name.
-        And if we assume an insert/update return trip workflow, we can also
-        assume in those cases that the oil_id will have been renamed.
-        So we will rename it back to 'oil_id'.
+        Okay, pymongo lets you specify the id of a new record, but it needs
+        to be the '_id' field. So we need to ensure that the '_id' field
+        exists.
+        The rule then is that the 'oil_id' is a required field, and the '_id'
+        field will be copied from it.
     '''
-    if '_id' in oil_json:
-        oil_json['oil_id'] = oil_json['_id']
-        del oil_json['_id']
-
-
-def get_one_oil(obj_id):
-    try:
-        result = Oil.find_one({'oil_id': obj_id})
-    except InvalidId:
-        return None
-
-    if isinstance(result, Oil):
-        return result
-    elif len(result) > 0:
-        return result[0]
-
-
-def get_oil_dict(obj_id):
-    return jsonify_model_obj(get_one_oil(obj_id))
-
-
-def get_oil_non_embedded_docs(oil_dict):
-    '''
-        Custom routine to retrieve any non-embedded documents that are
-        referenced by our oil attributes.
-
-        Right now we are handling:
-        - categories
-    '''
-    for i, c in enumerate(oil_dict['categories']):
-        oil_dict['categories'][i] = (Category.find_one({'_id': c}).dict())
+    if 'oil_id' in oil_json:
+        oil_json['_id'] = oil_json['oil_id']
+    else:
+        raise ValueError('oil_id field is required')
 
 
 @memoize_oil_arg
@@ -304,43 +277,3 @@ def get_oil_searchable_fields(oil):
         logger.info('oil failed searchable fields: {}: {}'
                     .format(oil.oil_id, oil.name))
         raise
-
-
-def get_category_ids(oil):
-    return [jsonify_model_obj(c)['_id'] for c in oil.categories]
-
-
-def get_category_paths_str(oil, sep=','):
-    regex = re.compile(r'\b(Crude-|Refined-|Other-)\b')
-
-    cat_str = sep.join(sorted(set(get_category_paths(oil))))
-
-    return regex.sub("", cat_str)
-
-
-def get_category_paths(oil, sep='-'):
-    return [sep.join([c.name for c in get_category_ancestors(cat)])
-            for cat in oil.categories]
-
-
-def get_category_ancestors(category):
-    '''
-        Here we take a category, which is assumed to be a node
-        in a tree structure, and determine the parents of the category
-        all the way up to the apex.
-    '''
-    cat_list = []
-    cat_list.append(category)
-
-    while category.parent is not None:
-        cat_list.append(category.parent)
-        category = category.parent
-
-    cat_list.reverse()
-    return cat_list
-
-
-def get_synonyms(oil, sep=','):
-    syn_list = [s.name for s in oil.synonyms]
-
-    return sep.join(syn_list)
