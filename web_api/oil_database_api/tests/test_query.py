@@ -1,8 +1,6 @@
 """
 Functional tests for the Model Web API
 """
-import pytest
-
 from .base import FunctionalTestBase
 
 from pprint import PrettyPrinter
@@ -35,13 +33,13 @@ class QueryTests(FunctionalTestBase):
         print(res)
 
         assert len(res) == 1
-        assert res[0]['_cls'].endswith('Oil')
+        assert res[0]['oil_id'] == 'AD00009'
 
     def test_post_query_no_results(self):
         '''
             Here we perform a query that we expect will return no results.
         '''
-        params = {'query': {'adios_oil_id': 'AD99999'}
+        params = {'query': {'oil_id': 'bogus'}
                   }
         resp = self.testapp.post_json('/query', params=params)
         res = resp.json_body
@@ -72,28 +70,22 @@ class QueryTests(FunctionalTestBase):
         print(res)
 
         assert len(res) == 1
-        assert res[0]['_cls'].endswith('Oil')
+        assert res[0]['oil_id'] == 'AD00009'
 
     def test_post_query_imported_record(self):
+        '''
+            This table doesn't really exist anymore, so we expect a failure
+        '''
         params = {'table': 'imported_record',
                   'query': {'oil_id': 'AD00009'}
                   }
-        resp = self.testapp.post_json('/query', params=params)
-        res = resp.json_body
-
-        print(res)
-
-        assert len(res) == 1
-        assert res[0]['_cls'].endswith('ImportedRecord')
+        self.testapp.post_json('/query', params=params, status=400)
 
     def test_post_query_ec_imported_record(self):
+        '''
+            This table doesn't really exist anymore, so we expect a failure
+        '''
         params = {'table': 'ec_imported_record',
                   'query': {'oil_id': 'EC002712'}
                   }
-        resp = self.testapp.post_json('/query', params=params)
-        res = resp.json_body
-
-        print(res)
-
-        assert len(res) == 1
-        assert res[0]['_cls'].endswith('ECImportedRecord')
+        self.testapp.post_json('/query', params=params, status=400)

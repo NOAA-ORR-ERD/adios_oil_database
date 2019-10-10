@@ -164,8 +164,8 @@ class EnvCanadaRecordParser(object):
             If there is no content in the reference fields, we will use the
             name of the Excel file.
         '''
-        ref = ' '.join([n for n
-                        in self.get_props_by_name(None, 'reference')[0]
+        ref = ' '.join([n.strip()
+                        for n in self.get_props_by_name(None, 'reference')[0]
                         if n is not None])
         if ref == "":
             ref = self.file_props['name']
@@ -248,7 +248,8 @@ class EnvCanadaRecordParser(object):
             We will concatenate all the comments we see in the list,
             separated with a space.
         '''
-        return ' '.join([n for n in self.get_props_by_name(None, 'comments')[0]
+        return ' '.join([n.strip()
+                         for n in self.get_props_by_name(None, 'comments')[0]
                          if n is not None])
 
     @property
@@ -257,8 +258,8 @@ class EnvCanadaRecordParser(object):
             We will concatenate all the location info we see in the list,
             separated with a space.
         '''
-        return ' '.join([n for n
-                         in self.get_props_by_name(None, 'source')[0]
+        return ' '.join([n.strip()
+                         for n in self.get_props_by_name(None, 'source')[0]
                          if n is not None])
 
     @property

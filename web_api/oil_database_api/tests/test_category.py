@@ -61,7 +61,7 @@ class CategoryTests(CategoryTestBase):
         self.testapp.post_json('/category', params='asdf', status=400)
 
         self.testapp.request('/category', method='POST',
-                             body='{"malformed":',
+                             body=b'{"malformed":',
                              headers={'Content-Type': 'application/json'},
                              status=400)
 
@@ -73,7 +73,7 @@ class CategoryTests(CategoryTestBase):
         self.testapp.put_json('/category', params='asdf', status=400)
 
         self.testapp.request('/category', method='PUT',
-                             body='{"malformed":',
+                             body=b'{"malformed":',
                              headers={'Content-Type': 'application/json'},
                              status=400)
 

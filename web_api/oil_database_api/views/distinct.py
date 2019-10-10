@@ -25,29 +25,17 @@ def get_distinct(request):
 
     attrs = ('location',)
 
-    oils = request.db_oil.oil
-    categories = request.db_oil.category
+    oils = request.db.oil_database.oil
+    categories = request.db.oil_database.category
 
-    for ir_attrs in Oil.objects.only(*attrs):
+    for ir_attrs in oils.find({}, projection=attrs + ('categories',)):
         for a in attrs:
-            res[a].add(getattr(ir_attrs, a))
+            if ir_attrs[a] is not None:
+                res[a].add(ir_attrs[a])
 
-    # Categories are in a slightly different format than the rest, so we
-    # handle them separately.
-    category_dict = {}
-    for parent in Category.objects.raw({'parent': None}):
-        category_dict.update(child_categories(parent))
+        categories = ir_attrs['categories']
+        if categories is not None:
+            for c in ir_attrs['categories']:
+                res['product_type'].add(c)
 
-    return ([dict(column=k, values=sorted(v)) for k, v in res.iteritems()] +
-            [dict(column='product_type', values=category_dict)])
-
-
-def child_categories(category):
-    '''
-        This is a recursive method to return a tree of sub-categories
-    '''
-    name = category.name
-    if category.children is not None and len(category.children) > 0:
-        return {name: [child_categories(c) for c in category.children]}
-    else:
-        return name
+    return [dict(column=k, values=sorted(v)) for k, v in res.items()]

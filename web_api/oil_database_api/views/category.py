@@ -11,14 +11,13 @@ from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
 from oil_database.util.json import jsonify_model_obj
-from oil_database.models.common import Category
 
 from oil_database_api.common.views import cors_policy, obj_id_from_url
 
 
 logger = logging.getLogger(__name__)
 
-category_api = Service(name='category', path='/categories*obj_id',
+category_api = Service(name='category', path='/category*obj_id',
                        description="Category APIs", cors_policy=cors_policy)
 
 
@@ -30,16 +29,17 @@ def get_categories(request):
         2. Return the JSON record of a particular category.
     '''
     obj_id = obj_id_from_url(request)
+    categories = request.db.oil_database.category
 
     if obj_id is not None:
-        res = get_category_dict(obj_id)
+        res = categories.find({'_id': obj_id})
 
         if res is not None:
             return res
         else:
             raise HTTPNotFound()
     else:
-        return [get_category_dict(c._id) for c in Category.find({})]
+        return list(categories.find({}))
 
 
 @category_api.post()
