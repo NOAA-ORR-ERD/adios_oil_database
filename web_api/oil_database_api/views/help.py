@@ -14,8 +14,9 @@ from docutils.core import publish_parts
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 
-from ..common.views import cors_exception, cors_policy
-from ..common.indexing import iter_keywords
+from oil_database_api.common.views import cors_exception, cors_policy
+from oil_database_api.common.indexing import iter_keywords
+
 
 help_svc = Service(name='help', path='/help*dir',
                    description="Help Documentation and Feedback API",
@@ -24,10 +25,14 @@ help_svc = Service(name='help', path='/help*dir',
 
 @help_svc.get()
 def get_help(request):
-    '''Get the requested help file if it exists'''
+    '''
+        Get the requested help file if it exists
+    '''
     help_dir = get_help_dir_from_config(request)
-    requested_dir = (urllib.unquote(sep.join(request.matchdict['dir']))
-                     .encode('utf8'))
+    requested_dir = urllib.parse.unquote(sep.join(request.matchdict['dir']))
+    print('get_help(): help_dir: ', help_dir)
+    print('get_help(): requested_dir: ', requested_dir)
+
     requested_file = join(help_dir, requested_dir)
 
     if isfile(requested_file + '.rst'):
@@ -93,7 +98,8 @@ def create_help_feedback(request):
     if 'index' not in json_request:
         json_request['index'] = client.incr('index')
 
-    client.set('feedback' + str(json_request['index']), json_request)
+    client.set('feedback' + str(json_request['index']),
+               str(json_request))
 
     return json_request
 
