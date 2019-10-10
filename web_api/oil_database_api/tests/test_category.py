@@ -22,14 +22,22 @@ class CategoryTests(CategoryTestBase):
         categories = resp.json_body
 
         for c in categories:
-            for k in ('name',
-                      '_id',
-                      # 'parent',  # optional
-                      'children'):
+            for k in ('_id', 'name'):
                 assert k in c
 
     def test_get_invalid_id(self):
-        self.testapp.get('/category/{}'.format('bogus_id'), status=404)
+        '''
+            Testing an ID that can't even be used as an ObjectId
+        '''
+        self.testapp.get('/category/{}'.format('bogus_id'), status=400)
+
+    def test_get_nonexistent_id(self):
+        '''
+            Here, we are using an ID that can be turned into an ObjectId,
+            but it's very unlikely that it will be found in the database.
+        '''
+        self.testapp.get('/category/{}'.format('deadbeefdeadbeefdeadbeef'),
+                         status=404)
 
     def test_get_valid_id(self):
         '''

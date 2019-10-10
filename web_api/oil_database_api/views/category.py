@@ -10,7 +10,7 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
-from oil_database.util.json import jsonify_model_obj
+from oil_database.util.json import fix_bson_ids
 
 from oil_database_api.common.views import cors_policy, obj_id_from_url
 
@@ -32,14 +32,18 @@ def get_categories(request):
     categories = request.db.oil_database.category
 
     if obj_id is not None:
-        res = categories.find({'_id': obj_id})
+        try:
+            res = categories.find_one({'_id': ObjectId(obj_id)})
+        except InvalidId as e:
+            raise HTTPBadRequest(e)
 
         if res is not None:
-            return res
+            print('res: ', res)
+            return fix_bson_ids(res)
         else:
             raise HTTPNotFound()
     else:
-        return list(categories.find({}))
+        return fix_bson_ids(list(categories.find({})))
 
 
 @category_api.post()
@@ -55,23 +59,31 @@ def insert_category(request):
         raise HTTPBadRequest(e)
 
     try:
-        obj = Category(**json_obj)
-        obj.save()
+        # We don't have our data classes anymore so we need to inject
+        # at least a little bit of sanity here.  We will fail if we don't
+        # have at least these attributes.
+        required_attrs = ('name',)
+        if any([a not in json_obj for a in required_attrs]):
+            raise ValueError('Category insert objects must have at least '
+                             'these attributes: {}'
+                             .format(required_attrs))
+
+        if '_id' in json_obj:
+            json_obj['_id'] = ObjectId(json_obj['_id'])
+            print('insert_category(): requested _id: ', json_obj['_id'])
+
+        json_obj['_id'] = (request.db.oil_database.category
+                           .insert_one(json_obj)
+                           .inserted_id)
+        print('insert_category(): _id: ', json_obj['_id'])
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return jsonify_model_obj(obj)
+    return fix_bson_ids(json_obj)
 
 
 @category_api.put()
 def update_category(request):
-    '''
-        The mongo model classes implement 'upsert' behavior, which is to say
-        that if the record exists, it is updated, and if it does not exist,
-        then it is inserted.
-        So this function, although separate, looks very similar to the insert
-        function.
-    '''
     try:
         json_obj = ujson.loads(request.body)
 
@@ -84,42 +96,41 @@ def update_category(request):
 
     try:
         print('putting category object: {}'.format(json_obj))
-        obj = Category(**json_obj)
-        obj.save()
+
+        # We will fail if we don't have at least these attributes.
+        required_attrs = ('_id', 'name',)
+        if any([a not in json_obj for a in required_attrs]):
+            raise ValueError('Category update objects must have at least '
+                             'these attributes: {}'
+                             .format(required_attrs))
+
+        json_obj['_id'] = ObjectId(json_obj['_id'])
+        print('update_category(): _id: ', json_obj['_id'])
+
+        (request.db.oil_database.category
+         .replace_one({'_id': json_obj['_id']}, json_obj))
+
         print('put category success!!')
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return jsonify_model_obj(obj)
+    return fix_bson_ids(json_obj)
 
 
 @category_api.delete()
-def delete_oil(request):
+def delete_category(request):
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
-        res = get_one_category(ObjectId(obj_id))
+        obj_id = ObjectId(obj_id)
+        print('delete_category(): _id: ', obj_id)
 
-        if res is None:
+        res = (request.db.oil_database.category
+               .delete_one({'_id': obj_id}))
+
+        if res.deleted_count == 0:
             raise HTTPNotFound()
-        else:
-            # should maybe wrap this in a try, and return any failure response
-            return res.delete()
+
+        return res
     else:
         raise HTTPBadRequest
-
-
-def get_one_category(obj_id):
-    try:
-        result = Category.find_one({'_id': ObjectId(obj_id)})
-    except InvalidId:
-        return None
-
-    if isinstance(result, Category):
-        return result
-    elif len(result) > 0:
-        return result[0]
-
-
-def get_category_dict(obj_id):
-    return jsonify_model_obj(get_one_category(obj_id))

@@ -22,7 +22,7 @@ pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
-oil_api = Service(name='oil', path='/oils*obj_id',
+oil_api = Service(name='oil', path='/oil*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
@@ -198,13 +198,6 @@ def insert_oil(request):
 
 @oil_api.put()
 def update_oil(request):
-    '''
-        The mongo model classes implement 'upsert' behavior, which is to say
-        that if the record exists, it is updated, and if it does not exist,
-        then it is inserted.
-        So this function, although separate, looks very similar to the insert
-        function.
-    '''
     try:
         json_obj = ujson.loads(request.body)
 
