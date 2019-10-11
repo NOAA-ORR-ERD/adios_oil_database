@@ -134,12 +134,26 @@ def search_with_post_sort(oils, start, stop, search_opts, sort):
 
     cursor = oils.find(search_opts)
 
-    sorted_res = sorted([get_oil_searchable_fields(o)
-                         for o in cursor],
+    results = []
+    none_results = []
+
+    for o in cursor:
+        rec = get_oil_searchable_fields(o)
+        if rec[field] is not None:
+            results.append(rec)
+        else:
+            none_results.append(rec)
+
+    sorted_res = sorted(results,
                         key=lambda x: x[field],
                         reverse=(direction == DESCENDING))
 
-    return [o for i, o in enumerate(sorted_res)
+    if direction == ASCENDING:
+        agg_results = none_results + sorted_res
+    else:
+        agg_results = sorted_res + none_results
+
+    return [o for i, o in enumerate(agg_results)
             if i >= start and i < stop]
 
 
