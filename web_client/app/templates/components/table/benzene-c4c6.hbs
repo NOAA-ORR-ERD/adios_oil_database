@@ -1,0 +1,60 @@
+<div class="detail-section">
+
+  <strong>C4-C6 Alkyl Benzenes:</strong>
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target=".c4c6-row-collapse"
+             aria-controls="c4c6-tbody"
+             aria-expanded="false">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Amylbenzene</th>
+          <th scope="col">Propylbenzene</th>
+          <th scope="col">Isopropylbenzene</th>
+          <th scope="col">Isobutylbenzene</th>
+          <th scope="col">n-Hexylbenzene</th>
+          <th scope="col">1,2,3-Trimethylbenzene</th>
+          <th scope="col">1,2,4-Trimethylbenzene</th>
+          <th scope="col">1,3,5-Trimethylbenzene</th>
+          <th scope="col">2-Ethyltoluene</th>
+          <th scope="col">3&4-Ethyltoluene</th>
+          <th scope="col">1-Methyl-2-isopropylbenzene</th>
+          <th scope="col">1,2-Dimethyl-4-ethylbenzene</th>
+          <th scope="col">Weathering</th>
+        </tr>
+      </thead>
+      <tbody id="c4c6-tbody">
+        {{#each oil.benzene as |benzene index|}}
+          {{#if (eq benzene.weathering weathered)}}
+            <tr class="collapse show c4c6-row-collapse">
+              <th scope="row">{{index}}</th>
+              <td>{{value-unit benzene.amylbenzene 2}}</td>
+              <td>{{value-unit benzene.propylebenzene 2}}</td>
+              <td>{{value-unit benzene.isopropylbenzene 2}}</td>
+              <td>{{value-unit benzene.isobutylbenzene 2}}</td>
+              <td>{{value-unit benzene.n_hexylbenzene 2}}</td>
+              <td>{{value-unit benzene._1_2_3_trimethylbenzene 2}}</td>
+              <td>{{value-unit benzene._1_2_4_trimethylbenzene 2}}</td>
+              <td>{{value-unit benzene._1_3_5_trimethylbenzene 2}}</td>
+              <td>{{value-unit benzene._2_ethyltoluene 2}}</td>
+              <td>{{value-unit benzene._3_4_ethyltoluene 2}}</td>
+              <td>{{value-unit benzene._1_methyl_2_isopropylbenzene 2}}</td>
+              <td>{{value-unit benzene._1_2_dimethyl_4_ethylbenzene 2}}</td>
+              <td>{{benzene.weathering}}</td>
+            </tr>
+          {{/if}}
+        {{/each}}
+
+        {{#if oil.benzene}}
+          <tr class="collapse c4c6-row-collapse">
+            <th scope="row">&#x2026;</th>
+          </tr>
+        {{else}}
+          <tr><td>Empty</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+
+</div>

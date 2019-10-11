@@ -1,0 +1,336 @@
+<div class="detail-section">
+  <strong>Alkylated PAHs:</strong>
+
+  <div class="row">
+
+    <div class="col-8">
+      <div class="table-responsive">
+        <center>Naphthalenes</center>
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".naphthalenes-row-collapse"
+                 aria-controls="naphthalenes-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">C0-N</th>
+              <th scope="col">C1-N</th>
+              <th scope="col">C2-N</th>
+              <th scope="col">C3-N</th>
+              <th scope="col">C4-N</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="naphthalenes-tbody">
+            {{#each oil.alkylatedPahs as |pah index|}}
+              {{#if (eq pah.weathering weathered)}}
+                <tr class="collapse show naphthalenes-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit pah.c0_n 2}}</td>
+                  <td>{{value-unit pah.c1_n 2}}</td>
+                  <td>{{value-unit pah.c2_n 2}}</td>
+                  <td>{{value-unit pah.c3_n 2}}</td>
+                  <td>{{value-unit pah.c4_n 2}}</td>
+                  <td>{{pah.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.alkylatedPahs}}
+              <tr class="collapse naphthalenes-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-8">
+      <div class="table-responsive">
+        <center>Phenanthrenes</center>
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".phenanthrenes-row-collapse"
+                 aria-controls="phenanthrenes-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">C0-P</th>
+              <th scope="col">C1-P</th>
+              <th scope="col">C2-P</th>
+              <th scope="col">C3-P</th>
+              <th scope="col">C4-P</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="phenanthrenes-tbody">
+            {{#each oil.alkylatedPahs as |pah index|}}
+              {{#if (eq pah.weathering weathered)}}
+                <tr class="collapse show phenanthrenes-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit pah.c0_p 2}}</td>
+                  <td>{{value-unit pah.c1_p 2}}</td>
+                  <td>{{value-unit pah.c2_p 2}}</td>
+                  <td>{{value-unit pah.c3_p 2}}</td>
+                  <td>{{value-unit pah.c4_p 2}}</td>
+                  <td>{{pah.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.alkylatedPahs}}
+              <tr class="collapse phenanthrenes-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-8">
+      <div class="table-responsive">
+        <center>Benzonaphthothiophenes</center>
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".bntp-row-collapse"
+                 aria-controls="bntp-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">C0-B</th>
+              <th scope="col">C1-B</th>
+              <th scope="col">C2-B</th>
+              <th scope="col">C3-B</th>
+              <th scope="col">C4-B</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="bntp-tbody">
+            {{#each oil.alkylatedPahs as |pah index|}}
+              {{#if (eq pah.weathering weathered)}}
+                <tr class="collapse show bntp-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit pah.c0_b 2}}</td>
+                  <td>{{value-unit pah.c1_b 2}}</td>
+                  <td>{{value-unit pah.c2_b 2}}</td>
+                  <td>{{value-unit pah.c3_b 2}}</td>
+                  <td>{{value-unit pah.c4_b 2}}</td>
+                  <td>{{pah.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.alkylatedPahs}}
+              <tr class="collapse bntp-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="col-6">
+      <div class="table-responsive">
+        <center>Dibenzothiophenes</center>
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".dibenzothiophenes-row-collapse"
+                 aria-controls="dibenzothiophenes-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">C0-D</th>
+              <th scope="col">C1-D</th>
+              <th scope="col">C2-D</th>
+              <th scope="col">C3-D</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="dibenzothiophenes-tbody">
+            {{#each oil.alkylatedPahs as |pah index|}}
+              {{#if (eq pah.weathering weathered)}}
+                <tr class="collapse show dibenzothiophenes-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit pah.c0_d 2}}</td>
+                  <td>{{value-unit pah.c1_d 2}}</td>
+                  <td>{{value-unit pah.c2_d 2}}</td>
+                  <td>{{value-unit pah.c3_d 2}}</td>
+                  <td>{{pah.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.alkylatedPahs}}
+              <tr class="collapse dibenzothiophenes-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="table-responsive">
+        <center>Fluorenes</center>
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".fluorenes-row-collapse"
+                 aria-controls="fluorenes-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">C0-F</th>
+              <th scope="col">C1-F</th>
+              <th scope="col">C2-F</th>
+              <th scope="col">C3-F</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="fluorenes-tbody">
+            {{#each oil.alkylatedPahs as |pah index|}}
+              {{#if (eq pah.weathering weathered)}}
+                <tr class="collapse show fluorenes-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit pah.c0_f 2}}</td>
+                  <td>{{value-unit pah.c1_f 2}}</td>
+                  <td>{{value-unit pah.c2_f 2}}</td>
+                  <td>{{value-unit pah.c3_f 2}}</td>
+                  <td>{{pah.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.alkylatedPahs}}
+              <tr class="collapse fluorenes-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="table-responsive">
+        <center>Chrysenes</center>
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".chrysenes-row-collapse"
+                 aria-controls="chrysenes-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">C0-C</th>
+              <th scope="col">C1-C</th>
+              <th scope="col">C2-C</th>
+              <th scope="col">C3-C</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="chrysenes-tbody">
+            {{#each oil.alkylatedPahs as |pah index|}}
+              {{#if (eq pah.weathering weathered)}}
+                <tr class="collapse show chrysenes-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit pah.c0_c 2}}</td>
+                  <td>{{value-unit pah.c1_c 2}}</td>
+                  <td>{{value-unit pah.c2_c 2}}</td>
+                  <td>{{value-unit pah.c3_c 2}}</td>
+                  <td>{{pah.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.alkylatedPahs}}
+              <tr class="collapse chrysenes-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="table-responsive">
+        <center>Other Priority PAHs</center>
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".otherpah-row-collapse"
+                 aria-controls="otherpah-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Biphenyl</th>
+              <th scope="col">Acenaphthylene</th>
+              <th scope="col">Acenaphthene</th>
+              <th scope="col">Anthracene</th>
+              <th scope="col">Fluoranthene</th>
+              <th scope="col">Pyrene</th>
+              <th scope="col">Perylene</th>
+              <th scope="col">Benz(a)anthracene</th>
+              <th scope="col">Benzo(b)fluoranthene</th>
+              <th scope="col">Benzo(k)fluoranthene</th>
+              <th scope="col">Benzo(e)pyrene</th>
+              <th scope="col">Benzo(a)pyrene</th>
+              <th scope="col">Benzo(ghi)perylene</th>
+              <th scope="col">Dibenzo(ah)anthracene</th>
+              <th scope="col">Indeno(1,2,3-cd)pyrene</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="otherpah-tbody">
+            {{#each oil.alkylatedPahs as |pah index|}}
+              {{#if (eq pah.weathering weathered)}}
+                <tr class="collapse show otherpah-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit pah.biphenyl 2}}</td>
+                  <td>{{value-unit pah.acenaphthylene 2}}</td>
+                  <td>{{value-unit pah.acenaphthene 2}}</td>
+                  <td>{{value-unit pah.anthracene 2}}</td>
+                  <td>{{value-unit pah.fluoranthene 2}}</td>
+                  <td>{{value-unit pah.pyrene 2}}</td>
+                  <td>{{value-unit pah.perylene 2}}</td>
+                  <td>{{value-unit pah.benz_a_anthracene 2}}</td>
+                  <td>{{value-unit pah.benzo_b_fluoranthene 2}}</td>
+                  <td>{{value-unit pah.benzo_k_fluoranthene 2}}</td>
+                  <td>{{value-unit pah.benzo_e_pyrene 2}}</td>
+                  <td>{{value-unit pah.benzo_a_pyrene 2}}</td>
+                  <td>{{value-unit pah.benzo_ghi_perylene 2}}</td>
+                  <td>{{value-unit pah.dibenzo_ah_anthracene 2}}</td>
+                  <td>{{value-unit pah.indeno_1_2_3_cd_pyrene 2}}</td>
+                  <td>{{pah.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.alkylatedPahs}}
+              <tr class="collapse otherpah-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </div>
+</div>

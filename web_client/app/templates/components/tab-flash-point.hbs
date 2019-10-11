@@ -1,0 +1,40 @@
+<div class="detail-section">
+
+  <div class="table-responsive">
+    <strong>Flash Point:</strong>
+
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target=".fp-row-collapse"
+             aria-controls="fp-tbody"
+             aria-expanded="false">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Temperature</th>
+          <th scope="col">Weathering</th>
+        </tr>
+      </thead>
+      <tbody id="fp-tbody">
+        {{#each oil.flashPoints as |fp index|}}
+          {{#if (eq fp.weathering weathered)}}
+            <tr class="collapse show fp-row-collapse">
+              <th scope="row">{{index}}</th>
+              <td>{{value-unit (convert-unit fp.ref_temp "C") 2}}</td>
+              <td>{{fp.weathering}}</td>
+            </tr>
+          {{/if}}
+        {{/each}}
+
+        {{#if oil.flashPoints}}
+          <tr class="collapse fp-row-collapse">
+            <th scope="row">&#x2026;</th>
+          </tr>
+        {{else}}
+          <tr><td>Empty</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

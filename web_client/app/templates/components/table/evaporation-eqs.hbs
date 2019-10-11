@@ -1,0 +1,44 @@
+<div class="detail-section">
+  <div class="table-responsive">
+    <strong>Evaporation Equations:</strong>
+
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target=".evaporationeqs-row-collapse"
+             aria-controls="evaporationeqs-tbody"
+             aria-expanded="false">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">A</th>
+          <th scope="col">B</th>
+          <th scope="col">C</th>
+          <th scope="col">Equation</th>
+          <th scope="col">Weathering</th>
+        </tr>
+      </thead>
+      <tbody id="evaporationeqs-tbody">
+        {{#each oil.evaporationEqs as |evap index|}}
+          {{#if (eq evap.weathering weathered)}}
+            <tr class="collapse show evaporationeqs-row-collapse">
+              <th scope="row">{{index}}</th>
+              <td>{{evap.a}}</td>
+              <td>{{evap.b}}</td>
+              <td>{{evap.c}}</td>
+              <td>{{evap.equation}}</td>
+              <td>{{evap.weathering}}</td>
+            </tr>
+          {{/if}}
+        {{/each}}
+
+        {{#if oil.evaporationEqs}}
+          <tr class="collapse evaporationeqs-row-collapse">
+            <th scope="row">&#x2026;</th>
+          </tr>
+        {{else}}
+          <tr><td>Empty</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+
+</div>

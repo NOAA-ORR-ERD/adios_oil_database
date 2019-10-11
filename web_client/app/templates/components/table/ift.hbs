@@ -1,0 +1,42 @@
+<div class="detail-section">
+  <div class="table-responsive">
+    <strong>Interfacial Tension:</strong>
+
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target=".ift-row-collapse"
+             aria-controls="ift-tbody"
+             aria-expanded="false">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Interface</th>
+          <th scope="col">Tension</th>
+          <th scope="col">Temperature</th>
+          <th scope="col">Weathering</th>
+        </tr>
+      </thead>
+      <tbody id="ift-tbody">
+        {{#each oil.ifts as |ift index|}}
+          {{#if (eq ift.weathering weathered)}}
+            <tr class="collapse show ift-row-collapse">
+              <th scope="row">{{index}}</th>
+              <td>{{ift.interface}}</td>
+              <td>{{value-unit ift.tension 3}}</td>
+              <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
+              <td>{{ift.weathering}}</td>
+            </tr>
+          {{/if}}
+        {{/each}}
+
+        {{#if oil.ifts}}
+          <tr class="collapse ift-row-collapse">
+            <th scope="row">&#x2026;</th>
+          </tr>
+        {{else}}
+          <tr><td>Empty</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+
+</div>

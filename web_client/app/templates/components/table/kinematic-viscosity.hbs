@@ -1,0 +1,40 @@
+<div class="detail-section">
+  <div class="table-responsive">
+    <strong>Kinematic Viscosity:</strong>
+
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target=".kvis-row-collapse"
+             aria-controls="kvis-tbody"
+             aria-expanded="false">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Viscosity</th>
+          <th scope="col">Temperature</th>
+          <th scope="col">Weathering</th>
+        </tr>
+      </thead>
+      <tbody id="kvis-tbody">
+        {{#each oil.kvis as |kvis index|}}
+          {{#if (eq kvis.weathering weathered)}}
+            <tr class="collapse show kvis-row-collapse">
+              <th scope="row">{{index}}</th>
+              <td>{{value-unit (convert-unit kvis.viscosity "cSt") 3}}</td>
+              <td>{{value-unit (convert-unit kvis.ref_temp "C") 2}}</td>
+              <td>{{kvis.weathering}}</td>
+            </tr>
+          {{/if}}
+        {{/each}}
+
+        {{#if oil.kvis}}
+          <tr class="collapse kvis-row-collapse">
+            <th scope="row">&#x2026;</th>
+          </tr>
+        {{else}}
+          <tr><td>Empty</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+
+</div>
