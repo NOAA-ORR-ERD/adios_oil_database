@@ -1,10 +1,7 @@
-# ember-oil-db
+# Adios Oil Database Web Client
 
-Web client that uses the OilDatabaseAPI to manage the NOAA  Oil Database
-from a web browser.
-
-This was built using the Ember web application framework to see how well
-it might satisfy the needs of such a web client.
+Web client that uses the Adios oil database web API to manage the NOAA
+Oil Database from a web browser.
 
 ## Prerequisites
 
@@ -18,7 +15,7 @@ You will need the following things properly installed on your computer.
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ember-oil-db`
+* `cd <repository>/web_client`
 * `npm install`
 
 ## Running / Development
