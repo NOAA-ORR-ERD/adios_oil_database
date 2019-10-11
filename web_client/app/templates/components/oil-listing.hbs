@@ -1,0 +1,58 @@
+<article class="listing">
+  <div class="details">
+    <h3>
+      {{#link-to "oils.show" oil class=oil.id}}{{oil.name}}{{/link-to}}
+    </h3>
+
+    <div class="detail id">
+      <span>ID:</span> {{oil.id}}
+    </div>
+
+    <div class="detail type">
+      <span>Type:</span> {{oil.productType}}
+    </div>
+
+    <div class="detail location">
+      <span>Location:</span> {{oil.location}}
+    </div>
+
+    <div class="detail categories">
+      <span>Categories:</span>
+
+      {{#each oil.categories as |category|}}
+        <span class="list-item-label">
+          {{category}}
+        </span>
+      {{/each}}
+    </div>
+
+    <div class="detail pour-point">
+      <span>Pour Point:</span>
+
+      {{#each oil.pourPoint as |pp|}}
+        <span class="list-item-label">
+          {{pp}}
+        </span>
+      {{/each}}
+
+    </div>
+
+    <div class="detail api">
+      <span>API:</span>
+
+      {{#each oil.apis as |api|}}
+        <span class="list-item-label">
+          {{api.gravity}}
+        </span>
+      {{/each}}
+    </div>
+
+    <div class="detail viscosity">
+      <span>Viscosity:</span> {{oil.viscosity}}
+    </div>
+
+    <div class="detail status">
+      <span>Status:</span> {{oil.status}}
+    </div>
+  </div>
+</article>

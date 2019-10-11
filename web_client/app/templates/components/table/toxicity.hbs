@@ -1,0 +1,42 @@
+<div class="detail-section">
+  <div class="table-responsive">
+    <strong>Toxicity:</strong>
+
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target=".toxicity-row-collapse"
+             aria-controls="toxicity-tbody"
+             aria-expanded="false">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Species</th>
+          <th scope="col">Type</th>
+          <th scope="col">24 Hours</th>
+          <th scope="col">48 Hours</th>
+          <th scope="col">96 Hours</th>
+        </tr>
+      </thead>
+      <tbody id="toxicity-tbody">
+        {{#each oil.toxicities as |toxicity index|}}
+          <tr class="collapse show toxicity-row-collapse">
+            <th scope="row">{{index}}</th>
+            <td>{{toxicity.species}}</td>
+            <td>{{toxicity.tox_type}}</td>
+            <td>{{toxicity.after_24h}}</td>
+            <td>{{toxicity.after_48h}}</td>
+            <td>{{toxicity.after_96h}}</td>
+          </tr>
+        {{/each}}
+
+        {{#if oil.toxicities}}
+          <tr class="collapse toxicity-row-collapse">
+            <th scope="row">&#x2026;</th>
+          </tr>
+        {{else}}
+          <tr><td>Empty</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,83 @@
+<div class="detail-section">
+  <strong>Biomarkers:</strong>
+
+  <div class="row">
+    <div class="col-12">
+
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+          <thead class="clickable" data-toggle="collapse"
+                 data-target=".biomarkers-row-collapse"
+                 aria-controls="biomarkers-tbody"
+                 aria-expanded="false">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">C21 Tricyclic Terpane</th>
+              <th scope="col">C22 Tricyclic Terpane</th>
+              <th scope="col">C23 Tricyclic Terpane</th>
+              <th scope="col">C24 Tricyclic Terpane</th>
+              <th scope="col">30-Norhopane</th>
+              <th scope="col">Hopane</th>
+              <th scope="col">30-Homohopane-22S</th>
+              <th scope="col">30-Homohopane-22R</th>
+              <th scope="col">30,31-Bishomohopane-22S</th>
+              <th scope="col">30,31-Bishomohopane-22R</th>
+              <th scope="col">30,31-Trishomohopane-22S</th>
+              <th scope="col">30,31-Trishomohopane-22R</th>
+              <th scope="col">Tetrakishomohopane-22S</th>
+              <th scope="col">Tetrakishomohopane-22R</th>
+              <th scope="col">Pentakishomohopane-22S</th>
+              <th scope="col">Pentakishomohopane-22R</th>
+              <th scope="col">18&#x3B1;,22,29,30-Trisnorneohopane</th>
+              <th scope="col">17&#x3B1;(H)-22,29,30-Trisnorhopane</th>
+              <th scope="col">14&#x3B2;(H),17&#x3B2;(H)-20-Cholestane</th>
+              <th scope="col">14&#x3B2;(H),17&#x3B2;(H)-20-Methylcholestane</th>
+              <th scope="col">14&#x3B2;(H),17&#x3B2;(H)-20-Ethylcholestane</th>
+              <th scope="col">Weathering</th>
+            </tr>
+          </thead>
+          <tbody id="biomarkers-tbody">
+            {{#each oil.biomarkers as |biomarker index|}}
+              {{#if (eq biomarker.weathering weathered)}}
+                <tr class="collapse show biomarkers-row-collapse">
+                  <th>{{index}}</th>
+                  <td>{{value-unit biomarker.c21_tricyclic_terpane 2}}</td>
+                  <td>{{value-unit biomarker.c22_tricyclic_terpane 2}}</td>
+                  <td>{{value-unit biomarker.c23_tricyclic_terpane 2}}</td>
+                  <td>{{value-unit biomarker.c24_tricyclic_terpane 2}}</td>
+                  <td>{{value-unit biomarker._30_norhopane 2}}</td>
+                  <td>{{value-unit biomarker.hopane 2}}</td>
+                  <td>{{value-unit biomarker._30_homohopane_22s 2}}</td>
+                  <td>{{value-unit biomarker._30_homohopane_22r 2}}</td>
+                  <td>{{value-unit biomarker._30_31_bishomohopane_22s 2}}</td>
+                  <td>{{value-unit biomarker._30_31_bishomohopane_22r 2}}</td>
+                  <td>{{value-unit biomarker._30_31_trishomohopane_22s 2}}</td>
+                  <td>{{value-unit biomarker._30_31_trishomohopane_22r 2}}</td>
+                  <td>{{value-unit biomarker.tetrakishomohopane_22s 2}}</td>
+                  <td>{{value-unit biomarker.tetrakishomohopane_22r 2}}</td>
+                  <td>{{value-unit biomarker.pentakishomohopane_22s 2}}</td>
+                  <td>{{value-unit biomarker.pentakishomohopane_22r 2}}</td>
+                  <td>{{value-unit biomarker._18a_22_29_30_trisnorneohopane 2}}</td>
+                  <td>{{value-unit biomarker._17a_h_22_29_30_trisnorhopane 2}}</td>
+                  <td>{{value-unit biomarker._14b_h_17b_h_20_cholestane 2}}</td>
+                  <td>{{value-unit biomarker._14b_h_17b_h_20_methylcholestane 2}}</td>
+                  <td>{{value-unit biomarker._14b_h_17b_h_20_ethylcholestane 2}}</td>
+                  <td>{{biomarker.weathering}}</td>
+                </tr>
+              {{/if}}
+            {{/each}}
+
+            {{#if oil.biomarkers}}
+              <tr class="collapse biomarkers-row-collapse">
+                <th>&#x2026;</th>
+              </tr>
+            {{else}}
+              <tr><td>Empty</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

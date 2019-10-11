@@ -1,0 +1,69 @@
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" data-toggle="tab" role="tab"
+       id="nav-physical-tab-{{slug weathered}}" href="#nav-physical-{{slug weathered}}"
+       aria-controls="nav-physical-{{slug weathered}}"
+       aria-selected="true">
+      Physical Properties
+    </a>
+    <a class="nav-item nav-link" data-toggle="tab" role="tab"
+       id="nav-distillation-tab-{{slug weathered}}" href="#nav-distillation-{{slug weathered}}"
+       aria-controls="nav-distillation-{{slug weathered}}"
+       aria-selected="false">
+      Distillation Cuts
+    </a>
+    <a class="nav-item nav-link" data-toggle="tab" role="tab"
+       id="nav-composition-tab-{{slug weathered}}" href="#nav-composition-{{slug weathered}}"
+       aria-controls="nav-composition-{{slug weathered}}"
+       aria-selected="false">
+      Composition
+    </a>
+    <a class="nav-item nav-link" data-toggle="tab" role="tab"
+       id="nav-environmental-tab-{{slug weathered}}" href="#nav-environmental-{{slug weathered}}"
+       aria-controls="nav-environmental-{{slug weathered}}"
+       aria-selected="false">
+      Environmental Behavior
+    </a>
+    <a class="nav-item nav-link" data-toggle="tab" role="tab"
+       id="nav-ccme-tab-{{slug weathered}}" href="#nav-ccme-{{slug weathered}}"
+       aria-controls="nav-ccme-{{slug weathered}}"
+       aria-selected="false">
+      CCME
+    </a>
+  </div>
+</nav>
+
+
+<div class="tab-content" id="nav-tabContent">
+  <div role="tabpanel" class="tab-pane fade active show"
+       id="nav-physical-{{slug weathered}}"
+       aria-labelledby="nav-physical-tab-{{slug weathered}}">
+    <TabPane::Physical @oil={{oil}} @weathered={{weathered}}/>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade active"
+       id="nav-distillation-{{slug weathered}}"
+       aria-labelledby="nav-distillation-tab-{{slug weathered}}">
+    {{! class 'active' is necessary for the graph to render properly,
+        even if the tab is not initially shown }}
+    <TabPane::Distillation @oil={{oil}} @weathered={{weathered}}/>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade"
+       id="nav-composition-{{slug weathered}}"
+       aria-labelledby="nav-composition-tab-{{slug weathered}}">
+    <TabPane::Composition @oil={{oil}} @weathered={{weathered}}/>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade"
+       id="nav-environmental-{{slug weathered}}"
+       aria-labelledby="nav-environmental-tab-{{slug weathered}}">
+    <TabPane::Environmental @oil={{oil}} @weathered={{weathered}}/>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade"
+       id="nav-ccme-{{slug weathered}}"
+       aria-labelledby="nav-ccme-tab-{{slug weathered}}">
+    <TabPane::Ccme @oil={{oil}} @weathered={{weathered}}/>
+  </div>
+</div>

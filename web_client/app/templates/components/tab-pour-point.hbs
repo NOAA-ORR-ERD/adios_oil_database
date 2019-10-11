@@ -1,0 +1,39 @@
+<div class="detail-section">
+  <div class="table-responsive">
+    <strong>Pour Point:</strong>
+
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target=".pp-row-collapse"
+             aria-controls="pp-tbody"
+             aria-expanded="false">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Temperature</th>
+          <th scope="col">Weathering</th>
+        </tr>
+      </thead>
+      <tbody id="pp-tbody">
+        {{#each oil.pourPoints as |pp index|}}
+          {{#if (eq pp.weathering weathered)}}
+            <tr class="collapse show pp-row-collapse">
+              <th scope="row">{{index}}</th>
+              <td>{{value-unit (convert-unit pp.ref_temp "C") 2}}</td>
+              <td>{{pp.weathering}}</td>
+            </tr>
+          {{/if}}
+        {{/each}}
+
+        {{#if oil.pourPoints}}
+          <tr class="collapse pp-row-collapse">
+            <th scope="row">&#x2026;</th>
+          </tr>
+        {{else}}
+          <tr><td>Empty</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

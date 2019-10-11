@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4 col-lg-2">
+      {{! First column }}
+
+      <strong>ID:</strong> {{oil.id}}
+      <br>
+
+      <strong>Type:</strong>
+      {{#if oil.productType}}
+        {{oil.productType}}
+      {{else}}
+        None
+      {{/if}}
+      <br>
+
+      {{#unless oil.status}}
+        <strong>
+          Status: <i class="status-good">OK</i>
+        </strong>
+      {{/unless}}
+    </div>
+
+    <div class="col-sm-8 col-md-8 col-lg-5 col-xl-4">
+      {{! Second column }}
+
+      <strong>API:</strong>
+
+      {{#if (not (is-empty oil.apis))}}
+        <span class="badge badge-dark">
+          {{round-relative oil.apis.[0].gravity 2}}
+        </span>
+      {{else}}
+        <span>
+          No Values
+        </span>
+      {{/if}}
+      <br>
+
+      <strong>Categories:</strong>
+
+      {{#each oil.categories as |category|}}
+        <span class="badge badge-dark">
+            {{category}}
+        </span>
+      {{else}}
+        None
+      {{/each}}
+    </div>
+
+    <div class="col">
+      {{! Third column }}
+
+      <strong>Location:</strong>
+      {{#if oil.location}}
+        {{oil.location}}
+      {{else}}
+        None
+      {{/if}}
+      <br>
+
+      <strong>Reference:</strong>
+      {{#if oil.reference}}
+        {{oil.reference}}
+      {{else}}
+        None
+      {{/if}}
+      <br>
+
+      <strong>Reference Date:</strong>
+      {{#if oil.referenceDate}}
+        {{! Europe/London is how we lookup GMT in moment.js }}
+        {{moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London"}}
+      {{else}}
+        None
+      {{/if}}
+      <br>
+
+      <strong>Sample Received Date:</strong>
+      {{#if oil.sampleDate}}
+        {{! Europe/London is how we lookup GMT in moment.js }}
+        {{moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London"}}
+      {{else}}
+        None
+      {{/if}}
+      <br>
+
+      <strong>Comments:</strong>
+      {{#if oil.comments}}
+        {{oil.comments}}
+      {{else}}
+        None
+      {{/if}}
+      <br>
+    </div>  
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      {{#if oil.status}}
+        <ul>
+          {{#each oil.status as |stat|}}
+            <li><i class="status-bad">{{stat}}</i></li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </div>
+  </div>
+
+</div>
