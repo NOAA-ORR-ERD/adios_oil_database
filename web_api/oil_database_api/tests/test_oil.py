@@ -248,7 +248,7 @@ class OilTestBase(FunctionalTestBase):
 
 class OilTests(OilTestBase):
     def test_get_no_id(self):
-        resp = self.testapp.get('/oil')
+        resp = self.testapp.get('/oils')
         oils = resp.json_body
 
         for r in oils:
@@ -265,7 +265,7 @@ class OilTests(OilTestBase):
                 assert k in r
 
     def test_get_invalid_id(self):
-        self.testapp.get('/oil/{}'.format('bogus'), status=404)
+        self.testapp.get('/oils/{}'.format('bogus'), status=404)
 
     def test_get_valid_id(self):
         '''
@@ -278,7 +278,7 @@ class OilTests(OilTestBase):
                        'AD01759',
                        'EC002234',
                        'EC000506'):
-            resp = self.testapp.get('/oil/{0}'.format(oil_id))
+            resp = self.testapp.get('/oils/{0}'.format(oil_id))
             oil = resp.json_body
 
             print('oil: ', oil['_id'])
@@ -364,17 +364,17 @@ class OilTests(OilTestBase):
                     assert self.toxicity_valid(t)
 
     def test_post_no_payload(self):
-        self.testapp.post_json('/oil', status=400)
+        self.testapp.post_json('/oils', status=400)
 
     def test_put_no_payload(self):
-        self.testapp.put_json('/oil', status=400)
+        self.testapp.put_json('/oils', status=400)
 
     def test_post_bad_req(self):
-        self.testapp.post_json('/oil', params=[], status=400)
-        self.testapp.post_json('/oil', params=1, status=400)
-        self.testapp.post_json('/oil', params='asdf', status=400)
+        self.testapp.post_json('/oils', params=[], status=400)
+        self.testapp.post_json('/oils', params=1, status=400)
+        self.testapp.post_json('/oils', params='asdf', status=400)
 
-        self.testapp.request('/oil', method='POST',
+        self.testapp.request('/oils', method='POST',
                              body=b'{"malformed":',
                              headers={'Content-Type': 'application/json'},
                              status=400)
@@ -382,19 +382,19 @@ class OilTests(OilTestBase):
         self.testapp.post_json('/oils', params={"bad": 'attr'}, status=415)
 
     def test_put_bad_req(self):
-        self.testapp.put_json('/oil', params=[], status=400)
-        self.testapp.put_json('/oil', params=1, status=400)
-        self.testapp.put_json('/oil', params='asdf', status=400)
+        self.testapp.put_json('/oils', params=[], status=400)
+        self.testapp.put_json('/oils', params=1, status=400)
+        self.testapp.put_json('/oils', params='asdf', status=400)
 
-        self.testapp.request('/oil', method='PUT',
+        self.testapp.request('/oils', method='PUT',
                              body=b'{"malformed":',
                              headers={'Content-Type': 'application/json'},
                              status=400)
 
-        self.testapp.put_json('/oil', params={"bad": 'attr'}, status=415)
+        self.testapp.put_json('/oils', params={"bad": 'attr'}, status=415)
 
     def test_delete_bad_req(self):
-        self.testapp.delete('/oil/{}'.format('bogus_id'), status=404)
+        self.testapp.delete('/oils/{}'.format('bogus_id'), status=404)
 
     def test_crud(self):
         oil_json = copy.deepcopy(basic_noaa_fm)
@@ -402,12 +402,12 @@ class OilTests(OilTestBase):
         #
         # test not inserted
         #
-        self.testapp.get('/oil/{}'.format(oil_json['oil_id']), status=404)
+        self.testapp.get('/oils/{}'.format(oil_json['oil_id']), status=404)
 
         #
         # insert
         #
-        resp = self.testapp.post_json('/oil', params=oil_json)
+        resp = self.testapp.post_json('/oils', params=oil_json)
         oil_json = resp.json_body
 
         assert oil_json['_id'] == 'AD99999'
@@ -416,7 +416,7 @@ class OilTests(OilTestBase):
         #
         # test inserted
         #
-        resp = self.testapp.get('/oil/{0}'.format(oil_json['_id']))
+        resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
         oil_json = resp.json_body
 
         assert oil_json['_id'] == 'AD99999'
@@ -427,7 +427,7 @@ class OilTests(OilTestBase):
         #
         oil_json['apis'][0]['gravity'] = 33.0
 
-        resp = self.testapp.put_json('/oil', params=oil_json)
+        resp = self.testapp.put_json('/oils', params=oil_json)
         oil_json = resp.json_body
 
         assert oil_json['apis'][0]['gravity'] == 33.0
@@ -435,7 +435,7 @@ class OilTests(OilTestBase):
         #
         # test updated
         #
-        resp = self.testapp.get('/oil/{0}'.format(oil_json['_id']))
+        resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
         oil_json = resp.json_body
 
         assert oil_json['apis'][0]['gravity'] == 33.0
@@ -443,9 +443,9 @@ class OilTests(OilTestBase):
         #
         # delete
         #
-        self.testapp.delete('/oil/{}'.format(oil_json['_id']))
+        self.testapp.delete('/oils/{}'.format(oil_json['_id']))
 
         #
         # test deleted
         #
-        self.testapp.get('/oil/{}'.format(oil_json['_id']), status=404)
+        self.testapp.get('/oils/{}'.format(oil_json['_id']), status=404)

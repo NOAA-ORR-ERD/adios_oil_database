@@ -22,7 +22,7 @@ pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
-oil_api = Service(name='oil', path='/oil*obj_id',
+oil_api = Service(name='oil', path='/oils*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
@@ -252,7 +252,6 @@ def fix_oil_id(oil_json):
 
 @memoize_oil_arg
 def get_oil_searchable_fields(oil):
-    pp.pprint(oil)
     oil = OilEstimation(oil)
 
     try:

@@ -18,7 +18,7 @@ class CategoryTestBase(FunctionalTestBase):
 
 class CategoryTests(CategoryTestBase):
     def test_get_no_id(self):
-        resp = self.testapp.get('/category')
+        resp = self.testapp.get('/categories')
         categories = resp.json_body
 
         for c in categories:
@@ -29,14 +29,14 @@ class CategoryTests(CategoryTestBase):
         '''
             Testing an ID that can't even be used as an ObjectId
         '''
-        self.testapp.get('/category/{}'.format('bogus_id'), status=400)
+        self.testapp.get('/categories/{}'.format('bogus_id'), status=400)
 
     def test_get_nonexistent_id(self):
         '''
             Here, we are using an ID that can be turned into an ObjectId,
             but it's very unlikely that it will be found in the database.
         '''
-        self.testapp.get('/category/{}'.format('deadbeefdeadbeefdeadbeef'),
+        self.testapp.get('/categories/{}'.format('deadbeefdeadbeefdeadbeef'),
                          status=404)
 
     def test_get_valid_id(self):
@@ -47,48 +47,48 @@ class CategoryTests(CategoryTestBase):
             Category IDs are random UUIDS.  So we can't really choose a static
             known ID.  We need to retrieve the IDs
         '''
-        res = self.testapp.get('/category')
+        res = self.testapp.get('/categories')
         categories = res.json_body
 
         for c in categories:
             c_id = c['_id']
-            res = self.testapp.get('/category/{}'.format(c_id))
+            res = self.testapp.get('/categories/{}'.format(c_id))
             cat = res.json_body
 
             assert c_id == cat['_id']
 
     def test_post_no_payload(self):
-        self.testapp.post_json('/category', status=400)
+        self.testapp.post_json('/categories', status=400)
 
     def test_put_no_payload(self):
-        self.testapp.put_json('/category', status=400)
+        self.testapp.put_json('/categories', status=400)
 
     def test_post_bad_req(self):
-        self.testapp.post_json('/category', params=[], status=400)
-        self.testapp.post_json('/category', params=1, status=400)
-        self.testapp.post_json('/category', params='asdf', status=400)
+        self.testapp.post_json('/categories', params=[], status=400)
+        self.testapp.post_json('/categories', params=1, status=400)
+        self.testapp.post_json('/categories', params='asdf', status=400)
 
-        self.testapp.request('/category', method='POST',
+        self.testapp.request('/categories', method='POST',
                              body=b'{"malformed":',
                              headers={'Content-Type': 'application/json'},
                              status=400)
 
-        self.testapp.post_json('/category', params={"bad": 'attr'}, status=415)
+        self.testapp.post_json('/categories', params={"bad": 'attr'}, status=415)
 
     def test_put_bad_req(self):
-        self.testapp.put_json('/category', params=[], status=400)
-        self.testapp.put_json('/category', params=1, status=400)
-        self.testapp.put_json('/category', params='asdf', status=400)
+        self.testapp.put_json('/categories', params=[], status=400)
+        self.testapp.put_json('/categories', params=1, status=400)
+        self.testapp.put_json('/categories', params='asdf', status=400)
 
-        self.testapp.request('/category', method='PUT',
+        self.testapp.request('/categories', method='PUT',
                              body=b'{"malformed":',
                              headers={'Content-Type': 'application/json'},
                              status=400)
 
-        self.testapp.put_json('/category', params={"bad": 'attr'}, status=415)
+        self.testapp.put_json('/categories', params={"bad": 'attr'}, status=415)
 
     def test_delete_bad_req(self):
-        self.testapp.delete('/oil/{}'.format('bogus_id'), status=404)
+        self.testapp.delete('/categories/{}'.format('bogus_id'), status=400)
 
     def test_crud(self):
         cat_json = {'name': 'Test Category'}
@@ -104,7 +104,7 @@ class CategoryTests(CategoryTestBase):
         #
         # insert
         #
-        resp = self.testapp.post_json('/category', params=cat_json)
+        resp = self.testapp.post_json('/categories', params=cat_json)
         cat_json = resp.json_body
 
         assert all([k in cat_json for k in ('_id', 'name')])
@@ -113,7 +113,7 @@ class CategoryTests(CategoryTestBase):
         #
         # test inserted
         #
-        resp = self.testapp.get('/category/{0}'.format(cat_json['_id']))
+        resp = self.testapp.get('/categories/{0}'.format(cat_json['_id']))
         cat_json = resp.json_body
 
         assert all([k in cat_json for k in ('_id', 'name')])
@@ -124,7 +124,7 @@ class CategoryTests(CategoryTestBase):
         #
         cat_json['name'] = 'Updated Test Category'
 
-        resp = self.testapp.put_json('/category', params=cat_json)
+        resp = self.testapp.put_json('/categories', params=cat_json)
         cat_json = resp.json_body
 
         assert cat_json['name'] == 'Updated Test Category'
@@ -132,7 +132,7 @@ class CategoryTests(CategoryTestBase):
         #
         # test updated
         #
-        resp = self.testapp.get('/category/{0}'.format(cat_json['_id']))
+        resp = self.testapp.get('/categories/{0}'.format(cat_json['_id']))
         cat_json = resp.json_body
 
         assert cat_json['name'] == 'Updated Test Category'
@@ -140,9 +140,9 @@ class CategoryTests(CategoryTestBase):
         #
         # delete
         #
-        self.testapp.delete('/category/{}'.format(cat_json['_id']))
+        self.testapp.delete('/categories/{}'.format(cat_json['_id']))
 
         #
         # test deleted
         #
-        self.testapp.get('/category/{}'.format(cat_json['_id']), status=404)
+        self.testapp.get('/categories/{}'.format(cat_json['_id']), status=404)

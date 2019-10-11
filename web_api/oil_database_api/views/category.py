@@ -17,7 +17,7 @@ from oil_database_api.common.views import cors_policy, obj_id_from_url
 
 logger = logging.getLogger(__name__)
 
-category_api = Service(name='category', path='/category*obj_id',
+category_api = Service(name='category', path='/categories*obj_id',
                        description="Category APIs", cors_policy=cors_policy)
 
 
@@ -122,11 +122,11 @@ def delete_category(request):
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
-        obj_id = ObjectId(obj_id)
-        print('delete_category(): _id: ', obj_id)
-
-        res = (request.db.oil_database.category
-               .delete_one({'_id': obj_id}))
+        try:
+            res = (request.db.oil_database.category
+                   .delete_one({'_id': ObjectId(obj_id)}))
+        except InvalidId as e:
+            raise HTTPBadRequest(e)
 
         if res.deleted_count == 0:
             raise HTTPNotFound()
