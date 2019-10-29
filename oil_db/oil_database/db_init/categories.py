@@ -17,9 +17,9 @@
     and the viscosity at a given temperature, usually at 38 C(100F).
     The criteria follows closely, but not identically, to the ASTM standards
 '''
-import logging
+import pdb
 
-import unit_conversion as uc
+import logging
 
 from oil_database.data_sources.oil import OilEstimation
 
@@ -135,15 +135,28 @@ def is_refined(oil):
 
 
 def api_min(oil, oil_api):
-    apis = [a for a in oil.apis if a.weathering == 0.0]
+    apis = get_apis(oil)
 
     return (len(apis) > 0 and apis[0].gravity > oil_api)
 
 
 def api_max(oil, oil_api):
-    apis = [a for a in oil.apis if a.weathering == 0.0]
+    apis = get_apis(oil)
 
     return (len(apis) > 0 and apis[0].gravity < oil_api)
+
+
+def get_apis(oil):
+    fresh_sample = [s for s in oil.samples
+                    if s.sample_id == 'w=0.0']
+    if len(fresh_sample) > 0:
+        fresh_sample = fresh_sample[0]
+    else:
+        return []
+
+    #pdb.set_trace()
+
+    return getattr(fresh_sample, 'apis', [])
 
 
 def is_crude_light(oil):

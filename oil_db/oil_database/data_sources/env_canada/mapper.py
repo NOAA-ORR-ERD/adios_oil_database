@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from collections import defaultdict
 import logging
 
 from oil_database.models.common.float_unit import (FloatUnit,
@@ -25,6 +26,19 @@ class EnvCanadaAttributeMapper(object):
         named attributes that are suitable for creation of a NOAA Oil Database
         record.
     '''
+    top_record_properties = ('_id',
+                             'oil_id',
+                             'name',
+                             'location',
+                             'reference',
+                             'reference_date',
+                             'sample_date',
+                             'comments',
+                             'api',
+                             'product_type',
+                             'categories',
+                             'status')
+
     def __init__(self, record):
         '''
             :param property_indexes: A lookup dictionary of property index
@@ -51,17 +65,43 @@ class EnvCanadaAttributeMapper(object):
         return props
 
     def dict(self):
-        items = []
+        rec = {}
+        samples = defaultdict(dict)
 
         for p in self.get_interface_properties():
             k, v = p, getattr(self, p)
 
-            if hasattr(v, '__iter__') and not hasattr(v, '__len__'):
-                v = list(v)
+            if k in self.top_record_properties:
+                rec[k] = v
+            elif hasattr(v, '__iter__') and not hasattr(v, '__len__'):
+                # we have a sequence of items
+                for i in v:
+                    w = 'w={}'.format(i.get('weathering', 0.0))
+                    i.pop('weathering', None)
 
-            items.append((k, v))
+                    try:
+                        samples[w][k].append(i)
+                    except KeyError:
+                        samples[w][k] = []
+                        samples[w][k].append(i)
+            else:
+                # assume a weathering of 0
+                samples['w=0.0'][k] = v
 
-        return dict(items)
+        # MongoDB strikes again.  Apparently, in order to support their query
+        # methods, dictionary keys, for all dicts, need to be a string that
+        # contains no '$' or '.' characters.  So we cannot use a floating point
+        # number as a dict key.  So instead of a dict of samples, it will be a
+        # list of dicts that contain a sample_id.  This sample_id will not be a
+        # proper MongoDB ID, but a human-readable way to identify the sample.
+        #
+        # For NOAA Filemaker records, the ID will be the weathering amount.
+        for k, v in samples.items():
+            v['sample_id'] = k
+
+        rec['samples'] = sorted(samples.values(), key=lambda v: v['sample_id'])
+
+        return rec
 
     def _class_path(self, class_obj):
         return '{}.{}'.format(class_obj.__module__, class_obj.__name__)

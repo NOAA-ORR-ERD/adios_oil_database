@@ -138,21 +138,20 @@ class EnvCanadaRecordParser(object):
 
     @property
     def weathering(self):
-        weathered_subsamples = self.get_props_by_name(None, 'weathered')[0]
+        weathered_subsamples = list(self.get_props_by_name(None,
+                                                           'weathered')[0])
 
         # this is a minor exception to the weathering.  If there is just one
         # weathered sample and it is a None value, we can probably assume
         # it is 0.0 (fresh)
         if len(weathered_subsamples) == 1 and weathered_subsamples[0] is None:
-            weathered_subsamples = (0.0,)
-
-        # Otherwise, we expect our Env Canada records to have fractionally
-        # weathered samples.
-        try:
-            weathered_subsamples = [float(w) for w in weathered_subsamples]
-        except ValueError:
-            raise ValueError('Bad weathering value: "{}"'
-                             .format(weathered_subsamples))
+            weathered_subsamples = [0.0]
+        else:
+            for i, w in enumerate(weathered_subsamples):
+                try:
+                    weathered_subsamples[i] = float(w)
+                except ValueError:
+                    pass
 
         return weathered_subsamples
 
@@ -2029,7 +2028,7 @@ class EnvCanadaRecordParser(object):
         '''
             Convert mN/m (dynes/cm) into N/m or return None value
         '''
-        if isinstance(m_n_per_m, (int, long, float)):
+        if isinstance(m_n_per_m, (int, float)):
             return m_n_per_m * 1e-3
         else:
             return None
