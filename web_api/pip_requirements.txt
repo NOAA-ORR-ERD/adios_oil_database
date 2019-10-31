@@ -2,4 +2,4 @@
 # These packages are not available via conda
 
 #pyramid_mongodb2
-git+https://github.com/JonnoFTW/pyramid_mongodb2.git
+-e git+https://github.com/JonnoFTW/pyramid_mongodb2.git#egg=pyramid_mongodb2
