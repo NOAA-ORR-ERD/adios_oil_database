@@ -8,6 +8,8 @@ test_develop:
     script:
         - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
         - yum install mongodb-org -y
+        - ls -l /etc/mongod.conf
+        - ls -l /data/db
         - mongod &
 
         - cd oil_db
