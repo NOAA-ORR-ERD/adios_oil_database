@@ -19,6 +19,7 @@ pydantic
 
 awesome-slugify>=1.6.5
 configparser>=3.7.4
+openpyxl>=3.0.0
 
 pytest>=3.8.0
 pytest-cov>=2.6.0
