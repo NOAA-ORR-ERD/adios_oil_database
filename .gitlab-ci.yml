@@ -13,7 +13,7 @@ test_develop:
 
         - cd oil_db
         - conda install --file conda_requirements.txt
-        - pip install -r pip_requirements.txt
+        - pip3 install -r pip_requirements.txt
         - python setup.py develop
         
         - oil_db_init
@@ -24,7 +24,7 @@ test_develop:
         # Install & test the oil_library_api package
         - cd ../web_api
         - conda install --file conda_requirements.txt
-        - pip install -r pip_requirements.txt
+        - pip3 install -r pip_requirements.txt
         - python setup.py develop
 
         - pytest oil_database_api
