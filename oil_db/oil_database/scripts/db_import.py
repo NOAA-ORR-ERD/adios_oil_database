@@ -3,6 +3,7 @@ import os
 import io
 import logging
 from datetime import datetime
+from argparse import ArgumentParser
 
 from pymongo.errors import DuplicateKeyError
 
@@ -62,6 +63,11 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
               )
 
 
+argp = ArgumentParser(description='Database import arguments')
+argp.add_argument('--all', action='store_true')
+argp.add_argument('config_file', action='store_const', const=None)
+
+
 def import_db_cmd(argv=sys.argv):
     # Let's give a round of applause to Python 3 for making stderr buffered.
     sys.stderr = io.TextIOWrapper(sys.stderr.detach().detach(),
@@ -69,13 +75,29 @@ def import_db_cmd(argv=sys.argv):
 
     logging.basicConfig(level=logging.INFO)
 
-    if len(argv) >= 2:
+    args = argp.parse_args(argv[1:])
+    print('args: ', args)
+
+    if args.config_file is not None:
         # we will assume that if a file is specified, it will contain all
         # necessary settings.
-        settings = file_settings(argv[1])
+        settings = file_settings(args.config_file)
     else:
         settings = default_settings()
         _add_datafiles(settings)
+
+    logger.info('connect_mongodb()...')
+    client = connect_mongodb(settings)
+
+    init_menu_item_collections(client, settings)
+
+    if args.all:
+        try:
+            add_all(settings)
+        except Exception:
+            print("{0}() FAILED\n".format(add_all.__name__))
+            raise
+        exit(0)
 
     try:
         import_db(settings)
@@ -109,11 +131,6 @@ def import_db(settings):
 
     '''
     quit_app = False
-
-    logger.info('connect_mongodb()...')
-    client = connect_mongodb(settings)
-
-    init_menu_item_collections(client, settings)
 
     while quit_app is False:
         print_menu()
@@ -245,7 +262,9 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
               '{} records processed, '
               '{} records succeeded, '
               '{} records failed,'
-              .format(total_count, success_count, error_count))
+              .format(tc.change(total_count, 'bold'),
+                      tc.change(success_count, 'bold'),
+                      tc.change(error_count, 'bold')))
 
 
 def _add_datafiles(settings):
