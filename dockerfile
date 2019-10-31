@@ -10,6 +10,7 @@ RUN yum install -y redis
 
 RUN cp /oil-database/platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
 RUN yum install mongodb-org -y
+RUN mongod --config /etc/mongod.conf &
 
 RUN cd oil-database/oil_db && conda install --file conda_requirements.txt
 RUN cd oil-database/oil_db && pip install -r pip_requirements.txt
