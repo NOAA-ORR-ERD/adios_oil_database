@@ -9,6 +9,8 @@ test_develop:
         - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
         - yum install mongodb-org -y
         - ls -l /etc/mongod.conf
+        - more /etc/mongod.conf
+        - ls -l /data
         - ls -l /data/db
         - mongod &
 
