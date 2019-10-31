@@ -1,7 +1,7 @@
 # Oil Database Docker configuration
 #
 
-FROM gitlab.orr.noaa.gov:5002/centos:latest
+FROM gitlab.orr.noaa.gov:5002/centos-conda
 RUN yum update -y
 
 COPY ./ /oil-database/
