@@ -1,0 +1,11 @@
+stages:
+    - build
+
+build:
+    stage: build
+    script:
+        - docker build -f dockerfile . -t gitlab.orr.noaa.gov:5002/oil-database
+        - docker push gitlab.orr.noaa.gov:5002/oil-database
+    tags:
+        - shell
+        - build
