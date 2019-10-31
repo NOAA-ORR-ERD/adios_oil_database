@@ -7,7 +7,7 @@ test_develop:
     image: gitlab.orr.noaa.gov:5002/centos-conda
     script:
         - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
-        - yum install mongodb-org
+        - yum install mongodb-org -y
         - systemctl start mongod.service
 
         - cd oil_db
