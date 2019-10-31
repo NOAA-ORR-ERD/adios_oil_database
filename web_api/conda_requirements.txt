@@ -8,8 +8,8 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
+mongodb>=3.3.9
 pymongo>=3.6.0
-#pymodm>=0.4.0  # pip only
 
 redis
 redis-py
@@ -21,7 +21,7 @@ paste
 waitress
 ujson
 
-pytest
+pytest>=3.8.0
 WebTest
 
 # The oil database is required, but is located within this project
