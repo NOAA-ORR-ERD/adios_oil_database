@@ -1,5 +1,21 @@
 stages:
+    - test
     - build
+
+test_develop:
+    stage: test
+    image: gitlab.orr.noaa.gov:5002/centos-conda
+    script:
+        - cd oil_db && conda install --file conda_requirements.txt
+        - cd oil_db && pip install -r pip_requirements.txt
+        - cd oil_db && python setup.py develop
+        
+        - cd oil_db && yes | oil_db_init
+        - cd oil_db && oil_db_import --all
+
+        - cd oil_db && pytest oil_database
+    tags:
+        - docker
 
 build:
     stage: build
@@ -9,3 +25,4 @@ build:
     tags:
         - shell
         - build
+        
