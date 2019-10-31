@@ -21,7 +21,7 @@ test_develop:
         - pip install -r pip_requirements.txt
         - python setup.py develop
         
-        - yes | oil_db_init
+        - { yes || :; } | oil_db_init
         - oil_db_import --all
 
         - pytest oil_database
