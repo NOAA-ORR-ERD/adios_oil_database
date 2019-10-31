@@ -7,6 +7,7 @@ test_develop:
     image: gitlab.orr.noaa.gov:5002/centos-conda
     script:
         - pwd
+        - ls -la
         - cd oil_db && conda install --file conda_requirements.txt
         - cd oil_db && pip install -r pip_requirements.txt
         - cd oil_db && python setup.py develop
