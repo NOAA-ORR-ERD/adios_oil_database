@@ -11,6 +11,9 @@ test_develop:
         - yum install mongodb-org -y
         - mongod --config /etc/mongod.conf &
 
+        - yum install redis -y
+        - redis-server --daemonize yes
+
         - cd oil_db
         - conda install --file conda_requirements.txt
         - pip install -r pip_requirements.txt
