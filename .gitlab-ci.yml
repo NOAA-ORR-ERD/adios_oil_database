@@ -10,9 +10,10 @@ test_develop:
         - yum install mongodb-org -y
         - ls -l /etc/mongod.conf
         - more /etc/mongod.conf
-        - ls -l /data
-        - ls -l /data/db
-        - mongod &
+        - ls -l /var/log/mongodb/
+        - ls -l /var/lib/mongo
+  
+        - mongod --config /etc/mongod.conf &
 
         - cd oil_db
         - pwd
