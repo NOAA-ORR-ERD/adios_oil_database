@@ -20,6 +20,7 @@ cornice>=3.4.4
 paste
 waitress
 ujson
+docutils>=0.15.2
 
 pytest>=3.8.0
 WebTest
