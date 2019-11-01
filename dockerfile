@@ -15,8 +15,8 @@ RUN cd oil-database/oil_db && conda install --file conda_requirements.txt
 RUN cd oil-database/oil_db && pip install -r pip_requirements.txt
 RUN cd oil-database/oil_db && python setup.py develop
 
-RUN mongod --config /etc/mongod.conf & && cd oil-database/oil_db && oil_db_init
-RUN mongod --config /etc/mongod.conf & && cd oil-database/oil_db && oil_db_import --all
+RUN mongod --config /etc/mongod.conf --fork && cd oil-database/oil_db && oil_db_init
+RUN mongod --config /etc/mongod.conf --fork && cd oil-database/oil_db && oil_db_import --all
 
 RUN cd oil-database/web_api && conda install --file conda_requirements.txt
 RUN cd oil-database/web_api && pip install -r pip_requirements.txt
