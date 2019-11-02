@@ -1,4 +1,5 @@
 # pip requirements file for the oil_database_api package.
 # These packages are not available via conda
 
-pyramid_mongodb2
+#pyramid_mongodb2
+-e git+https://github.com/JonnoFTW/pyramid_mongodb2.git#egg=pyramid_mongodb2
