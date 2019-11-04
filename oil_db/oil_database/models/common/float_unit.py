@@ -92,17 +92,29 @@ class FloatUnit(object, metaclass=UnitMeta):
                         convert(self.unit_type, self.from_unit, self.unit, v))
 
     def to_unit(self, new_unit):
+        '''
+            Return a FloatUnit object with values converted to the new unit
+        '''
         if new_unit not in self.__class__.unit_choices:
             raise ValueError('Invalid conversion from {} to {}'
                              .format(self.unit, new_unit))
 
+        kwargs = {}
+        kwargs['unit'] = new_unit
+
         if self.value is not None:
-            return convert(self.unit_type, self.unit, new_unit, self.value)
-        elif any([v is not None for v in (self.min_value, self.max_value)]):
-            return [convert(self.unit_type, self.unit, new_unit, v)
-                    for v in (self.min_value, self.max_value)]
-        else:
-            raise RuntimeError('Object has no valid values to convert')
+            kwargs['value'] = convert(self.unit_type, self.unit, new_unit,
+                                      self.value)
+
+        if self.min_value is not None:
+            kwargs['min_value'] = convert(self.unit_type, self.unit, new_unit,
+                                          self.min_value)
+
+        if self.max_value is not None:
+            kwargs['max_value'] = convert(self.unit_type, self.unit, new_unit,
+                                          self.max_value)
+
+        return self.__class__(**kwargs)
 
     def __str_unit__(self):
         if self.unit == '1':
