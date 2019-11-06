@@ -500,14 +500,14 @@ class OilEstimation(object):
     def non_redundant_dvis(self, sample='w=0.0'):
         sample = self.get_sample(sample_id=sample)
 
-        if sample.kvis is None:
+        if not hasattr(sample, 'kvis') or sample.kvis is None:
             kvis_dict = {}
         else:
             kvis_dict = dict([((k.ref_temp.to_unit('K')),
                                k.viscosity.to_unit('m^2/s'))
                               for k in sample.kvis])
 
-        if self.record.dvis is None:
+        if not hasattr(sample, 'dvis') or sample.dvis is None:
             dvis_dict = {}
         else:
             dvis_dict = dict([((d.ref_temp.to_unit('K')),

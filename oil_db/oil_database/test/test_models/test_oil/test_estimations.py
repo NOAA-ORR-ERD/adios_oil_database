@@ -418,16 +418,19 @@ class TestOilEstimationPointTemperatures():
         oil_est = OilEstimation(oil)
 
         if sample is None and estimate is None:
-            assert [np.isclose(a, b)
-                    for a, b in zip(oil_est.pour_point(), expected)
-                    if a is not None and b is not None]
+            res = oil_est.pour_point()
         elif sample is None:
-            assert oil_est.pour_point(estimate_if_none=estimate) == expected
+            res = oil_est.pour_point(estimate_if_none=estimate)
         elif estimate is None:
-            assert oil_est.pour_point(sample=sample) == expected
+            res = oil_est.pour_point(sample=sample)
         else:
-            assert oil_est.pour_point(sample=sample,
-                                      estimate_if_none=estimate) == expected
+            res = oil_est.pour_point(sample=sample, estimate_if_none=estimate)
+
+        for a, b in zip(res, expected):
+            if a is not None and b is not None:
+                assert np.isclose(a, b)
+            else:
+                assert a == b
 
 
 
