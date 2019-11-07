@@ -3,7 +3,7 @@
 
 FROM gitlab.orr.noaa.gov:5002/centos-conda
 
-COPY ../ /oil-database/
+COPY ./ /oil-database/
 
 RUN yum update -y
 RUN yum install -y redis
