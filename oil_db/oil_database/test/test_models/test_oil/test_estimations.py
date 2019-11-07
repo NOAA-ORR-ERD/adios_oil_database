@@ -355,6 +355,23 @@ class TestOilEstimationPointTemperatures():
            },
           None, None, (None, None)),
          ({'name': 'Oil Name',
+           'comments': 'This record has no pour point, but has dvis',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'dvis': [
+                   {'viscosity': {
+                        'value': 0.023, 'unit': 'kg/(m s)',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.DynamicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 288.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}}
+               ],
+           }]
+           },
+          None, None, (None, None)),
+         ({'name': 'Oil Name',
            'comments': 'This record has a single pour point attribute',
            'samples': [{
                'sample_id': 'w=0.0',
@@ -384,24 +401,7 @@ class TestOilEstimationPointTemperatures():
                ],
                'kvis': [
                    {'viscosity': {
-                        'value': 0.0000424, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
-                    'ref_temp': {
-                        'value': 311.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
-               ],
-           }]
-           },
-          None, None, (265.0, 265.0)),
-         ({'name': 'Oil Name',
-           'comments': 'This record has no pour point, but has kvis',
-           'samples': [{
-               'sample_id': 'w=0.0',
-               'kvis': [
-                   {'viscosity': {
-                        'value': 0.000134, 'unit': 'm^2/s',
+                        'value': 0.0001333, 'unit': 'm^2/s',
                         '_cls': 'oil_database.models.common.float_unit'
                                 '.KinematicViscosityUnit'},
                     'ref_temp': {
@@ -412,9 +412,54 @@ class TestOilEstimationPointTemperatures():
            }]
            },
           None, None, (None, 200.0)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no pour point, but has kvis',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'kvis': [
+                   {'viscosity': {
+                        'value': 0.0001333, 'unit': 'm^2/s',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.KinematicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 311.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}}
+               ],
+           }]
+           },
+          None, None, (None, 200.0)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no pour point, but has dvis and density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'dvis': [
+                   {'viscosity': {
+                        'value': 0.3851, 'unit': 'kg/(m s)',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.DynamicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 288.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}}
+               ],
+               'densities': [
+                   {'density': {'value': 800.0, 'unit': 'kg/m^3',
+                                '_cls': 'oil_database.models.common.float_unit'
+                                        '.DensityUnit'},
+                    'ref_temp': {'value': 288.0, 'unit': 'K',
+                                 '_cls': 'oil_database.models.common.float_unit'
+                                         '.TemperatureUnit'},
+                    }
+               ]
+           }]
+           },
+          None, None, (None, 200.0)),
          ]
     )
     def test_pour_point(self, oil, sample, estimate, expected):
+        print('oil: ', oil)
+        print('sample: ', sample)
         oil_est = OilEstimation(oil)
 
         if sample is None and estimate is None:
@@ -426,6 +471,7 @@ class TestOilEstimationPointTemperatures():
         else:
             res = oil_est.pour_point(sample=sample, estimate_if_none=estimate)
 
+        print(res, expected)
         for a, b in zip(res, expected):
             if a is not None and b is not None:
                 assert np.isclose(a, b)

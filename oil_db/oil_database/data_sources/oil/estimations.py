@@ -239,7 +239,7 @@ class OilEstimation(object):
         return list(zip([obj_list[i] for i in rho_idxs0],
                         [obj_list[i] for i in rho_idxs1]))
 
-    def pour_point(self, sample='w=0.0', estimate_if_none=True):
+    def pour_point(self, sample_id='w=0.0', estimate_if_none=True):
         '''
             Note: there is a catch-22 which puts us in an infinite loop
                   in some cases:
@@ -258,7 +258,7 @@ class OilEstimation(object):
         '''
         min_k = max_k = None
 
-        sample = self.get_sample(sample_id=sample)
+        sample = self.get_sample(sample_id=sample_id)
 
         try:
             pp = sample.pour_points[0].ref_temp.to_unit('K')
@@ -279,10 +279,10 @@ class OilEstimation(object):
 
         return min_k, max_k
 
-    def flash_point(self, sample='w=0.0'):
+    def flash_point(self, sample_id='w=0.0'):
         min_k = max_k = None
 
-        sample = self.get_sample(sample_id=sample)
+        sample = self.get_sample(sample_id=sample_id)
         fps = sample.flash_points
 
         try:
@@ -320,13 +320,17 @@ class OilEstimation(object):
         else:
             return None
 
-    def get_api(self, sample='w=0.0'):
+    def get_api(self, sample_id='w=0.0'):
         '''
             There should only be a single API value per weathered sample.
             We return the object, not just the value
         '''
-        sample = self.get_sample(sample_id=sample)
-        apis = sample.apis
+        sample = self.get_sample(sample_id=sample_id)
+
+        try:
+            apis = sample.apis
+        except AttributeError:
+            apis = []
 
         return apis[0] if len(apis) > 0 else None
 
@@ -336,7 +340,7 @@ class OilEstimation(object):
         else:
             return None
 
-    def get_densities(self, sample='w=0.0'):
+    def get_densities(self, sample_id='w=0.0'):
         '''
             return a list of densities for the oil at a specified state
             of weathering.
@@ -345,9 +349,14 @@ class OilEstimation(object):
             - the culled list of densities does not contain a measurement
               at 15C
         '''
-        sample = self.get_sample(sample_id=sample)
-        densities = sample.densities
-        api = self.get_api(sample)
+        sample = self.get_sample(sample_id=sample_id)
+
+        try:
+            densities = sample.densities
+        except AttributeError:
+            densities = []
+
+        api = self.get_api(sample_id)
 
         if (api is not None and
                 len([d for d in densities
@@ -362,7 +371,7 @@ class OilEstimation(object):
 
         return sorted(densities, key=lambda d: d.ref_temp.value)
 
-    def density_at_temp(self, temperature=288.15, sample='w=0.0'):
+    def density_at_temp(self, temperature=288.15, sample_id='w=0.0'):
         '''
             Get the oil density at a temperature or temperatures.
 
@@ -381,12 +390,12 @@ class OilEstimation(object):
                   temperature will become our minimum temperature.
         '''
         shape = None
-        densities = self.get_densities(sample=sample)
+        densities = self.get_densities(sample_id=sample_id)
 
         if len(densities) == 0:
             return None
 
-        pp_min_k, pp_max_k = self.pour_point(sample=sample,
+        pp_min_k, pp_max_k = self.pour_point(sample_id=sample_id,
                                              estimate_if_none=False)
 
         # set the minimum temperature to be the oil's pour point
@@ -433,8 +442,8 @@ class OilEstimation(object):
         closest_densities = self.bounding_temperatures(densities, temperature)
 
         temperature = np.array(temperature)
-        closest_values = np.array([[(d.density.to_unit('kg/m^3'),
-                                     d.ref_temp.to_unit('K'))
+        closest_values = np.array([[(d.density.to_unit('kg/m^3').value,
+                                     d.ref_temp.to_unit('K').value)
                                     for d in r]
                                    for r in closest_densities])
 
@@ -474,9 +483,11 @@ class OilEstimation(object):
 
         try:
             # sequence of ranges
-            densities = np.array([[d.density.to_unit('kg/m^3') for d in r]
+            densities = np.array([[d.density.to_unit('kg/m^3').value
+                                   for d in r]
                                   for r in closest_densities])
-            ref_temps = np.array([[d.ref_temp.to_unit('K') for d in r]
+            ref_temps = np.array([[d.ref_temp.to_unit('K').value
+                                   for d in r]
                                   for r in closest_densities])
 
             greater_than = np.all((temperature > ref_temps.T).T, axis=1)
@@ -487,9 +498,9 @@ class OilEstimation(object):
             return densities[:, 0], ref_temps[:, 0]
         except TypeError:
             # single range
-            densities = np.array([d.density.to_unit('kg/m^3')
+            densities = np.array([d.density.to_unit('kg/m^3').value
                                   for d in closest_densities])
-            ref_temps = np.array([d.ref_temp.to_unit('K')
+            ref_temps = np.array([d.ref_temp.to_unit('K').value
                                   for d in closest_densities])
 
             if np.all(temperature > ref_temps):
@@ -497,27 +508,27 @@ class OilEstimation(object):
             else:
                 return densities[0], ref_temps[0]
 
-    def non_redundant_dvis(self, sample='w=0.0'):
-        sample = self.get_sample(sample_id=sample)
+    def non_redundant_dvis(self, sample_id='w=0.0'):
+        sample = self.get_sample(sample_id=sample_id)
 
         if not hasattr(sample, 'kvis') or sample.kvis is None:
             kvis_dict = {}
         else:
-            kvis_dict = dict([((k.ref_temp.to_unit('K')),
-                               k.viscosity.to_unit('m^2/s'))
+            kvis_dict = dict([((k.ref_temp.to_unit('K').value),
+                               k.viscosity.to_unit('m^2/s').value)
                               for k in sample.kvis])
 
         if not hasattr(sample, 'dvis') or sample.dvis is None:
             dvis_dict = {}
         else:
-            dvis_dict = dict([((d.ref_temp.to_unit('K')),
-                               d.viscosity.to_unit('kg/(m s)'))
+            dvis_dict = dict([((d.ref_temp.to_unit('K').value),
+                               d.viscosity.to_unit('kg/(m s)').value)
                               for d in sample.dvis])
 
         non_redundant_keys = set(dvis_dict.keys()).difference(kvis_dict.keys())
 
         for k in sorted(non_redundant_keys):
-            yield ObjFromDict({'ref_temp': TemperatureUnit(value=k[1],
+            yield ObjFromDict({'ref_temp': TemperatureUnit(value=k,
                                                            unit='K'),
                                'viscosity': DynamicViscosityUnit(value=dvis_dict[k],
                                                                  unit='kg/(m s)')
@@ -539,29 +550,29 @@ class OilEstimation(object):
                                                     unit='m^2/s'),
                 'ref_temp': dvis_obj.ref_temp}
 
-    def aggregate_kvis(self, sample='w=0.0'):
-        sample = self.get_sample(sample_id=sample)
+    def aggregate_kvis(self, sample_id='w=0.0'):
+        sample = self.get_sample(sample_id=sample_id)
 
-        if not hasattr(sample, 'kvis') or sample.kvis is None:
-            kvis_list = []
-        else:
+        kvis_list = []
+        if hasattr(sample, 'kvis') and sample.kvis is not None:
             kvis_list = [(k.ref_temp.to_unit('K').value,
                           k.viscosity.to_unit('m^2/s').value)
                          for k in sample.kvis]
 
-        if hasattr(sample, 'dvis'):
-            dvis_list = [
-                (d.ref_temp.to_unit('K').value,
-                 est.dvis_to_kvis(d.viscosity.to_unit('kg/(m s)').value,
-                                  self.density_at_temp(d.ref_temp.to_unit('K').value))
-                 )
-                for d in list(self.non_redundant_dvis(sample))
-            ]
+        dvis_list = []
+        if hasattr(sample, 'dvis') and sample.dvis is not None:
+            for d in self.non_redundant_dvis(sample_id):
+                ref_temp = d.ref_temp.to_unit('K').value
+                viscosity = d.viscosity.to_unit('kg/(m s)').value
+                density = self.density_at_temp(d.ref_temp.to_unit('K').value)
 
-            agg = dict(dvis_list)
-            agg.update(kvis_list)
-        else:
-            agg = dict(kvis_list)
+                if all(v is not None for v in (ref_temp, viscosity, density)):
+                    dvis_list.append(
+                        (ref_temp, est.dvis_to_kvis(viscosity, density))
+                    )
+
+        agg = dict(dvis_list)
+        agg.update(kvis_list)
 
         return [ObjFromDict({'viscosity': KinematicViscosityUnit(value=k,
                                                                  unit='m^2/s'),
