@@ -34,10 +34,10 @@ test_develop:
     tags:
         - docker
 
-build:
+build_api:
     stage: build
     script:
-        - docker build -f dockerfile . -t gitlab.orr.noaa.gov:5002/oildb-api
+        - docker build -f web_api/dockerfile . -t gitlab.orr.noaa.gov:5002/oildb-api
         - docker push gitlab.orr.noaa.gov:5002/oildb-api
     tags:
         - shell
