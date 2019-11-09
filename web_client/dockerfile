@@ -1,3 +1,6 @@
+# Oil Database Web Client Docker configuration
+#
+
 FROM gitlab.orr.noaa.gov:5002/centos-conda
 
 RUN yum update -y && yum -y install node npm
@@ -8,7 +11,6 @@ RUN mkdir /config
 RUN cp /web_client/config-example.json /config/config.json
 RUN ln -s /config/config.json /web_client/config.json
 RUN cd /web_client && npm install 
-RUN cd /web_client && npm audit fix
 
 VOLUME /config
 EXPOSE 4200
