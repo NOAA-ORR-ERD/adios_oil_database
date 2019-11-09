@@ -42,3 +42,13 @@ build_api:
     tags:
         - shell
         - build
+
+build_client:
+    stage: build
+    script:
+        - docker build -f web_client/dockerfile . -t gitlab.orr.noaa.gov:5002/oildb-client
+        - docker push gitlab.orr.noaa.gov:5002/oildb-client
+    tags:
+        - shell
+        - build
+        
