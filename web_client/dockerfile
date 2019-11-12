@@ -9,7 +9,7 @@ COPY ./web_client/ /web_client/
 
 RUN mkdir /config
 RUN cp /web_client/config-example.json /config/config.json
-RUN ln -s /config/config.json /web_client/config.json
+RUN ln -s /config/config.json /web_client/public/assets/config.json
 RUN cd /web_client && npm install 
 
 VOLUME /config
