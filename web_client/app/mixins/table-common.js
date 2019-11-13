@@ -31,9 +31,12 @@ export default Mixin.create({
 
     this.set('data',this.get('model').toArray());
 
-    let table = new Table(this.get('columns'),
-                          this.get('data'),
-                          { enableSync: this.get('enableSync') });
+    let table = Table.create({
+		columns: this.get('columns'),
+		rows: this.get('data'),
+		enableSync: this.get('enableSync')
+    });
+
     let sortColumn = table.get('allColumns').findBy('valuePath', this.get('sort'));
 
     // Setup initial sort column

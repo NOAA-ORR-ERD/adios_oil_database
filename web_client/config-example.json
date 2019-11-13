@@ -1,0 +1,12 @@
+{
+  "comments": [
+	  "Oil Database Web Client Configuration",
+	  "Basically the only thing we want right now is to define",
+	  "where the web_api server is located.",
+	  "",
+	  "Note: This is not a normal Ember configuration method.",
+	  "      We will need to roll our own method for getting this config",
+	  "      into our adapter."
+  ]
+  "web_api": "http://web_api:9898",
+}

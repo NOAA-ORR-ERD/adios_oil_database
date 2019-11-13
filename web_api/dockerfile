@@ -1,4 +1,4 @@
-# Oil Database Docker configuration
+# Oil Database Web API Docker configuration
 #
 
 FROM gitlab.orr.noaa.gov:5002/centos-conda
