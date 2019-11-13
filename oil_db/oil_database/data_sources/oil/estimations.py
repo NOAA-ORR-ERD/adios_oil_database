@@ -3,8 +3,6 @@
     properties that are contained within an oil record that has been
     queried from the oil database.
 '''
-import pdb
-
 from importlib import import_module
 
 import numpy as np
@@ -48,15 +46,16 @@ def clamp(x, M, zeta=0.03):
             (M / (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 - zeta))))
 
 
-# In order to provide minimal overhead, we will be setting this up as a group
-# of interface classes that can be used a la carte.  There will of course be
-# some dependency between these, which we will attempt to document.
-#
-# All interfaces assume a self.record member, which is the contained
-# oil object.
-
-
 class OilEstimation(object):
+    '''
+        In order to provide minimal overhead, we will be setting this up as a
+        group of interface classes that can be used a la carte.
+        There will of course be some dependency between these, which we will
+        attempt to document.
+
+        All interfaces assume a self.record member, which is the contained
+        oil object.
+    '''
     def __init__(self, imported_rec):
         if hasattr(imported_rec, 'dict'):
             # we are dealing with a mapper object, convert to data object
@@ -74,8 +73,6 @@ class OilEstimation(object):
                 self.record.oil_name
             except Exception:
                 raise ValueError(e)
-
-        self._k_v2 = None
 
     def __repr__(self):
         try:
@@ -135,7 +132,26 @@ class OilEstimation(object):
         except Exception:
             return None
 
-        return samples[0] if len(samples) > 0 else None
+        return OilSampleEstimation(samples[0]) if len(samples) > 0 else None
+
+
+class OilSampleEstimation(object):
+    def __init__(self, sample):
+        '''
+            We expect a sample that has already been treated by our
+            OilEstimation class
+        '''
+        self.record = sample
+        self._k_v2 = None
+
+    def __getattr__(self, name):
+        return getattr(self.record, name, None)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.record == other.record
+        else:
+            return False
 
     @classmethod
     def lowest_temperature(cls, obj_list):
@@ -160,16 +176,19 @@ class OilEstimation(object):
             temperature(s)
 
             We accept only a scalar temperature or a sequence of temperatures
+            We expect temperatures in Kelvin
         '''
         if hasattr(temperature, '__iter__'):
             # we like to deal with numpy arrays as opposed to simple iterables
-            temperature = np.array(temperature)
+            temp_k = np.array(temperature)
+        else:
+            temp_k = temperature
 
         # our requested number of objs can have a range [0 ... listsize-1]
         if num >= len(obj_list):
             num = len(obj_list) - 1
 
-        temp_diffs = np.array([abs(obj.ref_temp.to_unit('K').value - temperature)
+        temp_diffs = np.array([abs(obj.ref_temp.to_unit('K').value - temp_k)
                                for obj in obj_list]).T
 
         if len(obj_list) <= 1:
@@ -214,6 +233,7 @@ class OilEstimation(object):
               lowest temperature.
 
             We accept only a scalar temperature or a sequence of temperatures
+            We expect temperatures in Kelvin
         '''
         temperature = np.array(temperature).reshape(-1, 1)
 
@@ -223,6 +243,7 @@ class OilEstimation(object):
 
         geq_temps = temperature >= [obj.ref_temp.to_unit('K').value
                                     for obj in obj_list]
+
         if geq_temps.shape[-1] == 0:
             return []
 
@@ -239,7 +260,7 @@ class OilEstimation(object):
         return list(zip([obj_list[i] for i in rho_idxs0],
                         [obj_list[i] for i in rho_idxs1]))
 
-    def pour_point(self, sample_id='w=0.0', estimate_if_none=True):
+    def pour_point(self, estimate_if_none=True):
         '''
             Note: there is a catch-22 which puts us in an infinite loop
                   in some cases:
@@ -258,17 +279,20 @@ class OilEstimation(object):
         '''
         min_k = max_k = None
 
-        sample = self.get_sample(sample_id=sample_id)
-
         try:
-            pp = sample.pour_points[0].ref_temp.to_unit('K')
+            pp_temp = self.record.pour_points[0].ref_temp.to_unit('K')
 
-            min_k = pp.min_value if pp.min_value is not None else pp.value
-            max_k = pp.max_value if pp.max_value is not None else pp.value
+            if hasattr(pp_temp, 'min_value') and pp_temp.min_value is not None:
+                min_k = pp_temp.min_value
+            else:
+                min_k = pp_temp.value
+
+            if hasattr(pp_temp, 'max_value') and pp_temp.max_value is not None:
+                max_k = pp_temp.max_value
+            else:
+                max_k = pp_temp.value
         except AttributeError:
             pass
-
-        #pdb.set_trace()
 
         if (min_k is None and max_k is None and estimate_if_none is True):
             lowest_kvis = self.lowest_temperature(self.aggregate_kvis())
@@ -279,14 +303,12 @@ class OilEstimation(object):
 
         return min_k, max_k
 
-    def flash_point(self, sample_id='w=0.0'):
+    def flash_point(self):
         min_k = max_k = None
 
-        sample = self.get_sample(sample_id=sample_id)
-        fps = sample.flash_points
-
         try:
-            fp_temp = fps[0].ref_temp.to_unit('K')
+            fp_temp = self.record.flash_points[0].ref_temp.to_unit('K')
+
             min_k = fp_temp.min_value
             max_k = fp_temp.max_value
         except Exception:
@@ -301,34 +323,28 @@ class OilEstimation(object):
         return min_k, max_k
 
     def flash_point_from_bp(self):
-        sample = self.get_sample(sample_id='w=0.0')
-
-        if len(sample.cuts) > 2:
+        if hasattr(self.record, 'cuts') and len(self.record.cuts) > 2:
             cut_temps = self.get_cut_temps()
             return est.flash_point_from_bp(cut_temps[0])
         else:
             return None
 
     def flash_point_from_api(self):
-        sample = self.get_sample(sample_id='w=0.0')
-
-        if len(sample.apis) > 0:
+        if hasattr(self.record, 'apis') and len(self.record.apis) > 0:
             return est.flash_point_from_api(self.get_api().gravity)
-        if len(self.get_densities()) > 0:
+        if hasattr(self.record, 'densities') and len(self.get_densities()) > 0:
             est_api = est.api_from_density(self.density_at_temp(273.15 + 15))
             return est.flash_point_from_api(est_api)
         else:
             return None
 
-    def get_api(self, sample_id='w=0.0'):
+    def get_api(self):
         '''
             There should only be a single API value per weathered sample.
             We return the object, not just the value
         '''
-        sample = self.get_sample(sample_id=sample_id)
-
         try:
-            apis = sample.apis
+            apis = self.record.apis
         except AttributeError:
             apis = []
 
@@ -340,38 +356,33 @@ class OilEstimation(object):
         else:
             return None
 
-    def get_densities(self, sample_id='w=0.0'):
+    def get_densities(self):
         '''
-            return a list of densities for the oil at a specified state
-            of weathering.
+            return a list of densities for the oil sample.
             We include the API as a density if:
-            - the specified weathering is 0
             - the culled list of densities does not contain a measurement
               at 15C
         '''
-        sample = self.get_sample(sample_id=sample_id)
-
         try:
-            densities = sample.densities
+            densities = self.record.densities
         except AttributeError:
             densities = []
 
-        api = self.get_api(sample_id)
+        api = self.get_api()
 
         if (api is not None and
                 len([d for d in densities
                      if np.isclose(d.ref_temp.value, 288.0, atol=1.0)]) == 0):
             kg_m_3, ref_temp_k = est.density_from_api(api.gravity)
 
-            densities.append(ObjFromDict({'density': DensityUnit(value=kg_m_3,
-                                                                 unit='kg/m^3'),
-                                          'ref_temp': TemperatureUnit(value=ref_temp_k,
-                                                                      unit='K')
-                                          }))
+            densities.append(ObjFromDict({
+                'density': DensityUnit(value=kg_m_3, unit='kg/m^3'),
+                'ref_temp': TemperatureUnit(value=ref_temp_k, unit='K')
+            }))
 
         return sorted(densities, key=lambda d: d.ref_temp.value)
 
-    def density_at_temp(self, temperature=288.15, sample_id='w=0.0'):
+    def density_at_temp(self, temperature=288.15):
         '''
             Get the oil density at a temperature or temperatures.
 
@@ -390,17 +401,16 @@ class OilEstimation(object):
                   temperature will become our minimum temperature.
         '''
         shape = None
-        densities = self.get_densities(sample_id=sample_id)
+        densities = self.get_densities()
 
         if len(densities) == 0:
             return None
 
-        pp_min_k, pp_max_k = self.pour_point(sample_id=sample_id,
-                                             estimate_if_none=False)
+        pp_min_k, pp_max_k = self.pour_point(estimate_if_none=False)
 
         # set the minimum temperature to be the oil's pour point
         if pp_min_k is not None or pp_max_k is not None:
-            min_k = np.min([d.ref_temp.to_unit('K')
+            min_k = np.min([d.ref_temp.to_unit('K').value
                             for d in densities] +
                            [pp for pp in (pp_min_k, pp_max_k)
                             if pp is not None])
@@ -508,31 +518,29 @@ class OilEstimation(object):
             else:
                 return densities[0], ref_temps[0]
 
-    def non_redundant_dvis(self, sample_id='w=0.0'):
-        sample = self.get_sample(sample_id=sample_id)
-
-        if not hasattr(sample, 'kvis') or sample.kvis is None:
-            kvis_dict = {}
-        else:
-            kvis_dict = dict([((k.ref_temp.to_unit('K').value),
+    def non_redundant_dvis(self):
+        if hasattr(self.record, 'kvis') and self.record.kvis is not None:
+            kvis_dict = dict([(k.ref_temp.to_unit('K').value,
                                k.viscosity.to_unit('m^2/s').value)
-                              for k in sample.kvis])
-
-        if not hasattr(sample, 'dvis') or sample.dvis is None:
-            dvis_dict = {}
+                              for k in self.record.kvis])
         else:
-            dvis_dict = dict([((d.ref_temp.to_unit('K').value),
+            kvis_dict = {}
+
+        if hasattr(self.record, 'dvis') and self.record.dvis is not None:
+            dvis_dict = dict([(d.ref_temp.to_unit('K').value,
                                d.viscosity.to_unit('kg/(m s)').value)
-                              for d in sample.dvis])
+                              for d in self.record.dvis])
+        else:
+            dvis_dict = {}
 
         non_redundant_keys = set(dvis_dict.keys()).difference(kvis_dict.keys())
 
         for k in sorted(non_redundant_keys):
-            yield ObjFromDict({'ref_temp': TemperatureUnit(value=k,
-                                                           unit='K'),
-                               'viscosity': DynamicViscosityUnit(value=dvis_dict[k],
-                                                                 unit='kg/(m s)')
-                               })
+            yield ObjFromDict({
+                'ref_temp': TemperatureUnit(value=k, unit='K'),
+                'viscosity': DynamicViscosityUnit(value=dvis_dict[k],
+                                                  unit='kg/(m s)')
+            })
 
     def dvis_to_kvis(self, kg_ms, ref_temp_k):
         density = self.density_at_temp(ref_temp_k)
@@ -550,21 +558,20 @@ class OilEstimation(object):
                                                     unit='m^2/s'),
                 'ref_temp': dvis_obj.ref_temp}
 
-    def aggregate_kvis(self, sample_id='w=0.0'):
-        sample = self.get_sample(sample_id=sample_id)
-
-        kvis_list = []
-        if hasattr(sample, 'kvis') and sample.kvis is not None:
+    def aggregate_kvis(self):
+        if hasattr(self.record, 'kvis') and self.record.kvis is not None:
             kvis_list = [(k.ref_temp.to_unit('K').value,
                           k.viscosity.to_unit('m^2/s').value)
-                         for k in sample.kvis]
+                         for k in self.record.kvis]
+        else:
+            kvis_list = []
 
         dvis_list = []
-        if hasattr(sample, 'dvis') and sample.dvis is not None:
-            for d in self.non_redundant_dvis(sample_id):
+        if hasattr(self.record, 'dvis') and self.record.dvis is not None:
+            for d in self.non_redundant_dvis():
                 ref_temp = d.ref_temp.to_unit('K').value
                 viscosity = d.viscosity.to_unit('kg/(m s)').value
-                density = self.density_at_temp(d.ref_temp.to_unit('K').value)
+                density = self.density_at_temp(temperature=ref_temp)
 
                 if all(v is not None for v in (ref_temp, viscosity, density)):
                     dvis_list.append(
@@ -580,7 +587,7 @@ class OilEstimation(object):
                              })
                 for t, k in sorted(agg.items())]
 
-    def kvis_at_temp(self, temp_k=288.15, sample='w=0.0'):
+    def kvis_at_temp(self, temp_k=288.15):
         shape = None
 
         if hasattr(temp_k, '__iter__'):
@@ -589,7 +596,7 @@ class OilEstimation(object):
             shape = temp_k.shape
             temp_k = temp_k.reshape(-1)
 
-        kvis_list = [kv for kv in self.aggregate_kvis(sample=sample)]
+        kvis_list = self.aggregate_kvis()
 
         if len(kvis_list) == 0:
             return None
@@ -609,15 +616,17 @@ class OilEstimation(object):
                     ref_kvis, ref_temp_k = ref_kvis[0], ref_temp_k[0]
             except TypeError:
                 # treat as a scalar
-                ref_kvis, ref_temp_k = (closest_kvis.viscosity.to_unit('m^2/s'),
-                                        closest_kvis.ref_temp.to_unit('K'))
+                ref_kvis = closest_kvis.viscosity.to_unit('m^2/s')
+                ref_temp_k = closest_kvis.ref_temp.to_unit('K')
         else:
             return None
 
         if self._k_v2 is None:
             self.determine_k_v2()
 
-        kvis_t = est.kvis_at_temp(ref_kvis, ref_temp_k, temp_k, self._k_v2)
+        kvis_t = est.kvis_at_temp(ref_kvis.value,
+                                  ref_temp_k.value,
+                                  temp_k, self._k_v2)
 
         if shape is not None:
             return kvis_t.reshape(shape)
@@ -644,14 +653,13 @@ class OilEstimation(object):
             return a * np.exp(k_v2 / temp_k)
 
         if kvis_list is None:
-            kvis_list = [kv for kv in self.aggregate_kvis()
-                         if (kv.weathering in (None, 0.0))]
+            kvis_list = self.aggregate_kvis()
 
         if len(kvis_list) < 2:
             return
 
-        ref_temp_k, ref_kvis = zip(*[(k.ref_temp.to_unit('K'),
-                                      k.viscosity.to_unit('m^2/s'))
+        ref_temp_k, ref_kvis = zip(*[(k.ref_temp.to_unit('K').value,
+                                      k.viscosity.to_unit('m^2/s').value)
                                      for k in kvis_list])
 
         for k in np.logspace(3.6, 4.5, num=8):
@@ -743,7 +751,8 @@ class OilEstimation(object):
             BP_i = est.cut_temps_from_api(oil_api)
             fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
         else:
-            BP_i, fevap_i = zip(*[(c.vapor_temp.to_unit('K'), c.fraction.value)
+            BP_i, fevap_i = zip(*[(c.vapor_temp.to_unit('K').value,
+                                   c.fraction.value)
                                   for c in cuts])
 
         popt, _pcov = curve_fit(_linear_curve, BP_i, fevap_i)
@@ -938,8 +947,9 @@ class OilEstimation(object):
         return f_sat_i, f_arom_i
 
     def oil_water_surface_tension(self):
-        if (self.record.oil_water_interfacial_tension_n_m is not None and
-                self.record.oil_water_interfacial_tension_ref_temp_k is not None):
+        if all([v is not None for v in
+                (self.record.oil_water_interfacial_tension_n_m,
+                 self.record.oil_water_interfacial_tension_ref_temp_k)]):
             ow_st = self.record.oil_water_interfacial_tension_n_m
             ref_temp_k = self.record.oil_water_interfacial_tension_ref_temp_k
 
@@ -955,7 +965,9 @@ class OilEstimation(object):
             return ow_st, 273.15 + 15, True
 
     def oil_seawater_surface_tension(self):
-        if self.record.oil_seawater_interfacial_tension_n_m is not None:
+        if all([v is not None for v in
+                (self.record.oil_seawater_interfacial_tension_n_m,
+                 self.record.oil_seawater_interfacial_tension_ref_temp_k)]):
             osw_st = self.record.oil_seawater_interfacial_tension_n_m
             ref_temp_k = self.record.oil_seawater_interfacial_tension_ref_temp_k
 
@@ -981,7 +993,7 @@ class OilEstimation(object):
             OilInitialize.cpp contains steps that are missing here and in the
             document.
         '''
-        _f_res, f_asph, _estimated_res, _estimated_asph = self.inert_fractions()
+        _f_res, f_asph = self.inert_fractions()
 
         if f_asph > 0.0:
             return est.bullwinkle_fraction_from_asph(f_asph)
@@ -1015,7 +1027,7 @@ class OilEstimation(object):
                   if self.record.vanadium is not None
                   else 0.0)
 
-            _f_res, f_asph, _estimated_res, _estimated_asph = self.inert_fractions()
+            _f_res, f_asph = self.inert_fractions()
             oil_api = self.get_api()
 
             if (Ni > 0.0 and Va > 0.0 and Ni + Va > 15.0):

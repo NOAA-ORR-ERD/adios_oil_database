@@ -6,7 +6,8 @@ import pytest
 import numpy as np
 
 from oil_database.util.json import ObjFromDict
-from oil_database.data_sources.oil.estimations import OilEstimation
+from oil_database.data_sources.oil.estimations import (OilEstimation,
+                                                       OilSampleEstimation)
 from oil_database.models.common.float_unit import TemperatureUnit
 
 
@@ -91,7 +92,14 @@ class TestOilEstimation():
         oil_est = OilEstimation(oil)
 
         if expected is not None:
-            expected = ObjFromDict(expected)
+            expected = OilSampleEstimation(ObjFromDict(expected))
+
+        if sample_id is None:
+            print('get_sample(): ', oil_est.get_sample())
+        else:
+            print('get_sample(): ', oil_est.get_sample(sample_id))
+
+        print('expected: ', expected)
 
         if sample_id is None:
             assert oil_est.get_sample() == expected
@@ -115,7 +123,7 @@ class TestOilEstimationTemperature():
         if expected is not None:
             expected = ObjFromDict(expected)
 
-        assert OilEstimation.lowest_temperature(obj_list) == expected
+        assert OilSampleEstimation.lowest_temperature(obj_list) == expected
 
     @pytest.mark.parametrize(
         'obj_list, temperature, expected',
@@ -211,7 +219,7 @@ class TestOilEstimationTemperature():
                 print('expected: ', [[o.__dict__ for o in i]
                                      for i in expected])
 
-        res = OilEstimation.closest_to_temperature(obj_list, temperature)
+        res = OilSampleEstimation.closest_to_temperature(obj_list, temperature)
 
         try:
             print('results: ', [o.__dict__ for o in res])
@@ -339,7 +347,7 @@ class TestOilEstimationTemperature():
                 expected = [ObjFromDict(oil_est._add_float_units(o))
                             for o in expected]
 
-        res = OilEstimation.bounding_temperatures(obj_list, temperature)
+        res = OilSampleEstimation.bounding_temperatures(obj_list, temperature)
         assert res == expected
 
 
@@ -463,13 +471,216 @@ class TestOilEstimationPointTemperatures():
         oil_est = OilEstimation(oil)
 
         if sample is None and estimate is None:
-            res = oil_est.pour_point()
+            res = oil_est.get_sample().pour_point()
         elif sample is None:
-            res = oil_est.pour_point(estimate_if_none=estimate)
+            res = oil_est.get_sample().pour_point(estimate_if_none=estimate)
         elif estimate is None:
-            res = oil_est.pour_point(sample=sample)
+            res = oil_est.get_sample().pour_point(sample=sample)
         else:
-            res = oil_est.pour_point(sample=sample, estimate_if_none=estimate)
+            res = oil_est.get_sample().pour_point(sample=sample,
+                                                  estimate_if_none=estimate)
+
+        print(res, expected)
+        for a, b in zip(res, expected):
+            if a is not None and b is not None:
+                assert np.isclose(a, b)
+            else:
+                assert a == b
+
+    @pytest.mark.parametrize(
+        'oil, sample, estimate, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None, None, (None, None)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no flash point, but has cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'cuts': [
+                   {'fraction': {
+                       'value':0.05, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 408.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.1, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 438.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.15, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 464.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.2, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 486.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.25, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 504.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.3, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 518.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.35, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 531.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.4, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 543.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.45, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 559.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.5, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 573.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.55, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 586.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.6, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 603.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.65, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 622.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.7, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 643.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.75, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 667.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    }
+               ],
+               'sara_total_fractions': [
+                   {'fraction': {
+                       'value': 0.895, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'sara_type': 'Saturates'},
+                   {'fraction': {
+                       'value': 0.093, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'sara_type': 'Aromatics'},
+                   {'fraction': {
+                       'value': 0.0, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'sara_type': 'Resins'},
+                   {'fraction': {
+                       'value': 0.01, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'sara_type': 'Asphaltenes'}
+               ],
+
+
+           }]
+           },
+          None, None, (None, 409.848)),
+         ]
+    )
+    def test_flash_point(self, oil, sample, estimate, expected):
+        print('oil: ', oil)
+        print('sample: ', sample)
+        oil_est = OilEstimation(oil)
+
+        if sample is None and estimate is None:
+            res = oil_est.get_sample().flash_point()
+        elif sample is None:
+            res = oil_est.get_sample().flash_point(estimate_if_none=estimate)
+        elif estimate is None:
+            res = oil_est.get_sample().flash_point(sample=sample)
+        else:
+            res = oil_est.get_sample().flash_point(sample=sample,
+                                                   estimate_if_none=estimate)
 
         print(res, expected)
         for a, b in zip(res, expected):
