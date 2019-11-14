@@ -309,16 +309,23 @@ class OilSampleEstimation(object):
         try:
             fp_temp = self.record.flash_points[0].ref_temp.to_unit('K')
 
-            min_k = fp_temp.min_value
-            max_k = fp_temp.max_value
+            if hasattr(fp_temp, 'min_value') and fp_temp.min_value is not None:
+                min_k = fp_temp.min_value
+            else:
+                min_k = fp_temp.value
+
+            if hasattr(fp_temp, 'max_value') and fp_temp.max_value is not None:
+                max_k = fp_temp.max_value
+            else:
+                max_k = fp_temp.value
         except Exception:
             pass
 
         if min_k is None and max_k is None:
-            max_k = self.flash_point_from_bp()
+            min_k = self.flash_point_from_bp()
 
-            if max_k is None:
-                max_k = self.flash_point_from_api()
+            if min_k is None:
+                min_k = self.flash_point_from_api()
 
         return min_k, max_k
 

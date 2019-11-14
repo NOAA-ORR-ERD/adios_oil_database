@@ -131,64 +131,53 @@ class TestOilEstimationTemperature():
          ([], None, []),
          pytest.param([{}], None, [],
                       marks=pytest.mark.raises(exception=AttributeError)),
-         ([{'ref_temp': {'value': 10.0,
-                         'unit': 'C',
+         ([{'ref_temp': {'value': 10.0, 'unit': 'C',
                          '_cls': 'oil_database.models.common.float_unit'
                                  '.TemperatureUnit'}}
            ],
-          20.0, [{'ref_temp': {'value': 10.0,
-                               'unit': 'C',
+          20.0, [{'ref_temp': {'value': 10.0, 'unit': 'C',
                                '_cls': 'oil_database.models.common.float_unit'
                                        '.TemperatureUnit'}}]
           ),
          ([
-           {'ref_temp': {'value': 280.0,
-                         'unit': 'K',
+           {'ref_temp': {'value': 280.0, 'unit': 'K',
                          '_cls': 'oil_database.models.common.float_unit'
                                  '.TemperatureUnit'}},
-           {'ref_temp': {'value': 290.0,
-                         'unit': 'K',
+           {'ref_temp': {'value': 290.0, 'unit': 'K',
                          '_cls': 'oil_database.models.common.float_unit'
                                  '.TemperatureUnit'}},
            ],
-          285.0, [{'ref_temp': {'value': 280.0,
-                                'unit': 'K',
+          285.0, [{'ref_temp': {'value': 280.0, 'unit': 'K',
                                 '_cls': 'oil_database.models.common.float_unit'
                                         '.TemperatureUnit'}}]
           ),
          ([
-           {'ref_temp': {'value': 280.0,
-                         'unit': 'K',
+           {'ref_temp': {'value': 280.0, 'unit': 'K',
                          '_cls': 'oil_database.models.common.float_unit'
                                  '.TemperatureUnit'}},
-           {'ref_temp': {'value': 290.0,
-                         'unit': 'K',
+           {'ref_temp': {'value': 290.0, 'unit': 'K',
                          '_cls': 'oil_database.models.common.float_unit'
                                  '.TemperatureUnit'}},
            ],
-          285.01, [{'ref_temp': {'value': 290.0,
-                                 'unit': 'K',
-                                 '_cls': 'oil_database.models.common.float_unit'
-                                         '.TemperatureUnit'}}]
+          285.01, [{'ref_temp': {
+                        'value': 290.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}}]
           ),
          ([
-           {'ref_temp': {'value': 280.0,
-                         'unit': 'K',
+           {'ref_temp': {'value': 280.0, 'unit': 'K',
                          '_cls': 'oil_database.models.common.float_unit'
                                  '.TemperatureUnit'}},
-           {'ref_temp': {'value': 290.0,
-                         'unit': 'K',
+           {'ref_temp': {'value': 290.0, 'unit': 'K',
                          '_cls': 'oil_database.models.common.float_unit'
                                  '.TemperatureUnit'}},
            ],
           [285.0, 285.01],
           [
-           [{'ref_temp': {'value': 280.0,
-                          'unit': 'K',
+           [{'ref_temp': {'value': 280.0, 'unit': 'K',
                           '_cls': 'oil_database.models.common.float_unit'
                                   '.TemperatureUnit'}}],
-           [{'ref_temp': {'value': 290.0,
-                          'unit': 'K',
+           [{'ref_temp': {'value': 290.0, 'unit': 'K',
                           '_cls': 'oil_database.models.common.float_unit'
                                   '.TemperatureUnit'}}],
            ]
@@ -353,7 +342,7 @@ class TestOilEstimationTemperature():
 
 class TestOilEstimationPointTemperatures():
     @pytest.mark.parametrize(
-        'oil, sample, estimate, expected',
+        'oil, sample_id, estimate, expected',
         [
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
@@ -452,12 +441,14 @@ class TestOilEstimationPointTemperatures():
                                 '.TemperatureUnit'}}
                ],
                'densities': [
-                   {'density': {'value': 800.0, 'unit': 'kg/m^3',
-                                '_cls': 'oil_database.models.common.float_unit'
-                                        '.DensityUnit'},
-                    'ref_temp': {'value': 288.0, 'unit': 'K',
-                                 '_cls': 'oil_database.models.common.float_unit'
-                                         '.TemperatureUnit'},
+                   {'density': {
+                       'value': 800.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'},
                     }
                ]
            }]
@@ -465,20 +456,20 @@ class TestOilEstimationPointTemperatures():
           None, None, (None, 200.0)),
          ]
     )
-    def test_pour_point(self, oil, sample, estimate, expected):
+    def test_pour_point(self, oil, sample_id, estimate, expected):
         print('oil: ', oil)
-        print('sample: ', sample)
+        print('sample: ', sample_id)
         oil_est = OilEstimation(oil)
 
-        if sample is None and estimate is None:
+        if sample_id is None and estimate is None:
             res = oil_est.get_sample().pour_point()
-        elif sample is None:
+        elif sample_id is None:
             res = oil_est.get_sample().pour_point(estimate_if_none=estimate)
         elif estimate is None:
-            res = oil_est.get_sample().pour_point(sample=sample)
+            res = oil_est.get_sample(sample_id=sample_id).pour_point()
         else:
-            res = oil_est.get_sample().pour_point(sample=sample,
-                                                  estimate_if_none=estimate)
+            res = (oil_est.get_sample(sample_id=sample_id)
+                   .pour_point(estimate_if_none=estimate))
 
         print(res, expected)
         for a, b in zip(res, expected):
@@ -488,7 +479,7 @@ class TestOilEstimationPointTemperatures():
                 assert a == b
 
     @pytest.mark.parametrize(
-        'oil, sample, estimate, expected',
+        'oil, sample_id, estimate, expected',
         [
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
@@ -498,64 +489,10 @@ class TestOilEstimationPointTemperatures():
            },
           None, None, (None, None)),
          ({'name': 'Oil Name',
-           'comments': 'This record has no flash point, but has cuts',
+           'comments': 'This record has no flash point, but has cuts & sara fractions',
            'samples': [{
                'sample_id': 'w=0.0',
                'cuts': [
-                   {'fraction': {
-                       'value':0.05, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 408.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.1, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 438.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.15, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 464.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.2, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 486.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.25, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 504.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.3, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 518.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
                    {'fraction': {
                        'value': 0.35, 'unit': 'fraction',
                        '_cls': 'oil_database.models.common.float_unit'
@@ -583,60 +520,6 @@ class TestOilEstimationPointTemperatures():
                         '_cls': 'oil_database.models.common.float_unit'
                                 '.TemperatureUnit'}
                     },
-                   {'fraction': {
-                       'value': 0.5, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 573.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.55, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 586.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.6, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 603.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.65, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 622.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.7, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 643.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    },
-                   {'fraction': {
-                       'value': 0.75, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
-                    'vapor_temp': {
-                        'value': 667.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
-                    }
                ],
                'sara_total_fractions': [
                    {'fraction': {
@@ -664,23 +547,45 @@ class TestOilEstimationPointTemperatures():
 
            }]
            },
-          None, None, (None, 409.848)),
+          None, None, (424.41, None)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no flash point, but has api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          None, None, (423.6, None)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a flash point',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'flash_points': [
+                   {'ref_temp': {
+                       'value': 273.15, 'unit': 'K',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.TemperatureUnit'}
+                    }
+               ],
+           }]
+           },
+          None, None, (273.15, 273.15)),
          ]
     )
-    def test_flash_point(self, oil, sample, estimate, expected):
+    def test_flash_point(self, oil, sample_id, estimate, expected):
         print('oil: ', oil)
-        print('sample: ', sample)
+        print('sample: ', sample_id)
         oil_est = OilEstimation(oil)
 
-        if sample is None and estimate is None:
+        if sample_id is None and estimate is None:
             res = oil_est.get_sample().flash_point()
-        elif sample is None:
+        elif sample_id is None:
             res = oil_est.get_sample().flash_point(estimate_if_none=estimate)
         elif estimate is None:
-            res = oil_est.get_sample().flash_point(sample=sample)
+            res = oil_est.get_sample(sample_id=sample_id).flash_point()
         else:
-            res = oil_est.get_sample().flash_point(sample=sample,
-                                                   estimate_if_none=estimate)
+            res = (oil_est.get_sample(sample_id=sample_id)
+                   .flash_point(estimate_if_none=estimate))
 
         print(res, expected)
         for a, b in zip(res, expected):
@@ -690,6 +595,573 @@ class TestOilEstimationPointTemperatures():
                 assert a == b
 
 
+class TestOilEstimationDensities():
+    @pytest.mark.parametrize(
+        'oil, sample_id, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None, None),
+         ({'name': 'Oil Name',
+           'comments': 'This record has one api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          None, {'gravity': 10.0}),
+         ({'name': 'Oil Name',
+           'comments': 'This record has multiple api gravities',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [
+                   {'gravity': 10.0},
+                   {'gravity': 20.0},
+                   {'gravity': 30.0}
+               ],
+           }]
+           },
+          None, {'gravity': 10.0}),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no api gravity, but has density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'densities': [
+                   {'density': {
+                       'value': 894.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 273.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'density': {
+                       'value': 89.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    }
+               ],
+           }]
+           },
+          None, None),
+         ]
+    )
+    def test_get_api(self, oil, sample_id, expected):
+        print('oil: ', oil)
+        print('sample: ', sample_id)
+        oil_est = OilEstimation(oil)
+
+        if sample_id is None:
+            res = oil_est.get_sample().get_api()
+        else:
+            res = oil_est.get_sample(sample_id=sample_id).get_api()
+
+        if expected is not None:
+            expected = ObjFromDict(expected)
+
+        assert res == expected
+
+    @pytest.mark.parametrize(
+        'oil, sample_id, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None, None),
+         ({'name': 'Oil Name',
+           'comments': 'This record has one api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          None, 10.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has multiple api gravities',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [
+                   {'gravity': 10.0},
+                   {'gravity': 20.0},
+                   {'gravity': 30.0}
+               ],
+           }]
+           },
+          None, 10.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no api gravity, but has density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'densities': [
+                   {'density': {
+                       'value': 994.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'density': {
+                       'value': 1000.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    }
+               ],
+           }]
+           },
+          None, 10.0),
+         ]
+    )
+    def test_get_api_from_densities(self, oil, sample_id, expected):
+        print('oil: ', oil)
+        print('sample: ', sample_id)
+        oil_est = OilEstimation(oil)
+
+        if sample_id is None:
+            res = oil_est.get_sample().get_api_from_densities()
+        else:
+            res = (oil_est.get_sample(sample_id=sample_id)
+                   .get_api_from_densities())
+
+        print(res, expected)
+        assert res == expected
+
+    @pytest.mark.parametrize(
+        'oil, sample_id, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None, []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has one api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          None, [
+              {'density': {
+                  'value': 1000.0, 'unit': 'kg/m^3',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.DensityUnit'},
+               'ref_temp': {
+                  'value': 288.15, 'unit': 'K',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.TemperatureUnit'}
+               }
+               ]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has multiple api gravities',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [
+                   {'gravity': 10.0},
+                   {'gravity': 20.0},
+                   {'gravity': 30.0}
+               ],
+           }]
+           },
+          None, [
+              {'density': {
+                  'value': 1000.0, 'unit': 'kg/m^3',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.DensityUnit'},
+               'ref_temp': {
+                  'value': 288.15, 'unit': 'K',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.TemperatureUnit'}
+               }
+               ]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no api gravity, but has density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'densities': [
+                   {'density': {
+                       'value': 994.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'density': {
+                       'value': 1000.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    }
+               ],
+           }]
+           },
+          None, [
+              {'density': {
+                  'value': 994.0, 'unit': 'kg/m^3',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.DensityUnit'},
+               'ref_temp': {
+                  'value': 273.15, 'unit': 'K',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.TemperatureUnit'}
+               },
+              {'density': {
+                  'value': 1000.0, 'unit': 'kg/m^3',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.DensityUnit'},
+               'ref_temp': {
+                  'value': 288.15, 'unit': 'K',
+                  '_cls': 'oil_database.models.common.float_unit'
+                          '.TemperatureUnit'}
+               }
+               ]),
+         ]
+    )
+    def test_get_densities(self, oil, sample_id, expected):
+        print('oil: ', oil)
+        print('sample: ', sample_id)
+        oil_est = OilEstimation(oil)
+
+        if sample_id is None:
+            res = oil_est.get_sample().get_densities()
+        else:
+            res = oil_est.get_sample(sample_id=sample_id).get_densities()
+
+        if expected is not None:
+            expected = [ObjFromDict(oil_est._add_float_units(i))
+                        for i in expected]
+
+        print(res, expected)
+        assert res == expected
+
+    @pytest.mark.parametrize(
+        'oil, sample_id, temp_k, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None, None, None),
+         ({'name': 'Oil Name',
+           'comments': 'This record has one api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          None, None, 1000.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has multiple api gravities',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [
+                   {'gravity': 10.0},
+                   {'gravity': 20.0},
+                   {'gravity': 30.0}
+               ],
+           }]
+           },
+          None, None, 1000.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no api gravity, but has density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'densities': [
+                   {'density': {
+                       'value': 994.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'density': {
+                       'value': 1000.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    }
+               ],
+           }]
+           },
+          None, None, 1000.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no api gravity, but has density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'densities': [
+                   {'density': {
+                       'value': 994.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'density': {
+                       'value': 1000.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    }
+               ],
+           }]
+           },
+          None, 273.15, 994.0),
+         ]
+    )
+    def test_density_at_temp(self, oil, sample_id, temp_k, expected):
+        print('oil: ', oil)
+        print('sample: ', sample_id)
+        oil_est = OilEstimation(oil)
+
+        if sample_id is None:
+            sample = oil_est.get_sample()
+        else:
+            sample = oil_est.get_sample(sample_id=sample_id)
+
+        if temp_k is None:
+            res = sample.density_at_temp()
+        else:
+            res = sample.density_at_temp(temperature=temp_k)
+
+        print(res, expected)
+        assert res == expected
+
+    @pytest.mark.parametrize(
+        'oil, sample_id, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None, None),
+         ({'name': 'Oil Name',
+           'comments': 'This record has one api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          None, 1000.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has multiple api gravities',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [
+                   {'gravity': 10.0},
+                   {'gravity': 20.0},
+                   {'gravity': 30.0}
+               ],
+           }]
+           },
+          None, 1000.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has no api gravity, but has density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'densities': [
+                   {'density': {
+                       'value': 994.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'density': {
+                       'value': 1000.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    }
+               ],
+           }]
+           },
+          None, 1000.0),
+         ]
+    )
+    def test_standard_density(self, oil, sample_id, expected):
+        print('oil: ', oil)
+        print('sample: ', sample_id)
+        oil_est = OilEstimation(oil)
+
+        if sample_id is None:
+            sample = oil_est.get_sample()
+        else:
+            sample = oil_est.get_sample(sample_id=sample_id)
+
+        res = sample.standard_density
+
+        print(res, expected)
+        assert res == expected
+
+
+class TestOilEstimationDynamicViscosities():
+    @pytest.mark.parametrize(
+        'oil, sample_id, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None, []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has just dvis',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'dvis': [
+                   {'viscosity': {
+                       'value': 0.025, 'unit': 'kg/(m s)',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DynamicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 273.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          None, [
+                 {'viscosity': {
+                     'value': 0.025, 'unit': 'kg/(m s)',
+                     '_cls': 'oil_database.models.common.float_unit'
+                             '.DynamicViscosityUnit'},
+                  'ref_temp': {
+                     'value': 273.0, 'unit': 'K',
+                     '_cls': 'oil_database.models.common.float_unit'
+                             '.TemperatureUnit'}
+                  },
+              ]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has 1 kvis and 1 redundant dvis',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'kvis': [
+                   {'viscosity': {
+                        'value': 0.0001333, 'unit': 'm^2/s',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.KinematicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}}
+               ],
+               'dvis': [
+                   {'viscosity': {
+                       'value': 0.025, 'unit': 'kg/(m s)',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DynamicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          None, []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has 1 kvis and 1 barely non-redundant dvis',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'kvis': [
+                   {'viscosity': {
+                        'value': 0.0001333, 'unit': 'm^2/s',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.KinematicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 273.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}}
+               ],
+               'dvis': [
+                   {'viscosity': {
+                       'value': 0.025, 'unit': 'kg/(m s)',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DynamicViscosityUnit'},
+                    'ref_temp': {
+                        'value': 273.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          None, [
+                 {'viscosity': {
+                     'value': 0.025, 'unit': 'kg/(m s)',
+                     '_cls': 'oil_database.models.common.float_unit'
+                             '.DynamicViscosityUnit'},
+                  'ref_temp': {
+                     'value': 273.0, 'unit': 'K',
+                     '_cls': 'oil_database.models.common.float_unit'
+                             '.TemperatureUnit'}
+                  },
+                 ]),
+         ]
+    )
+    def test_non_redundant_dvis(self, oil, sample_id, expected):
+        print('oil: ', oil)
+        print('sample: ', sample_id)
+        oil_est = OilEstimation(oil)
+
+        if sample_id is None:
+            sample = oil_est.get_sample()
+        else:
+            sample = oil_est.get_sample(sample_id=sample_id)
+
+        res = list(sample.non_redundant_dvis())
+
+        if expected is not None:
+            expected = [ObjFromDict(oil_est._add_float_units(i))
+                        for i in expected]
+
+        print(res, expected)
+        assert res == expected
 
 
 
