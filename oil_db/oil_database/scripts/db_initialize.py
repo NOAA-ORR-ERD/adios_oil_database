@@ -1,7 +1,8 @@
 import sys
 import os
+import io
 import logging
-from pprint import PrettyPrinter
+from argparse import ArgumentParser
 
 from pymongo import ASCENDING
 from pymongo.errors import ConnectionFailure
@@ -12,23 +13,35 @@ from oil_database.util.settings import file_settings, default_settings
 from oil_database.db_init.categories import (load_categories,
                                              print_all_categories)
 
+from pprint import PrettyPrinter
+pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
-
-pp = PrettyPrinter(indent=2, width=120)
 
 # All oil library data files are assumed to be in a common data folder
 data_path = os.path.sep.join(__file__.split(os.path.sep)[:-3] + ['data'])
 
 
+argp = ArgumentParser(description='Database Initialization Arguments:')
+argp.add_argument('--config', nargs=1,
+                  help=('Specify a *.ini file to supply application settings. '
+                        'If not specified, the default is to use a local '
+                        'MongoDB server.'))
+
+
 def init_db_cmd(argv=sys.argv):
+    # Let's give a round of applause to Python 3 for making stderr buffered.
+    sys.stderr = io.TextIOWrapper(sys.stderr.detach().detach(),
+                                  write_through=True)
+
     logging.basicConfig(level=logging.INFO)
 
-    if len(argv) >= 2:
-        # we will assume that if a file is specified, it will contain all
-        # necessary settings.
-        settings = file_settings(argv[1])
+    args = argp.parse_args(argv[1:])
+
+    if args.config is not None:
+        settings = file_settings(args.config)
     else:
+        print('Using default settings')
         settings = default_settings()
 
     try:
@@ -36,15 +49,6 @@ def init_db_cmd(argv=sys.argv):
     except Exception:
         print('{0}() FAILED\n'.format(init_db.__name__))
         raise
-
-
-def init_db_usage(argv):
-    cmd = os.path.basename(argv[0])
-
-    print('usage: {0} [config_file]\n'
-          '(example: "{0}")'.format(cmd))
-
-    sys.exit(1)
 
 
 def init_db(settings):
@@ -121,4 +125,3 @@ def create_indices(db):
     except Exception:
         print('Failed to drop Oil database!')
         raise
-

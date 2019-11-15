@@ -63,9 +63,14 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
               )
 
 
-argp = ArgumentParser(description='Database import arguments')
-argp.add_argument('--all', action='store_true')
-argp.add_argument('config_file', action='store_const', const=None)
+argp = ArgumentParser(description='Database Import Arguments:')
+argp.add_argument('--all', action='store_true',
+                  help=('Import all datasets, bypassing the menus, and quit '
+                        'the application when finished.'))
+argp.add_argument('--config', nargs=1,
+                  help=('Specify a *.ini file to supply application settings. '
+                        'If not specified, the default is to use a local '
+                        'MongoDB server.'))
 
 
 def import_db_cmd(argv=sys.argv):
@@ -76,13 +81,11 @@ def import_db_cmd(argv=sys.argv):
     logging.basicConfig(level=logging.INFO)
 
     args = argp.parse_args(argv[1:])
-    print('args: ', args)
 
-    if args.config_file is not None:
-        # we will assume that if a file is specified, it will contain all
-        # necessary settings.
-        settings = file_settings(args.config_file)
+    if args.config is not None:
+        settings = file_settings(args.config)
     else:
+        print('Using default settings')
         settings = default_settings()
         _add_datafiles(settings)
 
@@ -104,15 +107,6 @@ def import_db_cmd(argv=sys.argv):
     except Exception:
         print("{0}() FAILED\n".format(import_db.__name__))
         raise
-
-
-def import_db_usage(argv):
-    cmd = os.path.basename(argv[0])
-
-    print('usage: {0} [config_file]\n'
-          '(example: "{0}")'.format(cmd))
-
-    sys.exit(1)
 
 
 def import_db(settings):
