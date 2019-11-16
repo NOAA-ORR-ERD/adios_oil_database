@@ -426,7 +426,9 @@ class OilSampleEstimation(object):
         else:
             min_k = 0.0  # effectively no restriction
 
-        if hasattr(temperature, '__iter__'):
+        if temperature is None:
+            return None
+        elif hasattr(temperature, '__iter__'):
             temperature = np.clip(temperature, min_k, 1000.0)
             shape = temperature.shape
             temperature = temperature.reshape(-1)
@@ -552,18 +554,10 @@ class OilSampleEstimation(object):
     def dvis_to_kvis(self, kg_ms, ref_temp_k):
         density = self.density_at_temp(ref_temp_k)
 
-        if density is None:
+        if kg_ms is None or density is None:
             return None
         else:
-            return kg_ms / density
-
-    @classmethod
-    def dvis_obj_to_kvis_obj(cls, dvis_obj, density):
-        viscosity = est.dvis_to_kvis(dvis_obj.kg_ms, density)
-
-        return {'viscosity': KinematicViscosityUnit(value=viscosity,
-                                                    unit='m^2/s'),
-                'ref_temp': dvis_obj.ref_temp}
+            return est.dvis_to_kvis(kg_ms, density)
 
     def aggregate_kvis(self):
         if hasattr(self.record, 'kvis') and self.record.kvis is not None:
@@ -663,7 +657,7 @@ class OilSampleEstimation(object):
             kvis_list = self.aggregate_kvis()
 
         if len(kvis_list) < 2:
-            return
+            return None
 
         ref_temp_k, ref_kvis = zip(*[(k.ref_temp.to_unit('K').value,
                                       k.viscosity.to_unit('m^2/s').value)
