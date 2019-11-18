@@ -693,68 +693,95 @@ class OilSampleEstimation(object):
     def inert_fractions(self):
         f_res = f_asph = None
 
-        for f in self.record.sara_total_fractions:
-            if f.sara_type.lower() == 'resins':
-                f_res = f.fraction.value
+        if hasattr(self.record, 'sara_total_fractions'):
+            for f in self.record.sara_total_fractions:
+                try:
+                    if f.sara_type.lower() == 'resins':
+                        f_res = f.fraction.to_unit('fraction').value
+                except AttributeError:
+                    pass
 
-            if f.sara_type.lower() == 'asphaltenes':
-                f_asph = f.fraction.value
+                try:
+                    if f.sara_type.lower() == 'asphaltenes':
+                        f_asph = f.fraction.to_unit('fraction').value
+                except AttributeError:
+                    pass
 
         if f_res is None or f_asph is None:
-            density = self.density_at_temp(288.15)
-            viscosity = self.kvis_at_temp(288.15)
+            # try to estimate if we can't get values from our record
+            density_k = self.density_at_temp(288.15)
+            viscosity_k = self.kvis_at_temp(288.15)
+
+            if density_k is None or viscosity_k is None:
+                return f_res, f_asph
 
         if f_res is None:
-            f_res = est.resin_fraction(density, viscosity)
+            f_res = est.resin_fraction(density_k, viscosity_k)
 
         if f_asph is None:
-            f_asph = est.asphaltene_fraction(density, viscosity, f_res)
+            f_asph = est.asphaltene_fraction(density_k, viscosity_k, f_res)
 
         return f_res, f_asph
 
     def volatile_fractions(self):
-        try:
-            f_sat, f_arom = self.record.saturates, self.record.aromatics
-        except AttributeError:
-            f_sat, f_arom = (self.record.saturates_fraction,
-                             self.record.aromatics_fraction)
+        f_sat = f_arom = None
 
-        estimated_sat = estimated_arom = False
+        if hasattr(self.record, 'sara_total_fractions'):
+            for f in self.record.sara_total_fractions:
+                try:
+                    if f.sara_type.lower() == 'saturates':
+                        f_sat = f.fraction.to_unit('fraction').value
+                except AttributeError:
+                    pass
 
-        if f_sat is not None and f_arom is not None:
-            return f_sat, f_arom, estimated_sat, estimated_arom
-        else:
-            density = self.density_at_temp(288.15)
-            viscosity = self.kvis_at_temp(288.15)
+                try:
+                    if f.sara_type.lower() == 'aromatics':
+                        f_arom = f.fraction.to_unit('fraction').value
+                except AttributeError:
+                    pass
+
+        if f_sat is None or f_arom is None:
+            # try to estimate if we can't get values from our record
+            density_k = self.density_at_temp(288.15)
+            viscosity_k = self.kvis_at_temp(288.15)
+
+            if density_k is None or viscosity_k is None:
+                return f_sat, f_arom
 
         if f_sat is None:
-            f_sat = est.saturates_fraction(density, viscosity)
-            estimated_sat = True
+            f_sat = est.saturates_fraction(density_k, viscosity_k)
 
-        f_res, f_asph, _estimated_res, _estimated_asph = self.inert_fractions()
+        f_res, f_asph = self.inert_fractions()
         if f_arom is None:
             f_arom = est.aromatics_fraction(f_res, f_asph, f_sat)
-            estimated_arom = True
 
-        return f_sat, f_arom, estimated_sat, estimated_arom
+        return f_sat, f_arom
 
     def normalized_cut_values(self, N=10):
         f_res, f_asph = self.inert_fractions()
-        cuts = list(self.record.cuts)
 
-        if len(cuts) == 0:
-            if self.record.api is not None:
-                oil_api = self.record.api
-            else:
-                oil_rho = self.density_at_temp(288.15)
-                oil_api = est.api_from_density(oil_rho)
+        try:
+            cuts = list(self.record.cuts)
+        except AttributeError:
+            cuts = []
 
-            BP_i = est.cut_temps_from_api(oil_api)
-            fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
-        else:
+        if len(cuts) > 0:
             BP_i, fevap_i = zip(*[(c.vapor_temp.to_unit('K').value,
                                    c.fraction.value)
                                   for c in cuts])
+        else:
+            oil_api = self.get_api()
+
+            if oil_api is None:
+                oil_api = self.get_api_from_densities()
+
+            if oil_api is None or f_res is None or f_asph is None:
+                # we have no cut data and no way of estimating
+                return [], []
+            else:
+                oil_api = oil_api.gravity
+                BP_i = est.cut_temps_from_api(oil_api)
+                fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
 
         popt, _pcov = curve_fit(_linear_curve, BP_i, fevap_i)
         f_cutoff = _linear_curve(732.0, *popt)  # center of asymptote (< 739)

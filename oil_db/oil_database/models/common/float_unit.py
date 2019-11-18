@@ -102,16 +102,22 @@ class FloatUnit(object, metaclass=UnitMeta):
         kwargs = {}
         kwargs['unit'] = new_unit
 
+        unit_type = self.unit_type
+        if self.unit_type == 'Float':
+            # the unit_conversion package has no generic float type,
+            # but concentration in water will work pretty in this case
+            unit_type = 'Concentration In Water'
+
         if self.value is not None:
-            kwargs['value'] = convert(self.unit_type, self.unit, new_unit,
+            kwargs['value'] = convert(unit_type, self.unit, new_unit,
                                       self.value)
 
         if self.min_value is not None:
-            kwargs['min_value'] = convert(self.unit_type, self.unit, new_unit,
+            kwargs['min_value'] = convert(unit_type, self.unit, new_unit,
                                           self.min_value)
 
         if self.max_value is not None:
-            kwargs['max_value'] = convert(self.unit_type, self.unit, new_unit,
+            kwargs['max_value'] = convert(unit_type, self.unit, new_unit,
                                           self.max_value)
 
         return self.__class__(**kwargs)
