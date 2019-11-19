@@ -69,30 +69,30 @@ class TestOilEstimation():
         assert hasattr(oil_est, 'some_temp')
 
     @pytest.mark.parametrize(
-        'oil, sample_id, expected',
+        'oil, sample_id, product_type, expected',
         [
-         ({'name': 'Oil Name'}, None, None),
-         ({'name': 'Oil Name', 'samples': None}, None, None),
-         ({'name': 'Oil Name', 'samples': {}}, None, None),
+         ({'name': 'Oil Name'}, None, None, None),
+         ({'name': 'Oil Name', 'samples': None}, None, None, None),
+         ({'name': 'Oil Name', 'samples': {}}, None, None, None),
          ({'name': 'Oil Name',
            'samples': [{'sample_id': 'w=0.0'}]},
-          'w=1.0', None),
+          'w=1.0', None, None),
          ({'name': 'Oil Name',
            'samples': [{'sample_id': 'w=0.0'}]},
-          None, {'sample_id': 'w=0.0'}),
+          None, None, {'sample_id': 'w=0.0'}),
          ({'name': 'Oil Name',
            'samples': [{'sample_id': 'w=0.0'}]},
-          'w=0.0', {'sample_id': 'w=0.0'}),
+          'w=0.0', None, {'sample_id': 'w=0.0'}),
          ({'name': 'Oil Name',
            'samples': [{'sample_id': 'w=1.0'}]},
-          'w=1.0', {'sample_id': 'w=1.0'}),
+          'w=1.0', None, {'sample_id': 'w=1.0'}),
          ]
     )
-    def test_get_sample(self, oil, sample_id, expected):
+    def test_get_sample(self, oil, sample_id, product_type, expected):
         oil_est = OilEstimation(oil)
 
         if expected is not None:
-            expected = OilSampleEstimation(ObjFromDict(expected))
+            expected = OilSampleEstimation(ObjFromDict(expected), product_type)
 
         if sample_id is None:
             print('get_sample(): ', oil_est.get_sample())
@@ -1643,20 +1643,20 @@ class TestOilEstimationDistillationCuts():
                ],
                'cuts': [
                    {'fraction': {
-                       'value': 0.08, 'unit': 'fraction',
+                       'value': 0.16, 'unit': 'fraction',
                        '_cls': 'oil_database.models.common.float_unit'
                                '.FloatUnit'},
                     'vapor_temp': {
-                        'value': 305.771, 'unit': 'K',
+                        'value': 423.6, 'unit': 'K',
                         '_cls': 'oil_database.models.common.float_unit'
                                 '.TemperatureUnit'}
                     },
                    {'fraction': {
-                       'value': 0.4, 'unit': 'fraction',
+                       'value': 0.48, 'unit': 'fraction',
                        '_cls': 'oil_database.models.common.float_unit'
                                '.FloatUnit'},
                     'vapor_temp': {
-                        'value': 609.218, 'unit': 'K',
+                        'value': 738.26, 'unit': 'K',
                         '_cls': 'oil_database.models.common.float_unit'
                                 '.TemperatureUnit'}
                     },
@@ -1665,7 +1665,7 @@ class TestOilEstimationDistillationCuts():
                        '_cls': 'oil_database.models.common.float_unit'
                                '.FloatUnit'},
                     'vapor_temp': {
-                        'value': 733.869, 'unit': 'K',
+                        'value': 1052.92, 'unit': 'K',
                         '_cls': 'oil_database.models.common.float_unit'
                                 '.TemperatureUnit'}
                     },
@@ -1692,22 +1692,1083 @@ class TestOilEstimationDistillationCuts():
             else:
                 assert a == b
 
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          ([], [])),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          ([], [])),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an api and both inert fractions',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ]
+           }]
+           },
+          ([305.771, 384.353, 462.278, 538.126, 609.218,
+            671.537, 715.374, 732.825, 735.064, 733.869],
+           [0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08])),
+         ({'name': 'Oil Name',
+           'comments': 'This record has distillation cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ],
+               'cuts': [
+                   {'fraction': {
+                       'value': 0.16, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 423.6, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.48, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 738.26, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.8, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 1052.92, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          ([305.771, 384.353, 462.278, 538.126, 609.218,
+            671.537, 715.374, 732.825, 735.064, 733.869],
+           [0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08])),
+         ]
+    )
+    def test_get_cut_temps_fmasses(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.get_cut_temps_fmasses()
+
+        print(res, expected)
+        for a, b in zip(res, expected):
+            if a is not None and b is not None:
+                assert np.allclose(a, b)
+            else:
+                assert a == b
 
 
+class TestOilEstimationComponentMethods():
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          ([], [])),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          ([], [])),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an api and both inert fractions',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ]
+           }]
+           },
+          [
+           305.771, 305.771, 384.353, 384.353, 462.278, 462.278,
+           538.126, 538.126, 609.218, 609.218, 671.537, 671.537,
+           715.374, 715.374, 732.825, 732.825, 735.064, 735.064,
+           733.869, 733.869, 1015.0, 1015.0]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has distillation cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ],
+               'cuts': [
+                   {'fraction': {
+                       'value': 0.16, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 423.6, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.48, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 738.26, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.8, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 1052.92, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          [
+           305.771, 305.771, 384.353, 384.353, 462.278, 462.278,
+           538.126, 538.126, 609.218, 609.218, 671.537, 671.537,
+           715.374, 715.374, 732.825, 732.825, 735.064, 735.064,
+           733.869, 733.869, 1015.0, 1015.0]),
+         ]
+    )
+    def test_component_temps(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.component_temps()
+
+        print(res, expected)
+        for a, b in zip(res, expected):
+            if a is not None and b is not None:
+                assert np.allclose(a, b)
+            else:
+                assert a == b
+
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an api and both inert fractions',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ]
+           }]
+           },
+          [
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Resins', 'Asphaltenes']),
+         ({'name': 'Oil Name',
+           'comments': 'This record has distillation cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ],
+               'cuts': [
+                   {'fraction': {
+                       'value': 0.16, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 423.6, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.48, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 738.26, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.8, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 1052.92, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          [
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
+           'Resins', 'Asphaltenes']),
+         ]
+    )
+    def test_component_types(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.component_types()
+
+        print(res, expected)
+        assert res == expected
+
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an api and both inert fractions',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ]
+           }]
+           },
+          [70.6564, 60.6398, 106.593, 93.9145, 151.944,
+           136.655, 207.924, 190.431, 274.379, 255.684,
+           347.666, 329.491, 410.487, 394.411, 438.748,
+           424.151, 442.525, 428.152, 440.504, 426.011,
+           800.0, 1000.0]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has distillation cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ],
+               'cuts': [
+                   {'fraction': {
+                       'value': 0.16, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 423.6, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.48, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 738.26, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.8, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 1052.92, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          [70.6564, 60.6398, 106.593, 93.9145, 151.944,
+           136.655, 207.924, 190.431, 274.379, 255.684,
+           347.666, 329.491, 410.487, 394.411, 438.748,
+           424.151, 442.525, 428.152, 440.504, 426.011,
+           800.0, 1000.0]),
+         ]
+    )
+    def test_component_mol_wt(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.component_mol_wt()
+
+        print(res, expected)
+        assert np.allclose(res, expected)
+
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an api and both inert fractions',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ]
+           }]
+           },
+          [682.928, 819.514, 737.032, 884.439, 783.81,
+           940.572, 824.526, 989.431, 859.344, 1031.21,
+           887.7, 1065.24, 906.61, 1087.93, 913.923,
+           1096.71, 914.853, 1097.82, 914.357, 1097.23,
+           1100.0, 1100.0]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has distillation cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ],
+               'cuts': [
+                   {'fraction': {
+                       'value': 0.16, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 423.6, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.48, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 738.26, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.8, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 1052.92, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          [682.928, 819.514, 737.032, 884.439, 783.81,
+           940.572, 824.526, 989.431, 859.344, 1031.21,
+           887.7, 1065.24, 906.61, 1087.93, 913.923,
+           1096.71, 914.853, 1097.82, 914.357, 1097.23,
+           1100.0, 1100.0]),
+         ]
+    )
+    def test_component_densities(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.component_densities()
+
+        print(res, expected)
+        assert np.allclose(res, expected)
+
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an api and both inert fractions',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ]
+           }]
+           },
+          [0.683541, 0.82025, 0.737694, 0.885233, 0.784514, 0.941416,
+           0.825266, 0.99032, 0.860116, 1.032139, 0.888497, 1.066197,
+           0.907424, 1.08891, 0.914744, 1.097692, 0.915674, 1.098809,
+           0.915178, 1.09821, 1.100988, 1.100988]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has distillation cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ],
+               'cuts': [
+                   {'fraction': {
+                       'value': 0.16, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 423.6, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.48, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 738.26, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.8, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 1052.92, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          [0.683541, 0.82025, 0.737694, 0.885233, 0.784514, 0.941416,
+           0.825266, 0.99032, 0.860116, 1.032139, 0.888497, 1.066197,
+           0.907424, 1.08891, 0.914744, 1.097692, 0.915674, 1.098809,
+           0.915178, 1.09821, 1.100988, 1.100988]),
+         ]
+    )
+    def test_component_specific_gravity(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.component_specific_gravity()
+
+        print(res, expected)
+        assert np.allclose(res, expected)
+
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          []),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an api and both inert fractions',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ]
+           }]
+           },
+          [0.0728861, 0.00711392, 0.0586267, 0.0213733, 0.0417972, 0.0382028,
+           0.0195837, 0.0604163,  0.0195837, 0.0604163, 0.0195837, 0.0604163,
+           0.0195837, 0.0604163,  0.0195837, 0.0604163, 0.0195837, 0.0604163,
+           0.0195837, 0.0604163,  0.1,       0.1]),
+         ({'name': 'Oil Name',
+           'comments': 'This record has distillation cuts',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'sara_total_fractions': [
+                   {'sara_type': 'Resins',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+                   {'sara_type': 'Asphaltenes',
+                    'fraction': {
+                        'value': 10.0, 'unit': '%',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.FloatUnit'}
+                    },
+               ],
+               'cuts': [
+                   {'fraction': {
+                       'value': 0.16, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 423.6, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.48, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 738.26, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+                   {'fraction': {
+                       'value': 0.8, 'unit': 'fraction',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.FloatUnit'},
+                    'vapor_temp': {
+                        'value': 1052.92, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          [0.0728861, 0.00711392, 0.0586267, 0.0213733, 0.0417972, 0.0382028,
+           0.0195837, 0.0604163,  0.0195837, 0.0604163, 0.0195837, 0.0604163,
+           0.0195837, 0.0604163,  0.0195837, 0.0604163, 0.0195837, 0.0604163,
+           0.0195837, 0.0604163,  0.1,       0.1]),
+         ]
+    )
+    def test_component_mass_fractions(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.component_mass_fractions()
+
+        print(res, expected)
+        assert np.allclose(res, expected)
 
 
+class TestOilEstimationSurfaceTensions():
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          (None, None)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an oil-water tension',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               "ifts": [
+                   {"interface": "water",
+                    "tension": {
+                       "value": 0.0275, "unit": "N/m",
+                       "_cls": "oil_database.models.common.float_unit"
+                               ".InterfacialTensionUnit"},
+                    "ref_temp": {
+                        "value": 273.0, "unit": "K",
+                        "_cls": "oil_database.models.common.float_unit"
+                                ".TemperatureUnit"}
+                    },
+               ]
+           }]
+           },
+          (0.0275, 273.0)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has one api gravity',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'apis': [{'gravity': 10.0}],
+           }]
+           },
+          (0.036429, 288.15)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has only density',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'densities': [
+                   {'density': {
+                       'value': 1000.0, 'unit': 'kg/m^3',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.DensityUnit'},
+                    'ref_temp': {
+                        'value': 288.15, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ],
+           }]
+           },
+          (0.036429, 288.15)),
+         ]
+    )
+    def test_oil_water_surface_tension(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.oil_water_surface_tension()
+
+        print(res, expected)
+        assert res == expected
+
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          (None, None)),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an oil-seawater tension',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'ifts': [
+                   {'interface': 'seawater',
+                    'tension': {
+                       'value': 0.0275, 'unit': 'N/m',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.InterfacialTensionUnit'},
+                    'ref_temp': {
+                        'value': 273.0, 'unit': 'K',
+                        '_cls': 'oil_database.models.common.float_unit'
+                                '.TemperatureUnit'}
+                    },
+               ]
+           }]
+           },
+          (0.0275, 273.0)),
+         ]
+    )
+    def test_oil_seawater_surface_tension(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.oil_seawater_surface_tension()
+
+        print(res, expected)
+        assert res == expected
 
 
+class TestOilEstimationEmulsion():
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has no product type',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          0.0),
+         ({'name': 'Oil Name',
+           'product_type': 'Crude',
+           'comments': 'This record is crude',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          0.9),
+         ({'name': 'Oil Name',
+           'product_type': 'Refined',
+           'comments': 'This record is crude',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          0.0),
+         ]
+    )
+    def test_max_water_fraction_emulsion(self, oil, expected):
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.max_water_fraction_emulsion()
+
+        print(res, expected)
+        assert res == expected
+
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          None),
+         ({'name': 'Oil Name',
+           'product_type': 'Refined',
+           'comments': 'This record has a refined type',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          1.0),
+         ]
+    )
+    def test_bullwinkle_fraction(self, oil, expected):
+        '''
+            TODO: We need emuls_constant_max to calculate the old Adios
+                  bullwinkle fraction, but it is not clear how to map this
+                  information to our emulsion object.
+                  So for now, we will need to leave the Adios condition out.
+        '''
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
+
+        sample = oil_est.get_sample()
+
+        res = sample.bullwinkle_fraction()
+
+        print(res, expected)
+        assert res == expected
 
 
+class TestOilEstimationMisc():
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          0.0),
+         ]
+    )
+    def test_solubility(self, oil, expected):
+        '''
+            This function basically returns a constant, so not much to test.
+        '''
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
 
+        sample = oil_est.get_sample()
 
+        res = sample.solubility()
 
+        print(res, expected)
+        assert res == expected
 
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          0.035),
+         ({'name': 'Oil Name',
+           'comments': 'This record has an adhesion',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               'adhesions': [
+                   {'adhesion': {
+                       'value': 0.28, 'unit': 'N/m^2',
+                       '_cls': 'oil_database.models.common.float_unit'
+                               '.AdhesionUnit'}
+                    },
+               ],
+           }]
+           },
+          0.28),
+         ]
+    )
+    def test_adhesion(self, oil, expected):
+        '''
+            This function basically returns a constant, so not much to test.
+        '''
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
 
+        sample = oil_est.get_sample()
 
+        res = sample.adhesion()
 
+        print(res, expected)
+        assert res == expected
 
+    @pytest.mark.parametrize(
+        'oil, expected',
+        [
+         ({'name': 'Oil Name',
+           'comments': 'This record has an empty sample',
+           'samples': [{
+               'sample_id': 'w=0.0',
+           }]
+           },
+          0.0),
+         ({'name': 'Oil Name',
+           'comments': 'This record has a single sulfur',
+           'samples': [{
+               'sample_id': 'w=0.0',
+               "sulfur": [
+                   {"fraction": {
+                       "value": 0.0015, "unit": "fraction",
+                       "_cls": "oil_database.models.common.float_unit"
+                               ".FloatUnit"}
+                    }
+               ],
+           }]
+           },
+          0.0015),
+         ]
+    )
+    def test_sulfur_fraction(self, oil, expected):
+        '''
+            This function basically returns a constant, so not much to test.
+        '''
+        print('oil: ', oil)
+        oil_est = OilEstimation(oil)
 
+        sample = oil_est.get_sample()
 
+        res = sample.sulphur_fraction()
 
+        print(res, expected)
+        assert res == expected

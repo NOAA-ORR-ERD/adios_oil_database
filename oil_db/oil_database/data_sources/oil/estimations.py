@@ -127,21 +127,31 @@ class OilEstimation(object):
             case we just choose the first one.
         '''
         try:
+            product_type = self.record.product_type
+        except AttributeError:
+            product_type = None
+
+        try:
             samples = [s for s in self.record.samples
                        if s.sample_id == sample_id]
         except Exception:
             return None
 
-        return OilSampleEstimation(samples[0]) if len(samples) > 0 else None
+        if len(samples) > 0:
+            return OilSampleEstimation(samples[0], product_type)
+        else:
+            return None
 
 
 class OilSampleEstimation(object):
-    def __init__(self, sample):
+    def __init__(self, sample, product_type):
         '''
             We expect a sample that has already been treated by our
             OilEstimation class
         '''
         self.record = sample
+        self.record.product_type = product_type
+
         self._k_v2 = None
 
     def __getattr__(self, name):
@@ -817,16 +827,21 @@ class OilSampleEstimation(object):
     def component_temps(self, N=10):
         cut_temps = self.get_cut_temps(N)
 
-        component_temps = np.append([1015.0, 1015.0],
-                                    zip(cut_temps, cut_temps))
+        component_temps = np.array(list(zip(cut_temps, cut_temps)))
 
-        return np.roll(component_temps, -2)
+        if len(cut_temps) > 0:
+            component_temps = np.append(component_temps, [1015.0, 1015.0])
+
+        return component_temps
 
     def component_types(self, N=10):
         T_i = self.component_temps(N)
 
-        types_out = ['Saturates', 'Aromatics'] * (len(T_i) / 2 - 1)
-        types_out += ['Resins', 'Asphaltenes']
+        if len(T_i) > 0:
+            types_out = ['Saturates', 'Aromatics'] * int(len(T_i) / 2 - 1)
+            types_out += ['Resins', 'Asphaltenes']
+        else:
+            types_out = []
 
         return types_out
 
@@ -837,10 +852,15 @@ class OilSampleEstimation(object):
 
     @classmethod
     def estimate_component_mol_wt(cls, boiling_points):
-        mw_list = np.append([est.resin_mol_wt(boiling_points),
-                             est.asphaltene_mol_wt(boiling_points)],
-                            zip(est.saturate_mol_wt(boiling_points),
-                                est.aromatic_mol_wt(boiling_points)))
+        if len(boiling_points) > 0:
+            inert_mol_wt = [est.resin_mol_wt(boiling_points),
+                            est.asphaltene_mol_wt(boiling_points)]
+        else:
+            inert_mol_wt = []
+
+        mw_list = np.append(inert_mol_wt,
+                            list(zip(est.saturate_mol_wt(boiling_points),
+                                     est.aromatic_mol_wt(boiling_points))))
 
         return np.roll(mw_list, -2)
 
@@ -851,10 +871,15 @@ class OilSampleEstimation(object):
 
     @classmethod
     def estimate_component_densities(cls, boiling_points):
-        rho_list = np.append([est.resin_densities(boiling_points),
-                              est.asphaltene_densities(boiling_points)],
-                             zip(est.saturate_densities(boiling_points),
-                                 est.aromatic_densities(boiling_points)))
+        if len(boiling_points) > 0:
+            inert_densities = [est.resin_densities(boiling_points),
+                               est.asphaltene_densities(boiling_points)]
+        else:
+            inert_densities = []
+
+        rho_list = np.append(inert_densities,
+                             list(zip(est.saturate_densities(boiling_points),
+                                      est.aromatic_densities(boiling_points))))
 
         return np.roll(rho_list, -2)
 
@@ -867,8 +892,12 @@ class OilSampleEstimation(object):
         return self.component_mass_fractions_riazi()
 
     def component_mass_fractions_riazi(self):
-        f_res, f_asph, _estimated_res, _estimated_asph = self.inert_fractions()
         cut_temps, fmass_i = self.get_cut_temps_fmasses()
+
+        if len(cut_temps) > 0:
+            inert_fractions = [self.inert_fractions()]
+        else:
+            inert_fractions = []
 
         f_sat_i = fmass_i / 2.0
         f_arom_i = fmass_i / 2.0
@@ -879,10 +908,8 @@ class OilSampleEstimation(object):
                                                                   f_sat_i,
                                                                   f_arom_i)
 
-        mf_list = np.append([f_res, f_asph],
-                            zip(f_sat_i, f_arom_i))
-
-        return np.roll(mf_list, -2)
+        return np.append(list(zip(f_sat_i, f_arom_i)),
+                         inert_fractions)
 
     @classmethod
     def verify_cut_fractional_masses(cls, fmass_i, T_i, f_sat_i, f_arom_i,
@@ -975,34 +1002,48 @@ class OilSampleEstimation(object):
         return f_sat_i, f_arom_i
 
     def oil_water_surface_tension(self):
-        if all([v is not None for v in
-                (self.record.oil_water_interfacial_tension_n_m,
-                 self.record.oil_water_interfacial_tension_ref_temp_k)]):
-            ow_st = self.record.oil_water_interfacial_tension_n_m
-            ref_temp_k = self.record.oil_water_interfacial_tension_ref_temp_k
+        ifts = []
+        if hasattr(self.record, 'ifts'):
+            [ifts.append(t) for t in self.record.ifts
+             if t.interface.lower() == 'water']
 
-            return ow_st, ref_temp_k, False
-        elif self.record.api is not None:
-            ow_st = est.oil_water_surface_tension_from_api(self.record.api)
+        if len(ifts) > 0:
+            ow_st = ifts[0].tension.to_unit('N/m').value
+            ref_temp_k = ifts[0].ref_temp.to_unit('K').value
 
-            return ow_st, 273.15 + 15, True
-        else:
-            est_api = est.api_from_density(self.density_at_temp(288.15))
+            return ow_st, ref_temp_k
+
+        api = self.get_api()
+        if api is not None:
+            ow_st = est.oil_water_surface_tension_from_api(api.gravity)
+
+            return ow_st, 288.15
+
+        rho_t = self.density_at_temp(288.15)
+        if rho_t is not None:
+            est_api = est.api_from_density(rho_t)
             ow_st = est.oil_water_surface_tension_from_api(est_api)
 
-            return ow_st, 273.15 + 15, True
+            return ow_st, 288.15
+
+        return None, None
 
     def oil_seawater_surface_tension(self):
-        if all([v is not None for v in
-                (self.record.oil_seawater_interfacial_tension_n_m,
-                 self.record.oil_seawater_interfacial_tension_ref_temp_k)]):
-            osw_st = self.record.oil_seawater_interfacial_tension_n_m
-            ref_temp_k = self.record.oil_seawater_interfacial_tension_ref_temp_k
+        ifts = []
+        if hasattr(self.record, 'ifts'):
+            [ifts.append(t) for t in self.record.ifts
+             if t.interface.lower() == 'seawater']
 
-            return osw_st, ref_temp_k, False
-        else:
-            # we currently don't have an estimation for this one.
-            return None, None, False
+        print('ifts:', ifts)
+
+        if len(ifts) > 0:
+            osw_st = ifts[0].tension.to_unit('N/m').value
+            ref_temp_k = ifts[0].ref_temp.to_unit('K').value
+
+            return osw_st, ref_temp_k
+
+        # we currently don't have any alternate estimations for this one.
+        return None, None
 
     def max_water_fraction_emulsion(self):
         if self.record.product_type == 'Crude':
@@ -1039,20 +1080,20 @@ class OilSampleEstimation(object):
             - For right now we are referencing the Adios2 code file
               OilInitialize.cpp, function CAdiosData::Bullwinkle(void)
         '''
-        estimated = False
-
         if self.record.product_type == "Refined":
             bullwinkle_fraction = 1.0
-            estimated = True
-        elif self.record.emuls_constant_max is not None:
+        elif (hasattr(self.record, 'emuls_constant_max') and
+              self.record.emuls_constant_max is not None):
             bullwinkle_fraction = self.record.emuls_constant_max
         else:
             # product type is crude
             Ni = (self.record.nickel
-                  if self.record.nickel is not None
+                  if (hasattr(self.record, 'nickel') and
+                      self.record.nickel is not None)
                   else 0.0)
             Va = (self.record.vanadium
-                  if self.record.vanadium is not None
+                  if (hasattr(self.record, 'vanadium') and
+                      self.record.vanadium is not None)
                   else 0.0)
 
             _f_res, f_asph = self.inert_fractions()
@@ -1060,22 +1101,23 @@ class OilSampleEstimation(object):
 
             if (Ni > 0.0 and Va > 0.0 and Ni + Va > 15.0):
                 bullwinkle_fraction = 0.0
-            elif f_asph > 0.0:
+            elif f_asph is not None and f_asph > 0.0:
                 # Bullvalue = 0.32 - 3.59 * f_Asph
                 bullwinkle_fraction = 0.20219 - 0.168 * np.log10(f_asph)
                 bullwinkle_fraction = np.clip(bullwinkle_fraction, 0.0, 0.303)
-            elif oil_api < 26.0:
+            elif oil_api is not None and oil_api < 26.0:
                 bullwinkle_fraction = 0.08
-            elif oil_api > 50.0:
+            elif oil_api is not None and oil_api > 50.0:
                 bullwinkle_fraction = 0.303
-            else:
+            elif oil_api is not None:
                 bullwinkle_fraction = (-1.038 -
                                        0.78935 * np.log10(1.0 / oil_api))
+            else:
+                return None
 
             bullwinkle_fraction = self._adios2_new_bull_calc(bullwinkle_fraction)
-            estimated = True
 
-        return bullwinkle_fraction, estimated
+        return bullwinkle_fraction
 
     def _adios2_new_bull_calc(self, bullwinkle_fraction):
         '''
@@ -1113,18 +1155,23 @@ class OilSampleEstimation(object):
         return 0.0
 
     def adhesion(self):
-        estimated = False
+        adhesions = []
+        if hasattr(self.record, 'adhesions'):
+            [adhesions.append(t) for t in self.record.adhesions]
 
-        if self.record.adhesion is not None:
-            omega_a = self.record.adhesion
+        if len(adhesions) > 0:
+            omega_a = adhesions[0].adhesion.to_unit('N/m^2').value
         else:
             omega_a = 0.035
-            estimated = True
 
-        return omega_a, estimated
+        return omega_a
 
     def sulphur_fraction(self):
-        if self.record.sulphur is not None:
-            return self.record.sulphur
+        sulfurs = []
+        if hasattr(self.record, 'sulfur'):
+            [sulfurs.append(t) for t in self.record.sulfur]
+
+        if len(sulfurs) > 0:
+            return sulfurs[0].fraction.to_unit('fraction').value
         else:
             return 0.0
