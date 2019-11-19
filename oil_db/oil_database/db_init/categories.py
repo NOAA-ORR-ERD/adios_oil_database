@@ -70,22 +70,27 @@ def link_oil_to_categories(oil):
         This is similar to the batch processing function above.
     '''
     oil.categories = []
-    oil_est = OilEstimation(oil)
+    sample = OilEstimation(oil).get_sample()
 
-    if is_crude_light(oil_est):
+    if sample is None:
+        logger.warn('oil: {} has no fresh sample.  Skipping Categorization.'
+                    .format(oil.oil_id))
+        return
+
+    if is_crude_light(sample):
         # add crude->light
         categories = ['Crude', 'Light']
         oil.categories.extend(categories)
 
-    if is_crude_medium(oil_est):
+    if is_crude_medium(sample):
         categories = ['Crude', 'Medium']
         oil.categories.extend(categories)
 
-    if is_crude_heavy(oil_est):
+    if is_crude_heavy(sample):
         categories = ['Crude', 'Heavy']
         oil.categories.extend(categories)
 
-    if is_refined_fuel_oil_1(oil_est):
+    if is_refined_fuel_oil_1(sample):
         categories = ['Refined',
                       'Light',
                       'Fuel Oil 1',
@@ -93,20 +98,20 @@ def link_oil_to_categories(oil):
                       'Kerosene']
         oil.categories.extend(categories)
 
-    if is_refined_fuel_oil_2(oil_est):
+    if is_refined_fuel_oil_2(sample):
         categories = ['Refined',
                       'Fuel Oil 2',
                       'Diesel',
                       'Heating Oil']
         oil.categories.extend(categories)
 
-    if is_refined_ifo(oil_est):
+    if is_refined_ifo(sample):
         categories = ['Refined',
                       'Intermediate',
                       'Fuel Oil']
         oil.categories.extend(categories)
 
-    if is_refined_fuel_oil_6(oil_est):
+    if is_refined_fuel_oil_6(sample):
         categories = ['Refined',
                       'Heavy',
                       'Fuel Oil 6',
@@ -115,7 +120,7 @@ def link_oil_to_categories(oil):
                       'Group V']
         oil.categories.extend(categories)
 
-    if is_generic(oil_est):
+    if is_generic(oil):
         categories = ['Other', 'Generic']
         oil.categories.extend(categories)
 
@@ -135,28 +140,15 @@ def is_refined(oil):
 
 
 def api_min(oil, oil_api):
-    apis = get_apis(oil)
+    api = oil.get_api()
 
-    return (len(apis) > 0 and apis[0].gravity > oil_api)
+    return api is not None and api.gravity > oil_api
 
 
 def api_max(oil, oil_api):
-    apis = get_apis(oil)
+    api = oil.get_api()
 
-    return (len(apis) > 0 and apis[0].gravity < oil_api)
-
-
-def get_apis(oil):
-    fresh_sample = [s for s in oil.samples
-                    if s.sample_id == 'w=0.0']
-    if len(fresh_sample) > 0:
-        fresh_sample = fresh_sample[0]
-    else:
-        return []
-
-    #pdb.set_trace()
-
-    return getattr(fresh_sample, 'apis', [])
+    return api is not None and api.gravity < oil_api
 
 
 def is_crude_light(oil):
@@ -276,13 +268,13 @@ def is_generic(oil):
     return oil.name.startswith('*GENERIC')
 
 
-def is_within_viscosity_range(oil_obj, kvis_min=None, kvis_max=None):
+def is_within_viscosity_range(oil_sample, kvis_min=None, kvis_max=None):
     category_temp = 273.15 + 38
 
-    if oil_obj.kvis_at_temp(category_temp) is None:
+    if oil_sample.kvis_at_temp(category_temp) is None:
         return False
 
-    viscosity = oil_obj.kvis_at_temp(category_temp)
+    viscosity = oil_sample.kvis_at_temp(category_temp)
 
     if kvis_min is not None and kvis_max is not None:
         return (viscosity > kvis_min) and (viscosity <= kvis_max)
