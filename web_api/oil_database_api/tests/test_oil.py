@@ -14,20 +14,17 @@ class OilTestBase(FunctionalTestBase):
         valid status.
     '''
     def api_valid(self, api_gravity):
-        for k in ('gravity', 'weathering'):
+        for k in ('gravity',):
             if k not in api_gravity:
                 return False
 
         if not isinstance(api_gravity['gravity'], (float)):
             return False
 
-        if not isinstance(api_gravity['weathering'], (float)):
-            return False
-
         return True
 
     def densitiy_valid(self, density):
-        for k in ('ref_temp', 'density', 'weathering'):
+        for k in ('ref_temp', 'density'):
             if k not in density:
                 return False
 
@@ -37,13 +34,10 @@ class OilTestBase(FunctionalTestBase):
         if not self.density_value_valid(density['density']):
             return False
 
-        if not isinstance(density['weathering'], (float)):
-            return False
-
         return True
 
     def dvis_valid(self, dvis):
-        for k in ('ref_temp', 'viscosity', 'weathering'):
+        for k in ('ref_temp', 'viscosity'):
             if k not in dvis:
                 return False
 
@@ -53,13 +47,10 @@ class OilTestBase(FunctionalTestBase):
         if not self.dvis_value_valid(dvis['viscosity']):
             return False
 
-        if not isinstance(dvis['weathering'], (float)):
-            return False
-
         return True
 
     def kvis_valid(self, kvis):
-        for k in ('ref_temp', 'viscosity', 'weathering'):
+        for k in ('ref_temp', 'viscosity'):
             if k not in kvis:
                 return False
 
@@ -69,13 +60,10 @@ class OilTestBase(FunctionalTestBase):
         if not self.kvis_value_valid(kvis['viscosity']):
             return False
 
-        if not isinstance(kvis['weathering'], (float)):
-            return False
-
         return True
 
     def cut_valid(self, cut):
-        for k in ('fraction', 'vapor_temp', 'weathering'):
+        for k in ('fraction', 'vapor_temp'):
             if k not in cut:
                 return False
 
@@ -85,13 +73,10 @@ class OilTestBase(FunctionalTestBase):
         if not self.ref_temp_valid(cut['vapor_temp']):
             return False
 
-        if not isinstance(cut['weathering'], (float)):
-            return False
-
         return True
 
     def ift_valid(self, ift):
-        for k in ('tension', 'ref_temp', 'interface', 'weathering'):
+        for k in ('tension', 'ref_temp', 'interface'):
             if k not in ift:
                 return False
 
@@ -104,15 +89,12 @@ class OilTestBase(FunctionalTestBase):
         if not ift['interface'] in ('air', 'water', 'seawater'):
             return False
 
-        if not isinstance(ift['weathering'], (float)):
-            return False
-
         # all other fields can be blank
 
         return True
 
     def sulfur_valid(self, sulfur):
-        for k in ('fraction', 'weathering'):
+        for k in ('fraction',):
             if k not in sulfur:
                 return False
 
@@ -120,46 +102,34 @@ class OilTestBase(FunctionalTestBase):
                                      ('1', 'fraction', '%')):
             return False
 
-        if not isinstance(sulfur['weathering'], (float)):
-            return False
-
         return True
 
     def flash_point_valid(self, fp):
-        for k in ('ref_temp', 'weathering'):
+        for k in ('ref_temp',):
             if k not in fp:
                 return False
 
         if not self.ref_temp_valid(fp['ref_temp']):
             return False
 
-        if not isinstance(fp['weathering'], (float)):
-            return False
-
         return True
 
     def pour_point_valid(self, pp):
-        for k in ('ref_temp', 'weathering'):
+        for k in ('ref_temp',):
             if k not in pp:
                 return False
 
         if not self.ref_temp_valid(pp['ref_temp']):
             return False
 
-        if not isinstance(pp['weathering'], (float)):
-            return False
-
         return True
 
     def adhesion_valid(self, adhesion):
-        for k in ('adhesion', 'weathering'):
+        for k in ('adhesion',):
             if k not in adhesion:
                 return False
 
         if not self.adhesion_value_valid(adhesion['adhesion']):
-            return False
-
-        if not isinstance(adhesion['weathering'], (float)):
             return False
 
         return True
@@ -288,79 +258,69 @@ class OilTests(OilTestBase):
             # the oil_database module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
             attrs = ['_id',
+                     'oil_id',
+                     'categories',
+                     'reference',
+                     'status',
+                     'reference_date',
+                     'product_type',
                      'name',
                      'location',
                      'comments',
-                     'reference',
-                     'reference_date',
-                     'product_type',
-                     'categories',
-                     'status',
-                     'apis',
-                     'densities',
-                     'dvis',
-                     # 'kvis',
-                     'cuts',
-                     'ifts',
-                     'pour_points',
-                     'flash_points',
-                     'adhesions',
-                     'alkanes',
-                     'alkylated_pahs',
-                     'benzene',
-                     'biomarkers',
-                     'ccme',
-                     'ccme_f1',
-                     'ccme_f2',
-                     'ccme_tph',
-                     'chromatography',
-                     # 'conradson',
-                     'chemical_dispersibility',
-                     'emulsions',
-                     'evaporation_eqs',
-                     'headspace',
-                     'sara_total_fractions',
-                     'sulfur',
-                     # 'toxicities',
-                     'water',
-                     'wax_content']
+                     'samples']
 
             for k in attrs:
                 assert k in oil
 
-            for a in oil['apis']:
-                assert self.api_valid(a)
+            sample = [s for s in oil['samples']
+                      if s['sample_id'] == 'w=0.0'][0]
 
-            for d in oil['densities']:
-                assert self.densitiy_valid(d)
+            assert any(k in sample for k in ('apis', 'densities'))
 
-            for dvis in oil['dvis']:
-                assert self.dvis_valid(dvis)
+            if 'apis' in sample:
+                for a in sample['apis']:
+                    assert self.api_valid(a)
 
-            if 'kvis' in oil:
-                for kvis in oil['kvis']:
+            if 'densities' in sample:
+                for d in sample['densities']:
+                    assert self.densitiy_valid(d)
+
+            assert any(k in sample for k in ('kvis', 'dvis'))
+
+            if 'dvis' in sample:
+                for dvis in sample['dvis']:
+                    assert self.dvis_valid(dvis)
+
+            if 'kvis' in sample:
+                for kvis in sample['kvis']:
                     assert self.kvis_valid(kvis)
 
-            for c in oil['cuts']:
-                assert self.cut_valid(c)
+            if 'cuts' in sample:
+                for c in sample['cuts']:
+                    assert self.cut_valid(c)
 
-            for i in oil['ifts']:
-                assert self.ift_valid(i)
+            if 'ifts' in sample:
+                for i in sample['ifts']:
+                    assert self.ift_valid(i)
 
-            for s in oil['sulfur']:
-                assert self.sulfur_valid(s)
+            if 'sulfur' in sample:
+                for s in sample['sulfur']:
+                    assert self.sulfur_valid(s)
 
-            for f in oil['flash_points']:
-                assert self.flash_point_valid(f)
+            if 'flash_points' in sample:
+                for f in sample['flash_points']:
+                    assert self.flash_point_valid(f)
 
-            for p in oil['pour_points']:
-                assert self.pour_point_valid(p)
+            if 'pour_points' in sample:
+                for p in sample['pour_points']:
+                    assert self.pour_point_valid(p)
 
-            for a in oil['adhesions']:
-                assert self.adhesion_valid(a)
+            if 'adhesions' in sample:
+                for a in sample['adhesions']:
+                    assert self.adhesion_valid(a)
 
-            if 'toxicities' in oil:
-                for t in oil['toxicities']:
+            if 'toxicities' in sample:
+                for t in sample['toxicities']:
                     assert self.toxicity_valid(t)
 
     def test_post_no_payload(self):

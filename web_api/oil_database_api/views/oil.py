@@ -267,15 +267,16 @@ def fix_oil_id(oil_json):
 @memoize_oil_arg
 def get_oil_searchable_fields(oil):
     oil = OilEstimation(oil)
+    sample = oil.get_sample()
 
     try:
         return {'_id': oil.oil_id,
                 'name': oil.name,
                 'location': oil.location,
                 'product_type': oil.product_type,
-                'apis': [a for a in oil.apis],
-                'pour_point': oil.pour_point(),
-                'viscosity': oil.kvis_at_temp(273.15 + 38),
+                'apis': [sample.get_api()],
+                'pour_point': sample.pour_point(),
+                'viscosity': sample.kvis_at_temp(273.15 + 38),
                 'categories': oil.categories,
                 'status': oil.status,
                 }
