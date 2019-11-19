@@ -4,16 +4,21 @@ export function weatheredSamples([oil,
                                   ...rest]) {  // eslint-disable-line no-unused-vars
   let samples = new Set();
 
-  oil.eachAttribute(a => {
-    let attr = oil.get(a);
-    if (attr &&
-        attr.length > 0 &&
-        typeof attr['map'] === 'function' &&
-        attr.every(i => (i !== null && i['weathering'] !== undefined))) {
-      attr.map(i => (samples.add(i.weathering)));
-    }
+  oil.samples.forEach(s => {
+      if (typeof s.sample_id.split('=')[1] === 'undefined') {
+          // sample does not fit the 'w=<num>' format, just add the label
+          samples.add(s.sample_id);
+      }
+      else if (isNaN(Number(s.sample_id.split('=')[1]))) {
+          // sample fits the 'w=<num>' format, just not a number
+          samples.add(s.sample_id.split('=')[1]);          
+      }
+      else {
+          // sample fits the 'w=<num>' format, and is a number
+          samples.add(Number(s.sample_id.split('=')[1]));
+      }
   });
-  
+
   return Array.from(samples);
 }
 
