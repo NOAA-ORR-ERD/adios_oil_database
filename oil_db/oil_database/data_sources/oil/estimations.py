@@ -134,13 +134,31 @@ class OilEstimation(object):
         try:
             samples = [s for s in self.record.samples
                        if s.sample_id == sample_id]
-        except Exception:
+        except (AttributeError, TypeError):
             return None
 
         if len(samples) > 0:
             return OilSampleEstimation(samples[0], product_type)
         else:
             return None
+
+    def get_first_sample(self):
+        '''
+            Just get the first sample, regardless what it is.
+            We will likely only use this in the case that a fresh
+            sample doesn't exist.
+        '''
+        try:
+            product_type = self.record.product_type
+        except AttributeError:
+            product_type = None
+
+        try:
+            sample = self.record.samples[0]
+        except (AttributeError, TypeError):
+            return None
+
+        return OilSampleEstimation(sample, product_type)
 
 
 class OilSampleEstimation(object):

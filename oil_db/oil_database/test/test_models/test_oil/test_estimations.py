@@ -106,6 +106,29 @@ class TestOilEstimation():
         else:
             assert oil_est.get_sample(sample_id) == expected
 
+    @pytest.mark.parametrize(
+        'oil, product_type, expected',
+        [
+         ({'name': 'Oil Name'}, None, None),
+         ({'name': 'Oil Name', 'samples': None}, None, None),
+         ({'name': 'Oil Name', 'samples': {}}, None, None),
+         ({'name': 'Oil Name',
+           'samples': [{'sample_id': 'w=0.0'}]},
+          None, {'sample_id': 'w=0.0'}),
+         ]
+    )
+    def test_get_first_sample(self, oil, product_type, expected):
+        oil_est = OilEstimation(oil)
+
+        if expected is not None:
+            expected = OilSampleEstimation(ObjFromDict(expected), product_type)
+
+        print('get_first_sample(): ', oil_est.get_first_sample())
+
+        print('expected: ', expected)
+
+        assert oil_est.get_first_sample() == expected
+
 
 class TestOilEstimationTemperature():
     @pytest.mark.parametrize(

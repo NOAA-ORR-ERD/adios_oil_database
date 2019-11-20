@@ -269,6 +269,11 @@ def get_oil_searchable_fields(oil):
     oil = OilEstimation(oil)
     sample = oil.get_sample()
 
+    if sample is None:
+        # maybe there is not an unweathered (fresh) sample?
+        # That's ok, we will just get the first one we see.
+        sample = oil.get_first_sample()
+
     try:
         return {'_id': oil.oil_id,
                 'name': oil.name,

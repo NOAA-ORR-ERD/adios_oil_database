@@ -259,14 +259,14 @@ class OilTests(OilTestBase):
             # attributes, but we need to test that we conform to it.
             attrs = ['_id',
                      'oil_id',
-                     'categories',
-                     'reference',
-                     'status',
-                     'reference_date',
-                     'product_type',
                      'name',
+                     'product_type',
                      'location',
+                     'reference',
+                     'reference_date',
                      'comments',
+                     'categories',
+                     'status',
                      'samples']
 
             for k in attrs:
