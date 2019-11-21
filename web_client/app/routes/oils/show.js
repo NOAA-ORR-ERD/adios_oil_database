@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 export default Route.extend({
   model(params) {
-    return this.store.findRecord('oil', params.oil_id);
+    return this.store.findRecord('oil', params.oil_id, { reload: true });
   },
 
   actions: {

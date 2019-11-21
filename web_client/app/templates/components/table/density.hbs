@@ -9,22 +9,16 @@
              aria-controls="density-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Density</th>
           <th scope="col">Temperature</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="density-tbody">
         {{#each oil.densities as |density index|}}
-          {{#if (eq density.weathering weathered)}}
-            <tr class="collapse show density-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit (convert-unit density.density "g/cm^3") 3}}</td>
-              <td>{{value-unit (convert-unit density.ref_temp "C") 2}}</td>
-              <td>{{density.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show density-row-collapse">
+            <td>{{value-unit (convert-unit density.density "g/cm^3") 3}}</td>
+            <td>{{value-unit (convert-unit density.ref_temp "C") 2}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.densities}}

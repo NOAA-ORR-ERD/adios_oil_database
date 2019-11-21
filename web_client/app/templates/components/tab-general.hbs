@@ -27,9 +27,7 @@
       <strong>API:</strong>
 
       {{#if (not (is-empty oil.apis))}}
-        <span class="badge badge-dark">
-          {{round-relative oil.apis.[0].gravity 2}}
-        </span>
+        <input type="text" value="{{round-relative oil.apis.[0].gravity 2}}">
       {{else}}
         <span>
           No Values
