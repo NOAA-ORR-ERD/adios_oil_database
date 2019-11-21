@@ -9,7 +9,7 @@ export function valueUnitUnit([valueUnitObj,
 
   // SI Kelvin units don't have a degree, so are not included here.
   let tempUnits = new Set(['F', 'C']);
-  let fractionUnits = new Set(['1'])
+  let fractionUnits = new Set(['1', 'fraction'])
 
   if (tempUnits.has(u)) {
     sep = '°';

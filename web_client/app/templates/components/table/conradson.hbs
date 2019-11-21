@@ -8,27 +8,21 @@
              aria-controls="conradson-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Type</th>
           <th scope="col">Fraction</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="conradson-tbody">
         {{#each oil.conradson as |conradson index|}}
-          {{#if (eq conradson.weathering weathered)}}
-            <tr class="collapse show conradson-row-collapse">
-              <th scope="row">{{index}}</th>
-              {{#if conradson.crude}}
-                <td>Crude</td>
-                <td>{{value-unit conradson.crude 3}}</td>
-              {{else}}
-                <td>Residue</td>
-                <td>{{value-unit conradson.residue 3}}</td>
-              {{/if}}
-              <td>{{conradson.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show conradson-row-collapse">
+            {{#if conradson.crude}}
+              <td>Crude</td>
+              <td>{{value-unit conradson.crude 3}}</td>
+            {{else}}
+              <td>Residue</td>
+              <td>{{value-unit conradson.residue 3}}</td>
+            {{/if}}
+          </tr>
         {{/each}}
 
         {{#if oil.conradson}}

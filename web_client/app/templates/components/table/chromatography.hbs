@@ -12,30 +12,24 @@
                  aria-controls="gc-tbody"
                  aria-expanded="false">
             <tr>
-              <th scope="col">#</th>
               <th scope="col">Total Petroleum Hydocarbon</th>
               <th scope="col">Total Saturate Hydrocarbon</th>
               <th scope="col">Total Aromatic Hydrocarbon</th>
               <th scope="col">TSH/TPH</th>
               <th scope="col">TAH/TPH</th>
               <th scope="col">Resolved Peaks / TPH</th>
-              <th scope="col">Weathering</th>
             </tr>
           </thead>
           <tbody id="gc-tbody">
             {{#each oil.chromatography as |gc index|}}
-              {{#if (eq gc.weathering weathered)}}
-                <tr class="collapse show gc-row-collapse">
-                  <th scope="row">{{index}}</th>
-                  <td>{{value-unit gc.tph 3}}</td>
-                  <td>{{value-unit gc.tsh 3}}</td>
-                  <td>{{value-unit gc.tah 3}}</td>
-                  <td>{{value-unit gc.tsh_tph 3}}</td>
-                  <td>{{value-unit gc.tah_tph 3}}</td>
-                  <td>{{value-unit gc.resolved_peaks_tph 3}}</td>
-                  <td>{{gc.weathering}}</td>
-                </tr>
-              {{/if}}
+              <tr class="collapse show gc-row-collapse">
+                <td>{{value-unit gc.tph 3}}</td>
+                <td>{{value-unit gc.tsh 3}}</td>
+                <td>{{value-unit gc.tah 3}}</td>
+                <td>{{value-unit gc.tsh_tph 3}}</td>
+                <td>{{value-unit gc.tah_tph 3}}</td>
+                <td>{{value-unit gc.resolved_peaks_tph 3}}</td>
+              </tr>
             {{/each}}
 
             {{#if oil.chromatography}}

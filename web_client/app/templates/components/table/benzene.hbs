@@ -8,20 +8,14 @@
              aria-controls="benz-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Fraction</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="benz-tbody">
         {{#each oil.benzene as |benzene index|}}
-          {{#if (eq benzene.weathering weathered)}}
-            <tr class="collapse show benz-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit benzene.benzene 3}}</td>
-              <td>{{benzene.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show benz-row-collapse">
+            <td>{{value-unit benzene.benzene 3}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.benzene}}

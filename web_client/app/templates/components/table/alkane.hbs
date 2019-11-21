@@ -11,7 +11,6 @@
                  aria-controls="alkanes-tbody"
                  aria-expanded="false">
             <tr>
-              <th scope="col">#</th>
               <th scope="col">C8</th>
               <th scope="col">C9</th>
               <th scope="col">C10</th>
@@ -51,56 +50,51 @@
               <th scope="col">C44</th>
               <th scope="col">Pristane</th>
               <th scope="col">Phytane</th>
-              <th scope="col">Weathering</th>
             </tr>
           </thead>
           <tbody id="alkanes-tbody">
             {{#each oil.alkanes as |alkanes index|}}
-              {{#if (eq alkanes.weathering weathered)}}
-                <tr class="collapse show alkanes-row-collapse">
-                  <th>{{index}}</th>
-                  <td>{{value-unit alkanes.c8 2}}</td>
-                  <td>{{value-unit alkanes.c9 2}}</td>
-                  <td>{{value-unit alkanes.c10 2}}</td>
-                  <td>{{value-unit alkanes.c11 2}}</td>
-                  <td>{{value-unit alkanes.c12 2}}</td>
-                  <td>{{value-unit alkanes.c13 2}}</td>
-                  <td>{{value-unit alkanes.c14 2}}</td>
-                  <td>{{value-unit alkanes.c15 2}}</td>
-                  <td>{{value-unit alkanes.c16 2}}</td>
-                  <td>{{value-unit alkanes.c17 2}}</td>
-                  <td>{{value-unit alkanes.c18 2}}</td>
-                  <td>{{value-unit alkanes.c19 2}}</td>
-                  <td>{{value-unit alkanes.c20 2}}</td>
-                  <td>{{value-unit alkanes.c21 2}}</td>
-                  <td>{{value-unit alkanes.c22 2}}</td>
-                  <td>{{value-unit alkanes.c23 2}}</td>
-                  <td>{{value-unit alkanes.c24 2}}</td>
-                  <td>{{value-unit alkanes.c25 2}}</td>
-                  <td>{{value-unit alkanes.c26 2}}</td>
-                  <td>{{value-unit alkanes.c27 2}}</td>
-                  <td>{{value-unit alkanes.c28 2}}</td>
-                  <td>{{value-unit alkanes.c29 2}}</td>
-                  <td>{{value-unit alkanes.c30 2}}</td>
-                  <td>{{value-unit alkanes.c31 2}}</td>
-                  <td>{{value-unit alkanes.c32 2}}</td>
-                  <td>{{value-unit alkanes.c33 2}}</td>
-                  <td>{{value-unit alkanes.c34 2}}</td>
-                  <td>{{value-unit alkanes.c35 2}}</td>
-                  <td>{{value-unit alkanes.c36 2}}</td>
-                  <td>{{value-unit alkanes.c37 2}}</td>
-                  <td>{{value-unit alkanes.c38 2}}</td>
-                  <td>{{value-unit alkanes.c39 2}}</td>
-                  <td>{{value-unit alkanes.c40 2}}</td>
-                  <td>{{value-unit alkanes.c41 2}}</td>
-                  <td>{{value-unit alkanes.c42 2}}</td>
-                  <td>{{value-unit alkanes.c43 2}}</td>
-                  <td>{{value-unit alkanes.c44 2}}</td>
-                  <td>{{value-unit alkanes.pristane 2}}</td>
-                  <td>{{value-unit alkanes.phytane 2}}</td>
-                  <td>{{alkanes.weathering}}</td>
-                </tr>
-              {{/if}}
+              <tr class="collapse show alkanes-row-collapse">
+                <td>{{value-unit alkanes.c8 2}}</td>
+                <td>{{value-unit alkanes.c9 2}}</td>
+                <td>{{value-unit alkanes.c10 2}}</td>
+                <td>{{value-unit alkanes.c11 2}}</td>
+                <td>{{value-unit alkanes.c12 2}}</td>
+                <td>{{value-unit alkanes.c13 2}}</td>
+                <td>{{value-unit alkanes.c14 2}}</td>
+                <td>{{value-unit alkanes.c15 2}}</td>
+                <td>{{value-unit alkanes.c16 2}}</td>
+                <td>{{value-unit alkanes.c17 2}}</td>
+                <td>{{value-unit alkanes.c18 2}}</td>
+                <td>{{value-unit alkanes.c19 2}}</td>
+                <td>{{value-unit alkanes.c20 2}}</td>
+                <td>{{value-unit alkanes.c21 2}}</td>
+                <td>{{value-unit alkanes.c22 2}}</td>
+                <td>{{value-unit alkanes.c23 2}}</td>
+                <td>{{value-unit alkanes.c24 2}}</td>
+                <td>{{value-unit alkanes.c25 2}}</td>
+                <td>{{value-unit alkanes.c26 2}}</td>
+                <td>{{value-unit alkanes.c27 2}}</td>
+                <td>{{value-unit alkanes.c28 2}}</td>
+                <td>{{value-unit alkanes.c29 2}}</td>
+                <td>{{value-unit alkanes.c30 2}}</td>
+                <td>{{value-unit alkanes.c31 2}}</td>
+                <td>{{value-unit alkanes.c32 2}}</td>
+                <td>{{value-unit alkanes.c33 2}}</td>
+                <td>{{value-unit alkanes.c34 2}}</td>
+                <td>{{value-unit alkanes.c35 2}}</td>
+                <td>{{value-unit alkanes.c36 2}}</td>
+                <td>{{value-unit alkanes.c37 2}}</td>
+                <td>{{value-unit alkanes.c38 2}}</td>
+                <td>{{value-unit alkanes.c39 2}}</td>
+                <td>{{value-unit alkanes.c40 2}}</td>
+                <td>{{value-unit alkanes.c41 2}}</td>
+                <td>{{value-unit alkanes.c42 2}}</td>
+                <td>{{value-unit alkanes.c43 2}}</td>
+                <td>{{value-unit alkanes.c44 2}}</td>
+                <td>{{value-unit alkanes.pristane 2}}</td>
+                <td>{{value-unit alkanes.phytane 2}}</td>
+              </tr>
             {{/each}}
 
             {{#if oil.alkanes}}
