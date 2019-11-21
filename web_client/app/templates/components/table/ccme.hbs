@@ -8,26 +8,20 @@
              aria-controls="ccme-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">F1</th>
           <th scope="col">F2</th>
           <th scope="col">F3</th>
           <th scope="col">F4</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="ccme-tbody">
         {{#each oil.ccme as |ccme index|}}
-          {{#if (eq ccme.weathering weathered)}}
-            <tr class="collapse show ccme-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit ccme.f1 3}}</td>
-              <td>{{value-unit ccme.f2 3}}</td>
-              <td>{{value-unit ccme.f3 3}}</td>
-              <td>{{value-unit ccme.f4 3}}</td>
-              <td>{{ccme.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show ccme-row-collapse">
+            <td>{{value-unit ccme.f1 3}}</td>
+            <td>{{value-unit ccme.f2 3}}</td>
+            <td>{{value-unit ccme.f3 3}}</td>
+            <td>{{value-unit ccme.f4 3}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.ccme}}
