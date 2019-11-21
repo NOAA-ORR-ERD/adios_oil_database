@@ -3,49 +3,68 @@
     <div class="col-sm-4 col-lg-2">
       {{! First column }}
 
-      <strong>ID:</strong> {{oil.id}}
-      <br>
+      {{! Oil ID }}
+      <span class="mb-3 input-group">
+        <div class="input-group-prepend">
+          <label class="p-1 input-group-text font-weight-bold">ID:</label>
+        </div>
+        <input type="text" class="text-center bg-transparent" size="8" value={{oil.id}} readonly>
+      </span>
 
-      <strong>Type:</strong>
-      {{#if oil.productType}}
-        {{oil.productType}}
-      {{else}}
-        None
-      {{/if}}
-      <br>
+      {{! Type }}
+      <span class="mb-3 input-group">
+        <div class="input-group-prepend">
+          <label class="p-1 input-group-text font-weight-bold">Type:</label>
+        </div>
+        {{#if oil.productType}}
+          <input type="text" class="text-center bg-light" size="6" value={{oil.productType}}>
+        {{else}}
+          <input type="text" class="text-center bg-light" size="6" value="None">
+        {{/if}}          
+      </span>
 
+      {{! Status }}
       {{#unless oil.status}}
-        <strong>
-          Status: <i class="status-good">OK</i>
-        </strong>
+        <span class="mb-3 input-group">
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">Status:</label>
+          </div>
+          <input type="text" class="status-good text-center bg-transparent font-italic" size="4" value="OK" >
+        </span>
       {{/unless}}
+
     </div>
 
     <div class="col-sm-8 col-md-8 col-lg-5 col-xl-4">
       {{! Second column }}
 
-      <strong>API:</strong>
+      {{! API }}
+      <div class="mb-3 input-group">
+        <div class="input-group-prepend">
+          <label class="p-1 input-group-text font-weight-bold">API:</label>
+        </div>
+        {{#if (not (is-empty oil.apis))}}
+          <input type="text" size = "10" class="text-center bg-light" 
+            placeholder="API value" value={{round-relative oil.apis.[0].gravity 2}}>
+        {{else}}
+          <input type="text" size = "12" class="text-center bg-light"
+            placeholder="API value" value="No Values">
+        {{/if}}
+      </div>
 
-      {{#if (not (is-empty oil.apis))}}
-        <span class="badge badge-dark">
-          {{round-relative oil.apis.[0].gravity 2}}
-        </span>
-      {{else}}
-        <span>
-          No Values
-        </span>
-      {{/if}}
-      <br>
-
-      <strong>Categories:</strong>
-
-      {{#each oil.categories as |category|}}
-        <span class="badge badge-dark">
-          {{category}}
-        </span>
-      {{else}}
-        None
-      {{/each}}
+      {{! Categories }}
+      <div class="mb-3 card w-50">
+        <div class="p-0 card-header">
+          <span class="p-1 input-group-text font-weight-bold">Categories:</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          {{#each oil.categories as |category|}}
+            <li class="p-0 pl-1 list-group-item">{{category}}</li>
+          {{else}}
+            <li class="p-0 pl-1 list-group-item">None</li>
+          {{/each}}      
+        </ul>
+      </div>
     </div>
 
     <div class="col">
