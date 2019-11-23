@@ -17,9 +17,9 @@
           <label class="p-1 input-group-text font-weight-bold">Type:</label>
         </div>
         {{#if oil.productType}}
-          <input type="text" class="text-center bg-light" size="6" value={{oil.productType}}>
+          <input type="text" class="pl-1 bg-light" size="6" value={{oil.productType}}>
         {{else}}
-          <input type="text" class="text-center bg-light" size="6" value="None">
+          <input type="text" class="pl-1 bg-light" size="6" value="None">
         {{/if}}          
       </span>
 
@@ -44,8 +44,11 @@
           <label class="p-1 input-group-text font-weight-bold">API:</label>
         </div>
         {{#if (not (is-empty oil.apis))}}
-          <input type="text" size = "10" class="text-center bg-light" 
+          <input {{action "updateAPI" on="change"}} type="text" size = "10" class="pl-1 bg-light" 
             placeholder="API value" value={{round-relative oil.apis.[0].gravity 2}}>
+          {{!-- <Input @id="api" @type="text" @size="10" @class="pl-1 bg-light" 
+            @placeholder="API value" @value={{round-relative oil.apis.[0].gravity 2}}
+            @change={{action "updateAPI"}} /> --}}
         {{else}}
           <input type="text" size = "12" class="text-center bg-light"
             placeholder="API value" value="No Values">
