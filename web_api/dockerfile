@@ -27,4 +27,4 @@ RUN cp /oil-database/web_api/config-example.ini /config/config.ini
 
 EXPOSE 9898
 VOLUME /config
-ENTRYPOINT ["/oil-database/docker_start.sh"] 
+ENTRYPOINT ["/oil-database/web_api/docker_start.sh"] 
