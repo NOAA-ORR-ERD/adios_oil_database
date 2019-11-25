@@ -8,22 +8,16 @@
              aria-controls="cut-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Fraction</th>
           <th scope="col">Vapor Temperature</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="cut-tbody">
         {{#each oil.cuts as |cut index|}}
-          {{#if (eq cut.weathering weathered)}}
-            <tr class="collapse show cut-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit cut.fraction 3}}</td>
-              <td>{{value-unit (convert-unit cut.vapor_temp "C") 2}}</td>
-              <td>{{cut.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show cut-row-collapse">
+            <td>{{value-unit (convert-unit cut.fraction "%") 2}}</td>
+            <td>{{value-unit (convert-unit cut.vapor_temp "C") 2}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.cuts}}

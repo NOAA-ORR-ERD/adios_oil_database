@@ -8,25 +8,19 @@
              aria-controls="chemdisp-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Dispersant</th>
           <th scope="col">Effectiveness</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="chemdisp-tbody">
-        {{#each oil.chemicalDispersibility as |dispersibility index|}}
-          {{#if (eq dispersibility.weathering weathered)}}
-            <tr class="collapse show chemdisp-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{dispersibility.dispersant}}</td>
-              <td>{{value-unit dispersibility.effectiveness 3}}</td>
-              <td>{{dispersibility.weathering}}</td>
-            </tr>
-          {{/if}}
+        {{#each oil.chemical_dispersibility as |dispersibility index|}}
+          <tr class="collapse show chemdisp-row-collapse">
+            <td>{{dispersibility.dispersant}}</td>
+            <td>{{value-unit dispersibility.effectiveness 3}}</td>
+          </tr>
         {{/each}}
 
-        {{#if oil.chemicalDispersibility}}
+        {{#if oil.chemical_dispersibility}}
           <tr class="collapse chemdisp-row-collapse">
             <th scope="row">&#x2026;</th>
           </tr>

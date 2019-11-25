@@ -9,20 +9,14 @@
              aria-controls="water-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Fraction</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="water-tbody">
         {{#each oil.water as |water index|}}
-          {{#if (eq water.weathering weathered)}}
-            <tr class="collapse show water-row-collapse">
-              <th>{{index}}</th>
-              <td>{{value-unit water.fraction 3}}</td>
-              <td>{{water.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show water-row-collapse">
+            <td>{{value-unit water.fraction 3}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.water}}

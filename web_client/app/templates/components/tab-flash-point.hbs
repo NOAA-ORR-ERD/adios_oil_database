@@ -9,23 +9,17 @@
              aria-controls="fp-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Temperature</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="fp-tbody">
-        {{#each oil.flashPoints as |fp index|}}
-          {{#if (eq fp.weathering weathered)}}
-            <tr class="collapse show fp-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit (convert-unit fp.ref_temp "C") 2}}</td>
-              <td>{{fp.weathering}}</td>
-            </tr>
-          {{/if}}
+        {{#each oil.flash_points as |fp index|}}
+          <tr class="collapse show fp-row-collapse">
+            <td>{{value-unit (convert-unit fp.ref_temp "C") 2}}</td>
+          </tr>
         {{/each}}
 
-        {{#if oil.flashPoints}}
+        {{#if oil.flash_points}}
           <tr class="collapse fp-row-collapse">
             <th scope="row">&#x2026;</th>
           </tr>

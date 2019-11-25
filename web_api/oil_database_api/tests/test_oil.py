@@ -107,9 +107,11 @@ class OilTestBase(FunctionalTestBase):
     def flash_point_valid(self, fp):
         for k in ('ref_temp',):
             if k not in fp:
+                print('flash point: missing attr: {}', k)
                 return False
 
         if not self.ref_temp_valid(fp['ref_temp']):
+            print('flash point: ref_temp invalid: ', fp['ref_temp'])
             return False
 
         return True
@@ -209,8 +211,23 @@ class OilTestBase(FunctionalTestBase):
         if obj['unit'] not in units:
             return False
 
-        for k in ['value', 'min_value', 'max_value']:
-            if k in obj and not isinstance(obj[k], (float, int)):
+        # We should have either a single value, or a min/max pair of values
+        if (('value' not in obj) and
+                not all([k in obj for k in ('min_value', 'max_value')])):
+            return False
+
+        # if we have a single value, it needs to be valid
+        if ('value' in obj and
+                not isinstance(obj['value'], (float, int))):
+            return False
+
+        # if we have a ranged value, at least one needs to be valid
+        # ex: [10.0, 20.0] -> valid, represents interval 10.0 to 20.0
+        #     [10.0, None] -> valid, represents >10.0
+        #     [None, 10.0] -> valid, represents <10.0
+        if all([k in obj for k in ('min_value', 'max_value')]):
+            if not any([isinstance(obj[k], (float, int))
+                        for k in ('min_value', 'max_value')]):
                 return False
 
         return True

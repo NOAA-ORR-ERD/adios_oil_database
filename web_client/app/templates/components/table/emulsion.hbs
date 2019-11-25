@@ -8,7 +8,6 @@
              aria-controls="emulsion-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Visual Stability</th>
           <th scope="col">Water Content</th>
           <th scope="col">Complex Viscosity</th>
@@ -18,26 +17,21 @@
           <th scope="col">Tan Delta (V/E)</th>
           <th scope="col">Age</th>
           <th scope="col">Temperature</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="emulsion-tbody">
         {{#each oil.emulsions as |emulsion index|}}
-          {{#if (eq emulsion.weathering weathered)}}
-            <tr class="collapse show emulsion-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{emulsion.visual_stability}}</td>
-              <td>{{value-unit emulsion.water_content 3}}</td>
-              <td>{{value-unit emulsion.complex_viscosity 3}}</td>
-              <td>{{value-unit emulsion.complex_modulus 3}}</td>
-              <td>{{value-unit emulsion.storage_modulus 3}}</td>
-              <td>{{value-unit emulsion.loss_modulus 3}}</td>
-              <td>{{round-relative emulsion.tan_delta_v_e 3}}</td>
-              <td>{{value-unit (convert-unit emulsion.age "days") 1}}</td>
-              <td>{{value-unit (convert-unit emulsion.ref_temp "C") 3}}</td>
-              <td>{{emulsion.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show emulsion-row-collapse">
+            <td>{{emulsion.visual_stability}}</td>
+            <td>{{value-unit emulsion.water_content 3}}</td>
+            <td>{{value-unit emulsion.complex_viscosity 3}}</td>
+            <td>{{value-unit emulsion.complex_modulus 3}}</td>
+            <td>{{value-unit emulsion.storage_modulus 3}}</td>
+            <td>{{value-unit emulsion.loss_modulus 3}}</td>
+            <td>{{round-relative emulsion.tan_delta_v_e 3}}</td>
+            <td>{{value-unit (convert-unit emulsion.age "days") 1}}</td>
+            <td>{{value-unit (convert-unit emulsion.ref_temp "C") 3}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.emulsions}}

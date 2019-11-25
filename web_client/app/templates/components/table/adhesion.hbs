@@ -8,20 +8,14 @@
              aria-controls="adhesion-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Adhesion</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="adhesion-tbody">
         {{#each oil.adhesions as |adhesion index|}}
-          {{#if (eq adhesion.weathering weathered)}}
-            <tr class="collapse show adhesion-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit adhesion.adhesion 3}}</td>
-              <td>{{adhesion.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show adhesion-row-collapse">
+            <td>{{value-unit adhesion.adhesion 3}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.adhesions}}

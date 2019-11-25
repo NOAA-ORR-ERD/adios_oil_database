@@ -1,6 +1,4 @@
 export default function() {
-  this.namespace = '/api';
-
   let oils = [{
     "name": "ALASKA NORTH SLOPE (NORTHERN PIPELINE, 1999)",
     "_id": "AD01988",
@@ -106,6 +104,10 @@ export default function() {
     "viscosity": 0.0000061361
   }];
 
+  this.passthrough('/configs/main.json');
+
+  this.namespace = '/api';
+
   this.get('/oils', function(db, request) {
     if(request.queryParams.name !== undefined) {
       let filteredOils = oils.filter(function(i) {
@@ -122,6 +124,8 @@ export default function() {
   this.get('/oils/:id', function (db, request) {
     return oils.find((oil) => request.params.id === oil._id);
   });
+
+  //this.passthrough('http://localhost:9898/**');
 
   this.passthrough('http://localhost:9898/**');
 }

@@ -8,20 +8,14 @@
              aria-controls="sulfur-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Fraction</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="sulfur-tbody">
         {{#each oil.sulfur as |sulfur index|}}
-          {{#if (eq sulfur.weathering weathered)}}
             <tr class="collapse show sulfur-row-collapse">
-              <th scope="row">{{index}}</th>
               <td>{{value-unit sulfur.fraction 3}}</td>
-              <td>{{sulfur.weathering}}</td>
             </tr>
-          {{/if}}
         {{/each}}
 
         {{#if oil.sulfur}}

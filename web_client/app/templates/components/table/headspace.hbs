@@ -9,7 +9,6 @@
              aria-controls="headspace-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">n-C5</th>
           <th scope="col">n-C6</th>
           <th scope="col">n-C7</th>
@@ -17,24 +16,19 @@
           <th scope="col">C5 Group</th>
           <th scope="col">C6 Group</th>
           <th scope="col">C7 Group</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="headspace-tbody">
         {{#each oil.headspace as |headspace index|}}
-          {{#if (eq headspace.weathering weathered)}}
-            <tr class="collapse show headspace-row-collapse">
-              <th>{{index}}</th>
-              <td>{{value-unit headspace.n_c5 2}}</td>
-              <td>{{value-unit headspace.n_c6 2}}</td>
-              <td>{{value-unit headspace.n_c7 2}}</td>
-              <td>{{value-unit headspace.n_c8 2}}</td>
-              <td>{{value-unit headspace.c5_group 2}}</td>
-              <td>{{value-unit headspace.c6_group 2}}</td>
-              <td>{{value-unit headspace.c7_group 2}}</td>
-              <td>{{headspace.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show headspace-row-collapse">
+            <td>{{value-unit headspace.n_c5 2}}</td>
+            <td>{{value-unit headspace.n_c6 2}}</td>
+            <td>{{value-unit headspace.n_c7 2}}</td>
+            <td>{{value-unit headspace.n_c8 2}}</td>
+            <td>{{value-unit headspace.c5_group 2}}</td>
+            <td>{{value-unit headspace.c6_group 2}}</td>
+            <td>{{value-unit headspace.c7_group 2}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.headspace}}

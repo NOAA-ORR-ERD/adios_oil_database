@@ -11,7 +11,6 @@
                  aria-controls="ccmef2-tbody"
                  aria-expanded="false">
             <tr>
-              <th scope="col">#</th>
               <th scope="col">n-C8 to n-c10</th>
               <th scope="col">n-C10 to n-c12</th>
               <th scope="col">n-C12 to n-c16</th>
@@ -20,28 +19,23 @@
               <th scope="col">n-C24 to n-c28</th>
               <th scope="col">n-C28 to n-c34</th>
               <th scope="col">n-C34+</th>
-              <th scope="col">Weathering</th>
             </tr>
           </thead>
           <tbody id="ccmef2-tbody">
-            {{#each oil.ccmeF2 as |f2 index|}}
-              {{#if (eq f2.weathering weathered)}}
-                <tr class="collapse show ccmef2-row-collapse">
-                  <th>{{index}}</th>
-                  <td>{{f2.n_c8_to_n_c10}}</td>
-                  <td>{{f2.n_c10_to_n_c12}}</td>
-                  <td>{{f2.n_c12_to_n_c16}}</td>
-                  <td>{{f2.n_c16_to_n_c20}}</td>
-                  <td>{{f2.n_c20_to_n_c24}}</td>
-                  <td>{{f2.n_c24_to_n_c28}}</td>
-                  <td>{{f2.n_c28_to_n_c34}}</td>
-                  <td>{{f2.n_c34}}</td>
-                  <td>{{f2.weathering}}</td>
-                </tr>
-              {{/if}}
+            {{#each oil.ccme_f2 as |f2 index|}}
+              <tr class="collapse show ccmef2-row-collapse">
+                <td>{{f2.n_c8_to_n_c10}}</td>
+                <td>{{f2.n_c10_to_n_c12}}</td>
+                <td>{{f2.n_c12_to_n_c16}}</td>
+                <td>{{f2.n_c16_to_n_c20}}</td>
+                <td>{{f2.n_c20_to_n_c24}}</td>
+                <td>{{f2.n_c24_to_n_c28}}</td>
+                <td>{{f2.n_c28_to_n_c34}}</td>
+                <td>{{f2.n_c34}}</td>
+              </tr>
             {{/each}}
 
-            {{#if oil.ccmeF2}}
+            {{#if oil.ccme_f2}}
               <tr class="collapse ccmef2-row-collapse">
                 <th>&#x2026;</th>
               </tr>

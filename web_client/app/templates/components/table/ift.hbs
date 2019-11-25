@@ -8,24 +8,18 @@
              aria-controls="ift-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Interface</th>
           <th scope="col">Tension</th>
           <th scope="col">Temperature</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="ift-tbody">
         {{#each oil.ifts as |ift index|}}
-          {{#if (eq ift.weathering weathered)}}
-            <tr class="collapse show ift-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{ift.interface}}</td>
-              <td>{{value-unit ift.tension 3}}</td>
-              <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
-              <td>{{ift.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show ift-row-collapse">
+            <td>{{ift.interface}}</td>
+            <td>{{value-unit ift.tension 3}}</td>
+            <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.ifts}}

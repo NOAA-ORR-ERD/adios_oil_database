@@ -8,29 +8,23 @@
              aria-controls="evaporationeqs-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">A</th>
           <th scope="col">B</th>
           <th scope="col">C</th>
           <th scope="col">Equation</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="evaporationeqs-tbody">
-        {{#each oil.evaporationEqs as |evap index|}}
-          {{#if (eq evap.weathering weathered)}}
-            <tr class="collapse show evaporationeqs-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{evap.a}}</td>
-              <td>{{evap.b}}</td>
-              <td>{{evap.c}}</td>
-              <td>{{evap.equation}}</td>
-              <td>{{evap.weathering}}</td>
-            </tr>
-          {{/if}}
+        {{#each oil.evaporation_eqs as |evap index|}}
+          <tr class="collapse show evaporationeqs-row-collapse">
+            <td>{{evap.a}}</td>
+            <td>{{evap.b}}</td>
+            <td>{{evap.c}}</td>
+            <td>{{evap.equation}}</td>
+          </tr>
         {{/each}}
 
-        {{#if oil.evaporationEqs}}
+        {{#if oil.evaporation_eqs}}
           <tr class="collapse evaporationeqs-row-collapse">
             <th scope="row">&#x2026;</th>
           </tr>

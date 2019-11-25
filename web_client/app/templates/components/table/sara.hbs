@@ -8,25 +8,19 @@
              aria-controls="sara-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">SARA Type</th>
           <th scope="col">Fraction</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="sara-tbody">
-        {{#each oil.saraTotalFractions as |sara index|}}
-          {{#if (eq sara.weathering weathered)}}
-            <tr class="collapse show sara-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{sara.sara_type}}</td>
-              <td>{{value-unit sara.fraction 3}}</td>
-              <td>{{sara.weathering}}</td>
-            </tr>
-          {{/if}}
+        {{#each oil.sara_total_fractions as |sara index|}}
+          <tr class="collapse show sara-row-collapse">
+            <td>{{sara.sara_type}}</td>
+            <td>{{value-unit sara.fraction 3}}</td>
+          </tr>
         {{/each}}
 
-        {{#if oil.saraTotalFractions}}
+        {{#if oil.sara_total_fractions}}
           <tr class="collapse sara-row-collapse">
             <th scope="row">&#x2026;</th>
           </tr>

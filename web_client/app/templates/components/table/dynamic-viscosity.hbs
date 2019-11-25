@@ -8,22 +8,16 @@
              aria-controls="dvis-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Viscosity</th>
           <th scope="col">Temperature</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="dvis-tbody">
         {{#each oil.dvis as |dvis index|}}
-          {{#if (eq dvis.weathering weathered)}}
-            <tr class="collapse show dvis-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit (convert-unit dvis.viscosity "cP") 3}}</td>
-              <td>{{value-unit (convert-unit dvis.ref_temp "C") 2}}</td>
-              <td>{{dvis.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show dvis-row-collapse">
+            <td>{{value-unit (convert-unit dvis.viscosity "cP") 3}}</td>
+            <td>{{value-unit (convert-unit dvis.ref_temp "C") 2}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.dvis}}

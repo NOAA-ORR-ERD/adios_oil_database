@@ -1887,14 +1887,14 @@ class EnvCanadaRecordParser(object):
         except Exception:
             temp_c = None
 
+        fp_kwargs['ref_temp'] = {'unit': 'C'}
         if temp_c is not None:
-            fp_kwargs['ref_temp'] = {'unit': 'C'}
-
-            if min_temp_c == max_temp_c:
-                fp_kwargs['ref_temp']['value'] = temp_c
-            else:
-                fp_kwargs['ref_temp']['min_value'] = min_temp_c
-                fp_kwargs['ref_temp']['max_value'] = max_temp_c
+            fp_kwargs['ref_temp']['value'] = temp_c
+        elif min_temp_c == max_temp_c:
+            fp_kwargs['ref_temp']['value'] = max_temp_c
+        else:
+            fp_kwargs['ref_temp']['min_value'] = min_temp_c
+            fp_kwargs['ref_temp']['max_value'] = max_temp_c
 
         return fp_kwargs
 
@@ -1920,14 +1920,14 @@ class EnvCanadaRecordParser(object):
         except Exception:
             temp_c = None
 
+        pp_kwargs['ref_temp'] = {'unit': 'C'}
         if temp_c is not None:
-            pp_kwargs['ref_temp'] = {'unit': 'C'}
-
-            if min_temp_c == max_temp_c:
-                pp_kwargs['ref_temp']['value'] = temp_c
-            else:
-                pp_kwargs['ref_temp']['min_value'] = min_temp_c
-                pp_kwargs['ref_temp']['max_value'] = max_temp_c
+            pp_kwargs['ref_temp']['value'] = temp_c
+        elif min_temp_c == max_temp_c:
+            pp_kwargs['ref_temp']['value'] = min_temp_c
+        else:
+            pp_kwargs['ref_temp']['min_value'] = min_temp_c
+            pp_kwargs['ref_temp']['max_value'] = max_temp_c
 
         return pp_kwargs
 
@@ -2007,13 +2007,13 @@ class EnvCanadaRecordParser(object):
         if isinstance(value_in, (int, float)):
             value = value_in
         elif isinstance(value_in, str):
-            op = value_in.encode('utf8')[0]
+            op = value_in[0]
 
             if op in ('<', '>'):
-                    value = value_in[1:]
+                value = value_in[1:].strip()
             else:
                 op = None
-                value = value_in
+                value = value_in.strip()
 
             try:
                 value = float(value)

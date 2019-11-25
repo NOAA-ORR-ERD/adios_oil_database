@@ -8,26 +8,20 @@
              aria-controls="btex-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Toluene</th>
           <th scope="col">Ethylbenzene</th>
           <th scope="col">m&p-Xylene</th>
           <th scope="col">o-Xylene</th>
-          <th scope="col">Weathering</th>
         </tr>
       </thead>
       <tbody id="btex-tbody">
         {{#each oil.benzene as |benzene index|}}
-          {{#if (eq benzene.weathering weathered)}}
-            <tr class="collapse show btex-row-collapse">
-              <th scope="row">{{index}}</th>
-              <td>{{value-unit benzene.toluene 2}}</td>
-              <td>{{value-unit benzene.ethylbenzene 2}}</td>
-              <td>{{value-unit benzene.m_p_xylene 2}}</td>
-              <td>{{value-unit benzene.o_xylene 2}}</td>
-              <td>{{benzene.weathering}}</td>
-            </tr>
-          {{/if}}
+          <tr class="collapse show btex-row-collapse">
+            <td>{{value-unit benzene.toluene 2}}</td>
+            <td>{{value-unit benzene.ethylbenzene 2}}</td>
+            <td>{{value-unit benzene.m_p_xylene 2}}</td>
+            <td>{{value-unit benzene.o_xylene 2}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.benzene}}
