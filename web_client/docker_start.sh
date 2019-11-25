@@ -3,6 +3,6 @@
 cd /web_client
 cp /config/main.json public/configs
 
-rpm -ql npm
+ls -l /usr/bin
 
 ember serve
