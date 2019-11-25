@@ -10,6 +10,7 @@ COPY ./web_client/ /web_client/
 RUN mkdir /config
 
 RUN cd /web_client && npm install && npm install -g ember-cli
+RUN cd /web_client && ember version --verbose && npm --version
 
 VOLUME /config
 EXPOSE 4200
