@@ -5,4 +5,4 @@ cp /config/main.json public/configs
 
 ls -l /usr/bin
 
-ember serve
+/usr/bin/ember serve
