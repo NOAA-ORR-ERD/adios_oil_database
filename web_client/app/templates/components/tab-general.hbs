@@ -1,27 +1,41 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-4 col-lg-2">
+    <div class="col-sm-4 col-lg-3 d-flex flex-column">
       {{! First column }}
 
       {{! Oil ID }}
-      <span class="mb-3 input-group">
+      <div class="mb-3 input-group">
         <div class="input-group-prepend">
           <label class="p-1 input-group-text font-weight-bold">ID:</label>
         </div>
-        <input type="text" class="text-center bg-transparent" size="8" value={{oil.id}} readonly>
-      </span>
+        <input type="text" class="p-1 bg-transparent border" value={{oil.id}} readonly>
+      </div>
 
       {{! Type }}
-      <span class="mb-3 input-group">
+      <div class="form-inline mb-3">
+        <div class="input-group-prepend">
+          <label class="p-1 input-group-text font-weight-bold">Type:</label>
+        </div>  
+        <select class="p-1 bg-transparent border">
+          <option selected>Crude</option>
+          <option>Refined</option>
+          <option>Bitumen Product</option>
+          <option>Other</option>
+          <option>Empty (unclassified)</option>
+        </select>
+      </div>
+
+
+      {{!-- <span class="mb-3 input-group">
         <div class="input-group-prepend">
           <label class="p-1 input-group-text font-weight-bold">Type:</label>
         </div>
         {{#if oil.productType}}
-          <input type="text" class="pl-1 bg-light" size="6" value={{oil.productType}}>
+          <input type="text" class="pl-1 bg-transparent border" size="6" value={{oil.productType}}>
         {{else}}
-          <input type="text" class="pl-1 bg-light" size="6" value="None">
+          <input type="text" class="pl-1 bg-transparent border" size="6" value="None">
         {{/if}}          
-      </span>
+      </span> --}}
 
       {{! Status }}
       {{#unless oil.status}}
@@ -29,13 +43,13 @@
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Status:</label>
           </div>
-          <input type="text" class="status-good text-center bg-transparent font-italic" size="4" value="OK" >
+          <input type="text" class="status-good p-1 bg-transparent  border-0 font-italic" value="OK" >
         </span>
       {{/unless}}
 
     </div>
 
-    <div class="col-sm-8 col-md-8 col-lg-5 col-xl-4">
+    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
       {{! Second column }}
 
       {{! API }}
@@ -44,13 +58,13 @@
           <label class="p-1 input-group-text font-weight-bold">API:</label>
         </div>
         {{#if (not (is-empty oil.apis))}}
-          <input {{action "updateAPI" on="change"}} type="text" size = "10" class="pl-1 bg-light" 
+          <input {{action "updateAPI" on="change"}} type="text" size = "10" class="pl-1 bg-transparent border" 
             placeholder="API value" value={{round-relative oil.apis.[0].gravity 2}}>
-          {{!-- <Input @id="api" @type="text" @size="10" @class="pl-1 bg-light" 
+          {{!-- <Input @id="api" @type="text" @size="10" @class="pl-1 bg-transparent border" 
             @placeholder="API value" @value={{round-relative oil.apis.[0].gravity 2}}
             @change={{action "updateAPI"}} /> --}}
         {{else}}
-          <input type="text" size = "12" class="text-center bg-light"
+          <input type="text" size = "12" class="pl-1 bg-transparent border"
             placeholder="API value" value="No Values">
         {{/if}}
       </div>
