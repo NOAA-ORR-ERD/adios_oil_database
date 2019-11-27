@@ -39,8 +39,8 @@ build_api:
     stage: build
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/erd/oil_database
-        - docker push registry.orr.noaa.gov/erd/oil_database
+        - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/erd/oil_database/api
+        - docker push registry.orr.noaa.gov/erd/oil_database/api
     tags:
         - shell
         - build
