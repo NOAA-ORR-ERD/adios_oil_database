@@ -9,9 +9,11 @@ COPY ./web_client/ /web_client/
 
 RUN mkdir /config
 
-RUN cd /web_client && npm install
+RUN cd /web_client && ls -l
 RUN cd /web_client && node --version
 RUN cd /web_client && npm --version
+
+RUN cd /web_client && npm install
 
 # RUN cd /web_client && npm install -g ember-cli
 
