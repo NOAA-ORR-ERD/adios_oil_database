@@ -1,4 +1,6 @@
 #!/bin/bash
 
 cd /web_client
-ember serve
+cp /config/main.json public/configs
+
+/usr/bin/ember serve

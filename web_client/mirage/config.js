@@ -127,5 +127,6 @@ export default function() {
 
   //this.passthrough('http://localhost:9898/**');
 
-  this.passthrough('http://localhost:9898/**');
+  this.passthrough('http://localhost:9898/**',
+                   'https://adios-stage.orr.noaa.gov/api/**');
 }
