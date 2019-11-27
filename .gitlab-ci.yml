@@ -1,6 +1,7 @@
 stages:
     - test
-    - build
+    - build1
+    - build2
 
 test_develop:
     stage: test
@@ -36,7 +37,7 @@ test_develop:
         - docker
 
 build_api:
-    stage: build
+    stage: build1
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/erd/oil_database/api
@@ -46,7 +47,7 @@ build_api:
         - build
 
 build_client:
-    stage: build
+    stage: build2
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build -f web_client/dockerfile . -t registry.orr.noaa.gov/erd/oil_database/client
