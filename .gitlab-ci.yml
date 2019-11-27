@@ -4,7 +4,8 @@ stages:
 
 test_develop:
     stage: test
-    image: gitlab.orr.noaa.gov:5002/centos-conda
+    image: registry.orr.noaa.gov/erd/centos-conda
+
     script:
         # Install & test the oil_library package
         - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
@@ -37,18 +38,17 @@ test_develop:
 build_api:
     stage: build
     script:
-        - docker build -f web_api/dockerfile . -t gitlab.orr.noaa.gov:5002/oildb-api
-        - docker push gitlab.orr.noaa.gov:5002/oildb-api
+        - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/erd/oil_database
+        - docker push registry.orr.noaa.gov/erd/oil_database
     tags:
         - shell
         - build
 
-build_client:
-    stage: build
-    script:
-        - docker build -f web_client/dockerfile . -t gitlab.orr.noaa.gov:5002/oildb-client
-        - docker push gitlab.orr.noaa.gov:5002/oildb-client
-    tags:
-        - shell
-        - build
-        
+#build_client:
+#    stage: build
+#    script:
+#        - docker build -f web_client/dockerfile . -t gitlab.orr.noaa.gov:5002/oildb-client
+#        - docker push gitlab.orr.noaa.gov:5002/oildb-client
+#    tags:
+#        - shell
+#        - build
