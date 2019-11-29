@@ -17,25 +17,15 @@
           <label class="p-1 input-group-text font-weight-bold">Type:</label>
         </div>  
         <select class="p-1 bg-transparent border">
-          <option selected>Crude</option>
-          <option>Refined</option>
-          <option>Bitumen Product</option>
-          <option>Other</option>
-          <option>Empty (unclassified)</option>
+          {{#each this.oilTypes as |oilType|}}
+            {{#if (eq oil.productType oilType)}}
+              <option selected>{{oilType}}</option>
+            {{else}}
+              <option>{{oilType}}</option>
+            {{/if}}  
+          {{/each}}
         </select>
       </div>
-
-
-      {{!-- <span class="mb-3 input-group">
-        <div class="input-group-prepend">
-          <label class="p-1 input-group-text font-weight-bold">Type:</label>
-        </div>
-        {{#if oil.productType}}
-          <input type="text" class="pl-1 bg-transparent border" size="6" value={{oil.productType}}>
-        {{else}}
-          <input type="text" class="pl-1 bg-transparent border" size="6" value="None">
-        {{/if}}          
-      </span> --}}
 
       {{! Status }}
       {{#unless oil.status}}
@@ -76,9 +66,9 @@
         </div>
         <ul class="list-group list-group-flush">
           {{#each oil.categories as |category|}}
-            <li class="p-0 pl-1 list-group-item">{{category}}</li>
+            <li class="p-0 pl-1 list-group-item bg-transparent">{{category}}</li>
           {{else}}
-            <li class="p-0 pl-1 list-group-item">None</li>
+            <li class="p-0 pl-1 list-group-item bg-transparent">None</li>
           {{/each}}      
         </ul>
       </div>
