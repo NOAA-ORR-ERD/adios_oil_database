@@ -1,12 +1,12 @@
 # Oil Database Web API Docker configuration
 #
 
-FROM gitlab.orr.noaa.gov:5002/centos-conda
-
-COPY ./ /oil-database/
+FROM registry.orr.noaa.gov/erd/centos-conda
 
 RUN yum update -y
 RUN yum install -y redis
+
+COPY ./ /oil-database/
 
 RUN cp /oil-database/platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
 RUN yum install mongodb-org -y
@@ -27,4 +27,4 @@ RUN cp /oil-database/web_api/config-example.ini /config/config.ini
 
 EXPOSE 9898
 VOLUME /config
-ENTRYPOINT ["/oil-database/docker_start.sh"] 
+ENTRYPOINT ["/oil-database/web_api/docker_start.sh"] 
