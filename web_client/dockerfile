@@ -13,12 +13,11 @@ RUN cd /web_client && npm install -g n
 RUN cd /web_client && n stable
 RUN cd /web_client && node --version
 
-RUN cd /web_client && npm --version
 RUN cd /web_client && npm install npm@latest -g
 RUN cd /web_client && npm install
 RUN cd /web_client && npm --version
 
-# RUN cd /web_client && npm install -g ember-cli
+RUN cd /web_client && npm install -g ember-cli
 
 VOLUME /config
 EXPOSE 4200
