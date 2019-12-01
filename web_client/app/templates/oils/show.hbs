@@ -17,7 +17,15 @@
   </div>
 
   <div class="content">
-    <TabGeneral @oil={{this.model}} />
+    <TabGeneral 
+      @oil={{this.model}} 
+      @oilTypes={{array
+          "Crude"
+          "Refined"
+          "Bitumen Product"
+          "Other"
+          "Empty (unclassified)"}}
+    />
   </div>
 
   <nav>
