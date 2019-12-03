@@ -105,3 +105,24 @@ class ObjFromDict(object):
             return self.__dict__ == other.__dict__
         else:
             return False
+
+    def __lt__(self, other):
+        if isinstance(other, self.__class__):
+            return sorted(self.__dict__.items()) < sorted(other.__dict__.items())
+        else:
+            return False
+
+    def __gt__(self, other):
+        if isinstance(other, self.__class__):
+            return sorted(self.__dict__.items()) > sorted(other.__dict__.items())
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __ge__(self, other):
+        return not self < other
+
+    def __le__(self, other):
+        return not self > other
