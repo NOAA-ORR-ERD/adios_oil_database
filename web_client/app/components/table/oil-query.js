@@ -40,7 +40,7 @@ export default Component.extend(TableCommon, {
       searchable: true,
     }, {
       label: 'API',
-      valuePath: 'apis',
+      valuePath: 'api',
       cellComponent: 'table/cell/api',
       width: '164px'
     }, {
