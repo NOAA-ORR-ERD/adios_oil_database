@@ -108,7 +108,7 @@ export default function() {
                    'https://adios-stage.orr.noaa.gov/api/**',
                    'http://localhost:9898/**');
 
-  this.namespace = '/api';
+  this.namespace = '/api/v1';
 
   this.get('/oils', function(db, request) {
     if(request.queryParams.name !== undefined) {
