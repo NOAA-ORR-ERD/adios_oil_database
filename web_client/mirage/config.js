@@ -104,7 +104,9 @@ export default function() {
     "viscosity": 0.0000061361
   }];
 
-  this.passthrough('/configs/main.json');
+  this.passthrough('/configs/main.json',
+                   'https://adios-stage.orr.noaa.gov/api/**',
+                   'http://localhost:9898/**');
 
   this.namespace = '/api';
 
@@ -124,9 +126,4 @@ export default function() {
   this.get('/oils/:id', function (db, request) {
     return oils.find((oil) => request.params.id === oil._id);
   });
-
-  //this.passthrough('http://localhost:9898/**');
-
-  this.passthrough('http://localhost:9898/**',
-                   'https://adios-stage.orr.noaa.gov/api/**');
 }
