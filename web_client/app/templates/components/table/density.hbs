@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody id="density-tbody">
-        {{#each oil.densities as |density index|}}
+        {{#each oil.densities as |density|}}
           <tr class="collapse show density-row-collapse">
             <td>{{value-unit (convert-unit density.density "g/cm^3") 3}}</td>
             <td>{{value-unit (convert-unit density.ref_temp "C") 2}}</td>

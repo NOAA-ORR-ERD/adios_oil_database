@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody id="chemdisp-tbody">
-        {{#each oil.chemical_dispersibility as |dispersibility index|}}
+        {{#each oil.chemical_dispersibility as |dispersibility|}}
           <tr class="collapse show chemdisp-row-collapse">
             <td>{{dispersibility.dispersant}}</td>
             <td>{{value-unit dispersibility.effectiveness 3}}</td>

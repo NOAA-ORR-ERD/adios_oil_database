@@ -21,7 +21,7 @@
             </tr>
           </thead>
           <tbody id="gc-tbody">
-            {{#each oil.chromatography as |gc index|}}
+            {{#each oil.chromatography as |gc|}}
               <tr class="collapse show gc-row-collapse">
                 <td>{{value-unit gc.tph 3}}</td>
                 <td>{{value-unit gc.tsh 3}}</td>

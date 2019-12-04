@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody id="fp-tbody">
-        {{#each oil.flash_points as |fp index|}}
+        {{#each oil.flash_points as |fp|}}
           <tr class="collapse show fp-row-collapse">
             <td>{{value-unit (convert-unit fp.ref_temp "C") 2}}</td>
           </tr>

@@ -35,7 +35,7 @@
             </tr>
           </thead>
           <tbody id="biomarkers-tbody">
-            {{#each oil.biomarkers as |biomarker index|}}
+            {{#each oil.biomarkers as |biomarker|}}
               <tr class="collapse show biomarkers-row-collapse">
                 <td>{{value-unit biomarker.c21_tricyclic_terpane 2}}</td>
                 <td>{{value-unit biomarker.c22_tricyclic_terpane 2}}</td>

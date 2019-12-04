@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody id="sara-tbody">
-        {{#each oil.sara_total_fractions as |sara index|}}
+        {{#each oil.sara_total_fractions as |sara|}}
           <tr class="collapse show sara-row-collapse">
             <td>{{sara.sara_type}}</td>
             <td>{{value-unit sara.fraction 3}}</td>

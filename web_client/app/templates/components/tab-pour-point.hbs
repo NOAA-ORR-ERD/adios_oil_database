@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody id="pp-tbody">
-        {{#each oil.pour_points as |pp index|}}
+        {{#each oil.pour_points as |pp|}}
           <tr class="collapse show pp-row-collapse">
             <td>{{value-unit (convert-unit pp.ref_temp "C") 2}}</td>
           </tr>

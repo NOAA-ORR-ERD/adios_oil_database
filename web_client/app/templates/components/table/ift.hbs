@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody id="ift-tbody">
-        {{#each oil.ifts as |ift index|}}
+        {{#each oil.ifts as |ift|}}
           <tr class="collapse show ift-row-collapse">
             <td>{{ift.interface}}</td>
             <td>{{value-unit ift.tension 3}}</td>

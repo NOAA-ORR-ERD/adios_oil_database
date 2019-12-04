@@ -20,7 +20,7 @@
             </tr>
           </thead>
           <tbody id="naphthalenes-tbody">
-            {{#each oil.alkylated_pahs as |pah index|}}
+            {{#each oil.alkylated_pahs as |pah|}}
               <tr class="collapse show naphthalenes-row-collapse">
                 <td>{{value-unit pah.c0_n 2}}</td>
                 <td>{{value-unit pah.c1_n 2}}</td>
@@ -59,7 +59,7 @@
             </tr>
           </thead>
           <tbody id="phenanthrenes-tbody">
-            {{#each oil.alkylated_pahs as |pah index|}}
+            {{#each oil.alkylated_pahs as |pah|}}
               <tr class="collapse show phenanthrenes-row-collapse">
                 <td>{{value-unit pah.c0_p 2}}</td>
                 <td>{{value-unit pah.c1_p 2}}</td>
@@ -98,7 +98,7 @@
             </tr>
           </thead>
           <tbody id="bntp-tbody">
-            {{#each oil.alkylated_pahs as |pah index|}}
+            {{#each oil.alkylated_pahs as |pah|}}
               <tr class="collapse show bntp-row-collapse">
                 <td>{{value-unit pah.c0_b 2}}</td>
                 <td>{{value-unit pah.c1_b 2}}</td>
@@ -136,7 +136,7 @@
             </tr>
           </thead>
           <tbody id="dibenzothiophenes-tbody">
-            {{#each oil.alkylated_pahs as |pah index|}}
+            {{#each oil.alkylated_pahs as |pah|}}
               <tr class="collapse show dibenzothiophenes-row-collapse">
                 <td>{{value-unit pah.c0_d 2}}</td>
                 <td>{{value-unit pah.c1_d 2}}</td>
@@ -173,7 +173,7 @@
             </tr>
           </thead>
           <tbody id="fluorenes-tbody">
-            {{#each oil.alkylated_pahs as |pah index|}}
+            {{#each oil.alkylated_pahs as |pah|}}
               <tr class="collapse show fluorenes-row-collapse">
                 <td>{{value-unit pah.c0_f 2}}</td>
                 <td>{{value-unit pah.c1_f 2}}</td>
@@ -210,7 +210,7 @@
             </tr>
           </thead>
           <tbody id="chrysenes-tbody">
-            {{#each oil.alkylated_pahs as |pah index|}}
+            {{#each oil.alkylated_pahs as |pah|}}
               <tr class="collapse show chrysenes-row-collapse">
                 <td>{{value-unit pah.c0_c 2}}</td>
                 <td>{{value-unit pah.c1_c 2}}</td>
@@ -258,7 +258,7 @@
             </tr>
           </thead>
           <tbody id="otherpah-tbody">
-            {{#each oil.alkylated_pahs as |pah index|}}
+            {{#each oil.alkylated_pahs as |pah|}}
               <tr class="collapse show otherpah-row-collapse">
                 <td>{{value-unit pah.biphenyl 2}}</td>
                 <td>{{value-unit pah.acenaphthylene 2}}</td>

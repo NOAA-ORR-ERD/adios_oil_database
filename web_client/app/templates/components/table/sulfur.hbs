@@ -12,10 +12,10 @@
         </tr>
       </thead>
       <tbody id="sulfur-tbody">
-        {{#each oil.sulfur as |sulfur index|}}
-            <tr class="collapse show sulfur-row-collapse">
-              <td>{{value-unit sulfur.fraction 3}}</td>
-            </tr>
+        {{#each oil.sulfur as |sulfur|}}
+          <tr class="collapse show sulfur-row-collapse">
+            <td>{{value-unit sulfur.fraction 3}}</td>
+          </tr>
         {{/each}}
 
         {{#if oil.sulfur}}
