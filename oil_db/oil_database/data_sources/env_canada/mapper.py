@@ -38,6 +38,8 @@ class EnvCanadaAttributeMapper(object):
                              'product_type',
                              'categories',
                              'status')
+    sample_scalar_attrs = ('pour_point',
+                           'flash_point')
 
     def __init__(self, record):
         '''
@@ -79,11 +81,14 @@ class EnvCanadaAttributeMapper(object):
                     w = 'w={}'.format(i.get('weathering', 0.0))
                     i.pop('weathering', None)
 
-                    try:
-                        samples[w][k].append(i)
-                    except KeyError:
-                        samples[w][k] = []
-                        samples[w][k].append(i)
+                    if k in self.sample_scalar_attrs:
+                        samples[w][k] = i
+                    else:
+                        try:
+                            samples[w][k].append(i)
+                        except KeyError:
+                            samples[w][k] = []
+                            samples[w][k].append(i)
             else:
                 # assume a weathering of 0
                 samples['w=0.0'][k] = v
@@ -249,7 +254,7 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def flash_points(self):
+    def flash_point(self):
         for f in self.record.flash_points:
             kwargs = self._get_kwargs(f)
             kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)
@@ -257,7 +262,7 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def pour_points(self):
+    def pour_point(self):
         for p in self.record.pour_points:
             kwargs = self._get_kwargs(p)
             kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)

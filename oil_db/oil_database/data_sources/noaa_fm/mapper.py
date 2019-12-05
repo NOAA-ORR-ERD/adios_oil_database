@@ -294,7 +294,7 @@ class OilLibraryAttributeMapper(object):
                 yield kwargs
 
     @property
-    def flash_points(self):
+    def flash_point(self):
         min_temp = self._get_record_attr('flash_point_min_k', float)
         max_temp = self._get_record_attr('flash_point_max_k', float)
 
@@ -309,10 +309,10 @@ class OilLibraryAttributeMapper(object):
         kwargs['weathering'] = 0.0
 
         if len(kwargs.keys()) > 1:
-            yield kwargs
+            return kwargs
 
     @property
-    def pour_points(self):
+    def pour_point(self):
         min_temp = self._get_record_attr('pour_point_min_k', float)
         max_temp = self._get_record_attr('pour_point_max_k', float)
 
@@ -327,7 +327,7 @@ class OilLibraryAttributeMapper(object):
         kwargs['weathering'] = 0.0
 
         if len(kwargs.keys()) > 1:
-            yield kwargs
+            return kwargs
 
     @property
     def cuts(self):
