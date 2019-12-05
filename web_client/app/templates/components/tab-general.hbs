@@ -1,125 +1,186 @@
 <div class="container">
-  <div class="row">
-    <div class="col-sm-4 col-lg-3 d-flex flex-column">
-      {{! First column }}
 
-      {{! Oil ID }}
-      <div class="mb-3 input-group">
-        <div class="input-group-prepend">
-          <label class="p-1 input-group-text font-weight-bold">ID:</label>
-        </div>
-        <input type="text" class="p-1 bg-transparent border" value={{oil.id}} readonly>
-      </div>
+  <div class="row pl-0 pr-0">
+    
+    <div class="col-5">
 
-      {{! Type }}
-      <div class="form-inline mb-3">
-        <div class="input-group-prepend">
-          <label class="p-1 input-group-text font-weight-bold">Type:</label>
-        </div>  
-        <select class="p-1 bg-transparent border">
-          {{#each this.oilTypes as |oilType|}}
-            {{#if (eq oil.productType oilType)}}
-              <option selected>{{oilType}}</option>
-            {{else}}
-              <option>{{oilType}}</option>
-            {{/if}}  
-          {{/each}}
-        </select>
-      </div>
+      <div class="row pl-0 mb-3">
 
-      {{! Status }}
-      {{#unless oil.status}}
-        <span class="mb-3 input-group">
+        {{! Oil ID }}
+        <div class="col-4 pl-0 input-group">
           <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Status:</label>
+            <label class="p-1 input-group-text font-weight-bold">ID:</label>
           </div>
-          <input type="text" class="status-good p-1 bg-transparent  border-0 font-italic" value="OK" >
-        </span>
-      {{/unless}}
+          <Input @class="p-1 flex-fill bg-transparent border" @size="6" @value={{oil.id}} @readonly />
+        </div>
+
+        {{! Location }}
+        <div class="col pl-0 input-group">
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">Location:</label>
+          </div>
+          {{#if oil.location}}
+            <Input @class="p-1 flex-fill bg-transparent border" @value={{oil.location}} />
+          {{else}}
+            <Input @class="p-1 flex-fill bg-transparent border" @value="None" />
+          {{/if}}
+        </div>
+
+      </div>
+
+      <div class="row pl-0 mb-3">
+
+        {{! API }}
+        <div class="col-4 pl-0 input-group">
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">API:</label>
+          </div>
+          {{#if (not (is-empty oil.apis))}}
+            <Input @id="api" @type="number" @class="p-1 flex-fill bg-transparent border" 
+              @placeholder="API value" @value={{round-relative oil.apis.[0].gravity 2}}
+              @change={{action "updateAPI"}} @size="6" />
+          {{else}}
+            <Input @id="api" @type="text" @class="p-1 flex-fill bg-transparent border" 
+              @placeholder="API value" @value="No Values"
+              @change={{action "updateAPI"}} @size="6" />
+          {{/if}}
+        </div>
+
+        {{! Type }}
+        <div class="col pl-0 form-inline">
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">Type:</label>
+          </div>  
+          <select class="p-1 flex-fill bg-transparent border">
+            {{#each this.oilTypes as |oilType|}}
+              {{#if (eq oil.productType oilType)}}
+                <option selected>{{oilType}}</option>
+              {{else}}
+                <option>{{oilType}}</option>
+              {{/if}}  
+            {{/each}}
+          </select>
+        </div>
+
+      </div>
+
+      <div class="row pl-0 mb-3">
+      
+        {{! Categories }}
+        <div class="form-inline">
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">Categories:</label>
+          </div>
+
+          <PowerSelectMultiple 
+            @class="pl-1 flex-fill bg-transparent border"
+            @searchEnabled={{true}}
+            @options={{oil.categories}}
+            @selected={{oil.categories}}
+            @placeholder="Select some categories..."
+            @onChange={{action (mut category)}} as |category|>
+            {{category}}
+          </PowerSelectMultiple>
+
+          {{!-- <select class="p-1 bg-transparent border" multiple>
+            {{#each oil.categories as |category|}}
+              <option class="p-0 pl-1 bg-transparent">{{category}}</option>
+            {{else}}
+              <option class="p-0 pl-1 bg-transparent">None</option>
+            {{/each}}      
+          </select> --}}
+        </div>
+      
+      </div>
 
     </div>
 
-    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
-      {{! Second column }}
+    <div class="col-7 pr-0 mb-3">
 
-      {{! API }}
-      <div class="mb-3 input-group">
+      {{! Reference }}
+      <div class="row mb-3 input-group">
         <div class="input-group-prepend">
-          <label class="p-1 input-group-text font-weight-bold">API:</label>
+          <label class="p-1 input-group-text font-weight-bold">Reference:</label>
         </div>
-        {{#if (not (is-empty oil.apis))}}
-          <input {{action "updateAPI" on="change"}} type="text" size = "10" class="pl-1 bg-transparent border" 
-            placeholder="API value" value={{round-relative oil.apis.[0].gravity 2}}>
-          {{!-- <Input @id="api" @type="text" @size="10" @class="pl-1 bg-transparent border" 
-            @placeholder="API value" @value={{round-relative oil.apis.[0].gravity 2}}
-            @change={{action "updateAPI"}} /> --}}
+        {{#if oil.reference}}
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.reference}} @rows="3" />
         {{else}}
-          <input type="text" size = "12" class="pl-1 bg-transparent border"
-            placeholder="API value" value="No Values">
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" />
         {{/if}}
       </div>
 
-      {{! Categories }}
-      <div class="mb-3 card w-50">
-        <div class="p-0 card-header">
-          <span class="p-1 input-group-text font-weight-bold">Categories:</span>
-        </div>
-        <ul class="list-group list-group-flush">
-          {{#each oil.categories as |category|}}
-            <li class="p-0 pl-1 list-group-item bg-transparent">{{category}}</li>
+      <div class="row">
+
+        {{! Reference Date }}
+        <div class="col-5 pl-0 input-group">
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
+          </div>
+          {{#if oil.referenceDate}}
+            <Input @class="p-1 flex-fill bg-transparent border"  @size="7"
+            {{! Europe/London is how we lookup GMT in moment.js }}
+            @value={{moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London"}} />
           {{else}}
-            <li class="p-0 pl-1 list-group-item bg-transparent">None</li>
-          {{/each}}      
-        </ul>
+            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" />
+          {{/if}}
+        </div>
+
+        {{! Sample Received Date }}
+        <div class="col pl-0 input-group">
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
+          </div>
+          {{#if oil.sampleDate}}
+            <Input @class="p-1 flex-fill bg-transparent border" @size="7"
+            {{! Europe/London is how we lookup GMT in moment.js }}
+            @value={{moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London"}} />
+          {{else}}
+            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" />
+          {{/if}}
+        </div>
       </div>
+
     </div>
 
-    <div class="col">
-      {{! Third column }}
+  </div>
 
-      <strong>Location:</strong>
-      {{#if oil.location}}
-        {{oil.location}}
-      {{else}}
-        None
-      {{/if}}
-      <br>
+  {{!-- <div class="row pl-0 pr-0">
 
-      <strong>Reference:</strong>
-      {{#if oil.reference}}
-        {{oil.reference}}
-      {{else}}
-        None
-      {{/if}}
-      <br>
+    <div class="col-2 pl-0 pr-0 d-flex flex-column">
+      {{! First column }}
 
-      <strong>Reference Date:</strong>
-      {{#if oil.referenceDate}}
-        {{! Europe/London is how we lookup GMT in moment.js }}
-        {{moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London"}}
-      {{else}}
-        None
-      {{/if}}
-      <br>
+    </div>
 
-      <strong>Sample Received Date:</strong>
-      {{#if oil.sampleDate}}
-        {{! Europe/London is how we lookup GMT in moment.js }}
-        {{moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London"}}
-      {{else}}
-        None
-      {{/if}}
-      <br>
+    <div class="col-sm-6 col-md-6 col-lg-5 col-xl-4 d-flex flex-column">
+      {{! Second column }}
 
-      <strong>Comments:</strong>
+    </div>
+  </div>
+ --}}
+  {{! Comments }}
+  <div class="row pl-0 pr-0 mb-3">
+    <div class="col pl-0 pr-0 input-group">
+      <div class="input-group-prepend">
+        <label class="p-1 input-group-text font-weight-bold">Comments:</label>
+      </div>
       {{#if oil.comments}}
-        {{oil.comments}}
+        <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.comments}} @rows="1" />
       {{else}}
-        None
+        <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" @rows="1"/>
       {{/if}}
-      <br>
-    </div>  
+    </div>
+  </div>  
 
+  <div class="row pl-0 pr-0 mb-4">
+    {{! Status }}
+    {{#unless oil.status}}
+      <span class="col pl-0 pr-0 mb-2 input-group">
+        <div class="input-group-prepend">
+          <label class="p-1 input-group-text font-weight-bold">Status:</label>
+        </div>
+        <Input @class="status-good p-1 bg-transparent border-0 font-italic" @size="4" @value="OK" />
+      </span>
+    {{/unless}}
   </div>
 
   <div class="row">
