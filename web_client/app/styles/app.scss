@@ -50,3 +50,7 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 .status-bad {
   color: $red;
 }
+
+$ember-power-select-background-color: transparent;
+
+@import "ember-power-select";
