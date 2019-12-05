@@ -39,7 +39,8 @@ class EnvCanadaAttributeMapper(object):
                              'categories',
                              'status')
     sample_scalar_attrs = ('pour_point',
-                           'flash_point')
+                           'flash_point',
+                           'adhesion')
 
     def __init__(self, record):
         '''
@@ -286,7 +287,7 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def adhesions(self):
+    def adhesion(self):
         for a in self.record.adhesions:
             kwargs = self._get_kwargs(a)
 

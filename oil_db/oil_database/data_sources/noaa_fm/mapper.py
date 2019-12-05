@@ -306,9 +306,8 @@ class OilLibraryAttributeMapper(object):
             kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
                                   'unit': 'K',
                                   '_cls': self._class_path(TemperatureUnit)}
-        kwargs['weathering'] = 0.0
 
-        if len(kwargs.keys()) > 1:
+        if len(kwargs.keys()) > 0:
             return kwargs
 
     @property
@@ -324,9 +323,8 @@ class OilLibraryAttributeMapper(object):
             kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
                                   'unit': 'K',
                                   '_cls': self._class_path(TemperatureUnit)}
-        kwargs['weathering'] = 0.0
 
-        if len(kwargs.keys()) > 1:
+        if len(kwargs.keys()) > 0:
             return kwargs
 
     @property
@@ -362,7 +360,7 @@ class OilLibraryAttributeMapper(object):
             yield kwargs
 
     @property
-    def adhesions(self):
+    def adhesion(self):
         '''
             Note: We don't really know what the adhesion units are for the
                   NOAA Filemaker records.
@@ -379,9 +377,8 @@ class OilLibraryAttributeMapper(object):
 
             kwargs['adhesion'] = {'value': adhesion, 'unit': 'N/m^2',
                                   '_cls': self._class_path(AdhesionUnit)}
-            kwargs['weathering'] = 0.0
 
-            yield kwargs
+            return kwargs
 
     @property
     def evaporation_eqs(self):
