@@ -13,17 +13,20 @@ export function valueUnitRange([valueUnitObj, tol,
   let min = roundRelative([valueUnitObj.min_value, tol]);
   let max = roundRelative([valueUnitObj.max_value, tol]);
   
-  if (min && max && min === max) {
+  if (!isNaN(parseFloat(min)) && isFinite(min) &&
+      !isNaN(parseFloat(max)) && isFinite(max) &&
+      min === max) {
     valueUnitObj.value = valueUnitObj.min_value;
     return `${min}${unit}`
   }
-  else if (min && max) {
+  else if (!isNaN(parseFloat(min)) && isFinite(min) &&
+           !isNaN(parseFloat(max)) && isFinite(max)) {
     return `[${min}\u2192${max}]${unit}`;
   }
-  else if (min) {
+  else if (!isNaN(parseFloat(min)) && isFinite(min)) {
     return `>${min}${unit}`;
   }
-  else if (max) {
+  else if (!isNaN(parseFloat(max)) && isFinite(max)) {
     return `<${max}${unit}`;
   }
 
