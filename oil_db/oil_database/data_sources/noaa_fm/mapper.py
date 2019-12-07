@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from numbers import Number
 from datetime import datetime
 from collections import defaultdict
 import logging
@@ -13,6 +14,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    AdhesionUnit)
 
 from pprint import PrettyPrinter
+from builtins import isinstance
 pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
@@ -65,6 +67,30 @@ class OilLibraryAttributeMapper(object):
 
         return props
 
+    def generate_sample_id_attrs(self, sample_id):
+        attrs = {}
+
+        if sample_id == 0:
+            attrs['name'] = 'Fresh Oil Sample'
+            attrs['short_name'] = 'Fresh Oil'
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
+        elif isinstance(sample_id, str):
+            attrs['name'] = sample_id
+            attrs['short_name'] = '{}...'.format(sample_id[:12])
+            attrs['fraction_weathered'] = None
+            attrs['boiling_point_range'] = None
+        elif isinstance(sample_id, Number):
+            # we will assume this is a simple fractional weathered amount
+            attrs['name'] = '{}% Weathered'.format(sample_id * 100)
+            attrs['short_name'] = '{}% Weathered'.format(sample_id * 100)
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
+        else:
+            logger.warn("Can't generate IDs for sample: ", sample_id)
+
+        return attrs
+
     def dict(self):
         rec = {}
         samples = defaultdict(dict)
@@ -77,7 +103,7 @@ class OilLibraryAttributeMapper(object):
             elif hasattr(v, '__iter__') and not hasattr(v, '__len__'):
                 # we have a sequence of items
                 for i in v:
-                    w = 'w={}'.format(i.get('weathering', 0.0))
+                    w = i.get('weathering', 0.0)
                     i.pop('weathering', None)
 
                     try:
@@ -87,7 +113,7 @@ class OilLibraryAttributeMapper(object):
                         samples[w][k].append(i)
             else:
                 # assume a weathering of 0
-                samples['w=0.0'][k] = v
+                samples[0.0][k] = v
 
         # MongoDB strikes again.  Apparently, in order to support their query
         # methods, dictionary keys, for all dicts, need to be a string that
@@ -98,9 +124,9 @@ class OilLibraryAttributeMapper(object):
         #
         # For NOAA Filemaker records, the ID will be the weathering amount.
         for k, v in samples.items():
-            v['sample_id'] = k
+            v.update(self.generate_sample_id_attrs(k))
 
-        rec['samples'] = sorted(samples.values(), key=lambda v: v['sample_id'])
+        rec['samples'] = sorted(samples.values(), key=lambda v: v['name'])
 
         return rec
 

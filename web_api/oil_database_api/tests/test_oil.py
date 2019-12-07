@@ -290,7 +290,7 @@ class OilTests(OilTestBase):
                 assert k in oil
 
             sample = [s for s in oil['samples']
-                      if s['sample_id'] == 'w=0.0'][0]
+                      if s['name'] == 'Fresh Oil Sample'][0]
 
             assert any(k in sample for k in ('apis', 'densities'))
 

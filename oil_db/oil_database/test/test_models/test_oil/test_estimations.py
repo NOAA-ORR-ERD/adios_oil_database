@@ -75,17 +75,17 @@ class TestOilEstimation():
          ({'name': 'Oil Name', 'samples': None}, None, None, None),
          ({'name': 'Oil Name', 'samples': {}}, None, None, None),
          ({'name': 'Oil Name',
-           'samples': [{'sample_id': 'w=0.0'}]},
-          'w=1.0', None, None),
+           'samples': [{'name': 'Fresh Oil Sample'}]},
+          '10% Weathered', None, None),
          ({'name': 'Oil Name',
-           'samples': [{'sample_id': 'w=0.0'}]},
-          None, None, {'sample_id': 'w=0.0'}),
+           'samples': [{'name': 'Fresh Oil Sample'}]},
+          None, None, {'name': 'Fresh Oil Sample'}),
          ({'name': 'Oil Name',
-           'samples': [{'sample_id': 'w=0.0'}]},
-          'w=0.0', None, {'sample_id': 'w=0.0'}),
+           'samples': [{'name': 'Fresh Oil Sample'}]},
+          'Fresh Oil Sample', None, {'name': 'Fresh Oil Sample'}),
          ({'name': 'Oil Name',
-           'samples': [{'sample_id': 'w=1.0'}]},
-          'w=1.0', None, {'sample_id': 'w=1.0'}),
+           'samples': [{'name': '10% Weathered'}]},
+          '10% Weathered', None, {'name': '10% Weathered'}),
          ]
     )
     def test_get_sample(self, oil, sample_id, product_type, expected):
@@ -370,14 +370,14 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None, None, (None, None)),
          ({'name': 'Oil Name',
            'comments': 'This record has no pour point, but has dvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'dvis': [
                    {'viscosity': {
                         'value': 0.023, 'unit': 'kg/(m s)',
@@ -394,7 +394,7 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has a single pour point attribute',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'pour_points': [{
                    'ref_temp': {'value': 265.0,
                                 'unit': 'K',
@@ -408,7 +408,7 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has no pour point, but has kvis & dvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'dvis': [
                    {'viscosity': {
                         'value': 0.023, 'unit': 'kg/(m s)',
@@ -435,7 +435,7 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has no pour point, but has kvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'kvis': [
                    {'viscosity': {
                         'value': 0.0001333, 'unit': 'm^2/s',
@@ -452,7 +452,7 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has no pour point, but has dvis and density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'dvis': [
                    {'viscosity': {
                         'value': 0.3851, 'unit': 'kg/(m s)',
@@ -507,14 +507,14 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None, None, (None, None)),
          ({'name': 'Oil Name',
            'comments': 'This record has no flash point, but has cuts & sara fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'cuts': [
                    {'fraction': {
                        'value': 0.35, 'unit': 'fraction',
@@ -574,7 +574,7 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has no flash point, but has api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -582,7 +582,7 @@ class TestOilEstimationPointTemperatures():
          ({'name': 'Oil Name',
            'comments': 'This record has a flash point',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'flash_points': [
                    {'ref_temp': {
                        'value': 273.15, 'unit': 'K',
@@ -625,32 +625,32 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None),
          ({'name': 'Oil Name',
            'comments': 'This record has one api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
           {'gravity': 10.0}),
          ({'name': 'Oil Name',
            'comments': 'This record has multiple api gravities',
-           'samples': [{'sample_id': 'w=0.0',
-                        'apis': [{'gravity': 10.0},
-                                 {'gravity': 20.0},
-                                 {'gravity': 30.0}]
-                        }
-                       ]
+           'samples': [{
+               'name': 'Fresh Oil Sample',
+               'apis': [{'gravity': 10.0},
+                        {'gravity': 20.0},
+                        {'gravity': 30.0}]
+           }]
            },
           {'gravity': 10.0}),
          ({'name': 'Oil Name',
            'comments': 'This record has no api gravity, but has density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 894.0, 'unit': 'kg/m^3',
@@ -693,14 +693,14 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None),
          ({'name': 'Oil Name',
            'comments': 'This record has one api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -708,7 +708,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has multiple api gravities',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [
                    {'gravity': 10.0},
                    {'gravity': 20.0},
@@ -720,7 +720,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has no api gravity, but has density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
@@ -761,14 +761,14 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has one api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -784,7 +784,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has multiple api gravities',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [
                    {'gravity': 10.0},
                    {'gravity': 20.0},
@@ -804,7 +804,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has no api gravity, but has density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
@@ -864,14 +864,14 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None, None),
          ({'name': 'Oil Name',
            'comments': 'This record has one api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -879,7 +879,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has multiple api gravities',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [
                    {'gravity': 10.0},
                    {'gravity': 20.0},
@@ -891,7 +891,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has no api gravity, but has density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
@@ -918,7 +918,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has no api gravity, but has density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
@@ -964,14 +964,14 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None),
          ({'name': 'Oil Name',
            'comments': 'This record has one api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -979,7 +979,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has multiple api gravities',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [
                    {'gravity': 10.0},
                    {'gravity': 20.0},
@@ -991,7 +991,7 @@ class TestOilEstimationDensities():
          ({'name': 'Oil Name',
            'comments': 'This record has no api gravity, but has density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
@@ -1036,14 +1036,14 @@ class TestOilEstimationDynamicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has just dvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'dvis': [
                    {'viscosity': {
                        'value': 0.025, 'unit': 'kg/(m s)',
@@ -1071,7 +1071,7 @@ class TestOilEstimationDynamicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has 1 kvis and 1 redundant dvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'kvis': [
                    {'viscosity': {
                         'value': 0.0001333, 'unit': 'm^2/s',
@@ -1099,7 +1099,7 @@ class TestOilEstimationDynamicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has 1 kvis and 1 barely non-redundant dvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'kvis': [
                    {'viscosity': {
                         'value': 0.0001333, 'unit': 'm^2/s',
@@ -1157,14 +1157,14 @@ class TestOilEstimationDynamicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None, None, None),
          ({'name': 'Oil Name',
            'comments': 'This record has only density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
@@ -1182,7 +1182,7 @@ class TestOilEstimationDynamicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has only density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
@@ -1200,7 +1200,7 @@ class TestOilEstimationDynamicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has only density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
@@ -1218,7 +1218,7 @@ class TestOilEstimationDynamicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has only density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
@@ -1254,14 +1254,14 @@ class TestOilEstimationKinematicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has only kvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
@@ -1288,7 +1288,7 @@ class TestOilEstimationKinematicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has only dvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'dvis': [
                    {'viscosity': {
                        'value': 1000.0, 'unit': 'kg/(m s)',
@@ -1327,21 +1327,21 @@ class TestOilEstimationKinematicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None, None),
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           273.15, None),
          ({'name': 'Oil Name',
            'comments': 'This record has one kvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
@@ -1358,7 +1358,7 @@ class TestOilEstimationKinematicViscosities():
          ({'name': 'Oil Name',
            'comments': 'This record has one kvis',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
@@ -1396,14 +1396,14 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           (None, None)),
          ({'name': 'Oil Name',
            'comments': 'This record has a single Resin',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -1418,7 +1418,7 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has a single asphaltene',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
@@ -1433,7 +1433,7 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has a resin and an asphaltene',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -1454,7 +1454,7 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has density & viscosity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
@@ -1502,14 +1502,14 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           (None, None)),
          ({'name': 'Oil Name',
            'comments': 'This record has a single Saturate',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Saturates',
                     'fraction': {
@@ -1524,7 +1524,7 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has a single Aromatic',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Aromatics',
                     'fraction': {
@@ -1539,7 +1539,7 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has a Saturate and an Aromatic',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Saturates',
                     'fraction': {
@@ -1560,7 +1560,7 @@ class TestOilEstimationDistillationFractions():
          ({'name': 'Oil Name',
            'comments': 'This record has density & viscosity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
@@ -1610,14 +1610,14 @@ class TestOilEstimationDistillationCuts():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           ([], [])),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -1625,7 +1625,7 @@ class TestOilEstimationDistillationCuts():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -1649,7 +1649,7 @@ class TestOilEstimationDistillationCuts():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -1721,14 +1721,14 @@ class TestOilEstimationDistillationCuts():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           ([], [])),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -1736,7 +1736,7 @@ class TestOilEstimationDistillationCuts():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -1760,7 +1760,7 @@ class TestOilEstimationDistillationCuts():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -1834,14 +1834,14 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           ([], [])),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -1849,7 +1849,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -1875,7 +1875,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -1949,14 +1949,14 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -1964,7 +1964,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -1992,7 +1992,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -2064,14 +2064,14 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -2079,7 +2079,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -2105,7 +2105,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -2175,14 +2175,14 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -2190,7 +2190,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -2216,7 +2216,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -2286,14 +2286,14 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -2301,7 +2301,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -2326,7 +2326,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -2395,14 +2395,14 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           []),
          ({'name': 'Oil Name',
            'comments': 'This record has a single api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -2410,7 +2410,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has an api and both inert fractions',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
@@ -2435,7 +2435,7 @@ class TestOilEstimationComponentMethods():
          ({'name': 'Oil Name',
            'comments': 'This record has distillation cuts',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'sara_total_fractions': [
                    {'sara_type': 'Resins',
                     'fraction': {
@@ -2506,14 +2506,14 @@ class TestOilEstimationSurfaceTensions():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           (None, None)),
          ({'name': 'Oil Name',
            'comments': 'This record has an oil-water tension',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                "ifts": [
                    {"interface": "water",
                     "tension": {
@@ -2532,7 +2532,7 @@ class TestOilEstimationSurfaceTensions():
          ({'name': 'Oil Name',
            'comments': 'This record has one api gravity',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'apis': [{'gravity': 10.0}],
            }]
            },
@@ -2540,7 +2540,7 @@ class TestOilEstimationSurfaceTensions():
          ({'name': 'Oil Name',
            'comments': 'This record has only density',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
@@ -2574,14 +2574,14 @@ class TestOilEstimationSurfaceTensions():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           (None, None)),
          ({'name': 'Oil Name',
            'comments': 'This record has an oil-seawater tension',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'ifts': [
                    {'interface': 'seawater',
                     'tension': {
@@ -2618,7 +2618,7 @@ class TestOilEstimationEmulsion():
          ({'name': 'Oil Name',
            'comments': 'This record has no product type',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           0.0),
@@ -2626,7 +2626,7 @@ class TestOilEstimationEmulsion():
            'product_type': 'Crude',
            'comments': 'This record is crude',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           0.9),
@@ -2634,7 +2634,7 @@ class TestOilEstimationEmulsion():
            'product_type': 'Refined',
            'comments': 'This record is crude',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           0.0),
@@ -2657,7 +2657,7 @@ class TestOilEstimationEmulsion():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           None),
@@ -2665,7 +2665,7 @@ class TestOilEstimationEmulsion():
            'product_type': 'Refined',
            'comments': 'This record has a refined type',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           1.0),
@@ -2696,7 +2696,7 @@ class TestOilEstimationMisc():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           0.0),
@@ -2722,14 +2722,14 @@ class TestOilEstimationMisc():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           0.035),
          ({'name': 'Oil Name',
            'comments': 'This record has an adhesion',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                'adhesions': [
                    {'adhesion': {
                        'value': 0.28, 'unit': 'N/m^2',
@@ -2762,14 +2762,14 @@ class TestOilEstimationMisc():
          ({'name': 'Oil Name',
            'comments': 'This record has an empty sample',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
            }]
            },
           0.0),
          ({'name': 'Oil Name',
            'comments': 'This record has a single sulfur',
            'samples': [{
-               'sample_id': 'w=0.0',
+               'name': 'Fresh Oil Sample',
                "sulfur": [
                    {"fraction": {
                        "value": 0.0015, "unit": "fraction",
