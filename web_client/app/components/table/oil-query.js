@@ -42,7 +42,7 @@ export default Component.extend(TableCommon, {
       label: 'API',
       valuePath: 'api',
       cellComponent: 'table/cell/api',
-      width: '164px'
+      width: '70px'
     }, {
       label: 'Viscosity',
       valuePath: 'viscosity',

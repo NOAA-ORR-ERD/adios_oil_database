@@ -1,21 +1,16 @@
 <div class="container">
   <center>
-    <h4>
-      {{round-relative (mult weathered 100) 2}}% Evaporated
-      {{#if (eq weathered 0)}}
-        (Fresh)
-      {{/if}}
-    </h4>
+    <h4>{{sampleName}}</h4>
   </center>
 
   <div class="row">
-    <Table::Emulsion @oil={{oil}} @weathered={{weathered}} class="col-12"/>
+    <Table::Emulsion @oil={{oil}} class="col-12"/>
 
-    <Table::EvaporationEqs @oil={{oil}} @weathered={{weathered}} class="col-5"/>
+    <Table::EvaporationEqs @oil={{oil}} class="col-5"/>
 
-    <Table::ChemicalDispersibility @oil={{oil}} @weathered={{weathered}} class="col-5"/>
+    <Table::ChemicalDispersibility @oil={{oil}} class="col-5"/>
 
-    <Table::Toxicity @oil={{oil}} @weathered={{weathered}} class="col-5"/>
+    <Table::Toxicity @oil={{oil}} class="col-5"/>
   </div>
 
 </div>

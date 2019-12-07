@@ -22,39 +22,38 @@
 
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      {{#each (weathered-samples this.model) as |sample|}}
-        {{#if sample}}
-          <a id="nav-{{slug sample}}-tab" href="#nav-{{slug sample}}"
-             aria-controls="nav-{{slug sample}}"
+      {{#each (weathered-samples this.model) as |name idx|}}
+        {{#if idx}}
+          <a id="nav-{{slug name.[0]}}-tab" href="#nav-{{slug name.[0]}}"
+             aria-controls="nav-{{slug name.[0]}}"
              data-toggle="tab" role="tab"
              class="nav-item nav-link" aria-selected="false">
-            w={{sample}}
+            {{name.[1]}}
           </a>
         {{else}}
-          <a id="nav-{{slug sample}}-tab" href="#nav-{{slug sample}}"
-             aria-controls="nav-{{slug sample}}"
+          <a id="nav-{{slug name.[0]}}-tab" href="#nav-{{slug name.[0]}}"
+             aria-controls="nav-{{slug name.[0]}}"
              data-toggle="tab" role="tab"
              class="nav-item nav-link active" aria-selected="true">
-            w={{sample}} (fresh)
+            {{name.[1]}}
           </a>
         {{/if}}
-
       {{/each}}
     </div>
   </nav>
 
   <div class="tab-content" id="nav-tabContent">
 
-    {{#each (weathered-samples this.model) as |sample|}}
-      {{#if sample}}
+    {{#each (weathered-samples this.model) as |name idx|}}
+      {{#if idx}}
         <div class="tab-pane fade active" role="tabpanel"
-             id="nav-{{slug sample}}" aria-labelledby="nav-{{slug sample}}-tab">
-          <TabPane::WeatheredTopLevel @oil={{this.model}} @weathered={{sample}}/>
+             id="nav-{{slug name.[0]}}" aria-labelledby="nav-{{slug name.[0]}}-tab">
+          <TabPane::WeatheredTopLevel @oil={{this.model}} @sampleName={{name.[0]}}/>
         </div>
       {{else}}
         <div class="tab-pane fade active show" role="tabpanel"
-             id="nav-{{slug sample}}" aria-labelledby="nav-{{slug sample}}-tab">
-          <TabPane::WeatheredTopLevel @oil={{this.model}} @weathered={{sample}}/>
+             id="nav-{{slug name.[0]}}" aria-labelledby="nav-{{slug name.[0]}}-tab">
+          <TabPane::WeatheredTopLevel @oil={{this.model}} @sampleName={{name.[0]}}/>
         </div>
       {{/if}}
     {{/each}}

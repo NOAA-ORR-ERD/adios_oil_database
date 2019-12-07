@@ -1,55 +1,50 @@
 <div class="container">
   <center>
-    <h4>
-      {{round-relative (mult weathered 100) 2}}% Evaporated
-      {{#if (eq weathered 0)}}
-        (Fresh)
-      {{/if}}
-    </h4>
+    <h4>{{sampleName}}</h4>
   </center>
 
   <div class="row">
-    <Table::Water @oil={{oil}} @weathered={{weathered}} class="col-3"/>
+    <Table::Water @oil={{oil}} class="col-3"/>
 
-    <Table::Wax @oil={{oil}} @weathered={{weathered}} class="col-3"/>
+    <Table::Wax @oil={{oil}} class="col-3"/>
 
-    <Table::Sulfur @oil={{oil}} @weathered={{weathered}} class="col-3"/>
+    <Table::Sulfur @oil={{oil}} class="col-3"/>
   </div>
 
   <div class="row">
-    <Table::Sara @oil={{oil}} @weathered={{weathered}} class="col-4"/>
+    <Table::Sara @oil={{oil}} class="col-4"/>
 
-    <Table::Conradson @oil={{oil}} @weathered={{weathered}} class="col-4"/>
+    <Table::Conradson @oil={{oil}} class="col-4"/>
   </div>
 
   <div class="row">
-    <Table::Benzene @oil={{oil}} @weathered={{weathered}} class="col-3"/>
+    <Table::Benzene @oil={{oil}} class="col-3"/>
 
-    <Table::BenzeneBtex @oil={{oil}} @weathered={{weathered}} class="col-6"/>
+    <Table::BenzeneBtex @oil={{oil}} class="col-6"/>
   </div>
 
   <div class="row">
-    <Table::BenzeneC4c6 @oil={{oil}} @weathered={{weathered}} class="col-12"/>
+    <Table::BenzeneC4c6 @oil={{oil}} class="col-12"/>
   </div>
 
   <div class="row">
-    <Table::AlkylatedPah @oil={{oil}} @weathered={{weathered}} class="col-12"/>
+    <Table::AlkylatedPah @oil={{oil}} class="col-12"/>
   </div>
 
   <div class="row">
-    <Table::Alkane @oil={{oil}} @weathered={{weathered}} class="col-12"/>
+    <Table::Alkane @oil={{oil}} class="col-12"/>
   </div>
 
   <div class="row">
-    <Table::Chromatography @oil={{oil}} @weathered={{weathered}} class="col-12"/>
+    <Table::Chromatography @oil={{oil}} class="col-12"/>
   </div>
 
   <div class="row">
-    <Table::Headspace @oil={{oil}} @weathered={{weathered}} class="col-10"/>
+    <Table::Headspace @oil={{oil}} class="col-10"/>
   </div>
 
   <div class="row">
-    <Table::Biomarkers @oil={{oil}} @weathered={{weathered}} class="col-12"/>
+    <Table::Biomarkers @oil={{oil}} class="col-12"/>
   </div>
 
 </div>
