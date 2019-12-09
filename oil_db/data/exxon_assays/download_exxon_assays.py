@@ -96,7 +96,7 @@ def create_index_file(downloaded, destination):
     # remembering the name of the oil.
     index_file_name = os.path.join(destination, 'index.txt')
 
-    with open(index_file_name, 'wb') as index_file:
+    with open(index_file_name, 'w', encoding='ascii') as index_file:
         index_file.write('oil_name\tfile\n')
 
         for name, fname in sorted(downloaded.items()):
