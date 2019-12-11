@@ -1,17 +1,34 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm">
-      <h2 class="title">{{this.model.name}}</h2>
+    <div class="col-sm-2">
+      <div class="row">
+        <h3>
+          {{#link-to "oils"}}
+            <button type="button" class="btn btn-dark"
+                    data-toggle="tooltip" title="Back to List">
+              {{fa-icon "angle-double-up"}}
+            </button>
+          {{/link-to}}
+        </h3>
+	    &nbsp;
+          <XToggle
+            @theme="ios"
+            @showLabels={{true}}
+            @value={{this.editable}}
+            @onToggle={{action (mut this.editable)}}
+            as |toggle|>
+            <toggle.switch />
+
+            <toggle.label @value={{not this.editable}}>
+              &nbsp; &nbsp; {{if this.editable "Edit" ""}}
+            </toggle.label>
+          </XToggle>
+
+      </div>
     </div>
 
-    <div class="col-sm-2">
-      <h3>
-        {{#link-to "oils"}}
-          <span class="badge badge-dark">
-            Back to List
-          </span>
-        {{/link-to}}
-      </h3>    
+    <div class="col-sm">
+      <h2 class="title">{{this.model.name}}</h2>
     </div>
 
   </div>
@@ -39,6 +56,13 @@
           </a>
         {{/if}}
       {{/each}}
+      
+      <a id="nav-add-tab" href="#nav-add"
+         data-toggle="tab"
+         class="nav-item nav-link add-sample">
+        {{fa-icon "plus"}}
+      </a>
+      
     </div>
   </nav>
 
