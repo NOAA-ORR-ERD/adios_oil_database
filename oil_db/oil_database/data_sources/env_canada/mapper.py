@@ -41,7 +41,10 @@ class EnvCanadaAttributeMapper(object):
                              'status')
     sample_scalar_attrs = ('pour_point',
                            'flash_point',
-                           'adhesion')
+                           'adhesion',
+                           'sulfur',
+                           'water',
+                           'wax_content')
 
     def __init__(self, record):
         '''

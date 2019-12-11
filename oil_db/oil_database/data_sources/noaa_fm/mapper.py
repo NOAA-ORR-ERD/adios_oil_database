@@ -14,7 +14,6 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    AdhesionUnit)
 
 from pprint import PrettyPrinter
-from builtins import isinstance
 pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
@@ -456,34 +455,37 @@ class OilLibraryAttributeMapper(object):
     def sulfur(self):
         sulfur = self._get_record_attr('sulphur', float)
 
-        if sulfur is not None:
+        if sulfur is None:
+            return None
+        else:
             kwargs = {}
 
             kwargs['fraction'] = {'value': sulfur, 'unit': 'fraction',
                                   '_cls': self._class_path(FloatUnit)}
             kwargs['weathering'] = 0.0
 
-            yield kwargs
+            return kwargs
 
     @property
     def water(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def wax_content(self):
         wax = self._get_record_attr('wax_content', float)
 
-        if wax is not None:
+        if wax is None:
+            return None
+        else:
             kwargs = {}
 
             kwargs['fraction'] = {'value': wax, 'unit': 'fraction',
                                   '_cls': self._class_path(FloatUnit)}
 
-            yield kwargs
+            return kwargs
 
     @property
     def benzene(self):
