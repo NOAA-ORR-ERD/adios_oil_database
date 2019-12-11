@@ -96,7 +96,9 @@ class EnvCanadaAttributeMapper(object):
         if all([s['fraction_weathered'] is not None for s in samples]):
             return sorted(samples, key=lambda v: v['fraction_weathered'])
         else:
-            return sorted(samples, key=lambda v: v['name'])
+            # if we can't sort on weathered amount, then we will choose to
+            # not sort at all
+            return list(samples)
 
     def dict(self):
         rec = {}
