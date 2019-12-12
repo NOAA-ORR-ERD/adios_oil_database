@@ -682,7 +682,7 @@ class EnvCanadaRecordParser(object):
 
             kwargs = self.build_flash_point_kwargs(props_i, w)
 
-            if any([k in kwargs and kwargs[k] is not None
+            if any([kwargs is not None and k in kwargs and kwargs[k] is not None
                     for k in ('ref_temp',)]):
                 flash_points.append(kwargs)
 
@@ -706,7 +706,7 @@ class EnvCanadaRecordParser(object):
 
             kwargs = self._build_pour_point_kwargs(props_i, w)
 
-            if any([k in kwargs and kwargs[k] is not None
+            if any([kwargs is not None and k in kwargs and kwargs[k] is not None
                     for k in ('ref_temp',)]):
                 pour_points.append(kwargs)
 
@@ -1877,6 +1877,9 @@ class EnvCanadaRecordParser(object):
         fp_kwargs['weathering'] = weathering
 
         temp_c = fp_kwargs['flash_point']
+        if temp_c is None:
+            return None
+
         del fp_kwargs['flash_point']
 
         min_temp_c = self._get_min_temp(temp_c)
@@ -1890,7 +1893,7 @@ class EnvCanadaRecordParser(object):
         fp_kwargs['ref_temp'] = {'unit': 'C'}
         if temp_c is not None:
             fp_kwargs['ref_temp']['value'] = temp_c
-        elif min_temp_c == max_temp_c:
+        elif min_temp_c is not None and min_temp_c == max_temp_c:
             fp_kwargs['ref_temp']['value'] = max_temp_c
         else:
             fp_kwargs['ref_temp']['min_value'] = min_temp_c
@@ -1910,6 +1913,9 @@ class EnvCanadaRecordParser(object):
         pp_kwargs['weathering'] = weathering
 
         temp_c = pp_kwargs['pour_point']
+        if temp_c is None:
+            return None
+
         del pp_kwargs['pour_point']
 
         min_temp_c = self._get_min_temp(temp_c)

@@ -136,6 +136,26 @@ class OilTestBase(FunctionalTestBase):
 
         return True
 
+    def water_valid(self, water):
+        for k in ('fraction',):
+            if k not in water:
+                return False
+
+        if not self.fraction_valid(water['fraction']):
+            return False
+
+        return True
+
+    def wax_valid(self, wax):
+        for k in ('fraction',):
+            if k not in wax:
+                return False
+
+        if not self.fraction_valid(wax['fraction']):
+            return False
+
+        return True
+
     def toxicity_valid(self, toxicity):
         for k in ('species', 'tox_type'):
             if k not in toxicity:
@@ -155,6 +175,9 @@ class OilTestBase(FunctionalTestBase):
                     return False
 
         return True
+
+    def fraction_valid(self, fraction):
+        return self.unit_value_valid(fraction, ('1', '%', 'fraction'))
 
     def ref_temp_valid(self, ref_temp):
         return self.unit_value_valid(ref_temp, ('C', 'K'))
@@ -258,13 +281,19 @@ class OilTests(OilTestBase):
         '''
             We are basing our tests on webtest(unittest), so parametrization
             doesn't work.
+
+            General Rule: if a record doesn't have data to fill an attribute,
+                          the attribute should probably not exist either.
+                          So if we find an attribute, we will test it assuming
+                          that it has something valid.
         '''
         for oil_id in ('AD00009',
                        'AD00020',
                        'AD00025',
                        'AD01759',
                        'EC002234',
-                       'EC000506'):
+                       'EC000506',
+                       'EC000561'):
             resp = self.testapp.get('/oils/{0}'.format(oil_id))
             oil = resp.json_body
 
@@ -320,21 +349,23 @@ class OilTests(OilTestBase):
                 for i in sample['ifts']:
                     assert self.ift_valid(i)
 
+            if 'pour_point' in sample:
+                assert self.pour_point_valid(sample['pour_point'])
+
+            if 'flash_point' in sample:
+                assert self.flash_point_valid(sample['flash_point'])
+
+            if 'adhesion' in sample:
+                assert self.adhesion_valid(sample['adhesion'])
+
+            if 'water' in sample:
+                assert self.water_valid(sample['water'])
+
+            if 'wax_content' in sample:
+                assert self.wax_valid(sample['wax_content'])
+
             if 'sulfur' in sample:
-                for s in sample['sulfur']:
-                    assert self.sulfur_valid(s)
-
-            if 'flash_points' in sample:
-                for f in sample['flash_points']:
-                    assert self.flash_point_valid(f)
-
-            if 'pour_points' in sample:
-                for p in sample['pour_points']:
-                    assert self.pour_point_valid(p)
-
-            if 'adhesions' in sample:
-                for a in sample['adhesions']:
-                    assert self.adhesion_valid(a)
+                assert self.sulfur_valid(sample['sulfur'])
 
             if 'toxicities' in sample:
                 for t in sample['toxicities']:

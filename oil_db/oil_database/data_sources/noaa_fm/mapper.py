@@ -90,6 +90,14 @@ class OilLibraryAttributeMapper(object):
 
         return attrs
 
+    def sort_samples(self, samples):
+        if all([s['fraction_weathered'] is not None for s in samples]):
+            return sorted(samples, key=lambda v: v['fraction_weathered'])
+        else:
+            # if we can't sort on weathered amount, then we will choose to
+            # not sort at all
+            return list(samples)
+
     def dict(self):
         rec = {}
         samples = defaultdict(dict)
@@ -111,8 +119,10 @@ class OilLibraryAttributeMapper(object):
                         samples[w][k] = []
                         samples[w][k].append(i)
             else:
-                # assume a weathering of 0
-                samples[0.0][k] = v
+                # - assume a weathering of 0
+                # - if the attribute is None, we don't add it.
+                if v is not None:
+                    samples[0.0][k] = v
 
         # MongoDB strikes again.  Apparently, in order to support their query
         # methods, dictionary keys, for all dicts, need to be a string that
@@ -125,7 +135,7 @@ class OilLibraryAttributeMapper(object):
         for k, v in samples.items():
             v.update(self.generate_sample_id_attrs(k))
 
-        rec['samples'] = sorted(samples.values(), key=lambda v: v['name'])
+        rec['samples'] = self.sort_samples(samples.values())
 
         return rec
 
