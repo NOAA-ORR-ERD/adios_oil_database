@@ -3,32 +3,54 @@
     <strong>SARA Total Fractions:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".sara-row-collapse"
-             aria-controls="sara-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">SARA Type</th>
-          <th scope="col">Fraction</th>
-        </tr>
-      </thead>
       <tbody id="sara-tbody">
-        {{#each oil.sara_total_fractions as |sara|}}
-          <tr class="collapse show sara-row-collapse">
-            <td>{{sara.sara_type}}</td>
-            <td>{{value-unit sara.fraction 3}}</td>
-          </tr>
-        {{/each}}
+        <tr>
+          {{#if (find-by 'sara_type' "Saturates" oil.sara_total_fractions)}}
+            {{#with (find-by 'sara_type' "Saturates" oil.sara_total_fractions) as |sara|}}
+              <td>{{sara.sara_type}}</td>
+              <td>{{value-unit sara.fraction 3}}</td>
+            {{/with}}
+          {{else}}
+              <td>Saturates</td><td>No Data</td>
+          {{/if}}
+        </tr>
 
-        {{#if oil.sara_total_fractions}}
-          <tr class="collapse sara-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
-        {{else}}
-          <tr><td>No Data</td></tr>
-        {{/if}}
+        <tr>
+          {{#if (find-by 'sara_type' "Aromatics" oil.sara_total_fractions)}}
+            {{#with (find-by 'sara_type' "Aromatics" oil.sara_total_fractions) as |sara|}}
+              <td>{{sara.sara_type}}</td>
+              <td>{{value-unit sara.fraction 3}}</td>
+            {{/with}}
+          {{else}}
+              <td>Aromatics</td><td>No Data</td>
+          {{/if}}
+        </tr>
+
+        <tr>
+          {{#if (find-by 'sara_type' "Resins" oil.sara_total_fractions)}}
+            {{#with (find-by 'sara_type' "Resins" oil.sara_total_fractions) as |sara|}}
+              <td>{{sara.sara_type}}</td>
+              <td>{{value-unit sara.fraction 3}}</td>
+            {{/with}}
+          {{else}}
+              <td>Resins</td><td>No Data</td>
+          {{/if}}
+        </tr>
+
+        <tr>
+          {{#if (find-by 'sara_type' "Asphaltenes" oil.sara_total_fractions)}}
+            {{#with (find-by 'sara_type' "Asphaltenes" oil.sara_total_fractions) as |sara|}}
+              <td>{{sara.sara_type}}</td>
+              <td>{{value-unit sara.fraction 3}}</td>
+            {{/with}}
+          {{else}}
+              <td>Asphaltenes</td><td>No Data</td>
+          {{/if}}
+        </tr>
+
       </tbody>
     </table>
+
   </div>
 
 </div>
