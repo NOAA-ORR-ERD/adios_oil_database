@@ -1,0 +1,29 @@
+  <center>Dibenzothiophenes</center>
+
+<table class="table table-hover table-bordered">
+  <thead></thead>
+  <tbody id="dibenzothiophenes-tbody">
+    {{#if anyDataPresent}}
+      <tr>
+        <td>C0-D</td>
+        <td>{{value-unit oil.alkylated_pahs.c0_d 2}}</td>
+      </tr>
+      <tr>
+        <td>C1-D</td>
+        <td>{{value-unit oil.alkylated_pahs.c1_d 2}}</td>
+      </tr>
+      <tr>
+        <td>C2-D</td>
+        <td>{{value-unit oil.alkylated_pahs.c2_d 2}}</td>
+      </tr>
+      <tr>
+        <td>C3-D</td>
+        <td>{{value-unit oil.alkylated_pahs.c3_d 2}}</td>
+      </tr>
+    {{else}}
+      <tr>
+        <td>No Data</td>
+      </tr>
+    {{/if}}
+  </tbody>
+</table>

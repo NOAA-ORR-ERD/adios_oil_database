@@ -585,8 +585,7 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def biomarkers(self):

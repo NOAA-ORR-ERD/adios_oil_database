@@ -1,0 +1,33 @@
+<center>Phenanthrenes</center>
+
+<table class="table table-hover table-bordered">
+  <thead></thead>
+  <tbody id="phenanthrenes-tbody">
+    {{#if anyDataPresent}}
+      <tr>
+        <td>C0-P</td>
+        <td>{{value-unit oil.alkylated_pahs.c0_p 2}}</td>
+      </tr>
+      <tr>
+        <td>C1-P</td>
+        <td>{{value-unit oil.alkylated_pahs.c1_p 2}}</td>
+      </tr>
+      <tr>
+        <td>C2-P</td>
+        <td>{{value-unit oil.alkylated_pahs.c2_p 2}}</td>
+      </tr>
+      <tr>
+        <td>C3-P</td>
+        <td>{{value-unit oil.alkylated_pahs.c3_p 2}}</td>
+      </tr>
+       <tr>
+        <td>C4-P</td>
+        <td>{{value-unit oil.alkylated_pahs.c4_p 2}}</td>
+      </tr>
+    {{else}}
+      <tr>
+        <td>No Data</td>
+      </tr>
+    {{/if}}
+  </tbody>
+</table>
