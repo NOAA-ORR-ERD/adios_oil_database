@@ -21,10 +21,10 @@ export default Component.extend({
                  return this.oil.benzene[i] != null;
              }))
         {
-            this.set('allDataPresent', true);
+            this.set('anyDataPresent', true);
         }
         else {
-            this.set('allDataPresent', false);
+            this.set('anyDataPresent', false);
         }
     }
 });
