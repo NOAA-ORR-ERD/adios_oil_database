@@ -507,7 +507,7 @@ class OilLibraryAttributeMapper(object):
             kwargs['benzene'] = {'value': benzene_content, 'unit': 'fraction',
                                  '_cls': self._class_path(FloatUnit)}
 
-            yield kwargs
+            return kwargs
 
     @property
     def headspace(self):

@@ -2,31 +2,11 @@
   <div class="table-responsive">
     <strong>Benzene & Alkylated Benzene:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".benz-row-collapse"
-             aria-controls="benz-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Fraction</th>
-        </tr>
-      </thead>
-      <tbody id="benz-tbody">
-        {{#each oil.benzene as |benzene|}}
-          <tr class="collapse show benz-row-collapse">
-            <td>{{value-unit benzene.benzene 3}}</td>
-          </tr>
-        {{/each}}
-
-        {{#if oil.benzene}}
-          <tr class="collapse benz-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
-        {{else}}
-          <tr><td>No Data</td></tr>
-        {{/if}}
-      </tbody>
-    </table>
+    {{#if oil.benzene.benzene}}
+      {{value-unit oil.benzene.benzene 2}}
+    {{else}}
+      No Data
+    {{/if}}
   </div>
 
 </div>

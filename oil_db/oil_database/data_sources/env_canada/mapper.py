@@ -44,7 +44,8 @@ class EnvCanadaAttributeMapper(object):
                            'adhesion',
                            'sulfur',
                            'water',
-                           'wax_content')
+                           'wax_content',
+                           'benzene')
 
     def __init__(self, record):
         '''
