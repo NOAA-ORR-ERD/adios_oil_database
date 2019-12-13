@@ -2,104 +2,65 @@
   <strong>Alkanes:</strong>
 
   <div class="row">
-    <div class="col-12">
+
+    <div class="col-3">
 
       <div class="table-responsive">
         <table class="table table-hover table-bordered">
-          <thead class="clickable" data-toggle="collapse"
-                 data-target=".alkanes-row-collapse"
-                 aria-controls="alkanes-tbody"
-                 aria-expanded="false">
-            <tr>
-              <th scope="col">C8</th>
-              <th scope="col">C9</th>
-              <th scope="col">C10</th>
-              <th scope="col">C11</th>
-              <th scope="col">C12</th>
-              <th scope="col">C13</th>
-              <th scope="col">C14</th>
-              <th scope="col">C15</th>
-              <th scope="col">C16</th>
-              <th scope="col">C17</th>
-              <th scope="col">C18</th>
-              <th scope="col">C19</th>
-              <th scope="col">C20</th>
-              <th scope="col">C21</th>
-              <th scope="col">C22</th>
-              <th scope="col">C23</th>
-              <th scope="col">C24</th>
-              <th scope="col">C25</th>
-              <th scope="col">C26</th>
-              <th scope="col">C27</th>
-              <th scope="col">C28</th>
-              <th scope="col">C29</th>
-              <th scope="col">C30</th>
-              <th scope="col">C31</th>
-              <th scope="col">C32</th>
-              <th scope="col">C33</th>
-              <th scope="col">C34</th>
-              <th scope="col">C35</th>
-              <th scope="col">C36</th>
-              <th scope="col">C37</th>
-              <th scope="col">C38</th>
-              <th scope="col">C39</th>
-              <th scope="col">C40</th>
-              <th scope="col">C41</th>
-              <th scope="col">C42</th>
-              <th scope="col">C43</th>
-              <th scope="col">C44</th>
-              <th scope="col">Pristane</th>
-              <th scope="col">Phytane</th>
-            </tr>
-          </thead>
+          <thead></thead>
           <tbody id="alkanes-tbody">
-            {{#each oil.alkanes as |alkanes|}}
-              <tr class="collapse show alkanes-row-collapse">
-                <td>{{value-unit alkanes.c8 2}}</td>
-                <td>{{value-unit alkanes.c9 2}}</td>
-                <td>{{value-unit alkanes.c10 2}}</td>
-                <td>{{value-unit alkanes.c11 2}}</td>
-                <td>{{value-unit alkanes.c12 2}}</td>
-                <td>{{value-unit alkanes.c13 2}}</td>
-                <td>{{value-unit alkanes.c14 2}}</td>
-                <td>{{value-unit alkanes.c15 2}}</td>
-                <td>{{value-unit alkanes.c16 2}}</td>
-                <td>{{value-unit alkanes.c17 2}}</td>
-                <td>{{value-unit alkanes.c18 2}}</td>
-                <td>{{value-unit alkanes.c19 2}}</td>
-                <td>{{value-unit alkanes.c20 2}}</td>
-                <td>{{value-unit alkanes.c21 2}}</td>
-                <td>{{value-unit alkanes.c22 2}}</td>
-                <td>{{value-unit alkanes.c23 2}}</td>
-                <td>{{value-unit alkanes.c24 2}}</td>
-                <td>{{value-unit alkanes.c25 2}}</td>
-                <td>{{value-unit alkanes.c26 2}}</td>
-                <td>{{value-unit alkanes.c27 2}}</td>
-                <td>{{value-unit alkanes.c28 2}}</td>
-                <td>{{value-unit alkanes.c29 2}}</td>
-                <td>{{value-unit alkanes.c30 2}}</td>
-                <td>{{value-unit alkanes.c31 2}}</td>
-                <td>{{value-unit alkanes.c32 2}}</td>
-                <td>{{value-unit alkanes.c33 2}}</td>
-                <td>{{value-unit alkanes.c34 2}}</td>
-                <td>{{value-unit alkanes.c35 2}}</td>
-                <td>{{value-unit alkanes.c36 2}}</td>
-                <td>{{value-unit alkanes.c37 2}}</td>
-                <td>{{value-unit alkanes.c38 2}}</td>
-                <td>{{value-unit alkanes.c39 2}}</td>
-                <td>{{value-unit alkanes.c40 2}}</td>
-                <td>{{value-unit alkanes.c41 2}}</td>
-                <td>{{value-unit alkanes.c42 2}}</td>
-                <td>{{value-unit alkanes.c43 2}}</td>
-                <td>{{value-unit alkanes.c44 2}}</td>
-                <td>{{value-unit alkanes.pristane 2}}</td>
-                <td>{{value-unit alkanes.phytane 2}}</td>
-              </tr>
-            {{/each}}
-
             {{#if oil.alkanes}}
-              <tr class="collapse alkanes-row-collapse">
-                <th>&#x2026;</th>
+              <tr>
+                <td>C8</td>
+                <td>{{value-unit oil.alkanes.c8 2}}</td>
+              </tr>
+              <tr>
+                <td>C9</td>
+                <td>{{value-unit oil.alkanes.c9 2}}</td>
+              </tr>
+              <tr>
+                <td>C10</td>
+                <td>{{value-unit oil.alkanes.c10 2}}</td>
+              </tr>
+              <tr>
+                <td>C11</td>
+                <td>{{value-unit oil.alkanes.c11 2}}</td>
+              </tr>
+              <tr>
+                <td>C12</td>
+                <td>{{value-unit oil.alkanes.c12 2}}</td>
+              </tr>
+              <tr>
+                <td>C13</td>
+                <td>{{value-unit oil.alkanes.c13 2}}</td>
+              </tr>
+              <tr>
+                <td>C14</td>
+                <td>{{value-unit oil.alkanes.c14 2}}</td>
+              </tr>
+              <tr>
+                <td>C15</td>
+                <td>{{value-unit oil.alkanes.c15 2}}</td>
+              </tr>
+              <tr>
+                <td>C16</td>
+                <td>{{value-unit oil.alkanes.c16 2}}</td>
+              </tr>
+              <tr>
+                <td>C17</td>
+                <td>{{value-unit oil.alkanes.c17 2}}</td>
+              </tr>
+              <tr>
+                <td>C18</td>
+                <td>{{value-unit oil.alkanes.c18 2}}</td>
+              </tr>
+              <tr>
+                <td>C19</td>
+                <td>{{value-unit oil.alkanes.c19 2}}</td>
+              </tr>
+              <tr>
+                <td>C20</td>
+                <td>{{value-unit oil.alkanes.c20 2}}</td>
               </tr>
             {{else}}
               <tr><td>No Data</td></tr>
@@ -108,6 +69,142 @@
         </table>
       </div>
     </div>
-  </div>
 
+
+    <div class="col-3">
+
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+          <thead></thead>
+          <tbody id="alkanes-tbody">
+            {{#if oil.alkanes}}
+              <tr>
+                <td>C21</td>
+                <td>{{value-unit oil.alkanes.c21 2}}</td>
+              </tr>
+              <tr>
+                <td>C22</td>
+                <td>{{value-unit oil.alkanes.c22 2}}</td>
+              </tr>
+              <tr>
+                <td>C23</td>
+                <td>{{value-unit oil.alkanes.c23 2}}</td>
+              </tr>
+              <tr>
+                <td>C24</td>
+                <td>{{value-unit oil.alkanes.c24 2}}</td>
+              </tr>
+              <tr>
+                <td>C25</td>
+                <td>{{value-unit oil.alkanes.c25 2}}</td>
+              </tr>
+              <tr>
+                <td>C26</td>
+                <td>{{value-unit oil.alkanes.c26 2}}</td>
+              </tr>
+              <tr>
+                <td>C27</td>
+                <td>{{value-unit oil.alkanes.c27 2}}</td>
+              </tr>
+              <tr>
+                <td>C28</td>
+                <td>{{value-unit oil.alkanes.c28 2}}</td>
+              </tr>
+              <tr>
+                <td>C29</td>
+                <td>{{value-unit oil.alkanes.c29 2}}</td>
+              </tr>
+              <tr>
+                <td>C30</td>
+                <td>{{value-unit oil.alkanes.c30 2}}</td>
+              </tr>
+              <tr>
+                <td>C31</td>
+                <td>{{value-unit oil.alkanes.c31 2}}</td>
+              </tr>
+              <tr>
+                <td>C32</td>
+                <td>{{value-unit oil.alkanes.c32 2}}</td>
+              </tr>
+              <tr>
+                <td>C33</td>
+                <td>{{value-unit oil.alkanes.c33 2}}</td>
+              </tr>
+            {{else}}
+              <tr><td>No Data</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="col-3">
+
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+          <thead></thead>
+          <tbody id="alkanes-tbody">
+            {{#if oil.alkanes}}
+              <tr>
+                <td>C34</td>
+                <td>{{value-unit oil.alkanes.c34 2}}</td>
+              </tr>
+              <tr>
+                <td>C35</td>
+                <td>{{value-unit oil.alkanes.c35 2}}</td>
+              </tr>
+              <tr>
+                <td>C36</td>
+                <td>{{value-unit oil.alkanes.c36 2}}</td>
+              </tr>
+              <tr>
+                <td>C37</td>
+                <td>{{value-unit oil.alkanes.c37 2}}</td>
+              </tr>
+              <tr>
+                <td>C38</td>
+                <td>{{value-unit oil.alkanes.c38 2}}</td>
+              </tr>
+              <tr>
+                <td>C39</td>
+                <td>{{value-unit oil.alkanes.c39 2}}</td>
+              </tr>
+              <tr>
+                <td>C40</td>
+                <td>{{value-unit oil.alkanes.c40 2}}</td>
+              </tr>
+              <tr>
+                <td>C41</td>
+                <td>{{value-unit oil.alkanes.c41 2}}</td>
+              </tr>
+              <tr>
+                <td>C42</td>
+                <td>{{value-unit oil.alkanes.c42 2}}</td>
+              </tr>
+              <tr>
+                <td>C43</td>
+                <td>{{value-unit oil.alkanes.c43 2}}</td>
+              </tr>
+              <tr>
+                <td>C44</td>
+                <td>{{value-unit oil.alkanes.c44 2}}</td>
+              </tr>
+              <tr>
+                <td>Pristane</td>
+                <td>{{value-unit oil.alkanes.pristane 2}}</td>
+              </tr>
+              <tr>
+                <td>Phytane</td>
+                <td>{{value-unit oil.alkanes.phytane 2}}</td>
+              </tr>
+            {{else}}
+              <tr><td>No Data</td></tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
