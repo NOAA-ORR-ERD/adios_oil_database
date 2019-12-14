@@ -515,8 +515,7 @@ class OilLibraryAttributeMapper(object):
             N/A. Oil Library records don't have this.  So we form a generator
             function that returns an empty iterator
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def chromatography(self):
@@ -590,8 +589,7 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def toxicities(self):

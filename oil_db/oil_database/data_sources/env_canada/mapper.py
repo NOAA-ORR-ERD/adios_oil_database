@@ -48,7 +48,9 @@ class EnvCanadaAttributeMapper(object):
                            'benzene',
                            'alkylated_pahs',
                            'alkanes',
-                           'chromatography')
+                           'chromatography',
+                           'headspace',
+                           'biomarkers')
 
     def __init__(self, record):
         '''

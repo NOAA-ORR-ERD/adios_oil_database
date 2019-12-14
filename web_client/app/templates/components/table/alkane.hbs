@@ -3,7 +3,7 @@
 
   <div class="row">
 
-    <div class="col-3">
+    <div class="col-4">
 
       <div class="table-responsive">
         <table class="table table-hover table-bordered">
@@ -71,13 +71,13 @@
     </div>
 
 
-    <div class="col-3">
+    <div class="col-4">
 
       <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-          <thead></thead>
-          <tbody id="alkanes-tbody">
-            {{#if oil.alkanes}}
+        {{#if oil.alkanes}}
+          <table class="table table-hover table-bordered">
+            <thead></thead>
+            <tbody id="alkanes-tbody">
               <tr>
                 <td>C21</td>
                 <td>{{value-unit oil.alkanes.c21 2}}</td>
@@ -130,22 +130,20 @@
                 <td>C33</td>
                 <td>{{value-unit oil.alkanes.c33 2}}</td>
               </tr>
-            {{else}}
-              <tr><td>No Data</td></tr>
-            {{/if}}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        {{/if}}
       </div>
     </div>
 
 
-    <div class="col-3">
+    <div class="col-4">
 
       <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-          <thead></thead>
-          <tbody id="alkanes-tbody">
-            {{#if oil.alkanes}}
+        {{#if oil.alkanes}}
+          <table class="table table-hover table-bordered">
+            <thead></thead>
+            <tbody id="alkanes-tbody">
               <tr>
                 <td>C34</td>
                 <td>{{value-unit oil.alkanes.c34 2}}</td>
@@ -198,11 +196,9 @@
                 <td>Phytane</td>
                 <td>{{value-unit oil.alkanes.phytane 2}}</td>
               </tr>
-            {{else}}
-              <tr><td>No Data</td></tr>
-            {{/if}}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        {{/if}}
       </div>
     </div>
 
