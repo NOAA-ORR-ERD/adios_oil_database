@@ -50,7 +50,11 @@ class EnvCanadaAttributeMapper(object):
                            'alkanes',
                            'chromatography',
                            'headspace',
-                           'biomarkers')
+                           'biomarkers',
+                           'ccme',
+                           'ccme_f1',
+                           'ccme_f2',
+                           'ccme_tph')
 
     def __init__(self, record):
         '''

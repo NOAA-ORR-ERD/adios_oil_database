@@ -3,36 +3,30 @@
     <strong>CCME Fractions:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".ccme-row-collapse"
-             aria-controls="ccme-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">F1</th>
-          <th scope="col">F2</th>
-          <th scope="col">F3</th>
-          <th scope="col">F4</th>
-        </tr>
-      </thead>
+      <thead></thead>
       <tbody id="ccme-tbody">
-        {{#each oil.ccme as |ccme|}}
-          <tr class="collapse show ccme-row-collapse">
-            <td>{{value-unit ccme.f1 3}}</td>
-            <td>{{value-unit ccme.f2 3}}</td>
-            <td>{{value-unit ccme.f3 3}}</td>
-            <td>{{value-unit ccme.f4 3}}</td>
-          </tr>
-        {{/each}}
-
         {{#if oil.ccme}}
-          <tr class="collapse ccme-row-collapse">
-            <th scope="row">&#x2026;</th>
+          <tr>
+            <td>F1</td>
+            <td>{{value-unit oil.ccme.f1 3}}</td>
+          </tr>
+          <tr>
+            <td>F2</td>
+            <td>{{value-unit oil.ccme.f2 3}}</td>
+          </tr>
+          <tr>
+            <td>F3</td>
+            <td>{{value-unit oil.ccme.f3 3}}</td>
+          </tr>
+          <tr>
+            <td>F4</td>
+            <td>{{value-unit oil.ccme.f4 3}}</td>
           </tr>
         {{else}}
           <tr><td>No Data</td></tr>
         {{/if}}
       </tbody>
     </table>
-  </div>
 
+  </div>
 </div>

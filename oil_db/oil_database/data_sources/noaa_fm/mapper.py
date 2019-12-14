@@ -529,32 +529,28 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def ccme_f1(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def ccme_f2(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def ccme_tph(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def sara_total_fractions(self):
