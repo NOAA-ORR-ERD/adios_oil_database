@@ -1,53 +1,40 @@
 <div class="detail-section">
+  <div class="table-responsive">
   <strong>Gas Chromatography:</strong>
 
-  <div class="row">
-    <div class="col-9">
+    <table class="table table-hover table-bordered">
+      <thead></thead>
+      <tbody id="gc-tbody">
+        {{#if oil.chromatography}}
+          <tr>
+            <td>Total Petroleum Hydocarbon</td>
+            <td>{{value-unit oil.chromatography.tph 3}}</td>
+          </tr>
+          <tr>
+            <td>Total Saturate Hydrocarbon</td>
+            <td>{{value-unit oil.chromatography.tsh 3}}</td>
+          </tr>
+          <tr>
+            <td>Total Aromatic Hydrocarbon</td>
+            <td>{{value-unit oil.chromatography.tah 3}}</td>
+          </tr>
+          <tr>
+            <td>TSH/TPH</td>
+            <td>{{value-unit oil.chromatography.tsh_tph 3}}</td>
+          </tr>
+          <tr>
+            <td>TAH/TPH</td>
+            <td>{{value-unit oil.chromatography.tah_tph 3}}</td>
+          </tr>
+          <tr>
+            <td>Resolved Peaks / TPH</td>
+            <td>{{value-unit oil.chromatography.resolved_peaks_tph 3}}</td>
+          </tr>
+       {{else}}
+          <tr><td>No Data</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
 
-      <div class="table-responsive">
-    
-        <table class="table table-hover table-bordered">
-          <thead class="clickable" data-toggle="collapse"
-                 data-target=".gc-row-collapse"
-                 aria-controls="gc-tbody"
-                 aria-expanded="false">
-            <tr>
-              <th scope="col">Total Petroleum Hydocarbon</th>
-              <th scope="col">Total Saturate Hydrocarbon</th>
-              <th scope="col">Total Aromatic Hydrocarbon</th>
-              <th scope="col">TSH/TPH</th>
-              <th scope="col">TAH/TPH</th>
-              <th scope="col">Resolved Peaks / TPH</th>
-            </tr>
-          </thead>
-          <tbody id="gc-tbody">
-            {{#each oil.chromatography as |gc|}}
-              <tr class="collapse show gc-row-collapse">
-                <td>{{value-unit gc.tph 3}}</td>
-                <td>{{value-unit gc.tsh 3}}</td>
-                <td>{{value-unit gc.tah 3}}</td>
-                <td>{{value-unit gc.tsh_tph 3}}</td>
-                <td>{{value-unit gc.tah_tph 3}}</td>
-                <td>{{value-unit gc.resolved_peaks_tph 3}}</td>
-              </tr>
-            {{/each}}
-
-            {{#if oil.chromatography}}
-              <tr class="collapse gc-row-collapse">
-                <th scope="row">&#x2026;</th>
-              </tr>
-            {{else}}
-              <tr><td>No Data</td></tr>
-            {{/if}}
-          </tbody>
-        </table>
-      </div>
-    
-    </div>
-  </div>
-
-
-
-
-
+  </div>    
 </div>

@@ -47,7 +47,8 @@ class EnvCanadaAttributeMapper(object):
                            'wax_content',
                            'benzene',
                            'alkylated_pahs',
-                           'alkanes')
+                           'alkanes',
+                           'chromatography')
 
     def __init__(self, record):
         '''
