@@ -57,13 +57,15 @@
           </a>
         {{/if}}
       {{/each}}
-      
-      <a id="nav-add-tab" href="#nav-add"
-         data-toggle="tab"
-         class="nav-item nav-link add-sample">
-        {{fa-icon "plus"}}
-      </a>
-      
+
+      {{#if editable}}
+        <a id="nav-add-tab" href="#nav-add"
+           data-toggle="tab"
+           class="nav-item nav-link add-sample">
+          {{fa-icon "plus"}}
+        </a>
+      {{/if}}
+
     </div>
   </nav>
 
