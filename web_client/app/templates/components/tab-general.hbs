@@ -26,12 +26,18 @@
 
       <strong>API:</strong>
 
-      {{#if (not (is-empty oil.samples.[0].apis ))}}
-        <input type="text" value={{round-relative oil.samples.[0].apis.[0].gravity 2}} >
+      {{#if editable}}
+        {{#if (not (is-empty oil.samples.[0].apis ))}}
+          <input type="text" value={{round-relative oil.samples.[0].apis.[0].gravity 2}} >
+        {{else}}
+          <input type="text" value="Enter a value" >
+        {{/if}}
       {{else}}
-        <span>
-          No Values
-        </span>
+        {{#if (not (is-empty oil.samples.[0].apis ))}}
+          <span>{{round-relative oil.samples.[0].apis.[0].gravity 2}}</span>
+        {{else}}
+          <input type="text" value="No Data" >
+        {{/if}}
       {{/if}}
       <br>
 
