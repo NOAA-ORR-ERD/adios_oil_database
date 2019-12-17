@@ -11,19 +11,17 @@
           {{/link-to}}
         </h3>
 	    &nbsp;
-        <XToggle
-          @theme="ios"
-          @showLabels={{true}}
-          @value={{this.editable}}
-          @onToggle={{action (mut this.editable)}}
-          as |toggle|>
-          <toggle.switch />
-
-          <toggle.label @value={{not this.editable}}>
-            &nbsp; &nbsp;
-            {{if this.editable "Edit" ""}}
-          </toggle.label>
-        </XToggle>
+        <div>
+          <center class="small">Edit Mode</center>
+          <XToggle
+            @theme="ios"
+            @showLabels={{true}}
+            @onLabel="Edit"
+            @offLabel="View"
+            @value={{this.editable}}
+            @onToggle={{action (mut this.editable)}}
+          />
+        </div>
 
       </div>
     </div>
