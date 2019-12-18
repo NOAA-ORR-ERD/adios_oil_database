@@ -1,3 +1,4 @@
+import copy
 
 def get_new_oil(name, sparse=False):
     """
@@ -5,14 +6,13 @@ def get_new_oil(name, sparse=False):
     """
     if sparse:
         raise NotImplementedError
-    elif:
-        oil = copy.deepcopy(EMPTY_RECORD)
+    else:
+        oil = copy.deepcopy(RECORD_SPEC)
         oil["name"] = name
-
     return oil
 
 
-RECORD_SPEC = {"_id": "XX000000"
+RECORD_SPEC = {"_id": "XX000000",
                "name": "dummy name",
 # everything else here
                }
