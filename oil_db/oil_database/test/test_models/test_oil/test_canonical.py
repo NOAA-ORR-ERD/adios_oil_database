@@ -12,7 +12,7 @@ def test_no_name():
         oil = canonical.get_new_oil()
 
 @pytest.mark.xfail
-def get_sparse_oil():
+def test_get_sparse_oil():
     """
     try getting a sparse version of the oil
 
