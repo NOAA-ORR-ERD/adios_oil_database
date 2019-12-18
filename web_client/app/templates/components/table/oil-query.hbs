@@ -1,4 +1,22 @@
 {{#light-table table height="65vh" as |t|}}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        {{one-way-select selectedFilter
+            options=possibleFilters
+            optionValuePath="valuePath"
+            optionLabelPath="label"
+            update=(action (pipe (action (mut selectedFilter)) (action "onSearchChange")))
+        }}
+        {{one-way-input
+          value=q
+          placeholder="Search..."
+          update=(action (pipe (action (mut q)) (action "onSearchChange")))
+        }}
+      </div>
+
+    </div>
+  </div>
 
   {{t.head
     onColumnClick=(action "onColumnClick")
@@ -20,21 +38,4 @@
     {{/if}}
   {{/t.body}}
 
-  {{#t.foot fixed=true as |columns|}}
-    <tr>
-      <td class="align-center" colspan={{columns.length}}>
-        {{one-way-select selectedFilter
-            options=possibleFilters
-            optionValuePath="valuePath"
-            optionLabelPath="label"
-            update=(action (pipe (action (mut selectedFilter)) (action "onSearchChange")))
-        }}
-        {{one-way-input
-          value=q
-          placeholder="Search..."
-          update=(action (pipe (action (mut q)) (action "onSearchChange")))
-        }}
-      </td>
-    </tr>
-  {{/t.foot}}
 {{/light-table}}
