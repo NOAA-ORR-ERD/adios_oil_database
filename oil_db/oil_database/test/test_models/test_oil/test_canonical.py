@@ -10,3 +10,13 @@ def test_get_new_oil():
 def test_no_name():
     with pytest.raises(TypeError):
         oil = canonical.get_new_oil()
+
+@pytest.mark.xfail
+def get_sparse_oil():
+    """
+    try getting a sparse version of the oil
+
+    should only have the minimum fields
+    """
+    oil = canonical.get_new_oil("An Oil Name", sparse=True)
+
