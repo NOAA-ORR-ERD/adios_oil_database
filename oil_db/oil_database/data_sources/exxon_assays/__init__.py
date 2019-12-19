@@ -1,2 +1,2 @@
-from .reader import ExxonOilExcelFile
+from .reader import ExxonDataReader
 from .parser import ExxonRecordParser
