@@ -11,7 +11,7 @@ export default Model.extend({
   comments: attr(),
   categories: attr(),
   status: attr(),
-  apis: attr(),
+  api: attr(),
   viscosity: attr(),
 
   samples: attr()

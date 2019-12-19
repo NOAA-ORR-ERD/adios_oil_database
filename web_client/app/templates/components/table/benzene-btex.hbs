@@ -2,37 +2,31 @@
   <div class="table-responsive">
     <strong>BTEX Group:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".btex-row-collapse"
-             aria-controls="btex-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Toluene</th>
-          <th scope="col">Ethylbenzene</th>
-          <th scope="col">m&p-Xylene</th>
-          <th scope="col">o-Xylene</th>
-        </tr>
-      </thead>
-      <tbody id="btex-tbody">
-        {{#each oil.benzene as |benzene index|}}
-          <tr class="collapse show btex-row-collapse">
-            <td>{{value-unit benzene.toluene 2}}</td>
-            <td>{{value-unit benzene.ethylbenzene 2}}</td>
-            <td>{{value-unit benzene.m_p_xylene 2}}</td>
-            <td>{{value-unit benzene.o_xylene 2}}</td>
+    {{#if anyDataPresent}}
+      <table class="table table-hover table-bordered">
+        <thead></thead>
+        <tbody id="btex-tbody">
+          <tr>
+            <td >Toluene</td>
+            <td>{{value-unit oil.benzene.toluene 2}}</td>
           </tr>
-        {{/each}}
+          <tr>
+            <td >Ethylbenzene</td>
+            <td>{{value-unit oil.benzene.ethylbenzene 2}}</td>
+          </tr>
+          <tr>
+            <td >m&p-Xylene</td>
+            <td>{{value-unit oil.benzene.m_p_xylene 2}}</td>
+          </tr>
+          <tr>
+            <td >o-Xylene</td>
+            <td>{{value-unit oil.benzene.o_xylene 2}}</td>
+          </tr>
+        </tbody>
+      </table>
+    {{else}}
+      No Data
+    {{/if}}
 
-        {{#if oil.benzene}}
-          <tr class="collapse btex-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
-        {{else}}
-          <tr><td>Empty</td></tr>
-        {{/if}}
-      </tbody>
-    </table>
   </div>
-
 </div>

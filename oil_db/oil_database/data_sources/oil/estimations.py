@@ -116,7 +116,7 @@ class OilEstimation(object):
     def __getattr__(self, name):
         return getattr(self.record, name, None)
 
-    def get_sample(self, sample_id='w=0.0'):
+    def get_sample(self, name='Fresh Oil Sample'):
         '''
             sample_id will normally indicate a weathering amount, but
             there will be cases where it will indicate something else,
@@ -133,7 +133,7 @@ class OilEstimation(object):
 
         try:
             samples = [s for s in self.record.samples
-                       if s.sample_id == sample_id]
+                       if s.name == name]
         except (AttributeError, TypeError):
             return None
 

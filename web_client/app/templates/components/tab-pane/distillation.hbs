@@ -1,22 +1,17 @@
 <div class="container">
   <center>
-    <h4>
-      {{round-relative (mult weathered 100) 2}}% Evaporated
-      {{#if (eq weathered 0)}}
-        (Fresh)
-      {{/if}}
-    </h4>
+    <h4>{{sampleName}}</h4>
   </center>
 
   <div class="row">
     <div class="col-lg-5">
-      <Table::Distillation @oil={{oil}} @weathered={{weathered}} class="row"/>
+      <Table::Distillation @oil={{oil}} class="row"/>
     </div>
 
     <div class="col-lg-5">
       <strong>Distillation Graph:</strong>
 
-      <Graph::Distillation @oil={{oil}} @weathered={{weathered}} class="row"/>
+      <Graph::Distillation @oil={{oil}} @sampleName={{sampleName}} class="row"/>
     </div>
 
   </div>

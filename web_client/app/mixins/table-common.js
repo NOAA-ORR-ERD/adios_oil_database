@@ -12,7 +12,7 @@ export default Mixin.create({
   store: service(),
 
   page: 0,
-  limit: 10,
+  limit: 20,
   dir: 'asc',
   sort: 'firstName',
 
@@ -29,7 +29,7 @@ export default Mixin.create({
   init() {
     this._super(...arguments);
 
-    this.set('data',this.get('model').toArray());
+    this.set('data', this.get('model').toArray());
 
     let table = Table.create({
 		columns: this.get('columns'),

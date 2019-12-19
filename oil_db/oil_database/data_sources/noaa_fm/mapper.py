@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from numbers import Number
 from datetime import datetime
 from collections import defaultdict
 import logging
@@ -65,6 +66,38 @@ class OilLibraryAttributeMapper(object):
 
         return props
 
+    def generate_sample_id_attrs(self, sample_id):
+        attrs = {}
+
+        if sample_id == 0:
+            attrs['name'] = 'Fresh Oil Sample'
+            attrs['short_name'] = 'Fresh Oil'
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
+        elif isinstance(sample_id, str):
+            attrs['name'] = sample_id
+            attrs['short_name'] = '{}...'.format(sample_id[:12])
+            attrs['fraction_weathered'] = None
+            attrs['boiling_point_range'] = None
+        elif isinstance(sample_id, Number):
+            # we will assume this is a simple fractional weathered amount
+            attrs['name'] = '{}% Weathered'.format(sample_id * 100)
+            attrs['short_name'] = '{}% Weathered'.format(sample_id * 100)
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
+        else:
+            logger.warn("Can't generate IDs for sample: ", sample_id)
+
+        return attrs
+
+    def sort_samples(self, samples):
+        if all([s['fraction_weathered'] is not None for s in samples]):
+            return sorted(samples, key=lambda v: v['fraction_weathered'])
+        else:
+            # if we can't sort on weathered amount, then we will choose to
+            # not sort at all
+            return list(samples)
+
     def dict(self):
         rec = {}
         samples = defaultdict(dict)
@@ -77,7 +110,7 @@ class OilLibraryAttributeMapper(object):
             elif hasattr(v, '__iter__') and not hasattr(v, '__len__'):
                 # we have a sequence of items
                 for i in v:
-                    w = 'w={}'.format(i.get('weathering', 0.0))
+                    w = i.get('weathering', 0.0)
                     i.pop('weathering', None)
 
                     try:
@@ -86,8 +119,10 @@ class OilLibraryAttributeMapper(object):
                         samples[w][k] = []
                         samples[w][k].append(i)
             else:
-                # assume a weathering of 0
-                samples['w=0.0'][k] = v
+                # - assume a weathering of 0
+                # - if the attribute is None, we don't add it.
+                if v is not None:
+                    samples[0.0][k] = v
 
         # MongoDB strikes again.  Apparently, in order to support their query
         # methods, dictionary keys, for all dicts, need to be a string that
@@ -98,9 +133,9 @@ class OilLibraryAttributeMapper(object):
         #
         # For NOAA Filemaker records, the ID will be the weathering amount.
         for k, v in samples.items():
-            v['sample_id'] = k
+            v.update(self.generate_sample_id_attrs(k))
 
-        rec['samples'] = sorted(samples.values(), key=lambda v: v['sample_id'])
+        rec['samples'] = self.sort_samples(samples.values())
 
         return rec
 
@@ -294,7 +329,7 @@ class OilLibraryAttributeMapper(object):
                 yield kwargs
 
     @property
-    def flash_points(self):
+    def flash_point(self):
         min_temp = self._get_record_attr('flash_point_min_k', float)
         max_temp = self._get_record_attr('flash_point_max_k', float)
 
@@ -306,13 +341,12 @@ class OilLibraryAttributeMapper(object):
             kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
                                   'unit': 'K',
                                   '_cls': self._class_path(TemperatureUnit)}
-        kwargs['weathering'] = 0.0
 
-        if len(kwargs.keys()) > 1:
-            yield kwargs
+        if len(kwargs.keys()) > 0:
+            return kwargs
 
     @property
-    def pour_points(self):
+    def pour_point(self):
         min_temp = self._get_record_attr('pour_point_min_k', float)
         max_temp = self._get_record_attr('pour_point_max_k', float)
 
@@ -324,10 +358,9 @@ class OilLibraryAttributeMapper(object):
             kwargs['ref_temp'] = {'min_value': min_temp, 'max_value': max_temp,
                                   'unit': 'K',
                                   '_cls': self._class_path(TemperatureUnit)}
-        kwargs['weathering'] = 0.0
 
-        if len(kwargs.keys()) > 1:
-            yield kwargs
+        if len(kwargs.keys()) > 0:
+            return kwargs
 
     @property
     def cuts(self):
@@ -362,7 +395,7 @@ class OilLibraryAttributeMapper(object):
             yield kwargs
 
     @property
-    def adhesions(self):
+    def adhesion(self):
         '''
             Note: We don't really know what the adhesion units are for the
                   NOAA Filemaker records.
@@ -379,9 +412,8 @@ class OilLibraryAttributeMapper(object):
 
             kwargs['adhesion'] = {'value': adhesion, 'unit': 'N/m^2',
                                   '_cls': self._class_path(AdhesionUnit)}
-            kwargs['weathering'] = 0.0
 
-            yield kwargs
+            return kwargs
 
     @property
     def evaporation_eqs(self):
@@ -433,34 +465,37 @@ class OilLibraryAttributeMapper(object):
     def sulfur(self):
         sulfur = self._get_record_attr('sulphur', float)
 
-        if sulfur is not None:
+        if sulfur is None:
+            return None
+        else:
             kwargs = {}
 
             kwargs['fraction'] = {'value': sulfur, 'unit': 'fraction',
                                   '_cls': self._class_path(FloatUnit)}
             kwargs['weathering'] = 0.0
 
-            yield kwargs
+            return kwargs
 
     @property
     def water(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def wax_content(self):
         wax = self._get_record_attr('wax_content', float)
 
-        if wax is not None:
+        if wax is None:
+            return None
+        else:
             kwargs = {}
 
             kwargs['fraction'] = {'value': wax, 'unit': 'fraction',
                                   '_cls': self._class_path(FloatUnit)}
 
-            yield kwargs
+            return kwargs
 
     @property
     def benzene(self):
@@ -472,7 +507,7 @@ class OilLibraryAttributeMapper(object):
             kwargs['benzene'] = {'value': benzene_content, 'unit': 'fraction',
                                  '_cls': self._class_path(FloatUnit)}
 
-            yield kwargs
+            return kwargs
 
     @property
     def headspace(self):
@@ -480,48 +515,42 @@ class OilLibraryAttributeMapper(object):
             N/A. Oil Library records don't have this.  So we form a generator
             function that returns an empty iterator
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def chromatography(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def ccme(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def ccme_f1(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def ccme_f2(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def ccme_tph(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def sara_total_fractions(self):
@@ -542,24 +571,21 @@ class OilLibraryAttributeMapper(object):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def alkylated_pahs(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def biomarkers(self):
         '''
             N/A. Oil Library records don't have this.
         '''
-        if False:
-            yield None
+        return None
 
     @property
     def toxicities(self):

@@ -2,31 +2,14 @@
   <div class="table-responsive">
     <strong>Sulfur Content:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".sulfur-row-collapse"
-             aria-controls="sulfur-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Fraction</th>
-        </tr>
-      </thead>
-      <tbody id="sulfur-tbody">
-        {{#each oil.sulfur as |sulfur index|}}
-            <tr class="collapse show sulfur-row-collapse">
-              <td>{{value-unit sulfur.fraction 3}}</td>
-            </tr>
-        {{/each}}
+    {{#if oil.sulfur}}
+      {{value-unit (convert-unit oil.sulfur.fraction "%") 2}}
+    {{else}}
+      No Data
+    {{/if}}
 
-        {{#if oil.sulfur}}
-          <tr class="collapse sulfur-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
-        {{else}}
-          <tr><td>Empty</td></tr>
-        {{/if}}
-      </tbody>
-    </table>
   </div>
+
+  &nbsp;
 
 </div>

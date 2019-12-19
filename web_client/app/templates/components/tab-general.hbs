@@ -20,9 +20,9 @@
             <label class="p-1 input-group-text font-weight-bold">Location:</label>
           </div>
           {{#if oil.location}}
-            <Input @class="p-1 flex-fill bg-transparent border" @value={{oil.location}} />
+            <Input @class="p-1 flex-fill bg-transparent border" @value={{oil.location}} @readonly={{readOnly}} />
           {{else}}
-            <Input @class="p-1 flex-fill bg-transparent border" @value="None" />
+            <Input @class="p-1 flex-fill bg-transparent border" @value="None" @readonly={{readOnly}} />
           {{/if}}
         </div>
 
@@ -35,14 +35,14 @@
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">API:</label>
           </div>
-          {{#if (not (is-empty oil.apis))}}
-            <Input @id="api" @type="number" @class="p-1 flex-fill bg-transparent border" 
-              @placeholder="API value" @value={{round-relative oil.apis.[0].gravity 2}}
-              @change={{action "updateAPI"}} @size="6" />
+          {{#if (not (is-empty oil.samples.[0].apis))}}
+            <Input @id="api" @type="text" @class="p-1 flex-fill bg-transparent border" 
+              @placeholder="API value" @value={{round-relative oil.samples.[0].apis.[0].gravity 2}}
+              @change={{action "updateAPI"}} @size="6" @readonly={{readOnly}} />
           {{else}}
             <Input @id="api" @type="text" @class="p-1 flex-fill bg-transparent border" 
               @placeholder="API value" @value="No Values"
-              @change={{action "updateAPI"}} @size="6" />
+              @change={{action "updateAPI"}} @size="6" @readonly={{readOnly}} />
           {{/if}}
         </div>
 
@@ -50,16 +50,20 @@
         <div class="col pl-0 form-inline">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Type:</label>
-          </div>  
-          <select class="p-1 flex-fill bg-transparent border">
-            {{#each this.oilTypes as |oilType|}}
-              {{#if (eq oil.productType oilType)}}
-                <option selected>{{oilType}}</option>
-              {{else}}
-                <option>{{oilType}}</option>
-              {{/if}}  
-            {{/each}}
-          </select>
+          </div>
+          {{#if editable}}
+            <select class="p-1 flex-fill bg-transparent border">
+              {{#each this.oilTypes as |oilType|}}
+                {{#if (eq oil.productType oilType)}}
+                  <option selected>{{oilType}}</option>
+                {{else}}
+                  <option>{{oilType}}</option>
+                {{/if}}  
+              {{/each}}
+            </select>
+          {{else}}
+            <span class="p-1 flex-fill bg-transparent border">{{oil.productType}}</span>
+          {{/if}}  
         </div>
 
       </div>
@@ -103,9 +107,9 @@
           <label class="p-1 input-group-text font-weight-bold">Reference:</label>
         </div>
         {{#if oil.reference}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.reference}} @rows="3" />
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.reference}} @rows="3" @readonly={{readOnly}} />
         {{else}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" />
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" @readonly={{readOnly}} />
         {{/if}}
       </div>
 
@@ -117,11 +121,11 @@
             <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
           </div>
           {{#if oil.referenceDate}}
-            <Input @class="p-1 flex-fill bg-transparent border"  @size="7"
+            <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @readonly={{readOnly}}
             {{! Europe/London is how we lookup GMT in moment.js }}
             @value={{moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London"}} />
           {{else}}
-            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" />
+            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" @readonly={{readOnly}} />
           {{/if}}
         </div>
 
@@ -131,11 +135,11 @@
             <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
           </div>
           {{#if oil.sampleDate}}
-            <Input @class="p-1 flex-fill bg-transparent border" @size="7"
+            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @readonly={{readOnly}}
             {{! Europe/London is how we lookup GMT in moment.js }}
             @value={{moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London"}} />
           {{else}}
-            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" />
+            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" @readonly={{readOnly}} />
           {{/if}}
         </div>
       </div>
@@ -164,9 +168,9 @@
         <label class="p-1 input-group-text font-weight-bold">Comments:</label>
       </div>
       {{#if oil.comments}}
-        <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.comments}} @rows="1" />
+        <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.comments}} @rows="1" @readonly={{readOnly}} />
       {{else}}
-        <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" @rows="1"/>
+        <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" @rows="1" @readonly={{readOnly}} />
       {{/if}}
     </div>
   </div>  
@@ -178,7 +182,7 @@
         <div class="input-group-prepend">
           <label class="p-1 input-group-text font-weight-bold">Status:</label>
         </div>
-        <Input @class="status-good p-1 bg-transparent border-0 font-italic" @size="4" @value="OK" />
+        <Input @class="status-good p-1 bg-transparent border-0 font-italic" @size="4" @value="OK" @readonly />
       </span>
     {{/unless}}
   </div>
