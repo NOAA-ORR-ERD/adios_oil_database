@@ -8,7 +8,6 @@
              aria-controls="toxicity-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Species</th>
           <th scope="col">Type</th>
           <th scope="col">24 Hours</th>
@@ -17,9 +16,8 @@
         </tr>
       </thead>
       <tbody id="toxicity-tbody">
-        {{#each oil.toxicities as |toxicity index|}}
+        {{#each oil.toxicities as |toxicity|}}
           <tr class="collapse show toxicity-row-collapse">
-            <th scope="row">{{index}}</th>
             <td>{{toxicity.species}}</td>
             <td>{{toxicity.tox_type}}</td>
             <td>{{toxicity.after_24h}}</td>
@@ -33,7 +31,7 @@
             <th scope="row">&#x2026;</th>
           </tr>
         {{else}}
-          <tr><td>Empty</td></tr>
+          <tr><td>No Data</td></tr>
         {{/if}}
       </tbody>
     </table>

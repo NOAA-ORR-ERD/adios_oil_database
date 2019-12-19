@@ -1,44 +1,40 @@
 <div class="container">
   <center>
-    <h4>
-      {{round-relative (mult weathered 100) 2}}% Evaporated
-      {{#if (eq weathered 0)}}
-        (Fresh)
-      {{/if}}
-    </h4>
+    <h4>{{sampleName}}</h4>
   </center>
 
   <div class="row">
-
-    <div class="col-lg-5">
-      <TabPourPoint @oil={{oil}} @weathered={{weathered}} class="row"/>
+    <div class="col-lg-4">
+      <TabPourPoint @oil={{oil}} class="row"/>
     </div>
 
-    <div class="col-lg-5">
-      <TabFlashPoint @oil={{oil}} @weathered={{weathered}} class="row"/>
+    <div class="col-lg-4">
+      <TabFlashPoint @oil={{oil}} class="row"/>
     </div>
 
-    <div class="col-lg-5">
-      <Table::KinematicViscosity @oil={{oil}} @weathered={{weathered}} class="row"/>
+    <div class="col-lg-4">
+      <Table::Adhesion @oil={{oil}} class="row"/>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4">
+      <Table::Density @oil={{oil}} class="row"/>
     </div>
 
-    <div class="col-lg-5">
-      <Table::DynamicViscosity @oil={{oil}} @weathered={{weathered}} class="row"/>
+    <div class="col-lg-4">
+      <Table::KinematicViscosity @oil={{oil}} class="row"/>
     </div>
 
-    <div class="col-lg-5">
-      <Table::Density @oil={{oil}} @weathered={{weathered}} class="row"/>
+    <div class="col-lg-4">
+      <Table::DynamicViscosity @oil={{oil}} class="row"/>
     </div>
 
-    <div class="col-lg-5">
-      <Table::Adhesion @oil={{oil}} @weathered={{weathered}} class="row"/>
+    <div class="col-lg-4">
+      <Table::Ift @oil={{oil}} class="row"/>
     </div>
 
-    <div class="col-lg-5">
-      <Table::Ift @oil={{oil}} @weathered={{weathered}} class="row"/>
-    </div>
-
-    <div class="col-lg-5">
+    <div class="col-lg-4">
       {{! Placeholder div so that the last container lines up
           with the first column.  Only necessary for an odd number
           of containers }}

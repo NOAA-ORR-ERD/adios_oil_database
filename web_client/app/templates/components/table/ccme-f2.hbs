@@ -1,51 +1,48 @@
 <div class="detail-section">
-  <strong>Aromatics (F2):</strong>
+  <div class="table-responsive">
+    <strong>Aromatics (F2):</strong>
 
-  <div class="row">
-    <div class="col-12">
+    <table class="table table-hover table-bordered">
+      <thead></thead>
+      <tbody id="ccmef2-tbody">
+        {{#if oil.ccme_f2}}
+          <tr>
+            <td>n-C8 to n-c10</td>
+            <td>{{oil.ccme_f2.n_c8_to_n_c10}}</td>
+          </tr>
+          <tr>
+            <td>n-C10 to n-c12</td>
+            <td>{{oil.ccme_f2.n_c10_to_n_c12}}</td>
+          </tr>
+          <tr>
+            <td>n-C12 to n-c16</td>
+            <td>{{oil.ccme_f2.n_c12_to_n_c16}}</td>
+          </tr>
+          <tr>
+            <td>n-C16 to n-c20</td>
+            <td>{{oil.ccme_f2.n_c16_to_n_c20}}</td>
+          </tr>
+          <tr>
+            <td>n-C20 to n-c24</td>
+            <td>{{oil.ccme_f2.n_c20_to_n_c24}}</td>
+          </tr>
+          <tr>
+            <td>n-C24 to n-c28</td>
+            <td>{{oil.ccme_f2.n_c24_to_n_c28}}</td>
+          </tr>
+          <tr>
+            <td>n-C28 to n-c34</td>
+            <td>{{oil.ccme_f2.n_c28_to_n_c34}}</td>
+          </tr>
+          <tr>
+            <td>n-C34+</td>
+            <td>{{oil.ccme_f2.n_c34}}</td>
+          </tr>
+        {{else}}
+          <tr><td>No Data</td></tr>
+        {{/if}}
+      </tbody>
+    </table>
 
-      <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-          <thead class="clickable" data-toggle="collapse"
-                 data-target=".ccmef2-row-collapse"
-                 aria-controls="ccmef2-tbody"
-                 aria-expanded="false">
-            <tr>
-              <th scope="col">n-C8 to n-c10</th>
-              <th scope="col">n-C10 to n-c12</th>
-              <th scope="col">n-C12 to n-c16</th>
-              <th scope="col">n-C16 to n-c20</th>
-              <th scope="col">n-C20 to n-c24</th>
-              <th scope="col">n-C24 to n-c28</th>
-              <th scope="col">n-C28 to n-c34</th>
-              <th scope="col">n-C34+</th>
-            </tr>
-          </thead>
-          <tbody id="ccmef2-tbody">
-            {{#each oil.ccme_f2 as |f2 index|}}
-              <tr class="collapse show ccmef2-row-collapse">
-                <td>{{f2.n_c8_to_n_c10}}</td>
-                <td>{{f2.n_c10_to_n_c12}}</td>
-                <td>{{f2.n_c12_to_n_c16}}</td>
-                <td>{{f2.n_c16_to_n_c20}}</td>
-                <td>{{f2.n_c20_to_n_c24}}</td>
-                <td>{{f2.n_c24_to_n_c28}}</td>
-                <td>{{f2.n_c28_to_n_c34}}</td>
-                <td>{{f2.n_c34}}</td>
-              </tr>
-            {{/each}}
-
-            {{#if oil.ccme_f2}}
-              <tr class="collapse ccmef2-row-collapse">
-                <th>&#x2026;</th>
-              </tr>
-            {{else}}
-              <tr><td>Empty</td></tr>
-            {{/if}}
-          </tbody>
-        </table>
-      </div>
-    </div>
   </div>
-
 </div>

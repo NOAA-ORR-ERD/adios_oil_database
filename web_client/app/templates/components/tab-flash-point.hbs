@@ -3,31 +3,11 @@
   <div class="table-responsive">
     <strong>Flash Point:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".fp-row-collapse"
-             aria-controls="fp-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Temperature</th>
-        </tr>
-      </thead>
-      <tbody id="fp-tbody">
-        {{#each oil.flash_points as |fp index|}}
-          <tr class="collapse show fp-row-collapse">
-            <td>{{value-unit (convert-unit fp.ref_temp "C") 2}}</td>
-          </tr>
-        {{/each}}
-
-        {{#if oil.flash_points}}
-          <tr class="collapse fp-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
-        {{else}}
-          <tr><td>Empty</td></tr>
-        {{/if}}
-      </tbody>
-    </table>
+    {{#if oil.flash_point}}
+      {{value-unit (convert-unit oil.flash_point.ref_temp "C") 2}}
+    {{else}}
+      No Data
+    {{/if}}
 
   </div>
 

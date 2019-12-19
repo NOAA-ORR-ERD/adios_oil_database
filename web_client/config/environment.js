@@ -37,6 +37,17 @@ module.exports = function(environment) {
     enabled: false
   };
 
+  ENV['ember-toggle'] = {
+    includedThemes: [],
+    excludedThemes: [],
+    excludeBaseStyles: false, // defaults to false
+    defaultShowLabels: true,  // defaults to false
+    defaultTheme: 'ios',    // defaults to 'default'
+    defaultSize: 'small',     // defaults to 'medium'
+    defaultOffLabel: 'False', // defaults to 'Off'
+    defaultOnLabel: 'True'    // defaults to 'On'
+  };
+
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;

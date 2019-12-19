@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody id="conradson-tbody">
-        {{#each oil.conradson as |conradson index|}}
+        {{#each oil.conradson as |conradson|}}
           <tr class="collapse show conradson-row-collapse">
             {{#if conradson.crude}}
               <td>Crude</td>
@@ -30,7 +30,7 @@
             <th scope="row">&#x2026;</th>
           </tr>
         {{else}}
-          <tr><td>Empty</td></tr>
+          <tr><td>No Data</td></tr>
         {{/if}}
       </tbody>
     </table>

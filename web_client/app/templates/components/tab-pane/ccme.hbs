@@ -1,26 +1,13 @@
 <div class="container">
   <center>
-    <h4>
-      {{round-relative (mult weathered 100) 2}}% Evaporated
-      {{#if (eq weathered 0)}}
-        (Fresh)
-      {{/if}}
-    </h4>
+    <h4>{{sampleName}}</h4>
   </center>
 
   <div class="row">
-    <Table::Ccme @oil={{oil}} @weathered={{weathered}} class="col-5"/>
+    <Table::Ccme @oil={{oil}} class="col-2"/>
+    <Table::CcmeF1 @oil={{oil}} class="col-3"/>
+    <Table::CcmeF2 @oil={{oil}} class="col-3"/>
+    <Table::CcmeTph @oil={{oil}} class="col-3"/>
   </div>
 
-  <div class="row">
-    <Table::CcmeF1 @oil={{oil}} @weathered={{weathered}} class="col-12"/>
-  </div>
-
-  <div class="row">
-    <Table::CcmeF2 @oil={{oil}} @weathered={{weathered}} class="col-12"/>
-  </div>
-
-  <div class="row">
-    <Table::CcmeTph @oil={{oil}} @weathered={{weathered}} class="col-12"/>
-  </div>
 </div>

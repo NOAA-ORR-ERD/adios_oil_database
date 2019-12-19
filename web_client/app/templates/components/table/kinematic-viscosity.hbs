@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody id="kvis-tbody">
-        {{#each oil.kvis as |kvis index|}}
+        {{#each oil.kvis as |kvis|}}
           <tr class="collapse show kvis-row-collapse">
             <td>{{value-unit (convert-unit kvis.viscosity "cSt") 3}}</td>
             <td>{{value-unit (convert-unit kvis.ref_temp "C") 2}}</td>
@@ -25,7 +25,7 @@
             <th scope="row">&#x2026;</th>
           </tr>
         {{else}}
-          <tr><td>Empty</td></tr>
+          <tr><td>No Data</td></tr>
         {{/if}}
       </tbody>
     </table>

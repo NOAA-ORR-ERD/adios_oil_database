@@ -6,7 +6,7 @@ export function roundRelative([num,
   if (num === 0) {
     return 0.0;
   }
-  else if (num > 1.0) {
+  else if (Math.abs(num) > 1.0) {
     return Math.round(num * 10 ** tol) / 10 ** tol;
   }
   else if (num) {

@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody id="emulsion-tbody">
-        {{#each oil.emulsions as |emulsion index|}}
+        {{#each oil.emulsions as |emulsion|}}
           <tr class="collapse show emulsion-row-collapse">
             <td>{{emulsion.visual_stability}}</td>
             <td>{{value-unit emulsion.water_content 3}}</td>
@@ -39,7 +39,7 @@
             <th scope="row">&#x2026;</th>
           </tr>
         {{else}}
-          <tr><td>Empty</td></tr>
+          <tr><td>No Data</td></tr>
         {{/if}}
       </tbody>
     </table>

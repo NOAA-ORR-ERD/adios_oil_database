@@ -8,12 +8,12 @@
              aria-controls="cut-tbody"
              aria-expanded="false">
         <tr>
-          <th scope="col">Fraction</th>
+          <th scope="col">Mass Percent</th>
           <th scope="col">Vapor Temperature</th>
         </tr>
       </thead>
       <tbody id="cut-tbody">
-        {{#each oil.cuts as |cut index|}}
+        {{#each oil.cuts as |cut|}}
           <tr class="collapse show cut-row-collapse">
             <td>{{value-unit (convert-unit cut.fraction "%") 2}}</td>
             <td>{{value-unit (convert-unit cut.vapor_temp "C") 2}}</td>
@@ -25,7 +25,7 @@
             <th scope="row">&#x2026;</th>
           </tr>
         {{else}}
-          <tr><td>Empty</td></tr>
+          <tr><td>No Data</td></tr>
         {{/if}}
       </tbody>
     </table>

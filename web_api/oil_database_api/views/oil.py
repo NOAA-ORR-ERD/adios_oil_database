@@ -99,7 +99,7 @@ def get_oils(request):
         sort = sort_params(request)
 
         if (len(sort) > 0 and
-                sort[0][0] in ('apis', 'categories_str', 'viscosity')):
+                sort[0][0] in ('api', 'categories_str', 'viscosity')):
             return list(search_with_post_sort(oils,
                                               start, stop,
                                               search_opts, sort))
@@ -279,7 +279,7 @@ def get_oil_searchable_fields(oil):
                 'name': oil.name,
                 'location': oil.location,
                 'product_type': oil.product_type,
-                'apis': [sample.get_api()],
+                'api': sample.get_api(),
                 'pour_point': sample.pour_point(),
                 'viscosity': sample.kvis_at_temp(273.15 + 38),
                 'categories': oil.categories,

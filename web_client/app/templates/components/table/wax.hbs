@@ -2,31 +2,14 @@
   <div class="table-responsive">
     <strong>Wax Content:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".wax-row-collapse"
-             aria-controls="wax-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Fraction</th>
-        </tr>
-      </thead>
-      <tbody id="wax-tbody">
-        {{#each oil.wax_content as |wax index|}}
-          <tr class="collapse show wax-row-collapse">
-            <td>{{value-unit wax.fraction 3}}</td>
-          </tr>
-        {{/each}}
+    {{#if oil.wax_content}}
+      {{value-unit (convert-unit oil.wax_content.fraction "%") 2}}
+    {{else}}
+      No Data
+    {{/if}}
 
-        {{#if oil.wax_content}}
-          <tr class="collapse wax-row-collapse">
-            <th>&#x2026;</th>
-          </tr>
-        {{else}}
-          <tr><td>Empty</td></tr>
-        {{/if}}
-      </tbody>
-    </table>
   </div>
+
+  &nbsp;
 
 </div>

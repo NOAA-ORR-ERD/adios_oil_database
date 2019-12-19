@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from numbers import Number
 from collections import defaultdict
 import logging
 
@@ -38,6 +39,22 @@ class EnvCanadaAttributeMapper(object):
                              'product_type',
                              'categories',
                              'status')
+    sample_scalar_attrs = ('pour_point',
+                           'flash_point',
+                           'adhesion',
+                           'sulfur',
+                           'water',
+                           'wax_content',
+                           'benzene',
+                           'alkylated_pahs',
+                           'alkanes',
+                           'chromatography',
+                           'headspace',
+                           'biomarkers',
+                           'ccme',
+                           'ccme_f1',
+                           'ccme_f2',
+                           'ccme_tph')
 
     def __init__(self, record):
         '''
@@ -64,6 +81,38 @@ class EnvCanadaAttributeMapper(object):
 
         return props
 
+    def generate_sample_id_attrs(self, sample_id):
+        attrs = {}
+
+        if sample_id == 0:
+            attrs['name'] = 'Fresh Oil Sample'
+            attrs['short_name'] = 'Fresh Oil'
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
+        elif isinstance(sample_id, str):
+            attrs['name'] = sample_id
+            attrs['short_name'] = '{}...'.format(sample_id[:12])
+            attrs['fraction_weathered'] = None
+            attrs['boiling_point_range'] = None
+        elif isinstance(sample_id, Number):
+            # we will assume this is a simple fractional weathered amount
+            attrs['name'] = '{:.4g}% Weathered'.format(sample_id * 100)
+            attrs['short_name'] = '{:.4g}% Weathered'.format(sample_id * 100)
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
+        else:
+            logger.warn("Can't generate IDs for sample: ", sample_id)
+
+        return attrs
+
+    def sort_samples(self, samples):
+        if all([s['fraction_weathered'] is not None for s in samples]):
+            return sorted(samples, key=lambda v: v['fraction_weathered'])
+        else:
+            # if we can't sort on weathered amount, then we will choose to
+            # not sort at all
+            return list(samples)
+
     def dict(self):
         rec = {}
         samples = defaultdict(dict)
@@ -76,17 +125,20 @@ class EnvCanadaAttributeMapper(object):
             elif hasattr(v, '__iter__') and not hasattr(v, '__len__'):
                 # we have a sequence of items
                 for i in v:
-                    w = 'w={}'.format(i.get('weathering', 0.0))
+                    w = i.get('weathering', 0.0)
                     i.pop('weathering', None)
 
-                    try:
-                        samples[w][k].append(i)
-                    except KeyError:
-                        samples[w][k] = []
-                        samples[w][k].append(i)
+                    if k in self.sample_scalar_attrs:
+                        samples[w][k] = i
+                    else:
+                        try:
+                            samples[w][k].append(i)
+                        except KeyError:
+                            samples[w][k] = []
+                            samples[w][k].append(i)
             else:
                 # assume a weathering of 0
-                samples['w=0.0'][k] = v
+                samples[0.0][k] = v
 
         # MongoDB strikes again.  Apparently, in order to support their query
         # methods, dictionary keys, for all dicts, need to be a string that
@@ -97,9 +149,9 @@ class EnvCanadaAttributeMapper(object):
         #
         # For NOAA Filemaker records, the ID will be the weathering amount.
         for k, v in samples.items():
-            v['sample_id'] = k
+            v.update(self.generate_sample_id_attrs(k))
 
-        rec['samples'] = sorted(samples.values(), key=lambda v: v['sample_id'])
+        rec['samples'] = self.sort_samples(samples.values())
 
         return rec
 
@@ -249,7 +301,7 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def flash_points(self):
+    def flash_point(self):
         for f in self.record.flash_points:
             kwargs = self._get_kwargs(f)
             kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)
@@ -257,7 +309,7 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def pour_points(self):
+    def pour_point(self):
         for p in self.record.pour_points:
             kwargs = self._get_kwargs(p)
             kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)
@@ -281,7 +333,7 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def adhesions(self):
+    def adhesion(self):
         for a in self.record.adhesions:
             kwargs = self._get_kwargs(a)
 
