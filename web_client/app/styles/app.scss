@@ -52,5 +52,38 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 }
 
 $ember-power-select-background-color: transparent;
-
 @import "ember-power-select";
+
+.footer{
+    padding: 15px 0;
+    background: #2F4F4F;
+    img{
+        width: 64px;
+        height: 64px;
+    }
+    .nav{
+        margin-top: 20px;
+        li{
+            a{
+                @include transition(all .2s);
+                color: #aeaeae;
+                font-size: 11px;
+                padding: 5px 10px;
+
+                &.help{
+                    background: #3a3a3a;
+                    // TODO - add Font Awesome icons
+                    // span{
+                    //     @include fa;
+                    //     @include fa-exclamation-sign;
+                    // }
+                }
+
+                &:hover{
+                    background: #282828;
+                }
+            }
+        }
+    }
+}
+

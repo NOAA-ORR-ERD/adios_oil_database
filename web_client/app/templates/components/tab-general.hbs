@@ -36,7 +36,7 @@
             <label class="p-1 input-group-text font-weight-bold">API:</label>
           </div>
           {{#if (not (is-empty oil.apis))}}
-            <Input @id="api" @type="number" @class="p-1 flex-fill bg-transparent border" 
+            <Input @id="api" @type="text" @class="p-1 flex-fill bg-transparent border" 
               @placeholder="API value" @value={{round-relative oil.apis.[0].gravity 2}}
               @change={{action "updateAPI"}} @size="6" />
           {{else}}
