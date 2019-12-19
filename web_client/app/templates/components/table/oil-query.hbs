@@ -15,6 +15,16 @@
         }}
       </div>
 
+      <div class="col-3">
+        <PowerSelectMultiple
+          @selected={{this.selectedCities}}
+          @options={{this.cities}}
+          @onChange={{action (mut this.selectedCities)}}
+          @onKeydown={{this.handleKeydown}} as |name|>
+          {{name}}
+        </PowerSelectMultiple>
+      </div>
+
     </div>
   </div>
 
