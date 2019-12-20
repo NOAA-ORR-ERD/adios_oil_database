@@ -8,18 +8,20 @@
             optionLabelPath="label"
             update=(action (pipe (action (mut selectedFilter)) (action "onSearchChange")))
         }}
-        {{one-way-input
-          value=q
+
+        <input
+          value={{q}}
           placeholder="Search..."
-          update=(action (pipe (action (mut q)) (action "onSearchChange")))
-        }}
+          oninput={{action (pipe (action (mut q)) (action "onSearchChange")) value="target.value"}}
+        >
+
       </div>
 
       <div class="col-3">
         <PowerSelectMultiple
-          @selected={{this.selectedCities}}
-          @options={{this.cities}}
-          @onChange={{action (mut this.selectedCities)}}
+          @selected={{this.selectedLabels}}
+          @options={{this.labels}}
+          @onChange={{action (mut this.selectedLabels)}}
           @onKeydown={{this.handleKeydown}} as |name|>
           {{name}}
         </PowerSelectMultiple>

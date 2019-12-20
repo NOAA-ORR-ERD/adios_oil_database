@@ -5,16 +5,10 @@ import $ from 'jquery';
 
 export default Route.extend({
   model(params) {
-      return (async () => {
-          let config = await this.store.findRecord('config', 'main.json');
-          var adapter = await this.store.adapterFor('oil');
+      const oils = this.modelFor('oils');
 
-          if (adapter.host !== config.webApi) {
-            adapter = await adapter.reopen({host: config.webApi});
-          }
-
-          return this.store.findRecord('oil', params.oil_id, { reload: true });
-        })();
+      return this.store.findRecord('oil', params.oil_id, {param: oils,
+                                                          reload: true });
   },
 
   actions: {
