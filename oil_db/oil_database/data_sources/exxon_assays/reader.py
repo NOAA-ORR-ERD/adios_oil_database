@@ -34,6 +34,21 @@ class ExxonDataReader:
 
         self.index = self._read_index(data_index_file)
 
+    def _read_index(self, data_index_file):
+        with open(data_index_file) as index:
+            header = index.readline().strip()
+            print(header.split())
+            if header.split() != ['oil_name', 'file']:
+                raise ValueError(f"This: {data_index_file}\n"
+                                 "does not look like an Exxon Assay Index file")
+            data_files = []
+            for line in index:
+                line = line.strip()
+                if not line: continue
+                data_files.append(tuple(line.split("\t")))
+
+            return data_files
+
 
     def get_records(self):
         # an empty list for now -- just so we can test it :-)
