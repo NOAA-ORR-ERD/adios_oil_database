@@ -1,0 +1,9 @@
+<strong>Categories:</strong>
+
+<ul>
+  {{#each this.model as |cat|}}
+    <li>{{cat.name}}</li>
+  {{/each}}
+</ul>
+
+{{outlet}}
