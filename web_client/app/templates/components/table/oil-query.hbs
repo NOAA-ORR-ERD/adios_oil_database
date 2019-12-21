@@ -17,14 +17,19 @@
 
       </div>
 
-      <div class="col-3">
-        <PowerSelectMultiple
-          @selected={{this.selectedLabels}}
-          @options={{this.labels}}
-          @onChange={{action (mut this.selectedLabels)}}
-          @onKeydown={{this.handleKeydown}} as |name|>
-          {{name}}
-        </PowerSelectMultiple>
+      <div class="col-4">
+        <div class="row">
+        <strong>Categories</strong>
+          <div class="col-6">
+            <PowerSelectMultiple
+              @selected={{this.selectedLabels}}
+              @options={{this.labels}}
+              @onChange={{action (mut this.selectedLabels)}}
+              @onKeydown={{this.handleKeydown}} as |name|>
+              {{name}}
+            </PowerSelectMultiple>
+          </div>
+        </div>
       </div>
 
     </div>

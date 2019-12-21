@@ -59,22 +59,13 @@ export default Component.extend(TableCommon, {
   init() {
       this._super(...arguments);
       this.set('labels', this.fetchLabels());
-      
-      console.log(this.labels);
-
   },
 
   fetchLabels() {
-      return (async () => {
-          let config = await this.store.findRecord('config', 'main.json');
-          var adapter = await this.store.adapterFor('category');
-
-          if (adapter.host !== config.webApi) {
-            adapter = await adapter.reopen({host: config.webApi});
-          }
-
-          return this.store.peekAll('category');
-        })();
+      return this.get('store').findAll('category')
+             .then(function(response) {
+                 return response.toArray().map(i => {return i.name});
+             });
   },
 
   fetchRecords: task(function*() {
