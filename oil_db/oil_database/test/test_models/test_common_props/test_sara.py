@@ -2,6 +2,8 @@
     Test our SARA model classes
 '''
 import pytest
+pytestmark = pytest.mark.skipif(True, reason="Not using SARA now")
+
 
 from pydantic import ValidationError
 

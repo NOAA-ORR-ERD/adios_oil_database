@@ -3,6 +3,7 @@
     This is one of the very basic building blocks of all our models.
 '''
 import pytest
+pytestmark = pytest.mark.skipif(True, reason="Not using FloatUnits now")
 
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    AngularMeasureUnit,
