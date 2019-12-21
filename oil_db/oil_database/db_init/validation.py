@@ -1,3 +1,21 @@
+"""
+Validation of a single oil record
+
+NOTE: this needs a LOT more, and a massive refactor.
+
+A few ideas about that:
+
+This needs to work with the JSON, not classes!
+
+* Individual validation functions should contain their error messages, etc.
+
+* There should be some automated way to discover all the validators, so we can
+   simply add more in one place, and be done.
+
+* Maybe validator classes? that way we can subclass to make a lot of similar
+  ones without duplicating code.
+"""
+
 import logging
 
 import numpy as np
@@ -13,6 +31,7 @@ class OilRejected(Exception):
         Custom exception for Oil initialization that we can raise if we
         decide we need to reject an oil record for any reason.
     '''
+
     def __init__(self, message, oil_name, *args):
         # without this you may get DeprecationWarning
         self.message = message
@@ -29,7 +48,6 @@ class OilRejected(Exception):
                                                  self.oil_name,
                                                  self.message)
 
-
 #
 #
 # ### Oil Quality checks
@@ -37,30 +55,30 @@ class OilRejected(Exception):
 #
 def oil_record_validation(oil):
     '''
-        Validate an oil record and return a list of error messages
+    Validate an oil record and return a list of error messages
     '''
     errors = []
 
     if not has_product_type(oil):
-        errors.append('Imported Record has no product type')
+        errors.append('W001: Imported Record has no product type')
 
     if not has_api_or_densities(oil):
-        errors.append('Imported Record has no density information')
+        errors.append('E001: Imported Record has no density information')
 
     if not has_viscosities(oil):
-        errors.append('Imported Record has no viscosity information')
+        errors.append('E001: Imported Record has no viscosity information')
 
     if not has_distillation_cuts(oil):
-        errors.append('Imported Record has insufficient cut data')
+        errors.append('W001: Imported Record has insufficient distillation cut data')
 
     return errors
 
 
 def has_product_type(oil):
     '''
-        In order to perform estimations, we need to determine if we are
-        dealing with a crude or refined oil product.  We cannot continue
-        if this information is missing.
+    In order to perform estimations, we need to determine if we are
+    dealing with a crude or refined oil product.  We cannot continue
+    if this information is missing.
     '''
     if (oil.product_type is not None and
             oil.product_type.lower() in ('crude', 'refined')):
@@ -71,11 +89,12 @@ def has_product_type(oil):
 
 def has_api_or_densities(oil):
     '''
-        In order to perform estimations, we need to have at least one
-        density measurement.  We cannot continue if this information
-        is missing.
-        This is just a primitive test, so we do not evaluate the quantities,
-        simply that some kind of value exists.
+    In order to perform estimations, we need to have at least one
+    density measurement.  We cannot continue if this information
+    is missing.
+
+    This is just a primitive test, so we do not evaluate the quantities,
+    simply that some kind of value exists.
     '''
     if has_api(oil):
         return True
