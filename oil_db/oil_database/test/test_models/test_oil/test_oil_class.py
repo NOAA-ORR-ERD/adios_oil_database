@@ -40,9 +40,9 @@ def test_json_just_name():
 def test_json_a_few_fields():
     oil = Oil(name=NAME,
               api=32.5,
-              product_type="Crude",
               labels=["medium crude", "sweet crude"],
               )
+    oil.product_type="Crude"
     py_json = oil.py_json()
     assert py_json == {'name': NAME,
                        'api': 32.5,
@@ -82,6 +82,8 @@ def test_pyson():
     py_json = oil.py_json(sparse=True)
 
     pprint(py_json)
+
+    oil.random_attr = 456
 
     assert False
 
