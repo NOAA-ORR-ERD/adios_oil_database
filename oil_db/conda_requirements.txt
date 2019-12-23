@@ -4,7 +4,7 @@
 # 1: conda-forge
 # 2: NOAA-ORR-ERD channel
 # 3: defaults
-# 
+
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
@@ -20,7 +20,7 @@ pydantic
 awesome-slugify>=1.6.5
 configparser>=3.7.4
 openpyxl>=3.0.0
-pytz>=2019.3 
+pytz>=2019.3
 
 pytest>=3.8.0
 pytest-cov>=2.6.0
@@ -29,4 +29,4 @@ pytest-timeout>=1.2.1
 backports.functools_lru_cache>=1.5
 
 # this package is a bit old.  The new one is pip installed from GitHub
-#unit_conversion>=2.5.4
+# unit_conversion>=2.5.4
