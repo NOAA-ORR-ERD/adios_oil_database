@@ -58,6 +58,11 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
   color: $red;
 }
 
+.no-borders{
+  border: none;  
+  outline: none;
+}
+
 .footer{
     padding: 15px 0;
     //background: #2F4F4F;

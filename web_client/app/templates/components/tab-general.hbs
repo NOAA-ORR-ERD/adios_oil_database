@@ -7,23 +7,25 @@
       <div class="row pl-0 mb-3">
 
         {{! Oil ID }}
-        <div class="col-4 pl-0 input-group">
+        <div class="col-4 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">ID:</label>
           </div>
-          <Input @class="p-1 flex-fill bg-transparent border" @size="6" @value={{oil.id}} @readonly />
+          <span class="p-1">{{oil.id}}</span>
         </div>
 
         {{! Location }}
-        <div class="col pl-0 input-group">
+        <div class="col pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Location:</label>
           </div>
-          {{#if oil.location}}
-            <Input @class="p-1 flex-fill bg-transparent border" @value={{oil.location}} @readonly={{readOnly}} />
-          {{else}}
-            <Input @class="p-1 flex-fill bg-transparent border" @value="None" @readonly={{readOnly}} />
-          {{/if}}
+          {{#let (if oil.location oil.location "None") as |oilLocation|}}
+            {{#if editable}}
+              <Input @class="p-1 flex-fill bg-transparent border" @value={{oilLocation}} />
+            {{else}}
+              <span class="p-1 flex-fill">{{oilLocation}}</span>
+            {{/if}}
+          {{/let}}
         </div>
 
       </div>
@@ -31,23 +33,23 @@
       <div class="row pl-0 mb-3">
 
         {{! API }}
-        <div class="col-4 pl-0 input-group">
+        <div class="col-4 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">API:</label>
           </div>
-          {{#if (not (is-empty oil.samples.[0].apis))}}
-            <Input @id="api" @type="text" @class="p-1 flex-fill bg-transparent border" 
-              @placeholder="API value" @value={{round-relative oil.samples.[0].apis.[0].gravity 2}}
-              @change={{action "updateAPI"}} @size="6" @readonly={{readOnly}} />
-          {{else}}
-            <Input @id="api" @type="text" @class="p-1 flex-fill bg-transparent border" 
-              @placeholder="API value" @value="No Values"
-              @change={{action "updateAPI"}} @size="6" @readonly={{readOnly}} />
-          {{/if}}
+          {{#let (if (not (is-empty oil.samples.[0].apis)) 
+            (round-relative oil.samples.[0].apis.[0].gravity 2) "No Values") as |oilAPI|}}
+            {{#if editable}}
+              <Input @id="api" @type="text" @class="p-1 bg-transparent border" 
+                @placeholder="API value" @value={{oilAPI}} @change={{action "updateAPI"}} @size="6" />
+            {{else}}
+              <span class="p-1">{{oilAPI}}</span>
+            {{/if}}
+          {{/let}}
         </div>
 
         {{! Type }}
-        <div class="col pl-0 form-inline">
+        <div class="col pl-0 form-inline d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Type:</label>
           </div>
@@ -62,7 +64,7 @@
               {{/each}}
             </select>
           {{else}}
-            <span class="p-1 flex-fill bg-transparent border-0">{{oil.productType}}</span>
+            <span class="p-1 flex-fill">{{oil.productType}}</span>
           {{/if}}  
         </div>
 
@@ -112,41 +114,47 @@
         <div class="input-group-prepend">
           <label class="p-1 input-group-text font-weight-bold">Reference:</label>
         </div>
-        {{#if oil.reference}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.reference}} @rows="3" @readonly={{readOnly}} />
-        {{else}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" @readonly={{readOnly}} />
-        {{/if}}
+        {{#let (if oil.reference oil.reference "None") as |oilReference|}}
+          {{#if editable}}
+            <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilReference}} @rows="3" />
+          {{else}}
+            <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilReference}} rows="3" />
+          {{/if}}
+        {{/let}}
       </div>
 
       <div class="row">
 
         {{! Reference Date }}
-        <div class="col-5 pl-0 input-group">
+        <div class="col-5 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
           </div>
-          {{#if oil.referenceDate}}
-            <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @readonly={{readOnly}}
-            {{! Europe/London is how we lookup GMT in moment.js }}
-            @value={{moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London"}} />
-          {{else}}
-            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" @readonly={{readOnly}} />
-          {{/if}}
+          {{! Europe/London is how we lookup GMT in moment.js }}
+          {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
+            as |oilReferenceDate|}}
+            {{#if editable}}
+              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}} />
+            {{else}}
+              <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
+            {{/if}}
+          {{/let}}  
         </div>
 
         {{! Sample Received Date }}
-        <div class="col pl-0 input-group">
+        <div class="col pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
           </div>
-          {{#if oil.sampleDate}}
-            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @readonly={{readOnly}}
-            {{! Europe/London is how we lookup GMT in moment.js }}
-            @value={{moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London"}} />
-          {{else}}
-            <Input @class="p-1 flex-fill bg-transparent border" @size="7" @value="None" @readonly={{readOnly}} />
-          {{/if}}
+          {{! Europe/London is how we lookup GMT in moment.js }}
+          {{#let (if oil.sampleDate (moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
+            as |oilSampleDate|}}
+            {{#if editable}}
+              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilSampleDate}} />
+            {{else}}
+              <span class="p-1 flex-fill">{{oilSampleDate}}</span>
+            {{/if}}
+          {{/let}}
         </div>
       </div>
 
@@ -160,11 +168,13 @@
       <div class="input-group-prepend">
         <label class="p-1 input-group-text font-weight-bold">Comments:</label>
       </div>
-      {{#if oil.comments}}
-        <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oil.comments}} @rows="1" @readonly={{readOnly}} />
-      {{else}}
-        <Textarea @class="p-1 flex-fill bg-transparent border" @value="None" @rows="1" @readonly={{readOnly}} />
-      {{/if}}
+      {{#let (if oil.comments oil.location "None") as |oilComments|}}
+        {{#if editable}}
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1" />
+        {{else}}
+          <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilComments}} rows="1" />
+        {{/if}}
+      {{/let}}  
     </div>
   </div>  
 
