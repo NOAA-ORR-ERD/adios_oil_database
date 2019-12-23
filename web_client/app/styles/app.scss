@@ -50,16 +50,17 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
   color: $green;
 }
 
-.status-bad {
+.status-warning {
+  color: $orange;
+}
+
+.status-error {
   color: $red;
 }
 
-$ember-power-select-background-color: transparent;
-@import "ember-power-select";
-
 .footer{
     padding: 15px 0;
-    background: #2F4F4F;
+    //background: #2F4F4F;
     img{
         width: 64px;
         height: 64px;
@@ -90,3 +91,6 @@ $ember-power-select-background-color: transparent;
     }
 }
 
+//$ember-power-select-background-color: transparent;
+@import 'ember-power-select/themes/bootstrap';
+@import "ember-power-select";

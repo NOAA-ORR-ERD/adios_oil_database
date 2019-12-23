@@ -62,7 +62,7 @@
               {{/each}}
             </select>
           {{else}}
-            <span class="p-1 flex-fill bg-transparent border">{{oil.productType}}</span>
+            <span class="p-1 flex-fill bg-transparent border-0">{{oil.productType}}</span>
           {{/if}}  
         </div>
 
@@ -84,6 +84,12 @@
             @placeholder="Select some categories..."
             @onChange={{action (mut category)}} as |category|>
             {{category}}
+            {{!-- @placeholder="Select some categories..."
+            @selected={{this.selectedLabels}}
+            @options={{this.oilCategories}}
+            @onChange={{action (mut this.oilCategories)}}
+            @onKeydown={{this.handleKeydown}} as |name|>
+            {{name}} --}}
           </PowerSelectMultiple>
 
           {{!-- <select class="p-1 bg-transparent border" multiple>
@@ -148,19 +154,6 @@
 
   </div>
 
-  {{!-- <div class="row pl-0 pr-0">
-
-    <div class="col-2 pl-0 pr-0 d-flex flex-column">
-      {{! First column }}
-
-    </div>
-
-    <div class="col-sm-6 col-md-6 col-lg-5 col-xl-4 d-flex flex-column">
-      {{! Second column }}
-
-    </div>
-  </div>
- --}}
   {{! Comments }}
   <div class="row pl-0 pr-0 mb-3">
     <div class="col pl-0 pr-0 input-group">
@@ -175,24 +168,13 @@
     </div>
   </div>  
 
-  <div class="row pl-0 pr-0 mb-4">
-    {{! Status }}
-    {{#unless oil.status}}
-      <span class="col pl-0 pr-0 mb-2 input-group">
-        <div class="input-group-prepend">
-          <label class="p-1 input-group-text font-weight-bold">Status:</label>
-        </div>
-        <Input @class="status-good p-1 bg-transparent border-0 font-italic" @size="4" @value="OK" @readonly />
-      </span>
-    {{/unless}}
-  </div>
-
-  <div class="row">
+  {{!-- status message --}}
+  <div class="row mb-3">
     <div class="col">
       {{#if oil.status}}
         <ul>
           {{#each oil.status as |stat|}}
-            <li><i class="status-bad">{{stat}}</i></li>
+            <li><i class="status-warning">{{stat}}</i></li>
           {{/each}}
         </ul>
       {{/if}}

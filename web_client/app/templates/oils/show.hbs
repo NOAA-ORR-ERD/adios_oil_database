@@ -1,33 +1,50 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-2">
-      <div class="row">
-        <h3>
+
+    <div class="col-sm-3">
+      <div class="row d-flex align-items-center">
+
+        {{!-- back to oil list control --}}
+        <div class=" mr-2">
           {{#link-to "oils"}}
             <button type="button" class="btn btn-dark"
                     data-toggle="tooltip" title="Back to List">
-              {{fa-icon "angle-double-up"}}
+              {{fa-icon "list"}}
             </button>
           {{/link-to}}
-        </h3>
-        &nbsp;&nbsp;
-        <div>
-          <center class="small">Edit Mode</center>
-          <XToggle
-            @theme="ios"
-            @showLabels={{true}}
-            @onLabel="Edit"
-            @offLabel="View"
-            @value={{this.editable}}
-            @onToggle={{action (mut this.editable)}}
-          />
         </div>
+
+        {{!-- oil status --}}
+        <strong>
+          Status:
+          {{#if (eq (get-status this.model.status) "OK")}}
+            <i class="status-good">OK</i>
+          {{else if (eq (get-status this.model.status) "Errors")}}  
+            <i class="status-error">Errors</i>
+          {{else}}  
+            <i class="status-warning">Warnings</i>
+          {{/if}}
+        </strong>
 
       </div>
     </div>
 
+    {{!-- oil title --}}
     <div class="col-sm">
-      <h2 class="title">{{this.model.name}}</h2>
+      <h2 align="center" class="title">{{this.model.name}}</h2>
+    </div>
+
+    {{!-- edit mode switch control --}}
+    <div class="col-sm-2">
+      <center class="small">Edit Mode</center>
+      <XToggle
+        @theme="ios"
+        @showLabels={{true}}
+        @onLabel="Edit"
+        @offLabel="View"
+        @value={{this.editable}}
+        @onToggle={{action (mut this.editable)}}
+      />
     </div>
 
   </div>
@@ -38,11 +55,11 @@
       @editable={{this.editable}}
       @readOnly={{if this.editable undefined "readonly"}}
       @oilTypes={{array
-          "Crude"
-          "Refined"
-          "Bitumen Product"
-          "Other"
-          "Empty (unclassified)"}}
+          "crude"
+          "refined"
+          "bitumen product"
+          "other"
+          "empty (unclassified)"}}
     />
   </div>
 
