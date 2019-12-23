@@ -65,8 +65,8 @@ export default Mixin.create({
   actions: {
     onScrolledToBottom() {
       if (this.get('canLoadMore')) {
-        this.incrementProperty('page');
         this.get('fetchRecords').perform();
+        this.incrementProperty('page');
       }
     },
 
