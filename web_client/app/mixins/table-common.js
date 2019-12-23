@@ -14,7 +14,7 @@ export default Mixin.create({
   page: 0,
   limit: 20,
   dir: 'asc',
-  sort: 'firstName',
+  sort: 'name',
 
   isLoading: computed.oneWay('fetchRecords.isRunning'),
   canLoadMore: true,
