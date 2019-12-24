@@ -7,6 +7,8 @@
 '''
 import pytest
 
+pytestmark = pytest.mark.skipif(True, reason="Not using Estimations now")
+
 import numpy as np
 
 from oil_database.util.estimations import (density_from_api,
