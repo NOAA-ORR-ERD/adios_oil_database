@@ -1,13 +1,7 @@
-import os
 import sys
 import logging
 
-from pkg_resources import get_distribution
-
-try:
-    __version__ = get_distribution('oil_database').version
-except Exception:
-    __version__ = 'not_found'
+__version__ = "0.1.2"
 
 
 def initialize_console_log(level='debug'):
@@ -35,11 +29,11 @@ def initialize_console_log(level='debug'):
 
 
 # Set default logging handler to avoid "No handler found" warnings.
-try:  # Python 2.7+
-    from logging import NullHandler
-except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
+#try:  # Python 2.7+
+from logging import NullHandler
+# except ImportError:
+#     class NullHandler(logging.Handler):
+#         def emit(self, record):
+#             pass
 
 logging.getLogger(__name__).addHandler(NullHandler())
