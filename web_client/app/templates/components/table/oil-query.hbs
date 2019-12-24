@@ -1,30 +1,45 @@
 {{#light-table table height="65vh" as |t|}}
   <div class="container-fluid">
     <div class="row">
-      <div class="col-4">
-        {{one-way-select selectedFilter
-            options=possibleFilters
-            optionValuePath="valuePath"
-            optionLabelPath="label"
-            update=(action (pipe (action (mut selectedFilter)) (action "onSearchChange")))
-        }}
-
-        <input
-          value={{q}}
-          placeholder="Search..."
-          oninput={{action (pipe (action (mut q)) (action "onSearchChange")) value="target.value"}}
-        >
+      <div class="col-3">
+        <div class="row h-100 align-items-center">
+          <input class="form-control"
+            value={{q}}
+            placeholder="Search..."
+            oninput={{action (pipe (action (mut q)) (action "onSearchChange")) value="target.value"}}
+          >
+        </div>
 
       </div>
 
-      <div class="col-4">
-        <div class="row">
-        <strong>Categories</strong>
-          <div class="col-6">
+      <div class="col-3">
+        <div class="row h-100 align-items-center">
+          <div class="col-2">
+            <strong>API</strong>
+          </div>
+          <div class="col-10">
+            {{range-slider start=(array 0 100)
+              min=0
+              max=100
+              step=1
+              connect=true
+              tooltips=true
+              on-change=(action (pipe (action (mut this.selectedApi)) (action "onSearchChange")))
+              }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="row h-100 align-items-center">
+          <div class="col-2">
+            <strong>Categories</strong>
+          </div>
+          <div class="col-10">
             <PowerSelectMultiple
               @selected={{this.selectedLabels}}
               @options={{this.labels}}
-              @onChange={{action (mut this.selectedLabels)}}
+              @onChange={{action (pipe (action (mut this.selectedLabels)) (action "onSearchChange"))}}
               @onKeydown={{this.handleKeydown}} as |name|>
               {{name}}
             </PowerSelectMultiple>

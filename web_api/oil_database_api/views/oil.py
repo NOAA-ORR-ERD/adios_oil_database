@@ -74,7 +74,7 @@ def get_oils(request):
     '''
     obj_id = obj_id_from_url(request)
 
-    logger.info('GET /oils: id: {} options: {}'
+    logger.info('GET /oils: id: {}, options: {}'
                 .format(obj_id, request.GET))
 
     oils = request.db.oil_database.oil
@@ -113,7 +113,13 @@ def search_with_sort(oils, start, stop, search_opts, sort_opts):
     cursor = oils.find(search_opts)
 
     if len(sort_opts) > 0:
-        cursor = cursor.sort(sort_opts)
+        cursor = (cursor
+                  .collation({
+                      'locale': 'en_US',
+                      'strength': 1,
+                  })
+                  .sort(sort_opts)
+                  )
 
     logger.info('cursor #rows: {}'.format(cursor.count()))
 
@@ -172,18 +178,18 @@ def sort_params(request):
 
 
 def search_params(request):
+    query_out = {}
     query = request.GET.get('q', '')
-    field_name = decamelize(request.GET.get('qAttr', ''))
 
-    logger.info('(query, field_name): ({}, {})'.format(query, field_name))
+    if query != '':
+        query_out.update({
+            "$or": [{'name': {'$regex': query,
+                              '$options': 'i'}},
+                    {'location': {'$regex': query,
+                                  '$options': 'i'}}]
+        })
 
-    if query != '' and field_name != '':
-        logger.info('full search params')
-        return {field_name: {'$regex': query,
-                             '$options': 'i'}}
-    else:
-        logger.info('empty search params')
-        return {}
+    return query_out
 
 
 @oil_api.post()
