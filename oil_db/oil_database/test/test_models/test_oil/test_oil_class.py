@@ -6,11 +6,52 @@ import pytest
 import dataclasses
 from pprint import pprint
 
-from oil_database.models.oil.oil_class import Oil
+from oil_database.models.oil.oil_class import Oil, UnittedValue
 
 # A few handy constants for use for tests
 
 NAME = "A name for an oil"
+
+
+def test_UnittedValue():
+    uv = UnittedValue(1.0, "m")
+
+    assert uv.value == 1.0
+    assert uv.unit == "m"
+
+
+def test_UnittedValue_no_value():
+    with pytest.raises(TypeError):
+        uv = UnittedValue(1.0)
+    with pytest.raises(TypeError):
+        uv = UnittedValue("m/s")
+
+def test_UnittedValue_json():
+    uv = UnittedValue(1.0, "m")
+
+    py_json = uv.py_json()
+
+    print(py_json)
+
+    assert py_json == {'value': 1.0, 'unit': 'm'}
+
+
+def test_UnittedValue_from_py_json():
+    uv = UnittedValue.from_py_json({'value': 1.0, 'unit': 'm'})
+
+    assert uv.value == 1.0
+    assert uv.unit == "m"
+
+
+def test_UnittedValue_from_py_json_missing_data():
+
+    with pytest.raises(TypeError):
+        uv = UnittedValue.from_py_json({'value': 1.0})
+
+    with pytest.raises(TypeError):
+        uv = UnittedValue.from_py_json({'unit': 'm/s'})
+
+
 
 def test_minimal():
     oil = Oil(name=NAME)
@@ -83,9 +124,8 @@ def test_pyson():
 
     pprint(py_json)
 
-    oil.random_attr = 456
-
-    assert False
+    with pytest.raises(AttributeError):
+        oil.random_attr = 456
 
 
 # def test_fields():
@@ -94,6 +134,7 @@ def test_pyson():
 #     print(dataclasses.fields(oil))
 
 #     assert False
+
 
 
 

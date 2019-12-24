@@ -9,7 +9,7 @@ Having a Python class makes it easier to write importing, validating etc, code.
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 
 def _py_json(self, sparse=True):
@@ -27,10 +27,29 @@ def _py_json(self, sparse=True):
         except AttributeError:
             if not sparse:
                 json_obj[fieldname] = val
-            elif not (val == "" or val is None or val == []):
-                # can't just use falsey -- zero is falsey, but also a valid value.
+            elif not (val is None or (val in ("", [], {}))):
+                #  can't just use falsey -- zero is falsey,
+                #  but also a valid value.
                 json_obj[fieldname] = val
     return json_obj
+
+@classmethod
+def _from_py_json(cls, py_json):
+    """
+    classmethod to create a dataclass from json compatible python data
+    structure.
+    """
+    arg_dict = {}
+    for fieldname in cls.__dataclass_fields__.keys():
+        # this is just copying a dict
+        # will there be more complex versions?
+        try:
+            arg_dict[fieldname] = py_json[fieldname]
+        except KeyError:
+            pass
+    obj = cls(**arg_dict)
+    return obj
+
 
 class JSON_List(list):
     """
@@ -57,7 +76,33 @@ def dataclass_to_json(cls):
     have be a type with a _to_json method
     """
     cls.py_json = _py_json
+    cls.from_py_json = _from_py_json
+
     return cls
+
+@dataclass_to_json
+@dataclass
+class UnittedValue:
+    # fixme: could this use the FloatUnit stuff?
+    """
+    data structure to hold a value with a unit
+    """
+    value: float
+    unit: str
+
+
+@dataclass_to_json
+@dataclass
+class Viscosity:
+    """
+    class to hold viscosity data records
+    """
+    viscosity: UnittedValue
+    ref_temp: UnittedValue
+    standard_deviation: float = None
+    replicates: int = None
+    method: str = None
+
 
 @dataclass_to_json
 @dataclass
@@ -76,6 +121,8 @@ class Sample:
     # should we use unit types here?
     densities: List = field(default_factory=list)
     kvis:   List = field(default_factory=list)
+    dvis:   List = field(default_factory=list)
+
 
 
 def list_of_samples():
@@ -103,6 +150,7 @@ class Oil:
     product_type: str = ""
     # fixme: this should really be "sub_samples"
     samples: List[Sample] = field(default_factory=list_of_samples)
+    extra_data: Dict = field(default_factory=dict)
 
     def __post_init__(self):
         """
