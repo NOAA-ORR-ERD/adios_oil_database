@@ -9,9 +9,6 @@ import TableCommon from 'ember-oil-db/mixins/table-common';
 export default Component.extend(TableCommon, {
     // our query option properties
     q: '',
-    labels: [],
-    selectedLabels: [],
-    selectedApi: [],
 
     columns: computed(function() {
         return [{
@@ -54,7 +51,12 @@ export default Component.extend(TableCommon, {
 
     init() {
         this._super(...arguments);
+
+        this.labels = this.labels || [];
+        this.selectedLabels = this.selectedLabels || [];
         this.set('labels', this.fetchLabels());
+
+        this.selectedApi = this.selectedApi || [];
     },
 
     fetchLabels() {
