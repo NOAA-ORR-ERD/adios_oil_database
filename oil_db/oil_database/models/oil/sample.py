@@ -6,79 +6,14 @@ This maps to the JSON used in the DB
 Having a Python class makes it easier to write importing, validating etc, code.
 """
 
-import json
+from ..common.utilities import (dataclass_to_json,
+                                JSON_List,
+                                )
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Dict
 
-
-def _py_json(self, sparse=True):
-    """
-    function to convert a dataclass to json compatible python
-
-    :param sparse=True: If sparse is True, only non-empty fields will be
-                        written. If False, then all fields will be included.
-    """
-    json_obj = {}
-    for fieldname in self.__dataclass_fields__.keys():
-        val = getattr(self, fieldname)
-        try:
-            json_obj[fieldname] = val.py_json(sparse=sparse)
-        except AttributeError:
-            if not sparse:
-                json_obj[fieldname] = val
-            elif not (val is None or (val in ("", [], {}))):
-                #  can't just use falsey -- zero is falsey,
-                #  but also a valid value.
-                json_obj[fieldname] = val
-    return json_obj
-
-@classmethod
-def _from_py_json(cls, py_json):
-    """
-    classmethod to create a dataclass from json compatible python data
-    structure.
-    """
-    arg_dict = {}
-    for fieldname in cls.__dataclass_fields__.keys():
-        # this is just copying a dict
-        # will there be more complex versions?
-        try:
-            arg_dict[fieldname] = py_json[fieldname]
-        except KeyError:
-            pass
-    obj = cls(**arg_dict)
-    return obj
-
-
-class JSON_List(list):
-    """
-    just like a list, but with the ability to turn it into JSON
-
-    A regular list can only be converted to JSON if it has
-    JSON-able objects in it.
-    """
-    def py_json(self, sparse=True):
-        json_obj = []
-        for item in self:
-            try:
-                json_obj.append(item.py_json(sparse))
-            except AttributeError:
-                json_obj.append(item)
-        return json_obj
-
-
-def dataclass_to_json(cls):
-    """
-    class decorator that adds the ability to save a dataclass as JSON
-
-    All fields must be either JSON-able Python types or
-    have be a type with a _to_json method
-    """
-    cls.py_json = _py_json
-    cls.from_py_json = _from_py_json
-
-    return cls
 
 @dataclass_to_json
 @dataclass

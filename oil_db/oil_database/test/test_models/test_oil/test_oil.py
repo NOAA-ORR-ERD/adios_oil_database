@@ -6,50 +6,12 @@ import pytest
 import dataclasses
 from pprint import pprint
 
-from oil_database.models.oil.oil_class import Oil, UnittedValue
+from oil_database.models.oil.oil import Oil
 
 # A few handy constants for use for tests
 
 NAME = "A name for an oil"
 
-
-def test_UnittedValue():
-    uv = UnittedValue(1.0, "m")
-
-    assert uv.value == 1.0
-    assert uv.unit == "m"
-
-
-def test_UnittedValue_no_value():
-    with pytest.raises(TypeError):
-        uv = UnittedValue(1.0)
-    with pytest.raises(TypeError):
-        uv = UnittedValue("m/s")
-
-def test_UnittedValue_json():
-    uv = UnittedValue(1.0, "m")
-
-    py_json = uv.py_json()
-
-    print(py_json)
-
-    assert py_json == {'value': 1.0, 'unit': 'm'}
-
-
-def test_UnittedValue_from_py_json():
-    uv = UnittedValue.from_py_json({'value': 1.0, 'unit': 'm'})
-
-    assert uv.value == 1.0
-    assert uv.unit == "m"
-
-
-def test_UnittedValue_from_py_json_missing_data():
-
-    with pytest.raises(TypeError):
-        uv = UnittedValue.from_py_json({'value': 1.0})
-
-    with pytest.raises(TypeError):
-        uv = UnittedValue.from_py_json({'unit': 'm/s'})
 
 
 
@@ -114,6 +76,14 @@ def test_json_nonsparse():
                 ]:
         assert key in py_json
 
+def test_add_new_attribute():
+    """
+    you should not be able to add an aarbitrary new attribute
+    """
+    oil = Oil(name=NAME)
+
+    with pytest.raises(AttributeError):
+        oil.random_attr = 456
 
 
 def test_pyson():
@@ -124,9 +94,6 @@ def test_pyson():
 
     pprint(py_json)
 
-    with pytest.raises(AttributeError):
-        oil.random_attr = 456
-
 
 # def test_fields():
 #     oil = Oil(name=NAME)
@@ -134,7 +101,5 @@ def test_pyson():
 #     print(dataclasses.fields(oil))
 
 #     assert False
-
-
 
 
