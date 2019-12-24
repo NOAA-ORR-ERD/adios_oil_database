@@ -74,7 +74,7 @@ def get_oils(request):
     '''
     obj_id = obj_id_from_url(request)
 
-    logger.info('GET /oils: id: {} options: {}'
+    logger.info('GET /oils: id: {}, options: {}'
                 .format(obj_id, request.GET))
 
     oils = request.db.oil_database.oil
@@ -95,14 +95,15 @@ def get_oils(request):
         except Exception as e:
             raise HTTPBadRequest(e)
 
-        search_opts = search_params(request)
+        search_opts, post_opts = search_params(request)
         sort = sort_params(request)
 
-        if (len(sort) > 0 and
-                sort[0][0] in ('api', 'categories_str', 'viscosity')):
+        if ((len(sort) > 0 and sort[0][0] in ('api', 'viscosity')) or
+                (len(post_opts.keys()) > 0)):
             return list(search_with_post_sort(oils,
                                               start, stop,
-                                              search_opts, sort))
+                                              search_opts, post_opts,
+                                              sort))
         else:
             return list(search_with_sort(oils,
                                          start, stop,
@@ -113,7 +114,13 @@ def search_with_sort(oils, start, stop, search_opts, sort_opts):
     cursor = oils.find(search_opts)
 
     if len(sort_opts) > 0:
-        cursor = cursor.sort(sort_opts)
+        cursor = (cursor
+                  .collation({
+                      'locale': 'en_US',
+                      'strength': 1,
+                  })
+                  .sort(sort_opts)
+                  )
 
     logger.info('cursor #rows: {}'.format(cursor.count()))
 
@@ -122,7 +129,7 @@ def search_with_sort(oils, start, stop, search_opts, sort_opts):
             if i >= start and i < stop]
 
 
-def search_with_post_sort(oils, start, stop, search_opts, sort):
+def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
     '''
         Apply our sort options after the database query.  This is very slow
         compared to simply applying the sort to the database query itself,
@@ -139,6 +146,16 @@ def search_with_post_sort(oils, start, stop, search_opts, sort):
 
     for o in cursor:
         rec = get_oil_searchable_fields(o)
+
+        if 'apis' in post_opts:
+            # filter out the apis that don't match our criteria
+            low, high = post_opts['apis']
+
+            if ('api' not in rec or
+                    rec['api'] is None or
+                    not low <= rec['api'].gravity < high):
+                continue
+
         if rec[field] is not None:
             results.append(rec)
         else:
@@ -172,18 +189,33 @@ def sort_params(request):
 
 
 def search_params(request):
+    query_out = {}
+    post_out = {}
+
     query = request.GET.get('q', '')
-    field_name = decamelize(request.GET.get('qAttr', ''))
 
-    logger.info('(query, field_name): ({}, {})'.format(query, field_name))
+    if query != '':
+        query_out.update({
+            "$or": [{'name': {'$regex': query,
+                              '$options': 'i'}},
+                    {'location': {'$regex': query,
+                                  '$options': 'i'}}]
+        })
 
-    if query != '' and field_name != '':
-        logger.info('full search params')
-        return {field_name: {'$regex': query,
-                             '$options': 'i'}}
-    else:
-        logger.info('empty search params')
-        return {}
+    try:
+        apis = request.GET.get('qApi', '').split(',')
+        low, high = [float(a) for a in apis]
+
+        if low > high:
+            low, high = high, low
+
+        post_out['apis'] = [low, high]
+    except Exception:
+        # couldn't parse items into float interval.  Continue without adding
+        # the post-processing step.
+        pass
+
+    return query_out, post_out
 
 
 @oil_api.post()

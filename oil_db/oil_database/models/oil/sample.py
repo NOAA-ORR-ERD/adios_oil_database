@@ -6,58 +6,38 @@ This maps to the JSON used in the DB
 Having a Python class makes it easier to write importing, validating etc, code.
 """
 
-import json
+from ..common.utilities import (dataclass_to_json,
+                                JSON_List,
+                                )
+
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 
-def _py_json(self, sparse=True):
+@dataclass_to_json
+@dataclass
+class UnittedValue:
+    # fixme: could this use the FloatUnit stuff?
     """
-    function to convert a dataclass to json compatible python
-
-    :param sparse=True: If sparse is True, only non-empty fields will be
-                        written. If False, then all fields will be included.
+    data structure to hold a value with a unit
     """
-    json_obj = {}
-    for fieldname in self.__dataclass_fields__.keys():
-        val = getattr(self, fieldname)
-        try:
-            json_obj[fieldname] = val.py_json(sparse=sparse)
-        except AttributeError:
-            if not sparse:
-                json_obj[fieldname] = val
-            elif not (val == "" or val is None or val == []):
-                # can't just use falsey -- zero is falsey, but also a valid value.
-                json_obj[fieldname] = val
-    return json_obj
+    value: float
+    unit: str
 
-class JSON_List(list):
+
+@dataclass_to_json
+@dataclass
+class Viscosity:
     """
-    just like a list, but with the ability to turn it into JSON
-
-    A regular list can only be converted to JSON if it has
-    JSON-able objects in it.
+    class to hold viscosity data records
     """
-    def py_json(self, sparse=True):
-        json_obj = []
-        for item in self:
-            try:
-                json_obj.append(item.py_json(sparse))
-            except AttributeError:
-                json_obj.append(item)
-        return json_obj
+    viscosity: UnittedValue
+    ref_temp: UnittedValue
+    standard_deviation: float = None
+    replicates: int = None
+    method: str = None
 
-
-def dataclass_to_json(cls):
-    """
-    class decorator that adds the ability to save a dataclass as JSON
-
-    All fields must be either JSON-able Python types or
-    have be a type with a _to_json method
-    """
-    cls.py_json = _py_json
-    return cls
 
 @dataclass_to_json
 @dataclass
@@ -76,6 +56,8 @@ class Sample:
     # should we use unit types here?
     densities: List = field(default_factory=list)
     kvis:   List = field(default_factory=list)
+    dvis:   List = field(default_factory=list)
+
 
 
 def list_of_samples():
@@ -103,6 +85,7 @@ class Oil:
     product_type: str = ""
     # fixme: this should really be "sub_samples"
     samples: List[Sample] = field(default_factory=list_of_samples)
+    extra_data: Dict = field(default_factory=dict)
 
     def __post_init__(self):
         """

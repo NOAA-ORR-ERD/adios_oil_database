@@ -1,0 +1,5212 @@
+{
+  "_id": "EC002713",
+  "status": [],
+  "product_type": "crude",
+  "location": "Alaska, USA",
+  "oil_id": "EC002713",
+  "sample_date": 1426982400,
+  "name": "Alaska North Slope [2015]",
+  "categories": [
+    "Crude",
+    "Light"
+  ],
+  "reference_date": 1451606400,
+  "reference": "Hollebone, 2016.",
+  "comments": "",
+  "samples": [
+    {
+      "chemical_dispersibility": [
+        {
+          "standard_deviation": 3.519577146,
+          "replicates": 6,
+          "dispersant": "Corexit 9500",
+          "effectiveness": {
+            "value": 45.851302399,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "wax_content": {
+        "standard_deviation": 0.135739697,
+        "replicates": 3,
+        "method": "ESTS 1994",
+        "fraction": {
+          "value": 3.9793876894,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "chromatography": {
+        "method": "ESTS 2002a",
+        "tph": {
+          "value": 547.0344279498,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh": {
+          "value": 352.6172348372,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tah": {
+          "value": 194.4171931126,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh_tph": {
+          "value": 64.4597884193,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "tah_tph": {
+          "value": 35.5402115807,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "resolved_peaks_tph": {
+          "value": 24.9460957653,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "dvis": [
+        {
+          "standard_deviation": 0.001,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 17.92,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.0098,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 9.852,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "flash_point": {
+        "standard_deviation": null,
+        "replicates": 3,
+        "method": "ASTM 7094",
+        "ref_temp": {
+          "unit": "C",
+          "min_value": null,
+          "max_value": null,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "cuts": [
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 5,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 60.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 10,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 91.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 15,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 119.4,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 20,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 147.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 25,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 180.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 30,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 215.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 35,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 247.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 40,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 277.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 45,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 308,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 50,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 339.1,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 55,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 371.2,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 60,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 404.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 65,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 436.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 70,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 473.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 75,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 516.4,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 80,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 567.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 85,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 622.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 90,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 680.2,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "apis": [
+        {
+          "gravity": 31.32
+        }
+      ],
+      "sara_total_fractions": [
+        {
+          "standard_deviation": 0.21575864,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Saturates",
+          "percent": 57.9,
+          "fraction": {
+            "value": 57.9,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.21575864,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Aromatics",
+          "percent": 31.9,
+          "fraction": {
+            "value": 31.9,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.21575864,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Resins",
+          "percent": 6.4506105742,
+          "fraction": {
+            "value": 6.4506105742,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.135739697,
+          "replicates": 3,
+          "method": "ESTS 2014",
+          "sara_type": "Asphaltenes",
+          "percent": 3.9793876894,
+          "fraction": {
+            "value": 3.9793876894,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "alkanes": {
+        "method": "ESTS 2002a",
+        "pristane": {
+          "value": 1037.1402595245,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "phytane": {
+          "value": 882.0852453006,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c9": {
+          "value": 4101.6573135242,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c10": {
+          "value": 3655.8260546862,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c11": {
+          "value": 3208.2138983552,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c12": {
+          "value": 3057.1885722961,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c13": {
+          "value": 2850.1412151057,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c14": {
+          "value": 840.1123801333,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c15": {
+          "value": 2598.5014385851,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c16": {
+          "value": 2198.8488891124,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c17": {
+          "value": 2024.3225831998,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c18": {
+          "value": 2092.8510797981,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c19": {
+          "value": 1686.011381241,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c20": {
+          "value": 973.9371046141,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c21": {
+          "value": 1578.5847123042,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22": {
+          "value": 1467.1113011349,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23": {
+          "value": 1405.5618768455,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24": {
+          "value": 1343.3698824014,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c25": {
+          "value": 1278.8998512323,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c26": {
+          "value": 1212.7714267967,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c27": {
+          "value": 1152.0775539359,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c28": {
+          "value": 1081.7520912233,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c29": {
+          "value": 876.0207788436,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c30": {
+          "value": 690.6841747953,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c31": {
+          "value": 576.1055870667,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c32": {
+          "value": 479.6598280231,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c33": {
+          "value": 402.8856512209,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c34": {
+          "value": 307.1005230653,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c35": {
+          "value": 262.2812433213,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c36": {
+          "value": 204.4168909363,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c37": {
+          "value": 193.7628837886,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c38": {
+          "value": 151.1311812382,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c39": {
+          "value": 115.566588367,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c40": {
+          "value": 88.4180197301,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c41": {
+          "value": 60.3058436536,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c42": {
+          "value": 43.0726659201,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "evaporation_eqs": [
+        {
+          "equation": "(A + BT) ln t",
+          "a": 2.71,
+          "b": -0.045
+        }
+      ],
+      "alkylated_pahs": {
+        "method": "ESTS 2002a",
+        "c0_n": {
+          "value": 501.2300301606,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_n": {
+          "value": 1377.4068244401,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_n": {
+          "value": 2071.4202776402,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_n": {
+          "value": 1808.5758442446,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_n": {
+          "value": 960.6676466795,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_p": {
+          "value": 177.1762673487,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_p": {
+          "value": 485.6362603308,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_p": {
+          "value": 509.7391808243,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_p": {
+          "value": 378.2764872007,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_p": {
+          "value": 176.2938484698,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_d": {
+          "value": 107.1889890649,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_d": {
+          "value": 223.2718988984,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_d": {
+          "value": 313.6296125732,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_d": {
+          "value": 259.2286304274,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_f": {
+          "value": 66.162900833,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_f": {
+          "value": 151.8518604069,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_f": {
+          "value": 220.2539359844,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_f": {
+          "value": 233.9852366485,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_b": {
+          "value": 41.1182127685,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_b": {
+          "value": 136.9046628682,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_b": {
+          "value": 107.8725027888,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_b": {
+          "value": 173.735222486,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_b": {
+          "value": 114.9967598197,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_c": {
+          "value": 574.6273607311,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_c": {
+          "value": 29.72638051,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_c": {
+          "value": 53.4625338766,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_c": {
+          "value": 78.9531165197,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "biphenyl": {
+          "value": 125.1930807447,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthylene": {
+          "value": 13.5817579173,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthene": {
+          "value": 14.7703447604,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "anthracene": {
+          "value": 3.317071226,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "fluoranthene": {
+          "value": 5.180912952,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pyrene": {
+          "value": 15.7843588941,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benz_a_anthracene": {
+          "value": 2.8114622433,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_b_fluoranthene": {
+          "value": 4.7401797648,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_k_fluoranthene": {
+          "value": 0,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_e_pyrene": {
+          "value": 7.5749467669,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_a_pyrene": {
+          "value": 2.0830455492,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "perylene": {
+          "value": 3.2857511974,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "indeno_1_2_3_cd_pyrene": {
+          "value": 0.5565843451,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "dibenzo_ah_anthracene": {
+          "value": 1.1867056438,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_ghi_perylene": {
+          "value": 2.937515123,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "ifts": [
+        {
+          "standard_deviation": 0.82,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 27.69,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.17,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "water",
+          "tension": {
+            "value": 24.09,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.18,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "seawater",
+          "tension": {
+            "value": 22.81,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.18,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 27.14,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.27,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "water",
+          "tension": {
+            "value": 21.32,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.35,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "seawater",
+          "tension": {
+            "value": 19.75,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "adhesion": {
+        "standard_deviation": 1.05,
+        "replicates": 3,
+        "adhesion": {
+          "value": 18.03,
+          "from_unit": "g/cm^2",
+          "unit": "N/m^2",
+          "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+        }
+      },
+      "biomarkers": {
+        "method": "ESTS 2002a",
+        "c21_tricyclic_terpane": {
+          "value": 29.3,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22_tricyclic_terpane": {
+          "value": 13,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23_tricyclic_terpane": {
+          "value": 77.8,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24_tricyclic_terpane": {
+          "value": 43.5,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_norhopane": {
+          "value": 6.1335495263,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "hopane": {
+          "value": 131.7656061678,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22s": {
+          "value": 58.065123281,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22r": {
+          "value": 38.7058825844,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22s": {
+          "value": 41.1424282088,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22r": {
+          "value": 29.9001619438,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22s": {
+          "value": 31.7800152259,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22r": {
+          "value": 21.0895620613,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22s": {
+          "value": 22.6906670524,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22r": {
+          "value": 14.8163464146,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22s": {
+          "value": 24.5734597733,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22r": {
+          "value": 16.8669590069,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_18a_22_29_30_trisnorneohopane": {
+          "value": 29.8,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_17a_h_22_29_30_trisnorhopane": {
+          "value": 39.2,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_cholestane": {
+          "value": 80.7078186744,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_methylcholestane": {
+          "value": 76.5387381185,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_ethylcholestane": {
+          "value": 89.8623254578,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "emulsions": [
+        {
+          "visual_stability": "Unstable",
+          "standard_deviation": [
+            0.046,
+            0.059,
+            0.019,
+            0.49,
+            0.0073,
+            0.094
+          ],
+          "tan_delta_v_e": 1.9066666667,
+          "replicates": [
+            null,
+            null
+          ],
+          "cm_standard_deviation": 0.046,
+          "sm_standard_deviation": 0.059,
+          "lm_standard_deviation": 0.019,
+          "td_standard_deviation": 0.49,
+          "cv_standard_deviation": 0.0073,
+          "wc_standard_deviation": 0.094,
+          "mod_replicates": null,
+          "wc_replicates": null,
+          "water_content": {
+            "value": 0.0422222222,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "age": {
+            "value": 0.0,
+            "from_unit": "day",
+            "unit": "s",
+            "_cls": "oil_database.models.common.float_unit.TimeUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          },
+          "complex_modulus": {
+            "value": 0.3508333333,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "storage_modulus": {
+            "value": 0.1716666667,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "loss_modulus": {
+            "value": 0.3036666667,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "complex_viscosity": {
+            "value": 0.0558633333,
+            "from_unit": "Pa.s",
+            "unit": "kg/(m s)",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          }
+        }
+      ],
+      "densities": [
+        {
+          "standard_deviation": 0,
+          "replicates": 3,
+          "density": {
+            "value": 0.8751,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0,
+          "replicates": 3,
+          "density": {
+            "value": 0.8639,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "ccme": {
+        "method": "ESTS 2002a",
+        "f1": {
+          "value": 52.3730400552,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f2": {
+          "value": 152.8808543451,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f3": {
+          "value": 280.9288169821,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f4": {
+          "value": 60.8517165673,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "sulfur": {
+        "standard_deviation": 0,
+        "replicates": 3,
+        "fraction": {
+          "value": 0.9,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "water": {
+        "standard_deviation": 0.01,
+        "replicates": 3,
+        "fraction": {
+          "value": 0.27,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "pour_point": {
+        "standard_deviation": 2,
+        "replicates": 3,
+        "method": "ASTM D97",
+        "ref_temp": {
+          "unit": "C",
+          "value": -51.0,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "name": "Fresh Oil Sample",
+      "short_name": "Fresh Oil",
+      "fraction_weathered": 0.0,
+      "boiling_point_range": null
+    },
+    {
+      "chemical_dispersibility": [
+        {
+          "standard_deviation": 3.1719485355,
+          "replicates": 6,
+          "dispersant": "Corexit 9500",
+          "effectiveness": {
+            "value": 51.4195196661,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "wax_content": {
+        "standard_deviation": 0.1967218474,
+        "replicates": 3,
+        "method": "ESTS 1994",
+        "fraction": {
+          "value": 4.3719401994,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "chromatography": {
+        "method": "ESTS 2002a",
+        "tph": {
+          "value": 571.8248636364,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh": {
+          "value": 381.9541840273,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tah": {
+          "value": 189.8706796091,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh_tph": {
+          "value": 66.7956586565,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "tah_tph": {
+          "value": 33.2043413435,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "resolved_peaks_tph": {
+          "value": 26.6451670946,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "dvis": [
+        {
+          "standard_deviation": 0.47,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 94.1,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.2,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 36.64,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "flash_point": {
+        "standard_deviation": 1.15,
+        "replicates": 3,
+        "method": "ASTM 7094",
+        "ref_temp": {
+          "unit": "C",
+          "value": 23.33,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "cuts": [
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 5,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 118.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 10,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 150.4,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 15,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 179.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 20,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 210.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 25,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 237,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 30,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 264,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 35,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 285.4,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 40,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 315.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 45,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 342.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 50,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 369.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 55,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 397.8,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 60,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 425.8,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 65,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 454.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 70,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 488.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 75,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 527.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 80,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 572.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 85,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 619,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 90,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 663.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "apis": [
+        {
+          "gravity": 25.3
+        }
+      ],
+      "sara_total_fractions": [
+        {
+          "standard_deviation": 0.2635042291,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Saturates",
+          "percent": 58.9,
+          "fraction": {
+            "value": 58.9,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.2635042291,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Aromatics",
+          "percent": 29.3,
+          "fraction": {
+            "value": 29.3,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.2635042291,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Resins",
+          "percent": 7.1858848421,
+          "fraction": {
+            "value": 7.1858848421,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.119693632,
+          "replicates": 3,
+          "method": "ESTS 2014",
+          "sara_type": "Asphaltenes",
+          "percent": 4.5897500423,
+          "fraction": {
+            "value": 4.5897500423,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "alkanes": {
+        "method": "ESTS 2002a",
+        "pristane": {
+          "value": 1144.8493872178,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "phytane": {
+          "value": 970.5531704798,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c9": {
+          "value": 3887.6718978348,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c10": {
+          "value": 3693.7926083072,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c11": {
+          "value": 3321.6639855232,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c12": {
+          "value": 3227.5814728262,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c13": {
+          "value": 3030.8551883367,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c14": {
+          "value": 927.072737544,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c15": {
+          "value": 2855.4654306527,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c16": {
+          "value": 2392.252404514,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c17": {
+          "value": 2211.719413796,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c18": {
+          "value": 2265.0211658032,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c19": {
+          "value": 1791.397550055,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c20": {
+          "value": 1168.839680353,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c21": {
+          "value": 1674.6019762818,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22": {
+          "value": 1598.0247189052,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23": {
+          "value": 1498.2705137485,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24": {
+          "value": 1466.3803652296,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c25": {
+          "value": 1398.5745181983,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c26": {
+          "value": 1314.6493220821,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c27": {
+          "value": 1260.6636891584,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c28": {
+          "value": 1188.2965686465,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c29": {
+          "value": 917.6636647372,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c30": {
+          "value": 759.6501450041,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c31": {
+          "value": 661.5113565011,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c32": {
+          "value": 473.969857596,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c33": {
+          "value": 453.9211281279,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c34": {
+          "value": 348.2188063565,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c35": {
+          "value": 298.988817427,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c36": {
+          "value": 237.8372583999,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c37": {
+          "value": 226.5957868665,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c38": {
+          "value": 169.2461778455,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c39": {
+          "value": 166.4853200199,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c40": {
+          "value": 105.827784897,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c41": {
+          "value": 71.8700567341,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c42": {
+          "value": 56.7269793693,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "alkylated_pahs": {
+        "method": "ESTS 2002a",
+        "c0_n": {
+          "value": 497.0621119438,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_n": {
+          "value": 1429.6053214072,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_n": {
+          "value": 2163.0298410048,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_n": {
+          "value": 1877.2264061297,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_n": {
+          "value": 1034.3718413884,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_p": {
+          "value": 189.3581361322,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_p": {
+          "value": 512.6342205187,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_p": {
+          "value": 554.9775530899,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_p": {
+          "value": 418.9612444693,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_p": {
+          "value": 200.7809678138,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_d": {
+          "value": 114.2818423777,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_d": {
+          "value": 241.5931450448,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_d": {
+          "value": 328.9973138636,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_d": {
+          "value": 297.1120151974,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_f": {
+          "value": 69.7721945159,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_f": {
+          "value": 166.1172435324,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_f": {
+          "value": 242.1608999991,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_f": {
+          "value": 241.0924363712,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_b": {
+          "value": 43.0031197007,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_b": {
+          "value": 147.9225510621,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_b": {
+          "value": 115.732163433,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_b": {
+          "value": 190.6040967727,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_b": {
+          "value": 128.40636198,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_c": {
+          "value": 625.6682929485,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_c": {
+          "value": 32.6556539286,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_c": {
+          "value": 58.8882918882,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_c": {
+          "value": 81.3384784491,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "biphenyl": {
+          "value": 127.3868465775,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthylene": {
+          "value": 13.8726112754,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthene": {
+          "value": 13.8242270924,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "anthracene": {
+          "value": 4.25782289,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "fluoranthene": {
+          "value": 5.6548596338,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pyrene": {
+          "value": 16.6813890836,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benz_a_anthracene": {
+          "value": 2.9809358029,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_b_fluoranthene": {
+          "value": 5.3105439944,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_k_fluoranthene": {
+          "value": 0,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_e_pyrene": {
+          "value": 8.3157912863,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_a_pyrene": {
+          "value": 1.7004781401,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "perylene": {
+          "value": 4.0373249171,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "indeno_1_2_3_cd_pyrene": {
+          "value": 0.6043038727,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "dibenzo_ah_anthracene": {
+          "value": 1.3595110312,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_ghi_perylene": {
+          "value": 3.0932743938,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "ifts": [
+        {
+          "standard_deviation": 0.36,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 28.31,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.25,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "water",
+          "tension": {
+            "value": 27.57,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.88,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "seawater",
+          "tension": {
+            "value": 25.58,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.08,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 28.73,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.18,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "water",
+          "tension": {
+            "value": 21.74,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.16,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "seawater",
+          "tension": {
+            "value": 22.15,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "adhesion": {
+        "standard_deviation": 1.94,
+        "replicates": 3,
+        "adhesion": {
+          "value": 30,
+          "from_unit": "g/cm^2",
+          "unit": "N/m^2",
+          "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+        }
+      },
+      "biomarkers": {
+        "method": "ESTS 2002a",
+        "c21_tricyclic_terpane": {
+          "value": 31,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22_tricyclic_terpane": {
+          "value": 14.3,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23_tricyclic_terpane": {
+          "value": 82.7,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24_tricyclic_terpane": {
+          "value": 45.9,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_norhopane": {
+          "value": 6.600269151,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "hopane": {
+          "value": 142.2450107318,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22s": {
+          "value": 63.2108985649,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22r": {
+          "value": 46.4337767079,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22s": {
+          "value": 44.4335766884,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22r": {
+          "value": 32.598448685,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22s": {
+          "value": 34.9359671576,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22r": {
+          "value": 22.8337886275,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22s": {
+          "value": 24.9571870637,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22r": {
+          "value": 16.1957542357,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22s": {
+          "value": 26.9250238692,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22r": {
+          "value": 18.9488310679,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_18a_22_29_30_trisnorneohopane": {
+          "value": 30.6,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_17a_h_22_29_30_trisnorhopane": {
+          "value": 43,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_cholestane": {
+          "value": 90.7235807656,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_methylcholestane": {
+          "value": 83.0168349849,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_ethylcholestane": {
+          "value": 93.466570251,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "emulsions": [
+        {
+          "visual_stability": "Unstable",
+          "standard_deviation": [
+            0.032,
+            0.023,
+            0.036,
+            0.65,
+            0.0051,
+            0.15
+          ],
+          "tan_delta_v_e": 3.22,
+          "replicates": [
+            null,
+            null
+          ],
+          "cm_standard_deviation": 0.032,
+          "sm_standard_deviation": 0.023,
+          "lm_standard_deviation": 0.036,
+          "td_standard_deviation": 0.65,
+          "cv_standard_deviation": 0.0051,
+          "wc_standard_deviation": 0.15,
+          "mod_replicates": null,
+          "wc_replicates": null,
+          "water_content": {
+            "value": 0.1677777778,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "age": {
+            "value": 0.0,
+            "from_unit": "day",
+            "unit": "s",
+            "_cls": "oil_database.models.common.float_unit.TimeUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          },
+          "complex_modulus": {
+            "value": 0.455,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "storage_modulus": {
+            "value": 0.1378333333,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "loss_modulus": {
+            "value": 0.433,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "complex_viscosity": {
+            "value": 0.0724266667,
+            "from_unit": "Pa.s",
+            "unit": "kg/(m s)",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          }
+        }
+      ],
+      "densities": [
+        {
+          "standard_deviation": 0,
+          "replicates": 3,
+          "density": {
+            "value": 0.9091,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.0001,
+          "replicates": 3,
+          "density": {
+            "value": 0.8983,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "ccme": {
+        "method": "ESTS 2002a",
+        "f1": {
+          "value": 47.9771550015,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f2": {
+          "value": 160.5230111565,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f3": {
+          "value": 297.2531102078,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f4": {
+          "value": 66.0715872707,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "sulfur": {
+        "standard_deviation": 0,
+        "replicates": 3,
+        "fraction": {
+          "value": 1.1,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "water": {
+        "standard_deviation": 0,
+        "replicates": 3,
+        "fraction": {
+          "value": 0.1,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "pour_point": {
+        "standard_deviation": 2,
+        "replicates": 3,
+        "method": "ASTM D97",
+        "ref_temp": {
+          "unit": "C",
+          "value": -48.0,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "name": "12.42% Weathered",
+      "short_name": "12.42% Weathered",
+      "fraction_weathered": 0.1242,
+      "boiling_point_range": null
+    },
+    {
+      "chemical_dispersibility": [
+        {
+          "standard_deviation": 2.1576773192,
+          "replicates": 6,
+          "dispersant": "Corexit 9500",
+          "effectiveness": {
+            "value": 51.627319393,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "wax_content": {
+        "standard_deviation": 0.164881386,
+        "replicates": 3,
+        "method": "ESTS 1994",
+        "fraction": {
+          "value": 4.7594717963,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "chromatography": {
+        "method": "ESTS 2002a",
+        "tph": {
+          "value": 614.4374005645,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh": {
+          "value": 396.1728323569,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tah": {
+          "value": 218.2645682076,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh_tph": {
+          "value": 64.4773303176,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "tah_tph": {
+          "value": 35.5226696824,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "resolved_peaks_tph": {
+          "value": 22.1885969959,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "dvis": [
+        {
+          "standard_deviation": 5.3,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 745.9,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.23,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 170.8,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "flash_point": {
+        "standard_deviation": 0.58,
+        "replicates": 3,
+        "method": "ASTM 7094",
+        "ref_temp": {
+          "unit": "C",
+          "value": 82.67,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "cuts": [
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 5,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 195.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 10,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 223.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 15,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 248.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 20,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 271.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 25,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 295.8,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 30,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 317.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 35,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 342.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 40,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 367.1,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 45,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 391.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 50,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 417.1,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 55,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 441.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 60,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 470.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 65,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 502.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 70,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 538.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 75,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 579.1,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 80,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 619.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 85,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 657.4,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 90,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 708.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "apis": [
+        {
+          "gravity": 21.46
+        }
+      ],
+      "sara_total_fractions": [
+        {
+          "standard_deviation": 0.0429694682,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Saturates",
+          "percent": 55.6,
+          "fraction": {
+            "value": 55.6,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.0429694682,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Aromatics",
+          "percent": 30.7,
+          "fraction": {
+            "value": 30.7,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.0429694682,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Resins",
+          "percent": 8.3175775852,
+          "fraction": {
+            "value": 8.3175775852,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.1656129821,
+          "replicates": 3,
+          "method": "ESTS 2014",
+          "sara_type": "Asphaltenes",
+          "percent": 5.3732631525,
+          "fraction": {
+            "value": 5.3732631525,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "alkanes": {
+        "method": "ESTS 2002a",
+        "pristane": {
+          "value": 1264.7936422704,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "phytane": {
+          "value": 888.8661616418,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c9": {
+          "value": 1221.72252998,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c10": {
+          "value": 2771.3094274087,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c11": {
+          "value": 3234.7462323617,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c12": {
+          "value": 3401.7820586501,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c13": {
+          "value": 3234.0824944523,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c14": {
+          "value": 1009.3575774971,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c15": {
+          "value": 3068.6238581086,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c16": {
+          "value": 2576.3439301569,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c17": {
+          "value": 2381.9118365343,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c18": {
+          "value": 2435.8779512683,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c19": {
+          "value": 1963.7561785565,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c20": {
+          "value": 1284.6902626842,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c21": {
+          "value": 1879.8419161702,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22": {
+          "value": 1729.6416436709,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23": {
+          "value": 1666.7721149547,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24": {
+          "value": 1594.2419994524,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c25": {
+          "value": 1523.7527230864,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c26": {
+          "value": 1386.2598705068,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c27": {
+          "value": 1430.1722453457,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c28": {
+          "value": 1301.4859837191,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c29": {
+          "value": 1042.4881385545,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c30": {
+          "value": 873.659808328,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c31": {
+          "value": 722.0475814014,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c32": {
+          "value": 646.3702857082,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c33": {
+          "value": 523.967292761,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c34": {
+          "value": 403.0095689203,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c35": {
+          "value": 348.0808458903,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c36": {
+          "value": 275.4124070361,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c37": {
+          "value": 265.5814644909,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c38": {
+          "value": 208.5553647961,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c39": {
+          "value": 190.3731900527,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c40": {
+          "value": 136.5087432546,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c41": {
+          "value": 88.6314349157,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c42": {
+          "value": 64.5726626281,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "alkylated_pahs": {
+        "method": "ESTS 2002a",
+        "c0_n": {
+          "value": 562.0631758503,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_n": {
+          "value": 1644.5949043825,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_n": {
+          "value": 2550.0423265119,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_n": {
+          "value": 2253.362641834,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_n": {
+          "value": 1232.1720011094,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_p": {
+          "value": 222.785150408,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_p": {
+          "value": 609.8975257609,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_p": {
+          "value": 650.5296784947,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_p": {
+          "value": 481.1611359922,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_p": {
+          "value": 235.1313841691,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_d": {
+          "value": 135.769506595,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_d": {
+          "value": 285.1022891517,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_d": {
+          "value": 400.0484335543,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_d": {
+          "value": 354.1777744698,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_f": {
+          "value": 83.6901086948,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_f": {
+          "value": 188.5790648517,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_f": {
+          "value": 300.6571803747,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_f": {
+          "value": 289.0314107748,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_b": {
+          "value": 52.2014840713,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_b": {
+          "value": 178.1827680733,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_b": {
+          "value": 111.6174112349,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_b": {
+          "value": 225.8356343588,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_b": {
+          "value": 146.3904814351,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_c": {
+          "value": 714.2277791734,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_c": {
+          "value": 39.8619533025,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_c": {
+          "value": 71.4332814155,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_c": {
+          "value": 96.920860688,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "biphenyl": {
+          "value": 150.9376251024,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthylene": {
+          "value": 16.6041538222,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthene": {
+          "value": 18.4566651367,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "anthracene": {
+          "value": 4.2732203559,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "fluoranthene": {
+          "value": 6.3600728566,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pyrene": {
+          "value": 18.74466394,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benz_a_anthracene": {
+          "value": 4.0210243518,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_b_fluoranthene": {
+          "value": 6.1964700424,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_k_fluoranthene": {
+          "value": 0,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_e_pyrene": {
+          "value": 9.9407465376,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_a_pyrene": {
+          "value": 2.0068990859,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "perylene": {
+          "value": 4.8156698931,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "indeno_1_2_3_cd_pyrene": {
+          "value": 0.8558097874,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "dibenzo_ah_anthracene": {
+          "value": 1.5382101733,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_ghi_perylene": {
+          "value": 3.7366033952,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "ifts": [
+        {
+          "standard_deviation": 1.03,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 29.33,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.03,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "water",
+          "tension": {
+            "value": 29.89,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.03,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "seawater",
+          "tension": {
+            "value": 27.16,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.07,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 30.17,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.02,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "water",
+          "tension": {
+            "value": 24.93,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.03,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "seawater",
+          "tension": {
+            "value": 28.05,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "adhesion": {
+        "standard_deviation": 2.8,
+        "replicates": 3,
+        "adhesion": {
+          "value": 34.28,
+          "from_unit": "g/cm^2",
+          "unit": "N/m^2",
+          "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+        }
+      },
+      "biomarkers": {
+        "method": "ESTS 2002a",
+        "c21_tricyclic_terpane": {
+          "value": 32.3,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22_tricyclic_terpane": {
+          "value": 14.7,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23_tricyclic_terpane": {
+          "value": 86.4,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24_tricyclic_terpane": {
+          "value": 47.7,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_norhopane": {
+          "value": 7.0487850432,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "hopane": {
+          "value": 148.427192939,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22s": {
+          "value": 65.466890251,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22r": {
+          "value": 48.6197340255,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22s": {
+          "value": 47.1143688822,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22r": {
+          "value": 35.430766504,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22s": {
+          "value": 35.5425389143,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22r": {
+          "value": 23.9977700489,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22s": {
+          "value": 26.2587168167,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22r": {
+          "value": 17.0700229626,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22s": {
+          "value": 28.0805799154,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22r": {
+          "value": 19.1761766857,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_18a_22_29_30_trisnorneohopane": {
+          "value": 32.9,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_17a_h_22_29_30_trisnorhopane": {
+          "value": 43.3,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_cholestane": {
+          "value": 78.1530671343,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_methylcholestane": {
+          "value": 86.9870890978,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_ethylcholestane": {
+          "value": 103.8875519531,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "emulsions": [
+        {
+          "visual_stability": "Unstable",
+          "standard_deviation": [
+            0.018,
+            0.031,
+            0.019,
+            4.5,
+            0.0029,
+            0.11
+          ],
+          "tan_delta_v_e": 11.9816666667,
+          "replicates": [
+            null,
+            null
+          ],
+          "cm_standard_deviation": 0.018,
+          "sm_standard_deviation": 0.031,
+          "lm_standard_deviation": 0.019,
+          "td_standard_deviation": 4.5,
+          "cv_standard_deviation": 0.0029,
+          "wc_standard_deviation": 0.11,
+          "mod_replicates": null,
+          "wc_replicates": null,
+          "water_content": {
+            "value": 1.0266666667,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "age": {
+            "value": 0.0,
+            "from_unit": "day",
+            "unit": "s",
+            "_cls": "oil_database.models.common.float_unit.TimeUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          },
+          "complex_modulus": {
+            "value": 1.2593333333,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "storage_modulus": {
+            "value": 0.11415,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "loss_modulus": {
+            "value": 1.2536666667,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "complex_viscosity": {
+            "value": 0.2005,
+            "from_unit": "Pa.s",
+            "unit": "kg/(m s)",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          }
+        }
+      ],
+      "densities": [
+        {
+          "standard_deviation": 0,
+          "replicates": 3,
+          "density": {
+            "value": 0.933,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0,
+          "replicates": 3,
+          "density": {
+            "value": 0.9218,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "ccme": {
+        "method": "ESTS 2002a",
+        "f1": {
+          "value": 15.7849033522,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f2": {
+          "value": 169.9861706953,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f3": {
+          "value": 352.8155551965,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f4": {
+          "value": 75.8507713205,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "sulfur": {
+        "standard_deviation": 0.01,
+        "replicates": 3,
+        "fraction": {
+          "value": 1.3,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "water": {
+        "standard_deviation": 0,
+        "replicates": 3,
+        "fraction": {
+          "value": 0.1,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "pour_point": {
+        "standard_deviation": 2,
+        "replicates": 3,
+        "method": "ASTM D97",
+        "ref_temp": {
+          "unit": "C",
+          "value": -36.0,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "name": "24.56% Weathered",
+      "short_name": "24.56% Weathered",
+      "fraction_weathered": 0.2456,
+      "boiling_point_range": null
+    },
+    {
+      "chemical_dispersibility": [
+        {
+          "standard_deviation": 1.6195495663,
+          "replicates": 6,
+          "dispersant": "Corexit 9500",
+          "effectiveness": {
+            "max_value": 10.0,
+            "min_value": null,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "wax_content": {
+        "standard_deviation": 0.3954131128,
+        "replicates": 3,
+        "method": "ESTS 1994",
+        "fraction": {
+          "value": 6.0318736469,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "chromatography": {
+        "method": "ESTS 2002a",
+        "tph": {
+          "value": 558.2972896533,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh": {
+          "value": 352.6243591156,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tah": {
+          "value": 205.6729305377,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tsh_tph": {
+          "value": 63.1606790236,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "tah_tph": {
+          "value": 36.8393209764,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        },
+        "resolved_peaks_tph": {
+          "value": 16.0789063673,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "dvis": [
+        {
+          "standard_deviation": 230,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 1400,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 4.9,
+          "replicates": 3,
+          "method": "ASTM 7042",
+          "viscosity": {
+            "value": 8430,
+            "unit": "mPa s",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "flash_point": {
+        "standard_deviation": 0,
+        "replicates": 3,
+        "method": "ASTM 7094",
+        "ref_temp": {
+          "unit": "C",
+          "value": 138.0,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "cuts": [
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 5,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 264.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 10,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 287.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 15,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 307.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 20,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 327.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 25,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 347.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 30,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 368.8,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 35,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 389.8,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 40,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 411.3,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 45,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 431.6,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 50,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 453.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 55,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 478.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 60,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 505.9,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 65,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 536.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 70,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 570.2,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 75,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 604.5,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 80,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 637.4,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 85,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 672.7,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "method": "Merged ASTM D6730 Modified and ASTM D7169",
+          "fraction": {
+            "value": 90,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "vapor_temp": {
+            "value": 719.4,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "apis": [
+        {
+          "gravity": 17.93
+        }
+      ],
+      "sara_total_fractions": [
+        {
+          "standard_deviation": 0.5248224928,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Saturates",
+          "percent": 51.5,
+          "fraction": {
+            "value": 51.5,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.5248224928,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Aromatics",
+          "percent": 30.1,
+          "fraction": {
+            "value": 30.1,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.5248224928,
+          "replicates": 3,
+          "method": null,
+          "sara_type": "Resins",
+          "percent": 10.7051480072,
+          "fraction": {
+            "value": 10.7051480072,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.2059160069,
+          "replicates": 3,
+          "method": "ESTS 2014",
+          "sara_type": "Asphaltenes",
+          "percent": 7.7224436901,
+          "fraction": {
+            "value": 7.7224436901,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          }
+        }
+      ],
+      "alkanes": {
+        "method": "ESTS 2002a",
+        "pristane": {
+          "value": 1403.9212473319,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "phytane": {
+          "value": 1105.6054131307,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c9": {
+          "value": 1.2004574963,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c10": {
+          "value": 0.4834221729,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c11": {
+          "value": 3.0091111002,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c12": {
+          "value": 307.8397012959,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c13": {
+          "value": 1647.9601070719,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c14": {
+          "value": 723.3604436506,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c15": {
+          "value": 2569.6310397873,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c16": {
+          "value": 2574.1674704601,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c17": {
+          "value": 2574.1117275633,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c18": {
+          "value": 2362.8735839814,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c19": {
+          "value": 2235.3590550775,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c20": {
+          "value": 1441.7907206023,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c21": {
+          "value": 2102.8856583501,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22": {
+          "value": 1940.9353818393,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23": {
+          "value": 1900.6207545561,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24": {
+          "value": 1777.6373713205,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c25": {
+          "value": 1713.7119304364,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c26": {
+          "value": 1558.0690711267,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c27": {
+          "value": 1582.7613575567,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c28": {
+          "value": 1494.17722991,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c29": {
+          "value": 1196.6645504977,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c30": {
+          "value": 992.8209353145,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c31": {
+          "value": 826.8297495107,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c32": {
+          "value": 685.7193776047,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c33": {
+          "value": 622.5064617447,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c34": {
+          "value": 479.1126360229,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c35": {
+          "value": 416.9222338958,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c36": {
+          "value": 334.4884541255,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c37": {
+          "value": 327.338944184,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c38": {
+          "value": 246.096832299,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c39": {
+          "value": 223.6736426896,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c40": {
+          "value": 151.7336120126,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c41": {
+          "value": 103.7850014478,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c42": {
+          "value": 79.6474314705,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "alkylated_pahs": {
+        "method": "ESTS 2002a",
+        "c0_n": {
+          "value": 18.5797533318,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_n": {
+          "value": 651.4287607943,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_n": {
+          "value": 2074.013217188,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_n": {
+          "value": 2358.3588337158,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_n": {
+          "value": 1361.2194728016,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_p": {
+          "value": 258.948276503,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_p": {
+          "value": 698.4256150235,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_p": {
+          "value": 772.5503718319,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_p": {
+          "value": 591.4416253034,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_p": {
+          "value": 273.8670353853,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_d": {
+          "value": 155.0183965735,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_d": {
+          "value": 325.0546925655,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_d": {
+          "value": 466.1521120063,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_d": {
+          "value": 415.5600147805,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_f": {
+          "value": 87.950272643,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_f": {
+          "value": 223.1684572824,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_f": {
+          "value": 333.7515301179,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_f": {
+          "value": 341.1026735169,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_b": {
+          "value": 62.1425582723,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_b": {
+          "value": 211.1890415258,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_b": {
+          "value": 127.962722124,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_b": {
+          "value": 262.164852839,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c4_b": {
+          "value": 170.5990097437,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c0_c": {
+          "value": 834.0581845049,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c1_c": {
+          "value": 44.8881160146,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c2_c": {
+          "value": 84.3130956476,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c3_c": {
+          "value": 118.6914336781,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "biphenyl": {
+          "value": 124.3265019149,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthylene": {
+          "value": 13.5393353289,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "acenaphthene": {
+          "value": 13.4921135286,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "anthracene": {
+          "value": 4.1555328506,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "fluoranthene": {
+          "value": 5.5190071501,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pyrene": {
+          "value": 16.2806349915,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benz_a_anthracene": {
+          "value": 2.9093217296,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_b_fluoranthene": {
+          "value": 5.1829633579,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_k_fluoranthene": {
+          "value": 0,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_e_pyrene": {
+          "value": 8.1160125167,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_a_pyrene": {
+          "value": 1.6596258124,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "perylene": {
+          "value": 3.9403321263,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "indeno_1_2_3_cd_pyrene": {
+          "value": 0.5897860619,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "dibenzo_ah_anthracene": {
+          "value": 1.3268501056,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "benzo_ghi_perylene": {
+          "value": 3.0189614954,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "ifts": [
+        {
+          "standard_deviation": 0.12,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 31.73,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.12,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "air",
+          "tension": {
+            "value": 31.16,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.05,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "water",
+          "tension": {
+            "value": 23.84,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0.01,
+          "replicates": 3,
+          "method": "ESTS 2008",
+          "interface": "seawater",
+          "tension": {
+            "value": 23.71,
+            "from_unit": "dyne/cm",
+            "unit": "N/m",
+            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "adhesion": {
+        "standard_deviation": 3.09,
+        "replicates": 3,
+        "adhesion": {
+          "value": 56.39,
+          "from_unit": "g/cm^2",
+          "unit": "N/m^2",
+          "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+        }
+      },
+      "biomarkers": {
+        "method": "ESTS 2002a",
+        "c21_tricyclic_terpane": {
+          "value": 41.5,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c22_tricyclic_terpane": {
+          "value": 18.3,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c23_tricyclic_terpane": {
+          "value": 106.5,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "c24_tricyclic_terpane": {
+          "value": 60.3,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_norhopane": {
+          "value": 8.9729030808,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "hopane": {
+          "value": 187.6557838363,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22s": {
+          "value": 83.1376619786,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_homohopane_22r": {
+          "value": 62.0941225652,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22s": {
+          "value": 59.0241072589,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_bishomohopane_22r": {
+          "value": 42.508106882,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22s": {
+          "value": 44.1873864935,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_30_31_trishomohopane_22r": {
+          "value": 30.814178867,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22s": {
+          "value": 33.4119137877,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "tetrakishomohopane_22r": {
+          "value": 21.7801862523,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22s": {
+          "value": 36.189965232,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "pentakishomohopane_22r": {
+          "value": 24.9353794575,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_18a_22_29_30_trisnorneohopane": {
+          "value": 41.7,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_17a_h_22_29_30_trisnorhopane": {
+          "value": 56.8,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_cholestane": {
+          "value": 119.4262635567,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_methylcholestane": {
+          "value": 110.8269930548,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "_14b_h_17b_h_20_ethylcholestane": {
+          "value": 126.5990331775,
+          "from_unit": "ug/g",
+          "unit": "ppm",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "emulsions": [
+        {
+          "visual_stability": "Meso-stable",
+          "standard_deviation": [
+            0.56,
+            0.4,
+            0.55,
+            9.3,
+            0.089,
+            2.5
+          ],
+          "tan_delta_v_e": 20,
+          "replicates": [
+            null,
+            null
+          ],
+          "cm_standard_deviation": 0.56,
+          "sm_standard_deviation": 0.4,
+          "lm_standard_deviation": 0.55,
+          "td_standard_deviation": 9.3,
+          "cv_standard_deviation": 0.089,
+          "wc_standard_deviation": 2.5,
+          "mod_replicates": null,
+          "wc_replicates": null,
+          "water_content": {
+            "value": 22.8088888889,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "age": {
+            "value": 0.0,
+            "from_unit": "day",
+            "unit": "s",
+            "_cls": "oil_database.models.common.float_unit.TimeUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          },
+          "complex_modulus": {
+            "value": 15.3883333333,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "storage_modulus": {
+            "value": 0.865,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "loss_modulus": {
+            "value": 15.36,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "complex_viscosity": {
+            "value": 2.4491666667,
+            "from_unit": "Pa.s",
+            "unit": "kg/(m s)",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          }
+        },
+        {
+          "visual_stability": "Meso-stable",
+          "standard_deviation": [
+            0.65,
+            0.55,
+            0.64,
+            4.4,
+            0.1,
+            1.4
+          ],
+          "tan_delta_v_e": 10,
+          "replicates": [
+            null,
+            null
+          ],
+          "cm_standard_deviation": 0.65,
+          "sm_standard_deviation": 0.55,
+          "lm_standard_deviation": 0.64,
+          "td_standard_deviation": 4.4,
+          "cv_standard_deviation": 0.1,
+          "wc_standard_deviation": 1.4,
+          "mod_replicates": null,
+          "wc_replicates": null,
+          "water_content": {
+            "value": 14.7783333333,
+            "unit": "%",
+            "_cls": "oil_database.models.common.float_unit.FloatUnit"
+          },
+          "age": {
+            "value": 7.0,
+            "from_unit": "day",
+            "unit": "s",
+            "_cls": "oil_database.models.common.float_unit.TimeUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          },
+          "complex_modulus": {
+            "value": 12.1616666667,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "storage_modulus": {
+            "value": 1.083,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "loss_modulus": {
+            "value": 12.1033333333,
+            "from_unit": "Pa",
+            "unit": "N/m^2",
+            "_cls": "oil_database.models.common.float_unit.AdhesionUnit"
+          },
+          "complex_viscosity": {
+            "value": 1.9355,
+            "from_unit": "Pa.s",
+            "unit": "kg/(m s)",
+            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit"
+          }
+        }
+      ],
+      "densities": [
+        {
+          "standard_deviation": 7e-06,
+          "replicates": 3,
+          "density": {
+            "value": 0.956249,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 0.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        },
+        {
+          "standard_deviation": 0,
+          "replicates": 3,
+          "density": {
+            "value": 0.9444,
+            "from_unit": "g/mL",
+            "unit": "kg/m^3",
+            "_cls": "oil_database.models.common.float_unit.DensityUnit"
+          },
+          "ref_temp": {
+            "value": 15.0,
+            "from_unit": "C",
+            "unit": "K",
+            "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+          }
+        }
+      ],
+      "ccme": {
+        "method": "ESTS 2002a",
+        "f1": {
+          "value": 0,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f2": {
+          "value": 75.5361921037,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f3": {
+          "value": 375.1448950419,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        },
+        "f4": {
+          "value": 107.6162025077,
+          "unit": "mg/g",
+          "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
+        }
+      },
+      "sulfur": {
+        "standard_deviation": 0.01,
+        "replicates": 3,
+        "fraction": {
+          "value": 1.4,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "water": {
+        "standard_deviation": 0,
+        "replicates": 3,
+        "fraction": {
+          "value": 0.1,
+          "unit": "%",
+          "_cls": "oil_database.models.common.float_unit.FloatUnit"
+        }
+      },
+      "pour_point": {
+        "standard_deviation": 2,
+        "replicates": 3,
+        "method": "ASTM D97",
+        "ref_temp": {
+          "unit": "C",
+          "value": -3.0,
+          "_cls": "oil_database.models.common.float_unit.TemperatureUnit"
+        }
+      },
+      "name": "36.76% Weathered",
+      "short_name": "36.76% Weathered",
+      "fraction_weathered": 0.3676,
+      "boiling_point_range": null
+    }
+  ]
+}

@@ -28,5 +28,4 @@ pytest-timeout>=1.2.1
 
 backports.functools_lru_cache>=1.5
 
-# this package is a bit old.  The new one is pip installed from GitHub
-# unit_conversion>=2.5.4
+unit_conversion>=2.5.4
