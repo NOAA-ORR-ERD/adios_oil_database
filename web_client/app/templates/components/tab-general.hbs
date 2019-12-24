@@ -78,29 +78,25 @@
             <label class="p-1 input-group-text font-weight-bold">Categories:</label>
           </div>
 
-          <PowerSelectMultiple 
-            @class="pl-1 flex-fill bg-transparent border"
-            @searchEnabled={{true}}
-            @options={{oil.categories}}
-            @selected={{oil.categories}}
-            @placeholder="Select some categories..."
-            @onChange={{action (mut category)}} as |category|>
-            {{category}}
-            {{!-- @placeholder="Select some categories..."
-            @selected={{this.selectedLabels}}
-            @options={{this.oilCategories}}
-            @onChange={{action (mut this.oilCategories)}}
-            @onKeydown={{this.handleKeydown}} as |name|>
-            {{name}} --}}
-          </PowerSelectMultiple>
-
-          {{!-- <select class="p-1 bg-transparent border" multiple>
+          {{#if editable}}
+            <PowerSelectMultiple @class="bg-warning border-0"
+              @placeholder="Select some categories..."
+              @selected={{this.selectedCategories}}
+              @options={{this.oilCategories}}
+              @onChange={{action (mut this.selectedCategories)}}
+              @onKeydown={{this.handleKeydown}} as |name|>
+              <span class="bg-transparent border-0">{{name}}</span>
+            </PowerSelectMultiple>
+          {{else}}
             {{#each oil.categories as |category|}}
-              <option class="p-0 pl-1 bg-transparent">{{category}}</option>
+              <span class="p-1 ml-1">
+                {{category}}
+              </span>
             {{else}}
-              <option class="p-0 pl-1 bg-transparent">None</option>
-            {{/each}}      
-          </select> --}}
+              <span>None</span>
+            {{/each}}
+          {{/if}}
+
         </div>
       
       </div>

@@ -2,19 +2,21 @@ import Component from '@ember/component';
 
 export default Component.extend({
 
-    // oilCategories: ['one', 'two', 'three', 'four'],
+    oilCategories: undefined,
+    selectedCategories: undefined,
 
-    // init(){
-    //     this._super(...arguments);
-    //     this.set('oilCategories', this.fetchOilCategories());
-    // },
+    init(){
+        this._super(...arguments);
+        this.set('oilCategories', this.getOilCategories());
+        this.set('selectedCategories', this.oil.categories);
+    },
 
-    // fetchOilCategories() {
-    //     return this.get('store').findAll('category')
-    //            .then(function(response) {
-    //                return response.toArray().map(i => {return i.name});
-    //            });
-    // },
+    getOilCategories() {
+        return this.oil.get('store').findAll('category')
+            .then(function(response) {
+                return response.toArray().map(i => {return i.name});
+            });
+    },
   
     actions: {
         updateAPI() {

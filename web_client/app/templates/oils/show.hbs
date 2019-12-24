@@ -2,7 +2,7 @@
   <div class="row">
 
     <div class="col-sm-3">
-      <div class="row d-flex align-items-center">
+      <div class="row pl-3 d-flex align-items-center">
 
         {{!-- back to oil list control --}}
         <div class=" mr-2">
@@ -50,10 +50,9 @@
   </div>
 
   <div class="content">
-    <TabGeneral 
+    <TabGeneral
       @oil={{this.model}}
       @editable={{this.editable}}
-      @readOnly={{if this.editable undefined "readonly"}}
       @oilTypes={{array
           "crude"
           "refined"
