@@ -43,11 +43,6 @@ export default Component.extend(TableCommon, {
             cellComponent: 'table/cell/api',
             width: '70px'
         }, {
-            label: 'Viscosity',
-            valuePath: 'viscosity',
-            cellComponent: 'table/cell/viscosity',
-            width: '120px'
-        }, {
             label: 'Categories',
             valuePath: 'categories',
             cellComponent: 'table/cell/categories',
