@@ -21,7 +21,8 @@
           </div>
           {{#let (if oil.location oil.location "None") as |oilLocation|}}
             {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border" @value={{oilLocation}} />
+              <Input @class="p-1 flex-fill bg-transparent border" @value={{oilLocation}}
+                @placeholder="Enter Location"  @change={{action "updateLocation"}} />
             {{else}}
               <span class="p-1 flex-fill">{{oilLocation}}</span>
             {{/if}}
@@ -112,7 +113,8 @@
         </div>
         {{#let (if oil.reference oil.reference "None") as |oilReference|}}
           {{#if editable}}
-            <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilReference}} @rows="3" />
+            <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilReference}} @rows="3"
+              @placeholder="Enter Reference"  @change={{action "updateReference"}} />
           {{else}}
             <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilReference}} rows="3" />
           {{/if}}
@@ -130,7 +132,8 @@
           {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
             as |oilReferenceDate|}}
             {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}} />
+              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}}
+                @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
             {{/if}}
@@ -146,7 +149,8 @@
           {{#let (if oil.sampleDate (moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
             as |oilSampleDate|}}
             {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilSampleDate}} />
+              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilSampleDate}}
+                @placeholder="Enter Date"  @change={{action "updateSampleReceivedDate"}} />
             {{else}}
               <span class="p-1 flex-fill">{{oilSampleDate}}</span>
             {{/if}}

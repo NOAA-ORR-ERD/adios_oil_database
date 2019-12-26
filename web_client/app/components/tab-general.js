@@ -21,6 +21,24 @@ export default Component.extend({
     actions: {
         updateAPI() {
             alert('API value has been changed!');
+        },
+
+        updateLocation(event) {
+            //this.oil.location = event.target.value;
+            this.get('oil').set('location', event.target.value);
+            //this.get('oil').save();
+        },
+
+        updateReference() {
+
+        },
+
+        updateReferenceDate() {
+
+        },
+
+        updateSampleReceivedDate() {
+
         }
     }
 });
