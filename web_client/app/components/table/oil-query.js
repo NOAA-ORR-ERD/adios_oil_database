@@ -43,7 +43,7 @@ export default Component.extend(TableCommon, {
             cellComponent: 'table/cell/api',
             width: '70px'
         }, {
-            label: 'Categories',
+            label: 'Labels',
             valuePath: 'categories',
             cellComponent: 'table/cell/categories',
         }];
