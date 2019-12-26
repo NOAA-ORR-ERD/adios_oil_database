@@ -226,6 +226,10 @@ def get_search_params(request):
 
 def get_sort_params(request):
     sort = decamelize(request.GET.get('sort', None))
+
+    if sort == 'id':
+        sort = '_id'
+
     direction = ({'asc': ASCENDING,
                   'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
                                           ASCENDING))
