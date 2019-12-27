@@ -116,7 +116,7 @@
             <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilReference}} @rows="3"
               @placeholder="Enter Reference"  @change={{action "updateReference"}} />
           {{else}}
-            <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilReference}} rows="3" />
+            <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilReference}} readonly rows="3" />
           {{/if}}
         {{/let}}
       </div>
@@ -132,7 +132,7 @@
           {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
             as |oilReferenceDate|}}
             {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}}
+              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}} type="date"
                 @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
@@ -172,7 +172,7 @@
         {{#if editable}}
           <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1" />
         {{else}}
-          <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilComments}} rows="1" />
+          <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilComments}} readonly rows="1" />
         {{/if}}
       {{/let}}  
     </div>

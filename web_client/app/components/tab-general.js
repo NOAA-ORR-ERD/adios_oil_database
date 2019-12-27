@@ -19,26 +19,26 @@ export default Component.extend({
     },
   
     actions: {
-        updateAPI() {
-            alert('API value has been changed!');
+        updateAPI(event) {
+            this.get('oil').samples.get(0).apis.set('0.gravity',  Number(event.target.value));
+            //this.get('oil').save();
         },
 
         updateLocation(event) {
             //this.oil.location = event.target.value;
             this.get('oil').set('location', event.target.value);
-            //this.get('oil').save();
         },
 
-        updateReference() {
-
+        updateReference(event) {
+            this.get('oil').set('reference', event.target.value);
         },
 
         updateReferenceDate() {
-
+            //this.get('oil').set('referenceDate', Date.parse(event.target.value));
         },
 
         updateSampleReceivedDate() {
-
+            //this.get('oil').set('sampleDate', Date.parse(event.target.value));
         }
     }
 });
