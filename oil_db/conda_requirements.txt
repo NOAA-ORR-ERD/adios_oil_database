@@ -25,7 +25,8 @@ pytz>=2019.3
 pytest>=3.8.0
 pytest-cov>=2.6.0
 pytest-timeout>=1.2.1
+pytest-raises>=0.10
 
 backports.functools_lru_cache>=1.5
 
-unit_conversion>=2.5.4
+# unit_conversion>=2.5.4 # getting this direct from git now
