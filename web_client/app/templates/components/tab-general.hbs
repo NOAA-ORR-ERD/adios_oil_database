@@ -55,7 +55,7 @@
             <label class="p-1 input-group-text font-weight-bold">Type:</label>
           </div>
           {{#if editable}}
-            <select class="p-1 flex-fill bg-transparent border">
+            <select class="p-1 flex-fill bg-transparent border" onchange={{action "updateType"}}>
               {{#each this.oilTypes as |oilType|}}
                 {{#if (eq oil.productType oilType)}}
                   <option selected>{{oilType}}</option>
@@ -84,7 +84,7 @@
               @placeholder="Select some categories..."
               @selected={{this.selectedCategories}}
               @options={{this.oilCategories}}
-              @onChange={{action (mut this.selectedCategories)}}
+              @onChange={{action "updateCategories"}}
               @onKeydown={{this.handleKeydown}} as |name|>
               <span class="bg-transparent border-0">{{name}}</span>
             </PowerSelectMultiple>
@@ -114,7 +114,7 @@
         {{#let (if oil.reference oil.reference "None") as |oilReference|}}
           {{#if editable}}
             <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilReference}} @rows="3"
-              @placeholder="Enter Reference"  @change={{action "updateReference"}} />
+              @placeholder="Enter reference"  @change={{action "updateReference"}} />
           {{else}}
             <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilReference}} readonly rows="3" />
           {{/if}}
@@ -132,7 +132,7 @@
           {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
             as |oilReferenceDate|}}
             {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}} type="date"
+              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}}
                 @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
@@ -168,9 +168,10 @@
       <div class="input-group-prepend">
         <label class="p-1 input-group-text font-weight-bold">Comments:</label>
       </div>
-      {{#let (if oil.comments oil.location "None") as |oilComments|}}
+      {{#let (if oil.comments oil.comments "None") as |oilComments|}}
         {{#if editable}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1" />
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1"
+              @placeholder="Enter comments"  @change={{action "updateComments"}} />
         {{else}}
           <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilComments}} readonly rows="1" />
         {{/if}}

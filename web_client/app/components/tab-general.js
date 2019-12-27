@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import moment from 'moment';
 
 export default Component.extend({
 
@@ -29,16 +30,30 @@ export default Component.extend({
             this.get('oil').set('location', event.target.value);
         },
 
+        updateType(event) {
+            this.get('oil').set('productType', event.target.value);
+        },
+
+        updateCategories(selectedCategories) {
+            this.set('selectedCategories', selectedCategories);  
+            this.get('oil').set('categories', selectedCategories);
+        },
+
         updateReference(event) {
             this.get('oil').set('reference', event.target.value);
         },
 
-        updateReferenceDate() {
-            //this.get('oil').set('referenceDate', Date.parse(event.target.value));
+        updateReferenceDate(event) {
+            this.get('oil').set('referenceDate', moment(event.target.value, "YYYY-MM-DD").tz("Europe/London").unix());
         },
 
-        updateSampleReceivedDate() {
-            //this.get('oil').set('sampleDate', Date.parse(event.target.value));
+        updateSampleReceivedDate(event) {
+            this.get('oil').set('sampleDate', moment(event.target.value, "YYYY-MM-DD").tz("Europe/London").unix());
+        },
+
+        updateComments(event) {
+            this.get('oil').set('comments', event.target.value);
         }
+        
     }
 });
