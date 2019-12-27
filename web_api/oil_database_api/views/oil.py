@@ -95,8 +95,8 @@ def get_oils(request):
         except Exception as e:
             raise HTTPBadRequest(e)
 
-        search_opts, post_opts = search_params(request)
-        sort = sort_params(request)
+        search_opts, post_opts = get_search_params(request)
+        sort = get_sort_params(request)
 
         if ((len(sort) > 0 and sort[0][0] in ('api', 'viscosity')) or
                 (len(post_opts.keys()) > 0)):
@@ -137,7 +137,11 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
         determined until after the record is fetched.
     '''
     logger.info('post-sort...')
-    field, direction = sort[0]
+
+    if len(sort) >= 2:
+        field, direction = sort[0]
+    else:
+        field, direction = 'name', ASCENDING
 
     cursor = oils.find(search_opts)
 
@@ -154,6 +158,16 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
             if ('api' not in rec or
                     rec['api'] is None or
                     not low <= rec['api'].gravity < high):
+                continue
+
+        if 'labels' in post_opts:
+            if rec['categories'] is None:
+                continue
+
+            labels = [l.lower() for l in post_opts['labels']]
+            rec_labels = [c.lower() for c in rec['categories']]
+
+            if not all([(l in rec_labels) for l in labels]):
                 continue
 
         if rec[field] is not None:
@@ -174,21 +188,7 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
             if i >= start and i < stop]
 
 
-def sort_params(request):
-    sort = decamelize(request.GET.get('sort', None))
-    direction = ({'asc': ASCENDING,
-                  'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
-                                          ASCENDING))
-
-    logger.info('(sort, direction): ({}, {})'.format(sort, direction))
-
-    if sort is None:
-        return []
-    else:
-        return [(sort, direction)]
-
-
-def search_params(request):
+def get_search_params(request):
     query_out = {}
     post_out = {}
 
@@ -215,7 +215,31 @@ def search_params(request):
         # the post-processing step.
         pass
 
+    labels = request.GET.get('qLabels', '')
+
+    if labels != '':
+        labels = labels.split(',')
+        post_out['labels'] = labels
+
     return query_out, post_out
+
+
+def get_sort_params(request):
+    sort = decamelize(request.GET.get('sort', None))
+
+    if sort == 'id':
+        sort = '_id'
+
+    direction = ({'asc': ASCENDING,
+                  'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
+                                          ASCENDING))
+
+    logger.info('(sort, direction): ({}, {})'.format(sort, direction))
+
+    if sort is None:
+        return []
+    else:
+        return [(sort, direction)]
 
 
 @oil_api.post()

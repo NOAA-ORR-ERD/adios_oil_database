@@ -17,6 +17,11 @@ export default Component.extend(TableCommon, {
             width: '30px',
             cellComponent: 'table/cell/status'
         }, {
+            label: 'ID',
+            valuePath: 'id',
+            width: '100px',
+            searchable: true,
+        }, {
             label: 'Name',
             valuePath: 'name',
             width: '230px',
@@ -38,12 +43,7 @@ export default Component.extend(TableCommon, {
             cellComponent: 'table/cell/api',
             width: '70px'
         }, {
-            label: 'Viscosity',
-            valuePath: 'viscosity',
-            cellComponent: 'table/cell/viscosity',
-            width: '120px'
-        }, {
-            label: 'Categories',
+            label: 'Labels',
             valuePath: 'categories',
             cellComponent: 'table/cell/categories',
         }];
