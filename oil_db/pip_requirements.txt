@@ -1,4 +1,4 @@
 # pip requirements file for the oil_database package.
 # These packages are not available via conda
 
-pytest-raises>=0.10
+git+https://github.com/NOAA-ORR-ERD/PyNUCOS.git#egg=unit_conversion
