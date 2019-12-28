@@ -34,7 +34,7 @@ class Oil:
     api: float = None
     product_type: str = ""
     # fixme: this should really be "sub_samples"
-    samples: List[Sample] = field(default_factory=list)
+    samples: List[Sample] = field(default_factory=list_of_samples)
     extra_data: Dict = field(default_factory=dict)
 
     def __post_init__(self):
