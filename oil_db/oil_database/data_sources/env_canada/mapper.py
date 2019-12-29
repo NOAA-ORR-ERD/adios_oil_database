@@ -340,9 +340,10 @@ class EnvCanadaAttributeMapper(object):
 
             kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
                                   '_cls': self._class_path(FloatUnit)}
-            kwargs['vapor_temp'] = {'value': kwargs['temp_c'],
-                                    'from_unit': 'C', 'unit': 'K',
-                                    '_cls': self._class_path(TemperatureUnit)}
+
+            kwargs['vapor_temp'] = (TemperatureUnit(value=kwargs['temp_c'],
+                                                    from_unit='C', unit='K')
+                                    .dict())
 
             del kwargs['percent']
             del kwargs['temp_c']
