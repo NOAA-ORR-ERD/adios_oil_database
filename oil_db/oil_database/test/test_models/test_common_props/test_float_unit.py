@@ -4,9 +4,9 @@
 '''
 import pytest
 
-pytestmark = pytest.mark.skipif(True,
-                                reason="FloatUnits needs a lot of refactoring"
-                                "And a lot of these tests are failing")
+# pytestmark = pytest.mark.skipif(True,
+#                                 reason="FloatUnits needs a lot of refactoring"
+#                                 "And a lot of these tests are failing")
 
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    AngularMeasureUnit,
