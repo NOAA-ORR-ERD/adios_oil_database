@@ -227,16 +227,12 @@ class OilTestBase(FunctionalTestBase):
             if k not in obj:
                 return False
 
-        if not ('value' in obj or
-                all(l in obj for l in ('min_value', 'max_value'))):
-            return False
-
         if obj['unit'] not in units:
             return False
 
-        # We should have either a single value, or a min/max pair of values
-        if (('value' not in obj) and
-                not all([k in obj for k in ('min_value', 'max_value')])):
+        # The min/max pair is sparse if one value is None, so the requirement
+        # is that we need to have at least one of these attributes
+        if not (any(l in obj for l in ('value', 'min_value', 'max_value'))):
             return False
 
         # if we have a single value, it needs to be valid
