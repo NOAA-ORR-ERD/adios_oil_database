@@ -682,8 +682,10 @@ class EnvCanadaRecordParser(object):
 
             kwargs = self.build_flash_point_kwargs(props_i, w)
 
-            if any([kwargs is not None and k in kwargs and kwargs[k] is not None
-                    for k in ('ref_temp',)]):
+            if any([(kwargs is not None and
+                     k in kwargs and
+                     kwargs[k] is not None)
+                    for k in ('ref_temp_c',)]):
                 flash_points.append(kwargs)
 
         self._propagate_merged_excel_cells(flash_points, ('method',))
@@ -706,8 +708,10 @@ class EnvCanadaRecordParser(object):
 
             kwargs = self._build_pour_point_kwargs(props_i, w)
 
-            if any([kwargs is not None and k in kwargs and kwargs[k] is not None
-                    for k in ('ref_temp',)]):
+            if any([(kwargs is not None and
+                     k in kwargs and
+                     kwargs[k] is not None)
+                    for k in ('ref_temp_c',)]):
                 pour_points.append(kwargs)
 
         self._propagate_merged_excel_cells(pour_points, ('method',))
@@ -1890,14 +1894,14 @@ class EnvCanadaRecordParser(object):
         except Exception:
             temp_c = None
 
-        fp_kwargs['ref_temp'] = {'unit': 'C'}
+        fp_kwargs['ref_temp_c'] = {'unit': 'C'}
         if temp_c is not None:
-            fp_kwargs['ref_temp']['value'] = temp_c
+            fp_kwargs['ref_temp_c']['value'] = temp_c
         elif min_temp_c is not None and min_temp_c == max_temp_c:
-            fp_kwargs['ref_temp']['value'] = max_temp_c
+            fp_kwargs['ref_temp_c']['value'] = max_temp_c
         else:
-            fp_kwargs['ref_temp']['min_value'] = min_temp_c
-            fp_kwargs['ref_temp']['max_value'] = max_temp_c
+            fp_kwargs['ref_temp_c']['min_value'] = min_temp_c
+            fp_kwargs['ref_temp_c']['max_value'] = max_temp_c
 
         return fp_kwargs
 
@@ -1926,14 +1930,14 @@ class EnvCanadaRecordParser(object):
         except Exception:
             temp_c = None
 
-        pp_kwargs['ref_temp'] = {'unit': 'C'}
+        pp_kwargs['ref_temp_c'] = {'unit': 'C'}
         if temp_c is not None:
-            pp_kwargs['ref_temp']['value'] = temp_c
+            pp_kwargs['ref_temp_c']['value'] = temp_c
         elif min_temp_c == max_temp_c:
-            pp_kwargs['ref_temp']['value'] = min_temp_c
+            pp_kwargs['ref_temp_c']['value'] = min_temp_c
         else:
-            pp_kwargs['ref_temp']['min_value'] = min_temp_c
-            pp_kwargs['ref_temp']['max_value'] = max_temp_c
+            pp_kwargs['ref_temp_c']['min_value'] = min_temp_c
+            pp_kwargs['ref_temp_c']['max_value'] = max_temp_c
 
         return pp_kwargs
 

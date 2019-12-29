@@ -239,13 +239,13 @@ class EnvCanadaAttributeMapper(object):
         for d in self.record.densities:
             kwargs = self._get_kwargs(d)
 
-            kwargs['density'] = {'value': kwargs['g_ml'],
-                                 'from_unit': 'g/mL', 'unit': 'kg/m^3',
-                                 '_cls': self._class_path(DensityUnit)}
+            kwargs['density'] = (DensityUnit(value=kwargs['g_ml'],
+                                             from_unit='g/mL', unit='kg/m^3')
+                                 .dict())
 
-            kwargs['ref_temp'] = {'value': kwargs['ref_temp_c'],
-                                  'from_unit': 'C', 'unit': 'K',
-                                  '_cls': self._class_path(TemperatureUnit)}
+            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
+                                                  from_unit='C', unit='K')
+                                  .dict())
 
             del kwargs['g_ml']
             del kwargs['ref_temp_c']
@@ -254,17 +254,22 @@ class EnvCanadaAttributeMapper(object):
 
     @property
     def dvis(self):
+        '''
+            the mpa_s value could be a ranged value coming from the spreadsheet
+            so it is already a dict with either a value or a (min, max) set.
+            It already has a unit set.
+        '''
         for d in self.record.dvis:
             kwargs = self._get_kwargs(d)
 
-            kwargs['viscosity'] = kwargs['mpa_s']
-            kwargs['viscosity']['_cls'] = self._class_path(DynamicViscosityUnit)
+            kwargs['mpa_s']['from_unit'] = kwargs['mpa_s']['unit']
+            kwargs['mpa_s']['unit'] = 'Pa s'
+            kwargs['viscosity'] = (DynamicViscosityUnit(**kwargs['mpa_s'])
+                                   .dict())
 
-            kwargs['ref_temp'] = {
-                'value': kwargs['ref_temp_c'],
-                'from_unit': 'C', 'unit': 'K',
-                '_cls': self._class_path(TemperatureUnit)
-            }
+            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
+                                                  from_unit='C', unit='K')
+                                  .dict())
 
             del kwargs['mpa_s']
             del kwargs['ref_temp_c']
@@ -284,16 +289,14 @@ class EnvCanadaAttributeMapper(object):
         for i in self.record.ifts:
             kwargs = self._get_kwargs(i)
 
-            kwargs['tension'] = {
-                'value': kwargs['dynes_cm'],
-                'from_unit': 'dyne/cm', 'unit': 'N/m',
-                '_cls': self._class_path(InterfacialTensionUnit)
-            }
-            kwargs['ref_temp'] = {
-                'value': kwargs['ref_temp_c'],
-                'from_unit': 'C', 'unit': 'K',
-                '_cls': self._class_path(TemperatureUnit)
-            }
+            kwargs['tension'] = (InterfacialTensionUnit(
+                                     value=kwargs['dynes_cm'],
+                                     from_unit='dyne/cm', unit='N/m')
+                                 .dict())
+
+            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
+                                                  from_unit='C', unit='K')
+                                  .dict())
 
             del kwargs['dynes_cm']
             del kwargs['ref_temp_c']
@@ -304,7 +307,14 @@ class EnvCanadaAttributeMapper(object):
     def flash_point(self):
         for f in self.record.flash_points:
             kwargs = self._get_kwargs(f)
-            kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)
+
+            kwargs['ref_temp_c']['from_unit'] = kwargs['ref_temp_c']['unit']
+            kwargs['ref_temp_c']['unit'] = 'K'
+
+            kwargs['ref_temp'] = (TemperatureUnit(**kwargs['ref_temp_c'])
+                                  .dict())
+
+            del kwargs['ref_temp_c']
 
             yield kwargs
 
@@ -312,7 +322,14 @@ class EnvCanadaAttributeMapper(object):
     def pour_point(self):
         for p in self.record.pour_points:
             kwargs = self._get_kwargs(p)
-            kwargs['ref_temp']['_cls'] = self._class_path(TemperatureUnit)
+
+            kwargs['ref_temp_c']['from_unit'] = kwargs['ref_temp_c']['unit']
+            kwargs['ref_temp_c']['unit'] = 'K'
+
+            kwargs['ref_temp'] = (TemperatureUnit(**kwargs['ref_temp_c'])
+                                  .dict())
+
+            del kwargs['ref_temp_c']
 
             yield kwargs
 
@@ -337,9 +354,10 @@ class EnvCanadaAttributeMapper(object):
         for a in self.record.adhesions:
             kwargs = self._get_kwargs(a)
 
-            kwargs['adhesion'] = {'value': kwargs['g_cm_2'],
-                                  'from_unit': 'g/cm^2', 'unit': 'N/m^2',
-                                  '_cls': self._class_path(AdhesionUnit)}
+            kwargs['adhesion'] = (AdhesionUnit(value=kwargs['g_cm_2'],
+                                               from_unit='g/cm^2',
+                                               unit='N/m^2')
+                                  .dict())
 
             del kwargs['g_cm_2']
 
