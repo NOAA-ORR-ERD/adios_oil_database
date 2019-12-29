@@ -378,14 +378,14 @@ class EnvCanadaAttributeMapper(object):
                 'value': kwargs['water_content_percent'], 'unit': '%',
                 '_cls': self._class_path(FloatUnit)
             }
-            kwargs['age'] = {
-                'value': kwargs['age_days'], 'from_unit': 'day', 'unit': 's',
-                '_cls': self._class_path(TimeUnit)
-            }
-            kwargs['ref_temp'] = {
-                'value': kwargs['ref_temp_c'], 'from_unit': 'C', 'unit': 'K',
-                '_cls': self._class_path(TemperatureUnit)
-            }
+
+            kwargs['age'] = (TimeUnit(value=kwargs['age_days'],
+                                      from_unit='day', unit='s')
+                             .dict())
+
+            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
+                                                  from_unit='C', unit='K')
+                                  .dict())
 
             # the different modulus values have similar units of measure
             # to adhesion, so this is what we will go with
@@ -396,22 +396,20 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = mod_lbl[:-3]
 
                 if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'Pa', 'unit': 'N/m^2',
-                        '_cls': self._class_path(AdhesionUnit)
-                    }
+                    kwargs[new_lbl] = (AdhesionUnit(value=value,
+                                                    from_unit='Pa',
+                                                    unit='N/m^2')
+                                       .dict())
 
             for visc_lbl in ('complex_viscosity_pa_s',):
                 value = kwargs[visc_lbl]
                 new_lbl = visc_lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'Pa.s', 'unit': 'kg/(m s)',
-                        '_cls': self._class_path(DynamicViscosityUnit)
-                    }
+                    kwargs[new_lbl] = (DynamicViscosityUnit(value=value,
+                                                            from_unit='Pa.s',
+                                                            unit='kg/(m s)')
+                                       .dict())
 
             del kwargs['water_content_percent']
             del kwargs['age_days']
