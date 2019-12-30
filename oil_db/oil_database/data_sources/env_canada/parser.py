@@ -974,6 +974,7 @@ class EnvCanadaRecordParser(object):
                              'ref_temp_c': 15.0,
                              'age_days': 0.0}
                 rename_props = {'water_content_w_w': 'water_content_percent'}
+                prune_props = {'standard_deviation', 'replicates'}
 
                 sd_types = ('cm', 'sm', 'lm', 'td', 'cv', 'wc')
                 for idx, sd_type in enumerate(sd_types):
@@ -985,7 +986,8 @@ class EnvCanadaRecordParser(object):
 
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
-                                            rename_props=rename_props)
+                                            rename_props=rename_props,
+                                            prune_props=prune_props)
 
                 emulsions.append(kwargs)
 
