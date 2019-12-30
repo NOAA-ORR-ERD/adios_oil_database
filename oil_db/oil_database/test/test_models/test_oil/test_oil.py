@@ -31,16 +31,28 @@ def test_empty_string_name():
         oil = Oil(name="")
 
 
-@pytest.mark.xfail
+# @pytest.mark.xfail
 def test_json_just_name():
+    """
+    This is essentially the very minimal record
+
+    It will look like this:
+
+    {'name': 'A name for an oil',
+     'samples': [{'name': 'Fresh, Unweathered Oil', 'short_name': 'Fresh'}]}
+    """
     oil = Oil(name=NAME)
     assert oil.name == NAME
 
     py_json = oil.py_json()
-    assert py_json == {"name": NAME}
+
+    pprint(py_json)
+
+    assert py_json["name"] == NAME
+    assert len(py_json) == 2  # only two items
+    assert 'samples' in py_json
 
 
-@pytest.mark.xfail
 def test_json_a_few_fields():
     oil = Oil(name=NAME,
               api=32.5,
@@ -48,12 +60,13 @@ def test_json_a_few_fields():
               )
     oil.product_type="Crude"
     py_json = oil.py_json()
-    assert py_json == {'name': NAME,
-                       'api': 32.5,
-                       'product_type':
-                       'Crude',
-                       'labels': ['medium crude', 'sweet crude']
-                       }
+
+    assert len(py_json) == 5
+    assert py_json["name"] == NAME
+    assert py_json["api"] == 32.5
+    assert py_json["labels"] == ["medium crude", "sweet crude"]
+    assert py_json["product_type"] == "Crude"
+    assert 'samples' in py_json
 
 
 def test_json_nonsparse():

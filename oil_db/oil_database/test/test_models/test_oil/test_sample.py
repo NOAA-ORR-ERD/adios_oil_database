@@ -19,8 +19,7 @@ def test_sample_json_sparse():
 
     print(py_json)
 
-    assert py_json == {'name': 'a longer name that is more descriptive',
-                       'short_name': 'short'}
+    assert tuple(py_json.keys()) == ('name', 'short_name')
 
 
 def test_sample_json_full():

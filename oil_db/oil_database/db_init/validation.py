@@ -48,11 +48,14 @@ class OilRejected(Exception):
                                                  self.oil_name,
                                                  self.message)
 
-#
-#
+
+
 # ### Oil Quality checks
 #
-#
+# FIXME: At the very least, the checks should return the error message,
+#        rather than having a separate mapping. But this needs major refactoring anyway
+
+
 def oil_record_validation(oil):
     '''
     Validate an oil record and return a list of error messages
@@ -80,8 +83,8 @@ def has_product_type(oil):
     dealing with a crude or refined oil product.  We cannot continue
     if this information is missing.
     '''
-    if (oil.product_type is not None and
-            oil.product_type.lower() in ('crude', 'refined')):
+    if (oil.product_type is None or
+        oil.product_type.lower() in ('crude', 'refined', 'bitumen product' 'other')):
         return True
 
     return False
