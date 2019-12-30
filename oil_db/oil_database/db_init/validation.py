@@ -60,16 +60,16 @@ def oil_record_validation(oil):
     errors = []
 
     if not has_product_type(oil):
-        errors.append('W001: Imported Record has no product type')
+        errors.append('W001: Imported record has no product type')
 
     if not has_api_or_densities(oil):
-        errors.append('E001: Imported Record has no density information')
+        errors.append('E001: Imported record has no density information')
 
     if not has_viscosities(oil):
-        errors.append('E001: Imported Record has no viscosity information')
+        errors.append('E001: Imported record has no viscosity information')
 
     if not has_distillation_cuts(oil):
-        errors.append('W001: Imported Record has insufficient distillation cut data')
+        errors.append('W001: Imported record has insufficient distillation cut data')
 
     return errors
 
