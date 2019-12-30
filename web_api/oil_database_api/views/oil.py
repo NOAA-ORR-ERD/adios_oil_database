@@ -138,7 +138,7 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
     '''
     logger.info('post-sort...')
 
-    if len(sort) >= 2:
+    if len(sort) >= 1 and len(sort[0]) >= 2:
         field, direction = sort[0]
     else:
         field, direction = 'name', ASCENDING
@@ -161,6 +161,7 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
                 continue
 
         if 'labels' in post_opts:
+            # filter out the categories that don't match our criteria
             if rec['categories'] is None:
                 continue
 
