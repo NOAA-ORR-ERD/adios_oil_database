@@ -1,7 +1,7 @@
 # pip requirements file for the oil_database_api package.
 # These packages are not available via conda
 
-#pyramid_mongodb2
-# this is installed from github, in editable mode, 'cause the install is broken
-#  I've submitted a PR to fix, so we'll see.
--e git+https://github.com/JonnoFTW/pyramid_mongodb2.git#egg=pyramid_mongodb2
+# pyramid_mongodb2
+# this is installed from PyPi for now -- a conda-forge package is in the works.
+pyramid_mongodb2
+
