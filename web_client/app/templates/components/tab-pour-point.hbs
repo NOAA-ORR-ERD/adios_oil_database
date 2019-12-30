@@ -1,12 +1,18 @@
 <div class="detail-section">
-  <div class="table-responsive">
+  <div class="table-responsive d-flex">
     <strong>Pour Point:</strong>
-
-    {{#if oil.pour_point}}
+    <Table::Cell::ValueUnitField
+      @editable={{this.editable}}
+      @value={{this.oil.pour_point.ref_temp}}
+      @units="C"
+      @precision={{2}}
+      @hasValue={{this.oil.pour_point}}
+    />
+    {{!-- {{#if oil.pour_point}}
       {{value-unit (convert-unit oil.pour_point.ref_temp "C") 2}}
     {{else}}
       No Data
-    {{/if}}
+    {{/if}} --}}
 
   </div>
 

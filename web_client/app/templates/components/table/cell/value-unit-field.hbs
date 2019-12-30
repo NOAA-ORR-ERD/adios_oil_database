@@ -1,0 +1,29 @@
+{{!-- 
+editable - bool - edit mode flag
+value - number - field value-unit
+units - string - value units
+precision - number - value precision
+hasValue - field has value flag
+ --}}
+
+{{#if editable}}
+  <Input @class="bg-transparent border-0" 
+  @value={{if hasValue (value-unit (convert-unit value units) precision) "No Data"}}
+  @placeholder="Enter Value"  @change={{action "updateValue"}} />
+{{else}}
+  {{#if hasValue}}
+    {{value-unit (convert-unit value units) precision}}
+  {{else}}
+    "No Data"
+  {{/if}}
+{{/if}}
+
+{{!-- {{#let (if hasValue (value-unit (convert-unit fieldValue units) precision) "No Data") as |fieldValue|}}
+  {{#if editable}}
+    <Input @class="bg-transparent border-0" @value={{fieldValue}}
+    @placeholder="Enter Value"  @change={{action "updateValue"}} />
+  {{else}}
+    {{fieldValue}}
+  {{/if}}
+{{/let}} --}}
+

@@ -58,9 +58,9 @@
             <select class="p-1 flex-fill bg-transparent border" onchange={{action "updateType"}}>
               {{#each this.oilTypes as |oilType|}}
                 {{#if (eq oil.productType oilType)}}
-                  <option selected>{{oilType}}</option>
+                  <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
-                  <option>{{oilType}}</option>
+                  <option class="bg-light">{{oilType}}</option>
                 {{/if}}  
               {{/each}}
             </select>
