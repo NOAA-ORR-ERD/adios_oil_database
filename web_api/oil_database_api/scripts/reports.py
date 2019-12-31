@@ -8,6 +8,17 @@ from pyramid.scripts.common import parse_vars
 
 from oil_database.util.db_connection import connect_modb
 
+###
+#
+# We are no longer using PyMODM classes, so this script badly needs to be
+# refactored.
+#
+# As a matter of fact, why would we be hitting the database directly in a
+# web server script?  If we absolutely need to hit the database, then this
+# script should probably be moved to the oil_db.scripts area.
+#
+###
+
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
