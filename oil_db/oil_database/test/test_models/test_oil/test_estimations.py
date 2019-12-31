@@ -2,8 +2,6 @@
     Test our Oil Model Estimations class
 '''
 import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Estimations now")
-
 
 import numpy as np
 
@@ -11,6 +9,8 @@ from oil_database.util.json import ObjFromDict
 from oil_database.data_sources.oil.estimations import (OilEstimation,
                                                        OilSampleEstimation)
 from oil_database.models.common.float_unit import TemperatureUnit
+
+pytestmark = pytest.mark.skipif(True, reason="Not using Estimations now")
 
 
 class TestOilEstimation():
@@ -452,7 +452,8 @@ class TestOilEstimationPointTemperatures():
            },
           None, None, (None, 200.0)),
          ({'name': 'Oil Name',
-           'comments': 'This record has no pour point, but has dvis and density',
+           'comments': ('This record has no pour point, '
+                        'but has dvis and density'),
            'samples': [{
                'name': 'Fresh Oil Sample',
                'dvis': [
@@ -514,7 +515,8 @@ class TestOilEstimationPointTemperatures():
            },
           None, None, (None, None)),
          ({'name': 'Oil Name',
-           'comments': 'This record has no flash point, but has cuts & sara fractions',
+           'comments': ('This record has no flash point, '
+                        'but has cuts & sara fractions'),
            'samples': [{
                'name': 'Fresh Oil Sample',
                'cuts': [
@@ -1099,7 +1101,8 @@ class TestOilEstimationDynamicViscosities():
            },
           []),
          ({'name': 'Oil Name',
-           'comments': 'This record has 1 kvis and 1 barely non-redundant dvis',
+           'comments': ('This record has 1 kvis '
+                        'and 1 barely non-redundant dvis'),
            'samples': [{
                'name': 'Fresh Oil Sample',
                'kvis': [

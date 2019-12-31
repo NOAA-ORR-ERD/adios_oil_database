@@ -18,8 +18,6 @@ This needs to work with the JSON, not classes!
 
 import logging
 
-import numpy as np
-
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
@@ -48,12 +46,11 @@ class OilRejected(Exception):
                                                  self.oil_name,
                                                  self.message)
 
-
-
 # ### Oil Quality checks
 #
 # FIXME: At the very least, the checks should return the error message,
-#        rather than having a separate mapping. But this needs major refactoring anyway
+#        rather than having a separate mapping. But this needs major
+#        refactoring anyway
 
 
 def oil_record_validation(oil):
@@ -84,7 +81,8 @@ def has_product_type(oil):
     if this information is missing.
     '''
     if (oil.product_type is None or
-        oil.product_type.lower() in ('crude', 'refined', 'bitumen product' 'other')):
+        oil.product_type.lower() in ('crude', 'refined',
+                                     'bitumen product' 'other')):
         return True
 
     return False
@@ -196,9 +194,9 @@ def has_densities_below_pour_point(oil):
             except AttributeError:
                 oil_id = oil.oil_id
 
-            print ('\toil_id: {}, pour_point: {}, rho_temps: {}, lt: {}'
-                   .format(oil_id, pour_point, rho_temps,
-                           [(t < pour_point) for t in rho_temps]))
+            print('\toil_id: {}, pour_point: {}, rho_temps: {}, lt: {}'
+                  .format(oil_id, pour_point, rho_temps,
+                          [(t < pour_point) for t in rho_temps]))
             return True
 
 

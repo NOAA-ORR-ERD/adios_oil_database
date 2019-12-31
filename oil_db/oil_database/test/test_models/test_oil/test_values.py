@@ -2,8 +2,7 @@
 import pytest
 
 from oil_database.models.oil.values import (UnittedValue,
-                                            UnittedRange,
-                                            )
+                                            UnittedRange)
 
 
 def test_UnittedValue():
@@ -15,9 +14,9 @@ def test_UnittedValue():
 
 def test_UnittedValue_no_value():
     with pytest.raises(TypeError):
-        uv = UnittedValue(1.0)
+        UnittedValue(1.0)
     with pytest.raises(TypeError):
-        uv = UnittedValue("m/s")
+        UnittedValue("m/s")
 
 
 def test_UnittedValue_json():
@@ -40,10 +39,10 @@ def test_UnittedValue_from_py_json():
 def test_UnittedValue_from_py_json_missing_data():
 
     with pytest.raises(TypeError):
-        uv = UnittedValue.from_py_json({'value': 1.0})
+        UnittedValue.from_py_json({'value': 1.0})
 
     with pytest.raises(TypeError):
-        uv = UnittedValue.from_py_json({'unit': 'm/s'})
+        UnittedValue.from_py_json({'unit': 'm/s'})
 
 
 def test_UnittedRange_both():
@@ -79,4 +78,3 @@ def test_UnittedRange_from_json():
     assert ur.min_value == 5.0
     assert ur.max_value is None
     assert ur.unit == "m/s"
-
