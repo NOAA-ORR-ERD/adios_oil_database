@@ -69,7 +69,8 @@ def oil_record_validation(oil):
         errors.append('E001: Imported record has no viscosity information')
 
     if not has_distillation_cuts(oil):
-        errors.append('W001: Imported record has insufficient distillation cut data')
+        errors.append('W001: Imported record has insufficient '
+                      'distillation cut data')
 
     return errors
 

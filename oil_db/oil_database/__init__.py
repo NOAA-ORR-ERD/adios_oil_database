@@ -1,5 +1,6 @@
 import sys
-import logging
+from logging import (basicConfig, getLogger, NullHandler,
+                     DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 __version__ = "0.1.2"
 
@@ -15,25 +16,17 @@ def initialize_console_log(level='debug'):
 
     You will only get the logging messages at or above the level you set.
     '''
-    levels = {"debug": logging.DEBUG,
-              "info": logging.INFO,
-              "warning": logging.WARNING,
-              "error": logging.ERROR,
-              "critical": logging.CRITICAL,
+    levels = {"debug": DEBUG,
+              "info": INFO,
+              "warning": WARNING,
+              "error": ERROR,
+              "critical": CRITICAL,
               }
 
     level = levels[level.lower()]
     format_str = '%(levelname)s - %(module)8s - line:%(lineno)d - %(message)s'
 
-    logging.basicConfig(stream=sys.stdout, level=level, format=format_str)
+    basicConfig(stream=sys.stdout, level=level, format=format_str)
 
 
-# Set default logging handler to avoid "No handler found" warnings.
-#try:  # Python 2.7+
-from logging import NullHandler
-# except ImportError:
-#     class NullHandler(logging.Handler):
-#         def emit(self, record):
-#             pass
-
-logging.getLogger(__name__).addHandler(NullHandler())
+getLogger(__name__).addHandler(NullHandler())

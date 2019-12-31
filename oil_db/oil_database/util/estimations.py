@@ -330,9 +330,9 @@ def refractive_index(hc_char_param):
         This is the refractive index of liquid hydrocarbons at 20C,
         correlated through parameter I
     '''
-    I = np.array(hc_char_param)
+    i = np.array(hc_char_param)
 
-    return ((1 + 2 * I) / (1 - I)) ** (1.0 / 2.0)
+    return ((1 + 2 * i) / (1 - i)) ** (1.0 / 2.0)
 
 
 def _hydrocarbon_grouping_param(mol_wt, specific_gravity, temp_k):
@@ -347,8 +347,8 @@ def _hydrocarbon_grouping_param(mol_wt, specific_gravity, temp_k):
         - separates paraffins and aromatics
         - identifies various hydrocarbon types
     '''
-    I = _hydrocarbon_characterization_param(specific_gravity, temp_k)
-    n = refractive_index(I)
+    i = _hydrocarbon_characterization_param(specific_gravity, temp_k)
+    n = refractive_index(i)
 
     return mol_wt * (n - 1.475)
 
