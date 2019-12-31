@@ -29,6 +29,13 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
     background-color: inherit;
 }
 
+.api {
+    font-weight: bold;
+}
+.api:not(:last-child):after {
+    content: ", ";
+}
+
 .chart {
     border: 1px solid $border-color;
 }
