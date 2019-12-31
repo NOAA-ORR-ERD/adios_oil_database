@@ -39,14 +39,21 @@ class UnittedRange:
 
 @dataclass_to_json
 @dataclass
-class Viscosity:
-    """
-    class to hold viscosity data records
-    """
-    viscosity: UnittedValue
-    ref_temp: UnittedValue
+class Density:
+    # NOTE: should the values be optional?
+    density: UnittedValue = None
+    ref_temp: UnittedValue = None
     standard_deviation: float = None
     replicates: int = None
     method: str = None
 
+
+@dataclass_to_json
+@dataclass
+class Viscosity:
+    viscosity: UnittedValue = None
+    ref_temp: UnittedValue = None
+    standard_deviation: float = None
+    replicates: int = None
+    method: str = None
 

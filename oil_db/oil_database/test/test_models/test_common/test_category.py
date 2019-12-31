@@ -2,7 +2,7 @@
 Test our Category model class
 '''
 import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Catagories now")
+# pytestmark = pytest.mark.skipif(True, reason="Not using Catagories now")
 
 
 from pydantic import ValidationError

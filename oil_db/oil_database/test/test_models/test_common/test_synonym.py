@@ -2,7 +2,7 @@
     Test our Synonym model class
 '''
 import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Synonyms now")
+# pytestmark = pytest.mark.skipif(True, reason="Not using Synonyms now")
 
 
 from pydantic import ValidationError

@@ -16,6 +16,9 @@ def _py_json(self, sparse=True):
 
     :param sparse=True: If sparse is True, only non-empty fields will be
                         written. If False, then all fields will be included.
+
+    NOTE: could we use the dataclasses built-in .asdict?
+          It would not support sparse.
     """
     json_obj = {}
     for fieldname in self.__dataclass_fields__.keys():
@@ -37,14 +40,16 @@ def _from_py_json(cls, py_json):
     classmethod to create a dataclass from json compatible python data
     structure.
     """
+    print("working with:", py_json)
     arg_dict = {}
-    for fieldname in cls.__dataclass_fields__.keys():
-        # this is just copying a dict
-        # will there be more complex versions?
-        try:
-            arg_dict[fieldname] = py_json[fieldname]
-        except KeyError:
-            pass
+    for fieldname, fieldobj in cls.__dataclass_fields__.items():
+        if fieldname in py_json:
+            try:  # see if it's "one of ours"
+                arg_dict[fieldname] = fieldobj.type.from_py_json(py_json[fieldname])
+            except AttributeError:
+                # it's not, so we just use the value
+                arg_dict[fieldname] = py_json[fieldname]
+    print("argdict is:", arg_dict)
     obj = cls(**arg_dict)
     return obj
 

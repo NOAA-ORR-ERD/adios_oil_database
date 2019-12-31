@@ -2,7 +2,6 @@
     Test our Oil Model Estimations class
 '''
 import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Estimations now")
 
 
 import numpy as np
