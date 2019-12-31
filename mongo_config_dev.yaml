@@ -1,0 +1,8 @@
+# configuration for mongodb
+
+net:
+  port: 27017  # this is the mongo default
+
+storage:
+  dbPath: mongo_files
+
