@@ -2,7 +2,6 @@
 import pytest
 
 from oil_database.models.oil.values import (UnittedValue,
-                                            UnittedRange,
                                             Density,
                                             Viscosity,
                                             )
@@ -49,7 +48,7 @@ def test_UnittedValue_from_py_json_missing_data():
 
 
 def test_UnittedRange_both():
-    ur = UnittedRange(1.0, 5.0, "ft")
+    ur = UnittedValue(1.0, 5.0, "ft")
 
     assert ur.min_value == 1.0
     assert ur.max_value == 5.0
@@ -57,7 +56,7 @@ def test_UnittedRange_both():
 
 
 def test_UnittedRange_json_sparse():
-    ur = UnittedRange(None, 5.0, 'm')
+    ur = UnittedValue(None, 5.0, 'm')
 
     py_json = ur.py_json()
 
@@ -65,7 +64,7 @@ def test_UnittedRange_json_sparse():
 
 
 def test_UnittedRange_json_full():
-    ur = UnittedRange(None, 5.0, 'm')
+    ur = UnittedValue(None, 5.0, 'm')
 
     py_json = ur.py_json(sparse=False)
 
@@ -75,12 +74,13 @@ def test_UnittedRange_json_full():
 
 
 def test_UnittedRange_from_json():
-    ur = UnittedRange.from_py_json({'min_value': 5.0,
+    ur = UnittedValue.from_py_json({'min_value': 5.0,
                                     'unit': 'm/s'})
 
     assert ur.min_value == 5.0
     assert ur.max_value is None
     assert ur.unit == "m/s"
+
 
 def test_Density_std():
     # note on validation: if there is a standard deviation, there should be more

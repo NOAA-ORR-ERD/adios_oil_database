@@ -19,23 +19,31 @@ from typing import List, Dict
 @dataclass
 class UnittedValue:
     # fixme: could this use the FloatUnit stuff?
-    # should a unit be required? or is that a validation thing?
     """
     Data structure to hold a value with a unit
-    """
-    value: float
-    unit: str
 
+    This accommodates both a single value and a range of values
 
-@dataclass_to_json
-@dataclass
-class UnittedRange:
+    There is some complexity here, so everything is optional
+
+    But maybe it would be better to have some validation on creation
     """
-    Data structure to hold a range of values with a unit
-    """
+    value: float = None
     min_value: float = None
     max_value: float = None
-    unit: str = ""
+    unit: str = None
+
+
+
+# @dataclass_to_json
+# @dataclass
+# class UnittedRange:
+#     """
+#     Data structure to hold a range of values with a unit
+#     """
+#     min_value: float = None
+#     max_value: float = None
+#     unit: str = ""
 
 
 @dataclass_to_json
