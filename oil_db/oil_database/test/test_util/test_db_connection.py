@@ -24,6 +24,7 @@ def mongodb_settings():
             'mongodb.database': 'oil_database',
             'mongodb.alias': 'oil-db-app'}
 
+
 @pytest.mark.mongo
 def test_connect_mongodb(mongodb_settings):
     '''

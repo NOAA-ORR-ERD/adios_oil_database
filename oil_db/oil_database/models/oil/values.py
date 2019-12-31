@@ -26,6 +26,7 @@ class UnittedValue:
     value: float
     unit: str
 
+
 @dataclass_to_json
 @dataclass
 class UnittedRange:
