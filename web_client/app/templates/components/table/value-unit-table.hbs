@@ -1,0 +1,28 @@
+
+{{!-- <table class="table table-hover table-bordered">
+    <thead class="clickable" data-toggle="collapse"
+            data-target=".density-row-collapse"
+            aria-controls="density-tbody"
+            aria-expanded="false">
+    <tr>
+        <th scope="col">Density</th>
+        <th scope="col">Temperature</th>
+    </tr>
+    </thead>
+    <tbody id="density-tbody">
+    {{#each oil.densities as |density|}}
+        <tr class="collapse show density-row-collapse">
+        <td>{{value-unit (convert-unit density.density "g/cm^3") 3}}</td>
+        <td>{{value-unit (convert-unit density.ref_temp "C") 2}}</td>
+        </tr>
+    {{/each}}
+
+    {{#if oil.densities}}
+        <tr class="collapse density-row-collapse">
+        <th scope="row">&#x2026;</th>
+        </tr>
+    {{else}}
+        <tr><td>No Data</td></tr>
+    {{/if}}
+    </tbody>
+</table> --}}

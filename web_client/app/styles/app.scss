@@ -100,3 +100,6 @@ $ember-power-select-multiple-selection-background-color: #E8E8E8;
 $ember-power-select-background-color: #eee;
 @import 'ember-power-select/themes/bootstrap';
 @import "ember-power-select";
+
+@import "ember-modal-dialog/ember-modal-structure.css";
+@import "ember-modal-dialog/ember-modal-appearance.css";
