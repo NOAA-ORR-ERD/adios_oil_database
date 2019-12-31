@@ -1,12 +1,10 @@
 '''
     Test our Synonym model class
 '''
+import pytest
 from pydantic import ValidationError
 
 from oil_database.models.common import Synonym
-
-import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Synonyms now")
 
 
 class TestSynonym():

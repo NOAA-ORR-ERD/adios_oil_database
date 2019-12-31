@@ -1,14 +1,13 @@
 '''
 Test our Category model class
 '''
+import pytest
+
 from pydantic import ValidationError
 
 from oil_database.models.common import Category
 
 from ..conftest import db_setup
-
-import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Catagories now")
 
 
 Category.attach(db_setup().db)

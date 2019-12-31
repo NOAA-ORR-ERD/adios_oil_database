@@ -5,6 +5,8 @@
           vetted by subject matter experts in this section.  But we will try
           to be as complete as we can for now.
 '''
+import pytest
+
 import numpy as np
 
 from oil_database.util.estimations import (density_from_api,
@@ -43,8 +45,6 @@ from oil_database.util.estimations import (density_from_api,
                                            bullwinkle_fraction_from_api
                                            )
 
-import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Estimations now")
 
 
 class TestDensity(object):

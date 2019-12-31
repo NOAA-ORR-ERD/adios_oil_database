@@ -1,13 +1,12 @@
 '''
     Test our SARA model classes
 '''
+import pytest
+
 from pydantic import ValidationError
 
 from oil_database.models.common import (SARAFraction, SARADensity,
                                         MolecularWeight)
-
-import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using SARA now")
 
 
 class TestSaraFraction():

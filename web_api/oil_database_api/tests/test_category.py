@@ -1,10 +1,7 @@
 """
 Functional tests for the Model Web API
 """
-import copy
-
 from .base import FunctionalTestBase
-from .sample_oils import basic_noaa_fm
 
 
 class CategoryTestBase(FunctionalTestBase):
@@ -73,7 +70,8 @@ class CategoryTests(CategoryTestBase):
                              headers={'Content-Type': 'application/json'},
                              status=400)
 
-        self.testapp.post_json('/categories', params={"bad": 'attr'}, status=415)
+        self.testapp.post_json('/categories', params={"bad": 'attr'},
+                               status=415)
 
     def test_put_bad_req(self):
         self.testapp.put_json('/categories', params=[], status=400)
@@ -85,7 +83,8 @@ class CategoryTests(CategoryTestBase):
                              headers={'Content-Type': 'application/json'},
                              status=400)
 
-        self.testapp.put_json('/categories', params={"bad": 'attr'}, status=415)
+        self.testapp.put_json('/categories', params={"bad": 'attr'},
+                              status=415)
 
     def test_delete_bad_req(self):
         self.testapp.delete('/categories/{}'.format('bogus_id'), status=400)

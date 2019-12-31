@@ -10,8 +10,6 @@ from oil_database.data_sources.oil.estimations import (OilEstimation,
                                                        OilSampleEstimation)
 from oil_database.models.common.float_unit import TemperatureUnit
 
-pytestmark = pytest.mark.skipif(True, reason="Not using Estimations now")
-
 
 class TestOilEstimation():
     @pytest.mark.parametrize(
