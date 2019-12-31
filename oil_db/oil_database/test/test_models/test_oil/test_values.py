@@ -7,6 +7,7 @@ from oil_database.models.oil.values import (UnittedValue,
                                             Viscosity,
                                             )
 
+
 def test_UnittedValue():
     uv = UnittedValue(1.0, "m")
 
@@ -16,9 +17,9 @@ def test_UnittedValue():
 
 def test_UnittedValue_no_value():
     with pytest.raises(TypeError):
-        uv = UnittedValue(1.0)
+        UnittedValue(1.0)
     with pytest.raises(TypeError):
-        uv = UnittedValue("m/s")
+        UnittedValue("m/s")
 
 
 def test_UnittedValue_json():
@@ -41,10 +42,10 @@ def test_UnittedValue_from_py_json():
 def test_UnittedValue_from_py_json_missing_data():
 
     with pytest.raises(TypeError):
-        uv = UnittedValue.from_py_json({'value': 1.0})
+        UnittedValue.from_py_json({'value': 1.0})
 
     with pytest.raises(TypeError):
-        uv = UnittedValue.from_py_json({'unit': 'm/s'})
+        UnittedValue.from_py_json({'unit': 'm/s'})
 
 
 def test_UnittedRange_both():
@@ -81,7 +82,6 @@ def test_UnittedRange_from_json():
     assert ur.max_value is None
     assert ur.unit == "m/s"
 
-
 def test_Density_std():
     # note on validation: if there is a standard deviation, there should be more
     #                     than 1 replicate
@@ -116,7 +116,6 @@ def test_DM_json():
                  ref_temp=UnittedValue(15.0, "C"),
                  )
 
-
     py_json = dm.py_json()
 
     print(py_json)
@@ -130,10 +129,10 @@ def test_DM_json():
 
 def test_DM_from_py_json():
     dm = Density.from_py_json({'standard_deviation': 1.2,
-                                    'replicates': 3,
-                                    'density': {'value': 0.8751, 'unit': 'kg/m^3'},
-                                    'ref_temp': {'value': 15.0, 'unit': 'C'}
-                                    })
+                               'replicates': 3,
+                               'density': {'value': 0.8751, 'unit': 'kg/m^3'},
+                               'ref_temp': {'value': 15.0, 'unit': 'C'}
+                               })
 
     assert dm.standard_deviation == 1.2
     assert dm.replicates == 3

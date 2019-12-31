@@ -12,8 +12,6 @@ from oil_database.models.oil.oil import Oil
 NAME = "A name for an oil"
 
 
-
-
 def test_minimal():
     oil = Oil(name=NAME)
     assert oil.name == NAME
@@ -22,13 +20,13 @@ def test_minimal():
 def test_noname():
     """ you must specify at least a name """
     with pytest.raises(TypeError):
-        oil = Oil()
+        Oil()
 
 
 def test_empty_string_name():
     """ you must specify at least a name """
     with pytest.raises(TypeError):
-        oil = Oil(name="")
+        Oil(name="")
 
 
 # @pytest.mark.xfail
@@ -58,7 +56,7 @@ def test_json_a_few_fields():
               api=32.5,
               labels=["medium crude", "sweet crude"],
               )
-    oil.product_type="Crude"
+    oil.product_type = "Crude"
     py_json = oil.py_json()
 
     assert len(py_json) == 5
@@ -90,6 +88,7 @@ def test_json_nonsparse():
                 ]:
         assert key in py_json
 
+
 def test_add_new_attribute():
     """
     you should not be able to add an aarbitrary new attribute
@@ -103,7 +102,7 @@ def test_add_new_attribute():
 def test_pyson():
     oil = Oil(name=NAME)
 
-#    py_json = oil.py_json(sparse=False)
+    # py_json = oil.py_json(sparse=False)
     py_json = oil.py_json(sparse=True)
 
     pprint(py_json)
@@ -115,5 +114,3 @@ def test_pyson():
 #     print(dataclasses.fields(oil))
 
 #     assert False
-
-

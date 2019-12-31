@@ -34,6 +34,7 @@ def _py_json(self, sparse=True):
                 json_obj[fieldname] = val
     return json_obj
 
+
 @classmethod
 def _from_py_json(cls, py_json):
     """

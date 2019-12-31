@@ -2,8 +2,6 @@
 Test our Category model class
 '''
 import pytest
-# pytestmark = pytest.mark.skipif(True, reason="Not using Catagories now")
-
 
 from pydantic import ValidationError
 
@@ -11,21 +9,19 @@ from oil_database.models.common import Category
 
 from ..conftest import db_setup
 
+
 Category.attach(db_setup().db)
 
 
 class TestCategory():
-    @pytest.mark.parametrize('name, parent',
-                             [
-                              pytest.param(
-                                  None, None,
-                                  marks=pytest.mark.raises(exception=ValidationError)),
-                              pytest.param(
-                                  None, 'Parent',
-                                  marks=pytest.mark.raises(exception=ValidationError)),
-                              ('Category', None),
-                              ('Category', 'Parent'),
-                              ])
+    @pytest.mark.parametrize('name, parent', [
+        pytest.param(None, None,
+                     marks=pytest.mark.raises(exception=ValidationError)),
+        pytest.param(None, 'Parent',
+                     marks=pytest.mark.raises(exception=ValidationError)),
+        ('Category', None),
+        ('Category', 'Parent'),
+    ])
     def test_init(self, name, parent):
         parent_obj = None
 
@@ -46,12 +42,11 @@ class TestCategory():
             assert parent_obj.name == parent
             assert cat_obj.parent == parent_obj._id
 
-    @pytest.mark.parametrize('children',
-                             [
-                              None,
-                              ['child'],
-                              ['Child 1', 'Child 2'],
-                              ])
+    @pytest.mark.parametrize('children', [
+        None,
+        ['child'],
+        ['Child 1', 'Child 2'],
+    ])
     def test_init_children(self, children):
         if children is None:
             cat_obj = Category(name='Category')
@@ -65,15 +60,3 @@ class TestCategory():
         else:
             assert [Category.find_one({'_id': c}).name
                     for c in cat_obj.children] == children
-
-
-
-
-
-
-
-
-
-
-
-
