@@ -85,12 +85,18 @@ python setup.py develop
 
 This will install it in "develop" or "editable" mode -- so as you change the source code, the changes will be seen immediately without having to re-install.
 
-It's a good idea to run the tests:
+#### testing
 
-pytest --pyargs oil_database
+`pytest --pyargs oil_database`
 
-If they all pass, you're good to go.
 
+NOTE: this will skip teh database connection tests. If you have mongo running, you can turn them on by running pytest from within the test dir, and passing the --mongo flag:
+
+```
+cd oil_database/test
+
+pytest --mongo
+```
 
 ### Installing the web_api package:
 
@@ -100,10 +106,39 @@ cd ../web_api
 python setup.py develop
 ```
 
+### Starting mongodb:
+
+Mongodb needs to be running for all of the tests to work:
+
+`mongod -f mongo_config_dev.yml`
+
+will start the mongo daemon with the given config -- set up for development. You may want to do that it its own terminal.
+
+### Initializing the database:
+
+Create an empty DB
+
+```
+oil_db_init
+```
+Import the data we have so far:
+
+```
+oil_db_import --all
+```
+
+### testing
+
+pytest --pyargs oil_database_api
 
 
+### Running the API server
 
+`pserve --reload config-example.ini`
 
+## The client:
+
+See the README in the web_client dir.
 
 
 ## Project team:
