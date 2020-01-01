@@ -157,7 +157,7 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
 
             if ('api' not in rec or
                     rec['api'] is None or
-                    not low <= rec['api'].gravity < high):
+                    not low <= rec['api'].gravity <= high):
                 continue
 
         if 'labels' in post_opts:
