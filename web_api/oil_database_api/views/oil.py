@@ -269,6 +269,9 @@ def insert_oil(request):
 
 @oil_api.put()
 def update_oil(request):
+    # ember JSON serializer PUTs the id of the object in the URL
+    obj_id = obj_id_from_url(request)
+
     try:
         json_obj = ujson.loads(request.body)
 
@@ -280,7 +283,7 @@ def update_oil(request):
         raise HTTPBadRequest
 
     try:
-        fix_oil_id(json_obj)
+        fix_oil_id(json_obj, obj_id)
 
         (request.db.oil_database.oil
          .replace_one({'_id': json_obj['_id']}, json_obj))
@@ -307,15 +310,20 @@ def delete_oil(request):
         raise HTTPBadRequest
 
 
-def fix_oil_id(oil_json):
+def fix_oil_id(oil_json, obj_id=None):
     '''
         Okay, pymongo lets you specify the id of a new record, but it needs
         to be the '_id' field. So we need to ensure that the '_id' field
         exists.
-        The rule then is that the 'oil_id' is a required field, and the '_id'
-        field will be copied from it.
+        The rule then is that:
+        - Ember json serializer PUTs the id in the URL, so we look for it there
+          first.
+        - the 'oil_id' is a required field, and the '_id' field will be copied
+          from it.
     '''
-    if 'oil_id' in oil_json:
+    if obj_id is not None:
+        oil_json['_id'] = oil_json['oil_id'] = obj_id
+    elif 'oil_id' in oil_json:
         oil_json['_id'] = oil_json['oil_id']
     else:
         raise ValueError('oil_id field is required')

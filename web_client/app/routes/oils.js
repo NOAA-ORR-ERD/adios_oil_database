@@ -31,6 +31,13 @@ export default Route.extend({
 
     setupController(controller, models) {
         controller.setProperties(models);
+    },
+
+    actions: {
+        updateOil(oil) {
+            console.log('updateOil: ', oil.id);
+            oil.save();
+        }
     }
 
 });

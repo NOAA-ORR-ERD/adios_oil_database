@@ -22,7 +22,7 @@
           {{#let (if oil.location oil.location "None") as |oilLocation|}}
             {{#if editable}}
               <Input @class="p-1 flex-fill bg-transparent border" @value={{oilLocation}}
-                @placeholder="Enter Location"  @change={{action "updateLocation"}} />
+                @placeholder="Enter Location" @change={{action "updateLocation"}} />
             {{else}}
               <span class="p-1 flex-fill">{{oilLocation}}</span>
             {{/if}}
@@ -108,7 +108,7 @@
 
       {{! Reference }}
       <div class="row mb-3 input-group">
-          <label class="p-1 input-group-text font-weight-bold">Reference:</label>
+        <label class="p-1 input-group-text font-weight-bold">Reference:</label>
       </div>
       <div class="row mb-3 input-group">
         {{#let (if oil.reference oil.reference "None") as |oilReference|}}
@@ -165,13 +165,13 @@
   {{! Comments }}
   <div class="row pl-0 pr-0 mb-3">
     <div class="col-12 pl-0 pr-0">
-        <label class="p-1 font-weight-bold">Comments:</label>
+      <label class="p-1 font-weight-bold">Comments:</label>
     </div>
     <div class="col-12 pl-0 pr-0 input-group">
       {{#let (if oil.comments oil.comments "None") as |oilComments|}}
         {{#if editable}}
           <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1"
-              @placeholder="Enter comments"  @change={{action "updateComments"}} />
+            @placeholder="Enter comments"  @change={{action "updateComments"}} />
         {{else}}
           <span class="p-1 flex-fill bg-transparent no-borders">{{oilComments}}</span>
         {{/if}}
