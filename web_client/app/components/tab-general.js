@@ -26,8 +26,12 @@ export default Component.extend({
         },
 
         updateLocation(event) {
-            //this.oil.location = event.target.value;
-            this.get('oil').set('location', event.target.value);
+            this._super(...arguments);
+
+            let oil = this.get('oil')
+            oil.set('location', event.target.value);
+
+            this.submit(oil);
         },
 
         updateType(event) {
