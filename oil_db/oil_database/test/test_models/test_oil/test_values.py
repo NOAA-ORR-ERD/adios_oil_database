@@ -2,6 +2,7 @@
 import pytest
 
 from oil_database.models.oil.values import (UnittedValue,
+                                            UnittedRange,
                                             Density,
                                             Viscosity,
                                             )
@@ -81,6 +82,18 @@ def test_UnittedRange_from_json():
     assert ur.min_value == 5.0
     assert ur.max_value is None
     assert ur.unit == "m/s"
+
+
+def test_UnittedRange_from_json():
+    ur = UnittedRange.from_py_json({'min_value': 5.0,
+                                    'max_value': 10.1,
+                                    'unit': 'm/s'})
+
+    assert ur.min_value == 5.0
+    assert ur.max_value == 10.1
+    assert ur.unit == "m/s"
+
+
 
 
 def test_Density_std():
