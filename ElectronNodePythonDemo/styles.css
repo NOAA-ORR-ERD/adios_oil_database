@@ -1,0 +1,139 @@
+html, body, div, span, object, iframe, /* h1, h2, h3, h4, h5, h6, */ p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {margin:0;padding:0;border:0;font-weight:inherit;font-style:inherit;font-size:15px;font-family:inherit;vertical-align:baseline;}
+body {line-height:150%;}
+table {border-collapse:separate;border-spacing:0;}
+caption, th, td {text-align:left;font-weight:normal;}
+table, td, th {vertical-align:middle;}
+blockquote:before, blockquote:after, q:before, q:after {content:"";}
+blockquote, q {quotes:"" "";}
+* { -webkit-user-drag: none; }
+a img {border:none;}
+
+button { color: #015D93; }
+button:focus { color: #003B7F; }
+
+/* OS X El Capitan has default of Time Roman in text boxes. Override. */
+input[type="text"], textarea
+{
+	font-family: 'Verdana', 'Lucida Grande';
+}
+/* OS X El Capitan has default of Times Roman in pulldowns. Override. */
+select
+{
+	/* Chrome appears to pay attention to font-family spec in select only if
+	 * one of three additional parameters are specified. All three have
+	 * side effects of varying severity:
+	 */
+
+	/* Leaves the border, but rounds the corners and removes the down-arrow: */
+	/* -webkit-appearance: none; */
+
+	/* Removes the border but keeps the up-down arrow: */
+	/* border: 0px; */
+
+	/* Keeps the border and up-down arrow, but edge of the border is round: */
+	background-color: white; 
+
+	/* With one of the three options given, Chrome pays attention to: */
+	font-family: 'Verdana', 'Lucida Grande';
+}
+
+/**
+ * Basic Typography
+ */
+body {
+	font-family: Verdana, Lucida, Arial, Helvetica, sans-serif;
+	/* font-size: 80%; */
+	font-size: 15px;
+	color: #222;
+	background: #fff;
+	/* margin: 10px 15px; */
+	padding: 20px;
+}
+pre, code {
+	margin: 1.5em 0;
+	white-space: pre;
+}
+pre, code {
+	font: 1em 'andale mono', 'lucida console', monospace;
+	line-height:150%;
+}
+a[href] {
+  color: #007BCA;
+  background-color: transparent;
+  text-decoration: underline;
+  cursor: pointer;
+}
+a[href]:hover {
+  color: #015D93;
+  background-color: transparent;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.LinkStyle {
+  color: #007BCA;
+  background-color: transparent;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.LinkStyle:hover {
+  color: #015D93;
+  background-color: transparent;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.disabledtext {
+	color: #989898;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////// */
+
+body
+{
+	position: relative;
+	background-color: rgb(212, 230, 255);
+}
+
+.NeverSelect
+{
+	user-select: none;
+}
+
+.AllowSelect
+{
+	user-select: text;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////// */
+
+.A,
+.B
+{
+	width: 100px;
+	margin: 4px;
+}
+
+.CalculateButtonContainer
+{
+	margin: 20px;
+}
+
+.CalculateButton
+{
+	cursor: pointer;
+	background-color: #003B7F;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.CalculateButton:hover
+{
+	opacity: 0.5;
+}
+
+.Sum,
+.Quotient,
+.String
+{
+	background-color: lightgray;
+}

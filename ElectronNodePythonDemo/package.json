@@ -1,0 +1,15 @@
+{
+	"name": "electron-node-python-demo",
+	"version": "0.1.0",
+	"main": "main.js",
+    "scripts":
+	{
+        "start": "electron ."
+    },
+	"dependencies":
+	{
+		"electron": "*",
+		"request": "^2.88.0",
+		"request-promise": "^4.2.5"
+	}
+}
