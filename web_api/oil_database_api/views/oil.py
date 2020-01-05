@@ -272,6 +272,8 @@ def update_oil(request):
     # ember JSON serializer PUTs the id of the object in the URL
     obj_id = obj_id_from_url(request)
 
+    logger.info('PUT /oils: id: {}'.format(obj_id))
+
     try:
         json_obj = ujson.loads(request.body)
 
