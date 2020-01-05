@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="row pl-0 pr-0">
-    
+
     <div class="col-5">
 
       <div class="row pl-0 mb-3">
@@ -38,10 +38,10 @@
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">API:</label>
           </div>
-          {{#let (if (not (is-empty oil.samples.[0].apis)) 
+          {{#let (if (not (is-empty oil.samples.[0].apis))
             (round-relative oil.samples.[0].apis.[0].gravity 2) "No Values") as |oilAPI|}}
             {{#if editable}}
-              <Input @id="api" @type="text" @class="p-1 bg-transparent border" 
+              <Input @id="api" @type="text" @class="p-1 bg-transparent border"
                 @placeholder="API value" @value={{oilAPI}} @change={{action "updateAPI"}} @size="6" />
             {{else}}
               <span class="p-1">{{oilAPI}}</span>
@@ -61,22 +61,22 @@
                   <option selected>{{oilType}}</option>
                 {{else}}
                   <option>{{oilType}}</option>
-                {{/if}}  
+                {{/if}}
               {{/each}}
             </select>
           {{else}}
             <span class="p-1 flex-fill">{{oil.productType}}</span>
-          {{/if}}  
+          {{/if}}
         </div>
 
       </div>
 
       <div class="row pl-0 mb-3">
-      
+
         {{! Categories }}
         <div class="form-inline">
           <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Categories:</label>
+            <label class="p-1 input-group-text font-weight-bold">Labels:</label>
           </div>
 
           {{#if editable}}
@@ -99,7 +99,7 @@
           {{/if}}
 
         </div>
-      
+
       </div>
 
     </div>
@@ -137,7 +137,7 @@
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
             {{/if}}
-          {{/let}}  
+          {{/let}}
         </div>
 
         {{! Sample Received Date }}
@@ -175,9 +175,9 @@
         {{else}}
           <span class="p-1 flex-fill bg-transparent no-borders">{{oilComments}}</span>
         {{/if}}
-      {{/let}}  
+      {{/let}}
     </div>
-  </div>  
+  </div>
 
   {{!-- status message --}}
   <div class="row mb-3">
