@@ -6,7 +6,11 @@ In this case, a flask app.
 
 ## Dependencies
 
-nodejs: `conda install nodejs`
+nodejs:
+
+```
+conda install nodejs
+```
 
 (or get it from your system package manager, or ...)
 
@@ -22,17 +26,27 @@ On the Python side:
 
 python 3.7 (probably any python3 will do)
 
-flask: `conda install flask` or `pip install flask`
+flask:
+
+```
+conda install flask
+or
+pip install flask
+```
 
 # running the app:
 
-`npm start`
+```
+npm start
+```
 
 should do it.
 
 You can also run the flask app by itself with:
 
-`python server.py`
+```
+python server.py
+```
 
 And point your browser to: http://localhost:5000/index.html
 
