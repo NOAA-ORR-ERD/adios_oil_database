@@ -1,6 +1,14 @@
 '''
 Test our Category model class
+
+NOTE: This may be all obsolete -- we aren't doing hierarchtical catagories
+      anymore
+
+And the Catagory model depends on mongo -- so these are skipped most of the
+time anyway
 '''
+
+
 import pytest
 
 from pydantic import ValidationError
@@ -12,7 +20,7 @@ from ..conftest import db_setup
 
 Category.attach(db_setup().db)
 
-
+@pytest.mark.mongo
 class TestCategory():
     @pytest.mark.parametrize('name, parent', [
         pytest.param(None, None,

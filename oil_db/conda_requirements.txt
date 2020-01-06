@@ -29,4 +29,8 @@ pytest-raises>=0.10
 
 backports.functools_lru_cache>=1.5
 
-# unit_conversion>=2.5.4 # getting this direct from git now
+pynucos>=2.7.3  # this should be in conda-forge
+
+
+
+
