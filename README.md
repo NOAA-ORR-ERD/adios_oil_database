@@ -147,7 +147,6 @@ Program Manager (and primary contact with BSEE): Chris Barker
 
 Project Manager and lead chemist: Robert Jones
 
-Chemist: Dalina Thrift-Vivaros
+Chemist: Dalina Thrift-Viveros
 
 Software Developers: James Makela, Gennady Kachook
-
