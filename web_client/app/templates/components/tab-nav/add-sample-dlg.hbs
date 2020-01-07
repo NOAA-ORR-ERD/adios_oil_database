@@ -13,36 +13,60 @@
         <div class="form">
           <div class="row">
 
-            <div class="col-5">
+            <div class="col-6">
               <select {{on "change" addButton.updateSampleType}}>
                 <option value={{sampleTypes.weathered}}>
-                  Weathered Sample
+                  Weathered Fraction
                 </option>
                 <option value={{sampleTypes.distillate}}>
-                  Distillate Sample
+                  Distillate Temperature Range
                 </option>
                 <option value={{sampleTypes.nameOnly}}>
-                  Name-only Sample
+                  Name
                 </option>
               </select>
             </div>
 
 
-            <div class="col-3">
+            <div class="col-6">
               {{#if (eq sampleType sampleTypes.weathered)}}
-                <Input type="number" step="0.01"
-                       @class="form-control bg-transparent border"
-                       @placeholder="Enter weathered amount"
-                />
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6">
+                      <Input type="number" step="0.01"
+                             @class="form-control bg-transparent border"
+                             @placeholder="Fraction"
+                      />
+                    </div>
+                  </div>
+                </div>
               {{else if (eq sampleType sampleTypes.distillate)}}
-                <Input type="number" step="0.01"
-                       @class="bg-transparent border"
-                       @placeholder="Enter boiling point range"
-                />
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col">
+                      <Input type="number" step="0.01"
+                             @class="form-control bg-transparent border"
+                             @placeholder="Min"
+                      />
+                    </div>
+                    <div class="col">
+                      <Input type="number" step="0.01"
+                             @class="form-control bg-transparent border"
+                             @placeholder="Max"
+                      />
+                    </div>
+                  </div>
+                </div>
               {{else}}
-                <Input @class="bg-transparent border"
-                       @placeholder="Enter Name"
-                />
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col">
+                      <Input @class="form-control bg-transparent border"
+                             @placeholder="Enter Name"
+                      />
+                    </div>
+                  </div>
+                </div>
               {{/if}}
             </div>
 
