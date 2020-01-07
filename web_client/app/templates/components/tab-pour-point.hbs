@@ -1,5 +1,5 @@
 <div class="detail-section">
-  <div class="table-responsive d-flex align-items-center">
+  <div class="d-flex align-items-center">
     <label class="p-1 input-group-text font-weight-bold">Pour Point:</label>
     {{#if oil.pour_point}}
       {{#if editable}}
@@ -11,28 +11,47 @@
 
         {{#if isShowingModal}}
           {{#modal-dialog
-            onClose=(action (mut isShowingElementCenterModal) false)
+            onClose=(action "getModalInput")
             translucentOverlay=false
             targetAttachment="center left"
             tetherTarget="#pour-point-id"
             attachment="center left"
           }}
+            <h4>
+              Enter Pour Point (deg C)
+            </h4>
             <form>
-              <Input @type="radio" @name="interval-number"
-                @value="interval"
-                @focus-in={{action "toggleRadio"}}
-                checked={{this.isInterval}}
-              />
-              <div id="dialog-interval-input">
-                <label>Min:</label><input type="text" name="min-value">
-                <label>Max:</label><input type="text" name="max-value">
+              <div class="row form-check d-flex align-items-center">
+                <Input @class="col-1"
+                  @type="radio" @name="interval-number"
+                  @value="interval"
+                  @focus-in={{action "toggleRadio"}}
+                  @size="1"
+                  checked={{this.isInterval}}
+                />
+                {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
+                  <fieldset class="col" id="dialog-interval-input" disabled={{intervalInputDisabled}}>
+                    <label class="col-2 p-1">Min:</label><input class="col-3" type="text" name="min-value" size="3">
+                    <label class="col-2 p-1">Max:</label><input class="col-3" type="text" name="max-value" size="3">
+                  </fieldset>
+                {{/let}}
               </div>
-              <br>
-              <Input @type="radio" @name="interval-number" @value="number" checked={{not this.isInterval}} />
-              <div id="dialog-value-input">
-                <label>Value:</label><input type="text" name="value">
+
+              <div class="row form-check d-flex align-items-center">
+                <Input @class="col-1"
+                  @type="radio" @name="interval-number"
+                  @value="number"
+                  @focus-in={{action "toggleRadio"}}
+                  @size="1"
+                  checked={{not this.isInterval}}
+                />
+                {{#let (if this.isInterval "disabled" undefined) as |scalarInputDisabled|}}
+                  <fieldset class="col" id="dialog-scalar-input" disabled={{scalarInputDisabled}}>
+                    <label class="col-3 p-1 pr-0">Value:</label><input class="col-3" type="text" name="scalar" size="3">
+                  </fieldset>
+                {{/let}}
               </div>
-              <br>
+
               <input type="submit" value="OK">
             </form>
           {{/modal-dialog}}        
