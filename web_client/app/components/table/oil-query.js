@@ -12,10 +12,11 @@ export default Component.extend(TableCommon, {
 
     columns: computed(function() {
         return [{
-            label: '',
+            label: 'Status',
             valuePath: 'status',
-            width: '30px',
-            cellComponent: 'table/cell/status'
+            width: '70px',
+            cellComponent: 'table/cell/status',
+            searchable: true,
         }, {
             label: 'ID',
             valuePath: 'id',
