@@ -6,10 +6,6 @@
 
 import pytest
 
-pytestmark = pytest.mark.skipif(True,
-                                reason="Don't need to test another package,"
-                                "and these are failing anyway")
-
 
 class SomeException(Exception):
     pass

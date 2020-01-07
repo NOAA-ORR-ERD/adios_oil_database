@@ -24,6 +24,18 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
     padding: 0.12rem;
 }
 
+.input-group-text {
+    border: none;
+    background-color: inherit;
+}
+
+.api {
+    font-weight: normal;
+}
+.api:not(:last-child):after {
+    content: ", ";
+}
+
 .chart {
     border: 1px solid $border-color;
 }
@@ -101,5 +113,5 @@ $ember-power-select-background-color: #eee;
 @import 'ember-power-select/themes/bootstrap';
 @import "ember-power-select";
 
-@import "ember-modal-dialog/ember-modal-structure.css";
-@import "ember-modal-dialog/ember-modal-appearance.css";
+@import "ember-modal-dialog/ember-modal-structure";
+@import "ember-modal-dialog/ember-modal-appearance";

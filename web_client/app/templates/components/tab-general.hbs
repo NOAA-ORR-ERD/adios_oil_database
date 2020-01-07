@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="row pl-0 pr-0">
-    
+
     <div class="col-5">
 
       <div class="row pl-0 mb-3">
@@ -22,7 +22,7 @@
           {{#let (if oil.location oil.location "None") as |oilLocation|}}
             {{#if editable}}
               <Input @class="p-1 flex-fill bg-transparent border" @value={{oilLocation}}
-                @placeholder="Enter Location"  @change={{action "updateLocation"}} />
+                @placeholder="Enter Location" @change={{action "updateLocation"}} />
             {{else}}
               <span class="p-1 flex-fill">{{oilLocation}}</span>
             {{/if}}
@@ -38,10 +38,10 @@
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">API:</label>
           </div>
-          {{#let (if (not (is-empty oil.samples.[0].apis)) 
+          {{#let (if (not (is-empty oil.samples.[0].apis))
             (round-relative oil.samples.[0].apis.[0].gravity 2) "No Values") as |oilAPI|}}
             {{#if editable}}
-              <Input @id="api" @type="text" @class="p-1 bg-transparent border" 
+              <Input @id="api" @type="text" @class="p-1 bg-transparent border"
                 @placeholder="API value" @value={{oilAPI}} @change={{action "updateAPI"}} @size="6" />
             {{else}}
               <span class="p-1">{{oilAPI}}</span>
@@ -61,22 +61,22 @@
                   <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
                   <option class="bg-light">{{oilType}}</option>
-                {{/if}}  
+                {{/if}}
               {{/each}}
             </select>
           {{else}}
             <span class="p-1 flex-fill">{{oil.productType}}</span>
-          {{/if}}  
+          {{/if}}
         </div>
 
       </div>
 
       <div class="row pl-0 mb-3">
-      
+
         {{! Categories }}
         <div class="form-inline">
           <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Categories:</label>
+            <label class="p-1 input-group-text font-weight-bold">Labels:</label>
           </div>
 
           {{#if editable}}
@@ -99,7 +99,7 @@
           {{/if}}
 
         </div>
-      
+
       </div>
 
     </div>
@@ -108,15 +108,15 @@
 
       {{! Reference }}
       <div class="row mb-3 input-group">
-        <div class="input-group-prepend">
-          <label class="p-1 input-group-text font-weight-bold">Reference:</label>
-        </div>
+        <label class="p-1 input-group-text font-weight-bold">Reference:</label>
+      </div>
+      <div class="row mb-3 input-group">
         {{#let (if oil.reference oil.reference "None") as |oilReference|}}
           {{#if editable}}
             <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilReference}} @rows="3"
               @placeholder="Enter reference"  @change={{action "updateReference"}} />
           {{else}}
-            <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilReference}} readonly rows="3" />
+            <span class="p-1">{{oilReference}}</span>
           {{/if}}
         {{/let}}
       </div>
@@ -137,7 +137,7 @@
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
             {{/if}}
-          {{/let}}  
+          {{/let}}
         </div>
 
         {{! Sample Received Date }}
@@ -164,20 +164,20 @@
 
   {{! Comments }}
   <div class="row pl-0 pr-0 mb-3">
-    <div class="col pl-0 pr-0 input-group">
-      <div class="input-group-prepend">
-        <label class="p-1 input-group-text font-weight-bold">Comments:</label>
-      </div>
+    <div class="col-12 pl-0 pr-0">
+      <label class="p-1 font-weight-bold">Comments:</label>
+    </div>
+    <div class="col-12 pl-0 pr-0 input-group">
       {{#let (if oil.comments oil.comments "None") as |oilComments|}}
         {{#if editable}}
           <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1"
-              @placeholder="Enter comments"  @change={{action "updateComments"}} />
+            @placeholder="Enter comments"  @change={{action "updateComments"}} />
         {{else}}
-          <textarea class="p-1 flex-fill bg-transparent no-borders" value={{oilComments}} readonly rows="1" />
+          <span class="p-1 flex-fill bg-transparent no-borders">{{oilComments}}</span>
         {{/if}}
-      {{/let}}  
+      {{/let}}
     </div>
-  </div>  
+  </div>
 
   {{!-- status message --}}
   <div class="row mb-3">

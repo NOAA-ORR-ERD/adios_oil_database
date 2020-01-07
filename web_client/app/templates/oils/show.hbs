@@ -8,8 +8,8 @@
         <div class=" mr-2">
           {{#link-to "oils"}}
             <button type="button" class="btn btn-dark"
-                    data-toggle="tooltip" title="Back to List">
-              {{fa-icon "list"}}
+              data-toggle="tooltip" title="Back to List">
+              &lt; Back to List
             </button>
           {{/link-to}}
         </div>
@@ -53,6 +53,7 @@
     <TabGeneral
       @oil={{this.model}}
       @editable={{this.editable}}
+      @submit={{action send "updateOil"}}
       @oilTypes={{array
           "crude"
           "refined"
@@ -71,6 +72,14 @@
              data-toggle="tab" role="tab"
              class="nav-item nav-link" aria-selected="false">
             {{name.[1]}}
+
+            {{#if editable}}
+              <TabNav::RemoveSample
+                @oil={{this.model}}
+                @index={{idx}}
+                @submit={{action send "updateOil"}}
+              />
+            {{/if}}
           </a>
         {{else}}
           <a id="nav-{{slug name.[0]}}-tab" href="#nav-{{slug name.[0]}}"
@@ -83,11 +92,11 @@
       {{/each}}
 
       {{#if editable}}
-        <a id="nav-add-tab" href="#nav-add"
-           data-toggle="tab"
-           class="nav-item nav-link add-sample">
-          {{fa-icon "plus"}}
-        </a>
+        <TabNav::AddSample
+          @oil={{this.model}}
+          @submit={{action send "updateOil"}}
+        />
+
       {{/if}}
 
     </div>
@@ -107,7 +116,7 @@
       {{else}}
         <div class="tab-pane fade active show" role="tabpanel"
              id="nav-{{slug name.[0]}}" aria-labelledby="nav-{{slug name.[0]}}-tab">
-          <TabPane::WeatheredTopLevel 
+          <TabPane::WeatheredTopLevel
             @oil={{this.model}} @sampleName={{name.[0]}}
             @editable={{this.editable}}
           />

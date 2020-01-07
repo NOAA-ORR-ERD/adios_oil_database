@@ -1,12 +1,52 @@
 <div class="detail-section">
-  <div class="table-responsive d-flex">
-    <strong>Pour Point:</strong>
+  <div class="table-responsive d-flex align-items-center">
+    <label class="p-1 input-group-text font-weight-bold">Pour Point:</label>
     {{#if oil.pour_point}}
-      {{value-unit (convert-unit oil.pour_point.ref_temp "C") 2}}
+      {{#if editable}}
+        <Input id="pour-point-id" @class="p-1 bg-transparent border" @type="text"
+          @value={{value-unit (convert-unit oil.pour_point.ref_temp "C") 2}}
+          @focus-in={{action "toggleModal"}}
+          @size="7"
+        />
+
+        {{#if isShowingModal}}
+          {{#modal-dialog
+            onClose=(action (mut isShowingElementCenterModal) false)
+            translucentOverlay=false
+            targetAttachment="center left"
+            tetherTarget="#pour-point-id"
+            attachment="center left"
+          }}
+            <form>
+              <Input @type="radio" @name="interval-number"
+                @value="interval"
+                @focus-in={{action "toggleRadio"}}
+                checked={{this.isInterval}}
+              />
+              <div id="dialog-interval-input">
+                <label>Min:</label><input type="text" name="min-value">
+                <label>Max:</label><input type="text" name="max-value">
+              </div>
+              <br>
+              <Input @type="radio" @name="interval-number" @value="number" checked={{not this.isInterval}} />
+              <div id="dialog-value-input">
+                <label>Value:</label><input type="text" name="value">
+              </div>
+              <br>
+              <input type="submit" value="OK">
+            </form>
+          {{/modal-dialog}}        
+        {{/if}}
+      {{else}}
+        <span id="pour-point-id">
+          {{value-unit (convert-unit oil.pour_point.ref_temp "C") 2}}
+        </span>
+      {{/if}}    
     {{else}}
       No Data
     {{/if}}
   </div>
+
 
   &nbsp;
 

@@ -2,8 +2,6 @@
     Test our Oil Model Estimations class
 '''
 import pytest
-pytestmark = pytest.mark.skipif(True, reason="Not using Estimations now")
-
 
 import numpy as np
 
@@ -452,7 +450,8 @@ class TestOilEstimationPointTemperatures():
            },
           None, None, (None, 200.0)),
          ({'name': 'Oil Name',
-           'comments': 'This record has no pour point, but has dvis and density',
+           'comments': ('This record has no pour point, '
+                        'but has dvis and density'),
            'samples': [{
                'name': 'Fresh Oil Sample',
                'dvis': [
@@ -514,7 +513,8 @@ class TestOilEstimationPointTemperatures():
            },
           None, None, (None, None)),
          ({'name': 'Oil Name',
-           'comments': 'This record has no flash point, but has cuts & sara fractions',
+           'comments': ('This record has no flash point, '
+                        'but has cuts & sara fractions'),
            'samples': [{
                'name': 'Fresh Oil Sample',
                'cuts': [
@@ -1099,7 +1099,8 @@ class TestOilEstimationDynamicViscosities():
            },
           []),
          ({'name': 'Oil Name',
-           'comments': 'This record has 1 kvis and 1 barely non-redundant dvis',
+           'comments': ('This record has 1 kvis '
+                        'and 1 barely non-redundant dvis'),
            'samples': [{
                'name': 'Fresh Oil Sample',
                'kvis': [

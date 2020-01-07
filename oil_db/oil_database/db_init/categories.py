@@ -17,8 +17,6 @@
     and the viscosity at a given temperature, usually at 38 C(100F).
     The criteria follows closely, but not identically, to the ASTM standards
 '''
-import pdb
-
 import logging
 
 from oil_database.data_sources.oil import OilEstimation

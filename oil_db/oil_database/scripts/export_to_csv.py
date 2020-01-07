@@ -8,7 +8,7 @@ from openpyxl import Workbook
 
 import unit_conversion as uc
 
-from oil_database.util.db_connection import connect_modm
+from oil_database.util.db_connection import connect_mongodb
 from oil_database.util.settings import file_settings, default_settings
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ def export_to_csv_cmd(argv=sys.argv):
     try:
         export_to_csv(settings, export_file)
     except Exception:
-        print "{0}() FAILED\n".format(export_to_csv.__name__)
+        print('{0}() FAILED\n'.format(export_to_csv.__name__))
         raise
 
 
@@ -39,14 +39,15 @@ def export_to_csv_usage(argv):
     cmd = os.path.basename(argv[0])
 
     print('usage: {0} <export_file> [config_file]\n'
-          '(example: "{0} ec_export.csv")'.format(cmd))
+          '(example: "{0} ec_export.csv")'
+          .format(cmd))
 
     sys.exit(1)
 
 
 def export_to_csv(settings, export_file):
-    logger.info('connect_modm()...')
-    connect_modm(settings)
+    logger.info('connect_mongodb()...')
+    connect_mongodb(settings)
 
     wb = Workbook()
 
@@ -69,10 +70,10 @@ def add_wb_sheets(wb):
 
 def add_all_ec_records(dvis_sheet, api_sheet, hopane_sheet):
     '''
-        Note: We can't import any PyMODM models until there is a connection,
-              so we import it here.
-              We will assume the connect() has already happened prior to this
-              function.
+        FIXME: We aren't using PyMODM models anymore,
+               so this whole process will need to be refactored
+               to use a PyMongo client.
+               It doesn't even work in its current state.
     '''
     from oil_database.models.ec_imported_rec import ECImportedRecord
 
@@ -266,20 +267,3 @@ def excel_column_name(idx):
     ret.append(chr(0x41 + (idx % 26)))
 
     return ''.join(ret)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -8,8 +8,13 @@ Oil Database from a web browser.
 You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
+
 * [Node.js](https://nodejs.org/) (with npm)
+  (can be installed via conda)
+
 * [Ember CLI](https://ember-cli.com/)
+  (`npm install -g ember-cli`)
+
 * [Google Chrome](https://google.com/chrome/)
 
 ## Installation

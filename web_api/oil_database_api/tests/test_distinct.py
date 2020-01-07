@@ -3,9 +3,6 @@ Functional tests for the Model Web API
 """
 from .base import FunctionalTestBase
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2)
-
 
 class DistinctTests(FunctionalTestBase):
     def test_get_distinct(self):

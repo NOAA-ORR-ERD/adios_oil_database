@@ -18,8 +18,6 @@ This needs to work with the JSON, not classes!
 
 import logging
 
-import numpy as np
-
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
@@ -48,11 +46,13 @@ class OilRejected(Exception):
                                                  self.oil_name,
                                                  self.message)
 
-#
-#
 # ### Oil Quality checks
 #
-#
+# FIXME: At the very least, the checks should return the error message,
+#        rather than having a separate mapping. But this needs major
+#        refactoring anyway
+
+
 def oil_record_validation(oil):
     '''
     Validate an oil record and return a list of error messages
@@ -60,16 +60,17 @@ def oil_record_validation(oil):
     errors = []
 
     if not has_product_type(oil):
-        errors.append('W001: Imported Record has no product type')
+        errors.append('W001: Imported record has no product type')
 
     if not has_api_or_densities(oil):
-        errors.append('E001: Imported Record has no density information')
+        errors.append('E001: Imported record has no density information')
 
     if not has_viscosities(oil):
-        errors.append('E001: Imported Record has no viscosity information')
+        errors.append('E001: Imported record has no viscosity information')
 
     if not has_distillation_cuts(oil):
-        errors.append('W001: Imported Record has insufficient distillation cut data')
+        errors.append('W001: Imported record has insufficient '
+                      'distillation cut data')
 
     return errors
 
@@ -80,8 +81,9 @@ def has_product_type(oil):
     dealing with a crude or refined oil product.  We cannot continue
     if this information is missing.
     '''
-    if (oil.product_type is not None and
-            oil.product_type.lower() in ('crude', 'refined')):
+    if (oil.product_type is None or
+        oil.product_type.lower() in ('crude', 'refined',
+                                     'bitumen product' 'other')):
         return True
 
     return False
@@ -193,9 +195,9 @@ def has_densities_below_pour_point(oil):
             except AttributeError:
                 oil_id = oil.oil_id
 
-            print ('\toil_id: {}, pour_point: {}, rho_temps: {}, lt: {}'
-                   .format(oil_id, pour_point, rho_temps,
-                           [(t < pour_point) for t in rho_temps]))
+            print('\toil_id: {}, pour_point: {}, rho_temps: {}, lt: {}'
+                  .format(oil_id, pour_point, rho_temps,
+                          [(t < pour_point) for t in rho_temps]))
             return True
 
 

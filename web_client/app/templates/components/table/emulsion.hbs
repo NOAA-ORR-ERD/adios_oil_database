@@ -1,48 +1,36 @@
 <div class="detail-section">
-  <div class="table-responsive">
-    <strong>Emulsion Properties:</strong>
+  <strong>Emulsion Properties:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".emulsion-row-collapse"
-             aria-controls="emulsion-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Visual Stability</th>
-          <th scope="col">Water Content</th>
-          <th scope="col">Complex Viscosity</th>
-          <th scope="col">Complex Modulus</th>
-          <th scope="col">Storage Modulus</th>
-          <th scope="col">Loss Modulus</th>
-          <th scope="col">Tan Delta (V/E)</th>
-          <th scope="col">Age</th>
-          <th scope="col">Temperature</th>
-        </tr>
-      </thead>
-      <tbody id="emulsion-tbody">
-        {{#each oil.emulsions as |emulsion|}}
-          <tr class="collapse show emulsion-row-collapse">
-            <td>{{emulsion.visual_stability}}</td>
-            <td>{{value-unit emulsion.water_content 3}}</td>
-            <td>{{value-unit emulsion.complex_viscosity 3}}</td>
-            <td>{{value-unit emulsion.complex_modulus 3}}</td>
-            <td>{{value-unit emulsion.storage_modulus 3}}</td>
-            <td>{{value-unit emulsion.loss_modulus 3}}</td>
-            <td>{{round-relative emulsion.tan_delta_v_e 3}}</td>
-            <td>{{value-unit (convert-unit emulsion.age "days") 1}}</td>
-            <td>{{value-unit (convert-unit emulsion.ref_temp "C") 3}}</td>
-          </tr>
-        {{/each}}
+  <table class="table table-hover table-bordered">
+    <thead class="clickable" data-toggle="collapse"
+           data-target=".emulsion-row-collapse"
+           aria-controls="emulsion-tbody"
+           aria-expanded="false">
+      <tr></tr>
+    </thead>
+    <tbody id="emulsion-tbody">
+      {{#if oil.emulsions}}
+        {{#each-in tableFieldAttrs as |emul_prop value|}}
+          <tr>
+            <th>{{value.label}}</th>
 
-        {{#if oil.emulsions}}
-          <tr class="collapse emulsion-row-collapse">
-            <th scope="row">&#x2026;</th>
+            {{#each oil.emulsions as |emulsion|}}
+              {{#if value.unitValue}}
+                {{#if value.convertUnit}}
+                  <td>{{value-unit (convert-unit (get emulsion emul_prop) value.convertUnit) 1}}</td>
+                {{else}}
+                  <td>{{value-unit (get emulsion emul_prop) 3}}</td>
+                {{/if}}
+              {{else}}
+                <td>{{get emulsion emul_prop}}</td>
+              {{/if}}
+            {{/each}}
           </tr>
-        {{else}}
-          <tr><td>No Data</td></tr>
-        {{/if}}
-      </tbody>
-    </table>
-  </div>
+        {{/each-in}}
+      {{else}}
+        <tr><td>No Data</td></tr>
+      {{/if}}
+    </tbody>
+  </table>
 
 </div>

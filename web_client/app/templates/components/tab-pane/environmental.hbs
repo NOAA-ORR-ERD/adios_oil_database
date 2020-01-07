@@ -4,13 +4,15 @@
   </center>
 
   <div class="row">
-    <Table::Emulsion @oil={{oil}} class="col-12"/>
+    <div class="col-5">
+      <Table::EvaporationEqs @oil={{oil}}/>
 
-    <Table::EvaporationEqs @oil={{oil}} class="col-5"/>
+      <Table::ChemicalDispersibility @oil={{oil}}/>
 
-    <Table::ChemicalDispersibility @oil={{oil}} class="col-5"/>
+      <Table::Toxicity @oil={{oil}}/>
+    </div>
 
-    <Table::Toxicity @oil={{oil}} class="col-5"/>
+    <Table::Emulsion @oil={{oil}} class="col-5"/>
   </div>
 
 </div>
