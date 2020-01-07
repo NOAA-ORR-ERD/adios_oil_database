@@ -14,14 +14,14 @@
           <div class="row">
 
             <div class="col-6">
-              <select {{on "change" addButton.updateSampleType}}>
-                <option value={{sampleTypes.weathered}}>
+              <select {{on "change" this.updateSampleType}}>
+                <option value={{this.SampleTypes.weathered}}>
                   Weathered Fraction
                 </option>
-                <option value={{sampleTypes.distillate}}>
+                <option value={{this.SampleTypes.distillate}}>
                   Distillate Temperature Range
                 </option>
-                <option value={{sampleTypes.nameOnly}}>
+                <option value={{this.SampleTypes.nameOnly}}>
                   Name
                 </option>
               </select>
@@ -29,7 +29,7 @@
 
 
             <div class="col-6">
-              {{#if (eq sampleType sampleTypes.weathered)}}
+              {{#if (eq this.sampleType this.SampleTypes.weathered)}}
                 <div class="form-group">
                   <div class="row">
                     <div class="col-6">
@@ -40,7 +40,7 @@
                     </div>
                   </div>
                 </div>
-              {{else if (eq sampleType sampleTypes.distillate)}}
+              {{else if (eq this.sampleType this.SampleTypes.distillate)}}
                 <div class="form-group">
                   <div class="row">
                     <div class="col">
