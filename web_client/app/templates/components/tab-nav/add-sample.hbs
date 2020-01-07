@@ -1,4 +1,12 @@
 <a href="#" class="nav-item nav-link btn btn-lg" role="button"
-   {{on "click" this.addSample}} >
+    data-toggle="modal"
+    data-target="#addSampleDialog"
+>
   {{fa-icon "plus"}}
 </a>
+
+<TabNav::AddSampleDlg
+  @addButton={{this}}
+  @sampleType={{this.sampleType}}
+  @sampleTypes={{this.SampleTypes}}
+/>

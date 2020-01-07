@@ -1,9 +1,24 @@
-import Component from '@ember/component';
-import EmberObject from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 
+export default class AddSample extends Component {
+    @tracked sampleType = 0;
 
-export default Component.extend({
+    SampleTypes = {
+            weathered: 0,
+            distillate: 1,
+            nameOnly: 2
+    };
+
+    @action
+    updateSampleType(choice) {
+        console.log('changing subsample type choice',
+                    'from', this.sampleType,
+                    'to', choice.target.value);
+
+        this.sampleType = Number(choice.target.value);
+    }
 
     @action
     addSample() {
@@ -19,4 +34,5 @@ export default Component.extend({
 
         this.submit(oil);
     }
-});
+
+};
