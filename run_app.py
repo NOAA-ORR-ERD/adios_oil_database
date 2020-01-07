@@ -21,6 +21,7 @@ import os
 from subprocess import run, Popen
 import atexit
 import time
+import webbrowser
 
 # start up mongo:
 
@@ -47,10 +48,12 @@ def kill_everything():
 
 atexit.register(kill_everything)
 
+webbrowser.open('http://localhost:4200/', new=1)
+
 while True:
     print("App running: http://localhost:4200/")
     print("Hit ^C To stop:")
-    time.sleep(1.0)
+    time.sleep(2.0)
 
 
 
