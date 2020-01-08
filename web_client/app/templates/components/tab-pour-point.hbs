@@ -5,23 +5,34 @@
       {{#if editable}}
         <Input id="pour-point-id" @class="p-1 bg-transparent border" @type="text"
           @value={{value-unit (convert-unit oil.pour_point.ref_temp "C") 2}}
-          @focus-in={{action "toggleModal"}}
+          @focus-in={{action "openModalDialog"}}
           @size="7"
         />
 
         {{#if isShowingModal}}
+
+          {{!-- {{#ember-tether
+              target="#pour-point-id"
+              targetAttachment="center left"
+            attachment="center left"
+          }}
+            <div id="scalar-range-dialog" class="modal" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  ...
+                </div>
+              </div>
+            </div>
+          {{/ember-tether}} --}}
+
           {{#modal-dialog
-            onClose=(action "getModalInput")
+            onClose=(action "onCancel")
             translucentOverlay=false
             targetAttachment="center left"
             tetherTarget="#pour-point-id"
             attachment="center left"
           }}
-            {{!-- <h4>
-              Enter Pour Point (deg C)
-            </h4>
-            <form> --}}
-            <div class="card">
+            <div id="scalar-range-dialog" class="card">
               <h5 class="card-header text-center p-1">Pour Point (deg C)</h5>
               <div class="card-body p-1">
                 <div class="row form-check d-flex align-items-center">
@@ -56,14 +67,20 @@
                 </div>
 
                 <div class="row d-flex justify-content-end">
-                  <button type="button" class="btn btn-primary btn-sm mr-4">Save</button>
-                  <button type="button" class="btn btn-secondary btn-sm mr-4">Cancel</button>
+                  <button type="button" class="btn btn-primary btn-sm mr-4"
+                    onClick={{action "onSave"}}>
+                    Save
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm mr-4"
+                    {{action "closeModalDialog"}}>
+                    Cancel
+                  </button>
                 </div>
 
               </div>
             </div>  
-            {{!-- </form> --}}
           {{/modal-dialog}}        
+
         {{/if}}
       {{else}}
         <span id="pour-point-id">
