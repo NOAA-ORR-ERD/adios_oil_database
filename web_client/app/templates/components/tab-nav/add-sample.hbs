@@ -1,8 +1,7 @@
 <a href="#" class="nav-item nav-link btn btn-lg" role="button"
-    data-toggle="modal"
-    data-target="#addSampleDialog"
->
+   data-toggle="modal"
+   data-target="#addSampleDialog" >
   {{fa-icon "plus"}}
 </a>
 
-<TabNav::AddSampleDlg />
+<TabNav::AddSampleDlg @oil={{this.args.oil}} @submit={{this.args.submit}} />

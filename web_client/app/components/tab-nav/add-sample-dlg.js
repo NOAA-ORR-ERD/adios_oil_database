@@ -5,13 +5,13 @@ import { roundRelative } from 'ember-oil-db/helpers/round-relative';
 
 export default class AddSampleDlg extends Component {
     SampleTypes = {
-            weathered: 0,
-            distillate: 1,
-            nameOnly: 2
+        weathered: 0,
+        distillate: 1,
+        nameOnly: 2
     };
-    
+
     @tracked sampleType = 0;
-    
+
     @tracked weatheredFraction = NaN;
     @tracked distillateMin = NaN;
     @tracked distillateMax = NaN;
@@ -23,33 +23,51 @@ export default class AddSampleDlg extends Component {
             if (!Number.isNaN(this.weatheredFraction)) {
                 return true;
             }
+            break;
         case this.SampleTypes.distillate:
             if (!(Number.isNaN(this.distillateMin) &&
                   Number.isNaN(this.distillateMax))) {
                 return true;
             }
+            break;
         case this.SampleTypes.nameOnly:
             if (this.sampleName) {
                 return true;
             }
+            break;
         }
-        
+
         return false;
     }
 
     @action
     updateFraction(event) {
-        this.weatheredFraction = Number(event.target.value);
+        if (event.target.value === '') {
+            this.weatheredFraction = NaN;
+        }
+        else {
+            this.weatheredFraction = Number(event.target.value);
+        }
     }
 
     @action
     updateDistillateMin(event) {
-        this.distillateMin = Number(event.target.value);
+        if (event.target.value === '') {
+            this.distillateMin = NaN;
+        }
+        else {
+            this.distillateMin = Number(event.target.value);
+        }
     }
 
     @action
     updateDistillateMax(event) {
-        this.distillateMax = Number(event.target.value);
+        if (event.target.value === '') {
+            this.distillateMax = NaN;
+        }
+        else {
+            this.distillateMax = Number(event.target.value);
+        }
     }
 
     @action
@@ -64,9 +82,9 @@ export default class AddSampleDlg extends Component {
 
     @action
     submitForm() {
-        console.log('add-sample: submitForm()...');
         let newSample;
         let name, shortName;
+        let min, max;
 
         switch (this.sampleType) {
         case this.SampleTypes.weathered:
@@ -86,10 +104,18 @@ export default class AddSampleDlg extends Component {
             };
             break;
         case this.SampleTypes.distillate:
-            let min = roundRelative([this.distillateMin, 2]);
-            let max = roundRelative([this.distillateMax, 2]);
+            min = roundRelative([this.distillateMin, 2]);
+            max = roundRelative([this.distillateMax, 2]);
 
-            name = shortName = `BP Range: ${min} &deg;F -> ${max} &deg;F`;
+            if (!(Number.isNaN(min) || Number.isNaN(max))) {
+                name = shortName = `BP Range: ${min} °F \u2192 ${max} °F`;
+            }
+            else if (Number.isNaN(min)) {
+                name = shortName = `BP Range: <${max} °F`;
+            }
+            else {
+                name = shortName = `BP Range: >${min} °F`;
+            }
 
             newSample = {
                     'name': name,
@@ -99,7 +125,7 @@ export default class AddSampleDlg extends Component {
             break;
         case this.SampleTypes.nameOnly:
             name = this.sampleName;
-            
+
             if (name.length <= 12) {
                 shortName = name;
             }
@@ -114,8 +140,9 @@ export default class AddSampleDlg extends Component {
             break;
         }
 
-        console.log('newSample = ', newSample);
-
+        let oil = this.args.oil;
+        oil.samples.pushObject(newSample);
+        this.args.submit(oil);
     }
 
-};
+}
