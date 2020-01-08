@@ -1,6 +1,15 @@
 # ADIOS Oil Database
 
-Lot of code
+## Dev Process:
+
+As of Jan, 2019, we are in a push to get an MVP working to deliver to BSEE. So we are working in the develop branch, and actively pushing changes. When its gets more stable, we will start pushing to master, but for now -- do everything in develop.
+
+i.e.:
+
+If it's not trivial, and might step on others' toes, create a branch for a new feature or fix, when you are happy with it, "rebase" -- i.e. merge the latest develop into your branch. If it's all working, merge it all into develop.
+
+When you push to develop, the CI should run at least some tests, so you'll know if you accidentally broke something -- fix it if you did :-)
+
 
 ## Components
 
@@ -132,11 +141,26 @@ oil_db_import --all
 pytest --pyargs oil_database_api
 
 
-### Running the API server
+## Running the app:
+
+To run the app, you need to be running the database (`mongod`), the API server, and the client code. There is a single script that will do that all for you:
+
+```
+run_app.py
+```
+(Make sure you are in a fully configured environment first -- i.e. `conda activate adiosdb`)
+
+Note that `ember serve` takes a while to get started, so it won't work right away.
+
+hit `^C` to stop everything.
+
+If you want to know how to run each piece, read the script, and/or read on ...
+
+## Starting the API:
 
 `pserve --reload config-example.ini`
 
-## The client:
+## Running the client:
 
 See the README in the web_client dir.
 
@@ -147,7 +171,6 @@ Program Manager (and primary contact with BSEE): Chris Barker
 
 Project Manager and lead chemist: Robert Jones
 
-Chemist: Dalina Thrift-Vivaros
+Chemist: Dalina Thrift-Viveros
 
 Software Developers: James Makela, Gennady Kachook
-
