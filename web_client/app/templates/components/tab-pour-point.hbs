@@ -17,43 +17,52 @@
             tetherTarget="#pour-point-id"
             attachment="center left"
           }}
-            <h4>
+            {{!-- <h4>
               Enter Pour Point (deg C)
             </h4>
-            <form>
-              <div class="row form-check d-flex align-items-center">
-                <Input @class="col-1"
-                  @type="radio" @name="interval-number"
-                  @value="interval"
-                  @focus-in={{action "toggleRadio"}}
-                  @size="1"
-                  checked={{this.isInterval}}
-                />
-                {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
-                  <fieldset class="col" id="dialog-interval-input" disabled={{intervalInputDisabled}}>
-                    <label class="col-2 p-1">Min:</label><input class="col-3" type="text" name="min-value" size="3">
-                    <label class="col-2 p-1">Max:</label><input class="col-3" type="text" name="max-value" size="3">
-                  </fieldset>
-                {{/let}}
-              </div>
+            <form> --}}
+            <div class="card">
+              <h5 class="card-header text-center p-1">Pour Point (deg C)</h5>
+              <div class="card-body p-1">
+                <div class="row form-check d-flex align-items-center">
+                  <Input
+                    @type="radio" @name="interval-number"
+                    @value="interval"
+                    @focus-in={{action "toggleRadio"}}
+                    @size="1"
+                    checked={{this.isInterval}}
+                  />
+                  {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
+                    <fieldset id="dialog-interval-input" disabled={{intervalInputDisabled}}>
+                      <label class="col-2 p-1">Min:</label><input class="col-3" type="text" name="min-value" size="3">
+                      <label class="col-2 p-1">Max:</label><input class="col-3" type="text" name="max-value" size="3">
+                    </fieldset>
+                  {{/let}}
+                </div>
 
-              <div class="row form-check d-flex align-items-center">
-                <Input @class="col-1"
-                  @type="radio" @name="interval-number"
-                  @value="number"
-                  @focus-in={{action "toggleRadio"}}
-                  @size="1"
-                  checked={{not this.isInterval}}
-                />
-                {{#let (if this.isInterval "disabled" undefined) as |scalarInputDisabled|}}
-                  <fieldset class="col" id="dialog-scalar-input" disabled={{scalarInputDisabled}}>
-                    <label class="col-3 p-1 pr-0">Value:</label><input class="col-3" type="text" name="scalar" size="3">
-                  </fieldset>
-                {{/let}}
-              </div>
+                <div class="row form-check d-flex align-items-center">
+                  <Input
+                    @type="radio" @name="interval-number"
+                    @value="number"
+                    @focus-in={{action "toggleRadio"}}
+                    @size="1"
+                    checked={{not this.isInterval}}
+                  />
+                  {{#let (if this.isInterval "disabled" undefined) as |scalarInputDisabled|}}
+                    <fieldset id="dialog-scalar-input" disabled={{scalarInputDisabled}}>
+                      <label class="p-1 pr-0">Value:</label><input type="text" name="scalar" size="3">
+                    </fieldset>
+                  {{/let}}
+                </div>
 
-              <input type="submit" value="OK">
-            </form>
+                <div class="row d-flex justify-content-end">
+                  <button type="button" class="btn btn-primary btn-sm mr-4">Save</button>
+                  <button type="button" class="btn btn-secondary btn-sm mr-4">Cancel</button>
+                </div>
+
+              </div>
+            </div>  
+            {{!-- </form> --}}
           {{/modal-dialog}}        
         {{/if}}
       {{else}}
