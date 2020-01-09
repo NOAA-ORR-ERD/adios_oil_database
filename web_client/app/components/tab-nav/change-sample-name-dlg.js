@@ -5,6 +5,12 @@ import { action } from "@ember/object";
 export default class ChangeSampleNameDlg extends Component {
     @tracked sampleName;
 
+    constructor() {
+        super(...arguments);
+
+        this.sampleName = this.args.oil.samples[this.args.index].short_name;
+    }
+
     get formFilledOut() {
         if (this.sampleName) {
             return true;
