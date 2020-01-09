@@ -1,3 +1,4 @@
-<button type="button" class="btn btn-sm" {{on "click" (fn this.removeSample index)}} >
+<button type="button" class="btn btn-sm"
+        {{on "click" (fn this.removeSample this.args.index)}} >
   {{fa-icon "times"}}
 </button>

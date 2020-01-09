@@ -1,0 +1,100 @@
+<div id="addSampleDialog" class="modal fade" role="dialog" tabindex="-1"
+     aria-labelledby="addSampleDialogLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSampleDialogLabel">Add Oil Subsample</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form">
+          <div class="row">
+
+            <div class="col-6">
+              <select {{on "change" this.updateSampleType}}>
+                <option value={{this.SampleTypes.weathered}}>
+                  Weathered Fraction
+                </option>
+                <option value={{this.SampleTypes.distillate}}>
+                  Distillate Temperature Range
+                </option>
+                <option value={{this.SampleTypes.nameOnly}}>
+                  Name
+                </option>
+              </select>
+            </div>
+
+
+            <div class="col-6">
+              {{#if (eq this.sampleType this.SampleTypes.weathered)}}
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6">
+                      <Input type="number" step="0.01"
+                             @class="form-control bg-transparent border"
+                             @placeholder="Fraction"
+                             {{on "change" this.updateFraction}}
+                      />
+                    </div>
+                  </div>
+                </div>
+              {{else if (eq this.sampleType this.SampleTypes.distillate)}}
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col">
+                      <Input type="number"
+                             @class="form-control bg-transparent border"
+                             @placeholder="Min"
+                             {{on "change" this.updateDistillateMin}}
+                      />
+                    </div>
+                    <div class="col">
+                      <Input type="number"
+                             @class="form-control bg-transparent border"
+                             @placeholder="Max"
+                             {{on "change" this.updateDistillateMax}}
+                      />
+                    </div>
+                  </div>
+                </div>
+              {{else}}
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col">
+                      <Input type="text" @class="form-control bg-transparent border"
+                             @placeholder="Enter Name"
+                             {{on "change" this.updateName}}
+                      />
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cancel
+        </button>
+
+        {{#if this.formFilledOut}}
+          <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  {{on "click" this.submitForm}} >
+            OK
+          </button>
+        {{else}}
+          <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  disabled>
+            OK
+          </button>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

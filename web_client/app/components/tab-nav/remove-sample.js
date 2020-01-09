@@ -1,18 +1,13 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { action } from "@ember/object";
 
-export default Component.extend({
+export default class RemoveSample extends Component {
     @action
     removeSample(sampleIndex) {
-        let oil = this.get('oil');
-        let samples = oil.get('samples');
-
         // remove the sample
-        console.log('Removing sample...', sampleIndex);
-        samples.splice(sampleIndex, 1);
-        oil.set('samples', samples);
+        let oil = this.args.oil;
+        oil.samples.removeAt(sampleIndex, 1);
 
-        this.submit(oil);
+        this.args.submit(oil);
     }
-
-});
+}

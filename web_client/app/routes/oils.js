@@ -35,7 +35,6 @@ export default Route.extend({
 
     actions: {
         updateOil(oil) {
-            console.log('updateOil: ', oil.id);
             oil.save();
         }
     }
