@@ -1,38 +1,24 @@
 <div class="container">
   <center>
     <h4>{{sampleName}}</h4>
+
+    {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
+      <p class="small">
+        {{#if oil.fraction_weathered}}
+          <strong>Weathered Amount:</strong>
+          {{value-unit oil.fraction_weathered 2}}
+        {{/if}}
+
+        {{#if oil.boiling_point_range}}
+          {{#if oil.fraction_weathered}}
+            <br>
+          {{/if}}
+          <strong>BP Range:</strong>
+          {{value-unit oil.boiling_point_range 2}}
+        {{/if}}
+      </p>
+    {{/if}}
   </center>
-
-  <div class="row">
-    {{#if oil.fraction_weathered}}
-      <div class="col-lg-4">
-        <div class="row">
-          <div class="detail-section">
-            <div class="table-responsive">
-              <strong>Weathered Amount:</strong>
-              {{value-unit oil.fraction_weathered 2}}
-            </div>
-          &nbsp;
-          </div>
-        </div>
-      </div>
-    {{/if}}
-
-    {{#if oil.boiling_point_range}}
-      <div class="col-lg-4">
-        <div class="row">
-          <div class="detail-section">
-            <div class="table-responsive">
-              <strong>BP Range:</strong>
-              {{value-unit oil.boiling_point_range 2}}
-            </div>
-          &nbsp;
-          </div>
-        </div>
-      </div>
-    {{/if}}
-
-  </div>
 
   <div class="row">
     <div class="col-lg-4">
