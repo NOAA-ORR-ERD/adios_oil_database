@@ -11,7 +11,7 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     config.addinivalue_line("markers",
-                            "mongo: mark test as requireing mongo")
+                            "mongo: mark test as requiring mongo")
 
 
 def pytest_collection_modifyitems(config, items):

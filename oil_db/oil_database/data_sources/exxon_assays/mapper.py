@@ -19,6 +19,8 @@ pprint = PrettyPrinter(indent=2, width=120)
 logger = logging.getLogger(__name__)
 
 from oil_database.models.oil.oil import Oil
+from oil_database.models.oil.sample import Sample
+from oil_database.models.oil.values import UnittedValue, Density, Viscosity
 
 # (FloatUnit,
 #                                                    TemperatureUnit,
@@ -28,6 +30,7 @@ from oil_database.models.oil.oil import Oil
 #                                                    InterfacialTensionUnit,
 #                                                    AdhesionUnit,
 #                                                    ConcentrationInWaterUnit)
+
 
 def ExxonMapper(record):
     """
@@ -48,12 +51,34 @@ def ExxonMapper(record):
     # Exxon info in the header
     oil.reference = "\n".join([next(data)[0] for _ in range(3)])
 
-    while False:
-        row = next(data)
-        if not empty(row):
-            break
+    row = next_non_empty(data)
 
-    print(next(data))
+    print(row)
+
+    sample_names = row[1:]
+
+    print(sample_names)
+
+    samples = [Sample(name=name) for name in sample_names]
+
+    cut_volume = next_non_empty(data)
+    if cut_volume[0] != "Cut volume, %":
+        raise ValueError(f"Something wrong with data sheet:{cut_volume}")
+
+    for sample, val in zip(samples, cut_volume[1:]):
+        sample.cut_volume = UnittedValue(val, unit="%")
+
+    row = next_non_empty(data)
+    if row[0].strip() != "API Gravity,":
+        raise ValueError(f"Something wrong with data sheet:{row}")
+
+    for sample, val in zip(samples, row[1:]):
+        sample.api = UnittedValue(val, unit="API")
+
+    print()
+    for sample in samples: print(sample.py_json())
+
+
 
     return oil
 
@@ -66,6 +91,12 @@ def empty(row):
             return False
     return True
 
+def next_non_empty(data_iter):
+    while True:
+        row = next(data_iter)
+        if not empty(row):
+            break
+    return row
 
 
 # class EnvCanadaAttributeMapper(object):

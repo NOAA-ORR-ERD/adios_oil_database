@@ -46,13 +46,6 @@ class Oil:
         if self.name == "":
             raise TypeError("name must be a non-empty string")
 
-    def __setattr__(self, name, val):
-        if name not in self.__dataclass_fields__:
-            print("that's a new one!")
-            raise AttributeError("You can only set existing attributes")
-        else:
-            print("setting:", name)
-            self.__dict__[name] = val
 
 
 

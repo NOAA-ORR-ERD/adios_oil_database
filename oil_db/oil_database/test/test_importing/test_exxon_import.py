@@ -75,10 +75,12 @@ def test_exxon_mapper():
 
     assert oil.name == 'HOOPS Blend'
     assert oil.reference.startswith("ExxonMobil")
+    #assert len(oil.samples) == 8
+    #assert oil.samples[0].name == "Whole Crude"
 
     print(oil)
 
-#    assert False
+    #assert False
 
 
 

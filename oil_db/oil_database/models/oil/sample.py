@@ -10,7 +10,7 @@ from ..common.utilities import (dataclass_to_json,
                                 JSON_List,
                                 )
 
-from .values import Density, Viscosity
+from .values import UnittedValue, Density, Viscosity
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -30,6 +30,10 @@ class Sample:
     short_name: str = "Fresh"
     fraction_weathered: float = None
     boiling_point_range: tuple = None
+
+    # from Exxon Dist cut data
+    cut_volume: UnittedValue = None
+    api: UnittedValue = None
 
     # should we use unit types here?
     densities: List[Density] = field(default_factory=list)
