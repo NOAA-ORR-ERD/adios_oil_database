@@ -1,0 +1,11 @@
+<button type="button" class="btn btn-sm"
+        data-toggle="modal"
+        data-target="#changeSampleNameDialog" >
+  {{fa-icon "pencil"}}
+</button>
+
+<TabNav::ChangeSampleNameDlg
+  @oil={{this.args.oil}}
+  @index={{this.args.index}}
+  @submit={{this.args.submit}}
+/>
