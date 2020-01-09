@@ -45,8 +45,10 @@
                   />
                   {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
                     <fieldset id="dialog-interval-input" disabled={{intervalInputDisabled}}>
-                      <label class="col-2 p-1">Min:</label><input class="col-3" type="text" name="min-value" size="3">
-                      <label class="col-2 p-1">Max:</label><input class="col-3" type="text" name="max-value" size="3">
+                      <label class="col-2 p-1">Min</label>
+                      <input class="col-3" type="text" name="min-value" size="3" placeholder="-&infin;">
+                      <label class="col-2 p-1">Max</label>
+                      <input class="col-3" type="text" name="max-value" size="3" placeholder="+&infin;">
                     </fieldset>
                   {{/let}}
                 </div>
@@ -67,13 +69,13 @@
                 </div>
 
                 <div class="row d-flex justify-content-end">
-                  <button type="button" class="btn btn-primary btn-sm mr-4"
-                    onClick={{action "onSave"}}>
-                    Save
-                  </button>
                   <button type="button" class="btn btn-secondary btn-sm mr-4"
                     {{action "closeModalDialog"}}>
                     Cancel
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm mr-4"
+                    onClick={{action "onSave"}}>
+                    Save
                   </button>
                 </div>
 
