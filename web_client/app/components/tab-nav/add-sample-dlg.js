@@ -100,7 +100,10 @@ export default class AddSampleDlg extends Component {
             newSample = {
                 'name': name,
                 'short_name': shortName,
-                'fraction_weathered': this.weatheredFraction
+                'fraction_weathered': {
+                    value: this.weatheredFraction * 100,
+                    unit: '%'
+                }
             };
             break;
         case this.SampleTypes.distillate:
@@ -108,19 +111,23 @@ export default class AddSampleDlg extends Component {
             max = roundRelative([this.distillateMax, 2]);
 
             if (!(Number.isNaN(min) || Number.isNaN(max))) {
-                name = shortName = `BP Range: ${min} °F \u2192 ${max} °F`;
+                name = shortName = `BP Range: [${min}\u2192${max}] °C`;
             }
             else if (Number.isNaN(min)) {
-                name = shortName = `BP Range: <${max} °F`;
+                name = shortName = `BP Range: <${max} °C`;
             }
             else {
-                name = shortName = `BP Range: >${min} °F`;
+                name = shortName = `BP Range: >${min} °C`;
             }
 
             newSample = {
                     'name': name,
                     'short_name': shortName,
-                    'boiling_point_range': [min, max]
+                    'boiling_point_range': {
+                        min_value: min,
+                        max_value: max,
+                        unit: 'C'
+                    }
                 };
             break;
         case this.SampleTypes.nameOnly:
