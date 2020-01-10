@@ -78,21 +78,22 @@ def test_exxon_mapper():
     assert oil.name == 'HOOPS Blend'
     assert oil.reference.startswith("ExxonMobil")
 
-    print(oil)
+    samples = oil.samples
 
-    assert len(oil.samples) == 8
-    assert oil.samples[0].name == "Whole crude"
+    assert len(samples) == 8
+    assert samples[0].name == "Whole crude"
 
-    assert oil.samples[0].cut_volume == UnittedValue(100.0, unit="%")
-    assert oil.samples[3].cut_volume == UnittedValue(17.6059, unit="%")
+    assert samples[0].cut_volume == UnittedValue(100.0, unit="%")
+    assert samples[3].cut_volume == UnittedValue(17.6059, unit="%")
 
     assert oil.api == 35.2
 
-    print(oil.samples[0].densities[0].py_json())
-    assert oil.samples[0].densities[0].density.value == 0.84805316
-    assert oil.samples[7].densities[0].density.value == 0.99124762
+    assert samples[0].densities[0].density.value == 0.84805316
+    assert samples[7].densities[0].density.value == 0.99124762
 
-
+    # print(samples[0].carbon_mass_fraction)                 85.57594139885833
+    assert samples[0].carbon_mass_fraction == UnittedValue(85.58, unit="%")
+    assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26, unit="%")
 
 
 

@@ -31,13 +31,15 @@ class Sample:
     fraction_weathered: float = None
     boiling_point_range: tuple = None
 
-    # from Exxon Dist cut data
-    cut_volume: UnittedValue = None
-
     # should we use unit types here?
     densities: List[Density] = field(default_factory=list)
     kvis: List[Viscosity] = field(default_factory=list)
     dvis: List[Viscosity] = field(default_factory=list)
+
+    # From Exxon Dist cut data
+    cut_volume: UnittedValue = None
+    carbon_mass_fraction: UnittedValue = None
+    hydrogen_mass_fraction: UnittedValue = None
 
 
 

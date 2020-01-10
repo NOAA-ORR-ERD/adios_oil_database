@@ -34,6 +34,7 @@ from oil_database.models.oil.values import UnittedValue, Density, Viscosity
 #                                                    ConcentrationInWaterUnit)
 
 
+
 def ExxonMapper(record):
     """
     Accepts and Exxon record:
@@ -44,83 +45,99 @@ def ExxonMapper(record):
 
     returns an Oil Object
     """
-    name, data = record
-
-    oil = Oil(name)
-
-    data = iter(data)
-
-    # Exxon info in the header
-    oil.reference = "\n".join([next(data)[0] for _ in range(3)])
-
-    row = next_non_empty(data)
-
-    print(row)
-
-    sample_names = row[1:]
-
-    print(sample_names)
-
-    samples = [Sample(name=name) for name in sample_names]
-
-    # Cut Volume
-    row = get_next_properties_row(data, "Cut volume, %")
-    for sample, val in zip(samples, row[1:]):
-        sample.cut_volume = UnittedValue(round(val, 4), unit="%")
-
-    # API
-    row = get_next_properties_row(data, "API Gravity,")
-
-    # pull API from first value
-    oil.api = round(float(row[1]), 1)  # stored as full precision double
-
-    # use specific gravity to get density
-    row = get_next_properties_row(data, "Specific Gravity (60/60F)")
-    for sample, val in zip(samples, row[1:]):
-        rho = uc.convert("SG", "g/cm^3", val)
-        sample.densities = [Density(UnittedValue(round(rho, 8), unit="g/cm^3"),
-                                    UnittedValue(15.6, unit="C"))
-                            ]
-
-    #
+    return Mapper(record).process_record()
 
 
+class Mapper:
+    def __init__(self, record):
+        name, data = record
+        self.oil = Oil(name)
+        self.data = iter(data)
 
-    oil.samples = samples
+    def process_record(self):
+        data = self.data
+        oil = self.oil
 
+        # Exxon info in the header
+        oil.reference = "\n".join([next(data)[0] for _ in range(3)])
 
-    return oil
+        row = self.next_non_empty()
 
+        sample_names = row[1:]
 
-def norm(string):
-    """
-    normalizes a string for comparing
+        samples = [Sample(name=name) for name in sample_names]
+        self.samples = samples
 
-    so far: lower case, whitespace strip
-    trailing and leading comma strip
-    """
-    return string.strip().strip(',').lower()
+        # Cut Volume
+        row = self.get_next_properties_row("Cut volume, %")
+        for sample, val in zip(samples, row[1:]):
+            sample.cut_volume = UnittedValue(round(val, 4), unit="%")
 
-# Utilities:
-def empty(row):
-    for c in row:
-        if c is not None:
-            return False
-    return True
+        # API
+        row = self.get_next_properties_row("API Gravity,")
+        # pull API from first value
+        oil.api = round(float(row[1]), 1)  # stored as full precision double
 
-def next_non_empty(data_iter):
-    while True:
-        row = next(data_iter)
-        if not empty(row):
-            break
-    return row
+        # use specific gravity to get density
+        row = self.get_next_properties_row("Specific Gravity (60/60F)")
+        for sample, val in zip(samples, row[1:]):
+            rho = uc.convert("SG", "g/cm^3", val)
+            sample.densities = [Density(UnittedValue(round(rho, 8),
+                                                     unit="g/cm^3"),
+                                        UnittedValue(15.6,
+                                                     unit="C"))
+                                ]
 
+        self.set_sample_property("Carbon, wt %",
+                                 "carbon_mass_fraction",
+                                 "%",
+                                 2)
+        self.set_sample_property("Hydrogen, wt %",
+                                 "hydrogen_mass_fraction",
+                                 "%",
+                                 2)
 
-def get_next_properties_row(data, exp_field):
-    row = next_non_empty(data)
-    if norm(row[0]) != norm(exp_field):
-        raise ValueError(f"Something wrong with data sheet:{row}, expected: {exp_field}")
-    return row
+        oil.samples = samples
+
+        return oil
+
+    def set_sample_property(self, name, attr, unit, digits=None):
+        row = self.get_next_properties_row(name)
+        for sample, val in zip(self.samples, row[1:]):
+            if digits is not None:
+                val = round(val, digits)
+            setattr(sample, attr, UnittedValue(val, unit=unit))
+
+    @staticmethod
+    def norm(string):
+        """
+        normalizes a string for comparing
+
+        so far: lower case, whitespace strip
+        trailing and leading comma strip
+        """
+        return string.strip().strip(',').lower()
+
+    # Utilities:
+    @staticmethod
+    def empty(row):
+        for c in row:
+            if c is not None:
+                return False
+        return True
+
+    def next_non_empty(self):
+        while True:
+            row = next(self.data)
+            if not self.empty(row):
+                break
+        return row
+
+    def get_next_properties_row(self, exp_field):
+        row = self.next_non_empty()
+        if self.norm(row[0]) != self.norm(exp_field):
+            raise ValueError(f"Something wrong with data sheet:{row}, expected: {exp_field}")
+        return row
 
 
 
