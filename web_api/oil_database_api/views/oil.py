@@ -257,10 +257,14 @@ def insert_oil(request):
     except Exception as e:
         raise HTTPBadRequest(e)
 
-    logger.info('oil.name: {}'.format(json_obj['name']))
-
     try:
-        json_obj['_id'] = json_obj['oil_id'] = new_oil_id(request)
+        logger.info('oil.name: {}'.format(json_obj['name']))
+
+        if 'oil_id' in json_obj:
+            json_obj['_id'] = json_obj['oil_id']
+        else:
+            json_obj['_id'] = json_obj['oil_id'] = new_oil_id(request)
+
         json_obj['_id'] = (request.db.oil_database.oil
                            .insert_one(json_obj)
                            .inserted_id)
@@ -321,8 +325,12 @@ def new_oil_id(request):
         The current implementation is to walk the oil IDs, filter for the
         prefix, and choose the max numeric content.
 
-        This is not the most effective way to do this.  A persistent
-        incremental counter would be much faster.
+        Warning: We don't expect a lot of traffic POST'ing a bunch new oils
+                 to the database, it will only happen once in awhile.
+                 But this is not the most effective way to do this.  A persistent
+                 incremental counter would be much faster.  In fact, this
+                 is a bit brittle, and would fail if the website suffered
+                 a bunch of POST requests at once.
     '''
     id_prefix = 'XX'
     max_seq = 0
