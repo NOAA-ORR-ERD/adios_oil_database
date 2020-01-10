@@ -1,0 +1,11 @@
+<button type="button" class="btn btn-dark"
+        title="Make a Copy"
+        data-toggle="modal"
+        data-target="#copyOilDialog" >
+  Add New Oil
+</button>
+
+<Dialog::CopyOil
+  @oil={{this.args.oil}}
+  @submit={{this.args.submit}}
+/>

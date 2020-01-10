@@ -34,17 +34,30 @@
       <h2 align="center" class="title">{{this.model.name}}</h2>
     </div>
 
-    {{!-- edit mode switch control --}}
-    <div class="col-sm-2">
-      <center class="small">Edit Mode</center>
-      <XToggle
-        @theme="ios"
-        @showLabels={{true}}
-        @onLabel="Edit"
-        @offLabel="View"
-        @value={{this.editable}}
-        @onToggle={{action (mut this.editable)}}
-      />
+    <div class="col-sm-3">
+      <div class="row">
+
+        <div class="col-sm-5">
+          {{!-- edit mode switch control --}}
+          <center class="small">Edit Mode</center>
+          <XToggle
+            @theme="ios"
+            @showLabels={{true}}
+            @onLabel="Edit"
+            @offLabel="View"
+            @value={{this.editable}}
+            @onToggle={{action (mut this.editable)}}
+          />
+        </div>
+
+        <div class="col-sm-7">
+          <Button::CopyOil
+            @oil={{this.model}}
+            @submit={{action send "createOil"}}
+          />
+        </div>
+    
+      </div>
     </div>
 
   </div>
