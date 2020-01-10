@@ -36,6 +36,12 @@ export default Route.extend({
     actions: {
         updateOil(oil) {
             oil.save();
+        },
+
+        createOil(oil) {
+            let newOil = this.store.createRecord('oil', oil);
+            
+            newOil.save();
         }
     }
 
