@@ -1,20 +1,22 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from "@ember/object";
 
-import $ from 'jquery';
+export default class TabPourPoint extends Component {
 
-export default Component.extend({
+    @tracked isShowingModal = false;
+    @tracked isInterval = false;
 
-    isShowingModal: false,
-    isInterval: false,
+    @tracked intervalMin = undefined;
+    @tracked intervalMax = undefined;
+    @tracked scalarValue = undefined;
 
-    intervalMin: undefined,
-    intervalMax: undefined,
-    scalarValue: undefined,
+    constructor() {
+        super(...arguments);
 
-    init(){
         {{debugger}}
-        this._super(...arguments);
-        let oil = this.get('oil');
+
+        let oil = this.args.oil;
         if(oil.pour_point){
             if(oil.pour_point.ref_temp.value){
                 this.scalarValue = oil.pour_point.ref_temp.value;
@@ -29,37 +31,64 @@ export default Component.extend({
                 this.isInterval = true;
             }
         }
-        this.toggleInput();
-    },
-        
-    toggleInput(){
-        if(this.isInterval){
-            $('#dialog-interval-input').prop('disabled', false);
-            $('#dialog-scalar-input').prop('disabled', true);
-        } else {
-            $('#dialog-interval-input').prop('disabled', true);
-            $('#dialog-scalar-input').prop('disabled', false);
-        }
-    },
 
-    actions: {
-
-        openModalDialog(){
-            this.set('isShowingModal', true);
-            this.toggleInput();
-        },
-
-        closeModalDialog() {
-            this.set('isShowingModal', false);
-        },
-
-        toggleRadio(){
-            this.toggleProperty('isInterval');
-            this.toggleInput();
-        },
+}
     
-        onSave(){
-            alert("Saving");
-        }
+    // init(){
+    //     {{debugger}}
+    //     this._super(...arguments);
+    //     let oil = this.get('oil');
+    //     if(oil.pour_point){
+    //         if(oil.pour_point.ref_temp.value){
+    //             this.scalarValue = oil.pour_point.ref_temp.value;
+    //             this.isInterval = false;
+    //         }
+    //         if(oil.pour_point.ref_temp.min_value){
+    //             this.scalarValue = oil.pour_point.ref_temp.min_value;
+    //             this.isInterval = true;
+    //         }
+    //         if(oil.pour_point.ref_temp.max_value){
+    //             this.scalarValue = oil.pour_point.ref_temp.max_value;
+    //             this.isInterval = true;
+    //         }
+    //     }
+    //     this.toggleInput();
+    //}
+    
+    get isThereInput() {
+        // TODO
+        return true;
     }
-});
+
+    toggleInput(){
+        // if(this.isInterval){
+        //     $('#dialog-interval-input').prop('disabled', false);
+        //     $('#dialog-scalar-input').prop('disabled', true);
+        // } else {
+        //     $('#dialog-interval-input').prop('disabled', true);
+        //     $('#dialog-scalar-input').prop('disabled', false);
+        // }
+    }
+
+    @action
+    openModalDialog(){
+        this.isShowingModal = true;
+        this.toggleInput();
+    }
+
+    @action
+    closeModalDialog() {
+        this.isShowingModal = false;
+    }
+
+    @action
+    toggleRadio(){
+        //this.toggleProperty('isInterval');
+        this.toggleInput();
+    }
+
+    @action
+    onSave(){
+        alert("Saving");
+    }
+}
