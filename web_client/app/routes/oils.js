@@ -42,6 +42,8 @@ export default Route.extend({
             let newOil = this.store.createRecord('oil', oil);
             
             newOil.save();
+            
+            this.transitionTo('oils.show', newOil);
         }
     }
 
