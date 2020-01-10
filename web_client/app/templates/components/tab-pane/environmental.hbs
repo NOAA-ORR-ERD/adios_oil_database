@@ -6,7 +6,11 @@
       <p class="small">
         {{#if oil.fraction_weathered}}
           <strong>Weathered Amount:</strong>
-          {{value-unit oil.fraction_weathered 2}}
+          {{#if oil.fraction_weathered.unit}}
+            {{value-unit oil.fraction_weathered 2}}
+          {{else}}
+            {{oil.fraction_weathered}}
+          {{/if}}
         {{/if}}
 
         {{#if oil.boiling_point_range}}
