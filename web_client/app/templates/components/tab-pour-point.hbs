@@ -1,100 +1,115 @@
 <div class="detail-section">
   <div class="d-flex align-items-center">
     <label class="p-1 input-group-text font-weight-bold">Pour Point:</label>
-    {{#if this.oil.pour_point}}
-      {{#if editable}}
+    {{#if this.editable}}
+
+      {{#if this.pour_point}}
         <Input id="pour-point-id" @class="p-1 bg-transparent border" @type="text"
-          @value={{value-unit (convert-unit oil.pour_point.ref_temp "C") 2}}
+          @value={{value-unit (convert-unit this.pour_point.ref_temp "C") 2}}
           @focus-in={{action "openModalDialog"}}
-          @size="7"
         />
+      {{else}}
+        <Input id="pour-point-id" @class="p-1 bg-transparent border" @type="text"
+          @value="No Data"
+          @focus-in={{action "openModalDialog"}}
+        />
+      {{/if}} {{!-- if pour_point --}}
 
-        {{#if isShowingModal}}
+      {{#if this.isShowingModal}}
 
-          {{!-- {{#ember-tether
-              target="#pour-point-id"
-              targetAttachment="center left"
-            attachment="center left"
-          }}
-            <div id="scalar-range-dialog" class="modal" tabindex="-1" role="dialog">
-              <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                  ...
-                </div>
+        {{#modal-dialog
+          onClose=(action "closeModalDialog")
+          translucentOverlay=false
+          targetAttachment="center left"
+          tetherTarget="#pour-point-id"
+          attachment="center left"
+        }}
+          <div id="scalar-range-dialog" class="card">
+            <h5 class="card-header text-center p-1">Pour Point (deg C)</h5>
+            <div class="card-body p-1">
+              <div class="row d-flex align-items-center mx-2">
+                <Input
+                  @type="radio"
+                  @name="interval-number"
+                  @value="interval"
+                  @focus-in={{action "toggleRadio"}}
+                  id="range-radio-btn"
+                  checked={{this.isInterval}}
+                />
+                <label for="range-radio-btn" class="m-2 pb-1">Range</label>
+                {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
+                  <fieldset id="dialog-interval-input" disabled={{intervalInputDisabled}}>
+                    <Input
+                        @type="text" 
+                        @name="min-value" 
+                        @size="5" 
+                        @placeholder="-&infin;"
+                        class="m-2" 
+                    />
+                    <Input
+                        @type="text" 
+                        @name="max-value" 
+                        @size="5" 
+                        @placeholder="-&infin;"
+                        class="m-2" 
+                    />
+                  </fieldset>
+                {{/let}}
               </div>
-            </div>
-          {{/ember-tether}} --}}
 
-          {{#modal-dialog
-            onClose=(action "closeModalDialog")
-            translucentOverlay=false
-            targetAttachment="center left"
-            tetherTarget="#pour-point-id"
-            attachment="center left"
-          }}
-            <div id="scalar-range-dialog" class="card">
-              <h5 class="card-header text-center p-1">Pour Point (deg C)</h5>
-              <div class="card-body p-1">
-                <div class="row form-check d-flex align-items-center">
-                  <Input
-                    @type="radio" @name="interval-number"
-                    @value="interval"
-                    @focus-in={{action "toggleRadio"}}
-                    @size="1"
-                    checked={{this.isInterval}}
-                  />
-                  {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
-                    <fieldset id="dialog-interval-input" disabled={{intervalInputDisabled}}>
-                      <label class="col-2 p-1">Min</label>
-                      <input class="col-3" type="text" name="min-value" size="3" placeholder="-&infin;">
-                      <label class="col-2 p-1">Max</label>
-                      <input class="col-3" type="text" name="max-value" size="3" placeholder="+&infin;">
-                    </fieldset>
-                  {{/let}}
-                </div>
+              <div class="row d-flex align-items-center mx-2">
+                <Input
+                  @type="radio" @name="interval-number"
+                  @value="number"
+                  @focus-in={{action "toggleRadio"}}
+                  id="value-radio-btn"
+                  checked={{not this.isInterval}}
+                />
+                <label for="value-radio-btn" class="m-2 pb-1 pr-3">Value</label>
+                {{#let (if this.isInterval "disabled" undefined) as |scalarInputDisabled|}}
+                  <fieldset id="dialog-scalar-input" disabled={{scalarInputDisabled}}>
+                    <Input
+                      @type="text"
+                      @name="scalar"
+                      @size="5"
+                    />
+                  </fieldset>
+                {{/let}}
+              </div>
 
-                <div class="row form-check d-flex align-items-center">
-                  <Input
-                    @type="radio" @name="interval-number"
-                    @value="number"
-                    @focus-in={{action "toggleRadio"}}
-                    @size="1"
-                    checked={{not this.isInterval}}
-                  />
-                  {{#let (if this.isInterval "disabled" undefined) as |scalarInputDisabled|}}
-                    <fieldset id="dialog-scalar-input" disabled={{scalarInputDisabled}}>
-                      <label class="p-1 pr-0">Value:</label><input type="text" name="scalar" size="3">
-                    </fieldset>
-                  {{/let}}
-                </div>
-
-                <div class="row d-flex justify-content-end">
-                  <button type="button" class="btn btn-secondary btn-sm mr-2"
-                    {{action "closeModalDialog"}}>
-                    Cancel
-                  </button>
-                  <button type="button" class="btn btn-primary btn-sm mr-4"
+              <div class="row d-flex justify-content-end mx-2">
+                <button type="button" class="btn btn-secondary btn-sm mr-2"
+                  {{action "closeModalDialog"}}>
+                  Cancel
+                </button>
+                {{#if this.isThereInput}}
+                  <button type="button" class="btn btn-primary btn-sm"
                     onClick={{action "onSave"}}
-                    {{if (not this.isThereInput) disabled}}
                   >
                     Save
                   </button>
-
-                </div>
-
+                {{else}}
+                  <button type="button" class="btn btn-primary btn-sm"
+                    disabled
+                  >
+                    Save
+                  </button>
+                {{/if}}
               </div>
-            </div>  
-          {{/modal-dialog}}        
+            </div>
+          </div>  
+        {{/modal-dialog}}        
+      {{/if}}  {{!-- isShowingModal --}}
 
-        {{/if}}
-      {{else}}
+    {{else}}
+      {{#if this.pour_point}}
         <span id="pour-point-id">
           {{value-unit (convert-unit this.args.oil.pour_point.ref_temp "C") 2}}
         </span>
-      {{/if}}    
-    {{else}}
-      No Data
-    {{/if}}
+      {{else}}
+        No Data
+      {{/if}}
+    {{/if}}  {{!-- editable --}}
   </div>
 
 

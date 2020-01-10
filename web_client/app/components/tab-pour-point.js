@@ -4,6 +4,9 @@ import { action } from "@ember/object";
 
 export default class TabPourPoint extends Component {
 
+    @tracked pourPoint;
+    //@tracked editable;
+    
     @tracked isShowingModal = false;
     @tracked isInterval = false;
 
@@ -16,45 +19,31 @@ export default class TabPourPoint extends Component {
 
         {{debugger}}
 
-        let oil = this.args.oil;
-        if(oil.pour_point){
-            if(oil.pour_point.ref_temp.value){
-                this.scalarValue = oil.pour_point.ref_temp.value;
+        if(this.args.oil){
+            this.pour_point = this.args.oil.pour_point;
+        }
+
+        if(this.pour_point){
+            if(this.pour_point.ref_temp.value){
+                this.scalarValue = this.pour_point.ref_temp.value;
                 this.isInterval = false;
             }
-            if(oil.pour_point.ref_temp.min_value){
-                this.scalarValue = oil.pour_point.ref_temp.min_value;
+            if(this.pour_point.ref_temp.min_value){
+                this.scalarValue = this.pour_point.ref_temp.min_value;
                 this.isInterval = true;
             }
-            if(oil.pour_point.ref_temp.max_value){
-                this.scalarValue = oil.pour_point.ref_temp.max_value;
+            if(this.pour_point.ref_temp.max_value){
+                this.scalarValue = this.pour_point.ref_temp.max_value;
                 this.isInterval = true;
             }
         }
 
-}
+    }
     
-    // init(){
-    //     {{debugger}}
-    //     this._super(...arguments);
-    //     let oil = this.get('oil');
-    //     if(oil.pour_point){
-    //         if(oil.pour_point.ref_temp.value){
-    //             this.scalarValue = oil.pour_point.ref_temp.value;
-    //             this.isInterval = false;
-    //         }
-    //         if(oil.pour_point.ref_temp.min_value){
-    //             this.scalarValue = oil.pour_point.ref_temp.min_value;
-    //             this.isInterval = true;
-    //         }
-    //         if(oil.pour_point.ref_temp.max_value){
-    //             this.scalarValue = oil.pour_point.ref_temp.max_value;
-    //             this.isInterval = true;
-    //         }
-    //     }
-    //     this.toggleInput();
-    //}
-    
+    get editable() {
+        return this.args.editable;
+    }
+
     get isThereInput() {
         // TODO
         return true;
@@ -90,5 +79,6 @@ export default class TabPourPoint extends Component {
     @action
     onSave(){
         alert("Saving");
+        this.isShowingModal = false;
     }
 }
