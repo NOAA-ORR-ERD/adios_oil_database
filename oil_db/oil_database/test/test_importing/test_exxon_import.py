@@ -16,6 +16,8 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser
                                                     )
 
+from oil_database.models.oil.values import UnittedValue
+
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -75,12 +77,21 @@ def test_exxon_mapper():
 
     assert oil.name == 'HOOPS Blend'
     assert oil.reference.startswith("ExxonMobil")
-    #assert len(oil.samples) == 8
-    #assert oil.samples[0].name == "Whole Crude"
 
     print(oil)
 
-    #assert False
+    assert len(oil.samples) == 8
+    assert oil.samples[0].name == "Whole crude"
+
+    assert oil.samples[0].cut_volume == UnittedValue(100.0, unit="%")
+    assert oil.samples[3].cut_volume == UnittedValue(17.6059, unit="%")
+
+    assert oil.api == 35.2
+
+    print(oil.samples[0].densities[0].py_json())
+    assert oil.samples[0].densities[0].density.value == 0.84805316
+    assert oil.samples[7].densities[0].density.value == 0.99124762
+
 
 
 

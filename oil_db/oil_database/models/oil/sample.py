@@ -33,7 +33,6 @@ class Sample:
 
     # from Exxon Dist cut data
     cut_volume: UnittedValue = None
-    api: UnittedValue = None
 
     # should we use unit types here?
     densities: List[Density] = field(default_factory=list)

@@ -22,6 +22,13 @@ def test_sample_json_sparse():
 
     assert tuple(py_json.keys()) == ('name', 'short_name')
 
+def test_sample_add_non_existing():
+    s = Sample(short_name="short",
+               name="a longer name that is more descriptive",
+               )
+    with pytest.raises(AttributeError):
+        s.something_random = 43
+
 
 def test_sample_json_full():
     s = Sample()

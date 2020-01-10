@@ -18,6 +18,8 @@ pprint = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
+import unit_conversion as uc
+
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample
 from oil_database.models.oil.values import UnittedValue, Density, Viscosity
@@ -61,28 +63,43 @@ def ExxonMapper(record):
 
     samples = [Sample(name=name) for name in sample_names]
 
-    cut_volume = next_non_empty(data)
-    if cut_volume[0] != "Cut volume, %":
-        raise ValueError(f"Something wrong with data sheet:{cut_volume}")
-
-    for sample, val in zip(samples, cut_volume[1:]):
-        sample.cut_volume = UnittedValue(val, unit="%")
-
-    row = next_non_empty(data)
-    if row[0].strip() != "API Gravity,":
-        raise ValueError(f"Something wrong with data sheet:{row}")
-
+    # Cut Volume
+    row = get_next_properties_row(data, "Cut volume, %")
     for sample, val in zip(samples, row[1:]):
-        sample.api = UnittedValue(val, unit="API")
+        sample.cut_volume = UnittedValue(round(val, 4), unit="%")
 
-    print()
-    for sample in samples: print(sample.py_json())
+    # API
+    row = get_next_properties_row(data, "API Gravity,")
 
+    # pull API from first value
+    oil.api = round(float(row[1]), 1)  # stored as full precision double
+
+    # use specific gravity to get density
+    row = get_next_properties_row(data, "Specific Gravity (60/60F)")
+    for sample, val in zip(samples, row[1:]):
+        rho = uc.convert("SG", "g/cm^3", val)
+        sample.densities = [Density(UnittedValue(round(rho, 8), unit="g/cm^3"),
+                                    UnittedValue(15.6, unit="C"))
+                            ]
+
+    #
+
+
+
+    oil.samples = samples
 
 
     return oil
 
 
+def norm(string):
+    """
+    normalizes a string for comparing
+
+    so far: lower case, whitespace strip
+    trailing and leading comma strip
+    """
+    return string.strip().strip(',').lower()
 
 # Utilities:
 def empty(row):
@@ -97,6 +114,14 @@ def next_non_empty(data_iter):
         if not empty(row):
             break
     return row
+
+
+def get_next_properties_row(data, exp_field):
+    row = next_non_empty(data)
+    if norm(row[0]) != norm(exp_field):
+        raise ValueError(f"Something wrong with data sheet:{row}, expected: {exp_field}")
+    return row
+
 
 
 # class EnvCanadaAttributeMapper(object):
