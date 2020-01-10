@@ -45,7 +45,6 @@ export default Component.extend({
     actions: {
 
         openModalDialog(){
-            //$("#scalar-range-dialog").modal();
             this.set('isShowingModal', true);
             this.toggleInput();
         },
@@ -61,12 +60,6 @@ export default Component.extend({
     
         onSave(){
             alert("Saving");
-            //$("#scalar-range-dialog").hide();
-        },
-
-        onCancel(){
-            alert("Closing");
-            this.CloseModalDialog();
         }
     }
 });

@@ -26,7 +26,7 @@
           {{/ember-tether}} --}}
 
           {{#modal-dialog
-            onClose=(action "onCancel")
+            onClose=(action "closeModalDialog")
             translucentOverlay=false
             targetAttachment="center left"
             tetherTarget="#pour-point-id"
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="row d-flex justify-content-end">
-                  <button type="button" class="btn btn-secondary btn-sm mr-4"
+                  <button type="button" class="btn btn-secondary btn-sm mr-2"
                     {{action "closeModalDialog"}}>
                     Cancel
                   </button>
