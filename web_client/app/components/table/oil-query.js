@@ -67,18 +67,6 @@ export default Component.extend(TableCommon, {
         });
     },
 
-    fetchRecords: task(function*() {
-        let queryOptions = this.getQueryOptions();
-
-        let records = yield this.get('store').query('oil', queryOptions);
-
-        this.get('data').pushObjects(records.toArray());
-        this.set('meta', records.get('meta'));
-
-        this.set('canLoadMore', !isEmpty(records));
-
-    }).restartable(),
-
     getQueryOptions() {
         let queryOptions = this.getProperties(['page',
             'limit',
@@ -89,8 +77,8 @@ export default Component.extend(TableCommon, {
         queryOptions['qLabels'] = this.selectedLabels.join();
 
         if (this.selectedApi.join() === '0,100') {
-            // we are at the control limits, which we intend to mean
-            // no API query options specified
+            // We are at the upper and lower limits of our slider control,
+            // which we intend to mean that no API query options are specified.
             queryOptions['qApi'] = '';
         }
         else {

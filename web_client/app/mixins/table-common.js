@@ -48,25 +48,30 @@ export default Mixin.create({
   },
 
   fetchRecords: task(function*() {
-    let records = yield this.get('store').query(
-      'oil',
-      this.getProperties(['page',
-                          'limit',
-                          'sort',
-                          'dir'])
-    );
+    let queryOptions = this.getQueryOptions();
+
+    let records = yield this.get('store').query('oil', queryOptions);
 
     this.get('data').pushObjects(records.toArray());
     this.set('meta', records.get('meta'));
 
     this.set('canLoadMore', !isEmpty(records));
+    this.incrementProperty('page');
   }).restartable(),
+
+  getQueryOptions() {
+      return this.getProperties([
+          'page',
+          'limit',
+          'sort',
+          'dir'
+      ]);
+  },
 
   actions: {
     onScrolledToBottom() {
       if (this.get('canLoadMore')) {
         this.get('fetchRecords').perform();
-        this.incrementProperty('page');
       }
     },
 
@@ -79,6 +84,7 @@ export default Mixin.create({
           page: 0
         });
         this.get('data').clear();
+        this.set('page', 0);
         this.get('fetchRecords').perform();
       }
     }
