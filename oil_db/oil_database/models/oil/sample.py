@@ -31,6 +31,8 @@ class Sample:
     fraction_weathered: float = None
     boiling_point_range: tuple = None
 
+    pour_point: UnittedValue = None
+
     # should we use unit types here?
     densities: List[Density] = field(default_factory=list)
     kvis: List[Viscosity] = field(default_factory=list)

@@ -97,16 +97,26 @@ class Mapper:
                                  "%",
                                  2)
 
+        self.set_sample_property("Pour point, F",
+                                 "pour_point",
+                                 "C",
+                                 2,
+                                 "F")
+
         oil.samples = samples
 
         return oil
 
-    def set_sample_property(self, name, attr, unit, digits=None):
+    def set_sample_property(self, name, attr, unit,
+                            digits=None, convert_from=None):
         row = self.get_next_properties_row(name)
         for sample, val in zip(self.samples, row[1:]):
-            if digits is not None:
-                val = round(val, digits)
-            setattr(sample, attr, UnittedValue(val, unit=unit))
+            if val is not None:
+                if convert_from is not None:
+                    val = uc.convert(convert_from, unit, val)
+                if digits is not None:
+                    val = round(val, digits)
+                setattr(sample, attr, UnittedValue(val, unit=unit))
 
     @staticmethod
     def norm(string):
