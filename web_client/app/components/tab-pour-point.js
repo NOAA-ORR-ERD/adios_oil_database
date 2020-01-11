@@ -5,14 +5,13 @@ import { action } from "@ember/object";
 export default class TabPourPoint extends Component {
 
     @tracked pourPoint;
-    //@tracked editable;
     
     @tracked isShowingModal = false;
     @tracked isInterval = false;
 
-    @tracked intervalMin = undefined;
-    @tracked intervalMax = undefined;
-    @tracked scalarValue = undefined;
+    // @tracked intervalMin = undefined;
+    // @tracked intervalMax = undefined;
+    // @tracked scalarValue = undefined;
 
     constructor() {
         super(...arguments);
@@ -24,18 +23,20 @@ export default class TabPourPoint extends Component {
         }
 
         if(this.pour_point){
-            if(this.pour_point.ref_temp.value){
-                this.scalarValue = this.pour_point.ref_temp.value;
+            if(Number.isFinite(this.pour_point.ref_temp.value)){
+                //this.scalarValue = this.pour_point.ref_temp.value;
                 this.isInterval = false;
-            }
-            if(this.pour_point.ref_temp.min_value){
-                this.scalarValue = this.pour_point.ref_temp.min_value;
+            } else {
+                // always select interval input if there is no scalar value
                 this.isInterval = true;
             }
-            if(this.pour_point.ref_temp.max_value){
-                this.scalarValue = this.pour_point.ref_temp.max_value;
-                this.isInterval = true;
-            }
+            // if(this.pour_point.ref_temp.min_value){
+            //     //this.intervalMin = this.pour_point.ref_temp.min_value;
+            // }
+            // if(this.pour_point.ref_temp.max_value){
+            //     //this.intervalMax = this.pour_point.ref_temp.max_value;
+            //     this.isInterval = true;
+            // }
         }
 
     }

@@ -3,7 +3,7 @@ import { roundRelative } from './round-relative';
 import { valueUnitUnit } from './value-unit-unit';
 
 
-export function valueUnitRange([valueUnitObj, tol,
+export function valueUnitRange([valueUnitObj, tol, hideUnit,
                                 ...rest]) {  // eslint-disable-line no-unused-vars
   if (valueUnitObj == null) {
       return '';
@@ -17,17 +17,33 @@ export function valueUnitRange([valueUnitObj, tol,
       !isNaN(parseFloat(max)) && isFinite(max) &&
       min === max) {
     valueUnitObj.value = valueUnitObj.min_value;
-    return `${min}${unit}`
+    if (hideUnit) {
+      return [min, max];
+    } else {
+      return `${min}${unit}`;
+    }  
   }
   else if (!isNaN(parseFloat(min)) && isFinite(min) &&
            !isNaN(parseFloat(max)) && isFinite(max)) {
-    return `[${min}\u2192${max}]${unit}`;
+    if (hideUnit) {
+      return [min, max];
+    } else {
+      return `[${min}\u2192${max}]${unit}`;
+    }
   }
   else if (!isNaN(parseFloat(min)) && isFinite(min)) {
-    return `>${min}${unit}`;
+    if (hideUnit) {
+      return [min, "+&infin;"];
+    } else {
+      return `>${min}${unit}`;
+    }
   }
   else if (!isNaN(parseFloat(max)) && isFinite(max)) {
-    return `<${max}${unit}`;
+    if (hideUnit) {
+      return ["&infin;", max];
+    } else {
+      return `<${max}${unit}`;
+    }
   }
 
   return null;

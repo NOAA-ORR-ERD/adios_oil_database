@@ -4,12 +4,16 @@
     {{#if this.editable}}
 
       {{#if this.pour_point}}
-        <Input id="pour-point-id" @class="p-1 bg-transparent border" @type="text"
+        <Input id="pour-point-id" 
+          @class="p-1 bg-transparent border"
+          @type="text"
           @value={{value-unit (convert-unit this.pour_point.ref_temp "C") 2}}
           @focus-in={{action "openModalDialog"}}
         />
       {{else}}
-        <Input id="pour-point-id" @class="p-1 bg-transparent border" @type="text"
+        <Input id="pour-point-id"
+          @class="p-1 bg-transparent border"
+          @type="text"
           @value="No Data"
           @focus-in={{action "openModalDialog"}}
         />
@@ -72,6 +76,8 @@
                       @type="text"
                       @name="scalar"
                       @size="5"
+                      @placeholder=""
+                      @value={{if not this.interval (value-unit (convert-unit this.pour_point.ref_temp "C") 2 true)}}
                     />
                   </fieldset>
                 {{/let}}
@@ -103,7 +109,7 @@
 
     {{else}}
       {{#if this.pour_point}}
-        <span id="pour-point-id">
+        <span>
           {{value-unit (convert-unit this.args.oil.pour_point.ref_temp "C") 2}}
         </span>
       {{else}}
