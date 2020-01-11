@@ -1,0 +1,86 @@
+{{#let this.componentId as |targetId|}}
+  {{#modal-dialog
+    onClose=(action "closeModalDialog")
+    translucentOverlay=false
+    targetAttachment="center left"
+    tetherTarget=targetId
+    attachment="center left"
+  }}
+    <div id="scalar-range-dialog" class="card">
+      <h5 class="card-header text-center p-1">
+        {{this.valueTitle}} ({{this.valueUnit}})
+      </h5>
+      <div class="card-body p-1">
+        <div class="row d-flex align-items-center mx-2">
+          <Input
+            @type="radio"
+            @name="interval-number"
+            @value="interval"
+            @focus-in={{action "toggleRadio"}}
+            id="range-radio-btn"
+            checked={{this.isInterval}}
+          />
+          <label for="range-radio-btn" class="m-2 pb-1">
+            Range
+          </label>
+          {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
+            <fieldset id="dialog-interval-input" disabled={{intervalInputDisabled}}>
+              <Input
+                @type="text"
+                @name="min-value"
+                @size="5"
+                @placeholder="-∞"
+                class="m-2" 
+              />
+              <Input
+                @type="text"
+                @name="max-value"
+                @size="5"
+                @placeholder="-∞"
+                class="m-2"
+              />
+            </fieldset>
+          {{/let}}
+        </div>
+        <div class="row d-flex align-items-center mx-2">
+          <Input
+            @type="radio"
+            @name="interval-number"
+            @value="number"
+            @focus-in={{action "toggleRadio"}}
+            id="value-radio-btn"
+            checked={{not this.isInterval}}
+          />
+          <label for="value-radio-btn" class="m-2 pb-1 pr-3">
+            Value
+          </label>
+          {{#let (if this.isInterval "disabled" undefined) as |scalarInputDisabled|}}
+            <fieldset id="dialog-scalar-input" disabled={{scalarInputDisabled}}>
+              <Input
+                @type="text"
+                @name="scalar"
+                @size="5"
+                @placeholder=""
+                @value={{if not this.interval (value-unit (convert-unit this.valueObject "C") 2 true)}}
+              />
+            </fieldset>
+          {{/let}}
+        </div>
+        <div class="row d-flex justify-content-end mx-2">
+          <button type="button" class="btn btn-secondary btn-sm mr-2" {{action "closeModalDialog"}}>
+            Cancel
+          </button>
+          {{#if this.isThereInput}}
+            <button type="button" class="btn btn-primary btn-sm" onClick={{action "onSave"}}>
+              Save
+            </button>
+          {{else}}
+            <button type="button" class="btn btn-primary btn-sm" disabled>
+              Save
+            </button>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  {{/modal-dialog}}
+{{/let}}
