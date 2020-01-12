@@ -5,6 +5,7 @@ import { action } from "@ember/object";
 export default class TabPourPoint extends Component {
     
     @tracked isShowingModal = false;
+    @tracked pour_point;
 
     constructor() {
         super(...arguments);
@@ -45,7 +46,6 @@ export default class TabPourPoint extends Component {
     @action
     openModalDialog(){
         this.isShowingModal = true;
-        this.toggleInput();
     }
 
     @action
@@ -54,14 +54,7 @@ export default class TabPourPoint extends Component {
     }
 
     @action
-    toggleRadio(){
-        //this.toggleProperty('isInterval');
-        this.toggleInput();
-    }
-
-    @action
-    onSave(){
-        alert("Saving");
-        this.isShowingModal = false;
+    updateValue(valueObject) {
+        this.pour_point['ref_temp'] = valueObject;
     }
 }

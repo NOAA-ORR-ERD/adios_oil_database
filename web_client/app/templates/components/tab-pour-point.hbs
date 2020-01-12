@@ -27,10 +27,10 @@
           @valueUnit="C"
           @valuePrecision="2"
           @componentId={{concat "#" this.componentId}}
-          @isShowingModal={{mut this.isShowingModal}}
+          @closeModalDialog={{this.closeModalDialog}}
+          @updateValue={{this.updateValue}}
         />
       {{/if}}  {{!-- isShowingModal --}}
-
     {{else}}
       {{#if this.pour_point}}
         <span>

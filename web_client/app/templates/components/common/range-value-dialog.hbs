@@ -29,8 +29,9 @@
           @name="min-value"
           @size="5"
           @placeholder="-∞"
-          @value={{this.intervalMin}}
+          @value={{this.dialogValue.min}}
           @focus-in={{action "toggleRadio" true}}
+          @change={{action "changeMin"}}
           class="m-2" 
         />
         <Input
@@ -38,8 +39,9 @@
           @name="max-value"
           @size="5"
           @placeholder="+∞"
-          @value={{this.intervalMax}}
+          @value={{this.dialogValue.max}}
           @focus-in={{action "toggleRadio" true}}
+          @change={{action "changeMax"}}
           class="m-2"
         />
         {{!-- 
@@ -66,8 +68,9 @@
           @name="scalar"
           @size="5"
           @placeholder=""
-          @value={{this.scalarValue}}
+          @value={{this.dialogValue.value}}
           @focus-in={{action "toggleRadio" false}}
+          @change={{action "changeValue"}}
         />
         {{!-- 
           </fieldset>
@@ -75,7 +78,7 @@
         --}}
       </div>
       <div class="row d-flex justify-content-end mx-2">
-        <button type="button" class="btn btn-secondary btn-sm mr-2" {{action "closeModalDialog"}}>
+        <button type="button" class="btn btn-secondary btn-sm mr-2" onClick={{action "closeModalDialog"}}>
           Cancel
         </button>
         {{#if this.isThereInput}}

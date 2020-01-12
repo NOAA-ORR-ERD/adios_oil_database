@@ -33,14 +33,14 @@ export function valueUnitRange([valueUnitObj, tol, hideUnit,
   }
   else if (!isNaN(parseFloat(min)) && isFinite(min)) {
     if (hideUnit) {
-      return [min, "+&infin;"];
+      return [min, `+\u221e`];
     } else {
       return `>${min}${unit}`;
     }
   }
   else if (!isNaN(parseFloat(max)) && isFinite(max)) {
     if (hideUnit) {
-      return ["&infin;", max];
+      return [`-\u221e`, max];
     } else {
       return `<${max}${unit}`;
     }
