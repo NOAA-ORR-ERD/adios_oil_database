@@ -5,11 +5,11 @@
 
       {{#if this.pour_point}}
         <Input 
-          id={{this.componentId}}
           @class="p-1 bg-transparent border"
           @type="text"
           @value={{value-unit (convert-unit this.pour_point.ref_temp "C") 2}}
           @focus-in={{action "openModalDialog"}}
+          id="pour_point0"
         />
       {{else}}
         <Input id="pour-point-id"
@@ -25,7 +25,8 @@
           @valueObject={{this.pour_point.ref_temp}}
           @valueTitle="Pour Point"
           @valueUnit="C"
-          @sampleIndex={{this.sampleIndex}}
+          @valuePrecision="2"
+          @componentId={{concat "#" this.componentId}}
           @isShowingModal={{mut this.isShowingModal}}
         />
       {{/if}}  {{!-- isShowingModal --}}

@@ -1,63 +1,55 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
+import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
+import { valueUnit } from 'ember-oil-db/helpers/value-unit';
 
 export default class RangeValueDialog extends Component {
     
     @tracked isInterval = false;
 
-    // @tracked intervalMin = undefined;
-    // @tracked intervalMax = undefined;
-    // @tracked scalarValue = undefined;
+    @tracked intervalMin = undefined;
+    @tracked intervalMax = undefined;
+    @tracked scalarValue = undefined;
 
     constructor() {
         super(...arguments);
 
-        let args = [...arguments];
-
-        {{debugger}}
-
-        if(Number.isFinite(this.args.valueObject.value)){
-            //this.scalarValue = this.pour_point.ref_temp.value;
-            this.isInterval = false;
-        } else {
-            // always select interval input if there is no scalar value
-            this.isInterval = true;
-        }
-            // if(this.pour_point.ref_temp.min_value){
-            //     //this.intervalMin = this.pour_point.ref_temp.min_value;
-            // }
-            // if(this.pour_point.ref_temp.max_value){
-            //     //this.intervalMax = this.pour_point.ref_temp.max_value;
-            //     this.isInterval = true;
-            // }
-
-        this.valueObject = this.args.ValueObject; 
         this.valueTitle = this.args.valueTitle;
         this.valueUnit = this.args.valueUnit;
-        this.componentId = this.valueTitle + this.args.sampleIndex;
+        this.valuePrecision = this.args.valuePrecision;
+        this.componentId = this.args.componentId;
+        // create source and dialog value objects
+        this.sourceValue = this.args.valueObject;
+
+        // define if there is range
+        if(Number.isFinite(this.sourceValue.value)){
+            this.scalarValue = valueUnit([convertUnit([this.sourceValue, this.valueUnit]),
+                this.valuePrecision, true]);
+            this.isInterval = false;
+        } else {
+            // always select interval input if there is no scalar value (?)
+            [this.intervalMin, this.intervalMax] = valueUnit([convertUnit(
+                [this.sourceValue, this.valueUnit]), this.valuePrecision, true]);
+            this.isInterval = true;
+        }
+
     }
     
+    get argNames() {
+        return Object.keys(this.args);
+    }
+
     get isThereInput() {
         // TODO
         return true;
     }
 
-    toggleInput(){
-        // if(this.isInterval){
-        //     $('#dialog-interval-input').prop('disabled', false);
-        //     $('#dialog-scalar-input').prop('disabled', true);
-        // } else {
-        //     $('#dialog-interval-input').prop('disabled', true);
-        //     $('#dialog-scalar-input').prop('disabled', false);
-        // }
-    }
-
     @action
-    toggleRadio(){
-        //this.toggleProperty('isInterval');
-        this.toggleInput();
-    }
+    toggleRadio(isRange){
+        {{debugger}}
+        this.isInterval = isRange;
+   }
 
     @action
     closeModalDialog() {
