@@ -1,6 +1,27 @@
 <div class="detail-section">
+  <div class="table-responsive d-flex align-items-center">
+    <label class="p-1 input-group-text font-weight-bold">Flash Point:</label>
+    {{#if this.args.editable}}
+      <Common::RangeValueInput
+        @valueReference={{this.args.oil.flash_point}}
+        @valueObject={{if this.args.oil.flash_point this.args.oil.flash_point.ref_temp undefined}}
+        @valueTitle="Flash Point"
+        @valueUnit="C"
+        @valuePrecision="2"
+        @sampleIndex={{this.args.sampleIndex}}
+      />
+    {{else}}
+      {{#if this.args.oil.flash_point}}
+        <span>
+          {{value-unit (convert-unit this.args.oil.flash_point.ref_temp "C") 2}}
+        </span>
+      {{else}}
+        No Data
+      {{/if}}
+    {{/if}}  {{!-- editable --}}
+  </div>
 
-  <div class="table-responsive">
+  {{!-- <div class="table-responsive">
     <strong>Flash Point:</strong>
 
     {{#if oil.flash_point}}
@@ -9,6 +30,6 @@
       No Data
     {{/if}}
 
-  </div>
+  </div> --}}
 
 </div>

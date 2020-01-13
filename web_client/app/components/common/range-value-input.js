@@ -13,7 +13,6 @@ export default class RangeValueInput extends Component {
         if(this.args.valueReference){
             this.valueObject = this.args.valueObject;
         }
-        {{debugger}}
         // form component ID - it needs to tether ember-modal-dialog to - replace spaces too
         this.componentId = this.args.valueTitle.replace(/\s+/g, '-').toLowerCase() + 
             this.args.sampleIndex;
@@ -35,6 +34,7 @@ export default class RangeValueInput extends Component {
 
     @action
     updateValue(valueObject) {
+        // TODO
         //this.args.updateValue(valueObject);
     }
 }

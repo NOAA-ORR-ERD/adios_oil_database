@@ -1,13 +1,32 @@
 <div class="detail-section">
-  <div class="table-responsive">
-    <strong>Adhesion:</strong>
+  <div class="table-responsive d-flex align-items-center">
+    <label class="p-1 input-group-text font-weight-bold">Adhesion:</label>
 
-    {{#if oil.adhesion}}
-      {{value-unit oil.adhesion.adhesion 3}}
+    {{#if this.args.editable}}
+      {{#if this.args.oil.adhesion}}
+        <Input
+          @type="text"
+          @class="p-1 bg-transparent border"
+          @placeholder="adhesion value"
+          @value={{value-unit this.args.oil.adhesion.adhesion 3}} 
+          @change={{action "updateAdhesion"}}
+        />
+      {{else}}
+        <Input
+          @type="text"
+          @class="p-1 bg-transparent border"
+          @placeholder="adhesion value"
+          @value="No Data" 
+          @change={{action "updateAdhesion"}}
+        />
+      {{/if}}
     {{else}}
-      No Data
+      {{#if this.args.oil.adhesion}}
+        {{value-unit oil.adhesion.adhesion 3}}
+      {{else}}
+        No Data
+      {{/if}}
     {{/if}}
-
   </div>
 
 </div>

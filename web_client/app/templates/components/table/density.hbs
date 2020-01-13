@@ -16,8 +16,26 @@
       <tbody id="density-tbody">
         {{#each oil.densities as |density|}}
           <tr class="collapse show density-row-collapse">
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{density.density}}
+                @valueUnit={{"g/cm^3"}}
+                @valuePrecision={{3}}
+                @editable={{this.editable}}
+              />
+            </td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{density.ref_temp}}
+                @valueUnit={{"C"}}
+                @valuePrecision={{2}}
+                @editable={{this.editable}}
+              />
+            </td>
+            {{!-- 
             <td>{{value-unit (convert-unit density.density "g/cm^3") 3}}</td>
-            <td>{{value-unit (convert-unit density.ref_temp "C") 2}}</td>
+            <td>{{value-unit (convert-unit density.ref_temp "C") 2}}</td> 
+            --}}
           </tr>
         {{/each}}
 

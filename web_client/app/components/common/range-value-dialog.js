@@ -79,7 +79,6 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeMax(e){
-        {{debugger}}
         this.dialogMaxValue = Number(e.target.value);
         this.isThereInput = true;
     }
@@ -88,7 +87,6 @@ export default class RangeValueDialog extends Component {
     onSave(){
         let enteredValue = {};
         enteredValue["unit"] = this.args.valueUnit;
-        {{debugger}}
         if (this.isThereInput) {
             // prepare value object for back conversion
             if (this.isInterval) {
@@ -102,7 +100,7 @@ export default class RangeValueDialog extends Component {
                 enteredValue["value"] = this.dialogValue;
             }
 
-            // update parent value object
+            // TODO - update parent value object 
             //this.args.updateValue(enteredValue);
         
         }

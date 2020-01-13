@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | table/value-unit-table', function(hooks) {
+module('Integration | Component | common/value-unit-table', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<Table::ValueUnitTable />`);
+    await render(hbs`<Common::ValueUnitTable />`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      <Table::ValueUnitTable>
+      <Common::ValueUnitTable>
         template block text
-      </Table::ValueUnitTable>
+      </Common::ValueUnitTable>
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

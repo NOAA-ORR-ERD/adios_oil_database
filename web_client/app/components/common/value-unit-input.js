@@ -1,15 +1,15 @@
 import Component from '@glimmer/component';
 import { action } from "@ember/object";
 
-export default class Adhesion extends Component {
+export default class ValueUnitInput extends Component {
 
     constructor() {
         super(...arguments);
     }
 
     @action
-    updateAdhesion() {
+    updateValue() {
         // TODO
     }
-
+    
 }

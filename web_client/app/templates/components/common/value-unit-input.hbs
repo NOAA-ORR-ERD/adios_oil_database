@@ -1,0 +1,35 @@
+{{!-- 
+    arguments:
+        valueObject -- example: oil.adhesion.adhesion -- might be same as valueReference
+        valueUnit - display unit
+        valuePrecision - unit conversion precision
+        editable
+ --}}
+
+{{#if this.args.editable}}
+  {{#if this.args.valueObject}}
+    <Input
+      @type="text"
+      @class="w-100 bg-transparent border"
+      @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
+        this.args.valuePrecision true}}
+      @change={{action "updateValue"}}
+      size="1"
+    />
+  {{else}}
+    <Input
+      @type="text"
+      @class="w-100 bg-transparent border"
+      @value="No Data"
+      @change={{action "updateValue"}}
+      size="1"
+    />
+  {{/if}}
+{{else}}
+  {{#if this.args.valueObject}}
+    {{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
+      this.args.valuePrecision}}
+  {{else}}
+    No Data
+  {{/if}}
+{{/if}}

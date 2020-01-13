@@ -15,8 +15,26 @@
       <tbody id="dvis-tbody">
         {{#each oil.dvis as |dvis|}}
           <tr class="collapse show dvis-row-collapse">
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{dvis.viscosity}}
+                @valueUnit={{"cP"}}
+                @valuePrecision={{3}}
+                @editable={{this.editable}}
+              />
+            </td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{dvis.ref_temp}}
+                @valueUnit={{"C"}}
+                @valuePrecision={{2}}
+                @editable={{this.editable}}
+              />
+            </td>
+            {{!-- 
             <td>{{value-unit (convert-unit dvis.viscosity "cP") 3}}</td>
-            <td>{{value-unit (convert-unit dvis.ref_temp "C") 2}}</td>
+            <td>{{value-unit (convert-unit dvis.ref_temp "C") 2}}</td> 
+            --}}
           </tr>
         {{/each}}
 

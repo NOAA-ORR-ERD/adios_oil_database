@@ -14,29 +14,48 @@
     </div>
 
     <div class="col-lg-4">
-      <TabFlashPoint @oil={{oil}} class="row"/>
+      <TabFlashPoint
+        @oil={{oil}}
+        @editable={{this.editable}}
+        @sampleIndex={{this.sampleIndex}}
+        class="row"/>
     </div>
 
     <div class="col-lg-4">
-      <Table::Adhesion @oil={{oil}} class="row"/>
+      <Table::Adhesion
+        @oil={{oil}}
+        @editable={{this.editable}}
+        class="row"/>
     </div>
   </div>
 
   <div class="row">
     <div class="col-lg-4">
-      <Table::Density @oil={{oil}} class="row"/>
+      <Table::Density
+        @oil={{oil}}
+        @editable={{this.editable}}
+        class="row"/>
     </div>
 
     <div class="col-lg-4">
-      <Table::KinematicViscosity @oil={{oil}} class="row"/>
+      <Table::KinematicViscosity
+        @oil={{oil}}
+        @editable={{this.editable}}
+        class="row"/>
     </div>
 
     <div class="col-lg-4">
-      <Table::DynamicViscosity @oil={{oil}} class="row"/>
+      <Table::DynamicViscosity
+        @oil={{oil}}
+        @editable={{this.editable}}
+        class="row"/>
     </div>
 
     <div class="col-lg-4">
-      <Table::Ift @oil={{oil}} class="row"/>
+      <Table::Ift
+        @oil={{oil}}
+        @editable={{this.editable}}
+        class="row"/>
     </div>
 
     <div class="col-lg-4">
