@@ -17,6 +17,7 @@ export default Component.extend(TableCommon, {
             width: '70px',
             cellComponent: 'table/cell/status',
             searchable: true,
+            align: "center",
         }, {
             label: 'ID',
             valuePath: 'id',
