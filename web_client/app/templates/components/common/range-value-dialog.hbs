@@ -1,3 +1,14 @@
+{{!
+  arguments:
+    valueObject -- object like: {|value: $number| or |max_value: $number, min_value: $number|, unit: $string}
+    valueTitle - dialog title
+    valueUnit - dialog title unit
+    valuePrecision - value conversion precision
+    componentId - unique element ID to tether dialog to
+    updateValue - update function
+}}
+
+{{!-- based on ember-modal-dialog with ember-tether --}}
 {{#modal-dialog
   onClose=(action "closeModalDialog")
   translucentOverlay=false
@@ -6,10 +17,13 @@
   attachment="center left"
 }}
   <div id="scalar-range-dialog" class="card">
+    {{!-- dialog header --}}
     <h5 class="card-header text-center p-1">
-      {{this.valueTitle}} ({{this.valueUnit}})
+      {{this.args.valueTitle}} ({{this.args.valueUnit}})
     </h5>
+    {{!-- dialog body --}}
     <div class="card-body p-1">
+      {{!-- range input --}}
       <div class="row d-flex align-items-center mx-2">
         <Input
           @type="radio"
@@ -28,20 +42,20 @@
           @type="text"
           @name="min-value"
           @size="5"
-          @placeholder="-∞"
-          @value={{this.dialogValue.min}}
+          placeholder="-∞"
+          value={{this.dialogMinValue}}
           @focus-in={{action "toggleRadio" true}}
-          @change={{action "changeMin"}}
+          {{on "change" this.changeMin}}
           class="m-2" 
         />
         <Input
           @type="text"
           @name="max-value"
           @size="5"
-          @placeholder="+∞"
-          @value={{this.dialogValue.max}}
+          placeholder="+∞"
+          value={{this.dialogMaxValue}}
           @focus-in={{action "toggleRadio" true}}
-          @change={{action "changeMax"}}
+          {{on "change" this.changeMax}}
           class="m-2"
         />
         {{!-- 
@@ -49,6 +63,7 @@
         {{/let}} 
         --}}
       </div>
+      {{!-- scalar input --}}
       <div class="row d-flex align-items-center mx-2">
         <Input
           @type="radio"
@@ -67,29 +82,24 @@
           @type="text"
           @name="scalar"
           @size="5"
-          @placeholder=""
-          @value={{this.dialogValue.value}}
+          placeholder=""
+          value={{this.dialogValue}}
           @focus-in={{action "toggleRadio" false}}
-          @change={{action "changeValue"}}
+          {{on "change" this.changeValue}}
         />
         {{!-- 
           </fieldset>
         {{/let}} 
         --}}
       </div>
+      {{!-- dialog Cancel and Save buttons --}}
       <div class="row d-flex justify-content-end mx-2">
         <button type="button" class="btn btn-secondary btn-sm mr-2" onClick={{action "closeModalDialog"}}>
           Cancel
         </button>
-        {{#if this.isThereInput}}
-          <button type="button" class="btn btn-primary btn-sm" onClick={{action "onSave"}}>
-            Save
-          </button>
-        {{else}}
-          <button type="button" class="btn btn-primary btn-sm" disabled>
-            Save
-          </button>
-        {{/if}}
+        <button type="button" class="btn btn-primary btn-sm" onClick={{action "onSave"}}>
+          Save
+        </button>
       </div>
     </div>
   </div>

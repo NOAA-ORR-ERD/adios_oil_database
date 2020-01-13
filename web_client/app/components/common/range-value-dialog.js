@@ -8,33 +8,38 @@ export default class RangeValueDialog extends Component {
     
     @tracked isInterval = false;
 
+    @tracked dialogValue = "";
+    @tracked dialogMinValue = "";
+    @tracked dialogMaxValue = "";
+
+    isThereInput = false;
+
     constructor() {
         super(...arguments);
 
-        this.valueTitle = this.args.valueTitle;
-        this.valueUnit = this.args.valueUnit;
-        this.valuePrecision = this.args.valuePrecision;
+        //this.valueTitle = this.args.valueTitle;
         this.componentId = this.args.componentId;
-        // create source and dialog value objects
         this.sourceValue = this.args.valueObject;
-        this.dialogValue = {};
-        this.dialogValue["unit"] = this.valueUnit;
 
-        // define if there is range
-        if(Number.isFinite(this.sourceValue.value)){
-            this.dialogValue["value"] = valueUnit([convertUnit([this.sourceValue, this.valueUnit]),
-                this.valuePrecision, true]);
-            this.isInterval = false;
+        if(this.sourceValue)
+        {
+            // check if there is a range value
+            if(Number.isFinite(this.sourceValue.value)){
+                this.dialogValue = valueUnit([convertUnit([this.sourceValue, this.args.valueUnit]),
+                this.args.valuePrecision, true]);
+                this.isInterval = false;
+            } else {
+                // always select interval input if there is no scalar value (?)
+                let valMin, valMax;
+                [valMin, valMax] = valueUnit([convertUnit(
+                    [this.sourceValue, this.args.valueUnit]), this.args.valuePrecision, true]);
+                this.dialogMinValue = valMin;
+                this.dialogMaxValue = valMax;
+                this.isInterval = true;
+            }
         } else {
-            // always select interval input if there is no scalar value (?)
-            let valMin, valMax;
-            [valMin, valMax] = valueUnit([convertUnit(
-                [this.sourceValue, this.valueUnit]), this.valuePrecision, true]);
-            this.dialogValue["min"] = valMin;
-            this.dialogValue["max"] = valMax;
-            this.isInterval = true;
+            this.dialogValue = "";
         }
-
         this.isShowingModal = true;
     }
     
@@ -43,8 +48,11 @@ export default class RangeValueDialog extends Component {
     }
 
     get isThereInput() {
-        // TODO
-        return true;
+        return this.isThereInput;
+    }
+
+    set isThereInput(state) {
+        this.isThereInput = state;
     }
 
     @action
@@ -59,37 +67,43 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeValue(e) {
-        this.dialogValue["value"] = Number(e.target.value);
+        this.dialogValue = Number(e.target.value);
+        this.isThereInput = true;
     }
 
     @action
     changeMin(e) {
-        this.dialogValue["min"] = Number(e.target.value);
+        this.dialogMinValue = Number(e.target.value);
+        this.isThereInput = true;
     }
 
     @action
     changeMax(e){
-        this.dialogValue["max"] = Number(e.target.value);
+        {{debugger}}
+        this.dialogMaxValue = Number(e.target.value);
+        this.isThereInput = true;
     }
 
     @action
     onSave(){
-
+        let enteredValue = {};
+        enteredValue["unit"] = this.args.valueUnit;
         {{debugger}}
-        
         if (this.isThereInput) {
             // prepare value object for back conversion
             if (this.isInterval) {
-                delete this.dialogValue.value;
+                if (this.dialogMinValue) {
+                    enteredValue["min_value"] = this.dialogMinValue;
+                }
+                if (this.dialogMaxValue) {
+                    enteredValue["max_value"] = this.dialogMaxValue;
+                }
             } else {
-                delete this.dialogValue.min;
-                delete this.dialogValue.max;
+                enteredValue["value"] = this.dialogValue;
             }
 
-            // convert to source units
-            let targetValue = convertUnit([this.dialogValue, this.sourceValue.unit]);
             // update parent value object
-            this.args.updateValue(targetValue);
+            //this.args.updateValue(enteredValue);
         
         }
         this.closeModalDialog() 

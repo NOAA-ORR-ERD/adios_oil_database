@@ -1,38 +1,17 @@
 <div class="detail-section">
   <div class="d-flex align-items-center">
     <label class="p-1 input-group-text font-weight-bold">Pour Point:</label>
-    {{#if this.editable}}
-
-      {{#if this.pour_point}}
-        <Input 
-          @class="p-1 bg-transparent border"
-          @type="text"
-          @value={{value-unit (convert-unit this.pour_point.ref_temp "C") 2}}
-          @focus-in={{action "openModalDialog"}}
-          id="pour_point0"
-        />
-      {{else}}
-        <Input id="pour-point-id"
-          @class="p-1 bg-transparent border"
-          @type="text"
-          @value="No Data"
-          @focus-in={{action "openModalDialog"}}
-        />
-      {{/if}} {{!-- if pour_point --}}
-
-      {{#if this.isShowingModal}}
-        <Common::RangeValueDialog
-          @valueObject={{this.pour_point.ref_temp}}
-          @valueTitle="Pour Point"
-          @valueUnit="C"
-          @valuePrecision="2"
-          @componentId={{concat "#" this.componentId}}
-          @closeModalDialog={{this.closeModalDialog}}
-          @updateValue={{this.updateValue}}
-        />
-      {{/if}}  {{!-- isShowingModal --}}
+    {{#if this.args.editable}}
+      <Common::RangeValueInput
+        @valueReference={{this.args.oil.pour_point}}
+        @valueObject={{if this.args.oil.pour_point this.args.oil.pour_point.ref_temp undefined}}
+        @valueTitle="Pour Point"
+        @valueUnit="C"
+        @valuePrecision="2"
+        @sampleIndex={{this.args.sampleIndex}}
+      />
     {{else}}
-      {{#if this.pour_point}}
+      {{#if this.args.oil.pour_point}}
         <span>
           {{value-unit (convert-unit this.args.oil.pour_point.ref_temp "C") 2}}
         </span>
