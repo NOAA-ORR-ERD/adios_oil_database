@@ -245,6 +245,8 @@ def get_sort_params(request):
 
 @oil_api.post()
 def insert_oil(request):
+    logger.info('POST /oils')
+
     try:
         json_obj = ujson.loads(request.body)
 
@@ -256,7 +258,12 @@ def insert_oil(request):
         raise HTTPBadRequest(e)
 
     try:
-        fix_oil_id(json_obj)
+        logger.info('oil.name: {}'.format(json_obj['name']))
+
+        if 'oil_id' in json_obj:
+            json_obj['_id'] = json_obj['oil_id']
+        else:
+            json_obj['_id'] = json_obj['oil_id'] = new_oil_id(request)
 
         json_obj['_id'] = (request.db.oil_database.oil
                            .insert_one(json_obj)
@@ -310,6 +317,40 @@ def delete_oil(request):
         return res
     else:
         raise HTTPBadRequest
+
+
+def new_oil_id(request):
+    '''
+        Query the database for the next highest ID with a prefix of XX
+        The current implementation is to walk the oil IDs, filter for the
+        prefix, and choose the max numeric content.
+
+        Warning: We don't expect a lot of traffic POST'ing a bunch new oils
+                 to the database, it will only happen once in awhile.
+                 But this is not the most effective way to do this.  A persistent
+                 incremental counter would be much faster.  In fact, this
+                 is a bit brittle, and would fail if the website suffered
+                 a bunch of POST requests at once.
+    '''
+    id_prefix = 'XX'
+    max_seq = 0
+
+    cursor = (request.db.oil_database.oil
+              .find({'_id': {'$regex': '^{}'.format(id_prefix)}}, {'_id'}))
+    for row in cursor:
+        oil_id = row['_id']
+
+        try:
+            oil_seq = int(oil_id[len(id_prefix):])
+        except ValueError:
+            print('ValuError: continuing...')
+            continue
+
+        max_seq = oil_seq if oil_seq > max_seq else max_seq
+
+    max_seq += 1  # next in the sequence
+
+    return '{}{:06d}'.format(id_prefix, max_seq)
 
 
 def fix_oil_id(oil_json, obj_id=None):

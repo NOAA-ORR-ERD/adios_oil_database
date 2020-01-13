@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
 
-    <div class="col-sm-3">
+    <div class="col-sm-4">
       <div class="row pl-3 d-flex align-items-center">
 
         {{!-- back to oil list control --}}
@@ -17,7 +17,9 @@
         {{!-- oil status --}}
         <strong>
           Status:
-          {{#if (eq (get-status this.model.status) "OK")}}
+          {{#if this.model.hasDirtyAttributes}}
+            <i class="status-warning">Saving...</i>
+          {{else if (eq (get-status this.model.status) "OK")}}
             <i class="status-good">OK</i>
           {{else if (eq (get-status this.model.status) "Errors")}}  
             <i class="status-error">Errors</i>
@@ -34,17 +36,30 @@
       <h2 align="center" class="title">{{this.model.name}}</h2>
     </div>
 
-    {{!-- edit mode switch control --}}
-    <div class="col-sm-2">
-      <center class="small">Edit Mode</center>
-      <XToggle
-        @theme="ios"
-        @showLabels={{true}}
-        @onLabel="Edit"
-        @offLabel="View"
-        @value={{this.editable}}
-        @onToggle={{action (mut this.editable)}}
-      />
+    <div class="col-sm-3">
+      <div class="row">
+
+        <div class="col-sm-5">
+          {{!-- edit mode switch control --}}
+          <center class="small">Edit Mode</center>
+          <XToggle
+            @theme="ios"
+            @showLabels={{true}}
+            @onLabel="Edit"
+            @offLabel="View"
+            @value={{this.editable}}
+            @onToggle={{action (mut this.editable)}}
+          />
+        </div>
+
+        <div class="col-sm-7">
+          <Button::CopyOil
+            @oil={{this.model}}
+            @submit={{action send "createOil"}}
+          />
+        </div>
+    
+      </div>
     </div>
 
   </div>

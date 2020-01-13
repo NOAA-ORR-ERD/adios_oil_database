@@ -10,7 +10,7 @@ from ..common.utilities import (dataclass_to_json,
                                 JSON_List,
                                 )
 
-from .values import Density, Viscosity
+from .values import UnittedValue, Density, Viscosity
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -31,10 +31,28 @@ class Sample:
     fraction_weathered: float = None
     boiling_point_range: tuple = None
 
-    # should we use unit types here?
+    pour_point: UnittedValue = None
+
     densities: List[Density] = field(default_factory=list)
     kvis: List[Viscosity] = field(default_factory=list)
     dvis: List[Viscosity] = field(default_factory=list)
+
+    # Assorted:
+
+    sulfur_mass_fraction: UnittedValue = None
+
+    # From Exxon Dist cut data
+    cut_volume: UnittedValue = None
+    carbon_mass_fraction: UnittedValue = None
+    hydrogen_mass_fraction: UnittedValue = None
+    total_acid_number: UnittedValue = None
+    mercaptan_sulfur_mass_fraction: UnittedValue = None
+    nitrogen_mass_fraction: UnittedValue = None
+    calcium_mass_fraction: UnittedValue = None
+    reid_vapor_pressure: UnittedValue = None
+    hydrogen_sulfide_concentration: UnittedValue = None
+
+
 
 
 

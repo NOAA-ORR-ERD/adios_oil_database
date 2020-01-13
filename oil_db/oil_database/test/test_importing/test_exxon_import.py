@@ -16,6 +16,8 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser
                                                     )
 
+from oil_database.models.oil.values import UnittedValue
+
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -76,9 +78,40 @@ def test_exxon_mapper():
     assert oil.name == 'HOOPS Blend'
     assert oil.reference.startswith("ExxonMobil")
 
-    print(oil)
+    samples = oil.samples
 
-#    assert False
+    assert len(samples) == 8
+    assert samples[0].name == "Whole crude"
+
+    assert samples[0].cut_volume == UnittedValue(100.0, unit="%")
+    assert samples[3].cut_volume == UnittedValue(17.6059, unit="%")
+
+    assert oil.api == 35.2
+
+    assert samples[0].densities[0].density.value == 0.84805316
+    assert samples[7].densities[0].density.value == 0.99124762
+
+    # print(samples[0].carbon_mass_fraction)                 85.57594139885833
+    assert samples[0].carbon_mass_fraction == UnittedValue(85.58, unit="%")
+    assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26, unit="%")
+    assert samples[4].total_acid_number == UnittedValue(0.2069, unit="mg/kg")
+
+    # viscosity tests
+    # whole oil
+    kvis = samples[0].kvis
+    assert len(kvis) == 3
+    assert kvis[0].viscosity.value == 6.73896867
+    assert kvis[0].viscosity.unit == "cSt"
+    assert kvis[2].viscosity.value == 3.88298696
+    assert kvis[2].viscosity.unit == "cSt"
+
+    # One sample
+    kvis = samples[3].kvis
+    assert len(kvis) == 3
+    assert kvis[0].viscosity.value == 0.89317828
+    assert kvis[0].viscosity.unit == "cSt"
+    assert kvis[2].viscosity.value == 0.64536193
+    assert kvis[2].viscosity.unit == "cSt"
 
 
 

@@ -1,3 +1,5 @@
+mongo_files/*
+
 .DS_Store
 ~*
 

@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from oil_database.models.common.utilities import (JSON_List,
                                                   dataclass_to_json)
 
+import pytest
 
 # A few examples to work with
 
@@ -36,5 +37,13 @@ def test_simple_from_py_json():
     assert rs.x == 5
     assert rs.thing == "fred"
 
+
+def test_add_extra_attribute():
+        rs = ReallySimple.from_py_json({'x': 5,
+                                    'thing': "fred"}
+                                   )
+
+        with pytest.raises(AttributeError):
+            rs.something_random = 42
 
 
