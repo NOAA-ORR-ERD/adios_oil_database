@@ -94,6 +94,25 @@ def test_exxon_mapper():
     # print(samples[0].carbon_mass_fraction)                 85.57594139885833
     assert samples[0].carbon_mass_fraction == UnittedValue(85.58, unit="%")
     assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26, unit="%")
+    assert samples[4].total_acid_number == UnittedValue(0.2069, unit="mg/kg")
+
+    # viscosity tests
+    # whole oil
+    kvis = samples[0].kvis
+    assert len(kvis) == 3
+    assert kvis[0].viscosity.value == 6.73896867
+    assert kvis[0].viscosity.unit == "cSt"
+    assert kvis[2].viscosity.value == 3.88298696
+    assert kvis[2].viscosity.unit == "cSt"
+
+    # One sample
+    kvis = samples[3].kvis
+    assert len(kvis) == 3
+    assert kvis[0].viscosity.value == 0.89317828
+    assert kvis[0].viscosity.unit == "cSt"
+    assert kvis[2].viscosity.value == 0.64536193
+    assert kvis[2].viscosity.unit == "cSt"
+
 
 
 

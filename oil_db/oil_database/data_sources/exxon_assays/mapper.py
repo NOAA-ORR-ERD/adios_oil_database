@@ -49,6 +49,9 @@ def ExxonMapper(record):
 
 
 class Mapper:
+
+    field_map = {}
+
     def __init__(self, record):
         name, data = record
         self.oil = Oil(name)
@@ -92,6 +95,7 @@ class Mapper:
                                  "carbon_mass_fraction",
                                  "%",
                                  2)
+
         self.set_sample_property("Hydrogen, wt %",
                                  "hydrogen_mass_fraction",
                                  "%",
@@ -102,6 +106,74 @@ class Mapper:
                                  "C",
                                  2,
                                  "F")
+
+        self.set_sample_property("Neutralization number (TAN), MG/GM",
+                                 "total_acid_number",
+                                 "mg/kg",
+                                 4,
+                                 )
+
+        self.set_sample_property("Sulfur, wt%",
+                                 "sulfur_mass_fraction",
+                                 "%",
+                                 2,
+                                 )
+
+        # viscosity
+        row = self.get_next_properties_row("Viscosity at 20C/68F, cSt")
+        for sample, val in zip(samples, row[1:]):
+            sample.kvis = [Viscosity(UnittedValue(round(val, 8),
+                                                  unit="cSt"),
+                                     UnittedValue(20,
+                                                  unit="C"))]
+
+        row = self.get_next_properties_row("Viscosity at 40C/104F, cSt")
+        for sample, val in zip(samples, row[1:]):
+            sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
+                                                      unit="cSt"),
+                                         UnittedValue(40,
+                                                      unit="C")))
+        row = self.get_next_properties_row("Viscosity at 50C/122F, cSt")
+        for sample, val in zip(samples, row[1:]):
+            sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
+                                                      unit="cSt"),
+                                         UnittedValue(50,
+                                                      unit="C")))
+
+        # Viscosity at 20C/68F, cSt
+        # Viscosity at 40C/104F, cSt
+        # Viscosity at 50C/122F, cSt
+
+        # self.set_sample_property("Nitrogen, ppm",
+        #                          "nitrogen_mass_fraction"
+        #                          "ppm",
+        #                          2,
+        #                          )
+
+        # self.set_sample_property("Mercaptan sulfur, ppm",
+        #                          "mercaptan_sulfur_mass_fraction"
+        #                          "ppm",
+        #                          2,
+        #                          )
+
+        # self.set_sample_property("Reid Vapor Pressure (RVP) Whole Crude, psi",
+        #                          "reid_vapor_pressure"
+        #                          "psi",
+        #                          2,
+        #                          "psi"
+        #                          )
+
+        # self.set_sample_property("Hydrogen Sulfide (dissolved), ppm",
+        #                          "hydrogen_sulfide_concentration"
+        #                          "ppm",
+        #                          2,
+        #                          )
+
+        # "nitrogen_mass_fraction: UnittedValue"
+        # "calcium_mass_fraction: UnittedValue"
+        # "reid_vapor_pressure: UnittedValue"
+        # "hydrogen_sulfide_concentration"
+
 
         oil.samples = samples
 
