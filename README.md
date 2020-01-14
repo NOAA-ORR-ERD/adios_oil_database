@@ -87,7 +87,7 @@ conda install nodejs
 ### Installing the oil_database package:
 
 ```
-cd oil_database
+cd oil_db
 
 python setup.py develop
 ```
@@ -99,7 +99,7 @@ This will install it in "develop" or "editable" mode -- so as you change the sou
 `pytest --pyargs oil_database`
 
 
-NOTE: this will skip teh database connection tests. If you have mongo running, you can turn them on by running pytest from within the test dir, and passing the --mongo flag:
+NOTE: this will skip the database connection tests. If you have mongo running, you can turn them on by running pytest from within the test dir, and passing the --mongo flag:
 
 ```
 cd oil_database/test
