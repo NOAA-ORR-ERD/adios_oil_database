@@ -44,6 +44,14 @@ export default Route.extend({
             newOil.save().then(function(result) {
                 this.transitionTo('oils.show', result.id);
             }.bind(this));
+        },
+        
+        deleteOil(oil) {
+            oil.deleteRecord();
+            oil.save().then(function(result) {
+                result._internalModel.unloadRecord();
+                this.transitionTo('oils.index');
+            }.bind(this));
         }
     }
 
