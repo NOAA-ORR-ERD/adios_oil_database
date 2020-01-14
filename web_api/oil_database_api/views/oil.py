@@ -7,9 +7,11 @@ import ujson
 from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound,
+                                    HTTPConflict,
                                     HTTPUnsupportedMediaType)
 
 from pymongo import ASCENDING, DESCENDING
+from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
 from oil_database.data_sources.oil import OilEstimation
@@ -26,20 +28,21 @@ oil_api = Service(name='oil', path='/oils*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
+memoized_results = {}  # so it is visible to other functions
+
+
 def memoize_oil_arg(func):
     '''
         Decorator function to cache function results by oil_id
     '''
-    results = {}
-
     def memoized_func(oil):
         key = oil['oil_id']
 
-        if key not in results:
+        if key not in memoized_results:
             logger.info('loading Key: "{}"'.format(key))
-            results[key] = func(oil)
+            memoized_results[key] = func(oil)
 
-        return results[key]
+        return memoized_results[key]
 
     return memoized_func
 
@@ -268,7 +271,10 @@ def insert_oil(request):
         json_obj['_id'] = (request.db.oil_database.oil
                            .insert_one(json_obj)
                            .inserted_id)
+    except DuplicateKeyError as e:
+        raise HTTPConflict(detail=e)
     except Exception as e:
+        logger.error(e)
         raise HTTPUnsupportedMediaType(detail=e)
 
     return fix_bson_ids(json_obj)
@@ -296,6 +302,8 @@ def update_oil(request):
 
         (request.db.oil_database.oil
          .replace_one({'_id': json_obj['_id']}, json_obj))
+
+        memoized_results.pop(json_obj['_id'], None)
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
@@ -314,6 +322,8 @@ def delete_oil(request):
         if res.deleted_count == 0:
             raise HTTPNotFound()
 
+        memoized_results.pop(obj_id, None)
+
         return res
     else:
         raise HTTPBadRequest
@@ -327,10 +337,10 @@ def new_oil_id(request):
 
         Warning: We don't expect a lot of traffic POST'ing a bunch new oils
                  to the database, it will only happen once in awhile.
-                 But this is not the most effective way to do this.  A persistent
-                 incremental counter would be much faster.  In fact, this
-                 is a bit brittle, and would fail if the website suffered
-                 a bunch of POST requests at once.
+                 But this is not the most effective way to do this.
+                 A persistent incremental counter would be much faster.
+                 In fact, this is a bit brittle, and would fail if the website
+                 suffered a bunch of POST requests at once.
     '''
     id_prefix = 'XX'
     max_seq = 0
