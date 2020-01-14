@@ -26,13 +26,13 @@ export default Component.extend(TableCommon, {
         }, {
             label: 'Name',
             valuePath: 'name',
-            width: '230px',
             cellComponent: 'table/cell/oil-name',
+            minResizeWidth: '150px',
             searchable: true,
         }, {
             label: 'Location',
             valuePath: 'location',
-            width: '200px',
+            minResizeWidth: '100px',
             searchable: true,
         }, {
             label: 'Type',

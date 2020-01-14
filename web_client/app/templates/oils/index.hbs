@@ -1,10 +1,10 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-10">
+  <div class="d-flex justify-content-between p-1">
+    <div class="align-content-left">
       <p>Browse through the list of oils, or query for a particular oil.</p>
     </div>
 
-    <div class="col">
+    <div class="align-content-right">
       <Button::AddNewOil
         @submit={{action send "createOil"}}
       />
