@@ -96,11 +96,6 @@
             {{name.[1]}}
 
             {{#if editable}}
-              <TabNav::ChangeSampleName
-                @oil={{this.model}}
-                @index={{idx}}
-                @submit={{action send "updateOil"}}
-              />
               <TabNav::RemoveSample
                 @oil={{this.model}}
                 @index={{idx}}
@@ -138,6 +133,7 @@
           <TabPane::WeatheredTopLevel
             @oil={{this.model}} @sampleName={{name.[0]}}
             @editable={{this.editable}}
+            @submit={{action send "updateOil"}}
           />
         </div>
       {{else}}
@@ -146,6 +142,7 @@
           <TabPane::WeatheredTopLevel
             @oil={{this.model}} @sampleName={{name.[0]}}
             @editable={{this.editable}}
+            @submit={{action send "updateOil"}}
           />
         </div>
       {{/if}}

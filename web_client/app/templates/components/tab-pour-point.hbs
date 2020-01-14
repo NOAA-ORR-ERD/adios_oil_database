@@ -1,13 +1,24 @@
 <div class="detail-section">
-  <div class="table-responsive">
-    <strong>Pour Point:</strong>
-
-    {{#if oil.pour_point}}
-      {{value-unit (convert-unit oil.pour_point.ref_temp "C") 2}}
+  <div class="table-responsive d-flex align-items-center">
+    <label class="p-1 input-group-text font-weight-bold">Pour Point:</label>
+    {{#if this.args.editable}}
+      <Common::RangeValueInput
+        @valueReference={{this.args.oil.pour_point}}
+        @valueObject={{if this.args.oil.pour_point this.args.oil.pour_point.ref_temp undefined}}
+        @valueTitle="Pour Point"
+        @valueUnit="C"
+        @valuePrecision="2"
+        @sampleIndex={{this.args.sampleIndex}}
+      />
     {{else}}
-      No Data
-    {{/if}}
-
+      {{#if this.args.oil.pour_point}}
+        <span>
+          {{value-unit (convert-unit this.args.oil.pour_point.ref_temp "C") 2}}
+        </span>
+      {{else}}
+        No Data
+      {{/if}}
+    {{/if}}  {{!-- editable --}}
   </div>
 
   &nbsp;

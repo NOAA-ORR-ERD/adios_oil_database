@@ -43,7 +43,13 @@
   <div role="tabpanel" class="tab-pane fade active show"
        id="nav-physical-{{slug sampleName}}"
        aria-labelledby="nav-physical-tab-{{slug sampleName}}">
-    <TabPane::Physical @oil={{sample}} @sampleName={{sampleName}}/>
+    <TabPane::Physical
+      @oil={{sample}} 
+      @sampleName={{sampleName}} 
+      @sampleIndex={{this.sampleIndex}}
+      @editable={{this.editable}}
+      @submit={{action "submitSample"}}
+    />
   </div>
 
   <div role="tabpanel" class="tab-pane fade active"
