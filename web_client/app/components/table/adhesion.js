@@ -9,20 +9,26 @@ export default class Adhesion extends Component {
     constructor() {
         super(...arguments);
         this.adhesion = this.args.oil.adhesion;
-        {{debugger}}
     }
 
     @action
     updateAdhesion(e) {
-        {{debugger}}
-        // let adhesion = {};
-        // adhesion["value"] = Number(e.target.value);
-        // adhesion["unit"] = "N/m^2"
-        if(this.adhesion) {
-            this.adhesion.adhesion.value = Number(e.target.value);
-        }
+
+        // if (isNaN(e.target.value)) {
+        //     if (this.adhesion) {
+        //         this.adhesion = undefined;
+        //     }
+        // } else {
+        //     if (this.adhesion) {
+        //         this.adhesion.adhesion.value = Number(e.target.value);
+        //     } else {
+        //         let adhesion = {};
+        //         adhesion.value = Number(e.target.value);
+        //         adhesion.unit = "N/m^2";
+        //         //this.adhesion.pushObject(adhesion);
+        //     }
+        // }
         // TODO - No Data case
         //this.args.submit(this.args.oil);
     }
-
 }
