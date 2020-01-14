@@ -8,7 +8,7 @@
           @type="text"
           @class="p-1 bg-transparent border"
           @placeholder="adhesion value"
-          value={{value-unit this.args.oil.adhesion.adhesion 3}}
+          value={{value-unit this.adhesion.adhesion 3 true}}
           {{on "change" this.updateAdhesion}}
         />
       {{else}}
@@ -21,8 +21,8 @@
         />
       {{/if}}
     {{else}}
-      {{#if this.args.oil.adhesion}}
-        {{value-unit oil.adhesion.adhesion 3}}
+      {{#if this.adhesion}}
+        {{value-unit this.adhesion.adhesion 3}}
       {{else}}
         No Data
       {{/if}}

@@ -5,7 +5,6 @@ export default Component.extend({
         this._super(...arguments);
 
         let sampleName = this.get('sampleName');
-
         let samples = this.get('oil').samples;
 
         let sample = samples.find( (s) => {
@@ -18,5 +17,16 @@ export default Component.extend({
 
         this.set('sample', sample);
         this.set('sampleIndex', sampleIndex);
-      },
+    },
+
+    actions: {
+        submitSample(sample) {
+            {{debugger}}
+            let oil = this.get('oil');
+            // let samples =  oil.samples;
+            // samples[this.sampleIndex] = sample;
+            // oil.set('samples', samples);
+            this.submit(oil);
+        }
+    }
 });
