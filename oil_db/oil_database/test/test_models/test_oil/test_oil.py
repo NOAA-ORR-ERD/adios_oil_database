@@ -108,6 +108,26 @@ def test_pyson():
     pprint(py_json)
 
 
+def test_from_py_json_minimal():
+    py_json = {"name": "A name as a placeholder"}
+    oil = Oil.from_py_json(py_json)
+
+    assert oil.name == "A name as a placeholder"
+    assert oil.status == []
+    assert oil.api is None
+    # who knows how many others!
+
+
+def test_from_py_json_nothing():
+    """
+    you need to at least provide a name
+    """
+    py_json = {}
+    with pytest.raises(TypeError):
+        oil = Oil.from_py_json(py_json)
+
+
+
 # def test_fields():
 #     oil = Oil(name=NAME)
 

@@ -34,6 +34,13 @@ webapi = Popen(['pserve', '--reload', 'web_api/config-example.ini'])
 # print("after starting the webapi")
 
 os.chdir('web_client')
+
+# make sure npm packages are up to date
+print("Updating/installing npm packages")
+run(["npm", "install"])
+print("Done with npm packages")
+
+print("Starting up Ember Serve")
 client = Popen(['ember', 'serve'])
 
 print("after starting up the client")

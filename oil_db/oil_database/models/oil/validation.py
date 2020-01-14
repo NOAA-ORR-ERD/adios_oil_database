@@ -25,12 +25,14 @@ A few ideas about that:
   ones without duplicating code.
 """
 
-import logging
+from .oil import Oil
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+# import logging
 
-logger = logging.getLogger(__name__)
+# from pprint import PrettyPrinter
+# pp = PrettyPrinter(indent=2, width=120)
+
+# logger = logging.getLogger(__name__)
 
 
 def validate(oil_json):
@@ -53,23 +55,27 @@ def validate(oil_json):
         if msg:
             messages.append(msg)
 
-    oil_json.status = messages
+    oil_json["status"] = messages
 
 
 def has_product_type(oil):
     '''
-    In order to perform estimations, we need to determine if we are
-    dealing with a crude or refined oil product.  We cannot continue
-    if this information is missing.
+    Oil records should have a product type
     '''
-    if (oil.product_type is None or
-        oil.product_type.lower() in ('crude',
-                                     'refined',
-                                     'bitumen product',
-                                     'other')):
-        return 'W001: Imported record has no product type')
-    return ""
+    valid_types = ('crude',
+                   'refined',
+                   'bitumen product',
+                   'other')
 
+    if not oil.product_type:
+        return "W001: Record has no product type"
+    elif not oil.product_type.lower() in ('crude',
+                                          'refined',
+                                          'bitumen product',
+                                          'other'):
+        return f"W001: Record has no product type. Options are: {valid_types}"
+    else:
+        return None
 
 
 class OilRejected(Exception):
