@@ -19,6 +19,7 @@
               <Input type="text" @class="form-control bg-transparent border"
                      @placeholder="Enter Name"
                      {{on "change" this.updateName}}
+                     {{on "keypress" this.updateName}}
               />
             </div>
 
