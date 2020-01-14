@@ -1,8 +1,6 @@
 # README
 
-This is a sample Electron app wrapping a Python server.
-
-In this case, a flask app.
+This is a sample Electron app wrapping a Python server. In this case, a Flask app. The Python server serves all of the static files requested by the browser, plus handles a sample ajax call.
 
 ## Dependencies
 
