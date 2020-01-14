@@ -51,9 +51,9 @@ export default class RangeValueDialog extends Component {
         return this.isThereInput;
     }
 
-    set isThereInput(state) {
-        this.isThereInput = state;
-    }
+    // set isThereInput(state) {
+    //     this.isThereInput = state;
+    // }
 
     @action
     toggleRadio(isRange){
@@ -67,43 +67,71 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeValue(e) {
-        this.dialogValue = Number(e.target.value);
+        if(e.target.value.trim() === "") {
+            this.dialogValue = "";
+        } else {
+            this.dialogValue = Number(e.target.value);
+        }
         this.isThereInput = true;
     }
 
     @action
     changeMin(e) {
-        this.dialogMinValue = Number(e.target.value);
+        if(e.target.value.trim() === "") {
+            this.dialogMinValue = "";
+        } else {
+            this.dialogMinValue = Number(e.target.value);  
+        }
         this.isThereInput = true;
     }
 
     @action
     changeMax(e){
-        this.dialogMaxValue = Number(e.target.value);
+        if(e.target.value.trim() === "") {
+            this.dialogMaxValue = "";
+        } else {
+            this.dialogMaxValue = Number(e.target.value);
+        }
         this.isThereInput = true;
     }
 
     @action
     onSave(){
         let enteredValue = {};
+        var closeDialog = false;
+
         enteredValue["unit"] = this.args.valueUnit;
         if (this.isThereInput) {
             // prepare value object for back conversion
             if (this.isInterval) {
                 if (this.dialogMinValue) {
                     enteredValue["min_value"] = this.dialogMinValue;
+                    closeDialog = true;
                 }
                 if (this.dialogMaxValue) {
                     enteredValue["max_value"] = this.dialogMaxValue;
+                    closeDialog = true;
                 }
             } else {
-                enteredValue["value"] = this.dialogValue;
+                // it must be not empty
+                if (this.dialogValue) {
+                    enteredValue["value"] = this.dialogValue;
+                    closeDialog = true;
+                } else {
+                    alert ("Entered value is empty");
+                    // do not close dialog ?
+                }
+            
             }
-
             // TODO - update parent value object 
             //this.args.updateValue(enteredValue);
-        
+        } else {
+            // nothing has been changed - do not close dialog?
+            alert ("Nothing has been changed or entered!");
         }
-        this.closeModalDialog() 
+
+        if (closeDialog) {
+            this.closeModalDialog() 
+        }
     }
 }
