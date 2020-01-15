@@ -67,7 +67,7 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeValue(e) {
-        if(e.target.value.trim() === "") {
+        if(isNaN(e.target.value)) {
             this.dialogValue = "";
         } else {
             this.dialogValue = Number(e.target.value);
@@ -77,7 +77,7 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeMin(e) {
-        if(e.target.value.trim() === "") {
+        if(isNaN(e.target.value)) {
             this.dialogMinValue = "";
         } else {
             this.dialogMinValue = Number(e.target.value);  
@@ -87,7 +87,7 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeMax(e){
-        if(e.target.value.trim() === "") {
+        if(isNaN(e.target.value)) {
             this.dialogMaxValue = "";
         } else {
             this.dialogMaxValue = Number(e.target.value);
@@ -97,10 +97,9 @@ export default class RangeValueDialog extends Component {
 
     @action
     onSave(){
-        let enteredValue = {};
         var closeDialog = false;
-
-        enteredValue["unit"] = this.args.valueUnit;
+        let enteredValue = {"unit": this.args.valueUnit};
+        
         if (this.isThereInput) {
             // prepare value object for back conversion
             if (this.isInterval) {
