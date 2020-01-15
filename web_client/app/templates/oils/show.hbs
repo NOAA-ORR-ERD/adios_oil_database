@@ -37,7 +37,24 @@
     </div>
 
     <div class="col-sm-3">
-      <div class="row">
+      <div class="d-flex justify-content-center">
+        <Button::Download
+          @oil={{this.model}}
+        />
+
+        <Button::CopyOil
+          @oil={{this.model}}
+          @submit={{action send "createOil"}}
+        />
+
+        <Button::DeleteOil
+          @oil={{this.model}}
+          @submit={{action send "deleteOil"}}
+        />
+
+      </div>
+
+      <div class="d-flex justify-content-center">
 
         <div class="col-sm-5">
           {{!-- edit mode switch control --}}
@@ -51,22 +68,8 @@
             @onToggle={{action (mut this.editable)}}
           />
         </div>
-
-        <div class="col-sm-3">
-          <Button::CopyOil
-            @oil={{this.model}}
-            @submit={{action send "createOil"}}
-          />
-        </div>
-    
-        <div class="col-sm-3">
-          <Button::DeleteOil
-            @oil={{this.model}}
-            @submit={{action send "deleteOil"}}
-          />
-        </div>
-    
       </div>
+
     </div>
 
   </div>
