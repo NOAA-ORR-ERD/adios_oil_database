@@ -7,24 +7,28 @@
  --}}
 
 {{#if this.args.editable}}
-  {{#if this.args.valueObject}}
-    <Input
-      @type="text"
-      @class="w-100 bg-transparent border"
-      @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
-        this.args.valuePrecision true}}
-      @change={{action "updateValue"}}
-      size="1"
-    />
-  {{else}}
-    <Input
-      @type="text"
-      @class="w-100 bg-transparent border"
-      @value="No Data"
-      @change={{action "updateValue"}}
-      size="1"
-    />
-  {{/if}}
+  <div class="row d-flex m-0 p-0">
+    {{#if this.args.valueObject}}
+      <Input
+        @type="text"
+        @class="flex-fill bg-transparent border"
+        @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
+          this.args.valuePrecision true}}
+        @change={{action "updateValue"}}
+        size="1"
+      />
+    {{else}}
+      <Input
+        @type="text"
+        @class="flex-fill bg-transparent border"
+        @value=""
+        @placeholder="Enter a number value"
+        @change={{action "updateValue"}}
+        size="1"
+      />
+    {{/if}}
+    {{this.beaUnit}}
+  </div>
 {{else}}
   {{#if this.args.valueObject}}
     {{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
