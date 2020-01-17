@@ -6,6 +6,8 @@ appGlobals =
 function Initialize()
 {
 	$( ".CalculateButton" ).click( HandleCalculateButtonClick );
+	$( ".DownloadFileButton" ).click( HandleDownloadFileButtonClick );
+	$( ".UploadFileButton" ).click( HandleUploadFileButtonClick );
 }
 
 function HandleCalculateButtonClick( e )
@@ -17,6 +19,37 @@ function HandleCalculateButtonClick( e )
 		};
 	
 	CallAjaxFunction( "Calculate", o );
+}
+
+function HandleDownloadFileButtonClick( e )
+{
+	var e = $( "<a>Downloading...</a>" );
+	var json = "{ \"a\": 1, \"b\": \"apple\" }";
+	var blob = new Blob( [ json ], { type: "text/json" } );
+	e.attr( "href", window.URL.createObjectURL( blob ) );
+	e.attr( "download", "myfile.json" );
+	$( "body" ).append( e );
+	e[ 0 ].click();
+	e.remove();
+}
+
+function HandleUploadFileButtonClick( e )
+{
+	let file = $( ".FileInput" )[ 0 ].files[ 0 ];
+	// alert( file.path );
+	// let formData = new FormData();
+	// formData.append( "file", file );
+	let reader = new FileReader();
+	reader.onload = HandleFileLoad;
+	reader.readAsText( file );
+}
+
+function HandleFileLoad( evt )
+{
+	$( ".FileText" ).text( evt.target.result );
+	
+	// CallAjaxFunction( "Calculate", o );
+	// fetch( "/ajax", { method: "POST", body: formData } );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -22,6 +22,7 @@ app.on(
 	function()
 	{
 		var subpy = require( "child_process" ).spawn( "python", [ "./server.py" ] );
+		// subpy.stdout.on( "data", ( data ) => { console.log( data ); } );
 		// var subpy = require('child_process').spawn('./dist/server.exe');
 		var rp = require( "request-promise" );
 		var mainAddr = "http://localhost:5000";

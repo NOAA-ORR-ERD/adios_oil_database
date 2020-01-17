@@ -112,12 +112,16 @@ body
 	margin: 4px;
 }
 
-.CalculateButtonContainer
+.CalculateButtonContainer,
+.DownloadFileButtonContainer,
+.UploadFileButtonContainer
 {
 	margin: 20px;
 }
 
-.CalculateButton
+.CalculateButton,
+.DownloadFileButton,
+.UploadFileButton
 {
 	cursor: pointer;
 	background-color: #003B7F;
@@ -126,7 +130,9 @@ body
 	border-radius: 5px;
 }
 
-.CalculateButton:hover
+.CalculateButton:hover,
+.DownloadFileButtonButton:hover,
+.UploadFileButtonButton:hover
 {
 	opacity: 0.5;
 }
@@ -136,4 +142,18 @@ body
 .String
 {
 	background-color: lightgray;
+}
+
+.FileInput
+{
+	width: 200px;
+}
+
+.FileText
+{
+	margin-top: 20px;
+	width: 500px;
+	height: 250px;
+	border: 1px solid black;
+	overflow: scroll;
 }
