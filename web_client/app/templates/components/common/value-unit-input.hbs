@@ -5,7 +5,6 @@
         valuePrecision - unit conversion precision
         editable
  --}}
-
 {{#if this.args.editable}}
   <div class="row d-flex m-0 p-0">
     {{#if this.args.valueObject}}
@@ -27,7 +26,9 @@
         size="1"
       />
     {{/if}}
-    {{this.beaUnit}}
+    <div class="pl-1">
+      {{this.beaUnit}}
+    </div>
   </div>
 {{else}}
   {{#if this.args.valueObject}}
