@@ -21,9 +21,9 @@
             <i class="status-warning">Saving...</i>
           {{else if (eq (get-status this.model.status) "OK")}}
             <i class="status-good">OK</i>
-          {{else if (eq (get-status this.model.status) "Errors")}}  
+          {{else if (eq (get-status this.model.status) "Errors")}}
             <i class="status-error">Errors</i>
-          {{else}}  
+          {{else}}
             <i class="status-warning">Warnings</i>
           {{/if}}
         </strong>
@@ -58,7 +58,7 @@
 
         <div class="col-sm-5">
           {{!-- edit mode switch control --}}
-          <center class="small">Edit Mode</center>
+          <center class="small">Mode</center>
           <XToggle
             @theme="ios"
             @showLabels={{true}}
