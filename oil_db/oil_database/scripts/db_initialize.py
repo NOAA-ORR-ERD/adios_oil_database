@@ -113,10 +113,13 @@ def create_indices(db):
     print('\ncreating indices on db {}...'.format(db.name))
 
     try:
-        db.oil.create_index([('name', ASCENDING),
-                             ('location', ASCENDING),
-                             ('reference_date', ASCENDING)],
-                            unique=True)
+        # We have come to a consensus that unique (name, location, ref)
+        # is not necessary.
+        #
+        #db.oil.create_index([('name', ASCENDING),
+        #                     ('location', ASCENDING),
+        #                     ('reference_date', ASCENDING)],
+        #                    unique=True)
         print('Oil collection indices: {}'
               .format(list(db.oil.index_information().keys())))
     except ConnectionFailure:
