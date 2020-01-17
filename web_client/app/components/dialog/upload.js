@@ -15,6 +15,10 @@ export default class UploadDlg extends Component {
 
     @action uploadedFile(data) {
         let oilData = JSON.parse(data);
+
+        oilData['productType'] = oilData['product_type']
+        oilData['referenceDate'] = oilData['reference_date']
+
         delete oilData['id'];
 
         this.args.submit(oilData);
