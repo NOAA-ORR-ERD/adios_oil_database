@@ -1,3 +1,18 @@
+<Common::ValueUnitTable
+  @tableTitle="Density"
+  @leftColumnTitle="Density"
+  @rightColumnTitle="Temperature"
+  @valueArray={{oil.densities}}
+  @leftColumnValueName="density"
+  @leftColumnUnit={{"g/cm^3"}}
+  @leftColumnPrecision={{3}}
+  @rightColumnValueName="ref_temp"
+  @rightColumnUnit="C"
+  @rightColumnPrecision={{2}}
+  @editable={{this.editable}}
+/>
+
+{{!-- 
 <div class="detail-section">
   <div class="table-responsive">
     <strong>Density:</strong>
@@ -32,10 +47,8 @@
                 @editable={{this.editable}}
               />
             </td>
-            {{!-- 
             <td>{{value-unit (convert-unit density.density "g/cm^3") 3}}</td>
             <td>{{value-unit (convert-unit density.ref_temp "C") 2}}</td> 
-            --}}
           </tr>
         {{/each}}
 
@@ -52,4 +65,5 @@
   </div>
 
 
-</div>
+</div> 
+--}}
