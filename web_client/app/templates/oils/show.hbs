@@ -37,7 +37,24 @@
     </div>
 
     <div class="col-sm-3">
-      <div class="row">
+      <div class="d-flex justify-content-center">
+        <Button::Download
+          @oil={{this.model}}
+        />
+
+        <Button::CopyOil
+          @oil={{this.model}}
+          @submit={{action send "createOil"}}
+        />
+
+        <Button::DeleteOil
+          @oil={{this.model}}
+          @submit={{action send "deleteOil"}}
+        />
+
+      </div>
+
+      <div class="d-flex justify-content-center">
 
         <div class="col-sm-5">
           {{!-- edit mode switch control --}}
@@ -51,15 +68,8 @@
             @onToggle={{action (mut this.editable)}}
           />
         </div>
-
-        <div class="col-sm-7">
-          <Button::CopyOil
-            @oil={{this.model}}
-            @submit={{action send "createOil"}}
-          />
-        </div>
-    
       </div>
+
     </div>
 
   </div>
@@ -89,11 +99,6 @@
             {{name.[1]}}
 
             {{#if editable}}
-              <TabNav::ChangeSampleName
-                @oil={{this.model}}
-                @index={{idx}}
-                @submit={{action send "updateOil"}}
-              />
               <TabNav::RemoveSample
                 @oil={{this.model}}
                 @index={{idx}}
@@ -131,6 +136,7 @@
           <TabPane::WeatheredTopLevel
             @oil={{this.model}} @sampleName={{name.[0]}}
             @editable={{this.editable}}
+            @submit={{action send "updateOil"}}
           />
         </div>
       {{else}}
@@ -139,6 +145,7 @@
           <TabPane::WeatheredTopLevel
             @oil={{this.model}} @sampleName={{name.[0]}}
             @editable={{this.editable}}
+            @submit={{action send "updateOil"}}
           />
         </div>
       {{/if}}

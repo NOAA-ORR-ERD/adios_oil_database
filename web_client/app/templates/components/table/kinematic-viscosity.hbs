@@ -15,8 +15,26 @@
       <tbody id="kvis-tbody">
         {{#each oil.kvis as |kvis|}}
           <tr class="collapse show kvis-row-collapse">
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{kvis.viscosity}}
+                @valueUnit={{"cSt"}}
+                @valuePrecision={{3}}
+                @editable={{this.editable}}
+              />
+            </td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{kvis.ref_temp}}
+                @valueUnit={{"C"}}
+                @valuePrecision={{2}}
+                @editable={{this.editable}}
+              />
+            </td>
+            {{!-- 
             <td>{{value-unit (convert-unit kvis.viscosity "cSt") 3}}</td>
-            <td>{{value-unit (convert-unit kvis.ref_temp "C") 2}}</td>
+            <td>{{value-unit (convert-unit kvis.ref_temp "C") 2}}</td> 
+            --}}
           </tr>
         {{/each}}
 

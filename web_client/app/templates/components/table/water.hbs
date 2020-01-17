@@ -1,12 +1,20 @@
 <div class="detail-section">
-  <div class="table-responsive">
+  <div class="table-responsive d-flex">
     <strong>Water Content:</strong>
 
-    {{#if oil.water}}
+    <Table::ValueUnitField
+      @editable={{this.editable}}
+      @value={{oil.water.fraction}}
+      @units="%"
+      @precision={{2}}
+      @hasValue={{oil.water}}
+    />
+
+    {{!-- {{#if oil.water}}
       {{value-unit (convert-unit oil.water.fraction "%") 2}}
     {{else}}
       No Data
-    {{/if}}
+    {{/if}} --}}
 
   </div>
 

@@ -1,0 +1,11 @@
+<button type="button" class="btn btn-dark m-1"
+        title="Delete Oil"
+        data-toggle="modal"
+        data-target="#deleteOilDialog" >
+  Delete
+</button>
+
+<Dialog::DeleteOil
+  @oil={{this.args.oil}}
+  @submit={{this.args.submit}}
+/>

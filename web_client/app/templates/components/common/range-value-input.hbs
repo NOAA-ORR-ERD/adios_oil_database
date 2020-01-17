@@ -1,0 +1,38 @@
+{{! 
+    argunments:
+        valueReference -- example: sample.pour_point -- might be null in 'No Data' case
+        valueObject -- example: sample.pour_point.ref_temp -- might be same as valueReference
+        valueTitle - value title
+        valueUnit - display unit
+        valuePrecision - unit conversion precision
+        sampleIndex - index of sample in samples array
+ }}
+{{#if this.args.valueReference}}
+  <Input
+    @class="p-1 bg-transparent border"
+    @type="text"
+    @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit) this.args.valuePrecision}}
+    @focus-in={{action "openModalDialog"}}
+    id={{this.componentId}}
+  />
+{{else}}
+  <Input
+    @class="p-1 bg-transparent border"
+    @type="text"
+    @value="No Data"
+    @focus-in={{action "openModalDialog"}}
+    id={{this.componentId}}
+  />
+{{/if}} {{! if pour_point }}
+
+{{#if this.isShowingModal}}
+  <Common::RangeValueDialog
+    @valueObject={{this.valueObject}}
+    @valueTitle={{this.args.valueTitle}}
+    @valueUnit={{this.args.valueUnit}}
+    @valuePrecision={{this.args.valuePrecision}}
+    @componentId={{concat "#" this.componentId}}  {{!-- #! --}}
+    @closeModalDialog={{this.closeModalDialog}}
+    @updateValue={{this.updateValue}}
+  />
+{{/if}} {{! isShowingModal }}

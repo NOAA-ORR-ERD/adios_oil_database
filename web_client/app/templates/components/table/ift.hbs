@@ -18,7 +18,18 @@
           <tr class="collapse show ift-row-collapse">
             <td>{{ift.interface}}</td>
             <td>{{value-unit ift.tension 3}}</td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{ift.ref_temp}}
+                @valueUnit={{"C"}}
+                @valuePrecision={{2}}
+                @editable={{this.editable}}
+              />
+            </td>
+            {{!-- 
+            <td>{{value-unit ift.tension 3}}</td>
             <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
+            --}}
           </tr>
         {{/each}}
 

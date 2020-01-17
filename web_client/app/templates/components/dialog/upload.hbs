@@ -1,10 +1,10 @@
-<div id="changeSampleNameDialog" class="modal fade" role="dialog" tabindex="-1"
-     aria-labelledby="changeSampleNameDialogLabel" aria-hidden="true">
+<div id="uploadDialog" class="modal fade" role="dialog" tabindex="-1"
+     aria-labelledby="uploadDialogLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="changeSampleNameDialogLabel">
-          Rename Oil Subsample
+        <h5 class="modal-title" id="uploadDialogLabel">
+          Upload Oil
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -15,11 +15,13 @@
         <div class="form">
           <div class="row">
 
-            <div class="col-6">
-              <Input type="text" @class="form-control bg-transparent border"
-                     value={{this.sampleName}}
-                     {{on "change" this.updateName}}
-              />
+            <div class="col-10">
+            
+                <div class="form-group">
+                  <input type="file" class="form-control-file border" name="file"
+                         accept=".json"
+                         {{on "change" this.updateFile}} >
+                </div>
             </div>
 
           </div>

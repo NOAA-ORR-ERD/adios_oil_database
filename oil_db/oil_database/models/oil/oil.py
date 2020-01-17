@@ -44,7 +44,7 @@ class Oil:
         right now, a non-empty name is it.
         """
         if self.name == "":
-            raise TypeError("name must be a non-empty string")
+            raise TypeError("Name must be a non-empty string")
 
 
 
