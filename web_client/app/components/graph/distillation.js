@@ -110,7 +110,7 @@ export default LineChart.extend({
       .attr("font-size", "1.5em")
       .attr("fill", "currentColor")
       .style("text-anchor", "middle")
-      .text("Vapor Temperature (\u2103)");
+      .text("Vapor Temperature (\u00B0C)");
   },
 
   createYAxisElement: function() {
