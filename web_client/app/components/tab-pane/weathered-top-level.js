@@ -21,7 +21,6 @@ export default Component.extend({
 
     actions: {
         submitSample(sample) {
-            {{debugger}}
             let oil = this.get('oil');
             // let samples =  oil.samples;
             // samples[this.sampleIndex] = sample;
