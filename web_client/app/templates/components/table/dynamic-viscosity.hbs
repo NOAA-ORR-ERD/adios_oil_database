@@ -1,52 +1,13 @@
-<div class="detail-section">
-  <div class="table-responsive">
-    <strong>Dynamic Viscosity:</strong>
-
-    <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".dvis-row-collapse"
-             aria-controls="dvis-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Viscosity</th>
-          <th scope="col">Temperature</th>
-        </tr>
-      </thead>
-      <tbody id="dvis-tbody">
-        {{#each oil.dvis as |dvis|}}
-          <tr class="collapse show dvis-row-collapse">
-            <td>
-              <Common::ValueUnitInput
-                @valueObject={{dvis.viscosity}}
-                @valueUnit={{"cP"}}
-                @valuePrecision={{3}}
-                @editable={{this.editable}}
-              />
-            </td>
-            <td>
-              <Common::ValueUnitInput
-                @valueObject={{dvis.ref_temp}}
-                @valueUnit={{"C"}}
-                @valuePrecision={{2}}
-                @editable={{this.editable}}
-              />
-            </td>
-            {{!-- 
-            <td>{{value-unit (convert-unit dvis.viscosity "cP") 3}}</td>
-            <td>{{value-unit (convert-unit dvis.ref_temp "C") 2}}</td> 
-            --}}
-          </tr>
-        {{/each}}
-
-        {{#if oil.dvis}}
-          <tr class="collapse dvis-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
-        {{else}}
-          <tr><td>No Data</td></tr>
-        {{/if}}
-      </tbody>
-    </table>
-  </div>
-
-</div>
+<Common::ValueUnitTable
+  @tableTitle="Dynamic Viscosity"
+  @leftColumnTitle="Viscosity"
+  @rightColumnTitle="Temperature"
+  @valueArray={{oil.dvis}}
+  @leftColumnValueName="viscosity"
+  @leftColumnUnit={{"cP"}}
+  @leftColumnPrecision={{3}}
+  @rightColumnValueName="ref_temp"
+  @rightColumnUnit="C"
+  @rightColumnPrecision={{2}}
+  @editable={{this.editable}}
+/>

@@ -1,1 +1,84 @@
-{{yield}}
+{{!-- 
+    arguments:
+        tableTitle
+        leftColumnTitle
+        rightColumnTitle
+        valueArray
+        leftColumnValueName
+        leftColumnUnit
+        leftColumnPrecision
+        rightColumnValueName
+        rightColumnUnit
+        rightColumnPrecision
+
+ --}}
+
+<div class="detail-section">
+  <div class="table-responsive">
+    <strong>{{this.args.tableTitle}}:</strong>
+
+    <table class="table table-hover table-bordered">
+      <thead class="clickable" data-toggle="collapse"
+             data-target={{concat "." (concat this.tableId "-row-collapse")}}
+             aria-controls={{this.tableId}}
+             aria-expanded="false">
+        <tr>
+          <th scope="col">{{this.args.leftColumnTitle}}</th>
+          <th scope="col">{{this.args.rightColumnTitle}}</th>
+        </tr>
+      </thead>
+      <tbody id={{concat this.tableId "-tbody"}}>
+        {{#each this.valueArray as |value|}}
+          <tr class="collapse show {{concat this.tableId "-row-collapse"}}">
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{get value this.args.leftColumnValueName}}
+                @valueUnit={{this.args.leftColumnUnit}}
+                @valuePrecision={{this.args.leftColumnPrecision}}
+                @editable={{this.args.editable}}
+              />
+            </td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{get value this.args.rightColumnValueName}}
+                @valueUnit={{this.args.rightColumnUnit}}
+                @valuePrecision={{this.args.rightColumnPrecision}}
+                @editable={{this.args.editable}}
+              />
+            </td>
+            {{#if this.args.editable}}
+              <td class="border-0">
+                <button type="button" onClick={{action "deleteTableRow"}}
+                  class="btn btn-outline-danger btn-sm p-0 m-0 border-0">
+                  {{fa-icon "times"}}
+                </button>
+              </td>
+            {{/if}}
+          </tr>
+        {{/each}}
+        {{#if this.args.editable}}
+          <tr>
+            <td class="border-0">
+              <button type="button" onClick={{action "addTableRow"}}
+                class="btn btn-outline-dark btn-sm p-0 border-0">
+                {{fa-icon "plus"}}
+              </button>
+            </td>
+          </tr>
+        {{else}}
+          {{#if this.valueArray}}
+            <tr class="collapse {{concat this.tableId "-row-collapse"}}">
+              <th scope="row">&#x2026;</th>
+            </tr>
+          {{else}}
+            <tr><td>No Data</td></tr>
+          {{/if}}
+        {{/if}}
+
+      </tbody>
+    </table>
+
+  </div>
+
+
+</div>

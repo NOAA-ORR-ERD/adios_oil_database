@@ -14,7 +14,21 @@ export default class UploadDlg extends Component {
     }
 
     @action uploadedFile(data) {
-        let oilData = JSON.parse(data);
+        let oilData;
+
+        if (data) {
+            try {
+                oilData = JSON.parse(data);
+            }
+            catch(e) {
+                alert(e);
+                return;
+            }
+        }
+        else {
+            alert('File is empty!');
+            return;
+        }
 
         oilData['productType'] = oilData['product_type']
         oilData['referenceDate'] = oilData['reference_date']
