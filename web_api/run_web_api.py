@@ -3,49 +3,19 @@
 """
 Startup script for web_api for ADIOS OIl Database
 
-From Mike Orr:
+This version gets its settings from a JSON file.
 
-Pserve is a wrapper that parses the INI file, instantiates a WSGI
-application based on the "[app:main]" section, and a WSGI server based
-on the "[server:main]" section, and launches the server with the
-application. It also initialized Python logging from the INI file and
-has an optional monitor that will restart the application if a file in
-it changes (the "--reload" option). The "use = egg:waitress:main"
-option is the one that tells it to load Waitress, and the other
-options are its arguments.
+Usage:
 
-You can do most this without Pserve something like this:
+python run_web_api.py stand_alone_config.json
+
+NOTE: this is missing logger configuration -- that should be added.
 """
-
-# import pyramid.paster
-# import waitress
-
-# pyramid.paster.setup_logging("config:config-example.ini")
-# app = pyramid.paster.get_app("config:config-example.ini")
-
-# waitress.serve(app, host='0.0.0.0', port=8080)
-
-
-
-# Or if you have the deployment settings in a dict:
-
-# Fixme: need to set up loggin here
-# import logging.config
-import waitress
-import oil_database_api
-import configparser
-from pathlib import Path
-
-
-# logging.config.fileConfig("myloggingconfig.ini")
-config = configparser.ConfigParser()
-config.read('config-example.ini')
-config['app:oil_database_api']
-
-# print(dict(config['app:oil_database_api']))
 
 # set up the global config
 # 'here' is the dir we are running from
+#  fixme: maybe this should be derived from the location of the settings file?
+#         though I'm not sure how this information is used anyway
 _file = Path(__file__).resolve()
 here = _file.parent
 
@@ -53,37 +23,25 @@ global_config = {'here': here,
                  '__file__': _file,
                  }
 
+# load settings from JSON file
+with open(settings_file) as settings:
+    settings = json.load(settings)
+
 # find install info:
 install_path = Path(oil_database_api.__file__).parent
 help_dir = install_path / "help"
 
+settings['install_path'] = install_path,
+settings['help_dir'] = help_dir
 
-settings = {
-            'mongodb.host': "localhost",
-            'mongodb.port': "27017",
-            'mongodb.database': 'oil_database',
-            'mongodb.alias': 'oil-db-app',
+# pull the API info from the settings:
+api_host = settings.pop("web_api_host")
+api_port = settings.pop("web_api_port")
 
-            'pyramid.reload_templates': 'true',
-            'pyramid.debug_authorization': 'false',
-            'pyramid.debug_notfound': 'false',
-            'pyramid.debug_routematch': 'false',
-            'pyramid.default_locale_name': 'en',
-            'pyramid.includes': 'pyramid_tm\ncornice\npyramid_mongodb2',
-
-            'cors_policy.origins': 'http://0.0.0.0:8080\nhttp://localhost:8080\nhttp://localhost:8088\nhttp://localhost:4200\nhttp://localhost:4201',
-
-            'caps.can_modify_db': 'false',
-
-            'install_path': install_path,
-            'help_dir': help_dir
-            }
-
-
-
+# create the app
 app = oil_database_api.main(global_config, **settings)
 
-
-waitress.serve(app, host='0.0.0.0', port=8080)
+# start the server
+waitress.serve(app, host=api_host, port=api_port)
 
 
