@@ -11,7 +11,10 @@ import psutil
 
 def kill_subprocesses():
     for pid in sub_processes:
-        p = psutil.Process(pid)
+        try:
+            p = psutil.Process(pid)
+        except psutil.NoSuchProcess:
+            continue  # not there, so we don't care
         p.kill()  # or p.terminate()
 
 

@@ -1,4 +1,5 @@
-"""Main entry point
+"""
+Main entry point
 """
 import logging
 
@@ -43,6 +44,12 @@ def get_json(request):
 
 
 def main(global_config, **settings):
+
+    print("in main: global_config:")
+    print(global_config)
+
+    print("in main: settings:")
+    print(settings)
 
     load_cors_origins(settings, 'cors_policy.origins')
     generate_mongodb2_settings(settings)
