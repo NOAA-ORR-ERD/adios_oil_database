@@ -19,7 +19,7 @@
   <div id="scalar-range-dialog" class="card">
     {{!-- dialog header --}}
     <h5 class="card-header text-center p-1">
-      {{this.args.valueTitle}} ({{this.args.valueUnit}})
+      {{this.args.valueTitle}} ({{this.beaUnit}})
     </h5>
     {{!-- dialog body --}}
     <div class="card-body p-1">
@@ -36,10 +36,9 @@
         <label for="range-radio-btn" class="m-2 pb-1">
           Range
         </label>
-        {{!-- {{#let (if this.isInterval undefined "disabled") as |intervalInputDisabled|}}
-          <fieldset id="dialog-interval-input" disabled={{intervalInputDisabled}}> --}}
         <Input
-          @type="text"
+          @type="number"
+          @step={{this.numberStep}}
           @name="min-value"
           @size="5"
           placeholder="-∞"
@@ -49,7 +48,8 @@
           class="m-2" 
         />
         <Input
-          @type="text"
+          @type="number"
+          @step={{this.numberStep}}
           @name="max-value"
           @size="5"
           placeholder="+∞"
@@ -58,10 +58,6 @@
           {{on "change" this.changeMax}}
           class="m-2"
         />
-        {{!-- 
-        </fieldset>
-        {{/let}} 
-        --}}
       </div>
       {{!-- scalar input --}}
       <div class="row d-flex align-items-center mx-2">
@@ -76,10 +72,9 @@
         <label for="value-radio-btn" class="m-2 pb-1 pr-3">
           Value
         </label>
-        {{!-- {{#let (if this.isInterval "disabled" undefined) as |scalarInputDisabled|}}
-          <fieldset id="dialog-scalar-input" disabled={{scalarInputDisabled}}> --}}
         <Input
-          @type="text"
+          @type="number"
+          @step={{this.numberStep}}
           @name="scalar"
           @size="5"
           placeholder=""
@@ -87,10 +82,6 @@
           @focus-in={{action "toggleRadio" false}}
           {{on "change" this.changeValue}}
         />
-        {{!-- 
-          </fieldset>
-        {{/let}} 
-        --}}
       </div>
       {{!-- dialog Cancel and Save buttons --}}
       <div class="row d-flex justify-content-end mx-2">

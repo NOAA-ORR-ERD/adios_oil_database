@@ -3,9 +3,9 @@
     <label class="p-1 input-group-text font-weight-bold">Flash Point:</label>
     {{#if this.args.editable}}
       <Common::RangeValueInput
-        @valueReference={{this.args.oil.flash_point}}
-        @valueObject={{if this.args.oil.flash_point this.args.oil.flash_point.ref_temp undefined}}
         @valueTitle="Flash Point"
+        @valueObject={{this.args.oil.flash_point}}
+        @valueName={{"ref_temp"}}
         @valueUnit="C"
         @valuePrecision="2"
         @sampleIndex={{this.args.sampleIndex}}

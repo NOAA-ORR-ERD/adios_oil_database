@@ -36,6 +36,7 @@
                 @valueUnit={{this.args.leftColumnUnit}}
                 @valuePrecision={{this.args.leftColumnPrecision}}
                 @editable={{this.args.editable}}
+                @submit={{this.updateLeftColumnValue}}
               />
             </td>
             <td>
@@ -44,6 +45,7 @@
                 @valueUnit={{this.args.rightColumnUnit}}
                 @valuePrecision={{this.args.rightColumnPrecision}}
                 @editable={{this.args.editable}}
+                @submit={{this.updateRightColumnValue}}
               />
             </td>
             {{#if this.args.editable}}
@@ -59,7 +61,7 @@
         {{#if this.args.editable}}
           <tr>
             <td class="border-0">
-              <button type="button" onClick={{action "addTableRow"}}
+              <button type="button" onClick={{action "addEmptyTableRow"}}
                 class="btn btn-outline-dark btn-sm p-0 border-0">
                 {{fa-icon "plus"}}
               </button>

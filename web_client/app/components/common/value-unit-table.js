@@ -12,26 +12,50 @@ export default class ValueUnitTable extends Component {
         this.tableId = this.args.tableTitle.replace(/\s+/g, '-').toLowerCase();
 
         this.valueArray = this.args.valueArray;
+        
+        this.emptyRow = {
+            [this.args.leftColumnValueName]: {
+                value: NaN,
+                unit: this.args.leftColumnUnit
+            },
+            [this.args.rightColumnValueName]: {
+                value: NaN,
+                unit: this.args.rightColumnUnit
+            }
+        };
+
     }
 
     @action
     deleteTableRow(event) {
         // find current table row
         let currentRow = event.currentTarget.parentNode.parentNode;
-        // dlete table row
-        currentRow.parentNode.removeChild(currentRow);
         // delete correspondent array item based on row index - table idex starts from 1
-        delete this.valueArray[currentRow.rowIndex-1];
-    }
-
-    @action
-    addTableRow() {
+        this.valueArray.splice(currentRow.rowIndex - 1, 1);
+        this.valueArray = this.valueArray; // !!! - to "reset" array for tracking
 
     }
 
     @action
-    updateValue() {
+    addEmptyTableRow(event) {
+
+        if (this.valueArray ) {
+            this.valueArray = [...this.valueArray, this.emptyRow];
+        } else {
+            this.valueArray = [this.emptyRow];
+        }
+        
+    }
+
+    @action
+    updateLeftColumnValue(val) {
+        // TODO
+        {{debugger}}
+    }
+
+    @action
+    updateRightColumnValue(val) {
         // TODO
     }
-    
+
 }

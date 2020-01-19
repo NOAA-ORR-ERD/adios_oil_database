@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
+import { valueUnitUnit } from 'ember-oil-db/helpers/value-unit-unit';
 import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
 import { valueUnit } from 'ember-oil-db/helpers/value-unit';
 
@@ -20,6 +21,11 @@ export default class RangeValueDialog extends Component {
         //this.valueTitle = this.args.valueTitle;
         this.componentId = this.args.componentId;
         this.sourceValue = this.args.valueObject;
+
+        this.numberStep = 1/Math.pow(10, this.args.valuePrecision);
+
+        let unitObj = {"unit": this.args.valueUnit};
+        this.beaUnit = valueUnitUnit([unitObj]);
 
         if(this.sourceValue)
         {
@@ -51,10 +57,6 @@ export default class RangeValueDialog extends Component {
         return this.isThereInput;
     }
 
-    // set isThereInput(state) {
-    //     this.isThereInput = state;
-    // }
-
     @action
     toggleRadio(isRange){
         this.isInterval = isRange;
@@ -67,7 +69,7 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeValue(e) {
-        if(isNaN(e.target.value)) {
+        if(e.target.value.trim().length === 0) {
             this.dialogValue = "";
         } else {
             this.dialogValue = Number(e.target.value);
@@ -77,7 +79,7 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeMin(e) {
-        if(isNaN(e.target.value)) {
+        if(e.target.value.trim().length === 0) {
             this.dialogMinValue = "";
         } else {
             this.dialogMinValue = Number(e.target.value);  
@@ -87,7 +89,7 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeMax(e){
-        if(isNaN(e.target.value)) {
+        if(e.target.value.trim().length === 0) {
             this.dialogMaxValue = "";
         } else {
             this.dialogMaxValue = Number(e.target.value);
@@ -123,7 +125,7 @@ export default class RangeValueDialog extends Component {
             
             }
             // TODO - update parent value object 
-            //this.args.updateValue(enteredValue);
+            this.args.updateValue(enteredValue);
         } else {
             // nothing has been changed - do not close dialog?
             alert ("Nothing has been changed or entered!");
