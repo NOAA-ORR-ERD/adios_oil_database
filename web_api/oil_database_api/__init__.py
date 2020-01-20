@@ -1,4 +1,5 @@
-"""Main entry point
+"""
+Main entry point
 """
 import logging
 
@@ -14,8 +15,11 @@ from .common.views import cors_policy
 
 def load_cors_origins(settings, key):
     if key in settings:
-        origins = settings[key].split('\n')
-        cors_policy['origins'] = origins
+        try:
+            origins = settings[key].split('\n')
+        except AttributeError:  # Assume it's already a list
+            origins = settings[key]
+        cors_policy['origins'] = [s.strip() for s in origins]
 
 
 def generate_mongodb2_settings(settings):

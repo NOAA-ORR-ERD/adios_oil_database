@@ -10,6 +10,48 @@ If it's not trivial, and might step on others' toes, create a branch for a new f
 
 When you push to develop, the CI should run at least some tests, so you'll know if you accidentally broke something -- fix it if you did :-)
 
+# Overview
+
+The ADIOS OIl Database is a "Single page/rich client/AJAX") Web Application with the following components:
+
+The Client is built with the Ember Javascript Framework, which provides a whole pile of javascript, in browser templating, etc. You read more about it on the Web, but for now: it's a bunch of javascript, at run-time, entirely in the Browser.
+
+The Client relies on a JSON REST service, which is provided by a Pyramid App, using Cornice to help with the REST stuff. WE are calling this the "web_api", and the python package is called "oil_database_api".
+
+The web_api uses mongodb to manage the data itself. mongodb (https://www.mongodb.com/) is a "NoSQL Document Database", which runs as a separate server process.
+
+So: to run the app, you need to:
+
+* Serve up the pile of javascript/CSS/static resources etc to the browser to run the client.
+* Run the oil_database_api Pyramid App
+* Run the mongodb daemon (mongod) to serve the data.
+
+On our staging server, we have these running as three separate services (separate docker containers? not sure, but they could be)
+
+A bit more about Ember:
+
+Ember is a javascript framework -- you use it to write your in-the-browser code. However, it also comes with a set of utilities (ember-cli) that can be used to help manage your code: package it up, manage dependencies, etc. ONe of these is "ember serve" which provides (using node) a way to serve up all the files for development, including reloading when they change, etc.
+
+It also provides "ember build", which builds the app, creating a pile of static files that are needed to run the app -- these static files can be served up by any web server (SimpleHTTPServer seems to work fine, for example) In a production server, we might use Ngnx or Node, or ????
+
+### Electron:
+
+In addition to a server app hosted by NOAA, we want to provide a stand-alone version, so that others (BSEE in particular) can manage their own data, on their own systems, without needing to deploy a server application. Much like CammeoChemical and Tier2Submit.
+
+Electron is a framework for bundling up web apps as a desktop app:
+
+"Electron is an open source library developed by GitHub for building cross-platform desktop applications with HTML, CSS, and JavaScript. Electron accomplishes this by combining Chromium and Node.js into a single runtime "
+
+(https://electronjs.org/)
+
+Much like what we did for CameoChemicals with wxPython and WebKit (and what Micael has done for MarPlot with CEF and his own C++ code, but someone else doing the hard work :-)
+
+For our case, we need not only a Browser, but also the oil_database_api and mongodb servers running to use the app. In CameoChemicals, the host app and the server were written in Python, so we could start up the server in a separate thread, and have it all in one process. I think for Tier2Submit, they are doing a similar thing, but all in C++ (not sure about the threading, but...).
+
+As Electron embeds node, we need to start up the Pyramid app and mongod from javascript, as subprocesses, and hence the need to figure out how to manage them.
+
+
+
 
 ## Components
 
