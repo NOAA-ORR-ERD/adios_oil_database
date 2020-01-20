@@ -69,30 +69,30 @@ export default class RangeValueDialog extends Component {
 
     @action
     changeValue(e) {
-        if(e.target.value.trim().length === 0) {
+        if(Number.isNaN(parseFloat(e.target.value))) {
             this.dialogValue = "";
         } else {
-            this.dialogValue = Number(e.target.value);
+            this.dialogValue = parseFloat(e.target.value);
         }
         this.isThereInput = true;
     }
 
     @action
     changeMin(e) {
-        if(e.target.value.trim().length === 0) {
+        if(Number.isNaN(parseFloat(e.target.value))) {
             this.dialogMinValue = "";
         } else {
-            this.dialogMinValue = Number(e.target.value);  
+            this.dialogMinValue = parseFloat(e.target.value);  
         }
         this.isThereInput = true;
     }
 
     @action
     changeMax(e){
-        if(e.target.value.trim().length === 0) {
+        if(Number.isNaN(parseFloat(e.target.value))) {
             this.dialogMaxValue = "";
         } else {
-            this.dialogMaxValue = Number(e.target.value);
+            this.dialogMaxValue = parseFloat(e.target.value);
         }
         this.isThereInput = true;
     }

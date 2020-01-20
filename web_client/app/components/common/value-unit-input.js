@@ -15,11 +15,10 @@ export default class ValueUnitInput extends Component {
 
     @action
     updateValue(e) {
-        {{debugger}}
-        if(isNaN(e.target.value)) {
-            this.valueObject = undefined;
+        if(Number.isNaN(parseFloat(e.target.value))) {
+            this.valueObject = null;
         } else {
-            this.valueObject.value = Number(e.target.value);
+            this.valueObject.value = parseFloat(e.target.value);
             this.valueObject.unit = this.args.valueUnit;
         }
         this.args.submit(this.valueObject);

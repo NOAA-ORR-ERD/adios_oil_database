@@ -13,7 +13,29 @@ export default class ValueUnitTable extends Component {
 
         this.valueArray = this.args.valueArray;
         
-        this.emptyRow = {
+    }
+
+    removeEmptyTableRows() {
+        // TODO
+    }
+
+    @action
+    deleteTableRow(e) {
+        // find current table row
+        let currentRow = e.currentTarget.parentNode.parentNode;
+        // delete correspondent array item based on row index - table idex starts from 1
+        this.valueArray.splice(currentRow.rowIndex - 1, 1);
+        this.valueArray = this.valueArray; // !!! - to "reset" array for tracking
+
+    }
+
+    @action
+    addEmptyTableRow() {
+
+        if (!this.valueArray ) {
+            this.valueArray = [];
+        }
+        this.valueArray.push({
             [this.args.leftColumnValueName]: {
                 value: NaN,
                 unit: this.args.leftColumnUnit
@@ -22,39 +44,28 @@ export default class ValueUnitTable extends Component {
                 value: NaN,
                 unit: this.args.rightColumnUnit
             }
-        };
+        });
 
+        this.valueArray = this.valueArray;
     }
 
     @action
-    deleteTableRow(event) {
-        // find current table row
-        let currentRow = event.currentTarget.parentNode.parentNode;
-        // delete correspondent array item based on row index - table idex starts from 1
-        this.valueArray.splice(currentRow.rowIndex - 1, 1);
-        this.valueArray = this.valueArray; // !!! - to "reset" array for tracking
-
-    }
-
-    @action
-    addEmptyTableRow(event) {
-
-        if (this.valueArray ) {
-            this.valueArray = [...this.valueArray, this.emptyRow];
-        } else {
-            this.valueArray = [this.emptyRow];
-        }
-        
-    }
-
-    @action
-    updateLeftColumnValue(val) {
+    updateLeftColumnValue(index, valueObject) {
         // TODO
-        {{debugger}}
+        // if(valueObject) {
+        //     if(Number.isNaN(valueObject.value)){
+        //         if(this.valueArray[index][this.args.leftColumnValueName]){
+        //             this.valueArray[index][this.args.leftColumnValueName].value = NaN;
+        //         }
+        //     } else {
+        //         if(this.valueArray[index][this.args.leftColumnValueName]){
+        //             this.valueArray[index][this.args.leftColumnValueName].value = valueObject.value;
+        //     }
+        // }
     }
 
     @action
-    updateRightColumnValue(val) {
+    updateRightColumnValue(index, valueObject) {
         // TODO
     }
 

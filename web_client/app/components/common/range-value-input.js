@@ -36,7 +36,6 @@ export default class RangeValueInput extends Component {
 
     @action
     updateValue(enteredValue) {
-        {{debugger}}
         // TODO - do we need to keep properties other than value(s) and unit? (_cls, from_unit, etc.) 
         if(this.valueObject) {
             if(enteredValue) {
@@ -87,9 +86,10 @@ export default class RangeValueInput extends Component {
             //     this.valueObject.unit = valueObject.unit;
             //     this.valueObject = this.valueObject; // ember! - reset tracked object
             // } else {    // all fields are empty - remove object (?)
-            //     this.valueObject = undefined;
+            //     this.valueObject = null;
             // }
-   
+
+        // TODO
         //this.args.updateValue(valueObject);
     }
 }
