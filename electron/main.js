@@ -1,20 +1,89 @@
 const path = require( "path" );
 const childProcess = require( "child_process" );
-var requestPromise = require( "request-promise" );
-var dialog = require( "dialog" );
+const requestPromise = require( "request-promise" );
+const dialog = require( "dialog" );
+console.log(require.resolve('electron'))
 const electron = require( "electron" );
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const isMac = process.platform === 'darwin';
 
-electron.crashReporter.start( { companyName: "NOAA", submitURL: "https://google.com" } );
+electron.crashReporter.start( { companyName: "NOAA", submitURL: "https://response.restoration.noaa.gov/" } );
 
 var fileServerProcess = null;
 var mongoDbProcess = null;
 var webApiProcess = null;
 var mainWindow = null;
 
-app.on( "ready", AdvanceStartupSequence );
+/*
+const ref = require( "ref" );
+const ffi = require( "ffi" );
+
+var voidPtr = ref.refType( ref.types.void );
+var stringPtr = ref.refType( ref.types.CString );
+
+var user32 = ffi.Library(
+	"user32.dll",
+	{
+		// EnumWindows : ['bool', [voidPtr, 'int32']],
+		FindWindowW : [ "int", [ "string", "string"] ],
+		// ShowWindow : ['int', ['int', 'int']],
+		// CloseWindow  : ['long', ['long']],
+		// GetWindowTextA  : ['long', ['long', stringPtr, 'long']],
+		// GetWindowTextLengthA  : ['long', ['long']],
+		// IsWindowVisible  : ['long', ['long']],
+		// FindWindowW : ['int', ['string', 'string']],
+		// ShowWindow : ['int', ['int', 'int']]
+	}
+);
+
+function TEXT( text )
+{
+	return new Buffer( text, "ucs2").toString( "binary" );
+}
+
+function FindWindow( name )
+{
+	var text = TEXT( name );
+	var handle = 0;
+	
+	//ensure accurate reading, sometimes returns 0 when window does exist
+	for (var i = 0 ; i < 50 ; i++ )
+	{
+		handle = user32.FindWindowW( null, text );
+		if ( handle != 0 )
+		{
+			break;
+		}
+	}
+	
+	return handle;
+}
+*/
+
+app.on(
+	"ready",
+	function()
+	{
+		/*
+		if ( FindWindow( "Task Manager" ) != 0 )
+		{
+			dialog.err( "The program is already running.",
+						"ADIOS Oil Database Error",
+						function( code )
+						{
+							app.quit();
+						}
+			);
+		}
+		else
+		*/
+		{
+			OpenWindow();
+			AdvanceStartupSequence();
+		}
+	}
+);
 
 app.on(
 	"window-all-closed",
@@ -46,10 +115,13 @@ function AdvanceStartupSequence()
 		console.log( "AdvanceStartupSequence() calling StartWebApiProcess()" );
 		StartWebApiProcess();
 	}
-	else if ( mainWindow == null )
+	else if ( mainWindow != null )
 	{
-		console.log( "AdvanceStartupSequence() calling OpenWindow()" );
-		OpenWindow();
+		console.log( "AdvanceStartupSequence() navigating to the application url" );
+		// mainWindow.loadURL( "file://" + __dirname + "/index.html" );
+		DefineFullApplicationMenu();
+		mainWindow.loadURL( "http://localhost:8080" );
+		// mainWindow.webContents.openDevTools();
 	}
 }
 
@@ -84,7 +156,7 @@ function TryToCallFileServer( numTries )
 		{
 			console.log( "file server started! (received HTML string of length " + htmlString.length + ")" );
 			
-			AdvanceStartupSequence();
+			setTimeout( () => { AdvanceStartupSequence(); }, 0 );
 		}
 	)
 	.catch(
@@ -115,7 +187,7 @@ function StartMongoDbProcess()
 	
 	// var subpy = require('child_process').spawn('./dist/server.exe');
 	
-	fileServerProcess.on(
+	mongoDbProcess.on(
 		"error",
 		( err ) =>
 			{
@@ -130,9 +202,9 @@ function StartWebApiProcess()
 {
 	console.log( "StartWebApiProcess()" );
 	
-	let cwd = path.resolve( __dirname, ".." );
-	webApiProcess = childProcess.spawn( "pserve",
-										[ "--reload", "web_api/config-example.ini" ],
+	let cwd = path.join( path.resolve( __dirname, ".." ), "web_api" );
+	webApiProcess = childProcess.spawn( "python",
+										[ "start_server.py", "config-example.ini" ],
 										{ cwd: cwd } );
 	webApiProcess.on(
 		"error",
@@ -155,7 +227,7 @@ function TryToCallWebApiServer( numTries )
 		{
 			console.log( "web api server started! (received JSON string of length " + jsonString.length + ")" );
 			
-			AdvanceStartupSequence();
+			setTimeout( () => { AdvanceStartupSequence(); }, 0 );
 		}
 	)
 	.catch(
@@ -163,7 +235,7 @@ function TryToCallWebApiServer( numTries )
 		{
 			console.log( "waiting for the web api server to start, attempt = " + numTries + " ..." );
 			
-			if ( numTries >= 10 )
+			if ( numTries >= 20 )
 			{
 				QuitWithErrorMessage( "Unable to call the web api server process." );
 			}
@@ -179,8 +251,14 @@ function OpenWindow()
 {
 	console.log( "OpenWindow()" );
 	
-	DefineApplicationMenu();
-	mainWindow = new BrowserWindow( { width: 800, height: 600, icon: path.join( __dirname, "oil-barrel.ico" ) } );
+	DefineEmptyApplicationMenu();
+	mainWindow = new BrowserWindow(
+					{
+						width: 800,
+						height: 600,
+						icon: path.join( __dirname, "oil-barrel.ico" ),
+						title: "ADIOS Oil Database"
+					} );
 	mainWindow.on(
 		"closed",
 		function()
@@ -189,9 +267,8 @@ function OpenWindow()
 			KillChildProcesses();
 		}
 	);
-	// mainWindow.loadURL( "file://" + __dirname + "/index.html" );
-	mainWindow.loadURL( "http://localhost:8080" );
-	// mainWindow.webContents.openDevTools();
+	
+	mainWindow.loadURL( "http://localhost:8080/startup.html" );
 };
 
 function QuitWithErrorMessage( message )
@@ -326,7 +403,13 @@ const menuTemplate = [
   }
 ];
 
-function DefineApplicationMenu()
+function DefineEmptyApplicationMenu()
+{
+	const menu = electron.Menu.buildFromTemplate( [] );
+	electron.Menu.setApplicationMenu( menu );
+}
+
+function DefineFullApplicationMenu()
 {
 	const menu = electron.Menu.buildFromTemplate( menuTemplate );
 	electron.Menu.setApplicationMenu( menu );
