@@ -2,6 +2,7 @@
 Main entry point
 """
 import logging
+import os
 
 import ujson
 
@@ -93,6 +94,8 @@ def main(global_config, **settings):
     client_path = settings.get('client_path')
     if client_path:
         print("adding client code to serve:\n", client_path)
+        if not os.path.isdir(client_path):
+            raise ValueError(f"client path: {client_path} does not exist")
         config.add_static_view(name='/',
                                path=client_path)
 
@@ -104,6 +107,5 @@ def main(global_config, **settings):
     # setup the about endpoint
     config.add_route('about', '/about')
     config.add_view(about, route_name='about')
-
 
     return config.make_wsgi_app()

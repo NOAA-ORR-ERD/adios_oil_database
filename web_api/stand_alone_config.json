@@ -2,6 +2,9 @@
 "web_api_host": "0.0.0.0",
 "web_api_port": 9898,
 
+"standalone": true,
+"client_path": "../StandAlone/client_code",
+
 "mongodb.host": "localhost",
 "mongodb.port": "27017",
 "mongodb.database": "oil_database",
@@ -17,11 +20,8 @@
                      "pyramid_mongodb2"
                      ],
 
-"cors_policy.origins": ["http://0.0.0.0:8080",
-                        "http://localhost:8080",
-                        "http://localhost:8088",
-                        "http://localhost:4200",
-                        "http://localhost:4201"
+"cors_policy.origins": ["http://0.0.0.0:9898",
+                        "http://localhost:9898"
                        ],
 
 "caps.can_modify_db": false,

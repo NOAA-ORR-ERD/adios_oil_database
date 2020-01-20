@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
 _file = Path(__file__).resolve()
 here = _file.parent
+settings_path = Path(settings_file).resolve().parent
 
 global_config = {'here': here,
                  '__file__': _file,
@@ -54,11 +55,18 @@ settings['help_dir'] = help_dir
 api_host = settings.pop("web_api_host")
 api_port = settings.pop("web_api_port")
 
+# Set path to serve standalone:
+if settings.get('standalone'):
+    # Set the path for serving the files
+    # assume the client path is realtive to main settings file
+    settings['client_path'] = str((settings_path /
+                                   settings.pop('client_path')).resolve())
+
 # Configure the logger:
 # NOTE: we could do this all in the JSON:
 #       https://gist.github.com/pmav99/49c01313db33f3453b22
 # assume the log config file is next to the main settings file
-# log_config_file = Path(settings_file).resolve().parent / settings.pop("log_config_file")
+# log_config_file = settings_path / settings.pop("log_config_file")
 # logging.config.fileConfig(log_config_file)
 
 
