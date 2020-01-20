@@ -14,6 +14,19 @@ export default class AddNewOilDlg extends Component {
     }
 
     @action
+    setModalEvents(element) {
+        // Unfortunately, this is the only way to bind handlers to a bootstrap
+        // modal.  You need to show the modal first.
+        $(element).modal('show').on('shown.bs.modal', this.shown);
+        $(element).modal('hide');
+    }
+
+    @action
+    shown(event) {
+        event.currentTarget.querySelector('input').focus();
+    }
+
+    @action
     updateName(event) {
         this.name = event.target.value;
     }
