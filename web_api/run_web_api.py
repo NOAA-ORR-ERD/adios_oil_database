@@ -58,8 +58,8 @@ api_port = settings.pop("web_api_port")
 # NOTE: we could do this all in the JSON:
 #       https://gist.github.com/pmav99/49c01313db33f3453b22
 # assume the log config file is next to the main settings file
-log_config_file = Path(settings_file).resolve().parent / settings.pop("log_config_file")
-logging.config.fileConfig(log_config_file)
+# log_config_file = Path(settings_file).resolve().parent / settings.pop("log_config_file")
+# logging.config.fileConfig(log_config_file)
 
 
 # create the app
