@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody id={{concat this.tableId "-tbody"}}>
-        {{#each this.valueArray as |value|}}
+        {{#each this.valueArray as |value index|}}
           <tr class="collapse show {{concat this.tableId "-row-collapse"}}">
             <td>
               <Common::ValueUnitInput
@@ -36,6 +36,7 @@
                 @valueUnit={{this.args.leftColumnUnit}}
                 @valuePrecision={{this.args.leftColumnPrecision}}
                 @editable={{this.args.editable}}
+                @submit={{fn this.updateLeftColumnValue index}}
               />
             </td>
             <td>
@@ -44,6 +45,7 @@
                 @valueUnit={{this.args.rightColumnUnit}}
                 @valuePrecision={{this.args.rightColumnPrecision}}
                 @editable={{this.args.editable}}
+                @submit={{fn this.updateRightColumnValue index}}
               />
             </td>
             {{#if this.args.editable}}
@@ -59,7 +61,7 @@
         {{#if this.args.editable}}
           <tr>
             <td class="border-0">
-              <button type="button" onClick={{action "addTableRow"}}
+              <button type="button" onClick={{action "addEmptyTableRow"}}
                 class="btn btn-outline-dark btn-sm p-0 border-0">
                 {{fa-icon "plus"}}
               </button>

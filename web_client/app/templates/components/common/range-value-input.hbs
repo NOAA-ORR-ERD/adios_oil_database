@@ -1,17 +1,17 @@
 {{! 
     argunments:
-        valueReference -- example: sample.pour_point -- might be null in 'No Data' case
-        valueObject -- example: sample.pour_point.ref_temp -- might be same as valueReference
-        valueTitle - value title
-        valueUnit - display unit
-        valuePrecision - unit conversion precision
-        sampleIndex - index of sample in samples array
+        valueTitle - value title for range/value dialog
+        valueObject -- example: pour_point, flash_point, etc. - might be null in 'No Data' case
+        valueName -- example: ref_temp, etc.
+        valueUnit -- display unit
+        valuePrecision -- unit conversion precision
+        sampleIndex -- index of sample in samples array - it needs to tether a dialog (to form non-duplicate element id)
  }}
-{{#if this.args.valueReference}}
+{{#if this.valueObject}}
   <Input
     @class="p-1 bg-transparent border"
     @type="text"
-    @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit) this.args.valuePrecision}}
+    @value={{value-unit (convert-unit this.inputValue this.args.valueUnit) this.args.valuePrecision}}
     @focus-in={{action "openModalDialog"}}
     id={{this.componentId}}
   />
@@ -23,11 +23,11 @@
     @focus-in={{action "openModalDialog"}}
     id={{this.componentId}}
   />
-{{/if}} {{! if pour_point }}
+{{/if}}
 
 {{#if this.isShowingModal}}
   <Common::RangeValueDialog
-    @valueObject={{this.valueObject}}
+    @valueObject={{this.inputValue}}
     @valueTitle={{this.args.valueTitle}}
     @valueUnit={{this.args.valueUnit}}
     @valuePrecision={{this.args.valuePrecision}}

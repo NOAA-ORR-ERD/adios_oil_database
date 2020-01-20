@@ -3,9 +3,9 @@
     <label class="p-1 input-group-text font-weight-bold">Pour Point:</label>
     {{#if this.args.editable}}
       <Common::RangeValueInput
-        @valueReference={{this.args.oil.pour_point}}
-        @valueObject={{if this.args.oil.pour_point this.args.oil.pour_point.ref_temp undefined}}
         @valueTitle="Pour Point"
+        @valueObject={{this.args.oil.pour_point}}
+        @valueName="ref_temp"
         @valueUnit="C"
         @valuePrecision="2"
         @sampleIndex={{this.args.sampleIndex}}

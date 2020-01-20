@@ -3,7 +3,8 @@
         valueObject -- example: oil.adhesion.adhesion -- might be same as valueReference
         valueUnit - display unit
         valuePrecision - unit conversion precision
-        editable
+        editable - boolean
+        submit - submit changes function
  --}}
 {{#if this.args.editable}}
   <div class="row d-flex m-0 p-0">
@@ -31,7 +32,7 @@
     </div>
   </div>
 {{else}}
-  {{#if this.args.valueObject}}
+  {{#if this.valueObject}}
     {{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
       this.args.valuePrecision}}
   {{else}}
