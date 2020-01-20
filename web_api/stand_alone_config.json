@@ -24,5 +24,7 @@
                         "http://localhost:4201"
                        ],
 
-"caps.can_modify_db": false
+"caps.can_modify_db": false,
+
+"log_config_file": "standalone_logging.ini"
 }
