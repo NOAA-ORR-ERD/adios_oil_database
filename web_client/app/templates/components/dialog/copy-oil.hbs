@@ -1,5 +1,7 @@
 <div id="copyOilDialog" class="modal fade" role="dialog" tabindex="-1"
-     aria-labelledby="copyOilDialogLabel" aria-hidden="true">
+     aria-labelledby="copyOilDialogLabel" aria-hidden="true"
+     {{did-insert this.setModalEvents}}
+     >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -19,6 +21,8 @@
               <Input type="text" @class="form-control bg-transparent border"
                      value={{this.oilName}}
                      {{on "change" this.updateName}}
+                     {{on "keypress" this.updateName}}
+                     {{on "focusout" this.updateName}}
               />
             </div>
 
@@ -33,6 +37,7 @@
 
         {{#if this.formFilledOut}}
           <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  {{ref this "okButton"}}
                   {{on "click" this.submitForm}} >
             OK
           </button>
