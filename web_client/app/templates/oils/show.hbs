@@ -13,7 +13,7 @@
       {{!-- back to oil list control --}}
       <div class="mr-2 d-inline-block">
         {{#link-to "oils"}}
-          <button type="button" class="btn btn-dark btn-sm text-nowrap"
+          <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
             data-toggle="tooltip" title="Back to List">
             &lt; Back to List
           </button>
@@ -37,11 +37,10 @@
     </div>
 
       <div class="col-sm-4 col-xs-12">
-        <div class="row align-items-center">
+        <div class="row align-items-center justify-content-center">
   
-          <div class="col-xs-4 offset-md-4 text-center justify-content-center">
+          <div class="col-xs-4 mt-2 text-center">
             {{!-- edit mode switch control --}}
-            <span class="small text-nowrap">Edit Mode</span>
             <XToggle
               @theme="ios"
               @showLabels={{true}}
@@ -54,7 +53,7 @@
         </div>
       </div>
 
-      <div class="col-sm-4 col-xs-6">
+      <div class="col-xs-6 col-sm-4 col-lg-3 offset-lg-1">
           <div class="d-flex">
             <Button::Download
               @oil={{this.model}}
