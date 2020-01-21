@@ -16,7 +16,20 @@ export default class ValueUnitTable extends Component {
     }
 
     removeEmptyTableRows() {
-        // TODO
+        if(Array.isArray(this.valueArray)) {
+            let i = this.valueArray.length;
+
+            while(i--) {
+                if (this.valueArray[i][this.args.leftColumnValueName] &&
+                    this.valueArray[i][this.args.rightColumnValueName]) {
+                    if (Number.isNaN(parseFloat(this.valueArray[i][this.args.leftColumnValueName].value)) &&
+                        Number.isNaN(parseFloat(this.valueArray[i][this.args.leftColumnValueName].value))) {
+                            this.valueArray.splice(i, 1);
+                    }
+                }
+            }
+            this.valueArray = [...this.valueArray];
+        }
     }
 
     @action
@@ -51,22 +64,61 @@ export default class ValueUnitTable extends Component {
 
     @action
     updateLeftColumnValue(index, valueObject) {
-        // TODO
-        // if(valueObject) {
-        //     if(Number.isNaN(valueObject.value)){
-        //         if(this.valueArray[index][this.args.leftColumnValueName]){
-        //             this.valueArray[index][this.args.leftColumnValueName].value = NaN;
-        //         }
-        //     } else {
-        //         if(this.valueArray[index][this.args.leftColumnValueName]){
-        //             this.valueArray[index][this.args.leftColumnValueName].value = valueObject.value;
-        //     }
-        // }
+        if(valueObject) {
+            if(Number.isNaN(parseFloat(valueObject.value))){
+                // value has been removed (emty field) or is NaN
+                if(this.valueArray[index][this.args.leftColumnValueName]){
+                    this.valueArray[index][this.args.leftColumnValueName].value = NaN;
+                }   // do nothing if valueArray[index] has no leftColumnValueName property
+            } else {    // not NaN value
+                if(this.valueArray[index][this.args.leftColumnValueName]){
+                    this.valueArray[index][this.args.leftColumnValueName].value = valueObject.value;
+                    this.valueArray[index][this.args.leftColumnValueName].unit = valueObject.unit;
+                } else { // there is no value object in valueArray
+                    this.valueArray[index] = {
+                        [this.args.leftColumnValueName]: {
+                            value: valueObject.value, 
+                            unit: valueObject.unit
+                        }
+                    };
+                }
+            }
+        } else {    // null, etc. - value has been removed (emty field)
+            if(this.valueArray[index][this.args.leftColumnValueName]){
+                this.valueArray[index][this.args.leftColumnValueName].value = NaN; 
+            }
+        }
+
+        this.removeEmptyTableRows();
     }
 
     @action
     updateRightColumnValue(index, valueObject) {
-        // TODO
-    }
+        if(valueObject) {
+            if(Number.isNaN(parseFloat(valueObject.value))){
+                // value has been removed (emty field) or is NaN
+                if(this.valueArray[index][this.args.rightColumnValueName]){
+                    this.valueArray[index][this.args.rightColumnValueName].value = NaN;
+                }   // do nothing if valueArray[index] has no 'rightColumnValueName' property
+            } else {    // not NaN value
+                if(this.valueArray[index][this.args.rightColumnValueName]){
+                    this.valueArray[index][this.args.righttColumnValueName].value = valueObject.value;
+                    this.valueArray[index][this.args.rightColumnValueName].unit = valueObject.unit;
+                } else { // there is no value object in valueArray
+                    this.valueArray[index] = {
+                        [this.args.rightColumnValueName]: {
+                            value: valueObject.value, 
+                            unit: valueObject.unit
+                        }
+                    };
+                }
+            }
+        } else {    // null, etc. - value has been removed (emty field)
+            if(this.valueArray[index][this.args.rightColumnValueName]){
+                this.valueArray[index][this.args.rightColumnValueName].value = NaN; 
+            }
+        }
 
+        this.removeEmptyTableRows();
+    }
 }
