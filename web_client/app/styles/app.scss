@@ -74,7 +74,9 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
   border: none;  
   outline: none;
 }
-
+.nav-link.active {
+  text-decoration: underline;
+}
 .footer{
     padding: 15px 0;
     //background: #2F4F4F;
