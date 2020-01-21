@@ -37,8 +37,8 @@ export default class AddNewOilDlg extends Component {
     updateName(event) {
         this.name = event.target.value;
 
-        if (event.type === 'change') {
-            console.log('name changed...');
+        if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
+            this.okButton.focus();
         }
     }
 

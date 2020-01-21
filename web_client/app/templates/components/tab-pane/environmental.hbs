@@ -25,15 +25,24 @@
   </center>
 
   <div class="row">
-    <div class="col-5">
+    <div class="col-6">
       <Table::EvaporationEqs @oil={{oil}}/>
+    </div>
+    <div class="col-6">
+      <Table::Emulsion @oil={{oil}}/>
+    </div>
+  </div>
 
+  <div class="row">
+    <div class="col-6">
       <Table::ChemicalDispersibility @oil={{oil}}/>
+    </div>
+  </div>
 
+  <div class="row">
+    <div class="col-sm-8 col-xs-12">
       <Table::Toxicity @oil={{oil}}/>
     </div>
-
-    <Table::Emulsion @oil={{oil}} class="col-5"/>
   </div>
 
 </div>

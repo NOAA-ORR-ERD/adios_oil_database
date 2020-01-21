@@ -97,6 +97,8 @@ def main(global_config, **settings):
             raise ValueError(f"client path: {client_path} does not exist")
         config.add_static_view(name='/',
                                path=client_path)
+        # attempt to put the client files in a sub-dir
+        #  to avoid clashes with the API
         # config.add_static_view(name='/client/',
         #                        path=client_path)
 

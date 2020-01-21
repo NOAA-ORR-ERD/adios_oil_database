@@ -1,78 +1,79 @@
 <div class="container-fluid">
-  <div class="row">
+  <div class="row d-flex align-items-center">
+    <div class="col-12 col-sm">
 
-    <div class="col-sm-4">
-      <div class="row pl-3 d-flex align-items-center">
-
-        {{!-- back to oil list control --}}
-        <div class=" mr-2">
-          {{#link-to "oils"}}
-            <button type="button" class="btn btn-dark"
-              data-toggle="tooltip" title="Back to List">
-              &lt; Back to List
-            </button>
-          {{/link-to}}
-        </div>
-
-        {{!-- oil status --}}
-        <strong>
-          Status:
-          {{#if this.model.hasDirtyAttributes}}
-            <i class="status-warning">Saving...</i>
-          {{else if (eq (get-status this.model.status) "OK")}}
-            <i class="status-good">OK</i>
-          {{else if (eq (get-status this.model.status) "Errors")}}
-            <i class="status-error">Errors</i>
-          {{else}}
-            <i class="status-warning">Warnings</i>
-          {{/if}}
-        </strong>
-
-      </div>
-    </div>
-
-    {{!-- oil title --}}
-    <div class="col-sm">
+      {{!-- oil title --}}
       <h2 align="center" class="title">{{this.model.name}}</h2>
     </div>
+  </div>
 
-    <div class="col-sm-3">
-      <div class="d-flex justify-content-center">
-        <Button::Download
-          @oil={{this.model}}
-        />
+  <div class="row">
+    <div class="col-sm-4 col-xs-12">
 
-        <Button::CopyOil
-          @oil={{this.model}}
-          @submit={{action send "createOil"}}
-        />
+      {{!-- back to oil list control --}}
+      <div class="mr-2 d-inline-block">
+        {{#link-to "oils"}}
+          <button type="button" class="btn btn-dark btn-sm text-nowrap"
+            data-toggle="tooltip" title="Back to List">
+            &lt; Back to List
+          </button>
+        {{/link-to}}
 
-        <Button::DeleteOil
-          @oil={{this.model}}
-          @submit={{action send "deleteOil"}}
-        />
-
-      </div>
-
-      <div class="d-flex justify-content-center">
-
-        <div class="col-sm-5">
-          {{!-- edit mode switch control --}}
-          <center class="small">Mode</center>
-          <XToggle
-            @theme="ios"
-            @showLabels={{true}}
-            @onLabel="Edit"
-            @offLabel="View"
-            @value={{this.editable}}
-            @onToggle={{action (mut this.editable)}}
-          />
-        </div>
+      {{!-- oil status --}}
+      <strong>
+        Status:
+        {{#if this.model.hasDirtyAttributes}}
+          <i class="status-warning">Saving...</i>
+        {{else if (eq (get-status this.model.status) "OK")}}
+          <i class="status-good">OK</i>
+        {{else if (eq (get-status this.model.status) "Errors")}}
+          <i class="status-error">Errors</i>
+        {{else}}
+          <i class="status-warning">Warnings</i>
+        {{/if}}
+      </strong>
       </div>
 
     </div>
 
-  </div>
+      <div class="col-sm-4 col-xs-12">
+        <div class="row align-items-center">
+  
+          <div class="col-xs-4 offset-md-4 text-center justify-content-center">
+            {{!-- edit mode switch control --}}
+            <span class="small text-nowrap">Edit Mode</span>
+            <XToggle
+              @theme="ios"
+              @showLabels={{true}}
+              @onLabel="Edit"
+              @offLabel="View"
+              @value={{this.editable}}
+              @onToggle={{action (mut this.editable)}}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4 col-xs-6">
+          <div class="d-flex">
+            <Button::Download
+              @oil={{this.model}}
+            />
+
+            <Button::CopyOil
+              @oil={{this.model}}
+              @submit={{action send "createOil"}}
+            />
+
+            <Button::DeleteOil
+              @oil={{this.model}}
+              @submit={{action send "deleteOil"}}
+            />
+
+        </div>
+      </div>
+    </div>
+
 
   <div class="content">
     <TabGeneral
