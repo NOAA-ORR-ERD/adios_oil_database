@@ -1,3 +1,5 @@
+const USE_INI_CONFIG = true;
+
 const path = require( "path" );
 const childProcess = require( "child_process" );
 const requestPromise = require( "request-promise" );
@@ -203,12 +205,19 @@ function StartWebApiProcess()
 	console.log( "StartWebApiProcess()" );
 
 	let cwd = path.join( path.resolve( __dirname, ".." ), "web_api" );
-	// webApiProcess = childProcess.spawn( "python",
-	// 									[ "start_server.py", "config-example.ini" ],
-	// 									{ cwd: cwd } );
-    webApiProcess = childProcess.spawn( "python",
-                                     [ "run_web_api.py", "stand_alone_config.json" ],
-                                     { cwd: cwd } );
+	if ( USE_INI_CONFIG )
+	{
+		webApiProcess = childProcess.spawn( "python",
+											[ "start_server.py", "config-example.ini" ],
+											{ cwd: cwd } );
+	}
+	else
+	{
+		webApiProcess = childProcess.spawn( "python",
+											[ "run_web_api.py", "stand_alone_config.json" ],
+											{ cwd: cwd } );
+	}
+	
 	webApiProcess.on(
 		"error",
 		( err ) =>
@@ -271,7 +280,8 @@ function OpenWindow()
 		}
 	);
 
-	mainWindow.loadURL( "http://localhost:8080/startup.html" );
+	let p = path.join( __dirname, "startup.html" );
+	mainWindow.loadURL( "file://" + p );
 };
 
 function QuitWithErrorMessage( message )
