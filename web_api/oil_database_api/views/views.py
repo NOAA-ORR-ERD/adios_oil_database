@@ -1,12 +1,17 @@
 """ Cornice services.
+
+    Nothing here now -- it was jsut for testing
 """
-from cornice import Service
+pass
 
+# from cornice import Service
 
-hello = Service(name='hello', path='/', description="Simplest view")
+# hello = Service(name='hello',
+#                 path='/about',
+#                 description="Just knowing it works")
 
+# @hello.get()
+# def get_info(request):
+#     """Returns Hello in JSON."""
+#     return {'Hello': ', welcome to the Oil Database API!!'}
 
-@hello.get()
-def get_info(request):
-    """Returns Hello in JSON."""
-    return {'Hello': ', welcome to the Oil Database API!!'}

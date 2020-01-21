@@ -1,14 +1,15 @@
 """
 Main entry point
 """
-import logging
+import os
 
 import ujson
 
 from pyramid.config import Configurator
+from pyramid.response import Response
 from pyramid.renderers import JSON as JSONRenderer
 
-from oil_database.util.db_connection import connect_mongodb
+# from oil_database.util.db_connection import connect_mongodb
 
 from .common.views import cors_policy
 
@@ -46,6 +47,34 @@ def get_json(request):
     return ujson.loads(request.text, ensure_ascii=False)
 
 
+def about(request):
+    """
+    A simple view that give a little hello message if you hit the server directly
+    print('Incoming request')
+    """
+    msg = """
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>NOAA ADIOS Oil Database</title>
+      </head>
+      <body>
+        <h1> NOAA ADIOS Oil Database </h1>
+        <p>
+            Welcome to the ADIOS oil database server.
+
+            This service is a JSON Web REST Service.
+        </p>
+        <p>
+            [We need to document the API here -- or point to docs.]
+        </p>
+      </body>
+</html>
+    """
+    return Response(msg)
+
+
 def main(global_config, **settings):
 
     load_cors_origins(settings, 'cors_policy.origins')
@@ -59,5 +88,25 @@ def main(global_config, **settings):
 
     config.include("cornice")
     config.scan("oil_database_api.views")
+
+    # add static file serving if we are running the standalone
+    client_path = settings.get('client_path')
+    if client_path:
+        print("adding client code to serve:\n", client_path)
+        if not os.path.isdir(client_path):
+            raise ValueError(f"client path: {client_path} does not exist")
+        config.add_static_view(name='/',
+                               path=client_path)
+        # config.add_static_view(name='/client/',
+        #                        path=client_path)
+
+    else:
+        # serve up the basic hello message at the root
+        print("no client_path: not serving any static files")
+        config.add_route('home', '/')
+        config.add_view(about, route_name='home')
+    # setup the about endpoint
+    config.add_route('about', '/about')
+    config.add_view(about, route_name='about')
 
     return config.make_wsgi_app()
