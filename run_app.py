@@ -18,10 +18,14 @@ environment and all that. but for now, just starting it up.
 
 """
 import os
+import sys
 from subprocess import run, Popen
 import atexit
 import time
 import webbrowser
+
+rebuild = True if "--rebuild" in sys.argv else False
+
 
 # start up mongo:
 
@@ -35,10 +39,11 @@ webapi = Popen(['pserve', '--reload', 'web_api/config-example.ini'])
 
 os.chdir('web_client')
 
-# make sure npm packages are up to date
-print("Updating/installing npm packages")
-run(["npm", "install"])
-print("Done with npm packages")
+if rebuild:
+    # make sure npm packages are up to date
+    print("Updating/installing npm packages")
+    run(["npm", "install"])
+    print("Done with npm packages")
 
 print("Starting up Ember Serve")
 client = Popen(['ember', 'serve'])
