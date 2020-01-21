@@ -99,40 +99,25 @@ export default class RangeValueDialog extends Component {
 
     @action
     onSave(){
-        var closeDialog = false;
+        {{debugger}}
         let enteredValue = {"unit": this.args.valueUnit};
         
         if (this.isThereInput) {
-            // prepare value object for back conversion
             if (this.isInterval) {
-                if (this.dialogMinValue) {
+                if (this.dialogMinValue !== "") {
                     enteredValue["min_value"] = this.dialogMinValue;
-                    closeDialog = true;
                 }
-                if (this.dialogMaxValue) {
+                if (this.dialogMaxValue !== "") {
                     enteredValue["max_value"] = this.dialogMaxValue;
-                    closeDialog = true;
                 }
             } else {
-                // it must be not empty
-                if (this.dialogValue) {
+                if (this.dialogValue !== "") {
                     enteredValue["value"] = this.dialogValue;
-                    closeDialog = true;
-                } else {
-                    alert ("Entered value is empty");
-                    // do not close dialog ?
                 }
-            
             }
-            // TODO - update parent value object 
             this.args.updateValue(enteredValue);
-        } else {
-            // nothing has been changed - do not close dialog?
-            alert ("Nothing has been changed or entered!");
         }
 
-        if (closeDialog) {
-            this.closeModalDialog() 
-        }
+        this.closeModalDialog() 
     }
 }

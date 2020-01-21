@@ -23,7 +23,7 @@ export default class ValueUnitTable extends Component {
                 if (this.valueArray[i][this.args.leftColumnValueName] &&
                     this.valueArray[i][this.args.rightColumnValueName]) {
                     if (Number.isNaN(parseFloat(this.valueArray[i][this.args.leftColumnValueName].value)) &&
-                        Number.isNaN(parseFloat(this.valueArray[i][this.args.leftColumnValueName].value))) {
+                        Number.isNaN(parseFloat(this.valueArray[i][this.args.rightColumnValueName].value))) {
                             this.valueArray.splice(i, 1);
                     }
                 }
@@ -102,7 +102,7 @@ export default class ValueUnitTable extends Component {
                 }   // do nothing if valueArray[index] has no 'rightColumnValueName' property
             } else {    // not NaN value
                 if(this.valueArray[index][this.args.rightColumnValueName]){
-                    this.valueArray[index][this.args.righttColumnValueName].value = valueObject.value;
+                    this.valueArray[index][this.args.rightColumnValueName].value = valueObject.value;
                     this.valueArray[index][this.args.rightColumnValueName].unit = valueObject.unit;
                 } else { // there is no value object in valueArray
                     this.valueArray[index] = {

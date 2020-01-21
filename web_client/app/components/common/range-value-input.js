@@ -6,7 +6,8 @@ export default class RangeValueInput extends Component {
 
     @tracked isShowingModal = false;
     @tracked valueObject;
-    
+    @tracked inputValue;
+
     constructor() {
         super(...arguments);
 
@@ -36,58 +37,81 @@ export default class RangeValueInput extends Component {
 
     @action
     updateValue(enteredValue) {
-        // TODO - do we need to keep properties other than value(s) and unit? (_cls, from_unit, etc.) 
-        if(this.valueObject) {
-            if(enteredValue) {
-                // there are source and enterd value(s) case
-                // min value
-                if(enteredValue.min_value){
-                    this.valueObject[this.args.valueName].min_value = enteredValue.min_value;
-                } else {
-                    if(this.valueObject[this.args.valueName].min_value) {
-                        delete this.valueObject[this.args.valueName].min_value
-                    }
-                }
-                // max value
-                if(enteredValue.max_value){
-                    this.valueObject[this.args.valueName].max_value = enteredValue.max_value;
-                } else {
-                    if(this.valueObject[this.args.valueName].max_value) {
-                        delete this.valueObject[this.args.valueName].max_value
-                    }
-                }
-                // scalar value
-                if(enteredValue.value){
-                    this.valueObject[this.args.valueName].value = enteredValue.value;
-                } else {
-                    if(this.valueObject[this.args.valueName].value) {
-                        delete this.valueObject[this.args.valueName].value
-                    }
-                }
-                // save unit
-                this.valueObject[this.args.valueName].unit = enteredValue.unit;
+        // TODO - do we need to keep properties other than value(s) and unit? (_cls, from_unit, etc.)
 
-            } else if(this.valueObject[this.args.valueName]) {
-                // there is source value but tere is no entered value - remove from source
-                delete this.valueObject[this.args.valueName];
-            }   // else do nothing - there are no source and entered value
+        if (enteredValue) {
+            // check if all entered fields are not empty
+            if (enteredValue.hasOwnProperty("min_value") ||
+                enteredValue.hasOwnProperty("max_value") ||
+                enteredValue.hasOwnProperty("value")) {
 
+                if (this.valueObject) {
+                    // there are source and enterd value(s) case
+                    // min value
+                    if(enteredValue.hasOwnProperty("min_value")){
+                        this.valueObject[this.args.valueName].min_value = enteredValue.min_value;
+                    } else {
+                        if(this.valueObject[this.args.valueName].hasOwnProperty("min_value")) {
+                            delete this.valueObject[this.args.valueName].min_value;
+                        }
+                    }
+                    // max value
+                    if (enteredValue.hasOwnProperty("max_value")) {
+                        this.valueObject[this.args.valueName].max_value = enteredValue.max_value;
+                    } else {
+                        if(this.valueObject[this.args.valueName].hasOwnProperty("max_value")) {
+                            delete this.valueObject[this.args.valueName].max_value
+                        }
+                    }
+                    // scalar value
+                    if (enteredValue.hasOwnProperty("value")) {
+                        this.valueObject[this.args.valueName].value = enteredValue.value;
+                    } else {
+                        if(this.valueObject[this.args.valueName].hasOwnProperty("value")) {
+                            delete this.valueObject[this.args.valueName].value
+                        }
+                    }
+                    // save unit
+                    this.valueObject[this.args.valueName].unit = enteredValue.unit;
+
+                } else {
+                    // there is enterd value but there is no source object - create one
+                    this.valueObject = {
+                        [this.args.valueName]: {
+                            unit: enteredValue.unit
+                        }
+                    };
+
+                    if (enteredValue.hasOwnProperty("value")) {
+                        this.valueObject[this.args.valueName].value = enteredValue.value;
+                    } else {
+                        if (enteredValue.hasOwnProperty("min_value")) {
+                            this.valueObject[this.args.valueName].min_value = enteredValue.min_value;
+                        } 
+                        if (enteredValue.hasOwnProperty("max_value")) {
+                            this.valueObject[this.args.valueName].max_value = enteredValue.max_value;
+                        } 
+                    }
+                }
+            } else {
+                // all entered fields are empty - remove source
+                if (this.valueObject) {
+                    this.valueObject = null;
+                }
+            }
         } else {
-            if(enteredValue) {
-                // there is enterd value but there is no source object - create one
-                this.valueObject = {
-                    [this.args.valueName]: enteredValue
-                }
-            }   // else do nothing - there are no source object and entered value(s)
-        }
+            // nothing entered - remove source 
+            if (this.valueObject) {
+                this.valueObject = null;
+            }
+        }    
 
-            //  // check if all fields are not empty
-            //  if(this.valueObject.value || this.valueObject.min_value || this.valueObject.max_value) {
-            //     this.valueObject.unit = valueObject.unit;
-            //     this.valueObject = this.valueObject; // ember! - reset tracked object
-            // } else {    // all fields are empty - remove object (?)
-            //     this.valueObject = null;
-            // }
+        if (this.valueObject && this.valueObject[this.args.valueName]) {
+            this.inputValue = this.valueObject[this.args.valueName];
+        } else {
+            this.inputValue = null;
+        }
+        this.valueObject = this.valueObject; // ember! - reset tracked object
 
         // TODO
         //this.args.updateValue(valueObject);
