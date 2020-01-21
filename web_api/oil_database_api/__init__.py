@@ -1,7 +1,6 @@
 """
 Main entry point
 """
-import logging
 import os
 
 import ujson
@@ -10,7 +9,7 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.renderers import JSON as JSONRenderer
 
-from oil_database.util.db_connection import connect_mongodb
+# from oil_database.util.db_connection import connect_mongodb
 
 from .common.views import cors_policy
 
@@ -98,6 +97,8 @@ def main(global_config, **settings):
             raise ValueError(f"client path: {client_path} does not exist")
         config.add_static_view(name='/',
                                path=client_path)
+        # config.add_static_view(name='/client/',
+        #                        path=client_path)
 
     else:
         # serve up the basic hello message at the root

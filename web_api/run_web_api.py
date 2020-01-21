@@ -61,6 +61,14 @@ if settings.get('standalone'):
     # assume the client path is realtive to main settings file
     settings['client_path'] = str((settings_path /
                                    settings.pop('client_path')).resolve())
+    # Set up CORS policy for stand alone
+    # This assures the we're using the right ports, etc.
+    # it will override anything in the settings JSON file
+    # fixme:should this be automatic for all deployments?
+    settings["cors_policy.origins"] = [f"http://0.0.0.0:{api_port}",
+                                       f"http://localhost:{api_port}"
+                                       ]
+
 
 # Configure the logger:
 # NOTE: we could do this all in the JSON:
