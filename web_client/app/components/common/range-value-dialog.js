@@ -4,6 +4,9 @@ import { action } from "@ember/object";
 import { valueUnitUnit } from 'ember-oil-db/helpers/value-unit-unit';
 import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
 import { valueUnit } from 'ember-oil-db/helpers/value-unit';
+import $ from 'jquery';
+
+const ESC_KEY = 27;
 
 export default class RangeValueDialog extends Component {
     
@@ -13,10 +16,9 @@ export default class RangeValueDialog extends Component {
     @tracked dialogMinValue = "";
     @tracked dialogMaxValue = "";
 
-    isThereInput = false;
-
     constructor() {
         super(...arguments);
+        this._initEscListener();
 
         //this.valueTitle = this.args.valueTitle;
         this.componentId = this.args.componentId;
@@ -53,9 +55,20 @@ export default class RangeValueDialog extends Component {
         return Object.keys(this.args);
     }
 
-    get isThereInput() {
-        return this.isThereInput;
+    // add on ESC key event listener for dialog
+    _initEscListener() {
+        const closeOnEscapeKey = (ev) => {
+            if (ev.keyCode === ESC_KEY) { 
+                this.closeModalDialog(); 
+            }
+        };   
+        $('body').on('keyup.modal-dialog', closeOnEscapeKey);
     }
+
+    willDestroy() {
+        $('body').off('keyup.modal-dialog');
+    }
+    
 
     @action
     toggleRadio(isRange){
@@ -74,7 +87,6 @@ export default class RangeValueDialog extends Component {
         } else {
             this.dialogValue = parseFloat(e.target.value);
         }
-        this.isThereInput = true;
     }
 
     @action
@@ -84,7 +96,6 @@ export default class RangeValueDialog extends Component {
         } else {
             this.dialogMinValue = parseFloat(e.target.value);  
         }
-        this.isThereInput = true;
     }
 
     @action
@@ -94,15 +105,26 @@ export default class RangeValueDialog extends Component {
         } else {
             this.dialogMaxValue = parseFloat(e.target.value);
         }
-        this.isThereInput = true;
     }
 
     @action
     onSave(){
-        {{debugger}}
-        let enteredValue = {"unit": this.args.valueUnit};
+        let closeDialog = true;
+
+        // check if input fileds are empty
+        if (!this.isInterval && this.dialogValue === "" || 
+            this.isInterval && this.dialogMinValue === "" && this.dialogMaxValue === "") {
+
+            let confirmMessage = "The input has no numeric value(s). If you save it " +
+                this.args.valueTitle + " property will have no data in this oil record."
+            if (!confirm(confirmMessage)) {
+                closeDialog = false;
+            }
+        }
+
+        if (closeDialog) {
+            let enteredValue = {"unit": this.args.valueUnit};
         
-        if (this.isThereInput) {
             if (this.isInterval) {
                 if (this.dialogMinValue !== "") {
                     enteredValue["min_value"] = this.dialogMinValue;
@@ -115,9 +137,10 @@ export default class RangeValueDialog extends Component {
                     enteredValue["value"] = this.dialogValue;
                 }
             }
-            this.args.updateValue(enteredValue);
-        }
 
-        this.closeModalDialog() 
+            this.args.updateValue(enteredValue);
+
+            this.closeModalDialog();
+        }
     }
 }
