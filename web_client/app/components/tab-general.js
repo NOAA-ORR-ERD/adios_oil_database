@@ -21,13 +21,13 @@ export default Component.extend({
   
     actions: {
         updateAPI(event) {
-            this.get('oil').samples.get(0).apis.set('0.gravity',  Number(event.target.value));
-            //this.get('oil').save();
+            let oil = this.get('oil')
+            oil.samples.get(0).apis.set('0.gravity',  Number(event.target.value));
+
+            this.submit(oil);
         },
 
         updateLocation(event) {
-            this._super(...arguments);
-
             let oil = this.get('oil');
             oil.set('location', event.target.value);
 
@@ -35,28 +35,47 @@ export default Component.extend({
         },
 
         updateType(event) {
-            this.get('oil').set('productType', event.target.value);
+            let oil = this.get('oil');
+            oil.set('productType', event.target.value);
+
+            this.submit(oil);
         },
 
         updateCategories(selectedCategories) {
             this.set('selectedCategories', selectedCategories);  
-            this.get('oil').set('categories', selectedCategories);
+
+            let oil = this.get('oil');
+            oil.set('categories', selectedCategories);
+
+            this.submit(oil);
         },
 
         updateReference(event) {
-            this.get('oil').set('reference', event.target.value);
+            let oil = this.get('oil');
+            oil.set('reference', event.target.value);
+
+            this.submit(oil);
         },
 
         updateReferenceDate(event) {
-            this.get('oil').set('referenceDate', moment(event.target.value, "YYYY-MM-DD").tz("Europe/London").unix());
+            let oil = this.get('oil');
+            oil.set('referenceDate', moment(event.target.value, "YYYY-MM-DD").tz("Europe/London").unix());
+
+            this.submit(oil);
         },
 
         updateSampleReceivedDate(event) {
-            this.get('oil').set('sampleDate', moment(event.target.value, "YYYY-MM-DD").tz("Europe/London").unix());
+            let oil = this.get('oil');
+            oil.set('sampleDate', moment(event.target.value, "YYYY-MM-DD").tz("Europe/London").unix());
+
+            this.submit(oil);
         },
 
         updateComments(event) {
-            this.get('oil').set('comments', event.target.value);
+            let oil = this.get('oil');
+            oil.set('comments', event.target.value);
+
+            this.submit(oil);
         }
         
     }
