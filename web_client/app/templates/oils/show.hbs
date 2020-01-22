@@ -19,59 +19,57 @@
           </button>
         {{/link-to}}
 
-      {{!-- oil status --}}
-      <strong>
-        Status:
-        {{#if this.model.hasDirtyAttributes}}
-          <i class="status-warning">Saving...</i>
-        {{else if (eq (get-status this.model.status) "OK")}}
-          <i class="status-good">OK</i>
-        {{else if (eq (get-status this.model.status) "Errors")}}
-          <i class="status-error">Errors</i>
-        {{else}}
-          <i class="status-warning">Warnings</i>
-        {{/if}}
-      </strong>
+        {{!-- oil status --}}
+        <strong>
+          Status:
+          {{#if this.model.hasDirtyAttributes}}
+            <i class="status-warning">Saving...</i>
+          {{else if (eq (get-status this.model.status) "OK")}}
+            <i class="status-good">OK</i>
+          {{else if (eq (get-status this.model.status) "Errors")}}
+            <i class="status-error">Errors</i>
+          {{else}}
+            <i class="status-warning">Warnings</i>
+          {{/if}}
+        </strong>
       </div>
 
     </div>
 
-      <div class="col-sm-4 col-xs-12">
-        <div class="row align-items-center justify-content-center">
-  
-          <div class="col-xs-4 mt-2 text-center">
-            {{!-- edit mode switch control --}}
-            <XToggle
-              @theme="ios"
-              @showLabels={{true}}
-              @onLabel="Edit"
-              @offLabel="View"
-              @value={{this.editable}}
-              @onToggle={{action (mut this.editable)}}
-            />
-          </div>
-        </div>
-      </div>
+    <div class="col-sm-4 col-xs-12">
+      <div class="row align-items-center justify-content-center">
 
-      <div class="col-xs-6 col-sm-4 col-lg-3 offset-lg-1">
-          <div class="d-flex">
-            <Button::Download
-              @oil={{this.model}}
-            />
-
-            <Button::CopyOil
-              @oil={{this.model}}
-              @submit={{action send "createOil"}}
-            />
-
-            <Button::DeleteOil
-              @oil={{this.model}}
-              @submit={{action send "deleteOil"}}
-            />
-
+        <div class="col-xs-4 mt-2 text-center">
+          {{!-- edit mode switch control --}}
+          <XToggle
+            @theme="ios"
+            @showLabels={{true}}
+            @onLabel="Edit"
+            @offLabel="View"
+            @value={{this.editable}}
+            @onToggle={{action (mut this.editable)}}
+          />
         </div>
       </div>
     </div>
+
+    <div class="col-xs-6 col-sm-4 col-lg-3 offset-lg-1">
+      <div class="d-flex">
+        <Button::Download @oil={{this.model}} />
+
+        <Button::CopyOil
+          @oil={{this.model}}
+          @submit={{action send "createOil"}}
+        />
+
+        <Button::DeleteOil
+          @oil={{this.model}}
+          @submit={{action send "deleteOil"}}
+        />
+
+      </div>
+    </div>
+  </div>
 
 
   <div class="content">
