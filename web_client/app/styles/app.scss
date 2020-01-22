@@ -125,6 +125,17 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
     font-weight: 500;
 }
 
+.lt-sort-icon {
+    float: left !important;
+    margin: 5px;
+    color: gray;
+}
+.lt-column {
+    border-right: 1px lightgray solid;
+}
+.lt-column:last-child {
+    border-right: none;
+}
 .lt-body {
     vertical-align: text-top;
 }
