@@ -14,31 +14,75 @@
         </tr>
       </thead>
       <tbody id="ift-tbody">
-        {{#each oil.ifts as |ift|}}
+        {{#each this.iftsArray as |ift|}}
           <tr class="collapse show ift-row-collapse">
-            <td>{{ift.interface}}</td>
-            <td>{{value-unit ift.tension 3}}</td>
+            <td>
+              {{#if this.args.editable}}
+                <select class="p-1 flex-fill bg-transparent border" {{on "change" this.updateInterface}}>
+                  {{#each this.args.interfaces as |interface|}}
+                    {{#if (eq ift.interface interface)}}
+                      <option class="bg-light" selected>{{interface}}</option>
+                    {{else}}
+                      <option class="bg-light">{{interface}}</option>
+                    {{/if}}
+                  {{/each}}
+                </select>
+              {{else}}
+                {{ift.interface}}
+              {{/if}}
+            </td>
+            <td>
+              {{!-- <Common::ValueUnitInput
+                @valueObject={{ift.tension}}
+                @valueUnit={{"N/m"}}
+                @valuePrecision={{3}}
+                @editable={{this.args.editable}}
+                @submit={{fn this.updateTension index}}
+              /> --}}
+              {{value-unit ift.tension 3}}
+            </td>
             <td>
               <Common::ValueUnitInput
                 @valueObject={{ift.ref_temp}}
                 @valueUnit={{"C"}}
                 @valuePrecision={{2}}
-                @editable={{this.editable}}
+                @editable={{this.args.editable}}
+                @submit={{fn this.updateTemperature index}}
               />
             </td>
+            {{#if this.args.editable}}
+              <td class="border-0">
+                <button type="button" {{on "click" this.deleteTableRow}}
+                  class="btn btn-outline-danger btn-sm p-0 m-0 border-0">
+                  {{fa-icon "times"}}
+                </button>
+              </td>
+            {{/if}}
             {{!-- 
+            <td>{{ift.interface}}</td>
             <td>{{value-unit ift.tension 3}}</td>
             <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
             --}}
           </tr>
         {{/each}}
 
-        {{#if oil.ifts}}
-          <tr class="collapse ift-row-collapse">
-            <th scope="row">&#x2026;</th>
+        {{#if this.args.editable}}
+          <tr>
+            <td class="border-0">
+              <button type="button" {{on "click" this.addEmptyTableRow}}
+                class="btn btn-outline-dark btn-sm p-0 border-0">
+                {{fa-icon "plus"}}
+              </button>
+            </td>
           </tr>
         {{else}}
-          <tr><td>No Data</td></tr>
+          {{#if this.args.oil.ifts}}
+            <tr class="collapse ift-row-collapse">
+              <th scope="row">&#x2026;</th>
+            </tr>
+          {{else}}
+            <tr><td>No Data</td></tr>
+          {{/if}}
         {{/if}}
       </tbody>
     </table>

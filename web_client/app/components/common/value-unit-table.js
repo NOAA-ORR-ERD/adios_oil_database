@@ -39,7 +39,6 @@ export default class ValueUnitTable extends Component {
         // delete correspondent array item based on row index - table idex starts from 1
         this.valueArray.splice(currentRow.rowIndex - 1, 1);
         this.valueArray = this.valueArray; // !!! - to "reset" array for tracking
-
     }
 
     @action

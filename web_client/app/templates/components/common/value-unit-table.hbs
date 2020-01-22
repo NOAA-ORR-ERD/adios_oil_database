@@ -18,9 +18,7 @@
     <strong>{{this.args.tableTitle}}:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target={{concat "." (concat this.tableId "-row-collapse")}}
-             aria-controls={{this.tableId}}
+      <thead aria-controls={{this.tableId}}
              aria-expanded="false">
         <tr>
           <th scope="col">{{this.args.leftColumnTitle}}</th>
@@ -50,7 +48,7 @@
             </td>
             {{#if this.args.editable}}
               <td class="border-0">
-                <button type="button" onClick={{action "deleteTableRow"}}
+                <button type="button" {{on "click" this.deleteTableRow}}
                   class="btn btn-outline-danger btn-sm p-0 m-0 border-0">
                   {{fa-icon "times"}}
                 </button>
@@ -61,20 +59,16 @@
         {{#if this.args.editable}}
           <tr>
             <td class="border-0">
-              <button type="button" onClick={{action "addEmptyTableRow"}}
+              <button type="button" {{on "click" this.addEmptyTableRow}}
                 class="btn btn-outline-dark btn-sm p-0 border-0">
                 {{fa-icon "plus"}}
               </button>
             </td>
           </tr>
         {{else}}
-          {{#if this.valueArray}}
-            <tr class="collapse {{concat this.tableId "-row-collapse"}}">
-              <th scope="row">&#x2026;</th>
-            </tr>
-          {{else}}
+          {{#unless this.valueArray}}
             <tr><td>No Data</td></tr>
-          {{/if}}
+          {{/unless}}
         {{/if}}
 
       </tbody>
