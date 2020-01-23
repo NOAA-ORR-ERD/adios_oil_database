@@ -26,52 +26,6 @@ var mongoDbProcess = null;
 var webApiProcess = null;
 var mainWindow = null;
 
-/*
-const ref = require( "ref" );
-const ffi = require( "ffi" );
-
-var voidPtr = ref.refType( ref.types.void );
-var stringPtr = ref.refType( ref.types.CString );
-
-var user32 = ffi.Library(
-	"user32.dll",
-	{
-		// EnumWindows : ['bool', [voidPtr, 'int32']],
-		FindWindowW : [ "int", [ "string", "string"] ],
-		// ShowWindow : ['int', ['int', 'int']],
-		// CloseWindow  : ['long', ['long']],
-		// GetWindowTextA  : ['long', ['long', stringPtr, 'long']],
-		// GetWindowTextLengthA  : ['long', ['long']],
-		// IsWindowVisible  : ['long', ['long']],
-		// FindWindowW : ['int', ['string', 'string']],
-		// ShowWindow : ['int', ['int', 'int']]
-	}
-);
-
-function TEXT( text )
-{
-	return new Buffer( text, "ucs2").toString( "binary" );
-}
-
-function FindWindow( name )
-{
-	var text = TEXT( name );
-	var handle = 0;
-
-	//ensure accurate reading, sometimes returns 0 when window does exist
-	for (var i = 0 ; i < 50 ; i++ )
-	{
-		handle = user32.FindWindowW( null, text );
-		if ( handle != 0 )
-		{
-			break;
-		}
-	}
-
-	return handle;
-}
-*/
-
 // https://www.electronjs.org/docs/api/app#apprequestsingleinstancelock
 app.on(
 	"second-instance",
@@ -326,6 +280,8 @@ function QuitWithErrorMessage( message )
 
 function KillChildProcesses()
 {
+	// we don't need to kill the sub-processes because Node does it for us
+	
 	if ( fileServerProcess != null )
 	{
 		// fileServerProcess.kill( "SIGINT" );
