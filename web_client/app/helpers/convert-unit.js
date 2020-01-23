@@ -54,12 +54,21 @@ export function convertUnit([valueUnitObj,
     copyObj.unit = newUnit;
   }
   else if (compatibleWithOut.length > 1) {
-    // multiple converters available.  Do they match our unitType?
-    let compatibleWithUnitType = compatibleWithOut.filter(c => {
-      return c.Name === unitType;
-    });
+    // multiple converters available.  Which one to use?
+    let compatibleWithUnitType;
 
-    if (compatibleWithUnitType.length === 1) {
+    if (typeof unitType === 'undefined') {
+        // just choose the first one
+        compatibleWithUnitType = compatibleWithOut.slice(0, 1);
+    }
+    else {
+        compatibleWithUnitType = compatibleWithOut.filter(c => {
+            return c.Name === unitType;
+        });
+    }
+
+    if (compatibleWithUnitType.length === 1)
+    {
       let converter = compatibleWithUnitType[0];
 
       if (copyObj.value) {
