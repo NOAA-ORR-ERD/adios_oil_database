@@ -10,6 +10,15 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const isMac = process.platform === 'darwin';
 
+// https://www.electronjs.org/docs/api/app#apprequestsingleinstancelock
+const gotTheLock = app.requestSingleInstanceLock()
+if ( !gotTheLock )
+{
+	app.quit();
+}
+else
+{
+
 electron.crashReporter.start( { companyName: "NOAA", submitURL: "https://response.restoration.noaa.gov/" } );
 
 var fileServerProcess = null;
@@ -62,6 +71,23 @@ function FindWindow( name )
 	return handle;
 }
 */
+
+// https://www.electronjs.org/docs/api/app#apprequestsingleinstancelock
+app.on(
+	"second-instance",
+	function ( event, commandLine, workingDirectory )
+	{
+		// Someone tried to run a second instance, we should focus our window.
+		if ( mainWindow != null )
+		{
+			if ( mainWindow.isMinimized() )
+			{
+				mainWindow.restore();
+			}
+			mainWindow.focus();
+		}
+	}
+);
 
 app.on(
 	"ready",
@@ -426,4 +452,6 @@ function DefineFullApplicationMenu()
 {
 	const menu = electron.Menu.buildFromTemplate( menuTemplate );
 	electron.Menu.setApplicationMenu( menu );
+}
+
 }
