@@ -22,6 +22,7 @@ import sys
 from subprocess import run, Popen
 import atexit
 import time
+import urllib.request
 import webbrowser
 
 rebuild = True if "--rebuild" in sys.argv else False
@@ -52,8 +53,22 @@ print("after starting up the client")
 
 pids = [os.getpid()] + [p.pid for p in (mongo, webapi, client)]
 
+os.chdir('..')
+
+print(os.getcwd())
 monitor = Popen(['python', 'utilities/monitor_and_kill.py'] +
                 [str(pid) for pid in pids])
+
+
+def wait_for_client_server():
+    while True:
+        try:
+            urllib.request.urlopen("http://localhost:4200/")
+        except urllib.request.URLError:
+            print("waiting for ember server to start up")
+            time.sleep(1.0)
+            continue
+
 
 def kill_everything():
     print("killing everything on exit")
@@ -62,13 +77,14 @@ def kill_everything():
     client.terminate()
     # should we kill the monitor here? it should kill itself
 
+
 atexit.register(kill_everything)
 
+wait_for_client_server()
 webbrowser.open('http://localhost:4200/', new=1)
 
 while True:
     print("App running: http://localhost:4200/")
     print("Hit ^C To stop:")
     time.sleep(2.0)
-
 

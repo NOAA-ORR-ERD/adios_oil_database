@@ -173,7 +173,6 @@ class TestConcentrationInWaterUnit(object):
         (10.0, 'parts per million'),
         (10.0, 'parts per thousand'),
         (10.0, 'parts per trillion'),
-        (10.0, 'per cent'),
         (10.0, 'percent'),
         (10.0, 'pound per cubic foot'),
         (10.0, 'ppb'),

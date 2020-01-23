@@ -112,8 +112,10 @@ export default class RangeValueDialog extends Component {
         let closeDialog = true;
 
         // check if input fileds are empty
-        if (!this.isInterval && this.dialogValue === "" || 
-            this.isInterval && this.dialogMinValue === "" && this.dialogMaxValue === "") {
+        if (!this.isInterval && this.dialogValue === "" ||
+            this.isInterval && this.dialogMinValue === "" &&
+            this.dialogMaxValue === "")
+        {
 
             let confirmMessage = "The input has no numeric value(s). If you save it " +
                 this.args.valueTitle + " property will have no data in this oil record."

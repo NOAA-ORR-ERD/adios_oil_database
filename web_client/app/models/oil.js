@@ -8,6 +8,7 @@ export default Model.extend({
   location: attr(),
   reference: attr(),
   referenceDate: attr(),
+  sampleDate: attr(),
   comments: attr(),
   categories: attr(),
   status: attr(),

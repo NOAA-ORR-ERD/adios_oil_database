@@ -4,11 +4,12 @@
     {{#if this.args.editable}}
       <Common::RangeValueInput
         @valueTitle="Pour Point"
-        @valueObject={{this.args.oil.pour_point}}
-        @valueName="ref_temp"
+        @valueObject={{this.args.oil}}
+        @valueName="pour_point.ref_temp"
         @valueUnit="C"
         @valuePrecision="2"
         @sampleIndex={{this.args.sampleIndex}}
+        @submit={{this.submit}}
       />
     {{else}}
       {{#if this.args.oil.pour_point}}

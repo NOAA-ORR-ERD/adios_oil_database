@@ -4,11 +4,21 @@ const path = require( "path" );
 const childProcess = require( "child_process" );
 const requestPromise = require( "request-promise" );
 const dialog = require( "dialog" );
+const windowStateKeeper = require( "electron-window-state" );
 console.log(require.resolve('electron'))
 const electron = require( "electron" );
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const isMac = process.platform === 'darwin';
+
+// https://www.electronjs.org/docs/api/app#apprequestsingleinstancelock
+const gotTheLock = app.requestSingleInstanceLock()
+if ( !gotTheLock )
+{
+	app.quit();
+}
+else
+{
 
 electron.crashReporter.start( { companyName: "NOAA", submitURL: "https://response.restoration.noaa.gov/" } );
 
@@ -17,73 +27,29 @@ var mongoDbProcess = null;
 var webApiProcess = null;
 var mainWindow = null;
 
-/*
-const ref = require( "ref" );
-const ffi = require( "ffi" );
-
-var voidPtr = ref.refType( ref.types.void );
-var stringPtr = ref.refType( ref.types.CString );
-
-var user32 = ffi.Library(
-	"user32.dll",
+// https://www.electronjs.org/docs/api/app#apprequestsingleinstancelock
+app.on(
+	"second-instance",
+	function ( event, commandLine, workingDirectory )
 	{
-		// EnumWindows : ['bool', [voidPtr, 'int32']],
-		FindWindowW : [ "int", [ "string", "string"] ],
-		// ShowWindow : ['int', ['int', 'int']],
-		// CloseWindow  : ['long', ['long']],
-		// GetWindowTextA  : ['long', ['long', stringPtr, 'long']],
-		// GetWindowTextLengthA  : ['long', ['long']],
-		// IsWindowVisible  : ['long', ['long']],
-		// FindWindowW : ['int', ['string', 'string']],
-		// ShowWindow : ['int', ['int', 'int']]
-	}
-);
-
-function TEXT( text )
-{
-	return new Buffer( text, "ucs2").toString( "binary" );
-}
-
-function FindWindow( name )
-{
-	var text = TEXT( name );
-	var handle = 0;
-
-	//ensure accurate reading, sometimes returns 0 when window does exist
-	for (var i = 0 ; i < 50 ; i++ )
-	{
-		handle = user32.FindWindowW( null, text );
-		if ( handle != 0 )
+		// Someone tried to run a second instance, we should focus our window.
+		if ( mainWindow != null )
 		{
-			break;
+			if ( mainWindow.isMinimized() )
+			{
+				mainWindow.restore();
+			}
+			mainWindow.focus();
 		}
 	}
-
-	return handle;
-}
-*/
+);
 
 app.on(
 	"ready",
 	function()
 	{
-		/*
-		if ( FindWindow( "Task Manager" ) != 0 )
-		{
-			dialog.err( "The program is already running.",
-						"ADIOS Oil Database Error",
-						function( code )
-						{
-							app.quit();
-						}
-			);
-		}
-		else
-		*/
-		{
-			OpenWindow();
-			AdvanceStartupSequence();
-		}
+  		OpenWindow();
+		AdvanceStartupSequence();
 	}
 );
 
@@ -264,13 +230,23 @@ function OpenWindow()
 	console.log( "OpenWindow()" );
 
 	DefineEmptyApplicationMenu();
+	// TODO: we can add the path to where the window state should be kept (in our data folder): https://github.com/mawie81/electron-window-state
+	let mainWindowState = windowStateKeeper(
+		{
+			defaultWidth: 800,
+			defaultHeight: 600
+		}
+	);
 	mainWindow = new BrowserWindow(
 					{
-						width: 800,
-						height: 600,
+						x: mainWindowState.x,
+						y: mainWindowState.y,
+						width: mainWindowState.width,
+						height: mainWindowState.height,
 						icon: path.join( __dirname, "oil-barrel.ico" ),
 						title: "ADIOS Oil Database"
 					} );
+	mainWindowState.manage( mainWindow );
 	mainWindow.on(
 		"closed",
 		function()
@@ -300,6 +276,8 @@ function QuitWithErrorMessage( message )
 
 function KillChildProcesses()
 {
+	// we don't need to kill the sub-processes because Node does it for us
+	
 	if ( fileServerProcess != null )
 	{
 		// fileServerProcess.kill( "SIGINT" );
@@ -426,4 +404,6 @@ function DefineFullApplicationMenu()
 {
 	const menu = electron.Menu.buildFromTemplate( menuTemplate );
 	electron.Menu.setApplicationMenu( menu );
+}
+
 }

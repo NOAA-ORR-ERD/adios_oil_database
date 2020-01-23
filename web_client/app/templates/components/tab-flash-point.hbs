@@ -4,11 +4,12 @@
     {{#if this.args.editable}}
       <Common::RangeValueInput
         @valueTitle="Flash Point"
-        @valueObject={{this.args.oil.flash_point}}
-        @valueName={{"ref_temp"}}
+        @valueObject={{this.args.oil}}
+        @valueName={{"flash_point.ref_temp"}}
         @valueUnit="C"
         @valuePrecision="2"
         @sampleIndex={{this.args.sampleIndex}}
+        @submit={{this.submit}}
       />
     {{else}}
       {{#if this.args.oil.flash_point}}
@@ -21,15 +22,6 @@
     {{/if}}  {{!-- editable --}}
   </div>
 
-  {{!-- <div class="table-responsive">
-    <strong>Flash Point:</strong>
-
-    {{#if oil.flash_point}}
-      {{value-unit (convert-unit oil.flash_point.ref_temp "C") 2}}
-    {{else}}
-      No Data
-    {{/if}}
-
-  </div> --}}
+  &nbsp;
 
 </div>

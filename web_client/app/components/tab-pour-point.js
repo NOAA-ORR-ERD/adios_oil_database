@@ -1,14 +1,10 @@
 import Component from '@glimmer/component';
+import { action } from "@ember/object";
 
 export default class TabPourPoint extends Component {
-    
-    constructor() {
-        super(...arguments);
 
+    @action
+    submit() {
+        this.args.submit(this.args.oil);
     }
-    
-    get editable() {
-        return this.args.editable;
-    }
-
 }
