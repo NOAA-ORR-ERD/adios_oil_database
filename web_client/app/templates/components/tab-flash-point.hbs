@@ -1,11 +1,12 @@
 <div class="detail-section">
   <div class="table-responsive d-flex align-items-center">
     <label class="p-1 input-group-text font-weight-bold">Flash Point:</label>
+
     {{#if this.args.editable}}
       <Common::RangeValueInput
         @valueTitle="Flash Point"
         @valueObject={{this.args.oil}}
-        @valueName={{"flash_point.ref_temp"}}
+        @valueName="flash_point.ref_temp"
         @valueUnit="C"
         @valuePrecision="2"
         @sampleIndex={{this.args.sampleIndex}}

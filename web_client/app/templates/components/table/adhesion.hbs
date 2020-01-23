@@ -3,30 +3,24 @@
     <label class="p-1 input-group-text font-weight-bold">Adhesion:</label>
 
     {{#if this.args.editable}}
-      {{#if this.adhesion}}
-        <Input
-          @type="text"
-          @class="p-1 bg-transparent border"
-          @placeholder="adhesion value"
-          value={{value-unit this.adhesion.adhesion 3 true}}
-          {{on "change" this.updateAdhesion}}
-        />
-      {{else}}
-        <Input
-          @type="text"
-          @class="p-1 bg-transparent border"
-          @placeholder="No Data"
-          value="" 
-          {{on "change" this.updateAdhesion}}
-        />
-      {{/if}}
+      <Common::RangeValueInput
+        @valueTitle="Adhesion"
+        @valueObject={{this.args.oil}}
+        @valueName="adhesion.adhesion"
+        @valueUnit="N/m^2"
+        @valuePrecision="2"
+        @sampleIndex={{this.args.sampleIndex}}
+        @submit={{this.submit}}
+      />
     {{else}}
-      {{#if this.adhesion}}
-        {{value-unit this.adhesion.adhesion 3}}
+      {{#if this.args.oil.adhesion}}
+        {{value-unit this.args.oil.adhesion.adhesion 3}}
       {{else}}
         No Data
       {{/if}}
     {{/if}}
   </div>
+
+  &nbsp;
 
 </div>
