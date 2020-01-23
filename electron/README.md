@@ -19,6 +19,7 @@ Then a few things installed with npm:
     npm install request
     npm install request-promise
     npm install dialog
+	npm install --save electron-window-state
 ```
 
 # running the app:

@@ -4,6 +4,7 @@ const path = require( "path" );
 const childProcess = require( "child_process" );
 const requestPromise = require( "request-promise" );
 const dialog = require( "dialog" );
+const windowStateKeeper = require( "electron-window-state" );
 console.log(require.resolve('electron'))
 const electron = require( "electron" );
 const app = electron.app;
@@ -47,23 +48,8 @@ app.on(
 	"ready",
 	function()
 	{
-		/*
-		if ( FindWindow( "Task Manager" ) != 0 )
-		{
-			dialog.err( "The program is already running.",
-						"ADIOS Oil Database Error",
-						function( code )
-						{
-							app.quit();
-						}
-			);
-		}
-		else
-		*/
-		{
-			OpenWindow();
-			AdvanceStartupSequence();
-		}
+  		OpenWindow();
+		AdvanceStartupSequence();
 	}
 );
 
@@ -244,13 +230,23 @@ function OpenWindow()
 	console.log( "OpenWindow()" );
 
 	DefineEmptyApplicationMenu();
+	// TODO: we can add the path to where the window state should be kept (in our data folder): https://github.com/mawie81/electron-window-state
+	let mainWindowState = windowStateKeeper(
+		{
+			defaultWidth: 800,
+			defaultHeight: 600
+		}
+	);
 	mainWindow = new BrowserWindow(
 					{
-						width: 800,
-						height: 600,
+						x: mainWindowState.x,
+						y: mainWindowState.y,
+						width: mainWindowState.width,
+						height: mainWindowState.height,
 						icon: path.join( __dirname, "oil-barrel.ico" ),
 						title: "ADIOS Oil Database"
 					} );
+	mainWindowState.manage( mainWindow );
 	mainWindow.on(
 		"closed",
 		function()
