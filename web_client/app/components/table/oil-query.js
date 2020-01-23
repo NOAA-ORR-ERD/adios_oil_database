@@ -12,40 +12,46 @@ export default Component.extend(TableCommon, {
         return [{
             label: 'Status',
             valuePath: 'status',
-            width: '70px',
+            width: '80px',
             cellComponent: 'table/cell/status',
+            classNames: 'text-nowrap',
             searchable: true,
             align: "center",
         }, {
             label: 'ID',
             valuePath: 'id',
+            classNames: 'text-nowrap',
             width: '100px',
             searchable: true,
         }, {
             label: 'Name',
             valuePath: 'name',
             cellComponent: 'table/cell/oil-name',
-            minResizeWidth: '150px',
+            classNames: 'text-nowrap',
             searchable: true,
         }, {
             label: 'Location',
             valuePath: 'location',
-            minResizeWidth: '100px',
+            classNames: 'text-nowrap',
             searchable: true,
         }, {
             label: 'Type',
             valuePath: 'productType',
+            classNames: 'text-nowrap',
             width: '80px',
             searchable: true,
         }, {
             label: 'API',
             valuePath: 'api',
+            classNames: 'text-nowrap',
             cellComponent: 'table/cell/api',
-            width: '70px'
+            width: '60px'
         }, {
             label: 'Labels',
             valuePath: 'categories',
+            classNames: 'text-nowrap',
             cellComponent: 'table/cell/categories',
+            width: '100px'
         }];
     }),
 
