@@ -18,9 +18,12 @@ NOTE: this is missing logger configuration -- that should be added.
 #         though I'm not sure how this information is used anyway
 
 # These simply to make PyInstaller include them
-import pkg_resources.py2_warn
+# only in setuptools 45
+import pkg_resources.py2_warn  # only in setuptools 45
 import pyramid_tm
-# import cornice
+# import cornice  # this is gotten by copying it in later.
+import pyramid_mongodb2
+import oil_database_api.views
 
 
 # the ones we actually need
