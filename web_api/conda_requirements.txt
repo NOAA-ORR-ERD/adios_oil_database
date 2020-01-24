@@ -24,7 +24,9 @@ docutils>=0.15.2
 
 pytest>=3.8.0
 WebTest
+pyinstaller
 
 # The oil database is required, but is located within this project
 # at OilDatabase/oil_db
 # oil_database
+
