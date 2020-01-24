@@ -3,9 +3,7 @@
     <strong>Toxicity:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".toxicity-row-collapse"
-             aria-controls="toxicity-tbody"
+      <thead aria-controls="toxicity-tbody"
              aria-expanded="false">
         <tr>
           <th scope="col">Species</th>
@@ -16,20 +14,16 @@
         </tr>
       </thead>
       <tbody id="toxicity-tbody">
-        {{#each oil.toxicities as |toxicity|}}
-          <tr class="collapse show toxicity-row-collapse">
-            <td>{{toxicity.species}}</td>
-            <td>{{toxicity.tox_type}}</td>
-            <td>{{toxicity.after_24h}}</td>
-            <td>{{toxicity.after_48h}}</td>
-            <td>{{toxicity.after_96h}}</td>
-          </tr>
-        {{/each}}
-
         {{#if oil.toxicities}}
-          <tr class="collapse toxicity-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
+          {{#each oil.toxicities as |toxicity|}}
+            <tr>
+              <td>{{toxicity.species}}</td>
+              <td>{{toxicity.tox_type}}</td>
+              <td>{{toxicity.after_24h}}</td>
+              <td>{{toxicity.after_48h}}</td>
+              <td>{{toxicity.after_96h}}</td>
+            </tr>
+          {{/each}}
         {{else}}
           <tr><td>No Data</td></tr>
         {{/if}}

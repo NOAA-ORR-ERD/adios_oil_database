@@ -3,9 +3,7 @@
     <strong>Evaporation Equations:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".evaporationeqs-row-collapse"
-             aria-controls="evaporationeqs-tbody"
+      <thead aria-controls="evaporationeqs-tbody"
              aria-expanded="false">
         <tr>
           <th scope="col">A</th>
@@ -15,19 +13,15 @@
         </tr>
       </thead>
       <tbody id="evaporationeqs-tbody">
-        {{#each oil.evaporation_eqs as |evap|}}
-          <tr class="collapse show evaporationeqs-row-collapse">
-            <td>{{evap.a}}</td>
-            <td>{{evap.b}}</td>
-            <td>{{evap.c}}</td>
-            <td>{{evap.equation}}</td>
-          </tr>
-        {{/each}}
-
         {{#if oil.evaporation_eqs}}
-          <tr class="collapse evaporationeqs-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
+          {{#each oil.evaporation_eqs as |evap|}}
+            <tr>
+              <td>{{evap.a}}</td>
+              <td>{{evap.b}}</td>
+              <td>{{evap.c}}</td>
+              <td>{{evap.equation}}</td>
+            </tr>
+          {{/each}}
         {{else}}
           <tr><td>No Data</td></tr>
         {{/if}}

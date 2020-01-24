@@ -3,9 +3,7 @@
     <strong>Interfacial Tension:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".ift-row-collapse"
-             aria-controls="ift-tbody"
+      <thead aria-controls="ift-tbody"
              aria-expanded="false">
         <tr>
           <th scope="col">Interface</th>
@@ -14,29 +12,25 @@
         </tr>
       </thead>
       <tbody id="ift-tbody">
-        {{#each oil.ifts as |ift|}}
-          <tr class="collapse show ift-row-collapse">
-            <td>{{ift.interface}}</td>
-            <td>{{value-unit ift.tension 3}}</td>
-            <td>
-              <Common::ValueUnitInput
-                @valueObject={{ift.ref_temp}}
-                @valueUnit={{"C"}}
-                @valuePrecision={{2}}
-                @editable={{this.editable}}
-              />
-            </td>
-            {{!-- 
-            <td>{{value-unit ift.tension 3}}</td>
-            <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
-            --}}
-          </tr>
-        {{/each}}
-
         {{#if oil.ifts}}
-          <tr class="collapse ift-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
+          {{#each oil.ifts as |ift|}}
+            <tr>
+              <td>{{ift.interface}}</td>
+              <td>{{value-unit ift.tension 3}}</td>
+              <td>
+                <Common::ValueUnitInput
+                  @valueObject={{ift.ref_temp}}
+                  @valueUnit={{"C"}}
+                  @valuePrecision={{2}}
+                  @editable={{this.editable}}
+                />
+              </td>
+              {{!-- 
+              <td>{{value-unit ift.tension 3}}</td>
+              <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
+              --}}
+            </tr>
+          {{/each}}
         {{else}}
           <tr><td>No Data</td></tr>
         {{/if}}

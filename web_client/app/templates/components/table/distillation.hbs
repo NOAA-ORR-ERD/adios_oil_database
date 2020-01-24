@@ -3,9 +3,7 @@
     <strong>Distillation Cuts:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".cut-row-collapse"
-             aria-controls="cut-tbody"
+      <thead aria-controls="cut-tbody"
              aria-expanded="false">
         <tr>
           <th scope="col">Mass Percent</th>
@@ -13,17 +11,13 @@
         </tr>
       </thead>
       <tbody id="cut-tbody">
-        {{#each oil.cuts as |cut|}}
-          <tr class="collapse show cut-row-collapse">
-            <td>{{value-unit (convert-unit cut.fraction "%") 2}}</td>
-            <td>{{value-unit (convert-unit cut.vapor_temp "C") 2}}</td>
-          </tr>
-        {{/each}}
-
         {{#if oil.cuts}}
-          <tr class="collapse cut-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
+          {{#each oil.cuts as |cut|}}
+            <tr>
+              <td>{{value-unit (convert-unit cut.fraction "%") 2}}</td>
+              <td>{{value-unit (convert-unit cut.vapor_temp "C") 2}}</td>
+            </tr>
+          {{/each}}
         {{else}}
           <tr><td>No Data</td></tr>
         {{/if}}

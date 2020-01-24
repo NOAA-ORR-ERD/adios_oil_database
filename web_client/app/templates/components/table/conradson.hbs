@@ -3,9 +3,7 @@
     <strong>Conradson:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".conradson-row-collapse"
-             aria-controls="conradson-tbody"
+      <thead aria-controls="conradson-tbody"
              aria-expanded="false">
         <tr>
           <th scope="col">Type</th>
@@ -13,22 +11,18 @@
         </tr>
       </thead>
       <tbody id="conradson-tbody">
-        {{#each oil.conradson as |conradson|}}
-          <tr class="collapse show conradson-row-collapse">
-            {{#if conradson.crude}}
-              <td>Crude</td>
-              <td>{{value-unit conradson.crude 3}}</td>
-            {{else}}
-              <td>Residue</td>
-              <td>{{value-unit conradson.residue 3}}</td>
-            {{/if}}
-          </tr>
-        {{/each}}
-
         {{#if oil.conradson}}
-          <tr class="collapse conradson-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
+          {{#each oil.conradson as |conradson|}}
+            <tr>
+              {{#if conradson.crude}}
+                <td>Crude</td>
+                <td>{{value-unit conradson.crude 3}}</td>
+              {{else}}
+                <td>Residue</td>
+                <td>{{value-unit conradson.residue 3}}</td>
+              {{/if}}
+            </tr>
+          {{/each}}
         {{else}}
           <tr><td>No Data</td></tr>
         {{/if}}

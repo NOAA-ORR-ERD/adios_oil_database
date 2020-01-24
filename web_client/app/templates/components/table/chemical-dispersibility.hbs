@@ -3,9 +3,7 @@
     <strong>Chemical Dispersibility:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".chemdisp-row-collapse"
-             aria-controls="chemdisp-tbody"
+      <thead aria-controls="chemdisp-tbody"
              aria-expanded="false">
         <tr>
           <th scope="col">Dispersant</th>
@@ -13,17 +11,13 @@
         </tr>
       </thead>
       <tbody id="chemdisp-tbody">
-        {{#each oil.chemical_dispersibility as |dispersibility|}}
-          <tr class="collapse show chemdisp-row-collapse">
-            <td>{{dispersibility.dispersant}}</td>
-            <td>{{value-unit dispersibility.effectiveness 3}}</td>
-          </tr>
-        {{/each}}
-
         {{#if oil.chemical_dispersibility}}
-          <tr class="collapse chemdisp-row-collapse">
-            <th scope="row">&#x2026;</th>
-          </tr>
+          {{#each oil.chemical_dispersibility as |dispersibility|}}
+            <tr>
+              <td>{{dispersibility.dispersant}}</td>
+              <td>{{value-unit dispersibility.effectiveness 3}}</td>
+            </tr>
+          {{/each}}
         {{else}}
           <tr><td>No Data</td></tr>
         {{/if}}
