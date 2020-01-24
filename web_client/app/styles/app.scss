@@ -69,6 +69,20 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 .status-error {
   color: $red;
 }
+.reference-height {
+  height: 88px;
+  overflow: auto;
+}
+.reference-span {
+  white-space: pre-wrap;
+  overflow-y: scroll; 
+  overflow-x: scroll;
+  width: 100%;
+  height: 88px;
+}
+.reference-textarea {
+  width: 100%;
+}
 
 .no-borders{
   border: none;  
