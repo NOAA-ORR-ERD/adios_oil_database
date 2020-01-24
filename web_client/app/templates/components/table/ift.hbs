@@ -14,11 +14,11 @@
         </tr>
       </thead>
       <tbody id="ift-tbody">
-        {{#each this.iftsArray as |ift|}}
+        {{#each this.iftsArray as |ift index|}}
           <tr class="collapse show ift-row-collapse">
             <td>
               {{#if this.args.editable}}
-                <select class="p-1 flex-fill bg-transparent border" {{on "change" this.updateInterface}}>
+                <select class="p-1 flex-fill bg-transparent border" {{on "change" (fn this.updateInterface index)}}>
                   {{#each this.args.interfaces as |interface|}}
                     {{#if (eq ift.interface interface)}}
                       <option class="bg-light" selected>{{interface}}</option>
@@ -39,7 +39,6 @@
                 @editable={{this.args.editable}}
                 @submit={{fn this.updateTension index}}
               />
-              {{!-- {{value-unit ift.tension 3}} --}}
             </td>
             <td>
               <Common::ValueUnitInput
