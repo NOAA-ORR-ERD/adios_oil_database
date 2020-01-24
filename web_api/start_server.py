@@ -9,6 +9,14 @@ import sys
 
 from pyramid.scripts.common import get_config_loader
 
+# These simply to make PyInstaller include them
+# only in setuptools 45
+import pkg_resources.py2_warn  # only in setuptools 45
+import pyramid_tm
+# import cornice  # this is gotten by copying it in later.
+import pyramid_mongodb2
+import oil_database_api.views
+
 
 class ServerCommand(object):
     parser = argparse.ArgumentParser(
