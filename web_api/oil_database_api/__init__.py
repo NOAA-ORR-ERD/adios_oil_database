@@ -34,7 +34,8 @@ def generate_mongodb2_settings(settings):
         But we don't use all the options for connecting (yet)
     '''
     host = settings['mongodb.host'].strip()
-    port = settings['mongodb.port'].strip()
+    # So it can be an int or a str
+    port = str(settings['mongodb.port']).strip()
     db_name = settings['mongodb.database']
 
     mongo_uri = 'mongodb://{}:{}'.format(host, port)

@@ -16,6 +16,14 @@ NOTE: this is missing logger configuration -- that should be added.
 # 'here' is the dir we are running from
 #  fixme: maybe this should be derived from the location of the settings file?
 #         though I'm not sure how this information is used anyway
+
+# These simply to make PyInstaller include them
+import pkg_resources.py2_warn
+import pyramid_tm
+# import cornice
+
+
+# the ones we actually need
 import sys
 from pathlib import Path
 import json
@@ -23,6 +31,9 @@ import logging.config
 
 import waitress
 import oil_database_api
+
+print("Starting the Web API")
+print(sys.path)
 
 if __name__ == "__main__":
     try:
