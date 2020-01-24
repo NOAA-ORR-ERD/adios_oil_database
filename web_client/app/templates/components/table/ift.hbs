@@ -32,14 +32,14 @@
               {{/if}}
             </td>
             <td>
-              {{!-- <Common::ValueUnitInput
+              <Common::ValueUnitInput
                 @valueObject={{ift.tension}}
                 @valueUnit={{"N/m"}}
                 @valuePrecision={{3}}
                 @editable={{this.args.editable}}
                 @submit={{fn this.updateTension index}}
-              /> --}}
-              {{value-unit ift.tension 3}}
+              />
+              {{!-- {{value-unit ift.tension 3}} --}}
             </td>
             <td>
               <Common::ValueUnitInput
