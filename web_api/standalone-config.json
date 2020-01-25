@@ -26,5 +26,5 @@
 
 "caps.can_modify_db": false,
 
-"log_config_file": "standalone_logging.ini"
+"log_config_file": "standalone-logging.ini"
 }
