@@ -1,5 +1,25 @@
 # ADIOS Oil Database
 
+## Tl;dr
+
+* Setup and activate a conda environment:
+
+```
+conda create -n adiosdb python=3.7`
+conda activate adiosdb
+```
+* Setup everything:
+
+```
+python run_app.py --setup
+```
+
+* Run the app:
+
+```
+python run_app.py
+```
+
 ## Dev Process:
 
 As of Jan, 2019, we are in a push to get an MVP working to deliver to BSEE. So we are working in the develop branch, and actively pushing changes. When its gets more stable, we will start pushing to master, but for now -- do everything in develop.

@@ -24,8 +24,35 @@ import atexit
 import time
 import urllib.request
 import webbrowser
+import argparse
 
-rebuild = True if "--rebuild" in sys.argv else False
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--rebuild", '-r',
+                    action="store_true",
+                    help='Rebuild the dependencies: '
+                         'conda and npm')
+parser.add_argument('--database', '-d',
+                    action="store_true",
+                    help='rebuild the database')
+parser.add_argument('--setup', '-s',
+                    action="store_true",
+                    help='update dependencies and database, '
+                         "but don't run the servers")
+
+
+args = parser.parse_args()
+
+rebuild = args.rebuild
+build_database = args.database
+
+run_servers = True
+if args.setup:
+    rebuild = True
+    build_database = True
+    run_servers = False
+
+pids = []
 
 
 if rebuild:
@@ -39,13 +66,20 @@ if rebuild:
 
 # start up mongo:
 mongo = Popen(['mongod', '-f', 'mongo_config_dev.yml'])
+pids.append(mongo.pid)
 
 # print("after starting mongo")
+if build_database:
+    run("oil_db_init")
+    run(["oil_db_import", "--all"])
 
-webapi = Popen(['pserve', '--reload', 'web_api/config-example.ini'])
+if run_servers:
+    webapi = Popen(['pserve', '--reload', 'web_api/config-example.ini'])
+    pids.append(webapi.pid)
 
-# print("after starting the webapi")
 
+# ######
+#  Client
 os.chdir('web_client')
 
 if rebuild:
@@ -54,16 +88,17 @@ if rebuild:
     run(["npm", "install"])
     print("Done with npm packages")
 
-print("Starting up Ember Serve")
-client = Popen(['ember', 'serve'])
-
-print("after starting up the client")
-
-pids = [os.getpid()] + [p.pid for p in (mongo, webapi, client)]
+if run_servers:
+    print("Starting up Ember Serve")
+    client = Popen(['ember', 'serve'])
+    pids.append(client.pid)
 
 os.chdir('..')
+#  Client
+# ######
 
-print(os.getcwd())
+pids.insert(0, os.getpid())
+
 monitor = Popen(['python', 'utilities/monitor_and_kill.py'] +
                 [str(pid) for pid in pids])
 
@@ -88,8 +123,9 @@ def kill_everything():
 
 atexit.register(kill_everything)
 
-wait_for_client_server()
-webbrowser.open('http://localhost:4200/', new=1)
+if run_servers:
+    wait_for_client_server()
+    webbrowser.open('http://localhost:4200/', new=1)
 
 while True:
     print("App running: http://localhost:4200/")
