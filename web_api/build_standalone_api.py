@@ -9,9 +9,10 @@ from subprocess import run
 from pathlib import Path
 
 api_name = "run_web_api"
+# note: the start_server script was uglier to get running under PyInstaller
+#       so I punted on that.
 # api_name = "start_server"
 api_script = api_name + ".py"
-
 
 
 dist_dir = Path("dist").absolute()
@@ -30,6 +31,7 @@ run(["pyinstaller", "-y", "simple_server.py"])
 
 # then copy the simple_server stub to the run_web_api dir
 shutil.copy(dist_dir / "simple_server" / "simple_server", web_api_dir)
+# maybe should delete it to save confusion?
 
 
 # A total hack to get the full cornice package in:
@@ -51,13 +53,6 @@ dist_info_name = dist_info_dir.parts[-1]
 # and copy it in
 shutil.rmtree(web_api_dir / dist_info_name, ignore_errors=True)
 shutil.copytree(dist_info_dir, web_api_dir / dist_info_name)
-
-
-
-
-
-print("dist-info:")
-print(dist_info_dir)
 
 
 
