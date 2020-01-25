@@ -31,12 +31,13 @@ run(["pyinstaller", "-y", "simple_server.py"])
 
 # then copy the simple_server stub to the run_web_api dir
 shutil.copy(dist_dir / "simple_server" / "simple_server", web_api_dir)
-# maybe should delete it to save confusion?
+# delete it to save confusion?
+shutil.rmtree(dist_dir / "simple_server", ignore_errors=True)
 
 
 # A total hack to get the full cornice package in:
 
-# print("copying the cornice package in")
+print("copying the cornice package in")
 import cornice
 
 cornice_dir = Path(cornice.__file__).parent
