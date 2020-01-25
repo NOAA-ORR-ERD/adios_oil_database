@@ -27,7 +27,7 @@ def monitor(pid):
     # psutil.wait_procs(procs, timeout=None, callback=None)
     while True:
         if psutil.pid_exists(pid):
-            print(pid, "still running")
+            # print(pid, "still running")
             time.sleep(0.5)
         else:
             print("main process not there: killing subprocesses and quitting")

@@ -15,13 +15,15 @@ from .common.views import cors_policy
 
 
 def load_cors_origins(settings, key):
+    print("loading cors policy", key)
     if key in settings:
         try:
             origins = settings[key].split('\n')
         except AttributeError:  # Assume it's already a list
             origins = settings[key]
         cors_policy['origins'] = [s.strip() for s in origins]
-
+    print("cors_policy set:")
+    print(cors_policy['origins'])
 
 def generate_mongodb2_settings(settings):
     '''
@@ -34,7 +36,8 @@ def generate_mongodb2_settings(settings):
         But we don't use all the options for connecting (yet)
     '''
     host = settings['mongodb.host'].strip()
-    port = settings['mongodb.port'].strip()
+    # So it can be an int or a str
+    port = str(settings['mongodb.port']).strip()
     db_name = settings['mongodb.database']
 
     mongo_uri = 'mongodb://{}:{}'.format(host, port)
@@ -77,6 +80,7 @@ def about(request):
 
 def main(global_config, **settings):
 
+    print("*****running main of API****")
     load_cors_origins(settings, 'cors_policy.origins')
     generate_mongodb2_settings(settings)
 

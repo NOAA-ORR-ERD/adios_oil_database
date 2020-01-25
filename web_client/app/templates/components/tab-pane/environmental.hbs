@@ -5,7 +5,7 @@
     {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
       <p class="small">
         {{#if oil.fraction_weathered}}
-          <strong>Weathered Amount:</strong>
+          <strong>Weathered Fraction:</strong>
           {{#if oil.fraction_weathered.unit}}
             {{value-unit oil.fraction_weathered 2}}
           {{else}}

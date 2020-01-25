@@ -21,7 +21,7 @@ export default Component.extend(TableCommon, {
             label: 'ID',
             valuePath: 'id',
             classNames: 'text-nowrap',
-            width: '100px',
+            width: '110px',
             searchable: true,
         }, {
             label: 'Name',

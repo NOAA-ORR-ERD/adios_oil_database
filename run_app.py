@@ -28,8 +28,16 @@ import webbrowser
 rebuild = True if "--rebuild" in sys.argv else False
 
 
-# start up mongo:
+if rebuild:
+    # make sure conda packages are all up to date
+    print("updating / installing all conda packages")
+    run(["conda", "install", "-y",
+         "--file", "web_api/conda_requirements.txt",
+         "--file", "oil_db/conda_requirements.txt",
+         "--file", "web_client/conda_requirements.txt",
+         ])
 
+# start up mongo:
 mongo = Popen(['mongod', '-f', 'mongo_config_dev.yml'])
 
 # print("after starting mongo")

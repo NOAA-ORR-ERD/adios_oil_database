@@ -3,9 +3,7 @@
     <strong>Interfacial Tension:</strong>
 
     <table class="table table-hover table-bordered">
-      <thead class="clickable" data-toggle="collapse"
-             data-target=".ift-row-collapse"
-             aria-controls="ift-tbody"
+      <thead aria-controls="ift-tbody"
              aria-expanded="false">
         <tr>
           <th scope="col">Interface</th>
@@ -15,7 +13,7 @@
       </thead>
       <tbody id="ift-tbody">
         {{#each this.iftsArray as |ift index|}}
-          <tr class="collapse show ift-row-collapse">
+          <tr>
             <td>
               {{#if this.args.editable}}
                 <select class="p-1 flex-fill bg-transparent border" {{on "change" (fn this.updateInterface index)}}>
@@ -75,16 +73,12 @@
             </td>
           </tr>
         {{else}}
-          {{#if this.args.oil.ifts}}
-            <tr class="collapse ift-row-collapse">
-              <th scope="row">&#x2026;</th>
-            </tr>
-          {{else}}
+          {{#unless this.args.oil.ifts}}
             <tr><td>No Data</td></tr>
-          {{/if}}
+          {{/unless}}
         {{/if}}
       </tbody>
     </table>
-  </div>
 
+  </div>
 </div>

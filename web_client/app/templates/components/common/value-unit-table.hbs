@@ -11,7 +11,7 @@
         rightColumnValueName
         rightColumnUnit
         rightColumnPrecision
- --}}
+--}}
 
 <div class="detail-section">
   <div class="table-responsive">
@@ -27,7 +27,7 @@
       </thead>
       <tbody id={{concat this.tableId "-tbody"}}>
         {{#each this.valueArray as |value index|}}
-          <tr class="collapse show {{concat this.tableId "-row-collapse"}}">
+          <tr>
             <td>
               <Common::ValueUnitInput
                 @valueObject={{get value this.args.leftColumnValueName}}
@@ -75,5 +75,4 @@
     </table>
 
   </div>
-
 </div>

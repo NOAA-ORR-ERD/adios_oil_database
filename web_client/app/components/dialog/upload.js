@@ -21,7 +21,9 @@ export default class UploadDlg extends Component {
                 oilData = JSON.parse(data);
             }
             catch(e) {
-                alert(e);
+                alert("File Loading Error: " +
+                    "This does not look like a valid ADIOS database " +
+                    "JSON file. Please check the filename and try again.");
                 return;
             }
         }
