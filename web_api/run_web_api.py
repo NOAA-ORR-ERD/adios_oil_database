@@ -17,13 +17,25 @@ NOTE: this is missing logger configuration -- that should be added.
 #  fixme: maybe this should be derived from the location of the settings file?
 #         though I'm not sure how this information is used anyway
 
-# These simply to make PyInstaller include them
-# only in setuptools 45
-import pkg_resources.py2_warn  # only in setuptools 45
-import pyramid_tm
-import cornice  # this needs to be the noaa fork for now.
-import pyramid_mongodb2
-import oil_database_api.views
+# # These simply to make PyInstaller include them
+# import pkg_resources.py2_warn  # only in setuptools 45
+# import pyramid_tm
+# import cornice  # this needs to be the noaa fork for now.
+# import pyramid_mongodb2
+
+# import oil_database_api.views
+# # These to try to get pyinstaller to include them
+# #  but it leads to an infinite recursion
+# #    -- it seems only the "oil" view, but that's the most critical
+# from oil_database_api.views import (capabilities,
+#                                     distinct,
+# #                                    oil,
+#                                     category,
+#                                     query,
+#                                     )
+# # separate, so as not to override the build in object
+# from oil_database_api.views import object as _object
+
 
 
 # the ones we actually need

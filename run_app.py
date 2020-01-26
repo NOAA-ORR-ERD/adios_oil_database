@@ -24,7 +24,6 @@ import time
 import urllib.request
 import webbrowser
 import argparse
-import ujson
 
 
 parser = argparse.ArgumentParser()
