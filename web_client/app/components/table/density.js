@@ -8,9 +8,9 @@ export default Component.extend({
     },
     
     actions: {
-        onSubmit(densityObject) {
+        onSubmit(densitiesValue) {
             let oil = this.get('oil');
-            set(oil, 'densities', densityObject);
+            set(oil, 'densities', densitiesValue);
             this.submit(oil);
         }
     }
