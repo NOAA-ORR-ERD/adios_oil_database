@@ -18,13 +18,13 @@ environment and all that. but for now, just starting it up.
 
 """
 import os
-import sys
 from subprocess import run, Popen
 import atexit
 import time
 import urllib.request
 import webbrowser
 import argparse
+import ujson
 
 
 parser = argparse.ArgumentParser()
@@ -63,6 +63,8 @@ if rebuild:
          "--file", "oil_db/conda_requirements.txt",
          "--file", "web_client/conda_requirements.txt",
          ])
+    run(["python", "-m", "pip", "install", "-r",
+         "web_client/pip_requirements.txt"])
 
 # start up mongo:
 mongo = Popen(['mongod', '-f', 'mongo_config_dev.yml'])

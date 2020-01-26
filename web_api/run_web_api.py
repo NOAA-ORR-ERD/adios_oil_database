@@ -21,12 +21,13 @@ NOTE: this is missing logger configuration -- that should be added.
 # only in setuptools 45
 import pkg_resources.py2_warn  # only in setuptools 45
 import pyramid_tm
-# import cornice  # this is gotten by copying it in later.
+import cornice  # this needs to be the noaa fork for now.
 import pyramid_mongodb2
 import oil_database_api.views
 
 
 # the ones we actually need
+import os
 import sys
 from pathlib import Path
 import json
@@ -36,14 +37,20 @@ import waitress
 import oil_database_api
 
 print("Starting the Web API")
-print(sys.path)
+
+print("sys.argv:")
+print(sys.argv)
+print("cwd", os.getcwd())
 
 if __name__ == "__main__":
     try:
         settings_file = sys.argv[1]
     except IndexError:
-        print("you need to pass a settings JSON fileon the command line")
+        print("you need to pass a settings JSON file on the command line")
         sys.exit(1)
+
+
+
 
 
 _file = Path(__file__).resolve()

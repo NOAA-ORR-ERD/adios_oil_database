@@ -15,7 +15,8 @@ pyramid>=1.10.1
 pyramid_tm
 pyramid_debugtoolbar  # will eventually be brought in by pyramid_mongodb2
 pyramid_mongodb2
-cornice>=3.4.4
+simplejson  # required by cornice
+# cornice>=3.4.4  # installing the NOAA fork with pip instead
 paste
 pastedeploy>=2.0.1
 waitress

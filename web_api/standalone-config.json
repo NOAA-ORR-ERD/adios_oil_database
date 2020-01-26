@@ -6,7 +6,7 @@
 "client_path": "../StandAlone/client_code",
 
 "mongodb.host": "localhost",
-"mongodb.port": "27017",
+"mongodb.port": 27017,
 "mongodb.database": "oil_database",
 "mongodb.alias": "oil-db-app",
 
@@ -21,7 +21,8 @@
                      ],
 
 "cors_policy.origins": ["http://0.0.0.0:9898",
-                        "http://localhost:9898"
+                        "http://localhost:9898",
+                        "*"
                        ],
 
 "caps.can_modify_db": false,

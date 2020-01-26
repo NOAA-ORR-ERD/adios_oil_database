@@ -115,4 +115,14 @@ def main(global_config, **settings):
     config.add_route('about', '/about')
     config.add_view(about, route_name='about')
 
+    # Attempt to set up the rest by hand -- scanning is not working in the API:
+    # This is not working like this :-(
+    # from .views import oil
+    # config.add_cornice_service(oil.oil_api)
+    # from .views.category import category_api
+    # config.add_cornice_service(category_api)
+    # from .views.capabilities import capabilities_api
+    # config.add_cornice_service(capabilities_api)
+
+
     return config.make_wsgi_app()

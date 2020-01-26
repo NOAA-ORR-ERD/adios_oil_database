@@ -22,17 +22,18 @@ web_api_dir = dist_dir / api_name
 # run pyInstaller:
 
 # maybe need to set some other options, defaults for now
-run(["pyinstaller", "-y", api_script, "simple_server.py"])
+run(["pyinstaller", "-y", api_script])
+# run(["pyinstaller", "-y", api_script, "simple_server.py"])
 
-# this seems to pull the dependencies from simple_server, but not
-# create a startup stub -- so we build it again
-# PyInstaller supports  multipackage builds, but it looks really ugly.
-run(["pyinstaller", "-y", "simple_server.py"])
+# # this seems to pull the dependencies from simple_server, but not
+# # create a startup stub -- so we build it again
+# # PyInstaller supports  multipackage builds, but it looks really ugly.
+# run(["pyinstaller", "-y", "simple_server.py"])
 
-# then copy the simple_server stub to the run_web_api dir
-shutil.copy(dist_dir / "simple_server" / "simple_server", web_api_dir)
-# delete it to save confusion?
-shutil.rmtree(dist_dir / "simple_server", ignore_errors=True)
+# # then copy the simple_server stub to the run_web_api dir
+# shutil.copy(dist_dir / "simple_server" / "simple_server", web_api_dir)
+# # delete it to save confusion?
+# shutil.rmtree(dist_dir / "simple_server", ignore_errors=True)
 
 
 # A total hack to get the full cornice package in:
@@ -54,7 +55,3 @@ dist_info_name = dist_info_dir.parts[-1]
 # and copy it in
 shutil.rmtree(web_api_dir / dist_info_name, ignore_errors=True)
 shutil.copytree(dist_info_dir, web_api_dir / dist_info_name)
-
-
-
-
