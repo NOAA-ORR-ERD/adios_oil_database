@@ -59,6 +59,7 @@
       <Table::Density
         @oil={{oil}}
         @editable={{this.editable}}
+        @submit={{this.submit}}
         class="row"/>
     </div>
 
@@ -66,6 +67,7 @@
       <Table::KinematicViscosity
         @oil={{oil}}
         @editable={{this.editable}}
+        @submit={{this.submit}}
         class="row"/>
     </div>
 
@@ -73,6 +75,7 @@
       <Table::DynamicViscosity
         @oil={{oil}}
         @editable={{this.editable}}
+        @submit={{this.submit}}
         class="row"/>
     </div>
 
@@ -80,6 +83,11 @@
       <Table::Ift
         @oil={{oil}}
         @editable={{this.editable}}
+        @interfaces={{array
+          "air"
+          "water"
+          "seawater"}}
+        @submit={{this.submit}}
         class="row"/>
     </div>
 
