@@ -1,4 +1,5 @@
-const USE_INI_CONFIG = true;
+const USE_INI_CONFIG = false;
+const IS_INSTALLED_APPLICATION = false;
 
 const path = require( "path" );
 const childProcess = require( "child_process" );
@@ -98,7 +99,13 @@ function StartFileServerProcess()
 	console.log( "StartFileServerProcess()" );
 
 	let cwd = path.join( path.resolve( __dirname, ".." ), "web_client", "dist" );
-	fileServerProcess = childProcess.spawn( "python",
+	let appPath = "python";
+	if ( IS_INSTALLED_APPLICATION )
+	{
+		cwd = path.join( path.resolve( __dirname, "../../.." ), "oil_database", "web_client", "dist" );
+		appPath = "../../../adiosdb/python.exe";
+	}
+	fileServerProcess = childProcess.spawn( appPath,
 											[ "-m", "http.server", "8080" ],
 											{ cwd: cwd } );
 	fileServerProcess.on(
@@ -148,13 +155,22 @@ function StartMongoDbProcess()
 {
 	console.log( "StartMongoDbProcess()" );
 
-	cwd = path.resolve( __dirname, ".." );
-	mongoDbProcess = childProcess.spawn( "mongod",
-										 [ "-f", "mongo_config_dev.yml" ],
+	let cwd = path.resolve( __dirname, ".." );
+	let appPath = "mongod";
+	let configPath = "mongo_config_dev.yml";
+	if ( IS_INSTALLED_APPLICATION )
+	{
+		cwd = path.join( path.resolve( __dirname, "../../.." ), "oil_database" );
+		appPath = "../adiosdb/Library/bin/mongod.exe";
+		configPath = "../oil_database/mongo_config_dev.yml";
+	}
+	
+	mongoDbProcess = childProcess.spawn( appPath,
+										 [ "-f", configPath ],
 										 { cwd: cwd } );
-
+	
 	// var subpy = require('child_process').spawn('./dist/server.exe');
-
+	
 	mongoDbProcess.on(
 		"error",
 		( err ) =>
@@ -169,8 +185,14 @@ function StartMongoDbProcess()
 function StartWebApiProcess()
 {
 	console.log( "StartWebApiProcess()" );
-
+	
 	let cwd = path.join( path.resolve( __dirname, ".." ), "web_api" );
+	let appPath = "python";
+	if ( IS_INSTALLED_APPLICATION )
+	{
+		cwd = path.join( path.resolve( __dirname, "../../.." ), "oil_database", "web_api" );
+		appPath = "../../adiosdb/python.exe";
+	}
 	if ( USE_INI_CONFIG )
 	{
 		webApiProcess = childProcess.spawn( "python",
@@ -179,8 +201,8 @@ function StartWebApiProcess()
 	}
 	else
 	{
-		webApiProcess = childProcess.spawn( "python",
-											[ "run_web_api.py", "stand_alone_config.json" ],
+		webApiProcess = childProcess.spawn( appPath,
+											[ "run_web_api.py", "standalone-config.json" ],
 											{ cwd: cwd } );
 	}
 	
