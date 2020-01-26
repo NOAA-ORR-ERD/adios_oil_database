@@ -10,7 +10,6 @@ export default class ValueUnitTable extends Component {
         super(...arguments);
 
         this.tableId = this.args.tableTitle.replace(/\s+/g, '-').toLowerCase();
-
         this.valueArray = this.args.valueArray;
         
     }
@@ -89,6 +88,7 @@ export default class ValueUnitTable extends Component {
         }
 
         this.removeEmptyTableRows();
+        this.updateValue(this.valueArray);
     }
 
     @action
@@ -119,5 +119,11 @@ export default class ValueUnitTable extends Component {
         }
 
         this.removeEmptyTableRows();
+        this.updateValue(this.valueArray);
+    }
+
+    @action
+    updateValue(enteredValue) {
+        this.args.submit(enteredValue);
     }
 }
