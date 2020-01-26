@@ -12,7 +12,7 @@
         @submit={{this.submit}}
       />
     {{else}}
-      {{#if this.args.oil.pour_point}}
+      {{#if this.args.oil.pour_point.ref_temp}}
         <span>
           {{value-unit (convert-unit this.args.oil.pour_point.ref_temp "C") 2}}
         </span>

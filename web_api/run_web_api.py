@@ -88,8 +88,9 @@ if settings.get('standalone'):
 # NOTE: we could do this all in the JSON:
 #       https://gist.github.com/pmav99/49c01313db33f3453b22
 # assume the log config file is next to the main settings file
-# log_config_file = settings_path / settings.pop("log_config_file")
-# logging.config.fileConfig(log_config_file)
+log_config_file = settings_path / settings.pop("log_config_file")
+print("loading logging config from:", log_config_file)
+logging.config.fileConfig(log_config_file)
 
 
 # create the app

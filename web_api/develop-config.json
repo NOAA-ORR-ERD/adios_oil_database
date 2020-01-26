@@ -30,5 +30,5 @@
 
 "caps.can_modify_db": false,
 
-"log_config_file": "develop_logging.ini"
+"log_config_file": "develop-logging.ini"
 }
