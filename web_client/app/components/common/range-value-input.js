@@ -23,10 +23,11 @@ export default class RangeValueInput extends Component {
     }
 
     deepGet(obj, path) {
-        for (var i = 0, attrs = path.split('.'), len = attrs.length;
-        i < len; i++) {
+        let keys = Array.isArray(path) ? path : path.split('.');
+
+        for (let i = 0, len = keys.length; i < len; i++) {
             try {
-                obj = obj[attrs[i]];
+                obj = obj[keys[i]];
             }
             catch(err) {
                 return obj;  // undefined
@@ -40,19 +41,18 @@ export default class RangeValueInput extends Component {
         // protect against being something unexpected
         obj = typeof obj === 'object' ? obj : {};
 
-        // split the path into and array if its not one already
-        var keys = Array.isArray(path) ? path : path.split('.');
-        var key;
+        let keys = Array.isArray(path) ? path : path.split('.');
+        let key;
 
-        // loop over the path parts one at a time
-        // but, dont iterate the last part,
+        // loop over the path parts one at a time, all but the last part
         for (var i = 0; i < keys.length - 1; i++) {
             key = keys[i];
 
             if (!obj[key] && !Object.prototype.hasOwnProperty.call(obj, key)) {
-                // if nothing exists for this key, make it an empty object or array
-                // get the next key in the path, if its numeric, make this property
-                // an empty array.  Otherwise, make it an empty object
+                // If nothing exists for this key, make it an empty object
+                // or array, depending upon the next key in the path.
+                // If it's numeric, make this property an empty array.
+                // Otherwise, make it an empty object
                 var nextKey = keys[i+1];
                 var useArray = /^\+?(0|[1-9]\d*)$/.test(nextKey);
                 obj[key] = useArray ? [] : {};
@@ -61,7 +61,6 @@ export default class RangeValueInput extends Component {
             obj = obj[key];
         }
 
-        // set our value
         // we need to use @ember/object:set() here because our oil is a tracked
         // property, and it is defined as old-style ember, not octane.
         key = keys[i];
@@ -69,7 +68,21 @@ export default class RangeValueInput extends Component {
 
         return obj;
     }
-    
+
+    deepRemove(obj, path) {
+        let keys = Array.isArray(path) ? path : path.split('.');
+
+        if (keys.length >= 2) {
+            let parent = this.deepGet(obj, keys.slice(0, -1));
+
+            if (parent && parent.hasOwnProperty(keys.slice(-1)[0])) {
+                delete parent[keys.slice(-1)[0]]
+            }
+        }
+
+        return obj;
+    }
+
     enteredValuesValid(entered) {
         if (!entered) { return false }
 
@@ -99,19 +112,17 @@ export default class RangeValueInput extends Component {
 
     @action
     updateValue(enteredValue) {
-        let newValue;
         if (this.enteredValuesValid(enteredValue)) {
-            newValue = enteredValue;
+            this.deepSet(this.valueObject, this.args.valueName, enteredValue);
+            this.inputValue = enteredValue;
         }
         else {
             // nothing entered - This happens when we have no values in the
             // dialog and then press OK.  We will view this as an intentional
             // nullification of the property.
-            newValue = null;
-        }    
-
-        this.deepSet(this.valueObject, this.args.valueName, newValue);
-        this.inputValue = newValue;
+            this.deepRemove(this.valueObject, this.args.valueName);
+            this.inputValue = null;
+        }
 
         console.log('setting this.valueObject...');
         this.valueObject = this.valueObject; // ember! - reset tracked object
