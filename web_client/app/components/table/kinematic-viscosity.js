@@ -1,17 +1,10 @@
-import Component from '@ember/component';
-import { set } from "@ember/object";
+import Component from '@glimmer/component';
+import { action } from "@ember/object";
 
-export default Component.extend({
-
-    init(){
-        this._super(...arguments);
-    },
-    
-    actions: {
-        onSubmit(kvisValue) {
-            let oil = this.get('oil');
-            set(oil, 'kvis', kvisValue);
-            this.submit(oil);
-        }
+export default class KinematicViscosity extends Component {
+    @action
+    submit(kvisValue) {
+        this.args.oil.kvis = kvisValue;
+        this.submit(this.args.oil);
     }
-});
+}
