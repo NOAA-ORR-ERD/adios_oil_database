@@ -1,0 +1,143 @@
+in C:\Users\michael.katz\Documents\_scratch\odb\*
+
+replace
+	C:/Users/michael.katz/AppData/Local/Continuum/miniconda3/envs/adiosdb
+with
+	C:/Users/michael.katz/Documents/_scratch/odb/adiosdb
+
+replace
+	C:\\Users\\michael.katz\\AppData\\Local\\Continuum\\miniconda3\\envs\\adiosdb
+with
+	C:\\Users\\michael.katz\\Documents\\_scratch\\odb\\adiosdb
+
+replace
+	C:\Users\michael.katz\AppData\Local\Continuum\miniconda3\envs\adiosdb
+with
+	C:\Users\michael.katz\Documents\_scratch\odb\adiosdb
+
+replace
+	C:/Users/michael.katz/Documents/oil_database
+with
+	C:/Users/michael.katz/Documents/_scratch\odb\oil_database
+
+replace
+	C:\\Users\\michael.katz\\Documents\\oil_database
+with
+	C:\\Users\\michael.katz\\Documents\\_scratch\\odb\\oil_database
+
+replace
+	C:\Users\michael.katz\Documents\oil_database
+with
+	C:\Users\michael.katz\Documents\_scratch\odb\oil_database
+
+
+// to get pip to see ssl
+PS C:\Users\michael.katz\Documents\_scratch\odb\adiosdb> $Env:path += ";C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin"
+
+// to get rid of the numpy error (numpy.core._multiarray_umath The specified module could not be found.)
+.\Scripts\pip.exe install --force-reinstall numpy
+
+// to get rid of the scipy error (minpack2 The specified module could not be found.)
+.\Scripts\pip.exe install --force-reinstall scipy
+
+// to fix the CORS problem
+edit line 82 of run_web_api.py to the set ["http://localhost:8080"]
+
+// to move the mongo_files up a level
+update C:\Users\michael.katz\Documents\_scratch\odb\oil_database\mongo_config_dev.yml:
+  dbPath: ../mongo_files
+
+// see michaeledit in main.js for path changes
+
+PS C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\dist> ..\..\..\adiosdb\python.exe -m http.server 8080
+
+PS C:\Users\michael.katz\Documents\_scratch\odb\oil_database> ..\adiosdb\Library\bin\mongod.exe -f ..\oil_database\mongo_config_dev.yml
+
+PS C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_api> ..\..\adiosdb\python.exe .\run_web_api.py .\standalone-config.json
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Directories that can be deleted:
+
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\chrisb_old
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\docs
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\ElectronNodePythonDemo
+
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\mongo_files\diagnostic.data
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\mongo_files\journal
+
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\platform
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\utilities
+
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_api\build
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_api\dist
+
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\app
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\config
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\node_modules
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\mirage
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\public
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\tests
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\vendor
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\package
+
+----------------
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\node.exe
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\python37.pdb
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\python.pdb
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\pythonw.pdb
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\conda-meta
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\node_modules
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\include
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\tcl
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\mkl_*.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\*.pdb
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\libblas.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\libcblas.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\liblapack.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\svml_dispmd.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\mongo.exe
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\mongos.exe
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\include
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Lib\tkinter
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\DLLs\tcl86t.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\DLLs\tk86t.dll
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\tcl86t.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\sqlite3.exe
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\sqlite3.dll
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\lib\tclstub86.lib
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\lib\tkstub86.lib
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\lib\tcl86t.lib
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\lib\tk86t.lib
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Scripts\f2py.exe
+
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Lib\site-packages\PyInstaller*
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Lib\site-packages\flask*
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Lib\site-packages\git*
+
+C:\Users\michael.katz\Documents\_scratch\odb\mongo_files\README.txt
+
+C:\Users\michael.katz\Documents\_scratch\odb\electron\.gitignore
+C:\Users\michael.katz\Documents\_scratch\odb\electron\main.js
+C:\Users\michael.katz\Documents\_scratch\odb\electron\oil-barrel.ico
+C:\Users\michael.katz\Documents\_scratch\odb\electron\package.json
+C:\Users\michael.katz\Documents\_scratch\odb\electron\README.md
+C:\Users\michael.katz\Documents\_scratch\odb\electron\run_web_api.py
+
+C:\Users\michael.katz\Documents\_scratch\odb\electron\resources\app\.gitignore
+C:\Users\michael.katz\Documents\_scratch\odb\electron\resources\app\package-lock.json
+C:\Users\michael.katz\Documents\_scratch\odb\electron\resources\app\README.md
+C:\Users\michael.katz\Documents\_scratch\odb\electron\resources\app\run_web_api.py
+C:\Users\michael.katz\Documents\_scratch\odb\electron\startup.html
+
+========================
+
+C:\Users\michael.katz\Documents\_scratch\odb\oil_database = 12MB (5 MB zipped)
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb = 330MB (122 MB zipped)

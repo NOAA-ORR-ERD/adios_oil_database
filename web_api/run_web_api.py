@@ -17,16 +17,29 @@ NOTE: this is missing logger configuration -- that should be added.
 #  fixme: maybe this should be derived from the location of the settings file?
 #         though I'm not sure how this information is used anyway
 
-# These simply to make PyInstaller include them
-# only in setuptools 45
-import pkg_resources.py2_warn  # only in setuptools 45
-import pyramid_tm
-# import cornice  # this is gotten by copying it in later.
-import pyramid_mongodb2
-import oil_database_api.views
+# # These simply to make PyInstaller include them
+# import pkg_resources.py2_warn  # only in setuptools 45
+# import pyramid_tm
+# import cornice  # this needs to be the noaa fork for now.
+# import pyramid_mongodb2
+
+# import oil_database_api.views
+# # These to try to get pyinstaller to include them
+# #  but it leads to an infinite recursion
+# #    -- it seems only the "oil" view, but that's the most critical
+# from oil_database_api.views import (capabilities,
+#                                     distinct,
+# #                                    oil,
+#                                     category,
+#                                     query,
+#                                     )
+# # separate, so as not to override the build in object
+# from oil_database_api.views import object as _object
+
 
 
 # the ones we actually need
+import os
 import sys
 from pathlib import Path
 import json
@@ -36,14 +49,20 @@ import waitress
 import oil_database_api
 
 print("Starting the Web API")
-print(sys.path)
+
+print("sys.argv:")
+print(sys.argv)
+print("cwd", os.getcwd())
 
 if __name__ == "__main__":
     try:
         settings_file = sys.argv[1]
     except IndexError:
-        print("you need to pass a settings JSON fileon the command line")
+        print("you need to pass a settings JSON file on the command line")
         sys.exit(1)
+
+
+
 
 
 _file = Path(__file__).resolve()
@@ -88,8 +107,9 @@ if settings.get('standalone'):
 # NOTE: we could do this all in the JSON:
 #       https://gist.github.com/pmav99/49c01313db33f3453b22
 # assume the log config file is next to the main settings file
-# log_config_file = settings_path / settings.pop("log_config_file")
-# logging.config.fileConfig(log_config_file)
+log_config_file = settings_path / settings.pop("log_config_file")
+print("loading logging config from:", log_config_file)
+logging.config.fileConfig(log_config_file)
 
 
 # create the app

@@ -384,6 +384,11 @@ def fix_oil_id(oil_json, obj_id=None):
 
 @memoize_oil_arg
 def get_oil_searchable_fields(oil):
+    '''
+        Since end users are updating records in an immediate (blur) fashion,
+        there could be many records that are only partially filled in.
+        So we need to be very tolerant of bad records here.
+    '''
     oil = OilEstimation(oil)
     sample = oil.get_sample()
 
@@ -393,13 +398,28 @@ def get_oil_searchable_fields(oil):
         sample = oil.get_first_sample()
 
     try:
+        api_gravity = sample.get_api()
+    except Exception:
+        api_gravity = None
+
+    try:
+        pour_point = sample.pour_point()
+    except Exception:
+        pour_point = None
+
+    try:
+        kvis_at_38 = sample.kvis_at_temp(273.15 + 38)
+    except:
+        kvis_at_38 = None
+
+    try:
         return {'_id': oil.oil_id,
                 'name': oil.name,
                 'location': oil.location,
                 'product_type': oil.product_type,
-                'api': sample.get_api(),
-                'pour_point': sample.pour_point(),
-                'viscosity': sample.kvis_at_temp(273.15 + 38),
+                'api': api_gravity,
+                'pour_point': pour_point,
+                'viscosity': kvis_at_38,
                 'categories': oil.categories,
                 'status': oil.status,
                 }

@@ -15,13 +15,15 @@ from .common.views import cors_policy
 
 
 def load_cors_origins(settings, key):
+    print("loading cors policy", key)
     if key in settings:
         try:
             origins = settings[key].split('\n')
         except AttributeError:  # Assume it's already a list
             origins = settings[key]
         cors_policy['origins'] = [s.strip() for s in origins]
-
+    print("cors_policy set:")
+    print(cors_policy['origins'])
 
 def generate_mongodb2_settings(settings):
     '''
@@ -78,6 +80,7 @@ def about(request):
 
 def main(global_config, **settings):
 
+    print("*****running main of API****")
     load_cors_origins(settings, 'cors_policy.origins')
     generate_mongodb2_settings(settings)
 
@@ -111,5 +114,15 @@ def main(global_config, **settings):
     # setup the about endpoint
     config.add_route('about', '/about')
     config.add_view(about, route_name='about')
+
+    # Attempt to set up the rest by hand -- scanning is not working in the API:
+    # This is not working like this :-(
+    # from .views import oil
+    # config.add_cornice_service(oil.oil_api)
+    # from .views.category import category_api
+    # config.add_cornice_service(category_api)
+    # from .views.capabilities import capabilities_api
+    # config.add_cornice_service(capabilities_api)
+
 
     return config.make_wsgi_app()

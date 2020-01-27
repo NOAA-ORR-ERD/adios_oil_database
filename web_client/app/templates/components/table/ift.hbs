@@ -9,33 +9,87 @@
           <th scope="col">Interface</th>
           <th scope="col">Tension</th>
           <th scope="col">Temperature</th>
+
+          {{#if this.args.editable}}
+            <td class="border-0">
+              <button type="button"
+                {{on "click" (fn this.addEmptyTableRow 0)}}
+                class="btn btn-outline-dark btn-sm p-0 border-0">
+                {{fa-icon "plus"}}
+              </button>
+            </td>
+          {{/if}}
+
         </tr>
       </thead>
       <tbody id="ift-tbody">
-        {{#if oil.ifts}}
-          {{#each oil.ifts as |ift|}}
-            <tr>
-              <td>{{ift.interface}}</td>
-              <td>{{value-unit ift.tension 3}}</td>
-              <td>
-                <Common::ValueUnitInput
-                  @valueObject={{ift.ref_temp}}
-                  @valueUnit={{"C"}}
-                  @valuePrecision={{2}}
-                  @editable={{this.editable}}
-                />
+        {{#each this.iftsArray as |ift index|}}
+          <tr>
+            <td>
+              {{#if this.args.editable}}
+                <select class="p-1 flex-fill bg-transparent border" {{on "change" (fn this.updateInterface index)}}>
+                  {{#each this.args.interfaces as |interface|}}
+                    {{#if (eq ift.interface interface)}}
+                      <option class="bg-light" selected>{{interface}}</option>
+                    {{else}}
+                      <option class="bg-light">{{interface}}</option>
+                    {{/if}}
+                  {{/each}}
+                </select>
+              {{else}}
+                {{ift.interface}}
+              {{/if}}
+            </td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{ift.tension}}
+                @valueUnit={{"N/m"}}
+                @valuePrecision={{3}}
+                @editable={{this.args.editable}}
+                @submit={{fn this.updateAttr index "tension"}}
+              />
+            </td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{ift.ref_temp}}
+                @valueUnit={{"C"}}
+                @valuePrecision={{2}}
+                @editable={{this.args.editable}}
+                @submit={{fn this.updateAttr index "ref_temp"}}
+              />
+            </td>
+
+            {{#if this.args.editable}}
+              <td class="border-0">
+                <button type="button"
+                  {{on "click" (fn this.deleteTableRow index)}}
+                  class="btn btn-outline-danger btn-sm p-0 border-0">
+                  {{fa-icon "times"}}
+                </button>
               </td>
-              {{!-- 
-              <td>{{value-unit ift.tension 3}}</td>
-              <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
-              --}}
-            </tr>
-          {{/each}}
-        {{else}}
+
+              <td class="border-0">
+                <button type="button"
+                  {{on "click" (fn this.addEmptyTableRow (add index 1))}}
+                  class="btn btn-outline-dark btn-sm p-0 border-0">
+                  {{fa-icon "plus"}}
+                </button>
+              </td>
+            {{/if}}
+
+            {{!-- 
+            <td>{{ift.interface}}</td>
+            <td>{{value-unit ift.tension 3}}</td>
+            <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
+            --}}
+          </tr>
+        {{/each}}
+
+        {{#unless this.args.oil.ifts}}
           <tr><td>No Data</td></tr>
-        {{/if}}
+        {{/unless}}
       </tbody>
     </table>
-  </div>
 
+  </div>
 </div>

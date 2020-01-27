@@ -50,3 +50,20 @@
 .nav-tabs > a:hover > button {
     display: inline-flex;
 }
+
+/**
+ * This section is specific to the buttons inside the edit tables
+ */
+.table > thead > tr > td > button {
+    visibility: hidden;
+}
+.table > thead > tr:hover > td > button {
+    visibility: visible;
+}
+
+.table > tbody > tr > td > button {
+    visibility: hidden;
+}
+.table > tbody > tr:hover > td > button {
+    visibility: visible;
+}

@@ -20,10 +20,15 @@
                      ],
 
 "cors_policy.origins": ["http://0.0.0.0:9898",
-                        "http://localhost:9898"
+                        "http://localhost:9898",
+                        "http://0.0.0.0:8080",
+                        "http://localhost:8080",
+                        "http://localhost:8088",
+                        "http://localhost:4200",
+                        "http://localhost:4201"
                        ],
 
 "caps.can_modify_db": false,
 
-"log_config_file": "develop_logging.ini"
+"log_config_file": "develop-logging.ini"
 }

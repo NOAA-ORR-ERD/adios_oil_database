@@ -1,13 +1,37 @@
-<Common::ValueUnitTable
-  @tableTitle="Kinematic Viscosity"
-  @leftColumnTitle="Viscosity"
-  @rightColumnTitle="Temperature"
-  @valueArray={{oil.kvis}}
-  @leftColumnValueName="viscosity"
-  @leftColumnUnit={{"cSt"}}
-  @leftColumnPrecision={{3}}
-  @rightColumnValueName="ref_temp"
-  @rightColumnUnit="C"
-  @rightColumnPrecision={{2}}
-  @editable={{this.editable}}
-/>
+<div class="row">
+
+  {{#if this.args.editable}}
+    <div class="col-11">
+      <Common::ValueUnitTable
+        @tableTitle="Kinematic Viscosity"
+        @leftColumnTitle="Viscosity"
+        @rightColumnTitle="Temperature"
+        @valueArray={{this.args.oil.kvis}}
+        @leftColumnValueName="viscosity"
+        @leftColumnUnit={{"cSt"}}
+        @leftColumnPrecision={{3}}
+        @rightColumnValueName="ref_temp"
+        @rightColumnUnit="C"
+        @rightColumnPrecision={{2}}
+        @editable={{this.args.editable}}
+        @submit={{this.submit}}
+      />
+    </div>
+  {{else}}
+    <Common::ValueUnitTable
+      @tableTitle="Kinematic Viscosity"
+      @leftColumnTitle="Viscosity"
+      @rightColumnTitle="Temperature"
+      @valueArray={{this.args.oil.kvis}}
+      @leftColumnValueName="viscosity"
+      @leftColumnUnit={{"cSt"}}
+      @leftColumnPrecision={{3}}
+      @rightColumnValueName="ref_temp"
+      @rightColumnUnit="C"
+      @rightColumnPrecision={{2}}
+      @editable={{this.args.editable}}
+      @submit={{this.submit}}
+    />
+  {{/if}}
+
+</div>

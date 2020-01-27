@@ -33,7 +33,13 @@ export default LineChart.extend({
     }
 
     distinct_w.forEach(function(w) {
-      let weathered_cuts = cuts.filter((c) => (c.weathering === w));
+      let weathered_cuts = cuts.filter((c) => {
+          return (c.weathering === w &&
+                  c.fraction &&
+                  c.fraction.value &&
+                  c.vapor_temp &&
+                  c.vapor_temp.value);
+      });
 
       data.push({
         name: w,

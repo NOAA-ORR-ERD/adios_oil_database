@@ -57,7 +57,12 @@
        aria-labelledby="nav-distillation-tab-{{slug sampleName}}">
     {{! class 'active' is necessary for the graph to render properly,
         even if the tab is not initially shown }}
-    <TabPane::Distillation @oil={{sample}} @sampleName={{sampleName}}/>
+    <TabPane::Distillation
+      @oil={{sample}}
+      @sampleName={{sampleName}}
+      @editable={{this.editable}}
+      @submit={{action "submitSample"}}
+    />
   </div>
 
   <div role="tabpanel" class="tab-pane fade"

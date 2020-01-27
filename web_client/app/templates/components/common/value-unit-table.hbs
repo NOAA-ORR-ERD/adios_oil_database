@@ -11,7 +11,7 @@
         rightColumnValueName
         rightColumnUnit
         rightColumnPrecision
- --}}
+--}}
 
 <div class="detail-section">
   <div class="table-responsive">
@@ -23,57 +23,66 @@
         <tr>
           <th scope="col">{{this.args.leftColumnTitle}}</th>
           <th scope="col">{{this.args.rightColumnTitle}}</th>
-        </tr>
-      </thead>
-      <tbody id={{concat this.tableId "-tbody"}}>
-        {{#if this.valueArray}}
-          {{#each this.valueArray as |value index|}}
-            <tr>
-              <td>
-                <Common::ValueUnitInput
-                  @valueObject={{get value this.args.leftColumnValueName}}
-                  @valueUnit={{this.args.leftColumnUnit}}
-                  @valuePrecision={{this.args.leftColumnPrecision}}
-                  @editable={{this.args.editable}}
-                  @submit={{fn this.updateLeftColumnValue index}}
-                />
-              </td>
-              <td>
-                <Common::ValueUnitInput
-                  @valueObject={{get value this.args.rightColumnValueName}}
-                  @valueUnit={{this.args.rightColumnUnit}}
-                  @valuePrecision={{this.args.rightColumnPrecision}}
-                  @editable={{this.args.editable}}
-                  @submit={{fn this.updateRightColumnValue index}}
-                />
-              </td>
-              {{#if this.args.editable}}
-                <td class="border-0">
-                  <button type="button" onClick={{action "deleteTableRow"}}
-                    class="btn btn-outline-danger btn-sm p-0 m-0 border-0">
-                    {{fa-icon "times"}}
-                  </button>
-                </td>
-              {{/if}}
-            </tr>
-          {{/each}}
-        {{else}}
-          <tr><td>No Data</td></tr>
-        {{/if}}
-        {{#if this.args.editable}}
-          <tr>
+
+          {{#if this.args.editable}}
             <td class="border-0">
-              <button type="button" onClick={{action "addEmptyTableRow"}}
+              <button type="button"
+                {{on "click" (fn this.addEmptyTableRow 0)}}
                 class="btn btn-outline-dark btn-sm p-0 border-0">
                 {{fa-icon "plus"}}
               </button>
             </td>
+          {{/if}}
+
+        </tr>
+      </thead>
+      <tbody id={{concat this.tableId "-tbody"}}>
+        {{#each this.valueArray as |value index|}}
+          <tr>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{get value this.args.leftColumnValueName}}
+                @valueUnit={{this.args.leftColumnUnit}}
+                @valuePrecision={{this.args.leftColumnPrecision}}
+                @editable={{this.args.editable}}
+                @submit={{fn this.updateCellValue index this.args.leftColumnValueName}}
+              />
+            </td>
+            <td>
+              <Common::ValueUnitInput
+                @valueObject={{get value this.args.rightColumnValueName}}
+                @valueUnit={{this.args.rightColumnUnit}}
+                @valuePrecision={{this.args.rightColumnPrecision}}
+                @editable={{this.args.editable}}
+                @submit={{fn this.updateCellValue index this.args.rightColumnValueName}}
+              />
+            </td>
+            {{#if this.args.editable}}
+              <td class="border-0">
+                <button type="button"
+                  {{on "click" (fn this.deleteTableRow index)}}
+                  class="btn btn-outline-danger btn-sm p-0 border-0">
+                  {{fa-icon "times"}}
+                </button>
+
+                <button type="button"
+                  {{on "click" (fn this.addEmptyTableRow (add index 1))}}
+                  class="btn btn-outline-dark btn-sm p-0 border-0">
+                  {{fa-icon "plus"}}
+                </button>
+              </td>
+
+            {{/if}}
           </tr>
-        {{/if}}
+        {{/each}}
+        {{#unless this.args.editable}}
+          {{#unless this.valueArray}}
+            <tr><td>No Data</td></tr>
+          {{/unless}}
+        {{/unless}}
 
       </tbody>
     </table>
 
   </div>
-
 </div>
