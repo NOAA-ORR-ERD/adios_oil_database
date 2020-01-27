@@ -72,6 +72,7 @@ export default class Ift extends Component {
 
     @action
     updateTable(enteredValue) {
+        set(this.args.oil, 'ifts', enteredValue);
         this.args.submit(enteredValue);
     }
 
