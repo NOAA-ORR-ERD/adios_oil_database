@@ -55,15 +55,15 @@
  * This section is specific to the buttons inside the edit tables
  */
 .table > thead > tr > td > button {
-    display:none;
+    visibility: hidden;
 }
 .table > thead > tr:hover > td > button {
-    display: inline-flex;
+    visibility: visible;
 }
 
 .table > tbody > tr > td > button {
-    display:none;
+    visibility: hidden;
 }
 .table > tbody > tr:hover > td > button {
-    display: inline-flex;
+    visibility: visible;
 }
