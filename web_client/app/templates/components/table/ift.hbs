@@ -9,6 +9,17 @@
           <th scope="col">Interface</th>
           <th scope="col">Tension</th>
           <th scope="col">Temperature</th>
+
+          {{#if this.args.editable}}
+            <td class="border-0">
+              <button type="button"
+                {{on "click" (fn this.addEmptyTableRow 0)}}
+                class="btn btn-outline-dark btn-sm p-0 border-0">
+                {{fa-icon "plus"}}
+              </button>
+            </td>
+          {{/if}}
+
         </tr>
       </thead>
       <tbody id="ift-tbody">
@@ -35,7 +46,7 @@
                 @valueUnit={{"N/m"}}
                 @valuePrecision={{3}}
                 @editable={{this.args.editable}}
-                @submit={{fn this.updateTension index}}
+                @submit={{fn this.updateAttr index "tension"}}
               />
             </td>
             <td>
@@ -44,17 +55,28 @@
                 @valueUnit={{"C"}}
                 @valuePrecision={{2}}
                 @editable={{this.args.editable}}
-                @submit={{fn this.updateTemperature index}}
+                @submit={{fn this.updateAttr index "ref_temp"}}
               />
             </td>
+
             {{#if this.args.editable}}
               <td class="border-0">
-                <button type="button" {{on "click" this.deleteTableRow}}
-                  class="btn btn-outline-danger btn-sm p-0 m-0 border-0">
+                <button type="button"
+                  {{on "click" (fn this.deleteTableRow index)}}
+                  class="btn btn-outline-danger btn-sm p-0 border-0">
                   {{fa-icon "times"}}
                 </button>
               </td>
+
+              <td class="border-0">
+                <button type="button"
+                  {{on "click" (fn this.addEmptyTableRow (add index 1))}}
+                  class="btn btn-outline-dark btn-sm p-0 border-0">
+                  {{fa-icon "plus"}}
+                </button>
+              </td>
             {{/if}}
+
             {{!-- 
             <td>{{ift.interface}}</td>
             <td>{{value-unit ift.tension 3}}</td>
@@ -63,20 +85,9 @@
           </tr>
         {{/each}}
 
-        {{#if this.args.editable}}
-          <tr>
-            <td class="border-0">
-              <button type="button" {{on "click" this.addEmptyTableRow}}
-                class="btn btn-outline-dark btn-sm p-0 border-0">
-                {{fa-icon "plus"}}
-              </button>
-            </td>
-          </tr>
-        {{else}}
-          {{#unless this.args.oil.ifts}}
-            <tr><td>No Data</td></tr>
-          {{/unless}}
-        {{/if}}
+        {{#unless this.args.oil.ifts}}
+          <tr><td>No Data</td></tr>
+        {{/unless}}
       </tbody>
     </table>
 

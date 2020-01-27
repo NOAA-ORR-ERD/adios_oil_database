@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from "@ember/object";
+import { action, set } from "@ember/object";
 
 export default class Ift extends Component {
 
@@ -21,73 +21,58 @@ export default class Ift extends Component {
     }
 
     @action
-    deleteTableRow(e) {
-        // find current table row
-        let currentRow = e.currentTarget.parentNode.parentNode;
-        // delete correspondent array item based on row index - table idex starts from 1
-        this.iftsArray.splice(currentRow.rowIndex - 1, 1);
+    deleteTableRow(index) {
+        this.iftsArray.splice(index, 1);
         this.iftsArray = this.iftsArray; // !!! - to "reset" array for tracking
+
+        this.updateTable(this.iftsArray);
     }
 
     @action
-    addEmptyTableRow() {
-
+    addEmptyTableRow(index) {
         if (!this.iftsArray ) {
             this.iftsArray = [];
         }
-        this.iftsArray.push({
-            Tension: {
-                value: NaN,
-                unit: "N/m"
-            },
-            Temperature: {
-                value: NaN,
-                unit: "C"
-            }
-        });
 
+        this.iftsArray.splice(index, 0, {});
         this.iftsArray = this.iftsArray;
+
+        this.updateTable(this.iftsArray);
     }
 
     @action
     updateInterface(index, e) {
-        this.interface[index] = e.target.value;
-        this.submit();
+        if (e.target.value === '') {
+            // empty value chosen, delete the property if it exists
+            if (this.iftsArray[index].hasOwnProperty('interface')) {
+                delete this.iftsArray[index].interface;
+            }
+        }
+        else {
+            set(this.iftsArray[index], 'interface', e.target.value);
+        }
+
+        this.updateTable(this.iftsArray);
     }
 
     @action
-    updateTension(valueObject) {
-        // TODO
-        //
-        // a) valueObject is null
-        // b) valueObject is {value: x, unit: "yyy"}
-        //
-        // also initial value state:
-        //   1. iftsArray is null
-        //   2. iftsArray[index].tension is null
-        //   3. iftsArray[index].tension is {value: x, unit: "yyy"}
-        
-        // this.submit();
+    updateAttr(index, attrName, value) {
+        if (value) {
+            set(this.iftsArray[index], attrName, value);
+        }
+        else {
+            // empty value chosen, delete the property if it exists
+            if (this.iftsArray[index].hasOwnProperty(attrName)) {
+                delete this.iftsArray[index][attrName];
+            }
+        }
 
+        this.updateTable(this.iftsArray);
     }
 
     @action
-    updateTemperature(valueObject) {
-        // TODO
-        //
-        // a) valueObject is null
-        // b) valueObject is {value: x, unit: "yyy"}
-        //
-        // also initial value state:
-        //   1. iftsArray is null
-        //   2. iftsArray[index].ref_temp is null
-        //   3. iftsArray[index].ref_temp is {value: x, unit: "yyy"}
-
-        //this.submit();
+    updateTable(enteredValue) {
+        this.args.submit(enteredValue);
     }
 
-    @action submit() {
-        // TODO
-        //this.args.submit(this.iftsArray);
-    }
 }
