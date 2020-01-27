@@ -26,7 +26,12 @@
 
   <div class="row">
     <div class="col-lg-5">
-      <Table::Distillation @oil={{oil}} class="row"/>
+      <Table::Distillation
+        @oil={{oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        class="row"/>
+
     </div>
 
     <div class="col-lg-5">
