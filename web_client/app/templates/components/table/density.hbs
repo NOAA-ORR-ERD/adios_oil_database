@@ -1,14 +1,37 @@
-<Common::ValueUnitTable
-  @tableTitle="Density"
-  @leftColumnTitle="Density"
-  @rightColumnTitle="Temperature"
-  @valueArray={{oil.densities}}
-  @leftColumnValueName="density"
-  @leftColumnUnit={{"g/cm^3"}}
-  @leftColumnPrecision={{3}}
-  @rightColumnValueName="ref_temp"
-  @rightColumnUnit="C"
-  @rightColumnPrecision={{2}}
-  @editable={{editable}}
-  @submit={{action "onSubmit"}}
-/>
+<div class="row">
+
+  {{#if this.args.editable}}
+    <div class="col-11">
+      <Common::ValueUnitTable
+        @tableTitle="Density"
+        @leftColumnTitle="Density"
+        @rightColumnTitle="Temperature"
+        @valueArray={{this.args.oil.densities}}
+        @leftColumnValueName="density"
+        @leftColumnUnit={{"g/cm^3"}}
+        @leftColumnPrecision={{3}}
+        @rightColumnValueName="ref_temp"
+        @rightColumnUnit="C"
+        @rightColumnPrecision={{2}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
+      />
+    </div>
+  {{else}}
+    <Common::ValueUnitTable
+      @tableTitle="Density"
+      @leftColumnTitle="Density"
+      @rightColumnTitle="Temperature"
+      @valueArray={{this.args.oil.densities}}
+      @leftColumnValueName="density"
+      @leftColumnUnit={{"g/cm^3"}}
+      @leftColumnPrecision={{3}}
+      @rightColumnValueName="ref_temp"
+      @rightColumnUnit="C"
+      @rightColumnPrecision={{2}}
+      @editable={{this.args.editable}}
+      @submit={{this.args.submit}}
+    />
+  {{/if}}
+
+</div>

@@ -1,17 +1,10 @@
-import Component from '@ember/component';
-import { set } from "@ember/object";
+import Component from '@glimmer/component';
+import { action } from "@ember/object";
 
-export default Component.extend({
-
-    init(){
-        this._super(...arguments);
-    },
-    
-    actions: {
-        onSubmit(densitiesValue) {
-            let oil = this.get('oil');
-            set(oil, 'densities', densitiesValue);
-            this.submit(oil);
-        }
+export default class Density extends Component {
+    @action
+    submit(densitiesValue) {
+        this.args.oil.densities = densitiesValue;
+        this.args.submit(this.args.oil);
     }
-});
+}

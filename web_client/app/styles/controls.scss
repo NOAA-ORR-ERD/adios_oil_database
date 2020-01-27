@@ -50,3 +50,20 @@
 .nav-tabs > a:hover > button {
     display: inline-flex;
 }
+
+/**
+ * This section is specific to the buttons inside the edit tables
+ */
+.table > thead > tr > td > button {
+    display:none;
+}
+.table > thead > tr:hover > td > button {
+    display: inline-flex;
+}
+
+.table > tbody > tr > td > button {
+    display:none;
+}
+.table > tbody > tr:hover > td > button {
+    display: inline-flex;
+}

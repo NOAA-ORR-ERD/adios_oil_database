@@ -7,11 +7,11 @@
         submit - submit changes function
  --}}
 {{#if this.args.editable}}
-  <div class="row d-flex m-0 p-0">
-    {{#if this.args.valueObject}}
+  <div class="row m-0 p-0">
+    {{#if this.args.valueObject.value}}
       <Input
         @type="text"
-        @class="flex-fill bg-transparent border"
+        @class="flex-fill bg-transparent border col-7"
         @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
           this.args.valuePrecision true}}
         @change={{action "updateValue"}}
@@ -20,22 +20,22 @@
     {{else}}
       <Input
         @type="text"
-        @class="flex-fill bg-transparent border"
+        @class="flex-fill bg-transparent border col-7"
         @value=""
         @placeholder="Enter a number value"
         @change={{action "updateValue"}}
         size="1"
       />
     {{/if}}
-    <div class="pl-1">
+    <div class="pl-1 col-4">
       {{this.beaUnit}}
     </div>
   </div>
 {{else}}
-  {{#if this.valueObject}}
+  {{#if this.valueObject.value}}
     {{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
       this.args.valuePrecision}}
   {{else}}
-    No Data
+    &nbsp;
   {{/if}}
 {{/if}}

@@ -9,6 +9,8 @@ export default class ValueUnitInput extends Component {
     constructor() {
         super(...arguments);
 
+        this.valueObject = this.args.valueObject;
+
         let unitObj = {"unit": this.args.valueUnit};
         this.beaUnit = valueUnitUnit([unitObj]);
     }
@@ -18,10 +20,11 @@ export default class ValueUnitInput extends Component {
         if(Number.isNaN(parseFloat(e.target.value))) {
             this.valueObject = null;
         } else {
-            this.valueObject.value = parseFloat(e.target.value);
-            this.valueObject.unit = this.args.valueUnit;
+            this.valueObject = {
+                value: parseFloat(e.target.value),
+                unit: this.args.valueUnit
+            };
         }
         this.args.submit(this.valueObject);
     }
-    
 }
