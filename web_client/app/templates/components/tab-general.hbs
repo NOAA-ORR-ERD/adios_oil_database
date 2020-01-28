@@ -112,14 +112,14 @@
       </div>
       <div class="row mb-3 input-group">
         <div class="col-12 reference-height">
-        {{#let (if oil.reference oil.reference "None") as |oilReference|}}
-          {{#if editable}}
-            <Textarea @class="p-1 reference-textarea bg-transparent border" @value={{oilReference}} @rows="3"
-              @placeholder="Enter reference"  @change={{action "updateReference"}} />
-          {{else}}
+          {{#let (if oil.reference oil.reference "None") as |oilReference|}}
+            {{#if editable}}
+              <Textarea @class="p-1 reference-textarea bg-transparent border" @value={{oilReference}} @rows="3"
+                @placeholder="Enter reference"  @change={{action "updateReference"}} />
+            {{else}}
               <span class="p-1 reference-span">{{oilReference}}</span>
-          {{/if}}
-        {{/let}}
+            {{/if}}
+          {{/let}}
         </div>
       </div>
 
