@@ -12,6 +12,8 @@ export default Component.extend(TableCommon, {
         return [{
             label: 'Status',
             valuePath: 'status',
+            resizable: true,
+            minResizeWidth: 80,
             width: '80px',
             cellComponent: 'table/cell/status',
             classNames: 'text-nowrap',
@@ -23,35 +25,47 @@ export default Component.extend(TableCommon, {
             classNames: 'text-nowrap',
             width: '110px',
             searchable: true,
+            resizable: true,
+            minResizeWidth: 75
         }, {
             label: 'Name',
             valuePath: 'name',
             cellComponent: 'table/cell/oil-name',
             classNames: 'text-nowrap',
             searchable: true,
+            minResizeWidth: 100,
+            resizable: true,
         }, {
             label: 'Location',
             valuePath: 'location',
             classNames: 'text-nowrap',
             searchable: true,
+            minResizeWidth: 100,
+            resizable: true,
         }, {
             label: 'Type',
             valuePath: 'productType',
             classNames: 'text-nowrap',
             width: '80px',
+            minResizeWidth: 80,
             searchable: true,
+            resizable: true,
         }, {
             label: 'API',
             valuePath: 'api',
             classNames: 'text-nowrap',
             cellComponent: 'table/cell/api',
-            width: '60px'
+            width: '60px',
+            minResizeWidth: 60,
+            resizable: true,
         }, {
             label: 'Labels',
             valuePath: 'categories',
             classNames: 'text-nowrap',
             cellComponent: 'table/cell/categories',
-            width: '100px'
+            width: '100px',
+            minResizeWidth: 100,
+            resizable: true,
         }];
     }),
 
