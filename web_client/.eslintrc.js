@@ -16,7 +16,8 @@ module.exports = {
     browser: true
   },
   rules: {
-    'debugger': true
+    'debugger': true,
+    'no-console': 'off'
   },
   overrides: [
     // node files
