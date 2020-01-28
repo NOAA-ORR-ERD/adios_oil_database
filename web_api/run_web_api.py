@@ -17,7 +17,7 @@ NOTE: this is missing logger configuration -- that should be added.
 #  fixme: maybe this should be derived from the location of the settings file?
 #         though I'm not sure how this information is used anyway
 
-# # These simply to make PyInstaller include them
+# # # These simply to make PyInstaller include them
 # import pkg_resources.py2_warn  # only in setuptools 45
 # import pyramid_tm
 # import cornice  # this needs to be the noaa fork for now.

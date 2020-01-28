@@ -25,6 +25,7 @@ def load_cors_origins(settings, key):
     print("cors_policy set:")
     print(cors_policy['origins'])
 
+
 def generate_mongodb2_settings(settings):
     '''
         These settings are required by pyramid_mongodb2.
@@ -91,7 +92,30 @@ def main(global_config, **settings):
     config.add_renderer('json', renderer)
 
     config.include("cornice")
-    config.scan("oil_database_api.views")
+    # config.scan("oil_database_api.views")
+
+    # Attempt to set up the rest by hand -- scanning is not working when
+    # bundled by py2app
+    print("adding all the API rest services")
+    from .views import oil
+    config.add_cornice_service(oil.oil_api)
+
+    from .views.category import category_api
+    config.add_cornice_service(category_api)
+
+    from .views.capabilities import capabilities_api
+    config.add_cornice_service(capabilities_api)
+
+    from .views.distinct import distinct_api
+    config.add_cornice_service(distinct_api)
+
+    from .views.object import object_api
+    config.add_cornice_service(object_api)
+
+    from .views.query import query_api
+    config.add_cornice_service(query_api)
+
+
 
     # add static file serving if we are running the standalone
     client_path = settings.get('client_path')
@@ -99,11 +123,24 @@ def main(global_config, **settings):
         print("adding client code to serve:\n", client_path)
         if not os.path.isdir(client_path):
             raise ValueError(f"client path: {client_path} does not exist")
+#        config.add_static_view(name='client', # this would be cleaner, but couldn't get it to work with Ember
         config.add_static_view(name='/',
                                path=client_path)
+
+
+        # mike's suggestion for how to serve up the index.html page
+        print("about to set up home view")
+        def home(request):
+            """serving up index.html"""
+            return pyramid.response.FileResponse(client_path + "/index.html", request)
+
+        # this way has not been tested.
+        config.add_route("home", "/")
+        config.add_view(home, route_name="home")
+
         # attempt to put the client files in a sub-dir
         #  to avoid clashes with the API
-        # config.add_static_view(name='/client/',
+        # config.add_static_view(name='client',
         #                        path=client_path)
 
     else:
@@ -115,14 +152,6 @@ def main(global_config, **settings):
     config.add_route('about', '/about')
     config.add_view(about, route_name='about')
 
-    # Attempt to set up the rest by hand -- scanning is not working in the API:
-    # This is not working like this :-(
-    # from .views import oil
-    # config.add_cornice_service(oil.oil_api)
-    # from .views.category import category_api
-    # config.add_cornice_service(category_api)
-    # from .views.capabilities import capabilities_api
-    # config.add_cornice_service(capabilities_api)
 
 
     return config.make_wsgi_app()
