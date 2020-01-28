@@ -1,6 +1,0 @@
-{{#if this.args.editable}}
-  <Input @class="p-1 flex-fill bg-transparent border"  @size="30" @value={{this.args.sampleName}}
-  @placeholder="Enter name"  @change={{action "submit"}} />
-{{else}}
-  <h4>{{this.args.sampleName}}</h4>
-{{/if}}  {{!-- editable --}}
