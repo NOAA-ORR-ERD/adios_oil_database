@@ -169,7 +169,7 @@
     <div class="col-12 pl-0 pr-0">
       <label class="p-1 font-weight-bold">Comments:</label>
     </div>
-    <div style="height:34px;" class="col-12 pl-0 pr-0 input-group">
+    <div class="col-12 pl-0 pr-0 input-group oil-comments-div">
       {{#let (if oil.comments oil.comments "None") as |oilComments|}}
         {{#if editable}}
           <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1"
