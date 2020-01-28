@@ -14,7 +14,6 @@ from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
-from oil_database.data_sources.oil import OilEstimation
 
 from oil_database_api.common.views import (cors_policy,
                                            obj_id_from_url)
@@ -28,8 +27,9 @@ oil_api = Service(name='oil', path='/oils*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
+## fixme: this could be a class attribute, and make memoize a class
+##        might be good to mange the cache better, etc.
 memoized_results = {}  # so it is visible to other functions
-
 
 def memoize_oil_arg(func):
     '''
@@ -101,7 +101,8 @@ def get_oils(request):
         search_opts, post_opts = get_search_params(request)
         sort = get_sort_params(request)
 
-        if ((len(sort) > 0 and sort[0][0] in ('api', 'viscosity')) or
+#        if ((len(sort) > 0 and sort[0][0] in ('api', 'viscosity')) or
+        if ((len(sort) > 0 and sort[0][0] in ('api')) or
                 (len(post_opts.keys()) > 0)):
             return list(search_with_post_sort(oils,
                                               start, stop,
@@ -160,7 +161,9 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
 
             if ('api' not in rec or
                     rec['api'] is None or
-                    not low <= rec['api'].gravity <= high):
+                    # is api a number or a dict?
+                    not low <= rec['api'] <= high):
+                    # not low <= rec['api'] <= high):
                 continue
 
         if 'labels' in post_opts:
@@ -382,51 +385,38 @@ def fix_oil_id(oil_json, obj_id=None):
         raise ValueError('oil_id field is required')
 
 
-@memoize_oil_arg
+## fixme: do we want to memoize? how often are we getting the same results?
+##        Turnign it off now, as it could break if a record is edited!
+# @memoize_oil_arg
 def get_oil_searchable_fields(oil):
     '''
-        Since end users are updating records in an immediate (blur) fashion,
-        there could be many records that are only partially filled in.
-        So we need to be very tolerant of bad records here.
+    Since end users are updating records in an immediate (blur) fashion,
+    there could be many records that are only partially filled in.
+    So we need to be very tolerant of bad records here.
+
+    However, searching on bad records being bad is, well, OK.
+    As long as it doesn't crash
     '''
-
-    logging.info("trying to call get_oil_searchable_fields")
-
-    oil = OilEstimation(oil)
-    sample = oil.get_sample()
-
-    if sample is None:
-        # maybe there is not an unweathered (fresh) sample?
-        # That's ok, we will just get the first one we see.
-        sample = oil.get_first_sample()
-
+    # oil SHOULD have a direct api field, but that needs to be refactored
+    # so for now, we'll pull it out of the zeroth sub sample
     try:
-        api_gravity = sample.get_api()
-    except Exception:
-        api_gravity = None
+        oil['api'] = oil['samples'][0]['apis'][0]['gravity']
+    except (KeyError, IndexError):  # if there are no samples,
+                                    #  or no apis in the zeroth sample
+         oil['api'] = None
 
+    # unpack the relevant fields
     try:
-        pour_point = sample.pour_point()
-    except Exception:
-        pour_point = None
-
-    try:
-        kvis_at_38 = sample.kvis_at_temp(273.15 + 38)
-    except:
-        kvis_at_38 = None
-
-    try:
-        return {'_id': oil.oil_id,
-                'name': oil.name,
-                'location': oil.location,
-                'product_type': oil.product_type,
-                'api': api_gravity,
-                'pour_point': pour_point,
-                'viscosity': kvis_at_38,
-                'categories': oil.categories,
-                'status': oil.status,
+        return {'_id': oil['oil_id'],
+                'name': oil['name'],
+                'location': oil['location'],
+                'product_type': oil['product_type'],
+                'api': oil['api'],
+                'categories': oil['categories'],
+                # fixme: We should probably should do something smarter here
+                'status': oil['status'],
                 }
     except Exception:
-        logger.info('oil failed searchable fields: {}: {}'
-                    .format(oil.oil_id, oil.name))
+        logger.info('oil failed searchable fields {}: {}'
+                    .format(oil['oil_id'], oil['name']))
         raise

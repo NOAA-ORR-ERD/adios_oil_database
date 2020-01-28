@@ -1,6 +1,14 @@
 """
 Functional tests for the Model Web API
+
+FIXME: WE should hve tests that test the API, not everything else!
+
+And getting sample_oils from the oil filemaker data makes me really nervous
+
+
+
 """
+
 import copy
 
 from .base import FunctionalTestBase
@@ -254,21 +262,27 @@ class OilTestBase(FunctionalTestBase):
 
 class OilTests(OilTestBase):
     def test_get_no_id(self):
+        """
+        This request should result in an empty list,
+        so that's all we can test for
+        """
         resp = self.testapp.get('/oils')
         oils = resp.json_body
 
-        for r in oils:
-            for k in ('name',
-                      'oil_id',
-                      'status',
-                      'location',
-                      'product_type',
-                      'apis',
-                      'pour_point',
-                      'viscosity',
-                      'categories',
-                      'categories_str'):
-                assert k in r
+        assert oils == []
+
+        # for r in oils:
+        #     for k in ('name',
+        #               'oil_id',
+        #               'status',
+        #               'location',
+        #               'product_type',
+        #               'apis',
+        #               'pour_point',
+        #               'viscosity',
+        #               'categories',
+        #               'categories_str'):
+        #         assert k in r
 
     def test_get_invalid_id(self):
         self.testapp.get('/oils/{}'.format('bogus'), status=404)
@@ -453,3 +467,54 @@ class OilTests(OilTestBase):
         # test deleted
         #
         self.testapp.get('/oils/{}'.format(oil_json['_id']), status=404)
+
+
+class TestOilSort(OilTestBase):
+    """
+    testing calls to the API asking for sorted results
+
+    This only tests sorting on API and name -- probably should. test them all
+    """
+
+    def test_sorted_by_name_desc(self):
+        """
+        check getting a sorted result by name -- decending order
+        """
+        resp = self.testapp.get("/oils?dir=desc&limit=5&page=0&q=&qApi=&qLabels=&sort=name")
+
+        result = resp.json_body
+        names = [rec['name'] for rec in result]
+
+        assert names == sorted(names, reverse=True)
+
+    def test_sorted_by_name_asc(self):
+        """
+        check getting a sorted result by name -- ascending order
+        """
+        resp = self.testapp.get("/oils?dir=asc&limit=5&page=0&q=&qApi=&qLabels=&sort=name")
+
+        result = resp.json_body
+        names = [rec['name'] for rec in result]
+
+        assert names == sorted(names, reverse=False)
+
+    def test_sorted_by_api_and_range(self):
+        """
+        check getting results sorted by API, with a sub-range
+
+        https://adios-stage.orr.noaa.gov/api/oils?dir=asc&limit=20&page=0&q=&qApi=26%2C50&qLabels=&sort=api
+
+        We really should build up the url from parameters, but I'm lazy now.
+        """
+
+        resp = self.testapp.get("/oils?dir=asc&limit=20&page=0&q=&qApi=26%2C50&qLabels=&sort=api")
+
+        result = resp.json_body
+
+        apis = [rec['api'] for rec in result]
+
+        assert max(apis) <= 50
+        assert min(apis) >= 26
+
+        assert apis == sorted(apis)
+
