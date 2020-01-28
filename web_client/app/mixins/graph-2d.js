@@ -7,6 +7,8 @@ import { axisLeft, axisBottom } from 'd3-axis';
 import { format } from 'd3-format';
 import { select } from 'd3-selection';
 
+/* eslint-disable ember/no-new-mixins */
+
 export default Mixin.create({
 
   chartMargins: computed(function() {
@@ -142,3 +144,5 @@ export default Mixin.create({
   },
 
 });
+
+/* eslint-enable ember/no-new-mixins */

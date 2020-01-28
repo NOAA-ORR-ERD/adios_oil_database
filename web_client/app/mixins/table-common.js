@@ -7,6 +7,7 @@ import { task } from 'ember-concurrency';
      
 import Table from 'ember-light-table';
 
+/* eslint-disable ember/no-new-mixins */
 
 export default Mixin.create({
   store: service(),
@@ -90,3 +91,5 @@ export default Mixin.create({
     }
   }
 });
+
+/* eslint-enable ember/no-new-mixins */
