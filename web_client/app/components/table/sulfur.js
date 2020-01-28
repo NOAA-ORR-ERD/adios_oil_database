@@ -1,4 +1,10 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from "@ember/object";
 
-export default Component.extend({
-});
+export default class Sulfur extends Component {
+
+    @action
+    submit() {
+        this.args.submit(this.args.oil);
+    }
+}
