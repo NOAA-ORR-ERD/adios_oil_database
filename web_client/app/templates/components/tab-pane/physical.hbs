@@ -1,6 +1,15 @@
 <div class="container">
   <center>
-    <h4>{{sampleName}}</h4>
+    {{#if editable}}
+      <Input 
+        @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
+        @value={{this.oil.name}}
+        @placeholder="Enter Sample Name"
+        @change={{action this.submit this.oil}} 
+      />
+    {{else}}
+      <h4>{{sampleName}}</h4>
+    {{/if}}
 
     {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
       <p class="small">

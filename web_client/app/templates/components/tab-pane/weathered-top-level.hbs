@@ -68,18 +68,33 @@
   <div role="tabpanel" class="tab-pane fade"
        id="nav-composition-{{slug sampleName}}"
        aria-labelledby="nav-composition-tab-{{slug sampleName}}">
-    <TabPane::Composition @oil={{sample}} @sampleName={{sampleName}}/>
+    <TabPane::Composition
+      @oil={{sample}}
+      @sampleName={{sampleName}}
+      @editable={{this.editable}}
+      @submit={{action "submitSample"}}
+    />
   </div>
 
   <div role="tabpanel" class="tab-pane fade"
        id="nav-environmental-{{slug sampleName}}"
        aria-labelledby="nav-environmental-tab-{{slug sampleName}}">
-    <TabPane::Environmental @oil={{sample}} @sampleName={{sampleName}}/>
+    <TabPane::Environmental
+      @oil={{sample}}
+      @sampleName={{sampleName}}
+      @editable={{this.editable}}
+      @submit={{action "submitSample"}}
+    />
   </div>
 
   <div role="tabpanel" class="tab-pane fade"
        id="nav-ccme-{{slug sampleName}}"
        aria-labelledby="nav-ccme-tab-{{slug sampleName}}">
-    <TabPane::Ccme @oil={{sample}} @sampleName={{sampleName}}/>
+    <TabPane::Ccme
+      @oil={{sample}}
+      @sampleName={{sampleName}}
+      @editable={{this.editable}}
+      @submit={{action "submitSample"}}
+    />
   </div>
 </div>
