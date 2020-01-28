@@ -1,6 +1,15 @@
 <div class="container">
   <center>
-    <h4>{{sampleName}}</h4>
+    {{#if editable}}
+      <Input 
+        @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
+        @value={{this.oil.name}}
+        @placeholder="Enter Sample Name"
+        @change={{action this.submit this.oil}} 
+      />
+    {{else}}
+      <h4>{{sampleName}}</h4>
+    {{/if}}
 
     {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
       <p class="small">
@@ -25,11 +34,35 @@
   </center>
 
   <div class="row">
-    <Table::Water @oil={{oil}} @editable={{this.editable}} class="col-4"/>
+    <div class="col-lg-4">
+      <Table::Water 
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @sampleIndex={{this.sampleIndex}}
+        class="col-4"
+      />
+    </div>
 
-    <Table::Wax @oil={{oil}} @editable={{this.editable}} class="col-4"/>
+    <div class="col-lg-4">
+      <Table::Wax
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @sampleIndex={{this.sampleIndex}}
+        class="col-4"
+      />
+    </div>
 
-    <Table::Sulfur @oil={{oil}} @editable={{this.editable}} class="col-4"/>
+    <div class="col-lg-4">
+      <Table::Sulfur
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @sampleIndex={{this.sampleIndex}}
+        class="col-4"
+      />
+    </div>
   </div>
 
   <div class="row">

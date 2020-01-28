@@ -83,6 +83,9 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 .reference-textarea {
   width: 100%;
 }
+.oil-comments-div {
+    height: 34px;
+}
 
 .no-borders{
   border: none;  
@@ -122,6 +125,11 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
             }
         }
     }
+}
+
+.edit-sample-name {
+    font-weight: 500;
+    font-size: 1.5rem;
 }
 
 .list-item-category {
