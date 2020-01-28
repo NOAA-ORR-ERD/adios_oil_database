@@ -389,6 +389,9 @@ def get_oil_searchable_fields(oil):
         there could be many records that are only partially filled in.
         So we need to be very tolerant of bad records here.
     '''
+
+    logging.info("trying to call get_oil_searchable_fields")
+
     oil = OilEstimation(oil)
     sample = oil.get_sample()
 
