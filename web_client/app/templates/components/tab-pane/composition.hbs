@@ -34,29 +34,35 @@
   </center>
 
   <div class="row">
-    <Table::Water 
-      @oil={this.{oil}}
-      @editable={{this.editable}}
-      @submit={{this.submit}}
-      @sampleIndex={{this.sampleIndex}}
-      class="col-4"
-    />
+    <div class="col-lg-4">
+      <Table::Water 
+        @oil={this.{oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @sampleIndex={{this.sampleIndex}}
+        class="col-4"
+      />
+    </div>
 
-    <Table::Wax
-      @oil={{this.oil}}
-      @editable={{this.editable}}
-      @submit={{this.submit}}
-      @sampleIndex={{this.sampleIndex}}
-      class="col-4"
-    />
+    <div class="col-lg-4">
+      <Table::Wax
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @sampleIndex={{this.sampleIndex}}
+        class="col-4"
+      />
+    </div>
 
-    <Table::Sulfur
-      @oil={{this.oil}}
-      @editable={{this.editable}}
-      @submit={{this.submit}}
-      @sampleIndex={{this.sampleIndex}}
-      class="col-4"
-    />
+    <div class="col-lg-4">
+      <Table::Sulfur
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @sampleIndex={{this.sampleIndex}}
+        class="col-4"
+      />
+    </div>
   </div>
 
   <div class="row">
