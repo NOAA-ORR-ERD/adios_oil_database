@@ -1,13 +1,24 @@
 <div class="detail-section">
+
   <div class="table-responsive">
     <strong>Wax Content:</strong>
-
-    {{#if oil.wax_content}}
-      {{value-unit (convert-unit oil.wax_content.fraction "%") 2}}
+    {{#if this.args.editable}}
+      <Common::RangeValueInput
+        @valueTitle="Wax Content"
+        @valueObject={{this.args.oil}}
+        @valueName="wax_content.fraction"
+        @valueUnit="%"
+        @valuePrecision="2"
+        @sampleIndex={{this.args.sampleIndex}}
+        @submit={{this.submit}}
+      />
     {{else}}
-      No Data
-    {{/if}}
-
+      {{#if this.args.oil.wax_content.fraction}}
+        {{value-unit (convert-unit this.args.oil.wax_content.fraction "%") 2}}
+      {{else}}
+        No Data
+      {{/if}}
+    {{/if}}  {{!-- editable --}}
   </div>
 
   &nbsp;
