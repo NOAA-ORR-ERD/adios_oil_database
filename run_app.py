@@ -63,7 +63,7 @@ if rebuild:
          "--file", "web_client/conda_requirements.txt",
          ])
     run(["python", "-m", "pip", "install", "-r",
-         "web_client/pip_requirements.txt"])
+         "web_api/pip_requirements.txt"])
 
 # start up mongo:
 mongo = Popen(['mongod', '-f', 'mongo_config_dev.yml'])
