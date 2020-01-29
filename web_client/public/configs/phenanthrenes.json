@@ -1,0 +1,23 @@
+{
+  "id": "phenanthrenes.json",
+  "c0_p": {
+    "label": "C0-P",
+    "inputType": "scalar"
+  },
+  "c1_p": {
+    "label": "C1-P",
+    "inputType": "scalar"
+  },
+  "c2_p": {
+    "label": "C2-P",
+    "inputType": "scalar"
+  },
+  "c3_p": {
+    "label": "C3-P",
+    "inputType": "scalar"
+  },
+  "c4_p": {
+    "label": "C4-P",
+    "inputType": "scalar"
+  }
+}
