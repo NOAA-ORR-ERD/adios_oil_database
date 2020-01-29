@@ -7,7 +7,10 @@
 '''
 import pytest
 
-import numpy as np
+np = docutils = pytest.importorskip("numpy")
+# import pytest
+
+# import numpy as np
 
 from oil_database.util.estimations import (density_from_api,
                                            api_from_density,

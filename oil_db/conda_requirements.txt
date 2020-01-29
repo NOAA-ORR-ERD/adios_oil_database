@@ -9,7 +9,7 @@
 # outlined above in your conda configuration.
 
 python=3.7.*
-gitpython
+# gitpython
 numpy>=1.11.1
 scipy>=0.18.1
 
@@ -18,7 +18,7 @@ pymongo>=3.6.0
 pydantic
 
 awesome-slugify>=1.6.5
-configparser>=3.7.4
+# configparser>=3.7.4
 openpyxl>=3.0.0
 pytz>=2019.3
 
@@ -26,8 +26,6 @@ pytest>=3.8.0
 pytest-cov>=2.6.0
 pytest-timeout>=1.2.1
 pytest-raises>=0.10
-
-backports.functools_lru_cache>=1.5
 
 pynucos>=2.7.4  # this should be in conda-forge
 

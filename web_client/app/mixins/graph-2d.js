@@ -27,7 +27,7 @@ export default Mixin.create({
   }),
 
   chartWidth: computed(function() {
-    var width = this.$().width();
+    var width = this.element.clientWidth;
     var margins = this.get('chartMargins');
     return width - margins.right - margins.left;
   }),
@@ -58,7 +58,7 @@ export default Mixin.create({
 
   createChart: function() {
     // Clear the element, if there is something inside
-    var chartEl = this.$().get(0);
+    var chartEl = this.element;
     chartEl.innerHTML = '';
 
     this.addSVG();
@@ -120,7 +120,7 @@ export default Mixin.create({
   },
 
   addSVG: function() {
-    var el = this.$().get(0); // Get the actual DOM node, not the jQuery element
+    var el = this.element;
 
     var height = this.get('chartHeight');
     var width = this.get('chartWidth');
