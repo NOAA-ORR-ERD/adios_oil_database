@@ -42,7 +42,7 @@ export default Component.extend({
             // just use the default behavior
             this.element.querySelectorAll('.tab-pane').forEach(i => {
                 if (!i.classList.contains('show')) {
-                    console.log(i.classList.remove('active'));
+                    i.classList.remove('active');
                 }
             });
         }
