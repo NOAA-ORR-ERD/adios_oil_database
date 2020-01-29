@@ -43,9 +43,12 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
     background: url(../assets/images/oil-barrel-128x128.png);
     background-size: contain;
     background-repeat: no-repeat;
-    height: 120px;
-    width: 120px;
+    height: 2rem;
+    width: 2rem;
+    margin-bottom: .5rem;
+    vertical-align: middle;
     position: relative;
+    display: inline-block;
 }
 
 .noaa-logo {
