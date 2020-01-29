@@ -15,7 +15,7 @@ pymongo>=3.6.0
 pydantic
 
 awesome-slugify>=1.6.5
-configparser>=3.7.4
+# configparser>=3.7.4
 
 pynucos>=2.7.4  # this should be in conda-forge
 
