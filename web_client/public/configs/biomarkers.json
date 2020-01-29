@@ -1,0 +1,87 @@
+{
+  "id": "biomarkers.json",
+  "c21_tricyclic_terpane": {
+    "label": "C21 Tricyclic Terpane",
+    "inputType": "scalar"
+  },
+  "c22_tricyclic_terpane": {
+    "label": "C22 Tricyclic Terpane",
+    "inputType": "scalar"
+  },
+  "c23_tricyclic_terpane": {
+    "label": "C23 Tricyclic Terpane",
+    "inputType": "scalar"
+  },
+  "c24_tricyclic_terpane": {
+    "label": "C24 Tricyclic Terpane",
+    "inputType": "scalar"
+  },
+  "30_norhopane": {
+    "label": "30-Norhopane",
+    "inputType": "scalar"
+  },
+  "hopane": {
+    "label": "Hopane",
+    "inputType": "scalar"
+  },
+  "30_homohopane_22s": {
+    "label": "30-Homohopane-22S",
+    "inputType": "scalar"
+  },
+  "30_homohopane_22r": {
+    "label": "30-Homohopane-22R",
+    "inputType": "scalar"
+  },
+  "3031_bishomohopane_22s": {
+    "label": "30,31-Bishomohopane-22S",
+    "inputType": "scalar"
+  },
+  "3031_bishomohopane_22r": {
+    "label": "30,31-Bishomohopane-22R",
+    "inputType": "scalar"
+  },
+  "3031_trishomohopane_22s": {
+    "label": "30,31-Trishomohopane-22S",
+    "inputType": "scalar"
+  },
+  "3031_trishomohopane_22r": {
+    "label": "30,31-Trishomohopane-22R",
+    "inputType": "scalar"
+  },
+  "tetrakishomohopane_22s": {
+    "label": "Tetrakishomohopane-22S",
+    "inputType": "scalar"
+  },
+  "tetrakishomohopane_22r": {
+    "label": "Tetrakishomohopane-22R",
+    "inputType": "scalar"
+  },
+  "pentakishomohopane_22s": {
+    "label": "Pentakishomohopane-22S",
+    "inputType": "scalar"
+  },
+  "pentakishomohopane_22r": {
+    "label": "Pentakishomohopane-22R",
+    "inputType": "scalar"
+  },
+  "18a_222930_trisnorneohopane": {
+    "label": "18α,22,29,30-Trisnorneohopane",
+    "inputType": "scalar"
+  },
+  "17a_h_222930_trisnorhopane": {
+    "label": "17α(H)-22,29,30-Trisnorhopane",
+    "inputType": "scalar"
+  },
+  "14b_h_17b_h_20_cholestane": {
+    "label": "14β(H),17β(H)-20-Cholestane",
+    "inputType": "scalar"
+  },
+  "14b_h_17b_h_20_methylcholestane": {
+    "label": "14β(H),17β(H)-20-Methylcholestane",
+    "inputType": "scalar"
+  },
+  "14b_h_17b_h_20_ethylcholestane": {
+    "label": "14β(H),17β(H)-20-Ethylcholestane",
+    "inputType": "scalar"
+  }
+}

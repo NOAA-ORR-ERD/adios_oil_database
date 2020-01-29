@@ -1,0 +1,19 @@
+{
+  "id": "ccme_fractions.json",
+  "f1": {
+    "label": "F1",
+    "inputType": "scalar"
+  },
+  "f2": {
+    "label": "F2",
+    "inputType": "scalar"
+  },
+  "f3": {
+    "label": "F3",
+    "inputType": "scalar"
+  },
+  "f4": {
+    "label": "F4",
+    "inputType": "scalar"
+  }
+}

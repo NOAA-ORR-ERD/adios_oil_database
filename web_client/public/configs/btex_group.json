@@ -1,0 +1,19 @@
+{
+  "id": "btex_group.json",
+  "toluene": {
+    "label": "Toluene",
+    "inputType": "scalar"
+  },
+  "ethylbenzene": {
+    "label": "Ethylbenzene",
+    "inputType": "scalar"
+  },
+  "m_p_xylene": {
+    "label": "m&p-Xylene",
+    "inputType": "scalar"
+  },
+  "o_xylene": {
+    "label": "o-Xylene",
+    "inputType": "scalar"
+  }
+}

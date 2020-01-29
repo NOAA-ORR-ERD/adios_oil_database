@@ -1,0 +1,31 @@
+{
+  "id": "headspace_analysis.json",
+  "n_c5": {
+    "label": "n-C5",
+    "inputType": "scalar"
+  },
+  "n_c6": {
+    "label": "n-C6",
+    "inputType": "scalar"
+  },
+  "n_c7": {
+    "label": "n-C7",
+    "inputType": "scalar"
+  },
+  "n_c8": {
+    "label": "n-C8",
+    "inputType": "scalar"
+  },
+  "c5_group": {
+    "label": "C5 Group",
+    "inputType": "scalar"
+  },
+  "c6_group": {
+    "label": "C6 Group",
+    "inputType": "scalar"
+  },
+  "c7_group": {
+    "label": "C7 Group",
+    "inputType": "scalar"
+  }
+}

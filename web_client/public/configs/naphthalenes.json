@@ -1,0 +1,23 @@
+{
+  "id": "naphthalenes.json",
+  "c0_n": {
+    "label": "C0-N",
+    "inputType": "scalar"
+  },
+  "c1_n": {
+    "label": "C1-N",
+    "inputType": "scalar"
+  },
+  "c2_n": {
+    "label": "C2-N",
+    "inputType": "scalar"
+  },
+  "c3_n": {
+    "label": "C3-N",
+    "inputType": "scalar"
+  },
+  "c4_n": {
+    "label": "C4-N",
+    "inputType": "scalar"
+  }
+}

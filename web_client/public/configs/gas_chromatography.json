@@ -1,0 +1,27 @@
+{
+  "id": "gas_chromatography.json",
+  "total_petroleum_hydocarbon": {
+    "label": "Total Petroleum Hydocarbon",
+    "inputType": "scalar"
+  },
+  "total_saturate_hydrocarbon": {
+    "label": "Total Saturate Hydrocarbon",
+    "inputType": "scalar"
+  },
+  "total_aromatic_hydrocarbon": {
+    "label": "Total Aromatic Hydrocarbon",
+    "inputType": "scalar"
+  },
+  "tsh_tph_54_994": {
+    "label": "TSH/TPH 54.994 %",
+    "inputType": "scalar"
+  },
+  "tah_tph_45_006": {
+    "label": "TAH/TPH 45.006 %",
+    "inputType": "scalar"
+  },
+  "resolved_peaks_tph": {
+    "label": "Resolved Peaks / TPH",
+    "inputType": "scalar"
+  }
+}

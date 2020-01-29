@@ -1,0 +1,23 @@
+{
+  "id": "benzonaphthothiophenes.json",
+  "c0_b": {
+    "label": "C0-B",
+    "inputType": "scalar"
+  },
+  "c1_b": {
+    "label": "C1-B",
+    "inputType": "scalar"
+  },
+  "c2_b": {
+    "label": "C2-B",
+    "inputType": "scalar"
+  },
+  "c3_b": {
+    "label": "C3-B",
+    "inputType": "scalar"
+  },
+  "c4_b": {
+    "label": "C4-B",
+    "inputType": "scalar"
+  }
+}

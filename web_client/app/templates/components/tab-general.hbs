@@ -1,13 +1,13 @@
-<div class="container">
+<div class="container-fluid">
 
   <div class="row pl-0 pr-0">
 
-    <div class="col-5">
+    <div class="col-6">
 
       <div class="row pl-0 mb-3">
 
         {{! Oil ID }}
-        <div class="col-4 pl-0 input-group d-flex align-items-center">
+        <div class="col-6 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">ID:</label>
           </div>
@@ -15,7 +15,7 @@
         </div>
 
         {{! Location }}
-        <div class="col pl-0 input-group d-flex align-items-center">
+        <div class="col-6 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Location:</label>
           </div>
@@ -34,7 +34,7 @@
       <div class="row pl-0 mb-3">
 
         {{! API }}
-        <div class="col-4 pl-0 input-group d-flex align-items-center">
+        <div class="col-6 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">API:</label>
           </div>
@@ -50,7 +50,7 @@
         </div>
 
         {{! Type }}
-        <div class="col pl-0 form-inline d-flex align-items-center">
+        <div class="col-6 pl-0 form-inline d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Type:</label>
           </div>
@@ -74,7 +74,7 @@
       <div class="row pl-0 mb-3">
 
         {{! Categories }}
-        <div class="form-inline">
+        <div class="col-12 pl-0 form-inline d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Labels:</label>
           </div>
@@ -104,20 +104,21 @@
 
     </div>
 
-    <div class="col-7 pr-0 mb-3">
+    <div class="col-6">
 
       {{! Reference }}
-      <div class="row mb-3 input-group">
-        <label class="p-1 input-group-text font-weight-bold">Reference:</label>
-      </div>
-      <div class="row mb-3 input-group">
-        <div class="col-12 reference-height">
+      <div class="row mb-3">
+        <div class="col-12 input-group">        
+          <div class="input-group-prepend">
+            <label class="p-1 input-group-text font-weight-bold">Reference:</label>
+          </div>
           {{#let (if oil.reference oil.reference "None") as |oilReference|}}
             {{#if editable}}
-              <Textarea @class="p-1 reference-textarea bg-transparent border" @value={{oilReference}} @rows="3"
+              <Textarea @class="p-1 reference-textarea bg-transparent border" @value={{oilReference}} @rows="4"
                 @placeholder="Enter reference"  @change={{action "updateReference"}} />
             {{else}}
-              <span class="p-1 reference-span">{{oilReference}}</span>
+              <Textarea @class="p-1 reference-textarea bg-transparent border" @value={{oilReference}} @rows="4"
+                @placeholder="Enter reference"  @change={{action "updateReference"}} disabled />
             {{/if}}
           {{/let}}
         </div>
@@ -126,24 +127,26 @@
       <div class="row">
 
         {{! Reference Date }}
-        <div class="col-5 pl-0 input-group d-flex align-items-center">
+        <div class="col-6 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
+            <label class="input-group-text font-weight-bold">Reference Date:</label>
           </div>
-          {{! Europe/London is how we lookup GMT in moment.js }}
-          {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
-            as |oilReferenceDate|}}
-            {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}}
-                @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
-            {{else}}
-              <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
-            {{/if}}
-          {{/let}}
+          <div class="pl-0">        
+            {{! Europe/London is how we lookup GMT in moment.js }}
+            {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
+              as |oilReferenceDate|}}
+              {{#if editable}}
+                <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}}
+                  @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
+              {{else}}
+                <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
+              {{/if}}
+            {{/let}}
+          </div>
         </div>
 
         {{! Sample Received Date }}
-        <div class="col pl-0 input-group d-flex align-items-center">
+        <div class="col-6 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
           </div>
@@ -182,9 +185,10 @@
   </div>
 
   {{!-- status message --}}
-  <div class="row mb-3">
-    <div class="col">
+  <div class="row pl-0">
+    <div class="col pl-0">
       {{#if oil.status}}
+        <span>{{oil.status.length}} error{{#if (eq oil.status.length 1) }}s{{/if}} found:</span>
         <ul>
           {{#each oil.status as |stat|}}
             <li><i class="status-warning">{{stat}}</i></li>

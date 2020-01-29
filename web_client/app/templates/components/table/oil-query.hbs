@@ -54,11 +54,13 @@
     onColumnClick=(action "onColumnClick")
     iconAscending="fa fa-angle-down"
     iconDescending="fa fa-angle-up"
+    resizeOnDrag=true
     fixed=true
   }}
 
   {{#t.body
     canSelect=false
+    enableScaffolding=true
     onScrolledToBottom=(action "onScrolledToBottom")
     as |body|
   }}
