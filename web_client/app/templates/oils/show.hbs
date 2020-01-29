@@ -94,14 +94,19 @@
              aria-controls="nav-{{slug name.[0]}}"
              data-toggle="tab" role="tab"
              class="nav-item nav-link" aria-selected="false">
-            {{name.[1]}}
-
             {{#if editable}}
+              <Input
+                @class="p-1 flex-fill bg-transparent border"
+                @value={{name.[1]}}
+                @change={{action send "updateNavSampleName" this.model idx}} 
+              />
               <TabNav::RemoveSample
                 @oil={{this.model}}
                 @index={{idx}}
                 @submit={{action send "updateOil"}}
               />
+            {{else}}
+              {{name.[1]}}
             {{/if}}
           </a>
         {{else}}
@@ -109,7 +114,15 @@
              aria-controls="nav-{{slug name.[0]}}"
              data-toggle="tab" role="tab"
              class="nav-item nav-link active" aria-selected="true">
-            {{name.[1]}}
+            {{#if editable}}
+              <Input
+                @class="p-1 flex-fill bg-transparent border"
+                @value={{name.[1]}}
+                @change={{action send "updateNavSampleName" this.model idx}} 
+              />
+            {{else}}
+              {{name.[1]}}
+            {{/if}}
           </a>
         {{/if}}
       {{/each}}
