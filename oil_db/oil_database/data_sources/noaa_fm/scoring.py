@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 
-import numpy as np
+"""
+This is the "Quality Score" Code from the old OilLibrary
 
+Not sure if we'll do that again, but it will certainly be different
+
+But maybe some of this code will be helpful
+"""
+
+import numpy as np
 
 class ImportedRecordWithScore(object):
     def __init__(self, imported_rec):

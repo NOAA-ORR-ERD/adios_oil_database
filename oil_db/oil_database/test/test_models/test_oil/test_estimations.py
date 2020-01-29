@@ -3,7 +3,14 @@
 '''
 import pytest
 
-import numpy as np
+np = docutils = pytest.importorskip("numpy")
+
+# try:
+#     import numpy as np
+# except ImportError:
+#     # numpy not there, we can't run these tests
+#     pytest.skip("skipping estimation tests: numpy not there",
+#                 allow_module_level=True)
 
 from oil_database.util.json import ObjFromDict
 from oil_database.data_sources.oil.estimations import (OilEstimation,
