@@ -2,13 +2,24 @@
   <div class="table-responsive d-flex">
     <strong>Water Content:</strong>
 
-    <Table::ValueUnitField
-      @editable={{this.editable}}
-      @value={{oil.water.fraction}}
-      @units="%"
-      @precision={{2}}
-      @hasValue={{oil.water}}
-    />
+    {{#if this.args.editable}}
+      <Common::RangeValueInput
+        @valueTitle="Water Content"
+        @valueObject={{this.args.oil}}
+        @valueName="water.fraction"
+        @valueUnit="%"
+        @valuePrecision="2"
+        @sampleIndex={{this.args.sampleIndex}}
+        @submit={{this.submit}}
+      />
+    {{else}}
+      {{#if this.args.oil.water.fraction}}
+        {{value-unit (convert-unit this.args.oil.water.fraction "%") 2}}
+      {{else}}
+        No Data
+      {{/if}}
+    {{/if}}  {{!-- editable --}}
+
 
     {{!-- {{#if oil.water}}
       {{value-unit (convert-unit oil.water.fraction "%") 2}}
