@@ -15,10 +15,19 @@
       <p class="small">
         {{#if oil.fraction_weathered}}
           <strong>Weathered Fraction:</strong>
-          {{#if oil.fraction_weathered.unit}}
-            {{value-unit oil.fraction_weathered 2}}
+          {{#if editable}}
+            <Input 
+              @class="edit-fraction-weathered p-1 my-3 flex-fill bg-transparent border"
+              @value={{this.oil.fraction_weathered}}
+              @placeholder="Enter Weathered Fraction"
+              @change={{action this.submit this.oil}} 
+            />
           {{else}}
-            {{oil.fraction_weathered}}
+            {{#if oil.fraction_weathered.unit}}
+              {{value-unit oil.fraction_weathered 2}}
+            {{else}}
+              {{oil.fraction_weathered}}
+            {{/if}}
           {{/if}}
         {{/if}}
 
