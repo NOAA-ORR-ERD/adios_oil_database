@@ -52,12 +52,8 @@ export default Route.extend({
                 result._internalModel.unloadRecord();
                 this.transitionTo('oils.index');
             }.bind(this));
-        },
-
-        updateNavSampleName(oil, idx) {
-            oil.samples[idx].short_name = event.target.value;
-            oil.save();
         }
+        
     }
 
 });
