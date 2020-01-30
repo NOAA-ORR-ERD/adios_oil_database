@@ -1,5 +1,7 @@
 <div id="addSampleDialog" class="modal fade" role="dialog" tabindex="-1"
-     aria-labelledby="addSampleDialogLabel" aria-hidden="true">
+     aria-labelledby="addSampleDialogLabel" aria-hidden="true"
+     {{did-insert this.setModalEvents}}
+     >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -37,6 +39,8 @@
                              @class="form-control bg-transparent border"
                              @placeholder="Fraction"
                              {{on "change" this.updateFraction}}
+                             {{on "keypress" this.updateFraction}}
+                             {{on "focusout" this.updateFraction}}
                       />
                     </div>
                   </div>
@@ -49,6 +53,8 @@
                              @class="form-control bg-transparent border"
                              @placeholder="Min"
                              {{on "change" this.updateDistillateMin}}
+                             {{on "keypress" this.updateDistillateMin}}
+                             {{on "focusout" this.updateDistillateMin}}
                       />
                     </div>
                     <div class="col">
@@ -56,6 +62,8 @@
                              @class="form-control bg-transparent border"
                              @placeholder="Max"
                              {{on "change" this.updateDistillateMax}}
+                             {{on "keypress" this.updateDistillateMax}}
+                             {{on "focusout" this.updateDistillateMax}}
                       />
                     </div>
                   </div>
@@ -67,6 +75,8 @@
                       <Input type="text" @class="form-control bg-transparent border"
                              @placeholder="Enter Name"
                              {{on "change" this.updateName}}
+                             {{on "keypress" this.updateName}}
+                             {{on "focusout" this.updateName}}
                       />
                     </div>
                   </div>
@@ -85,6 +95,7 @@
 
         {{#if this.formFilledOut}}
           <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  {{ref this "okButton"}}
                   {{on "click" this.submitForm}} >
             OK
           </button>
