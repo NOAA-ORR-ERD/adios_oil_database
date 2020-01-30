@@ -31,6 +31,8 @@
                           @class="form-control bg-transparent border overflow-hidden"
                           @placeholder="Fraction"
                           {{on "change" this.updateFraction}}
+                          {{on "keypress" this.updateFraction}}
+                          {{on "focusout" this.updateFraction}}
                   />
               </div>
             {{else if (eq this.sampleType this.SampleTypes.distillate)}}
@@ -53,6 +55,8 @@
                 <Input type="text" @class="form-control bg-transparent border overflow-hidden"
                       @placeholder="Enter Name"
                       {{on "change" this.updateName}}
+                      {{on "keypress" this.updateName}}
+                      {{on "focusout" this.updateName}}
                 />
               </div>
             {{/if}}
@@ -68,6 +72,7 @@
 
         {{#if this.formFilledOut}}
           <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  {{ref this "okButton"}}
                   {{on "click" this.submitForm}} >
             OK
           </button>

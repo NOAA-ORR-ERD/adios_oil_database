@@ -47,6 +47,9 @@ export default class AddSampleDlg extends Component {
         }
         else {
             this.weatheredFraction = Number(event.target.value);
+            if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
+                this.okButton.focus();
+            }
         }
     }
 
@@ -73,6 +76,9 @@ export default class AddSampleDlg extends Component {
     @action
     updateName(event) {
         this.sampleName = event.target.value;
+        if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
+            this.okButton.focus();
+        }
     }
 
     @action
