@@ -51,6 +51,11 @@ export default Component.extend({
     actions: {
         shown(event) {
             event.data.updateSampleTab(event.currentTarget.hash);
+        },
+
+        updateShortSampleName(idx) {
+            this.oil.samples[idx].short_name = event.target.value;
+            this.submit(this.oil);
         }
     }
 

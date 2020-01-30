@@ -8,7 +8,16 @@
          class="nav-item nav-link"
          aria-selected="false"
          tab-level="0">
-        {{name.[1]}}
+
+        {{#if this.editable}}
+          <Input
+            @class="p-1 overflow-hidden bg-transparent border"
+            @value={{name.[1]}}
+            @change={{action "updateShortSampleName" idx}}
+          />
+        {{else}}
+          {{name.[1]}}
+        {{/if}}
 
         {{#if idx}}
           {{#if this.editable}}
