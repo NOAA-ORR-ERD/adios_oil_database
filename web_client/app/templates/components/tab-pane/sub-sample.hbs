@@ -28,13 +28,6 @@
        aria-selected="false">
       Environmental Behavior
     </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-ccme-tab-{{slug sampleName}}"
-       href="#nav-ccme-{{slug sampleName}}"
-       aria-controls="nav-ccme-{{slug sampleName}}"
-       aria-selected="false">
-      CCME
-    </a>
   </div>
 </nav>
 
@@ -80,17 +73,6 @@
        id="nav-environmental-{{slug sampleName}}"
        aria-labelledby="nav-environmental-tab-{{slug sampleName}}">
     <TabPane::Environmental
-      @oil={{sample}}
-      @sampleName={{sampleName}}
-      @editable={{this.editable}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
-
-  <div role="tabpanel" class="tab-pane fade"
-       id="nav-ccme-{{slug sampleName}}"
-       aria-labelledby="nav-ccme-tab-{{slug sampleName}}">
-    <TabPane::Ccme
       @oil={{sample}}
       @sampleName={{sampleName}}
       @editable={{this.editable}}
