@@ -387,7 +387,7 @@ def fix_oil_id(oil_json, obj_id=None):
 
 ## fixme: do we want to memoize? how often are we getting the same results?
 ##        Turnign it off now, as it could break if a record is edited!
-# @memoize_oil_arg
+@memoize_oil_arg
 def get_oil_searchable_fields(oil):
     '''
     Since end users are updating records in an immediate (blur) fashion,
@@ -401,20 +401,21 @@ def get_oil_searchable_fields(oil):
     # so for now, we'll pull it out of the zeroth sub sample
     try:
         oil['api'] = oil['samples'][0]['apis'][0]['gravity']
-    except (KeyError, IndexError):  # if there are no samples,
-                                    #  or no apis in the zeroth sample
-         oil['api'] = None
+    except (KeyError, IndexError):
+        # if there are no samples,
+        #  or no apis in the zeroth sample
+        oil['api'] = None
 
     # unpack the relevant fields
     try:
-        return {'_id': oil['oil_id'],
-                'name': oil['name'],
-                'location': oil['location'],
-                'product_type': oil['product_type'],
-                'api': oil['api'],
-                'categories': oil['categories'],
+        return {'_id': oil.get('oil_id'),
+                'name': oil.get('name', None),
+                'location': oil.get('location', None),
+                'product_type': oil.get('product_type', None),
+                'api': oil.get('api'),
+                'categories': oil.get('categories', []),
                 # fixme: We should probably should do something smarter here
-                'status': oil['status'],
+                'status': oil.get('status', []),
                 }
     except Exception:
         logger.info('oil failed searchable fields {}: {}'
