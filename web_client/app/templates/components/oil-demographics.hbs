@@ -7,7 +7,7 @@
       <div class="row pl-0 mb-3">
 
         {{! Oil ID }}
-        <div class="col-6 pl-0 input-group d-flex align-items-center">
+        <div class="col-sm-12 col-md-6 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">ID:</label>
           </div>
@@ -15,16 +15,14 @@
         </div>
 
         {{! Location }}
-        <div class="col-6 pl-0 input-group d-flex align-items-center">
-          <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Location:</label>
-          </div>
+        <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold">Location:</label>
           {{#let (if oil.location oil.location "None") as |oilLocation|}}
             {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border" @value={{oilLocation}}
+              <Input @class="p-1 overflow-hidden bg-transparent border" @value={{oilLocation}}
                 @placeholder="Enter Location" @change={{action "updateLocation"}} />
             {{else}}
-              <span class="p-1 flex-fill">{{oilLocation}}</span>
+              <span class="p-1">{{oilLocation}}</span>
             {{/if}}
           {{/let}}
         </div>
@@ -34,14 +32,12 @@
       <div class="row pl-0 mb-3">
 
         {{! API }}
-        <div class="col-6 pl-0 input-group d-flex align-items-center">
-          <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">API:</label>
-          </div>
+        <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold">API:</label>
           {{#let (if (not (is-empty oil.samples.[0].apis))
             (round-relative oil.samples.[0].apis.[0].gravity 2) "No Values") as |oilAPI|}}
             {{#if editable}}
-              <Input @id="api" @type="text" @class="p-1 bg-transparent border"
+              <Input @id="api" @type="text" @class="p-1 overflow-hidden bg-transparent border"
                 @placeholder="API value" @value={{oilAPI}} @change={{action "updateAPI"}} @size="6" />
             {{else}}
               <span class="p-1">{{oilAPI}}</span>
@@ -50,12 +46,10 @@
         </div>
 
         {{! Type }}
-        <div class="col-6 pl-0 form-inline d-flex align-items-center">
-          <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Type:</label>
-          </div>
+        <div class="col-sm-12 col-md-6 pl-0 form-inline align-items-center">
+          <label class="p-1 input-group-text font-weight-bold">Type:</label>
           {{#if editable}}
-            <select class="p-1 flex-fill bg-transparent border" onchange={{action "updateType"}}>
+            <select class="p-1 mt-1 overflow-hidden bg-transparent border" onchange={{action "updateType"}}>
               {{#each this.oilTypes as |oilType|}}
                 {{#if (eq oil.productType oilType)}}
                   <option class="bg-light" selected>{{oilType}}</option>
@@ -65,7 +59,7 @@
               {{/each}}
             </select>
           {{else}}
-            <span class="p-1 flex-fill">{{oil.productType}}</span>
+            <span class="p-1">{{oil.productType}}</span>
           {{/if}}
         </div>
 
@@ -107,17 +101,15 @@
     <div class="col-6">
 
       {{! Reference }}
-      <div class="row mb-3">
+      <div class="row mb-1">
         <div class="col-12 input-group">        
-          <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Reference:</label>
-          </div>
+          <label class="p-1 input-group-text font-weight-bold">Reference:</label>
           {{#let (if oil.reference oil.reference "None") as |oilReference|}}
             {{#if editable}}
-              <Textarea @class="p-1 reference-textarea bg-transparent border" @value={{oilReference}} @rows="4"
+              <Textarea @class="p-1 reference-textarea overflow-hidden bg-transparent border" @value={{oilReference}} @rows="4"
                 @placeholder="Enter reference"  @change={{action "updateReference"}} />
             {{else}}
-              <Textarea @class="p-1 reference-textarea bg-transparent border" @value={{oilReference}} @rows="4"
+              <Textarea @class="p-1 reference-textarea overflow-hidden bg-transparent border" @value={{oilReference}} @rows="4"
                 @placeholder="Enter reference"  @change={{action "updateReference"}} disabled />
             {{/if}}
           {{/let}}
@@ -127,37 +119,31 @@
       <div class="row">
 
         {{! Reference Date }}
-        <div class="col-6 pl-0 input-group d-flex align-items-center">
-          <div class="input-group-prepend">
-            <label class="input-group-text font-weight-bold">Reference Date:</label>
-          </div>
-          <div class="pl-0">        
-            {{! Europe/London is how we lookup GMT in moment.js }}
-            {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
-              as |oilReferenceDate|}}
-              {{#if editable}}
-                <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilReferenceDate}}
-                  @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
-              {{else}}
-                <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
-              {{/if}}
-            {{/let}}
-          </div>
+        <div class="col-sm-12 col-md-6 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
+          {{! Europe/London is how we lookup GMT in moment.js }}
+          {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
+            as |oilReferenceDate|}}
+            {{#if editable}}
+              <Input @class="p-1 overflow-hidden bg-transparent border" @value={{oilReferenceDate}}
+                @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
+            {{else}}
+              <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
+            {{/if}}
+          {{/let}}
         </div>
 
         {{! Sample Received Date }}
-        <div class="col-6 pl-0 input-group d-flex align-items-center">
-          <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
-          </div>
+        <div class="col-sm-12 col-md-6 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
           {{! Europe/London is how we lookup GMT in moment.js }}
           {{#let (if oil.sampleDate (moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
             as |oilSampleDate|}}
             {{#if editable}}
-              <Input @class="p-1 flex-fill bg-transparent border"  @size="7" @value={{oilSampleDate}}
+              <Input @class="p-1 overflow-hidden bg-transparent border" @value={{oilSampleDate}}
                 @placeholder="Enter Date"  @change={{action "updateSampleReceivedDate"}} />
             {{else}}
-              <span class="p-1 flex-fill">{{oilSampleDate}}</span>
+              <span class="p-1 ">{{oilSampleDate}}</span>
             {{/if}}
           {{/let}}
         </div>
@@ -168,17 +154,18 @@
   </div>
 
   {{! Comments }}
-  <div class="row pl-0 pr-0 mb-3">
-    <div class="col-12 pl-0 pr-0">
-      <label class="p-1 font-weight-bold">Comments:</label>
+  <div class="row p-0 mb-3">
+    <div class="col-12 p-0">
+      <label class="pl-1 font-weight-bold">Comments:</label>
     </div>
-    <div class="col-12 pl-0 pr-0 input-group oil-comments-div">
+    <div class="col-12 p-0 input-group">
       {{#let (if oil.comments oil.comments "None") as |oilComments|}}
         {{#if editable}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="1"
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="3"
             @placeholder="Enter comments"  @change={{action "updateComments"}} />
         {{else}}
-          <span class="p-1 flex-fill bg-transparent no-borders">{{oilComments}}</span>
+          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="3"
+            @placeholder="Enter comments" disabled @change={{action "updateComments"}} />
         {{/if}}
       {{/let}}
     </div>

@@ -46,7 +46,7 @@ export default Component.extend(TableCommon, {
             label: 'Type',
             valuePath: 'productType',
             classNames: 'text-nowrap',
-            width: '80px',
+            width: '100px',
             minResizeWidth: 80,
             searchable: true,
             resizable: true,
@@ -55,7 +55,7 @@ export default Component.extend(TableCommon, {
             valuePath: 'api',
             classNames: 'text-nowrap',
             cellComponent: 'table/cell/api',
-            width: '60px',
+            width: '80px',
             minResizeWidth: 60,
             resizable: true,
         }, {
@@ -63,7 +63,7 @@ export default Component.extend(TableCommon, {
             valuePath: 'categories',
             classNames: 'text-nowrap',
             cellComponent: 'table/cell/categories',
-            width: '100px',
+            width: '150px',
             minResizeWidth: 100,
             resizable: true,
         }];

@@ -36,11 +36,6 @@ parser.add_argument('--noconda', '-c',
                     action="store_true",
                     help="don't build the standalone conda environment")
 
-# parser.add_argument('--setup', '-s',
-#                     action="store_true",
-#                     help='update dependencies and database, '
-#                          "but don't run the servers")
-
 
 args = parser.parse_args()
 
@@ -67,6 +62,15 @@ if not nodeps:
          ])
     run(["python", "-m", "pip", "install", "-r",
          "web_api/pip_requirements.txt"])
+
+    # our applications have to be installed, too
+    chdir("oil_db")
+    run(["pip", "install", "-e", "."])
+
+    chdir("../web_api")
+    run(["pip", "install", "-e", "."])
+    chdir("..")
+
 
     # make sure npm packages are up to date
     chdir('web_client')

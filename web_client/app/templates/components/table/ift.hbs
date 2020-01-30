@@ -1,95 +1,99 @@
-<div class="detail-section">
-  <div class="table-responsive">
-    <strong>Interfacial Tension:</strong>
+<div class="row">
+  <div class="col-12">
+    <div class="detail-section">
+      <div class="table-responsive">
+        <strong>Interfacial Tension:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead aria-controls="ift-tbody"
-             aria-expanded="false">
-        <tr>
-          <th scope="col">Interface</th>
-          <th scope="col">Tension</th>
-          <th scope="col">Temperature</th>
+        <table class="table table-hover table-bordered">
+          <thead aria-controls="ift-tbody"
+                aria-expanded="false">
+            <tr>
+              <th scope="col">Interface</th>
+              <th scope="col">Tension</th>
+              <th scope="col">Temperature</th>
 
-          {{#if this.args.editable}}
-            <td class="border-0">
-              <button type="button"
-                {{on "click" (fn this.addEmptyTableRow 0)}}
-                class="btn btn-outline-dark btn-sm p-0 border-0">
-                {{fa-icon "plus"}}
-              </button>
-            </td>
-          {{/if}}
-
-        </tr>
-      </thead>
-      <tbody id="ift-tbody">
-        {{#each this.iftsArray as |ift index|}}
-          <tr>
-            <td>
               {{#if this.args.editable}}
-                <select class="p-1 flex-fill bg-transparent border" {{on "change" (fn this.updateInterface index)}}>
-                  {{#each this.args.interfaces as |interface|}}
-                    {{#if (eq ift.interface interface)}}
-                      <option class="bg-light" selected>{{interface}}</option>
-                    {{else}}
-                      <option class="bg-light">{{interface}}</option>
-                    {{/if}}
-                  {{/each}}
-                </select>
-              {{else}}
-                {{ift.interface}}
+                <td class="border-0">
+                  <button type="button"
+                    {{on "click" (fn this.addEmptyTableRow 0)}}
+                    class="btn btn-outline-dark btn-sm p-0 border-0">
+                    {{fa-icon "plus"}}
+                  </button>
+                </td>
               {{/if}}
-            </td>
-            <td>
-              <Common::ValueUnitInput
-                @valueObject={{ift.tension}}
-                @valueUnit={{"N/m"}}
-                @valuePrecision={{3}}
-                @editable={{this.args.editable}}
-                @submit={{fn this.updateAttr index "tension"}}
-              />
-            </td>
-            <td>
-              <Common::ValueUnitInput
-                @valueObject={{ift.ref_temp}}
-                @valueUnit={{"C"}}
-                @valuePrecision={{2}}
-                @editable={{this.args.editable}}
-                @submit={{fn this.updateAttr index "ref_temp"}}
-              />
-            </td>
 
-            {{#if this.args.editable}}
-              <td class="border-0">
-                <button type="button"
-                  {{on "click" (fn this.deleteTableRow index)}}
-                  class="btn btn-outline-danger btn-sm p-0 border-0">
-                  {{fa-icon "times"}}
-                </button>
-              </td>
+            </tr>
+          </thead>
+          <tbody id="ift-tbody">
+            {{#each this.iftsArray as |ift index|}}
+              <tr>
+                <td>
+                  {{#if this.args.editable}}
+                    <select class="p-1 flex-fill bg-transparent border" {{on "change" (fn this.updateInterface index)}}>
+                      {{#each this.args.interfaces as |interface|}}
+                        {{#if (eq ift.interface interface)}}
+                          <option class="bg-light" selected>{{interface}}</option>
+                        {{else}}
+                          <option class="bg-light">{{interface}}</option>
+                        {{/if}}
+                      {{/each}}
+                    </select>
+                  {{else}}
+                    {{ift.interface}}
+                  {{/if}}
+                </td>
+                <td>
+                  <Common::ValueUnitInput
+                    @valueObject={{ift.tension}}
+                    @valueUnit={{"N/m"}}
+                    @valuePrecision={{3}}
+                    @editable={{this.args.editable}}
+                    @submit={{fn this.updateAttr index "tension"}}
+                  />
+                </td>
+                <td>
+                  <Common::ValueUnitInput
+                    @valueObject={{ift.ref_temp}}
+                    @valueUnit={{"C"}}
+                    @valuePrecision={{2}}
+                    @editable={{this.args.editable}}
+                    @submit={{fn this.updateAttr index "ref_temp"}}
+                  />
+                </td>
 
-              <td class="border-0">
-                <button type="button"
-                  {{on "click" (fn this.addEmptyTableRow (add index 1))}}
-                  class="btn btn-outline-dark btn-sm p-0 border-0">
-                  {{fa-icon "plus"}}
-                </button>
-              </td>
-            {{/if}}
+                {{#if this.args.editable}}
+                  <td class="border-0">
+                    <button type="button"
+                      {{on "click" (fn this.deleteTableRow index)}}
+                      class="btn btn-outline-danger btn-sm p-0 border-0">
+                      {{fa-icon "times"}}
+                    </button>
+                  </td>
 
-            {{!-- 
-            <td>{{ift.interface}}</td>
-            <td>{{value-unit ift.tension 3}}</td>
-            <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
-            --}}
-          </tr>
-        {{/each}}
+                  <td class="border-0">
+                    <button type="button"
+                      {{on "click" (fn this.addEmptyTableRow (add index 1))}}
+                      class="btn btn-outline-dark btn-sm p-0 border-0">
+                      {{fa-icon "plus"}}
+                    </button>
+                  </td>
+                {{/if}}
 
-        {{#unless this.args.oil.ifts}}
-          <tr><td>No Data</td></tr>
-        {{/unless}}
-      </tbody>
-    </table>
+                {{!-- 
+                <td>{{ift.interface}}</td>
+                <td>{{value-unit ift.tension 3}}</td>
+                <td>{{value-unit (convert-unit ift.ref_temp "C") 2}}</td>
+                --}}
+              </tr>
+            {{/each}}
 
+            {{#unless this.args.oil.ifts}}
+              <tr><td>No Data</td></tr>
+            {{/unless}}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
   </div>
 </div>

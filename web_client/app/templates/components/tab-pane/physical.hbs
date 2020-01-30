@@ -15,10 +15,19 @@
       <p class="small">
         {{#if oil.fraction_weathered}}
           <strong>Weathered Fraction:</strong>
-          {{#if oil.fraction_weathered.unit}}
-            {{value-unit oil.fraction_weathered 2}}
+          {{#if editable}}
+            <Input 
+              @class="edit-fraction-weathered p-1 my-3 flex-fill bg-transparent border"
+              @value={{this.oil.fraction_weathered}}
+              @placeholder="Enter Weathered Fraction"
+              @change={{action this.submit this.oil}} 
+            />
           {{else}}
-            {{oil.fraction_weathered}}
+            {{#if oil.fraction_weathered.unit}}
+              {{value-unit oil.fraction_weathered 2}}
+            {{else}}
+              {{oil.fraction_weathered}}
+            {{/if}}
           {{/if}}
         {{/if}}
 
@@ -64,7 +73,7 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-md-6 col-lg-4">
       <Table::Density
         @oil={{this.oil}}
         @editable={{this.editable}}
@@ -72,7 +81,7 @@
         class="row"/>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-md-6 col-lg-4">
       <Table::KinematicViscosity
         @oil={{this.oil}}
         @editable={{this.editable}}
@@ -80,7 +89,7 @@
         class="row"/>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-md-6 col-lg-4">
       <Table::DynamicViscosity
         @oil={{this.oil}}
         @editable={{this.editable}}
@@ -88,7 +97,7 @@
         class="row"/>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-8">
       <Table::Ift
         @oil={{this.oil}}
         @editable={{this.editable}}
@@ -101,7 +110,7 @@
         class="row"/>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-xs-6 col-sm-6 col-lg-4">
       {{! Placeholder div so that the last container lines up
           with the first column.  Only necessary for an odd number
           of containers }}

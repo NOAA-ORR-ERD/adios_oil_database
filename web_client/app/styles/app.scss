@@ -7,7 +7,6 @@ $button-font-weight: 500;
 $border-color: #adb5bd;
 $nav-tabs-border-color: #adb5bd;
 $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
-$nav-tabs-color: #ffffff;
 
 // main bootstrap import
 @import "ember-cli-bootstrap-4/bootstrap";
@@ -44,9 +43,12 @@ $nav-tabs-color: #ffffff;
     background: url(../assets/images/oil-barrel-128x128.png);
     background-size: contain;
     background-repeat: no-repeat;
-    height: 120px;
-    width: 120px;
+    height: 2rem;
+    width: 2rem;
+    margin-bottom: .5rem;
+    vertical-align: middle;
     position: relative;
+    display: inline-block;
 }
 
 .noaa-logo {
@@ -82,9 +84,6 @@ $nav-tabs-color: #ffffff;
 }
 .reference-textarea {
   width: 100%;
-}
-.oil-comments-div {
-    height: 34px;
 }
 
 .no-borders{
