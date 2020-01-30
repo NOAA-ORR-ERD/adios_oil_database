@@ -41,7 +41,6 @@ def _from_py_json(cls, py_json):
     classmethod to create a dataclass from json compatible python data
     structure.
     """
-    print("working with:", py_json)
     arg_dict = {}
     for fieldname, fieldobj in cls.__dataclass_fields__.items():
         if fieldname in py_json:
@@ -50,7 +49,6 @@ def _from_py_json(cls, py_json):
             except AttributeError:
                 # it's not, so we just use the value
                 arg_dict[fieldname] = py_json[fieldname]
-    print("argdict is:", arg_dict)
     obj = cls(**arg_dict)
     return obj
 
