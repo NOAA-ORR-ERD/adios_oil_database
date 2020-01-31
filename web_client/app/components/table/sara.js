@@ -4,11 +4,13 @@ import { action, set } from "@ember/object";
 
 export default class Sara extends Component {
     @tracked properties;
-    @tracked saraObject;
+    @tracked saraArray;
+    @tracked oil;
 
     constructor() {
         super(...arguments);
 
+        this.oil = this.args.oil;
         this.saraArray = this.args.oil.sara_total_fractions;
         this.readPropertyTypes(this.args.store, 'sara-total-fractions.json');
 
@@ -23,7 +25,14 @@ export default class Sara extends Component {
 
     @action
     updateCellValue(label) {
-        let index = this.saraArray.findIndex(x => x.sara_type === label);
+        // TODO - rewrite this like getDeep/setDeep/removeDeep in range-value-input
+
+        let index;
+        if (this.saraArray) {
+            index = this.saraArray.findIndex(x => x.sara_type === label);
+        } else {
+            index = -1;
+        }
 
         if (index !== -1) {
             if(Number.isNaN(parseFloat(event.target.value))) {
@@ -45,16 +54,22 @@ export default class Sara extends Component {
                         unit: "%"
                     }
                 };
+                if(!this.saraArray) {
+                    this.saraArray = [];
+                }
                 this.saraArray.push(saraItem);
             }
         }
 
-        this.updateValue(this.saraArray);
-    }
+        if (this.saraArray && this.saraArray.length !== 0) {
+            set(this.oil, "sara_total_fractions", this.saraArray);
+        } else {
+            if (this.oil.sara_total_fractions) {
+                delete this.oil.sara_total_fractions;
+            }
+        }
 
-    @action
-    updateValue(enteredValue) {
-        this.args.submit(enteredValue);
+        this.args.submit(this.oil);
     }
 
 }
