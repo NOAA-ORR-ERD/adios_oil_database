@@ -8,20 +8,32 @@
 
         <div class="col-xs-12 col-lg-6">
           <div class="table-responsive">
-            <Table::AlkylatedPah::CxN
+            <Common::StaticTable
+              @store={{this.store}}
               @oil={{this.oil}}
               @editable={{this.editable}}
               @submit={{this.submit}}
+              @tableTitle="Naphthalenes"
+              @boldTitle={{false}}
+              @propertyName="alkylated_pahs"
+              @valueUnit="ppm"
+              @valuePrecision={{3}}
             />
           </div>
         </div>
 
         <div class="col-xs-12 col-lg-6">
           <div class="table-responsive">
-            <Table::AlkylatedPah::CxP
+            <Common::StaticTable
+              @store={{this.store}}
               @oil={{this.oil}}
               @editable={{this.editable}}
               @submit={{this.submit}}
+              @tableTitle="Phenanthrenes"
+              @boldTitle={{false}}
+              @propertyName="alkylated_pahs"
+              @valueUnit="ppm"
+              @valuePrecision={{3}}
             />
           </div>
         </div>
