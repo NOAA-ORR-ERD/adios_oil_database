@@ -1,0 +1,57 @@
+{
+  "id": "alkanes_8_20.json",
+  "template": {
+      "c8": {
+          "label": "C8",
+          "inputType": "scalar"
+      },
+      "c9": {
+          "label": "C9",
+          "inputType": "scalar"
+      },
+      "c10": {
+          "label": "C10",
+          "inputType": "scalar"
+      },
+      "c11": {
+          "label": "C11",
+          "inputType": "scalar"
+      },
+      "c12": {
+          "label": "C12",
+          "inputType": "scalar"
+      },
+      "c13": {
+          "label": "C13",
+          "inputType": "scalar"
+      },
+      "c14": {
+          "label": "C14",
+          "inputType": "scalar"
+      },
+      "c15": {
+          "label": "C15",
+          "inputType": "scalar"
+      },
+      "c16": {
+          "label": "C16",
+          "inputType": "scalar"
+      },
+      "c17": {
+          "label": "C17",
+          "inputType": "scalar"
+      },
+      "c18": {
+          "label": "C18",
+          "inputType": "scalar"
+      },
+      "c19": {
+          "label": "C19",
+          "inputType": "scalar"
+      },
+      "c20": {
+          "label": "C20",
+          "inputType": "scalar"
+      }
+  }
+}
