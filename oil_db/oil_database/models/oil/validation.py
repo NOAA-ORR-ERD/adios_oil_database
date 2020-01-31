@@ -9,14 +9,17 @@ The top-level interface is a single function:
 
 validate(pyjson_of_an_oil_record)
 
+(pyjson is a python dict that is a match for the JSON)
+
 It will add the validation messages to the "status" field of the record.
+
+
+Currently, it converts the pyjson into a .oil/Oil object, then validates on that.
 
 
 NOTE: this needs a LOT more, and a massive refactor.
 
 A few ideas about that:
-
-* Individual validation functions should contain their error messages, etc.
 
 * There should be some automated way to discover all the validators, so we can
    simply add more in one place, and be done.
@@ -27,12 +30,23 @@ A few ideas about that:
 
 from .oil import Oil
 
-# import logging
+import logging
 
-# from pprint import PrettyPrinter
-# pp = PrettyPrinter(indent=2, width=120)
+from pprint import PrettyPrinter
+pp = PrettyPrinter(indent=2, width=120)
 
-# logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
+
+# Putting these all here so we can keep track more easily
+
+WARNINGS = {"W003" : "Record name: {oil.name} is not very descriptive",
+            }
+
+ERRORS = {"E001": "Record has no name: every record must have a name",
+          "E002": "Crude Oils must have an API",
+          }
+WARNINGS = {code: (code + ": " + msg) for code, msg in WARNINGS.items()}
+ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}
 
 
 def validate(oil_json):
@@ -46,11 +60,17 @@ def validate(oil_json):
     """
 
     # make an oil object out of it:
-    oil = Oil.from_py_json(oil_json)
+    try:
+        oil = Oil.from_py_json(oil_json)
+    except TypeError as err:
+        if "argument: 'name'" in err.args[0]:
+            oil_json["status"] = ERRORS["E001"]
+            return
+        else:  # some other TypeError
+            raise
 
     messages = []
-    for val_fun in (has_product_type,
-                    ):
+    for val_fun in VALIDATORS:
         msg = val_fun(oil)
         if msg:
             messages.append(msg)
@@ -58,7 +78,19 @@ def validate(oil_json):
     oil_json["status"] = messages
 
 
-def has_product_type(oil):
+def val_has_reasonable_name(oil):
+    """
+    right now, reasonable is more than 5 characters
+
+    we may want to add more later
+    """
+    if len(oil.name.strip()) < 5:
+        return WARNINGS["W003"].format(oil=oil)
+    else:
+        return None
+
+
+def val_has_product_type(oil):
     '''
     Oil records should have a product type
     '''
@@ -78,33 +110,52 @@ def has_product_type(oil):
         return None
 
 
-class OilRejected(Exception):
-    '''
-        Custom exception for Oil initialization that we can raise if we
-        decide we need to reject an oil record for any reason.
-    '''
+def val_check_api(oil):
+    api = oil.api
+    ptype = oil.product_type
+    if ptype and ptype.lower() == "crude":
+        if api is None:
+            return ERRORS["E002"]
+    else:
+        if api is None:
+            return "W004: No api value provided"
+    if not (-60.0 < api < 100):  # somewhat arbitrary limits
+        return "W005: API value: {} seems unlikely".format(api)
 
-    def __init__(self, message, oil_name, *args):
-        # without this you may get DeprecationWarning
-        self.message = message
 
-        # Special attribute you desire with your Error,
-        # perhaps the value that caused the error?:
-        self.oil_name = oil_name
+# build a list of all the validators:
 
-        # allow users initialize misc. arguments as any other builtin Error
-        super().__init__(message, oil_name, *args)
+VALIDATORS = [ val for name, val in vars().items() if name.startswith("val_")]
 
-    def __repr__(self):
-        return '{0}(oil={1}, errors={2})'.format(self.__class__.__name__,
-                                                 self.oil_name,
-                                                 self.message)
 
-# ### Oil Quality checks
-#
-# FIXME: At the very least, the checks should return the error message,
-#        rather than having a separate mapping. But this needs major
-#        refactoring anyway
+
+# class OilRejected(Exception):
+#     '''
+#         Custom exception for Oil initialization that we can raise if we
+#         decide we need to reject an oil record for any reason.
+#     '''
+
+#     def __init__(self, message, oil_name, *args):
+#         # without this you may get DeprecationWarning
+#         self.message = message
+
+#         # Special attribute you desire with your Error,
+#         # perhaps the value that caused the error?:
+#         self.oil_name = oil_name
+
+#         # allow users initialize misc. arguments as any other builtin Error
+#         super().__init__(message, oil_name, *args)
+
+#     def __repr__(self):
+#         return '{0}(oil={1}, errors={2})'.format(self.__class__.__name__,
+#                                                  self.oil_name,
+#                                                  self.message)
+
+# # ### Oil Quality checks
+# #
+# # FIXME: At the very least, the checks should return the error message,
+# #        rather than having a separate mapping. But this needs major
+# #        refactoring anyway
 
 
 def oil_record_validation(oil):
