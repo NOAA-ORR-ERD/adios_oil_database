@@ -1,4 +1,4 @@
-<Common::StaticTable
+{{!-- <Common::StaticTable
   @oil={{oil}}
   @editable={{editable}}
   @store={{store}}
@@ -8,81 +8,56 @@
   @valueField="fraction"
   @valuePrecision={{3}}
 />
+ --}}
 
+{{!-- 
+  TODO: it doesn't check an input type -- scalar input at this moment only
+--}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{!-- <div class="detail-section">
+<div class="detail-section">
   <div class="table-responsive">
     <strong>SARA Total Fractions:</strong>
 
     <table class="table table-hover table-bordered">
       <tbody id="sara-tbody">
-        <tr>
-          {{#if (find-by "sara_type" "Saturates" oil.sara_total_fractions)}}
-            {{#with (find-by "sara_type" "Saturates" oil.sara_total_fractions) as |sara|}}
-              <td>{{sara.sara_type}}</td>
-              <td>{{value-unit sara.fraction 3}}</td>
-            {{/with}}
-          {{else}}
-            <td>Saturates</td><td>No Data</td>
-          {{/if}}
-        </tr>
 
-        <tr>
-          {{#if (find-by "sara_type" "Aromatics" oil.sara_total_fractions)}}
-            {{#with (find-by "sara_type" "Aromatics" oil.sara_total_fractions) as |sara|}}
-              <td>{{sara.sara_type}}</td>
-              <td>{{value-unit sara.fraction 3}}</td>
-            {{/with}}
-          {{else}}
-            <td>Aromatics</td><td>No Data</td>
-          {{/if}}
-        </tr>
-
-        <tr>
-          {{#if (find-by "sara_type" "Resins" oil.sara_total_fractions)}}
-            {{#with (find-by "sara_type" "Resins" oil.sara_total_fractions) as |sara|}}
-              <td>{{sara.sara_type}}</td>
-              <td>{{value-unit sara.fraction 3}}</td>
-            {{/with}}
-          {{else}}
-            <td>Resins</td><td>No Data</td>
-          {{/if}}
-        </tr>
-
-        <tr>
-          {{#if (find-by "sara_type" "Asphaltenes" oil.sara_total_fractions)}}
-            {{#with (find-by "sara_type" "Asphaltenes" oil.sara_total_fractions) as |sara|}}
-              <td>{{sara.sara_type}}</td>
-              <td>{{value-unit sara.fraction 3}}</td>
-            {{/with}}
-          {{else}}
-            <td>Asphaltenes</td><td>No Data</td>
-          {{/if}}
-        </tr>
+        {{#each-in this.properties as |attr value|}}
+          <tr>
+            <td>{{value.label}}</td>
+            {{#if (find-by "sara_type" value.label this.saraArray)}}
+              {{#with (find-by "sara_type" value.label this.saraArray) as |sara|}}
+                <td>
+                  {{!-- was: <td>{{value-unit sara.fraction 3}}</td> --}}
+                  <Common::ValueUnitInput
+                    @valueObject={{sara.fraction}}
+                    @valueUnit="%"
+                    @valuePrecision={{2}}
+                    @editable={{this.args.editable}}
+                    @submit={{fn this.updateCellValue (get value "label")}}
+                  />
+                </td>
+              {{/with}}
+            {{else}}
+              {{#if this.args.editable}}
+                <td>
+                  <Common::ValueUnitInput
+                    @valueObject=""
+                    @valueUnit="%"
+                    @valuePrecision={{2}}
+                    @editable={{this.args.editable}}
+                    @submit={{fn this.updateCellValue (get value "label")}}
+                  />
+                </td>
+              {{else}}
+                <td>No Data</td>
+              {{/if}}
+            {{/if}}
+          </tr>
+        {{/each-in}}
 
       </tbody>
     </table>
 
   </div>
 
-</div> --}}
+</div>
