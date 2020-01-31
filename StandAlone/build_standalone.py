@@ -43,6 +43,18 @@ nodeps = args.nodeps
 noconda = args.noconda
 nodatabase = args.nodatabase
 
+# utility functions
+def get_env_path(env_name):
+    env_list = run(['conda', 'env', 'list'], capture_output=True)
+    env_list = env_list.stdout.decode().split("\n")
+    for line in env_list:
+        if line.startswith('#'):
+            continue
+        name, path = line.split(maxsplit=1)
+        if name.strip() == env_name:
+            return Path(path.strip())
+
+
 # Update all the dependencies
 
 # first conda
@@ -117,6 +129,8 @@ if not nodatabase:
 
 if not noconda:
     # build the conda standalone environment
+    # NOTE: you still need to install the app pacakges:
+    #       oil_database, oil_database_api
     run(['conda',
          'create',
          '-y',
@@ -124,6 +138,23 @@ if not noconda:
          'standalone',
          '--file',
          'standalone_conda_requirements.txt'])
+    # our pacakges need to be installed before copying over.
+    # the environment needs to be activated to do that
+    # it is NOT easy to script activating the environment
+    """
+    conda activate standalone
+    cd oil_db
+    pip install .
+    cd ../web_api
+    pip install .
+    cd ..
+    """
+    # then you can copy it here:
+#    env_path = get_env_path(standalone)
+#    rmtree('standalone', ignore_errors=True)
+#    copytree(env_path, "./")
+
+
 
 
 

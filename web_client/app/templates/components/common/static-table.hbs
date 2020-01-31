@@ -4,7 +4,15 @@
 
     <table class="table table-hover table-bordered">
       <tbody id="sara-tbody">
-        {{#each this.typeKeys as |type|}}  
+        {{#each-in this.properties as |attr value|}}
+          <tr>
+            <td>{{attr}}</td>
+            <td>{{value.label}}</td>
+            <td>{{value.inputType}}</td>
+          </tr>
+        {{/each-in}}
+
+        {{#each this.typeKeys as |type|}}
           <tr>
             {{#if (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName))}}
               {{#with (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName)) as |sara|}}
