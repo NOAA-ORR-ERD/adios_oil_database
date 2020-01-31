@@ -75,7 +75,13 @@
   </div>
 
   <div class="row">
-    <Table::Sara @oil={{oil}} class="col-6"/>
+    <Table::Sara 
+      @oil={{this.oil}} 
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      @store={{this.parentView.oil.store}}
+      class="col-6"
+    />
   </div>
 
   <div class="row">
