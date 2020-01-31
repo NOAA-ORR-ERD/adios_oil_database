@@ -98,11 +98,11 @@ function StartFileServerProcess()
 {
 	console.log( "StartFileServerProcess()" );
 
-	let cwd = path.join( path.resolve( __dirname, ".." ), "web_client", "dist" );
+	let cwd = path.join( path.resolve( __dirname, ".." ), "StandAlone", "client_code" );
 	let appPath = "python";
 	if ( IS_INSTALLED_APPLICATION )
 	{
-		cwd = path.join( path.resolve( __dirname, "../../.." ), "oil_database", "web_client", "dist" );
+		cwd = path.join( path.resolve( __dirname, "../../.." ), "oil_database", "StandAlone", "client_code" );
 		appPath = "../../../adiosdb/python.exe";
 	}
 	fileServerProcess = childProcess.spawn( appPath,
@@ -265,7 +265,7 @@ function OpenWindow()
 						y: mainWindowState.y,
 						width: mainWindowState.width,
 						height: mainWindowState.height,
-						icon: path.join( __dirname, "oil-barrel.ico" ),
+						icon: path.join( __dirname, "adiosdb.ico" ),
 						title: "ADIOS Oil Database"
 					} );
 	mainWindowState.manage( mainWindow );

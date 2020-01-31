@@ -104,7 +104,7 @@ export default function() {
     "viscosity": 0.0000061361
   }];
 
-  this.passthrough('/configs/main.json',
+  this.passthrough('/configs/**',
                    'https://adios-stage.orr.noaa.gov/api/**',
                    'http://localhost:9898/**');
 

@@ -1,0 +1,33 @@
+<div class="detail-section">
+  <div class="table-responsive">
+    <strong>{{this.args.tableTitle}}</strong>
+
+    <table class="table table-hover table-bordered">
+      <tbody id="sara-tbody">
+        {{#each-in this.properties as |attr value|}}
+          <tr>
+            {{!-- <td>{{attr}}</td> --}}
+            <td>{{value.label}}</td>
+            <td>{{value.inputType}}</td>
+          </tr>
+        {{/each-in}}
+
+        {{!-- {{#each this.typeKeys as |type|}}
+          <tr>
+            {{#if (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName))}}
+              {{#with (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName)) as |sara|}}
+                <td>{{get sara this.args.typeField}}</td>
+                <td>{{value-unit (get sara this.args.valueField) this.args.valuePrecision}}</td>
+              {{/with}}
+            {{else}}
+              <td>{{get (get this.propertyTypesObj type) "label"}}</td><td>No Data</td>
+            {{/if}}
+          </tr>
+        {{/each}} --}}
+
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

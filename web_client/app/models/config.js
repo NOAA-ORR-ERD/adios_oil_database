@@ -3,5 +3,6 @@ const { Model, attr } = DS;
 
 export default Model.extend({
     comments: attr(),
-    webApi: attr()
+    webApi: attr(),
+    template: attr()
 });
