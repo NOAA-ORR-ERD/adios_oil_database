@@ -1,0 +1,57 @@
+{
+  "id": "alkanes_21_33.json",
+  "template": {
+      "c21": {
+          "label": "C21",
+          "inputType": "scalar"
+      },
+      "c22": {
+          "label": "C22",
+          "inputType": "scalar"
+      },
+      "c23": {
+          "label": "C23",
+          "inputType": "scalar"
+      },
+      "c24": {
+          "label": "C24",
+          "inputType": "scalar"
+      },
+      "c25": {
+          "label": "C25",
+          "inputType": "scalar"
+      },
+      "c26": {
+          "label": "C26",
+          "inputType": "scalar"
+      },
+      "c27": {
+          "label": "C27",
+          "inputType": "scalar"
+      },
+      "c28": {
+          "label": "C28",
+          "inputType": "scalar"
+      },
+      "c29": {
+          "label": "C29",
+          "inputType": "scalar"
+      },
+      "c30": {
+          "label": "C30",
+          "inputType": "scalar"
+      },
+      "c31": {
+          "label": "C31",
+          "inputType": "scalar"
+      },
+      "c32": {
+          "label": "C32",
+          "inputType": "scalar"
+      },
+      "c33": {
+          "label": "C33",
+          "inputType": "scalar"
+      }
+  }
+}

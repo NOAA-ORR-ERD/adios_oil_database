@@ -4,202 +4,48 @@
   <div class="row">
 
     <div class="col-xs-12 col-md-6 col-lg-4">
-
-      <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-          <thead></thead>
-          <tbody id="alkanes-tbody">
-            {{#if oil.alkanes}}
-              <tr>
-                <td>C8</td>
-                <td>{{value-unit oil.alkanes.c8 2}}</td>
-              </tr>
-              <tr>
-                <td>C9</td>
-                <td>{{value-unit oil.alkanes.c9 2}}</td>
-              </tr>
-              <tr>
-                <td>C10</td>
-                <td>{{value-unit oil.alkanes.c10 2}}</td>
-              </tr>
-              <tr>
-                <td>C11</td>
-                <td>{{value-unit oil.alkanes.c11 2}}</td>
-              </tr>
-              <tr>
-                <td>C12</td>
-                <td>{{value-unit oil.alkanes.c12 2}}</td>
-              </tr>
-              <tr>
-                <td>C13</td>
-                <td>{{value-unit oil.alkanes.c13 2}}</td>
-              </tr>
-              <tr>
-                <td>C14</td>
-                <td>{{value-unit oil.alkanes.c14 2}}</td>
-              </tr>
-              <tr>
-                <td>C15</td>
-                <td>{{value-unit oil.alkanes.c15 2}}</td>
-              </tr>
-              <tr>
-                <td>C16</td>
-                <td>{{value-unit oil.alkanes.c16 2}}</td>
-              </tr>
-              <tr>
-                <td>C17</td>
-                <td>{{value-unit oil.alkanes.c17 2}}</td>
-              </tr>
-              <tr>
-                <td>C18</td>
-                <td>{{value-unit oil.alkanes.c18 2}}</td>
-              </tr>
-              <tr>
-                <td>C19</td>
-                <td>{{value-unit oil.alkanes.c19 2}}</td>
-              </tr>
-              <tr>
-                <td>C20</td>
-                <td>{{value-unit oil.alkanes.c20 2}}</td>
-              </tr>
-            {{else}}
-              <tr><td>No Data</td></tr>
-            {{/if}}
-          </tbody>
-        </table>
-      </div>
+      <Common::StaticTable
+        @store={{this.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle=""
+        @templateName="alkanes_8_20"
+        @boldTitle={{false}}
+        @propertyName="alkanes"
+        @valueUnit="ppm"
+        @valuePrecision={{3}}
+      />
     </div>
 
-
     <div class="col-xs-12 col-md-6 col-lg-4">
-
-      <div class="table-responsive">
-        {{#if oil.alkanes}}
-          <table class="table table-hover table-bordered">
-            <thead></thead>
-            <tbody id="alkanes-tbody">
-              <tr>
-                <td>C21</td>
-                <td>{{value-unit oil.alkanes.c21 2}}</td>
-              </tr>
-              <tr>
-                <td>C22</td>
-                <td>{{value-unit oil.alkanes.c22 2}}</td>
-              </tr>
-              <tr>
-                <td>C23</td>
-                <td>{{value-unit oil.alkanes.c23 2}}</td>
-              </tr>
-              <tr>
-                <td>C24</td>
-                <td>{{value-unit oil.alkanes.c24 2}}</td>
-              </tr>
-              <tr>
-                <td>C25</td>
-                <td>{{value-unit oil.alkanes.c25 2}}</td>
-              </tr>
-              <tr>
-                <td>C26</td>
-                <td>{{value-unit oil.alkanes.c26 2}}</td>
-              </tr>
-              <tr>
-                <td>C27</td>
-                <td>{{value-unit oil.alkanes.c27 2}}</td>
-              </tr>
-              <tr>
-                <td>C28</td>
-                <td>{{value-unit oil.alkanes.c28 2}}</td>
-              </tr>
-              <tr>
-                <td>C29</td>
-                <td>{{value-unit oil.alkanes.c29 2}}</td>
-              </tr>
-              <tr>
-                <td>C30</td>
-                <td>{{value-unit oil.alkanes.c30 2}}</td>
-              </tr>
-              <tr>
-                <td>C31</td>
-                <td>{{value-unit oil.alkanes.c31 2}}</td>
-              </tr>
-              <tr>
-                <td>C32</td>
-                <td>{{value-unit oil.alkanes.c32 2}}</td>
-              </tr>
-              <tr>
-                <td>C33</td>
-                <td>{{value-unit oil.alkanes.c33 2}}</td>
-              </tr>
-            </tbody>
-          </table>
-        {{/if}}
-      </div>
+      <Common::StaticTable
+        @store={{this.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle=""
+        @templateName="alkanes_21_33"
+        @boldTitle={{false}}
+        @propertyName="alkanes"
+        @valueUnit="ppm"
+        @valuePrecision={{3}}
+      />
     </div>
 
-
     <div class="col-xs-12 col-md-6 col-lg-4">
-
-      <div class="table-responsive">
-        {{#if oil.alkanes}}
-          <table class="table table-hover table-bordered">
-            <thead></thead>
-            <tbody id="alkanes-tbody">
-              <tr>
-                <td>C34</td>
-                <td>{{value-unit oil.alkanes.c34 2}}</td>
-              </tr>
-              <tr>
-                <td>C35</td>
-                <td>{{value-unit oil.alkanes.c35 2}}</td>
-              </tr>
-              <tr>
-                <td>C36</td>
-                <td>{{value-unit oil.alkanes.c36 2}}</td>
-              </tr>
-              <tr>
-                <td>C37</td>
-                <td>{{value-unit oil.alkanes.c37 2}}</td>
-              </tr>
-              <tr>
-                <td>C38</td>
-                <td>{{value-unit oil.alkanes.c38 2}}</td>
-              </tr>
-              <tr>
-                <td>C39</td>
-                <td>{{value-unit oil.alkanes.c39 2}}</td>
-              </tr>
-              <tr>
-                <td>C40</td>
-                <td>{{value-unit oil.alkanes.c40 2}}</td>
-              </tr>
-              <tr>
-                <td>C41</td>
-                <td>{{value-unit oil.alkanes.c41 2}}</td>
-              </tr>
-              <tr>
-                <td>C42</td>
-                <td>{{value-unit oil.alkanes.c42 2}}</td>
-              </tr>
-              <tr>
-                <td>C43</td>
-                <td>{{value-unit oil.alkanes.c43 2}}</td>
-              </tr>
-              <tr>
-                <td>C44</td>
-                <td>{{value-unit oil.alkanes.c44 2}}</td>
-              </tr>
-              <tr>
-                <td>Pristane</td>
-                <td>{{value-unit oil.alkanes.pristane 2}}</td>
-              </tr>
-              <tr>
-                <td>Phytane</td>
-                <td>{{value-unit oil.alkanes.phytane 2}}</td>
-              </tr>
-            </tbody>
-          </table>
-        {{/if}}
-      </div>
+      <Common::StaticTable
+        @store={{this.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle=""
+        @templateName="alkanes_34_44_others"
+        @boldTitle={{false}}
+        @propertyName="alkanes"
+        @valueUnit="ppm"
+        @valuePrecision={{3}}
+      />
     </div>
 
   </div>
