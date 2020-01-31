@@ -387,6 +387,7 @@ const menuTemplate = [
     ]
   },
   // { role: 'windowMenu' }
+  /*
   {
     label: 'Window',
     submenu: [
@@ -402,6 +403,7 @@ const menuTemplate = [
       ])
     ]
   },
+  */
   {
     role: 'help',
     submenu: [
