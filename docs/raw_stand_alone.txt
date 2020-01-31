@@ -49,7 +49,7 @@ update C:\Users\michael.katz\Documents\_scratch\odb\oil_database\mongo_config_de
 
 // see michaeledit in main.js for path changes
 
-PS C:\Users\michael.katz\Documents\_scratch\odb\oil_database\web_client\dist> ..\..\..\adiosdb\python.exe -m http.server 8080
+PS C:\Users\michael.katz\Documents\_scratch\odb\oil_database\StandAlone\client_code> ..\..\..\adiosdb\python.exe -m http.server 8080
 
 PS C:\Users\michael.katz\Documents\_scratch\odb\oil_database> ..\adiosdb\Library\bin\mongod.exe -f ..\oil_database\mongo_config_dev.yml
 
@@ -93,7 +93,6 @@ C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\node_modules
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\include
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\tcl
 
-C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\mkl_*.dll
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\*.pdb
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\libblas.dll
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\libcblas.dll
@@ -109,6 +108,7 @@ C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Lib\tkinter
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\DLLs\tcl86t.dll
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\DLLs\tk86t.dll
 
+C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\mkl_*.dll
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\tcl86t.dll
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\sqlite3.exe
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb\Library\bin\sqlite3.dll
@@ -141,3 +141,22 @@ C:\Users\michael.katz\Documents\_scratch\odb\electron\startup.html
 
 C:\Users\michael.katz\Documents\_scratch\odb\oil_database = 12MB (5 MB zipped)
 C:\Users\michael.katz\Documents\_scratch\odb\adiosdb = 330MB (122 MB zipped)
+
+========================
+
+-------------------------
+STEP 1 (in a conda shell)
+-------------------------
+
+(base) PS C:\Users\michael.katz\Documents\oil_database\StandAlone> conda create -n standalone --file .\standalone_conda_requirements.txt
+
+===> creates C:\Users\michael.katz\AppData\Local\Continuum\miniconda3\envs\standalone
+
+(base) PS C:\Users\michael.katz\Documents\oil_database\StandAlone> conda activate standalone
+
+----------------------------------
+STEP 2 (in a separate conda shell)
+----------------------------------
+
+(base) PS C:\Users\michael.katz\Documents\oil_database\StandAlone> conda activate adiosdb
+(adiosdb) PS C:\Users\michael.katz\Documents\oil_database\StandAlone> python .\build_standalone.py --noconda
