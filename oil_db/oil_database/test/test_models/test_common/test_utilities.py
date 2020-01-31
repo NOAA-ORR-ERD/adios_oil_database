@@ -11,17 +11,23 @@ import pytest
 
 # A few examples to work with
 
+
 @dataclass_to_json
 @dataclass
 class ReallySimple:
     x: int = None
     thing: str = ""
 
+
+class ListOfRS(JSON_List):
+    item_type = ReallySimple
+
+
 @dataclass_to_json
 @dataclass
 class NestedList:
-    these: JSON_List = field(default_factory=JSON_List)
-    those: JSON_List = field(default_factory=JSON_List)
+    these: ListOfRS = field(default_factory=ListOfRS)
+    those: ListOfRS = field(default_factory=ListOfRS)
 
 
 def test_simple_py_json():
@@ -69,7 +75,7 @@ def test_json_list():
 def test_json_list_repr():
     jl = JSON_List([1, 2, 3, 4])
 
-    assert repr(jl) == "JSON_List([1, 2, 3, 4])"
+    assert repr(jl) == "JSON_List([1, 2, 3, 4], item_type=None)"
 
 
 def test_json_list_pyjson_simple():
@@ -79,10 +85,10 @@ def test_json_list_pyjson_simple():
 
 
 def test_json_list_pyjson_nested():
-    jl = JSON_List([ReallySimple(x=5, thing="fred"),
-                    ReallySimple(x=2, thing="bob"),
-                    ReallySimple(x=1, thing="jane"),
-                    ])
+    jl = ListOfRS([ReallySimple(x=5, thing="fred"),
+                   ReallySimple(x=2, thing="bob"),
+                   ReallySimple(x=1, thing="jane"),
+                   ])
 
     pyjson = jl.py_json()
 
@@ -93,8 +99,9 @@ def test_json_list_pyjson_nested():
                       {'x': 1, 'thing': 'jane'},
                       ]
 
+
 def test_nested_list_empty():
-    nl = NestedList(these=[3, 4, 5])
+    nl = NestedList(these=ListOfRS([3, 4, 5]))
 
     print(nl)
     print(nl.these)
@@ -107,9 +114,9 @@ def test_nested_list_empty():
 
 
 def test_nested_list():
-    nl = NestedList(these=JSON_List([ReallySimple(x=2, thing="bob"),
-                                     ReallySimple(x=1, thing="jane"),
-                                     ]))
+    nl = NestedList(these=ListOfRS([ReallySimple(x=2, thing="bob"),
+                                    ReallySimple(x=1, thing="jane"),
+                                    ]))
 
     nl.those.extend([ReallySimple(x=5, thing="fred"),
                      ReallySimple(x=2, thing="bob"),
@@ -125,6 +132,15 @@ def test_nested_list():
                       'those': [{'x': 5, 'thing': 'fred'},
                                 {'x': 2, 'thing': 'bob'},
                                 {'x': 1, 'thing': 'jane'}]}
+
+
+def test_nested_list_none_type():
+    pyjson = [{'x': 2, 'thing': 'bob'},
+              {'x': 1, 'thing': 'jane'}]
+
+    with pytest.raises(TypeError):
+        jl = JSON_List.from_py_json(pyjson)
+
 
 
 def test_nested_list_from_json():

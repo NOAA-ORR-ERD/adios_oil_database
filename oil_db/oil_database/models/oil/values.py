@@ -69,6 +69,10 @@ class Density:
     method: str = None
 
 
+class DensityList(JSON_List):
+    item_type = Density
+
+
 @dataclass_to_json
 @dataclass
 class Viscosity:
@@ -77,4 +81,8 @@ class Viscosity:
     standard_deviation: float = None
     replicates: int = None
     method: str = None
+
+
+class ViscosityList(JSON_List):
+    item_type = Viscosity
 

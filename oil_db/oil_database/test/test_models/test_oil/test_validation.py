@@ -161,7 +161,7 @@ def test_no_densities(big_record):
     oil = big_record
     validate(oil)
 
-    assert snippet_not_in_oil_status("W006:")
+    assert snippet_not_in_oil_status("W006:", oil)
 
     assert False
 
