@@ -76,6 +76,14 @@ class JSON_List(list):
                 json_obj.append(item)
         return json_obj
 
+    def __repr__(self):
+        return f"JSON_List({super().__repr__()})"
+
+    # def __str__(self):
+    #     # why don't either of this work? it's using this repr ??
+    #     # return super().__str__()
+    #     # return list.__str__(self)
+
 
 def dataclass_to_json(cls):
     """
