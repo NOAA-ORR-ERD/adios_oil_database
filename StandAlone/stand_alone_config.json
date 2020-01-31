@@ -1,0 +1,30 @@
+{
+"web_api_host": "0.0.0.0",
+"web_api_port": 9898,
+
+"standalone": true,
+"client_path": "../StandAlone/client_code",
+
+"mongodb.host": "localhost",
+"mongodb.port": "27017",
+"mongodb.database": "oil_database",
+"mongodb.alias": "oil-db-app",
+
+"pyramid.reload_templates": true,
+"pyramid.debug_authorization": false,
+"pyramid.debug_notfound": false,
+"pyramid.debug_routematch": false,
+"pyramid.default_locale_name": "en",
+"pyramid.includes": ["pyramid_tm",
+                     "cornice",
+                     "pyramid_mongodb2"
+                     ],
+
+"cors_policy.origins": ["http://0.0.0.0:9898",
+                        "http://localhost:9898"
+                       ],
+
+"caps.can_modify_db": false,
+
+"log_config_file": "standalone_logging.ini"
+}
