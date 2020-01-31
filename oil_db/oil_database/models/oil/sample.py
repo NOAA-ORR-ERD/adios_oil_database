@@ -33,9 +33,9 @@ class Sample:
 
     pour_point: UnittedValue = None
 
-    densities: List[Density] = field(default_factory=list)
-    kvis: List[Viscosity] = field(default_factory=list)
-    dvis: List[Viscosity] = field(default_factory=list)
+    densities: JSON_List = field(default_factory=JSON_List)
+    kvis: JSON_List = field(default_factory=JSON_List)
+    dvis: JSON_List = field(default_factory=JSON_List)
 
     # Assorted:
 

@@ -39,7 +39,12 @@ logger = logging.getLogger(__name__)
 
 # Putting these all here so we can keep track more easily
 
-WARNINGS = {"W003" : "Record name: {oil.name} is not very descriptive",
+WARNINGS = {"W001": "Record name: {oil.name} is not very descriptive",
+            "W002": "Record has no product type",
+            "W003": "Record has invalid product type. Options are: {valid_types}",
+            "W004": "No api value provided",
+            "W005": "API value: {api} seems unlikely",
+            "W006": "No density values provided",
             }
 
 ERRORS = {"E001": "Record has no name: every record must have a name",
@@ -47,6 +52,25 @@ ERRORS = {"E001": "Record has no name: every record must have a name",
           }
 WARNINGS = {code: (code + ": " + msg) for code, msg in WARNINGS.items()}
 ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}
+
+
+def api_kludge(oil_json):
+    """
+    This it get the API from the zeroth sub_record, where it should not be anyway :-(
+
+    See: https://gitlab.orr.noaa.gov/erd/oil_database/issues/77
+    """
+    print("in api_kludge:")
+    try:
+        print(oil_json['api'])
+    except KeyError:
+        print("no api key")
+    try:
+        oil_json['api'] = oil_json['samples'][0]['apis'][0]['gravity']
+    except (KeyError, IndexError):
+        # if there are no samples,
+        #  or no apis in the zeroth sample
+        oil_json['api'] = None
 
 
 def validate(oil_json):
@@ -60,6 +84,8 @@ def validate(oil_json):
     """
 
     # make an oil object out of it:
+    if 'api' not in oil_json:
+        api_kludge(oil_json)
     try:
         oil = Oil.from_py_json(oil_json)
     except TypeError as err:
@@ -85,7 +111,7 @@ def val_has_reasonable_name(oil):
     we may want to add more later
     """
     if len(oil.name.strip()) < 5:
-        return WARNINGS["W003"].format(oil=oil)
+        return WARNINGS["W001"].format(oil=oil)
     else:
         return None
 
@@ -100,12 +126,12 @@ def val_has_product_type(oil):
                    'other')
 
     if not oil.product_type:
-        return "W001: Record has no product type"
+        return WARNINGS["W002"]
     elif not oil.product_type.lower() in ('crude',
                                           'refined',
                                           'bitumen product',
                                           'other'):
-        return f"W002: Record has no product type. Options are: {valid_types}"
+        return WARNINGS["W003"].format(valid_types=valid_types)
     else:
         return None
 
@@ -118,44 +144,21 @@ def val_check_api(oil):
             return ERRORS["E002"]
     else:
         if api is None:
-            return "W004: No api value provided"
+            return WARNINGS["W004"]
     if not (-60.0 < api < 100):  # somewhat arbitrary limits
-        return "W005: API value: {} seems unlikely".format(api)
+        return WARNINGS["W005"].format(api=api)
+
+def val_check_for_densities(oil):
+    print("in densities check")
+    print(oil.samples[0].densities)
+
+    return None
 
 
 # build a list of all the validators:
 
 VALIDATORS = [ val for name, val in vars().items() if name.startswith("val_")]
 
-
-
-# class OilRejected(Exception):
-#     '''
-#         Custom exception for Oil initialization that we can raise if we
-#         decide we need to reject an oil record for any reason.
-#     '''
-
-#     def __init__(self, message, oil_name, *args):
-#         # without this you may get DeprecationWarning
-#         self.message = message
-
-#         # Special attribute you desire with your Error,
-#         # perhaps the value that caused the error?:
-#         self.oil_name = oil_name
-
-#         # allow users initialize misc. arguments as any other builtin Error
-#         super().__init__(message, oil_name, *args)
-
-#     def __repr__(self):
-#         return '{0}(oil={1}, errors={2})'.format(self.__class__.__name__,
-#                                                  self.oil_name,
-#                                                  self.message)
-
-# # ### Oil Quality checks
-# #
-# # FIXME: At the very least, the checks should return the error message,
-# #        rather than having a separate mapping. But this needs major
-# #        refactoring anyway
 
 
 def oil_record_validation(oil):
@@ -165,7 +168,7 @@ def oil_record_validation(oil):
     errors = []
 
     if not has_product_type(oil):
-        errors.append('W001: Imported record has no product type')
+        errors.append('W002: Imported record has no product type')
 
     if not has_api_or_densities(oil):
         errors.append('E001: Imported record has no density information')
@@ -174,7 +177,7 @@ def oil_record_validation(oil):
         errors.append('E001: Imported record has no viscosity information')
 
     if not has_distillation_cuts(oil):
-        errors.append('W001: Imported record has insufficient '
+        errors.append('W002: Imported record has insufficient '
                       'distillation cut data')
 
     return errors

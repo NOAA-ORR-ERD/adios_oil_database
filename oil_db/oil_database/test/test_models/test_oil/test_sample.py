@@ -1,6 +1,7 @@
 
 import pytest
 
+from oil_database.models.common.utilities import JSON_List
 from oil_database.models.oil.sample import Sample
 from oil_database.models.oil.values import (Density, Viscosity, UnittedValue)
 
@@ -32,7 +33,7 @@ def test_sample_add_non_existing():
 
 def test_sample_json_full():
     s = Sample()
-    py_json = s.py_json(sparse=False)  # the sparse version
+    py_json = s.py_json(sparse=False)  # the not sparse version
 
     print(py_json)
 
@@ -55,7 +56,8 @@ def test_complete_sample():
                )
     s.fraction_weathered = 0.23
     s.boiling_point_range = None
-    s.densities = [Density(standard_deviation=1.2,
+    s.densities = JSON_List(
+                   [Density(standard_deviation=1.2,
                            replicates=3,
                            density=UnittedValue(0.8751, "kg/m^3"),
                            ref_temp=UnittedValue(15.0, "C"),
@@ -65,7 +67,28 @@ def test_complete_sample():
                            density=UnittedValue(0.99, "kg/m^3"),
                            ref_temp=UnittedValue(25.0, "C"),
                            ),
-                   ]
+                   ])
+    py_json = s.py_json(sparse=False)  # the not sparse version
+
+    print(py_json)
+
+    assert py_json['name'] == "a longer name that is more descriptive"
+    assert py_json['short_name'] == "short"
+    for name in ('fraction_weathered',
+                 'boiling_point_range',
+                 'densities',
+                 'kvis',
+                 'dvis',
+                 ):
+        assert name in py_json
+
+    # Now test some real stuff:
+    dens = py_json['densities']
+    # type of densities
+    print(type(dens))
+    assert dens[0]['density']['value'] == 0.8751
+
+# def test_sample_from_json():
 
 
 
