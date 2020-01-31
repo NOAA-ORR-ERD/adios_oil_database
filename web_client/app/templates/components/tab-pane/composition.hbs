@@ -85,28 +85,52 @@
   </div>
 
   <div class="row">
-    <Table::Benzene @oil={{oil}} class="col-6"/>
+    <Table::Benzene
+      @oil={{this.oil}}
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      class="col-6"/>
   </div>
   &nbsp;
 
   <div class="row">
-    <Table::BenzeneBtex @oil={{oil}} class="col-6"/>
+    <Table::BenzeneBtex
+      @oil={{this.oil}}
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      class="col-6"/>
 
-    <Table::BenzeneC4c6 @oil={{oil}} class="col-6"/>
+    <Table::BenzeneC4c6
+      @oil={this.{oil}}
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      class="col-6"/>
   </div>
   &nbsp;
 
-  <Table::AlkylatedPah @oil={{oil}} />
+  <Table::AlkylatedPah
+    @oil={{this.oil}}
+    @editable={{this.editable}}
+    @submit={{this.submit}}
+/>
 
   <div class="row">
-    <Table::Alkane @oil={{oil}} class="col-12"/>
+    <Table::Alkane
+      @oil={{this.oil}}
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      class="col-12"/>
   </div>
 
   <div class="row">
   </div>
 
   <div class="row">
-    <Table::Biomarkers @oil={{oil}} class="col-6"/>
+    <Table::Biomarkers
+      @oil={{this.oil}}
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      class="col-6"/>
   </div>
 
 </div>
