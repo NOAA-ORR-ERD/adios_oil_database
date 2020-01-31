@@ -24,7 +24,7 @@ export default class StaticTable extends Component {
         }
         else {
             // Otherwise use the slugified table title
-            template = slugify(this.args.tableTitle) + '.json';
+            template = slugify(this.args.tableTitle, { separator: '_' }) + '.json';
         }
         
         if (typeof this.args.boldTitle === 'undefined') {

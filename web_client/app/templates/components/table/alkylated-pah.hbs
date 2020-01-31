@@ -40,40 +40,64 @@
 
         <div class="col-xs-12 col-lg-6">
           <div class="table-responsive">
-            <Table::AlkylatedPah::CxF
+            <Common::StaticTable
+              @store={{this.store}}
               @oil={{this.oil}}
               @editable={{this.editable}}
               @submit={{this.submit}}
+              @tableTitle="Fluorenes"
+              @boldTitle={{false}}
+              @propertyName="alkylated_pahs"
+              @valueUnit="ppm"
+              @valuePrecision={{3}}
             />
           </div>
         </div>
 
         <div class="col-xs-12 col-lg-6">
           <div class="table-responsive">
-            <Table::AlkylatedPah::CxC
+            <Common::StaticTable
+              @store={{this.store}}
               @oil={{this.oil}}
               @editable={{this.editable}}
               @submit={{this.submit}}
+              @tableTitle="Chrysenes"
+              @boldTitle={{false}}
+              @propertyName="alkylated_pahs"
+              @valueUnit="ppm"
+              @valuePrecision={{3}}
             />
           </div>
         </div>
 
         <div class="col-xs-12 col-lg-6">
           <div class="table-responsive">
-            <Table::AlkylatedPah::CxB
+            <Common::StaticTable
+              @store={{this.store}}
               @oil={{this.oil}}
               @editable={{this.editable}}
               @submit={{this.submit}}
+              @tableTitle="Benzonaphthothiophenes"
+              @boldTitle={{false}}
+              @propertyName="alkylated_pahs"
+              @valueUnit="ppm"
+              @valuePrecision={{3}}
             />
           </div>
         </div>
 
         <div class="col-xs-12 col-lg-6">
           <div class="table-responsive">
-            <Table::AlkylatedPah::CxD
+            <Common::StaticTable
+              @store={{this.store}}
               @oil={{this.oil}}
               @editable={{this.editable}}
               @submit={{this.submit}}
+              @tableTitle="Dibenzothiophenes"
+              @boldTitle={{false}}
+              @propertyName="alkylated_pahs"
+              @valueUnit="ppm"
+              @valuePrecision={{3}}
             />
           </div>
         </div>
@@ -83,10 +107,16 @@
 
     <div class="col-xs-6 col-sm-6 col-lg-4">
       <div class="table-responsive">
-        <Table::AlkylatedPah::Other
+        <Common::StaticTable
+          @store={{this.store}}
           @oil={{this.oil}}
           @editable={{this.editable}}
           @submit={{this.submit}}
+          @tableTitle="Other Priority PAHs"
+          @boldTitle={{false}}
+          @propertyName="alkylated_pahs"
+          @valueUnit="ppm"
+          @valuePrecision={{3}}
         />
       </div>
     </div>
