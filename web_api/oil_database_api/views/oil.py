@@ -27,10 +27,11 @@ oil_api = Service(name='oil', path='/oils*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
-## fixme: this could be a class attribute, and make memoize a class
-##        might be good to mange the cache better, etc.
+# fixme: this could be a class attribute, and make memoize a class
+#        might be good to mange the cache better, etc.
+#        and keep all the functionality together
+#        e.g. clearing the cache when the record changes
 memoized_results = {}  # so it is visible to other functions
-
 def memoize_oil_arg(func):
     '''
         Decorator function to cache function results by oil_id
@@ -260,6 +261,7 @@ def insert_oil(request):
         # an exception in any other case.
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
+        # validate here
     except Exception as e:
         raise HTTPBadRequest(e)
 
@@ -297,6 +299,7 @@ def update_oil(request):
         # an exception in any other case.
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
+        # validate here
     except Exception:
         raise HTTPBadRequest
 

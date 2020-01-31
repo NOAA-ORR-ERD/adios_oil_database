@@ -23,6 +23,37 @@ def no_type_oil():
     return no_type_oil
 
 
+def snippet_in_oil_status(snippet, oil):
+    """
+    checks if the particular snippet in one of the messages
+    """
+    for msg in oil["status"]:
+        if snippet in msg:
+            return True
+    return False
+
+def test_no_name():
+    oil = {}
+    validate(oil)
+
+    assert "E001: Record has no name: every record must have a name" in oil['status']
+
+
+@pytest.mark.parametrize("name", ["  ",
+                                  "X",
+                                  "4",
+                                  "this"
+                                  ])
+def test_reasonable_name(name):
+    # unreasonable names should fail
+    oil = {"name": name}  # only spaces
+    validate(oil)
+
+    assert snippet_in_oil_status("W003:", oil)
+
+
+
+
 def test_no_type(no_type_oil):
     validate(no_type_oil)
 
@@ -74,4 +105,19 @@ def test_big_record_no_type(big_record):
         assert False
 
     assert True
+
+
+def test_no_api_crude(no_type_oil):
+    oil = no_type_oil
+    oil['product_type'] = "Crude"
+    validate(oil)
+    assert snippet_in_oil_status("E002:", oil)
+
+
+def test_no_api_not_crude(no_type_oil):
+    oil = no_type_oil
+    oil['product_type'] = "Refined"
+    validate(oil)
+    assert snippet_in_oil_status("W004:", oil)
+
 
