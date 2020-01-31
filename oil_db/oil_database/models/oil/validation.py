@@ -92,13 +92,13 @@ def validate(oil_json):
         else:  # some other TypeError
             raise
 
-    messages = []
+    messages = set()
     for val_fun in VALIDATORS:
         msg = val_fun(oil)
         if msg:
-            messages.append(msg)
+            messages.add(msg)
 
-    oil_json["status"] = messages
+    oil_json["status"] = list(messages)
 
 
 def val_has_reasonable_name(oil):
@@ -153,7 +153,6 @@ def val_check_for_samples(oil):
 
 def val_check_for_densities(oil):
     # note: would be good to be smart about temp densities are at
-    print("in densities check")
     if not oil.samples:
         return WARNINGS["W006"]
 
@@ -164,18 +163,14 @@ def val_check_for_densities(oil):
 
 
 def val_check_for_distillation_cuts(oil):
-    print("in dist cuts check")
     try:
         sample = oil.samples[0]
-        print("there is a sample")
     except (AttributeError, IndexError):
         return None
     try:
         if not sample.cuts:
-            print("cuts, but empty")
             return WARNINGS["W007"]
     except AttributeError:
-        print("no cuts attribute")
         return WARNINGS["W007"]
     return None
 
