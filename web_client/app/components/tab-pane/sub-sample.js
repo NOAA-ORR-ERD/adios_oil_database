@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import $ from 'jquery';
 
 export default Component.extend({
     didReceiveAttrs() {
@@ -20,8 +21,10 @@ export default Component.extend({
     },
 
     didInsertElement() {
-        if (this.savedCategoryTab &&
-            this.element.querySelector(this.savedCategoryTab))
+        this._super(...arguments);
+
+        if (this.categoryTab &&
+            this.element.querySelector(this.categoryTab))
         {
             this.element.querySelectorAll('.tab-pane').forEach(i => {
                 i.classList.remove('active', 'show');
@@ -31,11 +34,11 @@ export default Component.extend({
                 i.setAttribute('aria-selected', false);
             });
 
-            let elem = this.element.querySelector(`a[href="${this.savedCategoryTab}"]`);
+            let elem = this.element.querySelector(`a[href="${this.categoryTab}"]`);
             elem.setAttribute('aria-selected', true);
             elem.classList.add('active');
 
-            this.element.querySelector(this.savedCategoryTab)
+            this.element.querySelector(this.categoryTab)
                 .classList.add('active', 'show');
         }
         else {
@@ -59,10 +62,10 @@ export default Component.extend({
 
     actions: {
         shown(event) {
-            event.data.set('savedCategoryTab', event.currentTarget.hash);
+            event.data.updateCategoryTab(event.currentTarget.hash);
         },
 
-        submitSample(sample) {
+        submitSample() {
             let oil = this.get('oil');
             // let samples =  oil.samples;
             // samples[this.sampleIndex] = sample;

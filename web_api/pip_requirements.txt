@@ -4,4 +4,5 @@
 # This is now in conda-forge.
 # pyramid_mongodb2
 
-https://github.com/NOAA-ORR-ERD/cornice/archive/v4.1.0-noaa.tar.gz
+# only need this if you want to build with PyInstaller
+# https://github.com/NOAA-ORR-ERD/cornice/archive/v4.1.0-noaa.tar.gz

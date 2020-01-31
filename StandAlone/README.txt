@@ -20,7 +20,7 @@ Do this if you are *not* using PyInstaller
 
 This is a pretty easy step: you simply build an environment in the usual way:
 
-`conda create -n standalone standalone_standalone_conda_requirements.txt`
+`conda create -n standalone --file standalone_standalone_conda_requirements.txt`
 
 That should create an directory called "standalone" in your miniconda3/envs dir (Or somewhere like that)
 
@@ -44,6 +44,10 @@ The ember app built and put somewhere.
 
 Then it should be runnable.
 
-There is a script: `build_standalone.py` in the Standalone directory that should do all that.
+There is a script: `build_standalone.py` in the Standalone directory that should do all that for you. you can look at it to see what it does.
+
+Be default, it updates and builds everything, but you can turn some of that off if you are running it multiple times:
+
+
 
 

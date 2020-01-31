@@ -41,12 +41,36 @@ export default class AddSampleDlg extends Component {
     }
 
     @action
+    setModalEvents(element) {
+        // Note: Bootstrap modals can not be modified with event handlers until
+        //       the elements are completely rendered.  So we can't add an 'on'
+        //       handler in the template like you would normally be able to do.
+        //       So we add a did-insert handler in the template, attaching it
+        //       to this function.
+        // Note: Ember doesn't want you to use JQuery for some purity reason,
+        //       and it throws warnings when the app starts.
+        //       Unfortunately, JQuery is the only way to add an event listener
+        //       to a bootstrap modal.
+        //       Don't believe me?  https://stackoverflow.com/questions/24211185/twitter-bootstrap-why-do-modal-events-work-in-jquery-but-not-in-pure-js
+        $(element).on('shown.bs.modal', this.shown);
+    }
+
+    @action
+    shown(event) {
+        event.currentTarget.querySelector('input').focus();
+    }
+
+    @action
     updateFraction(event) {
         if (event.target.value === '') {
             this.weatheredFraction = NaN;
         }
         else {
             this.weatheredFraction = Number(event.target.value);
+        }
+
+        if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
+            this.okButton.focus();
         }
     }
 
@@ -68,11 +92,19 @@ export default class AddSampleDlg extends Component {
         else {
             this.distillateMax = Number(event.target.value);
         }
+
+        if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
+            this.okButton.focus();
+        }
     }
 
     @action
     updateName(event) {
         this.sampleName = event.target.value;
+
+        if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
+            this.okButton.focus();
+        }
     }
 
     @action
@@ -85,6 +117,7 @@ export default class AddSampleDlg extends Component {
         let newSample;
         let name, shortName;
         let min, max;
+        let unit;
 
         switch (this.sampleType) {
         case this.SampleTypes.weathered:
@@ -106,21 +139,27 @@ export default class AddSampleDlg extends Component {
         case this.SampleTypes.distillate:
             min = roundRelative([this.distillateMin, 2]);
             max = roundRelative([this.distillateMax, 2]);
+            unit = 'C';
+
 
             if (!(Number.isNaN(min) || Number.isNaN(max))) {
-                name = shortName = `BP Range: ${min} °F \u2192 ${max} °F`;
+                name = shortName = `BP Range: ${min} °${unit} \u2192 ${max} °${unit}`;
             }
             else if (Number.isNaN(min)) {
-                name = shortName = `BP Range: <${max} °F`;
+                name = shortName = `BP Range: <${max} °${unit}`;
             }
             else {
-                name = shortName = `BP Range: >${min} °F`;
+                name = shortName = `BP Range: >${min} °${unit}`;
             }
 
             newSample = {
                     'name': name,
                     'short_name': shortName,
-                    'boiling_point_range': [min, max]
+                    'boiling_point_range': {
+                        'unit': unit,
+                        'min_value': min,
+                        'max_value': max
+                    }
                 };
             break;
         case this.SampleTypes.nameOnly:
