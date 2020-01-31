@@ -15,6 +15,7 @@ from .values import (UnittedValue,
                      # Viscosity,
                      DensityList,
                      ViscosityList,
+                     DistCutsList,
                      )
 
 from dataclasses import dataclass, field
@@ -41,7 +42,7 @@ class Sample:
     densities: DensityList = field(default_factory=DensityList)
     kvis: ViscosityList = field(default_factory=ViscosityList)
     dvis: ViscosityList = field(default_factory=ViscosityList)
-
+    cuts: DistCutsList = field(default_factory=DistCutsList)
     # Assorted:
 
     sulfur_mass_fraction: UnittedValue = None
@@ -60,6 +61,3 @@ class Sample:
 
 class SampleList(JSON_List):
     item_type = Sample
-
-    def __init__(self):
-        self.append(Sample())

@@ -45,10 +45,12 @@ WARNINGS = {"W001": "Record name: {oil.name} is not very descriptive",
             "W004": "No api value provided",
             "W005": "API value: {api} seems unlikely",
             "W006": "No density values provided",
+            "W007": "No distillation data provided"
             }
 
 ERRORS = {"E001": "Record has no name: every record must have a name",
           "E002": "Crude Oils must have an API",
+          "E003": "No Properties data at all",
           }
 WARNINGS = {code: (code + ": " + msg) for code, msg in WARNINGS.items()}
 ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}
@@ -60,11 +62,6 @@ def api_kludge(oil_json):
 
     See: https://gitlab.orr.noaa.gov/erd/oil_database/issues/77
     """
-    print("in api_kludge:")
-    try:
-        print(oil_json['api'])
-    except KeyError:
-        print("no api key")
     try:
         oil_json['api'] = oil_json['samples'][0]['apis'][0]['gravity']
     except (KeyError, IndexError):
@@ -148,10 +145,38 @@ def val_check_api(oil):
     if not (-60.0 < api < 100):  # somewhat arbitrary limits
         return WARNINGS["W005"].format(api=api)
 
-def val_check_for_densities(oil):
-    print("in densities check")
-    print(oil.samples[0].densities)
 
+def val_check_for_samples(oil):
+    if not oil.samples:
+        return ERRORS["E003"]
+
+
+def val_check_for_densities(oil):
+    # note: would be good to be smart about temp densities are at
+    print("in densities check")
+    if not oil.samples:
+        return WARNINGS["W006"]
+
+    if not oil.samples[0].densities:
+        return WARNINGS["W006"]
+
+    return None
+
+
+def val_check_for_distillation_cuts(oil):
+    print("in dist cuts check")
+    try:
+        sample = oil.samples[0]
+        print("there is a sample")
+    except (AttributeError, IndexError):
+        return None
+    try:
+        if not sample.cuts:
+            print("cuts, but empty")
+            return WARNINGS["W007"]
+    except AttributeError:
+        print("no cuts attribute")
+        return WARNINGS["W007"]
     return None
 
 

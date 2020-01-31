@@ -96,10 +96,10 @@ def test_complete_sample():
 
 # def test_sample_from_json():
 
-
-def test_samplelist():
-    sl = SampleList()
-    assert len(sl) == 1
-    assert type(sl[0]) == Sample
+# now allowing empty sample list
+# def test_samplelist():
+#     sl = SampleList()
+#     assert len(sl) == 1
+#     assert type(sl[0]) == Sample
 
 

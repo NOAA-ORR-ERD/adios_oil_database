@@ -1,3 +1,4 @@
+
 """
 Main class that represents an oil record.
 
@@ -85,4 +86,17 @@ class Viscosity:
 
 class ViscosityList(JSON_List):
     item_type = Viscosity
+
+@dataclass_to_json
+@dataclass
+class DistCuts:
+    fraction: UnittedValue = None
+    vapor_temp: UnittedValue = None
+
+
+class DistCutsList(JSON_List):
+    """
+    needs some refactoring: should be method, for one
+    """
+    item_type = DistCuts
 

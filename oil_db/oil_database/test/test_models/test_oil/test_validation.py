@@ -10,7 +10,7 @@ import copy
 from oil_database.models.oil.validation import validate
 
 # NOTE: this should be updated when the data model is updated.
-BIG_RECORD = json.load(open(Path(__file__).parent / "ExampleBigRecord_pp.json"))
+BIG_RECORD = json.load(open(Path(__file__).parent / "AlaskaNorthSlope2015.json"))
 
 
 @pytest.fixture
@@ -133,6 +133,11 @@ def test_api_outragious(no_type_oil):
     assert snippet_in_oil_status("W005:", oil)
 
 
+def test_no_subsamples(no_type_oil):
+    oil = no_type_oil
+    validate(oil)
+    assert snippet_in_oil_status("E003", oil)
+
 
 def test_api_real_record(big_record):
     """
@@ -163,5 +168,29 @@ def test_no_densities(big_record):
 
     assert snippet_not_in_oil_status("W006:", oil)
 
-    assert False
 
+def test_no_densities(big_record):
+    oil = big_record
+    oil['samples'][0]['densities'] = []
+    validate(oil)
+
+    assert snippet_in_oil_status("W006:", oil)
+
+
+def test_distillation_cuts(big_record):
+    oil = big_record
+
+    validate(oil)
+
+    assert snippet_not_in_oil_status("W007:", oil)
+    oil['samples'][0]
+
+
+def test_no_distillation_cuts(big_record):
+    oil = big_record
+    print(oil['samples'][0]['cuts'])
+    # remove the cut data
+    oil['samples'][0]['cuts'] = []
+    validate(oil)
+
+    assert snippet_in_oil_status("W007:", oil)
