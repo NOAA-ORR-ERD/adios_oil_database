@@ -9,10 +9,10 @@
             {{#if (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName))}}
               {{#with (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName)) as |sara|}}
                 <td>{{get sara this.args.typeField}}</td>
-                  <td>{{value-unit (get sara this.args.valueField) this.args.valuePrecision}}</td>
+                <td>{{value-unit (get sara this.args.valueField) this.args.valuePrecision}}</td>
               {{/with}}
             {{else}}
-              <td>this.propertyTypesObj[type].label</td><td>No Data</td>
+              <td>{{get (get this.propertyTypesObj type) "label"}}</td><td>No Data</td>
             {{/if}}
           </tr>
         {{/each}}
