@@ -4,7 +4,9 @@ import pytest
 from oil_database.models.oil.values import (UnittedValue,
                                             UnittedRange,
                                             Density,
+                                            DensityList,
                                             Viscosity,
+                                            ViscosityList,
                                             )
 
 
@@ -154,6 +156,31 @@ def test_DM_from_py_json():
     assert dm.density.value == 0.8751
     assert dm.ref_temp == UnittedValue(value=15.0, unit='C')
     assert dm.ref_temp.unit == "C"
+
+
+def test_density_list_falsey():
+    dl = DensityList()
+
+    assert not dl
+
+
+def test_DensityList_fromjson():
+    pyjson = [{'standard_deviation': 1.2,
+               'replicates': 3,
+               'density': {'value': 0.8751, 'unit': 'kg/m^3'},
+               'ref_temp': {'value': 15.0, 'unit': 'C'}
+               },
+              {'standard_deviation': 1.1,
+               'replicates': 3,
+               'density': {'value': 0.8751, 'unit': 'kg/m^3'},
+               'ref_temp': {'value': 15.0, 'unit': 'C'}
+               },
+              ]
+    dl = DensityList.from_py_json(pyjson)
+
+    assert len(dl) == 2
+    assert dl[0].density.value == 0.8751
+    assert dl[1].standard_deviation == 1.1
 
 
 def test_Viscosity_empty():

@@ -19,8 +19,9 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
                                                   EnvCanadaAttributeMapper)
 
-from oil_database.db_init.validation import oil_record_validation
+# from oil_database.db_init.validation import oil_record_validation
 from oil_database.db_init.categories import link_oil_to_categories
+from oil_database.models.oil.validation import validate
 
 logger = logging.getLogger(__name__)
 
@@ -232,12 +233,13 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
             try:
                 oil_obj = mapper_cls(parser_cls(*record_data))
 
-                oil_obj.status = oil_record_validation(oil_obj)
+                # oil_obj.status = oil_record_validation(oil_obj)
 
-                if len(oil_obj.status) == 0:
-                    link_oil_to_categories(oil_obj)
-
-                oil_collection.insert_one(oil_obj.dict())
+                # if len(oil_obj.status) == 0:
+                link_oil_to_categories(oil_obj)
+                oil_pyjson = oil_obj.dict()
+                validate(oil_pyjson)
+                oil_collection.insert_one(oil_pyjson)
             except DuplicateKeyError as e:
                 print('Duplicate fields for {}: {}'
                       .format(tc.change(oil_obj.oil_id, 'red'), e))

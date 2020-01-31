@@ -98,8 +98,8 @@ os.chdir('..')
 #  Client
 # ######
 
+# still may need this for mongod: used to rebuild database
 pids.insert(0, os.getpid())
-
 monitor = Popen(['python', 'utilities/monitor_and_kill.py'] +
                 [str(pid) for pid in pids])
 
@@ -125,11 +125,12 @@ def kill_everything():
 atexit.register(kill_everything)
 
 if run_servers:
+
     wait_for_client_server()
     webbrowser.open('http://localhost:4200/', new=1)
 
-while True:
-    print("App running: http://localhost:4200/")
-    print("Hit ^C To stop:")
-    time.sleep(2.0)
+    while True:
+        print("App running: http://localhost:4200/")
+        print("Hit ^C To stop:")
+        time.sleep(2.0)
 

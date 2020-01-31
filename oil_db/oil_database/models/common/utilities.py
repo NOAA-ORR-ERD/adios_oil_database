@@ -23,15 +23,15 @@ def _py_json(self, sparse=True):
     json_obj = {}
     for fieldname in self.__dataclass_fields__.keys():
         val = getattr(self, fieldname)
-        try:
-            json_obj[fieldname] = val.py_json(sparse=sparse)
+        try:  # convert to json
+            val = val.py_json(sparse=sparse)
         except AttributeError:
-            if not sparse:
-                json_obj[fieldname] = val
-            elif not (val is None or (val in ("", [], {}))):
-                #  can't just use falsey -- zero is falsey,
-                #  but also a valid value.
-                json_obj[fieldname] = val
+            pass
+        if not sparse:
+            json_obj[fieldname] = val
+        elif ((val == 0) or (val is not None) and val):
+            json_obj[fieldname] = val
+
     return json_obj
 
 
@@ -66,7 +66,11 @@ class JSON_List(list):
 
     A regular list can only be converted to JSON if it has
     JSON-able objects in it.
+
+    Note: msut be subclassed, and the item_type attribute set
     """
+    item_type = None
+
     def py_json(self, sparse=True):
         json_obj = []
         for item in self:
@@ -75,6 +79,30 @@ class JSON_List(list):
             except AttributeError:
                 json_obj.append(item)
         return json_obj
+
+    @classmethod
+    def from_py_json(cls, py_json):
+        """
+        create a JSON_List from json array of objects
+        that may be json-able.
+        """
+        if cls.item_type is None:
+            raise TypeError("You can not reconstruct a "
+                            "list of unknown type")
+        jl = cls()  # an empty JSON_List
+        # loop through contents
+        for item in py_json:
+            jl.append(cls.item_type.from_py_json(item))
+        return jl
+
+    def __repr__(self):
+        return (f"{self.__class__.__name__}({super().__repr__()}, "
+                f"item_type={self.item_type})")
+
+    # def __str__(self):
+    #     # why don't either of this work? it's using this repr ??
+    #     # return super().__str__()
+    #     # return list.__str__(self)
 
 
 def dataclass_to_json(cls):
