@@ -8,7 +8,7 @@
  --}}
 {{#if this.args.editable}}
   <div class="input-group">
-    {{#if this.args.valueObject.value}}
+    {{#if (or this.args.valueObject.value (eq this.args.valueObject.value 0))}}
       <Input
         @type="text"
         @class="bg-transparent border form-control"
@@ -30,7 +30,7 @@
     </label>
   </div>
 {{else}}
-  {{#if this.valueObject.value}}
+  {{#if (or this.valueObject.value (eq this.args.valueObject.value 0))}}
     {{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
       this.args.valuePrecision}}
   {{else}}
