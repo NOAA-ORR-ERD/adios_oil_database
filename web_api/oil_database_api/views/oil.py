@@ -14,6 +14,7 @@ from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
+from oil_database.models.oil.validation import validate
 
 from oil_database_api.common.views import (cors_policy,
                                            obj_id_from_url)
@@ -261,9 +262,13 @@ def insert_oil(request):
         # an exception in any other case.
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
-        # validate here
     except Exception as e:
         raise HTTPBadRequest(e)
+
+    try:
+        validate(json_obj)
+    except Exception as e:  # anything goes wrong with the validation
+        logger.error(f'Validation Error: {obj_id}: {e}')
 
     try:
         logger.info('oil.name: {}'.format(json_obj['name']))
@@ -299,13 +304,15 @@ def update_oil(request):
         # an exception in any other case.
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
-        # validate here
     except Exception:
         raise HTTPBadRequest
 
     try:
         fix_oil_id(json_obj, obj_id)
-
+        try:
+            validate(json_obj)
+        except Exception as e:  # anything goes wrong with the validation
+            logger.error(f'Validation Error: {obj_id}: {e}')
         (request.db.oil_database.oil
          .replace_one({'_id': json_obj['_id']}, json_obj))
 

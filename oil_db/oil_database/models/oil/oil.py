@@ -10,7 +10,7 @@ from ..common.utilities import (dataclass_to_json,
                                 JSON_List,
                                 )
 
-from .sample import Sample, list_of_samples
+from .sample import Sample, SampleList
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -34,7 +34,7 @@ class Oil:
     api: float = None
     product_type: str = ""
     # fixme: this should really be "sub_samples"
-    samples: List[Sample] = field(default_factory=list_of_samples)
+    samples: SampleList = field(default_factory=SampleList)
     extra_data: Dict = field(default_factory=dict)
 
     def __post_init__(self):

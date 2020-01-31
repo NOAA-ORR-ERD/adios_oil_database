@@ -9,7 +9,8 @@ import copy
 
 from oil_database.models.oil.validation import validate
 
-BIG_RECORD = json.load(open(Path(__file__).parent / "ExampleBigRecord_pp.json"))
+# NOTE: this should be updated when the data model is updated.
+BIG_RECORD = json.load(open(Path(__file__).parent / "AlaskaNorthSlope2015.json"))
 
 
 @pytest.fixture
@@ -32,6 +33,17 @@ def snippet_in_oil_status(snippet, oil):
             return True
     return False
 
+
+def snippet_not_in_oil_status(snippet, oil):
+    """
+    checks if the particular snippet in one of the messages
+    """
+    for msg in oil["status"]:
+        if snippet in msg:
+            return False
+    return True
+
+
 def test_no_name():
     oil = {}
     validate(oil)
@@ -49,15 +61,13 @@ def test_reasonable_name(name):
     oil = {"name": name}  # only spaces
     validate(oil)
 
-    assert snippet_in_oil_status("W003:", oil)
-
-
+    assert snippet_in_oil_status("W001:", oil)
 
 
 def test_no_type(no_type_oil):
     validate(no_type_oil)
 
-    assert 'W001: Record has no product type' in no_type_oil["status"]
+    assert snippet_in_oil_status("W002:", no_type_oil)
 
 
 def test_bad_type(no_type_oil):
@@ -65,7 +75,7 @@ def test_bad_type(no_type_oil):
     validate(no_type_oil)
 
     print(no_type_oil["status"])
-    assert "W002: Record has no product type. Options are: ('crude', 'refined', 'bitumen product', 'other')" in no_type_oil["status"]
+    assert snippet_in_oil_status("W003:", no_type_oil)
 
 
 def test_correct_type(no_type_oil):
@@ -98,13 +108,8 @@ def test_big_record_no_type(big_record):
     validate(big_record)
 
     print(big_record["status"])
-    for msg in big_record["status"]:
-        if msg.startswith("W001"):
-            break
-    else:
-        assert False
 
-    assert True
+    assert snippet_in_oil_status("W002", big_record)
 
 
 def test_no_api_crude(no_type_oil):
@@ -121,3 +126,71 @@ def test_no_api_not_crude(no_type_oil):
     assert snippet_in_oil_status("W004:", oil)
 
 
+def test_api_outragious(no_type_oil):
+    oil = no_type_oil
+    oil['api'] = -200
+    validate(oil)
+    assert snippet_in_oil_status("W005:", oil)
+
+
+def test_no_subsamples(no_type_oil):
+    oil = no_type_oil
+    validate(oil)
+    assert snippet_in_oil_status("E003", oil)
+
+
+def test_api_real_record(big_record):
+    """
+    note that this used a real record as of version 1:
+
+    api is stored in the zeroth subrecord..
+
+    so this makes sure the API tests work with that.
+    """
+    oil = big_record
+    validate(oil)
+
+    assert snippet_not_in_oil_status("E002:", oil)
+    assert snippet_not_in_oil_status("W004:", oil)
+
+
+def test_density_data(big_record):
+    oil = big_record
+
+    validate(oil)
+
+    assert snippet_not_in_oil_status("W004:", oil)
+
+
+def test_no_densities(big_record):
+    oil = big_record
+    validate(oil)
+
+    assert snippet_not_in_oil_status("W006:", oil)
+
+
+def test_no_densities(big_record):
+    oil = big_record
+    oil['samples'][0]['densities'] = []
+    validate(oil)
+
+    assert snippet_in_oil_status("W006:", oil)
+
+
+def test_distillation_cuts(big_record):
+    oil = big_record
+
+    validate(oil)
+
+    assert snippet_not_in_oil_status("W007:", oil)
+    oil['samples'][0]
+
+
+def test_no_distillation_cuts(big_record):
+    oil = big_record
+    print(oil['samples'][0]['cuts'])
+    # remove the cut data
+    oil['samples'][0]['cuts'] = []
+    validate(oil)
+
+    assert snippet_in_oil_status("W007:", oil)

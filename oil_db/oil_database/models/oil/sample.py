@@ -10,7 +10,13 @@ from ..common.utilities import (dataclass_to_json,
                                 JSON_List,
                                 )
 
-from .values import UnittedValue, Density, Viscosity
+from .values import (UnittedValue,
+                     # Density,
+                     # Viscosity,
+                     DensityList,
+                     ViscosityList,
+                     DistCutsList,
+                     )
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -33,10 +39,10 @@ class Sample:
 
     pour_point: UnittedValue = None
 
-    densities: List[Density] = field(default_factory=list)
-    kvis: List[Viscosity] = field(default_factory=list)
-    dvis: List[Viscosity] = field(default_factory=list)
-
+    densities: DensityList = field(default_factory=DensityList)
+    kvis: ViscosityList = field(default_factory=ViscosityList)
+    dvis: ViscosityList = field(default_factory=ViscosityList)
+    cuts: DistCutsList = field(default_factory=DistCutsList)
     # Assorted:
 
     sulfur_mass_fraction: UnittedValue = None
@@ -53,11 +59,5 @@ class Sample:
     hydrogen_sulfide_concentration: UnittedValue = None
 
 
-
-
-
-def list_of_samples():
-    """
-    create a list with one sample -- to use as a factory function
-    """
-    return JSON_List([Sample()])
+class SampleList(JSON_List):
+    item_type = Sample
