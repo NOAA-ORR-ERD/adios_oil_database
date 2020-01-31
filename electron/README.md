@@ -42,7 +42,7 @@ To build the standalone electron app, follow the instructions on https://github.
 
 (1) `npm install electron-packager -g`
 
-(2) From the electron subdirectory: `electron-packager . --icon .\oil-barrel.ico`
+(2) From the electron subdirectory: `electron-packager . --icon .\adiosdb.ico`
 
 (Note also that we've added "productName": "ADIOS Oil Database" to package.json.)
 
