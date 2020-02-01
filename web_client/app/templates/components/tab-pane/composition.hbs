@@ -91,6 +91,7 @@
       @oil={{this.oil}}
       @editable={{this.editable}}
       @submit={{this.submit}}
+      @store={{this.parentView.oil.store}}
       class="col-6"/>
   </div>
   &nbsp;
@@ -99,12 +100,14 @@
     <Table::BenzeneBtex
       @oil={{this.oil}}
       @editable={{this.editable}}
+      @store={{this.parentView.oil.store}}
       @submit={{this.submit}}
       class="col-6"/>
 
     <Table::BenzeneC4c6
       @oil={{this.oil}}
       @editable={{this.editable}}
+      @store={{this.parentView.oil.store}}
       @submit={{this.submit}}
       class="col-6"/>
   </div>
