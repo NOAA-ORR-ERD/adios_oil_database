@@ -1,7 +1,9 @@
 {
   "id": "benzene_and_alkylated_benzene.json",
-  "benzene": {
-    "label": "Benzene",
-    "inputType": "scalar"
+  "template": {
+      "benzene": {
+          "label": "Benzene",
+          "inputType": "scalar"
+      }
   }
 }
