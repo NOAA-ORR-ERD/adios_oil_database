@@ -64,54 +64,77 @@ def test_read_excel_file():
 def test_ExxonRecordParser():
     """
     This is really a do-nothing function
+
+    It's just a pass through
     """
     assert ExxonRecordParser("something random") == "something random"
 
 
-# This is where the real work happens!
-def test_exxon_mapper():
-    record = next(ExxonDataReader(example_dir, example_index).get_records())
+class TestExxonMapper():
+    """
+    This is where the real work happens!
+    """
 
+    # fixme -- there should probably be a fixture to get a record
+    record = next(ExxonDataReader(example_dir, example_index).get_records())
     oil = ExxonMapper(record)
 
+    def test_header(self):
+        oil = self.oil
+        assert oil.name == 'HOOPS Blend'
+        assert oil.reference.startswith("ExxonMobil")
+        assert oil.api == 35.2
 
-    assert oil.name == 'HOOPS Blend'
-    assert oil.reference.startswith("ExxonMobil")
+    def test_samples(self):
+        samples = self.oil.samples
 
-    samples = oil.samples
+        assert len(samples) == 8
+        assert samples[0].name == "Whole crude"
 
-    assert len(samples) == 8
-    assert samples[0].name == "Whole crude"
+    def test_dist_cuts(self):
+        samples = self.oil.samples
 
-    assert samples[0].cut_volume == UnittedValue(100.0, unit="%")
-    assert samples[3].cut_volume == UnittedValue(17.6059, unit="%")
+        assert samples[0].cut_volume == UnittedValue(100.0, unit="%")
+        assert samples[3].cut_volume == UnittedValue(17.6059, unit="%")
 
-    assert oil.api == 35.2
+    def test_density(self):
+        samples = self.oil.samples
 
-    assert samples[0].densities[0].density.value == 0.84805316
-    assert samples[7].densities[0].density.value == 0.99124762
+        assert samples[0].densities[0].density.value == 0.84805316
+        assert samples[7].densities[0].density.value == 0.99124762
 
-    # print(samples[0].carbon_mass_fraction)                 85.57594139885833
-    assert samples[0].carbon_mass_fraction == UnittedValue(85.58, unit="%")
-    assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26, unit="%")
-    assert samples[4].total_acid_number == UnittedValue(0.2069, unit="mg/kg")
+    def test_compostion(self):
+        samples = self.oil.samples
+        # print(samples[0].carbon_mass_fraction)                 85.57594139885833
+        assert samples[0].carbon_mass_fraction == UnittedValue(85.58, unit="%")
+        assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26, unit="%")
+        assert samples[4].total_acid_number == UnittedValue(0.2069, unit="mg/kg")
 
-    # viscosity tests
-    # whole oil
-    kvis = samples[0].kvis
-    assert len(kvis) == 3
-    assert kvis[0].viscosity.value == 6.73896867
-    assert kvis[0].viscosity.unit == "cSt"
-    assert kvis[2].viscosity.value == 3.88298696
-    assert kvis[2].viscosity.unit == "cSt"
+    def test_viscosity(self):
+        samples = self.oil.samples
+        # viscosity tests
+        # whole oil
+        kvis = samples[0].kvis
+        assert len(kvis) == 3
+        assert kvis[0].viscosity.value == 6.73896867
+        assert kvis[0].viscosity.unit == "cSt"
+        assert kvis[2].viscosity.value == 3.88298696
+        assert kvis[2].viscosity.unit == "cSt"
 
-    # One sample
-    kvis = samples[3].kvis
-    assert len(kvis) == 3
-    assert kvis[0].viscosity.value == 0.89317828
-    assert kvis[0].viscosity.unit == "cSt"
-    assert kvis[2].viscosity.value == 0.64536193
-    assert kvis[2].viscosity.unit == "cSt"
+        # One sample
+        kvis = samples[3].kvis
+        assert len(kvis) == 3
+        assert kvis[0].viscosity.value == 0.89317828
+        assert kvis[0].viscosity.unit == "cSt"
+        assert kvis[2].viscosity.value == 0.64536193
+        assert kvis[2].viscosity.unit == "cSt"
+
+        for sample in samples:
+            assert len(sample.dvis) == 0
+
+    def test_exxon_mapper(self):
+        samples = self.oil.samples
+
 
 
 
