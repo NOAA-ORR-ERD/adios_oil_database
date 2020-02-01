@@ -76,8 +76,8 @@
 
   <div class="row">
     <div class="col-md-6 col-lg-4">
-      <Table::Sara 
-        @oil={{this.oil}} 
+      <Table::Sara
+        @oil={{this.oil}}
         @editable={{this.editable}}
         @submit={{this.submit}}
         @store={{this.parentView.oil.store}}
@@ -103,7 +103,7 @@
       class="col-6"/>
 
     <Table::BenzeneC4c6
-      @oil={this.{oil}}
+      @oil={{this.oil}}
       @editable={{this.editable}}
       @submit={{this.submit}}
       class="col-6"/>
@@ -112,13 +112,15 @@
 
   <Table::AlkylatedPah
     @oil={{this.oil}}
+    @store={{this.parentView.oil.store}}
     @editable={{this.editable}}
     @submit={{this.submit}}
-/>
+  />
 
   <div class="row">
     <Table::Alkane
       @oil={{this.oil}}
+      @store={{this.parentView.oil.store}}
       @editable={{this.editable}}
       @submit={{this.submit}}
       class="col-12"/>
@@ -130,6 +132,7 @@
   <div class="row">
     <Table::Biomarkers
       @oil={{this.oil}}
+      @store={{this.parentView.oil.store}}
       @editable={{this.editable}}
       @submit={{this.submit}}
       class="col-6"/>

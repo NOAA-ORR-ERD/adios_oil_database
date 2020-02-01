@@ -1,23 +1,25 @@
 {
   "id": "fluorenes.json",
-  "c0_f": {
-    "label": "C0-F",
-    "inputType": "scalar"
-  },
-  "c1_f": {
-    "label": "C1-F",
-    "inputType": "scalar"
-  },
-  "c2_f": {
-    "label": "C2-F",
-    "inputType": "scalar"
-  },
-  "c3_f": {
-    "label": "C3-F",
-    "inputType": "scalar"
-  },
-  "c4_f": {
-    "label": "C4-F",
-    "inputType": "scalar"
+  "template": {
+      "c0_f": {
+          "label": "C0-F",
+          "inputType": "scalar"
+      },
+      "c1_f": {
+          "label": "C1-F",
+          "inputType": "scalar"
+      },
+      "c2_f": {
+          "label": "C2-F",
+          "inputType": "scalar"
+      },
+      "c3_f": {
+          "label": "C3-F",
+          "inputType": "scalar"
+      },
+      "c4_f": {
+          "label": "C4-F",
+          "inputType": "scalar"
+      }
   }
 }
