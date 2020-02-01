@@ -1,23 +1,25 @@
 {
   "id": "dibenzothiophenes.json",
-  "c0_d": {
-    "label": "C0-D",
-    "inputType": "scalar"
-  },
-  "c1_d": {
-    "label": "C1-D",
-    "inputType": "scalar"
-  },
-  "c2_d": {
-    "label": "C2-D",
-    "inputType": "scalar"
-  },
-  "c3_d": {
-    "label": "C3-D",
-    "inputType": "scalar"
-  },
-  "c4_d": {
-    "label": "C4-D",
-    "inputType": "scalar"
+  "template": {
+      "c0_d": {
+          "label": "C0-D",
+          "inputType": "scalar"
+      },
+      "c1_d": {
+          "label": "C1-D",
+          "inputType": "scalar"
+      },
+      "c2_d": {
+          "label": "C2-D",
+          "inputType": "scalar"
+      },
+      "c3_d": {
+          "label": "C3-D",
+          "inputType": "scalar"
+      },
+      "c4_d": {
+          "label": "C4-D",
+          "inputType": "scalar"
+      }
   }
 }

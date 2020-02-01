@@ -1,23 +1,25 @@
 {
   "id": "chrysenes.json",
-  "c0_c": {
-    "label": "C0-C",
-    "inputType": "scalar"
-  },
-  "c1_c": {
-    "label": "C1-C",
-    "inputType": "scalar"
-  },
-  "c2_c": {
-    "label": "C2-C",
-    "inputType": "scalar"
-  },
-  "c3_c": {
-    "label": "C3-C",
-    "inputType": "scalar"
-  },
-  "c4_c": {
-    "label": "C4-C",
-    "inputType": "scalar"
+  "template": {
+      "c0_c": {
+          "label": "C0-C",
+          "inputType": "scalar"
+      },
+      "c1_c": {
+          "label": "C1-C",
+          "inputType": "scalar"
+      },
+      "c2_c": {
+          "label": "C2-C",
+          "inputType": "scalar"
+      },
+      "c3_c": {
+          "label": "C3-C",
+          "inputType": "scalar"
+      },
+      "c4_c": {
+          "label": "C4-C",
+          "inputType": "scalar"
+      }
   }
 }
