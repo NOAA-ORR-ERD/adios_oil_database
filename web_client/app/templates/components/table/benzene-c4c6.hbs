@@ -1,5 +1,5 @@
 <div class="detail-section">
-{{!--     <Common::StaticTable
+    <Common::StaticTable
       @store={{this.store}}
       @oil={{this.oil}}
       @editable={{this.editable}}
@@ -10,66 +10,4 @@
       @valueUnit="ppm"
       @valuePrecision={{3}}
     />
- --}}
-
-  <strong>C4-C6 Alkyl Benzenes:</strong>
-
-  {{#if anyDataPresent}}
-    <table class="table table-hover table-bordered">
-      <thead></thead>
-      <tbody id="c4c6-tbody">
-        <tr>
-          <td>Amylbenzene</td>
-          <td>{{value-unit oil.benzene.amylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>Propylbenzene</td>
-          <td>{{value-unit oil.benzene.propylebenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>Isopropylbenzene</td>
-          <td>{{value-unit oil.benzene.isopropylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>Isobutylbenzene</td>
-          <td>{{value-unit oil.benzene.isobutylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>n-Hexylbenzene</td>
-          <td>{{value-unit oil.benzene.n_hexylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>1,2,3-Trimethylbenzene</td>
-          <td>{{value-unit oil.benzene._1_2_3_trimethylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>1,2,4-Trimethylbenzene</td>
-          <td>{{value-unit oil.benzene._1_2_4_trimethylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>1,3,5-Trimethylbenzene</td>
-          <td>{{value-unit oil.benzene._1_3_5_trimethylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>2-Ethyltoluene</td>
-          <td>{{value-unit oil.benzene._2_ethyltoluene 2}}</td>
-        </tr>
-        <tr>
-          <td>3&4-Ethyltoluene</td>
-          <td>{{value-unit oil.benzene._3_4_ethyltoluene 2}}</td>
-        </tr>
-        <tr>
-          <td>1-Methyl-2-isopropylbenzene</td>
-          <td>{{value-unit oil.benzene._1_methyl_2_isopropylbenzene 2}}</td>
-        </tr>
-        <tr>
-          <td>1,2-Dimethyl-4-ethylbenzene</td>
-          <td>{{value-unit oil.benzene._1_2_dimethyl_4_ethylbenzene 2}}</td>
-        </tr>
-      </tbody>
-    </table>
-  {{else}}
-    No Data
-  {{/if}}
-
 </div>
