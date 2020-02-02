@@ -8,6 +8,9 @@ from math import log10, floor
 
 
 def sigfigs(x, sig=6):
-    return round(x, sig - int(floor(log10(abs(x)))) - 1)
+    try:
+        return round(x, sig - int(floor(log10(abs(x)))) - 1)
+    except ValueError:
+        return x
 
 

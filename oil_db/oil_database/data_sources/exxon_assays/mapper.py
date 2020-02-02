@@ -11,18 +11,18 @@ But made into a class to match the reader:parser:mapper structure
 
 # from numbers import Number
 # from collections import defaultdict
+
 import logging
+import unit_conversion as uc
+from oil_database.util import sigfigs
+from oil_database.models.oil.oil import Oil
+from oil_database.models.oil.sample import Sample
+from oil_database.models.oil.values import UnittedValue, Density, Viscosity
 
 from pprint import PrettyPrinter
 pprint = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
-
-import unit_conversion as uc
-
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.sample import Sample
-from oil_database.models.oil.values import UnittedValue, Density, Viscosity
 
 
 def ExxonMapper(record):
@@ -83,17 +83,17 @@ def read_cut_table(oil, data):
     set_sample_property(data, samples, "Carbon, wt %",
                              "carbon_mass_fraction",
                              "%",
-                             2)
+                             4)
 
     set_sample_property(data, samples, "Hydrogen, wt %",
                              "hydrogen_mass_fraction",
                              "%",
-                             2)
+                             4)
 
     set_sample_property(data, samples, "Pour point, F",
                              "pour_point",
                              "C",
-                             2,
+                             4,
                              "F")
 
     set_sample_property(data, samples, "Neutralization number (TAN), MG/GM",
@@ -105,7 +105,7 @@ def read_cut_table(oil, data):
     set_sample_property(data, samples, "Sulfur, wt%",
                              "sulfur_mass_fraction",
                              "%",
-                             2,
+                             4,
                              )
 
     # viscosity
@@ -133,13 +133,13 @@ def read_cut_table(oil, data):
     set_sample_property(data, samples, "Mercaptan sulfur, ppm",
                              "mercaptan_sulfur_mass_fraction",
                              "ppm",
-                             3,
+                             4,
                              )
 
     set_sample_property(data, samples, "Nitrogen, ppm",
                              "nitrogen_mass_fraction",
                              "ppm",
-                             3,
+                             4,
                              )
 
     # set_sample_property(data, samples, "Reid Vapor Pressure (RVP) Whole Crude, psi",
@@ -168,7 +168,8 @@ def read_cut_table(oil, data):
 
 def set_sample_property(data, samples,
                         name, attr, unit,
-                        num_digits=None, convert_from=None):
+                        num_digits=None,
+                        convert_from=None):
     """
     reads a row from the spreadsheet, and sets the sample properties
 
@@ -181,7 +182,7 @@ def set_sample_property(data, samples,
             if convert_from is not None:
                 val = uc.convert(convert_from, unit, val)
             if num_digits is not None:
-                val = round(val, num_digits)
+                val = sigfigs(val, num_digits)
             setattr(sample, attr, UnittedValue(val, unit=unit))
 
 
