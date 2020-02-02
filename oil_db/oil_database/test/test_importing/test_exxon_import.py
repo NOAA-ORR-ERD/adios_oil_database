@@ -132,9 +132,12 @@ class TestExxonMapper():
         for sample in samples:
             assert len(sample.dvis) == 0
 
-    def test_exxon_mapper(self):
+    def test_composition(self):
         samples = self.oil.samples
+        assert samples[0].mercaptan_sulfur_mass_fraction.value == 0.596
 
+        assert samples[1].nitrogen_mass_fraction.value == 0.0
+        assert samples[5].nitrogen_mass_fraction.value == 47.62
 
 
 

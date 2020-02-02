@@ -133,14 +133,14 @@ def read_cut_table(oil, data):
     set_sample_property(data, samples, "Mercaptan sulfur, ppm",
                              "mercaptan_sulfur_mass_fraction",
                              "ppm",
-                             2,
+                             3,
                              )
 
-    # set_sample_property(data, samples, "Nitrogen, ppm",
-    #                          "nitrogen_mass_fraction"
-    #                          "ppm",
-    #                          2,
-    #                          )
+    set_sample_property(data, samples, "Nitrogen, ppm",
+                             "nitrogen_mass_fraction",
+                             "ppm",
+                             3,
+                             )
 
     # set_sample_property(data, samples, "Reid Vapor Pressure (RVP) Whole Crude, psi",
     #                          "reid_vapor_pressure"
