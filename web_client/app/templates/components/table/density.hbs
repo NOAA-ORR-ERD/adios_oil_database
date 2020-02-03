@@ -1,37 +1,18 @@
 <div class="row">
   <div class="col-12">
-
-  {{#if this.args.editable}}
-      <Common::ValueUnitTable
-        @tableTitle="Density"
-        @leftColumnTitle="Density"
-        @rightColumnTitle="Temperature"
-        @valueArray={{this.args.oil.densities}}
-        @leftColumnValueName="density"
-        @leftColumnUnit={{"g/cm^3"}}
-        @leftColumnPrecision={{3}}
-        @rightColumnValueName="ref_temp"
-        @rightColumnUnit="C"
-        @rightColumnPrecision={{2}}
-        @editable={{this.args.editable}}
-        @submit={{this.submit}}
-      />
-  {{else}}
     <Common::ValueUnitTable
-      @tableTitle="Density"
-      @leftColumnTitle="Density"
-      @rightColumnTitle="Temperature"
       @valueArray={{this.args.oil.densities}}
-      @leftColumnValueName="density"
-      @leftColumnUnit={{"g/cm^3"}}
-      @leftColumnPrecision={{3}}
-      @rightColumnValueName="ref_temp"
-      @rightColumnUnit="C"
-      @rightColumnPrecision={{2}}
       @editable={{this.args.editable}}
       @submit={{this.submit}}
+      @tableTitle="Density"
+      @leftColumnTitle="Density"
+      @leftColumnValueName="density"
+      @leftColumnPrecision={{3}}
+      @leftColumnUnit="g/cm^3"
+      @rightColumnTitle="Temperature"
+      @rightColumnValueName="ref_temp"
+      @rightColumnPrecision={{2}}
+      @rightColumnUnit="C"
     />
-  {{/if}}
-
   </div>
 </div>
