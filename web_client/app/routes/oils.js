@@ -13,7 +13,7 @@ export default Route.extend({
                   adapter = await adapter.reopen({host: config.webApi});
                 }
 
-                return this.store.findAll('oil');
+                return this.store.peekAll('oil');
             })(),
 
             categories: (async () => {
