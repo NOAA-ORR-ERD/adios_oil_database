@@ -87,34 +87,45 @@
   </div>
 
   <div class="row">
-    <Common::StaticTable
-      @oil={{this.oil}}
-      @store={{this.parentView.oil.store}}
-      @editable={{this.editable}}
-      @submit={{this.submit}}
-      @tableTitle="Benzene & Alkylated Benzene:"
-      @templateName="benzene_and_alkylated_benzene"
-      @propertyName="benzene"
-      @valueUnit="ppm"
-      @valuePrecision={{3}}
-    />
-  </div>
-  &nbsp;
+    <div class="col-3">
+      <Common::StaticTable
+        @oil={{this.oil}}
+        @store={{this.parentView.oil.store}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="Benzene & Alkylated Benzene:"
+        @templateName="benzene_and_alkylated_benzene"
+        @propertyName="benzene"
+        @valueUnit="ppm"
+        @valuePrecision={{3}}
+      />
 
-  <div class="row">
-    <Table::BenzeneBtex
-      @oil={{this.oil}}
-      @store={{this.parentView.oil.store}}
-      @editable={{this.editable}}
-      @submit={{this.submit}}
-      class="col-6"/>
+      <Common::StaticTable
+        @store={{this.parentView.oil.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="BTEX Group:"
+        @boldTitle={{true}}
+        @propertyName="benzene"
+        @valueUnit="ppm"
+        @valuePrecision={{3}}
+      />
+    </div>
 
-    <Table::BenzeneC4c6
-      @oil={{this.oil}}
-      @store={{this.parentView.oil.store}}
-      @editable={{this.editable}}
-      @submit={{this.submit}}
-      class="col-6"/>
+    <div class="col-5">
+      <Common::StaticTable
+        @store={{this.parentView.oil.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="C4-C6 Alkyl Benzenes:"
+        @boldTitle={{true}}
+        @propertyName="benzene"
+        @valueUnit="ppm"
+        @valuePrecision={{3}}
+      />
+    </div>
   </div>
   &nbsp;
 
