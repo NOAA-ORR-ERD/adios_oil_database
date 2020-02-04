@@ -132,14 +132,32 @@ class TestExxonMapper():
         for sample in samples:
             assert len(sample.dvis) == 0
 
-    def test_composition(self):
+    def test_composition_mercaptan(self):
+        samples = self.oil.samples
+        assert samples[0].mercaptan_sulfur_mass_fraction.value == 0.5962
+
+    def test_composition_nitrogen(self):
         samples = self.oil.samples
         assert samples[0].mercaptan_sulfur_mass_fraction.value == 0.5962
 
         assert samples[1].nitrogen_mass_fraction.value == 0.0
         assert samples[5].nitrogen_mass_fraction.value == 47.62
 
+    def test_reid_vp(self):
+        samples = self.oil.samples
+
+        ## fixme -- is Pa the right unit?
+        assert samples[0].reid_vapor_pressure.value == 60430.0
+
+        for sample in samples[1:]:
+            assert sample.reid_vapor_pressure is None
 
 
+    # def test_composition_ccr(self):
+    #     samples = self.oil.samples
+    #     assert samples[0].ccr_percent.value == 3.2
+
+    #     assert samples[1].ccr_percent.value == None
+    #     assert samples[6].ccr_percent.value == 0.4
 
 

@@ -54,6 +54,7 @@ class Sample:
     total_acid_number: UnittedValue = None
     mercaptan_sulfur_mass_fraction: UnittedValue = None
     nitrogen_mass_fraction: UnittedValue = None
+    ccr_percent = None
     calcium_mass_fraction: UnittedValue = None
     reid_vapor_pressure: UnittedValue = None
     hydrogen_sulfide_concentration: UnittedValue = None
