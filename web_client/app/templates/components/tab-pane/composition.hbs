@@ -136,17 +136,12 @@
     @submit={{this.submit}}
   />
 
-  <div class="row">
-    <Table::Alkane
-      @oil={{this.oil}}
-      @store={{this.parentView.oil.store}}
-      @editable={{this.editable}}
-      @submit={{this.submit}}
-      class="col-12"/>
-  </div>
-
-  <div class="row">
-  </div>
+  <Table::Alkane
+    @oil={{this.oil}}
+    @store={{this.parentView.oil.store}}
+    @editable={{this.editable}}
+    @submit={{this.submit}}
+  />
 
   <div class="row">
     <Table::Biomarkers
