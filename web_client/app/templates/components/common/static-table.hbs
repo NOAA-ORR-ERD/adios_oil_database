@@ -1,29 +1,37 @@
 <div class="detail-section">
   <div class="table-responsive">
-    <strong>{{this.args.tableTitle}}</strong>
+    <center>
+      {{#if this.boldTitle}}
+        <strong>{{this.args.tableTitle}}</strong>
+      {{else}}
+        {{this.args.tableTitle}}
+      {{/if}}
+    </center>
 
     <table class="table table-hover table-bordered">
-      <tbody id="sara-tbody">
-        {{#each-in this.properties as |attr value|}}
+      <tbody>
+        {{#if (or this.args.editable anyDataPresent)}}
+          {{#each-in this.properties as |attr value|}}
+            <tr>
+              {{!-- <td>{{attr}}</td> --}}
+              <td>{{value.label}}</td>
+              <td>
+                <Common::ValueUnitInput
+                  @valueObject={{get this.baseProperty attr}}
+                  @valueUnit={{this.args.valueUnit}}
+                  @valuePrecision={{this.args.valuePrecision}}
+                  @editable={{this.args.editable}}
+                  @submit={{fn this.updateCellValue attr}}
+                />
+              </td>
+            </tr>
+          {{/each-in}}
+        {{else}}
           <tr>
-            {{!-- <td>{{attr}}</td> --}}
-            <td>{{value.label}}</td>
-            <td>{{value.inputType}}</td>
+            <td>No Data</td>
           </tr>
-        {{/each-in}}
+        {{/if}}
 
-        {{!-- {{#each this.typeKeys as |type|}}
-          <tr>
-            {{#if (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName))}}
-              {{#with (find-by this.args.typeField (get (get this.propertyTypesObj type) "label") (get this.args.oil this.args.propertyName)) as |sara|}}
-                <td>{{get sara this.args.typeField}}</td>
-                <td>{{value-unit (get sara this.args.valueField) this.args.valuePrecision}}</td>
-              {{/with}}
-            {{else}}
-              <td>{{get (get this.propertyTypesObj type) "label"}}</td><td>No Data</td>
-            {{/if}}
-          </tr>
-        {{/each}} --}}
 
       </tbody>
     </table>

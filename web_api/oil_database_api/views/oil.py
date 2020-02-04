@@ -14,6 +14,7 @@ from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
+from oil_database.models.oil.validation import validate
 
 from oil_database_api.common.views import (cors_policy,
                                            obj_id_from_url)
@@ -27,10 +28,11 @@ oil_api = Service(name='oil', path='/oils*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
-## fixme: this could be a class attribute, and make memoize a class
-##        might be good to mange the cache better, etc.
+# fixme: this could be a class attribute, and make memoize a class
+#        might be good to mange the cache better, etc.
+#        and keep all the functionality together
+#        e.g. clearing the cache when the record changes
 memoized_results = {}  # so it is visible to other functions
-
 def memoize_oil_arg(func):
     '''
         Decorator function to cache function results by oil_id
@@ -264,6 +266,11 @@ def insert_oil(request):
         raise HTTPBadRequest(e)
 
     try:
+        validate(json_obj)
+    except Exception as e:  # anything goes wrong with the validation
+        logger.error(f'Validation Error: {obj_id}: {e}')
+
+    try:
         logger.info('oil.name: {}'.format(json_obj['name']))
 
         if 'oil_id' in json_obj:
@@ -302,7 +309,10 @@ def update_oil(request):
 
     try:
         fix_oil_id(json_obj, obj_id)
-
+        try:
+            validate(json_obj)
+        except Exception as e:  # anything goes wrong with the validation
+            logger.error(f'Validation Error: {obj_id}: {e}')
         (request.db.oil_database.oil
          .replace_one({'_id': json_obj['_id']}, json_obj))
 

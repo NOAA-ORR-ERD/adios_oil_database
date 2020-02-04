@@ -1,32 +1,15 @@
 <div class="detail-section">
   <div class="table-responsive">
-    <strong>BTEX Group:</strong>
-
-    {{#if anyDataPresent}}
-      <table class="table table-hover table-bordered">
-        <thead></thead>
-        <tbody id="btex-tbody">
-          <tr>
-            <td >Toluene</td>
-            <td>{{value-unit oil.benzene.toluene 2}}</td>
-          </tr>
-          <tr>
-            <td >Ethylbenzene</td>
-            <td>{{value-unit oil.benzene.ethylbenzene 2}}</td>
-          </tr>
-          <tr>
-            <td >m&p-Xylene</td>
-            <td>{{value-unit oil.benzene.m_p_xylene 2}}</td>
-          </tr>
-          <tr>
-            <td >o-Xylene</td>
-            <td>{{value-unit oil.benzene.o_xylene 2}}</td>
-          </tr>
-        </tbody>
-      </table>
-    {{else}}
-      No Data
-    {{/if}}
-
+    <Common::StaticTable
+      @store={{this.store}}
+      @oil={{this.oil}}
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      @tableTitle="BTEX Group:"
+      @boldTitle={{true}}
+      @propertyName="benzene"
+      @valueUnit="ppm"
+      @valuePrecision={{3}}
+    />
   </div>
 </div>

@@ -3,7 +3,13 @@ import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
 import slugify from 'ember-slugify';
 
-export default class StaticTable extends Component {
+//
+// Basically the logic for rendering columns vs. rows warrants two distinct
+// table types.
+// This is a wrapper for the respective column and row properties tables
+// that passes only the necessary arguments to them.
+//
+export default class ListPropertiesTable extends Component {
     @tracked properties;
     @tracked baseProperty;
 
@@ -26,7 +32,7 @@ export default class StaticTable extends Component {
             // Otherwise use the slugified table title
             template = slugify(this.args.tableTitle, { separator: '_' }) + '.json';
         }
-        
+
         if (typeof this.args.boldTitle === 'undefined') {
             this.boldTitle = true;  // default
         }
@@ -34,11 +40,18 @@ export default class StaticTable extends Component {
             this.boldTitle = this.args.boldTitle;
         }
 
+        if (typeof this.args.headerPosition === 'undefined') {
+            this.headerPosition = 'top';  // default
+        }
+        else {
+            this.headerPosition = this.args.headerPosition;
+        }
+
         this.readPropertyTypes(this.args.store, template);
     }
 
     readPropertyTypes(store, template) {
-        return store.findRecord('config', template)
+        return store.findRecord('config', template, { reload: false })
         .then(function(response) {
             this.properties = response.template;
         }.bind(this));
@@ -46,43 +59,9 @@ export default class StaticTable extends Component {
 
     get anyDataPresent() {
         if (this.properties && this.baseProperty) {
-            return Object.keys(this.properties).some(i => {
-                return this.baseProperty.hasOwnProperty(i);
-            });
+            return this.baseProperty.length > 0;
         }
 
         return false;
-    }
-
-    @action
-    updateCellValue(attr) {
-        if (event.target.value === '') {
-            // empty value entered, remove the attribute
-            delete this.baseProperty[attr];
-        }
-        else {
-            let newValue = parseFloat(event.target.value);
-
-            if (!Number.isNaN(newValue)) {
-                set(this.baseProperty, attr, {
-                    value: newValue,
-                    unit: this.args.valueUnit
-                });
-            }
-        }
-
-        this.updateValue(this.baseProperty);
-    }
-
-    @action
-    updateValue(enteredValue) {
-        if (Object.keys(enteredValue).length > 0) {
-            set(this.args.oil, this.args.propertyName, enteredValue);
-        }
-        else {
-            delete this.args.oil[this.args.propertyName];
-        }
-
-        this.args.submit(enteredValue);
     }
 }

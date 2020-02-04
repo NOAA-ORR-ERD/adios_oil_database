@@ -24,16 +24,6 @@ from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample
 from oil_database.models.oil.values import UnittedValue, Density, Viscosity
 
-# (FloatUnit,
-#                                                    TemperatureUnit,
-#                                                    TimeUnit,
-#                                                    DensityUnit,
-#                                                    DynamicViscosityUnit,
-#                                                    InterfacialTensionUnit,
-#                                                    AdhesionUnit,
-#                                                    ConcentrationInWaterUnit)
-
-
 
 def ExxonMapper(record):
     """
@@ -45,181 +35,188 @@ def ExxonMapper(record):
 
     returns an Oil Object
     """
-    return Mapper(record).process_record()
+    name, data = record
+    oil = Oil(name)
+    data = iter(data)
+
+    read_header(oil, data)
+    read_cut_table(oil, data)
+
+    return oil
 
 
-class Mapper:
+def read_header(oil, data):
+    # fixme: this should probably be more flexible
+    #        but we can wait 'till we get data that doesn't match
+    # it could / should read the whole dist cut table, then map it to the samples
+    # Exxon info in the header
+    oil.reference = "\n".join([next(data)[0] for _ in range(3)])
 
-    field_map = {}
 
-    def __init__(self, record):
-        name, data = record
-        self.oil = Oil(name)
-        self.data = iter(data)
+def read_cut_table(oil, data):
 
-    def process_record(self):
-        data = self.data
-        oil = self.oil
+    row = next_non_empty(data)
+    sample_names = row[1:]
 
-        # Exxon info in the header
-        oil.reference = "\n".join([next(data)[0] for _ in range(3)])
+    samples = [Sample(name=name) for name in sample_names]
 
-        row = self.next_non_empty()
+    # Cut Volume
+    row = get_next_properties_row(data, "Cut volume, %")
+    for sample, val in zip(samples, row[1:]):
+        sample.cut_volume = UnittedValue(round(val, 4), unit="%")
 
-        sample_names = row[1:]
+    # API
+    row = get_next_properties_row(data, "API Gravity,")
+    # pull API from first value
+    oil.api = round(float(row[1]), 1)  # stored as full precision double
 
-        samples = [Sample(name=name) for name in sample_names]
-        self.samples = samples
+    # use specific gravity to get density
+    row = get_next_properties_row(data, "Specific Gravity (60/60F)")
+    for sample, val in zip(samples, row[1:]):
+        rho = uc.convert("SG", "g/cm^3", val)
+        sample.densities = [Density(UnittedValue(round(rho, 8),
+                                                 unit="g/cm^3"),
+                                    UnittedValue(15.6,
+                                                 unit="C"))
+                            ]
 
-        # Cut Volume
-        row = self.get_next_properties_row("Cut volume, %")
-        for sample, val in zip(samples, row[1:]):
-            sample.cut_volume = UnittedValue(round(val, 4), unit="%")
+    set_sample_property(data, samples, "Carbon, wt %",
+                             "carbon_mass_fraction",
+                             "%",
+                             2)
 
-        # API
-        row = self.get_next_properties_row("API Gravity,")
-        # pull API from first value
-        oil.api = round(float(row[1]), 1)  # stored as full precision double
+    set_sample_property(data, samples, "Hydrogen, wt %",
+                             "hydrogen_mass_fraction",
+                             "%",
+                             2)
 
-        # use specific gravity to get density
-        row = self.get_next_properties_row("Specific Gravity (60/60F)")
-        for sample, val in zip(samples, row[1:]):
-            rho = uc.convert("SG", "g/cm^3", val)
-            sample.densities = [Density(UnittedValue(round(rho, 8),
-                                                     unit="g/cm^3"),
-                                        UnittedValue(15.6,
-                                                     unit="C"))
-                                ]
+    set_sample_property(data, samples, "Pour point, F",
+                             "pour_point",
+                             "C",
+                             2,
+                             "F")
 
-        self.set_sample_property("Carbon, wt %",
-                                 "carbon_mass_fraction",
-                                 "%",
-                                 2)
+    set_sample_property(data, samples, "Neutralization number (TAN), MG/GM",
+                             "total_acid_number",
+                             "mg/kg",
+                             4,
+                             )
 
-        self.set_sample_property("Hydrogen, wt %",
-                                 "hydrogen_mass_fraction",
-                                 "%",
-                                 2)
+    set_sample_property(data, samples, "Sulfur, wt%",
+                             "sulfur_mass_fraction",
+                             "%",
+                             2,
+                             )
 
-        self.set_sample_property("Pour point, F",
-                                 "pour_point",
-                                 "C",
-                                 2,
-                                 "F")
+    # viscosity
+    row = get_next_properties_row(data, "Viscosity at 20C/68F, cSt")
+    for sample, val in zip(samples, row[1:]):
+        sample.kvis = [Viscosity(UnittedValue(round(val, 8),
+                                              unit="cSt"),
+                                 UnittedValue(20,
+                                              unit="C"))]
 
-        self.set_sample_property("Neutralization number (TAN), MG/GM",
-                                 "total_acid_number",
-                                 "mg/kg",
-                                 4,
-                                 )
-
-        self.set_sample_property("Sulfur, wt%",
-                                 "sulfur_mass_fraction",
-                                 "%",
-                                 2,
-                                 )
-
-        # viscosity
-        row = self.get_next_properties_row("Viscosity at 20C/68F, cSt")
-        for sample, val in zip(samples, row[1:]):
-            sample.kvis = [Viscosity(UnittedValue(round(val, 8),
+    row = get_next_properties_row(data, "Viscosity at 40C/104F, cSt")
+    for sample, val in zip(samples, row[1:]):
+        sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
                                                   unit="cSt"),
-                                     UnittedValue(20,
-                                                  unit="C"))]
-
-        row = self.get_next_properties_row("Viscosity at 40C/104F, cSt")
-        for sample, val in zip(samples, row[1:]):
-            sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
-                                                      unit="cSt"),
-                                         UnittedValue(40,
-                                                      unit="C")))
-        row = self.get_next_properties_row("Viscosity at 50C/122F, cSt")
-        for sample, val in zip(samples, row[1:]):
-            sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
-                                                      unit="cSt"),
-                                         UnittedValue(50,
-                                                      unit="C")))
-
-        # Viscosity at 20C/68F, cSt
-        # Viscosity at 40C/104F, cSt
-        # Viscosity at 50C/122F, cSt
-
-        # self.set_sample_property("Nitrogen, ppm",
-        #                          "nitrogen_mass_fraction"
-        #                          "ppm",
-        #                          2,
-        #                          )
-
-        # self.set_sample_property("Mercaptan sulfur, ppm",
-        #                          "mercaptan_sulfur_mass_fraction"
-        #                          "ppm",
-        #                          2,
-        #                          )
-
-        # self.set_sample_property("Reid Vapor Pressure (RVP) Whole Crude, psi",
-        #                          "reid_vapor_pressure"
-        #                          "psi",
-        #                          2,
-        #                          "psi"
-        #                          )
-
-        # self.set_sample_property("Hydrogen Sulfide (dissolved), ppm",
-        #                          "hydrogen_sulfide_concentration"
-        #                          "ppm",
-        #                          2,
-        #                          )
-
-        # "nitrogen_mass_fraction: UnittedValue"
-        # "calcium_mass_fraction: UnittedValue"
-        # "reid_vapor_pressure: UnittedValue"
-        # "hydrogen_sulfide_concentration"
+                                     UnittedValue(40,
+                                                  unit="C")))
+    row = get_next_properties_row(data, "Viscosity at 50C/122F, cSt")
+    for sample, val in zip(samples, row[1:]):
+        sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
+                                                  unit="cSt"),
+                                     UnittedValue(50,
+                                                  unit="C")))
 
 
-        oil.samples = samples
+    set_sample_property(data, samples, "Mercaptan sulfur, ppm",
+                             "mercaptan_sulfur_mass_fraction",
+                             "ppm",
+                             2,
+                             )
 
-        return oil
+    # set_sample_property(data, samples, "Nitrogen, ppm",
+    #                          "nitrogen_mass_fraction"
+    #                          "ppm",
+    #                          2,
+    #                          )
 
-    def set_sample_property(self, name, attr, unit,
-                            digits=None, convert_from=None):
-        row = self.get_next_properties_row(name)
-        for sample, val in zip(self.samples, row[1:]):
-            if val is not None:
-                if convert_from is not None:
-                    val = uc.convert(convert_from, unit, val)
-                if digits is not None:
-                    val = round(val, digits)
-                setattr(sample, attr, UnittedValue(val, unit=unit))
+    # set_sample_property(data, samples, "Reid Vapor Pressure (RVP) Whole Crude, psi",
+    #                          "reid_vapor_pressure"
+    #                          "psi",
+    #                          2,
+    #                          "psi"
+    #                          )
 
-    @staticmethod
-    def norm(string):
-        """
-        normalizes a string for comparing
+    # set_sample_property(data, samples, "Hydrogen Sulfide (dissolved), ppm",
+    #                          "hydrogen_sulfide_concentration"
+    #                          "ppm",
+    #                          2,
+    #                          )
 
-        so far: lower case, whitespace strip
-        trailing and leading comma strip
-        """
-        return string.strip().strip(',').lower()
+    # "nitrogen_mass_fraction: UnittedValue"
+    # "calcium_mass_fraction: UnittedValue"
+    # "reid_vapor_pressure: UnittedValue"
+    # "hydrogen_sulfide_concentration"
 
-    # Utilities:
-    @staticmethod
-    def empty(row):
-        for c in row:
-            if c is not None:
-                return False
-        return True
 
-    def next_non_empty(self):
-        while True:
-            row = next(self.data)
-            if not self.empty(row):
-                break
-        return row
+    oil.samples = samples
 
-    def get_next_properties_row(self, exp_field):
-        row = self.next_non_empty()
-        if self.norm(row[0]) != self.norm(exp_field):
-            raise ValueError(f"Something wrong with data sheet:{row}, expected: {exp_field}")
-        return row
+    return oil
+
+
+def set_sample_property(data, samples,
+                        name, attr, unit,
+                        num_digits=None, convert_from=None):
+    """
+    reads a row from the spreadsheet, and sets the sample properties
+
+    optional rounding to "num_digits" digits
+    optional converting to unit from convert_from (if the the data aren't in the right units)
+    """
+    row = get_next_properties_row(data, name)
+    for sample, val in zip(samples, row[1:]):
+        if val is not None:
+            if convert_from is not None:
+                val = uc.convert(convert_from, unit, val)
+            if num_digits is not None:
+                val = round(val, num_digits)
+            setattr(sample, attr, UnittedValue(val, unit=unit))
+
+
+def norm(string):
+    """
+    normalizes a string for comparing
+
+    so far: lower case, whitespace strip
+    trailing and leading comma strip
+    """
+    return string.strip().strip(',').lower()
+
+
+# Utilities:
+def empty(row):
+    for c in row:
+        if c is not None:
+            return False
+    return True
+
+
+def next_non_empty(data):
+    while True:
+        row = next(data)
+        if not empty(row):
+            break
+    return row
+
+
+def get_next_properties_row(data, exp_field):
+    row = next_non_empty(data)
+    if norm(row[0]) != norm(exp_field):
+        raise ValueError(f"Something wrong with data sheet:{row}, expected: {exp_field}")
+    return row
+
 
 
 

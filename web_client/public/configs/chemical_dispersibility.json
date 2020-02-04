@@ -1,0 +1,15 @@
+{
+  "id": "chemical_dispersibility.json",
+  "template": {
+      "dispersant": {
+          "label": "Dispersant",
+          "dataType": "string"
+      },
+      "effectiveness": {
+          "label": "Effectiveness",
+          "dataType": "value-unit",
+          "unit": "%",
+          "precision": 3
+      }
+  }
+}

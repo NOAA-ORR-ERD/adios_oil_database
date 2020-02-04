@@ -12,7 +12,7 @@ We have potentially two ways to build a stand alone:
 
 If using PyInstaller, we can use the full conda environment we use for development.
 
-If using a "custom" environment, you can still use the full one to build, but you'll need to create a custom minimal wine to package it up.
+If using a "custom" environment, you can still use the full one to build, but you'll need to create a custom minimal one to package it up.
 
 ## minimal conda environment
 
@@ -29,6 +29,20 @@ In that environment, you should be able to run the full application, but not the
 To use that environment, you do:
 
 `conda activate standalone`
+
+once activated, you will need to install our packages:
+
+oil_database and oil_database_api are both python packages -- they should be installed into the python in the environment we're delivering with the standalone.
+
+The way to do that is:
+
+```
+conda activate standalone
+cd oil_db
+pip install .
+cd ../web_api
+pip install .
+```
 
 You should be able to build the ember app, and all that, with the full develop environment, and then deactivate that, and activate the standalone environment to test.
 
@@ -47,6 +61,11 @@ Then it should be runnable.
 There is a script: `build_standalone.py` in the Standalone directory that should do all that for you. you can look at it to see what it does.
 
 Be default, it updates and builds everything, but you can turn some of that off if you are running it multiple times:
+
+python build_standalone.py --help
+
+You do need to make sure that the standalone environment has our packages installed -- see above.
+
 
 
 

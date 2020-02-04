@@ -1,0 +1,56 @@
+{
+  "id": "emulsions.json",
+  "template": {
+      "age": {
+          "label": "Age",
+          "dataType": "value-unit",
+          "unit": "days",
+          "precision": 1
+      },
+      "ref_temp": {
+          "label": "Temperature",
+          "dataType": "value-unit",
+          "unit": "C",
+          "precision": 2
+      },
+      "visual_stability": {
+          "label": "Visual Stability",
+          "dataType": "string"
+      },
+      "water_content": {
+          "label": "Water Content",
+          "dataType": "value-unit",
+          "unit": "%",
+          "precision": 3
+      },
+      "complex_viscosity": {
+          "label": "Complex Viscosity",
+          "dataType": "value-unit",
+          "unit": "kg/(m s)",
+          "precision": 3
+      },
+      "complex_modulus": {
+          "label": "Complex Modulus",
+          "dataType": "value-unit",
+          "unit": "N/m^2",
+          "precision": 2
+      },
+      "storage_modulus": {
+          "label": "Storage Modulus",
+          "dataType": "value-unit",
+          "unit": "N/m^2",
+          "precision": 2
+      },
+      "loss_modulus": {
+          "label": "Loss Modulus",
+          "dataType": "value-unit",
+          "unit": "N/m^2",
+          "precision": 2
+      },
+      "tan_delta_v_e": {
+          "label": "Tan Delta (V/E)",
+          "dataType": "number",
+          "precision": 2
+      }
+  }
+}

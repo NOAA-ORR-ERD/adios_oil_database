@@ -1,0 +1,57 @@
+{
+  "id": "alkanes_34_44_others.json",
+  "template": {
+      "c34": {
+          "label": "C34",
+          "inputType": "scalar"
+      },
+      "c35": {
+          "label": "C35",
+          "inputType": "scalar"
+      },
+      "c36": {
+          "label": "C36",
+          "inputType": "scalar"
+      },
+      "c37": {
+          "label": "C37",
+          "inputType": "scalar"
+      },
+      "c38": {
+          "label": "C38",
+          "inputType": "scalar"
+      },
+      "c39": {
+          "label": "C39",
+          "inputType": "scalar"
+      },
+      "c40": {
+          "label": "C40",
+          "inputType": "scalar"
+      },
+      "c41": {
+          "label": "C41",
+          "inputType": "scalar"
+      },
+      "c42": {
+          "label": "C42",
+          "inputType": "scalar"
+      },
+      "c43": {
+          "label": "C43",
+          "inputType": "scalar"
+      },
+      "c44": {
+          "label": "C44",
+          "inputType": "scalar"
+      },
+      "pristane": {
+          "label": "Pristane",
+          "inputType": "scalar"
+      },
+      "phytane": {
+          "label": "Phytane",
+          "inputType": "scalar"
+      }
+  }
+}
