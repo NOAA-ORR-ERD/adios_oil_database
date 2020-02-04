@@ -54,7 +54,16 @@
       />
     </div>
     <div class="col-6">
-      <Table::Emulsion @oil={{oil}}/>
+      <Common::ListPropertiesTable
+        @oil={{this.oil}}
+        @store={{this.parentView.oil.store}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="Emulsion Properties"
+        @templateName="emulsions"
+        @propertyName="emulsions"
+        @headerPosition="side"
+      />
     </div>
   </div>
 
