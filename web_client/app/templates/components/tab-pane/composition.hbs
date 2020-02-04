@@ -143,11 +143,18 @@
     @submit={{this.submit}}
   />
 
-  <Table::Biomarkers
-    @oil={{this.oil}}
-    @store={{this.parentView.oil.store}}
-    @editable={{this.editable}}
-    @submit={{this.submit}}
-  />
+  <div class="row">
+    <Common::StaticTable
+      @store={{this.parentView.oil.store}}
+      @oil={{this.oil}}
+      @editable={{this.editable}}
+      @submit={{this.submit}}
+      @tableTitle="Biomarkers:"
+      @boldTitle={{true}}
+      @propertyName="biomarkers"
+      @valueUnit="ppm"
+      @valuePrecision={{3}}
+    />
+  </div>
 
 </div>

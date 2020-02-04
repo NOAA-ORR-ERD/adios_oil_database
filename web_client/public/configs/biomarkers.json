@@ -17,7 +17,7 @@
       "label": "C24 Tricyclic Terpane",
       "inputType": "scalar"
     },
-    "30_norhopane": {
+    "_30_norhopane": {
       "label": "30-Norhopane",
       "inputType": "scalar"
     },
@@ -25,27 +25,27 @@
       "label": "Hopane",
       "inputType": "scalar"
     },
-    "30_homohopane_22s": {
+    "_30_homohopane_22s": {
       "label": "30-Homohopane-22S",
       "inputType": "scalar"
     },
-    "30_homohopane_22r": {
+    "_30_homohopane_22r": {
       "label": "30-Homohopane-22R",
       "inputType": "scalar"
     },
-    "3031_bishomohopane_22s": {
+    "_30_31_bishomohopane_22s": {
       "label": "30,31-Bishomohopane-22S",
       "inputType": "scalar"
     },
-    "3031_bishomohopane_22r": {
+    "_30_31_bishomohopane_22r": {
       "label": "30,31-Bishomohopane-22R",
       "inputType": "scalar"
     },
-    "3031_trishomohopane_22s": {
+    "_30_31_trishomohopane_22s": {
       "label": "30,31-Trishomohopane-22S",
       "inputType": "scalar"
     },
-    "3031_trishomohopane_22r": {
+    "_30_31_trishomohopane_22r": {
       "label": "30,31-Trishomohopane-22R",
       "inputType": "scalar"
     },
@@ -65,23 +65,23 @@
       "label": "Pentakishomohopane-22R",
       "inputType": "scalar"
     },
-    "18a_222930_trisnorneohopane": {
+    "_18a_22_29_30_trisnorneohopane": {
       "label": "18α,22,29,30-Trisnorneohopane",
       "inputType": "scalar"
     },
-    "17a_h_222930_trisnorhopane": {
+    "_17a_h_22_29_30_trisnorhopane": {
       "label": "17α(H)-22,29,30-Trisnorhopane",
       "inputType": "scalar"
     },
-    "14b_h_17b_h_20_cholestane": {
+    "_14b_h_17b_h_20_cholestane": {
       "label": "14β(H),17β(H)-20-Cholestane",
       "inputType": "scalar"
     },
-    "14b_h_17b_h_20_methylcholestane": {
+    "_14b_h_17b_h_20_methylcholestane": {
       "label": "14β(H),17β(H)-20-Methylcholestane",
       "inputType": "scalar"
     },
-    "14b_h_17b_h_20_ethylcholestane": {
+    "_14b_h_17b_h_20_ethylcholestane": {
       "label": "14β(H),17β(H)-20-Ethylcholestane",
       "inputType": "scalar"
     }
