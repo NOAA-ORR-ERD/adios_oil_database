@@ -1,33 +1,23 @@
 <div class="detail-section">
-  <div class="table-responsive">
-    <strong>Water Content:</strong>
+  <strong>Water Content:</strong>
 
-    {{#if this.args.editable}}
-      <Common::RangeValueInput
-        @valueTitle="Water Content"
-        @valueObject={{this.args.oil}}
-        @valueName="water.fraction"
-        @valueUnit="%"
-        @valuePrecision="2"
-        @sampleIndex={{this.args.sampleIndex}}
-        @submit={{this.submit}}
-      />
-    {{else}}
-      {{#if this.args.oil.water.fraction}}
-        {{value-unit (convert-unit this.args.oil.water.fraction "%") 2}}
-      {{else}}
-        No Data
-      {{/if}}
-    {{/if}}  {{!-- editable --}}
-
-
-    {{!-- {{#if oil.water}}
-      {{value-unit (convert-unit oil.water.fraction "%") 2}}
+  {{#if this.args.editable}}
+    <Common::RangeValueInput
+      @valueTitle="Water Content"
+      @valueObject={{this.args.oil}}
+      @valueName="water.fraction"
+      @valueUnit="%"
+      @valuePrecision="2"
+      @sampleIndex={{this.args.sampleIndex}}
+      @submit={{this.submit}}
+    />
+  {{else}}
+    {{#if this.args.oil.water.fraction}}
+      {{value-unit (convert-unit this.args.oil.water.fraction "%") 2}}
     {{else}}
       No Data
-    {{/if}} --}}
-
-  </div>
+    {{/if}}
+  {{/if}}
 
   &nbsp;
 
