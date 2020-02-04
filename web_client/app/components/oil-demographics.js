@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import moment from 'moment';
+import { isBlank , isNone} from '@ember/utils';
 
 export default Component.extend({
 
@@ -21,8 +22,17 @@ export default Component.extend({
   
     actions: {
         updateAPI(event) {
-            let oil = this.get('oil')
-            oil.samples.get(0).apis.set('0.gravity',  Number(event.target.value));
+            let oil = this.get('oil');
+            let enteredAPI = event.target.value;
+            if (isBlank(enteredAPI)) {
+                delete oil.samples.get(0).apis;
+            } else {
+                if (isNone(oil.samples.get(0).apis)) {
+                    oil.samples.get(0).apis = [{gravity: Number(enteredAPI)}];
+                } else {
+                    oil.samples.get(0).apis.set('0.gravity',  Number(enteredAPI));
+                }
+            }
 
             this.submit(oil);
         },
