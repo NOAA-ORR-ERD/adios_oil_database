@@ -62,10 +62,11 @@
        id="nav-composition-{{slug sampleName}}"
        aria-labelledby="nav-composition-tab-{{slug sampleName}}">
     <TabPane::Composition
+      @store={{this.store}}
       @oil={{sample}}
-      @sampleName={{sampleName}}
       @editable={{this.editable}}
       @submit={{action "submitSample"}}
+      @sampleName={{sampleName}}
     />
   </div>
 
@@ -73,8 +74,8 @@
        id="nav-environmental-{{slug sampleName}}"
        aria-labelledby="nav-environmental-tab-{{slug sampleName}}">
     <TabPane::Environmental
-      @oil={{sample}}
       @store={{this.store}}
+      @oil={{sample}}
       @editable={{this.editable}}
       @submit={{action "submitSample"}}
       @sampleName={{sampleName}}
