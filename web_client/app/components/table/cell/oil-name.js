@@ -10,12 +10,3 @@ export default class OilName extends Component {
         this.oilId = this.args.row.content.id;
     }
 }
-
-//export default Component.extend({
-//  init() {
-//    this._super(...arguments);
-//
-//    this.set('oilId', arguments[0].attrs.row.value.content.id);
-//  },
-//
-//});
