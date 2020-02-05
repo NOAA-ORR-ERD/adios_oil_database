@@ -160,3 +160,28 @@ STEP 2 (in a separate conda shell)
 
 (base) PS C:\Users\michael.katz\Documents\oil_database\StandAlone> conda activate adiosdb
 (adiosdb) PS C:\Users\michael.katz\Documents\oil_database\StandAlone> python .\build_standalone.py --noconda
+
+///////////////////////////////////////////////////////////////////////
+
+> conda activate adiosdb
+> PS C:\Users\michael.katz\Documents\oil_database\web_client> ember build --prod -o client_code
+
+(adiosdb) PS C:\Users\michael.katz\Documents\oil_database> mongod --port 27017 --dbpath .\mongo_files\
+(adiosdb) PS C:\Users\michael.katz\Documents\oil_database> oil_db_init
+(adiosdb) PS C:\Users\michael.katz\Documents\oil_database> oil_db_import --all
+
+(control-c mongod)
+(copy ...\oil_database\mongo_files)
+
+(copy web_api)
+
+add "http://0.0.0.0:8080", "http://localhost:8080" as line 90 of oil_database/web_api/run_web_api.py
+
+(delete electron build directory oil_database\electron\ADIOS Oil Database-win32-x64)
+
+(adiosdb) PS C:\Users\michael.katz\Documents\oil_database\electron> electron-packager . --icon .\adiosdb.ico
+
+(copy contents of oil_database\electron\ADIOS Oil Database-win32-x64 to _scratch/odb/electron)
+(delete unused files from _scratch\odb\electron\resources\app)
+
+edit line 2 of _scratch\odb\electron\resources\app\main.js to set IS_INSTALLED_APPLICATION to true
