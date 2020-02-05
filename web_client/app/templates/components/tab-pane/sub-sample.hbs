@@ -74,9 +74,10 @@
        aria-labelledby="nav-environmental-tab-{{slug sampleName}}">
     <TabPane::Environmental
       @oil={{sample}}
-      @sampleName={{sampleName}}
+      @store={{this.store}}
       @editable={{this.editable}}
       @submit={{action "submitSample"}}
+      @sampleName={{sampleName}}
     />
   </div>
 </div>

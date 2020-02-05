@@ -49,11 +49,13 @@
            aria-labelledby="nav-{{slug name.[0]}}-tab"
            tab-level="0">
         <TabPane::SubSample
-          @oil={{this.oil}} @sampleName={{name.[0]}}
+          @oil={{this.oil}}
+          @store={{this.oil.store}}
           @editable={{this.editable}}
+          @submit={{this.submit}}
+          @sampleName={{name.[0]}}
           @categoryTab={{this.categoryTab}}
           @updateCategoryTab={{this.updateCategoryTab}}
-          @submit={{this.submit}}
         />
       </div>
     {{else}}
@@ -62,11 +64,13 @@
            aria-labelledby="nav-{{slug name.[0]}}-tab"
            tab-level="0">
         <TabPane::SubSample
-          @oil={{this.oil}} @sampleName={{name.[0]}}
+          @oil={{this.oil}}
+          @store={{this.oil.store}}
           @editable={{this.editable}}
+          @submit={{this.submit}}
+          @sampleName={{name.[0]}}
           @categoryTab={{this.categoryTab}}
           @updateCategoryTab={{this.updateCategoryTab}}
-          @submit={{this.submit}}
         />
       </div>
     {{/if}}
