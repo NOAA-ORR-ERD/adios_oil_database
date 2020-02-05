@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 import { roundRelative } from 'ember-oil-db/helpers/round-relative';
+import $ from 'jquery';
 
 export default class AddSampleDlg extends Component {
     SampleTypes = {

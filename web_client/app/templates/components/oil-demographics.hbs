@@ -52,11 +52,11 @@
                 @change={{action "updateAPI"}}
                 @size="6" />
             {{else}}
-              {{#unless (is-empty oil.samples.[0].apis)}}
-                <span class="p-1">{{oilAPI}}</span>
-              {{else}}
+              {{#if (is-empty oil.samples.[0].apis)}}
                 <span class="p-1">No Value</span>
-              {{/unless}}
+              {{else}}
+                <span class="p-1">{{oil.samples.0.apis.0.gravity}}</span>
+              {{/if}}
             {{/if}}
           {{/let}}
         </div>

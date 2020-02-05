@@ -12,7 +12,7 @@ export default class Sara extends Component {
 
         this.oil = this.args.oil;
         this.saraArray = this.args.oil.sara_total_fractions;
-        this.readPropertyTypes(this.args.store, 'sara-total-fractions.json');
+        this.readPropertyTypes(this.args.store, 'sara_total_fractions.json');
 
     }
 

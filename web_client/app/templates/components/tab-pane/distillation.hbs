@@ -43,20 +43,30 @@
   </center>
 
   <div class="row">
-    <div class="col-lg-5">
-      <Table::Distillation
-        @oil={{oil}}
+    <div class="col-lg-4">
+      <Common::ValueUnitTable
+        @valueArray={{oil.cuts}}
         @editable={{this.editable}}
         @submit={{this.submit}}
-        @sampleIndex={{this.sampleIndex}}
-        class="row"/>
-
+        @tableTitle="Distillation Cuts"
+        @leftColumnTitle="Mass Percent"
+        @leftColumnValueName="fraction"
+        @leftColumnUnit="%"
+        @leftColumnPrecision={{2}}
+        @rightColumnTitle="Vapor Temperature"
+        @rightColumnValueName="vapor_temp"
+        @rightColumnUnit="C"
+        @rightColumnPrecision={{2}}
+      />
     </div>
 
     <div class="col-lg-5">
       <strong>Distillation Graph:</strong>
 
-      <Graph::Distillation @oil={{oil}} @sampleName={{sampleName}} class="row"/>
+      <Graph::Distillation
+        @oil={{oil}}
+        @sampleName={{sampleName}}
+      />
     </div>
 
   </div>

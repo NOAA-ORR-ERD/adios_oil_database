@@ -1,25 +1,23 @@
 <div class="detail-section">
+  <strong>Wax Content:</strong>
 
-  <div class="table-responsive">
-    <strong>Wax Content:</strong>
-    {{#if this.args.editable}}
-      <Common::RangeValueInput
-        @valueTitle="Wax Content"
-        @valueObject={{this.args.oil}}
-        @valueName="wax_content.fraction"
-        @valueUnit="%"
-        @valuePrecision="2"
-        @sampleIndex={{this.args.sampleIndex}}
-        @submit={{this.submit}}
-      />
+  {{#if this.args.editable}}
+    <Common::RangeValueInput
+      @valueTitle="Wax Content"
+      @valueObject={{this.args.oil}}
+      @valueName="wax_content.fraction"
+      @valueUnit="%"
+      @valuePrecision="2"
+      @sampleIndex={{this.args.sampleIndex}}
+      @submit={{this.submit}}
+    />
+  {{else}}
+    {{#if this.args.oil.wax_content.fraction}}
+      {{value-unit (convert-unit this.args.oil.wax_content.fraction "%") 2}}
     {{else}}
-      {{#if this.args.oil.wax_content.fraction}}
-        {{value-unit (convert-unit this.args.oil.wax_content.fraction "%") 2}}
-      {{else}}
-        No Data
-      {{/if}}
-    {{/if}}  {{!-- editable --}}
-  </div>
+      No Data
+    {{/if}}
+  {{/if}}
 
   &nbsp;
 
