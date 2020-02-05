@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | table/alkylated-pah/cx-c', function(hooks) {
+module('Integration | Component | common/column-list-properties-table', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<Table::AlkylatedPah::CxC />`);
+    await render(hbs`<Common::ColumnListPropertiesTable />`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      <Table::AlkylatedPah::CxC>
+      <Common::ColumnListPropertiesTable>
         template block text
-      </Table::AlkylatedPah::CxC>
+      </Common::ColumnListPropertiesTable>
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

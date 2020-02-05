@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | table/range-value-unit-field', function(hooks) {
+module('Integration | Component | common/row-list-properties-table', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<Table::RangeValueUnitField />`);
+    await render(hbs`<Common::RowListPropertiesTable />`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      <Table::RangeValueUnitField>
+      <Common::RowListPropertiesTable>
         template block text
-      </Table::RangeValueUnitField>
+      </Common::RowListPropertiesTable>
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

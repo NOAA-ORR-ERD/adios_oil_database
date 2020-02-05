@@ -11,18 +11,62 @@ But made into a class to match the reader:parser:mapper structure
 
 # from numbers import Number
 # from collections import defaultdict
+
 import logging
+import unit_conversion as uc
+from oil_database.util import sigfigs
+from oil_database.models.oil.oil import Oil
+from oil_database.models.oil.sample import Sample
+from oil_database.models.oil.values import UnittedValue, Density, Viscosity
 
 from pprint import PrettyPrinter
 pprint = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
-import unit_conversion as uc
+def norm(string):
+    """
+    normalizes a string for comparing
 
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.sample import Sample
-from oil_database.models.oil.values import UnittedValue, Density, Viscosity
+    so far: lower case, whitespace strip
+    trailing and leading comma strip
+    """
+    return string.strip().strip(',').lower()
+
+
+MAPPING = {norm("Mercaptan sulfur, ppm"): {"attr": "mercaptan_sulfur_mass_fraction",
+                                           "unit": "ppm",
+                                           "num_digits": 4,
+                                           "convert_from": "ppm",
+                                           },
+           norm("Carbon, wt %"): {"attr": "carbon_mass_fraction",
+                                  "unit": "%",
+                                  "num_digits": 4,
+                                  },
+           norm("Hydrogen, wt %"): {"attr": "hydrogen_mass_fraction",
+                                    "unit": "%",
+                                    "num_digits": 4,
+                                    },
+           norm("Pour point, F"): {"attr": "pour_point",
+                                   "unit": "C",
+                                   "convert_from": "F",
+                                   },
+           norm("Nitrogen, ppm"): {"attr": "nitrogen_mass_fraction",
+                                   "unit": "ppm",
+                                   },
+           norm("Neutralization number (TAN), MG/GM"): {"attr": "total_acid_number",
+                                                        "unit": "mg/kg",
+                                                        },
+
+           norm("Sulfur, wt%"): {"attr": "sulfur_mass_fraction",
+                                 "unit": "%",
+                                 },
+           norm("Reid Vapor Pressure (RVP) Whole Crude, psi"): {"attr": "reid_vapor_pressure",
+                                                                "unit": "Pa",
+                                                                "convert_from": "psi"
+                                                                },
+
+           }
 
 
 def ExxonMapper(record):
@@ -40,7 +84,12 @@ def ExxonMapper(record):
     data = iter(data)
 
     read_header(oil, data)
-    read_cut_table(oil, data)
+    row = next_non_empty(data)
+    sample_names = row[1:]
+    samples = [Sample(name=name) for name in sample_names]
+    cut_table = read_cut_table(oil, data)
+    apply_map(data, cut_table, samples)
+    process_cut_table(oil, samples, cut_table)
 
     return oil
 
@@ -55,24 +104,42 @@ def read_header(oil, data):
 
 def read_cut_table(oil, data):
 
-    row = next_non_empty(data)
-    sample_names = row[1:]
+    cut_table = {}
 
-    samples = [Sample(name=name) for name in sample_names]
+    while True:
+        try:
+            row = next_non_empty(data)
+            cut_table[norm(row[0])] = row[1:]
+        except StopIteration:
+            break
+    return cut_table
 
+
+def apply_map(data, cut_table, samples):
+    for name, data in MAPPING.items():
+        row = cut_table[name]
+        set_sample_property(row, samples, **data)
+
+
+def process_cut_table(oil, samples, cut_table):
+    """
+    process the parts that aren't a simple map
+    """
     # Cut Volume
-    row = get_next_properties_row(data, "Cut volume, %")
-    for sample, val in zip(samples, row[1:]):
+    # row = get_next_properties_row(data, "Cut volume, %")
+    # Dist cuts -- each cut has part of it
+    row = cut_table[norm("Cut volume, %")]
+    for sample, val in zip(samples, row):
         sample.cut_volume = UnittedValue(round(val, 4), unit="%")
 
-    # API
-    row = get_next_properties_row(data, "API Gravity,")
+    # API -- odd because we only need one!
+    row = cut_table[norm("API Gravity,")]
     # pull API from first value
-    oil.api = round(float(row[1]), 1)  # stored as full precision double
+    oil.api = round(float(row[0]), 1)  # stored as full precision double
 
     # use specific gravity to get density
-    row = get_next_properties_row(data, "Specific Gravity (60/60F)")
-    for sample, val in zip(samples, row[1:]):
+    row = cut_table[norm("Specific Gravity (60/60F)")]
+    for sample, val in zip(samples, row):
         rho = uc.convert("SG", "g/cm^3", val)
         sample.densities = [Density(UnittedValue(round(rho, 8),
                                                  unit="g/cm^3"),
@@ -80,74 +147,29 @@ def read_cut_table(oil, data):
                                                  unit="C"))
                             ]
 
-    set_sample_property(data, samples, "Carbon, wt %",
-                             "carbon_mass_fraction",
-                             "%",
-                             2)
-
-    set_sample_property(data, samples, "Hydrogen, wt %",
-                             "hydrogen_mass_fraction",
-                             "%",
-                             2)
-
-    set_sample_property(data, samples, "Pour point, F",
-                             "pour_point",
-                             "C",
-                             2,
-                             "F")
-
-    set_sample_property(data, samples, "Neutralization number (TAN), MG/GM",
-                             "total_acid_number",
-                             "mg/kg",
-                             4,
-                             )
-
-    set_sample_property(data, samples, "Sulfur, wt%",
-                             "sulfur_mass_fraction",
-                             "%",
-                             2,
-                             )
-
     # viscosity
-    row = get_next_properties_row(data, "Viscosity at 20C/68F, cSt")
-    for sample, val in zip(samples, row[1:]):
+    # fixme: -- maybe should parse the labels for temp, etc?
+    #          wait till next version
+    row = cut_table[norm("Viscosity at 20C/68F, cSt")]
+    for sample, val in zip(samples, row):
         sample.kvis = [Viscosity(UnittedValue(round(val, 8),
                                               unit="cSt"),
                                  UnittedValue(20,
                                               unit="C"))]
 
-    row = get_next_properties_row(data, "Viscosity at 40C/104F, cSt")
-    for sample, val in zip(samples, row[1:]):
+    row = cut_table[norm("Viscosity at 40C/104F, cSt")]
+    for sample, val in zip(samples, row):
         sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
                                                   unit="cSt"),
                                      UnittedValue(40,
                                                   unit="C")))
-    row = get_next_properties_row(data, "Viscosity at 50C/122F, cSt")
-    for sample, val in zip(samples, row[1:]):
+    row = cut_table[norm("Viscosity at 50C/122F, cSt")]
+    for sample, val in zip(samples, row):
         sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
                                                   unit="cSt"),
                                      UnittedValue(50,
                                                   unit="C")))
 
-
-    set_sample_property(data, samples, "Mercaptan sulfur, ppm",
-                             "mercaptan_sulfur_mass_fraction",
-                             "ppm",
-                             2,
-                             )
-
-    # set_sample_property(data, samples, "Nitrogen, ppm",
-    #                          "nitrogen_mass_fraction"
-    #                          "ppm",
-    #                          2,
-    #                          )
-
-    # set_sample_property(data, samples, "Reid Vapor Pressure (RVP) Whole Crude, psi",
-    #                          "reid_vapor_pressure"
-    #                          "psi",
-    #                          2,
-    #                          "psi"
-    #                          )
 
     # set_sample_property(data, samples, "Hydrogen Sulfide (dissolved), ppm",
     #                          "hydrogen_sulfide_concentration"
@@ -165,34 +187,52 @@ def read_cut_table(oil, data):
 
     return oil
 
-
-def set_sample_property(data, samples,
-                        name, attr, unit,
-                        num_digits=None, convert_from=None):
+def set_sample_property(row,
+                        samples,
+                        attr,
+                        unit,
+                        num_digits=4,
+                        convert_from=None):
     """
     reads a row from the spreadsheet, and sets the sample properties
 
     optional rounding to "num_digits" digits
     optional converting to unit from convert_from (if the the data aren't in the right units)
     """
-    row = get_next_properties_row(data, name)
-    for sample, val in zip(samples, row[1:]):
+    for sample, val in zip(samples, row):
         if val is not None:
             if convert_from is not None:
                 val = uc.convert(convert_from, unit, val)
-            if num_digits is not None:
-                val = round(val, num_digits)
+            val = sigfigs(val, num_digits)
             setattr(sample, attr, UnittedValue(val, unit=unit))
+# def set_sample_property(samples,
+#                         attr,
+#                         unit,
+#                         num_digits=4,
+#                         convert_from=None):
+#     """
+#     reads a row from the spreadsheet, and sets the sample properties
+
+#     optional rounding to "num_digits" digits
+#     optional converting to unit from convert_from (if the the data aren't in the right units)
+#     """
+#     row = get_next_properties_row(data, name)
+#     for sample, val in zip(samples, row[1:]):
+#         if val is not None:
+#             if convert_from is not None:
+#                 val = uc.convert(convert_from, unit, val)
+#             val = sigfigs(val, num_digits)
+#             setattr(sample, attr, UnittedValue(val, unit=unit))
 
 
-def norm(string):
-    """
-    normalizes a string for comparing
+# def norm(string):
+#     """
+#     normalizes a string for comparing
 
-    so far: lower case, whitespace strip
-    trailing and leading comma strip
-    """
-    return string.strip().strip(',').lower()
+#     so far: lower case, whitespace strip
+#     trailing and leading comma strip
+#     """
+#     return string.strip().strip(',').lower()
 
 
 # Utilities:

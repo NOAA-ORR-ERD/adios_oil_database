@@ -17,14 +17,20 @@
         {{! Location }}
         <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Location:</label>
-          {{#let (if oil.location oil.location "None") as |oilLocation|}}
-            {{#if editable}}
-              <Input @class="p-1 overflow-hidden bg-transparent border" @value={{oilLocation}}
-                @placeholder="Enter Location" @change={{action "updateLocation"}} />
-            {{else}}
-              <span class="p-1">{{oilLocation}}</span>
-            {{/if}}
-          {{/let}}
+          {{#if editable}}
+            {{#let (if oil.location oil.location "") as |oilLocation|}}
+              <Input
+                @class="p-1 overflow-hidden bg-transparent border"
+                @value={{oilLocation}}
+                @placeholder="Enter Location"
+                @change={{action "updateLocation"}}
+              />
+            {{/let}}
+          {{else}}
+            {{#let (if oil.location oil.location "None") as |oilLocationV|}}
+              <span class="p-1">{{oilLocationV}}</span>
+            {{/let}}
+          {{/if}}
         </div>
 
       </div>
@@ -35,12 +41,22 @@
         <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">API:</label>
           {{#let (if (not (is-empty oil.samples.[0].apis))
-            (round-relative oil.samples.[0].apis.[0].gravity 2) "No Values") as |oilAPI|}}
+            (round-relative oil.samples.[0].apis.[0].gravity 2) "") as |oilAPI|}}
             {{#if editable}}
-              <Input @id="api" @type="text" @class="p-1 overflow-hidden bg-transparent border"
-                @placeholder="API value" @value={{oilAPI}} @change={{action "updateAPI"}} @size="6" />
+              <Input
+                @id="api"
+                @type="text"
+                @class="p-1 overflow-hidden bg-transparent border"
+                @placeholder="API value"
+                @value={{oilAPI}}
+                @change={{action "updateAPI"}}
+                @size="6" />
             {{else}}
-              <span class="p-1">{{oilAPI}}</span>
+              {{#if (is-empty oil.samples.[0].apis)}}
+                <span class="p-1">No Value</span>
+              {{else}}
+                <span class="p-1">{{oil.samples.0.apis.0.gravity}}</span>
+              {{/if}}
             {{/if}}
           {{/let}}
         </div>
@@ -104,13 +120,24 @@
       <div class="row mb-1">
         <div class="col-12 input-group">        
           <label class="p-1 input-group-text font-weight-bold">Reference:</label>
-          {{#let (if oil.reference oil.reference "None") as |oilReference|}}
+          {{#let (if oil.reference oil.reference (if editable "" "None")) as |oilReference|}}
             {{#if editable}}
-              <Textarea @class="p-1 reference-textarea overflow-hidden bg-transparent border" @value={{oilReference}} @rows="4"
-                @placeholder="Enter reference"  @change={{action "updateReference"}} />
+              <Textarea
+                @class="p-1 reference-textarea overflow-hidden bg-transparent border"
+                @value={{oilReference}}
+                @rows="4"
+                @placeholder="Enter reference"
+                @change={{action "updateReference"}}
+              />
             {{else}}
-              <Textarea @class="p-1 reference-textarea overflow-hidden bg-transparent border" @value={{oilReference}} @rows="4"
-                @placeholder="Enter reference"  @change={{action "updateReference"}} disabled />
+              <Textarea
+                @class="p-1 reference-textarea overflow-hidden bg-transparent border"
+                @value={{oilReference}}
+                @rows="4"
+                @placeholder="Enter reference" 
+                @change={{action "updateReference"}}
+                disabled
+              />
             {{/if}}
           {{/let}}
         </div>
@@ -122,11 +149,15 @@
         <div class="col-sm-12 col-md-6 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
           {{! Europe/London is how we lookup GMT in moment.js }}
-          {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
-            as |oilReferenceDate|}}
+          {{#let (if oil.referenceDate (moment-format (unix oil.referenceDate) 
+            "YYYY-MM-DD" timeZone="Europe/London") (if editable "" "None")) as |oilReferenceDate|}}
             {{#if editable}}
-              <Input @class="p-1 overflow-hidden bg-transparent border" @value={{oilReferenceDate}}
-                @placeholder="Enter Date"  @change={{action "updateReferenceDate"}} />
+              <Input
+                @class="p-1 overflow-hidden bg-transparent border"
+                @value={{oilReferenceDate}}
+                @placeholder="Enter Date"
+                @change={{action "updateReferenceDate"}}
+              />
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
             {{/if}}
@@ -137,11 +168,15 @@
         <div class="col-sm-12 col-md-6 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
           {{! Europe/London is how we lookup GMT in moment.js }}
-          {{#let (if oil.sampleDate (moment-format (unix oil.sampleDate) "YYYY-MM-DD" timeZone="Europe/London") "None")
-            as |oilSampleDate|}}
+          {{#let (if oil.sampleDate (moment-format (unix oil.sampleDate)
+            "YYYY-MM-DD" timeZone="Europe/London") (if editable "" "None")) as |oilSampleDate|}}
             {{#if editable}}
-              <Input @class="p-1 overflow-hidden bg-transparent border" @value={{oilSampleDate}}
-                @placeholder="Enter Date"  @change={{action "updateSampleReceivedDate"}} />
+              <Input
+                @class="p-1 overflow-hidden bg-transparent border"
+                @value={{oilSampleDate}}
+                @placeholder="Enter Date"
+                @change={{action "updateSampleReceivedDate"}}
+              />
             {{else}}
               <span class="p-1 ">{{oilSampleDate}}</span>
             {{/if}}
@@ -159,13 +194,24 @@
       <label class="pl-1 font-weight-bold">Comments:</label>
     </div>
     <div class="col-12 p-0 input-group">
-      {{#let (if oil.comments oil.comments "None") as |oilComments|}}
+      {{#let (if oil.comments oil.comments (if editable "" "None")) as |oilComments|}}
         {{#if editable}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="3"
-            @placeholder="Enter comments"  @change={{action "updateComments"}} />
+          <Textarea
+            @class="p-1 flex-fill bg-transparent border"
+            @value={{oilComments}}
+            @rows="3"
+            @placeholder="Enter comments"
+            @change={{action "updateComments"}}
+          />
         {{else}}
-          <Textarea @class="p-1 flex-fill bg-transparent border" @value={{oilComments}} @rows="3"
-            @placeholder="Enter comments" disabled @change={{action "updateComments"}} />
+          <Textarea
+            @class="p-1 flex-fill bg-transparent border"
+            @value={{oilComments}}
+            @rows="3"
+            @placeholder="Enter comments"
+            @change={{action "updateComments"}} 
+            disabled
+          />
         {{/if}}
       {{/let}}
     </div>
