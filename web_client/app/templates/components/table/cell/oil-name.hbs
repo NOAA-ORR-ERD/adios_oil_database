@@ -1,1 +1,3 @@
-{{#link-to "oils.show" oilId class=oilId}}{{value}}{{/link-to}}
+<LinkTo @route="oils.show" @model={{this.oilId}}>
+  {{this.args.value}}
+</LinkTo>
