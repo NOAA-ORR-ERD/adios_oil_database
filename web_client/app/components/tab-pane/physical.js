@@ -1,4 +1,4 @@
 import Component from '@glimmer/component';
 
-export default class Composition extends Component {
+export default class Physical extends Component {
 }
