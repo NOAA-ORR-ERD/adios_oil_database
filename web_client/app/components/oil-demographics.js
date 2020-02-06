@@ -22,16 +22,28 @@ export default Component.extend({
   
     actions: {
         updateAPI(event) {
+            {{debugger}}
             let oil = this.get('oil');
             let enteredAPI = event.target.value;
             if (isBlank(enteredAPI)) {
                 delete oil.samples.get(0).apis;
+                // in case there is api on top level
+                if (!isNone(oil.api)) {
+                    delete oil.api;
+                }
             } else {
                 if (isNone(oil.samples.get(0).apis)) {
                     oil.samples.get(0).apis = [{gravity: Number(enteredAPI)}];
                 } else {
                     oil.samples.get(0).apis.set('0.gravity',  Number(enteredAPI));
                 }
+                // for the new api place
+                if (isNone(oil.api)) {
+                    oil.api = Number(enteredAPI);
+                } else {
+                    oil.set('api',  Number(enteredAPI));
+                }
+
             }
 
             this.submit(oil);
