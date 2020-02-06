@@ -9,6 +9,7 @@ const windowStateKeeper = require( "electron-window-state" );
 console.log(require.resolve('electron'))
 const electron = require( "electron" );
 const app = electron.app;
+app.commandLine.appendSwitch( "disable-http-cache" );
 const BrowserWindow = electron.BrowserWindow;
 const isMac = process.platform === 'darwin';
 
