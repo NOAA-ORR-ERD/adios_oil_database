@@ -1,42 +1,42 @@
 <div class="container-fluid">
   <center>
-    {{#if editable}}
+    {{#if this.args.editable}}
       <Input 
         @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
-        @value={{this.oil.name}}
+        @value={{this.args.oil.name}}
         @placeholder="Enter Sample Name"
-        @change={{action this.submit this.oil}} 
+        @change={{action this.args.submit this.args.oil}} 
       />
     {{else}}
-      <h4>{{sampleName}}</h4>
+      <h4>{{this.args.sampleName}}</h4>
     {{/if}}
 
-    {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
+    {{#if (or this.args.oil.fraction_weathered this.args.oil.boiling_point_range)}}
       <p class="small">
-        {{#if oil.fraction_weathered}}
+        {{#if this.args.oil.fraction_weathered}}
           <strong>Weathered Fraction:</strong>
-          {{#if editable}}
+          {{#if this.args.editable}}
             <Input 
               @class="edit-fraction-weathered p-1 my-3 flex-fill bg-transparent border"
-              @value={{this.oil.fraction_weathered}}
+              @value={{this.args.oil.fraction_weathered}}
               @placeholder="Enter Weathered Fraction"
-              @change={{action this.submit this.oil}} 
+              @change={{action this.args.submit this.args.oil}} 
             />
           {{else}}
-            {{#if oil.fraction_weathered.unit}}
-              {{value-unit oil.fraction_weathered 2}}
+            {{#if this.args.oil.fraction_weathered.unit}}
+              {{value-unit this.args.oil.fraction_weathered 2}}
             {{else}}
-              {{oil.fraction_weathered}}
+              {{this.args.oil.fraction_weathered}}
             {{/if}}
           {{/if}}
         {{/if}}
 
-        {{#if oil.boiling_point_range}}
-          {{#if oil.fraction_weathered}}
+        {{#if this.args.oil.boiling_point_range}}
+          {{#if this.args.oil.fraction_weathered}}
             <br>
           {{/if}}
           <strong>BP Range:</strong>
-          {{value-unit oil.boiling_point_range 2}}
+          {{value-unit this.args.oil.boiling_point_range 2}}
         {{/if}}
       </p>
     {{/if}}
@@ -45,20 +45,20 @@
   <div class="row">
     <div class="col-lg-4">
       <Table::PourPoint
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
-        @sampleIndex={{this.sampleIndex}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
+        @sampleIndex={{this.args.sampleIndex}}
         class="row"
       />
     </div>
 
     <div class="col-lg-4">
       <Table::FlashPoint
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
-        @sampleIndex={{this.sampleIndex}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
+        @sampleIndex={{this.args.sampleIndex}}
         class="row"/>
     </div>
 
@@ -69,38 +69,38 @@
   <div class="row">
     <div class="col-md-6 col-lg-4">
       <Table::Density
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         class="row"/>
     </div>
 
     <div class="col-md-6 col-lg-4">
       <Table::KinematicViscosity
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         class="row"/>
     </div>
 
     <div class="col-md-6 col-lg-4">
       <Table::DynamicViscosity
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         class="row"/>
     </div>
 
     <div class="col-lg-8">
       <Table::Ift
-        @oil={{this.oil}}
-        @editable={{this.editable}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         @interfaces={{array
           ""
           "air"
           "water"
           "seawater"}}
-        @submit={{this.submit}}
         class="row"/>
     </div>
 
