@@ -1,42 +1,42 @@
 <div class="container-fluid">
   <center>
-    {{#if editable}}
+    {{#if this.args.editable}}
       <Input 
         @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
-        @value={{this.oil.name}}
+        @value={{this.args.oil.name}}
         @placeholder="Enter Sample Name"
-        @change={{action this.submit this.oil}} 
+        @change={{action this.args.submit this.args.oil}} 
       />
     {{else}}
-      <h4>{{sampleName}}</h4>
+      <h4>{{this.args.sampleName}}</h4>
     {{/if}}
 
-    {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
+    {{#if (or this.args.oil.fraction_weathered this.args.oil.boiling_point_range)}}
       <p class="small">
-        {{#if oil.fraction_weathered}}
+        {{#if this.args.oil.fraction_weathered}}
           <strong>Weathered Fraction:</strong>
-          {{#if editable}}
+          {{#if this.args.editable}}
             <Input 
               @class="edit-fraction-weathered p-1 my-3 flex-fill bg-transparent border"
-              @value={{this.oil.fraction_weathered}}
+              @value={{this.args.oil.fraction_weathered}}
               @placeholder="Enter Weathered Fraction"
-              @change={{action this.submit this.oil}} 
+              @change={{action this.args.submit this.args.oil}} 
             />
           {{else}}
-            {{#if oil.fraction_weathered.unit}}
-              {{value-unit oil.fraction_weathered 2}}
+            {{#if this.args.oil.fraction_weathered.unit}}
+              {{value-unit this.args.oil.fraction_weathered 2}}
             {{else}}
-              {{oil.fraction_weathered}}
+              {{this.args.oil.fraction_weathered}}
             {{/if}}
           {{/if}}
         {{/if}}
 
-        {{#if oil.boiling_point_range}}
-          {{#if oil.fraction_weathered}}
+        {{#if this.args.oil.boiling_point_range}}
+          {{#if this.args.oil.fraction_weathered}}
             <br>
           {{/if}}
           <strong>BP Range:</strong>
-          {{value-unit oil.boiling_point_range 2}}
+          {{value-unit this.args.oil.boiling_point_range 2}}
         {{/if}}
       </p>
     {{/if}}
@@ -46,10 +46,10 @@
 
     <div class="col-3">
       <Common::StaticTable
-        @store={{this.store}}
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @store={{this.args.store}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         @tableTitle="CCME Fractions"
         @propertyName="ccme"
         @valueUnit="mg/g"
@@ -59,10 +59,10 @@
 
     <div class="col-3">
       <Common::PropertiesTable
-        @store={{this.store}}
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @store={{this.args.store}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         @tableTitle="Saturates (F1)"
         @templateName="ccme_f1"
         @propertyName="ccme_f1"
@@ -71,10 +71,10 @@
 
     <div class="col-3">
       <Common::PropertiesTable
-        @store={{this.store}}
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @store={{this.args.store}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         @tableTitle="Aromatics (F2)"
         @templateName="ccme_f2"
         @propertyName="ccme_f2"
@@ -83,10 +83,10 @@
 
     <div class="col-3">
       <Common::PropertiesTable
-        @store={{this.store}}
-        @oil={{this.oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @store={{this.args.store}}
+        @oil={{this.args.oil}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         @tableTitle="GC-TPH (F1 + F2)"
         @templateName="ccme_tph"
         @propertyName="ccme_tph"
