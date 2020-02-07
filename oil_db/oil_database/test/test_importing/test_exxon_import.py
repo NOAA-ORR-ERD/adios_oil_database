@@ -8,8 +8,11 @@ but still handy to have some tests to run the code while under development
 """
 from pathlib import Path
 from pprint import pprint
+from math import isclose
 
 import pytest
+
+import unit_conversion as uc
 
 from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonMapper,
@@ -91,17 +94,17 @@ class TestExxonMapper():
         assert len(samples) == 8
         assert samples[0].name == "Whole crude"
 
-    def test_dist_cuts(self):
-        samples = self.oil.samples
-
-        assert samples[0].cut_volume == UnittedValue(100.0, unit="%")
-        assert samples[3].cut_volume == UnittedValue(17.6059, unit="%")
-
     def test_density(self):
         samples = self.oil.samples
 
         assert samples[0].densities[0].density.value == 0.84805316
         assert samples[7].densities[0].density.value == 0.99124762
+
+    def test_cut_volume(self):
+        samples = self.oil.samples
+
+        assert samples[0].cut_volume == UnittedValue(100.0, unit="%")
+        assert samples[3].cut_volume == UnittedValue(17.6059, unit="%")
 
     def test_compostion(self):
         samples = self.oil.samples
@@ -153,11 +156,68 @@ class TestExxonMapper():
             assert sample.reid_vapor_pressure is None
 
 
-    # def test_composition_ccr(self):
-    #     samples = self.oil.samples
-    #     assert samples[0].ccr_percent.value == 3.2
+    def test_composition_ccr(self):
+        samples = self.oil.samples
+        assert samples[0].ccr_percent.value == 3.19
 
-    #     assert samples[1].ccr_percent.value == None
-    #     assert samples[6].ccr_percent.value == 0.4
+        assert samples[1].ccr_percent is None
+        assert samples[6].ccr_percent.value == 0.3624
 
 
+    composition_values = [("calcium_mass_fraction", (0,), (5.9,)),
+                          ("hydrogen_sulfide_concentration", (), ()),
+                          ("salt_content", (0,), (0.0026,)),
+                          ("paraffin_volume_fraction", range(8), (35.54, 100.0, 91.91, 56.62, 42.77, 26.58, 18.99, 2.291 )),
+                          ("naphthene_volume_fraction", range(8), (31.4, 0.0, 8.1, 33.2, 40.8, 47.5, 35.4, 13.4)),
+                          ("aromatic_volume_fraction", range(8), (33.1, 0.0, 0.0, 10.2, 16.4, 26.0, 45.6, 84.3)),
+                          ]
+    @pytest.mark.parametrize("attr, indexes, values", composition_values)
+    def test_comp(self, attr, indexes, values):
+        samples = self.oil.samples
+
+        print(attr)
+        print(indexes)
+        print(values)
+        for i, val in zip(indexes, values):
+            print(i, val)
+            sample = samples[i]
+            print(sample.calcium_mass_fraction)
+            if val is None:
+                assert getattr(sample, attr) is None
+            else:
+                assert isclose(getattr(sample, attr).value,
+                               values[i], rel_tol=1e-2, abs_tol=1e-10)
+
+    def test_dist_cuts_units(self):
+        for sample in self.oil.samples:
+            for cut in sample.distillation_cuts:
+                assert cut.vapor_temp.unit == "C"
+                assert cut.fraction.unit == "%"
+
+    @pytest.mark.parametrize("samp_ind, cut_index, fraction, temp_f",
+                             [(0, 0, 0.0, -57.64),
+                              (0, 4, 30.0, 364.3),
+                              (5, 9, 80.0, 615.3),
+                              (7, 11, 95.0, 1436.0),
+                              ])
+    def test_dist_cuts(self, samp_ind, cut_index, fraction, temp_f):
+        samples = self.oil.samples
+
+        for cut in samples[samp_ind].distillation_cuts:
+            print(cut)
+        cut = samples[samp_ind].distillation_cuts[cut_index]
+        assert cut.fraction.value == fraction
+        assert isclose(cut.vapor_temp.value, uc.convert("F", "C", temp_f), rel_tol=1e-4)
+
+    def test_no_cuts_in_butane(self):
+        assert self.oil.samples[1].distillation_cuts == []
+
+
+
+
+
+# def test_check():
+#     record = next(ExxonDataReader(example_dir, example_index).get_records())
+#     oil = ExxonMapper(record)
+
+#     assert False

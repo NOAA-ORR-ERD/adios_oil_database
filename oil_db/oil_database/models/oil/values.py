@@ -89,7 +89,7 @@ class ViscosityList(JSON_List):
 
 @dataclass_to_json
 @dataclass
-class DistCuts:
+class DistCut:
     fraction: UnittedValue = None
     vapor_temp: UnittedValue = None
 
@@ -98,5 +98,5 @@ class DistCutsList(JSON_List):
     """
     needs some refactoring: should be method, for one
     """
-    item_type = DistCuts
+    item_type = DistCut
 

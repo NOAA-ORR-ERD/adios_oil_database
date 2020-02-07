@@ -16,7 +16,11 @@ import unit_conversion as uc
 from oil_database.util import sigfigs
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample
-from oil_database.models.oil.values import UnittedValue, Density, Viscosity
+from oil_database.models.oil.values import (UnittedValue,
+                                            Density,
+                                            Viscosity,
+                                            DistCut,
+                                            )
 
 from pprint import PrettyPrinter
 pprint = PrettyPrinter(indent=2, width=120)
@@ -205,6 +209,30 @@ def process_cut_table(oil, samples, cut_table):
                                      UnittedValue(50,
                                                   unit="C")))
 
+    # distillation data
+    if norm("Distillation type, TBP") not in cut_table:
+        raise ValueError("I do'nt recognise this distillation data. \n"
+                         'Expected: "Distillation type, TBP"')
+    for name, row in cut_table.items():
+        if norm("vol%, F") in name or name == norm("IBP, F"):  # looks like a distillation cut.
+
+            print("working with:", name)
+            percent = 0.0 if "ibp" in name else float(name.split("vol")[0])
+            print("percent is:", percent)
+            print(row)
+            for sample, val in zip(samples, row):
+                if val is not None:
+                    val = sigfigs(uc.convert("F", "C", val), 5)
+                    sample.distillation_cuts.append(
+                        DistCut(UnittedValue(percent, unit="%"),
+                                UnittedValue(val, unit="C")
+                                ))
+    #sort them
+    for sample in samples:
+        sample.distillation_cuts.sort(key=lambda c: c.fraction.value)
+
+
+
 
 
     # "nitrogen_mass_fraction: UnittedValue"
@@ -215,6 +243,7 @@ def process_cut_table(oil, samples, cut_table):
     oil.samples = samples
 
     return oil
+
 
 def set_sample_property(row,
                         samples,
