@@ -42,7 +42,7 @@ class Sample:
     densities: DensityList = field(default_factory=DensityList)
     kvis: ViscosityList = field(default_factory=ViscosityList)
     dvis: ViscosityList = field(default_factory=ViscosityList)
-    cuts: DistCutsList = field(default_factory=DistCutsList)
+    distillation_cuts: DistCutsList = field(default_factory=DistCutsList)
     # Assorted:
 
     sulfur_mass_fraction: UnittedValue = None
@@ -54,10 +54,17 @@ class Sample:
     total_acid_number: UnittedValue = None
     mercaptan_sulfur_mass_fraction: UnittedValue = None
     nitrogen_mass_fraction: UnittedValue = None
-    ccr_percent = None
+    ccr_percent: UnittedValue = None
     calcium_mass_fraction: UnittedValue = None
     reid_vapor_pressure: UnittedValue = None
     hydrogen_sulfide_concentration: UnittedValue = None
+    salt_content: UnittedValue = None
+    paraffin_volume_fraction: UnittedValue = None
+    naphthene_volume_fraction: UnittedValue = None
+    aromatic_volume_fraction: UnittedValue = None
+
+
+
 
 
 class SampleList(JSON_List):

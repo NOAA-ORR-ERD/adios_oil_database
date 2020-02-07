@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 """
-Exxon Mapper class
+Exxon Mapper
 
 Not really a class -- it's really a function that build up an
 oil object
 
-But made into a class to match the reader:parser:mapper structure
 """
 
 # from numbers import Number
@@ -23,6 +22,7 @@ from pprint import PrettyPrinter
 pprint = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
+
 
 def norm(string):
     """
@@ -65,6 +65,41 @@ MAPPING = {norm("Mercaptan sulfur, ppm"): {"attr": "mercaptan_sulfur_mass_fracti
                                                                 "unit": "Pa",
                                                                 "convert_from": "psi"
                                                                 },
+
+           norm("Hydrogen Sulfide (dissolved), ppm"): {"attr":
+                                                       "hydrogen_sulfide_concentration",
+                                                       "unit": "ppm",
+                                                       "convert_from": "ppm"
+                                                       },
+
+           norm("Salt content, ptb"): {"attr": "salt_content",
+                                               "unit": "ppm",
+                                               "convert_from": "ppb"
+                                       },
+
+           norm("Paraffins, vol %"): {"attr": "paraffin_volume_fraction",
+                                      "unit": "%",
+                                      "convert_from": "%"
+                                      },
+
+           norm("Naphthenes, vol %"): {"attr": "naphthene_volume_fraction",
+                                               "unit": "%",
+                                               "convert_from": "%"
+                                       },
+
+           norm("Aromatics (FIA), vol %"): {"attr": "aromatic_volume_fraction",
+                                            "unit": "%",
+                                            "convert_from": "%"
+                                            },
+
+           norm("CCR, wt%"): {"attr": "ccr_percent",
+                                      "unit": "%",
+                                      "convert_from": "%"
+                              },
+           norm("Calcium, ppm"): {"attr": "calcium_mass_fraction",
+                                  "unit": "ppm",
+                                  "convert_from": "ppm"
+                                  },
 
            }
 
@@ -171,14 +206,8 @@ def process_cut_table(oil, samples, cut_table):
                                                   unit="C")))
 
 
-    # set_sample_property(data, samples, "Hydrogen Sulfide (dissolved), ppm",
-    #                          "hydrogen_sulfide_concentration"
-    #                          "ppm",
-    #                          2,
-    #                          )
 
     # "nitrogen_mass_fraction: UnittedValue"
-    # "calcium_mass_fraction: UnittedValue"
     # "reid_vapor_pressure: UnittedValue"
     # "hydrogen_sulfide_concentration"
 
