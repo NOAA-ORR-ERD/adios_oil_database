@@ -1,0 +1,69 @@
+<center>
+  {{#if this.args.editable}}
+    <Input
+      @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
+      @value={{this.args.oil.name}}
+      @placeholder="Enter Sample Name"
+      @change={{action this.args.submit this.args.oil}}
+    />
+  {{else}}
+    <h4>
+      {{this.args.sampleName}}
+    </h4>
+  {{/if}}
+
+  {{#if (or this.args.oil.fraction_weathered this.args.oil.boiling_point_range)}}
+    <p class="small">
+      {{#if this.args.oil.fraction_weathered}}
+        <strong>
+          Weathered Fraction:
+        </strong>
+        {{#if this.args.editable}}
+          <Input
+            @class="edit-fraction-weathered p-1 my-3 flex-fill bg-transparent border"
+            @value={{this.args.oil.fraction_weathered}}
+            @placeholder="Enter Weathered Fraction"
+            @change={{action this.args.submit this.args.oil}}
+          />
+        {{else}}
+          {{#if this.args.oil.fraction_weathered.unit}}
+            {{value-unit this.args.oil.fraction_weathered 2}}
+          {{else}}
+            {{this.args.oil.fraction_weathered}}
+          {{/if}}
+        {{/if}}
+      {{/if}}
+
+      {{#if this.args.oil.boiling_point_range}}
+        {{#if this.args.oil.fraction_weathered}}
+          <br>
+        {{/if}}
+        <strong>
+          BP Range:
+        </strong>
+        {{value-unit this.args.oil.boiling_point_range 2}}
+      {{/if}}
+
+      {{!-- {{#if this.args.oil.boiling_point_range}}
+            {{#if this.args.oil.fraction_weathered}}
+            <br>
+            {{/if}}
+
+            {{#if this.args.editable}}
+            <Common::RangeValueInput
+                @valueTitle="BP Range:"
+                @valueObject={{this.args.oil}}
+                @valueName="boiling_point_range"
+                @valueUnit="C"
+                @valuePrecision="2"
+                @sampleIndex={{this.args.sampleIndex}}
+                @submit={{this.submit}}
+            />
+            {{else}}
+            <strong>BP Range:</strong>
+            {{value-unit this.args.oil.boiling_point_range 2}}
+            {{/if}}
+        {{/if}} --}}
+    </p>
+  {{/if}}
+</center>
