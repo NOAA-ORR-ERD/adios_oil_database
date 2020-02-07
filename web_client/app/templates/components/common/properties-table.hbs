@@ -1,0 +1,81 @@
+<div class="detail-section">
+  <div class="table-responsive">
+    <center>
+      {{#if this.boldTitle}}
+        <strong>{{this.args.tableTitle}}</strong>
+      {{else}}
+        {{this.args.tableTitle}}
+      {{/if}}
+    </center>
+
+    <table class="table table-hover table-bordered">
+      <tbody>
+        {{#if (or this.args.editable anyDataPresent)}}
+          {{#each-in this.properties as |attr value|}}
+            <tr>
+
+              {{#if this.boldHeader}}
+                <th scope="col">
+                  {{value.label}}
+                </th>
+              {{else}}
+                <td>
+                  {{value.label}}
+                </td>
+              {{/if}}
+
+
+
+              <td>
+                {{#if (eq value.dataType "value-unit")}}
+                  <Common::ValueUnitInput
+                    @valueObject={{get this.baseProperty attr}}
+                    @editable={{this.args.editable}}
+                    @submit={{fn this.updateAttrValue attr}}
+                    @valueUnit={{value.unit}}
+                    @valuePrecision={{value.precision}}
+                  />
+                {{else if (eq value.dataType "string")}}
+                  {{#if this.args.editable}}
+                    <Input @class="p-1 overflow-hidden bg-transparent border"
+                      @value={{get this.baseProperty attr}}
+                      @placeholder="Enter Value"
+                      @change={{fn this.updateAttrString attr}}
+                      size={{if value.size value.size "10"}}
+                    />
+                  {{else}}
+                    <span class="p-1">{{get this.baseProperty attr}}</span>
+                  {{/if}}
+                {{else if (eq value.dataType "number")}}
+                  {{#if this.args.editable}}
+                    <Input @class="p-1 overflow-hidden bg-transparent border"
+                      @value={{get this.baseProperty attr}}
+                      @placeholder="Enter Value"
+                      @change={{fn this.updateAttrString attr}}
+                      size={{if value.size value.size "10"}}
+                    />
+                  {{else}}
+                    <span class="p-1">{{get this.baseProperty attr}}</span>
+                  {{/if}}
+                {{/if}}
+              </td>
+
+
+
+
+
+
+            </tr>
+          {{/each-in}}
+
+        {{else}}
+          <tr>
+            <td>No Data</td>
+          </tr>
+        {{/if}}
+
+      </tbody>
+    </table>
+
+  </div>
+</div>

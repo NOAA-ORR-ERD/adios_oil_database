@@ -43,10 +43,56 @@
   </center>
 
   <div class="row">
-    <Table::Ccme @oil={{oil}} class="col-3"/>
-    <Table::CcmeF1 @oil={{oil}} class="col-3"/>
-    <Table::CcmeF2 @oil={{oil}} class="col-3"/>
-    <Table::CcmeTph @oil={{oil}} class="col-3"/>
+
+    <div class="col-3">
+      <Common::StaticTable
+        @store={{this.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="CCME Fractions"
+        @propertyName="ccme"
+        @valueUnit="mg/g"
+        @valuePrecision={{3}}
+      />
+    </div>
+
+    <div class="col-3">
+      <Common::PropertiesTable
+        @store={{this.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="Saturates (F1)"
+        @templateName="ccme_f1"
+        @propertyName="ccme_f1"
+      />
+    </div>
+
+    <div class="col-3">
+      <Common::PropertiesTable
+        @store={{this.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="Aromatics (F2)"
+        @templateName="ccme_f2"
+        @propertyName="ccme_f2"
+      />
+    </div>
+
+    <div class="col-3">
+      <Common::PropertiesTable
+        @store={{this.store}}
+        @oil={{this.oil}}
+        @editable={{this.editable}}
+        @submit={{this.submit}}
+        @tableTitle="GC-TPH (F1 + F2)"
+        @templateName="ccme_tph"
+        @propertyName="ccme_tph"
+      />
+    </div>
+
   </div>
 
 </div>

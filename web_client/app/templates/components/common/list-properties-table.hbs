@@ -1,19 +1,23 @@
-{{#if (eq this.headerPosition "top")}}
-  <Common::ColumnListPropertiesTable
-    @baseProperty={{this.baseProperty}}
-    @properties={{this.properties}}
+{{#if (eq this.headerPosition "side")}}
+  <Common::RowListPropertiesTable
+    @oil={{this.args.oil}}
+    @store={{this.args.store}}
     @editable={{this.args.editable}}
     @submit={{this.args.submit}}
     @tableTitle={{this.args.tableTitle}}
+    @propertyName={{this.args.propertyName}}
+    @templateName={{this.templateName}}
     @boldTitle={{this.boldTitle}}
   />
-{{else if (eq this.headerPosition "side")}}
-  <Common::RowListPropertiesTable
-    @baseProperty={{this.baseProperty}}
-    @properties={{this.properties}}
+{{else}}
+  <Common::ColumnListPropertiesTable
+    @oil={{this.args.oil}}
+    @store={{this.args.store}}
     @editable={{this.args.editable}}
     @submit={{this.args.submit}}
     @tableTitle={{this.args.tableTitle}}
+    @propertyName={{this.args.propertyName}}
+    @templateName={{this.templateName}}
     @boldTitle={{this.boldTitle}}
   />
 {{/if}}

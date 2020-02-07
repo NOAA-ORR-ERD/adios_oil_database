@@ -1,24 +1,8 @@
-import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
+import PropertiesTable from "./properties-table";
 
-export default class ColumnListPropertiesTable extends Component {
-    @tracked baseProperty;
-
-    constructor() {
-        super(...arguments);
-
-        if (this.args.baseProperty) {
-            this.baseProperty = this.args.baseProperty;
-        }
-
-        if (typeof this.args.boldTitle === 'undefined') {
-            this.boldTitle = true;  // default
-        }
-        else {
-            this.boldTitle = this.args.boldTitle;
-        }
-    }
+export default class ColumnListPropertiesTable extends PropertiesTable {
 
     get anyDataPresent() {
         if (this.baseProperty) {
@@ -50,7 +34,7 @@ export default class ColumnListPropertiesTable extends Component {
     }
 
     @action
-    updateCellValue(index, attrName, unitValue) {
+    updateListValue(index, attrName, unitValue) {
         if (unitValue) {
             if (!Number.isNaN(unitValue.value)) {
                 set(this.baseProperty[index], attrName, unitValue);
@@ -65,7 +49,7 @@ export default class ColumnListPropertiesTable extends Component {
     }
 
     @action
-    updateCellString(index, attrName, event) {
+    updateListString(index, attrName, event) {
         if (event.target.value) {
             set(this.baseProperty[index], attrName, event.target.value);
         }
