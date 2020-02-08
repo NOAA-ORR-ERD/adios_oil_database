@@ -1,0 +1,30 @@
+{
+  "id": "toxicity.json",
+  "template": {
+      "species": {
+          "label": "Species",
+          "dataType": "string",
+          "size": 20
+      },
+      "tox_type": {
+          "label": "Type",
+          "dataType": "string",
+          "size": 5
+      },
+      "after_24h": {
+          "label": "24 Hours",
+          "dataType": "number",
+          "precision": 2
+      },
+      "after_48h": {
+          "label": "48 Hours",
+          "dataType": "number",
+          "precision": 2
+      },
+      "after_96h": {
+          "label": "96 Hours",
+          "dataType": "number",
+          "precision": 2
+      }
+  }
+}
