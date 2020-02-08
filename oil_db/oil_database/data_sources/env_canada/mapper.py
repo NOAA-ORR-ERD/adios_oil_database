@@ -497,7 +497,7 @@ class EnvCanadaAttributeMapper(object):
 
                 if value is not None:
                     kwargs[new_lbl] = {
-                        'value': value, 'from_unit': 'ug/g', 'unit': 'ppm',
+                        'value': value, 'unit': 'ug/g',
                         '_cls': self._class_path(ConcentrationInWaterUnit)
                     }
 
@@ -522,7 +522,7 @@ class EnvCanadaAttributeMapper(object):
 
                 if value is not None:
                     kwargs[new_lbl] = {
-                        'value': value, 'from_unit': 'mg/g', 'unit': 'ppm',
+                        'value': value, 'unit': 'mg/g',
                         '_cls': self._class_path(ConcentrationInWaterUnit)
                     }
 
