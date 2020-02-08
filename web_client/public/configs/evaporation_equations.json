@@ -1,0 +1,25 @@
+{
+  "id": "evaporation_equations.json",
+  "template": {
+      "a": {
+          "label": "A",
+          "dataType": "number",
+          "precision": 2
+      },
+      "b": {
+          "label": "B",
+          "dataType": "number",
+          "precision": 2
+      },
+      "c": {
+          "label": "C",
+          "dataType": "number",
+          "precision": 2
+      },
+      "equation": {
+          "label": "Equation",
+          "dataType": "string",
+          "size": 20
+      }
+  }
+}
