@@ -15,7 +15,7 @@
         @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
           this.args.valuePrecision true}}
         @change={{action "updateValue"}}
-        @size="10"
+        size="10"
       />
     {{else}}
       <Input
@@ -24,7 +24,7 @@
         @value=""
         @placeholder="Enter a number value"
         @change={{action "updateValue"}}
-        @size="10"
+        size="10"
       />
     {{/if}}
     <label class="input-group-text">
