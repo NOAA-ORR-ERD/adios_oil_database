@@ -34,14 +34,6 @@
        tab-level="1">
       Environmental Behavior
     </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-ccme-tab-{{slug this.args.sampleName}}"
-       href="#nav-ccme-{{slug this.args.sampleName}}"
-       aria-controls="nav-ccme-{{slug this.args.sampleName}}"
-       aria-selected="false"
-       tab-level="1">
-      CCME
-    </a>
   </div>
 </nav>
 
@@ -94,19 +86,6 @@
        aria-labelledby="nav-environmental-tab-{{slug this.args.sampleName}}"
        tab-level="1">
     <TabPane::Environmental
-      @oil={{this.sample}}
-      @store={{this.args.store}}
-      @editable={{this.args.editable}}
-      @sampleName={{this.args.sampleName}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
-
-  <div role="tabpanel" class="tab-pane fade"
-       id="nav-ccme-{{slug this.args.sampleName}}"
-       aria-labelledby="nav-ccme-tab-{{slug this.args.sampleName}}"
-       tab-level="1">
-    <TabPane::Ccme
       @oil={{this.sample}}
       @store={{this.args.store}}
       @editable={{this.args.editable}}
