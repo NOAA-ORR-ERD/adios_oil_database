@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 import $ from 'jquery';
 
@@ -22,11 +21,11 @@ export default class SubSample extends Component {
             i.setAttribute('aria-selected', false);
         });
 
-        if (this.args.categoryTab &&
-            element.querySelector(`a[href="${this.args.categoryTab}"]`))
+        if (this.args.sampleTab && this.args.categoryTab &&
+            element.querySelector(`a[href="${this.args.categoryTab[this.args.sampleTab]}"]`))
         {
             // set our last active tab
-            let elem = element.querySelector(`a[href="${this.args.categoryTab}"]`);
+            let elem = element.querySelector(`a[href="${this.args.categoryTab[this.args.sampleTab]}"]`);
             elem.setAttribute('aria-selected', true);
             elem.classList.add('active');
         }
@@ -54,10 +53,10 @@ export default class SubSample extends Component {
             i.classList.remove('active', 'show');
         });
 
-        if (this.args.categoryTab &&
-                element.querySelector(this.args.categoryTab))
+        if (this.args.sampleTab && this.args.categoryTab &&
+                element.querySelector(this.args.categoryTab[this.args.sampleTab]))
         {
-            element.querySelector(this.args.categoryTab)
+            element.querySelector(this.args.categoryTab[this.args.sampleTab])
                 .classList.add('active', 'show');
         }
         else {
