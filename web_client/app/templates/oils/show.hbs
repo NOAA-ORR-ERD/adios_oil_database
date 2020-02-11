@@ -91,9 +91,9 @@
     @oil={{this.model}}
     @editable={{this.editable}}
     @categoryTab={{this.currentCategoryTab}}
-    @updateCategoryTab={{action (mut this.currentCategoryTab)}}
+    @updateCategoryTab={{action this.updateCategoryTab}}
     @sampleTab={{this.currentSampleTab}}
-    @updateSampleTab={{action (mut this.currentSampleTab)}}
+    @updateSampleTab={{action this.updateSampleTab}}
     @submit={{action send "updateOil"}}
   />
 
