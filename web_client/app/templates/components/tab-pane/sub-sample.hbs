@@ -1,97 +1,40 @@
-<nav
-  {{did-insert this.setToLastNavTab}}
->
+<nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" data-toggle="tab" role="tab"
-       id="nav-physical-tab-{{slug this.args.sampleName}}"
-       href="#nav-physical-{{slug this.args.sampleName}}"
-       aria-controls="nav-physical-{{slug this.args.sampleName}}"
-       aria-selected="true"
-       tab-level="1">
-      Physical Properties
-    </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-distillation-tab-{{slug this.args.sampleName}}"
-       href="#nav-distillation-{{slug this.args.sampleName}}"
-       aria-controls="nav-distillation-{{slug this.args.sampleName}}"
-       aria-selected="false"
-       tab-level="1">
-      Distillation Data
-    </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-composition-tab-{{slug this.args.sampleName}}"
-       href="#nav-composition-{{slug this.args.sampleName}}"
-       aria-controls="nav-composition-{{slug this.args.sampleName}}"
-       aria-selected="false"
-       tab-level="1">
-      Composition
-    </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-environmental-tab-{{slug this.args.sampleName}}"
-       href="#nav-environmental-{{slug this.args.sampleName}}"
-       aria-controls="nav-environmental-{{slug this.args.sampleName}}"
-       aria-selected="false"
-       tab-level="1">
-      Environmental Behavior
-    </a>
+    {{#each this.navTabProperties as |props|}}
+      <a data-toggle="tab" role="tab" tab-level="1"
+         id={{props.id}}
+         href={{props.href}}
+         aria-controls={{props.aria-controls}}
+         class={{props.class}}
+         aria-selected={{props.aria-selected}}
+         {{did-insert this.setEventShown}}
+         >
+        {{props.label}}
+      </a>
+    {{/each}}
   </div>
 </nav>
 
 
-<div class="tab-content" id="nav-tabContent"
-  {{did-insert this.setToLastTabPane}}
->
-  <div role="tabpanel" class="tab-pane fade active show"
-       id="nav-physical-{{slug this.args.sampleName}}"
-       aria-labelledby="nav-physical-tab-{{slug this.args.sampleName}}"
-       tab-level="1">
-    <TabPane::Physical
-      @oil={{this.sample}} 
-      @sampleIndex={{this.sampleIndex}}
-      @sampleName={{this.args.sampleName}} 
-      @editable={{this.args.editable}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
+<div class="tab-content" id="nav-tabContent">
+  {{#each this.tabPaneProperties as |props|}}
+    <div role="tabpanel" tab-level="1"
+         id={{props.id}}
+         aria-labelledby={{props.aria-labelledby}}
+         class={{props.class}}
+    >
+      {{component props.componentName
+        oil=this.sample
+        store=this.args.store
+        editable=this.args.editable
+        submit=(action "submitSample")
+        sampleIndex=this.sampleIndex
+        sampleName=this.args.sampleName}}
+    </div>
 
-  <div role="tabpanel" class="tab-pane fade active"
-       id="nav-distillation-{{slug this.args.sampleName}}"
-       aria-labelledby="nav-distillation-tab-{{slug this.args.sampleName}}"
-       tab-level="1">
-    {{! class 'active' is necessary for the graph to render properly,
-        even if the tab is not initially shown }}
-    <TabPane::Distillation
-      @oil={{this.sample}}
-      @editable={{this.args.editable}}
-      @sampleName={{this.args.sampleName}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
 
-  <div role="tabpanel" class="tab-pane fade"
-       id="nav-composition-{{slug this.args.sampleName}}"
-       aria-labelledby="nav-composition-tab-{{slug this.args.sampleName}}"
-       tab-level="1">
-    <TabPane::Composition
-      @oil={{this.sample}}
-      @store={{this.args.store}}
-      @editable={{this.args.editable}}
-      @sampleName={{this.args.sampleName}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
 
-  <div role="tabpanel" class="tab-pane fade"
-       id="nav-environmental-{{slug this.args.sampleName}}"
-       aria-labelledby="nav-environmental-tab-{{slug this.args.sampleName}}"
-       tab-level="1">
-    <TabPane::Environmental
-      @oil={{this.sample}}
-      @store={{this.args.store}}
-      @editable={{this.args.editable}}
-      @sampleName={{this.args.sampleName}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
+
+  {{/each}}
 
 </div>

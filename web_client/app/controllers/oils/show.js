@@ -3,9 +3,9 @@ import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 
 export default class ShowController extends Controller {
-    @tracked currentSampleTab = '#nav-fresh-oil-sample';
+    @tracked currentSampleTab = '#fresh-oil-sample';
     @tracked currentCategoryTab = {
-        '#nav-fresh-oil-sample': '#nav-physical-fresh-oil-sample'
+        '#fresh-oil-sample': '#fresh-oil-sample-physical'
     };
 
     @action
@@ -17,6 +17,9 @@ export default class ShowController extends Controller {
     updateCategoryTab(newTab) {
         if (this.currentSampleTab) {
             this.currentCategoryTab[this.currentSampleTab] = newTab;
+
+            // trigger an update
+            this.currentCategoryTab = this.currentCategoryTab;
         }
     }
 }

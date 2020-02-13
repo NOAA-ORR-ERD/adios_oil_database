@@ -9,7 +9,7 @@ export default class SubSample extends Component {
     sampleTab() {
         if (this.args.sampleTab) {
             // get the last active subsample tab
-            return this.args.sampleTab.slice('#nav-'.length);
+            return this.args.sampleTab.slice('#'.length);
         }
         else {
             // just choose the first tab
@@ -25,9 +25,9 @@ export default class SubSample extends Component {
             let ret = {
                 'name': s.name,
                 'short_name': s.short_name,
-                'id': 'nav-' + tabName + '-tab',
-                'href': '#nav-' + tabName,
-                'aria-controls': 'nav-' + tabName
+                'id': tabName + '-nav-tab',
+                'href': '#' + tabName,
+                'aria-controls': tabName
             };
 
             if (savedTab === tabName) {
@@ -55,12 +55,12 @@ export default class SubSample extends Component {
             let ret = {
                 'name': s.name,
                 'short_name': s.short_name,
-                'id': 'nav-' + tabName,
-                'aria-labelledby': 'nav-' + tabName + '-tab'
+                'id': tabName,
+                'aria-labelledby': tabName + '-nav-tab'
             };
 
 
-            if (sampleTab === slugify(s.name)) {
+            if (sampleTab === tabName) {
                 return {
                     ...ret,
                     'class': 'tab-pane fade active show'
