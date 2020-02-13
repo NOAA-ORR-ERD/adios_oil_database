@@ -39,6 +39,32 @@ export default class SubSample extends Component {
         }
     }
 
+    visible(currentTab) {
+        // Which tab is visible at any given state?
+        // - When we switch to a sample tab for the first time, it's sampletab->physical
+        // - When we switch to it after that, it's sampletab->lastactive
+        let ret = false;
+        let currentSampleTab = '#' + slugify(this.sample.name);
+
+        if (currentSampleTab === this.args.sampleTab) {
+            // we are at least on the right sample
+            // is it the right category?
+            if (typeof this.args.categoryTab[currentSampleTab] === 'undefined') {
+                // we choose physical as the default
+                if (currentTab === 'physical') {
+                    ret = true;
+                }
+            }
+            else if (this.args.categoryTab[currentSampleTab] === currentSampleTab + '-' + currentTab)
+            {
+                // we choose the last active category tab
+                ret = true;
+            }
+        }
+
+        return ret;
+    }
+
     get navTabProperties() {
         return [
             ['physical', 'Physical Properties'],
@@ -54,8 +80,7 @@ export default class SubSample extends Component {
                 'aria-controls': this.sampleTab() + '-' + tabName,
             }
 
-            if ('#' + this.categoryTab() === ret['href'])
-            {
+            if ('#' + this.categoryTab() === ret['href']) {
                 return {
                     ...ret,
                     'class': 'nav-item nav-link active',
@@ -84,10 +109,10 @@ export default class SubSample extends Component {
                 'id': this.sampleTab() + '-' + tabName,
                 'aria-labelledby': this.sampleTab() + '-' + tabName + '-nav-tab',
                 'componentName': componentName,
+                'visible': this.visible(tabName)
             }
 
-            if (this.categoryTab() === ret['id'])
-            {
+            if (this.categoryTab() === ret['id']) {
                 return {
                     ...ret,
                     'class': 'tab-pane fade active show'

@@ -18,23 +18,21 @@
 
 <div class="tab-content" id="nav-tabContent">
   {{#each this.tabPaneProperties as |props|}}
-    <div role="tabpanel" tab-level="1"
-         id={{props.id}}
-         aria-labelledby={{props.aria-labelledby}}
-         class={{props.class}}
-    >
-      {{component props.componentName
-        oil=this.sample
-        store=this.args.store
-        editable=this.args.editable
-        submit=(action "submitSample")
-        sampleIndex=this.sampleIndex
-        sampleName=this.args.sampleName}}
-    </div>
-
-
-
-
+    {{#if props.visible}}
+      <div role="tabpanel" tab-level="1"
+           id={{props.id}}
+           aria-labelledby={{props.aria-labelledby}}
+           class={{props.class}}
+      >
+        {{component props.componentName
+          oil=this.sample
+          store=this.args.store
+          editable=this.args.editable
+          submit=(action "submitSample")
+          sampleIndex=this.sampleIndex
+          sampleName=this.args.sampleName}}
+      </div>
+    {{/if}}
   {{/each}}
 
 </div>
