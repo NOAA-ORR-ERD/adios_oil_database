@@ -183,24 +183,14 @@
     </div>
     <div class="col-12 p-0 input-group">
       {{#let (if this.args.oil.comments this.args.oil.comments (if this.args.editable "" "None")) as |oilComments|}}
-        {{#if this.args.editable}}
-          <Textarea
-            @class="p-1 flex-fill bg-transparent border"
-            @value={{oilComments}}
-            @rows="3"
-            @placeholder="Enter comments"
-            @change={{action "updateComments"}}
-          />
-        {{else}}
-          <Textarea
-            @class="p-1 flex-fill bg-transparent border"
-            @value={{oilComments}}
-            @rows="3"
-            @placeholder="Enter comments"
-            @change={{action "updateComments"}} 
-            disabled
-          />
-        {{/if}}
+        <Textarea
+          @class="p-1 flex-fill bg-transparent border"
+          @value={{oilComments}}
+          @rows="3"
+          @placeholder="Enter comments"
+          @change={{action "updateComments"}}
+          disabled={{not this.args.editable}}
+        />
       {{/let}}
     </div>
   </div>
