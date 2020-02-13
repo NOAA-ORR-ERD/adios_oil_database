@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import slugify from 'ember-slugify';
 
 export default class ListPropertiesTable extends Component {
     constructor() {

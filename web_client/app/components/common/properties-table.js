@@ -78,12 +78,12 @@ export default class PropertiesTable extends Component {
     updateAttrValue(attrName, unitValue) {
         if (unitValue) {
             if (!Number.isNaN(unitValue.value)) {
-                set(this.baseProperty[index], attrName, unitValue);
+                set(this.baseProperty, attrName, unitValue);
             }
         }
         else {
             // empty value entered, remove the attribute
-            delete this.baseProperty[index][attrName];
+            delete this.baseProperty[attrName];
         }
 
         this.args.submit();
@@ -92,11 +92,11 @@ export default class PropertiesTable extends Component {
     @action
     updateAttrString(attrName, event) {
         if (event.target.value) {
-            set(this.baseProperty[index], attrName, event.target.value);
+            set(this.baseProperty, attrName, event.target.value);
         }
         else {
             // empty value entered, remove the attribute
-            delete this.baseProperty[index][attrName];
+            delete this.baseProperty[attrName];
         }
 
         this.args.submit();

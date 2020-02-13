@@ -1,4 +1,3 @@
-import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
 import PropertiesTable from "./properties-table";
 
