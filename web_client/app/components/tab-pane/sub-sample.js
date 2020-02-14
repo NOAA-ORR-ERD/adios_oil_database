@@ -112,16 +112,16 @@ export default class SubSample extends Component {
                 'visible': this.visible(tabName)
             }
 
-            if (this.categoryTab() === ret['id']) {
+            if (ret['visible']) {
                 return {
                     ...ret,
-                    'class': 'tab-pane fade active show'
+                    'class': 'tab-pane active show'
                 };
             }
             else {
                 return {
                     ...ret,
-                    'class': 'tab-pane fade'
+                    'class': 'tab-pane'
                 };
             }
         });

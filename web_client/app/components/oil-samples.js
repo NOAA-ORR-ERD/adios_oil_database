@@ -62,13 +62,13 @@ export default class SubSample extends Component {
             if (sampleTab === tabName) {
                 return {
                     ...ret,
-                    'class': 'tab-pane fade active show'
+                    'class': 'tab-pane active show'
                 };
             }
             else {
                 return {
                     ...ret,
-                    'class': 'tab-pane fade'
+                    'class': 'tab-pane'
                 };
             }
         });
