@@ -9,6 +9,7 @@ const windowStateKeeper = require( "electron-window-state" );
 console.log(require.resolve('electron'))
 const electron = require( "electron" );
 const app = electron.app;
+app.commandLine.appendSwitch( "disable-http-cache" );
 const BrowserWindow = electron.BrowserWindow;
 const isMac = process.platform === 'darwin';
 
@@ -107,7 +108,7 @@ function StartFileServerProcess()
 	}
 	fileServerProcess = childProcess.spawn( appPath,
 											[ "-m", "http.server", "8080" ],
-											{ cwd: cwd } );
+											{ cwd: cwd, stdio: "ignore" } );
 	fileServerProcess.on(
 		"error",
 		( err ) =>
@@ -167,7 +168,7 @@ function StartMongoDbProcess()
 	
 	mongoDbProcess = childProcess.spawn( appPath,
 										 [ "-f", configPath ],
-										 { cwd: cwd } );
+										 { cwd: cwd, stdio: "ignore" } );
 	
 	// var subpy = require('child_process').spawn('./dist/server.exe');
 	
@@ -197,13 +198,13 @@ function StartWebApiProcess()
 	{
 		webApiProcess = childProcess.spawn( "python",
 											[ "start_server.py", "config-example.ini" ],
-											{ cwd: cwd } );
+											{ cwd: cwd, stdio: "ignore" } );
 	}
 	else
 	{
 		webApiProcess = childProcess.spawn( appPath,
 											[ "run_web_api.py", "standalone-config.json" ],
-											{ cwd: cwd } );
+											{ cwd: cwd, stdio: "ignore" } );
 	}
 	
 	webApiProcess.on(

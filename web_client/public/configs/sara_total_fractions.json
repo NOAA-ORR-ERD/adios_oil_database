@@ -1,0 +1,21 @@
+{
+  "id": "sara_total_fractions.json",
+  "template": {
+      "saturates": {
+          "label": "Saturates",
+          "inputType": "range"
+      },
+      "aromatics": {
+          "label": "Aromatics",
+          "inputType": "range"
+      },
+      "resins": {
+          "label": "Resins",
+          "inputType": "range"
+      },
+      "asphaltenes": {
+          "label": "Asphaltenes",
+          "inputType": "range"
+      }
+  }
+}

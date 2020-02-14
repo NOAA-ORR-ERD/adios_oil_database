@@ -1,62 +1,37 @@
 <div class="container-fluid">
-  <center>
-    {{#if editable}}
-      <Input 
-        @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
-        @value={{this.oil.name}}
-        @placeholder="Enter Sample Name"
-        @change={{action this.submit this.oil}} 
-      />
-    {{else}}
-      <h4>{{sampleName}}</h4>
-    {{/if}}
 
-    {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
-      <p class="small">
-        {{#if oil.fraction_weathered}}
-          <strong>Weathered Fraction:</strong>
-          {{#if editable}}
-            <Input 
-              @class="edit-fraction-weathered p-1 my-3 flex-fill bg-transparent border"
-              @value={{this.oil.fraction_weathered}}
-              @placeholder="Enter Weathered Fraction"
-              @change={{action this.submit this.oil}} 
-            />
-          {{else}}
-            {{#if oil.fraction_weathered.unit}}
-              {{value-unit oil.fraction_weathered 2}}
-            {{else}}
-              {{oil.fraction_weathered}}
-            {{/if}}
-          {{/if}}
-        {{/if}}
-
-        {{#if oil.boiling_point_range}}
-          {{#if oil.fraction_weathered}}
-            <br>
-          {{/if}}
-          <strong>BP Range:</strong>
-          {{value-unit oil.boiling_point_range 2}}
-        {{/if}}
-      </p>
-    {{/if}}
-  </center>
+  <TabPane::PaneHeader
+    @oil={{this.args.oil}}
+    @editable={{this.args.editable}}
+    @submit={{this.args.submit}}
+    @sampleName={{this.args.sampleName}}
+  />
 
   <div class="row">
-    <div class="col-lg-5">
-      <Table::Distillation
-        @oil={{oil}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
-        @sampleIndex={{this.sampleIndex}}
-        class="row"/>
-
+    <div class="col-lg-4">
+      <Common::ValueUnitTable
+        @valueArray={{this.args.oil.cuts}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
+        @tableTitle="Distillation Cuts"
+        @leftColumnTitle="Mass Percent"
+        @leftColumnValueName="fraction"
+        @leftColumnUnit="%"
+        @leftColumnPrecision={{2}}
+        @rightColumnTitle="Vapor Temperature"
+        @rightColumnValueName="vapor_temp"
+        @rightColumnUnit="C"
+        @rightColumnPrecision={{2}}
+      />
     </div>
 
     <div class="col-lg-5">
       <strong>Distillation Graph:</strong>
 
-      <Graph::Distillation @oil={{oil}} @sampleName={{sampleName}} class="row"/>
+      <Graph::Distillation
+        @oil={{this.args.oil}}
+        @sampleName={{this.args.sampleName}}
+      />
     </div>
 
   </div>

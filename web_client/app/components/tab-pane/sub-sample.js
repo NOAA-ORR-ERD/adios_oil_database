@@ -1,76 +1,148 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from "@ember/object";
+import slugify from 'ember-slugify';
 import $ from 'jquery';
 
-export default Component.extend({
-    didReceiveAttrs() {
-        this._super(...arguments);
+export default class SubSample extends Component {
+    get sample() {
+        return this.args.oil.samples.find(s => s.name === this.args.sampleName);
+    }
 
-        let sampleName = this.get('sampleName');
-        let samples = this.get('oil').samples;
-
-        let sample = samples.find( (s) => {
-            return s.name === sampleName;
-        });
-
+    get sampleIndex() {
         // get an index of the current sample - to use one for component ID
-        let sampleIndex = this.get('oil').samples.findIndex(
-            xSample => xSample.name === sampleName);
+        return this.args.oil.samples.findIndex(s => s.name === this.args.sampleName);
+    }
 
-        this.set('sample', sample);
-        this.set('sampleIndex', sampleIndex);
-    },
-
-    didInsertElement() {
-        this._super(...arguments);
-
-        if (this.categoryTab &&
-            this.element.querySelector(this.categoryTab))
-        {
-            this.element.querySelectorAll('.tab-pane').forEach(i => {
-                i.classList.remove('active', 'show');
-            });
-            this.element.querySelectorAll('a[data-toggle="tab"]').forEach(i => {
-                i.classList.remove('active');
-                i.setAttribute('aria-selected', false);
-            });
-
-            let elem = this.element.querySelector(`a[href="${this.categoryTab}"]`);
-            elem.setAttribute('aria-selected', true);
-            elem.classList.add('active');
-
-            this.element.querySelector(this.categoryTab)
-                .classList.add('active', 'show');
+    sampleTab() {
+        if (this.args.sampleTab) {
+            // get the last active subsample tab
+            return this.args.sampleTab.slice('#'.length);
         }
         else {
-            // just use the default behavior
-            this.element.querySelectorAll('.tab-pane').forEach(i => {
-                if (!i.classList.contains('show')) {
-                    i.classList.remove('active');
+            // just choose the first tab
+            return slugify(this.args.oil.samples[0].name);
+        }
+    }
+
+    categoryTab() {
+        if(this.args.sampleTab && this.args.categoryTab &&
+                this.args.categoryTab[this.args.sampleTab]) {
+            return this.args.categoryTab[this.args.sampleTab].slice('#'.length)
+        }
+        else if (this.args.sampleTab) {
+            // choose the first category in the current sample
+            return this.args.sampleTab.slice('#'.length) + '-physical';
+        }
+        else {
+            // just choose the first category in the fresh sample
+            return 'fresh-oil-sample-physical';
+        }
+    }
+
+    visible(currentTab) {
+        // Which tab is visible at any given state?
+        // - When we switch to a sample tab for the first time, it's sampletab->physical
+        // - When we switch to it after that, it's sampletab->lastactive
+        let ret = false;
+        let currentSampleTab = '#' + slugify(this.sample.name);
+
+        if (currentSampleTab === this.args.sampleTab) {
+            // we are at least on the right sample
+            // is it the right category?
+            if (typeof this.args.categoryTab[currentSampleTab] === 'undefined') {
+                // we choose physical as the default
+                if (currentTab === 'physical') {
+                    ret = true;
                 }
-            });
+            }
+            else if (this.args.categoryTab[currentSampleTab] === currentSampleTab + '-' + currentTab)
+            {
+                // we choose the last active category tab
+                ret = true;
+            }
         }
 
+        return ret;
+    }
+
+    get navTabProperties() {
+        return [
+            ['physical', 'Physical Properties'],
+            ['distillation', 'Distillation Data'],
+            ['composition', 'Composition'],
+            ['environmental', 'Environmental Behavior']
+        ].map((item) => {
+            let [tabName, label] = item;
+            let ret = {
+                'label': label,
+                'id': this.sampleTab() + '-' + tabName + '-nav-tab',
+                'href': '#' + this.sampleTab() + '-' + tabName,
+                'aria-controls': this.sampleTab() + '-' + tabName,
+            }
+
+            if ('#' + this.categoryTab() === ret['href']) {
+                return {
+                    ...ret,
+                    'class': 'nav-item nav-link active',
+                    'aria-selected': true
+                };
+            }
+            else {
+                return {
+                    ...ret,
+                    'class': 'nav-item nav-link',
+                    'aria-selected': false
+                };
+            }
+        });
+    }
+
+    get tabPaneProperties() {
+        return [
+            ['physical', 'tab-pane/physical'],
+            ['distillation', 'tab-pane/distillation'],
+            ['composition', 'tab-pane/composition'],
+            ['environmental', 'tab-pane/environmental']
+        ].map((item) => {
+            let [tabName, componentName] = item;
+            let ret = {
+                'id': this.sampleTab() + '-' + tabName,
+                'aria-labelledby': this.sampleTab() + '-' + tabName + '-nav-tab',
+                'componentName': componentName,
+                'visible': this.visible(tabName)
+            }
+
+            if (this.categoryTab() === ret['id']) {
+                return {
+                    ...ret,
+                    'class': 'tab-pane fade active show'
+                };
+            }
+            else {
+                return {
+                    ...ret,
+                    'class': 'tab-pane fade'
+                };
+            }
+        });
+    }
+
+    @action
+    setEventShown(element) {
         // Note: Ember doesn't want you to use JQuery for some purity reason,
         //       and it throws warnings when the app starts.
         //       Unfortunately, JQuery is the only way to add an event listener
         //       to a bootstrap tab.
-        $(this.element).find('a[data-toggle="tab"]')
-                       .off("shown.bs.tab")
-                       .on('shown.bs.tab', this, this.actions.shown);
-
-    },
-
-    actions: {
-        shown(event) {
-            event.data.updateCategoryTab(event.currentTarget.hash);
-        },
-
-        submitSample() {
-            let oil = this.get('oil');
-            // let samples =  oil.samples;
-            // samples[this.sampleIndex] = sample;
-            // oil.set('samples', samples);
-            this.submit(oil);
-        }
+        $(element).off("shown.bs.tab").on('shown.bs.tab', this, this.shown);
     }
-});
+
+    @action
+    shown(event) {
+        event.data.args.updateCategoryTab(event.currentTarget.hash);
+    }
+
+    @action
+    submitSample() {
+        this.args.submit(this.args.oil);
+    }
+}

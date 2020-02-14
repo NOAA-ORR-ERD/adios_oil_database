@@ -11,8 +11,8 @@
     <table class="table table-hover table-bordered">
       <thead>
         <tr>
-          {{#each-in this.args.properties as |attr value|}}
-              <th scope="col">{{value.label}}</th>
+          {{#each-in this.properties as |attr value|}}
+            <th scope="col">{{value.label}}</th>
           {{/each-in}}
 
 
@@ -33,15 +33,13 @@
         {{#if (or this.args.editable anyDataPresent)}}
           {{#each this.baseProperty as |row index|}}
             <tr>
-              {{#each-in this.args.properties as |attr value|}}
+              {{#each-in this.properties as |attr value|}}
                 <td>
                   {{#if (eq value.dataType "value-unit")}}
                     <Common::ValueUnitInput
                       @valueObject={{get row attr}}
                       @editable={{this.args.editable}}
-
-                      @submit={{fn this.updateCellValue index attr}}
-
+                      @submit={{fn this.updateListValue index attr}}
                       @valueUnit={{value.unit}}
                       @valuePrecision={{value.precision}}
                     />
@@ -50,7 +48,19 @@
                       <Input @class="p-1 overflow-hidden bg-transparent border"
                         @value={{get row attr}}
                         @placeholder="Enter Value"
-                        @change={{fn this.updateCellString index attr}}
+                        @change={{fn this.updateListString index attr}}
+                        size={{if value.size value.size "10"}}
+                      />
+                    {{else}}
+                      <span class="p-1">{{get row attr}}</span>
+                    {{/if}}
+                  {{else if (eq value.dataType "number")}}
+                    {{#if this.args.editable}}
+                      <Input @class="p-1 overflow-hidden bg-transparent border"
+                        @value={{get row attr}}
+                        @placeholder="Enter Value"
+                        @change={{fn this.updateListString index attr}}
+                        size={{if value.size value.size "10"}}
                       />
                     {{else}}
                       <span class="p-1">{{get row attr}}</span>

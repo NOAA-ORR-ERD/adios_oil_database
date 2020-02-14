@@ -1,0 +1,37 @@
+{
+  "id": "ccme_f1.json",
+  "template": {
+      "n_c8_to_n_c10": {
+          "label": "n-C8 to n-C10",
+          "dataType": "number"
+      },
+      "n_c10_to_n_c12": {
+          "label": "n-C10 to n-C12",
+          "dataType": "number"
+      },
+      "n_c12_to_n_c16": {
+          "label": "n-C12 to n-C16",
+          "dataType": "number"
+      },
+      "n_c16_to_n_c20": {
+          "label": "n-C16 to n-C20",
+          "dataType": "number"
+      },
+      "n_c20_to_n_c24": {
+          "label": "n-C20 to n-C24",
+          "dataType": "number"
+      },
+      "n_c24_to_n_c28": {
+          "label": "n-C24 to n-C28",
+          "dataType": "number"
+      },
+      "n_c28_to_n_c34": {
+          "label": "n-C28 to n-C34",
+          "dataType": "number"
+      },
+      "n_c34": {
+          "label": "n-C34+",
+          "dataType": "number"
+      }
+  }
+}

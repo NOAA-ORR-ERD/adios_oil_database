@@ -1,82 +1,38 @@
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" data-toggle="tab" role="tab"
-       id="nav-physical-tab-{{slug sampleName}}"
-       href="#nav-physical-{{slug sampleName}}"
-       aria-controls="nav-physical-{{slug sampleName}}"
-       aria-selected="true">
-      Physical Properties
-    </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-distillation-tab-{{slug sampleName}}"
-       href="#nav-distillation-{{slug sampleName}}"
-       aria-controls="nav-distillation-{{slug sampleName}}"
-       aria-selected="false">
-      Distillation Data
-    </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-composition-tab-{{slug sampleName}}"
-       href="#nav-composition-{{slug sampleName}}"
-       aria-controls="nav-composition-{{slug sampleName}}"
-       aria-selected="false">
-      Composition
-    </a>
-    <a class="nav-item nav-link" data-toggle="tab" role="tab"
-       id="nav-environmental-tab-{{slug sampleName}}"
-       href="#nav-environmental-{{slug sampleName}}"
-       aria-controls="nav-environmental-{{slug sampleName}}"
-       aria-selected="false">
-      Environmental Behavior
-    </a>
+    {{#each this.navTabProperties as |props|}}
+      <a data-toggle="tab" role="tab" tab-level="1"
+         id={{props.id}}
+         href={{props.href}}
+         aria-controls={{props.aria-controls}}
+         class={{props.class}}
+         aria-selected={{props.aria-selected}}
+         {{did-insert this.setEventShown}}
+         >
+        {{props.label}}
+      </a>
+    {{/each}}
   </div>
 </nav>
 
 
 <div class="tab-content" id="nav-tabContent">
-  <div role="tabpanel" class="tab-pane fade active show"
-       id="nav-physical-{{slug sampleName}}"
-       aria-labelledby="nav-physical-tab-{{slug sampleName}}">
-    <TabPane::Physical
-      @oil={{sample}} 
-      @sampleName={{sampleName}} 
-      @sampleIndex={{this.sampleIndex}}
-      @editable={{this.editable}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
+  {{#each this.tabPaneProperties as |props|}}
+    {{#if props.visible}}
+      <div role="tabpanel" tab-level="1"
+           id={{props.id}}
+           aria-labelledby={{props.aria-labelledby}}
+           class={{props.class}}
+      >
+        {{component props.componentName
+          oil=this.sample
+          store=this.args.store
+          editable=this.args.editable
+          submit=(action "submitSample")
+          sampleIndex=this.sampleIndex
+          sampleName=this.args.sampleName}}
+      </div>
+    {{/if}}
+  {{/each}}
 
-  <div role="tabpanel" class="tab-pane fade active"
-       id="nav-distillation-{{slug sampleName}}"
-       aria-labelledby="nav-distillation-tab-{{slug sampleName}}">
-    {{! class 'active' is necessary for the graph to render properly,
-        even if the tab is not initially shown }}
-    <TabPane::Distillation
-      @oil={{sample}}
-      @sampleName={{sampleName}}
-      @editable={{this.editable}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
-
-  <div role="tabpanel" class="tab-pane fade"
-       id="nav-composition-{{slug sampleName}}"
-       aria-labelledby="nav-composition-tab-{{slug sampleName}}">
-    <TabPane::Composition
-      @oil={{sample}}
-      @sampleName={{sampleName}}
-      @editable={{this.editable}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
-
-  <div role="tabpanel" class="tab-pane fade"
-       id="nav-environmental-{{slug sampleName}}"
-       aria-labelledby="nav-environmental-tab-{{slug sampleName}}">
-    <TabPane::Environmental
-      @oil={{sample}}
-      @sampleName={{sampleName}}
-      @editable={{this.editable}}
-      @submit={{action "submitSample"}}
-    />
-  </div>
 </div>

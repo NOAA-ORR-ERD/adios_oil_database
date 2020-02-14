@@ -36,7 +36,7 @@
 
       <tbody>
         {{#if (or this.args.editable anyDataPresent)}}
-          {{#each-in this.args.properties as |attr value|}}
+          {{#each-in this.properties as |attr value|}}
             <tr>
               <th scope="col">{{value.label}}</th>
 
@@ -46,7 +46,7 @@
                     <Common::ValueUnitInput
                       @valueObject={{get col attr}}
                       @editable={{this.args.editable}}
-                      @submit={{fn this.updateCellValue index attr}}
+                      @submit={{fn this.updateListValue index attr}}
                       @valueUnit={{value.unit}}
                       @valuePrecision={{value.precision}}
                     />
@@ -55,7 +55,8 @@
                       <Input @class="p-1 overflow-hidden bg-transparent border"
                         @value={{get col attr}}
                         @placeholder="Enter Value"
-                        @change={{fn this.updateCellString index attr}}
+                        @change={{fn this.updateListString index attr}}
+                        size={{if value.size value.size "10"}}
                       />
                     {{else}}
                       <span class="p-1">{{get col attr}}</span>
@@ -65,7 +66,8 @@
                       <Input @class="p-1 overflow-hidden bg-transparent border"
                         @value={{get col attr}}
                         @placeholder="Enter Value"
-                        @change={{fn this.updateCellString index attr}}
+                        @change={{fn this.updateListString index attr}}
+                        size={{if value.size value.size "10"}}
                       />
                     {{else}}
                       <span class="p-1">{{get col attr}}</span>

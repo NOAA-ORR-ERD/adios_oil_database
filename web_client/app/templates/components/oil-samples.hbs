@@ -1,40 +1,42 @@
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    {{#each (weathered-samples this.oil) as |name idx|}}
-      <a id="nav-{{slug name.[0]}}-tab"
-         href="#nav-{{slug name.[0]}}"
-         aria-controls="nav-{{slug name.[0]}}"
-         data-toggle="tab" role="tab"
-         class="nav-item nav-link"
-         aria-selected="false"
-         tab-level="0">
+    {{#each this.navTabProperties as |props idx|}}
+      <a data-toggle="tab" role="tab" tab-level="0"
+         id={{props.id}}
+         href={{props.href}}
+         aria-controls={{props.aria-controls}}
+         class={{props.class}}
+         aria-selected={{props.aria-selected}}
+         {{did-insert this.setEventShown}}
+      >
 
-        {{#if this.editable}}
+
+        {{#if this.args.editable}}
           <Input
             @class="p-1 overflow-hidden bg-transparent border"
-            @value={{name.[1]}}
+            @value={{props.short_name}}
             @change={{action "updateShortSampleName" idx}}
           />
         {{else}}
-          {{name.[1]}}
+          {{props.short_name}}
         {{/if}}
 
         {{#if idx}}
-          {{#if this.editable}}
+          {{#if this.args.editable}}
             <TabNav::RemoveSample
-              @oil={{this.oil}}
+              @oil={{this.args.oil}}
               @index={{idx}}
-              @submit={{this.submit}}
+              @submit={{this.args.submit}}
             />
           {{/if}}
         {{/if}}
       </a>
     {{/each}}
 
-    {{#if this.editable}}
+    {{#if this.args.editable}}
       <TabNav::AddSample
-        @oil={{this.oil}}
-        @submit={{this.submit}}
+        @oil={{this.args.oil}}
+        @submit={{this.args.submit}}
       />
     {{/if}}
 
@@ -42,34 +44,23 @@
 </nav>
 
 <div class="tab-content" id="nav-tabContent">
-  {{#each (weathered-samples this.oil) as |name idx|}}
-    {{#if idx}}
-      <div class="tab-pane fade active" role="tabpanel"
-           id="nav-{{slug name.[0]}}"
-           aria-labelledby="nav-{{slug name.[0]}}-tab"
-           tab-level="0">
-        <TabPane::SubSample
-          @oil={{this.oil}} @sampleName={{name.[0]}}
-          @editable={{this.editable}}
-          @categoryTab={{this.categoryTab}}
-          @updateCategoryTab={{this.updateCategoryTab}}
-          @submit={{this.submit}}
-        />
-      </div>
-    {{else}}
-      <div class="tab-pane fade active show" role="tabpanel"
-           id="nav-{{slug name.[0]}}"
-           aria-labelledby="nav-{{slug name.[0]}}-tab"
-           tab-level="0">
-        <TabPane::SubSample
-          @oil={{this.oil}} @sampleName={{name.[0]}}
-          @editable={{this.editable}}
-          @categoryTab={{this.categoryTab}}
-          @updateCategoryTab={{this.updateCategoryTab}}
-          @submit={{this.submit}}
-        />
-      </div>
-    {{/if}}
+  {{#each this.tabPaneProperties as |props|}}
+    <div role="tabpanel" tab-level="0"
+      id={{props.id}}
+      aria-labelledby={{props.aria-labelledby}}
+      class={{props.class}}
+    >
+      <TabPane::SubSample
+        @oil={{this.args.oil}}
+        @store={{this.args.oil.store}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
+        @sampleTab={{this.args.sampleTab}}
+        @categoryTab={{this.args.categoryTab}}
+        @updateCategoryTab={{this.args.updateCategoryTab}}
+        @sampleName={{props.name}}
+      />
+    </div>
   {{/each}}
 
 </div>

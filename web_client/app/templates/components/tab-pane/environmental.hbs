@@ -1,74 +1,41 @@
 <div class="container-fluid">
-  <center>
-    {{#if editable}}
-      <Input 
-        @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
-        @value={{this.oil.name}}
-        @placeholder="Enter Sample Name"
-        @change={{action this.submit this.oil}} 
-      />
-    {{else}}
-      <h4>{{sampleName}}</h4>
-    {{/if}}
 
-    {{#if (or oil.fraction_weathered oil.boiling_point_range)}}
-      <p class="small">
-        {{#if oil.fraction_weathered}}
-          <strong>Weathered Fraction:</strong>
-          {{#if editable}}
-            <Input 
-              @class="edit-fraction-weathered p-1 my-3 flex-fill bg-transparent border"
-              @value={{this.oil.fraction_weathered}}
-              @placeholder="Enter Weathered Fraction"
-              @change={{action this.submit this.oil}} 
-            />
-          {{else}}
-            {{#if oil.fraction_weathered.unit}}
-              {{value-unit oil.fraction_weathered 2}}
-            {{else}}
-              {{oil.fraction_weathered}}
-            {{/if}}
-          {{/if}}
-        {{/if}}
-
-        {{#if oil.boiling_point_range}}
-          {{#if oil.fraction_weathered}}
-            <br>
-          {{/if}}
-          <strong>BP Range:</strong>
-          {{value-unit oil.boiling_point_range 2}}
-        {{/if}}
-      </p>
-    {{/if}}
-  </center>
+  <TabPane::PaneHeader
+    @oil={{this.args.oil}}
+    @editable={{this.args.editable}}
+    @submit={{this.args.submit}}
+    @sampleName={{this.args.sampleName}}
+  />
 
   <div class="row">
+
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.oil}}
-        @store={{this.parentView.oil.store}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @oil={{this.args.oil}}
+        @store={{this.args.store}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         @tableTitle="Chemical Dispersibility"
         @propertyName="chemical_dispersibility"
       />
     </div>
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.oil}}
-        @store={{this.parentView.oil.store}}
-        @editable={{this.editable}}
-        @submit={{this.submit}}
+        @oil={{this.args.oil}}
+        @store={{this.args.store}}
+        @editable={{this.args.editable}}
+        @submit={{this.args.submit}}
         @tableTitle="Emulsion Properties"
         @templateName="emulsions"
         @propertyName="emulsions"
         @headerPosition="side"
       />
     </div>
+
   </div>
 
   <div class="row">
-    <div class="col-sm-8 col-xs-12">
+    <div class="col-xs-12 col-sm-8">
     </div>
   </div>
 

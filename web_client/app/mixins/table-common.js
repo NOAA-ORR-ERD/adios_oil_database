@@ -70,25 +70,32 @@ export default Mixin.create({
   },
 
   actions: {
-    onScrolledToBottom() {
-      if (this.get('canLoadMore')) {
-        this.get('fetchRecords').perform();
-      }
-    },
+      onScrolledToBottom() {
+          if (this.get('canLoadMore')) {
+              this.get('fetchRecords').perform();
+          }
+      },
 
-    onColumnClick(column) {
-      if (column.sorted) {
-        this.setProperties({
-          dir: column.ascending ? 'asc' : 'desc',
-          sort: column.get('valuePath'),
-          canLoadMore: true,
-          page: 0
-        });
-        this.get('data').clear();
-        this.set('page', 0);
-        this.get('fetchRecords').perform();
+      onColumnClick(column) {
+          if (column.sorted) {
+              this.setProperties({
+                  dir: column.ascending ? 'asc' : 'desc',
+                          sort: column.get('valuePath'),
+                          canLoadMore: true,
+                          page: 0
+              });
+              this.get('data').clear();
+              this.set('page', 0);
+
+              // Not sure if this is behavior coming from the newly upgraded
+              // version of ember-light-table, or a new version of
+              // ember-scrollable.  But clearing the data automatically triggers
+              // onScrolledToBottom upon rerender.
+              // 
+              // So doing a fetch here is unnecessary.
+              //this.get('fetchRecords').perform();
+          }
       }
-    }
   }
 });
 
