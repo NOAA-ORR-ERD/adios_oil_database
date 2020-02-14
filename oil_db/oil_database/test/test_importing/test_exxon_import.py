@@ -190,7 +190,7 @@ class TestExxonMapper():
 
     def test_dist_cuts_units(self):
         for sample in self.oil.samples:
-            for cut in sample.distillation_cuts:
+            for cut in sample.cuts:
                 assert cut.vapor_temp.unit == "C"
                 assert cut.fraction.unit == "%"
 
@@ -203,14 +203,14 @@ class TestExxonMapper():
     def test_dist_cuts(self, samp_ind, cut_index, fraction, temp_f):
         samples = self.oil.samples
 
-        for cut in samples[samp_ind].distillation_cuts:
+        for cut in samples[samp_ind].cuts:
             print(cut)
-        cut = samples[samp_ind].distillation_cuts[cut_index]
+        cut = samples[samp_ind].cuts[cut_index]
         assert cut.fraction.value == fraction
         assert isclose(cut.vapor_temp.value, uc.convert("F", "C", temp_f), rel_tol=1e-4)
 
     def test_no_cuts_in_butane(self):
-        assert self.oil.samples[1].distillation_cuts == []
+        assert self.oil.samples[1].cuts == []
 
 
 

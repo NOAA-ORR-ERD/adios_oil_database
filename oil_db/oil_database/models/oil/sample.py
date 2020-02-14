@@ -42,7 +42,7 @@ class Sample:
     densities: DensityList = field(default_factory=DensityList)
     kvis: ViscosityList = field(default_factory=ViscosityList)
     dvis: ViscosityList = field(default_factory=ViscosityList)
-    distillation_cuts: DistCutsList = field(default_factory=DistCutsList)
+    cuts: DistCutsList = field(default_factory=DistCutsList)
     # Assorted:
 
     sulfur_mass_fraction: UnittedValue = None

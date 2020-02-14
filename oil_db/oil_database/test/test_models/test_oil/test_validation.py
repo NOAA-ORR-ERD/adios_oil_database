@@ -182,8 +182,10 @@ def test_distillation_cuts(big_record):
 
     validate(oil)
 
+    print(oil['status'])
+    print(oil['samples'][0]['cuts'])
+
     assert snippet_not_in_oil_status("W007:", oil)
-    oil['samples'][0]
 
 
 def test_no_distillation_cuts(big_record):
