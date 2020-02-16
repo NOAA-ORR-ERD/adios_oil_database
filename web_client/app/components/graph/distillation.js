@@ -5,8 +5,9 @@ import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
 
 
 export default class Distillation extends LineChart {
-    xLabel = 'Vapor Temperature (\u00B0C)';
-    yLabel = 'Fraction';
+    xLabel = 'Fraction';
+    yLabel = 'Vapor Temperature (\u00B0C)';
+    xScaleMinRange = [0];
     yScaleMinRange = [0];
 
     initData() {
@@ -47,8 +48,8 @@ export default class Distillation extends LineChart {
             data.push({
                 name: label,
                 values: weathered_cuts.map((c) => ([
-                    convertUnit([c.vapor_temp, 'C']).value,
-                    c.fraction.value
+                    c.fraction.value,
+                    convertUnit([c.vapor_temp, 'C']).value
                     ])),
                     color: 'grey'
             });

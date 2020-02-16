@@ -31,6 +31,11 @@ export default class LineChart extends Component {
     //                      2-tuple, but it can have a tuple with just a
     //                      single number representing a min or a max for
     //                      the range.
+    //    - xScaleMinRange: A list of numbers that set the minimum numeric
+    //                      range for the X axis.  Typically this would be a
+    //                      2-tuple, but it can have a tuple with just a
+    //                      single number representing a min or a max for
+    //                      the range.
     //    - legendPosition: Which corner to put the legend.  Can be one of
     //                      {'top-left', 'top-right',
     //                       'bottom-left', 'bottom-right'}
@@ -118,28 +123,37 @@ export default class LineChart extends Component {
         return this.chartSize.width;
     }
 
+    get xScaleRange() {
+        if (this.args.xScaleMinRange) {
+            return this.args.xScaleMinRange;
+        }
+        else if (this.xScaleMinRange) {
+            return this.xScaleMinRange
+        }
+        else {
+            return [];
+        }
+    }
+
     get xScale() {
         let xValues = [].concat(...this.data.map(d => d.values));
 
         if (xValues.every(i => i.length === 2)) {
             // array of x/y pairs.  Get the x values
-            xValues = xValues.map(i => i[0]);
-
-            return scaleLinear().domain(extent(xValues)).range([0, this.chartWidth]);
+            xValues = xValues.map(i => i[0]).concat(...this.xScaleRange);
         }
         else {
-            // Assume we have a bunch of y scalars.  Generate indexes as y
-            let indexes = Array(Math.max(...this.data.map(d => d.values.length)))
-            .fill().map((_, i) => i);
-
-            var widthPiece = this.chartWidth / (indexes.length - 1);
-            var positionPoints = indexes.map(function(position) {
-                return widthPiece * position;
-            });
-
-            return scaleOrdinal().domain(indexes).range(positionPoints);
+            // Assume we have a bunch of y scalars.  Generate indexes of y
+            xValues = Array(Math.max(...this.data.map(d => d.values.length)))
+            .fill().map((_, i) => i)
+            .concat(...this.xScaleRange);
         }
-        
+
+        if (xValues.length === 0) {
+            xValues = [0];  // gotta have at least one point
+        }
+
+        return scaleLinear().domain(extent(xValues)).range([0, this.chartWidth]);
     }
 
     get yScaleRange() {
