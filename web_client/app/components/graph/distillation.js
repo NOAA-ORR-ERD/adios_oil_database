@@ -46,7 +46,6 @@ export default class Distillation extends LineChart {
             });
 
             data.push({
-                name: label,
                 values: weathered_cuts.map((c) => ([
                     c.fraction.value,
                     convertUnit([c.vapor_temp, 'C']).value
@@ -80,24 +79,6 @@ export default class Distillation extends LineChart {
         .y(function(d) {
             return yScale(d[1]);
         });
-
-        let lines = svg
-        .selectAll('.line-chart__line__container')
-        .data(data);
-
-        // Append the new ones
-        lines.enter()
-        .append('g')
-        .attr('class', 'line-chart__line__container')
-        .append('svg:path')
-        .attr('class', 'line-chart__line')
-        .style('stroke', function(d) {
-            return d.color;
-        })
-        .attr('d', function(d) {
-            return chartLine(d.values);
-        })
-        .attr('fill', 'none');
 
         let circles = svg
         .selectAll("circle")
