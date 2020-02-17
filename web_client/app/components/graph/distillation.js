@@ -5,7 +5,7 @@ import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
 
 
 export default class Distillation extends LineChart {
-    xLabel = 'Fraction';
+    xLabel = 'Mass Fraction (%)';
     yLabel = 'Vapor Temperature (\u00B0C)';
     xScaleMinRange = [0];
     yScaleMinRange = [0];
