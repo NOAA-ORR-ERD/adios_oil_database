@@ -5,12 +5,8 @@ from collections import defaultdict
 
 from openpyxl import load_workbook
 
-from slugify import Slugify
-
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
-
-custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
@@ -103,16 +99,16 @@ class EnvCanadaOilExcelFile(object):
             if all([(r.value is None) for r in row[:2]]):
                 category_name, field_name = None, None
             elif row[0].value is not None:
-                category_name = custom_slugify(row[0].value)
+                category_name = row[0].value
                 row_prev_name = category_name
                 if row[1].value is not None:
-                    field_name = custom_slugify(str(row[1].value))
+                    field_name = str(row[1].value)
                 else:
                     field_name = None
             else:
                 category_name = row_prev_name
                 if row[1].value is not None:
-                    field_name = custom_slugify(str(row[1].value))
+                    field_name = str(row[1].value)
                 else:
                     field_name = None
 
@@ -123,7 +119,52 @@ class EnvCanadaOilExcelFile(object):
     def __repr__(self):
         return "<OilLibraryFile('%s')>" % (self.name)
 
+    def get_category_props(self, record):
+        '''
+            Get all oil data properties for each column of oil data, that exist
+            within a single category.
+            - This function is intended to work on the oil data columns for a
+              single oil, but this is not enforced.
+            - the oil properties will be returned as a dictionary.
+        '''
+        ret = {}
+        for k in self.self.field_indexes:
+            ret[k] = self.get_props_by_category(k)
+
+        return ret
+
+    def get_records(self):
+        '''
+            Iterate through all the oils, returning all the properties of each
+            one.
+        '''
+        for name in self.col_indexes:
+            yield (self.get_record(name), self.file_props)
+
     def get_record(self, name):
+        ret = {}
+        record_data = self.get_record_raw_columns(name)
+
+        for cat, sub_cat in self.field_indexes.items():
+            cat_values = {}
+
+            for f, idxs in sub_cat.items():
+                values_i = [record_data[i] for i in idxs]
+
+                if len(idxs) == 1:
+                    # flatten the list
+                    values_i = [i for sub in values_i for i in sub]
+                else:
+                    # transpose the list
+                    values_i = list(zip(*values_i))
+
+                cat_values[f] = values_i
+
+            ret[cat] = cat_values
+
+        return ret
+
+    def get_record_raw_columns(self, name):
         '''
             Return the columns in the Excel sheet referenced by the name of an
             oil.
@@ -135,10 +176,11 @@ class EnvCanadaOilExcelFile(object):
                           for i, col in enumerate(self.db_sheet.columns)
                           if i in self.col_indexes[name]]))
 
-    def get_records(self):
-        '''
-            Iterate through all the oils, returning all the properties of each
-            one.
-        '''
-        for name in self.col_indexes:
-            yield (self.field_indexes, self.get_record(name), self.file_props)
+
+
+
+
+
+
+
+

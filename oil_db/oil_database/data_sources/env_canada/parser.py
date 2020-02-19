@@ -13,8 +13,92 @@ custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
+import pdb
+
 
 class EnvCanadaRecordParser(object):
+    '''
+        A record class for the Environment Canada oil spreadsheet.  This is
+        intended to be used with a set of data representing a single record
+        from the spreadsheet.
+        - We manage a list of properties extracted from the Excel columns
+          for an oil.  Basically this will be a list of property groups,
+          where each property group will contain a set of property values at
+          differing degrees of weathering.
+        - The raw data from the Excel file will be a two-dimensional array
+          of data, so each property group will have the same number of items.
+          If an oil contains no oil property value at a certain degree of
+          weathering, instead of being removed from the group, it will contain
+          a value of None.
+        - We also manage an index lookup table for finding a set of property
+          values by their property name.
+        - It is possible that within a property group, there are multiple
+          properties of the same name.  This could happen if multiple sets of
+          properties are represented, possibly due to multiple testing methods.
+          For this reason, the index values contained in the lookup will be
+          a list with 1 or more indexes.
+    '''
+    datetime_pattern = re.compile(
+        r'(?P<month>\d{1,2})[-/](?P<day>\d{1,2})[-/](?P<year>\d{2,4})'
+        r'(?:[T ](?P<hour>\d{1,2}):(?P<minute>\d{1,2})'  # Optional HH:mm
+        r'(?::(?P<second>\d{1,2})'  # Optional seconds
+        r'(?:\.(?P<microsecond>\d{1,6})0*)?)?)?'  # Optional microseconds
+        r'(?P<tzinfo>Z|[+-]\d{2}(?::?\d{2})?)?\Z'  # Optional timezone
+    )
+
+    def __init__(self, values, file_props):
+        '''
+            :param property_indexes: A lookup dictionary of property index
+                                     values.
+            :type property_indexes: A dictionary with property names as keys,
+                                    and associated index values into the data.
+        '''
+        self.values = values
+        self.file_props = file_props
+
+    def get_props_by_category(self, category):
+        '''
+            Get all oil data properties for each column of oil data, that exist
+            within a single category.
+            - This function is intended to work on the oil data columns for a
+              single oil, but this is not enforced.
+            - the oil properties will be returned as a dictionary.
+        '''
+        ret = {}
+        cat_fields = self.prop_idx[category]
+
+        for f, idxs in cat_fields.items():
+            values_i = [self.values[i] for i in idxs]
+
+            if len(idxs) == 1:
+                # flatten the list
+                values_i = [i for sub in values_i for i in sub]
+                pass
+            else:
+                # transpose the list
+                values_i = list(zip(*values_i))
+
+            ret[f] = values_i
+
+        return ret
+
+    def get_props_by_name(self, category, name):
+        '''
+            Get the oil data properties for each column of oil data,
+            referenced by their category name and oil property name.
+            - This function is intended to work on the oil data columns for a
+              single oil, but this is not enforced.
+        '''
+        return [self.values[i] for i in self.prop_idx[category][name]]
+
+
+
+
+
+
+
+
+class EnvCanadaRecordParserOld(object):
     '''
         A record class for the Environment Canada oil spreadsheet.  This is
         intended to be used with a set of data representing a single record
@@ -54,6 +138,12 @@ class EnvCanadaRecordParser(object):
         self.prop_idx = property_indexes
         self.values = values
         self.file_props = file_props
+
+        print('self.prop_idx:')
+        pp.pprint(self.prop_idx)
+
+        print('self.file_props:')
+        pp.pprint(self.file_props)
 
     def get_props_by_category(self, category):
         '''
