@@ -35,6 +35,7 @@ label_map = {
     'benzene_and_alkynated_benzene_ests_2002b': 'benzene_and_alkynated_benzene',
     'biomarkers_ug_g_ests_2002a': 'biomarkers',
     'btex_group_ug_g_ests_2002b': 'btex_group',
+    'calculated_api_gravity': 'gravity',
     'c21_tricyclic_terpane_c21t': 'c21_tricyclic_terpane',
     'c22_tricyclic_terpane_c22t': 'c22_tricyclic_terpane',
     'c23_tricyclic_terpane_c23t': 'c23_tricyclic_terpane',
@@ -106,8 +107,10 @@ label_map = {
 }
 
 
-# class method decorator to join a list of labels with a separator
 def join_with(separator):
+    '''
+        Class method decorator to join a list of labels with a separator
+    '''
     def wrapper(func):
         @wraps(func)
         def wrapped(self, *args, **kwargs):
@@ -120,8 +123,28 @@ def join_with(separator):
     return wrapper
 
 
-# class method decorator to parse a label as a datetime
 def parse_time(func):
+    '''
+        Class method decorator to parse an attribute return value as a datetime
+
+        Note: Apparently there are a few records that just don't have
+              a sample date.  So we can't really enforce the presence
+              of a date here.
+
+        Note: The date formats are all over the place here.  So the default
+              datetime parsing is not sufficient.
+              Some formats that I have seen:
+              - MM/DD/YYYY          # most common
+              - MM-DD-YYYY          # different separator
+              - DD/MM/YYYY          # 7 records very clearly in this format
+              - MM/YYYY             # 3 records do this
+              - YYYY                # 2 records do this
+              - <month name>, YYYY  # 3 records do this
+              So we will:
+              - Treat MM/DD/YYYY as the default
+              - Allow for DD/MM/YYYY if it can be clearly determined
+              - Fix the others in the file.
+    '''
     def parse_single_datetime(date_str):
         datetime_pattern = re.compile(
             r'(?P<month>\d{1,2})[-/](?P<day>\d{1,2})[-/](?P<year>\d{2,4})'
@@ -151,25 +174,6 @@ def parse_time(func):
             return None
 
     def wrapper(*args, **kwargs):
-        '''
-            Note: Apparently there are a few records that just don't have
-                  a sample date.  So we can't really enforce the presence
-                  of a date here.
-
-            Note: The date formats are all over the place here.  So the default
-                  datetime parsing inside PyMODM is not sufficient.
-                  Some formats that I have seen:
-                  - MM/DD/YYYY          # most common
-                  - MM-DD-YYYY          # different separator
-                  - DD/MM/YYYY          # 7 records very clearly in this format
-                  - MM/YYYY             # 3 records do this
-                  - YYYY                # 2 records do this
-                  - <month name>, YYYY  # 3 records do this
-                  So we will:
-                  - Treat MM/DD/YYYY as the default
-                  - Allow for DD/MM/YYYY if it can be clearly determined
-                  - Fix the others in the file.
-        '''
         return [parse_single_datetime(dt)
                 for dt in func(*args, **kwargs)]
 
@@ -316,8 +320,7 @@ class EnvCanadaRecordParser(object):
             label information.
 
             Ex:
-                parser_obj.get_label(('gc_total_aromatic_hydrocarbon',
-                                      'gc_tah'))
+                parser_obj.get_label(('gc_total_aromatic_hydrocarbon.gc_tah'))
         '''
         if isinstance(nav_list, str):
             nav_list = nav_list.split('.')
@@ -338,8 +341,7 @@ class EnvCanadaRecordParser(object):
             all the defined properties.
         '''
         props = set([p for p in dir(self.__class__)
-                     if isinstance(getattr(self.__class__, p),
-                                   property)])
+                     if isinstance(getattr(self.__class__, p), property)])
 
         return props
 
@@ -463,15 +465,21 @@ class EnvCanadaRecordParser(object):
 
         return False
 
+    def iterate_weathering(self, obj):
+        for i, w in enumerate(self.weathering):
+            props_i = dict([(k, v[i]) for k, v in obj.items()])
+            props_i['weathering'] = w
+
+            yield props_i
+
     @property
     def apis(self):
         ret = []
-        props = self.values['api_gravity']['calculated_api_gravity']
+        props = self.values['api_gravity']
 
-        for i, w in enumerate(self.weathering):
-            if props[i] is not None:
-                ret.append({'gravity': props[i],
-                            'weathering': w})
+        for props_i in self.iterate_weathering(props):
+            if props_i['gravity'] is not None:
+                ret.append(props_i)
 
         return ret
 
@@ -499,11 +507,10 @@ class EnvCanadaRecordParser(object):
         cat_label = dict([(k, 'density_at_{}_c'.format(v))
                           for k, v in temps.items()])
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in
-                            self.values[cat_label[ref_temp]].items()])
+        props = self.values[cat_label[ref_temp]]
 
-            add_props = {'weathering': w, 'ref_temp_c': ref_temp}
+        for props_i in self.iterate_weathering(props):
+            add_props = {'ref_temp_c': ref_temp}
             rename_props = {'density_{}_c'.format(ref_temp): 'g_ml'}
             prune_props = ['density_{}_c'.format(t) for t in temp_mask]
 
@@ -543,23 +550,19 @@ class EnvCanadaRecordParser(object):
         return ret
 
     def _get_viscosities_at(self, ref_temp):
-        viscosities = []
+        ret = []
 
         temps = {0: '0_5',
                  5: '0_5',
                  15: '15'}
-
         temp_mask = [t for t in temps.keys() if t != ref_temp]
-
         cat_label = dict([(k, 'viscosity_at_{}_c'.format(v))
                           for k, v in temps.items()])
 
-        for i, w in enumerate(self.weathering):
-            # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in
-                            self.values[cat_label[ref_temp]].items()])
+        props = self.values[cat_label[ref_temp]]
 
-            add_props = {'weathering': w, 'ref_temp_c': ref_temp}
+        for props_i in self.iterate_weathering(props):
+            add_props = {'ref_temp_c': ref_temp}
             rename_props = {'viscosity_at_{}_c'.format(ref_temp): 'mpa_s'}
             prune_props = ['viscosity_at_{}_c'.format(t) for t in temp_mask]
 
@@ -575,9 +578,9 @@ class EnvCanadaRecordParser(object):
             if any([(l in kwargs['mpa_s'] and
                      kwargs['mpa_s'][l] not in (None, 0.0))
                     for l in ('value', 'min_value', 'max_value')]):
-                viscosities.append(kwargs)
+                ret.append(kwargs)
 
-        return viscosities
+        return ret
 
     @property
     def ifts(self):
@@ -603,7 +606,7 @@ class EnvCanadaRecordParser(object):
         return ifts
 
     def _get_tension_at(self, ref_temp, if_type):
-        tensions = []
+        ret = []
 
         temps = {0: '0_5',
                  5: '0_5',
@@ -619,15 +622,10 @@ class EnvCanadaRecordParser(object):
         cat_label = dict([(k, 'ift_at_{}_c'.format(v))
                           for k, v in temps.items()])
 
-        for i, w in enumerate(self.weathering):
-            # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in
-                            self.values[cat_label[ref_temp]].items()
-                            ])
+        props = self.values[cat_label[ref_temp]]
 
-            add_props = {'weathering': w,
-                         'ref_temp_c': ref_temp,
-                         'interface': if_type}
+        for props_i in self.iterate_weathering(props):
+            add_props = {'ref_temp_c': ref_temp, 'interface': if_type}
 
             # We have a couple duplicate labels, one for each if_type
             # and they are all here contained in a list.  We need to
@@ -656,29 +654,27 @@ class EnvCanadaRecordParser(object):
 
             try:
                 float(kwargs['dynes_cm'])
-                tensions.append(kwargs)
+                ret.append(kwargs)
             except Exception:
                 pass
 
-        return tensions
+        return ret
 
     @property
     def flash_points(self):
-        flash_points = []
+        ret = []
         props = self.values['flash_point_c']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            kwargs = self.build_flash_point_kwargs(props_i, w)
+        for props_i in self.iterate_weathering(props):
+            kwargs = self.build_flash_point_kwargs(props_i)
 
             if any([(kwargs is not None and
                      k in kwargs and
                      kwargs[k] is not None)
                     for k in ('ref_temp_c',)]):
-                flash_points.append(kwargs)
+                ret.append(kwargs)
 
-        return flash_points
+        return ret
 
     @property
     def pour_points(self):
@@ -688,21 +684,19 @@ class EnvCanadaRecordParser(object):
             the content to come up with minimum and maximum values.
             Dimensional parameters are simply (weathering).
         '''
-        pour_points = []
+        ret = []
         props = self.values['pour_point_c']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            kwargs = self._build_pour_point_kwargs(props_i, w)
+        for props_i in self.iterate_weathering(props):
+            kwargs = self._build_pour_point_kwargs(props_i)
 
             if any([(kwargs is not None and
                      k in kwargs and
                      kwargs[k] is not None)
                     for k in ('ref_temp_c',)]):
-                pour_points.append(kwargs)
+                ret.append(kwargs)
 
-        return pour_points
+        return ret
 
     @property
     def cuts(self):
@@ -730,15 +724,12 @@ class EnvCanadaRecordParser(object):
         cuts = []
         props = self.values['boiling_point_distribution_temperature_c']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-            cuts_i = self._build_cuts_from_dist_data(props_i, w)
-
-            cuts.extend(cuts_i)
+        for props_i in self.iterate_weathering(props):
+            cuts.extend(self._build_cuts_from_dist_data(props_i))
 
         return cuts
 
-    def _build_cuts_from_dist_data(self, props, weathering):
+    def _build_cuts_from_dist_data(self, props):
         '''
             Build a list of EC distillation cut objects from boiling point
             distribution data.
@@ -761,6 +752,7 @@ class EnvCanadaRecordParser(object):
 
         # The only labels we care about are the percent value labels
         for percent in range(5, 101, 5):
+            weathering = dist_data['weathering']
             label = self.slugify('{:0.02g}'.format(percent / 100.0))
             vapor_temp_c = dist_data[label]
             method = dist_data['method']
@@ -776,15 +768,12 @@ class EnvCanadaRecordParser(object):
 
         props = self.values['boiling_point_cumulative_weight_fraction']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-            cuts_i = self._build_cuts_from_cumulative_fraction(props_i, w)
-
-            cuts.extend(cuts_i)
+        for props_i in self.iterate_weathering(props):
+            cuts.extend(self._build_cuts_from_cumulative_fraction(props_i))
 
         return cuts
 
-    def _build_cuts_from_cumulative_fraction(self, props, weathering):
+    def _build_cuts_from_cumulative_fraction(self, props):
         '''
             Build a list of EC distillation cut objects from cumulative weight
             fraction data.
@@ -809,6 +798,7 @@ class EnvCanadaRecordParser(object):
         temp_values = list(range(40, 200, 20)) + list(range(200, 701, 50))
 
         for temp_c in temp_values:
+            weathering = frac_data['weathering']
             label = '_{}'.format(temp_c)
             percent = frac_data[label]
             method = frac_data['method']
@@ -833,23 +823,16 @@ class EnvCanadaRecordParser(object):
             value in g/cm^2.
             Dimensional parameters are simply (weathering).
         '''
-        adhesions = []
-        props = self.values['adhesion']
+        ret = []
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
+        for props_i in self.iterate_weathering(self.values['adhesion']):
             if props_i['adhesion'] is not None:
-                add_props = {'weathering': w}
-                rename_props = {'adhesion': 'g_cm_2'}
+                ret.append(self._build_kwargs(
+                    props_i,
+                    rename_props={'adhesion': 'g_cm_2'}
+                ))
 
-                kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
-                                            rename_props=rename_props)
-
-                adhesions.append(kwargs)
-
-        return adhesions
+        return ret
 
     @property
     def evaporation_eqs(self):
@@ -867,51 +850,42 @@ class EnvCanadaRecordParser(object):
         return evaporation
 
     def _get_evaporation_eqs_ests_1998(self):
-        evaporation_eqs = []
+        ret = []
 
         props = self.values['evaporation']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+        for props_i in self.iterate_weathering(props):
+            ret.append(self._build_evaporation_kwargs(props_i,
+                                                      '(A + BT) ln t',
+                                                      'for_ev_a_bt_ln_t'))
 
-            evap_kwargs = self._build_evaporation_kwargs(props_i, w,
-                                                         '(A + BT) ln t',
-                                                         'for_ev_a_bt_ln_t')
-            evaporation_eqs.append(evap_kwargs)
-
-        return [eq for eq in evaporation_eqs
+        return [eq for eq in ret
                 if eq['a'] is not None and eq['b'] is not None]
 
     def _get_evaporation_eqs_mass_loss1(self):
-        evaporation_eqs = []
+        ret = []
 
         props = self.values['parameters_for_evaporation_equation_mass_loss']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+        for props_i in self.iterate_weathering(props):
+            ret.append(self._build_evaporation_kwargs(props_i,
+                                                      '(A + BT) sqrt(t)',
+                                                      'for_ev_a_bt_sqrt_t'))
 
-            evap_kwargs = self._build_evaporation_kwargs(props_i, w,
-                                                         '(A + BT) sqrt(t)',
-                                                         'for_ev_a_bt_sqrt_t')
-            evaporation_eqs.append(evap_kwargs)
-
-        return [eq for eq in evaporation_eqs
+        return [eq for eq in ret
                 if eq['a'] is not None and eq['b'] is not None]
 
     def _get_evaporation_eqs_mass_loss2(self):
-        evaporation_eqs = []
+        ret = []
 
         props = self.values['parameters_for_evaporation_equation_mass_loss']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+        for props_i in self.iterate_weathering(props):
+            ret.append(self._build_evaporation_kwargs(props_i,
+                                                      'A + B ln (t + C)',
+                                                      'for_ev_a_b_ln_t_c'))
 
-            evap_kwargs = self._build_evaporation_kwargs(props_i, w,
-                                                         'A + B ln (t + C)',
-                                                         'for_ev_a_b_ln_t_c')
-            evaporation_eqs.append(evap_kwargs)
-
-        return [eq for eq in evaporation_eqs
+        return [eq for eq in ret
                 if eq['a'] is not None and eq['b'] is not None]
 
     @property
@@ -932,13 +906,9 @@ class EnvCanadaRecordParser(object):
         emulsions = []
         props = self.values['emulsion_at_15_c_day_{}'.format(age)]
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
+        for props_i in self.iterate_weathering(props):
             if props_i['water_content_w_w'] is not None:
-                add_props = {'weathering': w,
-                             'ref_temp_c': 15.0,
-                             'age_days': age}
+                add_props = {'ref_temp_c': 15.0, 'age_days': age}
                 rename_props = {'water_content_w_w': 'water_content_percent'}
                 prune_props = {'standard_deviation', 'replicates'}
 
@@ -969,15 +939,11 @@ class EnvCanadaRecordParser(object):
         corexit = []
         props = self.values['chemical_dispersibility_with_corexit_9500']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
+        for props_i in self.iterate_weathering(props):
             if props_i['dispersant_effectiveness'] is not None:
-                add_props = {'weathering': w}
                 op_and_value = {'dispersant_effectiveness'}
 
                 kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
                                             op_and_value=op_and_value)
                 kwargs['dispersant_effectiveness']['unit'] = '%'
 
@@ -993,17 +959,12 @@ class EnvCanadaRecordParser(object):
             Dimensional parameters are (weathering).
         '''
         sulfur_contents = []
-        props = self.values['sulfur_content']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
+        for props_i in self.iterate_weathering(self.values['sulfur_content']):
             if props_i['sulfur_content'] is not None:
-                add_props = {'weathering': w}
                 rename_props = {'sulfur_content': 'percent'}
 
                 kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
                                             rename_props=rename_props)
 
                 sulfur_contents.append(kwargs)
@@ -1016,18 +977,13 @@ class EnvCanadaRecordParser(object):
             Dimensional parameters are (weathering).
         '''
         water_contents = []
-        props = self.values['water_content']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
+        for props_i in self.iterate_weathering(self.values['water_content']):
             if props_i['water_content'] is not None:
-                add_props = {'weathering': w}
                 rename_props = {'water_content': 'percent'}
                 op_and_value = {'percent'}
 
                 kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
                                             rename_props=rename_props,
                                             op_and_value=op_and_value)
                 kwargs['percent']['unit'] = '%'
@@ -1042,13 +998,10 @@ class EnvCanadaRecordParser(object):
             Dimensional parameters are (weathering).
         '''
         wax_contents = []
-        props = self.values['wax_content']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
+        for props_i in self.iterate_weathering(self.values['wax_content']):
             if props_i['waxes'] is not None:
-                add_props = {'weathering': w, 'method': 'ESTS 1994'}
+                add_props = {'method': 'ESTS 1994'}
                 rename_props = {'waxes': 'percent'}
 
                 kwargs = self._build_kwargs(props_i,
@@ -1087,21 +1040,18 @@ class EnvCanadaRecordParser(object):
 
         sara_mask = [a for a in sara_types if a != sara_type]
 
-        saturates_fractions = []
+        ret = []
 
         props = self.values['hydrocarbon_group_content']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
+        for props_i in self.iterate_weathering(props):
             if props_i[sara_type] is not None:
                 sd, r, m = [props_i[label][sara_types[sara_type]['test_set']]
                             for label in ('standard_deviation',
                                           'replicates',
                                           'method')]
 
-                add_props = {'weathering': w,
-                             'sara_type': sara_types[sara_type]['label'],
+                add_props = {'sara_type': sara_types[sara_type]['label'],
                              'standard_deviation': sd,
                              'replicates': r,
                              'method': m}
@@ -1113,9 +1063,9 @@ class EnvCanadaRecordParser(object):
                                             prune_props=prune_props,
                                             rename_props=rename_props)
 
-                saturates_fractions.append(kwargs)
+                ret.append(kwargs)
 
-        return saturates_fractions
+        return ret
 
     @property
     def benzene(self):
@@ -1134,37 +1084,31 @@ class EnvCanadaRecordParser(object):
                   of the values were 'ND'.  Not sure what this means, but for
                   our purposes, it will be changed to a None.
         '''
-        benzenes = []
+        ret = []
 
-        benz_props = self.values['benzene_and_alkynated_benzene']
-        btex_props = self.values['btex_group']
-        c4_props = self.values['c4_c6_alkyl_benzenes']
+        props = {}
+        [props.update(self.values[c])
+         for c in ('benzene_and_alkynated_benzene',
+                   'btex_group',
+                   'c4_c6_alkyl_benzenes')]
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in benz_props.items()])
-            kwargs = props_i
-
-            props_i = dict([(k, v[i]) for k, v in btex_props.items()])
-            kwargs.update(props_i)
-
-            props_i = dict([(k, v[i]) for k, v in c4_props.items()])
-            kwargs.update(props_i)
-
-            [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
-             for lbl in list(kwargs.keys())]
-
+        for props_i in self.iterate_weathering(props):
             # fix the 'ND' values
-            for k, v in list(kwargs.items()):
+            for k, v in list(props_i.items()):
                 if v == 'ND':
-                    kwargs[k] = None
+                    props_i[k] = None
 
-            if not all([(v is None) for k, v in kwargs.items()]):
-                kwargs['weathering'] = w
-                kwargs['method'] = 'ESTS 2002b'
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
+                 for lbl in list(props_i.keys())
+                 if lbl != 'weathering']
 
-                benzenes.append(kwargs)
+                props_i['method'] = 'ESTS 2002b'
 
-        return benzenes
+                ret.append(props_i)
+
+        return ret
 
     @property
     def headspace(self):
@@ -1180,25 +1124,22 @@ class EnvCanadaRecordParser(object):
               the properties are empty for a particular weathered sample,
               we will not include it.
         '''
-        headspace = []
+        ret = []
 
         props = self.values['headspace_analysis']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+        for props_i in self.iterate_weathering(props):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                [self._rename_prop(props_i, lbl, lbl + '_mg_g')
+                 for lbl in list(props_i.keys())
+                 if lbl != 'weathering']
 
-            if not all([(v is None) for v in props_i.values()]):
-                kwargs = props_i
+                props_i['method'] = 'ESTS 2002b'
 
-                [self._rename_prop(kwargs, lbl, lbl + '_mg_g')
-                 for lbl in list(kwargs.keys())]
+                ret.append(props_i)
 
-                kwargs['weathering'] = w
-                kwargs['method'] = 'ESTS 2002b'
-
-                headspace.append(kwargs)
-
-        return headspace
+        return ret
 
     @property
     def chromatography(self):
@@ -1217,24 +1158,19 @@ class EnvCanadaRecordParser(object):
               If all of the properties are empty for a particular weathered
               sample, we will not include it.
         '''
-        gas_chromatography = []
+        ret = []
 
-        gc_tph = self.values['gc_total_petroleum_hydrocarbon']
-        gc_tsh = self.values['gc_total_saturate_hydrocarbon']
-        gc_tah = self.values['gc_total_aromatic_hydrocarbon']
-        gc_hcr = self.values['hydrocarbon_content_ratio']
+        props = {}
+        [props.update(self.values[c])
+         for c in ('gc_total_petroleum_hydrocarbon',
+                   'gc_total_saturate_hydrocarbon',
+                   'gc_total_aromatic_hydrocarbon',
+                   'hydrocarbon_content_ratio')]
 
-        for i, w in enumerate(self.weathering):
-            kwargs = dict([(k, v[i]) for k, v in gc_tph.items()])
-
-            kwargs.update([(k, v[i]) for k, v in gc_tsh.items()])
-
-            kwargs.update([(k, v[i]) for k, v in gc_tah.items()])
-
-            kwargs.update([(k, v[i]) for k, v in gc_hcr.items()])
-
-            if not all([v is None for v in kwargs.values()]):
-                add_props = {'weathering': w, 'method': 'ESTS 2002a'}
+        for props_i in self.iterate_weathering(props):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                add_props = {'method': 'ESTS 2002a'}
                 rename_props = {
                     'gc_tph': 'tph_mg_g',
                     'gc_tsh': 'tsh_mg_g',
@@ -1244,13 +1180,13 @@ class EnvCanadaRecordParser(object):
                     'resolved_peaks_tph': 'resolved_peaks_tph_percent',
                 }
 
-                kwargs = self._build_kwargs(kwargs,
-                                            add_props=add_props,
-                                            rename_props=rename_props)
+                props_i = self._build_kwargs(props_i,
+                                             add_props=add_props,
+                                             rename_props=rename_props)
 
-                gas_chromatography.append(kwargs)
+                ret.append(props_i)
 
-        return gas_chromatography
+        return ret
 
     @property
     def ccme(self):
@@ -1266,29 +1202,21 @@ class EnvCanadaRecordParser(object):
               the properties are empty for a particular weathered sample,
               we will not include it.
         '''
-        ccme_fractions = []
+        ret = []
 
-        ccme_props = self.values['ccme_fractions']
+        for props_i in self.iterate_weathering(self.values['ccme_fractions']):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                props_i['method'] = 'ESTS 2002b'
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
+                [self._rename_prop(props_i,
+                                   'ccme_{}'.format(f),
+                                   '{}_mg_g'.format(f))
+                 for f in ('f1', 'f2', 'f3', 'f4',)]
 
-            if not all([v is None for v in props_i.values()]):
-                kwargs = props_i
+                ret.append(props_i)
 
-                add_props = {'weathering': w, 'method': 'ESTS 2002a'}
-                rename_props = {'ccme_f1': 'f1_mg_g',
-                                'ccme_f2': 'f2_mg_g',
-                                'ccme_f3': 'f3_mg_g',
-                                'ccme_f4': 'f4_mg_g'}
-
-                kwargs = self._build_kwargs(kwargs,
-                                            add_props=add_props,
-                                            rename_props=rename_props)
-
-                ccme_fractions.append(kwargs)
-
-        return ccme_fractions
+        return ret
 
     @property
     def ccme_f1(self):
@@ -1304,22 +1232,16 @@ class EnvCanadaRecordParser(object):
               the properties are empty for a particular weathered sample,
               we will not include it.
         '''
-        ccme_saturates = []
+        ret = []
 
-        ccme_props = self.values['saturates_f1']
+        for props_i in self.iterate_weathering(self.values['saturates_f1']):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                props_i['method'] = 'ESTS 2002a'
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
+                ret.append(props_i)
 
-            if not all([v is None for v in props_i.values()]):
-                kwargs = props_i
-
-                kwargs['weathering'] = w
-                kwargs['method'] = 'ESTS 2002a'
-
-                ccme_saturates.append(kwargs)
-
-        return ccme_saturates
+        return ret
 
     @property
     def ccme_f2(self):
@@ -1335,22 +1257,16 @@ class EnvCanadaRecordParser(object):
               the properties are empty for a particular weathered sample,
               we will not include it.
         '''
-        ccme_aromatics = []
+        ret = []
 
-        ccme_props = self.values['aromatics_f2']
+        for props_i in self.iterate_weathering(self.values['aromatics_f2']):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                props_i['method'] = 'ESTS 2002a'
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
+                ret.append(props_i)
 
-            if not all([v is None for v in props_i.values()]):
-                kwargs = props_i
-
-                kwargs['weathering'] = w
-                kwargs['method'] = 'ESTS 2002a'
-
-                ccme_aromatics.append(kwargs)
-
-        return ccme_aromatics
+        return ret
 
     @property
     def ccme_tph(self):
@@ -1367,22 +1283,18 @@ class EnvCanadaRecordParser(object):
               the properties are empty for a particular weathered sample,
               we will not include it.
         '''
-        ccme_tph = []
+        ret = []
 
-        ccme_props = self.values['gc_tph_f1_plus_f2']
+        props = self.values['gc_tph_f1_plus_f2']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
+        for props_i in self.iterate_weathering(props):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                props_i['method'] = 'ESTS 2002a'
 
-            if not all([v is None for v in props_i.values()]):
-                kwargs = props_i
+                ret.append(props_i)
 
-                kwargs['weathering'] = w
-                kwargs['method'] = 'ESTS 2002a'
-
-                ccme_tph.append(kwargs)
-
-        return ccme_tph
+        return ret
 
     @property
     def alkylated_pahs(self):
@@ -1406,28 +1318,26 @@ class EnvCanadaRecordParser(object):
         '''
         alkylated_pahs = []
 
-        all_props = [self.values[c]
-                     for c in ('naphthalenes',
-                               'phenanthrenes',
-                               'dibenzothiophenes',
-                               'fluorenes',
-                               'benzonaphthothiophenes',
-                               'chrysenes',
-                               'other_priority_pahs')]
+        props = {}
+        [props.update(self.values[c])
+         for c in ('naphthalenes',
+                   'phenanthrenes',
+                   'dibenzothiophenes',
+                   'fluorenes',
+                   'benzonaphthothiophenes',
+                   'chrysenes',
+                   'other_priority_pahs')]
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for cat_props in all_props
-                            for k, v in cat_props.items()])
+        for props_i in self.iterate_weathering(props):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
+                 for lbl in list(props_i.keys())
+                 if lbl != 'weathering']
 
-            if not all([v is None for v in props_i.values()]):
-                kwargs = props_i
+                props_i['method'] = 'ESTS 2002a'
 
-                [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
-                 for lbl in list(kwargs.keys())]
-
-                kwargs.update({'weathering': w, 'method': 'ESTS 2002a'})
-
-                alkylated_pahs.append(kwargs)
+                alkylated_pahs.append(props_i)
 
         return alkylated_pahs
 
@@ -1449,25 +1359,20 @@ class EnvCanadaRecordParser(object):
         '''
         ret = []
 
-        props = self.values['n_alkanes']
+        for props_i in self.iterate_weathering(self.values['n_alkanes']):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
+                 for lbl in list(props_i.keys())
+                 if lbl != 'weathering']
 
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+                for lbl in list(props_i.keys()):
+                    if props_i[lbl] in ('/', ' '):
+                        props_i[lbl] = None
 
-            if not all([v is None for v in props_i.values()]):
-                kwargs = props_i
+                props_i['method'] = 'ESTS 2002a'
 
-                [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
-                 for lbl in list(kwargs.keys())]
-
-                for lbl in list(kwargs.keys()):
-                    if kwargs[lbl] in ('/', ' '):
-                        kwargs[lbl] = None
-
-                kwargs['weathering'] = w
-                kwargs['method'] = 'ESTS 2002a'
-
-                ret.append(kwargs)
+                ret.append(props_i)
 
         return ret
 
@@ -1478,26 +1383,22 @@ class EnvCanadaRecordParser(object):
             which we will try to capture.
             We have a single property group in this case.
             - Dimensional parameters are (weathering).
-            - Values Units are all ug/g as far as I can tell, which is
-              basically the same as ppm, so no conversion.
-            - We will rename the properties all with a '_ppm' suffix to
-              indicate the units.
+            - Values Units are all ug/g as far as I can tell.
         '''
-        biomarkers = []
+        ret = []
 
-        bio_props = self.values['biomarkers']
+        for props_i in self.iterate_weathering(self.values['biomarkers']):
+            if not all([v is None for k, v in props_i.items()
+                        if k is not 'weathering']):
+                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
+                 for lbl in list(props_i.keys())
+                 if lbl != 'weathering']
 
-        for i, w in enumerate(self.weathering):
-            kwargs = dict([(k, v[i]) for k, v in bio_props.items()])
+                props_i['method'] = 'ESTS 2002a'
 
-            [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
-             for lbl in list(kwargs.keys())]
+                ret.append(props_i)
 
-            if any([(v is not None) for v in kwargs.values()]):
-                kwargs.update({'weathering': w, 'method': 'ESTS 2002a'})
-                biomarkers.append(kwargs)
-
-        return biomarkers
+        return ret
 
     def _build_kwargs(self, props,
                       add_props=None,
@@ -1601,16 +1502,14 @@ class EnvCanadaRecordParser(object):
 
         return kwargs
 
-    def build_flash_point_kwargs(self, props, weathering):
+    def build_flash_point_kwargs(self, props):
         '''
             Build a flash point properties dictionary suitable to be passed in
             as keyword args.  This is different enough from the generic
             build_kwargs() that it gets its own function.
             - props: a dictionary of properties
-            - weathering: The fractional oil weathering amount.
         '''
         fp_kwargs = props
-        fp_kwargs['weathering'] = weathering
 
         temp_c = fp_kwargs['flash_point']
         if temp_c is None:
@@ -1637,7 +1536,7 @@ class EnvCanadaRecordParser(object):
 
         return fp_kwargs
 
-    def _build_pour_point_kwargs(self, props, weathering):
+    def _build_pour_point_kwargs(self, props):
         '''
             Build a pour point properties dictionary suitable to be passed in
             as keyword args.  This is different enough from the generic
@@ -1646,7 +1545,6 @@ class EnvCanadaRecordParser(object):
             - weathering: The fractional oil weathering amount.
         '''
         pp_kwargs = props
-        pp_kwargs['weathering'] = weathering
 
         temp_c = pp_kwargs['pour_point']
         if temp_c is None:
@@ -1673,8 +1571,7 @@ class EnvCanadaRecordParser(object):
 
         return pp_kwargs
 
-    def _build_evaporation_kwargs(self, props, weathering,
-                                  equation, coeff_label):
+    def _build_evaporation_kwargs(self, props, equation, coeff_label):
         '''
             Build evaporation equation properties dictionary suitable to be
             passed in as keyword args.  This is different enough from the
@@ -1685,21 +1582,16 @@ class EnvCanadaRecordParser(object):
                            This is a suffix that we will prepend with the
                            coefficient we would like to get.
         '''
-        evap_kwargs = props
+        evap_kwargs = {}
 
-        evap_kwargs['weathering'] = weathering
+        evap_kwargs['weathering'] = props['weathering']
         evap_kwargs['equation'] = equation
 
-        evap_kwargs['a'] = evap_kwargs['a_{}'.format(coeff_label)]
-        evap_kwargs['b'] = evap_kwargs['b_{}'.format(coeff_label)]
+        evap_kwargs['a'] = props['a_{}'.format(coeff_label)]
+        evap_kwargs['b'] = props['b_{}'.format(coeff_label)]
 
-        del evap_kwargs['a_{}'.format(coeff_label)]
-        del evap_kwargs['b_{}'.format(coeff_label)]
-
-        if 'c_{}'.format(coeff_label) in evap_kwargs:
-            evap_kwargs['c'] = evap_kwargs['c_{}'.format(coeff_label)]
-
-            del evap_kwargs['c_{}'.format(coeff_label)]
+        if 'c_{}'.format(coeff_label) in props:
+            evap_kwargs['c'] = props['c_{}'.format(coeff_label)]
 
         return evap_kwargs
 
