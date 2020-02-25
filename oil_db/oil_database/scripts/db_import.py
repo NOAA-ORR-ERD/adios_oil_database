@@ -237,7 +237,9 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
             try:
                 parser_obj = parser_cls(*record_data)
 
-                pp.pprint(parser_obj.values)
+                #pp.pprint(parser_obj.file_props)
+                #pp.pprint(parser_obj.values)
+                #pp.pprint(parser_obj.labels)
 
                 oil_obj = mapper_cls(parser_obj)
 

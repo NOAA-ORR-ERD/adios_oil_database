@@ -6,10 +6,10 @@ from openpyxl import load_workbook
 
 from slugify import Slugify
 
+from ..import field_name_sluggify
+
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
-
-from ..import field_name_sluggify
 
 custom_slugify = field_name_sluggify
 
@@ -18,7 +18,8 @@ logger = logging.getLogger(__name__)
 
 class ExxonDataReader:
     """
-    reads the Exxon Excel files, and returns records as simple nested data structures:
+    reads the Exxon Excel files, and returns records as simple nested
+    data structures:
 
     Essentially the file as a raw table
     """
@@ -28,7 +29,8 @@ class ExxonDataReader:
 
         :param data_dir: directory with one or more Exxon Assay Excel files
 
-        :param data_index_file: name of index file -- mapping oil names to files
+        :param data_index_file: name of index file -- mapping oil names
+                                to files
         """
         self.data_dir = data_dir
 
@@ -39,8 +41,9 @@ class ExxonDataReader:
             header = indexfile.readline().strip()
             if header.split() != ['oil_name', 'file']:
                 raise ValueError(f"This: {data_index_file}\n"
-                                  "does not look like an Exxon Assay Index file")
+                                 "does not look like an Exxon Assay Index file")
             index = []
+
             for line in indexfile:
                 line = line.strip()
                 if not line:
@@ -50,8 +53,8 @@ class ExxonDataReader:
                     oil_name, filename = line.split("\t")
                 except ValueError:
                     raise ValueError(f"There is something wrong with this line"
-                                      "in the index file:\n"
-                                      "{line}")
+                                     "in the index file:\n"
+                                     "{line}")
                 index.append((oil_name, self.data_dir / filename))
 
             return index
@@ -76,9 +79,9 @@ class ExxonDataReader:
         sheetnames = wb.sheetnames
 
         if len(sheetnames) != 1:
-            raise ValueError(f"file: {filename} does not have one and only one sheet")
+            raise ValueError(f'file: {filename} does not have '
+                             'one and only one sheet')
 
         sheet = wb[sheetnames[0]]
 
         return [[c.value for c in row] for row in sheet.rows]
-

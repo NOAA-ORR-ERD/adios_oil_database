@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import re
+from functools import wraps
 from datetime import datetime
 from pytz import timezone
 import logging
@@ -13,7 +14,166 @@ custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
-import pdb
+
+# Here we map some of the more unwieldy labels to simpler ones
+# These labels could appear at any level of the hierarchy
+label_map = {
+    'ests_emergencies_sciences_and_technologies_code': 'ests_code',
+    'acenaphthylene_acl': 'acenaphthylene',
+    'acenaphthene_ace': 'acenaphthene',
+    'adhesion_g_cm2_ests_1996': 'adhesion',
+    'alkylated_total_aromatic_hydrocarbons_pahs_ug_g_oil_ests_2002a': 'alkylated_total_pahs',
+    'anthracene_an': 'anthracene',
+    'aromatics_f2_ests_2002a': 'aromatics_f2',
+    'benz_a_anthracene_baa': 'benz_a_anthracene',
+    'benzo_a_pyrene_bap': 'benzo_a_pyrene',
+    'benzo_b_fluoranthene_bbf': 'benzo_b_fluoranthene',
+    'benzo_e_pyrene_bep': 'benzo_e_pyrene',
+    'benzo_ghi_perylene_bgp': 'benzo_ghi_perylene',
+    'benzo_k_fluoranthene_bkf': 'benzo_k_fluoranthene',
+    'biphenyl_bph': 'biphenyl',
+    'benzene_and_alkynated_benzene_ests_2002b': 'benzene_and_alkynated_benzene',
+    'biomarkers_ug_g_ests_2002a': 'biomarkers',
+    'btex_group_ug_g_ests_2002b': 'btex_group',
+    'c21_tricyclic_terpane_c21t': 'c21_tricyclic_terpane',
+    'c22_tricyclic_terpane_c22t': 'c22_tricyclic_terpane',
+    'c23_tricyclic_terpane_c23t': 'c23_tricyclic_terpane',
+    'c24_tricyclic_terpane_c24t': 'c24_tricyclic_terpane',
+    'c4_c6_alkyl_benzenes_ug_g_ests_2002b': 'c4_c6_alkyl_benzenes',
+    'ccme_fractions_mg_g_oil_ests_2002a': 'ccme_fractions',
+    'chemical_dispersibility_with_corexit_9500_dispersant_swirling_flask_test_astm_f2059': 'chemical_dispersibility_with_corexit_9500',
+    'density_at_0_5_c_g_ml_astm_d5002': 'density_at_0_5_c',
+    'density_at_15_c_g_ml_astm_d5002': 'density_at_15_c',
+    'density_0_c_g_ml': 'density_0_c',
+    'density_5_c_g_ml': 'density_5_c',
+    'density_15_c_g_ml': 'density_15_c',
+    'dibenzo_ah_anthracene_da': 'dibenzo_ah_anthracene',
+    'emulsion_at_15_degc_on_the_day_of_formation_ests_1998_2': 'emulsion_at_15_c_day_0',
+    'emulsion_at_15_degc_one_week_after_formation_ests_1998b': 'emulsion_at_15_c_day_7',
+    'evaporation_ests_1998_1': 'evaporation',
+    'fluoranthene_fl': 'fluoranthene',
+    'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'gc_tah',
+    'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'gc_tph',
+    'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'gc_tsh',
+    'gc_tah_mg_g_oil_ests_2002a': 'gc_total_aromatic_hydrocarbon',
+    'gc_tph_f1_f2_ests_2002a': 'gc_tph_f1_plus_f2',
+    'gc_tph_mg_g_oil_ests_2002a': 'gc_total_petroleum_hydrocarbon',
+    'gc_tsh_mg_g_oil_ests_2002a': 'gc_total_saturate_hydrocarbon',
+    'headspace_analysis_mg_g_oil_ests_2002b': 'headspace_analysis',
+    'hopane_h30': 'hopane',
+    'hydrocarbon_content_ratio_ests_2002a': 'hydrocarbon_content_ratio',
+    'indeno_1_2_3_cd_pyrene_ip': 'indeno_1_2_3_cd_pyrene',
+    'interfacial_tension_0_c_oil_water': 'ift_0_c_oil_water',
+    'interfacial_tension_5_c_oil_water': 'ift_5_c_oil_water',
+    'interfacial_tension_15_c_oil_water': 'ift_15_c_oil_water',
+    'interfacial_tension_0_c_oil_salt_water_3_3_nacl': 'ift_0_c_oil_seawater',
+    'interfacial_tension_5_c_oil_salt_water_3_3_nacl': 'ift_5_c_oil_seawater',
+    'interfacial_tension_15_c_oil_salt_water_3_3_nacl': 'ift_15_c_oil_seawater',
+    'n_alkanes_ug_g_oil_ests_2002a': 'n_alkanes',
+    'other_priority_pahs_ug_g_oil': 'other_priority_pahs',
+    'pentakishomohopane_22r_h35r': 'pentakishomohopane_22r',
+    'pentakishomohopane_22s_h35s': 'pentakishomohopane_22s',
+    'pyrene_py': 'pyrene',
+    'perylene_pe': 'perylene',
+    'saturates_f1_ests_2002a': 'saturates_f1',
+    'sulfur_content_astm_d4294': 'sulfur_content',
+    'surface_interfacial_tension_at_0_5_c_mn_m_or_dynes_cm': 'ift_at_0_5_c',
+    'surface_interfacial_tension_at_15_c_mn_m_or_dynes_cm': 'ift_at_15_c',
+    'surface_tension_0_c_oil_air': 'ift_0_c_oil_air',
+    'surface_tension_5_c_oil_air': 'ift_5_c_oil_air',
+    'surface_tension_15_c_oil_air': 'ift_15_c_oil_air',
+    'tetrakishomohopane_22r_h34r': 'tetrakishomohopane_22r',
+    'tetrakishomohopane_22s_h34s': 'tetrakishomohopane_22s',
+    'viscosity_at_0_5_c_mpa_s': 'viscosity_at_0_5_c',
+    'viscosity_at_0_c_mpa_s': 'viscosity_at_0_c',
+    'viscosity_at_5_c_mpa_s': 'viscosity_at_5_c',
+    'viscosity_at_15_c_mpa_s': 'viscosity_at_15_c',
+    'water_content_astm_e203': 'water_content',
+    'wax_content_ests_1994': 'wax_content',
+    '_18a_22_29_30_trisnorneohopane_c27ts': '_18a_22_29_30_trisnorneohopane',
+    '_17a_h_22_29_30_trisnorhopane_c27tm': '_17a_h_22_29_30_trisnorhopane',
+    '_14ss_h_17ss_h_20_cholestane_c27assss': '_14b_h_17b_h_20_cholestane',
+    '_14ss_h_17ss_h_20_methylcholestane_c28assss': '_14b_h_17b_h_20_methylcholestane',
+    '_14ss_h_17ss_h_20_ethylcholestane_c29assss': '_14b_h_17b_h_20_ethylcholestane',
+    '_30_31_bishomohopane_22r_h32r': '_30_31_bishomohopane_22r',
+    '_30_31_bishomohopane_22s_h32s': '_30_31_bishomohopane_22s',
+    '_30_31_trishomohopane_22r_h33r': '_30_31_trishomohopane_22r',
+    '_30_31_trishomohopane_22s_h33s': '_30_31_trishomohopane_22s',
+    '_30_homohopane_22r_h31r': '_30_homohopane_22r',
+    '_30_homohopane_22s_h31s': '_30_homohopane_22s',
+    '_30_norhopane_h29': '_30_norhopane',
+
+}
+
+
+# class method decorator to join a list of labels with a separator
+def join_with(separator):
+    def wrapper(func):
+        @wraps(func)
+        def wrapped(self, *args, **kwargs):
+            return separator.join([i.strip()
+                                   for i in func(self, *args, **kwargs)
+                                   if i is not None])
+
+        return wrapped
+
+    return wrapper
+
+
+# class method decorator to parse a label as a datetime
+def parse_time(func):
+    def parse_single_datetime(date_str):
+        datetime_pattern = re.compile(
+            r'(?P<month>\d{1,2})[-/](?P<day>\d{1,2})[-/](?P<year>\d{2,4})'
+            r'(?:[T ](?P<hour>\d{1,2}):(?P<minute>\d{1,2})'  # Optional HH:mm
+            r'(?::(?P<second>\d{1,2})'  # Optional seconds
+            r'(?:\.(?P<microsecond>\d{1,6})0*)?)?)?'  # Optional microseconds
+            r'(?P<tzinfo>Z|[+-]\d{2}(?::?\d{2})?)?\Z'  # Optional timezone
+        )
+
+        if isinstance(date_str, datetime):
+            return date_str
+        elif isinstance(date_str, str):
+            match = re.match(datetime_pattern, date_str.strip())
+
+            if match is not None:
+                tp = {k: int(v) for k, v in match.groupdict().items()
+                      if v is not None}
+
+                if tp['month'] > 12:
+                    tp['month'], tp['day'] = tp['day'], tp['month']
+
+                return datetime(**tp)
+            else:
+                raise ValueError('datetime "{}" is not parsable'
+                                 .format(date_str))
+        else:
+            return None
+
+    def wrapper(*args, **kwargs):
+        '''
+            Note: Apparently there are a few records that just don't have
+                  a sample date.  So we can't really enforce the presence
+                  of a date here.
+
+            Note: The date formats are all over the place here.  So the default
+                  datetime parsing inside PyMODM is not sufficient.
+                  Some formats that I have seen:
+                  - MM/DD/YYYY          # most common
+                  - MM-DD-YYYY          # different separator
+                  - DD/MM/YYYY          # 7 records very clearly in this format
+                  - MM/YYYY             # 3 records do this
+                  - YYYY                # 2 records do this
+                  - <month name>, YYYY  # 3 records do this
+                  So we will:
+                  - Treat MM/DD/YYYY as the default
+                  - Allow for DD/MM/YYYY if it can be clearly determined
+                  - Fix the others in the file.
+        '''
+        return [parse_single_datetime(dt)
+                for dt in func(*args, **kwargs)]
+
+    return wrapper
 
 
 class EnvCanadaRecordParser(object):
@@ -21,164 +181,153 @@ class EnvCanadaRecordParser(object):
         A record class for the Environment Canada oil spreadsheet.  This is
         intended to be used with a set of data representing a single record
         from the spreadsheet.
-        - We manage a list of properties extracted from the Excel columns
-          for an oil.  Basically this will be a list of property groups,
-          where each property group will contain a set of property values at
-          differing degrees of weathering.
-        - The raw data from the Excel file will be a two-dimensional array
-          of data, so each property group will have the same number of items.
-          If an oil contains no oil property value at a certain degree of
-          weathering, instead of being removed from the group, it will contain
-          a value of None.
-        - We also manage an index lookup table for finding a set of property
-          values by their property name.
-        - It is possible that within a property group, there are multiple
-          properties of the same name.  This could happen if multiple sets of
-          properties are represented, possibly due to multiple testing methods.
-          For this reason, the index values contained in the lookup will be
-          a list with 1 or more indexes.
+        - We manage a hierarcical structure of properties extracted from the
+          Excel columns for an oil.  Basically this will be a dictionary of
+          raw property category names, where each property category itself will
+          contain a dictionary of raw individual properties.
+        - The data associated with any individual property will be a list of
+          values corresponding to the weathered subsamples that exist for the
+          oil record.
     '''
-    datetime_pattern = re.compile(
-        r'(?P<month>\d{1,2})[-/](?P<day>\d{1,2})[-/](?P<year>\d{2,4})'
-        r'(?:[T ](?P<hour>\d{1,2}):(?P<minute>\d{1,2})'  # Optional HH:mm
-        r'(?::(?P<second>\d{1,2})'  # Optional seconds
-        r'(?:\.(?P<microsecond>\d{1,6})0*)?)?)?'  # Optional microseconds
-        r'(?P<tzinfo>Z|[+-]\d{2}(?::?\d{2})?)?\Z'  # Optional timezone
-    )
-
     def __init__(self, values, file_props):
         '''
-            :param property_indexes: A lookup dictionary of property index
+            :param values: A dictionary of property values
                                      values.
-            :type property_indexes: A dictionary with property names as keys,
-                                    and associated index values into the data.
+            :type values: A dictionary structure with raw property names
+                          as keys, and associated values.
+            :param file_props: A dictionary of property values concerning the
+                               source xl spreadsheet.
+            :type file_props: A dictionary structure with property names
+                              as keys, and associated values.
         '''
-        self.values = values
+        self.values = self.slugify_keys(values)
+        self.labels = self.generate_labels(values)
+        self.propagate_merged_cells()
         self.file_props = file_props
 
-    def get_props_by_category(self, category):
+    def slugify(self, label):
+        if label is None:
+            return label
+
+        prefix = '_' if label[0].isdigit() else ''
+
+        return prefix + custom_slugify(label)
+
+    def slugify_keys(self, obj):
         '''
-            Get all oil data properties for each column of oil data, that exist
-            within a single category.
-            - This function is intended to work on the oil data columns for a
-              single oil, but this is not enforced.
-            - the oil properties will be returned as a dictionary.
+            Generate a structure like the incoming data, but with keys that
+            have been 'slugified', which is to say turned into a string that
+            is suitable for use as an object attribute.
+            - The strings will be snake-case, all lowercase words separated
+              by underscores.
+            - They will not start with a numeric digit.  If the original label
+              starts with a digit, the slug will be prepended with an
+              underscore ('_').
         '''
-        ret = {}
-        cat_fields = self.prop_idx[category]
+        if isinstance(obj, (tuple, list, set, frozenset)):
+            return [self.slugify_keys(v)
+                    for v in obj]
+        elif isinstance(obj, dict):
+            return dict([(label_map.get(self.slugify(k), self.slugify(k)),
+                          self.slugify_keys(v))
+                        for k, v in obj.items()])
+        else:
+            return obj
 
-        for f, idxs in cat_fields.items():
-            values_i = [self.values[i] for i in idxs]
-
-            if len(idxs) == 1:
-                # flatten the list
-                values_i = [i for sub in values_i for i in sub]
-                pass
-            else:
-                # transpose the list
-                values_i = list(zip(*values_i))
-
-            ret[f] = values_i
-
-        return ret
-
-    def get_props_by_name(self, category, name):
+    def generate_labels(self, obj):
         '''
-            Get the oil data properties for each column of oil data,
-            referenced by their category name and oil property name.
-            - This function is intended to work on the oil data columns for a
-              single oil, but this is not enforced.
+            Generate a structure containing the original field label data.
+            - We will keep this separate from the actual data so not to make
+              the data structure unnecessarily complex.
+            - The hierarchy of the labels will closely match the data hierarchy
+              with the following exceptions
+              - The value at any particular node will be expanded to a dict
+                containing:
+                  {'label': <raw_label>,
+                   'value': <value>
+                   }
+              - This is only to contain label information.  If there is no
+                expandable value at a node, it will be considered a leaf node.
+                It will contain:
+                  {'label': <raw_label>,
+                   'value': None
+                   }
         '''
-        return [self.values[i] for i in self.prop_idx[category][name]]
+        if isinstance(obj, (tuple, list, set, frozenset)):
+            ret = [self.generate_labels(v) for v in obj]
 
+            if all([i is None for i in ret]):
+                ret = None
 
+            return ret
+        elif isinstance(obj, dict):
+            ret = {}
 
+            for k, v in obj.items():
+                v = self.generate_labels(v)
+                s_k = label_map.get(self.slugify(k), self.slugify(k))
 
+                ret[s_k] = {'label': k,
+                            'value': v}
 
+            return ret
+        else:
+            return None
 
-
-
-class EnvCanadaRecordParserOld(object):
-    '''
-        A record class for the Environment Canada oil spreadsheet.  This is
-        intended to be used with a set of data representing a single record
-        from the spreadsheet.
-        - We manage a list of properties extracted from the Excel columns
-          for an oil.  Basically this will be a list of property groups,
-          where each property group will contain a set of property values at
-          differing degrees of weathering.
-        - The raw data from the Excel file will be a two-dimensional array
-          of data, so each property group will have the same number of items.
-          If an oil contains no oil property value at a certain degree of
-          weathering, instead of being removed from the group, it will contain
-          a value of None.
-        - We also manage an index lookup table for finding a set of property
-          values by their property name.
-        - It is possible that within a property group, there are multiple
-          properties of the same name.  This could happen if multiple sets of
-          properties are represented, possibly due to multiple testing methods.
-          For this reason, the index values contained in the lookup will be
-          a list with 1 or more indexes.
-    '''
-    datetime_pattern = re.compile(
-        r'(?P<month>\d{1,2})[-/](?P<day>\d{1,2})[-/](?P<year>\d{2,4})'
-        r'(?:[T ](?P<hour>\d{1,2}):(?P<minute>\d{1,2})'  # Optional HH:mm
-        r'(?::(?P<second>\d{1,2})'  # Optional seconds
-        r'(?:\.(?P<microsecond>\d{1,6})0*)?)?)?'  # Optional microseconds
-        r'(?P<tzinfo>Z|[+-]\d{2}(?::?\d{2})?)?\Z'  # Optional timezone
-    )
-
-    def __init__(self, property_indexes, values, file_props):
+    def propagate_merged_cells(self):
         '''
-            :param property_indexes: A lookup dictionary of property index
-                                     values.
-            :type property_indexes: A dictionary with property names as keys,
-                                    and associated index values into the data.
+            Some rows within the columns of an oil are merged in the excel
+            spreadsheet into one cell.  This is to imply that all columns
+            should have the merged value.  But when parsing the columns,
+            only the first one will have the value.
+            So as a preprocessing step, we will propagate these values to all
+            cells within that row
+
+            In addition, some method fields are implied to be for multiple
+            grouped categories, but the field only lies within one of the
+            categories.
+            So we need to copy it to the other category
         '''
-        self.prop_idx = property_indexes
-        self.values = values
-        self.file_props = file_props
+        propagate = [('viscosity_at_0_5_c', 'method'),
+                     ('ift_at_0_5_c', 'method'),
+                     ('ift_at_15_c', 'method'),
+                     ('flash_point_c', 'method'),
+                     ('pour_point_c', 'method'),
+                     ('boiling_point_cumulative_weight_fraction', 'method'),
+                     ('hydrocarbon_group_content', 'method'),
+                     ]
 
-        print('self.prop_idx:')
-        pp.pprint(self.prop_idx)
+        for cat, attr in propagate:
+            cells = self.values[cat][attr]
+            if cells[0] is not None:
+                self.values[cat][attr] = [cells[0] for _c in cells]
 
-        print('self.file_props:')
-        pp.pprint(self.file_props)
+        copy_to = [('viscosity_at_0_5_c', 'method', 'viscosity_at_15_c'),
+                   ('boiling_point_cumulative_weight_fraction', 'method',
+                    'boiling_point_distribution_temperature_c')
+                   ]
 
-    def get_props_by_category(self, category):
+        for cat, attr, other_cat in copy_to:
+            self.values[other_cat][attr] = self.values[cat][attr]
+
+    def get_label(self, nav_list):
         '''
-            Get all oil data properties for each column of oil data, that exist
-            within a single category.
-            - This function is intended to work on the oil data columns for a
-              single oil, but this is not enforced.
-            - the oil properties will be returned as a dictionary.
+            For an attribute in our values hierarchy, get the original source
+            label information.
+
+            Ex:
+                parser_obj.get_label(('gc_total_aromatic_hydrocarbon',
+                                      'gc_tah'))
         '''
-        ret = {}
-        cat_fields = self.prop_idx[category]
+        if isinstance(nav_list, str):
+            nav_list = nav_list.split('.')
 
-        for f, idxs in cat_fields.items():
-            values_i = [self.values[i] for i in idxs]
+        labels = {'value': self.labels}
 
-            if len(idxs) == 1:
-                # flatten the list
-                values_i = [i for sub in values_i for i in sub]
-                pass
-            else:
-                # transpose the list
-                values_i = list(zip(*values_i))
+        for l in nav_list:
+            labels = labels['value'][l]
 
-            ret[f] = values_i
-
-        return ret
-
-    def get_props_by_name(self, category, name):
-        '''
-            Get the oil data properties for each column of oil data,
-            referenced by their category name and oil property name.
-            - This function is intended to work on the oil data columns for a
-              single oil, but this is not enforced.
-        '''
-        return [self.values[i] for i in self.prop_idx[category][name]]
+        return labels['label']
 
     def get_interface_properties(self):
         '''
@@ -195,20 +344,17 @@ class EnvCanadaRecordParserOld(object):
         return props
 
     @property
+    @join_with(' ')
     def name(self):
         '''
             For now we will just concatenate all the names we see in the
             list.  In the future, we will want to be a bit smarter.
         '''
-        return ' '.join([n.strip()
-                         for n in self.get_props_by_name(None, 'oil')[0]
-                         if n is not None])
+        return self.values[None]['oil']
 
     @property
     def ests_codes(self):
-        return self.get_props_by_name(None,
-                                      'ests_emergencies_sciences_'
-                                      'and_technologies_code')[0]
+        return self.values[None]['ests_code']
 
     @property
     def oil_id(self):
@@ -228,8 +374,7 @@ class EnvCanadaRecordParserOld(object):
 
     @property
     def weathering(self):
-        weathered_subsamples = list(self.get_props_by_name(None,
-                                                           'weathered')[0])
+        weathered_subsamples = self.values[None]['weathered']
 
         # this is a minor exception to the weathering.  If there is just one
         # weathered sample and it is a None value, we can probably assume
@@ -246,20 +391,9 @@ class EnvCanadaRecordParserOld(object):
         return weathered_subsamples
 
     @property
+    @join_with(' ')
     def reference(self):
-        '''
-            We will concatenate all the reference content we see in the
-            list, separated with a space.
-            If there is no content in the reference fields, we will use the
-            name of the Excel file.
-        '''
-        ref = ' '.join([n.strip()
-                        for n in self.get_props_by_name(None, 'reference')[0]
-                        if n is not None])
-        if ref == "":
-            ref = self.file_props['name']
-
-        return ref
+        return self.values[None]['reference']
 
     @property
     def reference_date(self):
@@ -281,75 +415,19 @@ class EnvCanadaRecordParserOld(object):
             return datetime(max(occurrences), 1, 1, tzinfo=timezone('GMT'))
 
     @property
+    @parse_time
     def sample_date(self):
-        '''
-            We will concatenate all the reference content we see in the
-            list, separated with a space.
-
-            Note: Apparently there are a few records that just don't have
-                  a sample date.  So we can't really enforce the presence
-                  of a date here.
-
-            Note: The date formats are all over the place here.  So the default
-                  datetime parsing inside PyMODM is not sufficient.
-                  Some formats that I have seen:
-                  - MM/DD/YYYY          # most common
-                  - MM-DD-YYYY          # different separator
-                  - DD/MM/YYYY          # 7 records very clearly in this format
-                  - MM/YYYY             # 3 records do this
-                  - YYYY                # 2 records do this
-                  - <month name>, YYYY  # 3 records do this
-                  So we will:
-                  - Treat MM/DD/YYYY as the default
-                  - Allow for DD/MM/YYYY if it can be clearly determined
-                  - Fix the others in the file.
-        '''
-        dates = set([n for n in
-                     self.get_props_by_name(None, 'date_sample_received')[0]
-                     if n is not None])
-
-        if len(dates) > 0:
-            return self._parse_time(dates.pop())
-        else:
-            return None
-
-    def _parse_time(self, date_str):
-        if isinstance(date_str, datetime):
-            return date_str
-        elif isinstance(date_str, str):
-            match = re.match(self.datetime_pattern, date_str.strip())
-
-            if match is not None:
-                tp = {k: int(v) for k, v in match.groupdict().items()
-                      if v is not None}
-
-                if tp['month'] > 12:
-                    tp['month'], tp['day'] = tp['day'], tp['month']
-
-                return datetime(**tp)
-            else:
-                raise ValueError('datetime "{}" is not parsable'
-                                 .format(date_str))
+        return self.values[None]['date_sample_received']
 
     @property
+    @join_with(' ')
     def comments(self):
-        '''
-            We will concatenate all the comments we see in the list,
-            separated with a space.
-        '''
-        return ' '.join([n.strip()
-                         for n in self.get_props_by_name(None, 'comments')[0]
-                         if n is not None])
+        return self.values[None]['comments']
 
     @property
+    @join_with(' ')
     def location(self):
-        '''
-            We will concatenate all the location info we see in the list,
-            separated with a space.
-        '''
-        return ' '.join([n.strip()
-                         for n in self.get_props_by_name(None, 'source')[0]
-                         if n is not None])
+        return self.values[None]['source']
 
     @property
     def product_type(self):
@@ -388,19 +466,12 @@ class EnvCanadaRecordParserOld(object):
     @property
     def apis(self):
         ret = []
-        props = self.get_props_by_category('api_gravity')
+        props = self.values['api_gravity']['calculated_api_gravity']
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            if props_i['calculated_api_gravity'] is not None:
-                add_props = {'weathering': w}
-                rename_props = {'calculated_api_gravity': 'gravity'}
-
-                kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
-                                            rename_props=rename_props)
-                ret.append(kwargs)
+            if props[i] is not None:
+                ret.append({'gravity': props[i],
+                            'weathering': w})
 
         return ret
 
@@ -412,80 +483,34 @@ class EnvCanadaRecordParserOld(object):
             at 0/5C.  I dunno, I would have organized the data in a more
             orthogonal way.
         '''
-        ret = self._get_densities_at_0c()
-        ret.extend(self._get_densities_at_5c())
-        ret.extend(self._get_densities_at_15c())
+        ret = []
+
+        for temp in (0, 5, 15):
+            ret.extend(self._get_densities_at(temp))
 
         return ret
 
-    def _get_densities_at_15c(self):
+    def _get_densities_at(self, ref_temp):
         ret = []
-        props = self.get_props_by_category('density_at_15_c_g_ml_astm_d5002')
+        temps = {0: '0_5',
+                 5: '0_5',
+                 15: '15'}
+        temp_mask = [t for t in temps.keys() if t != ref_temp]
+        cat_label = dict([(k, 'density_at_{}_c'.format(v))
+                          for k, v in temps.items()])
 
         for i, w in enumerate(self.weathering):
-            # we want to create a density object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+            props_i = dict([(k, v[i]) for k, v in
+                            self.values[cat_label[ref_temp]].items()])
 
-            add_props = {'weathering': w, 'ref_temp_c': 15.0}
-            rename_props = {'density_15_c_g_ml': 'g_ml'}
+            add_props = {'weathering': w, 'ref_temp_c': ref_temp}
+            rename_props = {'density_{}_c'.format(ref_temp): 'g_ml'}
+            prune_props = ['density_{}_c'.format(t) for t in temp_mask]
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
-                                        rename_props=rename_props)
-
-            try:
-                kwargs['g_ml'] = float(kwargs['g_ml'])
-            except Exception:
-                kwargs['g_ml'] = None
-
-            if kwargs['g_ml'] not in (None, 0.0):
-                ret.append(kwargs)
-
-        return ret
-
-    def _get_densities_at_5c(self):
-        ret = []
-        props = self.get_props_by_category('density_at_0_5_c_g_ml_astm_d5002')
-
-        for i, w in enumerate(self.weathering):
-            # we want to create a density object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            add_props = {'weathering': w, 'ref_temp_c': 5.0}
-            prune_props = {'density_0_c_g_ml'}
-            rename_props = {'density_5_c_g_ml': 'g_ml'}
-
-            kwargs = self._build_kwargs(props_i,
-                                        add_props=add_props,
-                                        prune_props=prune_props,
-                                        rename_props=rename_props)
-
-            try:
-                kwargs['g_ml'] = float(kwargs['g_ml'])
-            except Exception:
-                kwargs['g_ml'] = None
-
-            if kwargs['g_ml'] not in (None, 0.0):
-                ret.append(kwargs)
-
-        return ret
-
-    def _get_densities_at_0c(self):
-        ret = []
-        props = self.get_props_by_category('density_at_0_5_c_g_ml_astm_d5002')
-
-        for i, w in enumerate(self.weathering):
-            # we want to create a density object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            add_props = {'weathering': w, 'ref_temp_c': 0.0}
-            prune_props = {'density_5_c_g_ml'}
-            rename_props = {'density_0_c_g_ml': 'g_ml'}
-
-            kwargs = self._build_kwargs(props_i,
-                                        add_props=add_props,
-                                        prune_props=prune_props,
-                                        rename_props=rename_props)
+                                        rename_props=rename_props,
+                                        prune_props=prune_props)
 
             try:
                 kwargs['g_ml'] = float(kwargs['g_ml'])
@@ -510,83 +535,40 @@ class EnvCanadaRecordParserOld(object):
                   viscosity value.  I don't really know what else to do in
                   this case but parse the float value and ignore the operator.
         '''
-        viscosities = self._get_viscosities_at_0c()
-        viscosities.extend(self._get_viscosities_at_5c())
-        viscosities.extend(self._get_viscosities_at_15c())
+        ret = []
 
-        self._propagate_merged_excel_cells(viscosities, ('method',))
+        for temp in (0, 5, 15):
+            ret.extend(self._get_viscosities_at(temp))
 
-        return viscosities
+        return ret
 
-    def _get_viscosities_at_15c(self):
+    def _get_viscosities_at(self, ref_temp):
         viscosities = []
-        props = self.get_props_by_category('viscosity_at_15_c_mpa_s')
+
+        temps = {0: '0_5',
+                 5: '0_5',
+                 15: '15'}
+
+        temp_mask = [t for t in temps.keys() if t != ref_temp]
+
+        cat_label = dict([(k, 'viscosity_at_{}_c'.format(v))
+                          for k, v in temps.items()])
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+            props_i = dict([(k, v[i]) for k, v in
+                            self.values[cat_label[ref_temp]].items()])
 
-            add_props = {'weathering': w, 'ref_temp_c': 15.0}
-            rename_props = {'viscosity_at_15_c_mpa_s': 'mpa_s'}
+            add_props = {'weathering': w, 'ref_temp_c': ref_temp}
+            rename_props = {'viscosity_at_{}_c'.format(ref_temp): 'mpa_s'}
+            prune_props = ['viscosity_at_{}_c'.format(t) for t in temp_mask]
+
             op_and_value = {'mpa_s'}
 
             kwargs = self._build_kwargs(props_i,
                                         add_props=add_props,
                                         rename_props=rename_props,
-                                        op_and_value=op_and_value)
-            kwargs['mpa_s']['unit'] = 'mPa s'
-
-            if any([(l in kwargs['mpa_s'] and
-                     kwargs['mpa_s'][l] not in (None, 0.0))
-                    for l in ('value', 'min_value', 'max_value')]):
-                viscosities.append(kwargs)
-
-        return viscosities
-
-    def _get_viscosities_at_5c(self):
-        viscosities = []
-        props = self.get_props_by_category('viscosity_at_0_5_c_mpa_s')
-
-        for i, w in enumerate(self.weathering):
-            # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            add_props = {'weathering': w, 'ref_temp_c': 5.0}
-            prune_props = {'viscosity_at_0_c_mpa_s'}
-            rename_props = {'viscosity_at_5_c_mpa_s': 'mpa_s'}
-            op_and_value = {'mpa_s'}
-
-            kwargs = self._build_kwargs(props_i,
-                                        add_props=add_props,
                                         prune_props=prune_props,
-                                        rename_props=rename_props,
-                                        op_and_value=op_and_value)
-            kwargs['mpa_s']['unit'] = 'mPa s'
-
-            if any([(l in kwargs['mpa_s'] and
-                     kwargs['mpa_s'][l] not in (None, 0.0))
-                    for l in ('value', 'min_value', 'max_value')]):
-                viscosities.append(kwargs)
-
-        return viscosities
-
-    def _get_viscosities_at_0c(self):
-        viscosities = []
-        props = self.get_props_by_category('viscosity_at_0_5_c_mpa_s')
-
-        for i, w in enumerate(self.weathering):
-            # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            add_props = {'weathering': w, 'ref_temp_c': 0.0}
-            prune_props = {'viscosity_at_5_c_mpa_s'}
-            rename_props = {'viscosity_at_0_c_mpa_s': 'mpa_s'}
-            op_and_value = {'mpa_s'}
-
-            kwargs = self._build_kwargs(props_i,
-                                        add_props=add_props,
-                                        prune_props=prune_props,
-                                        rename_props=rename_props,
                                         op_and_value=op_and_value)
             kwargs['mpa_s']['unit'] = 'mPa s'
 
@@ -613,159 +595,77 @@ class EnvCanadaRecordParserOld(object):
                   case of duplicate properties.  I don't think we need to
                   throw away what we have, but this needs to be addressed.
         '''
-        ifts = self._get_tensions_at_0c()
-        ifts.extend(self._get_tensions_at_5c())
-        ifts.extend(self._get_tensions_at_15c())
+        ifts = []
+        for temp in (0, 5, 15):
+            for if_type in ('air', 'water', 'seawater'):
+                ifts.extend(self._get_tension_at(temp, if_type))
 
         return ifts
 
-    def _get_tensions_at_15c(self):
+    def _get_tension_at(self, ref_temp, if_type):
         tensions = []
-        props = self.get_props_by_category('surface_interfacial_tension_'
-                                           'at_15_c_mn_m_or_dynes_cm')
+
+        temps = {0: '0_5',
+                 5: '0_5',
+                 15: '15'}
+        if_types = {'air': {'labels': ['oil_air'],
+                            'idx': 0},
+                    'water': {'labels': ['oil_water'],
+                              'idx': 1},
+                    'seawater': {'labels': ['oil_seawater'],
+                                 'idx': 2}
+                    }
+
+        cat_label = dict([(k, 'ift_at_{}_c'.format(v))
+                          for k, v in temps.items()])
 
         for i, w in enumerate(self.weathering):
             # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
+            props_i = dict([(k, v[i]) for k, v in
+                            self.values[cat_label[ref_temp]].items()
+                            ])
 
-            labels = ('surface_tension_15_c_oil_air',
-                      'interfacial_tension_15_c_oil_water',
-                      'interfacial_tension_15_c_oil_salt_water_3_3_nacl')
-            if_types = ('air', 'water', 'seawater')
+            add_props = {'weathering': w,
+                         'ref_temp_c': ref_temp,
+                         'interface': if_type}
 
-            for idx, (label, if_type) in enumerate(list(zip(labels,
-                                                            if_types))):
-                try:
-                    props_i_label = float(props_i[label])
-                except Exception:
-                    props_i_label = None
+            # We have a couple duplicate labels, one for each if_type
+            # and they are all here contained in a list.  We need to
+            # choose the right one.
+            for dup_lbl in ('standard_deviation', 'replicates'):
+                add_props[dup_lbl] = props_i[dup_lbl][if_types[if_type]['idx']]
 
-                if props_i_label not in (None, 0.0):
-                    add_props = {'weathering': w,
-                                 'ref_temp_c': 15.0,
-                                 'interface': if_type}
-                    prune_props = {i for i in labels if i != label}
-                    rename_props = {label: 'dynes_cm'}
+            prune_props = []
+            for temp in temps:
+                for i in if_types:
+                    if temp != ref_temp or i != if_type:
+                        for k in list(props_i.keys()):
+                            if all([k.find(l) >= 0
+                                    for l in
+                                    ['_{}'.format(temp)] + if_types[i]['labels']]):
+                                prune_props.append(k)
 
-                    # We have a couple duplicate labels, one for each if_type
-                    # and they are all here contained in a list.  We need to
-                    # choose the right one.
-                    for dup_lbl in ('standard_deviation', 'replicates'):
-                        add_props[dup_lbl] = props_i[dup_lbl][idx]
+            rename_props = {
+                'ift_{}_c_oil_{}'.format(ref_temp, if_type): 'dynes_cm'
+            }
 
-                    kwargs = self._build_kwargs(props_i,
-                                                add_props=add_props,
-                                                prune_props=prune_props,
-                                                rename_props=rename_props)
+            kwargs = self._build_kwargs(props_i,
+                                        add_props=add_props,
+                                        prune_props=prune_props,
+                                        rename_props=rename_props)
 
-                    tensions.append(kwargs)
-
-        self._propagate_merged_excel_cells(tensions, ('method',))
-
-        return tensions
-
-    def _get_tensions_at_5c(self):
-        tensions = []
-        props = self.get_props_by_category('surface_interfacial_tension_'
-                                           'at_0_5_c_mn_m_or_dynes_cm')
-
-        for i, w in enumerate(self.weathering):
-            # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            labels = ('surface_tension_5_c_oil_air',
-                      'interfacial_tension_5_c_oil_water',
-                      'interfacial_tension_5_c_oil_salt_water_3_3_nacl')
-            xtra_labels = ('surface_tension_0_c_oil_air',
-                           'interfacial_tension_0_c_oil_water',
-                           'interfacial_tension_0_c_oil_salt_water_3_3_nacl')
-            if_types = ('air', 'water', 'seawater')
-
-            for idx, (label, if_type) in enumerate(list(zip(labels,
-                                                            if_types))):
-                try:
-                    props_i_label = float(props_i[label])
-                except Exception:
-                    props_i_label = None
-
-                if props_i_label not in (None, 0.0):
-                    add_props = {'weathering': w,
-                                 'ref_temp_c': 5.0,
-                                 'interface': if_type}
-                    prune_props = {i for i in labels + xtra_labels
-                                   if i != label}
-                    rename_props = {label: 'dynes_cm'}
-
-                    # We have a couple duplicate labels, one for each if_type
-                    # and they are all here contained in a list.  We need to
-                    # choose the right one.
-                    for dup_lbl in ('standard_deviation', 'replicates'):
-                        add_props[dup_lbl] = props_i[dup_lbl][idx]
-
-                    kwargs = self._build_kwargs(props_i,
-                                                add_props=add_props,
-                                                prune_props=prune_props,
-                                                rename_props=rename_props)
-
-                    tensions.append(kwargs)
-
-        self._propagate_merged_excel_cells(tensions, ('method',))
-
-        return tensions
-
-    def _get_tensions_at_0c(self):
-        tensions = []
-        props = self.get_props_by_category('surface_interfacial_tension_'
-                                           'at_0_5_c_mn_m_or_dynes_cm')
-
-        for i, w in enumerate(self.weathering):
-            # we want to create a viscosity object for each weathering value
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            labels = ('surface_tension_0_c_oil_air',
-                      'interfacial_tension_0_c_oil_water',
-                      'interfacial_tension_0_c_oil_salt_water_3_3_nacl')
-            xtra_labels = ('surface_tension_5_c_oil_air',
-                           'interfacial_tension_5_c_oil_water',
-                           'interfacial_tension_5_c_oil_salt_water_3_3_nacl')
-            if_types = ('air', 'water', 'seawater')
-
-            for idx, (label, if_type) in enumerate(list(zip(labels,
-                                                            if_types))):
-                try:
-                    props_i_label = float(props_i[label])
-                except Exception:
-                    props_i_label = None
-
-                if props_i_label not in (None, 0.0):
-                    add_props = {'weathering': w,
-                                 'ref_temp_c': 0.0,
-                                 'interface': if_type}
-                    prune_props = {i for i in labels + xtra_labels
-                                   if i != label}
-                    rename_props = {label: 'dynes_cm'}
-
-                    # We have a couple duplicate labels, one for each if_type
-                    # and they are all here contained in a list.  We need to
-                    # choose the right one.
-                    for dup_lbl in ('standard_deviation', 'replicates'):
-                        add_props[dup_lbl] = props_i[dup_lbl][idx]
-
-                    kwargs = self._build_kwargs(props_i,
-                                                add_props=add_props,
-                                                prune_props=prune_props,
-                                                rename_props=rename_props)
-
-                    tensions.append(kwargs)
-
-        self._propagate_merged_excel_cells(tensions, ('method',))
+            try:
+                float(kwargs['dynes_cm'])
+                tensions.append(kwargs)
+            except Exception:
+                pass
 
         return tensions
 
     @property
     def flash_points(self):
         flash_points = []
-        props = self.get_props_by_category('flash_point_c')
+        props = self.values['flash_point_c']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -778,8 +678,6 @@ class EnvCanadaRecordParserOld(object):
                     for k in ('ref_temp_c',)]):
                 flash_points.append(kwargs)
 
-        self._propagate_merged_excel_cells(flash_points, ('method',))
-
         return flash_points
 
     @property
@@ -791,7 +689,7 @@ class EnvCanadaRecordParserOld(object):
             Dimensional parameters are simply (weathering).
         '''
         pour_points = []
-        props = self.get_props_by_category('pour_point_c')
+        props = self.values['pour_point_c']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -803,8 +701,6 @@ class EnvCanadaRecordParserOld(object):
                      kwargs[k] is not None)
                     for k in ('ref_temp_c',)]):
                 pour_points.append(kwargs)
-
-        self._propagate_merged_excel_cells(pour_points, ('method',))
 
         return pour_points
 
@@ -828,16 +724,11 @@ class EnvCanadaRecordParserOld(object):
         cuts = self._get_cuts_from_bp_cumulative_frac()
         cuts.extend(self._get_cuts_from_bp_distribution())
 
-        if len(cuts) > 0:
-            cuts[0]['method'] = self._get_cuts_method()
-            self._propagate_merged_excel_cells(cuts, ('method',))
-
         return cuts
 
     def _get_cuts_from_bp_distribution(self):
         cuts = []
-        props = self.get_props_by_category('boiling_point_'
-                                           'distribution_temperature_c')
+        props = self.values['boiling_point_distribution_temperature_c']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -870,9 +761,9 @@ class EnvCanadaRecordParserOld(object):
 
         # The only labels we care about are the percent value labels
         for percent in range(5, 101, 5):
-            label = custom_slugify('{:0.02g}'.format(percent / 100.0))
+            label = self.slugify('{:0.02g}'.format(percent / 100.0))
             vapor_temp_c = dist_data[label]
-            method = None
+            method = dist_data['method']
 
             if vapor_temp_c is not None:
                 cuts.append(self._build_cut_kwargs(vapor_temp_c, percent,
@@ -880,23 +771,10 @@ class EnvCanadaRecordParserOld(object):
 
         return cuts
 
-    def _get_cuts_method(self):
-        methods = []
-
-        props = self.get_props_by_category('boiling_point_'
-                                           'cumulative_weight_fraction')
-
-        for i, _w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-            methods.append(props_i['method'])
-
-        return methods[0]
-
     def _get_cuts_from_bp_cumulative_frac(self):
         cuts = []
 
-        props = self.get_props_by_category('boiling_point_'
-                                           'cumulative_weight_fraction')
+        props = self.values['boiling_point_cumulative_weight_fraction']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -931,7 +809,7 @@ class EnvCanadaRecordParserOld(object):
         temp_values = list(range(40, 200, 20)) + list(range(200, 701, 50))
 
         for temp_c in temp_values:
-            label = '{}'.format(temp_c)
+            label = '_{}'.format(temp_c)
             percent = frac_data[label]
             method = frac_data['method']
 
@@ -956,7 +834,7 @@ class EnvCanadaRecordParserOld(object):
             Dimensional parameters are simply (weathering).
         '''
         adhesions = []
-        props = self.get_props_by_category('adhesion_g_cm2_ests_1996')
+        props = self.values['adhesion']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -991,7 +869,7 @@ class EnvCanadaRecordParserOld(object):
     def _get_evaporation_eqs_ests_1998(self):
         evaporation_eqs = []
 
-        props = self.get_props_by_category('evaporation_ests_1998_1')
+        props = self.values['evaporation']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1007,8 +885,7 @@ class EnvCanadaRecordParserOld(object):
     def _get_evaporation_eqs_mass_loss1(self):
         evaporation_eqs = []
 
-        props = self.get_props_by_category('parameters_for_'
-                                           'evaporation_equation_mass_loss')
+        props = self.values['parameters_for_evaporation_equation_mass_loss']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1024,8 +901,7 @@ class EnvCanadaRecordParserOld(object):
     def _get_evaporation_eqs_mass_loss2(self):
         evaporation_eqs = []
 
-        props = self.get_props_by_category('parameters_for_'
-                                           'evaporation_equation_mass_loss')
+        props = self.values['parameters_for_evaporation_equation_mass_loss']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1045,16 +921,16 @@ class EnvCanadaRecordParserOld(object):
             properties, which we will try to capture.
             Dimensional parameters are (temperature, age, weathering).
         '''
-        emulsions = self._get_emulsion_age_0()
-        emulsions.extend(self._get_emulsion_age_7())
+        emulsions = []
+
+        for age in (0, 7):
+            emulsions.extend(self._get_emulsion_at(age))
 
         return emulsions
 
-    def _get_emulsion_age_0(self):
+    def _get_emulsion_at(self, age):
         emulsions = []
-        props = self.get_props_by_category('emulsion_at_15_degc_'
-                                           'on_the_day_of_formation_'
-                                           'ests_1998_2')
+        props = self.values['emulsion_at_15_c_day_{}'.format(age)]
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1062,7 +938,7 @@ class EnvCanadaRecordParserOld(object):
             if props_i['water_content_w_w'] is not None:
                 add_props = {'weathering': w,
                              'ref_temp_c': 15.0,
-                             'age_days': 0.0}
+                             'age_days': age}
                 rename_props = {'water_content_w_w': 'water_content_percent'}
                 prune_props = {'standard_deviation', 'replicates'}
 
@@ -1083,37 +959,6 @@ class EnvCanadaRecordParserOld(object):
 
         return emulsions
 
-    def _get_emulsion_age_7(self):
-        emulsions = []
-        props = self.get_props_by_category('emulsion_at_15_degc_'
-                                           'one_week_after_formation_'
-                                           'ests_1998b')
-
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            if props_i['water_content_w_w'] is not None:
-                add_props = {'weathering': w,
-                             'ref_temp_c': 15.0,
-                             'age_days': 7.0}
-                rename_props = {'water_content_w_w': 'water_content_percent'}
-
-                sd_types = ('cm', 'sm', 'lm', 'td', 'cv', 'wc')
-                for idx, sd_type in enumerate(sd_types):
-                    sd_label = '{}_standard_deviation'.format(sd_type)
-                    add_props[sd_label] = props_i['standard_deviation'][idx]
-
-                add_props['mod_replicates'] = props_i['replicates'][0]
-                add_props['wc_replicates'] = props_i['replicates'][1]
-
-                kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
-                                            rename_props=rename_props)
-
-                emulsions.append(kwargs)
-
-        return emulsions
-
     @property
     def corexit(self):
         '''
@@ -1122,10 +967,7 @@ class EnvCanadaRecordParserOld(object):
             Dimensional parameters are (weathering).
         '''
         corexit = []
-        props = self.get_props_by_category('chemical_dispersibility_with_'
-                                           'corexit_9500_dispersant_'
-                                           'swirling_flask_test_'
-                                           'astm_f2059')
+        props = self.values['chemical_dispersibility_with_corexit_9500']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1150,45 +992,8 @@ class EnvCanadaRecordParserOld(object):
             float value.
             Dimensional parameters are (weathering).
         '''
-        return self._get_sulfur_content_by_weathering()
-
-    @property
-    def water(self):
-        '''
-            Dimensional parameters are (weathering).
-        '''
-        return self._get_water_content_by_weathering()
-
-    @property
-    def wax_content(self):
-        '''
-            Dimensional parameters are (weathering).
-        '''
-        return self._get_wax_content_by_weathering()
-
-    @property
-    def sara_total_fractions(self):
-        '''
-            Dimensional parameters are (weathering).
-
-            Note: This is probably not a requirement, but It is nice to order
-                  These things in an expected way.  So we will order these
-                  fractions by weathering amount from lowest to highest.
-                  And we will order fraction groups of the same weathering
-                  amount by SARA, as the acronym implies.
-                  This will be a flat list, however.
-        '''
-        saturates = self._get_saturates_fraction_by_weathering()
-        aromatics = self._get_aromatics_fraction_by_weathering()
-        resins = self._get_resins_fraction_by_weathering()
-        asphaltenes = self._get_asphaltenes_fraction_by_weathering()
-
-        return [f for g in zip(saturates, aromatics, resins, asphaltenes)
-                for f in g]
-
-    def _get_sulfur_content_by_weathering(self):
         sulfur_contents = []
-        props = self.get_props_by_category('sulfur_content_astm_d4294')
+        props = self.values['sulfur_content']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1205,10 +1010,13 @@ class EnvCanadaRecordParserOld(object):
 
         return sulfur_contents
 
-    def _get_water_content_by_weathering(self):
+    @property
+    def water(self):
+        '''
+            Dimensional parameters are (weathering).
+        '''
         water_contents = []
-
-        props = self.get_props_by_category('water_content_astm_e203')
+        props = self.values['water_content']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1228,10 +1036,13 @@ class EnvCanadaRecordParserOld(object):
 
         return water_contents
 
-    def _get_wax_content_by_weathering(self):
+    @property
+    def wax_content(self):
+        '''
+            Dimensional parameters are (weathering).
+        '''
         wax_contents = []
-
-        props = self.get_props_by_category('wax_content_ests_1994')
+        props = self.values['wax_content']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
@@ -1248,33 +1059,54 @@ class EnvCanadaRecordParserOld(object):
 
         return wax_contents
 
-    def _get_saturates_fraction_by_weathering(self):
+    @property
+    def sara_total_fractions(self):
+        '''
+            Dimensional parameters are (weathering).
+
+            Note: This is probably not a requirement, but It is nice to order
+                  These things in an expected way.  So we will order these
+                  fractions by weathering amount from lowest to highest.
+                  And we will order fraction groups of the same weathering
+                  amount by SARA, as the acronym implies.
+                  This will be a flat list, however.
+        '''
+        fractions = []
+
+        for sara_type in ('saturates', 'aromatics', 'resin', 'asphaltene'):
+            fractions.extend(self._get_sara_fractions_as(sara_type))
+
+        return fractions
+
+    def _get_sara_fractions_as(self, sara_type):
+        sara_types = {'saturates': {'test_set': 0, 'label': 'Saturates'},
+                      'aromatics': {'test_set': 0, 'label': 'Aromatics'},
+                      'resin': {'test_set': 0, 'label': 'Resins'},
+                      'asphaltene': {'test_set': 1, 'label': 'Asphaltenes'},
+                      }
+
+        sara_mask = [a for a in sara_types if a != sara_type]
+
         saturates_fractions = []
 
-        props = self.get_props_by_category('hydrocarbon_group_content')
-
-        # the method cells are merged into a single wide one across all
-        # weathered samples for an oil, so we only see a value in the
-        # first cell here.  But it applies to all samples.
-        props['method'] = [props['method'][0] for _m in props['method']]
+        props = self.values['hydrocarbon_group_content']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in props.items()])
 
-            if props_i['saturates'] is not None:
-                # first index of these list properties
-                sd, r, m = [props_i[label][0]
+            if props_i[sara_type] is not None:
+                sd, r, m = [props_i[label][sara_types[sara_type]['test_set']]
                             for label in ('standard_deviation',
                                           'replicates',
                                           'method')]
 
                 add_props = {'weathering': w,
-                             'sara_type': 'Saturates',
+                             'sara_type': sara_types[sara_type]['label'],
                              'standard_deviation': sd,
                              'replicates': r,
                              'method': m}
-                prune_props = {'aromatics', 'resin', 'asphaltene'}
-                rename_props = {'saturates': 'percent'}
+                rename_props = {sara_type: 'percent'}
+                prune_props = sara_mask
 
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
@@ -1284,117 +1116,6 @@ class EnvCanadaRecordParserOld(object):
                 saturates_fractions.append(kwargs)
 
         return saturates_fractions
-
-    def _get_aromatics_fraction_by_weathering(self):
-        aromatics_fractions = []
-
-        props = self.get_props_by_category('hydrocarbon_group_content')
-
-        # the method cells are merged into a single wide one across all
-        # weathered samples for an oil, so we only see a value in the
-        # first cell here.  But it applies to all samples.
-        props['method'] = [props['method'][0] for _m in props['method']]
-
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            if props_i['aromatics'] is not None:
-                # first instance of these list properties
-                sd, r, m = [props_i[label][0]
-                            for label in ('standard_deviation',
-                                          'replicates',
-                                          'method')]
-
-                add_props = {'weathering': w,
-                             'sara_type': 'Aromatics',
-                             'standard_deviation': sd,
-                             'replicates': r,
-                             'method': m}
-                prune_props = {'saturates', 'resin', 'asphaltene'}
-                rename_props = {'aromatics': 'percent'}
-
-                kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
-                                            prune_props=prune_props,
-                                            rename_props=rename_props)
-
-                aromatics_fractions.append(kwargs)
-
-        return aromatics_fractions
-
-    def _get_resins_fraction_by_weathering(self):
-        resins_fractions = []
-
-        props = self.get_props_by_category('hydrocarbon_group_content')
-
-        # the method cells are merged into a single wide one across all
-        # weathered samples for an oil, so we only see a value in the
-        # first cell here.  But it applies to all samples.
-        props['method'] = [props['method'][0] for _m in props['method']]
-
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            if props_i['resin'] is not None:
-                # first index of these list properties
-                sd, r, m = [props_i[label][0]
-                            for label in ('standard_deviation',
-                                          'replicates',
-                                          'method')]
-
-                add_props = {'weathering': w,
-                             'sara_type': 'Resins',
-                             'standard_deviation': sd,
-                             'replicates': r,
-                             'method': m}
-                prune_props = {'saturates', 'aromatics', 'asphaltene'}
-                rename_props = {'resin': 'percent'}
-
-                kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
-                                            prune_props=prune_props,
-                                            rename_props=rename_props)
-
-                resins_fractions.append(kwargs)
-
-        return resins_fractions
-
-    def _get_asphaltenes_fraction_by_weathering(self):
-        asphaltenes_fractions = []
-
-        props = self.get_props_by_category('hydrocarbon_group_content')
-
-        # the method cells are merged into a single wide one across all
-        # weathered samples for an oil, so we only see a value in the
-        # first cell here.  But it applies to all samples.
-        props['method'] = [props['method'][0] for _m in props['method']]
-
-        for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in props.items()])
-
-            if props_i['asphaltene'] is not None:
-                # second index of these list properties
-                sd, r, m = [props_i[label][1]
-                            for label in ('standard_deviation',
-                                          'replicates',
-                                          'method')]
-
-                add_props = {'weathering': w,
-                             'sara_type': 'Asphaltenes',
-                             'standard_deviation': sd,
-                             'replicates': r,
-                             'method': m}
-                prune_props = {'saturates', 'aromatics', 'resin'}
-                rename_props = {'asphaltene': 'percent'}
-
-                kwargs = self._build_kwargs(props_i,
-                                            add_props=add_props,
-                                            prune_props=prune_props,
-                                            rename_props=rename_props)
-
-                asphaltenes_fractions.append(kwargs)
-
-        return asphaltenes_fractions
 
     @property
     def benzene(self):
@@ -1415,12 +1136,9 @@ class EnvCanadaRecordParserOld(object):
         '''
         benzenes = []
 
-        benz_props = self.get_props_by_category('benzene_and_'
-                                                'alkynated_benzene_'
-                                                'ests_2002b')
-        btex_props = self.get_props_by_category('btex_group_ug_g_ests_2002b')
-        c4_props = self.get_props_by_category('c4_c6_alkyl_benzenes_ug_g_'
-                                              'ests_2002b')
+        benz_props = self.values['benzene_and_alkynated_benzene']
+        btex_props = self.values['btex_group']
+        c4_props = self.values['c4_c6_alkyl_benzenes']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in benz_props.items()])
@@ -1435,19 +1153,15 @@ class EnvCanadaRecordParserOld(object):
             [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
              for lbl in list(kwargs.keys())]
 
-            self._prepend_underscores(kwargs)
-
             # fix the 'ND' values
             for k, v in list(kwargs.items()):
                 if v == 'ND':
                     kwargs[k] = None
 
-            kwargs['weathering'] = w
-            kwargs['method'] = 'ESTS 2002b'
+            if not all([(v is None) for k, v in kwargs.items()]):
+                kwargs['weathering'] = w
+                kwargs['method'] = 'ESTS 2002b'
 
-            if not all([(v is None)
-                        for k, v in kwargs.items()
-                        if k not in ('weathering', 'method')]):
                 benzenes.append(kwargs)
 
         return benzenes
@@ -1468,11 +1182,10 @@ class EnvCanadaRecordParserOld(object):
         '''
         headspace = []
 
-        hs_props = self.get_props_by_category('headspace_analysis_mg_g_oil_'
-                                              'ests_2002b')
+        props = self.values['headspace_analysis']
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in hs_props.items()])
+            props_i = dict([(k, v[i]) for k, v in props.items()])
 
             if not all([(v is None) for v in props_i.values()]):
                 kwargs = props_i
@@ -1506,31 +1219,26 @@ class EnvCanadaRecordParserOld(object):
         '''
         gas_chromatography = []
 
-        gc_tph = self.get_props_by_category('gc_tph_mg_g_oil_ests_2002a')
-        gc_tsh = self.get_props_by_category('gc_tsh_mg_g_oil_ests_2002a')
-        gc_tah = self.get_props_by_category('gc_tah_mg_g_oil_ests_2002a')
-        gc_hcr = self.get_props_by_category('hydrocarbon_content_ratio_'
-                                            'ests_2002a')
+        gc_tph = self.values['gc_total_petroleum_hydrocarbon']
+        gc_tsh = self.values['gc_total_saturate_hydrocarbon']
+        gc_tah = self.values['gc_total_aromatic_hydrocarbon']
+        gc_hcr = self.values['hydrocarbon_content_ratio']
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in gc_tph.items()])
-            kwargs = props_i
+            kwargs = dict([(k, v[i]) for k, v in gc_tph.items()])
 
-            props_i = dict([(k, v[i]) for k, v in gc_tsh.items()])
-            kwargs.update(props_i)
+            kwargs.update([(k, v[i]) for k, v in gc_tsh.items()])
 
-            props_i = dict([(k, v[i]) for k, v in gc_tah.items()])
-            kwargs.update(props_i)
+            kwargs.update([(k, v[i]) for k, v in gc_tah.items()])
 
-            props_i = dict([(k, v[i]) for k, v in gc_hcr.items()])
-            kwargs.update(props_i)
+            kwargs.update([(k, v[i]) for k, v in gc_hcr.items()])
 
             if not all([v is None for v in kwargs.values()]):
                 add_props = {'weathering': w, 'method': 'ESTS 2002a'}
                 rename_props = {
-                    'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'tph_mg_g',
-                    'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'tsh_mg_g',
-                    'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'tah_mg_g',
+                    'gc_tph': 'tph_mg_g',
+                    'gc_tsh': 'tsh_mg_g',
+                    'gc_tah': 'tah_mg_g',
                     'gc_tsh_gc_tph': 'tsh_tph_percent',
                     'gc_tah_gc_tph': 'tah_tph_percent',
                     'resolved_peaks_tph': 'resolved_peaks_tph_percent',
@@ -1560,8 +1268,7 @@ class EnvCanadaRecordParserOld(object):
         '''
         ccme_fractions = []
 
-        ccme_props = self.get_props_by_category('ccme_fractions_mg_g_oil_'
-                                                'ests_2002a')
+        ccme_props = self.values['ccme_fractions']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
@@ -1599,7 +1306,7 @@ class EnvCanadaRecordParserOld(object):
         '''
         ccme_saturates = []
 
-        ccme_props = self.get_props_by_category('saturates_f1_ests_2002a')
+        ccme_props = self.values['saturates_f1']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
@@ -1630,7 +1337,7 @@ class EnvCanadaRecordParserOld(object):
         '''
         ccme_aromatics = []
 
-        ccme_props = self.get_props_by_category('aromatics_f2_ests_2002a')
+        ccme_props = self.values['aromatics_f2']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
@@ -1662,7 +1369,7 @@ class EnvCanadaRecordParserOld(object):
         '''
         ccme_tph = []
 
-        ccme_props = self.get_props_by_category('gc_tph_f1_f2_ests_2002a')
+        ccme_props = self.values['gc_tph_f1_plus_f2']
 
         for i, w in enumerate(self.weathering):
             props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
@@ -1699,58 +1406,21 @@ class EnvCanadaRecordParserOld(object):
         '''
         alkylated_pahs = []
 
-        naphthalene_props = self.get_props_by_category('naphthalenes')
-        phenanthrene_props = self.get_props_by_category('phenanthrenes')
-
-        dibenzothiophene_props = self.get_props_by_category(
-            'dibenzothiophenes'
-        )
-
-        fluorene_props = self.get_props_by_category('fluorenes')
-
-        benzonaphthothiophene_props = self.get_props_by_category(
-            'benzonaphthothiophenes'
-        )
-
-        chrysene_props = self.get_props_by_category('chrysenes')
-
-        other_props = self.get_props_by_category(
-            'other_priority_pahs_ug_g_oil'
-        )
+        all_props = [self.values[c]
+                     for c in ('naphthalenes',
+                               'phenanthrenes',
+                               'dibenzothiophenes',
+                               'fluorenes',
+                               'benzonaphthothiophenes',
+                               'chrysenes',
+                               'other_priority_pahs')]
 
         for i, w in enumerate(self.weathering):
-            props_i = {}
-
-            for cat_props in (naphthalene_props,
-                              phenanthrene_props,
-                              dibenzothiophene_props,
-                              fluorene_props,
-                              benzonaphthothiophene_props,
-                              chrysene_props,
-                              other_props):
-                props_i.update([(k, v[i])
-                                for k, v in cat_props.items()])
+            props_i = dict([(k, v[i]) for cat_props in all_props
+                            for k, v in cat_props.items()])
 
             if not all([v is None for v in props_i.values()]):
-                rename_props = {
-                    'biphenyl_bph': 'biphenyl',
-                    'acenaphthylene_acl': 'acenaphthylene',
-                    'acenaphthene_ace': 'acenaphthene',
-                    'anthracene_an': 'anthracene',
-                    'fluoranthene_fl': 'fluoranthene',
-                    'pyrene_py': 'pyrene',
-                    'benz_a_anthracene_baa': 'benz_a_anthracene',
-                    'benzo_b_fluoranthene_bbf': 'benzo_b_fluoranthene',
-                    'benzo_k_fluoranthene_bkf': 'benzo_k_fluoranthene',
-                    'benzo_e_pyrene_bep': 'benzo_e_pyrene',
-                    'benzo_a_pyrene_bap': 'benzo_a_pyrene',
-                    'perylene_pe': 'perylene',
-                    'indeno_1_2_3_cd_pyrene_ip': 'indeno_1_2_3_cd_pyrene',
-                    'dibenzo_ah_anthracene_da': 'dibenzo_ah_anthracene',
-                    'benzo_ghi_perylene_bgp': 'benzo_ghi_perylene',
-                }
-
-                kwargs = self._build_kwargs(props_i, rename_props=rename_props)
+                kwargs = props_i
 
                 [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
                  for lbl in list(kwargs.keys())]
@@ -1764,7 +1434,7 @@ class EnvCanadaRecordParserOld(object):
     @property
     def alkanes(self):
         '''
-            The Evironment Canada data sheet contains data for n-Alkanes,
+            The Environment Canada data sheet contains data for n-Alkanes,
             which we will try to capture.
             We have a single property group in this case.
             - Dimensional parameters are (weathering).
@@ -1777,13 +1447,12 @@ class EnvCanadaRecordParserOld(object):
             Note: One record has a couple of fields containing '/'.  Not really
                   sure what that means, but we will nullify it for now.
         '''
-        ccme_fractions = []
+        ret = []
 
-        ccme_props = self.get_props_by_category('n_alkanes_ug_g_oil_'
-                                                'ests_2002a')
+        props = self.values['n_alkanes']
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in ccme_props.items()])
+            props_i = dict([(k, v[i]) for k, v in props.items()])
 
             if not all([v is None for v in props_i.values()]):
                 kwargs = props_i
@@ -1798,14 +1467,14 @@ class EnvCanadaRecordParserOld(object):
                 kwargs['weathering'] = w
                 kwargs['method'] = 'ESTS 2002a'
 
-                ccme_fractions.append(kwargs)
+                ret.append(kwargs)
 
-        return ccme_fractions
+        return ret
 
     @property
     def biomarkers(self):
         '''
-            The Evironment Canada data sheet contains data for biomarkers,
+            The Environment Canada data sheet contains data for biomarkers,
             which we will try to capture.
             We have a single property group in this case.
             - Dimensional parameters are (weathering).
@@ -1816,42 +1485,13 @@ class EnvCanadaRecordParserOld(object):
         '''
         biomarkers = []
 
-        bio_props = self.get_props_by_category('biomarkers_ug_g_'
-                                               'ests_2002a')
+        bio_props = self.values['biomarkers']
 
         for i, w in enumerate(self.weathering):
-            props_i = dict([(k, v[i]) for k, v in bio_props.items()])
-
-            rename_props = {
-                'c21_tricyclic_terpane_c21t': 'c21_tricyclic_terpane',
-                'c22_tricyclic_terpane_c22t': 'c22_tricyclic_terpane',
-                'c23_tricyclic_terpane_c23t': 'c23_tricyclic_terpane',
-                'c24_tricyclic_terpane_c24t': 'c24_tricyclic_terpane',
-                '30_norhopane_h29': '30_norhopane',
-                'hopane_h30': 'hopane',
-                '30_homohopane_22s_h31s': '30_homohopane_22s',
-                '30_homohopane_22r_h31r': '30_homohopane_22r',
-                '30_31_bishomohopane_22s_h32s': '30_31_bishomohopane_22s',
-                '30_31_bishomohopane_22r_h32r': '30_31_bishomohopane_22r',
-                '30_31_trishomohopane_22s_h33s': '30_31_trishomohopane_22s',
-                '30_31_trishomohopane_22r_h33r': '30_31_trishomohopane_22r',
-                'tetrakishomohopane_22s_h34s': 'tetrakishomohopane_22s',
-                'tetrakishomohopane_22r_h34r': 'tetrakishomohopane_22r',
-                'pentakishomohopane_22s_h35s': 'pentakishomohopane_22s',
-                'pentakishomohopane_22r_h35r': 'pentakishomohopane_22r',
-                '18a_22_29_30_trisnorneohopane_c27ts': '18a_22_29_30_trisnorneohopane',
-                '17a_h_22_29_30_trisnorhopane_c27tm': '17a_h_22_29_30_trisnorhopane',
-                '14ss_h_17ss_h_20_cholestane_c27assss': '14b_h_17b_h_20_cholestane',
-                '14ss_h_17ss_h_20_methylcholestane_c28assss': '14b_h_17b_h_20_methylcholestane',
-                '14ss_h_17ss_h_20_ethylcholestane_c29assss': '14b_h_17b_h_20_ethylcholestane',
-            }
-
-            kwargs = self._build_kwargs(props_i, rename_props=rename_props)
+            kwargs = dict([(k, v[i]) for k, v in bio_props.items()])
 
             [self._rename_prop(kwargs, lbl, lbl + '_ug_g')
              for lbl in list(kwargs.keys())]
-
-            self._prepend_underscores(kwargs)
 
             if any([(v is not None) for v in kwargs.values()]):
                 kwargs.update({'weathering': w, 'method': 'ESTS 2002a'})
@@ -1920,7 +1560,7 @@ class EnvCanadaRecordParserOld(object):
 
         if prune_props is not None:
             for p in prune_props:
-                del kwargs[p]
+                kwargs.pop(p, None)
 
         if rename_props is not None:
             for old_prop, new_prop in rename_props.items():

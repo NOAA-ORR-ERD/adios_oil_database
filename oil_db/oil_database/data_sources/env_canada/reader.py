@@ -99,16 +99,16 @@ class EnvCanadaOilExcelFile(object):
             if all([(r.value is None) for r in row[:2]]):
                 category_name, field_name = None, None
             elif row[0].value is not None:
-                category_name = row[0].value
+                category_name = row[0].value.strip()
                 row_prev_name = category_name
                 if row[1].value is not None:
-                    field_name = str(row[1].value)
+                    field_name = str(row[1].value).strip()
                 else:
                     field_name = None
             else:
                 category_name = row_prev_name
                 if row[1].value is not None:
-                    field_name = str(row[1].value)
+                    field_name = str(row[1].value).strip()
                 else:
                     field_name = None
 
