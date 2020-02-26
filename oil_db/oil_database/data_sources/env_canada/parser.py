@@ -1263,12 +1263,7 @@ class EnvCanadaRecordParser(object):
                       add_props=None,
                       prune_props=None,
                       rename_props=None,
-                      op_and_value=None,
-                      to_fraction=None,
-                      to_kg_ms=None,
-                      to_n_m=None,
-                      to_kg_m_2=None,
-                      to_kg_m_3=None):
+                      op_and_value=None):
         '''
             Build a content properties dictionary suitable to be passed in
             as keyword args.
@@ -1278,15 +1273,6 @@ class EnvCanadaRecordParser(object):
             - rename_props: dict containing properties to be renamed,
             - op_and_value: A set of numeric properties that could contain an
                             operator prefix.
-            - to_fraction: A set of properties to convert from percent to
-                           fraction.
-            - to_kg_ms: A set of properties to convert from (mPa * s) to
-                        (kg / (m * s)).
-            - to_n_m: A set of properties to convert from mN/m (dynes/cm) into
-                      N/m.
-            - to kg_m_2: A set of properties to convert from g/cm^2 to kg/m^2
-            - to kg_m_3: A set of properties to convert from g/cm^3 (g/ml)
-                         to kg/m^3
 
             Note: We perform actions in a particular order.
                   1: Add any add_props that were passed in.
@@ -1296,11 +1282,6 @@ class EnvCanadaRecordParser(object):
                      prefix.  Right now we will just throw away the operator,
                      but in the future we could decide to keep it in its own
                      property.  Depends upon how useful it turns out to be.
-                  5: Convert any to_fraction props that were passed in.
-                  6: Convert any to_kg_ms props that were passed in.
-                  7: Convert any to_n_m props that were passed in.
-                  8: Convert any to_kg_m_2 props that were passed in.
-                  9: Convert any to_kg_m_3 props that were passed in.
 
             TODO: It is intended that any unit conversions will be handled in
                   an exclusive way.  It is unlikely that we will be performing
@@ -1339,26 +1320,6 @@ class EnvCanadaRecordParser(object):
                 else:
                     kwargs[ov] = {'value': value, 'unit': '1'}
 
-        if to_fraction is not None:
-            for f in to_fraction:
-                kwargs[f] = self._percent_to_fraction(kwargs[f])
-
-        if to_kg_ms is not None:
-            for m in to_kg_ms:
-                kwargs[m] = self._mpa_s_to_kg_ms(kwargs[m])
-
-        if to_n_m is not None:
-            for n in to_n_m:
-                kwargs[n] = self._m_n_per_m_to_nm(kwargs[n])
-
-        if to_kg_m_2 is not None:
-            for k in to_kg_m_2:
-                kwargs[k] = self._g_cm_2_to_kg_m_2(kwargs[k])
-
-        if to_kg_m_3 is not None:
-            for k in to_kg_m_3:
-                kwargs[k] = self._g_cm_3_to_kg_m_3(kwargs[k])
-
         return kwargs
 
     def build_flash_point_kwargs(self, props):
@@ -1376,22 +1337,8 @@ class EnvCanadaRecordParser(object):
 
         del fp_kwargs['flash_point']
 
-        min_temp_c = self._get_min_temp(temp_c)
-        max_temp_c = self._get_max_temp(temp_c)
-
-        try:
-            temp_c = float(temp_c)
-        except Exception:
-            temp_c = None
-
-        fp_kwargs['ref_temp_c'] = {'unit': 'C'}
-        if temp_c is not None:
-            fp_kwargs['ref_temp_c']['value'] = temp_c
-        elif min_temp_c is not None and min_temp_c == max_temp_c:
-            fp_kwargs['ref_temp_c']['value'] = max_temp_c
-        else:
-            fp_kwargs['ref_temp_c']['min_value'] = min_temp_c
-            fp_kwargs['ref_temp_c']['max_value'] = max_temp_c
+        fp_kwargs['ref_temp_c'] = self._get_range_or_scalar(temp_c)
+        fp_kwargs['ref_temp_c']['unit'] = 'C'
 
         return fp_kwargs
 
@@ -1411,22 +1358,8 @@ class EnvCanadaRecordParser(object):
 
         del pp_kwargs['pour_point']
 
-        min_temp_c = self._get_min_temp(temp_c)
-        max_temp_c = self._get_max_temp(temp_c)
-
-        try:
-            temp_c = float(temp_c)
-        except Exception:
-            temp_c = None
-
-        pp_kwargs['ref_temp_c'] = {'unit': 'C'}
-        if temp_c is not None:
-            pp_kwargs['ref_temp_c']['value'] = temp_c
-        elif min_temp_c == max_temp_c:
-            pp_kwargs['ref_temp_c']['value'] = min_temp_c
-        else:
-            pp_kwargs['ref_temp_c']['min_value'] = min_temp_c
-            pp_kwargs['ref_temp_c']['max_value'] = max_temp_c
+        pp_kwargs['ref_temp_c'] = self._get_range_or_scalar(temp_c)
+        pp_kwargs['ref_temp_c']['unit'] = 'C'
 
         return pp_kwargs
 
@@ -1458,32 +1391,18 @@ class EnvCanadaRecordParser(object):
         kwargs[new_prop] = kwargs[old_prop]
         del kwargs[old_prop]
 
-    def _prepend_underscores(self, kwargs):
-        '''
-            kwargs that start with a number are not valid.
-            Prepend an underscore to them.
-        '''
-        for k, v in list(kwargs.items()):
-            if k[0].isdigit():
-                kwargs['_' + k] = v
-                del kwargs[k]
+    def _get_range_or_scalar(self, value_in):
+        op, value = self._get_op_and_value(value_in)
 
-    def _propagate_merged_excel_cells(self, objects, labels):
-        '''
-            Some content in the Excel file is represented in a group of
-            merged cells, in which only the first cell in our array has the
-            content.  So we would like to propagate this content to all
-            our viscosity objects.
-
-            Note: if we find ourselves doing this a lot, we will want to
-                  generalize this function a bit.
-        '''
-        for k in labels:
-            value = [v[k] for v in objects
-                     if k in v and v[k] is not None]
-            if len(value) > 0:
-                value = value[0]  # first value, just to keep it simple.
-                [v.update(((k, value),)) for v in objects]
+        if op == '<':
+            # range with no min limit
+            return {'min_value': None, 'max_value': value}
+        elif op == '>':
+            # range with no max limit
+            return {'min_value': value, 'max_value': None}
+        else:
+            # scalar value or None.  Either way we return the value
+            return {'value': value}
 
     def _get_op_and_value(self, value_in):
         '''
@@ -1516,86 +1435,3 @@ class EnvCanadaRecordParser(object):
             value = None
 
         return op, value
-
-    def _m_n_per_m_to_nm(self, m_n_per_m):
-        '''
-            Convert mN/m (dynes/cm) into N/m or return None value
-        '''
-        if isinstance(m_n_per_m, (int, float)):
-            return m_n_per_m * 1e-3
-        else:
-            return None
-
-    def _get_min_temp(self, temp_c):
-        '''
-            calculate the pour point minimum value from the Excel content
-            - Excel float content is in degrees Celcius
-
-            - if we have no preceding operater,     then min = the value.
-            - if we have a '>' preceding the float, then min = the value.
-            - if we have a '<' preceding the float, then min = None.
-            - otherwise,                                 min = None
-        '''
-        op, value = self._get_op_and_value(temp_c)
-
-        if op == '<':
-            value = None
-
-        return value
-
-    def _get_max_temp(self, temp_c):
-        '''
-            calculate the flash point minimum value from the Excel content
-            - Excel float content is in degrees Celcius
-
-            - if we have no preceding operater,     then max = the value.
-            - if we have a '<' preceding the float, then max = the value.
-            - if we have a '>' preceding the float, then max = None.
-            - otherwise,                                 max = None
-        '''
-        op, value = self._get_op_and_value(temp_c)
-
-        if op == '>':
-            value = None
-
-        return value
-
-    def _celcius_to_kelvin(self, temp_c):
-        if temp_c is not None:
-            temp_c += 273.15
-
-        return temp_c
-
-    def _g_cm_2_to_kg_m_2(self, g_cm_2):
-        if g_cm_2 is None:
-            kg_m_2 = None
-        else:
-            kg_m_2 = g_cm_2 * 10.0
-
-        return kg_m_2
-
-    def _g_cm_3_to_kg_m_3(self, g_cm_3):
-        if g_cm_3 is None:
-            kg_m_3 = None
-        else:
-            kg_m_3 = g_cm_3 * 1000.0
-
-        return kg_m_3
-
-    def _mpa_s_to_kg_ms(self, mpa_s):
-        '''
-            Environment Canada measures dynamic viscosity in (mPa * s), so we
-            need to convert to (kg / (m * s))
-        '''
-        if mpa_s is None:
-            kg_ms = None
-        else:
-            kg_ms = mpa_s * 1e-3
-
-        return kg_ms
-
-    def _percent_to_fraction(self, percent):
-        if percent is not None:
-            percent /= 100.0
-
-        return percent
