@@ -1252,7 +1252,7 @@ class EnvCanadaRecordParser(object):
                     props_i['method'] = method
 
                 for lbl in list(props_i.keys()):
-                    if props_i[lbl] in ('/', ' '):
+                    if props_i[lbl] in ('/', ' ', 'ND'):
                         props_i[lbl] = None
 
                 ret.append(props_i)
