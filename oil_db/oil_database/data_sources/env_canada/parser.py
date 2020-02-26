@@ -41,6 +41,10 @@ label_map = {
     'c23_tricyclic_terpane_c23t': 'c23_tricyclic_terpane',
     'c24_tricyclic_terpane_c24t': 'c24_tricyclic_terpane',
     'c4_c6_alkyl_benzenes_ug_g_ests_2002b': 'c4_c6_alkyl_benzenes',
+    'ccme_f1': 'f1',
+    'ccme_f2': 'f2',
+    'ccme_f3': 'f3',
+    'ccme_f4': 'f4',
     'ccme_fractions_mg_g_oil_ests_2002a': 'ccme_fractions',
     'chemical_dispersibility_with_corexit_9500_dispersant_swirling_flask_test_astm_f2059': 'chemical_dispersibility_with_corexit_9500',
     'density_at_0_5_c_g_ml_astm_d5002': 'density_at_0_5_c',
@@ -53,13 +57,15 @@ label_map = {
     'emulsion_at_15_degc_one_week_after_formation_ests_1998b': 'emulsion_at_15_c_day_7',
     'evaporation_ests_1998_1': 'evaporation',
     'fluoranthene_fl': 'fluoranthene',
-    'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'gc_tah',
-    'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'gc_tph',
-    'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'gc_tsh',
+    'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'tah',
+    'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'tph',
+    'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'tsh',
     'gc_tah_mg_g_oil_ests_2002a': 'gc_total_aromatic_hydrocarbon',
+    'gc_tah_gc_tph': 'tah_tph',
     'gc_tph_f1_f2_ests_2002a': 'gc_tph_f1_plus_f2',
     'gc_tph_mg_g_oil_ests_2002a': 'gc_total_petroleum_hydrocarbon',
     'gc_tsh_mg_g_oil_ests_2002a': 'gc_total_saturate_hydrocarbon',
+    'gc_tsh_gc_tph': 'tsh_tph',
     'headspace_analysis_mg_g_oil_ests_2002b': 'headspace_analysis',
     'hopane_h30': 'hopane',
     'hydrocarbon_content_ratio_ests_2002a': 'hydrocarbon_content_ratio',
@@ -539,8 +545,9 @@ class EnvCanadaRecordParser(object):
             with only a few deviations.
 
             Note: Sometimes there is a greater than ('>') indication for a
-                  viscosity value.  I don't really know what else to do in
-                  this case but parse the float value and ignore the operator.
+                  viscosity value.  In this case, we parse the float value
+                  as an interval with the operator indicating whether it is
+                  a min or a max.
         '''
         ret = []
 
@@ -591,12 +598,6 @@ class EnvCanadaRecordParser(object):
             There are two categories, surface/interfacial tension at 15C, and
             surface/interfacial tension at 0/5C.
             I still think it could have been organized more orthogonally.
-
-            TODO: we are having problems matching up the standard deviation
-                  and replicates because they are duplicated within a category.
-                  We need to rethink the indexing to at least allow for the
-                  case of duplicate properties.  I don't think we need to
-                  throw away what we have, but this needs to be addressed.
         '''
         ifts = []
         for temp in (0, 5, 15):
@@ -819,8 +820,6 @@ class EnvCanadaRecordParser(object):
     @property
     def adhesions(self):
         '''
-            Getting the adhesion is fairly straightforward.  We simply get the
-            value in g/cm^2.
             Dimensional parameters are simply (weathering).
         '''
         ret = []
@@ -954,8 +953,6 @@ class EnvCanadaRecordParser(object):
     @property
     def sulfur(self):
         '''
-            Getting the sulfur content is very straightforward.  Just get the
-            float value.
             Dimensional parameters are (weathering).
         '''
         sulfur_contents = []
@@ -1016,13 +1013,6 @@ class EnvCanadaRecordParser(object):
     def sara_total_fractions(self):
         '''
             Dimensional parameters are (weathering).
-
-            Note: This is probably not a requirement, but It is nice to order
-                  These things in an expected way.  So we will order these
-                  fractions by weathering amount from lowest to highest.
-                  And we will order fraction groups of the same weathering
-                  amount by SARA, as the acronym implies.
-                  This will be a flat list, however.
         '''
         fractions = []
 
@@ -1075,40 +1065,13 @@ class EnvCanadaRecordParser(object):
             We have 3 property groups in this case, and I think it would be ok
             to merge them into a single object.
             - Dimensional parameters are (weathering).
-            - Units are all ug/g as far as I can tell, which is basically the
-              same as ppm, so no conversion.
-            - We will rename the benzene amount properties all with a '_ppm'
-              suffix to indicate the units.
-
-            Note: One record in the datasheet had a benzene section where most
-                  of the values were 'ND'.  Not sure what this means, but for
-                  our purposes, it will be changed to a None.
+            - Units are all ug/g as far as I can tell.
         '''
-        ret = []
-
-        props = {}
-        [props.update(self.values[c])
-         for c in ('benzene_and_alkynated_benzene',
-                   'btex_group',
-                   'c4_c6_alkyl_benzenes')]
-
-        for props_i in self.iterate_weathering(props):
-            # fix the 'ND' values
-            for k, v in list(props_i.items()):
-                if v == 'ND':
-                    props_i[k] = None
-
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
-                 for lbl in list(props_i.keys())
-                 if lbl != 'weathering']
-
-                props_i['method'] = 'ESTS 2002b'
-
-                ret.append(props_i)
-
-        return ret
+        return self.weathering_sliced_obj(('benzene_and_alkynated_benzene',
+                                           'btex_group',
+                                           'c4_c6_alkyl_benzenes'),
+                                          suffix='_ug_g',
+                                          method='ESTS 2002b')
 
     @property
     def headspace(self):
@@ -1118,28 +1081,10 @@ class EnvCanadaRecordParser(object):
             We have a single property group in this case.
             - Dimensional parameters are (weathering).
             - Values Units are all mg/g as far as I can tell.
-            - We will rename the properties all with a '_mg_g' suffix to
-              indicate the units.
-            - lots of oils have no headspace measurements at all.  If all of
-              the properties are empty for a particular weathered sample,
-              we will not include it.
         '''
-        ret = []
-
-        props = self.values['headspace_analysis']
-
-        for props_i in self.iterate_weathering(props):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                [self._rename_prop(props_i, lbl, lbl + '_mg_g')
-                 for lbl in list(props_i.keys())
-                 if lbl != 'weathering']
-
-                props_i['method'] = 'ESTS 2002b'
-
-                ret.append(props_i)
-
-        return ret
+        return self.weathering_sliced_obj('headspace_analysis',
+                                          suffix='_mg_g',
+                                          method='ESTS 2002b')
 
     @property
     def chromatography(self):
@@ -1153,40 +1098,18 @@ class EnvCanadaRecordParser(object):
               - Hydrocarbon Content Ratio
             - Dimensional parameters are (weathering).
             - Values Units are split between mg/g and percent.
-            - We will append the appropriate unit suffix to each property.
-            - lots of oils have no chromatography measurements at all.
-              If all of the properties are empty for a particular weathered
-              sample, we will not include it.
         '''
-        ret = []
+        gcts = self.weathering_sliced_obj(('gc_total_petroleum_hydrocarbon',
+                                           'gc_total_saturate_hydrocarbon',
+                                           'gc_total_aromatic_hydrocarbon'),
+                                          suffix='_mg_g',
+                                          method='ESTS 2002a')
+        gcrs = self.weathering_sliced_obj('hydrocarbon_content_ratio',
+                                          suffix='_percent')
 
-        props = {}
-        [props.update(self.values[c])
-         for c in ('gc_total_petroleum_hydrocarbon',
-                   'gc_total_saturate_hydrocarbon',
-                   'gc_total_aromatic_hydrocarbon',
-                   'hydrocarbon_content_ratio')]
+        [a.update(b) for a, b in zip(gcts, gcrs)]
 
-        for props_i in self.iterate_weathering(props):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                add_props = {'method': 'ESTS 2002a'}
-                rename_props = {
-                    'gc_tph': 'tph_mg_g',
-                    'gc_tsh': 'tsh_mg_g',
-                    'gc_tah': 'tah_mg_g',
-                    'gc_tsh_gc_tph': 'tsh_tph_percent',
-                    'gc_tah_gc_tph': 'tah_tph_percent',
-                    'resolved_peaks_tph': 'resolved_peaks_tph_percent',
-                }
-
-                props_i = self._build_kwargs(props_i,
-                                             add_props=add_props,
-                                             rename_props=rename_props)
-
-                ret.append(props_i)
-
-        return ret
+        return gcts
 
     @property
     def ccme(self):
@@ -1196,27 +1119,10 @@ class EnvCanadaRecordParser(object):
             We have a single property group in this case.
             - Dimensional parameters are (weathering).
             - Values Units are all mg/g as far as I can tell.
-            - We will rename the properties all with a '_mg_g' suffix to
-              indicate the units.
-            - lots of oils have no CCME measurements at all.  If all of
-              the properties are empty for a particular weathered sample,
-              we will not include it.
         '''
-        ret = []
-
-        for props_i in self.iterate_weathering(self.values['ccme_fractions']):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                props_i['method'] = 'ESTS 2002b'
-
-                [self._rename_prop(props_i,
-                                   'ccme_{}'.format(f),
-                                   '{}_mg_g'.format(f))
-                 for f in ('f1', 'f2', 'f3', 'f4',)]
-
-                ret.append(props_i)
-
-        return ret
+        return self.weathering_sliced_obj('ccme_fractions',
+                                          suffix='_mg_g',
+                                          method='ESTS 2002a')
 
     @property
     def ccme_f1(self):
@@ -1227,21 +1133,9 @@ class EnvCanadaRecordParser(object):
             - We have a single property group in this case.
             - Dimensional parameters are (weathering).
             - Values Units are not specified.
-            - We will not append a suffix to the properties.
-            - lots of oils have no CCME measurements at all.  If all of
-              the properties are empty for a particular weathered sample,
-              we will not include it.
         '''
-        ret = []
-
-        for props_i in self.iterate_weathering(self.values['saturates_f1']):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                props_i['method'] = 'ESTS 2002a'
-
-                ret.append(props_i)
-
-        return ret
+        return self.weathering_sliced_obj('saturates_f1',
+                                          method='ESTS 2002a')
 
     @property
     def ccme_f2(self):
@@ -1252,21 +1146,9 @@ class EnvCanadaRecordParser(object):
             - We have a single property group in this case.
             - Dimensional parameters are (weathering).
             - Values Units are not specified.
-            - We will not append a suffix to the properties.
-            - lots of oils have no CCME measurements at all.  If all of
-              the properties are empty for a particular weathered sample,
-              we will not include it.
         '''
-        ret = []
-
-        for props_i in self.iterate_weathering(self.values['aromatics_f2']):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                props_i['method'] = 'ESTS 2002a'
-
-                ret.append(props_i)
-
-        return ret
+        return self.weathering_sliced_obj('aromatics_f2',
+                                          method='ESTS 2002a')
 
     @property
     def ccme_tph(self):
@@ -1278,23 +1160,9 @@ class EnvCanadaRecordParser(object):
             - We have a single property group in this case.
             - Dimensional parameters are (weathering).
             - Values Units are not specified.
-            - We will not append a suffix to the properties.
-            - lots of oils have no CCME measurements at all.  If all of
-              the properties are empty for a particular weathered sample,
-              we will not include it.
         '''
-        ret = []
-
-        props = self.values['gc_tph_f1_plus_f2']
-
-        for props_i in self.iterate_weathering(props):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                props_i['method'] = 'ESTS 2002a'
-
-                ret.append(props_i)
-
-        return ret
+        return self.weathering_sliced_obj('gc_tph_f1_plus_f2',
+                                          method='ESTS 2002a')
 
     @property
     def alkylated_pahs(self):
@@ -1311,35 +1179,16 @@ class EnvCanadaRecordParser(object):
               - Other Priority PAHs
             - Dimensional parameters are (weathering).
             - Values Units are ug/g
-            - We will append a suffix '_ug_g' to the properties.
-            - lots of oils have no alkylated PAH measurements at all.
-              If all of the properties are empty for a particular weathered
-              sample, we will not include it.
         '''
-        alkylated_pahs = []
-
-        props = {}
-        [props.update(self.values[c])
-         for c in ('naphthalenes',
-                   'phenanthrenes',
-                   'dibenzothiophenes',
-                   'fluorenes',
-                   'benzonaphthothiophenes',
-                   'chrysenes',
-                   'other_priority_pahs')]
-
-        for props_i in self.iterate_weathering(props):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
-                 for lbl in list(props_i.keys())
-                 if lbl != 'weathering']
-
-                props_i['method'] = 'ESTS 2002a'
-
-                alkylated_pahs.append(props_i)
-
-        return alkylated_pahs
+        return self.weathering_sliced_obj(('naphthalenes',
+                                           'phenanthrenes',
+                                           'dibenzothiophenes',
+                                           'fluorenes',
+                                           'benzonaphthothiophenes',
+                                           'chrysenes',
+                                           'other_priority_pahs'),
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
 
     @property
     def alkanes(self):
@@ -1349,32 +1198,10 @@ class EnvCanadaRecordParser(object):
             We have a single property group in this case.
             - Dimensional parameters are (weathering).
             - Values Units are all ug/g as far as I can tell.
-            - We will rename the properties all with a '_ug_g' suffix to
-              indicate the units.
-            - lots of oils have no n-Alkane measurements at all.  If all of
-              the properties are empty for a particular weathered sample,
-              we will not include it.
-            Note: One record has a couple of fields containing '/'.  Not really
-                  sure what that means, but we will nullify it for now.
         '''
-        ret = []
-
-        for props_i in self.iterate_weathering(self.values['n_alkanes']):
-            if not all([v is None for k, v in props_i.items()
-                        if k is not 'weathering']):
-                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
-                 for lbl in list(props_i.keys())
-                 if lbl != 'weathering']
-
-                for lbl in list(props_i.keys()):
-                    if props_i[lbl] in ('/', ' '):
-                        props_i[lbl] = None
-
-                props_i['method'] = 'ESTS 2002a'
-
-                ret.append(props_i)
-
-        return ret
+        return self.weathering_sliced_obj('n_alkanes',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
 
     @property
     def biomarkers(self):
@@ -1385,16 +1212,48 @@ class EnvCanadaRecordParser(object):
             - Dimensional parameters are (weathering).
             - Values Units are all ug/g as far as I can tell.
         '''
-        ret = []
+        return self.weathering_sliced_obj('biomarkers',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
 
-        for props_i in self.iterate_weathering(self.values['biomarkers']):
+    def weathering_sliced_obj(self, groups, suffix=None, method=None):
+        '''
+            Generalized method for getting the individual sample-sliced
+            attributes from one or more property groups
+            :param groups: The group or groups from which to collect the
+                           attribute slices.
+            :type groups: A string or list of strings.
+            :param suffix: Add a suffix to the attribute names.  This is most
+                           often used if we are dealing with a homogeneous
+                           set of properties with the same units
+            :type suffix: A string.
+            :param method: Add an attribute for the testing method documented
+                           as being used to measure the properties.
+            :type method: A string.
+        '''
+        ret = []
+        props = {}
+
+        if isinstance(groups, str):
+            groups = [groups]
+
+        [props.update(self.values[c])
+         for c in groups]
+
+        for props_i in self.iterate_weathering(props):
             if not all([v is None for k, v in props_i.items()
                         if k is not 'weathering']):
-                [self._rename_prop(props_i, lbl, lbl + '_ug_g')
-                 for lbl in list(props_i.keys())
-                 if lbl != 'weathering']
+                if suffix is not None:
+                    [self._rename_prop(props_i, lbl, lbl + suffix)
+                     for lbl in list(props_i.keys())
+                     if lbl != 'weathering']
 
-                props_i['method'] = 'ESTS 2002a'
+                if method is not None:
+                    props_i['method'] = method
+
+                for lbl in list(props_i.keys()):
+                    if props_i[lbl] in ('/', ' '):
+                        props_i[lbl] = None
 
                 ret.append(props_i)
 
