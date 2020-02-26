@@ -1,18 +1,14 @@
 #!/usr/bin/env python
-
 """
 Exxon Mapper
 
 Not really a class -- it's really a function that build up an
 oil object
-
 """
-
-# from numbers import Number
-# from collections import defaultdict
-
 import logging
+
 import unit_conversion as uc
+
 from oil_database.util import sigfigs
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample
@@ -38,74 +34,81 @@ def norm(string):
     return string.strip().strip(',').lower()
 
 
-MAPPING = {norm("Mercaptan sulfur, ppm"): {"attr": "mercaptan_sulfur_mass_fraction",
-                                           "unit": "ppm",
-                                           "num_digits": 4,
-                                           "convert_from": "ppm",
-                                           },
-           norm("Carbon, wt %"): {"attr": "carbon_mass_fraction",
-                                  "unit": "%",
-                                  "num_digits": 4,
-                                  },
-           norm("Hydrogen, wt %"): {"attr": "hydrogen_mass_fraction",
-                                    "unit": "%",
-                                    "num_digits": 4,
-                                    },
-           norm("Pour point, F"): {"attr": "pour_point",
-                                   "unit": "C",
-                                   "convert_from": "F",
-                                   },
-           norm("Nitrogen, ppm"): {"attr": "nitrogen_mass_fraction",
-                                   "unit": "ppm",
-                                   },
-           norm("Neutralization number (TAN), MG/GM"): {"attr": "total_acid_number",
-                                                        "unit": "mg/kg",
-                                                        },
-
-           norm("Sulfur, wt%"): {"attr": "sulfur_mass_fraction",
-                                 "unit": "%",
-                                 },
-           norm("Reid Vapor Pressure (RVP) Whole Crude, psi"): {"attr": "reid_vapor_pressure",
-                                                                "unit": "Pa",
-                                                                "convert_from": "psi"
-                                                                },
-
-           norm("Hydrogen Sulfide (dissolved), ppm"): {"attr":
-                                                       "hydrogen_sulfide_concentration",
-                                                       "unit": "ppm",
-                                                       "convert_from": "ppm"
-                                                       },
-
-           norm("Salt content, ptb"): {"attr": "salt_content",
-                                               "unit": "ppm",
-                                               "convert_from": "ppb"
-                                       },
-
-           norm("Paraffins, vol %"): {"attr": "paraffin_volume_fraction",
-                                      "unit": "%",
-                                      "convert_from": "%"
-                                      },
-
-           norm("Naphthenes, vol %"): {"attr": "naphthene_volume_fraction",
-                                               "unit": "%",
-                                               "convert_from": "%"
-                                       },
-
-           norm("Aromatics (FIA), vol %"): {"attr": "aromatic_volume_fraction",
-                                            "unit": "%",
-                                            "convert_from": "%"
-                                            },
-
-           norm("CCR, wt%"): {"attr": "ccr_percent",
-                                      "unit": "%",
-                                      "convert_from": "%"
-                              },
-           norm("Calcium, ppm"): {"attr": "calcium_mass_fraction",
-                                  "unit": "ppm",
-                                  "convert_from": "ppm"
-                                  },
-
-           }
+MAPPING = {
+    norm("Mercaptan sulfur, ppm"): {
+        "attr": "mercaptan_sulfur_mass_fraction",
+        "unit": "ppm",
+        "num_digits": 4,
+        "convert_from": "ppm",
+    },
+    norm("Carbon, wt %"): {
+        "attr": "carbon_mass_fraction",
+        "unit": "%",
+        "num_digits": 4,
+    },
+    norm("Hydrogen, wt %"): {
+        "attr": "hydrogen_mass_fraction",
+        "unit": "%",
+        "num_digits": 4,
+    },
+    norm("Pour point, F"): {
+        "attr": "pour_point",
+        "unit": "C",
+        "convert_from": "F",
+    },
+    norm("Nitrogen, ppm"): {
+        "attr": "nitrogen_mass_fraction",
+        "unit": "ppm",
+    },
+    norm("Neutralization number (TAN), MG/GM"): {
+        "attr": "total_acid_number",
+        "unit": "mg/kg",
+    },
+    norm("Sulfur, wt%"): {
+        "attr": "sulfur_mass_fraction",
+        "unit": "%",
+    },
+    norm("Reid Vapor Pressure (RVP) Whole Crude, psi"): {
+        "attr": "reid_vapor_pressure",
+        "unit": "Pa",
+        "convert_from": "psi"
+    },
+    norm("Hydrogen Sulfide (dissolved), ppm"): {
+        "attr": "hydrogen_sulfide_concentration",
+        "unit": "ppm",
+        "convert_from": "ppm"
+    },
+    norm("Salt content, ptb"): {
+        "attr": "salt_content",
+        "unit": "ppm",
+        "convert_from": "ppb"
+    },
+    norm("Paraffins, vol %"): {
+        "attr": "paraffin_volume_fraction",
+        "unit": "%",
+        "convert_from": "%"
+    },
+    norm("Naphthenes, vol %"): {
+        "attr": "naphthene_volume_fraction",
+        "unit": "%",
+        "convert_from": "%"
+    },
+    norm("Aromatics (FIA), vol %"): {
+        "attr": "aromatic_volume_fraction",
+        "unit": "%",
+        "convert_from": "%"
+    },
+    norm("CCR, wt%"): {
+        "attr": "ccr_percent",
+        "unit": "%",
+        "convert_from": "%"
+    },
+    norm("Calcium, ppm"): {
+        "attr": "calcium_mass_fraction",
+        "unit": "ppm",
+        "convert_from": "ppm"
+    },
+}
 
 
 def ExxonMapper(record):
@@ -136,12 +139,12 @@ def ExxonMapper(record):
 def read_header(oil, data):
     # fixme: this should probably be more flexible
     #        but we can wait 'till we get data that doesn't match
-    # it could / should read the whole dist cut table, then map it to the samples
-    # Exxon info in the header
+    # it could / should read the whole dist cut table, then map it
+    # to the samples Exxon info in the header
     oil.reference = "\n".join([next(data)[0] for _ in range(3)])
 
 
-def read_cut_table(oil, data):
+def read_cut_table(_oil, data):
 
     cut_table = {}
 
@@ -214,7 +217,8 @@ def process_cut_table(oil, samples, cut_table):
         raise ValueError("I don't recognise this distillation data. \n"
                          'Expected: "Distillation type, TBP"')
     for name, row in cut_table.items():
-        if norm("vol%, F") in name or name == norm("IBP, F"):  # looks like a distillation cut.
+        if norm("vol%, F") in name or name == norm("IBP, F"):
+            # looks like a distillation cut.
 
             print("working with:", name)
             percent = 0.0 if "ibp" in name else float(name.split("vol")[0])
@@ -227,17 +231,13 @@ def process_cut_table(oil, samples, cut_table):
                         DistCut(UnittedValue(percent, unit="%"),
                                 UnittedValue(val, unit="C")
                                 ))
-    #sort them
+    # sort them
     for sample in samples:
         sample.cuts.sort(key=lambda c: c.fraction.value)
-
-
-
 
     # "nitrogen_mass_fraction: UnittedValue"
     # "reid_vapor_pressure: UnittedValue"
     # "hydrogen_sulfide_concentration"
-
 
     oil.samples = samples
 
@@ -254,7 +254,8 @@ def set_sample_property(row,
     reads a row from the spreadsheet, and sets the sample properties
 
     optional rounding to "num_digits" digits
-    optional converting to unit from convert_from (if the the data aren't in the right units)
+    optional converting to unit from convert_from (if the the data aren't in
+    the right units)
     """
     for sample, val in zip(samples, row):
         if val is not None:
@@ -271,7 +272,8 @@ def set_sample_property(row,
 #     reads a row from the spreadsheet, and sets the sample properties
 
 #     optional rounding to "num_digits" digits
-#     optional converting to unit from convert_from (if the the data aren't in the right units)
+#     optional converting to unit from convert_from (if the the data aren't in
+#     the right units)
 #     """
 #     row = get_next_properties_row(data, name)
 #     for sample, val in zip(samples, row[1:]):
@@ -311,10 +313,9 @@ def next_non_empty(data):
 def get_next_properties_row(data, exp_field):
     row = next_non_empty(data)
     if norm(row[0]) != norm(exp_field):
-        raise ValueError(f"Something wrong with data sheet:{row}, expected: {exp_field}")
+        raise ValueError(f'Something wrong with data sheet: {row}, '
+                         'expected: {exp_field}')
     return row
-
-
 
 
 # class EnvCanadaAttributeMapper(object):

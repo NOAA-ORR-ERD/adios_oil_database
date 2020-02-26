@@ -167,7 +167,7 @@ def val_check_for_distillation_cuts(oil):
         sample = oil.samples[0]
     except (AttributeError, IndexError):
         return None
-    print(sample.cuts)
+
     try:
         if not sample.cuts:
             return WARNINGS["W007"]

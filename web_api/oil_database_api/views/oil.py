@@ -33,6 +33,8 @@ oil_api = Service(name='oil', path='/oils*obj_id',
 #        and keep all the functionality together
 #        e.g. clearing the cache when the record changes
 memoized_results = {}  # so it is visible to other functions
+
+
 def memoize_oil_arg(func):
     '''
         Decorator function to cache function results by oil_id
