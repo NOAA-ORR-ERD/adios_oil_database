@@ -10,6 +10,7 @@ from ..common.utilities import (dataclass_to_json,
                                 JSON_List,
                                 )
 
+from .values import ProductType
 from .sample import Sample, SampleList
 
 from dataclasses import dataclass, field
@@ -32,7 +33,7 @@ class Oil:
     status: List[str] = field(default_factory=list)
 
     api: float = None
-    product_type: ProductTypes = ""
+    product_type: ProductType = ""
     # fixme: this should really be "sub_samples"
     samples: SampleList = field(default_factory=SampleList)
     extra_data: Dict = field(default_factory=dict)

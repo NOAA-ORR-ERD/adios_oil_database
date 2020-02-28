@@ -7,6 +7,7 @@ from oil_database.models.oil.values import (UnittedValue,
                                             DensityList,
                                             Viscosity,
                                             ViscosityList,
+                                            ProductType,
                                             )
 
 
@@ -199,3 +200,31 @@ def test_Viscosity_empty():
     assert pyj['replicates'] is None
     assert pyj['standard_deviation'] is None
     assert pyj['viscosity'] is None
+
+
+@pytest.mark.parametrize("type", ('crude',
+                                  'refined',
+                                  'bitumen product',
+                                  'Refined',
+                                  'Bitumen Product',
+                                  'other'))
+def test_ProductType_validation(type):
+    pt = ProductType(type)
+
+    assert pt.validate() == []
+
+@pytest.mark.parametrize("type", ('crud',
+                                  'rfined',
+                                  'bitumen',
+                                  'Reefined',
+                                  'Biitumen Product',
+                                  'random'))
+def test_ProductType_validation_invalid(type):
+    pt = ProductType(type)
+
+    result = pt.validate()
+    assert len(result) == 1
+    assert result[0].startswith("W003:")
+
+
+
