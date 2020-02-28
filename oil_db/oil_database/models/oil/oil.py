@@ -32,7 +32,7 @@ class Oil:
     status: List[str] = field(default_factory=list)
 
     api: float = None
-    product_type: str = ""
+    product_type: ProductTypes = ""
     # fixme: this should really be "sub_samples"
     samples: SampleList = field(default_factory=SampleList)
     extra_data: Dict = field(default_factory=dict)

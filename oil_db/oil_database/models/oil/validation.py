@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 WARNINGS = {"W001": "Record name: {oil.name} is not very descriptive",
             "W002": "Record has no product type",
-            "W003": "{type} is not a valid product type. Options are: {valid_types}",
+            "W003": "{} is not a valid product type. Options are: {}",
             "W004": "No api value provided",
             "W005": "API value: {api} seems unlikely",
             "W006": "No density values provided",
@@ -180,16 +180,6 @@ def val_check_for_distillation_cuts(oil):
 
 VALIDATORS = [ val for name, val in vars().items() if name.startswith("val_")]
 
-
-class EnumValidator:
-    def __init__(self, valid_items):
-        self.valid_items = valid_items
-
-    def __call__(self, item):
-        if not item in self.valid_items:
-            return WARNINGS["W003"].format(type=item, valid_types=valid_items)
-        else:
-            return None
 
 
 

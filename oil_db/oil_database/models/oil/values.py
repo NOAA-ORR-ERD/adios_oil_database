@@ -16,6 +16,9 @@ from datetime import datetime
 from typing import List, Dict
 
 
+class ProductTypes:
+    pass
+
 @dataclass_to_json
 @dataclass
 class UnittedValue:
