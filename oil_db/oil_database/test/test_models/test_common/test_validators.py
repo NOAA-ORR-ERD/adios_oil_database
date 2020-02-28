@@ -3,7 +3,9 @@
 import pytest
 from oil_database.models.common.validators import (EnumValidator,
                                                    )
-from oil_database.models.oil.validation import WARNINGS, ERRORS
+
+from oil_database.models.oil.validation.warnings import WARNINGS
+from oil_database.models.oil.validation.errors import ERRORS
 
 
 class Test_EnumValidator():
