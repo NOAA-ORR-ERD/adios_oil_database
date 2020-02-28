@@ -39,6 +39,7 @@ class UnittedValue:
     min_value: float = None
     max_value: float = None
     unit: str = None
+    # unit_type: str = None
 
 
 @dataclass_to_json
@@ -99,4 +100,9 @@ class DistCutsList(JSON_List):
     needs some refactoring: should be method, for one
     """
     item_type = DistCut
+
+    def validate(self):
+        # do validation here
+        pass
+
 
