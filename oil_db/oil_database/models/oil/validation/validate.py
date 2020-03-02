@@ -42,20 +42,6 @@ from .warnings import WARNINGS
 from .errors import ERRORS
 
 
-def api_kludge(oil_json):
-    """
-    This it get the API from the zeroth sub_record, where it should not be anyway :-(
-
-    See: https://gitlab.orr.noaa.gov/erd/oil_database/issues/77
-    """
-    try:
-        oil_json['api'] = oil_json['samples'][0]['apis'][0]['gravity']
-    except (KeyError, IndexError):
-        # if there are no samples,
-        #  or no apis in the zeroth sample
-        oil_json['api'] = None
-
-
 def validate(oil_json):
     """
     validate the oil record.
@@ -65,10 +51,6 @@ def validate(oil_json):
     :param oil: The oil record to be validated, in json-compatible python data structure.
 
     """
-
-    # make an oil object out of it:
-    if 'api' not in oil_json:
-        api_kludge(oil_json)
     try:
         oil = Oil.from_py_json(oil_json)
     except TypeError as err:

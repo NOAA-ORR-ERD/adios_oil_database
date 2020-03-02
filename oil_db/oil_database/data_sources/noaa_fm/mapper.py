@@ -239,6 +239,13 @@ class OilLibraryAttributeMapper(object):
         return self.record.product_type
 
     @property
+    def api(self):
+        try:
+            return float(self.record.api)
+        except Exception:
+            return None
+
+    @property
     def apis(self):
         '''
             NOAA Filemaker has only one api value, and it is just a float

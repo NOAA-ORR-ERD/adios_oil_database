@@ -140,14 +140,6 @@ class EnvCanadaAttributeMapper(object):
                 # assume a weathering of 0
                 samples[0.0][k] = v
 
-        # MongoDB strikes again.  Apparently, in order to support their query
-        # methods, dictionary keys, for all dicts, need to be a string that
-        # contains no '$' or '.' characters.  So we cannot use a floating point
-        # number as a dict key.  So instead of a dict of samples, it will be a
-        # list of dicts that contain a sample_id.  This sample_id will not be a
-        # proper MongoDB ID, but a human-readable way to identify the sample.
-        #
-        # For NOAA Filemaker records, the ID will be the weathering amount.
         for k, v in samples.items():
             v.update(self.generate_sample_id_attrs(k))
 
@@ -228,6 +220,20 @@ class EnvCanadaAttributeMapper(object):
     @property
     def product_type(self):
         return self.record.product_type
+
+    @property
+    def api(self):
+        '''
+            This attribute is a top-level, representing the value of the
+            fresh sample.
+        '''
+        apis = [a['gravity'] for a in self.record.apis
+                if a['weathering'] == 0.0]
+
+        try:
+            return apis[0]
+        except Exception:
+            return None
 
     @property
     def apis(self):

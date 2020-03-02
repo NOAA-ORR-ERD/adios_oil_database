@@ -237,17 +237,12 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
             try:
                 parser_obj = parser_cls(*record_data)
 
-                #pp.pprint(parser_obj.file_props)
-                #pp.pprint(parser_obj.values)
-                #pp.pprint(parser_obj.labels)
-
                 oil_obj = mapper_cls(parser_obj)
 
-                # oil_obj.status = oil_record_validation(oil_obj)
-
-                # if len(oil_obj.status) == 0:
                 link_oil_to_categories(oil_obj)
+
                 oil_pyjson = oil_obj.dict()
+
                 validate(oil_pyjson)
                 oil_collection.insert_one(oil_pyjson)
             except DuplicateKeyError as e:
