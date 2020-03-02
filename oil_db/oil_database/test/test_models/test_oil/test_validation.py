@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import copy
 
-from oil_database.models.oil.validation import validate
+from oil_database.models.oil.validation.validate import validate
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(Path(__file__).parent / "AlaskaNorthSlope2015.json"))

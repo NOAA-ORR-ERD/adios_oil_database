@@ -28,7 +28,7 @@ A few ideas about that:
   ones without duplicating code.
 """
 
-from .oil import Oil
+from ..oil import Oil
 
 import logging
 
@@ -38,22 +38,8 @@ pp = PrettyPrinter(indent=2, width=120)
 logger = logging.getLogger(__name__)
 
 # Putting these all here so we can keep track more easily
-
-WARNINGS = {"W001": "Record name: {oil.name} is not very descriptive",
-            "W002": "Record has no product type",
-            "W003": "Record has invalid product type. Options are: {valid_types}",
-            "W004": "No api value provided",
-            "W005": "API value: {api} seems unlikely",
-            "W006": "No density values provided",
-            "W007": "No distillation data provided"
-            }
-
-ERRORS = {"E001": "Record has no name: every record must have a name",
-          "E002": "Crude Oils must have an API",
-          "E003": "No Properties data at all",
-          }
-WARNINGS = {code: (code + ": " + msg) for code, msg in WARNINGS.items()}
-ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}
+from .warnings import WARNINGS
+from .errors import ERRORS
 
 
 def api_kludge(oil_json):
@@ -128,7 +114,7 @@ def val_has_product_type(oil):
                                           'refined',
                                           'bitumen product',
                                           'other'):
-        return WARNINGS["W003"].format(valid_types=valid_types)
+        return WARNINGS["W003"].format(oil.product_type, valid_types)
     else:
         return None
 
@@ -179,6 +165,7 @@ def val_check_for_distillation_cuts(oil):
 # build a list of all the validators:
 
 VALIDATORS = [ val for name, val in vars().items() if name.startswith("val_")]
+
 
 
 
