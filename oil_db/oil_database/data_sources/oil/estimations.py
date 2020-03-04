@@ -94,6 +94,7 @@ class OilEstimation(object):
             del data['_cls']
 
             py_class = self.py_class_from_name(class_name)
+
             return py_class(**data)
         elif isinstance(data, dict):
             return dict([(k, self._add_float_units(v))

@@ -52,6 +52,7 @@ def _from_py_json(cls, py_json):
     obj = cls(**arg_dict)
     return obj
 
+
 def __setattr__(self, name, val):
     if name not in self.__dataclass_fields__:
         raise AttributeError(f"You can only set existing attributes: "

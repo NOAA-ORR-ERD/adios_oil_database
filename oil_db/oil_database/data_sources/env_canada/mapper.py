@@ -3,6 +3,8 @@ from numbers import Number
 from collections import defaultdict
 import logging
 
+from slugify import Slugify
+
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    TemperatureUnit,
                                                    TimeUnit,
@@ -12,8 +14,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    AdhesionUnit,
                                                    ConcentrationInWaterUnit)
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
@@ -156,10 +157,7 @@ class EnvCanadaAttributeMapper(object):
             source object, a common operation will be to guarantee that we are
             always working with a kwargs struct.
         '''
-        if isinstance(obj, dict):
-            return obj
-        else:
-            return obj.dict()
+        return obj if isinstance(obj, dict) else obj.dict()
 
     @property
     def status(self):
@@ -239,6 +237,125 @@ class EnvCanadaAttributeMapper(object):
     def apis(self):
         for a in self.record.apis:
             yield self._get_kwargs(a)
+
+    @property
+    def compounds(self):
+        '''
+            Gather up all the groups of compounds scattered throughout the EC
+            and compile them into an organized list.
+
+            Compounds apply to:
+            - individual chemicals
+            - mixed isomers
+
+            Compounds do not apply to:
+            - waxes
+            - SARA
+            - Sulfur
+            - Carbon
+
+            Example of content:
+            [
+                {
+                    name: "1-Methyl-2-Isopropylbenzene",
+                    groups: ["C4-C6 Alkyl Benzenes", ...],
+                    method: "ESTS 2002b",
+                    measurement: {
+                        value: 3.4,
+                        unit: "ppm",
+                        unit_type: "MassFraction",
+                        replicates: 3,
+                        standard_deviation: 0.1
+                    }
+                },
+                ...
+            ],
+
+            Note: Although we could in theory assign multiple groups to a
+                  particular compound, we will only assign one group to the
+                  list.  This group will have a close relationship to the
+                  category of compounds where it is found in the EC datasheet.
+            Note: Most of the compound groups don't have replicates or
+                  standard deviation.  We will not add these attributes if
+                  they aren't found within the attribute group.
+            Todo: The measurement will be in FloatUnit types to start with.
+                  Then the FloatUnit types will be enhanced to have the
+                  unit_type, replicates, and standard_deviation.
+        '''
+        groups = [
+            ('benzene_and_alkynated_benzene', None, 'ug/g', 'MassFraction'),
+            ('btex_group', None, 'ug/g', 'MassFraction'),
+            ('c4_c6_alkyl_benzenes', None, 'ug/g', 'MassFraction'),
+            ('naphthalenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
+            ('phenanthrenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
+            ('dibenzothiophenes', 'alkylated_total_pahs', 'ug/g',
+             'MassFraction'),
+            ('fluorenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
+            ('benzonaphthothiophenes', 'alkylated_total_pahs', 'ug/g',
+             'MassFraction'),
+            ('chrysenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
+            ('other_priority_pahs', 'alkylated_total_pahs', 'ug/g',
+             'MassFraction'),
+            ('n_alkanes', None, 'ug/g', 'MassFraction'),
+            ('biomarkers', None, 'ug/g', 'MassFraction'),
+        ]
+
+        for group_args in groups:
+            for c in self.compounds_in_group(*group_args):
+                yield c
+
+    def compounds_in_group(self, category, group_category, unit, unit_type):
+        '''
+            category: The category attribute containing the data
+            group_category: The category attribute containing the group label
+            unit: The unit
+            unit_type: The type of thing that the unit measures
+                       (length, mass, etc.)
+        '''
+        suffix = '_' + custom_slugify(unit)
+        category_obj = getattr(self.record, category)
+
+        if group_category is not None:
+            group_name = self.record.labels[group_category]['label']
+        else:
+            group_name = self.record.labels[category]['label']
+
+        for sample_obj in category_obj:
+            weathering = sample_obj['weathering']
+            method = None
+            replicates = None
+            std_dev = None
+
+            if 'method' in sample_obj:
+                method = sample_obj['method']
+
+            if 'replicates' in sample_obj:
+                replicates = sample_obj['replicates']
+
+            if 'standard_deviation' in sample_obj:
+                std_dev = sample_obj['standard_deviation']
+
+            for k, v in sample_obj.items():
+                if k.endswith(suffix) and v is not None:
+                    attr_label = self.record.get_label([category,
+                                                        k[:-len(suffix)]])
+                    compound = {
+                        'weathering': weathering,
+                        'name': attr_label,
+                        'groups': [group_name],
+                        'method': method,
+                        'measurement': {'value': v,
+                                        'unit': unit,
+                                        'unit_type': unit_type},
+                    }
+
+                    if replicates is not None:
+                        compound['measurement']['replicates'] = replicates
+
+                    if std_dev is not None:
+                        compound['measurement']['standard_deviation'] = std_dev
+
+                    yield compound
 
     @property
     def densities(self):
@@ -477,41 +594,6 @@ class EnvCanadaAttributeMapper(object):
             yield kwargs
 
     @property
-    def benzene(self):
-        for b in self.record.benzene:
-            kwargs = self._get_kwargs(b)
-
-            for lbl in ('benzene_ug_g',
-                        'toluene_ug_g',
-                        'ethylbenzene_ug_g',
-                        'm_p_xylene_ug_g',
-                        'o_xylene_ug_g',
-                        'isopropylbenzene_ug_g',
-                        'propylebenzene_ug_g',
-                        'isobutylbenzene_ug_g',
-                        'amylbenzene_ug_g',
-                        'n_hexylbenzene_ug_g',
-                        '_1_2_3_trimethylbenzene_ug_g',
-                        '_1_2_4_trimethylbenzene_ug_g',
-                        '_1_2_dimethyl_4_ethylbenzene_ug_g',
-                        '_1_3_5_trimethylbenzene_ug_g',
-                        '_1_methyl_2_isopropylbenzene_ug_g',
-                        '_2_ethyltoluene_ug_g',
-                        '_3_4_ethyltoluene_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'ug/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            yield kwargs
-
-    @property
     def headspace(self):
         for h in self.record.headspace:
             kwargs = self._get_kwargs(h)
@@ -609,127 +691,5 @@ class EnvCanadaAttributeMapper(object):
 
             kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
                                   '_cls': self._class_path(FloatUnit)}
-
-            yield kwargs
-
-    @property
-    def alkanes(self):
-        for a in self.record.alkanes:
-            kwargs = self._get_kwargs(a)
-
-            for lbl in ('pristane_ug_g', 'phytane_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            for n in range(8, 45):
-                lbl, new_lbl = 'c{}_ug_g'.format(n), 'c{}'.format(n)
-                value = kwargs[lbl]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            yield kwargs
-
-    @property
-    def alkylated_pahs(self):
-        for a in self.record.alkylated_pahs:
-            kwargs = self._get_kwargs(a)
-
-            for i, g in [(i, g) for g in 'npdfbc' for i in range(5)]:
-                lbl, new_lbl = ('c{}_{}_ug_g'.format(i, g),
-                                'c{}_{}'.format(i, g))
-                value = kwargs.get(lbl, None)
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                if lbl in kwargs:
-                    del kwargs[lbl]
-
-            for lbl in ('biphenyl_ug_g',
-                        'acenaphthylene_ug_g',
-                        'acenaphthene_ug_g',
-                        'anthracene_ug_g',
-                        'fluoranthene_ug_g',
-                        'pyrene_ug_g',
-                        'benz_a_anthracene_ug_g',
-                        'benzo_b_fluoranthene_ug_g',
-                        'benzo_k_fluoranthene_ug_g',
-                        'benzo_e_pyrene_ug_g',
-                        'benzo_a_pyrene_ug_g',
-                        'perylene_ug_g',
-                        'indeno_1_2_3_cd_pyrene_ug_g',
-                        'dibenzo_ah_anthracene_ug_g',
-                        'benzo_ghi_perylene_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            yield kwargs
-
-    @property
-    def biomarkers(self):
-        for b in self.record.biomarkers:
-            kwargs = self._get_kwargs(b)
-
-            for lbl in ('c21_tricyclic_terpane_ug_g',
-                        'c22_tricyclic_terpane_ug_g',
-                        'c23_tricyclic_terpane_ug_g',
-                        'c24_tricyclic_terpane_ug_g',
-                        '_30_norhopane_ug_g',
-                        'hopane_ug_g',
-                        '_30_homohopane_22s_ug_g',
-                        '_30_homohopane_22r_ug_g',
-                        '_30_31_bishomohopane_22s_ug_g',
-                        '_30_31_bishomohopane_22r_ug_g',
-                        '_30_31_trishomohopane_22s_ug_g',
-                        '_30_31_trishomohopane_22r_ug_g',
-                        'tetrakishomohopane_22s_ug_g',
-                        'tetrakishomohopane_22r_ug_g',
-                        'pentakishomohopane_22s_ug_g',
-                        'pentakishomohopane_22r_ug_g',
-                        '_18a_22_29_30_trisnorneohopane_ug_g',
-                        '_17a_h_22_29_30_trisnorhopane_ug_g',
-                        '_14b_h_17b_h_20_cholestane_ug_g',
-                        '_14b_h_17b_h_20_methylcholestane_ug_g',
-                        '_14b_h_17b_h_20_ethylcholestane_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
 
             yield kwargs

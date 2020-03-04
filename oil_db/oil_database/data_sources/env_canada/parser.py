@@ -1058,18 +1058,20 @@ class EnvCanadaRecordParser(object):
         return ret
 
     @property
-    def benzene(self):
-        '''
-            The Evironment Canada data sheet contains data for Benzene content,
-            which we will try to capture.
-            We have 3 property groups in this case, and I think it would be ok
-            to merge them into a single object.
-            - Dimensional parameters are (weathering).
-            - Units are all ug/g as far as I can tell.
-        '''
-        return self.weathering_sliced_obj(('benzene_and_alkynated_benzene',
-                                           'btex_group',
-                                           'c4_c6_alkyl_benzenes'),
+    def benzene_and_alkynated_benzene(self):
+        return self.weathering_sliced_obj('benzene_and_alkynated_benzene',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002b')
+
+    @property
+    def btex_group(self):
+        return self.weathering_sliced_obj('btex_group',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002b')
+
+    @property
+    def c4_c6_alkyl_benzenes(self):
+        return self.weathering_sliced_obj('c4_c6_alkyl_benzenes',
                                           suffix='_ug_g',
                                           method='ESTS 2002b')
 
@@ -1165,33 +1167,49 @@ class EnvCanadaRecordParser(object):
                                           method='ESTS 2002a')
 
     @property
-    def alkylated_pahs(self):
-        '''
-            The Evironment Canada data sheet contains data for Alkylated Total
-            Aromatic Hydrocarbons (PAHs), which we will try to capture.
-            - We have seven property groups in this case, which we will merge.
-              - Naphthalenes
-              - Phenanthrenes
-              - Dibenzothiophenes
-              - Fluorenes
-              - Benzonaphthothiophenes
-              - Chrysenes
-              - Other Priority PAHs
-            - Dimensional parameters are (weathering).
-            - Values Units are ug/g
-        '''
-        return self.weathering_sliced_obj(('naphthalenes',
-                                           'phenanthrenes',
-                                           'dibenzothiophenes',
-                                           'fluorenes',
-                                           'benzonaphthothiophenes',
-                                           'chrysenes',
-                                           'other_priority_pahs'),
+    def naphthalenes(self):
+        return self.weathering_sliced_obj('naphthalenes',
                                           suffix='_ug_g',
                                           method='ESTS 2002a')
 
     @property
-    def alkanes(self):
+    def phenanthrenes(self):
+        return self.weathering_sliced_obj('phenanthrenes',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
+
+    @property
+    def dibenzothiophenes(self):
+        return self.weathering_sliced_obj('dibenzothiophenes',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
+
+    @property
+    def fluorenes(self):
+        return self.weathering_sliced_obj('fluorenes',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
+
+    @property
+    def benzonaphthothiophenes(self):
+        return self.weathering_sliced_obj('benzonaphthothiophenes',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
+
+    @property
+    def chrysenes(self):
+        return self.weathering_sliced_obj('chrysenes',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
+
+    @property
+    def other_priority_pahs(self):
+        return self.weathering_sliced_obj('other_priority_pahs',
+                                          suffix='_ug_g',
+                                          method='ESTS 2002a')
+
+    @property
+    def n_alkanes(self):
         '''
             The Environment Canada data sheet contains data for n-Alkanes,
             which we will try to capture.
