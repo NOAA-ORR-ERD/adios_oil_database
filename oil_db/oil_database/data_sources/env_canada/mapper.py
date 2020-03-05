@@ -254,23 +254,6 @@ class EnvCanadaAttributeMapper(object):
             - Sulfur
             - Carbon
 
-            Example of content:
-            [
-                {
-                    name: "1-Methyl-2-Isopropylbenzene",
-                    groups: ["C4-C6 Alkyl Benzenes", ...],
-                    method: "ESTS 2002b",
-                    measurement: {
-                        value: 3.4,
-                        unit: "ppm",
-                        unit_type: "MassFraction",
-                        replicates: 3,
-                        standard_deviation: 0.1
-                    }
-                },
-                ...
-            ],
-
             Note: Although we could in theory assign multiple groups to a
                   particular compound, we will only assign one group to the
                   list.  This group will have a close relationship to the
@@ -304,13 +287,43 @@ class EnvCanadaAttributeMapper(object):
             for c in self.compounds_in_group(*group_args):
                 yield c
 
+    @property
+    def headspace_analysis(self):
+        '''
+            Gather up all the headspace analysis data contained in the EC
+            and compile it into an organized list.
+        '''
+        for c in self.compounds_in_group('headspace_analysis', None,
+                                         'mg/g', 'MassFraction'):
+            yield c
+
     def compounds_in_group(self, category, group_category, unit, unit_type):
         '''
-            category: The category attribute containing the data
-            group_category: The category attribute containing the group label
-            unit: The unit
-            unit_type: The type of thing that the unit measures
-                       (length, mass, etc.)
+            :param category: The category attribute containing the data
+            :param group_category: The category attribute containing the
+                                   group label
+            :param unit: The unit
+            :param unit_type: The type of thing that the unit measures
+                              (length, mass, etc.)
+
+            Example of content:
+                {
+                    'name': "1-Methyl-2-Isopropylbenzene",
+                    'groups': ["C4-C6 Alkyl Benzenes", ...],
+                    'method': "ESTS 2002b",
+                    'measurement': {
+                        value: 3.4,
+                        unit: "ppm",
+                        unit_type: "MassFraction",
+                        replicates: 3,
+                        standard_deviation: 0.1
+                    }
+                    'weathering': 0.0,  # this is not part of the spec,
+                                        # and is only temporarily here to
+                                        # keep track of which subsample it
+                                        # belongs to.  It will be filtered out
+                                        # when building the subsamples.
+                }
         '''
         suffix = '_' + custom_slugify(unit)
         category_obj = getattr(self.record, category)
@@ -590,31 +603,6 @@ class EnvCanadaAttributeMapper(object):
                                   '_cls': self._class_path(FloatUnit)}
 
             del kwargs['percent']
-
-            yield kwargs
-
-    @property
-    def headspace(self):
-        for h in self.record.headspace:
-            kwargs = self._get_kwargs(h)
-
-            for lbl in ('n_c5_mg_g',
-                        'n_c6_mg_g',
-                        'n_c7_mg_g',
-                        'n_c8_mg_g',
-                        'c5_group_mg_g',
-                        'c6_group_mg_g',
-                        'c7_group_mg_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'mg/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
 
             yield kwargs
 

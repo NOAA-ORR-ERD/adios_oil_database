@@ -1076,7 +1076,7 @@ class EnvCanadaRecordParser(object):
                                           method='ESTS 2002b')
 
     @property
-    def headspace(self):
+    def headspace_analysis(self):
         '''
             The Evironment Canada data sheet contains data for headspace
             analysis, which we will try to capture.
