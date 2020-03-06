@@ -22,7 +22,7 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
 
 # from oil_database.db_init.validation import oil_record_validation
 from oil_database.db_init.categories import link_oil_to_categories
-from oil_database.models.oil.validation import validate
+from oil_database.models.oil.validation.validate import validate
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)

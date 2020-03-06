@@ -14,7 +14,7 @@ from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
-from oil_database.models.oil.validation import validate
+from oil_database.models.oil.validation.validate import validate
 
 from oil_database_api.common.views import (cors_policy,
                                            obj_id_from_url)
@@ -270,7 +270,12 @@ def insert_oil(request):
     try:
         validate(json_obj)
     except Exception as e:  # anything goes wrong with the validation
-        logger.error(f'Validation Error: {obj_id}: {e}')
+        # note: ideally the validation should NEVER raise an Exception!
+        # but if it does, we need to log it
+        # There is no obj_id here -- is there something else we can put
+        # in the log?
+        # logger.error(f'Validation Error: {obj_id}: {e}')
+        logger.error(f'Validation Error: {e}')
 
     try:
         logger.info('oil.name: {}'.format(json_obj['name']))
