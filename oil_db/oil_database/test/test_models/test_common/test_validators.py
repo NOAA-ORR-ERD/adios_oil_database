@@ -2,6 +2,7 @@
 
 import pytest
 from oil_database.models.common.validators import (EnumValidator,
+                                                   FloatRangeValidator,
                                                    )
 
 from oil_database.models.oil.validation.warnings import WARNINGS
@@ -39,7 +40,53 @@ class Test_EnumValidator():
         print(result)
         assert result == []
 
+    def test_numbers_good(self):
+        val = EnumValidator([3, 5, 7], "Number: {} not one of {}")
 
+        result = val(5)
+
+        assert result == []
+
+    @pytest.mark.parametrize("item", [2,
+                                      "a string",
+                                      (1, 2, 3),
+                                      ])
+    def test_numbers_bad(self, item):
+        val = EnumValidator([3, 5, 7], "Number: {} not one of {}")
+
+        result = val(item)
+        print(result)
+        assert len(result) == 1
+        assert result[0].startswith('Number:')
+        assert str(item) in result[0]
+
+
+class TestFloatRangeValidator:
+
+    @pytest.mark.parametrize("min, max, value", [(0, 100, 0),
+                                                 (0, 100, 100),
+                                                 (0, 100, 50),
+                                                 ])
+    def test_valid(self, min, max, value):
+        val = FloatRangeValidator(min, max)
+
+        result = val(value)
+        assert result == []
+
+    @pytest.mark.parametrize("min, max, value", [(0, 100, -1),
+                                                 (0, 100, 101),
+                                                 (0, 100, "this"),
+                                                 ])
+    def test_invalid(self, min, max, value):
+        val = FloatRangeValidator(min, max)
+
+        result = val(value)
+        print("result", result)
+        assert len(result) == 1
+        assert result[0].startswith('ValidationError:')# ' 101 is not between 0 and 100')
+        assert str(value) in result[0]
+        assert str(min) in result[0]
+        assert str(max) in result[0]
 
 
 

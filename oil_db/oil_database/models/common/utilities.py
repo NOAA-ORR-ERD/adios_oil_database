@@ -10,6 +10,12 @@ from datetime import datetime
 from typing import List, Dict
 
 
+def something(val):
+    # much like python's "Truthy" and Falsey", but we want some values to not be false
+    # like zero, for instance
+    return ((val == 0) or (val is not None) and val)
+
+
 def _py_json(self, sparse=True):
     """
     function to convert a dataclass to json compatible python
@@ -29,7 +35,7 @@ def _py_json(self, sparse=True):
             pass
         if not sparse:
             json_obj[fieldname] = val
-        elif ((val == 0) or (val is not None) and val):
+        elif something(val):
             json_obj[fieldname] = val
 
     return json_obj
@@ -52,12 +58,51 @@ def _from_py_json(cls, py_json):
     obj = cls(**arg_dict)
     return obj
 
+
+def _validate(self):
+    """
+    Function to validate a dataclass with fields that have validate methods.
+
+    The validate methods are expected to return a list of validation messages.
+
+    The top-level validator extends the existing list
+    """
+    print("validate called on", self)
+    messages = []
+    for fieldname in self.__dataclass_fields__.keys():
+        val = getattr(self, fieldname)
+        try:  # convert to json
+            messages.extend(val.validate())
+        except AttributeError:  # This one doesn't have a validate method.
+            pass
+    return messages
+
+
 def __setattr__(self, name, val):
-    if name not in self.__dataclass_fields__:
+    print("in:", self.__class__)
+    print("in __setattr__, name, val:", name, repr(val))
+    try:
+        fieldobj = self.__dataclass_fields__[name]
+    except KeyError:
         raise AttributeError(f"You can only set existing attributes: "
                              f"{name} does not exist")
-    else:
+    try:
+        # try to make it the right type, but store it anyway.
+        self.__dict__[name] = fieldobj.type(val)
+    except TypeError:
         self.__dict__[name] = val
+
+
+
+
+    # if name not in self.__dataclass_fields__:
+    #     raise AttributeError(f"You can only set existing attributes: "
+    #                          f"{name} does not exist")
+    # else:
+    #     # assure that the field value is the correct type
+    #     # this will also make a copy -- is that desirable?
+    #     fieldobj = self.__dataclass_fields__[name]
+    #     self.__dict__[name] = fieldobj.type(val)
 
 
 class JSON_List(list):
@@ -114,6 +159,7 @@ def dataclass_to_json(cls):
     """
     cls.py_json = _py_json
     cls.from_py_json = _from_py_json
+    cls.validate = _validate
     cls.__setattr__ = __setattr__
 
     return cls

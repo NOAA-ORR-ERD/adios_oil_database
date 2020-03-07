@@ -30,6 +30,27 @@ class NestedList:
     those: ListOfRS = field(default_factory=ListOfRS)
 
 
+class JustOneStringValidated(str):
+    """
+    as simple as possible
+    """
+    only_valid = "this particular string"
+
+    def validate(self):
+        if self == self.only_valid:
+            return []
+        else:
+            return [f'Invalid value: "{self}", should be: "{self.only_valid}"']
+
+
+@dataclass_to_json
+@dataclass
+class SimpleWithValidated():
+    attr1: JustOneStringValidated = "this"
+    attr2: JustOneStringValidated = "this particular string"
+    non_validated: str = "an arbitrary string"
+
+
 def test_simple_py_json():
     rs = ReallySimple(x=5, thing="fred")
 
@@ -157,3 +178,40 @@ def test_nested_list_from_json():
 
     assert nl.those[0].thing == 'fred'
     assert nl.those[2].x == 1
+
+
+def test_validate():
+    """
+    make sure that all validators are being called
+    """
+    nl = NestedList(these=ListOfRS([ReallySimple(x=2, thing="bob"),
+                                    ReallySimple(x=1, thing="jane"),
+                                    ]))
+
+    nl.those.extend([ReallySimple(x=5, thing="fred"),
+                     ReallySimple(x=2, thing="bob"),
+                     ReallySimple(x=1, thing="jane"),
+                     ])
+
+    print(nl)
+
+    pyjson = nl.py_json()
+
+    assert pyjson == {'these': [{'x': 2, 'thing': 'bob'},
+                                {'x': 1, 'thing': 'jane'}],
+                      'those': [{'x': 5, 'thing': 'fred'},
+                                {'x': 2, 'thing': 'bob'},
+                                {'x': 1, 'thing': 'jane'}]}
+
+
+def test_SimpleWithValidated():
+    obj = SimpleWithValidated()
+
+    result = obj.validate()
+    print("result:", result)
+    assert len(result) == 1
+    assert result[0] == 'Invalid value: "this", should be: "this particular string"'
+    assert False
+
+
+

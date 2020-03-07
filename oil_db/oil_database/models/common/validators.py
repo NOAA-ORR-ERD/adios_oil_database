@@ -1,7 +1,20 @@
 
 
 class EnumValidator:
+    """
+    validator for Enum values: a value that can only be one of a set
+
+    """
     def __init__(self, valid_items, err_msg, case_insensitive=False):
+        """
+        :param valid_items: list of valid items -- can be anything that an `in`
+                            test will work for.
+        :param err_msg: The error message that should be used on failure. Should
+                        be a format string that takes two parameters: item and valid_items
+
+        :param case_insensitive=False: whether you want the test to be case-insensitive.
+                                       only works for string values, of course.
+        """
         if case_insensitive:
             valid_items = [item.lower() for item in valid_items]
         self.valid_items = valid_items
@@ -15,4 +28,41 @@ class EnumValidator:
             return [self.err_msg.format(item, self.valid_items)]
         else:
             return []
+
+
+class FloatRangeValidator:
+    """
+    Validator for float values that can only be a given range
+
+    range is inclusive (<= and >=)
+    """
+    def __init__(self, min, max, err_msg=None):
+        """
+        :param min: minimum value allowed
+
+        :param max: maximum value allowed
+
+        :param err_msg: The error message that should be used on failure. Should
+                        be a format string that takes three parameters: default is:
+                        "ValidationError: {} is not between {} and {}"
+        """
+        self.min = min
+        self.max = max
+        if err_msg is None:
+            self.err_msg = "ValidationError: {} is not between {} and {}"
+        else:
+            self.err_msg = err_msg
+
+    def __call__(self, value):
+        try:
+            value = float(value)
+        except ValueError:
+            return [self.err_msg.format(value, self.min, self.max)]
+
+        if not self.min <= value <= self.max:
+            return [self.err_msg.format(value, self.min, self.max)]
+        else:
+            return []
+
+
 

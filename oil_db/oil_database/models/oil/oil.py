@@ -20,23 +20,22 @@ from typing import List, Dict
 @dataclass_to_json
 @dataclass
 class Oil:
-    # NOTE: types for documentation only -- not enforced
     # metadata:
     name: str  # only required field
     oil_id: str = ""
     location: str = ""
     reference: str = ""
-    reference_date: int = ""
-    sample_date: datetime = ""
+    reference_date: str = "" # note: should be ISO 8601 string only!
+    sample_date: str = ""
     comments: str = ""
-    labels: List[str] = field(default_factory=list)
-    status: List[str] = field(default_factory=list)
+    labels: list = field(default_factory=list)
+    status: list = field(default_factory=list)
 
     api: float = None
     product_type: ProductType = ""
     # fixme: this should really be "sub_samples"
     samples: SampleList = field(default_factory=SampleList)
-    extra_data: Dict = field(default_factory=dict)
+    extra_data: dict = field(default_factory=dict)
 
     def __post_init__(self):
         """
