@@ -67,42 +67,33 @@ def _validate(self):
 
     The top-level validator extends the existing list
     """
-    print("validate called on", self)
     messages = []
-    for fieldname in self.__dataclass_fields__.keys():
-        val = getattr(self, fieldname)
-        try:  # convert to json
-            messages.extend(val.validate())
+    for fieldname, fieldobj in self.__dataclass_fields__.items():
+        value = getattr(self, fieldname)
+        try:
+            # validate with the type's validate method
+            messages.extend(fieldobj.type.validate(value))
         except AttributeError:  # This one doesn't have a validate method.
             pass
+
     return messages
 
 
 def __setattr__(self, name, val):
-    print("in:", self.__class__)
-    print("in __setattr__, name, val:", name, repr(val))
     try:
         fieldobj = self.__dataclass_fields__[name]
     except KeyError:
         raise AttributeError(f"You can only set existing attributes: "
                              f"{name} does not exist")
-    try:
-        # try to make it the right type, but store it anyway.
-        self.__dict__[name] = fieldobj.type(val)
-    except TypeError:
-        self.__dict__[name] = val
+    self.__dict__[name] = val
 
-
-
-
-    # if name not in self.__dataclass_fields__:
-    #     raise AttributeError(f"You can only set existing attributes: "
-    #                          f"{name} does not exist")
-    # else:
-    #     # assure that the field value is the correct type
-    #     # this will also make a copy -- is that desirable?
-    #     fieldobj = self.__dataclass_fields__[name]
+    # Better not to try to convert type here
+    # That made it too inflexible
+    # try:
+    #     # try to make it the right type, but store it anyway.
     #     self.__dict__[name] = fieldobj.type(val)
+    # except TypeError:
+    #     self.__dict__[name] = val
 
 
 class JSON_List(list):

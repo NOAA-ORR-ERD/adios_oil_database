@@ -179,11 +179,6 @@ def test_DensityList_fromjson():
               ]
     dl = DensityList.from_py_json(pyjson)
 
-    print("type of Density:", type(DensityList))
-    print(len(DensityList))
-    print(DensityList[0])
-    print(DensityList[1])
-
     assert len(dl) == 2
     assert dl[0].density.value == 0.8751
     assert dl[1].standard_deviation == 1.1

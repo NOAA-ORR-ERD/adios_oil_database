@@ -36,11 +36,12 @@ class JustOneStringValidated(str):
     """
     only_valid = "this particular string"
 
-    def validate(self):
-        if self == self.only_valid:
+    @classmethod
+    def validate(cls, value):
+        if value == cls.only_valid:
             return []
         else:
-            return [f'Invalid value: "{self}", should be: "{self.only_valid}"']
+            return [f'Invalid value: "{value}", should be: "{cls.only_valid}"']
 
 
 @dataclass_to_json
@@ -211,7 +212,6 @@ def test_SimpleWithValidated():
     print("result:", result)
     assert len(result) == 1
     assert result[0] == 'Invalid value: "this", should be: "this particular string"'
-    assert False
 
 
 
