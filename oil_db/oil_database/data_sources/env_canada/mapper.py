@@ -18,6 +18,8 @@ custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
+import pdb
+
 
 class EnvCanadaAttributeMapper(object):
     '''
@@ -118,6 +120,7 @@ class EnvCanadaAttributeMapper(object):
         rec = {}
         samples = defaultdict(dict)
 
+        # initial pass: iterate the properties and populate samples
         for p in self.get_interface_properties():
             k, v = p, getattr(self, p)
 
@@ -141,8 +144,37 @@ class EnvCanadaAttributeMapper(object):
                 # assume a weathering of 0
                 samples[0.0][k] = v
 
+        # some post processing of our samples
         for k, v in samples.items():
             v.update(self.generate_sample_id_attrs(k))
+
+            if 'cuts' in v:
+                # - we need the cuts to be filtered properly by weathering,
+                #   but the final attribute 'distillation_data' is an object
+                #   which contains the cuts list and some other attributes.
+                # - EC data doesn't specify the type of fractions it uses for
+                #   distillation, assume mass fraction.
+                method = ','.join(set(
+                    [m for m in (self.record.values
+                                 ['boiling_point_cumulative_weight_fraction']
+                                 ['method'])
+                     if m is not None]
+                ))
+
+                dist_obj = {'type': 'mass',
+                            'method': method,
+                            'cuts': v['cuts']}
+                v.pop('cuts', None)
+
+                methods = set()
+                for c in dist_obj['cuts']:
+                    methods.add(c['method'])
+                    c.pop('method', None)
+
+                dist_obj['method'] = ', '.join([i for i in methods
+                                                if i is not None])
+
+                v['distillation_data'] = dist_obj
 
         rec['samples'] = self.sort_samples(samples.values())
 
