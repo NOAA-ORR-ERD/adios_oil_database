@@ -176,6 +176,37 @@ class EnvCanadaAttributeMapper(object):
 
                 v['distillation_data'] = dist_obj
 
+            if 'sara_total_fractions' in v:
+                # - we need the SARA items to be filtered properly
+                #   by weathering, but the final attribute 'sara' is an object
+                #   which contains the four sara items as attributes.
+                #   So we have to shuffle some things around.
+                saturates = [s for s in v['sara_total_fractions']
+                             if s['sara_type'].lower() == 'saturates']
+                aromatics = [s for s in v['sara_total_fractions']
+                             if s['sara_type'].lower() == 'aromatics']
+                resins = [s for s in v['sara_total_fractions']
+                          if s['sara_type'].lower() == 'resins']
+                asphaltenes = [s for s in v['sara_total_fractions']
+                               if s['sara_type'].lower() == 'asphaltenes']
+
+                [s.pop('sara_type', None) for s in v['sara_total_fractions']]
+
+                v['sara'] = {
+                    'method': ', '.join([s['method']
+                                         for s in v['sara_total_fractions']
+                                         if s['method'] is not None])
+                }
+                v['sara']['saturates'] = saturates[0]['fraction'] if len(saturates) > 0 else None
+
+                v['sara']['aromatics'] = aromatics[0]['fraction'] if len(aromatics) > 0 else None
+
+                v['sara']['resins'] = resins[0]['fraction'] if len(resins) > 0 else None
+
+                v['sara']['asphaltenes'] = asphaltenes[0]['fraction'] if len(asphaltenes) > 0 else None
+
+                v.pop('sara_total_fractions', None)
+
         rec['samples'] = self.sort_samples(samples.values())
 
         return rec
@@ -710,6 +741,11 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(f)
 
             kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
+                                  'standard_deviation': kwargs['standard_deviation'],
+                                  'replicates': kwargs['replicates'],
                                   '_cls': self._class_path(FloatUnit)}
+            kwargs.pop('percent', None)
+            kwargs.pop('standard_deviation', None)
+            kwargs.pop('replicates', None)
 
             yield kwargs

@@ -63,6 +63,8 @@ class FloatUnit(object, metaclass=UnitMeta):
     value: float = None
     min_value: float = None
     max_value: float = None
+    standard_deviation: float = None
+    replicates: float = None
 
     def __post_init__(self):
         if hasattr(self.unit, 'decode'):
