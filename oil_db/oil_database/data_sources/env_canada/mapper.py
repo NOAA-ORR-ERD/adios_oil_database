@@ -302,6 +302,17 @@ class EnvCanadaAttributeMapper(object):
             yield self._get_kwargs(a)
 
     @property
+    def bulk_composition(self):
+        for c in ('wax_content', 'water_content', 'sulfur_content'):
+            label = self.record.get_label(c)
+            label = label[:label.find('Content') + len('Content')]
+
+            weathered_slice = getattr(self.record, c)
+            for ws in weathered_slice:
+                ws['name'] = label
+                yield ws
+
+    @property
     def compounds(self):
         '''
             Gather up all the groups of compounds scattered throughout the EC
@@ -630,42 +641,6 @@ class EnvCanadaAttributeMapper(object):
             kwargs['effectiveness']['_cls'] = self._class_path(FloatUnit)
 
             del kwargs['dispersant_effectiveness']
-
-            yield kwargs
-
-    @property
-    def sulfur(self):
-        for s in self.record.sulfur:
-            kwargs = self._get_kwargs(s)
-
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  '_cls': self._class_path(FloatUnit)}
-
-            del kwargs['percent']
-
-            yield kwargs
-
-    @property
-    def water(self):
-        for w in self.record.water:
-            kwargs = self._get_kwargs(w)
-
-            kwargs['fraction'] = kwargs['percent']
-            kwargs['fraction']['_cls'] = self._class_path(FloatUnit)
-
-            del kwargs['percent']
-
-            yield kwargs
-
-    @property
-    def wax_content(self):
-        for w in self.record.wax_content:
-            kwargs = self._get_kwargs(w)
-
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  '_cls': self._class_path(FloatUnit)}
-
-            del kwargs['percent']
 
             yield kwargs
 

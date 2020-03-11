@@ -951,63 +951,45 @@ class EnvCanadaRecordParser(object):
         return corexit
 
     @property
-    def sulfur(self):
-        '''
-            Dimensional parameters are (weathering).
-        '''
-        sulfur_contents = []
-
-        for props_i in self.iterate_weathering(self.values['sulfur_content']):
-            if props_i['sulfur_content'] is not None:
-                rename_props = {'sulfur_content': 'percent'}
-
-                kwargs = self._build_kwargs(props_i,
-                                            rename_props=rename_props)
-
-                sulfur_contents.append(kwargs)
-
-        return sulfur_contents
+    def sulfur_content(self):
+        return self.bulk_content('sulfur_content', 'sulfur_content',
+                                 'ASTM D4294')
 
     @property
-    def water(self):
-        '''
-            Dimensional parameters are (weathering).
-        '''
-        water_contents = []
-
-        for props_i in self.iterate_weathering(self.values['water_content']):
-            if props_i['water_content'] is not None:
-                rename_props = {'water_content': 'percent'}
-                op_and_value = {'percent'}
-
-                kwargs = self._build_kwargs(props_i,
-                                            rename_props=rename_props,
-                                            op_and_value=op_and_value)
-                kwargs['percent']['unit'] = '%'
-
-                water_contents.append(kwargs)
-
-        return water_contents
+    def water_content(self):
+        return self.bulk_content('water_content', 'water_content', 'ASTM E203')
 
     @property
     def wax_content(self):
+        return self.bulk_content('wax_content', 'waxes', 'ESTS 1994')
+
+    def bulk_content(self, category, attr, method):
         '''
             Dimensional parameters are (weathering).
         '''
-        wax_contents = []
+        ret = []
 
-        for props_i in self.iterate_weathering(self.values['wax_content']):
-            if props_i['waxes'] is not None:
-                add_props = {'method': 'ESTS 1994'}
-                rename_props = {'waxes': 'percent'}
+        for props_i in self.iterate_weathering(self.values[category]):
+            if props_i[attr] is not None:
+                add_props = {'method': method}
+                rename_props = {attr: 'measurement'}
+                op_and_value = {'measurement'}
 
                 kwargs = self._build_kwargs(props_i,
                                             add_props=add_props,
-                                            rename_props=rename_props)
+                                            rename_props=rename_props,
+                                            op_and_value=op_and_value)
+                kwargs['measurement']['unit'] = '%'
+                kwargs['measurement']['unit_type'] = 'MassFraction'
 
-                wax_contents.append(kwargs)
+                for lbl in ('standard_deviation', 'replicates'):
+                    if lbl in kwargs:
+                        kwargs['measurement'][lbl] = kwargs[lbl]
+                        kwargs.pop(lbl, None)
 
-        return wax_contents
+                ret.append(kwargs)
+
+        return ret
 
     @property
     def sara_total_fractions(self):
