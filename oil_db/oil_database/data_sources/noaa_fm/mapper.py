@@ -38,7 +38,7 @@ class OilLibraryAttributeMapper(object):
                              'comments',
                              'api',
                              'product_type',
-                             'categories',
+                             'labels',
                              'status')
 
     def __init__(self, record):
@@ -50,7 +50,7 @@ class OilLibraryAttributeMapper(object):
         '''
         self.record = record
         self._status = None
-        self._categories = None
+        self._labels = None
 
     def get_interface_properties(self):
         '''
@@ -177,16 +177,16 @@ class OilLibraryAttributeMapper(object):
         self._status = value
 
     @property
-    def categories(self):
+    def labels(self):
         '''
             The parser does not have this, but we will want to get/set
             this property.
         '''
-        return self._categories
+        return self._labels
 
-    @categories.setter
-    def categories(self, value):
-        self._categories = value
+    @labels.setter
+    def labels(self, value):
+        self._labels = value
 
     @property
     def name(self):

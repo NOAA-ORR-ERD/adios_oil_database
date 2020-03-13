@@ -27,17 +27,18 @@ example_index = example_dir / "index.txt"
 
 
 def test_read_index():
-    reader = ExxonDataReader(example_dir, example_index)
+    reader = ExxonDataReader(example_index, example_dir)
 
     assert reader.index is not None
     print(reader.index)
-    assert reader.index == [('HOOPS Blend',
-                             example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx'),
-                            ]
+    assert reader.index == [(
+        'HOOPS Blend',
+        example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx'
+    )]
 
 
 def test_get_records():
-    reader = ExxonDataReader(example_dir, example_index)
+    reader = ExxonDataReader(example_index, example_dir)
 
     records = reader.get_records()
 
@@ -54,12 +55,14 @@ def test_get_records():
 
 
 def test_read_excel_file():
-    record = ExxonDataReader.read_excel_file(example_dir /
-                                             "Crude_Oil_HOOPS_Blend_assay_xls.xlsx")
+    record = ExxonDataReader.read_excel_file(
+        example_dir / "Crude_Oil_HOOPS_Blend_assay_xls.xlsx"
+    )
 
     pprint(record[:7])
 
-    # there could be a LOT here, but just to make sure it isn't completely bonkers
+    # there could be a LOT here, but just to make sure it isn't completely
+    # bonkers
     assert record[0][0] == "ExxonMobil"
     assert record
 
@@ -70,7 +73,8 @@ def test_ExxonRecordParser():
 
     It's just a pass through
     """
-    assert ExxonRecordParser("something random") == "something random"
+    assert ExxonRecordParser("something random", None) == ("something random",
+                                                           None)
 
 
 class TestExxonMapper():
@@ -79,7 +83,7 @@ class TestExxonMapper():
     """
 
     # fixme -- there should probably be a fixture to get a record
-    record = next(ExxonDataReader(example_dir, example_index).get_records())
+    record = next(ExxonDataReader(example_index, example_dir).get_records())
     oil = ExxonMapper(record)
 
     def test_header(self):

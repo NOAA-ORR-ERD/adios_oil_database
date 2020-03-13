@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import sys
 import os
+from pathlib import Path
 import logging
 from openpyxl import load_workbook
 
@@ -33,7 +33,7 @@ class ExxonDataReader:
         """
         self.data_dir = data_dir
         if self.data_dir is None:
-            self.data_dir = os.path.dirname(data_index_file)
+            self.data_dir = Path(os.path.dirname(data_index_file))
 
         self.index = self._read_index(data_index_file)
 
@@ -56,8 +56,7 @@ class ExxonDataReader:
                     raise ValueError(f"There is something wrong with this line"
                                      "in the index file:\n"
                                      "{line}")
-                index.append((oil_name,
-                              os.path.join(self.data_dir, filename)))
+                index.append((oil_name, self.data_dir / filename))
 
             return index
 

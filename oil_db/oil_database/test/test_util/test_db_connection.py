@@ -25,7 +25,6 @@ def mongodb_settings():
             'mongodb.alias': 'oil-db-app'}
 
 
-@pytest.mark.mongo
 def test_connect_mongodb(mongodb_settings):
     '''
         Test a successful MongoDB connection.  We need to have a running
@@ -36,7 +35,6 @@ def test_connect_mongodb(mongodb_settings):
     assert mongodb_client.address == ('localhost', 27017)
 
 
-@pytest.mark.mongo
 def test_mongodb_connect_exceptions():
     with pytest.raises(KeyError):
         connect_mongodb({})
