@@ -19,6 +19,10 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
                                                   EnvCanadaAttributeMapper)
 
+from oil_database.data_sources.exxon_assays import (ExxonDataReader,
+                                                    ExxonRecordParser,
+                                                    ExxonMapper)
+
 
 # from oil_database.db_init.validation import oil_record_validation
 from oil_database.db_init.categories import link_oil_to_categories
@@ -63,7 +67,11 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
                EnvCanadaRecordParser,
                EnvCanadaAttributeMapper],
               # ('Exxon Assays', add_exxon_records)
-              ['Exxon Assays', not_implemented],
+              ['Exxon Assays', 'oildb.exxon_files',
+               None,
+               ExxonDataReader,
+               ExxonRecordParser,
+               ExxonMapper],
               ['All datasets', add_all]
               )
 
@@ -306,4 +314,7 @@ def _add_exxon_files(settings):
         So exactly what should be contained in the settings?  I think it should
         be the index file.
     '''
-    logger.warning('Exxon file import is not implemented yet!')
+    exxon_files = '\n'.join([os.path.join(data_path, 'exxon_assays', fn)
+                             for fn in ('index.txt',)])
+
+    settings['oildb.exxon_files'] = exxon_files

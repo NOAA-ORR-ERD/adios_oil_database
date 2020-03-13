@@ -33,13 +33,14 @@ from ..oil import Oil
 import logging
 
 from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
-
-logger = logging.getLogger(__name__)
-
 # Putting these all here so we can keep track more easily
 from .warnings import WARNINGS
 from .errors import ERRORS
+
+
+pp = PrettyPrinter(indent=2, width=120)
+
+logger = logging.getLogger(__name__)
 
 
 def validate(oil_json):
@@ -151,9 +152,7 @@ def val_check_for_distillation_cuts(oil):
 
 # build a list of all the validators:
 
-VALIDATORS = [ val for name, val in vars().items() if name.startswith("val_")]
-
-
+VALIDATORS = [val for name, val in vars().items() if name.startswith("val_")]
 
 
 def oil_record_validation(oil):

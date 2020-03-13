@@ -64,8 +64,5 @@ class Sample:
     aromatic_volume_fraction: UnittedValue = None
 
 
-
-
-
 class SampleList(JSON_List):
     item_type = Sample

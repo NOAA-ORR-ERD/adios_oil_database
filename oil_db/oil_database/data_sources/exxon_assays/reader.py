@@ -1,10 +1,9 @@
 #!/usr/bin/env python
+
+import sys
+import os
 import logging
-from collections import defaultdict
-
 from openpyxl import load_workbook
-
-from slugify import Slugify
 
 from ..import field_name_sluggify
 
@@ -23,7 +22,7 @@ class ExxonDataReader:
 
     Essentially the file as a raw table
     """
-    def __init__(self, data_dir, data_index_file):
+    def __init__(self, data_index_file, data_dir=None):
         """
         Initialize a reader for the Exxon Data
 
@@ -33,6 +32,8 @@ class ExxonDataReader:
                                 to files
         """
         self.data_dir = data_dir
+        if self.data_dir is None:
+            self.data_dir = os.path.dirname(data_index_file)
 
         self.index = self._read_index(data_index_file)
 
@@ -55,7 +56,8 @@ class ExxonDataReader:
                     raise ValueError(f"There is something wrong with this line"
                                      "in the index file:\n"
                                      "{line}")
-                index.append((oil_name, self.data_dir / filename))
+                index.append((oil_name,
+                              os.path.join(self.data_dir, filename)))
 
             return index
 

@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Dict
 
+
 @dataclass_to_json
 @dataclass
 class Oil:
@@ -45,7 +46,3 @@ class Oil:
         """
         if self.name == "":
             raise TypeError("Name must be a non-empty string")
-
-
-
-

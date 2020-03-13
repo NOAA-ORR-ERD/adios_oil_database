@@ -18,8 +18,6 @@ custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
-import pdb
-
 
 class EnvCanadaAttributeMapper(object):
     '''
