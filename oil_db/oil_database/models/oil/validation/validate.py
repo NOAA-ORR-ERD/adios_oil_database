@@ -61,6 +61,11 @@ def validate(oil_json):
             raise
 
     messages = set()
+
+    # first call Oil Object's validate
+    messages.update(oil.validate())
+
+    # then the stand-alone ones
     for val_fun in VALIDATORS:
         msg = val_fun(oil)
         if msg:

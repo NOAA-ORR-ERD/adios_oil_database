@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 
 import { extent } from 'd3-array';
-import { scaleLinear, scaleOrdinal } from 'd3-scale';
+import { scaleLinear } from 'd3-scale';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { format } from 'd3-format';
 import { select } from 'd3-selection';

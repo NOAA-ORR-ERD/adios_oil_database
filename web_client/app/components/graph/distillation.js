@@ -1,5 +1,3 @@
-import { line } from 'd3-shape';
-
 import LineChart from './line-chart';
 import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
 
@@ -7,20 +5,12 @@ import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
 export default class Distillation extends LineChart {
     xLabel = 'Mass Fraction (%)';
     yLabel = 'Vapor Temperature (\u00B0C)';
-    xScaleMinRange = [0];
+    xScaleMinRange = [0, 100];
     yScaleMinRange = [0];
 
     initData() {
         let cuts = this.args.oil.cuts;
         let data = [];
-        let label;
-
-        if (typeof this.args.oil.fraction_weathered !== 'undefined') {
-            label = 'weathered=' + this.args.oil.fraction_weathered;
-        }
-        else if (typeof this.args.oil.boiling_point_range !== 'undefined') {
-            label = 'BP range=' + this.args.oil.boiling_point_range;
-        }
 
         let distinct_w;
         try {
@@ -71,14 +61,6 @@ export default class Distillation extends LineChart {
         let yScale = this.yScale;
 
         let svg = this.chartSVG;
-
-        let chartLine = line()
-        .x(function(d) {
-            return xScale(d[0]);
-        })
-        .y(function(d) {
-            return yScale(d[1]);
-        });
 
         let circles = svg
         .selectAll("circle")
