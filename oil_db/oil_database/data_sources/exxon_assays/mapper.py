@@ -11,15 +11,14 @@ import unit_conversion as uc
 
 from oil_database.util import sigfigs
 from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.sample import Sample
+from oil_database.models.oil.sample import Sample, SampleList
 from oil_database.models.oil.values import (UnittedValue,
                                             Density,
                                             Viscosity,
-                                            DistCut,
-                                            )
+                                            DistCut)
 
 from pprint import PrettyPrinter
-pprint = PrettyPrinter(indent=2, width=120)
+pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
@@ -123,15 +122,15 @@ def ExxonMapper(record):
     """
     name, data = record
     oil = Oil(name)
-    print('\n', oil.name)
 
     data = iter(data)
 
     read_header(oil, data)
     row = next_non_empty(data)
 
+    oil._id = oil.oil_id = row[0]
     sample_names = row[1:]
-    samples = [Sample(name=name) for name in sample_names]
+    samples = SampleList([Sample(name=name) for name in sample_names])
 
     cut_table = read_cut_table(oil, data)
 
@@ -177,46 +176,49 @@ def process_cut_table(oil, samples, cut_table):
     # row = get_next_properties_row(data, "Cut volume, %")
     # Dist cuts -- each cut has part of it
     row = cut_table[norm("Cut volume, %")]
+
     for sample, val in zip(samples, row):
-        sample.cut_volume = UnittedValue(round(val, 4), unit="%")
+        try:
+            sample.cut_volume = UnittedValue(round(val, 4), unit="%")
+        except Exception:
+            sample.cut_volume = None
 
     # API -- odd because we only need one!
     row = cut_table[norm("API Gravity,")]
+
     # pull API from first value
-    oil.api = round(float(row[0]), 1)  # stored as full precision double
+    try:
+        oil.api = round(float(row[0]), 1)  # stored as full precision double
+    except Exception:
+        oil.api = None
 
     # use specific gravity to get density
     row = cut_table[norm("Specific Gravity (60/60F)")]
     for sample, val in zip(samples, row):
-        rho = uc.convert("SG", "g/cm^3", val)
-        sample.densities = [Density(UnittedValue(round(rho, 8),
-                                                 unit="g/cm^3"),
-                                    UnittedValue(15.6,
-                                                 unit="C"))
-                            ]
+        try:
+            rho = uc.convert("SG", "g/cm^3", val)
+            sample.densities.append(
+                Density(UnittedValue(round(rho, 8), unit="g/cm^3"),
+                        UnittedValue(15.6, unit="C"))
+            )
+        except Exception:
+            pass
 
     # viscosity
     # fixme: -- maybe should parse the labels for temp, etc?
     #          wait till next version
-    row = cut_table[norm("Viscosity at 20C/68F, cSt")]
-    for sample, val in zip(samples, row):
-        sample.kvis = [Viscosity(UnittedValue(round(val, 8),
-                                              unit="cSt"),
-                                 UnittedValue(20,
-                                              unit="C"))]
-
-    row = cut_table[norm("Viscosity at 40C/104F, cSt")]
-    for sample, val in zip(samples, row):
-        sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
-                                                  unit="cSt"),
-                                     UnittedValue(40,
-                                                  unit="C")))
-    row = cut_table[norm("Viscosity at 50C/122F, cSt")]
-    for sample, val in zip(samples, row):
-        sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
-                                                  unit="cSt"),
-                                     UnittedValue(50,
-                                                  unit="C")))
+    for lbl in ("Viscosity at 20C/68F, cSt",
+                "Viscosity at 40C/104F, cSt",
+                "Viscosity at 50C/122F, cSt"):
+        row = cut_table[norm(lbl)]
+        for sample, val in zip(samples, row):
+            try:
+                sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
+                                                          unit="cSt"),
+                                             UnittedValue(40,
+                                                          unit="C")))
+            except Exception:
+                pass
 
     # distillation data
     if norm("Distillation type, TBP") not in cut_table:
@@ -225,11 +227,8 @@ def process_cut_table(oil, samples, cut_table):
     for name, row in cut_table.items():
         if norm("vol%, F") in name or name == norm("IBP, F"):
             # looks like a distillation cut.
-
-            print("working with:", name)
             percent = 0.0 if "ibp" in name else float(name.split("vol")[0])
-            print("percent is:", percent)
-            print(row)
+
             for sample, val in zip(samples, row):
                 if val is not None:
                     val = sigfigs(uc.convert("F", "C", val), 5)

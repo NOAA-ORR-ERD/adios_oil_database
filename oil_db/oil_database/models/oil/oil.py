@@ -23,6 +23,7 @@ from typing import List, Dict
 class Oil:
     # metadata:
     name: str  # only required field
+    _id: str = ""
     oil_id: str = ""
     location: str = ""
     reference: str = ""

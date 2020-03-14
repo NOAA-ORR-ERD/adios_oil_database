@@ -60,6 +60,9 @@ class OilEstimation(object):
         if hasattr(imported_rec, 'dict'):
             # we are dealing with a mapper object, convert to data object
             self.record = imported_rec.dict()
+        elif hasattr(imported_rec, 'py_json'):
+            # we are dealing with a mapper object, convert to data object
+            self.record = imported_rec.py_json()
         else:
             self.record = imported_rec
 

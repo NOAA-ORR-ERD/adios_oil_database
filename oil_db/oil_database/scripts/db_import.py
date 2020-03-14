@@ -243,15 +243,17 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
             total_count += 1
 
             try:
-                parser_obj = parser_cls(*record_data)
-
-                oil_obj = mapper_cls(parser_obj)
+                oil_obj = mapper_cls(parser_cls(*record_data))
 
                 link_oil_to_labels(oil_obj)
 
-                oil_pyjson = oil_obj.dict()
+                if hasattr(oil_obj, 'py_json'):
+                    oil_pyjson = oil_obj.py_json()
+                else:
+                    oil_pyjson = oil_obj.dict()
 
                 validate(oil_pyjson)
+
                 oil_collection.insert_one(oil_pyjson)
             except DuplicateKeyError as e:
                 print('Duplicate fields for {}: {}'

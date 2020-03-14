@@ -4,7 +4,6 @@ Tools for helping make our data models.
 So far: making dataclasses read/writable as JSON
 """
 
-
 def something(val):
     '''
         much like python's "Truthy" and Falsey", but we want some values
@@ -30,6 +29,7 @@ def _py_json(self, sparse=True):
             val = val.py_json(sparse=sparse)
         except AttributeError:
             pass
+
         if not sparse:
             json_obj[fieldname] = val
         elif something(val):
@@ -113,6 +113,7 @@ class JSON_List(list):
                 json_obj.append(item.py_json(sparse))
             except AttributeError:
                 json_obj.append(item)
+
         return json_obj
 
     @classmethod
