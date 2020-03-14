@@ -321,7 +321,7 @@ class OilTests(OilTestBase):
                      'reference',
                      'reference_date',
                      'comments',
-                     'categories',
+                     'labels',
                      'status',
                      'samples']
 
