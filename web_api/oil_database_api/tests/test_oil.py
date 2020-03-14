@@ -8,7 +8,6 @@ And getting sample_oils from the oil filemaker data makes me really nervous
 
 
 """
-
 import copy
 
 from .base import FunctionalTestBase
@@ -485,7 +484,8 @@ class TestOilSort(OilTestBase):
         result = resp.json_body
         names = [rec['name'] for rec in result]
 
-        assert names == sorted(names, reverse=True)
+        # we are sorting case insensitive
+        assert names == sorted(names, reverse=True, key=lambda x: x.lower())
 
     def test_sorted_by_name_asc(self):
         """
@@ -496,7 +496,8 @@ class TestOilSort(OilTestBase):
         result = resp.json_body
         names = [rec['name'] for rec in result]
 
-        assert names == sorted(names, reverse=False)
+        # we are sorting case insensitive
+        assert names == sorted(names, reverse=False, key=lambda x: x.lower())
 
     def test_sorted_by_api_and_range(self):
         """
