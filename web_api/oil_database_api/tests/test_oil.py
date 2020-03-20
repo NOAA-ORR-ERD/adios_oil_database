@@ -230,7 +230,7 @@ class OilTestBase(FunctionalTestBase):
             Generic test of our unit/value objects.  We have a lot of them,
             so this should cover the general testing criteria.
         '''
-        for k in ['_cls', 'unit']:
+        for k in ['unit_type', 'unit']:
             if k not in obj:
                 return False
 

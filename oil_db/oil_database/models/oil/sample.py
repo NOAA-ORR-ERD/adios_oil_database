@@ -61,7 +61,7 @@ class Sample:
             if self.name.lower() == 'whole crude':
                 self.name = 'Fresh Oil Sample'
 
-        if self.short_name is None:
+        if self.short_name is None and self.name is not None:
             if self.name.lower() == 'fresh oil sample':
                 self.short_name = 'Fresh Oil'
             else:
