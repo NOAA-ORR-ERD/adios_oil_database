@@ -25,8 +25,8 @@ class Sample:
     could be fresh oil, or weathered samples, or distillation cuts, or ...
     """
     # metadata:
-    name: str = "Fresh, Unweathered Oil"
-    short_name: str = "Fresh"
+    name: str = "Fresh Oil Sample"
+    short_name: str = None
     fraction_weathered: float = None
     boiling_point_range: tuple = None
 
@@ -55,6 +55,17 @@ class Sample:
     paraffin_volume_fraction: UnittedValue = None
     naphthene_volume_fraction: UnittedValue = None
     aromatic_volume_fraction: UnittedValue = None
+
+    def __post_init__(self):
+        if self.name is not None:
+            if self.name.lower() == 'whole crude':
+                self.name = 'Fresh Oil Sample'
+
+        if self.short_name is None:
+            if self.name.lower() == 'fresh oil sample':
+                self.short_name = 'Fresh Oil'
+            else:
+                self.short_name = '{}...'.format(self.name[:12])
 
 
 class SampleList(JSON_List):

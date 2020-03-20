@@ -130,6 +130,7 @@ def ExxonMapper(record):
 
     oil._id = oil.oil_id = row[0]
     sample_names = row[1:]
+
     samples = SampleList([Sample(name=name) for name in sample_names])
 
     cut_table = read_cut_table(oil, data)
@@ -263,13 +264,10 @@ def set_sample_property(row,
     the right units)
     """
     for sample, val in zip(samples, row):
-        if convert_from is not None:
-            try:
+        if val is not None and val not in ('NotAvailable',):
+            if convert_from is not None:
                 val = uc.convert(convert_from, unit, val)
-            except Exception:
-                val = None
 
-        if val is not None:
             val = sigfigs(val, num_digits)
             setattr(sample, attr, UnittedValue(val, unit=unit))
 

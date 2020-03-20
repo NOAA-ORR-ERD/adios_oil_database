@@ -97,11 +97,9 @@ def test_UnittedRange_from_json():
     assert ur.unit == "m/s"
 
 
-
-
 def test_Density_std():
-    # note on validation: if there is a standard deviation, there should be more
-    #                     than 1 replicate
+    # note on validation: if there is a standard deviation, there should be
+    #                     more than 1 replicate
     #                     and if there is more than one replicate, there should
     #                     probably be a non-zero standard deviation
     dm = Density(standard_deviation=1.2,
@@ -113,8 +111,8 @@ def test_Density_std():
 
 
 def test_Density_val():
-    # note on validation: if there is a standard deviation, there should be more
-    #                     than 1 replicate
+    # note on validation: if there is a standard deviation, there should be
+    #                     more than 1 replicate
     #                     and if there is more than one replicate, there should
     #                     probably be a non-zero standard deviation
     dm = Density(UnittedValue(0.8751, unit="kg/m^3"),
@@ -202,29 +200,27 @@ def test_Viscosity_empty():
     assert pyj['viscosity'] is None
 
 
-@pytest.mark.parametrize("type", ('crude',
-                                  'refined',
-                                  'bitumen product',
-                                  'Refined',
-                                  'Bitumen Product',
-                                  'other'))
-def test_ProductType_validation(type):
-    pt = ProductType(type)
+@pytest.mark.parametrize("product_type", ('crude',
+                                          'refined',
+                                          'bitumen product',
+                                          'Refined',
+                                          'Bitumen Product',
+                                          'other'))
+def test_ProductType_validation(product_type):
+    pt = ProductType(product_type)
 
     assert pt.validate() == []
 
-@pytest.mark.parametrize("type", ('crud',
-                                  'rfined',
-                                  'bitumen',
-                                  'Reefined',
-                                  'Biitumen Product',
-                                  'random'))
-def test_ProductType_validation_invalid(type):
-    pt = ProductType(type)
+
+@pytest.mark.parametrize("product_type", ('crud',
+                                          'rfined',
+                                          'bitumen',
+                                          'Reefined',
+                                          'Biitumen Product',
+                                          'random'))
+def test_ProductType_validation_invalid(product_type):
+    pt = ProductType(product_type)
 
     result = pt.validate()
     assert len(result) == 1
     assert result[0].startswith("W003:")
-
-
-

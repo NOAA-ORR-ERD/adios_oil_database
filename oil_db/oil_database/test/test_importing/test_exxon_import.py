@@ -96,7 +96,7 @@ class TestExxonMapper():
         samples = self.oil.samples
 
         assert len(samples) == 8
-        assert samples[0].name == "Whole crude"
+        assert samples[0].name == "Fresh Oil Sample"
 
     def test_density(self):
         samples = self.oil.samples

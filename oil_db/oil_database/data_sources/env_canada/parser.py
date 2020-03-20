@@ -980,7 +980,7 @@ class EnvCanadaRecordParser(object):
                                             rename_props=rename_props,
                                             op_and_value=op_and_value)
                 kwargs['measurement']['unit'] = '%'
-                kwargs['measurement']['unit_type'] = 'MassFraction'
+                kwargs['measurement']['unit_type'] = 'Mass Fraction'
 
                 for lbl in ('standard_deviation', 'replicates'):
                     if lbl in kwargs:

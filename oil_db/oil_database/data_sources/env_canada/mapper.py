@@ -12,7 +12,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    DynamicViscosityUnit,
                                                    InterfacialTensionUnit,
                                                    AdhesionUnit,
-                                                   ConcentrationInWaterUnit)
+                                                   MassFractionUnit)
 
 custom_slugify = Slugify(to_lower=True, separator='_')
 
@@ -195,12 +195,10 @@ class EnvCanadaAttributeMapper(object):
                                          for s in v['sara_total_fractions']
                                          if s['method'] is not None])
                 }
+
                 v['sara']['saturates'] = saturates[0]['fraction'] if len(saturates) > 0 else None
-
                 v['sara']['aromatics'] = aromatics[0]['fraction'] if len(aromatics) > 0 else None
-
                 v['sara']['resins'] = resins[0]['fraction'] if len(resins) > 0 else None
-
                 v['sara']['asphaltenes'] = asphaltenes[0]['fraction'] if len(asphaltenes) > 0 else None
 
                 v.pop('sara_total_fractions', None)
@@ -208,9 +206,6 @@ class EnvCanadaAttributeMapper(object):
         rec['samples'] = self.sort_samples(samples.values())
 
         return rec
-
-    def _class_path(self, class_obj):
-        return '{}.{}'.format(class_obj.__module__, class_obj.__name__)
 
     def _get_kwargs(self, obj):
         '''
@@ -338,21 +333,21 @@ class EnvCanadaAttributeMapper(object):
                   unit_type, replicates, and standard_deviation.
         '''
         groups = [
-            ('benzene_and_alkynated_benzene', None, 'ug/g', 'MassFraction'),
-            ('btex_group', None, 'ug/g', 'MassFraction'),
-            ('c4_c6_alkyl_benzenes', None, 'ug/g', 'MassFraction'),
-            ('naphthalenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
-            ('phenanthrenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
+            ('benzene_and_alkynated_benzene', None, 'ug/g', 'Mass Fraction'),
+            ('btex_group', None, 'ug/g', 'Mass Fraction'),
+            ('c4_c6_alkyl_benzenes', None, 'ug/g', 'Mass Fraction'),
+            ('naphthalenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction'),
+            ('phenanthrenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction'),
             ('dibenzothiophenes', 'alkylated_total_pahs', 'ug/g',
-             'MassFraction'),
-            ('fluorenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
+             'Mass Fraction'),
+            ('fluorenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction'),
             ('benzonaphthothiophenes', 'alkylated_total_pahs', 'ug/g',
-             'MassFraction'),
-            ('chrysenes', 'alkylated_total_pahs', 'ug/g', 'MassFraction'),
+             'Mass Fraction'),
+            ('chrysenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction'),
             ('other_priority_pahs', 'alkylated_total_pahs', 'ug/g',
-             'MassFraction'),
-            ('n_alkanes', None, 'ug/g', 'MassFraction'),
-            ('biomarkers', None, 'ug/g', 'MassFraction'),
+             'Mass Fraction'),
+            ('n_alkanes', None, 'ug/g', 'Mass Fraction'),
+            ('biomarkers', None, 'ug/g', 'Mass Fraction'),
         ]
 
         for group_args in groups:
@@ -366,7 +361,7 @@ class EnvCanadaAttributeMapper(object):
             and compile it into an organized list.
         '''
         for c in self.compounds_in_group('headspace_analysis', None,
-                                         'mg/g', 'MassFraction'):
+                                         'mg/g', 'Mass Fraction'):
             yield c
 
     def compounds_in_group(self, category, group_category, unit, unit_type):
@@ -386,7 +381,7 @@ class EnvCanadaAttributeMapper(object):
                     'measurement': {
                         value: 3.4,
                         unit: "ppm",
-                        unit_type: "MassFraction",
+                        unit_type: "Mass Fraction",
                         replicates: 3,
                         standard_deviation: 0.1
                     }
@@ -448,11 +443,12 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(d)
 
             kwargs['density'] = (DensityUnit(value=kwargs['g_ml'],
-                                             from_unit='g/mL', unit='kg/m^3')
+                                             convert_from='g/mL',
+                                             unit='kg/m^3')
                                  .dict())
 
             kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
+                                                  convert_from='C', unit='K')
                                   .dict())
 
             del kwargs['g_ml']
@@ -470,13 +466,13 @@ class EnvCanadaAttributeMapper(object):
         for d in self.record.dvis:
             kwargs = self._get_kwargs(d)
 
-            kwargs['mpa_s']['from_unit'] = kwargs['mpa_s']['unit']
+            kwargs['mpa_s']['convert_from'] = kwargs['mpa_s']['unit']
             kwargs['mpa_s']['unit'] = 'Pa s'
             kwargs['viscosity'] = (DynamicViscosityUnit(**kwargs['mpa_s'])
                                    .dict())
 
             kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
+                                                  convert_from='C', unit='K')
                                   .dict())
 
             del kwargs['mpa_s']
@@ -499,11 +495,11 @@ class EnvCanadaAttributeMapper(object):
 
             kwargs['tension'] = (InterfacialTensionUnit(
                                      value=kwargs['dynes_cm'],
-                                     from_unit='dyne/cm', unit='N/m')
+                                     convert_from='dyne/cm', unit='N/m')
                                  .dict())
 
             kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
+                                                  convert_from='C', unit='K')
                                   .dict())
 
             del kwargs['dynes_cm']
@@ -516,7 +512,7 @@ class EnvCanadaAttributeMapper(object):
         for f in self.record.flash_points:
             kwargs = self._get_kwargs(f)
 
-            kwargs['ref_temp_c']['from_unit'] = kwargs['ref_temp_c']['unit']
+            kwargs['ref_temp_c']['convert_from'] = kwargs['ref_temp_c']['unit']
             kwargs['ref_temp_c']['unit'] = 'K'
 
             kwargs['ref_temp'] = (TemperatureUnit(**kwargs['ref_temp_c'])
@@ -531,7 +527,7 @@ class EnvCanadaAttributeMapper(object):
         for p in self.record.pour_points:
             kwargs = self._get_kwargs(p)
 
-            kwargs['ref_temp_c']['from_unit'] = kwargs['ref_temp_c']['unit']
+            kwargs['ref_temp_c']['convert_from'] = kwargs['ref_temp_c']['unit']
             kwargs['ref_temp_c']['unit'] = 'K'
 
             kwargs['ref_temp'] = (TemperatureUnit(**kwargs['ref_temp_c'])
@@ -546,11 +542,11 @@ class EnvCanadaAttributeMapper(object):
         for c in self.record.cuts:
             kwargs = self._get_kwargs(c)
 
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  '_cls': self._class_path(FloatUnit)}
+            kwargs['fraction'] = (FloatUnit(value=kwargs['percent'], unit='%')
+                                  .dict())
 
             kwargs['vapor_temp'] = (TemperatureUnit(value=kwargs['temp_c'],
-                                                    from_unit='C', unit='K')
+                                                    convert_from='C', unit='K')
                                     .dict())
 
             del kwargs['percent']
@@ -564,7 +560,7 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(a)
 
             kwargs['adhesion'] = (AdhesionUnit(value=kwargs['g_cm_2'],
-                                               from_unit='g/cm^2',
+                                               convert_from='g/cm^2',
                                                unit='N/m^2')
                                   .dict())
 
@@ -582,17 +578,17 @@ class EnvCanadaAttributeMapper(object):
         for e in self.record.emulsions:
             kwargs = self._get_kwargs(e)
 
-            kwargs['water_content'] = {
-                'value': kwargs['water_content_percent'], 'unit': '%',
-                '_cls': self._class_path(FloatUnit)
-            }
+            kwargs['water_content'] = (
+                FloatUnit(value=kwargs['water_content_percent'], unit='%')
+                .dict()
+            )
 
             kwargs['age'] = (TimeUnit(value=kwargs['age_days'],
-                                      from_unit='day', unit='s')
+                                      convert_from='day', unit='s')
                              .dict())
 
             kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
+                                                  convert_from='C', unit='K')
                                   .dict())
 
             # the different modulus values have similar units of measure
@@ -605,7 +601,7 @@ class EnvCanadaAttributeMapper(object):
 
                 if value is not None:
                     kwargs[new_lbl] = (AdhesionUnit(value=value,
-                                                    from_unit='Pa',
+                                                    convert_from='Pa',
                                                     unit='N/m^2')
                                        .dict())
 
@@ -614,10 +610,11 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = visc_lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = (DynamicViscosityUnit(value=value,
-                                                            from_unit='Pa.s',
-                                                            unit='kg/(m s)')
-                                       .dict())
+                    kwargs[new_lbl] = (
+                        DynamicViscosityUnit(value=value, unit='kg/(m s)',
+                                             convert_from='Pa.s')
+                        .dict()
+                    )
 
             del kwargs['water_content_percent']
             del kwargs['age_days']
@@ -635,8 +632,10 @@ class EnvCanadaAttributeMapper(object):
             kwargs = self._get_kwargs(c)
 
             kwargs['dispersant'] = 'Corexit 9500'
-            kwargs['effectiveness'] = kwargs['dispersant_effectiveness']
-            kwargs['effectiveness']['_cls'] = self._class_path(FloatUnit)
+
+            kwargs['effectiveness'] = FloatUnit(
+                **kwargs['dispersant_effectiveness']
+            ).dict()
 
             del kwargs['dispersant_effectiveness']
 
@@ -654,9 +653,9 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-5]
 
                 if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'mg/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)}
+                    kwargs[new_lbl] = (MassFractionUnit(value=value,
+                                                        unit='mg/g')
+                                       .dict())
 
                 del kwargs[lbl]
 
@@ -667,8 +666,7 @@ class EnvCanadaAttributeMapper(object):
                 new_lbl = lbl[:-8]
 
                 if value is not None:
-                    kwargs[new_lbl] = {'value': value, 'unit': '%',
-                                       '_cls': self._class_path(FloatUnit)}
+                    kwargs[new_lbl] = FloatUnit(value=value, unit='%').dict()
 
                 del kwargs[lbl]
 
@@ -684,10 +682,10 @@ class EnvCanadaAttributeMapper(object):
                 value = kwargs[lbl]
 
                 if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'mg/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
+                    kwargs[new_lbl] = (
+                        MassFractionUnit(value=value, unit='mg/g')
+                        .dict()
+                    )
 
                 del kwargs[lbl]
 
@@ -713,10 +711,13 @@ class EnvCanadaAttributeMapper(object):
         for f in self.record.sara_total_fractions:
             kwargs = self._get_kwargs(f)
 
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  'standard_deviation': kwargs['standard_deviation'],
-                                  'replicates': kwargs['replicates'],
-                                  '_cls': self._class_path(FloatUnit)}
+            kwargs['fraction'] = (
+                FloatUnit(value=kwargs['percent'], unit='%',
+                          standard_deviation=kwargs['standard_deviation'],
+                          replicates=kwargs['replicates'])
+                .dict()
+            )
+
             kwargs.pop('percent', None)
             kwargs.pop('standard_deviation', None)
             kwargs.pop('replicates', None)
