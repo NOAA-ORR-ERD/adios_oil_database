@@ -98,7 +98,8 @@ def main(global_config, **settings):
 
     config.add_request_method(get_json, 'json', reify=True)
     renderer = JSONRenderer(
-        serializer=lambda v, **kw: json.dumps(v, default=json_datetime_part)
+        serializer=lambda v, **kw: json.dumps(v, default=json_datetime_part,
+                                              sort_keys=True, indent=4)
     )
 
     config.add_renderer('json', renderer)
