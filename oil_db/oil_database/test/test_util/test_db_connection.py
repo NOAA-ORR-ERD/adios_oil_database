@@ -11,6 +11,9 @@ NOTE: These should really use a fixture to start up mongo, and/or
 
 import pytest
 
+# Pass the --mongo command line option if you want these to run.
+pytestmark = pytest.mark.mongo
+
 from oil_database.util.db_connection import connect_mongodb
 
 
@@ -41,3 +44,4 @@ def test_mongodb_connect_exceptions():
 
     with pytest.raises(KeyError):
         connect_mongodb({'mongodb.host': 'localhost'})  # port setting missing
+
