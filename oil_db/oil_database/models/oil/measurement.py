@@ -53,23 +53,9 @@ class MeasurementBase(MeasurementDataclass):
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field
-        print("py_json called")
         pj = super().py_json(sparse)
-        print(pj)
         pj['unit_type'] = self.unit_type
         return pj
-
-    # def convert_to(self, new_unit):
-    #     for a, v in zip(('value', 'min_value', 'max_value', 'standard_deviation'),
-    #                     (self.value, self.min_value, self.max_value, self.standard_deviation)):
-    #         if v is not None:
-    #             setattr(self, a,
-    #                     convert(self.unit_type,
-    #                             self.unit,
-    #                             new_unit,
-    #                             v)
-    #                     )
-    #         self.unit = new_unit
 
     def convert_to(self, new_unit):
         # fixme: should this return a new object instead of mutating?
@@ -87,9 +73,25 @@ class MeasurementBase(MeasurementDataclass):
         new_vals['unit'] = new_unit
         self.__dict__.update(new_vals)
 
+    # @property
+    # def unit_type(self):
+    #     return self.__class__.unit_type
+
 
 class Length(MeasurementBase):
     unit_type = "length"
+
+
+class MassFraction(MeasurementBase):
+    unit_type = "massfraction"
+
+
+class VolumeFraction(MeasurementBase):
+    unit_type = "volumefraction"
+
+
+class Mass(MeasurementBase):
+    unit_type = "mass"
 
 
 class Temperature(MeasurementBase):

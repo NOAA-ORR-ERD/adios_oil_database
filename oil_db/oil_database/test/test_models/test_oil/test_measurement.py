@@ -5,7 +5,10 @@ import pytest
 from unit_conversion import InvalidUnitError
 
 from oil_database.models.oil.measurement import (Length,
-                                                 Temperature)
+                                                 Temperature,
+                                                 MassFraction,
+                                                 VolumeFraction,
+                                                 Mass)
 
 
 #  Note: the Measurement base class should not be used on its own
@@ -18,6 +21,19 @@ def test_Length():
 
     assert uv.value == 1.0
     assert uv.unit == "m"
+
+
+def test_Length_change_unit_type():
+    "you should not be able to change the unit_type"
+
+    l = Length(value=3.14,
+               unit='mm')
+
+    assert l.unit_type == 'length'
+    with pytest.raises(AttributeError):
+        l.unit_type = 'anything else'
+
+
 
 # we can't have any required arguments
 # as you could have value, or min or max
@@ -199,4 +215,25 @@ def test_convert_wrong_value_not_break():
         assert l.unit == "m"
         assert l.replicates == 3
         assert l.standard_deviation == "bad value"
+
+
+@pytest.mark.parametrize("Type, val1, unit1, val2, unit2",
+                         [(MassFraction, 0.1, 'fraction', 100, 'g/kg'),
+                          (VolumeFraction, 1, '%', 0.01, 'fraction'),
+                          (Mass, 1, 'kg', 1000, 'g'),
+                          ])
+def test_basic_convert(Type, val1, unit1, val2, unit2):
+    measurement = Type(value=val1,
+                       unit=unit1,
+                       )
+
+    assert measurement.value == val1
+    assert measurement.unit == unit1
+    assert measurement.unit_type == Type.unit_type
+
+    measurement.convert_to(unit2)
+
+    assert measurement.value == val2
+    assert measurement.unit == unit2
+    assert measurement.unit_type == Type.unit_type
 
