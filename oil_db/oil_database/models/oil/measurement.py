@@ -72,19 +72,20 @@ class MeasurementBase(MeasurementDataclass):
     #         self.unit = new_unit
 
     def convert_to(self, new_unit):
-        for attr in ('value', 'min_value', 'max_value', 'standard_deviation'):
+        # fixme: should this return a new object instead of mutating?
+        new_vals = {att: None for att in ('value', 'min_value', 'max_value', 'standard_deviation')}
+        for attr in new_vals.keys():
             val = getattr(self, attr)
             if val is not None:
                 new_val = convert(self.unit_type,
                                   self.unit,
                                   new_unit,
                                   val)
-                setattr(self,
-                        attr,
-                        new_val
-                        )
-        self.unit = new_unit
-
+                print(f"changing: {attr} from {val} to {new_val}")
+                new_vals[attr] = new_val
+        # if this was all successful
+        new_vals['unit'] = new_unit
+        self.__dict__.update(new_vals)
 
 
 class Length(MeasurementBase):

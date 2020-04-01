@@ -2,11 +2,13 @@ from math import isclose
 
 import pytest
 
+from unit_conversion import InvalidUnitError
+
 from oil_database.models.oil.measurement import (Length,
                                                  Temperature)
 
 
-#  Note: the Measuremtn base class should not be used on its own
+#  Note: the Measurement base class should not be used on its own
 #.       it needs a unit type
 # so it's not tested here
 
@@ -152,4 +154,49 @@ def test_Length_convert_to_all():
     assert isclose(l.max_value, 32.80839895)
     assert isclose(l.standard_deviation, 1.6404199475)
     assert l.replicates == 3
+
+
+def test_convert_wrong_unit():
+    l = Length(min_value=1.0,
+               max_value=10.0,
+               unit="m",
+               replicates=3,
+               standard_deviation=0.5)
+
+    with pytest.raises(InvalidUnitError):
+        l.convert_to("kg")
+
+
+def test_convert_wrong_unit_not_break():
+    l = Length(min_value=1.0,
+               max_value=10.0,
+               unit="m",
+               replicates=3,
+               standard_deviation=0.5)
+    # make sure an icorrect unit didn't break anything!
+    try:
+        l.convert_to("kg")
+    except InvalidUnitError:
+        assert l.min_value == 1.0
+        assert l.max_value == 10.0
+        assert l.unit == "m"
+        assert l.replicates == 3
+        assert l.standard_deviation == 0.5
+
+
+def test_convert_wrong_value_not_break():
+    l = Length(min_value=1.0,
+               max_value=10.0,
+               unit="m",
+               replicates=3,
+               standard_deviation="bad value")
+    # make sure an icorrect unit didn't break anything!
+    try:
+        l.convert_to("cm")
+    except: # anything goes wrong, the values shouldn't change
+        assert l.min_value == 1.0
+        assert l.max_value == 10.0
+        assert l.unit == "m"
+        assert l.replicates == 3
+        assert l.standard_deviation == "bad value"
 
