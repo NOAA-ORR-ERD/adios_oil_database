@@ -21,7 +21,7 @@ from typing import List, Dict
 
 @dataclass_to_json
 @dataclass
-class MeasurementBase:
+class MeasurementDataclass:
     """
     Data structure to hold a value with a unit
 
@@ -45,18 +45,46 @@ class MeasurementBase:
     standard_deviation: float = None
     replicates: float = None
 
+
+class MeasurementBase(MeasurementDataclass):
+    # need to add these here, so they won't be overwritten by the
+    # decorator
     unit_type = None
 
+    def py_json(self, sparse=True):
+        # unit_type is added here, as it's not a settable field
+        print("py_json called")
+        pj = super().py_json(sparse)
+        print(pj)
+        pj['unit_type'] = self.unit_type
+        return pj
+
+    # def convert_to(self, new_unit):
+    #     for a, v in zip(('value', 'min_value', 'max_value', 'standard_deviation'),
+    #                     (self.value, self.min_value, self.max_value, self.standard_deviation)):
+    #         if v is not None:
+    #             setattr(self, a,
+    #                     convert(self.unit_type,
+    #                             self.unit,
+    #                             new_unit,
+    #                             v)
+    #                     )
+    #         self.unit = new_unit
+
     def convert_to(self, new_unit):
-        for a, v in zip(('value', 'min_value', 'max_value'),
-                        (self.value, self.min_value, self.max_value)):
-            if v is not None:
-                setattr(self, a,
-                        convert(self.unit_type,
-                                self.convert_from,
-                                self.unit,
-                                v)
+        for attr in ('value', 'min_value', 'max_value', 'standard_deviation'):
+            val = getattr(self, attr)
+            if val is not None:
+                new_val = convert(self.unit_type,
+                                  self.unit,
+                                  new_unit,
+                                  val)
+                setattr(self,
+                        attr,
+                        new_val
                         )
+        self.unit = new_unit
+
 
 
 class Length(MeasurementBase):
@@ -65,3 +93,5 @@ class Length(MeasurementBase):
 
 class Temperature(MeasurementBase):
     unit_type = "temperature"
+    def __init__(self):
+        raise NotImplementedError("Need to special case standard deviation: it's not absolute")

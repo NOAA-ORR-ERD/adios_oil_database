@@ -1,3 +1,5 @@
+from math import isclose
+
 import pytest
 
 from oil_database.models.oil.measurement import (Length,
@@ -37,7 +39,10 @@ def test_Length_json():
 
     print(py_json)
 
-    assert py_json == {'value': 1.0, 'unit': 'm'}
+    assert py_json == {'value': 1.0,
+                       'unit': 'm',
+                       'unit_type': 'length',
+                       }
 
 
 def test_Length_from_py_json():
@@ -69,36 +74,82 @@ def test_LengthRange_json_sparse():
 
     py_json = ur.py_json()
 
-    assert py_json == {'max_value': 5.0, 'unit': 'm'}
+    assert py_json == {'max_value': 5.0,
+                       'unit': 'm',
+                       'unit_type': 'length'}
 
 
-def test_LengthRange_json_full():
-    ur = Length(max_value=5.0, unit='m')
+def test_Length_json_full():
+    l = Length(max_value=5.0, unit='m')
 
-    py_json = ur.py_json(sparse=False)
+    py_json = l.py_json(sparse=False)
 
+    print(l)
+    print(l.py_json)
     assert py_json == {'value': None,
                        'max_value': 5.0,
                        'unit': 'm',
                        'min_value': None,
                        'standard_deviation': None,
-                       'replicates': None}
+                       'replicates': None,
+                       'unit_type': 'length'}
 
 
-def test_LengthRange_from_json():
+def test_Length_from_json_min():
     ur = Length.from_py_json({'min_value': 5.0,
-                                    'unit': 'm/s'})
+                              'unit': 'm/s'})
 
     assert ur.min_value == 5.0
     assert ur.max_value is None
     assert ur.unit == "m/s"
 
 
-def test_LengthRange_from_json():
+def test_Length_range_from_json():
     ur = Length.from_py_json({'min_value': 5.0,
-                                    'max_value': 10.1,
-                                    'unit': 'm/s'})
+                              'max_value': 10.1,
+                              'unit': 'm/s'})
 
     assert ur.min_value == 5.0
     assert ur.max_value == 10.1
     assert ur.unit == "m/s"
+
+
+def test_Length_convert_to():
+    l = Length(1.0, unit="m")
+
+    assert l.value == 1.0
+    assert l.unit == "m"
+
+    l.convert_to("ft")
+
+    assert l.unit == "ft"
+    assert isclose(l.value, 3.280839895)
+    assert l.min_value is None
+    assert l.max_value is None
+    assert l.standard_deviation is None
+    assert l.replicates is None
+
+
+def test_Length_convert_to_all():
+    l = Length(min_value=1.0,
+               max_value=10.0,
+               unit="m",
+               replicates=3,
+               standard_deviation=0.5)
+
+    assert l.min_value == 1.0
+    assert l.max_value == 10.0
+    assert l.unit == "m"
+    assert l.replicates == 3
+    assert l.standard_deviation == 0.5
+
+    l.convert_to("ft")
+
+    assert l.unit == "ft"
+    assert l.value is None
+
+    assert isclose(l.min_value, 3.280839895)
+    assert isclose(l.max_value, 32.80839895)
+    assert isclose(l.standard_deviation, 1.6404199475)
+    assert l.replicates == 3
+
