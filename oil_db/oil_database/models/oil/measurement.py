@@ -96,5 +96,6 @@ class Mass(MeasurementBase):
 
 class Temperature(MeasurementBase):
     unit_type = "temperature"
-    def __init__(self):
-        raise NotImplementedError("Need to special case standard deviation: it's not absolute")
+
+    def convert_to(self, new_unit):
+        raise NotImplementedError

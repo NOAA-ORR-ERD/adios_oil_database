@@ -7,6 +7,7 @@ Having a Python class makes it easier to write importing, validating etc, code.
 """
 
 from ..common.utilities import dataclass_to_json, JSON_List
+from .measurement import MassFraction, Temperature
 
 from .values import (UnittedValue,
                      DensityList,
@@ -27,34 +28,48 @@ class Sample:
     # metadata:
     name: str = "Fresh Oil Sample"
     short_name: str = None
-    fraction_weathered: float = None
-    boiling_point_range: tuple = None
+    fraction_weathered: MassFraction = None
+    boiling_point_range: Temperature = None
+    cut_volume: UnittedValue = None  # from Exxon data
 
-    pour_point: UnittedValue = None
+    compounds: CompoundList = field(default_factory=CompoundList)
 
-    densities: DensityList = field(default_factory=DensityList)
-    kvis: ViscosityList = field(default_factory=ViscosityList)
-    dvis: ViscosityList = field(default_factory=ViscosityList)
-    cuts: DistCutsList = field(default_factory=DistCutsList)
+    bulk_composition: CompoundList = field(default_factory=CompoundList)
+    # sulfur_mass_fraction: UnittedValue = None
+    # carbon_mass_fraction: UnittedValue = None
+    # hydrogen_mass_fraction: UnittedValue = None
+    # total_acid_number: UnittedValue = None
+    # mercaptan_sulfur_mass_fraction: UnittedValue = None
+    # nitrogen_mass_fraction: UnittedValue = None
+    # ccr_percent: UnittedValue = None
+    # calcium_mass_fraction: UnittedValue = None
+    # reid_vapor_pressure: UnittedValue = None
+    # hydrogen_sulfide_concentration: UnittedValue = None
+    # salt_content: UnittedValue = None
+    # paraffin_volume_fraction: UnittedValue = None
+    # naphthene_volume_fraction: UnittedValue = None
+    # aromatic_volume_fraction: UnittedValue = None
+
+    SARA: Sara = None
+
+    distillation_data: DistCutsList = field(default_factory=DistCutsList)
+
+    headspace_analysis: CompoundList = field(default_factory=CompoundList)
+
+    physical_properties: PhysicalProperties = None
+    # pour_point: Temperature = None
+    # flash_point: Temperature = None
+    # densities: DensityList = field(default_factory=DensityList)
+    # kvis: ViscosityList = field(default_factory=ViscosityList)
+    # dvis: ViscosityList = field(default_factory=ViscosityList)
+
+    miscellaneous: CompoundList = field(default_factory=CompoundList)
+
     # Assorted:
 
-    sulfur_mass_fraction: UnittedValue = None
-
     # From Exxon Dist cut data
-    cut_volume: UnittedValue = None
-    carbon_mass_fraction: UnittedValue = None
-    hydrogen_mass_fraction: UnittedValue = None
-    total_acid_number: UnittedValue = None
-    mercaptan_sulfur_mass_fraction: UnittedValue = None
-    nitrogen_mass_fraction: UnittedValue = None
-    ccr_percent: UnittedValue = None
-    calcium_mass_fraction: UnittedValue = None
-    reid_vapor_pressure: UnittedValue = None
-    hydrogen_sulfide_concentration: UnittedValue = None
-    salt_content: UnittedValue = None
-    paraffin_volume_fraction: UnittedValue = None
-    naphthene_volume_fraction: UnittedValue = None
-    aromatic_volume_fraction: UnittedValue = None
+
+    extra_data: dict = field(default_factory=dict)
 
     def __post_init__(self):
         if self.name is not None:
@@ -66,17 +81,6 @@ class Sample:
                 self.short_name = 'Fresh Oil'
             else:
                 self.short_name = '{}...'.format(self.name[:12])
-
-    @classmethod
-    def factory(cls, **kwargs):
-        # this factory method is here mainly so we can ignore extra keyword
-        # arguments.  dataclasses don't do this natively, and overloading
-        # the __init__() is problematic.
-        class_fields = {f.name for f in fields(cls)}
-
-        return cls(**{k: v
-                      for k, v in kwargs.items()
-                      if k in class_fields})
 
 
 class SampleList(JSON_List):

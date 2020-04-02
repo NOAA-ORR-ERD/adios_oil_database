@@ -25,19 +25,19 @@ class Oil:
     name: str  # only required field
     _id: str = ""
     oil_id: str = ""
+
     location: str = ""
     reference: str = ""
-    reference_date: str = "" # note: should be ISO 8601 string only!
     sample_date: str = ""
     comments: str = ""
+    API: float = None
+    product_type: ProductType = ""
+
     labels: list = field(default_factory=list)
     status: list = field(default_factory=list)
-
-    api: float = None
-    product_type: ProductType = ""
-    # fixme: this should really be "sub_samples"
-    samples: SampleList = field(default_factory=SampleList)
     extra_data: dict = field(default_factory=dict)
+
+    sub_samples: SampleList = field(default_factory=SampleList)
 
     def __post_init__(self):
         """
