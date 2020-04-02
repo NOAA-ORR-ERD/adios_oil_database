@@ -63,6 +63,8 @@ class Sample:
     # kvis: ViscosityList = field(default_factory=ViscosityList)
     # dvis: ViscosityList = field(default_factory=ViscosityList)
 
+    CCME: CCME = None
+
     miscellaneous: CompoundList = field(default_factory=CompoundList)
 
     # Assorted:
