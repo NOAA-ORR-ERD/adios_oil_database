@@ -4,6 +4,7 @@ Tools for helping make our data models.
 So far: making dataclasses read/writable as JSON
 """
 
+
 def something(val):
     '''
         much like python's "Truthy" and Falsey", but we want some values
@@ -53,6 +54,11 @@ def _from_py_json(cls, py_json):
             except AttributeError:
                 # it's not, so we just use the value
                 arg_dict[fieldname] = py_json[fieldname]
+            except TypeError:
+                print('TypeError in {}._from_py_json(): field: {}'
+                      .format(cls.__name__, fieldname))
+                raise
+
     obj = cls(**arg_dict)
     return obj
 

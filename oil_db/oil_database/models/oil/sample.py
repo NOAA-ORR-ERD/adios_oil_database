@@ -13,7 +13,7 @@ from .values import (UnittedValue,
                      ViscosityList,
                      DistCutsList)
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 
 
 @dataclass_to_json
@@ -66,6 +66,17 @@ class Sample:
                 self.short_name = 'Fresh Oil'
             else:
                 self.short_name = '{}...'.format(self.name[:12])
+
+    @classmethod
+    def factory(cls, **kwargs):
+        # this factory method is here mainly so we can ignore extra keyword
+        # arguments.  dataclasses don't do this natively, and overloading
+        # the __init__() is problematic.
+        class_fields = {f.name for f in fields(cls)}
+
+        return cls(**{k: v
+                      for k, v in kwargs.items()
+                      if k in class_fields})
 
 
 class SampleList(JSON_List):

@@ -15,7 +15,13 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    MassFractionUnit)
 
 from oil_database.models.oil.oil import Oil
+from oil_database.models.oil.sample import Sample, SampleList
+from oil_database.models.oil.values import (UnittedValue,
+                                            Density, DensityList,
+                                            Viscosity, ViscosityList,
+                                            DistCut, DistCutsList)
 
+import pdb
 from pprint import pprint
 
 custom_slugify = Slugify(to_lower=True, separator='_')
@@ -56,12 +62,144 @@ class EnvCanadaRecordMapper(object):
         self._labels = None
 
     def py_json(self):
-        rec = Oil(**self.record.dict())
+        samples = [EnvCanadaSampleMapper.factory(s, w)
+                   for s, w
+                   in zip(self.record.samples, self.record.weathering)]
+
+        rec = self.record.dict()
+        rec['samples'] = SampleList([Sample.factory(**s.dict())
+                                     for s in samples])
+
+        rec['_id'] = rec['oil_id']
+
+        rec = Oil(**rec)
 
         return rec.py_json()
 
 
-class EnvCanadaAttributeMapper(object):
+class EnvCanadaSampleMapper(object):
+    def __init__(self, parser, sample_id):
+        self.parser = parser
+        self.generate_sample_id_attrs(sample_id)
+
+    @classmethod
+    def factory(cls, parser, sample_id):
+        return cls(parser, sample_id)
+
+    def generate_sample_id_attrs(self, sample_id):
+        if sample_id == 0:
+            self.name = 'Fresh Oil Sample'
+            self.short_name = 'Fresh Oil'
+            self.fraction_weathered = sample_id
+            self.boiling_point_range = None
+        elif isinstance(sample_id, str):
+            self.name = sample_id
+            self.short_name = '{}...'.format(sample_id[:12])
+            self.fraction_weathered = None
+            self.boiling_point_range = None
+        elif isinstance(sample_id, Number):
+            # we will assume this is a simple fractional weathered amount
+            self.name = '{:.4g}% Weathered'.format(sample_id * 100)
+            self.short_name = '{:.4g}% Weathered'.format(sample_id * 100)
+            self.fraction_weathered = sample_id
+            self.boiling_point_range = None
+        else:
+            logger.warn("Can't generate IDs for sample: ", sample_id)
+
+        return self
+
+    def dict(self):
+        rec = self.parser.dict()
+        for attr in ('name', 'short_name',
+                     'fraction_weathered',
+                     'boiling_point_range',
+                     'densities',
+                     'dvis',
+                     'cuts'):
+            rec[attr] = getattr(self, attr)
+
+        return rec
+
+    @property
+    def densities(self):
+        ret = DensityList()
+
+        for item in (('density_0_c', 0.0, 1, 1),
+                     ('density_5_c', 5.0, 1, 1),
+                     ('density_15_c', 15.0, 0, 0)):
+            rho_lbl, ref_temp, std_idx, repl_idx = item
+
+            rho = self.parser.densities[rho_lbl]
+            std_dev = self.parser.densities['standard_deviation'][std_idx]
+            replicates = self.parser.densities['replicates'][repl_idx]
+
+            ret.append(Density(density=UnittedValue(rho, unit="g/mL"),
+                               ref_temp=UnittedValue(ref_temp, unit="C"),
+                               standard_deviation=std_dev,
+                               replicates=replicates))
+
+        return ret
+
+    @property
+    def dvis(self):
+        ret = ViscosityList()
+
+        for item in (('viscosity_0_c', 0.0, 1, 1),
+                     ('viscosity_5_c', 5.0, 1, 1),
+                     ('viscosity_15_c', 15.0, 0, 0)):
+            mu_lbl, ref_temp, std_idx, repl_idx = item
+
+            mu = self.parser.dvis[mu_lbl]
+            std_dev = self.parser.dvis['standard_deviation'][std_idx]
+            replicates = self.parser.dvis['replicates'][repl_idx]
+
+            ret.append(Viscosity(UnittedValue(mu, unit="mPa.s"),
+                                 UnittedValue(ref_temp, unit="C"),
+                                 standard_deviation=std_dev,
+                                 replicates=replicates))
+
+        return ret
+
+    @property
+    def cuts(self):
+        ret = DistCutsList()
+
+        for frac in list(range(5, 101, 5)) + ['initial_boiling_point', 'fbp']:
+            if frac == 100:
+                frac_lbl = self.parser.slugify('1')
+            elif isinstance(frac, Number):
+                frac_lbl = self.parser.slugify(f'{frac / 100.0}')
+            else:
+                frac_lbl = frac
+
+            if frac == 'initial_boiling_point':
+                frac = 0.0
+            elif frac == 'fbp':
+                # This should probably not be used because based on the
+                # table, fbp is somewhere between 95% and 100%, but we don't
+                # know exactly where.
+                frac = 97.5
+
+            ref_temp = self.parser.boiling_point_distribution[frac_lbl]
+
+            if ref_temp is not None:
+                ret.append(DistCut(UnittedValue(frac, unit="%"),
+                                   UnittedValue(ref_temp, unit="C")))
+
+        return ret
+
+
+
+
+
+
+
+
+
+
+
+
+class EnvCanadaAttributeMapperOld(object):
     '''
         A translation/conversion layer for the Environment Canada imported
         record object.

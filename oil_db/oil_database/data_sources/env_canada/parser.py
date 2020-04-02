@@ -188,7 +188,31 @@ def parse_time(func):
     return wrapper
 
 
-class EnvCanadaRecordParser(object):
+class ParserBase(object):
+    def slugify(self, label):
+        '''
+            Generate a string that is suitable for use as an object attribute.
+            - The strings will be snake-case, all lowercase words separated
+              by underscores.
+            - They will not start with a numeric digit.  If the original label
+              starts with a digit, the slug will be prepended with an
+              underscore ('_').
+
+            Note: Some unicode characters are not intuitive.  Specifically,
+                  In German orthography, the grapheme ß, called Eszett or
+                  scharfes S (Sharp S).  It looks sorta like a capital B to
+                  English readers, but converting it to 'ss' is not completely
+                  inappropriate.
+        '''
+        if label is None:
+            return label
+
+        prefix = '_' if label[0].isdigit() else ''
+
+        return prefix + custom_slugify(label)
+
+
+class EnvCanadaRecordParser(ParserBase):
     '''
         A record class for the Environment Canada oil spreadsheet.  This is
         intended to be used with a set of data representing a single record
@@ -216,38 +240,11 @@ class EnvCanadaRecordParser(object):
         self._propagate_merged_cells()
         self.file_props = file_props
 
-    def slugify(self, label):
-        '''
-            Generate a string that is suitable for use as an object attribute.
-            - The strings will be snake-case, all lowercase words separated
-              by underscores.
-            - They will not start with a numeric digit.  If the original label
-              starts with a digit, the slug will be prepended with an
-              underscore ('_').
-
-            Note: Some unicode characters are not intuitive.  Specifically,
-                  In German orthography, the grapheme ß, called Eszett or
-                  scharfes S (Sharp S).  It looks sorta like a capital B to
-                  English readers, but converting it to 'ss' is not completely
-                  inappropriate.
-        '''
-        if label is None:
-            return label
-
-        prefix = '_' if label[0].isdigit() else ''
-
-        return prefix + custom_slugify(label)
-
     def _slugify_keys(self, obj):
         '''
             Generate a structure like the incoming data, but with keys that
             have been 'slugified', which is to say turned into a string that
             is suitable for use as an object attribute.
-            - The strings will be snake-case, all lowercase words separated
-              by underscores.
-            - They will not start with a numeric digit.  If the original label
-              starts with a digit, the slug will be prepended with an
-              underscore ('_').
         '''
 
         if isinstance(obj, (tuple, list, set, frozenset)):
@@ -516,7 +513,7 @@ class EnvCanadaRecordParser(object):
         return ret
 
 
-class EnvCanadaSampleParser(object):
+class EnvCanadaSampleParser(ParserBase):
     '''
         A sample class for the Environment Canada oil spreadsheet.  This is
         intended to be used with a set of data representing a single subsample
@@ -582,6 +579,14 @@ class EnvCanadaSampleParser(object):
         for p in props:
             yield p, getattr(self, p)
 
+    def dict(self):
+        attrs = set(self.attr_map.keys())
+
+        [attrs.add(p) for p in dir(self.__class__)
+         if isinstance(getattr(self.__class__, p), property)]
+
+        return dict([(a, getattr(self, a)) for a in attrs])
+
     def deep_get(self, attr_path, default=None):
         if isinstance(attr_path, str):
             attr_path = attr_path.split('.')
@@ -597,7 +602,13 @@ class EnvCanadaSampleParser(object):
             return default
 
     def __getattr__(self, name):
-        return self.values.get(self.attr_map[name])
+        try:
+            ret = self.values.get(self.attr_map[name])
+        except Exception:
+            logger.info('EnvCanadaSampleParser.{} not found'.format(name))
+            raise
+
+        return ret
 
     @property
     def api(self):
