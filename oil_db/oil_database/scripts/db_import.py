@@ -28,8 +28,9 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
 from oil_database.db_init.labels import link_oil_to_labels
 from oil_database.models.oil.validation.validate import validate
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+import pdb
+
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -245,7 +246,7 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
             try:
                 oil_obj = mapper_cls(parser_cls(*record_data))
 
-                link_oil_to_labels(oil_obj)
+                #link_oil_to_labels(oil_obj)
 
                 if hasattr(oil_obj, 'py_json'):
                     oil_pyjson = oil_obj.py_json()

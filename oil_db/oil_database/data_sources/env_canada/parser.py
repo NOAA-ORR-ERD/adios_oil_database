@@ -254,8 +254,6 @@ class EnvCanadaRecordParser(object):
             return [self._slugify_keys(v)
                     for v in obj]
         elif isinstance(obj, dict):
-            logger.info(obj)
-
             return dict([(label_map.get(self.slugify(k), self.slugify(k)),
                           self._slugify_keys(v))
                         for k, v in obj.items()])
@@ -355,20 +353,6 @@ class EnvCanadaRecordParser(object):
 
         for cat, attr, other_cat in copy_to:
             self.values[other_cat][attr] = self.values[cat][attr]
-
-    def get_interface_properties(self):
-        '''
-            These are all the property names that define the data in an
-            Environment Canada record.
-            Our source data cannot be directly mapped to our object dict, so
-            we don't directly map any data items.  We will simply roll up
-            all the defined properties.
-        '''
-        props = set([p for p in dir(self.__class__)
-                     if isinstance(getattr(self.__class__, p), property)])
-
-        for p in props:
-            yield p, getattr(self, p)
 
     @property
     @join_with(' ')
@@ -513,6 +497,23 @@ class EnvCanadaRecordParser(object):
             props_i['weathering'] = w
 
             yield EnvCanadaSampleParser(props_i)
+
+    def dict(self):
+        ret = {}
+
+        for attr in ('name',
+                     'oil_id',
+                     'location',
+                     'reference',
+                     'reference_date',
+                     'sample_date',
+                     'comments',
+                     'product_type'):
+            ret[attr] = getattr(self, attr)
+
+        ret['samples'] = list(self.samples)
+
+        return ret
 
 
 class EnvCanadaSampleParser(object):

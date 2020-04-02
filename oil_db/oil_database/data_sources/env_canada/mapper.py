@@ -14,6 +14,8 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    AdhesionUnit,
                                                    MassFractionUnit)
 
+from oil_database.models.oil.oil import Oil
+
 from pprint import pprint
 
 custom_slugify = Slugify(to_lower=True, separator='_')
@@ -53,10 +55,10 @@ class EnvCanadaRecordMapper(object):
         self._status = None
         self._labels = None
 
-    def dict(self):
-        rec = {}
+    def py_json(self):
+        rec = Oil(**self.record.dict())
 
-        return rec
+        return rec.py_json()
 
 
 class EnvCanadaAttributeMapper(object):
