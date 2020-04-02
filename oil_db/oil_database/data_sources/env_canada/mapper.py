@@ -164,6 +164,7 @@ class EnvCanadaSampleMapper(object):
     def cuts(self):
         ret = DistCutsList()
 
+        # First the boiling point distribution data (if present)
         for frac in list(range(5, 101, 5)) + ['initial_boiling_point', 'fbp']:
             if frac == 100:
                 frac_lbl = self.parser.slugify('1')
@@ -176,8 +177,8 @@ class EnvCanadaSampleMapper(object):
                 frac = 0.0
             elif frac == 'fbp':
                 # This should probably not be used because based on the
-                # table, fbp is somewhere between 95% and 100%, but we don't
-                # know exactly where.
+                # data in the spreadsheet, fbp is somewhere between 95% and
+                # 100%, but we don't know exactly where.
                 frac = 97.5
 
             ref_temp = self.parser.boiling_point_distribution[frac_lbl]
@@ -185,6 +186,18 @@ class EnvCanadaSampleMapper(object):
             if ref_temp is not None:
                 ret.append(DistCut(UnittedValue(frac, unit="%"),
                                    UnittedValue(ref_temp, unit="C")))
+
+        # Then the cumulative weight fraction (if present)
+        for ref_temp in list(range(40, 201, 20)) + list(range(250, 701, 50)):
+            temp_lbl = self.parser.slugify(str(ref_temp))
+            frac = self.parser.boiling_point_cumulative_fraction[temp_lbl]
+
+            if frac is not None:
+                ret.append(DistCut(UnittedValue(frac, unit="%"),
+                                   UnittedValue(ref_temp, unit="C")))
+
+        # There is a single method field associated with the cuts.
+        # Do we do anything with it?
 
         return ret
 
