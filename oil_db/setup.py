@@ -137,9 +137,9 @@ setup(name=pkg_name,
                                         ('oil_db_import = '
                                          'oil_database.scripts.db_import'
                                          ':import_db_cmd'),
-                                        ('export_ec = '
-                                         'oil_database.scripts.export_to_csv'
-                                         ':export_to_csv_cmd'),
+                                        ('oil_query = '
+                                         'oil_database.scripts.oil_query'
+                                         ':oil_query_cmd'),
                                         ],
                     },
       zip_safe=False,
