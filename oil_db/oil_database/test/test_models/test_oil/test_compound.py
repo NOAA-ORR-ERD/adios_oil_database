@@ -107,6 +107,20 @@ def test_Comopund_round_trip():
     assert c_list2 == c_list
 
 
+def test_Compound_sparse():
+    comp = Compound(name="n-C12 to n-C16",
+                    method="ESTS 2002a",
+                    measurement=MassFraction(value=38,
+                                             unit='mg/g'),
+                    )
+
+    assert comp.groups == []
+    py_json = comp.py_json()
+
+    pprint(py_json)
+    assert py_json['method'] == "ESTS 2002a"
+    assert 'groups' not in py_json
+
 
 
 

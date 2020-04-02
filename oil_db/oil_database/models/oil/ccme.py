@@ -7,11 +7,9 @@ CCME is kind of a special case, so this nails it down
 from ..common.utilities import (dataclass_to_json,
                                 JSON_List,
                                 )
-from ..common.validators import (EnumValidator,
-                                 )
 
-from .validation.warnings import WARNINGS
-from .validation.errors import ERRORS
+from .measurement import MassFraction
+from .compound import CompoundList
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -33,9 +31,11 @@ class CCME:
 
     total_GC_TPH: MassFraction = None
 
-    saturates:
-    aromatics:
-    GC_TPH:
+
+    saturates: CompoundList = field(default_factory=CompoundList)
+    aromatics: CompoundList = field(default_factory=CompoundList)
+    GC_TPH: CompoundList = field(default_factory=CompoundList)
+
 
 
 
