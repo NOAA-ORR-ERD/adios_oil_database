@@ -17,11 +17,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Dict
 
+
 @dataclass_to_json
 @dataclass
 class Oil:
     # metadata:
     name: str  # only required field
+    _id: str = ""
     oil_id: str = ""
     location: str = ""
     reference: str = ""
@@ -45,7 +47,3 @@ class Oil:
         """
         if self.name == "":
             raise TypeError("Name must be a non-empty string")
-
-
-
-

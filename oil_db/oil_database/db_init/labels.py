@@ -1,21 +1,18 @@
 '''
-    This is where we handle the initialization of the oil categories.
+    This is where we handle the initialization of the oil labels.
 
-    Basically, we have a number of oil categories arranged in a tree
-    structure.  This will make it possible to create an expandable and
-    collapsible way for users to find oils by the general 'type' of oil
-    they are looking for, starting from very general types and navigating
-    to more specific types.
+    Basically, we have a number of oil labels which will make it possible
+    for users to find oils by the general 'type' of oil they are looking for.
 
     So we would like each oil to be linked to one or more of these
-    categories.  For most of the oils we should be able to do this using
+    labels.  For most of the oils we should be able to do this using
     generalized methods.  But there will very likely be some records
     we just have to link in a hard-coded way.
 
     The selection criteria for assigning refined products to different
-    categories on the oil selection screen, depends upon the API (density)
-    and the viscosity at a given temperature, usually at 38 C(100F).
-    The criteria follows closely, but not identically, to the ASTM standards
+    labels depends upon the API (density) and the viscosity at a given
+    temperature, usually at 38 C(100F).  The criteria follows closely,
+    but not identically, to the ASTM standards
 '''
 import logging
 
@@ -24,13 +21,11 @@ from oil_database.data_sources.oil import OilEstimation
 logger = logging.getLogger(__name__)
 
 
-def load_categories(db):
+def load_labels(db):
     '''
-        It has been decided that our categories will operate in a similar
-        manner to a simple tagging system.
-        So there are no longer any parent/child relationships.  This will
-        simply be a collection of tag names
-
+        It has been decided that our labels will operate in a similar
+        manner to a simple tagging system.  So this will simply be a
+        collection of tag names.
     '''
     for name in ('Crude',
                  'Refined',
@@ -51,23 +46,22 @@ def load_categories(db):
                  'Bunker',
                  'Group V',
                  'Other'):
-        db.category.insert_one({'name': name})
+        db.label.insert_one({'name': name})
 
 
-def print_all_categories(db):
-    logger.info('Categories in the database...')
+def print_all_labels(db):
+    logger.info('Labels in the database...')
 
-    for category in db.category.find({}):
-        logger.info('\t{}'.format(category['name']))
+    for label in db.label.find({}):
+        logger.info('\t{}'.format(label['name']))
 
 
-def link_oil_to_categories(oil):
+def link_oil_to_labels(oil):
     '''
         Here, we have a single oil and we would like to link it to one or more
-        categories based on its properties.
-        This is similar to the batch processing function above.
+        labels based on its properties.
     '''
-    oil.categories = []
+    oil.labels = []
     sample = OilEstimation(oil).get_sample()
 
     if sample is None:
@@ -76,55 +70,45 @@ def link_oil_to_categories(oil):
         return
 
     if is_crude_light(sample):
-        # add crude->light
-        categories = ['Crude', 'Light']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Crude', 'Light'])
 
     if is_crude_medium(sample):
-        categories = ['Crude', 'Medium']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Crude', 'Medium'])
 
     if is_crude_heavy(sample):
-        categories = ['Crude', 'Heavy']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Crude', 'Heavy'])
 
     if is_refined_fuel_oil_1(sample):
-        categories = ['Refined',
-                      'Light',
-                      'Fuel Oil 1',
-                      'Gasoline',
-                      'Kerosene']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Refined',
+                           'Light',
+                           'Fuel Oil 1',
+                           'Gasoline',
+                           'Kerosene'])
 
     if is_refined_fuel_oil_2(sample):
-        categories = ['Refined',
-                      'Fuel Oil 2',
-                      'Diesel',
-                      'Heating Oil']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Refined',
+                           'Fuel Oil 2',
+                           'Diesel',
+                           'Heating Oil'])
 
     if is_refined_ifo(sample):
-        categories = ['Refined',
-                      'Intermediate',
-                      'Fuel Oil']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Refined',
+                           'Intermediate',
+                           'Fuel Oil'])
 
     if is_refined_fuel_oil_6(sample):
-        categories = ['Refined',
-                      'Heavy',
-                      'Fuel Oil 6',
-                      'HFO',
-                      'Bunker',
-                      'Group V']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Refined',
+                           'Heavy',
+                           'Fuel Oil 6',
+                           'HFO',
+                           'Bunker',
+                           'Group V'])
 
     if is_generic(oil):
-        categories = ['Other', 'Generic']
-        oil.categories.extend(categories)
+        oil.labels.extend(['Other', 'Generic'])
 
-    if len(oil.categories) == 0:
-        categories = ['Other']
-        oil.categories.extend(categories)
+    if len(oil.labels) == 0:
+        oil.labels.extend(['Other'])
 
 
 def is_crude(oil):

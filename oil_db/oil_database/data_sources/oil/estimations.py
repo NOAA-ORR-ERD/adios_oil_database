@@ -11,7 +11,8 @@ from scipy.optimize import curve_fit
 from oil_database.util import estimations as est
 from oil_database.util.json import ObjFromDict
 
-from oil_database.models.common.float_unit import (TemperatureUnit,
+from oil_database.models.common.float_unit import (UnitClassLU,
+                                                   TemperatureUnit,
                                                    DensityUnit,
                                                    DynamicViscosityUnit,
                                                    KinematicViscosityUnit)
@@ -60,6 +61,9 @@ class OilEstimation(object):
         if hasattr(imported_rec, 'dict'):
             # we are dealing with a mapper object, convert to data object
             self.record = imported_rec.dict()
+        elif hasattr(imported_rec, 'py_json'):
+            # we are dealing with a mapper object, convert to data object
+            self.record = imported_rec.py_json()
         else:
             self.record = imported_rec
 
@@ -86,14 +90,12 @@ class OilEstimation(object):
         if isinstance(data, (tuple, list, set, frozenset)):
             return type(data)([self._add_float_units(v) for v in data])
         if (isinstance(data, dict) and
-                '_cls' in data and
+                'unit_type' in data and
                 any([(k in data)
                      for k in ('value', 'max_value', 'min_value')])):
-            # create a FloatUnit type from our struct
-            class_name = data['_cls']
-            del data['_cls']
+            py_class = UnitClassLU[data['unit_type']]
+            data.pop('unit_type', None)
 
-            py_class = self.py_class_from_name(class_name)
             return py_class(**data)
         elif isinstance(data, dict):
             return dict([(k, self._add_float_units(v))

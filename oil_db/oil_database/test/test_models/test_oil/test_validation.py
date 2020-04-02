@@ -169,14 +169,6 @@ def test_no_densities(big_record):
     assert snippet_not_in_oil_status("W006:", oil)
 
 
-def test_no_densities(big_record):
-    oil = big_record
-    oil['samples'][0]['densities'] = []
-    validate(oil)
-
-    assert snippet_in_oil_status("W006:", oil)
-
-
 def test_distillation_cuts(big_record):
     oil = big_record
 

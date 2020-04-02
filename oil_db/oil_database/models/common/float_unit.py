@@ -58,38 +58,40 @@ class FloatUnit(object, metaclass=UnitMeta):
         from the unit data table inside the PyNUCOS package.
     '''
     unit: str
-    from_unit: str = None
-
+    convert_from: str = None
     value: float = None
     min_value: float = None
     max_value: float = None
+    standard_deviation: float = None
+    replicates: float = None
 
     def __post_init__(self):
         if hasattr(self.unit, 'decode'):
             self.unit = self.unit.decode('utf-8')
 
         if self.unit not in self.__class__.unit_choices:
-            raise ValueError('{}: Invalid unit passed in {}'
+            raise ValueError('{}: Invalid unit passed in ({})'
                              .format(self.__class__.__name__, repr(self.unit)))
 
-        if self.from_unit is not None:
+        if self.convert_from is not None:
             self._convert_value_arg()
 
     def _convert_value_arg(self):
-        if hasattr(self.from_unit, 'decode'):
-            # ensure we are working with a unicode from_unit value
-            self.from_unit = self.from_unit.decode('utf-8')
+        if hasattr(self.convert_from, 'decode'):
+            # ensure we are working with a unicode convert_from value
+            self.convert_from = self.convert_from.decode('utf-8')
 
-        if not (self.from_unit in self.__class__.unit_choices and
+        if not (self.convert_from in self.__class__.unit_choices and
                 self.unit in self.__class__.unit_choices):
             raise ValueError('Invalid conversion from {} to {}'
-                             .format(self.from_unit, self.unit))
+                             .format(self.convert_from, self.unit))
 
         for a, v in zip(('value', 'min_value', 'max_value'),
                         (self.value, self.min_value, self.max_value)):
             if v is not None:
                 setattr(self, a,
-                        convert(self.unit_type, self.from_unit, self.unit, v))
+                        convert(self.unit_type,
+                                self.convert_from, self.unit, v))
 
     def to_unit(self, new_unit):
         '''
@@ -156,12 +158,14 @@ class FloatUnit(object, metaclass=UnitMeta):
         return '<{}({})>'.format(self.__class__.__name__, self.__str__())
 
     def dict(self):
-        ret = {'_cls': '{}.{}'.format(self.__class__.__module__,
-                                      self.__class__.__name__)}
+        ret = {}
         for k in self.__dataclass_fields__.keys():
             value = getattr(self, k)
             if value is not None:
                 ret[k] = value
+
+        if self.unit_type is not None:
+            ret['unit_type'] = self.unit_type
 
         return ret
 
@@ -169,47 +173,7 @@ class FloatUnit(object, metaclass=UnitMeta):
         return json.dumps(self.dict())
 
 
-class AdhesionUnit(FloatUnit):
-    pass
-
-
-class AngularMeasureUnit(FloatUnit):
-    pass
-
-
-class AreaUnit(FloatUnit):
-    pass
-
-
-class ConcentrationInWaterUnit(FloatUnit):
-    pass
-
-
-class DensityUnit(FloatUnit):
-    pass
-
-
-class DischargeUnit(FloatUnit):
-    pass
-
-
-class DynamicViscosityUnit(FloatUnit):
-    pass
-
-
-class InterfacialTensionUnit(FloatUnit):
-    pass
-
-
-class KinematicViscosityUnit(FloatUnit):
-    pass
-
-
 class LengthUnit(FloatUnit):
-    pass
-
-
-class MassUnit(FloatUnit):
     pass
 
 
@@ -217,7 +181,19 @@ class OilConcentrationUnit(FloatUnit):
     pass
 
 
+class AreaUnit(FloatUnit):
+    pass
+
+
+class VolumeUnit(FloatUnit):
+    pass
+
+
 class TemperatureUnit(FloatUnit):
+    pass
+
+
+class MassUnit(FloatUnit):
     pass
 
 
@@ -229,5 +205,55 @@ class VelocityUnit(FloatUnit):
     pass
 
 
-class VolumeUnit(FloatUnit):
+class DischargeUnit(FloatUnit):
     pass
+
+
+class MassDischargeUnit(FloatUnit):
+    pass
+
+
+class DensityUnit(FloatUnit):
+    pass
+
+
+class KinematicViscosityUnit(FloatUnit):
+    pass
+
+
+class DynamicViscosityUnit(FloatUnit):
+    pass
+
+
+class InterfacialTensionUnit(FloatUnit):
+    pass
+
+
+class AdhesionUnit(FloatUnit):
+    pass
+
+
+class ConcentrationInWaterUnit(FloatUnit):
+    pass
+
+
+class ConcentrationUnit(FloatUnit):
+    pass
+
+
+class MassFractionUnit(FloatUnit):
+    pass
+
+
+class VolumeFractionUnit(FloatUnit):
+    pass
+
+
+class AngularMeasureUnit(FloatUnit):
+    pass
+
+
+# lookup table to find a unit class from a unit_type string
+UnitClassLU = dict([(camelcase_to_space(k[:-4]), v)
+                    for k, v in vars().items()
+                    if k.endswith('Unit')])

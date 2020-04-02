@@ -3,19 +3,12 @@
 '''
 import pytest
 
-np = docutils = pytest.importorskip("numpy")
-
-# try:
-#     import numpy as np
-# except ImportError:
-#     # numpy not there, we can't run these tests
-#     pytest.skip("skipping estimation tests: numpy not there",
-#                 allow_module_level=True)
-
 from oil_database.util.json import ObjFromDict
 from oil_database.data_sources.oil.estimations import (OilEstimation,
                                                        OilSampleEstimation)
 from oil_database.models.common.float_unit import TemperatureUnit
+
+np = docutils = pytest.importorskip("numpy")
 
 
 class TestOilEstimation():
@@ -52,8 +45,7 @@ class TestOilEstimation():
         'oil',
         [{'name': 'Oil Name',
           'temperature': {'value': 293.0, 'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'
+                          'unit_type': 'Temperature'
                           }
           },
          ]
@@ -162,54 +154,42 @@ class TestOilEstimationTemperature():
          pytest.param([{}], None, [],
                       marks=pytest.mark.raises(exception=AttributeError)),
          ([{'ref_temp': {'value': 10.0, 'unit': 'C',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}}
+                         'unit_type': 'Temperature'}}
            ],
           20.0, [{'ref_temp': {'value': 10.0, 'unit': 'C',
-                               '_cls': 'oil_database.models.common.float_unit'
-                                       '.TemperatureUnit'}}]
+                               'unit_type': 'Temperature'}}]
           ),
          ([
            {'ref_temp': {'value': 280.0, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            {'ref_temp': {'value': 290.0, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            ],
           285.0, [{'ref_temp': {'value': 280.0, 'unit': 'K',
-                                '_cls': 'oil_database.models.common.float_unit'
-                                        '.TemperatureUnit'}}]
+                                'unit_type': 'Temperature'}}]
           ),
          ([
            {'ref_temp': {'value': 280.0, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            {'ref_temp': {'value': 290.0, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            ],
           285.01, [{'ref_temp': {
                         'value': 290.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}]
+                        'unit_type': 'Temperature'}}]
           ),
          ([
            {'ref_temp': {'value': 280.0, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            {'ref_temp': {'value': 290.0, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            ],
           [285.0, 285.01],
           [
            [{'ref_temp': {'value': 280.0, 'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}}],
+                          'unit_type': 'Temperature'}}],
            [{'ref_temp': {'value': 290.0, 'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}}],
+                          'unit_type': 'Temperature'}}],
            ]
           ),
          ]
@@ -255,95 +235,78 @@ class TestOilEstimationTemperature():
                       marks=pytest.mark.raises(exception=AttributeError)),
          ([{'ref_temp': {'value': 10.0,
                          'unit': 'C',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}}
+                         'unit_type': 'Temperature'}}
            ],
           20.0, [[
                   {'ref_temp': {'value': 10.0,
                                 'unit': 'C',
-                                '_cls': 'oil_database.models.common.float_unit'
-                                        '.TemperatureUnit'}},
+                                'unit_type': 'Temperature'}},
                   {'ref_temp': {'value': 10.0,
                                 'unit': 'C',
-                                '_cls': 'oil_database.models.common.float_unit'
-                                        '.TemperatureUnit'}},
+                                'unit_type': 'Temperature'}},
                  ]]
           ),
          ([
            {'ref_temp': {'value': 280.0,
                          'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            {'ref_temp': {'value': 290.0,
                          'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            ],
           285.0,
           [[
             {'ref_temp': {'value': 280.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             {'ref_temp': {'value': 290.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             ]]
           ),
          ([
            {'ref_temp': {'value': 280.0,
                          'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            {'ref_temp': {'value': 290.0,
                          'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            ],
           285.01,
           [[
             {'ref_temp': {'value': 280.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             {'ref_temp': {'value': 290.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             ]]
           ),
          ([
            {'ref_temp': {'value': 280.0,
                          'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            {'ref_temp': {'value': 290.0,
                          'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}},
+                         'unit_type': 'Temperature'}},
            ],
           [285.0, 285.01],
           [
            [
             {'ref_temp': {'value': 280.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             {'ref_temp': {'value': 290.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             ],
            [
             {'ref_temp': {'value': 280.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             {'ref_temp': {'value': 290.0,
                           'unit': 'K',
-                          '_cls': 'oil_database.models.common.float_unit'
-                                  '.TemperatureUnit'}},
+                          'unit_type': 'Temperature'}},
             ],
            ]
           ),
@@ -388,12 +351,10 @@ class TestOilEstimationPointTemperatures():
                'dvis': [
                    {'viscosity': {
                         'value': 0.023, 'unit': 'kg/(m s)',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.DynamicViscosityUnit'},
+                        'unit_type': 'Dynamic Viscosity'},
                     'ref_temp': {
                         'value': 288.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
@@ -405,8 +366,7 @@ class TestOilEstimationPointTemperatures():
                'pour_points': [{
                    'ref_temp': {'value': 265.0,
                                 'unit': 'K',
-                                '_cls': 'oil_database.models.common.float_unit'
-                                        '.TemperatureUnit'}
+                                'unit_type': 'Temperature'}
                }],
                'kvis': None,
            }]
@@ -419,22 +379,18 @@ class TestOilEstimationPointTemperatures():
                'dvis': [
                    {'viscosity': {
                         'value': 0.023, 'unit': 'kg/(m s)',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.DynamicViscosityUnit'},
+                        'unit_type': 'Dynamic Viscosity'},
                     'ref_temp': {
                         'value': 288.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
                'kvis': [
                    {'viscosity': {
                         'value': 0.0001333, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 311.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
@@ -446,12 +402,10 @@ class TestOilEstimationPointTemperatures():
                'kvis': [
                    {'viscosity': {
                         'value': 0.0001333, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 311.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
@@ -464,22 +418,18 @@ class TestOilEstimationPointTemperatures():
                'dvis': [
                    {'viscosity': {
                         'value': 0.3851, 'unit': 'kg/(m s)',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.DynamicViscosityUnit'},
+                        'unit_type': 'Dynamic Viscosity'},
                     'ref_temp': {
                         'value': 288.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
                'densities': [
                    {'density': {
                        'value': 800.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'},
+                        'unit_type': 'Temperature'},
                     }
                ]
            }]
@@ -527,52 +477,42 @@ class TestOilEstimationPointTemperatures():
                'cuts': [
                    {'fraction': {
                        'value': 0.35, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 531.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.4, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 543.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.45, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 559.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
                'sara_total_fractions': [
                    {'fraction': {
                        'value': 0.895, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'sara_type': 'Saturates'},
                    {'fraction': {
                        'value': 0.093, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'sara_type': 'Aromatics'},
                    {'fraction': {
                        'value': 0.0, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'sara_type': 'Resins'},
                    {'fraction': {
                        'value': 0.01, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'sara_type': 'Asphaltenes'}
                ],
 
@@ -595,8 +535,7 @@ class TestOilEstimationPointTemperatures():
                'flash_points': [
                    {'ref_temp': {
                        'value': 273.15, 'unit': 'K',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.TemperatureUnit'}
+                       'unit_type': 'Temperature'}
                     }
                ],
            }]
@@ -663,21 +602,17 @@ class TestOilEstimationDensities():
                'densities': [
                    {'density': {
                        'value': 894.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'density': {
                        'value': 89.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     }
                ],
            }]
@@ -733,21 +668,17 @@ class TestOilEstimationDensities():
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     }
                ],
            }]
@@ -783,11 +714,9 @@ class TestOilEstimationDensities():
            },
           [
            {'density': {'value': 1000.0, 'unit': 'kg/m^3',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.DensityUnit'},
+                        'unit_type': 'Density'},
             'ref_temp': {'value': 288.15, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}
+                         'unit_type': 'Temperature'}
             }
            ]),
          ({'name': 'Oil Name',
@@ -803,11 +732,9 @@ class TestOilEstimationDensities():
            },
           [
            {'density': {'value': 1000.0, 'unit': 'kg/m^3',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.DensityUnit'},
+                        'unit_type': 'Density'},
             'ref_temp': {'value': 288.15, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}
+                         'unit_type': 'Temperature'}
             }
            ]),
          ({'name': 'Oil Name',
@@ -817,39 +744,31 @@ class TestOilEstimationDensities():
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     }
                ],
            }]
            },
           [
            {'density': {'value': 994.0, 'unit': 'kg/m^3',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.DensityUnit'},
+                        'unit_type': 'Density'},
             'ref_temp': {'value': 273.15, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}
+                         'unit_type': 'Temperature'}
             },
            {'density': {'value': 1000.0, 'unit': 'kg/m^3',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.DensityUnit'},
+                        'unit_type': 'Density'},
             'ref_temp': {'value': 288.15, 'unit': 'K',
-                         '_cls': 'oil_database.models.common.float_unit'
-                                 '.TemperatureUnit'}
+                         'unit_type': 'Temperature'}
             }
            ]),
          ]
@@ -904,21 +823,17 @@ class TestOilEstimationDensities():
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     }
                ],
            }]
@@ -931,21 +846,17 @@ class TestOilEstimationDensities():
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     }
                ],
            }]
@@ -1004,21 +915,17 @@ class TestOilEstimationDensities():
                'densities': [
                    {'density': {
                        'value': 994.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     }
                ],
            }]
@@ -1056,12 +963,10 @@ class TestOilEstimationDynamicViscosities():
                'dvis': [
                    {'viscosity': {
                        'value': 0.025, 'unit': 'kg/(m s)',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DynamicViscosityUnit'},
+                       'unit_type': 'Dynamic Viscosity'},
                     'ref_temp': {
                         'value': 273.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1069,12 +974,10 @@ class TestOilEstimationDynamicViscosities():
           [
            {'viscosity': {
                'value': 0.025, 'unit': 'kg/(m s)',
-               '_cls': 'oil_database.models.common.float_unit'
-                       '.DynamicViscosityUnit'},
+               'unit_type': 'Dynamic Viscosity'},
             'ref_temp': {
                'value': 273.0, 'unit': 'K',
-               '_cls': 'oil_database.models.common.float_unit'
-                       '.TemperatureUnit'}
+               'unit_type': 'Temperature'}
             },
            ]),
          ({'name': 'Oil Name',
@@ -1084,22 +987,18 @@ class TestOilEstimationDynamicViscosities():
                'kvis': [
                    {'viscosity': {
                         'value': 0.0001333, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
                'dvis': [
                    {'viscosity': {
                        'value': 0.025, 'unit': 'kg/(m s)',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DynamicViscosityUnit'},
+                       'unit_type': 'Dynamic Viscosity'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1113,22 +1012,18 @@ class TestOilEstimationDynamicViscosities():
                'kvis': [
                    {'viscosity': {
                         'value': 0.0001333, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
                'dvis': [
                    {'viscosity': {
                        'value': 0.025, 'unit': 'kg/(m s)',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DynamicViscosityUnit'},
+                       'unit_type': 'Dynamic Viscosity'},
                     'ref_temp': {
                         'value': 273.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1136,12 +1031,10 @@ class TestOilEstimationDynamicViscosities():
           [
            {'viscosity': {
                'value': 0.025, 'unit': 'kg/(m s)',
-               '_cls': 'oil_database.models.common.float_unit'
-                       '.DynamicViscosityUnit'},
+               'unit_type': 'Dynamic Viscosity'},
             'ref_temp': {
                'value': 273.0, 'unit': 'K',
-               '_cls': 'oil_database.models.common.float_unit'
-                       '.TemperatureUnit'}
+               'unit_type': 'Temperature'}
             },
            ]),
          ]
@@ -1178,12 +1071,10 @@ class TestOilEstimationDynamicViscosities():
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1196,12 +1087,10 @@ class TestOilEstimationDynamicViscosities():
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1214,12 +1103,10 @@ class TestOilEstimationDynamicViscosities():
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1232,12 +1119,10 @@ class TestOilEstimationDynamicViscosities():
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1275,24 +1160,20 @@ class TestOilEstimationKinematicViscosities():
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
           [
            {'viscosity': {
                 'value': 1.0, 'unit': 'm^2/s',
-                '_cls': 'oil_database.models.common.float_unit'
-                        '.KinematicViscosityUnit'},
+                'unit_type': 'Kinematic Viscosity'},
             'ref_temp': {
                 'value': 273.15, 'unit': 'K',
-                '_cls': 'oil_database.models.common.float_unit'
-                        '.TemperatureUnit'}
+                'unit_type': 'Temperature'}
             },
            ]),
          ({'name': 'Oil Name',
@@ -1302,12 +1183,10 @@ class TestOilEstimationKinematicViscosities():
                'dvis': [
                    {'viscosity': {
                        'value': 1000.0, 'unit': 'kg/(m s)',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DynamicViscosityUnit'},
+                       'unit_type': 'Dynamic Viscosity'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1355,12 +1234,10 @@ class TestOilEstimationKinematicViscosities():
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
@@ -1372,12 +1249,10 @@ class TestOilEstimationKinematicViscosities():
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 273.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
@@ -1418,8 +1293,7 @@ class TestOilEstimationDistillationFractions():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1433,8 +1307,7 @@ class TestOilEstimationDistillationFractions():
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1448,14 +1321,12 @@ class TestOilEstimationDistillationFractions():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1468,23 +1339,19 @@ class TestOilEstimationDistillationFractions():
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
@@ -1524,8 +1391,7 @@ class TestOilEstimationDistillationFractions():
                    {'sara_type': 'Saturates',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1539,8 +1405,7 @@ class TestOilEstimationDistillationFractions():
                    {'sara_type': 'Aromatics',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1554,14 +1419,12 @@ class TestOilEstimationDistillationFractions():
                    {'sara_type': 'Saturates',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Aromatics',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1574,23 +1437,19 @@ class TestOilEstimationDistillationFractions():
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
                'kvis': [
                    {'viscosity': {
                         'value': 1.0, 'unit': 'm^2/s',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.KinematicViscosityUnit'},
+                        'unit_type': 'Kinematic Viscosity'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}}
+                        'unit_type': 'Temperature'}}
                ],
            }]
            },
@@ -1641,14 +1500,12 @@ class TestOilEstimationDistillationCuts():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1664,43 +1521,35 @@ class TestOilEstimationDistillationCuts():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1752,14 +1601,12 @@ class TestOilEstimationDistillationCuts():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1775,43 +1622,35 @@ class TestOilEstimationDistillationCuts():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1865,14 +1704,12 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -1890,43 +1727,35 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -1980,14 +1809,12 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -2007,43 +1834,35 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -2095,14 +1914,12 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -2120,43 +1937,35 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -2206,14 +2015,12 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -2231,43 +2038,35 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -2317,14 +2116,12 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -2341,43 +2138,35 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -2426,14 +2215,12 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ]
            }]
@@ -2450,43 +2237,35 @@ class TestOilEstimationComponentMethods():
                    {'sara_type': 'Resins',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                    {'sara_type': 'Asphaltenes',
                     'fraction': {
                         'value': 10.0, 'unit': '%',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.FloatUnit'}
+                        'unit_type': 'Float'}
                     },
                ],
                'cuts': [
                    {'fraction': {
                        'value': 0.16, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 423.6, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.48, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 738.26, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                    {'fraction': {
                        'value': 0.8, 'unit': 'fraction',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.FloatUnit'},
+                       'unit_type': 'Float'},
                     'vapor_temp': {
                         'value': 1052.92, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -2528,12 +2307,10 @@ class TestOilEstimationSurfaceTensions():
                    {"interface": "water",
                     "tension": {
                        "value": 0.0275, "unit": "N/m",
-                       "_cls": "oil_database.models.common.float_unit"
-                               ".InterfacialTensionUnit"},
+                       "unit_type": "Interfacial Tension"},
                     "ref_temp": {
                         "value": 273.0, "unit": "K",
-                        "_cls": "oil_database.models.common.float_unit"
-                                ".TemperatureUnit"}
+                        "unit_type": "Temperature"}
                     },
                ]
            }]
@@ -2554,12 +2331,10 @@ class TestOilEstimationSurfaceTensions():
                'densities': [
                    {'density': {
                        'value': 1000.0, 'unit': 'kg/m^3',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.DensityUnit'},
+                       'unit_type': 'Density'},
                     'ref_temp': {
                         'value': 288.15, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ],
            }]
@@ -2596,12 +2371,10 @@ class TestOilEstimationSurfaceTensions():
                    {'interface': 'seawater',
                     'tension': {
                        'value': 0.0275, 'unit': 'N/m',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.InterfacialTensionUnit'},
+                       'unit_type': 'Interfacial Tension'},
                     'ref_temp': {
                         'value': 273.0, 'unit': 'K',
-                        '_cls': 'oil_database.models.common.float_unit'
-                                '.TemperatureUnit'}
+                        'unit_type': 'Temperature'}
                     },
                ]
            }]
@@ -2743,8 +2516,7 @@ class TestOilEstimationMisc():
                'adhesions': [
                    {'adhesion': {
                        'value': 0.28, 'unit': 'N/m^2',
-                       '_cls': 'oil_database.models.common.float_unit'
-                               '.AdhesionUnit'}
+                       'unit_type': 'Adhesion'}
                     },
                ],
            }]
@@ -2783,8 +2555,7 @@ class TestOilEstimationMisc():
                "sulfur": [
                    {"fraction": {
                        "value": 0.0015, "unit": "fraction",
-                       "_cls": "oil_database.models.common.float_unit"
-                               ".FloatUnit"}
+                       "unit_type": "Float"}
                     }
                ],
            }]

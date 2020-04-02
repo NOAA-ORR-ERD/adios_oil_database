@@ -15,6 +15,8 @@ RUN cd oil-database/oil_db && conda install --file conda_requirements.txt
 RUN cd oil-database/oil_db && pip install -r pip_requirements.txt
 RUN cd oil-database/oil_db && python setup.py develop
 
+RUN cd oil-database/oil_db/data/exxon_assays && python ./download_exxon_assays.py
+
 RUN mongod --config /etc/mongod.conf --fork && cd oil-database/oil_db && oil_db_init
 RUN mongod --config /etc/mongod.conf --fork && cd oil-database/oil_db && oil_db_import --all
 

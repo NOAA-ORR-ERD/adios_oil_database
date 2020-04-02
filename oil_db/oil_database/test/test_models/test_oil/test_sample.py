@@ -13,8 +13,8 @@ from oil_database.models.oil.values import (Density,
 def test_sample_init():
     s = Sample()
 
-    assert s.name == "Fresh, Unweathered Oil"
-    assert s.short_name == "Fresh"
+    assert s.name == "Fresh Oil Sample"
+    assert s.short_name == "Fresh Oil"
 
 
 def test_sample_json_sparse():
@@ -42,8 +42,8 @@ def test_sample_json_full():
 
     print(py_json)
 
-    assert py_json['name'] == "Fresh, Unweathered Oil"
-    assert py_json['short_name'] == "Fresh"
+    assert py_json['name'] == "Fresh Oil Sample"
+    assert py_json['short_name'] == "Fresh Oil"
     for name in ('fraction_weathered',
                  'boiling_point_range',
                  'densities',
@@ -64,16 +64,16 @@ def test_complete_sample():
     s.boiling_point_range = None
     s.densities = DensityList(
                    [Density(standard_deviation=1.2,
-                           replicates=3,
-                           density=UnittedValue(0.8751, "kg/m^3"),
-                           ref_temp=UnittedValue(15.0, "C"),
-                           ),
-                   Density(standard_deviation=1.4,
-                           replicates=5,
-                           density=UnittedValue(0.99, "kg/m^3"),
-                           ref_temp=UnittedValue(25.0, "C"),
-                           ),
-                   ])
+                            replicates=3,
+                            density=UnittedValue(0.8751, "kg/m^3"),
+                            ref_temp=UnittedValue(15.0, "C"),
+                            ),
+                    Density(standard_deviation=1.4,
+                            replicates=5,
+                            density=UnittedValue(0.99, "kg/m^3"),
+                            ref_temp=UnittedValue(25.0, "C"),
+                            ),
+                    ])
     py_json = s.py_json(sparse=False)  # the not sparse version
 
     print(py_json)
@@ -101,5 +101,3 @@ def test_complete_sample():
 #     sl = SampleList()
 #     assert len(sl) == 1
 #     assert type(sl[0]) == Sample
-
-

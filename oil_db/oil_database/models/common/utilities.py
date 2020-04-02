@@ -4,15 +4,11 @@ Tools for helping make our data models.
 So far: making dataclasses read/writable as JSON
 """
 
-import json
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import List, Dict
-
-
 def something(val):
-    # much like python's "Truthy" and Falsey", but we want some values to not be false
-    # like zero, for instance
+    '''
+        much like python's "Truthy" and Falsey", but we want some values
+        to not be false like zero, for instance
+    '''
     return ((val == 0) or (val is not None) and val)
 
 
@@ -33,6 +29,7 @@ def _py_json(self, sparse=True):
             val = val.py_json(sparse=sparse)
         except AttributeError:
             pass
+
         if not sparse:
             json_obj[fieldname] = val
         elif something(val):
@@ -51,7 +48,8 @@ def _from_py_json(cls, py_json):
     for fieldname, fieldobj in cls.__dataclass_fields__.items():
         if fieldname in py_json:
             try:  # see if it's "one of ours"
-                arg_dict[fieldname] = fieldobj.type.from_py_json(py_json[fieldname])
+                arg_dict[fieldname] = (fieldobj.type
+                                       .from_py_json(py_json[fieldname]))
             except AttributeError:
                 # it's not, so we just use the value
                 arg_dict[fieldname] = py_json[fieldname]
@@ -81,10 +79,11 @@ def _validate(self):
 
 def __setattr__(self, name, val):
     try:
-        fieldobj = self.__dataclass_fields__[name]
+        _fieldobj = self.__dataclass_fields__[name]
     except KeyError:
         raise AttributeError(f"You can only set existing attributes: "
-                             f"{name} does not exist")
+                             f"{self.__class__.__name__}.{name} "
+                             "does not exist")
     self.__dict__[name] = val
 
     # Better not to try to convert type here
@@ -114,6 +113,7 @@ class JSON_List(list):
                 json_obj.append(item.py_json(sparse))
             except AttributeError:
                 json_obj.append(item)
+
         return json_obj
 
     @classmethod

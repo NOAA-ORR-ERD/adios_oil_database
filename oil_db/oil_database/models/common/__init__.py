@@ -1,4 +1,4 @@
 from .base_model import MongoBaseModel, PydObjectId
-from .category import Category
+from .label import Label
 from .synonym import Synonym
 from .sara import SARAFraction, SARADensity, MolecularWeight
