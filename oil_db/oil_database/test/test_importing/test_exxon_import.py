@@ -112,10 +112,13 @@ class TestExxonMapper():
 
     def test_compostion(self):
         samples = self.oil.samples
-        # print(samples[0].carbon_mass_fraction)                 85.57594139885833
-        assert samples[0].carbon_mass_fraction == UnittedValue(85.58, unit="%")
-        assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26, unit="%")
-        assert samples[4].total_acid_number == UnittedValue(0.2069, unit="mg/kg")
+        # print(samples[0].carbon_mass_fraction)  85.57594139885833
+        assert samples[0].carbon_mass_fraction == UnittedValue(85.58,
+                                                               unit="%")
+        assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26,
+                                                                 unit="%")
+        assert samples[4].total_acid_number == UnittedValue(0.2069,
+                                                            unit="mg/kg")
 
     def test_viscosity(self):
         samples = self.oil.samples
@@ -153,12 +156,11 @@ class TestExxonMapper():
     def test_reid_vp(self):
         samples = self.oil.samples
 
-        ## fixme -- is Pa the right unit?
+        # fixme -- is Pa the right unit?
         assert samples[0].reid_vapor_pressure.value == 60430.0
 
         for sample in samples[1:]:
             assert sample.reid_vapor_pressure is None
-
 
     def test_composition_ccr(self):
         samples = self.oil.samples
@@ -167,14 +169,18 @@ class TestExxonMapper():
         assert samples[1].ccr_percent is None
         assert samples[6].ccr_percent.value == 0.3624
 
+    composition_values = [
+        ("calcium_mass_fraction", (0,), (5.9,)),
+        ("hydrogen_sulfide_concentration", (), ()),
+        ("salt_content", (0,), (0.0026,)),
+        ("paraffin_volume_fraction", range(8), (35.54, 100.0, 91.91, 56.62,
+                                                42.77, 26.58, 18.99, 2.291)),
+        ("naphthene_volume_fraction", range(8), (31.4, 0.0, 8.1, 33.2,
+                                                 40.8, 47.5, 35.4, 13.4)),
+        ("aromatic_volume_fraction", range(8), (33.1, 0.0, 0.0, 10.2,
+                                                16.4, 26.0, 45.6, 84.3)),
+    ]
 
-    composition_values = [("calcium_mass_fraction", (0,), (5.9,)),
-                          ("hydrogen_sulfide_concentration", (), ()),
-                          ("salt_content", (0,), (0.0026,)),
-                          ("paraffin_volume_fraction", range(8), (35.54, 100.0, 91.91, 56.62, 42.77, 26.58, 18.99, 2.291 )),
-                          ("naphthene_volume_fraction", range(8), (31.4, 0.0, 8.1, 33.2, 40.8, 47.5, 35.4, 13.4)),
-                          ("aromatic_volume_fraction", range(8), (33.1, 0.0, 0.0, 10.2, 16.4, 26.0, 45.6, 84.3)),
-                          ]
     @pytest.mark.parametrize("attr, indexes, values", composition_values)
     def test_comp(self, attr, indexes, values):
         samples = self.oil.samples
@@ -211,13 +217,11 @@ class TestExxonMapper():
             print(cut)
         cut = samples[samp_ind].cuts[cut_index]
         assert cut.fraction.value == fraction
-        assert isclose(cut.vapor_temp.value, uc.convert("F", "C", temp_f), rel_tol=1e-4)
+        assert isclose(cut.vapor_temp.value, uc.convert("F", "C", temp_f),
+                       rel_tol=1e-4)
 
     def test_no_cuts_in_butane(self):
         assert self.oil.samples[1].cuts == []
-
-
-
 
 
 # def test_check():

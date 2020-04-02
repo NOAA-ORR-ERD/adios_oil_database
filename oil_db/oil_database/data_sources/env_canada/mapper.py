@@ -14,9 +14,49 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    AdhesionUnit,
                                                    MassFractionUnit)
 
+from pprint import pprint
+
 custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
+
+
+class EnvCanadaRecordMapper(object):
+    '''
+        A translation/conversion layer for the Environment Canada imported
+        record object.
+        This is intended to be used interchangeably with either an Environment
+        Canada record or record parser object.  Its purpose is to generate
+        named attributes that are suitable for creation of a NOAA Oil Database
+        record.
+    '''
+    top_record_properties = ('_id',
+                             'oil_id',
+                             'name',
+                             'location',
+                             'reference',
+                             'reference_date',
+                             'sample_date',
+                             'comments',
+                             'api',
+                             'product_type',
+                             'labels',
+                             'status')
+
+    def __init__(self, record):
+        '''
+            :param record: A parsed object representing a single oil or
+                           refined product.
+            :type record: A record parser object.
+        '''
+        self.record = record
+        self._status = None
+        self._labels = None
+
+    def dict(self):
+        rec = {}
+
+        return rec
 
 
 class EnvCanadaAttributeMapper(object):
@@ -80,7 +120,8 @@ class EnvCanadaAttributeMapper(object):
                      if isinstance(getattr(self.__class__, p),
                                    property)])
 
-        return props
+        for p in props:
+            yield p, getattr(self, p)
 
     def generate_sample_id_attrs(self, sample_id):
         attrs = {}
@@ -119,9 +160,7 @@ class EnvCanadaAttributeMapper(object):
         samples = defaultdict(dict)
 
         # initial pass: iterate the properties and populate samples
-        for p in self.get_interface_properties():
-            k, v = p, getattr(self, p)
-
+        for k, v in self.get_interface_properties():
             if k in self.top_record_properties:
                 rec[k] = v
             elif hasattr(v, '__iter__') and not hasattr(v, '__len__'):

@@ -17,7 +17,7 @@ from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
 
 from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
-                                                  EnvCanadaAttributeMapper)
+                                                  EnvCanadaRecordMapper)
 
 from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser,
@@ -65,7 +65,7 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
                None,
                EnvCanadaOilExcelFile,
                EnvCanadaRecordParser,
-               EnvCanadaAttributeMapper],
+               EnvCanadaRecordMapper],
               # ('Exxon Assays', add_exxon_records)
               ['Exxon Assays', 'oildb.exxon_files',
                None,
