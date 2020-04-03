@@ -93,6 +93,10 @@ class Mass(MeasurementBase):
     unit_type = "mass"
 
 
+class Density(MeasurementBase):
+    unit_type = "density"
+
+
 class Temperature(MeasurementBase):
     unit_type = "temperature"
 

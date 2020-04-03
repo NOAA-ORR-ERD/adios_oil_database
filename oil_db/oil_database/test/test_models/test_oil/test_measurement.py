@@ -8,7 +8,9 @@ from oil_database.models.oil.measurement import (Length,
                                                  Temperature,
                                                  MassFraction,
                                                  VolumeFraction,
-                                                 Mass)
+                                                 Mass,
+                                                 Density,
+                                                 )
 
 
 #  Note: the Measurement base class should not be used on its own
@@ -221,7 +223,9 @@ def test_convert_wrong_value_not_break():
                          [(MassFraction, 0.1, 'fraction', 100, 'g/kg'),
                           (VolumeFraction, 1, '%', 0.01, 'fraction'),
                           (Mass, 1, 'kg', 1000, 'g'),
-                          (Temperature, 32.0, 'F', 0.0, 'C')
+                          (Temperature, 32.0, 'F', 0.0, 'C'),
+                          (Density, 1.0, 'kg/m^3', 0.062427962, 'lbs/ft^3'),
+                          (Density, 10.0, 'API', 1.0, 'SpecificGravity'),
                           ])
 def test_basic_convert(Type, val1, unit1, val2, unit2):
     measurement = Type(value=val1,
@@ -234,7 +238,7 @@ def test_basic_convert(Type, val1, unit1, val2, unit2):
 
     measurement.convert_to(unit2)
 
-    assert measurement.value == val2
+    assert isclose(measurement.value, val2)
     assert measurement.unit == unit2
     assert measurement.unit_type == Type.unit_type
 
