@@ -221,6 +221,7 @@ def test_convert_wrong_value_not_break():
                          [(MassFraction, 0.1, 'fraction', 100, 'g/kg'),
                           (VolumeFraction, 1, '%', 0.01, 'fraction'),
                           (Mass, 1, 'kg', 1000, 'g'),
+                          (Temperature, 32.0, 'F', 0.0, 'C')
                           ])
 def test_basic_convert(Type, val1, unit1, val2, unit2):
     measurement = Type(value=val1,
@@ -236,4 +237,46 @@ def test_basic_convert(Type, val1, unit1, val2, unit2):
     assert measurement.value == val2
     assert measurement.unit == unit2
     assert measurement.unit_type == Type.unit_type
+
+
+
+def test_Temperature_F_C():
+    """
+    we need to make sure not to reset the zero
+    point of standard deviation.
+    """
+    temp = Temperature(value=10.0,
+                       unit="F",
+                       standard_deviation=1.0,
+                       replicates=3)
+
+    print(temp)
+    temp.convert_to('C')
+
+    assert temp.unit == 'C'
+    assert isclose(temp.value, -12.222222222)
+    assert isclose(temp.standard_deviation, 5.0 / 9.0)
+
+
+def test_Temperature_C_K():
+    """
+    we need to make sure not to reset the zero
+    point of standard deviation.
+    """
+    temp = Temperature(value=0.0,
+                       unit="C",
+                       standard_deviation=3.14,
+                       replicates=3)
+
+    print(temp)
+    temp.convert_to('K')
+
+    assert temp.unit == 'K'
+    assert isclose(temp.value, 273.15)
+    assert isclose(temp.standard_deviation, 3.14)
+
+
+
+
+
 

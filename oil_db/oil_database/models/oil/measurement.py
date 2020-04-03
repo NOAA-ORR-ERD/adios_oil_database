@@ -67,7 +67,6 @@ class MeasurementBase(MeasurementDataclass):
                                   self.unit,
                                   new_unit,
                                   val)
-                print(f"changing: {attr} from {val} to {new_val}")
                 new_vals[attr] = new_val
         # if this was all successful
         new_vals['unit'] = new_unit
@@ -98,4 +97,16 @@ class Temperature(MeasurementBase):
     unit_type = "temperature"
 
     def convert_to(self, new_unit):
-        raise NotImplementedError
+        # need to do the "right thing" with standard deviation
+        if self.standard_deviation is None:
+            # no need for anything special
+            super().convert_to(new_unit)
+        else:
+            new_std = convert("deltatemperature",
+                              self.unit,
+                              new_unit,
+                              self.standard_deviation)
+            super().convert_to(new_unit)
+            self.standard_deviation = new_std
+
+
