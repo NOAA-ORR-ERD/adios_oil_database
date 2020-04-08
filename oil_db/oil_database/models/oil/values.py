@@ -32,6 +32,14 @@ class ProductType(str):
         return self._validator(self)
 
 
+@dataclass_to_json
+@dataclass
+class Reference:
+    year: int = None
+    reference: str = ""
+
+
+
 
 @dataclass_to_json
 @dataclass

@@ -10,7 +10,7 @@ from ..common.utilities import (dataclass_to_json,
                                 JSON_List,
                                 )
 
-from .values import ProductType
+from .values import ProductType, Reference
 from .sample import Sample, SampleList
 
 from dataclasses import dataclass, field
@@ -27,7 +27,7 @@ class Oil:
     oil_id: str = ""
 
     location: str = ""
-    reference: str = ""
+    reference: Reference = None
     sample_date: str = ""
     comments: str = ""
     API: float = None
