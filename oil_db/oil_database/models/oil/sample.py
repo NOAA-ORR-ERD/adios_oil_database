@@ -15,6 +15,7 @@ from .measurement import DistCutList
 from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
 from .sara import Sara
+from .ccme import CCME
 
 from .compound import CompoundList
 

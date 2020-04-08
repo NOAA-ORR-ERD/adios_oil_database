@@ -56,7 +56,7 @@ class TestPhysicalProperties:
         trying to do a pretty complete one
 
         Note: This is more an integration test.  Each complex attribute of the
-              Sample should have its own pytests
+              PhysicalProperties dataclass should have its own pytests
         """
         p = PhysicalProperties()
 
