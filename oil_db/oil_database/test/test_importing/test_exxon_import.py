@@ -19,8 +19,7 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser
                                                     )
 
-from oil_database.models.oil.values import UnittedValue
-
+from oil_database.models.common.measurement import UnittedValue
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"

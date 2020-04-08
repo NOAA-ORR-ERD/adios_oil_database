@@ -16,12 +16,17 @@ from oil_database.models.common.float_unit import (FloatUnit,
 
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample, SampleList
-from oil_database.models.oil.values import (UnittedValue,
-                                            Density, DensityList,
-                                            Viscosity, ViscosityList,
-                                            DistCut, DistCutsList)
 
-import pdb
+from oil_database.models.common.measurement import (Temperature,
+                                                    Density,
+                                                    DynamicViscosity
+                                                    )
+
+from oil_database.models.oil.measurement import (DensityPoint, DensityList,
+                                                 DynamicViscosityPoint,
+                                                 DynamicViscosityList,
+                                                 DistCut, DistCutList)
+
 from pprint import pprint
 
 custom_slugify = Slugify(to_lower=True, separator='_')
@@ -67,7 +72,10 @@ class EnvCanadaRecordMapper(object):
                    in zip(self.record.samples, self.record.weathering)]
 
         rec = self.record.dict()
-        rec['samples'] = SampleList([Sample.factory(**s.dict())
+
+        pprint(samples[0].dict())
+
+        rec['samples'] = SampleList([Sample.from_py_json(s.dict())
                                      for s in samples])
 
         rec['_id'] = rec['oil_id']
@@ -133,16 +141,18 @@ class EnvCanadaSampleMapper(object):
             std_dev = self.parser.densities['standard_deviation'][std_idx]
             replicates = self.parser.densities['replicates'][repl_idx]
 
-            ret.append(Density(density=UnittedValue(rho, unit="g/mL"),
-                               ref_temp=UnittedValue(ref_temp, unit="C"),
-                               standard_deviation=std_dev,
-                               replicates=replicates))
+            ret.append(DensityPoint(
+                density=Density(value=rho, unit="g/mL",
+                                standard_deviation=std_dev,
+                                replicates=replicates),
+                ref_temp=Temperature(value=ref_temp, unit="C"),
+            ))
 
         return ret
 
     @property
     def dvis(self):
-        ret = ViscosityList()
+        ret = DynamicViscosityList()
 
         for item in (('viscosity_0_c', 0.0, 1, 1),
                      ('viscosity_5_c', 5.0, 1, 1),
@@ -153,16 +163,18 @@ class EnvCanadaSampleMapper(object):
             std_dev = self.parser.dvis['standard_deviation'][std_idx]
             replicates = self.parser.dvis['replicates'][repl_idx]
 
-            ret.append(Viscosity(UnittedValue(mu, unit="mPa.s"),
-                                 UnittedValue(ref_temp, unit="C"),
-                                 standard_deviation=std_dev,
-                                 replicates=replicates))
+            ret.append(DynamicViscosityPoint(
+                viscosity=DynamicViscosity(value=mu, unit="mPa.s",
+                                           standard_deviation=std_dev,
+                                           replicates=replicates),
+                ref_temp=Temperature(value=ref_temp, unit="C"),
+            ))
 
         return ret
 
     @property
     def cuts(self):
-        ret = DistCutsList()
+        ret = []
 
         # First the boiling point distribution data (if present)
         for frac in list(range(5, 101, 5)) + ['initial_boiling_point', 'fbp']:

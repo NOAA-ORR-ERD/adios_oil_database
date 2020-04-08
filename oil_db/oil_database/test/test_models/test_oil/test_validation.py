@@ -38,17 +38,15 @@ def snippet_not_in_oil_status(snippet, oil):
     """
     checks if the particular snippet in one of the messages
     """
-    for msg in oil["status"]:
-        if snippet in msg:
-            return False
-    return True
+    return not snippet_in_oil_status(snippet, oil)
 
 
 def test_no_name():
     oil = {}
     validate(oil)
 
-    assert "E001: Record has no name: every record must have a name" in oil['status']
+    assert ("E001: Record has no name: every record must have a name"
+            in oil['status'])
 
 
 @pytest.mark.parametrize("name", ["  ",
@@ -128,7 +126,7 @@ def test_no_api_not_crude(no_type_oil):
 
 def test_api_outragious(no_type_oil):
     oil = no_type_oil
-    oil['api'] = -200
+    oil['API'] = -200
     validate(oil)
     assert snippet_in_oil_status("W005:", oil)
 
@@ -181,7 +179,8 @@ def test_no_distillation_cuts(big_record):
     oil = big_record
 
     # remove the cut data
-    oil['samples'][0]['cuts'] = []
+    oil['sub_samples'][0]['distillation_data'] = []
     validate(oil)
+    print(oil["status"])
 
     assert snippet_in_oil_status("W007:", oil)

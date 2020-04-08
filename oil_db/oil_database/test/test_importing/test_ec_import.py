@@ -19,8 +19,6 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
                                                   EnvCanadaRecordMapper)
 
-import pdb
-
 from pprint import pprint
 from builtins import isinstance
 
@@ -1235,6 +1233,20 @@ class TestEnvCanadaRecordMapper(object):
 
     def test_init_invalid(self):
         _mapper = EnvCanadaRecordMapper(None)
+
+    def test_init_valid(self, oil_id, expected):
+        '''
+            We are being fairly light on the parameter checking in our
+            constructor.  So if no file props are passed in, we can still
+            construct the parser, but accessing reference_date could raise
+            a TypeError.
+            This is because the reference_date will sometimes need the
+            file props if the reference field contains no date information.
+        '''
+        data = self.reader.get_record(oil_id)
+        parser = EnvCanadaRecordParser(data, None)  # should construct fine
+
+        assert parser.reference_date.year == expected
 
 
 

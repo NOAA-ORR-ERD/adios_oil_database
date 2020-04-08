@@ -23,32 +23,30 @@ def test_CCME_small():
     ccme.CCME_F4 = MassFraction(unit="mg/g", value=40)
     ccme.total_GC_TPH = MassFraction(unit="mg/g", value=690)
 
-
-    ccme.saturates = CompoundList(
-                     [Compound(name="n-C8 to n-C10",
-                               method="ESTS 2002a",
-                               measurement=MassFraction(value=18,
-                                                        unit='mg/g'),
-                               ),
+    ccme.saturates = CompoundList([
+        Compound(name="n-C8 to n-C10",
+                 method="ESTS 2002a",
+                 measurement=MassFraction(value=18, unit='mg/g'),
+        ),
                       Compound(name="n-C10 to n-C12",
                                method="ESTS 2002a",
                                measurement=MassFraction(value=11,
                                                         unit='mg/g'),
                                ),
-                      ])
+    ])
 
     assert len(ccme.saturates) == 2
 
     ccme.aromatics.extend([Compound(name="n-C8 to n-C10",
-                               method="ESTS 2002a",
-                               measurement=MassFraction(value=4,
-                                                        unit='mg/g'),
-                               ),
-                      Compound(name="n-C10 to n-C12",
-                               method="ESTS 2002a",
-                               measurement=MassFraction(value=2,
-                                                        unit='mg/g'),
-                               ),
+                                    method="ESTS 2002a",
+                                    measurement=MassFraction(value=4,
+                                                             unit='mg/g'),
+                                    ),
+                           Compound(name="n-C10 to n-C12",
+                                    method="ESTS 2002a",
+                                    measurement=MassFraction(value=2,
+                                                             unit='mg/g'),
+                                    ),
                       ])
 
     assert len(ccme.saturates) == 2

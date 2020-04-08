@@ -5,16 +5,18 @@ This maps to the JSON used in the DB
 
 Having a Python class makes it easier to write importing, validating etc, code.
 """
+from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
-from .measurement import MassFraction, Temperature
 
-from .values import (UnittedValue,
-                     DensityList,
-                     ViscosityList,
-                     DistCutsList)
+from ..common.measurement import MassFraction, VolumeFraction, Temperature
+from .measurement import DistCutList
 
-from dataclasses import dataclass, field, fields
+from .physical_properties import PhysicalProperties
+from .environmental_behavior import EnvironmentalBehavior
+from .sara import Sara
+
+from .compound import CompoundList
 
 
 @dataclass_to_json
@@ -30,9 +32,13 @@ class Sample:
     short_name: str = None
     fraction_weathered: MassFraction = None
     boiling_point_range: Temperature = None
-    cut_volume: UnittedValue = None  # from Exxon data
+    cut_volume: VolumeFraction = None  # from Exxon data
 
-    compounds: CompoundList = field(default_factory=CompoundList)
+    physical_properties: PhysicalProperties = None
+    environmental_behavior: EnvironmentalBehavior = None
+    SARA: Sara = None
+
+    distillation_data: DistCutList = field(default_factory=DistCutList)
 
     bulk_composition: CompoundList = field(default_factory=CompoundList)
     # sulfur_mass_fraction: UnittedValue = None
@@ -50,18 +56,9 @@ class Sample:
     # naphthene_volume_fraction: UnittedValue = None
     # aromatic_volume_fraction: UnittedValue = None
 
-    SARA: Sara = None
-
-    distillation_data: DistCutsList = field(default_factory=DistCutsList)
+    compounds: CompoundList = field(default_factory=CompoundList)
 
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
-
-    physical_properties: PhysicalProperties = None
-    # pour_point: Temperature = None
-    # flash_point: Temperature = None
-    # densities: DensityList = field(default_factory=DensityList)
-    # kvis: ViscosityList = field(default_factory=ViscosityList)
-    # dvis: ViscosityList = field(default_factory=ViscosityList)
 
     CCME: CCME = None
 

@@ -2,8 +2,6 @@
     Test our FloatUnit model class
     This is one of the very basic building blocks of all our models.
 '''
-import pdb
-
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    LengthUnit,
                                                    OilConcentrationUnit,

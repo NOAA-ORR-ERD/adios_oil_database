@@ -9,14 +9,17 @@ class EnumValidator:
         """
         :param valid_items: list of valid items -- can be anything that an `in`
                             test will work for.
-        :param err_msg: The error message that should be used on failure. Should
-                        be a format string that takes two parameters: item and valid_items
+        :param err_msg: The error message that should be used on failure.
+                        Should be a format string that takes two parameters:
+                        item and valid_items
 
-        :param case_insensitive=False: whether you want the test to be case-insensitive.
-                                       only works for string values, of course.
+        :param case_insensitive=False: whether you want the test to be
+                                       case-insensitive.
+                                       Only works for string values, of course.
         """
         if case_insensitive:
             valid_items = [item.lower() for item in valid_items]
+
         self.valid_items = valid_items
         self.err_msg = err_msg
         self.case_insensitive = case_insensitive
@@ -24,7 +27,8 @@ class EnumValidator:
     def __call__(self, item):
         if self.case_insensitive:
             item = item.lower()
-        if not item in self.valid_items:
+
+        if item not in self.valid_items:
             return [self.err_msg.format(item, self.valid_items)]
         else:
             return []
@@ -36,18 +40,20 @@ class FloatRangeValidator:
 
     range is inclusive (<= and >=)
     """
-    def __init__(self, min, max, err_msg=None):
+    def __init__(self, min_value, max_value, err_msg=None):
         """
         :param min: minimum value allowed
 
         :param max: maximum value allowed
 
-        :param err_msg: The error message that should be used on failure. Should
-                        be a format string that takes three parameters: default is:
-                        "ValidationError: {} is not between {} and {}"
+        :param err_msg: The error message that should be used on failure.
+                        Should be a format string that takes three parameters:
+                        default is:
+                            "ValidationError: {} is not between {} and {}"
         """
-        self.min = min
-        self.max = max
+        self.min = min_value
+        self.max = max_value
+
         if err_msg is None:
             self.err_msg = "ValidationError: {} is not between {} and {}"
         else:

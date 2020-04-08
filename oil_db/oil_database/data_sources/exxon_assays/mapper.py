@@ -12,10 +12,16 @@ import unit_conversion as uc
 from oil_database.util import sigfigs
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample, SampleList
-from oil_database.models.oil.values import (UnittedValue,
-                                            Density,
-                                            Viscosity,
-                                            DistCut)
+
+from oil_database.models.common.measurement import (Temperature,
+                                                    MassFraction,
+                                                    Density,
+                                                    KinematicViscosity,
+                                                    )
+
+from oil_database.models.oil.measurement import (DensityPoint,
+                                                 KinematicViscosityPoint,
+                                                 DistCut)
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -180,7 +186,7 @@ def process_cut_table(oil, samples, cut_table):
 
     for sample, val in zip(samples, row):
         try:
-            sample.cut_volume = UnittedValue(round(val, 4), unit="%")
+            sample.cut_volume = MassFraction(value=round(val, 4), unit="%")
         except Exception:
             sample.cut_volume = None
 
@@ -198,10 +204,11 @@ def process_cut_table(oil, samples, cut_table):
     for sample, val in zip(samples, row):
         try:
             rho = uc.convert("SG", "g/cm^3", val)
-            sample.densities.append(
-                Density(UnittedValue(round(rho, 8), unit="g/cm^3"),
-                        UnittedValue(15.6, unit="C"))
-            )
+            sample.densities.append(DensityPoint(
+                density=Density(value=round(rho, 8), unit="g/cm^3"),
+                ref_temp=Temperature(value=15.6, unit="C"),
+            ))
+
         except Exception:
             pass
 
@@ -214,10 +221,11 @@ def process_cut_table(oil, samples, cut_table):
         row = cut_table[norm(lbl)]
         for sample, val in zip(samples, row):
             try:
-                sample.kvis.append(Viscosity(UnittedValue(round(val, 8),
-                                                          unit="cSt"),
-                                             UnittedValue(40,
-                                                          unit="C")))
+                sample.kvis.append(KinematicViscosityPoint(
+                    viscosity=KinematicViscosity(value=round(val, 8),
+                                                 unit="cSt"),
+                    ref_temp=Temperature(value=40, unit="C"),
+                ))
             except Exception:
                 pass
 
@@ -233,10 +241,10 @@ def process_cut_table(oil, samples, cut_table):
             for sample, val in zip(samples, row):
                 if val is not None:
                     val = sigfigs(uc.convert("F", "C", val), 5)
-                    sample.cuts.append(
-                        DistCut(UnittedValue(percent, unit="%"),
-                                UnittedValue(val, unit="C")
-                                ))
+                    sample.cuts.append(DistCut(
+                        fraction=MassFraction(value=percent, unit="%"),
+                        vapor_temp=Temperature(value=val, unit="C")
+                    ))
     # sort them
     for sample in samples:
         sample.cuts.sort(key=lambda c: c.fraction.value)

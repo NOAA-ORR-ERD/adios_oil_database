@@ -8,14 +8,196 @@
   "reference_date": 1451606400,
   "sample_date": 1426982400,
   "comments": "",
-  "api": 31.32,
+  "API": 31.32,
   "categories": [
     "Crude",
     "Light"
   ],
   "status": [],
-  "samples": [
+  "sub_samples": [
     {
+      "physical_properties": {
+          "densities": [
+              {
+                "standard_deviation": 0,
+                "replicates": 3,
+                "density": {
+                  "_cls": "oil_database.models.common.float_unit.DensityUnit",
+                  "unit": "kg/m^3",
+                  "from_unit": "g/mL",
+                  "value": 875.1
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 273.15
+                }
+              },
+              {
+                "standard_deviation": 0,
+                "replicates": 3,
+                "density": {
+                  "_cls": "oil_database.models.common.float_unit.DensityUnit",
+                  "unit": "kg/m^3",
+                  "from_unit": "g/mL",
+                  "value": 863.9
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 288.15
+                }
+              }
+          ],
+          "dynamic_viscosities": [
+              {
+                  "standard_deviation": 0.001,
+                  "replicates": 3,
+                  "method": "ASTM 7042",
+                  "viscosity": {
+                      "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit",
+                      "unit": "Pa s",
+                      "from_unit": "mPa s",
+                      "value": 0.01792
+                  },
+                  "ref_temp": {
+                      "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                      "unit": "K",
+                      "from_unit": "C",
+                      "value": 273.15
+                  }
+              },
+              {
+                  "standard_deviation": 0.0098,
+                  "replicates": 3,
+                  "method": "ASTM 7042",
+                  "viscosity": {
+                      "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit",
+                      "unit": "Pa s",
+                      "from_unit": "mPa s",
+                      "value": 0.009852
+                  },
+                  "ref_temp": {
+                      "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                      "unit": "K",
+                      "from_unit": "C",
+                      "value": 288.15
+                  }
+              }
+          ],
+          "interfacial_tensions": [
+              {
+                "standard_deviation": 0.82,
+                "replicates": 3,
+                "method": "ESTS 2008",
+                "interface": "air",
+                "tension": {
+                  "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
+                  "unit": "N/m",
+                  "from_unit": "dyne/cm",
+                  "value": 0.02769
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 273.15
+                }
+              },
+              {
+                "standard_deviation": 0.17,
+                "replicates": 3,
+                "method": "ESTS 2008",
+                "interface": "water",
+                "tension": {
+                  "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
+                  "unit": "N/m",
+                  "from_unit": "dyne/cm",
+                  "value": 0.02409
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 273.15
+                }
+              },
+              {
+                "standard_deviation": 0.18,
+                "replicates": 3,
+                "method": "ESTS 2008",
+                "interface": "seawater",
+                "tension": {
+                  "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
+                  "unit": "N/m",
+                  "from_unit": "dyne/cm",
+                  "value": 0.02281
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 273.15
+                }
+              },
+              {
+                "standard_deviation": 0.18,
+                "replicates": 3,
+                "method": "ESTS 2008",
+                "interface": "air",
+                "tension": {
+                  "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
+                  "unit": "N/m",
+                  "from_unit": "dyne/cm",
+                  "value": 0.02714
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 288.15
+                }
+              },
+              {
+                "standard_deviation": 0.27,
+                "replicates": 3,
+                "method": "ESTS 2008",
+                "interface": "water",
+                "tension": {
+                  "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
+                  "unit": "N/m",
+                  "from_unit": "dyne/cm",
+                  "value": 0.02132
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 288.15
+                }
+              },
+              {
+                "standard_deviation": 0.35,
+                "replicates": 3,
+                "method": "ESTS 2008",
+                "interface": "seawater",
+                "tension": {
+                  "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
+                  "unit": "N/m",
+                  "from_unit": "dyne/cm",
+                  "value": 0.01975
+                },
+                "ref_temp": {
+                  "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
+                  "unit": "K",
+                  "from_unit": "C",
+                  "value": 288.15
+                }
+              }
+          ]
+      },
       "chromatography": {
         "method": "ESTS 2002a",
         "tph": {
@@ -49,116 +231,6 @@
           "_cls": "oil_database.models.common.float_unit.FloatUnit"
         }
       },
-      "ifts": [
-        {
-          "standard_deviation": 0.82,
-          "replicates": 3,
-          "method": "ESTS 2008",
-          "interface": "air",
-          "tension": {
-            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
-            "unit": "N/m",
-            "from_unit": "dyne/cm",
-            "value": 0.02769
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 273.15
-          }
-        },
-        {
-          "standard_deviation": 0.17,
-          "replicates": 3,
-          "method": "ESTS 2008",
-          "interface": "water",
-          "tension": {
-            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
-            "unit": "N/m",
-            "from_unit": "dyne/cm",
-            "value": 0.02409
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 273.15
-          }
-        },
-        {
-          "standard_deviation": 0.18,
-          "replicates": 3,
-          "method": "ESTS 2008",
-          "interface": "seawater",
-          "tension": {
-            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
-            "unit": "N/m",
-            "from_unit": "dyne/cm",
-            "value": 0.02281
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 273.15
-          }
-        },
-        {
-          "standard_deviation": 0.18,
-          "replicates": 3,
-          "method": "ESTS 2008",
-          "interface": "air",
-          "tension": {
-            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
-            "unit": "N/m",
-            "from_unit": "dyne/cm",
-            "value": 0.02714
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 288.15
-          }
-        },
-        {
-          "standard_deviation": 0.27,
-          "replicates": 3,
-          "method": "ESTS 2008",
-          "interface": "water",
-          "tension": {
-            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
-            "unit": "N/m",
-            "from_unit": "dyne/cm",
-            "value": 0.02132
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 288.15
-          }
-        },
-        {
-          "standard_deviation": 0.35,
-          "replicates": 3,
-          "method": "ESTS 2008",
-          "interface": "seawater",
-          "tension": {
-            "_cls": "oil_database.models.common.float_unit.InterfacialTensionUnit",
-            "unit": "N/m",
-            "from_unit": "dyne/cm",
-            "value": 0.01975
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 288.15
-          }
-        }
-      ],
       "biomarkers": {
         "method": "ESTS 2002a",
         "c21_tricyclic_terpane": {
@@ -288,40 +360,6 @@
           "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
         }
       },
-      "densities": [
-        {
-          "standard_deviation": 0,
-          "replicates": 3,
-          "density": {
-            "_cls": "oil_database.models.common.float_unit.DensityUnit",
-            "unit": "kg/m^3",
-            "from_unit": "g/mL",
-            "value": 875.1
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 273.15
-          }
-        },
-        {
-          "standard_deviation": 0,
-          "replicates": 3,
-          "density": {
-            "_cls": "oil_database.models.common.float_unit.DensityUnit",
-            "unit": "kg/m^3",
-            "from_unit": "g/mL",
-            "value": 863.9
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 288.15
-          }
-        }
-      ],
       "emulsions": [
         {
           "visual_stability": "Unstable",
@@ -374,42 +412,6 @@
             "unit": "kg/(m s)",
             "from_unit": "Pa.s",
             "value": 0.0558633333
-          }
-        }
-      ],
-      "dvis": [
-        {
-          "standard_deviation": 0.001,
-          "replicates": 3,
-          "method": "ASTM 7042",
-          "viscosity": {
-            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit",
-            "unit": "Pa s",
-            "from_unit": "mPa s",
-            "value": 0.01792
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 273.15
-          }
-        },
-        {
-          "standard_deviation": 0.0098,
-          "replicates": 3,
-          "method": "ASTM 7042",
-          "viscosity": {
-            "_cls": "oil_database.models.common.float_unit.DynamicViscosityUnit",
-            "unit": "Pa s",
-            "from_unit": "mPa s",
-            "value": 0.009852
-          },
-          "ref_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 288.15
           }
         }
       ],
@@ -1026,7 +1028,7 @@
           "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
         }
       },
-      "cuts": [
+      "distillation_data": [
         {
           "method": "Merged ASTM D6730 Modified and ASTM D7169",
           "fraction": {
@@ -1299,8 +1301,8 @@
       },
       "name": "Fresh Oil Sample",
       "short_name": "Fresh Oil",
-      "fraction_weathered": 0.0,
-      "boiling_point_range": null
+      "boiling_point_range": null,
+      "fraction_weathered": {"value": 0.0, "unit": "1"}
     },
     {
       "chromatography": {
@@ -2580,8 +2582,8 @@
       },
       "name": "12.42% Weathered",
       "short_name": "12.42% Weathered",
-      "fraction_weathered": 0.1242,
-      "boiling_point_range": null
+      "boiling_point_range": null,
+      "fraction_weathered": {"value": 0.1242, "unit": "1"}
     },
     {
       "chromatography": {
@@ -3861,8 +3863,8 @@
       },
       "name": "24.56% Weathered",
       "short_name": "24.56% Weathered",
-      "fraction_weathered": 0.2456,
-      "boiling_point_range": null
+      "boiling_point_range": null,
+      "fraction_weathered": {"value": 0.2456, "unit": "1"}
     },
     {
       "chromatography": {
@@ -5172,8 +5174,8 @@
       },
       "name": "36.76% Weathered",
       "short_name": "36.76% Weathered",
-      "fraction_weathered": 0.3676,
-      "boiling_point_range": null
+      "boiling_point_range": null,
+      "fraction_weathered": {"value": 0.3676, "unit": "1"}
     }
   ]
 }

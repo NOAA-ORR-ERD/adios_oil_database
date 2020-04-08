@@ -51,7 +51,7 @@ def test_json_just_name():
 
 def test_json_a_few_fields():
     oil = Oil(name=NAME,
-              api=32.5,
+              API=32.5,
               labels=["medium crude", "sweet crude"],
               )
     oil.product_type = "Crude"
@@ -59,7 +59,7 @@ def test_json_a_few_fields():
 
     assert len(py_json) == 4
     assert py_json["name"] == NAME
-    assert py_json["api"] == 32.5
+    assert py_json["API"] == 32.5
     assert py_json["labels"] == ["medium crude", "sweet crude"]
     assert py_json["product_type"] == "Crude"
 
@@ -75,10 +75,9 @@ def test_json_nonsparse():
                 'oil_id',
                 'location',
                 'reference',
-                'reference_date',
                 'sample_date',
                 'comments',
-                'api',
+                'API',
                 'product_type',
                 'labels',
                 'status',
@@ -111,7 +110,7 @@ def test_from_py_json_minimal():
 
     assert oil.name == "A name as a placeholder"
     assert oil.status == []
-    assert oil.api is None
+    assert oil.API is None
     # who knows how many others!
 
 

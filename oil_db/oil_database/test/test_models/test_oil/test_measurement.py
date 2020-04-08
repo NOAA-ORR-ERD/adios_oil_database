@@ -1,286 +1,388 @@
-from math import isclose
-
 import pytest
 
-from unit_conversion import InvalidUnitError
+from oil_database.models.oil.measurement import (DensityPoint,
+                                                 DensityList,
+                                                 DynamicViscosityPoint,
+                                                 DynamicViscosityList,
+                                                 KinematicViscosityPoint,
+                                                 KinematicViscosityList,
+                                                 DistCut,
+                                                 DistCutList,
+                                                 InterfacialTensionPoint,
+                                                 InterfacialTensionList,
+                                                 Dispersibility,
+                                                 DispersibilityList,
+                                                 Emulsion,
+                                                 EmulsionList)
+
+
+class TestDensityPoint:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = DensityPoint()
+
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = DensityPoint.from_py_json({})
+
+    def test_from_json(self):
+        json_obj = {'density': {'value': 900.0, 'unit': 'kg/m^3',
+                                'standard_deviation': 1.2, 'replicates': 3},
+                    'ref_temp': {'value': 273.15, 'unit': 'K',
+                                 'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = DensityPoint.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['density']['unit_type'] = 'density'
+        json_obj['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestDensityList:
+    def test_init_empty(self):
+        assert DensityList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert DensityList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'density': {'value': 900.0, 'unit': 'kg/m^3',
+                                 'standard_deviation': 1.2, 'replicates': 3},
+                     'ref_temp': {'value': 273.15, 'unit': 'K',
+                                  'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = DensityList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['density']['unit_type'] = 'density'
+        json_obj[0]['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestDynamicViscosityPoint:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = DynamicViscosityPoint()
+
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = DynamicViscosityPoint.from_py_json({})
+
+    def test_from_json(self):
+        json_obj = {'viscosity': {'value': 100.0, 'unit': 'cP',
+                                  'standard_deviation': 1.2, 'replicates': 3},
+                    'ref_temp': {'value': 273.15, 'unit': 'K',
+                                 'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = DynamicViscosityPoint.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['viscosity']['unit_type'] = 'dynamicviscosity'
+        json_obj['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestDynamicViscosityList:
+    def test_init_empty(self):
+        assert DynamicViscosityList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert DynamicViscosityList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'viscosity': {'value': 100.0, 'unit': 'cP',
+                                   'standard_deviation': 1.2, 'replicates': 3},
+                     'ref_temp': {'value': 273.15, 'unit': 'K',
+                                  'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = DynamicViscosityList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['viscosity']['unit_type'] = 'dynamicviscosity'
+        json_obj[0]['ref_temp']['unit_type'] = 'temperature'
 
-from oil_database.models.oil.measurement import (Length,
-                                                 Temperature,
-                                                 MassFraction,
-                                                 VolumeFraction,
-                                                 Mass,
-                                                 Density,
-                                                 )
+        assert model.py_json() == json_obj
 
 
-#  Note: the Measurement base class should not be used on its own
-#.       it needs a unit type
-# so it's not tested here
+class TestKinematicViscosityPoint:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = KinematicViscosityPoint()
 
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = KinematicViscosityPoint.from_py_json({})
 
-def test_Length():
-    uv = Length(1.0, unit="m")
+    def test_from_json(self):
+        json_obj = {'viscosity': {'value': 100.0, 'unit': 'cSt',
+                                  'standard_deviation': 1.2, 'replicates': 3},
+                    'ref_temp': {'value': 273.15, 'unit': 'K',
+                                 'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = KinematicViscosityPoint.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['viscosity']['unit_type'] = 'kinematicviscosity'
+        json_obj['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
 
-    assert uv.value == 1.0
-    assert uv.unit == "m"
 
+class TestKinematicViscosityList:
+    def test_init_empty(self):
+        assert KinematicViscosityList().py_json() == []
 
-def test_Length_change_unit_type():
-    "you should not be able to change the unit_type"
+    def test_from_json_empty(self):
+        assert KinematicViscosityList.from_py_json([]).py_json() == []
 
-    l = Length(value=3.14,
-               unit='mm')
+    def test_from_json(self):
+        json_obj = [{'viscosity': {'value': 100.0, 'unit': 'cSt',
+                                   'standard_deviation': 1.2, 'replicates': 3},
+                     'ref_temp': {'value': 273.15, 'unit': 'K',
+                                  'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = KinematicViscosityList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['viscosity']['unit_type'] = 'kinematicviscosity'
+        json_obj[0]['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
 
-    assert l.unit_type == 'length'
-    with pytest.raises(AttributeError):
-        l.unit_type = 'anything else'
 
+class TestDistCut:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = DistCut()
 
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = DistCut.from_py_json({})
 
-# we can't have any required arguments
-# as you could have value, or min or max
-# def test_Length_no_value():
-#     with pytest.raises(TypeError):
-#         Length()
+    def test_from_json(self):
+        json_obj = {'fraction': {'value': 10.0, 'unit': '%',
+                                 'standard_deviation': 1.2, 'replicates': 3},
+                    'vapor_temp': {'value': 273.15, 'unit': 'K',
+                                   'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = DistCut.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['fraction']['unit_type'] = 'massfraction'
+        json_obj['vapor_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
 
-#     with pytest.raises(TypeError):
-#         Length(unit="m/s")
 
+class TestDistCutList:
+    def test_init_empty(self):
+        assert DistCutList().py_json() == []
 
-# def test_Length_no_unit():
-#     with pytest.raises(TypeError):
-#         Length(1.0)
+    def test_from_json_empty(self):
+        assert DistCutList.from_py_json([]).py_json() == []
 
+    def test_from_json(self):
+        json_obj = [{'fraction': {'value': 10.0, 'unit': '%',
+                                  'standard_deviation': 1.2, 'replicates': 3},
+                     'vapor_temp': {'value': 273.15, 'unit': 'K',
+                                    'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = DistCutList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['fraction']['unit_type'] = 'massfraction'
+        json_obj[0]['vapor_temp']['unit_type'] = 'temperature'
 
-def test_Length_json():
-    uv = Length(1.0, unit="m")
+        assert model.py_json() == json_obj
 
-    py_json = uv.py_json()
 
-    print(py_json)
+class TestInterfacialTensionPoint:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = InterfacialTensionPoint()
 
-    assert py_json == {'value': 1.0,
-                       'unit': 'm',
-                       'unit_type': 'length',
-                       }
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = InterfacialTensionPoint.from_py_json({})
 
-
-def test_Length_from_py_json():
-    uv = Length.from_py_json({'value': 1.0, 'unit': 'm'})
-
-    assert uv.value == 1.0
-    assert uv.unit == "m"
-
-# can't have any required data
-# def test_Length_from_py_json_missing_data():
-
-#     with pytest.raises(TypeError):
-#         Length.from_py_json({'value': 1.0})
-
-#     with pytest.raises(TypeError):
-#         Length.from_py_json({'unit': 'm/s'})
-
-
-def test_LengthRange_both():
-    ur = Length(None, "ft", 1.0, 5.0)
-
-    assert ur.min_value == 1.0
-    assert ur.max_value == 5.0
-    assert ur.unit == "ft"
-
-
-def test_LengthRange_json_sparse():
-    ur = Length(max_value=5.0, unit='m')
-
-    py_json = ur.py_json()
-
-    assert py_json == {'max_value': 5.0,
-                       'unit': 'm',
-                       'unit_type': 'length'}
-
-
-def test_Length_json_full():
-    l = Length(max_value=5.0, unit='m')
-
-    py_json = l.py_json(sparse=False)
-
-    print(l)
-    print(l.py_json)
-    assert py_json == {'value': None,
-                       'max_value': 5.0,
-                       'unit': 'm',
-                       'min_value': None,
-                       'standard_deviation': None,
-                       'replicates': None,
-                       'unit_type': 'length'}
-
-
-def test_Length_from_json_min():
-    ur = Length.from_py_json({'min_value': 5.0,
-                              'unit': 'm/s'})
-
-    assert ur.min_value == 5.0
-    assert ur.max_value is None
-    assert ur.unit == "m/s"
-
-
-def test_Length_range_from_json():
-    ur = Length.from_py_json({'min_value': 5.0,
-                              'max_value': 10.1,
-                              'unit': 'm/s'})
-
-    assert ur.min_value == 5.0
-    assert ur.max_value == 10.1
-    assert ur.unit == "m/s"
-
-
-def test_Length_convert_to():
-    l = Length(1.0, unit="m")
-
-    assert l.value == 1.0
-    assert l.unit == "m"
-
-    l.convert_to("ft")
-
-    assert l.unit == "ft"
-    assert isclose(l.value, 3.280839895)
-    assert l.min_value is None
-    assert l.max_value is None
-    assert l.standard_deviation is None
-    assert l.replicates is None
-
-
-def test_Length_convert_to_all():
-    l = Length(min_value=1.0,
-               max_value=10.0,
-               unit="m",
-               replicates=3,
-               standard_deviation=0.5)
-
-    assert l.min_value == 1.0
-    assert l.max_value == 10.0
-    assert l.unit == "m"
-    assert l.replicates == 3
-    assert l.standard_deviation == 0.5
-
-    l.convert_to("ft")
-
-    assert l.unit == "ft"
-    assert l.value is None
-
-    assert isclose(l.min_value, 3.280839895)
-    assert isclose(l.max_value, 32.80839895)
-    assert isclose(l.standard_deviation, 1.6404199475)
-    assert l.replicates == 3
-
-
-def test_convert_wrong_unit():
-    l = Length(min_value=1.0,
-               max_value=10.0,
-               unit="m",
-               replicates=3,
-               standard_deviation=0.5)
-
-    with pytest.raises(InvalidUnitError):
-        l.convert_to("kg")
-
-
-def test_convert_wrong_unit_not_break():
-    l = Length(min_value=1.0,
-               max_value=10.0,
-               unit="m",
-               replicates=3,
-               standard_deviation=0.5)
-    # make sure an icorrect unit didn't break anything!
-    try:
-        l.convert_to("kg")
-    except InvalidUnitError:
-        assert l.min_value == 1.0
-        assert l.max_value == 10.0
-        assert l.unit == "m"
-        assert l.replicates == 3
-        assert l.standard_deviation == 0.5
-
-
-def test_convert_wrong_value_not_break():
-    l = Length(min_value=1.0,
-               max_value=10.0,
-               unit="m",
-               replicates=3,
-               standard_deviation="bad value")
-    # make sure an icorrect unit didn't break anything!
-    try:
-        l.convert_to("cm")
-    except: # anything goes wrong, the values shouldn't change
-        assert l.min_value == 1.0
-        assert l.max_value == 10.0
-        assert l.unit == "m"
-        assert l.replicates == 3
-        assert l.standard_deviation == "bad value"
-
-
-@pytest.mark.parametrize("Type, val1, unit1, val2, unit2",
-                         [(MassFraction, 0.1, 'fraction', 100, 'g/kg'),
-                          (VolumeFraction, 1, '%', 0.01, 'fraction'),
-                          (Mass, 1, 'kg', 1000, 'g'),
-                          (Temperature, 32.0, 'F', 0.0, 'C'),
-                          (Density, 1.0, 'kg/m^3', 0.062427962, 'lbs/ft^3'),
-                          (Density, 10.0, 'API', 1.0, 'SpecificGravity'),
-                          ])
-def test_basic_convert(Type, val1, unit1, val2, unit2):
-    measurement = Type(value=val1,
-                       unit=unit1,
-                       )
-
-    assert measurement.value == val1
-    assert measurement.unit == unit1
-    assert measurement.unit_type == Type.unit_type
-
-    measurement.convert_to(unit2)
-
-    assert isclose(measurement.value, val2)
-    assert measurement.unit == unit2
-    assert measurement.unit_type == Type.unit_type
-
-
-
-def test_Temperature_F_C():
-    """
-    we need to make sure not to reset the zero
-    point of standard deviation.
-    """
-    temp = Temperature(value=10.0,
-                       unit="F",
-                       standard_deviation=1.0,
-                       replicates=3)
-
-    print(temp)
-    temp.convert_to('C')
-
-    assert temp.unit == 'C'
-    assert isclose(temp.value, -12.222222222)
-    assert isclose(temp.standard_deviation, 5.0 / 9.0)
-
-
-def test_Temperature_C_K():
-    """
-    we need to make sure not to reset the zero
-    point of standard deviation.
-    """
-    temp = Temperature(value=0.0,
-                       unit="C",
-                       standard_deviation=3.14,
-                       replicates=3)
-
-    print(temp)
-    temp.convert_to('K')
-
-    assert temp.unit == 'K'
-    assert isclose(temp.value, 273.15)
-    assert isclose(temp.standard_deviation, 3.14)
-
-
-
-
-
-
+    def test_from_json(self):
+        json_obj = {'interface': 'water',
+                    'tension': {'value': 1000.0, 'unit': 'dyne/cm',
+                                'standard_deviation': 1.2, 'replicates': 3},
+                    'ref_temp': {'value': 273.15, 'unit': 'K',
+                                 'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = InterfacialTensionPoint.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['tension']['unit_type'] = 'interfacialtension'
+        json_obj['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestInterfacialTensionList:
+    def test_init_empty(self):
+        assert InterfacialTensionList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert InterfacialTensionList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'interface': 'water',
+                     'tension': {'value': 1000.0, 'unit': 'dyne/cm',
+                                 'standard_deviation': 1.2, 'replicates': 3},
+                     'ref_temp': {'value': 273.15, 'unit': 'K',
+                                  'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = InterfacialTensionList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['tension']['unit_type'] = 'interfacialtension'
+        json_obj[0]['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestDispersibility:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = Dispersibility()
+
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = Dispersibility.from_py_json({})
+
+    def test_from_json(self):
+        json_obj = {'dispersant': 'corexit',
+                    'effectiveness': {'value': 10.0, 'unit': '%',
+                                      'standard_deviation': 1.2,
+                                      'replicates': 3},
+                    }
+        model = Dispersibility.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['effectiveness']['unit_type'] = 'massfraction'
+
+        assert model.py_json() == json_obj
+
+
+class TestDispersibilityList:
+    def test_init_empty(self):
+        assert DispersibilityList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert DispersibilityList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'dispersant': 'corexit',
+                     'effectiveness': {'value': 10.0, 'unit': '%',
+                                       'standard_deviation': 1.2,
+                                       'replicates': 3},
+                     }]
+        model = DispersibilityList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['effectiveness']['unit_type'] = 'massfraction'
+
+        assert model.py_json() == json_obj
+
+
+class TestEmulsion:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = Emulsion()
+
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = Emulsion.from_py_json({})
+
+    def test_from_json(self):
+        json_obj = {'complex_modulus': {'value': 1.0, 'unit': 'Pa',
+                                        'standard_deviation': 1.2,
+                                        'replicates': 3},
+                    'storage_modulus': {'value': 1.0, 'unit': 'Pa',
+                                        'standard_deviation': 1.2,
+                                        'replicates': 3},
+                    'loss_modulus': {'value': 1.0, 'unit': 'Pa',
+                                     'standard_deviation': 1.2,
+                                     'replicates': 3},
+                    'tan_delta': {'value': 10.0, 'unit': '%',
+                                  'standard_deviation': 1.2,
+                                  'replicates': 3},
+                    'complex_viscosity': {'value': 100.0, 'unit': 'cP',
+                                          'standard_deviation': 1.2,
+                                          'replicates': 3},
+                    'water_content': {'value': 10.0, 'unit': '%',
+                                      'standard_deviation': 1.2,
+                                      'replicates': 3},
+                    }
+        model = Emulsion.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['complex_modulus']['unit_type'] = 'adhesion'
+        json_obj['storage_modulus']['unit_type'] = 'adhesion'
+        json_obj['loss_modulus']['unit_type'] = 'adhesion'
+        json_obj['tan_delta']['unit_type'] = 'massfraction'
+        json_obj['complex_viscosity']['unit_type'] = 'dynamicviscosity'
+        json_obj['water_content']['unit_type'] = 'massfraction'
+
+        assert model.py_json() == json_obj
+
+
+class TestEmulsionList:
+    def test_init_empty(self):
+        assert EmulsionList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert EmulsionList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'complex_modulus': {'value': 1.0, 'unit': 'Pa',
+                                         'standard_deviation': 1.2,
+                                         'replicates': 3},
+                     'storage_modulus': {'value': 1.0, 'unit': 'Pa',
+                                         'standard_deviation': 1.2,
+                                         'replicates': 3},
+                     'loss_modulus': {'value': 1.0, 'unit': 'Pa',
+                                      'standard_deviation': 1.2,
+                                      'replicates': 3},
+                     'tan_delta': {'value': 10.0, 'unit': '%',
+                                   'standard_deviation': 1.2,
+                                   'replicates': 3},
+                     'complex_viscosity': {'value': 100.0, 'unit': 'cP',
+                                           'standard_deviation': 1.2,
+                                           'replicates': 3},
+                     'water_content': {'value': 10.0, 'unit': '%',
+                                       'standard_deviation': 1.2,
+                                       'replicates': 3},
+                     }]
+        model = EmulsionList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['complex_modulus']['unit_type'] = 'adhesion'
+        json_obj[0]['storage_modulus']['unit_type'] = 'adhesion'
+        json_obj[0]['loss_modulus']['unit_type'] = 'adhesion'
+        json_obj[0]['tan_delta']['unit_type'] = 'massfraction'
+        json_obj[0]['complex_viscosity']['unit_type'] = 'dynamicviscosity'
+        json_obj[0]['water_content']['unit_type'] = 'massfraction'
+
+        assert model.py_json() == json_obj

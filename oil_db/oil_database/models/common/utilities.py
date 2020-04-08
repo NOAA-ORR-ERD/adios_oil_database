@@ -40,23 +40,32 @@ def _py_json(self, sparse=True):
 
 
 @classmethod
-def _from_py_json(cls, py_json):
+def _from_py_json(cls, py_json, allow_none=False):
     """
     classmethod to create a dataclass from json compatible python data
     structure.
     """
     arg_dict = {}
+
+    if py_json is None and allow_none is True:
+        # the parent object defined an attribute with a default of None
+        # We could actually allow other default types, but this one is common
+        return py_json
+
     for fieldname, fieldobj in cls.__dataclass_fields__.items():
         if fieldname in py_json:
+            allow_none = True if fieldobj.default is None else False
+
             try:  # see if it's "one of ours"
                 arg_dict[fieldname] = (fieldobj.type
-                                       .from_py_json(py_json[fieldname]))
+                                       .from_py_json(py_json[fieldname],
+                                                     allow_none=allow_none))
             except AttributeError:
                 # it's not, so we just use the value
                 arg_dict[fieldname] = py_json[fieldname]
             except TypeError:
-                print('TypeError in {}._from_py_json(): field: {}'
-                      .format(cls.__name__, fieldname))
+                print(f'TypeError in {cls.__name__}._from_py_json(): '
+                      f'field: {fieldname}')
                 raise
 
     obj = cls(**arg_dict)
@@ -123,7 +132,7 @@ class JSON_List(list):
         return json_obj
 
     @classmethod
-    def from_py_json(cls, py_json):
+    def from_py_json(cls, py_json, allow_none=False):
         """
         create a JSON_List from json array of objects
         that may be json-able.

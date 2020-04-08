@@ -1,13 +1,13 @@
 
 import pytest
 
-# from oil_database.models.common.utilities import JSON_List
-from oil_database.models.oil.sample import Sample, SampleList
-from oil_database.models.oil.values import (Density,
-                                            DensityList,
-                                            Viscosity,
-                                            ViscosityList,
-                                            UnittedValue)
+from oil_database.models.common.measurement import Temperature, Density
+
+from oil_database.models.oil.measurement import (DensityPoint,
+                                                 DensityList)
+
+from oil_database.models.oil.sample import Sample
+from oil_database.models.oil.physical_properties import PhysicalProperties
 
 
 def test_sample_init():
@@ -46,9 +46,17 @@ def test_sample_json_full():
     assert py_json['short_name'] == "Fresh Oil"
     for name in ('fraction_weathered',
                  'boiling_point_range',
-                 'densities',
-                 'kvis',
-                 'dvis',
+                 'cut_volume',
+                 'physical_properties',
+                 'environmental_behavior',
+                 'SARA',
+                 'distillation_data',
+                 'bulk_composition',
+                 'compounds',
+                 'headspace_analysis',
+                 'CCME',
+                 'miscellaneous',
+                 'extra_data',
                  ):
         assert name in py_json
 
@@ -60,20 +68,24 @@ def test_complete_sample():
     s = Sample(short_name="short",
                name="a longer name that is more descriptive",
                )
+    p = PhysicalProperties()
+
     s.fraction_weathered = 0.23
     s.boiling_point_range = None
-    s.densities = DensityList(
-                   [Density(standard_deviation=1.2,
-                            replicates=3,
-                            density=UnittedValue(0.8751, "kg/m^3"),
-                            ref_temp=UnittedValue(15.0, "C"),
-                            ),
-                    Density(standard_deviation=1.4,
-                            replicates=5,
-                            density=UnittedValue(0.99, "kg/m^3"),
-                            ref_temp=UnittedValue(25.0, "C"),
-                            ),
-                    ])
+
+    p.densities = DensityList([
+        DensityPoint(density=Density(value=0.8751, unit="kg/m^3",
+                                     standard_deviation=1.2,
+                                     replicates=3),
+                     ref_temp=Temperature(value=15.0, unit="C")),
+        DensityPoint(density=Density(value=0.99, unit="kg/m^3",
+                                     standard_deviation=1.4,
+                                     replicates=5),
+                     ref_temp=Temperature(value=25.0, unit="C"))
+    ])
+
+    s.physical_properties = p
+
     py_json = s.py_json(sparse=False)  # the not sparse version
 
     print(py_json)
@@ -82,16 +94,20 @@ def test_complete_sample():
     assert py_json['short_name'] == "short"
     for name in ('fraction_weathered',
                  'boiling_point_range',
-                 'densities',
-                 'kvis',
-                 'dvis',
+                 'physical_properties',
                  ):
         assert name in py_json
 
+    for name in ('densities',
+                 'kinematic_viscosities',
+                 'dynamic_viscosities',
+                 ):
+        assert name in py_json['physical_properties']
+
     # Now test some real stuff:
-    dens = py_json['densities']
-    # type of densities
+    dens = py_json['physical_properties']['densities']
     print(type(dens))
+
     assert dens[0]['density']['value'] == 0.8751
 
 # def test_sample_from_json():

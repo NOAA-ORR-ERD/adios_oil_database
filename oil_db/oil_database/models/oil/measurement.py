@@ -1,116 +1,124 @@
+'''
+    Classes for storing measured values within an Oil record
+'''
+from dataclasses import dataclass
 
-"""
-classes for holding a measurement
-"""
-
-from unit_conversion import convert
-
-from ..common.utilities import (dataclass_to_json,
-                                JSON_List,
-                                )
-from ..common.validators import (EnumValidator,
-                                 )
-
-from .validation.warnings import WARNINGS
-from .validation.errors import ERRORS
-
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import List, Dict
+from ..common.utilities import dataclass_to_json, JSON_List
+from ..common.measurement import (Temperature,
+                                  MassFraction,
+                                  Density,
+                                  DynamicViscosity,
+                                  KinematicViscosity,
+                                  InterfacialTension,
+                                  Adhesion)
 
 
 @dataclass_to_json
 @dataclass
-class MeasurementDataclass:
+class DensityPoint:
+    density: Density
+    ref_temp: Temperature
+
+
+class DensityList(JSON_List):
+    item_type = DensityPoint
+
+
+@dataclass_to_json
+@dataclass
+class DynamicViscosityPoint:
+    viscosity: DynamicViscosity
+    ref_temp: Temperature
+
+
+class DynamicViscosityList(JSON_List):
+    item_type = DynamicViscosityPoint
+
+
+@dataclass_to_json
+@dataclass
+class KinematicViscosityPoint:
+    viscosity: KinematicViscosity
+    ref_temp: Temperature
+
+
+class KinematicViscosityList(JSON_List):
+    item_type = KinematicViscosityPoint
+
+
+@dataclass_to_json
+@dataclass
+class DistCut:
+    fraction: MassFraction
+    vapor_temp: Temperature
+
+
+class DistCutList(JSON_List):
     """
-    Data structure to hold a value with a unit
-
-    This accommodates both a single value and a range of values
-
-    There is some complexity here, so everything is optional
-
-    But maybe it would be better to have some validation on creation
-
-    NOTES:
-       If there is a value, there should be no min_value or max_value
-       If there is only  a min or max, then it is interpreted as
-       greater than or less than
-
-       There needs to be validation on that!
+    needs some refactoring: should be method, for one
     """
-    value: float = None
-    unit: str = None
-    min_value: float = None
-    max_value: float = None
-    standard_deviation: float = None
-    replicates: float = None
+    item_type = DistCut
+
+    def validate(self):
+        # do validation here
+        pass
 
 
-class MeasurementBase(MeasurementDataclass):
-    # need to add these here, so they won't be overwritten by the
-    # decorator
-    unit_type = None
-
-    def py_json(self, sparse=True):
-        # unit_type is added here, as it's not a settable field
-        pj = super().py_json(sparse)
-        pj['unit_type'] = self.unit_type
-        return pj
-
-    def convert_to(self, new_unit):
-        # fixme: should this return a new object instead of mutating?
-        new_vals = {att: None for att in ('value', 'min_value', 'max_value', 'standard_deviation')}
-        for attr in new_vals.keys():
-            val = getattr(self, attr)
-            if val is not None:
-                new_val = convert(self.unit_type,
-                                  self.unit,
-                                  new_unit,
-                                  val)
-                new_vals[attr] = new_val
-        # if this was all successful
-        new_vals['unit'] = new_unit
-        self.__dict__.update(new_vals)
-
-    # @property
-    # def unit_type(self):
-    #     return self.__class__.unit_type
+@dataclass_to_json
+@dataclass
+class InterfacialTensionPoint:
+    interface: str
+    tension: InterfacialTension
+    ref_temp: Temperature
+    method: str = None
 
 
-class Length(MeasurementBase):
-    unit_type = "length"
+class InterfacialTensionList(JSON_List):
+    item_type = InterfacialTensionPoint
 
 
-class MassFraction(MeasurementBase):
-    unit_type = "massfraction"
+@dataclass_to_json
+@dataclass
+class Dispersibility:
+    dispersant: str
+    # Todo: effectiveness is a measurement, in that it is measured in percent
+    #       and has associated standard_deviation & replicates.
+    #       Unfortunately, NUCOS is incapable of supplying a generic type
+    #       for fractional conversions.  So we use MassFraction, as it has
+    #       percent to fraction conversions.  This needs to be fixed, ideally
+    #       in NUCOS.
+    effectiveness: MassFraction
+    method: str = None
 
 
-class VolumeFraction(MeasurementBase):
-    unit_type = "volumefraction"
+class DispersibilityList(JSON_List):
+    item_type = Dispersibility
 
 
-class Mass(MeasurementBase):
-    unit_type = "mass"
+@dataclass_to_json
+@dataclass
+class Emulsion:
+    '''
+        Note: This is a first pass attempt.  Will probably need to be
+              reorganized.
+    '''
+    # Pa units, some kind of pressure/stress.
+    # Adhesion provides the right units
+    complex_modulus: Adhesion
+    storage_modulus: Adhesion
+    loss_modulus: Adhesion
+
+    # Todo: this seems to be just unit-less float, but it too is a measurement
+    #       with standard_deviation & replicates.  Well MassFraction will do
+    #       for now.  But NUCOS needs to be updated.
+    tan_delta: MassFraction
+
+    complex_viscosity: DynamicViscosity
+    water_content: MassFraction
+
+    method: str = None
+    visual_stability: str = None
 
 
-class Density(MeasurementBase):
-    unit_type = "density"
-
-
-class Temperature(MeasurementBase):
-    unit_type = "temperature"
-
-    def convert_to(self, new_unit):
-        # need to do the "right thing" with standard deviation
-        if self.standard_deviation is None:
-            # no need for anything special
-            super().convert_to(new_unit)
-        else:
-            new_std = convert("deltatemperature",
-                              self.unit,
-                              new_unit,
-                              self.standard_deviation)
-            super().convert_to(new_unit)
-            self.standard_deviation = new_std
-
-
+class EmulsionList(JSON_List):
+    item_type = Emulsion
