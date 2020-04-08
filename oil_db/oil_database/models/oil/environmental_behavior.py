@@ -11,12 +11,9 @@ from ..common.utilities import dataclass_to_json
 
 from .measurement import DispersibilityList, EmulsionList
 
-from .compound import CompoundList
-from .measurement import MassFraction, Temperature
-
 
 @dataclass_to_json
 @dataclass
 class EnvironmentalBehavior:
-    dispersibility: DispersibilityList = field(default_factory=DispersibilityList)
-    emulsion: EmulsionList = field(default_factory=EmulsionList)
+    dispersibilities: DispersibilityList = field(default_factory=DispersibilityList)
+    emulsions: EmulsionList = field(default_factory=EmulsionList)

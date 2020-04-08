@@ -15,9 +15,6 @@ from .measurement import (DensityList,
                           KinematicViscosityList,
                           InterfacialTensionList)
 
-from .compound import CompoundList
-from .measurement import MassFraction
-
 
 @dataclass_to_json
 @dataclass

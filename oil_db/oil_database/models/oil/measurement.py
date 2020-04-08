@@ -81,12 +81,6 @@ class InterfacialTensionList(JSON_List):
 @dataclass
 class Dispersibility:
     dispersant: str
-    # Todo: effectiveness is a measurement, in that it is measured in percent
-    #       and has associated standard_deviation & replicates.
-    #       Unfortunately, NUCOS is incapable of supplying a generic type
-    #       for fractional conversions.  So we use MassFraction, as it has
-    #       percent to fraction conversions.  This needs to be fixed, ideally
-    #       in NUCOS.
     effectiveness: MassFraction
     method: str = None
 
@@ -108,7 +102,7 @@ class Emulsion:
     storage_modulus: Adhesion
     loss_modulus: Adhesion
 
-    # Todo: this seems to be just unit-less float, but it too is a measurement
+    # Todo: this seems to be just unit-less float, but it is a measurement
     #       with standard_deviation & replicates.  Well MassFraction will do
     #       for now.  But NUCOS needs to be updated.
     tan_delta: MassFraction
