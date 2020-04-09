@@ -19,8 +19,7 @@ from oil_database.models.oil.sample import Sample, SampleList
 
 from oil_database.models.common.measurement import (Temperature,
                                                     Density,
-                                                    DynamicViscosity
-                                                    )
+                                                    DynamicViscosity)
 
 from oil_database.models.oil.measurement import (DensityPoint, DensityList,
                                                  DynamicViscosityPoint,
@@ -48,7 +47,6 @@ class EnvCanadaRecordMapper(object):
                              'name',
                              'location',
                              'reference',
-                             'reference_date',
                              'sample_date',
                              'comments',
                              'api',
@@ -62,25 +60,30 @@ class EnvCanadaRecordMapper(object):
                            refined product.
             :type record: A record parser object.
         '''
-        self.record = record
+        if hasattr(record, 'dict'):
+            self.record = record
+        else:
+            raise ValueError(f'{self.__class__.__name__}(): '
+                             'invalid parser passed in')
         self._status = None
         self._labels = None
 
-    def py_json(self):
-        samples = [EnvCanadaSampleMapper.factory(s, w)
-                   for s, w
-                   in zip(self.record.samples, self.record.weathering)]
+    @property
+    def sub_samples(self):
+        return [EnvCanadaSampleMapper(s, w)
+                for s, w in zip(self.record.sub_samples,
+                                self.record.weathering)]
 
+    def py_json(self):
         rec = self.record.dict()
 
-        pprint(samples[0].dict())
-
-        rec['samples'] = SampleList([Sample.from_py_json(s.dict())
-                                     for s in samples])
-
         rec['_id'] = rec['oil_id']
+        rec['sub_samples'] = [s.dict() for s in self.sub_samples]
 
-        rec = Oil(**rec)
+        if len(rec['sub_samples']) > 0:
+            rec['API'] = rec['sub_samples'][0]['api']
+
+        rec = Oil.from_py_json(rec)
 
         return rec.py_json()
 
@@ -90,15 +93,11 @@ class EnvCanadaSampleMapper(object):
         self.parser = parser
         self.generate_sample_id_attrs(sample_id)
 
-    @classmethod
-    def factory(cls, parser, sample_id):
-        return cls(parser, sample_id)
-
     def generate_sample_id_attrs(self, sample_id):
         if sample_id == 0:
             self.name = 'Fresh Oil Sample'
             self.short_name = 'Fresh Oil'
-            self.fraction_weathered = sample_id
+            self.fraction_weathered = {'value': sample_id, 'unit': '1'}
             self.boiling_point_range = None
         elif isinstance(sample_id, str):
             self.name = sample_id
@@ -109,7 +108,7 @@ class EnvCanadaSampleMapper(object):
             # we will assume this is a simple fractional weathered amount
             self.name = '{:.4g}% Weathered'.format(sample_id * 100)
             self.short_name = '{:.4g}% Weathered'.format(sample_id * 100)
-            self.fraction_weathered = sample_id
+            self.fraction_weathered = {'value': sample_id, 'unit': '1'}
             self.boiling_point_range = None
         else:
             logger.warn("Can't generate IDs for sample: ", sample_id)
@@ -123,7 +122,7 @@ class EnvCanadaSampleMapper(object):
                      'boiling_point_range',
                      'densities',
                      'dvis',
-                     'cuts'):
+                     'distillation_data'):
             rec[attr] = getattr(self, attr)
 
         return rec
@@ -173,7 +172,7 @@ class EnvCanadaSampleMapper(object):
         return ret
 
     @property
-    def cuts(self):
+    def distillation_data(self):
         ret = []
 
         # First the boiling point distribution data (if present)
@@ -196,8 +195,10 @@ class EnvCanadaSampleMapper(object):
             ref_temp = self.parser.boiling_point_distribution[frac_lbl]
 
             if ref_temp is not None:
-                ret.append(DistCut(UnittedValue(frac, unit="%"),
-                                   UnittedValue(ref_temp, unit="C")))
+                ret.append({
+                    'fraction': {'value': frac, 'unit': '%'},
+                    'vapor_temp': {'value': ref_temp, 'unit': 'C'}
+                })
 
         # Then the cumulative weight fraction (if present)
         for ref_temp in list(range(40, 201, 20)) + list(range(250, 701, 50)):
@@ -205,8 +206,10 @@ class EnvCanadaSampleMapper(object):
             frac = self.parser.boiling_point_cumulative_fraction[temp_lbl]
 
             if frac is not None:
-                ret.append(DistCut(UnittedValue(frac, unit="%"),
-                                   UnittedValue(ref_temp, unit="C")))
+                ret.append({
+                    'fraction': {'value': frac, 'unit': '%'},
+                    'vapor_temp': {'value': ref_temp, 'unit': 'C'}
+                })
 
         # There is a single method field associated with the cuts.
         # Do we do anything with it?

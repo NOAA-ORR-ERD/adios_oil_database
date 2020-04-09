@@ -399,12 +399,7 @@ class EnvCanadaRecordParser(ParserBase):
         return weathered_subsamples
 
     @property
-    @join_with(' ')
     def reference(self):
-        return self.values[None]['reference']
-
-    @property
-    def reference_date(self):
         '''
             The reference content can have:
             - no content:  In this case we take the created date of the
@@ -415,12 +410,17 @@ class EnvCanadaRecordParser(ParserBase):
                                      year (most recent) and form a datetime
                                      with it.
         '''
-        occurrences = [int(n) for n in
-                       re.compile(r'\d{4}').findall(self.reference)]
+        ref_text = ' '.join([f for f in self.values[None]['reference']
+                            if f is not None])
+
+        occurrences = [int(n) for n in re.compile(r'\d{4}').findall(ref_text)]
+
         if len(occurrences) == 0:
-            return self.file_props['created']
+            ref_year = self.file_props['created'].year
         else:
-            return datetime(max(occurrences), 1, 1, tzinfo=timezone('GMT'))
+            ref_year = max(occurrences)
+
+        return {'reference': ref_text, 'year': ref_year}
 
     @property
     @parse_time
@@ -488,7 +488,7 @@ class EnvCanadaRecordParser(ParserBase):
                      for cat_key, cat_val in self.values.items()])
 
     @property
-    def samples(self):
+    def sub_samples(self):
         for i, w in enumerate(self.weathering):
             props_i = self.vertical_slice(i)
             props_i['weathering'] = w
@@ -502,13 +502,12 @@ class EnvCanadaRecordParser(ParserBase):
                      'oil_id',
                      'location',
                      'reference',
-                     'reference_date',
                      'sample_date',
                      'comments',
                      'product_type'):
             ret[attr] = getattr(self, attr)
 
-        ret['samples'] = list(self.samples)
+        ret['samples'] = list(self.sub_samples)
 
         return ret
 

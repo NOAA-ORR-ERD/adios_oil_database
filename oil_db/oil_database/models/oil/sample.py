@@ -42,20 +42,6 @@ class Sample:
     distillation_data: DistCutList = field(default_factory=DistCutList)
 
     bulk_composition: CompoundList = field(default_factory=CompoundList)
-    # sulfur_mass_fraction: UnittedValue = None
-    # carbon_mass_fraction: UnittedValue = None
-    # hydrogen_mass_fraction: UnittedValue = None
-    # total_acid_number: UnittedValue = None
-    # mercaptan_sulfur_mass_fraction: UnittedValue = None
-    # nitrogen_mass_fraction: UnittedValue = None
-    # ccr_percent: UnittedValue = None
-    # calcium_mass_fraction: UnittedValue = None
-    # reid_vapor_pressure: UnittedValue = None
-    # hydrogen_sulfide_concentration: UnittedValue = None
-    # salt_content: UnittedValue = None
-    # paraffin_volume_fraction: UnittedValue = None
-    # naphthene_volume_fraction: UnittedValue = None
-    # aromatic_volume_fraction: UnittedValue = None
 
     compounds: CompoundList = field(default_factory=CompoundList)
 

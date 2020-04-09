@@ -17,7 +17,8 @@ from openpyxl.utils.exceptions import InvalidFileException
 
 from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
-                                                  EnvCanadaRecordMapper)
+                                                  EnvCanadaRecordMapper,
+                                                  EnvCanadaSampleMapper)
 
 from pprint import pprint
 from builtins import isinstance
@@ -129,7 +130,22 @@ class TestEnvCanadaRecordParser(object):
         data = self.reader.get_record(oil_id)
         parser = EnvCanadaRecordParser(data, None)  # should construct fine
 
-        assert parser.reference_date.year == expected
+        assert parser.reference['year'] == expected
+
+    @pytest.mark.parametrize('oil_id, expected', [
+        ('2713', 2016),
+        ('2234', 2017),
+    ])
+    def test_init_valid_data_and_file_props(self, oil_id, expected):
+        '''
+            The reference_date will sometimes need the file props if the
+            reference field contains no date information.  check that the
+            file props are correctly parsed.
+        '''
+        data = self.reader.get_record(oil_id)
+        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+
+        assert parser.reference['year'] == expected
 
     @pytest.mark.parametrize('label, expected', [
         ('A Label', 'a_label'),
@@ -168,9 +184,8 @@ class TestEnvCanadaRecordParser(object):
         ('2234', 'ests_codes', ['2234.1.1 A', '2234.1.4.1 ', '2234.1.3.1 ',
                                 '2234.1.2.1 ', '2234.1.5.1 ']),
         ('2234', 'weathering', [0.0, 0.0853, 0.1686, 0.2534, 0.2645]),
-        ('2713', 'reference', 'Hollebone, 2016.'),
-        ('2713', 'reference_date', datetime(2016, 1, 1,
-                                            tzinfo=timezone('GMT'))),
+        ('2713', 'reference', {'reference': 'Hollebone, 2016. ',
+                               'year': 2016}),
         ('2234', 'sample_date', datetime(2013, 4, 8, 0, 0)),
         ('2234', 'comments', 'Via  CanmetENERGY, Natural Resources Canada'),
         ('2234', 'location', 'Alberta, Canada'),
@@ -211,7 +226,7 @@ class TestEnvCanadaRecordParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
 
         assert np.allclose(samples[index].deep_get(attr, default=default),
                            expected)
@@ -233,7 +248,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
 
         assert np.allclose(samples[index].deep_get(attr, default=default),
                            expected)
@@ -246,7 +261,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
 
         assert np.allclose(samples[index].api, expected)
 
@@ -286,7 +301,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
 
         assert self.compare_expected(samples[index].densities, expected)
 
@@ -308,7 +323,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].dvis)
 
         assert self.compare_expected(samples[index].dvis, expected)
@@ -353,7 +368,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].ift)
 
         assert self.compare_expected(samples[index].ift, expected)
@@ -372,7 +387,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].flash_point)
 
         assert self.compare_expected(samples[index].flash_point, expected)
@@ -391,7 +406,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].pour_point)
 
         assert self.compare_expected(samples[index].pour_point, expected)
@@ -448,7 +463,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].boiling_point_distribution)
 
         assert self.compare_expected(samples[index].boiling_point_distribution,
@@ -502,7 +517,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].boiling_point_cumulative_fraction)
 
         assert self.compare_expected(samples[index]
@@ -521,7 +536,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].adhesion)
 
         assert self.compare_expected(samples[index].adhesion, expected)
@@ -546,7 +561,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].evaporation_eqs)
 
         assert self.compare_expected(samples[index].evaporation_eqs, expected)
@@ -595,7 +610,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(list(samples[index].emulsion))
 
         assert self.compare_expected(list(samples[index].emulsion), expected)
@@ -612,7 +627,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].chemical_dispersibility)
 
         assert self.compare_expected(samples[index].chemical_dispersibility,
@@ -630,7 +645,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].sulfur_content)
 
         assert self.compare_expected(samples[index].sulfur_content, expected)
@@ -647,7 +662,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].water_content)
 
         assert self.compare_expected(samples[index].water_content, expected)
@@ -664,7 +679,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].wax_content)
 
         assert self.compare_expected(samples[index].wax_content, expected)
@@ -689,7 +704,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].sara_total_fractions)
 
         assert self.compare_expected(samples[index].sara_total_fractions,
@@ -703,7 +718,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].benzene)
 
         assert self.compare_expected(samples[index].benzene, expected)
@@ -722,7 +737,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].btex_group)
 
         assert self.compare_expected(samples[index].btex_group, expected)
@@ -757,7 +772,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].c4_c6_alkyl_benzenes)
 
         assert self.compare_expected(samples[index].c4_c6_alkyl_benzenes,
@@ -783,7 +798,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].headspace_analysis)
 
         assert self.compare_expected(samples[index].headspace_analysis,
@@ -807,7 +822,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].chromatography)
 
         assert self.compare_expected(samples[index].chromatography, expected)
@@ -826,7 +841,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].ccme)
 
         assert self.compare_expected(samples[index].ccme, expected)
@@ -853,7 +868,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].ccme_f1)
 
         assert self.compare_expected(samples[index].ccme_f1, expected)
@@ -880,7 +895,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].ccme_f2)
 
         assert self.compare_expected(samples[index].ccme_f2, expected)
@@ -909,7 +924,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].ccme_tph)
 
         assert self.compare_expected(samples[index].ccme_tph, expected)
@@ -930,7 +945,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].naphthalenes)
 
         assert self.compare_expected(samples[index].naphthalenes, expected)
@@ -951,7 +966,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].phenanthrenes)
 
         assert self.compare_expected(samples[index].phenanthrenes, expected)
@@ -970,7 +985,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].dibenzothiophenes)
 
         assert self.compare_expected(samples[index].dibenzothiophenes,
@@ -990,7 +1005,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].fluorenes)
 
         assert self.compare_expected(samples[index].fluorenes, expected)
@@ -1011,7 +1026,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].benzonaphthothiophenes)
 
         assert self.compare_expected(samples[index].benzonaphthothiophenes,
@@ -1031,7 +1046,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].chrysenes)
 
         assert self.compare_expected(samples[index].chrysenes, expected)
@@ -1072,7 +1087,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].other_priority_pahs)
 
         assert self.compare_expected(samples[index].other_priority_pahs,
@@ -1162,7 +1177,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].n_alkanes)
 
         assert self.compare_expected(samples[index].n_alkanes, expected)
@@ -1215,7 +1230,7 @@ class TestEnvCanadaSampleParser(object):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
-        samples = list(parser.samples)
+        samples = list(parser.sub_samples)
         pprint(samples[index].biomarkers)
 
         assert self.compare_expected(samples[index].biomarkers, expected)
@@ -1232,8 +1247,21 @@ class TestEnvCanadaRecordMapper(object):
             _mapper = EnvCanadaRecordMapper()
 
     def test_init_invalid(self):
-        _mapper = EnvCanadaRecordMapper(None)
+        with pytest.raises(ValueError):
+            _mapper = EnvCanadaRecordMapper(None)
 
+    @pytest.mark.parametrize('oil_id, expected', [
+        ('2713', {'_id': 'EC002713',
+                  'oil_id': 'EC002713',
+                  'comments': None,
+                  'location': 'Alaska, USA',
+                  'name': 'Alaska North Slope [2015]',
+                  'product_type': 'crude',
+                  'reference': {'reference': 'Hollebone, 2016. ',
+                                'year': 2016},
+                  'sample_date': datetime(2015, 3, 22, 0, 0),
+                  }),
+    ])
     def test_init_valid(self, oil_id, expected):
         '''
             We are being fairly light on the parameter checking in our
@@ -1243,10 +1271,84 @@ class TestEnvCanadaRecordMapper(object):
             This is because the reference_date will sometimes need the
             file props if the reference field contains no date information.
         '''
-        data = self.reader.get_record(oil_id)
-        parser = EnvCanadaRecordParser(data, None)  # should construct fine
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        mapper = EnvCanadaRecordMapper(parser)
+        py_json = mapper.py_json()
 
-        assert parser.reference_date.year == expected
+        for k, v in expected.items():
+            if v is not None:
+                assert py_json[k] == v
+
+
+class TestEnvCanadaSampleMapper(object):
+    '''
+        Note: still building up the new version of the mapper
+    '''
+    reader = EnvCanadaOilExcelFile(data_file)
+
+    def test_init_invalid(self):
+        with pytest.raises(TypeError):
+            _mapper = EnvCanadaSampleMapper()
+
+        with pytest.raises(TypeError):
+            _mapper = EnvCanadaSampleMapper(None)
+
+        mapper = EnvCanadaSampleMapper(None, None)
+
+        with pytest.raises(AttributeError):
+            mapper.dict()
+
+    @pytest.mark.parametrize('oil_id, expected', [
+        ('2713', {'_id': 'EC002713',
+                  'oil_id': 'EC002713',
+                  'comments': None,
+                  'location': 'Alaska, USA',
+                  'name': 'Alaska North Slope [2015]',
+                  'product_type': 'crude',
+                  'reference': {'reference': 'Hollebone, 2016. ',
+                                'year': 2016},
+                  'sample_date': datetime(2015, 3, 22, 0, 0),
+                  }),
+    ])
+    def test_init_valid(self, oil_id, expected):
+        '''
+            We are being fairly light on the parameter checking in our
+            constructor.  So if no file props are passed in, we can still
+            construct the parser, but accessing reference_date could raise
+            a TypeError.
+            This is because the reference_date will sometimes need the
+            file props if the reference field contains no date information.
+        '''
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        mapper = EnvCanadaRecordMapper(parser)
+        sub_mapper = mapper.sub_samples[0]
+
+        assert type(sub_mapper) == EnvCanadaSampleMapper
+
+    @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        ('2713', 0, 'name', 'Fresh Oil Sample'),
+        ('2713', -1, 'name', '36.76% Weathered'),
+        ('2713', 0, 'short_name', 'Fresh Oil'),
+        ('2713', -1, 'short_name', '36.76% Weathered'),
+        ('540', 0, 'name', 'Fresh Oil Sample'),
+        ('540', -1, 'name', '7.45% Weathered'),
+    ])
+    def test_name(self, oil_id, index, attr, expected):
+        '''
+            We are being fairly light on the parameter checking in our
+            constructor.  So if no file props are passed in, we can still
+            construct the parser, but accessing reference_date could raise
+            a TypeError.
+            This is because the reference_date will sometimes need the
+            file props if the reference field contains no date information.
+        '''
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
+
+        assert getattr(sub_mapper, attr) == expected
 
 
 
