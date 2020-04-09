@@ -26,7 +26,7 @@ lxml
 pytest>=3.8.0
 pytest-cov>=2.6.0
 pytest-timeout>=1.2.1
-pytest-raises>=0.10
+#pytest-raises>=0.10  # v0.10 is giving unknown mark warnings. Moved to pip
 
 pynucos>=2.7.4  # this should be in conda-forge
 
