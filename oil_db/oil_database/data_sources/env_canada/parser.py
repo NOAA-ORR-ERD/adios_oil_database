@@ -655,7 +655,7 @@ class EnvCanadaSampleParser(ParserBase):
         return ret
 
     @property
-    def ift(self):
+    def ifts(self):
         '''
             Getting interfacial tensions out of this datasheet is a bit tricky,
             but understandably so since we are dealing with a number of

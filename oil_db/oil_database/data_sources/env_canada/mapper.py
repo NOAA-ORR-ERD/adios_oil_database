@@ -24,7 +24,9 @@ from oil_database.models.common.measurement import (Temperature,
 from oil_database.models.oil.measurement import (DensityPoint, DensityList,
                                                  DynamicViscosityPoint,
                                                  DynamicViscosityList,
-                                                 DistCut, DistCutList)
+                                                 DistCut, DistCutList,
+                                                 InterfacialTensionPoint,
+                                                 InterfacialTensionList)
 
 from pprint import pprint
 
@@ -129,7 +131,7 @@ class EnvCanadaSampleMapper(object):
 
     @property
     def densities(self):
-        ret = DensityList()
+        ret = []
 
         for item in (('density_0_c', 0.0, 1, 1),
                      ('density_5_c', 5.0, 1, 1),
@@ -140,34 +142,37 @@ class EnvCanadaSampleMapper(object):
             std_dev = self.parser.densities['standard_deviation'][std_idx]
             replicates = self.parser.densities['replicates'][repl_idx]
 
-            ret.append(DensityPoint(
-                density=Density(value=rho, unit="g/mL",
-                                standard_deviation=std_dev,
-                                replicates=replicates),
-                ref_temp=Temperature(value=ref_temp, unit="C"),
-            ))
+            if rho is not None:
+                ret.append({
+                    'density': {'value': rho, 'unit': 'g/mL',
+                                'standard_deviation': std_dev,
+                                'replicates': replicates},
+                    'ref_temp': {'value': ref_temp, 'unit': 'C'}
+                })
 
         return ret
 
     @property
-    def dvis(self):
-        ret = DynamicViscosityList()
+    def dynamic_viscosities(self):
+        ret = []
 
-        for item in (('viscosity_0_c', 0.0, 1, 1),
-                     ('viscosity_5_c', 5.0, 1, 1),
-                     ('viscosity_15_c', 15.0, 0, 0)):
+        for item in (('viscosity_at_0_c', 0.0, 1, 1),
+                     ('viscosity_at_5_c', 5.0, 1, 1),
+                     ('viscosity_at_15_c', 15.0, 0, 0)):
             mu_lbl, ref_temp, std_idx, repl_idx = item
 
+            pprint(self.parser.dvis)
             mu = self.parser.dvis[mu_lbl]
             std_dev = self.parser.dvis['standard_deviation'][std_idx]
             replicates = self.parser.dvis['replicates'][repl_idx]
 
-            ret.append(DynamicViscosityPoint(
-                viscosity=DynamicViscosity(value=mu, unit="mPa.s",
-                                           standard_deviation=std_dev,
-                                           replicates=replicates),
-                ref_temp=Temperature(value=ref_temp, unit="C"),
-            ))
+            if mu is not None:
+                ret.append({
+                    'viscosity': {'value': mu, 'unit': 'mPa.s',
+                                  'standard_deviation': std_dev,
+                                  'replicates': replicates},
+                    'ref_temp': {'value': ref_temp, 'unit': 'C'}
+                })
 
         return ret
 
@@ -215,6 +220,121 @@ class EnvCanadaSampleMapper(object):
         # Do we do anything with it?
 
         return ret
+
+    @property
+    def flash_point(self):
+        fp = dict(self.parser.flash_point.items())
+
+        value = self.min_max(fp.pop('flash_point', None))
+        if all([i is None for i in value]):
+            return None
+
+        if value[0] == value[1]:
+            fp['value'] = value[0]
+        else:
+            fp['min_value'], fp['max_value'] = value
+
+        fp['unit'] = 'C'
+        fp.pop('method', None)
+
+        return fp
+
+    @property
+    def pour_point(self):
+        pp = dict(self.parser.pour_point.items())
+
+        value = self.min_max(pp.pop('pour_point', None))
+        if all([i is None for i in value]):
+            return None
+
+        if value[0] == value[1]:
+            pp['value'] = value[0]
+        else:
+            pp['min_value'], pp['max_value'] = value
+
+        pp['unit'] = 'C'
+        pp.pop('method', None)
+
+        return pp
+
+    @property
+    def interfacial_tensions(self):
+        ret = []
+        method = self.parser.ifts['method']
+
+        for intf, temp, std_idx, method_idx in (('air',       0.0, 3, 1),
+                                                ('water',     0.0, 4, 1),
+                                                ('seawater',  0.0, 5, 1),
+                                                ('air',       5.0, 3, 1),
+                                                ('water',     5.0, 4, 1),
+                                                ('seawater',  5.0, 5, 1),
+                                                ('air',      15.0, 0, 0),
+                                                ('water',    15.0, 1, 0),
+                                                ('seawater', 15.0, 2, 0)):
+            lbl = f'ift_{int(temp)}_c_oil_{intf}'
+            value = self.parser.ifts[lbl]
+
+            if value is not None:
+                std_dev = self.parser.ifts['standard_deviation'][std_idx]
+                repl = self.parser.ifts['replicates'][std_idx]
+
+                ret.append({
+                    'interface': intf,
+                    'tension': {'value': value, 'unit': 'mN/m',
+                                'standard_deviation': std_dev,
+                                'replicates': repl},
+                    'ref_temp': {'value': temp, 'unit': 'C'},
+                    'method': method[method_idx]
+                })
+
+        return ret
+
+    @property
+    def dispersibilities(self):
+        value = self.parser.chemical_dispersibility['dispersant_effectiveness']
+
+        if value is not None:
+            ret = dict(self.parser.chemical_dispersibility.items())
+
+            ret['dispersant'] = 'Corexit 9500'
+            ret['method'] = 'Swirling Flask Test (ASTM F2059)'
+            ret.pop('dispersant_effectiveness', None)
+
+            ret['effectiveness'] = {
+                'value': value, 'unit': '%',
+                'standard_deviation': ret.pop('standard_deviation', None),
+                'replicates': ret.pop('replicates', None)
+            }
+
+            return [ret]
+        else:
+            return None
+
+    def min_max(self, value):
+        if value is None or isinstance(value, Number):
+            return [value, value]
+
+        try:
+            op, num = value[0], float(value[1:])
+        except ValueError:
+            return [None, None]  # could not convert to number
+
+        if op == '<':
+            return [None, num]
+        elif op == '>':
+            return [num, None]
+        else:
+            return [None, None]  # can't determine a range
+
+
+
+
+
+
+
+
+
+
 
 
 

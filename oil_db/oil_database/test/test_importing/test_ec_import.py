@@ -1332,10 +1332,131 @@ class TestEnvCanadaSampleMapper(object):
         ('2713', -1, 'name', '36.76% Weathered'),
         ('2713', 0, 'short_name', 'Fresh Oil'),
         ('2713', -1, 'short_name', '36.76% Weathered'),
+        ('2713', 0, 'fraction_weathered', {'value': 0.0, 'unit': '1'}),
+        ('2713', 0, 'boiling_point_range', None),
+        ('2713', 0, 'densities', [{'density': {'value': 0.8751, 'unit': 'g/mL',
+                                               'standard_deviation': 0,
+                                               'replicates': 3},
+                                   'ref_temp': {'value': 0.0, 'unit': 'C'}},
+                                  {'density': {'value': 0.8639, 'unit': 'g/mL',
+                                               'standard_deviation': 0,
+                                               'replicates': 3},
+                                   'ref_temp': {'value': 15.0, 'unit': 'C'}}
+        ]),
+        ('2713', 0, 'dynamic_viscosities', [
+            {'viscosity': {'value': 17.92, 'unit': 'mPa.s',
+                           'standard_deviation': 0.001, 'replicates': 3},
+             'ref_temp': {'value': 0.0, 'unit': 'C'}},
+            {'viscosity': {'value': 9.852, 'unit': 'mPa.s',
+                           'standard_deviation': 0.0098, 'replicates': 3},
+             'ref_temp': {'unit': 'C', 'value': 15.0}}
+        ]),
+        ('2713', 0, 'distillation_data', [
+            {'fraction': {'unit': '%', 'value': 5},
+             'vapor_temp': {'unit': 'C', 'value': 60.3}},
+            {'fraction': {'unit': '%', 'value': 10},
+             'vapor_temp': {'unit': 'C', 'value': 91.9}},
+            {'fraction': {'unit': '%', 'value': 15},
+             'vapor_temp': {'unit': 'C', 'value': 119.4}},
+            {'fraction': {'unit': '%', 'value': 20},
+             'vapor_temp': {'unit': 'C', 'value': 147.9}},
+            {'fraction': {'unit': '%', 'value': 25},
+             'vapor_temp': {'unit': 'C', 'value': 180.6}},
+            {'fraction': {'unit': '%', 'value': 30},
+             'vapor_temp': {'unit': 'C', 'value': 215.7}},
+            {'fraction': {'unit': '%', 'value': 35},
+             'vapor_temp': {'unit': 'C', 'value': 247.7}},
+            {'fraction': {'unit': '%', 'value': 40},
+             'vapor_temp': {'unit': 'C', 'value': 277.7}},
+            {'fraction': {'unit': '%', 'value': 45},
+             'vapor_temp': {'unit': 'C', 'value': 308}},
+            {'fraction': {'unit': '%', 'value': 50},
+             'vapor_temp': {'unit': 'C', 'value': 339.1}},
+            {'fraction': {'unit': '%', 'value': 55},
+             'vapor_temp': {'unit': 'C', 'value': 371.2}},
+            {'fraction': {'unit': '%', 'value': 60},
+             'vapor_temp': {'unit': 'C', 'value': 404.3}},
+            {'fraction': {'unit': '%', 'value': 65},
+             'vapor_temp': {'unit': 'C', 'value': 436.3}},
+            {'fraction': {'unit': '%', 'value': 70},
+             'vapor_temp': {'unit': 'C', 'value': 473.3}},
+            {'fraction': {'unit': '%', 'value': 75},
+             'vapor_temp': {'unit': 'C', 'value': 516.4}},
+            {'fraction': {'unit': '%', 'value': 80},
+             'vapor_temp': {'unit': 'C', 'value': 567.6}},
+            {'fraction': {'unit': '%', 'value': 85},
+             'vapor_temp': {'unit': 'C', 'value': 622.6}},
+            {'fraction': {'unit': '%', 'value': 90},
+             'vapor_temp': {'unit': 'C', 'value': 680.2}},
+            {'fraction': {'unit': '%', 'value': 0.0},
+             'vapor_temp': {'unit': 'C', 'value': -11.7}},
+            {'fraction': {'unit': '%', 'value': 97.5},
+             'vapor_temp': {'unit': 'C', 'value': '>720'}}
+        ]),
+        ('2713', 0, 'pour_point', {'value': -51, 'unit': 'C',
+                                   'standard_deviation': 2, 'replicates': 3}),
+        ('2713', 0, 'flash_point', None),
+        ('2713', 0, 'interfacial_tensions', [
+            {'interface': 'air',
+             'method': 'ESTS 2008',
+             'tension': {'value': 27.69,
+                         'unit': 'mN/m',
+                         'standard_deviation': 0.82,
+                         'replicates': 3},
+             'ref_temp': {'value': 0.0, 'unit': 'C'}},
+            {'interface': 'water',
+             'method': 'ESTS 2008',
+             'tension': {'value': 24.09,
+                         'unit': 'mN/m',
+                         'standard_deviation': 0.17,
+                         'replicates': 3},
+             'ref_temp': {'value': 0.0, 'unit': 'C'}
+             },
+            {'interface': 'seawater',
+             'method': 'ESTS 2008',
+             'tension': {'value': 22.81,
+                         'unit': 'mN/m',
+                         'standard_deviation': 0.18,
+                         'replicates': 3},
+             'ref_temp': {'value': 0.0, 'unit': 'C'}
+             },
+            {'interface': 'air',
+             'method': 'ESTS 2008',
+             'tension': {'value': 27.14,
+                         'unit': 'mN/m',
+                         'standard_deviation': 0.18,
+                         'replicates': 3},
+             'ref_temp': {'value': 15.0, 'unit': 'C'}
+             },
+            {'interface': 'water',
+             'method': 'ESTS 2008',
+             'tension': {'value': 21.32,
+                         'unit': 'mN/m',
+                         'standard_deviation': 0.27,
+                         'replicates': 3},
+             'ref_temp': {'value': 15.0, 'unit': 'C'}
+             },
+            {'interface': 'seawater',
+             'method': 'ESTS 2008',
+             'tension': {'value': 19.75,
+                         'unit': 'mN/m',
+                         'standard_deviation': 0.35,
+                         'replicates': 3},
+             'ref_temp': {'value': 15.0, 'unit': 'C'}
+             }
+         ]),
+        ('2713', 0, 'dispersibilities', [
+            {'dispersant': 'Corexit 9500',
+             'method': 'Swirling Flask Test (ASTM F2059)',
+             'effectiveness': {'value': 45.85130239898933,
+                               'unit': '%',
+                               'standard_deviation': 3.5195771460223515,
+                               'replicates': 6}}
+         ]),
         ('540', 0, 'name', 'Fresh Oil Sample'),
         ('540', -1, 'name', '7.45% Weathered'),
     ])
-    def test_name(self, oil_id, index, attr, expected):
+    def test_attribute(self, oil_id, index, attr, expected):
         '''
             We are being fairly light on the parameter checking in our
             constructor.  So if no file props are passed in, we can still
@@ -1348,6 +1469,7 @@ class TestEnvCanadaSampleMapper(object):
                                        self.reader.file_props)
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
+        pprint(getattr(sub_mapper, attr))
         assert getattr(sub_mapper, attr) == expected
 
 
