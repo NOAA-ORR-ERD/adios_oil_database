@@ -692,9 +692,13 @@ class EnvCanadaSampleParser(ParserBase):
         return ret
 
     @property
-    def emulsion(self):
-        for category in ('emulsion_at_15_c_day_0', 'emulsion_at_15_c_day_7'):
-            yield self.values[category]
+    def emulsions(self):
+        for category, age in (('emulsion_at_15_c_day_0', 0),
+                         ('emulsion_at_15_c_day_7', 7)):
+            emul = dict(self.values[category].items())
+            emul['age'] = age
+
+            yield emul
 
     @property
     def chromatography(self):

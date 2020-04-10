@@ -168,6 +168,10 @@ class Temperature(MeasurementBase):
             self.standard_deviation = new_std
 
 
+class Time(MeasurementBase):
+    unit_type = "time"
+
+
 class Length(MeasurementBase):
     unit_type = "length"
 

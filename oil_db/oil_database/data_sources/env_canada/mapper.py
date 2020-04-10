@@ -144,10 +144,9 @@ class EnvCanadaSampleMapper(object):
 
             if rho is not None:
                 ret.append({
-                    'density': {'value': rho, 'unit': 'g/mL',
-                                'standard_deviation': std_dev,
-                                'replicates': replicates},
-                    'ref_temp': {'value': ref_temp, 'unit': 'C'}
+                    'density': self.measurement(rho, 'g/mL',
+                                                std_dev, replicates),
+                    'ref_temp': self.measurement(ref_temp, 'C')
                 })
 
         return ret
@@ -168,10 +167,9 @@ class EnvCanadaSampleMapper(object):
 
             if mu is not None:
                 ret.append({
-                    'viscosity': {'value': mu, 'unit': 'mPa.s',
-                                  'standard_deviation': std_dev,
-                                  'replicates': replicates},
-                    'ref_temp': {'value': ref_temp, 'unit': 'C'}
+                    'viscosity': self.measurement(mu, 'mPa.s',
+                                                  std_dev, replicates),
+                    'ref_temp': self.measurement(ref_temp, 'C')
                 })
 
         return ret
@@ -201,8 +199,8 @@ class EnvCanadaSampleMapper(object):
 
             if ref_temp is not None:
                 ret.append({
-                    'fraction': {'value': frac, 'unit': '%'},
-                    'vapor_temp': {'value': ref_temp, 'unit': 'C'}
+                    'fraction': self.measurement(frac, '%'),
+                    'vapor_temp': self.measurement(ref_temp, 'C')
                 })
 
         # Then the cumulative weight fraction (if present)
@@ -212,8 +210,8 @@ class EnvCanadaSampleMapper(object):
 
             if frac is not None:
                 ret.append({
-                    'fraction': {'value': frac, 'unit': '%'},
-                    'vapor_temp': {'value': ref_temp, 'unit': 'C'}
+                    'fraction': self.measurement(frac, '%'),
+                    'vapor_temp': self.measurement(ref_temp, 'C')
                 })
 
         # There is a single method field associated with the cuts.
@@ -280,10 +278,8 @@ class EnvCanadaSampleMapper(object):
 
                 ret.append({
                     'interface': intf,
-                    'tension': {'value': value, 'unit': 'mN/m',
-                                'standard_deviation': std_dev,
-                                'replicates': repl},
-                    'ref_temp': {'value': temp, 'unit': 'C'},
+                    'tension': self.measurement(value, 'mN/m', std_dev, repl),
+                    'ref_temp': self.measurement(temp, 'C'),
                     'method': method[method_idx]
                 })
 
@@ -300,15 +296,56 @@ class EnvCanadaSampleMapper(object):
             ret['method'] = 'Swirling Flask Test (ASTM F2059)'
             ret.pop('dispersant_effectiveness', None)
 
-            ret['effectiveness'] = {
-                'value': value, 'unit': '%',
-                'standard_deviation': ret.pop('standard_deviation', None),
-                'replicates': ret.pop('replicates', None)
-            }
+            ret.update([
+                ('effectiveness',
+                 self.measurement(value, '%',
+                                  ret.pop('standard_deviation', None),
+                                  ret.pop('replicates', None)))
+            ])
 
             return [ret]
         else:
             return None
+
+    @property
+    def emulsions(self):
+        ret = []
+        for e in self.parser.emulsions:
+            emul = dict(e.items())
+
+            for long_name, name, unit, std_idx, repl_idx in (
+                ('complex_modulus_pa', 'complex_modulus', 'Pa', 0, 0),
+                ('storage_modulus_pa', 'storage_modulus', 'Pa', 1, 0),
+                ('loss_modulus_pa', 'loss_modulus', 'Pa', 2, 0),
+                ('tan_delta_v_e', 'tan_delta', '%', 3, 0),
+                ('complex_viscosity_pa_s', 'complex_viscosity', 'Pa.s', 4, 0),
+                ('water_content_w_w', 'water_content', '%', 5, 1),
+            ):
+                emul.update([
+                    (name,
+                     self.measurement(emul.pop(long_name, None), unit,
+                                      emul['standard_deviation'][std_idx],
+                                      emul['replicates'][repl_idx]))
+                ])
+
+            emul.pop('standard_deviation', None)
+            emul.pop('replicates', None)
+            emul['age'] = {'value': emul['age'], 'unit': 'day'}
+            emul['method'] = 'ESTS 1998-2'
+
+            ret.append(emul)
+
+        return ret
+
+    def measurement(self, value, unit, std_dev=None, replicates=None):
+        ret = {'value': value, 'unit': unit}
+        if std_dev is not None:
+            ret['standard_deviation'] = std_dev
+
+        if replicates is not None:
+            ret['replicates'] = replicates
+
+        return ret
 
     def min_max(self, value):
         if value is None or isinstance(value, Number):

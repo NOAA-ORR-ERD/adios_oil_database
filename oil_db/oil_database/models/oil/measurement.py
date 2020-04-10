@@ -4,7 +4,8 @@
 from dataclasses import dataclass
 
 from ..common.utilities import dataclass_to_json, JSON_List
-from ..common.measurement import (Temperature,
+from ..common.measurement import (Time,
+                                  Temperature,
                                   MassFraction,
                                   Density,
                                   DynamicViscosity,
@@ -92,10 +93,8 @@ class DispersibilityList(JSON_List):
 @dataclass_to_json
 @dataclass
 class Emulsion:
-    '''
-        Note: This is a first pass attempt.  Will probably need to be
-              reorganized.
-    '''
+    age: Time
+
     # Pa units, some kind of pressure/stress.
     # Adhesion provides the right units
     complex_modulus: Adhesion
