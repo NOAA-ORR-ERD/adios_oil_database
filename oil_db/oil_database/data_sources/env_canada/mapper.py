@@ -39,6 +39,33 @@ class EnvCanadaMapperBase:
 
         return ret
 
+    def compound(self, name, measurement, method=None, groups=None,
+                 sparse=False):
+        '''
+            Example of content:
+                {
+                    'name': "1-Methyl-2-Isopropylbenzene",
+                    'method': "ESTS 2002b",
+                    'groups': ["C4-C6 Alkyl Benzenes", ...],
+                    'measurement': {
+                        value: 3.4,
+                        unit: "ppm",
+                        unit_type: "Mass Fraction",
+                        replicates: 3,
+                        standard_deviation: 0.1
+                    }
+                }
+        '''
+        ret = {'name': name, 'measurement': measurement}
+
+        if method is not None or sparse is False:
+            ret['method'] = method
+
+        if groups is not None or sparse is False:
+            ret['groups'] = groups
+
+        return ret
+
     def min_max(self, value):
         if value is None or isinstance(value, Number):
             return [value, value]
@@ -414,11 +441,9 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
             Note: Most of the compound groups don't have replicates or
                   standard deviation.  We will not add these attributes if
                   they aren't found within the attribute group.
-            Todo: The measurement will be in FloatUnit types to start with.
-                  Then the FloatUnit types will be enhanced to have the
-                  unit_type, replicates, and standard_deviation.
         '''
         ret = []
+
         groups = [
             ('benzene', None, 'ug/g', 'Mass Fraction', False),
             ('btex_group', None, 'ug/g', 'Mass Fraction', False),
@@ -447,8 +472,60 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
 
         return ret
 
+    @property
+    def headspace_analysis(self):
+        ret = []
+
+        groups = [
+            ('headspace_analysis', None, 'mg/g', 'Mass Fraction', False),
+        ]
+
+        for group_args in groups:
+            for c in self.compounds_in_group(*group_args):
+                ret.append(c)
+
+        return ret
+
+    @property
+    def bulk_composition(self):
+        '''
+            Gather up all the groups of compounds that comprise a 'bulk'
+            amount and compile them into an organized list.
+
+            Bulk compositions apply to:
+            - wax
+            - water
+            - Sulfur
+            - Carbon
+        '''
+        ret = []
+
+        for attr, alt_attr, method in (('wax_content', 'waxes', 'ESTS 1994'),
+                                       ('water_content', None, 'ASTM E203'),
+                                       ('sulfur_content', None, 'ASTM D4294')
+                                       ):
+            label = self.parser.get_label(attr)
+            label = label[:label.find('Content') + len('Content')]
+
+            value = getattr(self.parser, attr)
+
+            if alt_attr is not None:
+                value['value'] = value.pop(alt_attr, None)
+            else:
+                value['value'] = value.pop(attr, None)
+
+            value['unit'] = '%'
+            value['unit_type'] = 'massfraction'
+
+            ret.append(self.compound(label,
+                                     self.measurement(**value),
+                                     method=method,
+                                     sparse=True))
+
+        return ret
+
     def compounds_in_group(self, category, group_category,
-                           unit, unit_type, filter=True):
+                           unit, unit_type, filter_compounds=True):
         '''
             :param category: The category attribute containing the data
             :param group_category: The category attribute containing the
@@ -493,17 +570,13 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
             std_dev = cat_obj['standard_deviation']
 
         for k, v in cat_obj.items():
-            if v is not None and (k.endswith(suffix) or not filter):
+            if v is not None and (k.endswith(suffix) or not filter_compounds):
                 attr_label = self.parser.get_label([category, k])
-                compound = {
-                    'name': attr_label,
-                    'groups': [group_name],
-                    'method': method,
-                    'measurement': self.measurement(v, unit, unit_type,
-                                                    std_dev, replicates)
-                }
 
-                yield compound
+                yield self.compound(attr_label,
+                                    self.measurement(v, unit, unit_type,
+                                                     std_dev, replicates),
+                                    method=method, groups=[group_name])
 
 
 

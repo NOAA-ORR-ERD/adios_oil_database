@@ -1500,6 +1500,7 @@ class TestEnvCanadaSampleMapper(object):
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
         ('2234', 0, 'compounds', {
             'list_size': 91,
+            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
             'total_groups': {
                 'Alkylated Total Aromatic Hydrocarbons (PAHs) (µg/g oil) '
                 '(ESTS 2002a):',
@@ -1509,6 +1510,7 @@ class TestEnvCanadaSampleMapper(object):
          }),
         ('561', 0, 'compounds', {
             'list_size': 114,
+            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
             'total_groups': {
                 'Alkylated Total Aromatic Hydrocarbons (PAHs) (µg/g oil) '
                 '(ESTS 2002a):',
@@ -1517,6 +1519,23 @@ class TestEnvCanadaSampleMapper(object):
                 'BTEX group (µg/g) (ESTS 2002b)',
                 'n-Alkanes (µg/g oil) (ESTS 2002a):',
                 'Benzene and Alkynated Benzene (ESTS 2002b)'
+            }
+         }),
+        ('2234', 0, 'bulk_composition', {
+            'list_size': 3,
+            'compound_attrs': ('name', 'method', 'measurement'),
+            'total_groups': None
+         }),
+        ('2234', 0, 'headspace_analysis', {
+            'list_size': 0,
+            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
+            'total_groups': set()
+         }),
+        ('561', 0, 'headspace_analysis', {
+            'list_size': 7,
+            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
+            'total_groups': {
+                'Headspace Analysis (mg/g oil) (ESTS 2002b):'
             }
          }),
     ])
@@ -1534,16 +1553,15 @@ class TestEnvCanadaSampleMapper(object):
         assert len(compounds) == expected['list_size']
 
         for c in compounds:
-            for attr in ('name', 'method', 'groups', 'measurement'):
+            for attr in expected['compound_attrs']:
                 assert attr in c
 
             for attr in ('value', 'unit', 'unit_type'):
                 assert attr in c['measurement']
 
-        total_groups = set([sub for c in compounds for sub in c['groups']])
-        print(total_groups)
-
-        assert total_groups == expected['total_groups']
+        if expected['total_groups'] is not None:
+            total_groups = set([sub for c in compounds for sub in c['groups']])
+            assert total_groups == expected['total_groups']
 
 
 
