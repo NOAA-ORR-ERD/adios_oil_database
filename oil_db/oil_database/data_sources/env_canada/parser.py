@@ -493,7 +493,7 @@ class EnvCanadaRecordParser(ParserBase):
             props_i = self.vertical_slice(i)
             props_i['weathering'] = w
 
-            yield EnvCanadaSampleParser(props_i)
+            yield EnvCanadaSampleParser(props_i, self.labels)
 
     def dict(self):
         ret = {}
@@ -526,43 +526,44 @@ class EnvCanadaSampleParser(ParserBase):
     attr_map = {
         # any attributes that are a simple mapping of the data
         'adhesion': 'adhesion',
-        'flash_point': 'flash_point_c',
-        'pour_point': 'pour_point_c',
+        'benzene': 'benzene_and_alkynated_benzene',
+        'benzonaphthothiophenes': 'benzonaphthothiophenes',
+        'biomarkers': 'biomarkers',
         'boiling_point_distribution': ('boiling_point_distribution_'
                                        'temperature_c'),
         'boiling_point_cumulative_fraction': ('boiling_point_'
                                               'cumulative_weight_fraction'),
-        'chemical_dispersibility': 'chemical_dispersibility_with_corexit_9500',
-        'sulfur_content': 'sulfur_content',
-        'water_content': 'water_content',
-        'wax_content': 'wax_content',
-        'sara_total_fractions': 'hydrocarbon_group_content',
-        'benzene': 'benzene_and_alkynated_benzene',
         'btex_group': 'btex_group',
         'c4_c6_alkyl_benzenes': 'c4_c6_alkyl_benzenes',
-        'headspace_analysis': 'headspace_analysis',
         'ccme': 'ccme_fractions',
         'ccme_f1': 'saturates_f1',
         'ccme_f2': 'aromatics_f2',
         'ccme_tph': 'gc_tph_f1_plus_f2',
-        'naphthalenes': 'naphthalenes',
-        'phenanthrenes': 'phenanthrenes',
-        'dibenzothiophenes': 'dibenzothiophenes',
-        'fluorenes': 'fluorenes',
-        'benzonaphthothiophenes': 'benzonaphthothiophenes',
+        'chemical_dispersibility': 'chemical_dispersibility_with_corexit_9500',
         'chrysenes': 'chrysenes',
-        'other_priority_pahs': 'other_priority_pahs',
+        'dibenzothiophenes': 'dibenzothiophenes',
+        'flash_point': 'flash_point_c',
+        'fluorenes': 'fluorenes',
+        'headspace_analysis': 'headspace_analysis',
         'n_alkanes': 'n_alkanes',
-        'biomarkers': 'biomarkers',
+        'naphthalenes': 'naphthalenes',
+        'other_priority_pahs': 'other_priority_pahs',
+        'phenanthrenes': 'phenanthrenes',
+        'pour_point': 'pour_point_c',
+        'sara_total_fractions': 'hydrocarbon_group_content',
+        'sulfur_content': 'sulfur_content',
+        'water_content': 'water_content',
+        'wax_content': 'wax_content',
     }
 
-    def __init__(self, values):
+    def __init__(self, values, labels):
         '''
             :param values: A dictionary of property values.
             :type values: A dictionary structure with raw property names
                           as keys, and associated values.
         '''
         self.values = values
+        self.labels = labels
 
     def get_interface_properties(self):
         '''
@@ -601,6 +602,11 @@ class EnvCanadaSampleParser(ParserBase):
             return default
 
     def __getattr__(self, name):
+        '''
+            The attributes are mapped to simpler names than the original
+            slugified names in the datasheet.  Grab the value referenced by
+            the simplified name
+        '''
         try:
             ret = self.values.get(self.attr_map[name])
         except Exception:
@@ -608,6 +614,27 @@ class EnvCanadaSampleParser(ParserBase):
             raise
 
         return ret
+
+    def get_label(self, nav_list):
+        '''
+            For an attribute in our values hierarchy, get the original source
+            label information.
+
+            Ex:
+                parser_obj.get_label(('gc_total_aromatic_hydrocarbon.tah'))
+        '''
+        if isinstance(nav_list, str):
+            nav_list = nav_list.split('.')
+
+        labels = {'value': self.labels}
+
+        for l in nav_list:
+            try:
+                labels = labels['value'][l]
+            except KeyError:
+                labels = labels['value'][self.attr_map[l]]
+
+        return labels['label']
 
     @property
     def api(self):

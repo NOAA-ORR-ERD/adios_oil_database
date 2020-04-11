@@ -15,18 +15,6 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    MassFractionUnit)
 
 from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.sample import Sample, SampleList
-
-from oil_database.models.common.measurement import (Temperature,
-                                                    Density,
-                                                    DynamicViscosity)
-
-from oil_database.models.oil.measurement import (DensityPoint, DensityList,
-                                                 DynamicViscosityPoint,
-                                                 DynamicViscosityList,
-                                                 DistCut, DistCutList,
-                                                 InterfacialTensionPoint,
-                                                 InterfacialTensionList)
 
 from pprint import pprint
 
@@ -35,7 +23,40 @@ custom_slugify = Slugify(to_lower=True, separator='_')
 logger = logging.getLogger(__name__)
 
 
-class EnvCanadaRecordMapper(object):
+class EnvCanadaMapperBase:
+    def measurement(self, value, unit, unit_type=None,
+                    standard_deviation=None, replicates=None):
+        ret = {'value': value, 'unit': unit}
+
+        if unit_type is not None:
+            ret['unit_type'] = unit_type
+
+        if standard_deviation is not None:
+            ret['standard_deviation'] = standard_deviation
+
+        if replicates is not None:
+            ret['replicates'] = replicates
+
+        return ret
+
+    def min_max(self, value):
+        if value is None or isinstance(value, Number):
+            return [value, value]
+
+        try:
+            op, num = value[0], float(value[1:])
+        except ValueError:
+            return [None, None]  # could not convert to number
+
+        if op == '<':
+            return [None, num]
+        elif op == '>':
+            return [num, None]
+        else:
+            return [None, None]  # can't determine a range
+
+
+class EnvCanadaRecordMapper(EnvCanadaMapperBase):
     '''
         A translation/conversion layer for the Environment Canada imported
         record object.
@@ -90,7 +111,7 @@ class EnvCanadaRecordMapper(object):
         return rec.py_json()
 
 
-class EnvCanadaSampleMapper(object):
+class EnvCanadaSampleMapper(EnvCanadaMapperBase):
     def __init__(self, parser, sample_id):
         self.parser = parser
         self.generate_sample_id_attrs(sample_id)
@@ -145,7 +166,8 @@ class EnvCanadaSampleMapper(object):
             if rho is not None:
                 ret.append({
                     'density': self.measurement(rho, 'g/mL',
-                                                std_dev, replicates),
+                                                standard_deviation=std_dev,
+                                                replicates=replicates),
                     'ref_temp': self.measurement(ref_temp, 'C')
                 })
 
@@ -168,7 +190,8 @@ class EnvCanadaSampleMapper(object):
             if mu is not None:
                 ret.append({
                     'viscosity': self.measurement(mu, 'mPa.s',
-                                                  std_dev, replicates),
+                                                  standard_deviation=std_dev,
+                                                  replicates=replicates),
                     'ref_temp': self.measurement(ref_temp, 'C')
                 })
 
@@ -278,7 +301,9 @@ class EnvCanadaSampleMapper(object):
 
                 ret.append({
                     'interface': intf,
-                    'tension': self.measurement(value, 'mN/m', std_dev, repl),
+                    'tension': self.measurement(value, 'mN/m',
+                                                standard_deviation=std_dev,
+                                                replicates=repl),
                     'ref_temp': self.measurement(temp, 'C'),
                     'method': method[method_idx]
                 })
@@ -297,10 +322,11 @@ class EnvCanadaSampleMapper(object):
             ret.pop('dispersant_effectiveness', None)
 
             ret.update([
-                ('effectiveness',
-                 self.measurement(value, '%',
-                                  ret.pop('standard_deviation', None),
-                                  ret.pop('replicates', None)))
+                ('effectiveness', self.measurement(
+                     value, '%',
+                     standard_deviation=ret.pop('standard_deviation', None),
+                     replicates=ret.pop('replicates', None)
+                 ))
             ])
 
             return [ret]
@@ -322,10 +348,11 @@ class EnvCanadaSampleMapper(object):
                 ('water_content_w_w', 'water_content', '%', 5, 1),
             ):
                 emul.update([
-                    (name,
-                     self.measurement(emul.pop(long_name, None), unit,
-                                      emul['standard_deviation'][std_idx],
-                                      emul['replicates'][repl_idx]))
+                    (name, self.measurement(
+                        emul.pop(long_name, None), unit,
+                        standard_deviation=emul['standard_deviation'][std_idx],
+                        replicates=emul['replicates'][repl_idx]
+                     ))
                 ])
 
             emul.pop('standard_deviation', None)
@@ -337,31 +364,147 @@ class EnvCanadaSampleMapper(object):
 
         return ret
 
-    def measurement(self, value, unit, std_dev=None, replicates=None):
-        ret = {'value': value, 'unit': unit}
-        if std_dev is not None:
-            ret['standard_deviation'] = std_dev
+    @property
+    def sara(self):
+        '''
+            Note: Each measurement appears to be associated with a method.
+                  However the Sara class only supports a single method as a
+                  first order attribute.
+        '''
+        ret = {}
+        sara_category = self.parser.sara_total_fractions
 
-        if replicates is not None:
-            ret['replicates'] = replicates
+        ret['method'] = ', '.join([i for i in sara_category['method']
+                                   if i is not None])
+
+        for src_name, name, idx, in (('saturates', 'saturates', 0),
+                                     ('aromatics', 'aromatics', 0),
+                                     ('resin', 'resins', 0),
+                                     ('asphaltene', 'asphaltenes', 1)):
+            value = sara_category[src_name]
+            std_dev = sara_category['standard_deviation'][idx]
+            repl = sara_category['replicates'][idx]
+
+            ret[name] = self.measurement(value, '%',
+                                         standard_deviation=std_dev,
+                                         replicates=repl)
 
         return ret
 
-    def min_max(self, value):
-        if value is None or isinstance(value, Number):
-            return [value, value]
+    @property
+    def compounds(self):
+        '''
+            Gather up all the groups of compounds scattered throughout the EC
+            and compile them into an organized list.
 
-        try:
-            op, num = value[0], float(value[1:])
-        except ValueError:
-            return [None, None]  # could not convert to number
+            Compounds apply to:
+            - individual chemicals
+            - mixed isomers
 
-        if op == '<':
-            return [None, num]
-        elif op == '>':
-            return [num, None]
+            Compounds do not apply to:
+            - waxes
+            - SARA
+            - Sulfur
+            - Carbon
+
+            Note: Although we could in theory assign multiple groups to a
+                  particular compound, we will only assign one group to the
+                  list.  This group will have a close relationship to the
+                  category of compounds where it is found in the EC datasheet.
+            Note: Most of the compound groups don't have replicates or
+                  standard deviation.  We will not add these attributes if
+                  they aren't found within the attribute group.
+            Todo: The measurement will be in FloatUnit types to start with.
+                  Then the FloatUnit types will be enhanced to have the
+                  unit_type, replicates, and standard_deviation.
+        '''
+        ret = []
+        groups = [
+            ('benzene', None, 'ug/g', 'Mass Fraction', False),
+            ('btex_group', None, 'ug/g', 'Mass Fraction', False),
+            ('c4_c6_alkyl_benzenes', None, 'ug/g', 'Mass Fraction', False),
+            ('naphthalenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('phenanthrenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('dibenzothiophenes', 'alkylated_total_pahs', 'ug/g',
+             'Mass Fraction', False),
+            ('fluorenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('benzonaphthothiophenes', 'alkylated_total_pahs', 'ug/g',
+             'Mass Fraction', False),
+            ('chrysenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('other_priority_pahs', 'alkylated_total_pahs', 'ug/g',
+             'Mass Fraction', False),
+            ('n_alkanes', None, 'ug/g', 'Mass Fraction', False),
+            ('biomarkers', None, 'ug/g', 'Mass Fraction', False),
+        ]
+
+        for group_args in groups:
+            for c in self.compounds_in_group(*group_args):
+                ret.append(c)
+
+        return ret
+
+    def compounds_in_group(self, category, group_category,
+                           unit, unit_type, filter=True):
+        '''
+            :param category: The category attribute containing the data
+            :param group_category: The category attribute containing the
+                                   group label
+            :param unit: The unit.
+            :param unit_type: The type of thing that the unit measures
+                              (length, mass, etc.)
+            :param filter: Filter only those attributes that have a suffix
+                           matching the unit value.
+
+            Example of content:
+                {
+                    'name': "1-Methyl-2-Isopropylbenzene",
+                    'method': "ESTS 2002b",
+                    'groups': ["C4-C6 Alkyl Benzenes", ...],
+                    'measurement': {
+                        value: 3.4,
+                        unit: "ppm",
+                        unit_type: "Mass Fraction",
+                        replicates: 3,
+                        standard_deviation: 0.1
+                    }
+                }
+        '''
+        suffix = '_' + custom_slugify(unit)
+        cat_obj = getattr(self.parser, category)
+
+        if group_category is not None:
+            group_name = self.parser.get_label(group_category)
         else:
-            return [None, None]  # can't determine a range
+            group_name = self.parser.get_label(category)
+
+        method, replicates, std_dev = None, None, None
+
+        if 'method' in cat_obj:
+            method = cat_obj['method']
+
+        if 'replicates' in cat_obj:
+            replicates = cat_obj['replicates']
+
+        if 'standard_deviation' in cat_obj:
+            std_dev = cat_obj['standard_deviation']
+
+        for k, v in cat_obj.items():
+            if v is not None and (k.endswith(suffix) or not filter):
+                attr_label = self.parser.get_label([category, k])
+                compound = {
+                    'name': attr_label,
+                    'groups': [group_name],
+                    'method': method,
+                    'measurement': self.measurement(v, unit, unit_type,
+                                                    std_dev, replicates)
+                }
+
+                yield compound
+
 
 
 

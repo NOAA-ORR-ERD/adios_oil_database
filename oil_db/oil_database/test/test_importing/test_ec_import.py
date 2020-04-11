@@ -1338,12 +1338,10 @@ class TestEnvCanadaSampleMapper(object):
         ('2713', 0, 'boiling_point_range', None),
         ('2713', 0, 'densities', [
             {'density': {'value': 0.8751, 'unit': 'g/mL',
-                         'standard_deviation': 0,
-                         'replicates': 3},
+                         'standard_deviation': 0, 'replicates': 3},
              'ref_temp': {'value': 0.0, 'unit': 'C'}},
             {'density': {'value': 0.8639, 'unit': 'g/mL',
-                         'standard_deviation': 0,
-                         'replicates': 3},
+                         'standard_deviation': 0, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}}
          ]),
         ('2713', 0, 'dynamic_viscosities', [
@@ -1402,132 +1400,150 @@ class TestEnvCanadaSampleMapper(object):
         ('2713', 0, 'interfacial_tensions', [
             {'interface': 'air',
              'method': 'ESTS 2008',
-             'tension': {'value': 27.69,
-                         'unit': 'mN/m',
-                         'standard_deviation': 0.82,
-                         'replicates': 3},
+             'tension': {'value': 27.69, 'unit': 'mN/m',
+                         'standard_deviation': 0.82, 'replicates': 3},
              'ref_temp': {'value': 0.0, 'unit': 'C'}},
             {'interface': 'water',
              'method': 'ESTS 2008',
-             'tension': {'value': 24.09,
-                         'unit': 'mN/m',
-                         'standard_deviation': 0.17,
-                         'replicates': 3},
+             'tension': {'value': 24.09, 'unit': 'mN/m',
+                         'standard_deviation': 0.17, 'replicates': 3},
              'ref_temp': {'value': 0.0, 'unit': 'C'}
              },
             {'interface': 'seawater',
              'method': 'ESTS 2008',
-             'tension': {'value': 22.81,
-                         'unit': 'mN/m',
-                         'standard_deviation': 0.18,
-                         'replicates': 3},
+             'tension': {'value': 22.81, 'unit': 'mN/m',
+                         'standard_deviation': 0.18, 'replicates': 3},
              'ref_temp': {'value': 0.0, 'unit': 'C'}
              },
             {'interface': 'air',
              'method': 'ESTS 2008',
-             'tension': {'value': 27.14,
-                         'unit': 'mN/m',
-                         'standard_deviation': 0.18,
-                         'replicates': 3},
+             'tension': {'value': 27.14, 'unit': 'mN/m',
+                         'standard_deviation': 0.18, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              },
             {'interface': 'water',
              'method': 'ESTS 2008',
-             'tension': {'value': 21.32,
-                         'unit': 'mN/m',
-                         'standard_deviation': 0.27,
-                         'replicates': 3},
+             'tension': {'value': 21.32, 'unit': 'mN/m',
+                         'standard_deviation': 0.27, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              },
             {'interface': 'seawater',
              'method': 'ESTS 2008',
-             'tension': {'value': 19.75,
-                         'unit': 'mN/m',
-                         'standard_deviation': 0.35,
-                         'replicates': 3},
+             'tension': {'value': 19.75, 'unit': 'mN/m',
+                         'standard_deviation': 0.35, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              }
          ]),
         ('2713', 0, 'dispersibilities', [
             {'dispersant': 'Corexit 9500',
              'method': 'Swirling Flask Test (ASTM F2059)',
-             'effectiveness': {'value': 45.85130239898933,
-                               'unit': '%',
+             'effectiveness': {'value': 45.85130239898933, 'unit': '%',
                                'standard_deviation': 3.5195771460223515,
                                'replicates': 6}}
          ]),
         ('2234', 0, 'emulsions', [
             {'age': {'unit': 'day', 'value': 0},
-             'complex_modulus': {'replicates': 6,
-                                 'standard_deviation': 18,
-                                 'unit': 'Pa',
-                                 'value': 40},
-             'complex_viscosity': {'replicates': 6,
-                                   'standard_deviation': 2.9,
-                                   'unit': 'Pa.s',
-                                   'value': 7.097499999999999},
-             'loss_modulus': {'replicates': 6,
-                              'standard_deviation': 17,
-                              'unit': 'Pa',
-                              'value': 40},
              'method': 'ESTS 1998-2',
-             'storage_modulus': {'replicates': 6,
-                                 'standard_deviation': 6,
-                                 'unit': 'Pa',
-                                 'value': 13.822833333333334},
-             'tan_delta': {'replicates': 6,
-                           'standard_deviation': 1.2,
-                           'unit': '%',
-                           'value': 3.1350000000000002},
              'visual_stability': 'Entrained',
-             'water_content': {'replicates': 9,
-                               'standard_deviation': 2.3,
-                               'unit': '%',
-                               'value': 39.78666666666666}},
+             'complex_modulus': {'value': 40, 'unit': 'Pa',
+                                 'standard_deviation': 18, 'replicates': 6},
+             'complex_viscosity': {'value': 7.097499999999999, 'unit': 'Pa.s',
+                                   'standard_deviation': 2.9, 'replicates': 6},
+             'loss_modulus': {'value': 40, 'unit': 'Pa',
+                              'standard_deviation': 17, 'replicates': 6},
+             'storage_modulus': {'value': 13.822833333333334, 'unit': 'Pa',
+                                 'standard_deviation': 6, 'replicates': 6},
+             'tan_delta': {'value': 3.1350000000000002, 'unit': '%',
+                           'standard_deviation': 1.2, 'replicates': 6},
+             'water_content': {'value': 39.78666666666666, 'unit': '%',
+                               'standard_deviation': 2.3, 'replicates': 9}},
             {'age': {'unit': 'day', 'value': 7},
-             'complex_modulus': {'replicates': 6,
-                                 'standard_deviation': 7,
-                                 'unit': 'Pa',
-                                 'value': 30},
-             'complex_viscosity': {'replicates': 6,
-                                   'standard_deviation': 1.1,
-                                   'unit': 'Pa.s',
-                                   'value': 4.979833333333333},
-             'loss_modulus': {'replicates': 6,
-                              'standard_deviation': 6.9,
-                              'unit': 'Pa',
-                              'value': 30},
              'method': 'ESTS 1998-2',
-             'storage_modulus': {'replicates': 6,
-                                 'standard_deviation': 0.96,
-                                 'unit': 'Pa',
-                                 'value': 2.4436666666666667},
-             'tan_delta': {'replicates': 6,
-                           'standard_deviation': 4.1,
-                           'unit': '%',
-                           'value': 13.883333333333333},
              'visual_stability': None,
-             'water_content': {'replicates': 9,
-                               'standard_deviation': 1.8,
-                               'unit': '%',
-                               'value': 15.592222222222224}}
+             'complex_modulus': {'value': 30, 'unit': 'Pa',
+                                 'standard_deviation': 7, 'replicates': 6},
+             'complex_viscosity': {'value': 4.979833333333333, 'unit': 'Pa.s',
+                                   'standard_deviation': 1.1, 'replicates': 6},
+             'loss_modulus': {'value': 30, 'unit': 'Pa',
+                              'standard_deviation': 6.9, 'replicates': 6},
+             'storage_modulus': {'value': 2.4436666666666667, 'unit': 'Pa',
+                                 'standard_deviation': 0.96, 'replicates': 6},
+             'tan_delta': {'value': 13.883333333333333, 'unit': '%',
+                           'standard_deviation': 4.1, 'replicates': 6},
+             'water_content': {'value': 15.592222222222224, 'unit': '%',
+                               'standard_deviation': 1.8, 'replicates': 9}}
          ]),
+        ('2713', 0, 'sara', {
+            'method': 'ESTS 2014',
+            'aromatics': {'value': 31.9, 'unit': '%',
+                          'standard_deviation': 0.21575863999286224,
+                          'replicates': 3},
+            'asphaltenes': {'value': 3.979387689417676, 'unit': '%',
+                            'standard_deviation': 0.13573969703208513,
+                            'replicates': 3},
+            'resins': {'value': 6.450610574167082, 'unit': '%',
+                       'standard_deviation': 0.21575863999286224,
+                       'replicates': 3},
+            'saturates': {'value': 57.9, 'unit': '%',
+                          'standard_deviation': 0.21575863999286224,
+                          'replicates': 3}
+         }),
     ])
     def test_attribute(self, oil_id, index, attr, expected):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if no file props are passed in, we can still
-            construct the parser, but accessing reference_date could raise
-            a TypeError.
-            This is because the reference_date will sometimes need the
-            file props if the reference field contains no date information.
-        '''
         parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
                                        self.reader.file_props)
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         pprint(getattr(sub_mapper, attr))
         assert getattr(sub_mapper, attr) == expected
+
+    @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        ('2234', 0, 'compounds', {
+            'list_size': 91,
+            'total_groups': {
+                'Alkylated Total Aromatic Hydrocarbons (PAHs) (µg/g oil) '
+                '(ESTS 2002a):',
+                'Biomarkers (µg/g) (ESTS 2002a):',
+                'n-Alkanes (µg/g oil) (ESTS 2002a):',
+            }
+         }),
+        ('561', 0, 'compounds', {
+            'list_size': 114,
+            'total_groups': {
+                'Alkylated Total Aromatic Hydrocarbons (PAHs) (µg/g oil) '
+                '(ESTS 2002a):',
+                'C4-C6 Alkyl Benzenes (µg/g) (ESTS 2002b):',
+                'Biomarkers (µg/g) (ESTS 2002a):',
+                'BTEX group (µg/g) (ESTS 2002b)',
+                'n-Alkanes (µg/g oil) (ESTS 2002a):',
+                'Benzene and Alkynated Benzene (ESTS 2002b)'
+            }
+         }),
+    ])
+    def test_compound_list(self, oil_id, index, attr, expected):
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
+
+        compounds = getattr(sub_mapper, attr)
+
+        # We won't be checking every single compound since there are typically
+        # over one hundred to check.  We will verify general properties of our
+        # compound list though
+        assert type(compounds) == list
+        assert len(compounds) == expected['list_size']
+
+        for c in compounds:
+            for attr in ('name', 'method', 'groups', 'measurement'):
+                assert attr in c
+
+            for attr in ('value', 'unit', 'unit_type'):
+                assert attr in c['measurement']
+
+        total_groups = set([sub for c in compounds for sub in c['groups']])
+        print(total_groups)
+
+        assert total_groups == expected['total_groups']
 
 
 

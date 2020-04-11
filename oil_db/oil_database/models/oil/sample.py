@@ -41,9 +41,9 @@ class Sample:
 
     distillation_data: DistCutList = field(default_factory=DistCutList)
 
-    bulk_composition: CompoundList = field(default_factory=CompoundList)
-
     compounds: CompoundList = field(default_factory=CompoundList)
+
+    bulk_composition: CompoundList = field(default_factory=CompoundList)
 
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
 
