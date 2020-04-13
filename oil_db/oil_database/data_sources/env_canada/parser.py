@@ -3,7 +3,6 @@ import re
 from functools import wraps
 from collections import defaultdict
 from datetime import datetime
-from pytz import timezone
 import logging
 
 from slugify import Slugify

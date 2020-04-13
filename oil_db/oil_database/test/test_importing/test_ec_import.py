@@ -7,7 +7,6 @@
     real dataset.
 '''
 from datetime import datetime
-from pytz import timezone
 from pathlib import Path
 
 import pytest
@@ -21,7 +20,6 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaSampleMapper)
 
 from pprint import pprint
-from builtins import isinstance
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -1577,11 +1575,7 @@ class TestEnvCanadaSampleMapper(object):
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         ccme = sub_mapper.CCME
-        pprint(ccme)
 
-        # We won't be checking every single compound since there are typically
-        # over one hundred to check.  We will verify general properties of our
-        # compound list though
         assert type(ccme) == dict
 
         for attr, fraction in zip(('CCME_F1', 'CCME_F2', 'CCME_F3', 'CCME_F4',
@@ -1598,3 +1592,48 @@ class TestEnvCanadaSampleMapper(object):
                                           ('saturates',
                                            'aromatics',
                                            'GC_TPH')]
+
+    @pytest.mark.parametrize('oil_id, index', [
+        ('2234', 0),
+        ('561', 0),
+    ])
+    def test_physical_properties(self, oil_id, index):
+        '''
+            CCME object is a hybrid of struct attributes with a few
+            compound lists thrown in.
+        '''
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
+
+        phys = sub_mapper.physical_properties
+
+        assert type(phys) == dict
+
+        # env canada has no kinematic viscosities
+        for attr in ('pour_point', 'flash_point',
+                     'densities', 'dynamic_viscosities',
+                     'interfacial_tensions'):
+            assert attr in phys
+
+    @pytest.mark.parametrize('oil_id, index', [
+        ('2234', 0),
+        ('561', 0),
+    ])
+    def test_environmental_behavior(self, oil_id, index):
+        '''
+            CCME object is a hybrid of struct attributes with a few
+            compound lists thrown in.
+        '''
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
+
+        env = sub_mapper.environmental_behavior
+        pprint(env)
+
+        assert type(env) == dict
+
+        # env canada has no kinematic viscosities
+        for attr in ('dispersibilities', 'emulsions'):
+            assert attr in env

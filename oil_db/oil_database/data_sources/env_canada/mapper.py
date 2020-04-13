@@ -555,6 +555,26 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
 
         return ret
 
+    @property
+    def physical_properties(self):
+        ret = {}
+
+        for attr in ('pour_point', 'flash_point',
+                     'densities', 'dynamic_viscosities',
+                     'interfacial_tensions'):
+            ret[attr] = getattr(self, attr)
+
+        return ret
+
+    @property
+    def environmental_behavior(self):
+        ret = {}
+
+        for attr in ('dispersibilities', 'emulsions'):
+            ret[attr] = getattr(self, attr)
+
+        return ret
+
     def compounds_in_group(self, category, group_category,
                            unit, unit_type, filter_compounds=True):
         '''
