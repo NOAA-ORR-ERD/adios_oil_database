@@ -161,7 +161,7 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
             self.fraction_weathered = {'value': sample_id, 'unit': '1'}
             self.boiling_point_range = None
         else:
-            logger.warn("Can't generate IDs for sample: ", sample_id)
+            logger.warning("Can't generate IDs for sample: ", sample_id)
 
         return self
 
@@ -521,6 +521,37 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
                                      self.measurement(**value),
                                      method=method,
                                      sparse=True))
+
+        return ret
+
+    @property
+    def CCME(self):
+        ret = dict(self.parser.values['ccme_fractions'].items())
+
+        for k in list(ret.keys()):
+            ret[k] = self.measurement(ret[k], 'mg/g', 'massfraction')
+            ret[f'ccme_{k}'.upper()] = ret.pop(k)
+
+        ret['total_GC_TPH'] = self.measurement(
+            self.parser.deep_get('gc_tph_f1_plus_f2'
+                                 '.total_tph_gc_detected_tph_undetected_tph'),
+            'mg/g',
+            'massfraction'
+        )
+
+        groups = [
+            ('saturates', 'ccme_f1'),
+            ('aromatics', 'ccme_f2'),
+            ('GC_TPH', 'ccme_tph'),
+        ]
+
+        for attr, name in groups:
+            ret[attr] = list(self.compounds_in_group(name, None,
+                                                     'mg/g', 'Mass Fraction',
+                                                     False))
+
+        ret['GC_TPH'] = [c for c in ret['GC_TPH']
+                         if not c['name'].startswith('TOTAL TPH ')]
 
         return ret
 

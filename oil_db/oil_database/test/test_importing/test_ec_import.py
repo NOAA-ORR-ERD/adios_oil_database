@@ -1299,19 +1299,11 @@ class TestEnvCanadaSampleMapper(object):
         with pytest.raises(AttributeError):
             mapper.dict()
 
-    @pytest.mark.parametrize('oil_id, expected', [
-        ('2713', {'_id': 'EC002713',
-                  'oil_id': 'EC002713',
-                  'comments': None,
-                  'location': 'Alaska, USA',
-                  'name': 'Alaska North Slope [2015]',
-                  'product_type': 'crude',
-                  'reference': {'reference': 'Hollebone, 2016. ',
-                                'year': 2016},
-                  'sample_date': datetime(2015, 3, 22, 0, 0),
-                  }),
+    @pytest.mark.parametrize('oil_id', [
+        '2713',
+        '561',
     ])
-    def test_init_valid(self, oil_id, expected):
+    def test_init_valid(self, oil_id):
         '''
             We are being fairly light on the parameter checking in our
             constructor.  So if no file props are passed in, we can still
@@ -1563,18 +1555,46 @@ class TestEnvCanadaSampleMapper(object):
             total_groups = set([sub for c in compounds for sub in c['groups']])
             assert total_groups == expected['total_groups']
 
+    @pytest.mark.parametrize('oil_id, index, expected', [
+        ('2234', 0, {
+            'fractions': (15.583570558636511, 50.05584387906363,
+                          193.13054450058388, 40.22553136249657, 690),
+            'list_sizes': [8, 8, 8],
+         }),
+        ('561', 0, {
+            'fractions': (67.75015134410184, 170.80807177215303,
+                          302.2111667030308, 59.840797508312335, None),
+            'list_sizes': [0, 0, 0],
+         }),
+    ])
+    def test_ccme(self, oil_id, index, expected):
+        '''
+            CCME object is a hybrid of struct attributes with a few
+            compound lists thrown in.
+        '''
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
+        ccme = sub_mapper.CCME
+        pprint(ccme)
 
+        # We won't be checking every single compound since there are typically
+        # over one hundred to check.  We will verify general properties of our
+        # compound list though
+        assert type(ccme) == dict
 
+        for attr, fraction in zip(('CCME_F1', 'CCME_F2', 'CCME_F3', 'CCME_F4',
+                                   'total_GC_TPH'),
+                                  expected['fractions']):
+            assert attr in ccme
 
+            for measurement_attr in ('value', 'unit', 'unit_type'):
+                assert measurement_attr in ccme[attr]
 
+            assert ccme[attr]['value'] == fraction
 
-
-
-
-
-
-
-
-
-
+        assert expected['list_sizes'] == [len(ccme[attr]) for attr in
+                                          ('saturates',
+                                           'aromatics',
+                                           'GC_TPH')]
