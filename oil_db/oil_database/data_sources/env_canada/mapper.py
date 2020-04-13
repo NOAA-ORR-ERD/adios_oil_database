@@ -167,12 +167,18 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
 
     def dict(self):
         rec = self.parser.dict()
-        for attr in ('name', 'short_name',
+        for attr in ('name',
+                     'short_name',
                      'fraction_weathered',
                      'boiling_point_range',
-                     'densities',
-                     'dvis',
-                     'distillation_data'):
+                     'physical_properties',
+                     'environmental_behavior',
+                     'SARA',
+                     'distillation_data',
+                     'compounds',
+                     'bulk_composition',
+                     'headspace_analysis',
+                     'CCME'):
             rec[attr] = getattr(self, attr)
 
         return rec
@@ -392,7 +398,7 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
         return ret
 
     @property
-    def sara(self):
+    def SARA(self):
         '''
             Note: Each measurement appears to be associated with a method.
                   However the Sara class only supports a single method as a

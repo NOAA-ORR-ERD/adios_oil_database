@@ -362,14 +362,14 @@ class TestEnvCanadaSampleParser(object):
                                             'Too Viscous',
                                             'Too Viscous']}),
     ])
-    def test_ift(self, rec, index, expected):
+    def test_ifts(self, rec, index, expected):
         data = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ift)
+        pprint(samples[index].ifts)
 
-        assert self.compare_expected(samples[index].ift, expected)
+        assert self.compare_expected(samples[index].ifts, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2234', 0, {'flash_point': '< -5',
@@ -609,9 +609,9 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, self.reader.file_props)
 
         samples = list(parser.sub_samples)
-        pprint(list(samples[index].emulsion))
+        pprint(list(samples[index].emulsions))
 
-        assert self.compare_expected(list(samples[index].emulsion), expected)
+        assert self.compare_expected(list(samples[index].emulsions), expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2713', 0, {'dispersant_effectiveness': 45.8513,
@@ -1463,7 +1463,7 @@ class TestEnvCanadaSampleMapper(object):
              'water_content': {'value': 15.592222222222224, 'unit': '%',
                                'standard_deviation': 1.8, 'replicates': 9}}
          ]),
-        ('2713', 0, 'sara', {
+        ('2713', 0, 'SARA', {
             'method': 'ESTS 2014',
             'aromatics': {'value': 31.9, 'unit': '%',
                           'standard_deviation': 0.21575863999286224,
