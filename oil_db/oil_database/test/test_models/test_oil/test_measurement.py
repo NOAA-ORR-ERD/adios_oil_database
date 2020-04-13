@@ -314,7 +314,8 @@ class TestEmulsion:
             _model = Emulsion.from_py_json({})
 
     def test_from_json(self):
-        json_obj = {'complex_modulus': {'value': 1.0, 'unit': 'Pa',
+        json_obj = {'age': {'value': 0.0, 'unit': 'day', 'unit_type': 'time'},
+                    'complex_modulus': {'value': 1.0, 'unit': 'Pa',
                                         'standard_deviation': 1.2,
                                         'replicates': 3},
                     'storage_modulus': {'value': 1.0, 'unit': 'Pa',
@@ -355,7 +356,8 @@ class TestEmulsionList:
         assert EmulsionList.from_py_json([]).py_json() == []
 
     def test_from_json(self):
-        json_obj = [{'complex_modulus': {'value': 1.0, 'unit': 'Pa',
+        json_obj = [{'age': {'value': 0.0, 'unit': 'day', 'unit_type': 'time'},
+                     'complex_modulus': {'value': 1.0, 'unit': 'Pa',
                                          'standard_deviation': 1.2,
                                          'replicates': 3},
                      'storage_modulus': {'value': 1.0, 'unit': 'Pa',
