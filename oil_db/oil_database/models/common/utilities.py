@@ -138,12 +138,14 @@ class JSON_List(list):
         that may be json-able.
         """
         if cls.item_type is None:
-            raise TypeError("You can not reconstruct a "
-                            "list of unknown type")
+            raise TypeError("You can not reconstruct a list of unknown type")
+
         jl = cls()  # an empty JSON_List
+
         # loop through contents
         for item in py_json:
             jl.append(cls.item_type.from_py_json(item))
+
         return jl
 
     def __repr__(self):

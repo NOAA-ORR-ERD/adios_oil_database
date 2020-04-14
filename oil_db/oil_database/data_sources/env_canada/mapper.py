@@ -215,7 +215,6 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
                      ('viscosity_at_15_c', 15.0, 0, 0)):
             mu_lbl, ref_temp, std_idx, repl_idx = item
 
-            pprint(self.parser.dvis)
             mu = self.parser.dvis[mu_lbl]
             std_dev = self.parser.dvis['standard_deviation'][std_idx]
             replicates = self.parser.dvis['replicates'][repl_idx]
@@ -364,7 +363,7 @@ class EnvCanadaSampleMapper(EnvCanadaMapperBase):
 
             return [ret]
         else:
-            return None
+            return []
 
     @property
     def emulsions(self):
