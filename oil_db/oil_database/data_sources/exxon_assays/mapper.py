@@ -10,13 +10,16 @@ import logging
 import unit_conversion as uc
 
 from oil_database.util import sigfigs
-from oil_database.models.common.measurement import (Temperature,
+from oil_database.models.common.measurement import (UnittedValue,
+                                                    Temperature,
                                                     MassFraction,
                                                     Density,
-                                                    KinematicViscosity)
+                                                    KinematicViscosity,
+                                                    Adhesion)
 from oil_database.models.oil.measurement import (DensityPoint,
                                                  KinematicViscosityPoint,
                                                  DistCut)
+from oil_database.models.oil.compound import Compound
 
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample, SampleList
@@ -27,7 +30,6 @@ from oil_database.models.oil.sara import Sara
 from oil_database.models.oil.ccme import CCME
 
 from pprint import PrettyPrinter
-
 pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
@@ -274,26 +276,48 @@ def process_cut_table(oil, samples, cut_table):
     return oil
 
 
-def set_sample_property(row,
-                        samples,
-                        attr,
-                        unit,
-                        num_digits=4,
-                        convert_from=None):
+# it always comes down to this, doesn't it.
+measurement_lu = {
+    'Pa': Adhesion,
+    'ppm': MassFraction,
+    '%': MassFraction,
+    'mg/kg': MassFraction
+}
+
+
+def set_sample_property(row, samples, attr, unit,
+                        num_digits=4, convert_from=None):
     """
     reads a row from the spreadsheet, and sets the sample properties
 
-    optional rounding to "num_digits" digits
-    optional converting to unit from convert_from (if the the data aren't in
+    Notes:
+    - optional rounding to "num_digits" digits
+    - optional converting to unit from convert_from (if the the data aren't in
     the right units)
+    - These values are now kept in a list of compounds held by the
+      bulk_composition attribute
+    - Ideally, the name & groups of each compound would have the
+      original field text from the datasheet.
     """
     for sample, val in zip(samples, row):
+        #print('attr, val, unit: ', (attr, val, unit))
+
         if val is not None and val not in ('NotAvailable',):
             if convert_from is not None:
                 val = uc.convert(convert_from, unit, val)
 
-            val = sigfigs(val, num_digits)
-            #setattr(sample, attr, UnittedValue(val, unit=unit))
+            if attr in ('pour_point', 'flash_point'):
+                phys = sample.physical_properties
+                setattr(phys, attr, Temperature(val, unit=unit))
+            else:
+                compositions = sample.bulk_composition
+                cls = measurement_lu[unit]
+
+                compositions.append(Compound(
+                    name=attr,
+                    measurement=cls(sigfigs(val, num_digits),
+                                    unit=unit)
+                ))
 
 
 # Utilities:

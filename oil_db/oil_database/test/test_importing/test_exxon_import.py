@@ -191,20 +191,17 @@ class TestExxonMapper():
         '''
         samples = self.oil.sub_samples
 
-        print(attr)
-        print(indexes)
-        print(values)
-
         for i, val in zip(indexes, values):
-            print(i, val)
-            sample = samples[i]
+            filter_list = [c for c in samples[i].bulk_composition
+                           if c.name == attr]
+            assert len(filter_list) == 1
 
-            print(sample.calcium_mass_fraction)
+            compound = filter_list[0]
 
             if val is None:
-                assert getattr(sample, attr) is None
+                assert compound.measurement.value is None
             else:
-                assert isclose(getattr(sample, attr).value,
+                assert isclose(compound.measurement.value,
                                values[i], rel_tol=1e-2, abs_tol=1e-10)
 
     def test_dist_cuts_units(self):
