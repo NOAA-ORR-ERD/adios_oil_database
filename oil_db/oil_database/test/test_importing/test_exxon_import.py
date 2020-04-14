@@ -19,7 +19,7 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser
                                                     )
 
-from oil_database.models.common.measurement import UnittedValue
+from oil_database.models.common.measurement import UnittedValue, MassFraction
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -89,41 +89,41 @@ class TestExxonMapper():
         oil = self.oil
         assert oil.name == 'HOOPS Blend'
         assert oil.reference.startswith("ExxonMobil")
-        assert oil.api == 35.2
+        assert oil.API == 35.2
 
     def test_samples(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
 
         assert len(samples) == 8
         assert samples[0].name == "Fresh Oil Sample"
 
     def test_density(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
 
-        assert samples[0].densities[0].density.value == 0.84805316
-        assert samples[7].densities[0].density.value == 0.99124762
+        assert samples[0].physical_properties.densities[0].density.value == 0.84805316
+        assert samples[7].physical_properties.densities[0].density.value == 0.99124762
 
     def test_cut_volume(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
 
-        assert samples[0].cut_volume == UnittedValue(100.0, unit="%")
-        assert samples[3].cut_volume == UnittedValue(17.6059, unit="%")
+        assert samples[0].cut_volume == MassFraction(100.0, unit="%")
+        assert samples[3].cut_volume == MassFraction(17.6059, unit="%")
 
-    def test_compostion(self):
-        samples = self.oil.samples
+    def test_composition(self):
+        samples = self.oil.sub_samples
         # print(samples[0].carbon_mass_fraction)  85.57594139885833
-        assert samples[0].carbon_mass_fraction == UnittedValue(85.58,
+        assert samples[0].carbon_mass_fraction == MassFraction(85.58,
                                                                unit="%")
-        assert samples[0].hydrogen_mass_fraction == UnittedValue(13.26,
+        assert samples[0].hydrogen_mass_fraction == MassFraction(13.26,
                                                                  unit="%")
-        assert samples[4].total_acid_number == UnittedValue(0.2069,
+        assert samples[4].total_acid_number == MassFraction(0.2069,
                                                             unit="mg/kg")
 
     def test_viscosity(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
         # viscosity tests
         # whole oil
-        kvis = samples[0].kvis
+        kvis = samples[0].physical_properties.kinematic_viscosities
         assert len(kvis) == 3
         assert kvis[0].viscosity.value == 6.73896867
         assert kvis[0].viscosity.unit == "cSt"
@@ -131,7 +131,7 @@ class TestExxonMapper():
         assert kvis[2].viscosity.unit == "cSt"
 
         # One sample
-        kvis = samples[3].kvis
+        kvis = samples[3].physical_properties.kinematic_viscosities
         assert len(kvis) == 3
         assert kvis[0].viscosity.value == 0.89317828
         assert kvis[0].viscosity.unit == "cSt"
@@ -139,21 +139,21 @@ class TestExxonMapper():
         assert kvis[2].viscosity.unit == "cSt"
 
         for sample in samples:
-            assert len(sample.dvis) == 0
+            assert len(sample.physical_properties.dynamic_viscosities) == 0
 
     def test_composition_mercaptan(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
         assert samples[0].mercaptan_sulfur_mass_fraction.value == 0.5962
 
     def test_composition_nitrogen(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
         assert samples[0].mercaptan_sulfur_mass_fraction.value == 0.5962
 
         assert samples[1].nitrogen_mass_fraction.value == 0.0
         assert samples[5].nitrogen_mass_fraction.value == 47.62
 
     def test_reid_vp(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
 
         # fixme -- is Pa the right unit?
         assert samples[0].reid_vapor_pressure.value == 60430.0
@@ -162,7 +162,7 @@ class TestExxonMapper():
             assert sample.reid_vapor_pressure is None
 
     def test_composition_ccr(self):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
         assert samples[0].ccr_percent.value == 3.19
 
         assert samples[1].ccr_percent is None
@@ -182,15 +182,25 @@ class TestExxonMapper():
 
     @pytest.mark.parametrize("attr, indexes, values", composition_values)
     def test_comp(self, attr, indexes, values):
-        samples = self.oil.samples
+        '''
+            Notes:
+            - These values are now kept in a list of compounds held by the
+              bulk_composition attribute
+            - Ideally, the name & groups of each compound would have the
+              original field text from the datasheet.
+        '''
+        samples = self.oil.sub_samples
 
         print(attr)
         print(indexes)
         print(values)
+
         for i, val in zip(indexes, values):
             print(i, val)
             sample = samples[i]
+
             print(sample.calcium_mass_fraction)
+
             if val is None:
                 assert getattr(sample, attr) is None
             else:
@@ -198,8 +208,8 @@ class TestExxonMapper():
                                values[i], rel_tol=1e-2, abs_tol=1e-10)
 
     def test_dist_cuts_units(self):
-        for sample in self.oil.samples:
-            for cut in sample.cuts:
+        for sample in self.oil.sub_samples:
+            for cut in sample.distillation_data:
                 assert cut.vapor_temp.unit == "C"
                 assert cut.fraction.unit == "%"
 
@@ -210,17 +220,19 @@ class TestExxonMapper():
                               (7, 11, 95.0, 1436.0),
                               ])
     def test_dist_cuts(self, samp_ind, cut_index, fraction, temp_f):
-        samples = self.oil.samples
+        samples = self.oil.sub_samples
 
-        for cut in samples[samp_ind].cuts:
+        for cut in samples[samp_ind].distillation_data:
             print(cut)
-        cut = samples[samp_ind].cuts[cut_index]
+
+        cut = samples[samp_ind].distillation_data[cut_index]
+
         assert cut.fraction.value == fraction
         assert isclose(cut.vapor_temp.value, uc.convert("F", "C", temp_f),
                        rel_tol=1e-4)
 
     def test_no_cuts_in_butane(self):
-        assert self.oil.samples[1].cuts == []
+        assert self.oil.sub_samples[1].distillation_data == []
 
 
 # def test_check():

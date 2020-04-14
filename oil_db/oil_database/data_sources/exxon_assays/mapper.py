@@ -10,20 +10,24 @@ import logging
 import unit_conversion as uc
 
 from oil_database.util import sigfigs
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.sample import Sample, SampleList
-
 from oil_database.models.common.measurement import (Temperature,
                                                     MassFraction,
                                                     Density,
-                                                    KinematicViscosity,
-                                                    )
-
+                                                    KinematicViscosity)
 from oil_database.models.oil.measurement import (DensityPoint,
                                                  KinematicViscosityPoint,
                                                  DistCut)
 
+from oil_database.models.oil.oil import Oil
+from oil_database.models.oil.sample import Sample, SampleList
+
+from oil_database.models.oil.physical_properties import PhysicalProperties
+from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
+from oil_database.models.oil.sara import Sara
+from oil_database.models.oil.ccme import CCME
+
 from pprint import PrettyPrinter
+
 pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
@@ -139,6 +143,8 @@ def ExxonMapper(record):
 
     samples = SampleList([Sample(name=name) for name in sample_names])
 
+    create_middle_tier_objs(samples)
+
     cut_table = read_cut_table(oil, data)
 
     apply_map(data, cut_table, samples)
@@ -175,6 +181,14 @@ def apply_map(data, cut_table, samples):
         set_sample_property(row, samples, **data)
 
 
+def create_middle_tier_objs(samples):
+    for sample in samples:
+        sample.physical_properties = PhysicalProperties()
+        sample.environmental_behavior = EnvironmentalBehavior()
+        sample.SARA = Sara
+        sample.CCME = CCME
+
+
 def process_cut_table(oil, samples, cut_table):
     """
     process the parts that aren't a simple map
@@ -195,16 +209,16 @@ def process_cut_table(oil, samples, cut_table):
 
     # pull API from first value
     try:
-        oil.api = round(float(row[0]), 1)  # stored as full precision double
+        oil.API = round(float(row[0]), 1)  # stored as full precision double
     except Exception:
-        oil.api = None
+        oil.API = None
 
     # use specific gravity to get density
     row = cut_table[norm("Specific Gravity (60/60F)")]
     for sample, val in zip(samples, row):
         try:
             rho = uc.convert("SG", "g/cm^3", val)
-            sample.densities.append(DensityPoint(
+            sample.physical_properties.densities.append(DensityPoint(
                 density=Density(value=round(rho, 8), unit="g/cm^3"),
                 ref_temp=Temperature(value=15.6, unit="C"),
             ))
@@ -221,11 +235,13 @@ def process_cut_table(oil, samples, cut_table):
         row = cut_table[norm(lbl)]
         for sample, val in zip(samples, row):
             try:
-                sample.kvis.append(KinematicViscosityPoint(
-                    viscosity=KinematicViscosity(value=round(val, 8),
-                                                 unit="cSt"),
-                    ref_temp=Temperature(value=40, unit="C"),
-                ))
+                sample.physical_properties.kinematic_viscosities.append(
+                    KinematicViscosityPoint(
+                        viscosity=KinematicViscosity(value=round(val, 8),
+                                                     unit="cSt"),
+                        ref_temp=Temperature(value=40, unit="C"),
+                    )
+                )
             except Exception:
                 pass
 
@@ -241,19 +257,19 @@ def process_cut_table(oil, samples, cut_table):
             for sample, val in zip(samples, row):
                 if val is not None:
                     val = sigfigs(uc.convert("F", "C", val), 5)
-                    sample.cuts.append(DistCut(
+                    sample.distillation_data.append(DistCut(
                         fraction=MassFraction(value=percent, unit="%"),
                         vapor_temp=Temperature(value=val, unit="C")
                     ))
     # sort them
     for sample in samples:
-        sample.cuts.sort(key=lambda c: c.fraction.value)
+        sample.distillation_data.sort(key=lambda c: c.fraction.value)
 
     # "nitrogen_mass_fraction: UnittedValue"
     # "reid_vapor_pressure: UnittedValue"
     # "hydrogen_sulfide_concentration"
 
-    oil.samples = samples
+    oil.sub_samples = samples
 
     return oil
 
@@ -277,7 +293,7 @@ def set_sample_property(row,
                 val = uc.convert(convert_from, unit, val)
 
             val = sigfigs(val, num_digits)
-            setattr(sample, attr, UnittedValue(val, unit=unit))
+            #setattr(sample, attr, UnittedValue(val, unit=unit))
 
 
 # Utilities:
