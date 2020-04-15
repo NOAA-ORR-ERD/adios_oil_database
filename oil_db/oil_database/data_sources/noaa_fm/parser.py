@@ -214,6 +214,40 @@ class OilLibraryRecordParser(ParserBase):
         return ret
 
     @property
+    def pour_point(self):
+        ret = {'unit': 'K'}
+
+        min_value = self.pour_point_min_k
+        max_value = self.pour_point_max_k
+
+        if min_value is None and max_value is None:
+            ret = None
+        elif min_value == max_value:
+            ret['value'] = min_value
+        else:
+            ret['min_value'] = min_value
+            ret['max_value'] = max_value
+
+        return ret
+
+    @property
+    def flash_point(self):
+        ret = {'unit': 'K'}
+
+        min_value = self.flash_point_min_k
+        max_value = self.flash_point_max_k
+
+        if min_value is None and max_value is None:
+            ret = None
+        elif min_value == max_value:
+            ret['value'] = min_value
+        else:
+            ret['min_value'] = min_value
+            ret['max_value'] = max_value
+
+        return ret
+
+    @property
     def densities(self):
         ret = []
         dens = self.get_property_sets(4, 'density',

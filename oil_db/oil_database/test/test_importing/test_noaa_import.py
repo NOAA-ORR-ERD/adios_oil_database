@@ -171,6 +171,12 @@ class TestOilLibraryRecordParser:
         ('AD00047', 'pour_point_max_k', 293.0),
         ('AD01598', 'pour_point_min_k', 323.0),  # '>' sign in field
         ('AD01598', 'pour_point_max_k', None),
+        ('AD00009', 'pour_point', {'value': 244.0, 'unit': 'K'}),
+        ('AD00047', 'pour_point', {'max_value': 293.0, 'min_value': None,
+                                   'unit': 'K'}),
+        ('AD01598', 'pour_point', {'max_value': None, 'min_value': 323.0,
+                                   'unit': 'K'}),
+        ('AD00005', 'pour_point', None),
         ('AD00025', 'asphaltenes', 0.02),
         ('AD00025', 'aromatics', 0.128),
         ('AD00025', 'wax_content', 0.069),
@@ -183,6 +189,10 @@ class TestOilLibraryRecordParser:
         ('AD00125', 'flash_point_max_k', 230.0),
         ('AD00135', 'flash_point_min_k', 363.15),  # '>' sign in field
         ('AD00135', 'flash_point_max_k', None),
+        ('AD00025', 'flash_point', {'value': 280.0, 'unit': 'K'}),
+        ('AD00125', 'flash_point', {'max_value': 230.0, 'min_value': None,
+                                    'unit': 'K'}),
+        ('AD00020', 'flash_point', None),
         ('AD00020', 'densities', [
             {'density': {'value': 904.0, 'unit': 'kg/m^3'},
              'ref_temp': {'value': 273.0, 'unit': 'K'},
