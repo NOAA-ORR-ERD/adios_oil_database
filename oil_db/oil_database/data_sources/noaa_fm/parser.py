@@ -215,28 +215,73 @@ class OilLibraryRecordParser(ParserBase):
 
     @property
     def densities(self):
-        return self.get_property_sets(4, 'density',
+        ret = []
+        dens = self.get_property_sets(4, 'density',
                                       ('kg_m_3', 'ref_temp_k', 'weathering'),
                                       ('kg_m_3', 'ref_temp_k'))
 
+        for d in dens:
+            if (d['kg_m_3'] is not None and d['ref_temp_k'] is not None):
+                ret.append({
+                    'density': {'value': d['kg_m_3'], 'unit': 'kg/m^3'},
+                    'ref_temp': {'value': d['ref_temp_k'], 'unit': 'K'},
+                    'weathering': d.get('weathering', 0.0),
+                })
+
+        return ret
+
     @property
     def kvis(self):
-        return self.get_property_sets(6, 'kvis',
+        ret = []
+        visc = self.get_property_sets(6, 'kvis',
                                       ('m_2_s', 'ref_temp_k', 'weathering'),
                                       ('m_2_s', 'ref_temp_k'))
 
-    @property
-    def dvis(self):
-        return self.get_property_sets(6, 'dvis',
-                                      ('kg_ms', 'ref_temp_k', 'weathering'),
-                                      ('kg_ms', 'ref_temp_k'))
+        for v in visc:
+            if (v['m_2_s'] is not None and v['ref_temp_k'] is not None):
+                ret.append({
+                    'viscosity': {'value': v['m_2_s'], 'unit': 'm^2/s'},
+                    'ref_temp': {'value': v['ref_temp_k'], 'unit': 'K'},
+                    'weathering': v.get('weathering', 0.0),
+                })
+
+        return ret
 
     @property
-    def cuts(self):
-        return self.get_property_sets(15, 'cut',
+    def dvis(self):
+        ret = []
+        visc = self.get_property_sets(6, 'dvis',
+                                      ('kg_ms', 'ref_temp_k', 'weathering'),
+                                      ('kg_ms', 'ref_temp_k'))
+        for v in visc:
+            if (v['kg_ms'] is not None and v['ref_temp_k'] is not None):
+                ret.append({
+                    'viscosity': {'value': v['kg_ms'], 'unit': 'kg/(m s)'},
+                    'ref_temp': {'value': v['ref_temp_k'], 'unit': 'K'},
+                    'weathering': v.get('weathering', 0.0),
+                })
+
+        return ret
+
+    @property
+    def distillation_data(self):
+        ret = []
+        cuts = self.get_property_sets(15, 'cut',
                                       ('vapor_temp_k', 'liquid_temp_k',
                                        'fraction'),
                                       ('vapor_temp_k', 'fraction'))
+
+        for c in cuts:
+            if (c['fraction'] is not None and
+                    (c['liquid_temp_k'] is not None or
+                     c['vapor_temp_k'] is not None)):
+                ret.append({
+                    'fraction': {'value': c['fraction'], 'unit': '1'},
+                    'liquid_temp': {'value': c['liquid_temp_k'], 'unit': 'K'},
+                    'vapor_temp': {'value': c['vapor_temp_k'], 'unit': 'K'},
+                })
+
+        return ret
 
     @property
     def toxicities(self):
@@ -262,7 +307,7 @@ class OilLibraryRecordParser(ParserBase):
         return all_tox
 
     @property
-    def ifts(self):
+    def interfacial_tensions(self):
         ret = []
 
         for intf in ('water', 'seawater'):
@@ -270,8 +315,12 @@ class OilLibraryRecordParser(ParserBase):
             temp = getattr(self, f'oil_{intf}_interfacial_tension_ref_temp_k')
 
             if value is not None:
-                ret.append({'n_m': value, 'ref_temp_k': temp,
-                            'interface': intf})
+                ret.append({
+                    'interface': intf,
+                    'method': None,
+                    'tension': {'value': value, 'unit': 'N/m'},
+                    'ref_temp': {'value': temp, 'unit': 'K'}
+                })
 
         return ret
 
