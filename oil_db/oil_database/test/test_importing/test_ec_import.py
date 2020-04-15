@@ -116,7 +116,7 @@ class TestEnvCanadaRecordParser(object):
         pytest.param('2234', 2017,
                      marks=pytest.mark.raises(exception=TypeError)),
     ])
-    def test_init_valid_data_arg(self, oil_id, expected):
+    def test_init_valid_data(self, oil_id, expected):
         '''
             We are being fairly light on the parameter checking in our
             constructor.  So if no file props are passed in, we can still

@@ -1,107 +1,109 @@
 #!/usr/bin/env python
 import logging
 import re
-from itertools import zip_longest
 
-from slugify import slugify_filename
+from ..parser import ParserBase
 
 logger = logging.getLogger(__name__)
 
 
-class OilLibraryRecordParser(object):
+class OilLibraryRecordParser(ParserBase):
     '''
-        A record class for the NOAA Oil Library spreadsheet.
+        A record parsing class for the NOAA Oil Library spreadsheet.
         - We manage a list of properties extracted from an Excel row for an
           oil.
         - The raw data from the Excel file will be a flat list, even for
           multidimensional properties like densities, viscosities, and
           distillation cuts.
     '''
-    def __init__(self, property_names, values):
+    def __init__(self, values, file_props):
         '''
-            :param property_names: A list of property names.
-
-            :param values: A list of property values.
+            :param values: A dict of property names/values.
 
             Basically, we will do some light massaging of the names and values
             of our incoming properties, and then we will directly apply them
             to our __dict__.
-            Additional customized properties will be defined for anything
-            that requires special treatment.
         '''
-        file_columns = [slugify_filename(c).lower()
-                        for c in property_names]
-        values = [v.strip() if v is not None else None
-                  for v in values]
-        row_dict = dict(zip_longest(file_columns, values))
+        self.__dict__.update(self._privatize_data_properties(
+            self._slugify_keys(values)
+        ))
+        self.file_props = file_props
 
-        self._privatize_data_properties(row_dict)
+    def _slugify_keys(self, obj):
+        '''
+            Generate a structure like the incoming data, but with keys that
+            have been 'slugified', which is to say turned into a string that
+            is suitable for use as an object attribute.
+        '''
+        if isinstance(obj, (tuple, list, set, frozenset)):
+            return [self._slugify_keys(v) for v in obj]
+        elif isinstance(obj, dict):
+            return dict([(self.slugify(k), self._slugify_keys(v))
+                        for k, v in obj.items()])
+        else:
+            return obj
 
-        self.__dict__.update(row_dict)
-
-    def _privatize_data_properties(self, kwargs):
+    def _privatize_data_properties(self, obj):
         '''
             Certain named data properties need to be handled as special cases
-            by the parser.  So in order to do this, we need to turn them into
-            private members.
-            This will allow us to create special case properties that have the
-            original property name.
+            by the parser.  This will be handled with a property definition
+            that sometimes has the same name as the original data property.
+
+            So to ensure the original property doesn't get clobbered, we need
+            to turn them into private members (add an underscore to the name).
         '''
-        for name in ('synonyms',
+        for name in ('reference',
+                     'synonyms',
                      'pour_point_min_k', 'pour_point_max_k',
                      'flash_point_min_k', 'flash_point_max_k',
                      'preferred_oils', 'product_type',
                      'cut_units', 'oil_class'):
-            self._privatize_data_property(kwargs, name)
-        pass
+            self._privatize_data_property(obj, name)
+
+        return obj
 
     def _privatize_data_property(self, kwargs, name):
-        '''
-            Prepend a named keyward argument with an underscore,
-            making it a 'private' property.
-        '''
-        new_name = '_{}'.format(name)
-
-        kwargs[new_name] = kwargs[name]
-        del kwargs[name]
-
-    def get_interface_properties(self):
-        '''
-            These are all the property names that define the data in an
-            Oil Library record.  They include the raw data column names
-            plus any date items that needed to be redefined as special cases.
-        '''
-        props = set([k for k in self.__dict__
-                     if not k.startswith('_')])
-        props = props.union(set([p for p in dir(self.__class__)
-                                 if isinstance(getattr(self.__class__, p),
-                                               property)]))
-        return props
+        kwargs[f'_{name}'] = kwargs.pop(name)
 
     @property
     def oil_id(self):
         return self.adios_oil_id
 
     @property
-    def reference_date(self):
+    def reference(self):
         '''
-            There is no defined reference date in an Oil Library record.
-            There is however the possibility that a year of publication is
-            contained within the reference text.
-            We will try to find a year value within the reference field
-            and return it.  Otherwise we return None
+            The reference content can have:
+            - no content:  In this case we take the created date of the
+                           .csv file header.
+            - one year (YYYY):  In this case we parse the year as an int and
+                                form a datetime with it.
+            - multiple years (YYYY): In this case we use the highest numeric
+                                     year (most recent) and form a datetime
+                                     with it.
         '''
-        if self.reference is None:
+        ref_text = self._reference
+        occurrences = [int(n) for n in re.compile(r'\d{4}').findall(ref_text)]
+
+        if len(occurrences) == 0:
+            print(self.file_props)
+            ref_year = self.file_props['created'].year
+        else:
+            ref_year = max(occurrences)
+
+        return {'reference': ref_text, 'year': ref_year}
+
+    @property
+    def synonyms(self):
+        '''
+            Synonyms is a single string field that contains a comma separated
+            list of substring names
+        '''
+        if self._synonyms is None or self._synonyms.strip() == '':
             return None
         else:
-            expression = re.compile(r'\d{4}')
-            occurrences = expression.findall(self.reference)
-
-            if len(occurrences) == 0:
-                return None
-            else:
-                # just return the first one
-                return occurrences[0]
+            return [{'name': s.strip()}
+                    for s in self._synonyms.split(',')
+                    if len(s) > 0]
 
     @property
     def pour_point_min_k(self):
@@ -167,19 +169,6 @@ class OilLibraryRecordParser(object):
             return self._oil_class.lower()
         else:
             return None
-
-    @property
-    def synonyms(self):
-        '''
-            Synonyms is a single string field that contains a comma separated
-            list of substring names
-        '''
-        if self._synonyms is None or self._synonyms.strip() == '':
-            return None
-        else:
-            return [{'name': s.strip()}
-                    for s in self._synonyms.split(',')
-                    if len(s) > 0]
 
     def get_property_sets(self, num_sets, obj_name, obj_argnames,
                           required_obj_args):
@@ -271,3 +260,39 @@ class OilLibraryRecordParser(object):
                     t.pop(d, None)
 
         return all_tox
+
+    @property
+    def ifts(self):
+        ret = []
+
+        for intf in ('water', 'seawater'):
+            value = getattr(self, f'oil_{intf}_interfacial_tension_n_m')
+            temp = getattr(self, f'oil_{intf}_interfacial_tension_ref_temp_k')
+
+            if value is not None:
+                ret.append({'n_m': value, 'ref_temp_k': temp,
+                            'interface': intf})
+
+        return ret
+
+    @property
+    def weathering(self):
+        '''
+            A NOAA Filemaker record is a flat row of data, but there are some
+            attributes that have weathering associated with their measured
+            values.  These attributes are:
+            - Density
+            - KVis
+            - Dvis
+
+            All other attributes should be implicitly regarded as fresh oil
+            measurements.
+        '''
+        weathered_amounts = set((0.0,))
+
+        for k, v in self.__dict__.items():
+            if k.endswith('weathering') and k != 'weathering':
+                v = 0.0 if v is None else v
+                weathered_amounts.add(v)
+
+        return weathered_amounts

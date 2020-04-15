@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import sys
 import logging
+from datetime import datetime
+from itertools import zip_longest
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +15,7 @@ class ImportFileHeaderContentError(Exception):
     pass
 
 
-class OilLibraryCsvFile(object):
+class OilLibraryCsvFile:
     ''' A specialized file reader for the OilLib and CustLib
         flat datafiles.
         - We will use universal newline support to designate
@@ -55,11 +57,12 @@ class OilLibraryCsvFile(object):
         self.file_columns = None
         self.file_columns_lu = None
         self.num_columns = None
+        self._row_lu = {}
 
         self.fileobj = open(name, 'r', encoding='mac_roman')
         self.field_delim = field_delim
 
-        self.__version__ = self.readline()
+        self.__version__ = self.readline(cache=False)
         print('file version: ', self.__version__)
         self._check_version_hdr(ignore_version)
 
@@ -93,7 +96,7 @@ class OilLibraryCsvFile(object):
                                                    'product field!!')
 
     def _set_table_columns(self):
-        self.file_columns = self.readline()
+        self.file_columns = self.readline(cache=False)
         self.file_columns_lu = dict(zip(self.file_columns,
                                         range(len(self.file_columns))))
         self.num_columns = len(self.file_columns)
@@ -112,8 +115,14 @@ class OilLibraryCsvFile(object):
             row = []
         return row
 
-    def readline(self):
-        return self._parse_row(self.fileobj.readline())
+    def readline(self, cache=True):
+        row = self._parse_row(self.fileobj.readline())
+
+        if cache and row is not None:
+            oil_id = row[self.file_columns_lu['ADIOS_Oil_ID']]
+            self._row_lu[oil_id] = row
+
+        return row
 
     def readlines(self):
         while True:
@@ -132,7 +141,33 @@ class OilLibraryCsvFile(object):
             if len(r) < 10:
                 logger.info('got record: {}'.format(r))
 
-            yield self.file_columns, r
+            yield dict(zip_longest(self.file_columns, r))
+
+    def get_record(self, oil_id):
+        if len(self._row_lu) == 0:
+            list(self.get_records())
+
+        return dict(zip_longest(self.file_columns,
+                                self.convert_fields(self._row_lu[oil_id])))
+
+    def convert_fields(self, row):
+        return [self.convert_field(f) for f in row]
+
+    def convert_field(self, field):
+        '''
+            Convert data fields to numeric if possible
+        '''
+        try:
+            return int(field)
+        except Exception:
+            pass
+
+        try:
+            return float(field)
+        except Exception:
+            pass
+
+        return field
 
     def rewind(self):
         self.fileobj.seek(0)
@@ -179,6 +214,14 @@ class OilLibraryCsvFile(object):
             file_out.write('\n')
 
         file_out.close()
+
+    @property
+    def file_props(self):
+        version, created, app = self.__version__
+
+        return {'version': version,
+                'created': datetime.strptime(created, '%m/%d/%Y'),
+                'application': app}
 
     def __repr__(self):
         return ("<{}('{}')>".format(self.__class__.__name__, self.name))
