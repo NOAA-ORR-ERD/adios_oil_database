@@ -94,20 +94,20 @@ class DispersibilityList(JSON_List):
 @dataclass
 class Emulsion:
     age: Time
+    water_content: MassFraction
 
     # Pa units, some kind of pressure/stress.
     # Adhesion provides the right units
-    complex_modulus: Adhesion
-    storage_modulus: Adhesion
-    loss_modulus: Adhesion
+    complex_modulus: Adhesion = None
+    storage_modulus: Adhesion = None
+    loss_modulus: Adhesion = None
 
     # Todo: this seems to be just unit-less float, but it is a measurement
     #       with standard_deviation & replicates.  Well MassFraction will do
     #       for now.  But NUCOS needs to be updated.
-    tan_delta: MassFraction
+    tan_delta: MassFraction = None
 
-    complex_viscosity: DynamicViscosity
-    water_content: MassFraction
+    complex_viscosity: DynamicViscosity = None
 
     method: str = None
     visual_stability: str = None

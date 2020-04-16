@@ -15,6 +15,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    MassFractionUnit)
 
 from oil_database.models.oil.oil import Oil
+from ..mapper import MapperBase
 
 from pprint import pprint
 
@@ -23,67 +24,7 @@ custom_slugify = Slugify(to_lower=True, separator='_')
 logger = logging.getLogger(__name__)
 
 
-class EnvCanadaMapperBase:
-    def measurement(self, value, unit, unit_type=None,
-                    standard_deviation=None, replicates=None):
-        ret = {'value': value, 'unit': unit}
-
-        if unit_type is not None:
-            ret['unit_type'] = unit_type
-
-        if standard_deviation is not None:
-            ret['standard_deviation'] = standard_deviation
-
-        if replicates is not None:
-            ret['replicates'] = replicates
-
-        return ret
-
-    def compound(self, name, measurement, method=None, groups=None,
-                 sparse=False):
-        '''
-            Example of content:
-                {
-                    'name': "1-Methyl-2-Isopropylbenzene",
-                    'method': "ESTS 2002b",
-                    'groups': ["C4-C6 Alkyl Benzenes", ...],
-                    'measurement': {
-                        value: 3.4,
-                        unit: "ppm",
-                        unit_type: "Mass Fraction",
-                        replicates: 3,
-                        standard_deviation: 0.1
-                    }
-                }
-        '''
-        ret = {'name': name, 'measurement': measurement}
-
-        if method is not None or sparse is False:
-            ret['method'] = method
-
-        if groups is not None or sparse is False:
-            ret['groups'] = groups
-
-        return ret
-
-    def min_max(self, value):
-        if value is None or isinstance(value, Number):
-            return [value, value]
-
-        try:
-            op, num = value[0], float(value[1:])
-        except ValueError:
-            return [None, None]  # could not convert to number
-
-        if op == '<':
-            return [None, num]
-        elif op == '>':
-            return [num, None]
-        else:
-            return [None, None]  # can't determine a range
-
-
-class EnvCanadaRecordMapper(EnvCanadaMapperBase):
+class EnvCanadaRecordMapper(MapperBase):
     '''
         A translation/conversion layer for the Environment Canada imported
         record object.
@@ -138,7 +79,7 @@ class EnvCanadaRecordMapper(EnvCanadaMapperBase):
         return rec.py_json()
 
 
-class EnvCanadaSampleMapper(EnvCanadaMapperBase):
+class EnvCanadaSampleMapper(MapperBase):
     def __init__(self, parser, sample_id):
         self.parser = parser
         self.generate_sample_id_attrs(sample_id)

@@ -82,6 +82,10 @@ class OilLibraryRecordParser(ParserBase):
         return self.api
 
     @property
+    def sulfur(self):
+        return self.sulphur
+
+    @property
     def reference(self):
         '''
             The reference content can have:

@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 from numbers import Number
-from datetime import datetime
 from collections import defaultdict
 import logging
 from math import isclose
 
-from oil_database.models.common.float_unit import (AdhesionUnit)
+from ..mapper import MapperBase
+
+from oil_database.models.oil.oil import Oil
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -13,7 +14,7 @@ pp = PrettyPrinter(indent=2, width=120)
 logger = logging.getLogger(__name__)
 
 
-class OilLibraryAttributeMapper(object):
+class OilLibraryAttributeMapper(MapperBase):
     '''
         A translation/conversion layer for the NOAA Filemaker imported
         record object.
@@ -33,9 +34,8 @@ class OilLibraryAttributeMapper(object):
                  'status',
                  'product_type',
                  'API',
-                 #'sub_samples',
-                 )
-    fresh_sample_props = ('enivironmental_behavior',
+                 'sub_samples')
+    fresh_sample_props = ('environmental_behavior',
                           'SARA',
                           'distillation_data',
                           'compounds',
@@ -68,44 +68,15 @@ class OilLibraryAttributeMapper(object):
 
         return ret
 
-    def dict(self):
+    def py_json(self):
         rec = {}
 
-        for attr in self.oil_properties:
+        for attr in self.oil_props:
             rec[attr] = getattr(self, attr)
 
-    def dict_old(self):
-        rec = {}
-        samples = defaultdict(dict)
+        obj = Oil.from_py_json(rec)
 
-        for p in self.get_interface_properties():
-            k, v = p, getattr(self, p)
-
-            if k in self.top_record_properties:
-                rec[k] = v
-            elif hasattr(v, '__iter__') and not hasattr(v, '__len__'):
-                # we have a sequence of items
-                for i in v:
-                    w = i.get('weathering', 0.0)
-                    i.pop('weathering', None)
-
-                    try:
-                        samples[w][k].append(i)
-                    except KeyError:
-                        samples[w][k] = []
-                        samples[w][k].append(i)
-            else:
-                # - assume a weathering of 0
-                # - if the attribute is None, we don't add it.
-                if v is not None:
-                    samples[0.0][k] = v
-
-        for k, v in samples.items():
-            v.update(self.generate_sample_id_attrs(k))
-
-        rec['samples'] = self.sort_samples(samples.values())
-
-        return rec
+        return obj.py_json()
 
     @property
     def adhesion(self):
@@ -169,18 +140,91 @@ class OilLibraryAttributeMapper(object):
         elif isclose(sample_id, 0):
             attrs['name'] = 'Fresh Oil Sample'
             attrs['short_name'] = 'Fresh Oil'
-            attrs['fraction_weathered'] = sample_id
+            attrs['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
             attrs['boiling_point_range'] = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
             attrs['name'] = '{}% Weathered'.format(sample_id * 100)
             attrs['short_name'] = '{}% Weathered'.format(sample_id * 100)
-            attrs['fraction_weathered'] = sample_id
+            attrs['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
             attrs['boiling_point_range'] = None
         else:
             logger.warn("Can't generate IDs for sample: ", sample_id)
 
         return attrs
+
+    @property
+    def environmental_behavior(self):
+        '''
+            Notes:
+            - there is a dispersability_temp_k, but it does not fit with the
+              oil model.  sample.environmental_behavior.dispersibilites is
+              for chemical dispersibility with a dispersant, and makes no
+              reference to a temperature.
+        '''
+        ret = {}
+        for attr in ('emulsions',):
+            ret[attr] = getattr(self, attr, None)
+
+        return ret
+
+    @property
+    def compounds(self):
+        '''
+            Tentative Compound items:
+            - benzene (units=???, typical value=0.05 for gasoline,
+                       just a fractional value maybe?)
+            - naphthenes (units=???, typical value=0.0004 for Jet A-1)
+            - ???
+
+            Notes:
+            - we need to discuss what fields in the NOAA Filemaker datasheet
+              constitute compounds.
+        '''
+        ret = []
+        for attr in ('benzene', 'naphthenes'):
+            value = getattr(self, attr, None)
+
+            if value is not None:
+                ret.append(self.compound(
+                    attr,
+                    self.measurement(value=value, unit='1',
+                                     unit_type='massfraction'),
+                ))
+
+        return ret
+
+    @property
+    def bulk_composition(self):
+        '''
+            Tentative Bulk Composition items:
+            - Paraffins  (unit=???, 0.783 for Alberta 1992
+                          0.019 for Salmon Oil & Gas)
+            - Polars  (unit=1 possibly, 0.0284 for Alberta 1992)
+            - Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)
+            - Nickel  (unit=ppm most likely)
+            - Vanadium  (unit=ppm most likely)
+
+            Notes:
+            - we need to discuss what fields in the NOAA Filemaker datasheet
+              constitute compounds.
+        '''
+        ret = []
+        for attr, unit in (('paraffins', '1'),
+                           ('polars', '1'),
+                           ('sulfur', '1'),
+                           ('nickel', 'ppm'),
+                           ('vanadium', 'ppm')):
+            value = getattr(self, attr, None)
+
+            if value is not None:
+                ret.append(self.compound(
+                    attr,
+                    self.measurement(value=value, unit=unit,
+                                     unit_type='massfraction'),
+                ))
+
+        return ret
 
     def physical_properties(self, weathering):
         ret = {}
@@ -214,14 +258,3 @@ class OilLibraryAttributeMapper(object):
             [v.pop('weathering', None) for v in values]
 
             return values
-
-
-
-
-
-
-
-
-
-
-

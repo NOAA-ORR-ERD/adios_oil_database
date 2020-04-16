@@ -17,8 +17,6 @@ from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
 
 from pprint import pprint
 
-import pdb
-
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
 data_file = example_dir / "OilLibTestSet.txt"
@@ -325,7 +323,7 @@ class TestOilLibraryRecordParser:
             'crude': {'value': 0.0054, 'unit': '1'},
          }),
         ('AD00025', 'conradson', None),
-        ('AD00020', 'dispersability_temp_k', 280.0),
+        ('AD00020', 'dispersability_temp_k', 280.0),  # where would this go?
         ('AD00020', 'preferred_oils', True),
         ('AD00020', 'k0y', 0.00000202),
         ('AD00017', 'SARA', {
@@ -522,8 +520,8 @@ class TestOilLibraryAttributeMapper:
         ('AD02068', -1, 'name', '26.0% Weathered'),
         ('AD02068', 0, 'short_name', 'Fresh Oil'),
         ('AD02068', -1, 'short_name', '26.0% Weathered'),
-        ('AD02068', 0, 'fraction_weathered', 0.0),
-        ('AD02068', -1, 'fraction_weathered', 0.26),
+        ('AD02068', 0, 'fraction_weathered', {'unit': '1', 'value': 0.0}),
+        ('AD02068', -1, 'fraction_weathered', {'unit': '1', 'value': 0.26}),
         ('AD02068', 0, 'boiling_point_range', None),
         ('AD02068', -1, 'boiling_point_range', None),
         ('AD02068', -1, 'boiling_point_range', None),
@@ -594,15 +592,104 @@ class TestOilLibraryAttributeMapper:
         pprint(phys[attr])
         assert phys[attr] == expected
 
+    @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        ('AD00020', 0, 'emulsions', [
+            {'age': {'unit': 'day', 'value': 0.0},
+             'ref_temp': {'unit': 'K', 'value': 288.15},
+             'water_content': {'unit': '1', 'value': 0.89}}
+         ]),
+    ])
+    def test_environmental_behavior(self, oil_id, index, attr, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        environ = mapper.sub_samples[index]['environmental_behavior']
 
+        pprint(environ)
+        pprint(environ[attr])
+        assert environ[attr] == expected
 
+    @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        ('AD00017', 0, 'saturates', {'unit': '1', 'value': 0.8}),
+        ('AD00017', 0, 'aromatics', {'unit': '1', 'value': 0.19}),
+        ('AD00017', 0, 'resins', {'unit': '1', 'value': 0.01}),
+        ('AD00017', 0, 'asphaltenes', {'unit': '1', 'value': 0.01}),
+    ])
+    def test_sara(self, oil_id, index, attr, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        environ = mapper.sub_samples[index]['SARA']
 
+        pprint(environ)
+        pprint(environ[attr])
+        assert environ[attr] == expected
 
+    @pytest.mark.parametrize('oil_id, index, expected', [
+        ('AD00025', 0, {'list_size': 8}),
+        ('AD00020', 0, {'list_size': 0}),
+    ])
+    def test_distillation_data(self, oil_id, index, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        cuts = mapper.sub_samples[index]['distillation_data']
 
+        pprint(cuts)
+        assert len(cuts) == expected['list_size']
 
+    @pytest.mark.parametrize('oil_id, index, expected', [
+        ('AD00025', 0, {
+            'names': set()
+         }),
+        ('AD00084', 0, {
+            'names': {'benzene', }
+         }),
+        ('AD01500', 0, {
+            'names': {'naphthenes', }
+         }),
+    ])
+    def test_compounds(self, oil_id, index, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        compounds = mapper.sub_samples[index]['compounds']
 
+        pprint(compounds)
 
+        for c in compounds:
+            assert 'name' in c
+            assert 'measurement' in c
 
+        assert set([c['name'] for c in compounds]) == expected['names']
 
+    @pytest.mark.parametrize('oil_id, index, expected', [
+        ('AD00020', 0, {
+            'names': {'sulfur', 'nickel', 'vanadium'}
+         }),
+        ('AD00024', 0, {
+            'names': {'paraffins', 'polars'}
+         }),
+    ])
+    def test_bulk_composition(self, oil_id, index, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        composition = mapper.sub_samples[index]['bulk_composition']
 
+        pprint(composition)
 
+        for c in composition:
+            assert 'name' in c
+            assert 'measurement' in c
+
+        assert set([c['name'] for c in composition]) == expected['names']
+
+    @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        ('AD00020', 0, 'name', 'Fresh Oil Sample'),
+        ('AD00005', 0, 'name', 'Fresh Oil Sample'),
+    ])
+    def test_py_json(self, oil_id, index, attr, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        oil = mapper.py_json()
+        # pprint(oil)
+        sample = oil['sub_samples'][index]
+
+        pprint(sample[attr])
+        assert sample[attr] == expected
