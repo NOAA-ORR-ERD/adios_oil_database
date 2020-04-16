@@ -59,10 +59,13 @@ class TestOilLibraryCsvFile:
         # records in our test file
         assert len(recs) == 1495
 
-        for r in recs:
-            # each item coming from records() is a dict with field keys and
-            # data
-            assert len(r) == 159
+        for rec, file_props in recs:
+            # each item coming from records() is a list containing 2 dicts.
+            # - dict with field keys & data representing the record data
+            # - dict with keys & data representing the properties of the
+            #   source data file
+            assert len(rec) == 159
+            assert len(file_props) == 3
 
     @pytest.mark.parametrize('oil_id, field, expected', [
         ('AD00009', 'Oil_Name', 'ABU SAFAH'),
@@ -79,9 +82,11 @@ class TestOilLibraryCsvFile:
         '''
         reader = OilLibraryCsvFile(data_file)
 
-        rec = reader.get_record(oil_id)
+        rec, file_props = reader.get_record(oil_id)
 
-        print(rec)
+        assert type(file_props) == dict
+        assert len(file_props) == 3
+        assert set(file_props.keys()) == {'version', 'created', 'application'}
 
         assert rec[field] == expected
 
@@ -112,7 +117,7 @@ class TestOilLibraryRecordParser:
             file props if the reference field contains no date information.
         '''
         rec = self.reader.get_record(oil_id)
-        parser = OilLibraryRecordParser(rec, None)  # should construct fine
+        parser = OilLibraryRecordParser(rec[0], None)  # should construct fine
 
         assert parser.reference['year'] == expected
 
@@ -127,7 +132,7 @@ class TestOilLibraryRecordParser:
             file props are correctly parsed.
         '''
         rec = self.reader.get_record(oil_id)
-        parser = OilLibraryRecordParser(rec, self.reader.file_props)
+        parser = OilLibraryRecordParser(*rec)
 
         assert parser.reference['year'] == expected
 
@@ -140,7 +145,7 @@ class TestOilLibraryRecordParser:
     ])
     def test_slugify(self, label, expected):
         rec = self.reader.get_record('AD00009')
-        parser = OilLibraryRecordParser(rec, self.reader.file_props)
+        parser = OilLibraryRecordParser(*rec)
 
         assert parser.slugify(label) == expected
 
@@ -177,10 +182,14 @@ class TestOilLibraryRecordParser:
         ('AD01598', 'pour_point', {'max_value': None, 'min_value': 323.0,
                                    'unit': 'K'}),
         ('AD00005', 'pour_point', None),
-        ('AD00025', 'asphaltenes', 0.02),
-        ('AD00025', 'aromatics', 0.128),
         ('AD00025', 'wax_content', 0.069),
         ('AD00025', 'water_content_emulsion', 0.9),
+        ('AD00025', 'emulsions', [
+            {'water_content': {'value': 0.9, 'unit': '1'},
+             'age': {'value': 0.0, 'unit': 'day'},
+             'ref_temp': {'value': 288.15, 'unit': 'K'},
+             },
+         ]),
         ('AD00025', 'emuls_constant_min', 0.148),
         ('AD00025', 'emuls_constant_max', 0.255),
         ('AD00025', 'flash_point_min_k', 280.0),
@@ -204,7 +213,7 @@ class TestOilLibraryRecordParser:
              'ref_temp': {'value': 273.0, 'unit': 'K'},
              'weathering': 0.16},
          ]),
-        ('AD02068', 'kvis', [
+        ('AD02068', 'kinematic_viscosities', [
             {'viscosity': {'value': 3e-06, 'unit': 'm^2/s'},
              'ref_temp': {'value': 273.0, 'unit': 'K'},
              'weathering': 0.0},
@@ -224,7 +233,7 @@ class TestOilLibraryRecordParser:
              'ref_temp': {'value': 288.0, 'unit': 'K'},
              'weathering': 0.26},
          ]),
-        ('AD01987', 'dvis', [
+        ('AD01987', 'dynamic_viscosities', [
             {'viscosity': {'value': 0.034, 'unit': 'kg/(m s)'},
              'ref_temp': {'value': 273.0, 'unit': 'K'},
              'weathering': 0.0},
@@ -298,8 +307,10 @@ class TestOilLibraryRecordParser:
         ('AD01500', 'naphthenes', 0.0004),
         ('AD00024', 'paraffins', 0.783),
         ('AD00025', 'polars', 0.012),
-        ('AD00017', 'resins', 0.01),
         ('AD00017', 'saturates', 0.8),
+        ('AD00025', 'aromatics', 0.128),
+        ('AD00017', 'resins', 0.01),
+        ('AD00025', 'asphaltenes', 0.02),
         ('AD00020', 'sulphur', 0.0104),
         ('AD00020', 'reid_vapor_pressure', 0.19),
         ('AD00020', 'viscosity_multiplier', None),  # all fields blank
@@ -307,15 +318,291 @@ class TestOilLibraryRecordParser:
         ('AD00020', 'vanadium', 33.9),  # percent??  ppm??
         ('AD01853', 'conrandson_residuum', 0.0019),
         ('AD01901', 'conrandson_crude', 0.0054),
+        ('AD01853', 'conradson', {
+            'residue': {'value': 0.0019, 'unit': '1'},
+         }),
+        ('AD01901', 'conradson', {
+            'crude': {'value': 0.0054, 'unit': '1'},
+         }),
+        ('AD00025', 'conradson', None),
         ('AD00020', 'dispersability_temp_k', 280.0),
         ('AD00020', 'preferred_oils', True),
         ('AD00020', 'k0y', 0.00000202),
-        ('AD01987', 'weathering', {0.0, 0.31}),
-        ('AD02068', 'weathering', {0.0, 0.11, 0.26}),
+        ('AD00017', 'SARA', {
+            'aromatics': {'value': 0.19, 'unit': '1'},
+            'asphaltenes': {'value': 0.01, 'unit': '1'},
+            'resins': {'value': 0.01, 'unit': '1'},
+            'saturates': {'value': 0.8, 'unit': '1'},
+         }),
+        ('AD00025', 'SARA', {
+            'aromatics': {'value': 0.128, 'unit': '1'},
+            'asphaltenes': {'value': 0.02, 'unit': '1'},
+            'saturates': {'value': 0.842, 'unit': '1'},
+         }),
+        ('AD00005', 'SARA', None),
+        ('AD01987', 'weathering', [0.0, 0.31]),
+        ('AD02068', 'weathering', [0.0, 0.11, 0.26]),
     ])
     def test_attrs(self, oil_id, attr, expected):
         rec = self.reader.get_record(oil_id)
-        parser = OilLibraryRecordParser(rec, self.reader.file_props)
+        parser = OilLibraryRecordParser(*rec)
 
         pprint(getattr(parser, attr))
         assert getattr(parser, attr) == expected
+
+
+class TestOilLibraryAttributeMapper:
+    reader = OilLibraryCsvFile(data_file)
+
+    def test_init(self):
+        with pytest.raises(TypeError):
+            _mapper = OilLibraryAttributeMapper()
+
+    def test_init_invalid(self):
+        '''
+            This should construct just fine.  Of course nothing will really
+            work if you pass in a None value.
+        '''
+        _mapper = OilLibraryAttributeMapper(None)
+
+    @pytest.mark.parametrize('oil_id, expected', [
+        ('AD00009', 1993),
+    ])
+    def test_init_valid_data(self, oil_id, expected):
+        '''
+            We are being fairly light on the parameter checking in our
+            constructor.  So if no file props are passed in, we can still
+            construct the parser, but accessing reference_date could raise
+            a TypeError.
+            This is because the reference_date will sometimes need the
+            file props if the reference field contains no date information.
+        '''
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+
+        assert mapper.reference['year'] == expected
+
+    @pytest.mark.parametrize('oil_id, attr, expected', [
+        ('AD00009', '_id', 'AD00009'),
+        ('AD00009', 'oil_id', 'AD00009'),
+        ('AD00009', 'name', 'ABU SAFAH'),
+        ('AD00009', 'location', 'SAUDI ARABIA'),
+        ('AD00009', 'reference', {'reference': ('Williams, R., ARAMCO, Letter '
+                                                'to Lehr, W.,  NOAA, '
+                                                'March 13, 1993.'),
+                                  'year': 1993}),
+        ('AD00010', 'comments', ('Crude sample represents 1989 winter '
+                                 'production.  Product considered an '
+                                 'Arabian medium crude.')
+         ),
+        ('AD00009', 'labels', None),
+        ('AD00009', 'status', None),
+        ('AD00009', 'product_type', 'crude'),
+        ('AD00009', 'API', 28.0),
+        # ('AD00009', 'sub_samples', None),  # we'll test this later
+        ('AD00020', 'densities', [
+            {'density': {'value': 904.0, 'unit': 'kg/m^3'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.0},
+            {'density': {'value': 920.0, 'unit': 'kg/m^3'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.09},
+            {'density': {'value': 934.0, 'unit': 'kg/m^3'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.16},
+         ]),
+        ('AD01987', 'dynamic_viscosities', [
+            {'viscosity': {'value': 0.034, 'unit': 'kg/(m s)'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.0},
+            {'viscosity': {'value': 0.016, 'unit': 'kg/(m s)'},
+             'ref_temp': {'value': 288.0, 'unit': 'K'},
+             'weathering': 0.0},
+            {'viscosity': {'value': 5.66, 'unit': 'kg/(m s)'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.31},
+            {'viscosity': {'value': 0.9, 'unit': 'kg/(m s)'},
+             'ref_temp': {'value': 288.0, 'unit': 'K'},
+             'weathering': 0.31},
+         ]),
+        ('AD02068', 'kinematic_viscosities', [
+            {'viscosity': {'value': 3e-06, 'unit': 'm^2/s'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.0},
+            {'viscosity': {'value': 2e-06, 'unit': 'm^2/s'},
+             'ref_temp': {'value': 288.0, 'unit': 'K'},
+             'weathering': 0.0},
+            {'viscosity': {'value': 4e-06, 'unit': 'm^2/s'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.11},
+            {'viscosity': {'value': 3e-06, 'unit': 'm^2/s'},
+             'ref_temp': {'value': 288.0, 'unit': 'K'},
+             'weathering': 0.11},
+            {'viscosity': {'value': 7e-06, 'unit': 'm^2/s'},
+             'ref_temp': {'value': 273.0, 'unit': 'K'},
+             'weathering': 0.26},
+            {'viscosity': {'value': 5e-06, 'unit': 'm^2/s'},
+             'ref_temp': {'value': 288.0, 'unit': 'K'},
+             'weathering': 0.26},
+         ]),
+        ('AD00025', 'interfacial_tensions', [
+            {'interface': 'water',
+             'method': None,
+             'tension': {'value': 0.0215, 'unit': 'N/m'},
+             'ref_temp': {'value': 288.0, 'unit': 'K'}
+             },
+            {'interface': 'seawater',
+             'method': None,
+             'tension': {'value': 0.015, 'unit': 'N/m'},
+             'ref_temp': {'value': 288.0, 'unit': 'K'}
+             },
+         ]),
+        ('AD00009', 'pour_point', {'value': 244.0, 'unit': 'K'}),
+        ('AD00047', 'pour_point', {'max_value': 293.0, 'min_value': None,
+                                   'unit': 'K'}),
+        ('AD01598', 'pour_point', {'max_value': None, 'min_value': 323.0,
+                                   'unit': 'K'}),
+        ('AD00005', 'pour_point', None),
+        ('AD00025', 'flash_point', {'value': 280.0, 'unit': 'K'}),
+        ('AD00125', 'flash_point', {'max_value': 230.0, 'min_value': None,
+                                    'unit': 'K'}),
+        ('AD00020', 'flash_point', None),
+        ('AD00025', 'distillation_data', [
+            {'fraction': {'value': 0.01, 'unit': '1'},
+             'liquid_temp': {'value': 115.0, 'unit': 'K'},
+             'vapor_temp': {'value': 37.0, 'unit': 'K'},
+             },
+            {'fraction': {'value': 0.05, 'unit': '1'},
+             'liquid_temp': {'value': 158.0, 'unit': 'K'},
+             'vapor_temp': {'value': 95.0, 'unit': 'K'},
+             },
+            {'fraction': {'value': 0.1, 'unit': '1'},
+             'liquid_temp': {'value': 182.0, 'unit': 'K'},
+             'vapor_temp': {'value': 111.0, 'unit': 'K'},
+             },
+            {'fraction': {'value': 0.15, 'unit': '1'},
+             'liquid_temp': {'value': 206.0, 'unit': 'K'},
+             'vapor_temp': {'value': 126.0, 'unit': 'K'},
+             },
+            {'fraction': {'value': 0.20, 'unit': '1'},
+             'liquid_temp': {'value': 234.0, 'unit': 'K'},
+             'vapor_temp': {'value': 142.0, 'unit': 'K'},
+             },
+            {'fraction': {'value': 0.25, 'unit': '1'},
+             'liquid_temp': {'value': 260.0, 'unit': 'K'},
+             'vapor_temp': {'value': 155.0, 'unit': 'K'},
+             },
+            {'fraction': {'value': 0.30, 'unit': '1'},
+             'liquid_temp': {'value': 286.0, 'unit': 'K'},
+             'vapor_temp': {'value': 189.0, 'unit': 'K'},
+             },
+            {'fraction': {'value': 0.34, 'unit': '1'},
+             'liquid_temp': {'value': 304.0, 'unit': 'K'},
+             'vapor_temp': {'value': 213.0, 'unit': 'K'},
+             },
+         ]),
+        ('AD00025', 'toxicities', [
+            {'after_48h': 1.12, 'species': 'Daphia Magna', 'tox_type': 'EC'},
+            {'after_24h': 8.17, 'species': 'Artemia spp.', 'tox_type': 'EC'},
+            {'after_48h': 6.28, 'species': 'Daphia Magna', 'tox_type': 'LC'},
+            {'after_24h': 10.6, 'species': 'Artemia spp.', 'tox_type': 'LC'}
+         ]),
+        ('AD00020', 'adhesion', {'unit': 'N/m^2', 'value': 0.28}),
+        ('AD00025', 'adhesion', None),
+     ])
+    def test_attrs(self, oil_id, attr, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+
+        pprint(getattr(mapper, attr))
+        assert getattr(mapper, attr) == expected
+
+    @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        ('AD02068', 0, 'name', 'Fresh Oil Sample'),
+        ('AD02068', -1, 'name', '26.0% Weathered'),
+        ('AD02068', 0, 'short_name', 'Fresh Oil'),
+        ('AD02068', -1, 'short_name', '26.0% Weathered'),
+        ('AD02068', 0, 'fraction_weathered', 0.0),
+        ('AD02068', -1, 'fraction_weathered', 0.26),
+        ('AD02068', 0, 'boiling_point_range', None),
+        ('AD02068', -1, 'boiling_point_range', None),
+        ('AD02068', -1, 'boiling_point_range', None),
+    ])
+    def test_sample_attribute(self, oil_id, index, attr, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        sample = mapper.sub_samples[index]
+
+        pprint(sample[attr])
+        assert sample[attr] == expected
+
+    @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        # properties without weathering are fresh, so only show up in the
+        # first sample
+        ('AD02068', 0, 'pour_point', {'unit': 'K', 'value': 243.0}),
+        ('AD02068', 0, 'flash_point', {'unit': 'K', 'value': 305.0}),
+        ('AD02068', 0, 'interfacial_tensions', [
+            {'interface': 'seawater',
+             'method': None,
+             'ref_temp': {'unit': 'K', 'value': 273.0},
+             'tension': {'unit': 'N/m', 'value': 0.0153}}
+         ]),
+        pytest.param('AD01998', 1, 'pour_point', None,
+                     marks=pytest.mark.raises(exception=KeyError)),
+        pytest.param('AD01998', 1, 'flash_point', None,
+                     marks=pytest.mark.raises(exception=KeyError)),
+        pytest.param('AD01998', 1, 'interfacial_tensions', None,
+                     marks=pytest.mark.raises(exception=KeyError)),
+        # weathered properties will show up in multiple samples
+        ('AD02068', 0, 'densities', [
+            {'density': {'unit': 'kg/m^3', 'value': 800.0},
+             'ref_temp': {'unit': 'K', 'value': 273.0}},
+            {'density': {'unit': 'kg/m^3', 'value': 790.0},
+             'ref_temp': {'unit': 'K', 'value': 288.0}}
+         ]),
+        ('AD02068', 1, 'densities', [
+            {'density': {'unit': 'kg/m^3', 'value': 815.0},
+             'ref_temp': {'unit': 'K', 'value': 273.0}},
+            {'density': {'unit': 'kg/m^3', 'value': 805.0},
+             'ref_temp': {'unit': 'K', 'value': 288.0}}
+         ]),
+        ('AD02068', 2, 'kinematic_viscosities', [
+            {'ref_temp': {'unit': 'K', 'value': 273.0},
+             'viscosity': {'unit': 'm^2/s', 'value': 7e-06}},
+            {'ref_temp': {'unit': 'K', 'value': 288.0},
+             'viscosity': {'unit': 'm^2/s', 'value': 5e-06}}
+         ]),
+        ('AD01998', 0, 'dynamic_viscosities', [
+            {'ref_temp': {'unit': 'K', 'value': 273.0},
+             'viscosity': {'unit': 'kg/(m s)', 'value': 0.025}},
+            {'ref_temp': {'unit': 'K', 'value': 288.0},
+             'viscosity': {'unit': 'kg/(m s)', 'value': 0.014}}
+         ]),
+        ('AD01998', 2, 'dynamic_viscosities', [
+            {'ref_temp': {'unit': 'K', 'value': 273.0},
+             'viscosity': {'unit': 'kg/(m s)', 'value': 0.068}},
+            {'ref_temp': {'unit': 'K', 'value': 288.0},
+             'viscosity': {'unit': 'kg/(m s)', 'value': 0.032}}
+         ]),
+    ])
+    def test_physical_properties(self, oil_id, index, attr, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        phys = mapper.sub_samples[index]['physical_properties']
+
+        pprint(phys)
+        pprint(phys[attr])
+        assert phys[attr] == expected
+
+
+
+
+
+
+
+
+
+
+
+
+

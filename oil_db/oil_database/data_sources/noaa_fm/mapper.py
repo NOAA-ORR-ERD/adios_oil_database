@@ -3,15 +3,9 @@ from numbers import Number
 from datetime import datetime
 from collections import defaultdict
 import logging
+from math import isclose
 
-from oil_database.models.common.float_unit import (FloatUnit,
-                                                   TemperatureUnit,
-                                                   TimeUnit,
-                                                   DensityUnit,
-                                                   KinematicViscosityUnit,
-                                                   DynamicViscosityUnit,
-                                                   InterfacialTensionUnit,
-                                                   AdhesionUnit)
+from oil_database.models.common.float_unit import (AdhesionUnit)
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -28,18 +22,27 @@ class OilLibraryAttributeMapper(object):
         named attributes that are suitable for creation of a NOAA Oil Database
         record.
     '''
-    top_record_properties = ('_id',
-                             'oil_id',
-                             'name',
-                             'location',
-                             'reference',
-                             'reference_date',
-                             'sample_date',
-                             'comments',
-                             'api',
-                             'product_type',
-                             'labels',
-                             'status')
+    oil_props = ('_id',
+                 'oil_id',
+                 'name',
+                 'location',
+                 'reference',
+                 # 'sample_date',  # not found in the datasheet
+                 'comments',
+                 'labels',
+                 'status',
+                 'product_type',
+                 'API',
+                 #'sub_samples',
+                 )
+    fresh_sample_props = ('enivironmental_behavior',
+                          'SARA',
+                          'distillation_data',
+                          'compounds',
+                          'bulk_composition',
+                          'headspace_analysis',
+                          'CCME')
+    weathered_sample_props = ('physical_properties',)
 
     def __init__(self, record):
         '''
@@ -49,56 +52,29 @@ class OilLibraryAttributeMapper(object):
                                     and associated index values into the data.
         '''
         self.record = record
-        self._status = None
-        self._labels = None
+        self.status = None
+        self.labels = None
 
-    def get_interface_properties(self):
+    def __getattr__(self, name):
         '''
-            These are all the property names that define the data in an
-            NOAA Oil Database record.
-            Our source data cannot be directly mapped to our object dict, so
-            we don't directly map any data items.  We will simply roll up
-            all the defined properties.
+            Handle any attributes not defined as properties in this class
+            by trying them on the parser.
         '''
-        props = set([p for p in dir(self.__class__)
-                     if isinstance(getattr(self.__class__, p),
-                                   property)])
+        try:
+            ret = getattr(self.record, name)
+        except Exception:
+            logger.info(f'{self.__class__.__name__}.{name} not found')
+            raise
 
-        return props
-
-    def generate_sample_id_attrs(self, sample_id):
-        attrs = {}
-
-        if sample_id == 0:
-            attrs['name'] = 'Fresh Oil Sample'
-            attrs['short_name'] = 'Fresh Oil'
-            attrs['fraction_weathered'] = sample_id
-            attrs['boiling_point_range'] = None
-        elif isinstance(sample_id, str):
-            attrs['name'] = sample_id
-            attrs['short_name'] = '{}...'.format(sample_id[:12])
-            attrs['fraction_weathered'] = None
-            attrs['boiling_point_range'] = None
-        elif isinstance(sample_id, Number):
-            # we will assume this is a simple fractional weathered amount
-            attrs['name'] = '{}% Weathered'.format(sample_id * 100)
-            attrs['short_name'] = '{}% Weathered'.format(sample_id * 100)
-            attrs['fraction_weathered'] = sample_id
-            attrs['boiling_point_range'] = None
-        else:
-            logger.warn("Can't generate IDs for sample: ", sample_id)
-
-        return attrs
-
-    def sort_samples(self, samples):
-        if all([s['fraction_weathered'] is not None for s in samples]):
-            return sorted(samples, key=lambda v: v['fraction_weathered'])
-        else:
-            # if we can't sort on weathered amount, then we will choose to
-            # not sort at all
-            return list(samples)
+        return ret
 
     def dict(self):
+        rec = {}
+
+        for attr in self.oil_properties:
+            rec[attr] = getattr(self, attr)
+
+    def dict_old(self):
         rec = {}
         samples = defaultdict(dict)
 
@@ -124,14 +100,6 @@ class OilLibraryAttributeMapper(object):
                 if v is not None:
                     samples[0.0][k] = v
 
-        # MongoDB strikes again.  Apparently, in order to support their query
-        # methods, dictionary keys, for all dicts, need to be a string that
-        # contains no '$' or '.' characters.  So we cannot use a floating point
-        # number as a dict key.  So instead of a dict of samples, it will be a
-        # list of dicts that contain a sample_id.  This sample_id will not be a
-        # proper MongoDB ID, but a human-readable way to identify the sample.
-        #
-        # For NOAA Filemaker records, the ID will be the weathering amount.
         for k, v in samples.items():
             v.update(self.generate_sample_id_attrs(k))
 
@@ -139,280 +107,13 @@ class OilLibraryAttributeMapper(object):
 
         return rec
 
-    def _class_path(self, class_obj):
-        return '{}.{}'.format(class_obj.__module__, class_obj.__name__)
-
-    def _get_kwargs(self, obj):
-        '''
-            Since we want to interchangeably use a parser or a record for our
-            source object, a common operation will be to guarantee that we are
-            always working with a kwargs struct.
-        '''
-        if isinstance(obj, dict):
-            return obj
-        else:
-            return obj.dict()
-
-    def _get_record_attr(self, attr, attr_type=None):
-        try:
-            ret = getattr(self.record, attr)
-        except Exception:
-            ret = self.record.get(attr)
-
-        if attr_type is not None and ret is not None:
-            return attr_type(ret)
-        else:
-            return ret
-
-    @property
-    def status(self):
-        '''
-            The parser does not have this, but we will want to get/set
-            this property.
-        '''
-        return self._status
-
-    @status.setter
-    def status(self, value):
-        self._status = value
-
-    @property
-    def labels(self):
-        '''
-            The parser does not have this, but we will want to get/set
-            this property.
-        '''
-        return self._labels
-
-    @labels.setter
-    def labels(self, value):
-        self._labels = value
-
-    @property
-    def name(self):
-        return self.record.oil_name
-
-    @property
-    def oil_id(self):
-        return self.record.oil_id
-
-    @property
-    def _id(self):
-        return self.oil_id
-
-    @property
-    def reference(self):
-        return self.record.reference
-
-    @property
-    def reference_date(self):
-        '''
-            Basically, our the oil library parser returns a four digit year.
-            This needs to be turned into a DateTimeField somehow.
-            We will choose Jan 1 of the year specified.
-        '''
-        rd = self.record.reference_date
-
-        if rd is not None:
-            return datetime(year=int(self.record.reference_date),
-                            month=1, day=1)
-
-    @property
-    def comments(self):
-        '''
-            Nothing special to do here.
-        '''
-        return self.record.comments
-
-    @property
-    def location(self):
-        '''
-            Nothing special to do here.
-        '''
-        return self.record.location
-
-    @property
-    def product_type(self):
-        '''
-            Nothing special to do here.
-        '''
-        return self.record.product_type
-
-    @property
-    def api(self):
-        try:
-            return float(self.record.api)
-        except Exception:
-            return None
-
-    @property
-    def apis(self):
-        '''
-            NOAA Filemaker has only one api value, and it is just a float
-        '''
-        if self.record.api is not None:
-            yield {'gravity': float(self.record.api), 'weathering': 0.0}
-
-    @property
-    def densities(self):
-        for d in self.record.densities:
-            kwargs = self._get_kwargs(d)
-
-            kwargs['density'] = (DensityUnit(value=kwargs['kg_m_3'],
-                                             unit='kg/m^3')
-                                 .dict())
-
-            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_k'],
-                                                  unit='K')
-                                  .dict())
-
-            kwargs['weathering'] = float(kwargs.get('weathering', 0.0))
-
-            del kwargs['kg_m_3'],
-            del kwargs['ref_temp_k'],
-
-            yield kwargs
-
-    @property
-    def dvis(self):
-        for d in self.record.dvis:
-            kwargs = self._get_kwargs(d)
-
-            kwargs['viscosity'] = (DynamicViscosityUnit(value=kwargs['kg_ms'],
-                                                        unit='kg/(m s)')
-                                   .dict())
-
-            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_k'],
-                                                  unit='K')
-                                  .dict())
-
-            kwargs['weathering'] = float(kwargs.get('weathering', 0.0))
-
-            del kwargs['kg_ms']
-            del kwargs['ref_temp_k']
-
-            yield kwargs
-
-    @property
-    def kvis(self):
-        for k in self.record.kvis:
-            kwargs = self._get_kwargs(k)
-
-            kwargs['viscosity'] = (
-                KinematicViscosityUnit(value=kwargs['m_2_s'], unit='m^2/s')
-                .dict()
-            )
-
-            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_k'],
-                                                  unit='K')
-                                  .dict())
-
-            kwargs['weathering'] = float(kwargs.get('weathering', 0.0))
-
-            del kwargs['m_2_s']
-            del kwargs['ref_temp_k']
-
-            yield kwargs
-
-    @property
-    def ifts(self):
-        for interface in ('water', 'seawater'):
-            lbl = 'oil_{}_interfacial_tension'.format(interface)
-
-            tension = self._get_record_attr('{}_n_m'.format(lbl), float)
-
-            ref_temp = self._get_record_attr('{}_ref_temp_k'.format(lbl),
-                                             float)
-
-            if all([v is not None for v in (tension, ref_temp)]):
-                kwargs = {}
-
-                kwargs['tension'] = (InterfacialTensionUnit(value=tension,
-                                                            unit='N/m')
-                                     .dict())
-
-                kwargs['ref_temp'] = (TemperatureUnit(value=ref_temp, unit='K')
-                                      .dict())
-
-                kwargs['interface'] = interface
-                kwargs['weathering'] = 0.0
-
-                yield kwargs
-
-    @property
-    def flash_point(self):
-        min_temp = self._get_record_attr('flash_point_min_k', float)
-        max_temp = self._get_record_attr('flash_point_max_k', float)
-
-        kwargs = {}
-        if (min_temp is not None and min_temp == max_temp):
-            kwargs['ref_temp'] = (TemperatureUnit(value=min_temp, unit='K')
-                                  .dict())
-        elif any([v is not None for v in (min_temp, max_temp)]):
-            kwargs['ref_temp'] = (TemperatureUnit(min_value=min_temp,
-                                                  max_value=max_temp,
-                                                  unit='K')
-                                  .dict())
-
-        if len(kwargs.keys()) > 0:
-            return kwargs
-
-    @property
-    def pour_point(self):
-        min_temp = self._get_record_attr('pour_point_min_k', float)
-        max_temp = self._get_record_attr('pour_point_max_k', float)
-
-        kwargs = {}
-        if (min_temp is not None and min_temp == max_temp):
-            kwargs['ref_temp'] = (TemperatureUnit(value=min_temp, unit='K')
-                                  .dict())
-        elif any([v is not None for v in (min_temp, max_temp)]):
-            kwargs['ref_temp'] = (TemperatureUnit(min_value=min_temp,
-                                                  max_value=max_temp,
-                                                  unit='K')
-                                  .dict())
-
-        if len(kwargs.keys()) > 0:
-            return kwargs
-
-    @property
-    def cuts(self):
-        for c in self.record.cuts:
-            kwargs = self._get_kwargs(c)
-
-            liquid_temp = kwargs.get('liquid_temp_k')
-            if liquid_temp is not None:
-                liquid_temp = float(liquid_temp)
-
-            vapor_temp = kwargs.get('vapor_temp_k')
-            if vapor_temp is not None:
-                vapor_temp = float(vapor_temp)
-
-            fraction = kwargs.get('fraction')
-            if fraction is not None:
-                fraction = float(fraction)
-
-            kwargs['fraction'] = (FloatUnit(value=fraction, unit='fraction')
-                                  .dict())
-
-            kwargs['vapor_temp'] = (TemperatureUnit(value=vapor_temp, unit='K')
-                                    .dict())
-
-            if liquid_temp is not None:
-                kwargs['liquid_temp'] = (TemperatureUnit(value=liquid_temp,
-                                                         unit='K')
-                                         .dict())
-
-            kwargs['weathering'] = 0.0
-
-            kwargs.pop('liquid_temp_k', None)
-            kwargs.pop('vapor_temp_k', None)
-
-            yield kwargs
-
     @property
     def adhesion(self):
         '''
+            The parser has an adhesion attribute with a simple float, and we
+            would like to reform it as a value/unit.  But we don't want to
+            change its name.  So we redefined it in the mapper.
+
             Note: We don't really know what the adhesion units are for the
                   NOAA Filemaker records.
 
@@ -421,227 +122,106 @@ class OilLibraryAttributeMapper(object):
                   Based on the range of numbers I am seeing, it kinda looks
                   like we are dealing with Pascals (N/m^2)
         '''
-        adhesion = self._get_record_attr('adhesion', float)
+        adhesion = self.record.adhesion
 
         if adhesion is not None:
-            kwargs = {}
-
-            kwargs['adhesion'] = (AdhesionUnit(value=adhesion, unit='N/m^2')
-                                  .dict())
-
-            return kwargs
-
-    @property
-    def evaporation_eqs(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        if False:
-            yield None
-
-    @property
-    def emulsions(self):
-        '''
-            Oil Library records do have some attributes related to emulsions:
-            - emuls_constant_min (???)
-            - emuls_constant_max (???)
-            - water_content_emulsion (probably maps to water_content)
-
-            But it is not clear how to map this information to our emulsion
-            object.  Basically we will just use the water content for now.
-
-            - Age will be set to the day of formation
-            - Temperature will be set to 15C (288.15K)
-        '''
-        water_content = self._get_record_attr('water_content_emulsion', float)
-
-        if water_content is not None:
-            kwargs = {}
-
-            kwargs['water_content'] = (FloatUnit(value=water_content,
-                                                 unit='fraction')
-                                       .dict())
-
-            kwargs['age'] = TimeUnit(value=0.0, unit='s').dict()
-
-            kwargs['ref_temp'] = (TemperatureUnit(value=273.15, unit='K')
-                                  .dict())
-
-            yield kwargs
-
-    @property
-    def chemical_dispersibility(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        if False:
-            yield None
-
-    @property
-    def sulfur(self):
-        sulfur = self._get_record_attr('sulphur', float)
-
-        if sulfur is None:
-            return None
+            ret = {'value': adhesion, 'unit': 'N/m^2'}
         else:
-            kwargs = {}
+            ret = None
 
-            kwargs['fraction'] = (FloatUnit(value=sulfur, unit='fraction')
-                                  .dict())
-            kwargs['weathering'] = 0.0
-
-            return kwargs
+        return ret
 
     @property
-    def water(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
+    def sub_samples(self):
+        samples = []
+        for w in self.weathering:
+            samples.append(self.sample(w))
 
-    @property
-    def wax_content(self):
-        wax = self._get_record_attr('wax_content', float)
+        return samples
 
-        if wax is None:
-            return None
+    def sample(self, weathering):
+        ret = self.generate_sample_id_attrs(weathering)
+
+        for attr in self.weathered_sample_props:
+            value = getattr(self, attr)(weathering)
+
+            if value is not None:
+                ret[attr] = value
+
+        if isclose(weathering, 0.0):
+            # first unweathered, get the fresh sample attrs
+            for attr in self.fresh_sample_props:
+                value = getattr(self, attr, None)
+
+                if value is not None:
+                    ret[attr] = value
+
+        return ret
+
+    def generate_sample_id_attrs(self, sample_id):
+        attrs = {}
+
+        if isinstance(sample_id, str):
+            attrs['name'] = sample_id
+            attrs['short_name'] = '{}...'.format(sample_id[:12])
+            attrs['fraction_weathered'] = None
+            attrs['boiling_point_range'] = None
+        elif isclose(sample_id, 0):
+            attrs['name'] = 'Fresh Oil Sample'
+            attrs['short_name'] = 'Fresh Oil'
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
+        elif isinstance(sample_id, Number):
+            # we will assume this is a simple fractional weathered amount
+            attrs['name'] = '{}% Weathered'.format(sample_id * 100)
+            attrs['short_name'] = '{}% Weathered'.format(sample_id * 100)
+            attrs['fraction_weathered'] = sample_id
+            attrs['boiling_point_range'] = None
         else:
-            kwargs = {}
+            logger.warn("Can't generate IDs for sample: ", sample_id)
 
-            kwargs['fraction'] = (FloatUnit(value=wax, unit='fraction')
-                                  .dict())
+        return attrs
 
-            return kwargs
+    def physical_properties(self, weathering):
+        ret = {}
 
-    @property
-    def benzene(self):
-        benzene_content = self._get_record_attr('benzene', float)
+        # fresh only attributes
+        if isclose(weathering, 0.0):
+            for attr in ('pour_point', 'flash_point', 'interfacial_tensions'):
+                value = getattr(self, attr)
 
-        if benzene_content is not None:
-            kwargs = {}
+                if value is not None:
+                    ret[attr] = value
 
-            kwargs['benzene'] = (FloatUnit(value=benzene_content,
-                                           unit='fraction')
-                                 .dict())
+        # weathered attributes
+        for attr in ('densities', 'dynamic_viscosities',
+                     'kinematic_viscosities'):
+            values = self.filter_weathered_attr(attr, weathering)
 
-            return kwargs
+            if len(values) > 0:
+                ret[attr] = values
 
-    @property
-    def headspace(self):
-        '''
-            N/A. Oil Library records don't have this.  So we form a generator
-            function that returns an empty iterator
-        '''
-        return None
+        return ret
 
-    @property
-    def chromatography(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
+    def filter_weathered_attr(self, attr, weathering):
+        values = getattr(self, attr, None)
 
-    @property
-    def ccme(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
+        if values is None:
+            return []
+        else:
+            values = [v for v in values
+                      if isclose(v['weathering'], weathering)]
+            [v.pop('weathering', None) for v in values]
 
-    @property
-    def ccme_f1(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
+            return values
 
-    @property
-    def ccme_f2(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
 
-    @property
-    def ccme_tph(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
 
-    @property
-    def sara_total_fractions(self):
-        for sara_type in ('Saturates', 'Aromatics', 'Resins', 'Asphaltenes'):
-            fraction = self._get_record_attr(sara_type.lower(), float)
 
-            if fraction is not None:
-                kwargs = {}
 
-                kwargs['fraction'] = (FloatUnit(value=fraction,
-                                                unit='fraction')
-                                      .dict())
 
-                kwargs['sara_type'] = sara_type
 
-                yield kwargs
 
-    @property
-    def alkanes(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
 
-    @property
-    def alkylated_pahs(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
 
-    @property
-    def biomarkers(self):
-        '''
-            N/A. Oil Library records don't have this.
-        '''
-        return None
 
-    @property
-    def toxicities(self):
-        '''
-            This is unique to the NOAA Filemaker records
-        '''
-        for tox in self.record.toxicities:
-            kwargs = self._get_kwargs(tox)
-
-            # Note: we will maybe want to specify the units of concentration,
-            #       but I am not sure what the units are.  PPM maybe?
-            #       For now, we will just store the numbers.
-
-            after_24h = kwargs.get('after_24h')
-            after_48h = kwargs.get('after_48h')
-            after_96h = kwargs.get('after_96h')
-
-            if any([c is not None
-                    for c in (after_24h, after_48h, after_96h)]):
-                yield kwargs
-
-    @property
-    def conradson(self):
-        '''
-            This is unique to the NOAA Filemaker records
-        '''
-        residue = self._get_record_attr('conrandson_residuum', float)
-        crude = self._get_record_attr('conrandson_crude', float)
-
-        if any([a is not None for a in (residue, crude)]):
-            kwargs = {}
-            if residue is not None:
-                kwargs['residue'] = (FloatUnit(value=residue, unit='fraction')
-                                     .dict())
-
-            if crude is not None:
-                kwargs['crude'] = (FloatUnit(value=crude, unit='fraction')
-                                   .dict())
-
-            yield kwargs

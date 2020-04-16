@@ -70,6 +70,18 @@ class OilLibraryRecordParser(ParserBase):
         return self.adios_oil_id
 
     @property
+    def _id(self):
+        return self.adios_oil_id
+
+    @property
+    def name(self):
+        return self.oil_name
+
+    @property
+    def API(self):
+        return self.api
+
+    @property
     def reference(self):
         '''
             The reference content can have:
@@ -255,45 +267,42 @@ class OilLibraryRecordParser(ParserBase):
                                       ('kg_m_3', 'ref_temp_k'))
 
         for d in dens:
-            if (d['kg_m_3'] is not None and d['ref_temp_k'] is not None):
-                ret.append({
-                    'density': {'value': d['kg_m_3'], 'unit': 'kg/m^3'},
-                    'ref_temp': {'value': d['ref_temp_k'], 'unit': 'K'},
-                    'weathering': d.get('weathering', 0.0),
-                })
+            ret.append({
+                'density': {'value': d['kg_m_3'], 'unit': 'kg/m^3'},
+                'ref_temp': {'value': d['ref_temp_k'], 'unit': 'K'},
+                'weathering': d.get('weathering', 0.0),
+            })
 
         return ret
 
     @property
-    def kvis(self):
+    def kinematic_viscosities(self):
         ret = []
         visc = self.get_property_sets(6, 'kvis',
                                       ('m_2_s', 'ref_temp_k', 'weathering'),
                                       ('m_2_s', 'ref_temp_k'))
 
         for v in visc:
-            if (v['m_2_s'] is not None and v['ref_temp_k'] is not None):
-                ret.append({
-                    'viscosity': {'value': v['m_2_s'], 'unit': 'm^2/s'},
-                    'ref_temp': {'value': v['ref_temp_k'], 'unit': 'K'},
-                    'weathering': v.get('weathering', 0.0),
-                })
+            ret.append({
+                'viscosity': {'value': v['m_2_s'], 'unit': 'm^2/s'},
+                'ref_temp': {'value': v['ref_temp_k'], 'unit': 'K'},
+                'weathering': v.get('weathering', 0.0),
+            })
 
         return ret
 
     @property
-    def dvis(self):
+    def dynamic_viscosities(self):
         ret = []
         visc = self.get_property_sets(6, 'dvis',
                                       ('kg_ms', 'ref_temp_k', 'weathering'),
                                       ('kg_ms', 'ref_temp_k'))
         for v in visc:
-            if (v['kg_ms'] is not None and v['ref_temp_k'] is not None):
-                ret.append({
-                    'viscosity': {'value': v['kg_ms'], 'unit': 'kg/(m s)'},
-                    'ref_temp': {'value': v['ref_temp_k'], 'unit': 'K'},
-                    'weathering': v.get('weathering', 0.0),
-                })
+            ret.append({
+                'viscosity': {'value': v['kg_ms'], 'unit': 'kg/(m s)'},
+                'ref_temp': {'value': v['ref_temp_k'], 'unit': 'K'},
+                'weathering': v.get('weathering', 0.0),
+            })
 
         return ret
 
@@ -306,14 +315,16 @@ class OilLibraryRecordParser(ParserBase):
                                       ('vapor_temp_k', 'fraction'))
 
         for c in cuts:
-            if (c['fraction'] is not None and
-                    (c['liquid_temp_k'] is not None or
-                     c['vapor_temp_k'] is not None)):
-                ret.append({
-                    'fraction': {'value': c['fraction'], 'unit': '1'},
-                    'liquid_temp': {'value': c['liquid_temp_k'], 'unit': 'K'},
-                    'vapor_temp': {'value': c['vapor_temp_k'], 'unit': 'K'},
-                })
+            value = {
+                'fraction': {'value': c['fraction'], 'unit': '1'},
+                'vapor_temp': {'value': c['vapor_temp_k'], 'unit': 'K'},
+            }
+
+            if c.get('liquid_temp_k', None) is not None:
+                value['liquid_temp'] = {'value': c['liquid_temp_k'],
+                                        'unit': 'K'}
+
+            ret.append(value)
 
         return ret
 
@@ -359,6 +370,66 @@ class OilLibraryRecordParser(ParserBase):
         return ret
 
     @property
+    def emulsions(self):
+        '''
+            Oil Library records do have some attributes related to emulsions:
+            - emuls_constant_min (???)
+            - emuls_constant_max (???)
+            - water_content_emulsion (probably maps to water_content)
+
+            But it is not clear how to map this information to our emulsion
+            object.  Basically we will just use the water content for now.
+
+            - Age will be set to the day of formation
+            - Temperature will be set to 15C (288.15K)
+        '''
+        ret = []
+
+        water_content = self.water_content_emulsion
+
+        if water_content is not None:
+            ret.append({
+                'water_content': {'value': water_content, 'unit': '1'},
+                'age': {'value': 0.0, 'unit': 'day'},
+                'ref_temp': {'value': 288.15, 'unit': 'K'},
+            })
+
+        return ret
+
+    @property
+    def conradson(self):
+        ret = {}
+
+        residue = self.conrandson_residuum
+        crude = self.conrandson_crude
+
+        if residue is not None:
+            ret['residue'] = {'value': residue, 'unit': '1'}
+
+        if crude is not None:
+            ret['crude'] = {'value': crude, 'unit': '1'}
+
+        if len(ret) == 0:
+            ret = None
+
+        return ret
+
+    @property
+    def SARA(self):
+        ret = {}
+
+        for sara_type in ('saturates', 'aromatics', 'resins', 'asphaltenes'):
+            fraction = getattr(self, sara_type)
+
+            if fraction is not None:
+                ret[sara_type] = {'value': fraction, 'unit': '1'}
+
+        if len(ret) == 0:
+            ret = None
+
+        return ret
+
+    @property
     def weathering(self):
         '''
             A NOAA Filemaker record is a flat row of data, but there are some
@@ -378,4 +449,4 @@ class OilLibraryRecordParser(ParserBase):
                 v = 0.0 if v is None else v
                 weathered_amounts.add(v)
 
-        return weathered_amounts
+        return sorted(list(weathered_amounts))

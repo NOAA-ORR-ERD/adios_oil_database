@@ -504,7 +504,7 @@ class EnvCanadaSampleParser(ParserBase):
         try:
             ret = self.values.get(self.attr_map[name])
         except Exception:
-            logger.info('EnvCanadaSampleParser.{} not found'.format(name))
+            logger.info(f'{self.__class__.__name__}.{name} not found')
             raise
 
         return ret

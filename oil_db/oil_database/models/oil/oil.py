@@ -5,17 +5,12 @@ This maps to the JSON used in the DB
 
 Having a Python class makes it easier to write importing, validating etc, code.
 """
+from dataclasses import dataclass, field
 
-from ..common.utilities import (dataclass_to_json,
-                                JSON_List,
-                                )
+from ..common.utilities import dataclass_to_json, JSON_List
 
 from .values import ProductType, Reference
-from .sample import Sample, SampleList
-
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import List, Dict
+from .sample import SampleList
 
 
 @dataclass_to_json

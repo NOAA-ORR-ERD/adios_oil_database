@@ -141,14 +141,16 @@ class OilLibraryCsvFile:
             if len(r) < 10:
                 logger.info('got record: {}'.format(r))
 
-            yield dict(zip_longest(self.file_columns, r))
+            yield [dict(zip_longest(self.file_columns, r)),
+                   self.file_props]
 
     def get_record(self, oil_id):
         if len(self._row_lu) == 0:
             list(self.get_records())
 
-        return dict(zip_longest(self.file_columns,
-                                self.convert_fields(self._row_lu[oil_id])))
+        return [dict(zip_longest(self.file_columns,
+                                 self.convert_fields(self._row_lu[oil_id]))),
+                self.file_props]
 
     def convert_fields(self, row):
         return [self.convert_field(f) for f in row]
