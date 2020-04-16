@@ -16,23 +16,23 @@ from .sample import SampleList
 @dataclass_to_json
 @dataclass
 class Oil:
-    # metadata:
     name: str  # only required field
     _id: str = ""
     oil_id: str = ""
 
+    status: list = field(default_factory=list)
+    extra_data: dict = field(default_factory=dict)
+    sub_samples: SampleList = field(default_factory=SampleList)
+
+    # meta data
     location: str = ""
     reference: Reference = None
     sample_date: str = ""
     comments: str = ""
     API: float = None
     product_type: ProductType = ""
-
     labels: list = field(default_factory=list)
-    status: list = field(default_factory=list)
-    extra_data: dict = field(default_factory=dict)
 
-    sub_samples: SampleList = field(default_factory=SampleList)
 
     def __post_init__(self):
         """
