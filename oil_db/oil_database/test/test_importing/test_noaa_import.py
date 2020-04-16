@@ -55,7 +55,7 @@ class TestOilLibraryCsvFile:
         recs = list(reader.get_records())
 
         # records in our test file
-        assert len(recs) == 1495
+        assert len(recs) == 19
 
         for rec, file_props in recs:
             # each item coming from records() is a list containing 2 dicts.

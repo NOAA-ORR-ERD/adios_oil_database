@@ -115,24 +115,6 @@ class OilLibraryCsvFile:
             row = []
         return row
 
-    def readline(self, cache=True):
-        row = self.convert_fields(self._parse_row(self.fileobj.readline()))
-
-        if cache and row is not None:
-            oil_id = row[self.file_columns_lu['ADIOS_Oil_ID']]
-            self._row_lu[oil_id] = row
-
-        return row
-
-    def readlines(self):
-        while True:
-            line = self.readline()
-
-            if line is None:
-                break
-            elif len(line) > 0:
-                yield line
-
     def get_records(self):
         '''
             This is the API that the oil import processes expect
@@ -150,6 +132,24 @@ class OilLibraryCsvFile:
 
         return [dict(zip_longest(self.file_columns, self._row_lu[oil_id])),
                 self.file_props]
+
+    def readlines(self):
+        while True:
+            line = self.readline()
+
+            if line is None:
+                break
+            elif len(line) > 0:
+                yield line
+
+    def readline(self, cache=True):
+        row = self.convert_fields(self._parse_row(self.fileobj.readline()))
+
+        if cache and row is not None:
+            oil_id = row[self.file_columns_lu['ADIOS_Oil_ID']]
+            self._row_lu[oil_id] = row
+
+        return row
 
     def convert_fields(self, row):
         if row is None:
@@ -223,8 +223,13 @@ class OilLibraryCsvFile:
     def file_props(self):
         version, created, app = self.__version__
 
+        try:
+            created_date = datetime.strptime(created, '%m/%d/%Y')
+        except ValueError:
+            created_date = datetime.strptime(created, '%m/%d/%y')
+
         return {'version': version,
-                'created': datetime.strptime(created, '%m/%d/%Y'),
+                'created': created_date,
                 'application': app}
 
     def __repr__(self):
