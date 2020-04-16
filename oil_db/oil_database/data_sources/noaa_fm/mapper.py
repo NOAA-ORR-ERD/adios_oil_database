@@ -39,9 +39,7 @@ class OilLibraryAttributeMapper(MapperBase):
                           'SARA',
                           'distillation_data',
                           'compounds',
-                          'bulk_composition',
-                          'headspace_analysis',
-                          'CCME')
+                          'bulk_composition')
     weathered_sample_props = ('physical_properties',)
 
     def __init__(self, record):

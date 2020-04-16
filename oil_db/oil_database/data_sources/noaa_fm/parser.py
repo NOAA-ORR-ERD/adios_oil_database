@@ -98,10 +98,14 @@ class OilLibraryRecordParser(ParserBase):
                                      with it.
         '''
         ref_text = self._reference
-        occurrences = [int(n) for n in re.compile(r'\d{4}').findall(ref_text)]
+
+        if ref_text is None:
+            occurrences = []
+        else:
+            occurrences = [int(n)
+                           for n in re.compile(r'\d{4}').findall(ref_text)]
 
         if len(occurrences) == 0:
-            print(self.file_props)
             ref_year = self.file_props['created'].year
         else:
             ref_year = max(occurrences)

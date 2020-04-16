@@ -116,7 +116,7 @@ class OilLibraryCsvFile:
         return row
 
     def readline(self, cache=True):
-        row = self._parse_row(self.fileobj.readline())
+        row = self.convert_fields(self._parse_row(self.fileobj.readline()))
 
         if cache and row is not None:
             oil_id = row[self.file_columns_lu['ADIOS_Oil_ID']]
@@ -148,12 +148,14 @@ class OilLibraryCsvFile:
         if len(self._row_lu) == 0:
             list(self.get_records())
 
-        return [dict(zip_longest(self.file_columns,
-                                 self.convert_fields(self._row_lu[oil_id]))),
+        return [dict(zip_longest(self.file_columns, self._row_lu[oil_id])),
                 self.file_props]
 
     def convert_fields(self, row):
-        return [self.convert_field(f) for f in row]
+        if row is None:
+            return None
+        else:
+            return [self.convert_field(f) for f in row]
 
     def convert_field(self, field):
         '''
