@@ -338,9 +338,9 @@ class TestEmulsion:
 
         # the measurement classes will add unit_type, so we add it to more
         # easily compare the output
-        json_obj['complex_modulus']['unit_type'] = 'adhesion'
-        json_obj['storage_modulus']['unit_type'] = 'adhesion'
-        json_obj['loss_modulus']['unit_type'] = 'adhesion'
+        json_obj['complex_modulus']['unit_type'] = None
+        json_obj['storage_modulus']['unit_type'] = None
+        json_obj['loss_modulus']['unit_type'] = None
         json_obj['tan_delta']['unit_type'] = 'massfraction'
         json_obj['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj['water_content']['unit_type'] = 'massfraction'
@@ -380,9 +380,9 @@ class TestEmulsionList:
 
         # the measurement classes will add unit_type, so we add it to more
         # easily compare the output
-        json_obj[0]['complex_modulus']['unit_type'] = 'adhesion'
-        json_obj[0]['storage_modulus']['unit_type'] = 'adhesion'
-        json_obj[0]['loss_modulus']['unit_type'] = 'adhesion'
+        json_obj[0]['complex_modulus']['unit_type'] = None
+        json_obj[0]['storage_modulus']['unit_type'] = None
+        json_obj[0]['loss_modulus']['unit_type'] = None
         json_obj[0]['tan_delta']['unit_type'] = 'massfraction'
         json_obj[0]['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj[0]['water_content']['unit_type'] = 'massfraction'

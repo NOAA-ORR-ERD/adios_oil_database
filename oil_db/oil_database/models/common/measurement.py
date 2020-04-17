@@ -204,5 +204,9 @@ class Adhesion(MeasurementBase):
     unit_type = "adhesion"
 
 
+class NeedleAdhesion(MeasurementBase):
+    unit_type = None
+
+
 class InterfacialTension(MeasurementBase):
     unit_type = "interfacialtension"

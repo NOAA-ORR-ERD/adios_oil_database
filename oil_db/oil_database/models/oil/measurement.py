@@ -11,7 +11,7 @@ from ..common.measurement import (Time,
                                   DynamicViscosity,
                                   KinematicViscosity,
                                   InterfacialTension,
-                                  Adhesion)
+                                  NeedleAdhesion)
 
 
 @dataclass_to_json
@@ -98,9 +98,9 @@ class Emulsion:
 
     # Pa units, some kind of pressure/stress.
     # Adhesion provides the right units
-    complex_modulus: Adhesion = None
-    storage_modulus: Adhesion = None
-    loss_modulus: Adhesion = None
+    complex_modulus: NeedleAdhesion = None
+    storage_modulus: NeedleAdhesion = None
+    loss_modulus: NeedleAdhesion = None
 
     # Todo: this seems to be just unit-less float, but it is a measurement
     #       with standard_deviation & replicates.  Well MassFraction will do

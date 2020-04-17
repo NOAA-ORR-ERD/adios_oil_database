@@ -15,6 +15,7 @@ from oil_database.models.common import (ProductType,
                                         DynamicViscosity,
                                         KinematicViscosity,
                                         Adhesion,
+                                        NeedleAdhesion,
                                         InterfacialTension)
 
 
@@ -435,6 +436,26 @@ class TestAdhesion:
 
         assert math.isclose(model.value, 1.01972, rel_tol=1e-05)
         assert model.unit == 'kg/m^2'
+
+
+class TestNeedleAdhesion:
+    '''
+        All of our common Measurement subclasses share a common codebase.
+        We will only test the things that are different, which haven't been
+        tested yet.
+    '''
+    def test_init_empty(self):
+        model = NeedleAdhesion()
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': None}
+
+    def test_convert_to(self):
+        model = NeedleAdhesion(value=10.0, unit='g/cm^2')
+
+        with pytest.raises(ValueError):
+            model.convert_to('kg/m^2')
 
 
 class TestInterfacialTension:

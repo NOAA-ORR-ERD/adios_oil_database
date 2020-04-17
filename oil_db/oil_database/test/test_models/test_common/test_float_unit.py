@@ -746,10 +746,8 @@ class TestDynamicViscosityUnit(object):
         (10.0, 'kg/(m s)'),
         (10.0, 'Pascal second'),
         (10.0, 'Pa s'),
-        (10.0, 'Pa.s'),
         (10.0, 'milliPascal second'),
         (10.0, 'mPa s'),
-        (10.0, 'mPa.s'),
         (10.0, 'Newton seconds per square meter'),
         (10.0, 'N s/m^2'),
         (10.0, 'N s/m\N{SUPERSCRIPT TWO}'),
@@ -767,11 +765,11 @@ class TestDynamicViscosityUnit(object):
             marks=pytest.mark.raises(exception=ValueError)),
     ])
     def test_init(self, value, unit):
-        kvis_unit = DynamicViscosityUnit(value=value, unit=unit)
+        dvis_unit = DynamicViscosityUnit(value=value, unit=unit)
 
-        assert repr(kvis_unit) == (u'<DynamicViscosityUnit({} {})>'
+        assert repr(dvis_unit) == (u'<DynamicViscosityUnit({} {})>'
                                    .format(value, unit))
-        assert str(kvis_unit) == (u'{} {}'.format(value, unit))
+        assert str(dvis_unit) == (u'{} {}'.format(value, unit))
 
     @pytest.mark.parametrize('value, unit', [
         (10.0, 'kg/(m s)'),
@@ -816,11 +814,11 @@ class TestInterfacialTensionUnit(object):
             marks=pytest.mark.raises(exception=ValueError)),
     ])
     def test_init(self, value, unit):
-        kvis_unit = InterfacialTensionUnit(value=value, unit=unit)
+        ift_unit = InterfacialTensionUnit(value=value, unit=unit)
 
-        assert repr(kvis_unit) == (u'<InterfacialTensionUnit({} {})>'
-                                   .format(value, unit))
-        assert str(kvis_unit) == (u'{} {}'.format(value, unit))
+        assert repr(ift_unit) == (u'<InterfacialTensionUnit({} {})>'
+                                  .format(value, unit))
+        assert str(ift_unit) == (u'{} {}'.format(value, unit))
 
     @pytest.mark.parametrize('value, unit', [
         (10.0, 'N/m'),
@@ -886,11 +884,10 @@ class TestAdhesionUnit(object):
             marks=pytest.mark.raises(exception=ValueError)),
     ])
     def test_init(self, value, unit):
-        kvis_unit = AdhesionUnit(value=value, unit=unit)
+        adh_unit = AdhesionUnit(value=value, unit=unit)
 
-        assert repr(kvis_unit) == (u'<AdhesionUnit({} {})>'
-                                   .format(value, unit))
-        assert str(kvis_unit) == (u'{} {}'.format(value, unit))
+        assert repr(adh_unit) == (u'<AdhesionUnit({} {})>'.format(value, unit))
+        assert str(adh_unit) == (u'{} {}'.format(value, unit))
 
     @pytest.mark.parametrize('value, unit', [
         (10.0, 'Pa'),
