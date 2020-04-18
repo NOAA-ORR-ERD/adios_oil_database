@@ -18,7 +18,7 @@ class Compound:
         - hydrogen_mass_fraction: UnittedValue = None
         - mercaptan_sulfur_mass_fraction: UnittedValue = None
         - nitrogen_mass_fraction: UnittedValue = None
-        - ccr_percent: UnittedValue = None
+        - ccr_percent: UnittedValue = None  # conradson carbon residue
         - calcium_mass_fraction: UnittedValue = None
         - hydrogen_sulfide_concentration: UnittedValue = None
         - salt_content: UnittedValue = None

@@ -5,6 +5,7 @@ Exxon Mapper
 Not really a class -- it's really a function that build up an
 oil object
 """
+import re
 import logging
 
 import unit_conversion as uc
@@ -29,8 +30,7 @@ from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
 from oil_database.models.oil.sara import Sara
 from oil_database.models.oil.ccme import CCME
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -143,11 +143,13 @@ def ExxonMapper(record):
     oil._id = oil.oil_id = row[0]
     sample_names = row[1:]
 
-    samples = SampleList([Sample(name=name) for name in sample_names])
-
+    samples = SampleList([Sample(**sample_id_attrs(name))
+                          for name in sample_names])
     create_middle_tier_objs(samples)
 
     cut_table = read_cut_table(oil, data)
+
+    set_boiling_point_range(samples, cut_table)
 
     apply_map(data, cut_table, samples)
 
@@ -157,15 +159,45 @@ def ExxonMapper(record):
 
 
 def read_header(oil, data):
-    # fixme: this should probably be more flexible
-    #        but we can wait 'till we get data that doesn't match
-    # it could / should read the whole dist cut table, then map it
-    # to the samples Exxon info in the header
+    '''
+        fixme: this should probably be more flexible
+               but we can wait 'till we get data that doesn't match
+        it could / should read the whole dist cut table, then map it
+        to the samples Exxon info in the header
+    '''
     oil.reference = "\n".join([next(data)[0] for _ in range(3)])
 
 
-def read_cut_table(_oil, data):
+def sample_id_attrs(name):
+    kwargs = {}
 
+    if name == 'Whole crude':
+        kwargs['name'] = 'Fresh Oil Sample'
+        kwargs['short_name'] = 'Fresh Oil'
+    else:
+        kwargs['name'] = name
+        kwargs['short_name'] = f'{name[:12]}...'
+
+    return kwargs
+
+
+def create_middle_tier_objs(samples):
+    '''
+        These are the dataclasses that comprise the attributes of the Sample
+    '''
+    for sample in samples:
+        sample.physical_properties = PhysicalProperties()
+        sample.environmental_behavior = EnvironmentalBehavior()
+        sample.SARA = Sara()
+
+
+def read_cut_table(_oil, data):
+    '''
+        Read the rest of the rows and save them in a dictionary.
+        - key: first field of the row
+        - value: the rest of the fields as a list.  The index position in the
+          list will be correlated to the sample names that were captured.
+    '''
     cut_table = {}
 
     while True:
@@ -174,21 +206,46 @@ def read_cut_table(_oil, data):
             cut_table[norm(row[0])] = row[1:]
         except StopIteration:
             break
+
     return cut_table
+
+
+def set_boiling_point_range(samples, cut_table):
+    '''
+        Parse the names to determine the boiling point ranges
+        Requires the sample names to be initialized
+
+        Need to know:
+        - Initial boiling point (IBF)
+        - End boiling point (EP)
+    '''
+    print([s.name for s in samples])
+
+    initial_bp = cut_table['ibp, f'][0]
+    final_bp = cut_table['ep, f'][-1]
+
+    for sample_prev, sample in zip(samples, samples[1:]):
+        prev_max_temp = to_number(sample_prev.name.split()[-1])
+        min_temp, _sep, max_temp = [to_number(n)
+                                    for n in sample.name.split()[-3:]]
+
+        if min_temp == 'IBP':
+            min_temp = initial_bp
+        elif not isinstance(min_temp, float):
+            min_temp = prev_max_temp
+
+        sample.boiling_point_range = [min_temp, max_temp]
+
+    # fix the last sample
+    final_bpr = samples[-1].boiling_point_range
+    final_bpr[0] = final_bpr[1]
+    final_bpr[1] = final_bp
 
 
 def apply_map(data, cut_table, samples):
     for name, data in MAPPING.items():
         row = cut_table[name]
         set_sample_property(row, samples, **data)
-
-
-def create_middle_tier_objs(samples):
-    for sample in samples:
-        sample.physical_properties = PhysicalProperties()
-        sample.environmental_behavior = EnvironmentalBehavior()
-        sample.SARA = Sara
-        sample.CCME = CCME
 
 
 def process_cut_table(oil, samples, cut_table):
@@ -300,8 +357,6 @@ def set_sample_property(row, samples, attr, unit,
       original field text from the datasheet.
     """
     for sample, val in zip(samples, row):
-        #print('attr, val, unit: ', (attr, val, unit))
-
         if val is not None and val not in ('NotAvailable',):
             if convert_from is not None:
                 val = uc.convert(convert_from, unit, val)
@@ -315,8 +370,7 @@ def set_sample_property(row, samples, attr, unit,
 
                 compositions.append(Compound(
                     name=attr,
-                    measurement=cls(sigfigs(val, num_digits),
-                                    unit=unit)
+                    measurement=cls(sigfigs(val, num_digits), unit=unit)
                 ))
 
 
@@ -324,8 +378,10 @@ def set_sample_property(row, samples, attr, unit,
 def next_non_empty(data):
     while True:
         row = next(data)
+
         if not is_empty(row):
             break
+
     return row
 
 
@@ -335,7 +391,32 @@ def is_empty(row):
 
 def get_next_properties_row(data, exp_field):
     row = next_non_empty(data)
+
     if norm(row[0]) != norm(exp_field):
         raise ValueError(f'Something wrong with data sheet: {row}, '
                          'expected: {exp_field}')
+
     return row
+
+
+def to_number(field):
+    '''
+        Try to extract a number from a text field.  Within this scope, we
+        don't care to try extract any unit information, just the number.
+        Some variations on numeric data fields in the Exxon Assays:
+        - '1000F+'
+        - '1000F'
+        - '650'
+        - 'C5' is not numeric
+    '''
+    try:
+        return float(field)
+    except Exception:
+        pass
+
+    try:
+        return float(re.search('^[0-9\\.]+', field).group(0))
+    except Exception:
+        pass
+
+    return field

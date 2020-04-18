@@ -7,7 +7,6 @@ lot of it (Or writing it all by hand)
 but still handy to have some tests to run the code while under development
 """
 from pathlib import Path
-from pprint import pprint
 from math import isclose
 
 import pytest
@@ -19,7 +18,9 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser
                                                     )
 
-from oil_database.models.common.measurement import UnittedValue, MassFraction
+from oil_database.models.common.measurement import MassFraction
+
+from pprint import pprint
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -85,17 +86,80 @@ class TestExxonMapper():
     record = next(ExxonDataReader(example_index, example_dir).get_records())
     oil = ExxonMapper(record)
 
+    def test_init(self):
+        with pytest.raises(TypeError):
+            _mapper = ExxonMapper()
+
+    def test_init_invalid(self):
+        with pytest.raises(TypeError):
+            _mapper = ExxonMapper(None)
+
     def test_header(self):
         oil = self.oil
         assert oil.name == 'HOOPS Blend'
         assert oil.reference.startswith("ExxonMobil")
         assert oil.API == 35.2
 
-    def test_samples(self):
+    @pytest.mark.parametrize("index, expected",
+                             [(0, {
+                                 'name': 'Fresh Oil Sample',
+                                 'short_name': 'Fresh Oil',
+                               }),
+                              (1, {
+                                 'name': 'Butane and Lighter IBP - 60F',
+                                 'short_name': 'Butane and L...',
+                               }),
+                              (2, {
+                                 'name': 'Lt. Naphtha C5 - 165F',
+                                 'short_name': 'Lt. Naphtha ...',
+                               }),
+                              (3, {
+                                 'name': 'Hvy Naphtha 165 - 330F',
+                                 'short_name': 'Hvy Naphtha ...',
+                               }),
+                              (4, {
+                                 'name': 'Kerosene 330 - 480F',
+                                 'short_name': 'Kerosene 330...'
+                               }),
+                              (5, {
+                                 'name': 'Diesel 480 - 650F',
+                                 'short_name': 'Diesel 480 -...'
+                               }),
+                              (6, {
+                                 'name': 'Vacuum Gas Oil 650 - 1000F',
+                                 'short_name': 'Vacuum Gas O...'
+                               }),
+                              (7, {
+                                 'name': 'Vacuum Residue 1000F+',
+                                 'short_name': 'Vacuum Resid...'
+                               }),
+                              ])
+    def test_sample_ids(self, index, expected):
+        samples = self.oil.sub_samples
+
+        pprint(samples[index].py_json())
+
+        assert len(samples) == 8
+        assert samples[index].name == expected['name']
+        assert samples[index].short_name == expected['short_name']
+
+    @pytest.mark.parametrize("index, expected", [
+        (0, None),
+        (1, [-57.64149540757175, 60.0]),
+        (2, [60.0, 165.0]),
+        (3, [165.0, 330.0]),
+        (4, [330.0, 480.0]),
+        (5, [480.0, 650.0]),
+        (6, [650.0, 1000.0]),
+        (7, [1000.0, 1504.6348493781763]),
+    ])
+    def test_boiling_point_range(self, index, expected):
         samples = self.oil.sub_samples
 
         assert len(samples) == 8
-        assert samples[0].name == "Fresh Oil Sample"
+
+        pprint(samples[index].boiling_point_range)
+        assert samples[index].boiling_point_range == expected
 
     def test_density(self):
         samples = self.oil.sub_samples
@@ -162,6 +226,9 @@ class TestExxonMapper():
             assert sample.reid_vapor_pressure is None
 
     def test_composition_ccr(self):
+        '''
+            Conradson Carbon Residue
+        '''
         samples = self.oil.sub_samples
         assert samples[0].ccr_percent.value == 3.19
 
