@@ -236,10 +236,12 @@ def ExxonMapper(record):
     sample_names = row[1:]
 
     samples = SampleList([Sample(**sample_id_attrs(name))
-                          for name in sample_names])
-    create_middle_tier_objs(samples)
+                          for name in sample_names
+                          if name is not None])
 
-    cut_table = read_cut_table(oil, data)
+    cut_table = read_cut_table(sample_names, data)
+
+    create_middle_tier_objs(samples)
 
     set_boiling_point_range(samples, cut_table)
 
@@ -283,19 +285,29 @@ def create_middle_tier_objs(samples):
         sample.SARA = Sara()
 
 
-def read_cut_table(_oil, data):
+def read_cut_table(sample_names, data):
     '''
         Read the rest of the rows and save them in a dictionary.
         - key: first field of the row
         - value: the rest of the fields as a list.  The index position in the
           list will be correlated to the sample names that were captured.
+
+        Note: Some datasheets (curlew) have some empty columns in between
+              the sample data and the properties column.  So we need to make
+              sure there actually exists a sample name field before adding
+              it to our cut table data.
     '''
     cut_table = {}
 
     while True:
         try:
             row = next_non_empty(data)
-            cut_table[norm(row[0])] = row[1:]
+
+            sample_attr = norm(row[0])
+            sample_data = [f for f, n in zip(row[1:], sample_names)
+                           if n is not None]
+
+            cut_table[sample_attr] = sample_data
         except StopIteration:
             break
 
