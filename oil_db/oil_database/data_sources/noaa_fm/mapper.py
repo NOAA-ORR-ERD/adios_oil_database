@@ -8,8 +8,7 @@ from ..mapper import MapperBase
 
 from oil_database.models.oil.oil import Oil
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 

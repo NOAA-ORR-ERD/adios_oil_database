@@ -288,13 +288,14 @@ class OilTests(OilTestBase):
 
     def test_get_valid_id(self):
         '''
-            We are basing our tests on webtest(unittest), so parametrization
-            doesn't work.
+            Note: We are basing our tests on webtest(unittest), so
+                  parametrization doesn't work.
 
-            General Rule: if a record doesn't have data to fill an attribute,
-                          the attribute should probably not exist either.
-                          So if we find an attribute, we will test it assuming
-                          that it has something valid.
+            Note: The web server does not have any control over the correctness
+                  of the oil records, and so should not have any responsibility
+                  for it.  So for this test, we will just test that we did
+                  in fact get something that looks like an oil record at a
+                  high level.
         '''
         for oil_id in ('AD00009',
                        'AD00020',
@@ -303,12 +304,11 @@ class OilTests(OilTestBase):
                        'EC002234',
                        'EC000506',
                        'EC000561'):
+            print(f'checking for {oil_id}')
             resp = self.testapp.get('/oils/{0}'.format(oil_id))
             oil = resp.json_body
 
             print('oil: ', oil['_id'])
-
-            # print (ujson.dumps(oil, indent=4, ensure_ascii=False))
 
             # the oil_database module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
@@ -318,67 +318,20 @@ class OilTests(OilTestBase):
                      'product_type',
                      'location',
                      'reference',
-                     'reference_date',
-                     'comments',
-                     'labels',
+                     'API',
                      'status',
-                     'samples']
+                     'sub_samples']
 
             for k in attrs:
                 assert k in oil
 
-            sample = [s for s in oil['samples']
+            sample = [s for s in oil['sub_samples']
                       if s['name'] == 'Fresh Oil Sample'][0]
 
-            assert any(k in sample for k in ('apis', 'densities'))
-
-            if 'apis' in sample:
-                for a in sample['apis']:
-                    assert self.api_valid(a)
-
-            if 'densities' in sample:
-                for d in sample['densities']:
-                    assert self.densitiy_valid(d)
-
-            assert any(k in sample for k in ('kvis', 'dvis'))
-
-            if 'dvis' in sample:
-                for dvis in sample['dvis']:
-                    assert self.dvis_valid(dvis)
-
-            if 'kvis' in sample:
-                for kvis in sample['kvis']:
-                    assert self.kvis_valid(kvis)
-
-            if 'cuts' in sample:
-                for c in sample['cuts']:
-                    assert self.cut_valid(c)
-
-            if 'ifts' in sample:
-                for i in sample['ifts']:
-                    assert self.ift_valid(i)
-
-            if 'pour_point' in sample:
-                assert self.pour_point_valid(sample['pour_point'])
-
-            if 'flash_point' in sample:
-                assert self.flash_point_valid(sample['flash_point'])
-
-            if 'adhesion' in sample:
-                assert self.adhesion_valid(sample['adhesion'])
-
-            if 'water' in sample:
-                assert self.water_valid(sample['water'])
-
-            if 'wax_content' in sample:
-                assert self.wax_valid(sample['wax_content'])
-
-            if 'sulfur' in sample:
-                assert self.sulfur_valid(sample['sulfur'])
-
-            if 'toxicities' in sample:
-                for t in sample['toxicities']:
-                    assert self.toxicity_valid(t)
+            sample_attrs = ('name',
+                            'short_name')
+            for k in sample_attrs:
+                assert k in sample  # required
 
     def test_post_no_payload(self):
         self.testapp.post_json('/oils', status=400)
@@ -512,7 +465,7 @@ class TestOilSort(OilTestBase):
 
         result = resp.json_body
 
-        apis = [rec['api'] for rec in result]
+        apis = [rec['API'] for rec in result]
 
         assert max(apis) <= 50
         assert min(apis) >= 26

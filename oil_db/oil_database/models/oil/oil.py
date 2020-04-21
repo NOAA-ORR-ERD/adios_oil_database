@@ -7,7 +7,7 @@ Having a Python class makes it easier to write importing, validating etc, code.
 """
 from dataclasses import dataclass, field
 
-from ..common.utilities import dataclass_to_json, JSON_List
+from ..common.utilities import dataclass_to_json
 
 from .values import ProductType, Reference
 from .sample import SampleList
