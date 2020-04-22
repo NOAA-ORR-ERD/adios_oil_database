@@ -22,11 +22,12 @@ from oil_database.models.common.measurement import (UnittedValue,
 from oil_database.models.oil.measurement import (DensityPoint,
                                                  KinematicViscosityPoint,
                                                  DistCut)
-from oil_database.models.oil.compound import Compound
+from oil_database.models.oil.values import Reference
 
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample, SampleList
 
+from oil_database.models.oil.compound import Compound
 from oil_database.models.oil.physical_properties import PhysicalProperties
 from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
 from oil_database.models.oil.sara import Sara
@@ -259,7 +260,15 @@ def read_header(oil, data):
         it could / should read the whole dist cut table, then map it
         to the samples Exxon info in the header
     '''
-    oil.reference = "\n".join([next(data)[0] for _ in range(3)])
+    ref_text = "\n".join([next(data)[0] for _ in range(3)])
+    years = [int(n) for n in re.compile(r'\d{4}').findall(ref_text)]
+
+    if len(years) == 0:
+        ref_year = None  # need to get file props from the .xlsx file
+    else:
+        ref_year = max(years)
+
+    oil.reference = Reference(reference=ref_text, year=ref_year)
 
 
 def sample_id_attrs(name):
