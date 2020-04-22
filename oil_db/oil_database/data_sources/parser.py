@@ -87,6 +87,19 @@ def parse_time(func):
     return wrapper
 
 
+def date_only(func):
+    def date_portion(date_time_obj):
+        if isinstance(date_time_obj, datetime):
+            return date_time_obj.strftime('%Y-%m-%d')
+        else:
+            return None
+
+    def wrapper(*args, **kwargs):
+        return date_portion(func(*args, **kwargs))
+
+    return wrapper
+
+
 class ParserBase(object):
     '''
         Only things that are common to all parsers

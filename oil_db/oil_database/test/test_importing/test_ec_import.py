@@ -184,7 +184,7 @@ class TestEnvCanadaRecordParser(object):
         ('2234', 'weathering', [0.0, 0.0853, 0.1686, 0.2534, 0.2645]),
         ('2713', 'reference', {'reference': 'Hollebone, 2016. ',
                                'year': 2016}),
-        ('2234', 'sample_date', datetime(2013, 4, 8, 0, 0)),
+        ('2234', 'sample_date', '2013-04-08'),
         ('2234', 'comments', 'Via  CanmetENERGY, Natural Resources Canada'),
         ('2234', 'location', 'Alberta, Canada'),
         ('2234', 'product_type', 'crude'),
@@ -1257,7 +1257,7 @@ class TestEnvCanadaRecordMapper(object):
                   'product_type': 'crude',
                   'reference': {'reference': 'Hollebone, 2016. ',
                                 'year': 2016},
-                  'sample_date': datetime(2015, 3, 22, 0, 0),
+                  'sample_date': '2015-03-22',
                   }),
     ])
     def test_init_valid(self, oil_id, expected):

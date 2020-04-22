@@ -3,7 +3,7 @@ import re
 from collections import defaultdict
 import logging
 
-from ..parser import ParserBase, join_with, parse_time
+from ..parser import ParserBase, join_with, parse_time, date_only
 
 logger = logging.getLogger(__name__)
 
@@ -317,6 +317,7 @@ class EnvCanadaRecordParser(ParserBase):
         return {'reference': ref_text, 'year': ref_year}
 
     @property
+    @date_only
     @parse_time
     def sample_date(self):
         ret = [v for v in self.values[None]['date_sample_received']
