@@ -105,9 +105,7 @@ def get_oils(request):
         search_opts, post_opts = get_search_params(request)
         sort = get_sort_params(request)
 
-#        if ((len(sort) > 0 and sort[0][0] in ('api', 'viscosity')) or
-        if ((len(sort) > 0 and sort[0][0] in ('api')) or
-                (len(post_opts.keys()) > 0)):
+        if len(post_opts.keys()) > 0:
             return list(search_with_post_sort(oils,
                                               start, stop,
                                               search_opts, post_opts,
@@ -119,6 +117,8 @@ def get_oils(request):
 
 
 def search_with_sort(oils, start, stop, search_opts, sort_opts):
+    logger.info('search #rows: {}'.format(oils.count_documents(search_opts)))
+
     cursor = oils.find(search_opts)
 
     if len(sort_opts) > 0:
@@ -129,8 +129,6 @@ def search_with_sort(oils, start, stop, search_opts, sort_opts):
                   })
                   .sort(sort_opts)
                   )
-
-    logger.info('cursor #rows: {}'.format(cursor.count()))
 
     return [get_oil_searchable_fields(o)
             for i, o in enumerate(cursor)
@@ -163,11 +161,9 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
             # filter out the apis that don't match our criteria
             low, high = post_opts['apis']
 
-            if ('api' not in rec or
-                    rec['api'] is None or
-                    # is api a number or a dict?
-                    not low <= rec['api'] <= high):
-                    # not low <= rec['api'] <= high):
+            if ('API' not in rec or
+                    rec['API'] is None or
+                    not low <= rec['API'] <= high):
                 continue
 
         if 'labels' in post_opts:
@@ -200,6 +196,21 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
 
 
 def get_search_params(request):
+    '''
+        Process the incoming search directives and convert them into MongoDB
+        compatible search parameters.
+
+        query options:
+        - q: A string that is matched against the oil name, location.  The
+             matching will be case insensitive.
+        - qApi: A range of numbers in which the API of the oil will be
+                filtered.
+        - qLabels: A list of label strings that will be matched against the oil
+                   labels to filter the results.
+
+        Note: some search directives cannot be easily turned into a MongoDB
+              search, so instead they will be used to filter the results.
+    '''
     query_out = {}
     post_out = {}
 
@@ -240,6 +251,8 @@ def get_sort_params(request):
 
     if sort == 'id':
         sort = '_id'
+    elif sort == 'api':
+        sort = 'API'
 
     direction = ({'asc': ASCENDING,
                   'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
@@ -402,8 +415,6 @@ def fix_oil_id(oil_json, obj_id=None):
         raise ValueError('oil_id field is required')
 
 
-## fixme: do we want to memoize? how often are we getting the same results?
-##        Turnign it off now, as it could break if a record is edited!
 @memoize_oil_arg
 def get_oil_searchable_fields(oil):
     '''
@@ -414,22 +425,13 @@ def get_oil_searchable_fields(oil):
     However, searching on bad records being bad is, well, OK.
     As long as it doesn't crash
     '''
-    # oil SHOULD have a direct api field, but that needs to be refactored
-    # so for now, we'll pull it out of the zeroth sub sample
-    try:
-        oil['api'] = oil['samples'][0]['apis'][0]['gravity']
-    except (KeyError, IndexError):
-        # if there are no samples,
-        #  or no apis in the zeroth sample
-        oil['api'] = None
-
     # unpack the relevant fields
     try:
         return {'_id': oil.get('oil_id'),
                 'name': oil.get('name', None),
                 'location': oil.get('location', None),
                 'product_type': oil.get('product_type', None),
-                'api': oil.get('api'),
+                'API': oil.get('API'),
                 'categories': oil.get('categories', []),
                 # fixme: We should probably should do something smarter here
                 'status': oil.get('status', []),

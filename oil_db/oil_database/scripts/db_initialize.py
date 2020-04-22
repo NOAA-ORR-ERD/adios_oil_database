@@ -4,14 +4,11 @@ import io
 import logging
 from argparse import ArgumentParser
 
-from pymongo import ASCENDING
 from pymongo.errors import ConnectionFailure
 
 from oil_database.util.db_connection import connect_mongodb
 from oil_database.util.settings import file_settings, default_settings
-
-from oil_database.db_init.categories import (load_categories,
-                                             print_all_categories)
+from oil_database.db_init.labels import (load_labels, print_all_labels)
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -60,8 +57,7 @@ def init_db(settings):
             - drop the database
             - create the tables (if necessary)
             - load the basic infrastructure data:
-                - Categories
-
+                - Labels
     '''
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
@@ -78,9 +74,9 @@ def init_db(settings):
     db = getattr(client, settings['mongodb.database'])
 
     print()
-    load_categories(db)
+    load_labels(db)
 
-    print_all_categories(db)
+    print_all_labels(db)
 
     create_indices(db)
 
@@ -115,11 +111,10 @@ def create_indices(db):
     try:
         # We have come to a consensus that unique (name, location, ref)
         # is not necessary.
-        #
-        #db.oil.create_index([('name', ASCENDING),
-        #                     ('location', ASCENDING),
-        #                     ('reference_date', ASCENDING)],
-        #                    unique=True)
+        # db.oil.create_index([('name', ASCENDING),
+        #                      ('location', ASCENDING),
+        #                      ('reference_date', ASCENDING)],
+        #                     unique=True)
         print('Oil collection indices: {}'
               .format(list(db.oil.index_information().keys())))
     except ConnectionFailure:

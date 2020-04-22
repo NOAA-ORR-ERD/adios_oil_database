@@ -5,37 +5,33 @@ This maps to the JSON used in the DB
 
 Having a Python class makes it easier to write importing, validating etc, code.
 """
-
-from ..common.utilities import (dataclass_to_json,
-                                JSON_List,
-                                )
-
-from .values import ProductType
-from .sample import Sample, SampleList
-
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import List, Dict
+
+from ..common.utilities import dataclass_to_json
+
+from .values import ProductType, Reference
+from .sample import SampleList
+
 
 @dataclass_to_json
 @dataclass
 class Oil:
-    # metadata:
     name: str  # only required field
+    _id: str = ""
     oil_id: str = ""
+
+    status: list = field(default_factory=list)
+    extra_data: dict = field(default_factory=dict)
+    sub_samples: SampleList = field(default_factory=SampleList)
+
+    # meta data
     location: str = ""
-    reference: str = ""
-    reference_date: str = "" # note: should be ISO 8601 string only!
+    reference: Reference = None
     sample_date: str = ""
     comments: str = ""
-    labels: list = field(default_factory=list)
-    status: list = field(default_factory=list)
-
-    api: float = None
+    API: float = None
     product_type: ProductType = ""
-    # fixme: this should really be "sub_samples"
-    samples: SampleList = field(default_factory=SampleList)
-    extra_data: dict = field(default_factory=dict)
+    labels: list = field(default_factory=list)
 
     def __post_init__(self):
         """
@@ -45,7 +41,3 @@ class Oil:
         """
         if self.name == "":
             raise TypeError("Name must be a non-empty string")
-
-
-
-

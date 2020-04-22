@@ -4,3 +4,4 @@
 # pynucos is no on conda-forge -- so nothing to do here :-)
 # git+https://github.com/NOAA-ORR-ERD/PyNUCOS.git@v2.7.3#egg=unit_conversion
 
+git+https://github.com/Lemmons/pytest-raises.git

@@ -1,7 +1,10 @@
 #!/usr/bin/env python
+from math import isclose
 from numbers import Number
 from collections import defaultdict
 import logging
+
+from slugify import Slugify
 
 from oil_database.models.common.float_unit import (FloatUnit,
                                                    TemperatureUnit,
@@ -10,15 +13,19 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    DynamicViscosityUnit,
                                                    InterfacialTensionUnit,
                                                    AdhesionUnit,
-                                                   ConcentrationInWaterUnit)
+                                                   MassFractionUnit)
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+from oil_database.models.oil.oil import Oil
+from ..mapper import MapperBase
+
+from pprint import pprint
+
+custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
 
-class EnvCanadaAttributeMapper(object):
+class EnvCanadaRecordMapper(MapperBase):
     '''
         A translation/conversion layer for the Environment Canada imported
         record object.
@@ -27,703 +34,563 @@ class EnvCanadaAttributeMapper(object):
         named attributes that are suitable for creation of a NOAA Oil Database
         record.
     '''
-    top_record_properties = ('_id',
-                             'oil_id',
-                             'name',
-                             'location',
-                             'reference',
-                             'reference_date',
-                             'sample_date',
-                             'comments',
-                             'api',
-                             'product_type',
-                             'categories',
-                             'status')
-    sample_scalar_attrs = ('pour_point',
-                           'flash_point',
-                           'adhesion',
-                           'sulfur',
-                           'water',
-                           'wax_content',
-                           'benzene',
-                           'alkylated_pahs',
-                           'alkanes',
-                           'chromatography',
-                           'headspace',
-                           'biomarkers',
-                           'ccme',
-                           'ccme_f1',
-                           'ccme_f2',
-                           'ccme_tph')
-
     def __init__(self, record):
         '''
-            :param property_indexes: A lookup dictionary of property index
-                                     values.
-            :type property_indexes: A dictionary with property names as keys,
-                                    and associated index values into the data.
+            :param record: A parsed object representing a single oil or
+                           refined product.
+            :type record: A record parser object.
         '''
-        self.record = record
+        if hasattr(record, 'dict'):
+            self.record = record
+        else:
+            raise ValueError(f'{self.__class__.__name__}(): '
+                             'invalid parser passed in')
         self._status = None
-        self._categories = None
+        self._labels = None
 
-    def get_interface_properties(self):
-        '''
-            These are all the property names that define the data in an
-            NOAA Oil Database record.
-            Our source data cannot be directly mapped to our object dict, so
-            we don't directly map any data items.  We will simply roll up
-            all the defined properties.
-        '''
-        props = set([p for p in dir(self.__class__)
-                     if isinstance(getattr(self.__class__, p),
-                                   property)])
+    @property
+    def sub_samples(self):
+        return [EnvCanadaSampleMapper(s, w)
+                for s, w in zip(self.record.sub_samples,
+                                self.record.weathering)]
 
-        return props
+    def resolve_oil_api(self, record):
+        if len(record['sub_samples']) > 0:
+            fresh_sample = record['sub_samples'][0]
+
+            if ('fraction_weathered' in fresh_sample and
+                    fresh_sample['fraction_weathered'] is not None and
+                    not isclose(fresh_sample['fraction_weathered']['value'],
+                                0.0)):
+                # API cannot be determined from a non-fresh sample, even if it
+                # has the data.  And since the record attributes are sparse,
+                # no need to even set the API attribute
+                logger.warning(f'{record["oil_id"]}: no fresh sample')
+                return
+
+            api = fresh_sample['api']
+
+            if api is None:
+                # grab the fresh density at 15C and convert
+                phys = self.sub_samples[0].physical_properties
+                api_densities = [d for d in phys['densities']
+                                 if d['ref_temp']['unit'] == 'C'
+                                 and d['ref_temp']['value'] == 15.0]
+                if len(api_densities) > 0:
+                    api_rho = api_densities[0]['density']['value']  # g/mL
+                    api = 141.5 / api_rho - 131.5
+                else:
+                    logger.warning(f'oil {record["oil_id"]} '
+                                   'has no API & no 15C density')
+                    api = None
+
+            record['API'] = api
+
+    def py_json(self):
+        rec = self.record.dict()
+
+        rec['_id'] = rec['oil_id']
+        rec['sub_samples'] = [s.dict() for s in self.sub_samples]
+
+        self.resolve_oil_api(rec)
+
+        rec = Oil.from_py_json(rec)
+
+        return rec.py_json()
+
+
+class EnvCanadaSampleMapper(MapperBase):
+    def __init__(self, parser, sample_id):
+        self.parser = parser
+        self.generate_sample_id_attrs(sample_id)
 
     def generate_sample_id_attrs(self, sample_id):
-        attrs = {}
-
         if sample_id == 0:
-            attrs['name'] = 'Fresh Oil Sample'
-            attrs['short_name'] = 'Fresh Oil'
-            attrs['fraction_weathered'] = sample_id
-            attrs['boiling_point_range'] = None
+            self.name = 'Fresh Oil Sample'
+            self.short_name = 'Fresh Oil'
+            self.fraction_weathered = {'value': sample_id, 'unit': '1'}
+            self.boiling_point_range = None
         elif isinstance(sample_id, str):
-            attrs['name'] = sample_id
-            attrs['short_name'] = '{}...'.format(sample_id[:12])
-            attrs['fraction_weathered'] = None
-            attrs['boiling_point_range'] = None
+            self.name = sample_id
+            self.short_name = '{}...'.format(sample_id[:12])
+            self.fraction_weathered = None
+            self.boiling_point_range = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
-            attrs['name'] = '{:.4g}% Weathered'.format(sample_id * 100)
-            attrs['short_name'] = '{:.4g}% Weathered'.format(sample_id * 100)
-            attrs['fraction_weathered'] = sample_id
-            attrs['boiling_point_range'] = None
+            self.name = '{:.4g}% Weathered'.format(sample_id * 100)
+            self.short_name = '{:.4g}% Weathered'.format(sample_id * 100)
+            self.fraction_weathered = {'value': sample_id, 'unit': '1'}
+            self.boiling_point_range = None
         else:
-            logger.warn("Can't generate IDs for sample: ", sample_id)
+            logger.warning("Can't generate IDs for sample: ", sample_id)
 
-        return attrs
-
-    def sort_samples(self, samples):
-        if all([s['fraction_weathered'] is not None for s in samples]):
-            return sorted(samples, key=lambda v: v['fraction_weathered'])
-        else:
-            # if we can't sort on weathered amount, then we will choose to
-            # not sort at all
-            return list(samples)
+        return self
 
     def dict(self):
-        rec = {}
-        samples = defaultdict(dict)
-
-        for p in self.get_interface_properties():
-            k, v = p, getattr(self, p)
-
-            if k in self.top_record_properties:
-                rec[k] = v
-            elif hasattr(v, '__iter__') and not hasattr(v, '__len__'):
-                # we have a sequence of items
-                for i in v:
-                    w = i.get('weathering', 0.0)
-                    i.pop('weathering', None)
-
-                    if k in self.sample_scalar_attrs:
-                        samples[w][k] = i
-                    else:
-                        try:
-                            samples[w][k].append(i)
-                        except KeyError:
-                            samples[w][k] = []
-                            samples[w][k].append(i)
-            else:
-                # assume a weathering of 0
-                samples[0.0][k] = v
-
-        # MongoDB strikes again.  Apparently, in order to support their query
-        # methods, dictionary keys, for all dicts, need to be a string that
-        # contains no '$' or '.' characters.  So we cannot use a floating point
-        # number as a dict key.  So instead of a dict of samples, it will be a
-        # list of dicts that contain a sample_id.  This sample_id will not be a
-        # proper MongoDB ID, but a human-readable way to identify the sample.
-        #
-        # For NOAA Filemaker records, the ID will be the weathering amount.
-        for k, v in samples.items():
-            v.update(self.generate_sample_id_attrs(k))
-
-        rec['samples'] = self.sort_samples(samples.values())
+        rec = self.parser.dict()
+        for attr in ('name',
+                     'short_name',
+                     'fraction_weathered',
+                     'boiling_point_range',
+                     'physical_properties',
+                     'environmental_behavior',
+                     'SARA',
+                     'distillation_data',
+                     'compounds',
+                     'bulk_composition',
+                     'headspace_analysis',
+                     'CCME'):
+            rec[attr] = getattr(self, attr)
 
         return rec
 
-    def _class_path(self, class_obj):
-        return '{}.{}'.format(class_obj.__module__, class_obj.__name__)
-
-    def _get_kwargs(self, obj):
-        '''
-            Since we want to interchangeably use a parser or a record for our
-            source object, a common operation will be to guarantee that we are
-            always working with a kwargs struct.
-        '''
-        if isinstance(obj, dict):
-            return obj
-        else:
-            return obj.dict()
-
-    @property
-    def status(self):
-        '''
-            The parser does not have this, but we will want to get/set
-            this property.
-        '''
-        return self._status
-
-    @status.setter
-    def status(self, value):
-        self._status = value
-
-    @property
-    def categories(self):
-        '''
-            The parser does not have this, but we will want to get/set
-            this property.
-        '''
-        return self._categories
-
-    @categories.setter
-    def categories(self, value):
-        self._categories = value
-
-    @property
-    def name(self):
-        return self.record.name
-
-    @property
-    def oil_id(self):
-        return self.record.oil_id
-
-    @property
-    def _id(self):
-        return self.oil_id
-
-    @property
-    def reference(self):
-        return self.record.reference
-
-    @property
-    def reference_date(self):
-        return self.record.reference_date
-
-    @property
-    def sample_date(self):
-        return self.record.sample_date
-
-    @property
-    def comments(self):
-        return self.record.comments
-
-    @property
-    def location(self):
-        return self.record.location
-
-    @property
-    def product_type(self):
-        return self.record.product_type
-
-    @property
-    def apis(self):
-        for a in self.record.apis:
-            yield self._get_kwargs(a)
-
     @property
     def densities(self):
-        for d in self.record.densities:
-            kwargs = self._get_kwargs(d)
+        ret = []
 
-            kwargs['density'] = (DensityUnit(value=kwargs['g_ml'],
-                                             from_unit='g/mL', unit='kg/m^3')
-                                 .dict())
+        for item in (('density_0_c', 0.0, 1, 1),
+                     ('density_5_c', 5.0, 1, 1),
+                     ('density_15_c', 15.0, 0, 0)):
+            rho_lbl, ref_temp, std_idx, repl_idx = item
 
-            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
-                                  .dict())
+            rho = self.parser.densities[rho_lbl]
+            std_dev = self.parser.densities['standard_deviation'][std_idx]
+            replicates = self.parser.densities['replicates'][repl_idx]
 
-            del kwargs['g_ml']
-            del kwargs['ref_temp_c']
+            if rho is not None:
+                ret.append({
+                    'density': self.measurement(rho, 'g/mL',
+                                                standard_deviation=std_dev,
+                                                replicates=replicates),
+                    'ref_temp': self.measurement(ref_temp, 'C')
+                })
 
-            yield kwargs
-
-    @property
-    def dvis(self):
-        '''
-            the mpa_s value could be a ranged value coming from the spreadsheet
-            so it is already a dict with either a value or a (min, max) set.
-            It already has a unit set.
-        '''
-        for d in self.record.dvis:
-            kwargs = self._get_kwargs(d)
-
-            kwargs['mpa_s']['from_unit'] = kwargs['mpa_s']['unit']
-            kwargs['mpa_s']['unit'] = 'Pa s'
-            kwargs['viscosity'] = (DynamicViscosityUnit(**kwargs['mpa_s'])
-                                   .dict())
-
-            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
-                                  .dict())
-
-            del kwargs['mpa_s']
-            del kwargs['ref_temp_c']
-
-            yield kwargs
+        return ret
 
     @property
-    def kvis(self):
-        '''
-            N/A. Env. Canada records don't have this.
-        '''
-        if False:
-            yield None
+    def dynamic_viscosities(self):
+        ret = []
+
+        for item in (('viscosity_at_0_c', 0.0, 1, 1),
+                     ('viscosity_at_5_c', 5.0, 1, 1),
+                     ('viscosity_at_15_c', 15.0, 0, 0)):
+            mu_lbl, ref_temp, std_idx, repl_idx = item
+
+            mu = self.parser.dvis[mu_lbl]
+            std_dev = self.parser.dvis['standard_deviation'][std_idx]
+            replicates = self.parser.dvis['replicates'][repl_idx]
+
+            if mu is not None:
+                ret.append({
+                    'viscosity': self.measurement(mu, 'mPa.s',
+                                                  standard_deviation=std_dev,
+                                                  replicates=replicates),
+                    'ref_temp': self.measurement(ref_temp, 'C')
+                })
+
+        return ret
 
     @property
-    def ifts(self):
-        for i in self.record.ifts:
-            kwargs = self._get_kwargs(i)
+    def distillation_data(self):
+        ret = []
 
-            kwargs['tension'] = (InterfacialTensionUnit(
-                                     value=kwargs['dynes_cm'],
-                                     from_unit='dyne/cm', unit='N/m')
-                                 .dict())
+        # First the boiling point distribution data (if present)
+        for frac in list(range(5, 101, 5)) + ['initial_boiling_point', 'fbp']:
+            if frac == 100:
+                frac_lbl = self.parser.slugify('1')
+            elif isinstance(frac, Number):
+                frac_lbl = self.parser.slugify(f'{frac / 100.0}')
+            else:
+                frac_lbl = frac
 
-            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
-                                  .dict())
+            if frac == 'initial_boiling_point':
+                frac = 0.0
+            elif frac == 'fbp':
+                # This should probably not be used because based on the
+                # data in the spreadsheet, fbp is somewhere between 95% and
+                # 100%, but we don't know exactly where.
+                frac = 97.5
 
-            del kwargs['dynes_cm']
-            del kwargs['ref_temp_c']
+            ref_temp = self.parser.boiling_point_distribution[frac_lbl]
 
-            yield kwargs
+            if ref_temp is not None:
+                ret.append({
+                    'fraction': self.measurement(frac, '%'),
+                    'vapor_temp': self.measurement(ref_temp, 'C')
+                })
+
+        # Then the cumulative weight fraction (if present)
+        for ref_temp in list(range(40, 201, 20)) + list(range(250, 701, 50)):
+            temp_lbl = self.parser.slugify(str(ref_temp))
+            frac = self.parser.boiling_point_cumulative_fraction[temp_lbl]
+
+            if frac is not None:
+                ret.append({
+                    'fraction': self.measurement(frac, '%'),
+                    'vapor_temp': self.measurement(ref_temp, 'C')
+                })
+
+        # There is a single method field associated with the cuts.
+        # Do we do anything with it?
+
+        return ret
 
     @property
     def flash_point(self):
-        for f in self.record.flash_points:
-            kwargs = self._get_kwargs(f)
+        fp = dict(self.parser.flash_point.items())
 
-            kwargs['ref_temp_c']['from_unit'] = kwargs['ref_temp_c']['unit']
-            kwargs['ref_temp_c']['unit'] = 'K'
+        value = self.min_max(fp.pop('flash_point', None))
+        if all([i is None for i in value]):
+            return None
 
-            kwargs['ref_temp'] = (TemperatureUnit(**kwargs['ref_temp_c'])
-                                  .dict())
+        if value[0] == value[1]:
+            fp['value'] = value[0]
+        else:
+            fp['min_value'], fp['max_value'] = value
 
-            del kwargs['ref_temp_c']
+        fp['unit'] = 'C'
+        fp.pop('method', None)
 
-            yield kwargs
+        return fp
 
     @property
     def pour_point(self):
-        for p in self.record.pour_points:
-            kwargs = self._get_kwargs(p)
+        pp = dict(self.parser.pour_point.items())
 
-            kwargs['ref_temp_c']['from_unit'] = kwargs['ref_temp_c']['unit']
-            kwargs['ref_temp_c']['unit'] = 'K'
+        value = self.min_max(pp.pop('pour_point', None))
+        if all([i is None for i in value]):
+            return None
 
-            kwargs['ref_temp'] = (TemperatureUnit(**kwargs['ref_temp_c'])
-                                  .dict())
+        if value[0] == value[1]:
+            pp['value'] = value[0]
+        else:
+            pp['min_value'], pp['max_value'] = value
 
-            del kwargs['ref_temp_c']
+        pp['unit'] = 'C'
+        pp.pop('method', None)
 
-            yield kwargs
-
-    @property
-    def cuts(self):
-        for c in self.record.cuts:
-            kwargs = self._get_kwargs(c)
-
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  '_cls': self._class_path(FloatUnit)}
-
-            kwargs['vapor_temp'] = (TemperatureUnit(value=kwargs['temp_c'],
-                                                    from_unit='C', unit='K')
-                                    .dict())
-
-            del kwargs['percent']
-            del kwargs['temp_c']
-
-            yield kwargs
+        return pp
 
     @property
-    def adhesion(self):
-        for a in self.record.adhesions:
-            kwargs = self._get_kwargs(a)
+    def interfacial_tensions(self):
+        ret = []
+        method = self.parser.ifts['method']
 
-            kwargs['adhesion'] = (AdhesionUnit(value=kwargs['g_cm_2'],
-                                               from_unit='g/cm^2',
-                                               unit='N/m^2')
-                                  .dict())
+        for intf, temp, std_idx, method_idx in (('air',       0.0, 3, 1),
+                                                ('water',     0.0, 4, 1),
+                                                ('seawater',  0.0, 5, 1),
+                                                ('air',       5.0, 3, 1),
+                                                ('water',     5.0, 4, 1),
+                                                ('seawater',  5.0, 5, 1),
+                                                ('air',      15.0, 0, 0),
+                                                ('water',    15.0, 1, 0),
+                                                ('seawater', 15.0, 2, 0)):
+            lbl = f'ift_{int(temp)}_c_oil_{intf}'
+            value = self.parser.ifts[lbl]
 
-            del kwargs['g_cm_2']
+            if value is not None:
+                std_dev = self.parser.ifts['standard_deviation'][std_idx]
+                repl = self.parser.ifts['replicates'][std_idx]
 
-            yield kwargs
+                ret.append({
+                    'interface': intf,
+                    'tension': self.measurement(value, 'mN/m',
+                                                standard_deviation=std_dev,
+                                                replicates=repl),
+                    'ref_temp': self.measurement(temp, 'C'),
+                    'method': method[method_idx]
+                })
+
+        return ret
 
     @property
-    def evaporation_eqs(self):
-        for e in self.record.evaporation_eqs:
-            yield self._get_kwargs(e)
+    def dispersibilities(self):
+        value = self.parser.chemical_dispersibility['dispersant_effectiveness']
+
+        if value is not None:
+            ret = dict(self.parser.chemical_dispersibility.items())
+
+            ret['dispersant'] = 'Corexit 9500'
+            ret['method'] = 'Swirling Flask Test (ASTM F2059)'
+            ret.pop('dispersant_effectiveness', None)
+
+            ret.update([
+                ('effectiveness', self.measurement(
+                     value, '%',
+                     standard_deviation=ret.pop('standard_deviation', None),
+                     replicates=ret.pop('replicates', None)
+                 ))
+            ])
+
+            return [ret]
+        else:
+            return []
 
     @property
     def emulsions(self):
-        for e in self.record.emulsions:
-            kwargs = self._get_kwargs(e)
+        ret = []
+        for e in self.parser.emulsions:
+            emul = dict(e.items())
 
-            kwargs['water_content'] = {
-                'value': kwargs['water_content_percent'], 'unit': '%',
-                '_cls': self._class_path(FloatUnit)
-            }
+            for long_name, name, unit, std_idx, repl_idx in (
+                ('complex_modulus_pa', 'complex_modulus', 'Pa', 0, 0),
+                ('storage_modulus_pa', 'storage_modulus', 'Pa', 1, 0),
+                ('loss_modulus_pa', 'loss_modulus', 'Pa', 2, 0),
+                ('tan_delta_v_e', 'tan_delta', '%', 3, 0),
+                ('complex_viscosity_pa_s', 'complex_viscosity', 'Pa.s', 4, 0),
+                ('water_content_w_w', 'water_content', '%', 5, 1),
+            ):
+                emul.update([
+                    (name, self.measurement(
+                        emul.pop(long_name, None), unit,
+                        standard_deviation=emul['standard_deviation'][std_idx],
+                        replicates=emul['replicates'][repl_idx]
+                     ))
+                ])
 
-            kwargs['age'] = (TimeUnit(value=kwargs['age_days'],
-                                      from_unit='day', unit='s')
-                             .dict())
+            emul.pop('standard_deviation', None)
+            emul.pop('replicates', None)
+            emul['age'] = {'value': emul['age'], 'unit': 'day'}
+            emul['method'] = 'ESTS 1998-2'
 
-            kwargs['ref_temp'] = (TemperatureUnit(value=kwargs['ref_temp_c'],
-                                                  from_unit='C', unit='K')
-                                  .dict())
+            ret.append(emul)
 
-            # the different modulus values have similar units of measure
-            # to adhesion, so this is what we will go with
-            for mod_lbl in ('complex_modulus_pa',
-                            'storage_modulus_pa',
-                            'loss_modulus_pa'):
-                value = kwargs[mod_lbl]
-                new_lbl = mod_lbl[:-3]
-
-                if value is not None:
-                    kwargs[new_lbl] = (AdhesionUnit(value=value,
-                                                    from_unit='Pa',
-                                                    unit='N/m^2')
-                                       .dict())
-
-            for visc_lbl in ('complex_viscosity_pa_s',):
-                value = kwargs[visc_lbl]
-                new_lbl = visc_lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = (DynamicViscosityUnit(value=value,
-                                                            from_unit='Pa.s',
-                                                            unit='kg/(m s)')
-                                       .dict())
-
-            del kwargs['water_content_percent']
-            del kwargs['age_days']
-            del kwargs['ref_temp_c']
-            del kwargs['complex_modulus_pa']
-            del kwargs['storage_modulus_pa']
-            del kwargs['loss_modulus_pa']
-            del kwargs['complex_viscosity_pa_s']
-
-            yield kwargs
+        return ret
 
     @property
-    def chemical_dispersibility(self):
-        for c in self.record.corexit:
-            kwargs = self._get_kwargs(c)
+    def SARA(self):
+        '''
+            Note: Each measurement appears to be associated with a method.
+                  However the Sara class only supports a single method as a
+                  first order attribute.
+        '''
+        ret = {}
+        sara_category = self.parser.sara_total_fractions
 
-            kwargs['dispersant'] = 'Corexit 9500'
-            kwargs['effectiveness'] = kwargs['dispersant_effectiveness']
-            kwargs['effectiveness']['_cls'] = self._class_path(FloatUnit)
+        ret['method'] = ', '.join([i for i in sara_category['method']
+                                   if i is not None])
 
-            del kwargs['dispersant_effectiveness']
+        for src_name, name, idx, in (('saturates', 'saturates', 0),
+                                     ('aromatics', 'aromatics', 0),
+                                     ('resin', 'resins', 0),
+                                     ('asphaltene', 'asphaltenes', 1)):
+            value = sara_category[src_name]
+            std_dev = sara_category['standard_deviation'][idx]
+            repl = sara_category['replicates'][idx]
 
-            yield kwargs
+            ret[name] = self.measurement(value, '%',
+                                         standard_deviation=std_dev,
+                                         replicates=repl)
 
-    @property
-    def sulfur(self):
-        for s in self.record.sulfur:
-            kwargs = self._get_kwargs(s)
-
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  '_cls': self._class_path(FloatUnit)}
-
-            del kwargs['percent']
-
-            yield kwargs
-
-    @property
-    def water(self):
-        for w in self.record.water:
-            kwargs = self._get_kwargs(w)
-
-            kwargs['fraction'] = kwargs['percent']
-            kwargs['fraction']['_cls'] = self._class_path(FloatUnit)
-
-            del kwargs['percent']
-
-            yield kwargs
+        return ret
 
     @property
-    def wax_content(self):
-        for w in self.record.wax_content:
-            kwargs = self._get_kwargs(w)
+    def compounds(self):
+        '''
+            Gather up all the groups of compounds scattered throughout the EC
+            and compile them into an organized list.
 
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  '_cls': self._class_path(FloatUnit)}
+            Compounds apply to:
+            - individual chemicals
+            - mixed isomers
 
-            del kwargs['percent']
+            Compounds do not apply to:
+            - waxes
+            - SARA
+            - Sulfur
+            - Carbon
 
-            yield kwargs
+            Note: Although we could in theory assign multiple groups to a
+                  particular compound, we will only assign one group to the
+                  list.  This group will have a close relationship to the
+                  category of compounds where it is found in the EC datasheet.
+            Note: Most of the compound groups don't have replicates or
+                  standard deviation.  We will not add these attributes if
+                  they aren't found within the attribute group.
+        '''
+        ret = []
+
+        groups = [
+            ('benzene', None, 'ug/g', 'Mass Fraction', False),
+            ('btex_group', None, 'ug/g', 'Mass Fraction', False),
+            ('c4_c6_alkyl_benzenes', None, 'ug/g', 'Mass Fraction', False),
+            ('naphthalenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('phenanthrenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('dibenzothiophenes', 'alkylated_total_pahs', 'ug/g',
+             'Mass Fraction', False),
+            ('fluorenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('benzonaphthothiophenes', 'alkylated_total_pahs', 'ug/g',
+             'Mass Fraction', False),
+            ('chrysenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
+             False),
+            ('other_priority_pahs', 'alkylated_total_pahs', 'ug/g',
+             'Mass Fraction', False),
+            ('n_alkanes', None, 'ug/g', 'Mass Fraction', False),
+            ('biomarkers', None, 'ug/g', 'Mass Fraction', False),
+        ]
+
+        for group_args in groups:
+            for c in self.compounds_in_group(*group_args):
+                ret.append(c)
+
+        return ret
 
     @property
-    def benzene(self):
-        for b in self.record.benzene:
-            kwargs = self._get_kwargs(b)
+    def headspace_analysis(self):
+        ret = []
 
-            for lbl in ('benzene_ug_g',
-                        'toluene_ug_g',
-                        'ethylbenzene_ug_g',
-                        'm_p_xylene_ug_g',
-                        'o_xylene_ug_g',
-                        'isopropylbenzene_ug_g',
-                        'propylebenzene_ug_g',
-                        'isobutylbenzene_ug_g',
-                        'amylbenzene_ug_g',
-                        'n_hexylbenzene_ug_g',
-                        '_1_2_3_trimethylbenzene_ug_g',
-                        '_1_2_4_trimethylbenzene_ug_g',
-                        '_1_2_dimethyl_4_ethylbenzene_ug_g',
-                        '_1_3_5_trimethylbenzene_ug_g',
-                        '_1_methyl_2_isopropylbenzene_ug_g',
-                        '_2_ethyltoluene_ug_g',
-                        '_3_4_ethyltoluene_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
+        groups = [
+            ('headspace_analysis', None, 'mg/g', 'Mass Fraction', False),
+        ]
 
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'ug/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
+        for group_args in groups:
+            for c in self.compounds_in_group(*group_args):
+                ret.append(c)
+
+        return ret
+
+    @property
+    def bulk_composition(self):
+        '''
+            Gather up all the groups of compounds that comprise a 'bulk'
+            amount and compile them into an organized list.
+
+            Bulk compositions apply to:
+            - wax
+            - water
+            - Sulfur
+            - Carbon
+        '''
+        ret = []
+
+        for attr, alt_attr, method in (('wax_content', 'waxes', 'ESTS 1994'),
+                                       ('water_content', None, 'ASTM E203'),
+                                       ('sulfur_content', None, 'ASTM D4294')
+                                       ):
+            label = self.parser.get_label(attr)
+            label = label[:label.find('Content') + len('Content')]
+
+            value = getattr(self.parser, attr)
+
+            if alt_attr is not None:
+                value['value'] = value.pop(alt_attr, None)
+            else:
+                value['value'] = value.pop(attr, None)
+
+            value['unit'] = '%'
+            value['unit_type'] = 'massfraction'
+
+            ret.append(self.compound(label,
+                                     self.measurement(**value),
+                                     method=method,
+                                     sparse=True))
+
+        return ret
+
+    @property
+    def CCME(self):
+        ret = dict(self.parser.values['ccme_fractions'].items())
+
+        for k in list(ret.keys()):
+            ret[k] = self.measurement(ret[k], 'mg/g', 'massfraction')
+            ret[f'ccme_{k}'.upper()] = ret.pop(k)
+
+        ret['total_GC_TPH'] = self.measurement(
+            self.parser.deep_get('gc_tph_f1_plus_f2'
+                                 '.total_tph_gc_detected_tph_undetected_tph'),
+            'mg/g',
+            'massfraction'
+        )
+
+        groups = [
+            ('saturates', 'ccme_f1'),
+            ('aromatics', 'ccme_f2'),
+            ('GC_TPH', 'ccme_tph'),
+        ]
+
+        for attr, name in groups:
+            ret[attr] = list(self.compounds_in_group(name, None,
+                                                     'mg/g', 'Mass Fraction',
+                                                     False))
+
+        ret['GC_TPH'] = [c for c in ret['GC_TPH']
+                         if not c['name'].startswith('TOTAL TPH ')]
+
+        return ret
+
+    @property
+    def physical_properties(self):
+        ret = {}
+
+        for attr in ('pour_point', 'flash_point',
+                     'densities', 'dynamic_viscosities',
+                     'interfacial_tensions'):
+            ret[attr] = getattr(self, attr)
+
+        return ret
+
+    @property
+    def environmental_behavior(self):
+        ret = {}
+
+        for attr in ('dispersibilities', 'emulsions'):
+            ret[attr] = getattr(self, attr)
+
+        return ret
+
+    def compounds_in_group(self, category, group_category,
+                           unit, unit_type, filter_compounds=True):
+        '''
+            :param category: The category attribute containing the data
+            :param group_category: The category attribute containing the
+                                   group label
+            :param unit: The unit.
+            :param unit_type: The type of thing that the unit measures
+                              (length, mass, etc.)
+            :param filter: Filter only those attributes that have a suffix
+                           matching the unit value.
+
+            Example of content:
+                {
+                    'name': "1-Methyl-2-Isopropylbenzene",
+                    'method': "ESTS 2002b",
+                    'groups': ["C4-C6 Alkyl Benzenes", ...],
+                    'measurement': {
+                        value: 3.4,
+                        unit: "ppm",
+                        unit_type: "Mass Fraction",
+                        replicates: 3,
+                        standard_deviation: 0.1
                     }
+                }
+        '''
+        suffix = '_' + custom_slugify(unit)
+        cat_obj = getattr(self.parser, category)
 
-                del kwargs[lbl]
+        if group_category is not None:
+            group_name = self.parser.get_label(group_category)
+        else:
+            group_name = self.parser.get_label(category)
 
-            yield kwargs
+        method, replicates, std_dev = None, None, None
 
-    @property
-    def headspace(self):
-        for h in self.record.headspace:
-            kwargs = self._get_kwargs(h)
+        if 'method' in cat_obj:
+            method = cat_obj['method']
 
-            for lbl in ('n_c5_mg_g',
-                        'n_c6_mg_g',
-                        'n_c7_mg_g',
-                        'n_c8_mg_g',
-                        'c5_group_mg_g',
-                        'c6_group_mg_g',
-                        'c7_group_mg_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
+        if 'replicates' in cat_obj:
+            replicates = cat_obj['replicates']
 
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'mg/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
+        if 'standard_deviation' in cat_obj:
+            std_dev = cat_obj['standard_deviation']
 
-                del kwargs[lbl]
+        for k, v in cat_obj.items():
+            if v is not None and (k.endswith(suffix) or not filter_compounds):
+                attr_label = self.parser.get_label([category, k])
 
-            yield kwargs
-
-    @property
-    def chromatography(self):
-        for c in self.record.chromatography:
-            kwargs = self._get_kwargs(c)
-
-            for lbl in ('tph_mg_g',
-                        'tsh_mg_g',
-                        'tah_mg_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'mg/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)}
-
-                del kwargs[lbl]
-
-            for lbl in ('tsh_tph_percent',
-                        'tah_tph_percent',
-                        'resolved_peaks_tph_percent'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-8]
-
-                if value is not None:
-                    kwargs[new_lbl] = {'value': value, 'unit': '%',
-                                       '_cls': self._class_path(FloatUnit)}
-
-                del kwargs[lbl]
-
-            yield kwargs
-
-    @property
-    def ccme(self):
-        for c in self.record.ccme:
-            kwargs = self._get_kwargs(c)
-
-            for n in range(1, 5):
-                lbl, new_lbl = 'f{}_mg_g'.format(n), 'f{}'.format(n)
-                value = kwargs[lbl]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value, 'unit': 'mg/g',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            yield kwargs
-
-    @property
-    def ccme_f1(self):
-        for c in self.record.ccme_f1:
-            yield self._get_kwargs(c)
-
-    @property
-    def ccme_f2(self):
-        for c in self.record.ccme_f2:
-            yield self._get_kwargs(c)
-
-    @property
-    def ccme_tph(self):
-        for c in self.record.ccme_tph:
-            yield self._get_kwargs(c)
-
-    @property
-    def sara_total_fractions(self):
-        for f in self.record.sara_total_fractions:
-            kwargs = self._get_kwargs(f)
-
-            kwargs['fraction'] = {'value': kwargs['percent'], 'unit': '%',
-                                  '_cls': self._class_path(FloatUnit)}
-
-            yield kwargs
-
-    @property
-    def alkanes(self):
-        for a in self.record.alkanes:
-            kwargs = self._get_kwargs(a)
-
-            for lbl in ('pristane_ug_g', 'phytane_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            for n in range(8, 45):
-                lbl, new_lbl = 'c{}_ug_g'.format(n), 'c{}'.format(n)
-                value = kwargs[lbl]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            yield kwargs
-
-    @property
-    def alkylated_pahs(self):
-        for a in self.record.alkylated_pahs:
-            kwargs = self._get_kwargs(a)
-
-            for i, g in [(i, g) for g in 'npdfbc' for i in range(5)]:
-                lbl, new_lbl = ('c{}_{}_ug_g'.format(i, g),
-                                'c{}_{}'.format(i, g))
-                value = kwargs.get(lbl, None)
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                if lbl in kwargs:
-                    del kwargs[lbl]
-
-            for lbl in ('biphenyl_ug_g',
-                        'acenaphthylene_ug_g',
-                        'acenaphthene_ug_g',
-                        'anthracene_ug_g',
-                        'fluoranthene_ug_g',
-                        'pyrene_ug_g',
-                        'benz_a_anthracene_ug_g',
-                        'benzo_b_fluoranthene_ug_g',
-                        'benzo_k_fluoranthene_ug_g',
-                        'benzo_e_pyrene_ug_g',
-                        'benzo_a_pyrene_ug_g',
-                        'perylene_ug_g',
-                        'indeno_1_2_3_cd_pyrene_ug_g',
-                        'dibenzo_ah_anthracene_ug_g',
-                        'benzo_ghi_perylene_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            yield kwargs
-
-    @property
-    def biomarkers(self):
-        for b in self.record.biomarkers:
-            kwargs = self._get_kwargs(b)
-
-            for lbl in ('c21_tricyclic_terpane_ug_g',
-                        'c22_tricyclic_terpane_ug_g',
-                        'c23_tricyclic_terpane_ug_g',
-                        'c24_tricyclic_terpane_ug_g',
-                        '_30_norhopane_ug_g',
-                        'hopane_ug_g',
-                        '_30_homohopane_22s_ug_g',
-                        '_30_homohopane_22r_ug_g',
-                        '_30_31_bishomohopane_22s_ug_g',
-                        '_30_31_bishomohopane_22r_ug_g',
-                        '_30_31_trishomohopane_22s_ug_g',
-                        '_30_31_trishomohopane_22r_ug_g',
-                        'tetrakishomohopane_22s_ug_g',
-                        'tetrakishomohopane_22r_ug_g',
-                        'pentakishomohopane_22s_ug_g',
-                        'pentakishomohopane_22r_ug_g',
-                        '_18a_22_29_30_trisnorneohopane_ug_g',
-                        '_17a_h_22_29_30_trisnorhopane_ug_g',
-                        '_14b_h_17b_h_20_cholestane_ug_g',
-                        '_14b_h_17b_h_20_methylcholestane_ug_g',
-                        '_14b_h_17b_h_20_ethylcholestane_ug_g'):
-                value = kwargs[lbl]
-                new_lbl = lbl[:-5]
-
-                if value is not None:
-                    kwargs[new_lbl] = {
-                        'value': value,
-                        'from_unit': 'ug/g', 'unit': 'ppm',
-                        '_cls': self._class_path(ConcentrationInWaterUnit)
-                    }
-
-                del kwargs[lbl]
-
-            yield kwargs
+                yield self.compound(attr_label,
+                                    self.measurement(v, unit, unit_type,
+                                                     std_dev, replicates),
+                                    method=method, groups=[group_name])

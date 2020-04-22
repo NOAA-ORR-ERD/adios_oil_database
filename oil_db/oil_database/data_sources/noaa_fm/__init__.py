@@ -1,5 +1,6 @@
-from .reader import OilLibraryCsvFile
+from .reader import (OilLibraryCsvFile,
+                     ImportFileHeaderLengthError,
+                     ImportFileHeaderContentError)
+
 from .parser import OilLibraryRecordParser
 from .mapper import OilLibraryAttributeMapper
-
-# from .scoring import ImportedRecordWithScore

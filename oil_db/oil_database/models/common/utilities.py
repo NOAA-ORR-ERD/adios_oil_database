@@ -4,15 +4,12 @@ Tools for helping make our data models.
 So far: making dataclasses read/writable as JSON
 """
 
-import json
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import List, Dict
-
 
 def something(val):
-    # much like python's "Truthy" and Falsey", but we want some values to not be false
-    # like zero, for instance
+    '''
+        much like python's "Truthy" and Falsey", but we want some values
+        to not be false like zero, for instance
+    '''
     return ((val == 0) or (val is not None) and val)
 
 
@@ -33,6 +30,7 @@ def _py_json(self, sparse=True):
             val = val.py_json(sparse=sparse)
         except AttributeError:
             pass
+
         if not sparse:
             json_obj[fieldname] = val
         elif something(val):
@@ -42,19 +40,34 @@ def _py_json(self, sparse=True):
 
 
 @classmethod
-def _from_py_json(cls, py_json):
+def _from_py_json(cls, py_json, allow_none=False):
     """
     classmethod to create a dataclass from json compatible python data
     structure.
     """
     arg_dict = {}
+
+    if py_json is None and allow_none is True:
+        # the parent object defined an attribute with a default of None
+        # We could actually allow other default types, but this one is common
+        return py_json
+
     for fieldname, fieldobj in cls.__dataclass_fields__.items():
         if fieldname in py_json:
+            allow_none = True if fieldobj.default is None else False
+
             try:  # see if it's "one of ours"
-                arg_dict[fieldname] = fieldobj.type.from_py_json(py_json[fieldname])
+                arg_dict[fieldname] = (fieldobj.type
+                                       .from_py_json(py_json[fieldname],
+                                                     allow_none=allow_none))
             except AttributeError:
                 # it's not, so we just use the value
                 arg_dict[fieldname] = py_json[fieldname]
+            except TypeError:
+                print(f'TypeError in {cls.__name__}._from_py_json(): '
+                      f'field: {fieldname}')
+                raise
+
     obj = cls(**arg_dict)
     return obj
 
@@ -81,10 +94,11 @@ def _validate(self):
 
 def __setattr__(self, name, val):
     try:
-        fieldobj = self.__dataclass_fields__[name]
+        _fieldobj = self.__dataclass_fields__[name]
     except KeyError:
         raise AttributeError(f"You can only set existing attributes: "
-                             f"{name} does not exist")
+                             f"{self.__class__.__name__}.{name} "
+                             "does not exist")
     self.__dict__[name] = val
 
     # Better not to try to convert type here
@@ -114,21 +128,24 @@ class JSON_List(list):
                 json_obj.append(item.py_json(sparse))
             except AttributeError:
                 json_obj.append(item)
+
         return json_obj
 
     @classmethod
-    def from_py_json(cls, py_json):
+    def from_py_json(cls, py_json, allow_none=False):
         """
         create a JSON_List from json array of objects
         that may be json-able.
         """
         if cls.item_type is None:
-            raise TypeError("You can not reconstruct a "
-                            "list of unknown type")
+            raise TypeError("You can not reconstruct a list of unknown type")
+
         jl = cls()  # an empty JSON_List
+
         # loop through contents
         for item in py_json:
             jl.append(cls.item_type.from_py_json(item))
+
         return jl
 
     def __repr__(self):

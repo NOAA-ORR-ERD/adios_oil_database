@@ -29,13 +29,12 @@ class EnvCanadaOilExcelFile(object):
         self.name = name
 
         self.wb = load_workbook(self.name, data_only=True)
-        self.wb.get_sheet_names()
 
         self.file_props = dict([(e, getattr(self.wb.properties, e))
                                 for e in self.wb.properties.__elements__])
         self.file_props['name'] = basename(name)
 
-        self.db_sheet = self.wb.get_sheet_by_name('Database')
+        self.db_sheet = self.wb['Database']
 
         self.col_indexes = self._get_oil_column_indexes()
         self.field_indexes = self._get_row_field_names()
@@ -119,19 +118,17 @@ class EnvCanadaOilExcelFile(object):
     def __repr__(self):
         return "<OilLibraryFile('%s')>" % (self.name)
 
-    def get_category_props(self, record):
+    def _get_record_raw_columns(self, name):
         '''
-            Get all oil data properties for each column of oil data, that exist
-            within a single category.
-            - This function is intended to work on the oil data columns for a
-              single oil, but this is not enforced.
-            - the oil properties will be returned as a dictionary.
+            Return the columns in the Excel sheet referenced by the name of an
+            oil.
+            Note: the Excel sheet columns object has no direct indexing,
+                  only a next().  This is why we are using walk method to get
+                  our indexed columns.
         '''
-        ret = {}
-        for k in self.self.field_indexes:
-            ret[k] = self.get_props_by_category(k)
-
-        return ret
+        return list(zip(*[[cell.value for cell in col]
+                          for i, col in enumerate(self.db_sheet.columns)
+                          if i in self.col_indexes[name]]))
 
     def get_records(self):
         '''
@@ -142,8 +139,19 @@ class EnvCanadaOilExcelFile(object):
             yield (self.get_record(name), self.file_props)
 
     def get_record(self, name):
+        '''
+            A 'record' coming out of our reader is a dict of dicts
+            representing the data for a single oil.
+            - The top level keys are the raw category names as seen in the
+              first column of the spreadsheet
+            - The second level keys are the raw field names that are contained
+              within the category, as seen in the second column of the
+              spreadsheet
+            - Each value in the field dict is a list representing a horizontal
+              slice of the columns that comprise the record
+        '''
         ret = {}
-        record_data = self.get_record_raw_columns(name)
+        record_data = self._get_record_raw_columns(name)
 
         for cat, sub_cat in self.field_indexes.items():
             cat_values = {}
@@ -163,24 +171,3 @@ class EnvCanadaOilExcelFile(object):
             ret[cat] = cat_values
 
         return ret
-
-    def get_record_raw_columns(self, name):
-        '''
-            Return the columns in the Excel sheet referenced by the name of an
-            oil.
-            Note: the Excel sheet columns object has no direct indexing,
-                  only a next().  This is why we are using walk method to get
-                  our indexed columns.
-        '''
-        return list(zip(*[[cell.value for cell in col]
-                          for i, col in enumerate(self.db_sheet.columns)
-                          if i in self.col_indexes[name]]))
-
-
-
-
-
-
-
-
-

@@ -17,15 +17,18 @@ from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
 
 from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
-                                                  EnvCanadaAttributeMapper)
+                                                  EnvCanadaRecordMapper)
+
+from oil_database.data_sources.exxon_assays import (ExxonDataReader,
+                                                    ExxonRecordParser,
+                                                    ExxonMapper)
 
 
 # from oil_database.db_init.validation import oil_record_validation
-from oil_database.db_init.categories import link_oil_to_categories
+from oil_database.db_init.labels import link_oil_to_labels
 from oil_database.models.oil.validation.validate import validate
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -61,9 +64,13 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
                None,
                EnvCanadaOilExcelFile,
                EnvCanadaRecordParser,
-               EnvCanadaAttributeMapper],
+               EnvCanadaRecordMapper],
               # ('Exxon Assays', add_exxon_records)
-              ['Exxon Assays', not_implemented],
+              ['Exxon Assays', 'oildb.exxon_files',
+               None,
+               ExxonDataReader,
+               ExxonRecordParser,
+               ExxonMapper],
               ['All datasets', add_all]
               )
 
@@ -235,20 +242,17 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
             total_count += 1
 
             try:
-                parser_obj = parser_cls(*record_data)
+                oil_obj = mapper_cls(parser_cls(*record_data))
 
-                #pp.pprint(parser_obj.file_props)
-                #pp.pprint(parser_obj.values)
-                #pp.pprint(parser_obj.labels)
+                #link_oil_to_labels(oil_obj)
 
-                oil_obj = mapper_cls(parser_obj)
+                if hasattr(oil_obj, 'py_json'):
+                    oil_pyjson = oil_obj.py_json()
+                else:
+                    oil_pyjson = oil_obj.dict()
 
-                # oil_obj.status = oil_record_validation(oil_obj)
-
-                # if len(oil_obj.status) == 0:
-                link_oil_to_categories(oil_obj)
-                oil_pyjson = oil_obj.dict()
                 validate(oil_pyjson)
+
                 oil_collection.insert_one(oil_pyjson)
             except DuplicateKeyError as e:
                 print('Duplicate fields for {}: {}'
@@ -311,4 +315,7 @@ def _add_exxon_files(settings):
         So exactly what should be contained in the settings?  I think it should
         be the index file.
     '''
-    logger.warning('Exxon file import is not implemented yet!')
+    exxon_files = '\n'.join([os.path.join(data_path, 'exxon_assays', fn)
+                             for fn in ('index.txt',)])
+
+    settings['oildb.exxon_files'] = exxon_files

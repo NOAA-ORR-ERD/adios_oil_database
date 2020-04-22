@@ -1,10 +1,10 @@
 """
 testing the oil model with a large, full, record
 """
-
 import json
 from pathlib import Path
 import pytest
+
 from oil_database.models.oil.oil import Oil
 
 
@@ -20,8 +20,6 @@ def test_subsamples():
 
     print("working with:", oil.name)
 
-    assert len(oil.samples) == 4
-    assert oil.samples[0].name == "Fresh Oil Sample"
-    assert oil.samples[3],name == "36.76% Weathered"
-
-
+    assert len(oil.sub_samples) == 4
+    assert oil.sub_samples[0].name == "Fresh Oil Sample"
+    assert oil.sub_samples[3].name == "36.76% Weathered"

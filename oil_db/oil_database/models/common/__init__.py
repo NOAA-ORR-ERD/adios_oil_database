@@ -1,4 +1,19 @@
 from .base_model import MongoBaseModel, PydObjectId
-from .category import Category
+from .label import Label
 from .synonym import Synonym
 from .sara import SARAFraction, SARADensity, MolecularWeight
+from .measurement import (ProductType,
+                          UnittedValue,
+                          UnittedRange,
+                          MeasurementBase,
+                          Temperature,
+                          Length,
+                          Mass,
+                          MassFraction,
+                          VolumeFraction,
+                          Density,
+                          DynamicViscosity,
+                          KinematicViscosity,
+                          Adhesion,
+                          NeedleAdhesion,
+                          InterfacialTension)
