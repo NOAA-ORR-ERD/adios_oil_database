@@ -231,10 +231,9 @@ def ExxonMapper(record):
     data = iter(data)
 
     read_header(oil, data)
-    row = next_non_empty(data)
 
-    oil._id = oil.oil_id = row[0]
-    sample_names = row[1:]
+    oil.oil_id, sample_names = read_identification(data)
+    oil._id = oil.oil_id
 
     samples = SampleList([Sample(**sample_id_attrs(name))
                           for name in sample_names
@@ -269,6 +268,12 @@ def read_header(oil, data):
         ref_year = max(years)
 
     oil.reference = Reference(reference=ref_text, year=ref_year)
+
+
+def read_identification(data):
+    row = next_non_empty(data)
+
+    return f'EX-{row[0]}', row[1:]
 
 
 def sample_id_attrs(name):
