@@ -24,15 +24,8 @@ class OilLibraryAttributeMapper(MapperBase):
     '''
     oil_props = ('_id',
                  'oil_id',
-                 'name',
-                 'location',
-                 'reference',
-                 # 'sample_date',  # not found in the datasheet
-                 'comments',
-                 'labels',
+                 'metadata',
                  'status',
-                 'product_type',
-                 'API',
                  'sub_samples')
     fresh_sample_props = ('environmental_behavior',
                           'SARA',
@@ -151,6 +144,22 @@ class OilLibraryAttributeMapper(MapperBase):
         return attrs
 
     @property
+    def metadata(self):
+        ret = {}
+
+        for attr in ('name',
+                     'source_id',
+                     'location',
+                     'reference',
+                     # 'sample_date',  # not available in datasheet
+                     'product_type',
+                     'API',
+                     'comments'):
+            ret[attr] = getattr(self, attr)
+
+        return ret
+
+    @property
     def environmental_behavior(self):
         '''
             Notes:
@@ -160,6 +169,7 @@ class OilLibraryAttributeMapper(MapperBase):
               reference to a temperature.
         '''
         ret = {}
+
         for attr in ('emulsions',):
             ret[attr] = getattr(self, attr, None)
 

@@ -66,6 +66,10 @@ class OilLibraryRecordParser(ParserBase):
         kwargs[f'_{name}'] = kwargs.pop(name)
 
     @property
+    def source_id(self):
+        return self.adios_oil_id
+
+    @property
     def oil_id(self):
         return self.adios_oil_id
 

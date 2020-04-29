@@ -394,9 +394,9 @@ class TestOilLibraryAttributeMapper:
                                  'Arabian medium crude.')
          ),
         ('AD00009', 'labels', None),
-        ('AD00009', 'status', None),
         ('AD00009', 'product_type', 'crude'),
         ('AD00009', 'API', 28.0),
+        ('AD00009', 'status', None),
         # ('AD00009', 'sub_samples', None),  # we'll test this later
         ('AD00020', 'densities', [
             {'density': {'value': 904.0, 'unit': 'kg/m^3'},
@@ -514,6 +514,29 @@ class TestOilLibraryAttributeMapper:
 
         pprint(getattr(mapper, attr))
         assert getattr(mapper, attr) == expected
+
+    @pytest.mark.parametrize('oil_id, attr, expected', [
+        ('AD00009', 'name', 'ABU SAFAH'),
+        ('AD00009', 'source_id', 'AD00009'),
+        ('AD00009', 'location', 'SAUDI ARABIA'),
+        ('AD00009', 'reference', {'reference': ('Williams, R., ARAMCO, Letter '
+                                                'to Lehr, W.,  NOAA, '
+                                                'March 13, 1993.'),
+                                  'year': 1993}),
+        ('AD00010', 'comments', ('Crude sample represents 1989 winter '
+                                 'production.  Product considered an '
+                                 'Arabian medium crude.')
+         ),
+        ('AD00009', 'product_type', 'crude'),
+        ('AD00009', 'API', 28.0),
+    ])
+    def test_metadata(self, oil_id, attr, expected):
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        meta = mapper.metadata
+
+        pprint(meta[attr])
+        assert meta[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
         ('AD02068', 0, 'name', 'Fresh Oil Sample'),
