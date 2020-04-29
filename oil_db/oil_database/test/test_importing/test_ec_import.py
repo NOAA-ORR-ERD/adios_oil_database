@@ -6,7 +6,6 @@
     Either we test it correctly, or we test it in an episodic manner on the
     real dataset.
 '''
-from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -1240,6 +1239,15 @@ class TestEnvCanadaRecordMapper(object):
     '''
     reader = EnvCanadaOilExcelFile(data_file)
 
+    def deep_get(self, json_obj, attr_path):
+        if isinstance(attr_path, str):
+            attr_path = attr_path.split('.')
+
+        if len(attr_path) > 1:
+            return self.deep_get(json_obj[attr_path[0]], attr_path[1:])
+        else:
+            return json_obj[attr_path[0]]
+
     def test_init(self):
         with pytest.raises(TypeError):
             _mapper = EnvCanadaRecordMapper()
@@ -1251,13 +1259,15 @@ class TestEnvCanadaRecordMapper(object):
     @pytest.mark.parametrize('oil_id, expected', [
         ('2713', {'_id': 'EC002713',
                   'oil_id': 'EC002713',
-                  'comments': None,
-                  'location': 'Alaska, USA',
-                  'name': 'Alaska North Slope [2015]',
-                  'product_type': 'crude',
-                  'reference': {'reference': 'Hollebone, 2016. ',
-                                'year': 2016},
-                  'sample_date': '2015-03-22',
+                  'metadata.name': 'Alaska North Slope [2015]',
+                  'metadata.source_id': '2713',
+                  'metadata.location': 'Alaska, USA',
+                  'metadata.reference': {'reference': 'Hollebone, 2016. ',
+                                         'year': 2016},
+                  'metadata.sample_date': '2015-03-22',
+                  'metadata.product_type': 'crude',
+                  'metadata.API': 31.32,
+                  'metadata.comments': None,
                   }),
     ])
     def test_init_valid(self, oil_id, expected):
@@ -1276,7 +1286,7 @@ class TestEnvCanadaRecordMapper(object):
 
         for k, v in expected.items():
             if v is not None:
-                assert py_json[k] == v
+                assert self.deep_get(py_json, k) == v
 
 
 class TestEnvCanadaSampleMapper(object):

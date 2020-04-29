@@ -92,9 +92,9 @@ class TestExxonMapper():
     def test_header(self):
         oil = ExxonMapper(self.record)
 
-        assert oil.name == 'HOOPS Blend'
-        assert oil.reference.reference.startswith("ExxonMobil")
-        assert oil.API == 35.2
+        assert oil.metadata.name == 'HOOPS Blend'
+        assert oil.metadata.reference.reference.startswith("ExxonMobil")
+        assert oil.metadata.API == 35.2
 
     @pytest.mark.parametrize("index, expected",
                              [(0, {

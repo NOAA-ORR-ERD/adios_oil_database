@@ -10,7 +10,9 @@ import copy
 from oil_database.models.oil.validation.validate import validate
 
 # NOTE: this should be updated when the data model is updated.
-BIG_RECORD = json.load(open(Path(__file__).parent / "AlaskaNorthSlope2015.json"))
+BIG_RECORD = json.load(open(
+    Path(__file__).parent / "AlaskaNorthSlope2015.json"
+))
 
 
 @pytest.fixture
@@ -20,7 +22,9 @@ def big_record():
 
 @pytest.fixture
 def no_type_oil():
-    no_type_oil = {"name": "Just a Name to Have a Placeholder"}
+    no_type_oil = {'oil_id': 'AD00123',
+                   'metadata': {'name': 'An oil name'}
+                   }
     return no_type_oil
 
 
@@ -41,11 +45,11 @@ def snippet_not_in_oil_status(snippet, oil):
     return not snippet_in_oil_status(snippet, oil)
 
 
-def test_no_name():
+def test_no_id():
     oil = {}
     validate(oil)
 
-    assert ("E001: Record has no name: every record must have a name"
+    assert ("E001: Record has no oil_id: every record must have an ID"
             in oil['status'])
 
 
@@ -56,7 +60,10 @@ def test_no_name():
                                   ])
 def test_reasonable_name(name):
     # unreasonable names should fail
-    oil = {"name": name}  # only spaces
+    oil = {
+        'oil_id': 'AD00123',
+        'metadata': {"name": name}
+        }
     validate(oil)
 
     assert snippet_in_oil_status("W001:", oil)
@@ -69,7 +76,7 @@ def test_no_type(no_type_oil):
 
 
 def test_bad_type(no_type_oil):
-    no_type_oil['product_type'] = "Fred"
+    no_type_oil['metadata']['product_type'] = "Fred"
     validate(no_type_oil)
 
     print(no_type_oil["status"])
@@ -77,7 +84,7 @@ def test_bad_type(no_type_oil):
 
 
 def test_correct_type(no_type_oil):
-    no_type_oil['product_type'] = "Crude"
+    no_type_oil['metadata']['product_type'] = "Crude"
     validate(no_type_oil)
 
     print(no_type_oil["status"])
@@ -101,7 +108,7 @@ def test_big_record_no_type(big_record):
     """
     remove the product type from the record
     """
-    big_record['product_type'] = None
+    big_record['metadata']['product_type'] = None
 
     validate(big_record)
 
@@ -112,7 +119,7 @@ def test_big_record_no_type(big_record):
 
 def test_no_api_crude(no_type_oil):
     oil = no_type_oil
-    oil['product_type'] = "Crude"
+    oil['metadata']['product_type'] = "Crude"
     validate(oil)
     assert snippet_in_oil_status("E002:", oil)
 
@@ -126,7 +133,7 @@ def test_no_api_not_crude(no_type_oil):
 
 def test_api_outragious(no_type_oil):
     oil = no_type_oil
-    oil['API'] = -200
+    oil['metadata']['API'] = -200
     validate(oil)
     assert snippet_in_oil_status("W005:", oil)
 

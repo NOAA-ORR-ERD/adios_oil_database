@@ -1,19 +1,9 @@
 #!/usr/bin/env python
 from math import isclose
 from numbers import Number
-from collections import defaultdict
 import logging
 
 from slugify import Slugify
-
-from oil_database.models.common.float_unit import (FloatUnit,
-                                                   TemperatureUnit,
-                                                   TimeUnit,
-                                                   DensityUnit,
-                                                   DynamicViscosityUnit,
-                                                   InterfacialTensionUnit,
-                                                   AdhesionUnit,
-                                                   MassFractionUnit)
 
 from oil_database.models.oil.oil import Oil
 from ..mapper import MapperBase
@@ -84,7 +74,7 @@ class EnvCanadaRecordMapper(MapperBase):
                                    'has no API & no 15C density')
                     api = None
 
-            record['API'] = api
+            record['metadata']['API'] = api
 
     def py_json(self):
         rec = self.record.dict()

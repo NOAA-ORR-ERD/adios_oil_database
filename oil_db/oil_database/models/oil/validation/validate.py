@@ -32,13 +32,9 @@ from ..oil import Oil
 
 import logging
 
-from pprint import PrettyPrinter
 # Putting these all here so we can keep track more easily
 from .warnings import WARNINGS
 from .errors import ERRORS
-
-
-pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +52,11 @@ def validate(oil_json):
     try:
         oil = Oil.from_py_json(oil_json)
     except TypeError as err:
-        if "argument: 'name'" in err.args[0]:
+        if "argument: 'oil_id'" in err.args[0]:
+            print(err)
             oil_json["status"] = ERRORS["E001"]
             return
-        else:  # some other TypeError
+        else:
             raise
 
     messages = set()
@@ -82,8 +79,8 @@ def val_has_reasonable_name(oil):
 
     we may want to add more later
     """
-    if len(oil.name.strip()) < 5:
-        return WARNINGS["W001"].format(oil=oil)
+    if len(oil.metadata.name.strip()) < 5:
+        return WARNINGS["W001"].format(oil.metadata.name)
     else:
         return None
 
@@ -97,20 +94,20 @@ def val_has_product_type(oil):
                    'bitumen product',
                    'other')
 
-    if not oil.product_type:
+    if not oil.metadata.product_type:
         return WARNINGS["W002"]
-    elif not oil.product_type.lower() in ('crude',
-                                          'refined',
-                                          'bitumen product',
-                                          'other'):
-        return WARNINGS["W003"].format(oil.product_type, valid_types)
+    elif not oil.metadata.product_type.lower() in ('crude',
+                                                   'refined',
+                                                   'bitumen product',
+                                                   'other'):
+        return WARNINGS["W003"].format(oil.metadata.product_type, valid_types)
     else:
         return None
 
 
 def val_check_api(oil):
-    api = oil.API
-    ptype = oil.product_type
+    api = oil.metadata.API
+    ptype = oil.metadata.product_type
     if ptype and ptype.lower() == "crude":
         if api is None:
             return ERRORS["E002"]
@@ -155,34 +152,3 @@ def val_check_for_distillation_cuts(oil):
 # build a list of all the validators:
 
 VALIDATORS = [val for name, val in vars().items() if name.startswith("val_")]
-
-
-def oil_record_validation(oil):
-    '''
-    Validate an oil record and return a list of error messages
-    '''
-    errors = []
-
-    if not has_product_type(oil):
-        errors.append('W002: Imported record has no product type')
-
-    if not has_api_or_densities(oil):
-        errors.append('E001: Imported record has no density information')
-
-    if not has_viscosities(oil):
-        errors.append('E001: Imported record has no viscosity information')
-
-    if not has_distillation_cuts(oil):
-        errors.append('W002: Imported record has insufficient '
-                      'distillation cut data')
-
-    return errors
-
-
-
-
-
-
-
-
-

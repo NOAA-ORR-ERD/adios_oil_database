@@ -259,7 +259,7 @@ class EnvCanadaRecordParser(ParserBase):
         return self.values[None]['ests_code']
 
     @property
-    def oil_id(self):
+    def source_id(self):
         '''
             We will use the ESTS codes in the record as the identifier.
 
@@ -268,11 +268,15 @@ class EnvCanadaRecordParser(ParserBase):
             the petroleum substance, and the rest identify a degree of
             weathering.  So we will use just the first one.
         '''
-        primary_codes = set([int(str(c).split('.')[0])
+        primary_codes = set([str(c).split('.')[0]
                              for c in self.ests_codes])
         assert len(primary_codes) == 1
 
-        return 'EC{:06.0f}'.format(primary_codes.pop())
+        return primary_codes.pop()
+
+    @property
+    def oil_id(self):
+        return 'EC{:06.0f}'.format(int(self.source_id))
 
     @property
     def weathering(self):
@@ -383,6 +387,21 @@ class EnvCanadaRecordParser(ParserBase):
                      for cat_key, cat_val in self.values.items()])
 
     @property
+    def metadata(self):
+        ret = {}
+
+        for attr in ('name',
+                     'source_id',
+                     'location',
+                     'reference',
+                     'sample_date',
+                     'product_type',
+                     'comments'):
+            ret[attr] = getattr(self, attr)
+
+        return ret
+
+    @property
     def sub_samples(self):
         for i, w in enumerate(self.weathering):
             props_i = self.vertical_slice(i)
@@ -393,16 +412,11 @@ class EnvCanadaRecordParser(ParserBase):
     def dict(self):
         ret = {}
 
-        for attr in ('name',
-                     'oil_id',
-                     'location',
-                     'reference',
-                     'sample_date',
-                     'comments',
-                     'product_type'):
+        for attr in ('oil_id',
+                     'metadata'):
             ret[attr] = getattr(self, attr)
 
-        ret['samples'] = list(self.sub_samples)
+        ret['sub_samples'] = list(self.sub_samples)
 
         return ret
 

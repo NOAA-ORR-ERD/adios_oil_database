@@ -1,18 +1,23 @@
 {
   "_id": "EC002713",
-  "name": "Alaska North Slope [2015]",
   "oil_id": "EC002713",
-  "product_type": "crude",
-  "location": "Alaska, USA",
-  "reference": "Hollebone, 2016.",
-  "reference_date": 1451606400,
-  "sample_date": 1426982400,
-  "comments": "",
-  "API": 31.32,
-  "categories": [
-    "Crude",
-    "Light"
-  ],
+  "metadata": {
+      "name": "Alaska North Slope [2015]",
+      "source_id": "2713",
+      "location": "Alaska, USA",
+      "reference": {
+          "reference": "Hollebone, 2016.",
+          "year": 2016
+      },
+      "sample_date": 1426982400,
+      "product_type": "crude",
+      "API": 31.32,
+      "comments": "",
+      "labels": [
+          "Crude",
+          "Light"
+      ]      
+  },
   "status": [],
   "sub_samples": [
     {

@@ -6,14 +6,15 @@ from pathlib import Path
 
 import pytest
 
-from oil_database.models.oil import Oil, MetaData
+from oil_database.models.oil.oil import Oil
+from oil_database.models.oil.metadata import MetaData
 from oil_database.models.oil.values import Reference
 
 
 from pprint import pprint
 # A few handy constants for use for tests
 
-NAME = "A name for an oil"
+OIL_ID = 'AD00123'
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
@@ -23,24 +24,26 @@ BIG_RECORD = json.load(open(
 
 class TestOil:
     def test_init_empty(self):
-        """ you must specify at least a name """
+        '''
+            You must specify at least an oil_id
+        '''
         with pytest.raises(TypeError):
             Oil()
 
-    def test_empty_name(self):
-        """ you must specify at least a name """
+    def test_empty_oil_id(self):
+        """ you must specify at least an oil_id """
         with pytest.raises(TypeError):
-            Oil(name="")
+            Oil(oil_id="")
 
     def test_init_minimal(self):
         '''
-            Even though we initialized with only a name, all attributes
+            Even though we initialized with only an ID, all attributes
             should be present.
         '''
-        oil = Oil(name=NAME)
-        assert oil.name == NAME
+        oil = Oil(oil_id=OIL_ID)
+        assert oil.oil_id == OIL_ID
 
-        for attr in ('name', 'oil_id', 'source_id',
+        for attr in ('oil_id', '_id',
                      'metadata', 'sub_samples', 'status', 'extra_data'):
             assert hasattr(oil, attr)
 
@@ -48,7 +51,7 @@ class TestOil:
         '''
             You should not be able to add an arbitrary new attribute
         '''
-        oil = Oil(name=NAME)
+        oil = Oil(oil_id=OIL_ID)
 
         with pytest.raises(AttributeError):
             oil.random_attr = 456
@@ -61,26 +64,25 @@ class TestOil:
 
                 {'name': 'A name for an oil'}
         '''
-        oil = Oil(name=NAME)
-        assert oil.name == NAME
+        oil = Oil(oil_id=OIL_ID)
+        assert oil.oil_id == OIL_ID
 
         py_json = oil.py_json()
 
-        assert py_json["name"] == NAME
-        assert len(py_json) == 1  # only one item
+        assert py_json["oil_id"] == OIL_ID
+        assert py_json["_id"] == OIL_ID
+        assert len(py_json) == 2
 
     def test_json_minimal_nonsparse(self):
-        oil = Oil(name=NAME)
+        oil = Oil(oil_id=OIL_ID)
         py_json = oil.py_json(sparse=False)
 
         pprint(py_json)
 
-        assert len(py_json) == 8
+        assert len(py_json) == 6
 
         for attr in ['_id',
                      'oil_id',
-                     'name',
-                     'source_id',
                      'metadata',
                      'sub_samples',
                      'status',
@@ -89,10 +91,11 @@ class TestOil:
             assert attr in py_json
 
     def test_from_py_json_nothing(self):
-        """
-        you need to at least provide a name
-        """
+        '''
+            You must specify at least an oil_id
+        '''
         py_json = {}
+
         with pytest.raises(TypeError):
             _oil = Oil.from_py_json(py_json)
 
@@ -101,10 +104,10 @@ class TestOil:
             Note: It seems we are not only checking for existence, but specific
                   values.  Parametrize??
         '''
-        py_json = {"name": NAME}
+        py_json = {"oil_id": OIL_ID}
         oil = Oil.from_py_json(py_json)
 
-        assert oil.name == NAME
+        assert oil.oil_id == OIL_ID
         assert oil.status == []
         assert oil.metadata.API is None
 
@@ -114,7 +117,7 @@ class TestOil:
         """
         oil = Oil.from_py_json(BIG_RECORD)
 
-        print("working with:", oil.name)
+        print("working with:", oil.metadata.name)
 
         assert len(oil.sub_samples) == 4
         assert oil.sub_samples[0].name == "Fresh Oil Sample"
@@ -202,7 +205,7 @@ class TestMetaData:
          ),
     ))
     def test_metadata_in_oil(self, attr, value, expected):
-        oil = Oil(name=NAME)
+        oil = Oil(oil_id=OIL_ID)
 
         assert hasattr(oil.metadata, attr)
         assert getattr(oil.metadata, attr) == expected['default']

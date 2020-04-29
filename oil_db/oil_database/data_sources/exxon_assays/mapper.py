@@ -226,14 +226,15 @@ def ExxonMapper(record):
     returns an Oil Object
     """
     name, data = record
-    oil = Oil(name)
-
     data = iter(data)
 
-    read_header(oil, data)
+    reference = read_header(data)
 
-    oil.oil_id, sample_names = read_identification(data)
-    oil._id = oil.oil_id
+    oil_id, sample_names = read_identification(data)
+
+    oil = Oil(oil_id=oil_id)
+    oil.metadata.name = name
+    oil.metadata.reference = reference
 
     samples = SampleList([Sample(**sample_id_attrs(name))
                           for name in sample_names
@@ -252,7 +253,7 @@ def ExxonMapper(record):
     return oil
 
 
-def read_header(oil, data):
+def read_header(data):
     '''
         fixme: this should probably be more flexible
                but we can wait 'till we get data that doesn't match
@@ -267,7 +268,7 @@ def read_header(oil, data):
     else:
         ref_year = max(years)
 
-    oil.reference = Reference(reference=ref_text, year=ref_year)
+    return Reference(reference=ref_text, year=ref_year)
 
 
 def read_identification(data):
@@ -416,9 +417,9 @@ def process_cut_table(oil, samples, cut_table):
 
     # pull API from first value
     try:
-        oil.API = round(float(row[0]), 1)  # stored as full precision double
+        oil.metadata.API = round(float(row[0]), 1)  # stored as full precision double
     except Exception:
-        oil.API = None
+        oil.metadata.API = None
 
     # use specific gravity to get density
     row = cut_table[norm("Specific Gravity (60/60F)")]

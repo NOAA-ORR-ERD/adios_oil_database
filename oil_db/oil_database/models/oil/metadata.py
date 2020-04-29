@@ -11,10 +11,12 @@ from .values import ProductType, Reference
 @dataclass_to_json
 @dataclass
 class MetaData:
-    location: str = ""
+    name: str = ''
+    source_id: str = ''
+    location: str = ''
     reference: Reference = field(default_factory=Reference)
-    sample_date: str = ""
-    product_type: ProductType = ""
+    sample_date: str = ''
+    product_type: ProductType = ''
     API: float = None
-    comments: str = ""
+    comments: str = ''
     labels: list = field(default_factory=list)
