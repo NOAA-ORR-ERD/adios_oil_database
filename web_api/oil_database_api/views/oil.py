@@ -146,6 +146,10 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
 
     if len(sort) >= 1 and len(sort[0]) >= 2:
         field, direction = sort[0]
+
+        # get rid of the 'metadata.' prefix.  We don't want it for a
+        # post-process sort.
+        field = field.split('.')[-1]
     else:
         field, direction = 'name', ASCENDING
 
@@ -247,12 +251,19 @@ def get_search_params(request):
 
 
 def get_sort_params(request):
+    '''
+        Note: Most of the fields that we want to sort on are now found in the
+              metadata attribute.  So to do a MongoDB sort, we need to
+              specify the full field path in dotted notation.
+    '''
     sort = decamelize(request.GET.get('sort', None))
 
     if sort == 'id':
         sort = '_id'
     elif sort == 'api':
-        sort = 'API'
+        sort = 'metadata.API'
+    else:
+        sort = f'metadata.{sort}'
 
     direction = ({'asc': ASCENDING,
                   'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
@@ -427,12 +438,14 @@ def get_oil_searchable_fields(oil):
     '''
     # unpack the relevant fields
     try:
+        meta = oil['metadata']
+
         return {'_id': oil.get('oil_id'),
-                'name': oil.get('name', None),
-                'location': oil.get('location', None),
-                'product_type': oil.get('product_type', None),
-                'API': oil.get('API'),
-                'categories': oil.get('categories', []),
+                'name': meta.get('name', None),
+                'location': meta.get('location', None),
+                'product_type': meta.get('product_type', None),
+                'API': meta.get('API'),
+                'labels': meta.get('labels', []),
                 # fixme: We should probably should do something smarter here
                 'status': oil.get('status', []),
                 }

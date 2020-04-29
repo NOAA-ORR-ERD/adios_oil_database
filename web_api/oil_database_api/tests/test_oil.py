@@ -312,18 +312,21 @@ class OilTests(OilTestBase):
 
             # the oil_database module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
-            attrs = ['_id',
-                     'oil_id',
-                     'name',
-                     'product_type',
-                     'location',
-                     'reference',
-                     'API',
-                     'status',
-                     'sub_samples']
 
-            for k in attrs:
+            for k in ('_id',
+                      'oil_id',
+                      'metadata',
+                      'status',
+                      'sub_samples'):
                 assert k in oil
+
+            for k in ('name',
+                      'source_id',
+                      'location',
+                      'reference',
+                      'product_type',
+                      'API'):
+                assert k in oil['metadata']
 
             sample = [s for s in oil['sub_samples']
                       if s['name'] == 'Fresh Oil Sample'][0]
@@ -432,7 +435,14 @@ class TestOilSort(OilTestBase):
         """
         check getting a sorted result by name -- decending order
         """
-        resp = self.testapp.get("/oils?dir=desc&limit=5&page=0&q=&qApi=&qLabels=&sort=name")
+        resp = self.testapp.get('/oils?'
+                                'limit=5&'
+                                'page=0&'
+                                'q=&'
+                                'qApi=&'
+                                'qLabels=&'
+                                'dir=desc&'
+                                'sort=name')
 
         result = resp.json_body
         names = [rec['name'] for rec in result]
@@ -444,7 +454,14 @@ class TestOilSort(OilTestBase):
         """
         check getting a sorted result by name -- ascending order
         """
-        resp = self.testapp.get("/oils?dir=asc&limit=5&page=0&q=&qApi=&qLabels=&sort=name")
+        resp = self.testapp.get('/oils?'
+                                'limit=5&'
+                                'page=0&'
+                                'q=&'
+                                'qApi=&'
+                                'qLabels=&'
+                                'dir=asc&'
+                                'sort=name')
 
         result = resp.json_body
         names = [rec['name'] for rec in result]
