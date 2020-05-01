@@ -665,11 +665,12 @@ class TestOilLibraryAttributeMapper:
         ('AD00084', 0, {
             'names': {'benzene', }
          }),
-        ('AD01500', 0, {
-            'names': {'naphthenes', }
-         }),
     ])
     def test_compounds(self, oil_id, index, expected):
+        '''
+            Data points that are classified as compounds:
+            - benzene
+        '''
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         compounds = mapper.sub_samples[index]['compounds']
@@ -684,13 +685,28 @@ class TestOilLibraryAttributeMapper:
 
     @pytest.mark.parametrize('oil_id, index, expected', [
         ('AD00020', 0, {
-            'names': {'sulfur', 'nickel', 'vanadium'}
+            'names': {'water_content', 'wax_content',
+                      'sulfur', 'nickel', 'vanadium'}
          }),
         ('AD00024', 0, {
-            'names': {'paraffins', 'polars'}
+            'names': {'paraffins', 'polars', 'wax_content'}
+         }),
+        ('AD01500', 0, {
+            'names': {'naphthenes', }
          }),
     ])
     def test_bulk_composition(self, oil_id, index, expected):
+        '''
+            Data points that are classified in bulk composition:
+            - Water Content Emulsion
+            - Wax Content
+            - Sulphur
+            - Naphthenes
+            - Paraffins
+            - Nickel
+            - Vanadium
+            - Polars
+        '''
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         composition = mapper.sub_samples[index]['bulk_composition']

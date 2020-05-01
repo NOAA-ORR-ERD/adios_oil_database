@@ -181,7 +181,6 @@ class OilLibraryAttributeMapper(MapperBase):
             Tentative Compound items:
             - benzene (units=???, typical value=0.05 for gasoline,
                        just a fractional value maybe?)
-            - naphthenes (units=???, typical value=0.0004 for Jet A-1)
             - ???
 
             Notes:
@@ -189,13 +188,13 @@ class OilLibraryAttributeMapper(MapperBase):
               constitute compounds.
         '''
         ret = []
-        for attr in ('benzene', 'naphthenes'):
+        for attr, unit in (('benzene', '1'),):
             value = getattr(self, attr, None)
 
             if value is not None:
                 ret.append(self.compound(
                     attr,
-                    self.measurement(value=value, unit='1',
+                    self.measurement(value=value, unit=unit,
                                      unit_type='massfraction'),
                 ))
 
@@ -205,26 +204,36 @@ class OilLibraryAttributeMapper(MapperBase):
     def bulk_composition(self):
         '''
             Tentative Bulk Composition items:
+            - Water Content Emulsion
+            - Wax Content
+            - Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)
+            - Naphthenes (units=???, typical value=0.0004 for Jet A-1)
             - Paraffins  (unit=???, 0.783 for Alberta 1992
                           0.019 for Salmon Oil & Gas)
-            - Polars  (unit=1 possibly, 0.0284 for Alberta 1992)
-            - Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)
             - Nickel  (unit=ppm most likely)
             - Vanadium  (unit=ppm most likely)
+            - Polars  (unit=1 possibly, 0.0284 for Alberta 1992)
 
             Notes:
             - we need to discuss what fields in the NOAA Filemaker datasheet
               constitute compounds.
         '''
         ret = []
-        for attr, unit in (('paraffins', '1'),
-                           ('polars', '1'),
-                           ('sulfur', '1'),
-                           ('nickel', 'ppm'),
-                           ('vanadium', 'ppm')):
+        for attr, map_to, unit in (('water_content_emulsion', 'water_content',
+                                    '1'),
+                                   ('wax_content', None, '1'),
+                                   ('sulfur', None, '1'),
+                                   ('naphthenes', None, '1'),
+                                   ('paraffins', None, '1'),
+                                   ('nickel', None, 'ppm'),
+                                   ('vanadium', None, 'ppm'),
+                                   ('polars', None, '1')):
             value = getattr(self, attr, None)
 
             if value is not None:
+                if map_to is not None:
+                    attr = map_to
+
                 ret.append(self.compound(
                     attr,
                     self.measurement(value=value, unit=unit,
