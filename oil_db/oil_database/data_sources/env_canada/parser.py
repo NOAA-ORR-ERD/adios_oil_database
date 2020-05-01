@@ -453,7 +453,11 @@ class EnvCanadaSampleParser(ParserBase):
         'dibenzothiophenes': 'dibenzothiophenes',
         'flash_point': 'flash_point_c',
         'fluorenes': 'fluorenes',
+        'gc_total_petroleum_hydrocarbon': 'gc_total_petroleum_hydrocarbon',
+        'gc_total_saturate_hydrocarbon': 'gc_total_saturate_hydrocarbon',
+        'gc_total_aromatic_hydrocarbon': 'gc_total_aromatic_hydrocarbon',
         'headspace_analysis': 'headspace_analysis',
+        'hydrocarbon_content_ratio': 'hydrocarbon_content_ratio',
         'n_alkanes': 'n_alkanes',
         'naphthalenes': 'naphthalenes',
         'other_priority_pahs': 'other_priority_pahs',
@@ -517,7 +521,7 @@ class EnvCanadaSampleParser(ParserBase):
             the simplified name
         '''
         try:
-            ret = self.values.get(self.attr_map[name])
+            ret = self.values[self.attr_map[name]]
         except Exception:
             logger.info(f'{self.__class__.__name__}.{name} not found')
             raise

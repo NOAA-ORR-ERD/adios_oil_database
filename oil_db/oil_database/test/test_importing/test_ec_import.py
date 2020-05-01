@@ -1522,7 +1522,7 @@ class TestEnvCanadaSampleMapper(object):
             }
          }),
         ('2234', 0, 'bulk_composition', {
-            'list_size': 3,
+            'list_size': 9,
             'compound_attrs': ('name', 'method', 'measurement'),
             'total_groups': None
          }),

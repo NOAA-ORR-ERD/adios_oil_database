@@ -448,35 +448,54 @@ class EnvCanadaSampleMapper(MapperBase):
             Gather up all the groups of compounds that comprise a 'bulk'
             amount and compile them into an organized list.
 
-            Bulk compositions apply to:
+            Data points that are classified in bulk composition:
             - wax
             - water
             - Sulfur
-            - Carbon
+            - GC-TPH
+            - GC-TSH
+            - GC-TAH
+            - Hydrocarbon Content Ratio
         '''
         ret = []
 
-        for attr, alt_attr, method in (('wax_content', 'waxes', 'ESTS 1994'),
-                                       ('water_content', None, 'ASTM E203'),
-                                       ('sulfur_content', None, 'ASTM D4294')
-                                       ):
+        for attr, map_to, unit, method in (
+            ('wax_content', 'waxes', '%', 'ESTS 1994'),
+            ('water_content', None, '%', 'ASTM E203'),
+            ('sulfur_content', None, '%', 'ASTM D4294'),
+            ('gc_total_petroleum_hydrocarbon', 'tph', 'mg/g', 'ESTS 2002a'),
+            ('gc_total_saturate_hydrocarbon', 'tsh', 'mg/g', 'ESTS 2002a'),
+            ('gc_total_aromatic_hydrocarbon', 'tah', 'mg/g', 'ESTS 2002a'),
+        ):
             label = self.parser.get_label(attr)
-            label = label[:label.find('Content') + len('Content')]
+
+            if label.find('Content') >= 0:
+                label = label[:label.find('Content') + len('Content')]
 
             value = getattr(self.parser, attr)
 
-            if alt_attr is not None:
-                value['value'] = value.pop(alt_attr, None)
+            if map_to is not None:
+                value['value'] = value.pop(map_to, None)
             else:
                 value['value'] = value.pop(attr, None)
 
-            value['unit'] = '%'
+            value['unit'] = unit
             value['unit_type'] = 'massfraction'
 
             ret.append(self.compound(label,
                                      self.measurement(**value),
                                      method=method,
                                      sparse=True))
+
+        # this one isn't as simple as the rest
+        groups = [
+            ('hydrocarbon_content_ratio', 'hydrocarbon_content_ratio',
+             '%', 'Mass Fraction', False),
+        ]
+
+        for group_args in groups:
+            for c in self.compounds_in_group(*group_args):
+                ret.append(c)
 
         return ret
 
