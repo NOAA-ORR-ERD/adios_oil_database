@@ -200,55 +200,49 @@ class TestExxonMapper():
             assert len(sample.physical_properties.dynamic_viscosities) == 0
 
     @pytest.mark.parametrize("attr, indexes, values", [
+        ('Sulfur Mass Fraction', range(8), (1.149, 0.000191, 0.002439, 0.01979,
+                                            0.1179, 0.7602, 1.584, 3.047)),
+        ('Naphthene Volume Fraction', range(8), (31.4, 0.0, 8.1, 33.2,
+                                                 40.8, 47.5, 35.4, 13.4)),
+        ('Paraffin Volume Fraction', range(8), (35.54, 100.0, 91.91, 56.62,
+                                                42.77, 26.58, 18.99, 2.291)),
+        ('Nickel Mass Fraction', range(8), (8.2, None, None, None,
+                                            None, None, None, 47.0)),
+        ('Vanadium Mass Fraction', range(8), (17.21, None, None, None,
+                                              None, None, None, 98.81)),
         ('Carbon Mass Fraction', range(8), (85.58, 82.43, 83.64, 85.43,
                                             85.86, 86.06, 85.87, 85.43)),
         ('Hydrogen Mass Fraction', range(8), (13.26, 17.57, 16.36, 14.57,
                                               14.04, 13.09, 12.36, 11.8)),
-        ('Total Acid Number', range(8), (0.9092, 8.294e-08, 4.869e-05,
-                                         0.004045, 0.2069, 1.318, 1.85,
-                                         0.6179)),
-        ('Sulfur Mass Fraction', range(8), (1.149, 0.000191, 0.002439, 0.01979,
-                                            0.1179, 0.7602, 1.584, 3.047)),
         ('Mercaptan Sulfur Mass Fraction',
          range(8), (0.5962, 0.7594, 8.106, 45.26,
                     32.83, 20.2, 3.227, 0.07651)
          ),
         ('Nitrogen Mass Fraction', range(8), (968.1, 0.0, 0.0, 0.06181,
                                               1.798, 47.62, 782.4, 4176.0)),
-        ('Conradson Carbon Residue', range(8), (3.19, None, None, None,
-                                                None, None, 0.3624, 17.69)),
-        ('N-Heptane Insolubles (C7 Asphaltenes)',
-         range(8), (0.3427, None, None, None,
-                    None, None, 0.0, 1.967)
-         ),
-        ('Nickel Mass Fraction', range(8), (8.2, None, None, None,
-                                            None, None, None, 47.0)),
-        ('Vanadium Mass Fraction', range(8), (17.21, None, None, None,
-                                              None, None, None, 98.81)),
         ('Calcium Mass Fraction', range(8), (5.9, None, None, None,
                                              None, None, None, None)),
-        ('Reid Vapor Pressure', range(8), (60430.0, None, None, None,
-                                           None, None, None, None)),
         ('Hydrogen Sulfide Concentration', range(8), (0.0, None, None, None,
                                                       None, None, None, None)),
         ('Salt Content', range(8), (0.0026, None, None, None,
                                     None, None, None, None)),
-        ('Paraffin Volume Fraction', range(8), (35.54, 100.0, 91.91, 56.62,
-                                                42.77, 26.58, 18.99, 2.291)),
-        ('Naphthene Volume Fraction', range(8), (31.4, 0.0, 8.1, 33.2,
-                                                 40.8, 47.5, 35.4, 13.4)),
-        ('Aromatic Volume Fraction', range(8), (33.1, 0.0, 0.0, 10.2,
-                                                16.4, 26.0, 45.6, 84.3)),
-        ('Naphthalene Volume Fraction', range(8), (None, None, None, None,
-                                                   1.044, 8.591, None, None)),
-        # ('Freeze Point', (), ()),
-        # ('Smoke Point', (), ()),
-        # ('Cetane Index 1990 (D4737)', (), ()),
-        # ('Cloud Point', (), ()),
-        # ('Aniline Point', (), ()),
     ])
     def test_bulk_composition(self, attr, indexes, values):
         '''
+            Data points that are classified in bulk composition:
+            - Sulphur
+            - Naphthenes
+            - Paraffins
+            - Nickel
+            - Vanadium
+            - Carbon
+            - Hydrogen
+            - Mercaptan Sulfur
+            - Nitrogen
+            - Calcium
+            - Hydrogen Sulfide
+            - Salt content
+
             Notes:
             - These values are now kept in a list of compounds held by the
               bulk_composition attribute
@@ -260,6 +254,72 @@ class TestExxonMapper():
 
         for i, val in zip(indexes, values):
             filter_list = [c for c in samples[i].bulk_composition
+                           if c.name == attr]
+            if val is None:
+                assert len(filter_list) == 0
+            else:
+                assert len(filter_list) == 1
+
+                compound = filter_list[0]
+
+                assert isclose(compound.measurement.value,
+                               values[i], rel_tol=1e-2, abs_tol=1e-10)
+
+    @pytest.mark.parametrize("attr, indexes, values", [
+        ('Total Acid Number', range(8), (0.9092, 8.294e-08, 4.869e-05,
+                                         0.004045, 0.2069, 1.318,
+                                         1.85, 0.6179)),
+        ('Reid Vapor Pressure', range(8), (60430.0, None, None, None,
+                                           None, None, None, None)),
+        ('Aniline Point', range(8), (None, None, None, None,
+                                     60.3774, 68.5409, 80.9411, None)),
+        ('Cetane Index 1990 (D4737)', range(8), (None, None, None,
+                                                 36.2293, 45.0054, 49.9755,
+                                                 None, None)),
+        ('Cloud Point', range(8), (None, None, None,
+                                   -76.986, -52.4362, -15.5355,
+                                   None, None)),
+        ('Smoke Point', range(8), (None, None, None,
+                                   29.8541, 22.4655, 13.7602,
+                                   None, None)),
+        ('Conradson Carbon Residue', range(8), (3.19, None, None, None,
+                                                None, None, 0.3624, 17.69)),
+        ('Freeze Point', range(8), (None, None, None,
+                                    -72.8973, -48.1675, -9.66432,
+                                    None, None)),
+    ])
+    def test_industry_properties(self, attr, indexes, values):
+        '''
+            Data points that are classified in industry properties:
+            - Total Acid Number (Neutralization Number)
+            - Reid Vapor Pressure
+
+            - Aniline Point
+            - Cetane Index
+            - Vanadium
+            - Cloud Point
+            - Smoke Point
+            - Conradson Carbon Residue
+            - Conradson Residuum (Vacuum Residue)
+            - Gel Point (Freeze Point)
+
+            Notes:
+            - These values are kept in a list of attributes held by the
+              industry_properties attribute
+            - Ideally, the name & groups of each compound would have the
+              original field text from the datasheet.  This is not the case
+              at present.
+        '''
+        samples = ExxonMapper(self.record).sub_samples
+
+        print([c.measurement.value
+               for s in samples
+               for c in s.industry_properties
+               if c.name == attr
+               ])
+
+        for i, val in zip(indexes, values):
+            filter_list = [c for c in samples[i].industry_properties
                            if c.name == attr]
             if val is None:
                 assert len(filter_list) == 0

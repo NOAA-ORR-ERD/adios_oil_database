@@ -45,6 +45,8 @@ class Sample:
 
     bulk_composition: CompoundList = field(default_factory=CompoundList)
 
+    industry_properties: CompoundList = field(default_factory=CompoundList)
+
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
 
     CCME: CCME = None

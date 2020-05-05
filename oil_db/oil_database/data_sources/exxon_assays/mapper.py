@@ -12,6 +12,7 @@ import unit_conversion as uc
 
 from oil_database.util import sigfigs
 from oil_database.models.common.measurement import (UnittedValue,
+                                                    Length,
                                                     Temperature,
                                                     MassFraction,
                                                     VolumeFraction,
@@ -85,7 +86,7 @@ MAPPING = {
         'attr': 'Total Acid Number',
         'unit': 'mg/kg',
         'cls': MassFraction,
-        'element_of': 'bulk_composition',
+        'element_of': 'industry_properties',
     },
     norm('Sulfur, wt%'): {
         'attr': 'Sulfur Mass Fraction',
@@ -119,7 +120,7 @@ MAPPING = {
         'unit': '%',
         'cls': MassFraction,
         'convert_from': '%',
-        'element_of': 'bulk_composition',
+        'element_of': 'industry_properties',
     },
     norm('N-Heptane Insolubles (C7 Asphaltenes), wt%'): {
         'attr': 'N-Heptane Insolubles (C7 Asphaltenes)',
@@ -151,7 +152,7 @@ MAPPING = {
         'unit': 'Pa',
         'cls': Adhesion,  # Probably not Adhesion??
         'convert_from': 'psi',
-        'element_of': 'bulk_composition',  # should this be here??
+        'element_of': 'industry_properties',
     },
     norm('Hydrogen Sulfide (dissolved), ppm'): {
         'attr': 'Hydrogen Sulfide Concentration',
@@ -192,8 +193,21 @@ MAPPING = {
     #
     # Freeze point, F
     #
-    # Smoke point, mm
-    #
+    norm('Freeze point, F'): {
+        'attr': 'Freeze Point',
+        'unit': 'C',
+        'convert_from': 'F',
+        'cls': Temperature,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Smoke point, mm'): {
+        'attr': 'Smoke Point',
+        'unit': 'mm',
+        'cls': Length,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
     norm('Naphthalenes (D1840), vol%'): {
         'attr': 'Naphthalene Volume Fraction',
         'unit': '%',
@@ -206,12 +220,29 @@ MAPPING = {
     #
     # Viscosity at 150C/302F, cSt (not a simple map)
     #
-    # Cetane Index 1990 (D4737),
-    #
-    # Cloud point, F
-    #
-    # Aniline pt, F
-    #
+    norm('Cetane Index 1990 (D4737),'): {
+        'attr': 'Cetane Index 1990 (D4737)',
+        'unit': 'dimensionless',
+        'cls': UnittedValue,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Cloud point, F'): {
+        'attr': 'Cloud Point',
+        'unit': 'C',
+        'convert_from': 'F',
+        'cls': Temperature,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Aniline pt, F'): {
+        'attr': 'Aniline Point',
+        'unit': 'C',
+        'convert_from': 'F',
+        'cls': Temperature,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
 }
 
 
