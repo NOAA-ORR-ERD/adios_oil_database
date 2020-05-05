@@ -200,8 +200,8 @@ class KinematicViscosity(MeasurementBase):
     unit_type = "kinematicviscosity"
 
 
-class Adhesion(MeasurementBase):
-    unit_type = "adhesion"
+class Pressure(MeasurementBase):
+    unit_type = "pressure"
 
 
 class NeedleAdhesion(MeasurementBase):

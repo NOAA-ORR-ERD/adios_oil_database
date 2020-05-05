@@ -2516,7 +2516,7 @@ class TestOilEstimationMisc():
                'adhesions': [
                    {'adhesion': {
                        'value': 0.28, 'unit': 'N/m^2',
-                       'unit_type': 'Adhesion'}
+                       'unit_type': 'Pressure'}
                     },
                ],
            }]

@@ -14,6 +14,6 @@ from .measurement import (ProductType,
                           Density,
                           DynamicViscosity,
                           KinematicViscosity,
-                          Adhesion,
+                          Pressure,
                           NeedleAdhesion,
                           InterfacialTension)

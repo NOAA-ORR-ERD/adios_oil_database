@@ -14,7 +14,7 @@ from oil_database.models.common import (ProductType,
                                         Density,
                                         DynamicViscosity,
                                         KinematicViscosity,
-                                        Adhesion,
+                                        Pressure,
                                         NeedleAdhesion,
                                         InterfacialTension)
 
@@ -350,30 +350,6 @@ class TestDensity:
         assert model.value == 1.0
         assert model.unit == 'g/cm^3'
 
-    # The density list tests are handled in the oil module tests
-    #def test_density_list_empty(self):
-    #    dl = DensityList()
-    #
-    #    assert not dl
-
-    #def test_density_list_from_py_json(self):
-    #    pyjson = [{'standard_deviation': 1.2,
-    #               'replicates': 3,
-    #               'density': {'value': 0.8751, 'unit': 'kg/m^3'},
-    #               'ref_temp': {'value': 15.0, 'unit': 'C'}
-    #               },
-    #              {'standard_deviation': 1.1,
-    #               'replicates': 3,
-    #               'density': {'value': 0.8751, 'unit': 'kg/m^3'},
-    #               'ref_temp': {'value': 15.0, 'unit': 'C'}
-    #               },
-    #              ]
-    #    dl = DensityList.from_py_json(pyjson)
-    #
-    #    assert len(dl) == 2
-    #    assert dl[0].density.value == 0.8751
-    #    assert dl[1].standard_deviation == 1.1
-
 
 class TestDynamicViscosity:
     '''
@@ -417,25 +393,25 @@ class TestKinematicViscosity:
         assert model.unit == 'St'
 
 
-class TestAdhesion:
+class TestPressure:
     '''
         All of our common Measurement subclasses share a common codebase.
         We will only test the things that are different, which haven't been
         tested yet.
     '''
     def test_init_empty(self):
-        model = Adhesion()
+        model = Pressure()
         py_json = model.py_json()
 
         # should only have a unit_type
-        assert py_json == {'unit_type': 'adhesion'}
+        assert py_json == {'unit_type': 'pressure'}
 
     def test_convert_to(self):
-        model = Adhesion(value=10.0, unit='Pa')
-        model.convert_to('kg/m^2')
+        model = Pressure(value=10.0, unit='Pa')
+        model.convert_to('dyn/cm^2')
 
-        assert math.isclose(model.value, 1.01972, rel_tol=1e-05)
-        assert model.unit == 'kg/m^2'
+        assert math.isclose(model.value, 100.0, rel_tol=1e-05)
+        assert model.unit == 'dyn/cm^2'
 
 
 class TestNeedleAdhesion:

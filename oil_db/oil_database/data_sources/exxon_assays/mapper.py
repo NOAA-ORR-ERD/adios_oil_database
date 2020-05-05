@@ -18,7 +18,7 @@ from oil_database.models.common.measurement import (UnittedValue,
                                                     VolumeFraction,
                                                     Density,
                                                     KinematicViscosity,
-                                                    Adhesion)
+                                                    Pressure)
 
 from oil_database.models.oil.measurement import (DensityPoint,
                                                  KinematicViscosityPoint,
@@ -150,7 +150,7 @@ MAPPING = {
     norm('Reid Vapor Pressure (RVP) Whole Crude, psi'): {
         'attr': 'Reid Vapor Pressure',
         'unit': 'Pa',
-        'cls': Adhesion,  # Probably not Adhesion??
+        'cls': Pressure,
         'convert_from': 'psi',
         'element_of': 'industry_properties',
     },
