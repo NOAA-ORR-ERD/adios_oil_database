@@ -69,6 +69,8 @@ class FloatUnit(object, metaclass=UnitMeta):
         if hasattr(self.unit, 'decode'):
             self.unit = self.unit.decode('utf-8')
 
+        print(self.__class__.unit_choices)
+
         if self.unit not in self.__class__.unit_choices:
             raise ValueError('{}: Invalid unit passed in ({})'
                              .format(self.__class__.__name__, repr(self.unit)))
@@ -193,6 +195,13 @@ class TemperatureUnit(FloatUnit):
     pass
 
 
+#
+# This one is not working because the unit type is not syntactically consistent
+#
+class DeltaTemperatureUnit(FloatUnit):
+    pass
+
+
 class MassUnit(FloatUnit):
     pass
 
@@ -229,7 +238,7 @@ class InterfacialTensionUnit(FloatUnit):
     pass
 
 
-class AdhesionUnit(FloatUnit):
+class PressureUnit(FloatUnit):
     pass
 
 
@@ -238,6 +247,10 @@ class ConcentrationInWaterUnit(FloatUnit):
 
 
 class ConcentrationUnit(FloatUnit):
+    pass
+
+
+class DimensionlessUnit(FloatUnit):
     pass
 
 
@@ -250,6 +263,10 @@ class VolumeFractionUnit(FloatUnit):
 
 
 class AngularMeasureUnit(FloatUnit):
+    pass
+
+
+class AngularVelocityUnit(FloatUnit):
     pass
 
 

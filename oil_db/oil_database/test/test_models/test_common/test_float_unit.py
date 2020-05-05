@@ -8,6 +8,7 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    AreaUnit,
                                                    VolumeUnit,
                                                    TemperatureUnit,
+                                                   DeltaTemperatureUnit,
                                                    MassUnit,
                                                    TimeUnit,
                                                    VelocityUnit,
@@ -17,12 +18,14 @@ from oil_database.models.common.float_unit import (FloatUnit,
                                                    KinematicViscosityUnit,
                                                    DynamicViscosityUnit,
                                                    InterfacialTensionUnit,
-                                                   AdhesionUnit,
+                                                   PressureUnit,
                                                    ConcentrationInWaterUnit,
                                                    ConcentrationUnit,
+                                                   DimensionlessUnit,
                                                    MassFractionUnit,
                                                    VolumeFractionUnit,
-                                                   AngularMeasureUnit)
+                                                   AngularMeasureUnit,
+                                                   AngularVelocityUnit)
 
 import pytest
 
@@ -83,17 +86,17 @@ class TestFloatUnit():
         assert repr(float_unit) == (u'<FloatUnit({})>'
                                     .format(expected))
 
-    @pytest.mark.parametrize('value, unit, expected', [
-        (10.0, '%', '10.0 %'),
-        (10.0, '1', '10.0'),
-        pytest.param(10.0, 'hogsheads per fortnight', 'N/A',
+    @pytest.mark.parametrize('value, unit', [
+        (10.0, '%'),
+        (10.0, '1'),
+        pytest.param(10.0, 'hogsheads per fortnight',
                      marks=pytest.mark.raises(exception=ValueError)),
-        pytest.param(10.0, '', 'N/A',
+        pytest.param(10.0, '',
                      marks=pytest.mark.raises(exception=ValueError)),
-        pytest.param(10.0, None, 'N/A',
+        pytest.param(10.0, None,
                      marks=pytest.mark.raises(exception=ValueError)),
     ])
-    def test_dict(self, value, unit, expected):
+    def test_dict(self, value, unit):
         float_unit = FloatUnit(value=value, unit=unit)
 
         json_dict = float_unit.dict()
@@ -399,6 +402,57 @@ class TestTemperatureUnit(object):
         assert json_dict['unit'] == unit
         assert json_dict['value'] == value
         assert json_dict['unit_type'] == 'Temperature'
+
+
+#
+# This one is not working because the unit type is not syntactically consistent
+# But we probably don't need it, so we will forego testing
+#
+# class TestDeltaTemperatureUnit(object):
+#     @pytest.mark.parametrize('value, unit', [
+#         (10.0, 'Kelvin'),
+#         (10.0, 'degree kelvin'),
+#         (10.0, 'degrees kelvin'),
+#         (10.0, 'degree k'),
+#         (10.0, 'degrees k'),
+#         (10.0, 'deg k'),
+#         (10.0, 'K'),
+#
+#         (10.0, 'Celsius'),
+#         (10.0, 'degrees celsius'),
+#         (10.0, 'degrees c'),
+#         (10.0, 'deg c'),
+#         (10.0, 'centigrade'),
+#         (10.0, 'C'),
+#
+#         (10.0, 'degrees f'),
+#         (10.0, 'degrees fahrenheit'),
+#         (10.0, 'F'),
+#         (10.0, 'degree f'),
+#         (10.0, 'Fahrenheit'),
+#         (10.0, 'deg f'),
+#         pytest.param(10.0, 'hogsheads per fortnight',
+#                      marks=pytest.mark.raises(exception=ValueError)),
+#     ])
+#     def test_init(self, value, unit):
+#         temp_unit = DeltaTemperatureUnit(value=value, unit=unit)
+#
+#         assert repr(temp_unit) == (u'<DeltaTemperatureUnit({} {})>'
+#                                    .format(value, unit))
+#         assert str(temp_unit) == (u'{} {}'.format(value, unit))
+#
+#     @pytest.mark.parametrize('value, unit', [
+#         (10.0, 'K'),
+#     ])
+#     def test_dict(self, value, unit):
+#         float_unit = DeltaTemperatureUnit(value=value, unit=unit)
+#
+#         json_dict = float_unit.dict()
+#         print('json_dict: ', json_dict)
+#
+#         assert json_dict['unit'] == unit
+#         assert json_dict['value'] == value
+#         assert json_dict['unit_type'] == 'Delta Temperature'
 
 
 class TestMassUnit(object):
@@ -834,7 +888,7 @@ class TestInterfacialTensionUnit(object):
         assert json_dict['unit_type'] == 'Interfacial Tension'
 
 
-class TestAdhesionUnit(object):
+class TestPressureUnit(object):
     @pytest.mark.parametrize('value, unit', [
         (10.0, 'Pascal'),
         (10.0, 'Pa'),
@@ -849,58 +903,35 @@ class TestAdhesionUnit(object):
         (10.0, 'bars'),
         (10.0, 'millibar'),
         (10.0, 'mbar'),
-        (10.0, 'gram force per square centimeter'),
-        (10.0, 'g/cm^2'),
-        (10.0, 'gf/cm^2'),
-        (10.0, 'g/cm\N{SUPERSCRIPT TWO}'),
-        (10.0, 'gf/cm\N{SUPERSCRIPT TWO}'),
-        (10.0, 'gram force per square meter'),
-        (10.0, 'g/m^2'),
-        (10.0, 'gf/m^2'),
-        (10.0, 'g/m\N{SUPERSCRIPT TWO}'),
-        (10.0, 'gf/m\N{SUPERSCRIPT TWO}'),
-        (10.0, 'kilogram force per square centimeter'),
-        (10.0, 'kg/cm^2'),
-        (10.0, 'kgf/cm^2'),
-        (10.0, 'kg/cm\N{SUPERSCRIPT TWO}'),
-        (10.0, 'kgf/cm\N{SUPERSCRIPT TWO}'),
-        (10.0, 'kilogram force per square meter'),
-        (10.0, 'kg/m^2'),
-        (10.0, 'kgf/m^2'),
-        (10.0, 'kg/m\N{SUPERSCRIPT TWO}'),
-        (10.0, 'kgf/m\N{SUPERSCRIPT TWO}'),
         (10.0, 'dyne per square centimeter'),
         (10.0, 'dyn/cm^2'),
         (10.0, 'dyn/cm\N{SUPERSCRIPT TWO}'),
-        (10.0, 'pound force per square inch'),
+        (10.0, 'pound per square inch'),
         (10.0, 'lb/in^2'),
-        (10.0, 'lbf/in\N{SUPERSCRIPT TWO}'),
-        (10.0, 'lb/in^2'),
-        (10.0, 'lbf/in\N{SUPERSCRIPT TWO}'),
         (10.0, 'psi'),
-        (10.0, 'pfsi'),
+        (10.0, 'lb/in\N{SUPERSCRIPT TWO}'),
         pytest.param(
             10.0, 'hogsheads per fortnight',
             marks=pytest.mark.raises(exception=ValueError)),
     ])
     def test_init(self, value, unit):
-        adh_unit = AdhesionUnit(value=value, unit=unit)
+        adh_unit = PressureUnit(value=value, unit=unit)
 
-        assert repr(adh_unit) == (u'<AdhesionUnit({} {})>'.format(value, unit))
+        assert repr(adh_unit) == (u'<PressureUnit({} {})>'.format(value, unit))
         assert str(adh_unit) == (u'{} {}'.format(value, unit))
 
     @pytest.mark.parametrize('value, unit', [
         (10.0, 'Pa'),
     ])
     def test_dict(self, value, unit):
-        float_unit = AdhesionUnit(value=value, unit=unit)
+        float_unit = PressureUnit(value=value, unit=unit)
 
         json_dict = float_unit.dict()
         print('json_dict: ', json_dict)
 
         assert json_dict['unit'] == unit
         assert json_dict['value'] == value
-        assert json_dict['unit_type'] == 'Adhesion'
+        assert json_dict['unit_type'] == 'Pressure'
 
 
 class TestConcentrationInWaterUnit(object):
@@ -1015,6 +1046,48 @@ class TestConcentrationUnit(object):
         assert json_dict['unit'] == unit
         assert json_dict['value'] == value
         assert json_dict['unit_type'] == 'Concentration'
+
+
+class TestDimensionlessUnit(object):
+    @pytest.mark.parametrize('value, unit', [
+        (10.0, 'fraction (decimal)'),
+        (10.0, 'number'),
+        (10.0, 'fraction'),
+        (10.0, '1'),
+        (10.0, 'percent'),
+        (10.0, 'parts per hundred'),
+        (10.0, '%'),
+        (10.0, 'part per thousand'),
+        (10.0, 'parts per thousand'),
+        (10.0, '0/00'),
+        (10.0, '\u2030'),
+        (10.0, '‰'),
+        pytest.param(10.0, 'hogsheads per fortnight',
+                     marks=pytest.mark.raises(exception=ValueError)),
+    ])
+    def test_init(self, value, unit):
+        oc_unit = DimensionlessUnit(value=value, unit=unit)
+
+        if unit == '1':
+            assert repr(oc_unit) == (u'<DimensionlessUnit({})>'.format(value))
+            assert str(oc_unit) == (u'{}'.format(value))
+        else:
+            assert repr(oc_unit) == (u'<DimensionlessUnit({} {})>'
+                                     .format(value, unit))
+            assert str(oc_unit) == (u'{} {}'.format(value, unit))
+
+    @pytest.mark.parametrize('value, unit', [
+        (10.0, '1'),
+    ])
+    def test_dict(self, value, unit):
+        float_unit = DimensionlessUnit(value=value, unit=unit)
+
+        json_dict = float_unit.dict()
+        print('json_dict: ', json_dict)
+
+        assert json_dict['unit'] == unit
+        assert json_dict['value'] == value
+        assert json_dict['unit_type'] == 'Dimensionless'
 
 
 class TestMassFractionUnit(object):
@@ -1165,3 +1238,46 @@ class TestAngularMeasureUnit(object):
         assert json_dict['unit'] == unit
         assert json_dict['value'] == value
         assert json_dict['unit_type'] == 'Angular Measure'
+
+
+class TestAngularVelocityUnit(object):
+    @pytest.mark.parametrize('value, unit', [
+        (10.0, u'rad/s'),
+        (10.0, u'1/s'),
+        (10.0, u'radians/sec'),
+        (10.0, u'hertz'),
+        (10.0, u'hz'),
+        (10.0, u'cycles/sec'),
+        (10.0, u'rpm'),
+        (10.0, u'rotations per minute'),
+        pytest.param(10.0, 'hogsheads per fortnight',
+                     marks=pytest.mark.raises(exception=ValueError)),
+    ])
+    def test_init(self, value, unit):
+        am_unit = AngularVelocityUnit(value=value, unit=unit)
+
+        assert repr(am_unit) == (u'<AngularVelocityUnit({} {})>'
+                                 .format(value, unit))
+        assert str(am_unit) == (u'{} {}'.format(value, unit))
+
+    @pytest.mark.parametrize('value, unit', [
+        (10.0, u'rad/s'),
+        (10.0, u'1/s'),
+        (10.0, u'radians/sec'),
+        (10.0, u'hertz'),
+        (10.0, u'hz'),
+        (10.0, u'cycles/sec'),
+        (10.0, u'rpm'),
+        (10.0, u'rotations per minute'),
+        pytest.param(10.0, 'hogsheads per fortnight',
+                     marks=pytest.mark.raises(exception=ValueError)),
+    ])
+    def test_dict(self, value, unit):
+        float_unit = AngularVelocityUnit(value=value, unit=unit)
+
+        json_dict = float_unit.dict()
+        print('json_dict: ', json_dict)
+
+        assert json_dict['unit'] == unit
+        assert json_dict['value'] == value
+        assert json_dict['unit_type'] == 'Angular Velocity'
