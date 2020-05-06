@@ -31,7 +31,8 @@ class OilLibraryAttributeMapper(MapperBase):
                           'SARA',
                           'distillation_data',
                           'compounds',
-                          'bulk_composition')
+                          'bulk_composition',
+                          'industry_properties')
     weathered_sample_props = ('physical_properties',)
 
     def __init__(self, record):
@@ -181,11 +182,6 @@ class OilLibraryAttributeMapper(MapperBase):
             Tentative Compound items:
             - benzene (units=???, typical value=0.05 for gasoline,
                        just a fractional value maybe?)
-            - ???
-
-            Notes:
-            - we need to discuss what fields in the NOAA Filemaker datasheet
-              constitute compounds.
         '''
         ret = []
         for attr, unit in (('benzene', '1'),):
@@ -213,10 +209,6 @@ class OilLibraryAttributeMapper(MapperBase):
             - Nickel  (unit=ppm most likely)
             - Vanadium  (unit=ppm most likely)
             - Polars  (unit=1 possibly, 0.0284 for Alberta 1992)
-
-            Notes:
-            - we need to discuss what fields in the NOAA Filemaker datasheet
-              constitute compounds.
         '''
         ret = []
         for attr, map_to, unit in (('water_content_emulsion', 'water_content',
@@ -228,6 +220,37 @@ class OilLibraryAttributeMapper(MapperBase):
                                    ('nickel', None, 'ppm'),
                                    ('vanadium', None, 'ppm'),
                                    ('polars', None, '1')):
+            value = getattr(self, attr, None)
+
+            if value is not None:
+                if map_to is not None:
+                    attr = map_to
+
+                ret.append(self.compound(
+                    attr,
+                    self.measurement(value=value, unit=unit,
+                                     unit_type='massfraction'),
+                ))
+
+        return ret
+
+    @property
+    def industry_properties(self):
+        '''
+            Industry Property items:
+            - Reid Vapor Pressure (min/max/avg = 0/0.81/0.295, probably bars)
+            - Conradson Crude (min/max/avg = 0.0054/0.12/0.035, probably just
+                               a fractional value)
+            - Conradson Residuum (one value, 0.0019, probably just a fractional
+                                  value)
+        '''
+        ret = []
+        for attr, map_to, unit in (('reid_vapor_pressure',
+                                    'Reid Vapor Pressure', 'bar'),
+                                   ('conrandson_crude',
+                                    'Conradson Carbon Residue (CCR)', '1'),
+                                   ('conrandson_residuum',
+                                    'Conradson Residuum', '1')):
             value = getattr(self, attr, None)
 
             if value is not None:

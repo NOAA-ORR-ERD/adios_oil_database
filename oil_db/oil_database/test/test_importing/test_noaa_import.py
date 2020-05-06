@@ -719,6 +719,33 @@ class TestOilLibraryAttributeMapper:
 
         assert set([c['name'] for c in composition]) == expected['names']
 
+    @pytest.mark.parametrize('oil_id, index, expected', [
+        ('AD01901', 0, {
+            'names': {'Conradson Carbon Residue (CCR)'}
+         }),
+        ('AD01853', 0, {
+            'names': {'Reid Vapor Pressure', 'Conradson Residuum'}
+         }),
+    ])
+    def test_industry_properties(self, oil_id, index, expected):
+        '''
+            Data points that are classified in industry properties:
+            - Reid Vapor Pressure
+            - Conradson Crude
+            - Conradson Residuum
+        '''
+        rec = self.reader.get_record(oil_id)
+        mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
+        composition = mapper.sub_samples[index]['industry_properties']
+
+        pprint(composition)
+
+        for c in composition:
+            assert 'name' in c
+            assert 'measurement' in c
+
+        assert set([c['name'] for c in composition]) == expected['names']
+
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
         ('AD00020', 0, 'name', 'Fresh Oil Sample'),
         ('AD00005', 0, 'name', 'Fresh Oil Sample'),
