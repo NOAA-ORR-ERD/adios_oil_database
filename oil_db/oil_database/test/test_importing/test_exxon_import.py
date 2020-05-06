@@ -170,33 +170,42 @@ class TestExxonMapper():
 
         assert samples[index].cut_volume == expected
 
-    def test_density(self):
+    @pytest.mark.parametrize("sample_idx, density_idx, expected", [
+        (0, 0, 0.84805316),
+        (7, 0, 0.99124762),
+    ])
+    def test_densities(self, sample_idx, density_idx, expected):
         samples = ExxonMapper(self.record).sub_samples
+        sample = samples[sample_idx]
+        density = sample.physical_properties.densities[density_idx]
 
-        assert samples[0].physical_properties.densities[0].density.value == 0.84805316
-        assert samples[7].physical_properties.densities[0].density.value == 0.99124762
+        assert density.density.value == expected
 
-    def test_viscosity(self):
+    @pytest.mark.parametrize("sample_idx, viscosity_idx, expected", [
+        (0, 0, 6.73896867),
+        (0, 2, 3.88298696),
+        (3, 0, 0.89317828),
+        (3, 2, 0.64536193),
+    ])
+    def test_kinematic_viscosities(self, sample_idx, viscosity_idx, expected):
         samples = ExxonMapper(self.record).sub_samples
+        sample = samples[sample_idx]
+        phys = sample.physical_properties
+        viscosity = phys.kinematic_viscosities[viscosity_idx]
 
         # viscosity tests
         # whole oil
-        kvis = samples[0].physical_properties.kinematic_viscosities
-        assert len(kvis) == 3
-        assert kvis[0].viscosity.value == 6.73896867
-        assert kvis[0].viscosity.unit == "cSt"
-        assert kvis[2].viscosity.value == 3.88298696
-        assert kvis[2].viscosity.unit == "cSt"
-
-        # One sample
-        kvis = samples[3].physical_properties.kinematic_viscosities
-        assert len(kvis) == 3
-        assert kvis[0].viscosity.value == 0.89317828
-        assert kvis[0].viscosity.unit == "cSt"
-        assert kvis[2].viscosity.value == 0.64536193
-        assert kvis[2].viscosity.unit == "cSt"
+        assert viscosity.viscosity.value == expected
+        assert viscosity.viscosity.unit == "cSt"
 
         for sample in samples:
+            assert len(sample.physical_properties.dynamic_viscosities) == 0
+
+    def test_dynamic_viscosities(self):
+        samples = ExxonMapper(self.record).sub_samples
+
+        for sample in samples:
+            # no dynamic viscosities in the Exxon Assays
             assert len(sample.physical_properties.dynamic_viscosities) == 0
 
     @pytest.mark.parametrize("attr, indexes, values", [

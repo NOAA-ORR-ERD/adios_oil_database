@@ -445,7 +445,8 @@ def process_cut_table(oil, samples, cut_table):
 
     # pull API from first value
     try:
-        oil.metadata.API = round(float(row[0]), 1)  # stored as full precision double
+        # stored as full precision double
+        oil.metadata.API = round(float(row[0]), 1)
     except Exception:
         oil.metadata.API = None
 
@@ -500,10 +501,6 @@ def process_cut_table(oil, samples, cut_table):
     # sort them
     for sample in samples:
         sample.distillation_data.sort(key=lambda c: c.fraction.value)
-
-    # "nitrogen_mass_fraction: UnittedValue"
-    # "reid_vapor_pressure: UnittedValue"
-    # "hydrogen_sulfide_concentration"
 
     oil.sub_samples = samples
 
