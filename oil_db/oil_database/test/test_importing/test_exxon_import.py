@@ -312,12 +312,6 @@ class TestExxonMapper():
         '''
         samples = ExxonMapper(self.record).sub_samples
 
-        print([c.measurement.value
-               for s in samples
-               for c in s.industry_properties
-               if c.name == attr
-               ])
-
         for i, val in zip(indexes, values):
             filter_list = [c for c in samples[i].industry_properties
                            if c.name == attr]
@@ -329,6 +323,37 @@ class TestExxonMapper():
                 compound = filter_list[0]
 
                 assert isclose(compound.measurement.value,
+                               values[i], rel_tol=1e-2, abs_tol=1e-10)
+
+    @pytest.mark.parametrize("attr, indexes, values", [
+        ('saturates', range(8), [None, None, None, None,
+                                 None, None, None, None]),
+        ('aromatics', range(8), [33.1, 0, 0, 10.22,
+                                 16.41, 25.96, 45.63, 84.27]),
+        ('resins', range(8), [None, None, None, None,
+                              None, None, None, None]),
+        ('asphaltenes', range(8), [0.3427, None, None, None,
+                                   None, None, 0, 1.967]),
+    ])
+    def test_sara(self, attr, indexes, values):
+        '''
+            Test the sara attributes:
+            - Aromatics
+            - Asphaltenes
+
+            Note: saturates and resins are not found in the Exxon Assays
+        '''
+        samples = ExxonMapper(self.record).sub_samples
+
+        for i, val in zip(indexes, values):
+            sara = samples[i].SARA
+
+            if val is None:
+                assert getattr(sara, attr) is None
+            else:
+                sara_attr = getattr(sara, attr)
+
+                assert isclose(sara_attr.value,
                                values[i], rel_tol=1e-2, abs_tol=1e-10)
 
     def test_dist_cuts_units(self):

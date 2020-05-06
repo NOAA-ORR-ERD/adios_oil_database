@@ -123,10 +123,9 @@ MAPPING = {
         'element_of': 'industry_properties',
     },
     norm('N-Heptane Insolubles (C7 Asphaltenes), wt%'): {
-        'attr': 'N-Heptane Insolubles (C7 Asphaltenes)',
+        'attr': 'SARA.asphaltenes',
         'unit': '%',
         'cls': MassFraction,
-        'element_of': 'bulk_composition',
     },
     norm('Nickel, ppm'): {
         'attr': 'Nickel Mass Fraction',
@@ -182,11 +181,9 @@ MAPPING = {
         'element_of': 'bulk_composition',
     },
     norm('Aromatics (FIA), vol %'): {
-        'attr': 'Aromatic Volume Fraction',
+        'attr': 'SARA.aromatics',
         'unit': '%',
         'cls': VolumeFraction,
-        'convert_from': '%',
-        'element_of': 'bulk_composition',
     },
     #
     # Bunch of distillation props (not a simple map)
