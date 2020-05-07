@@ -1,15 +1,18 @@
 {
-    "API": 37.0,
     "_id": "AD00025",
-    "comments": "This oil is a EPS standard oil for dispersant testing.",
-    "location": "ALBERTA, CANADA",
-    "name": "ALBERTA SWEET MIXED BLEND",
-    "oil_id": "AD00025",
-    "product_type": "refined",
-    "reference": {
-        "reference": "Whiticar, S. Bobra, M., Fingas, M., Jokuty, P., Liuzzo, P., Callaghan, S., Ackerman, F., and Coa, J. 1992. A Catalogue of Crude Oil and Oil Product Properties (1992 Edition). Prepared for Environment Canada, EE-144, Ottawa, Ontario. 643pp.",
-        "year": 1992
+    "metadata": {
+        "API": 37.0,
+        "comments": "This oil is a EPS standard oil for dispersant testing.",
+        "location": "ALBERTA, CANADA",
+        "name": "ALBERTA SWEET MIXED BLEND",
+        "product_type": "refined",
+        "reference": {
+            "reference": "Whiticar, S. Bobra, M., Fingas, M., Jokuty, P., Liuzzo, P., Callaghan, S., Ackerman, F., and Coa, J. 1992. A Catalogue of Crude Oil and Oil Product Properties (1992 Edition). Prepared for Environment Canada, EE-144, Ottawa, Ontario. 643pp.",
+            "year": 1992
+        },
+        "source_id": "AD00025"
     },
+    "oil_id": "AD00025",
     "status": [],
     "sub_samples": [
         {
@@ -31,6 +34,22 @@
                 }
             },
             "bulk_composition": [
+                {
+                    "measurement": {
+                        "unit": "1",
+                        "unit_type": "massfraction",
+                        "value": 0.9
+                    },
+                    "name": "water_content"
+                },
+                {
+                    "measurement": {
+                        "unit": "1",
+                        "unit_type": "massfraction",
+                        "value": 0.069
+                    },
+                    "name": "wax_content"
+                },
                 {
                     "measurement": {
                         "unit": "1",

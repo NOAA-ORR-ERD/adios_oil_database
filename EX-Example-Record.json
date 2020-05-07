@@ -1,12 +1,14 @@
 {
-    "API": 26.4,
     "_id": "EX-BALDR16Y",
-    "name": "Balder Blend",
-    "oil_id": "EX-BALDR16Y",
-    "reference": {
-        "reference": "ExxonMobil\nRefining and Supply Company\n22777 Springwoods Village Parkway,\nSpring, TX 77389",
-        "year": 7738
+    "metadata": {
+        "API": 26.4,
+        "name": "Balder Blend",
+        "reference": {
+            "reference": "ExxonMobil\nRefining and Supply Company\n22777 Springwoods Village Parkway,\nSpring, TX 77389",
+            "year": 7738
+        }
     },
+    "oil_id": "EX-BALDR16Y",
     "status": [
         "W002: Record has no product type"
     ],

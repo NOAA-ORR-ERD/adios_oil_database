@@ -1,15 +1,18 @@
 {
-    "API": 20.93,
     "_id": "EC002234",
-    "comments": "Via  CanmetENERGY, Natural Resources Canada",
-    "location": "Alberta, Canada",
-    "name": "Access West Winter Blend",
-    "oil_id": "EC002234",
-    "product_type": "crude",
-    "reference": {
-        "year": 2017
+    "metadata": {
+        "API": 20.93,
+        "comments": "Via  CanmetENERGY, Natural Resources Canada",
+        "location": "Alberta, Canada",
+        "name": "Access West Winter Blend",
+        "product_type": "crude",
+        "reference": {
+            "year": 2017
+        },
+        "sample_date": "2013-04-08",
+        "source_id": "2234"
     },
-    "sample_date": "2013-04-08",
+    "oil_id": "EC002234",
     "status": [],
     "sub_samples": [
         {
@@ -386,6 +389,66 @@
                     },
                     "method": "ASTM D4294",
                     "name": "Sulfur Content"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 298.9954903007806
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TPH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 164.37549893086512
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TSH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 134.61999136991548
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TAH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 54.99362166618327
+                    },
+                    "name": "GC-TSH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 45.00637833381672
+                    },
+                    "name": "GC-TAH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 9.082119444292854
+                    },
+                    "name": "Resolved Peaks/TPH (%)"
                 }
             ],
             "compounds": [
@@ -2297,6 +2360,66 @@
                     },
                     "method": "ASTM D4294",
                     "name": "Sulfur Content"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 317.2889023996673
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TPH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 173.42974662919528
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TSH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 143.85915577047203
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TAH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 54.679424224200964
+                    },
+                    "name": "GC-TSH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 45.32057577579905
+                    },
+                    "name": "GC-TAH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 8.945676460285073
+                    },
+                    "name": "Resolved Peaks/TPH (%)"
                 }
             ],
             "compounds": [
@@ -4208,6 +4331,66 @@
                     },
                     "method": "ASTM D4294",
                     "name": "Sulfur Content"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 356.3296592694092
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TPH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 189.68723037113853
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TSH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 166.64242889827062
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TAH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 53.23179105725178
+                    },
+                    "name": "GC-TSH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 46.76820894274822
+                    },
+                    "name": "GC-TAH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 8.756688125979839
+                    },
+                    "name": "Resolved Peaks/TPH (%)"
                 }
             ],
             "compounds": [
@@ -6106,6 +6289,66 @@
                     },
                     "method": "ASTM D4294",
                     "name": "Sulfur Content"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 312.74277848356013
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TPH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 157.56050907667495
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TSH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 155.18226940688513
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TAH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 50.38155911721402
+                    },
+                    "name": "GC-TSH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 49.61844088278598
+                    },
+                    "name": "GC-TAH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 7.271874049957231
+                    },
+                    "name": "Resolved Peaks/TPH (%)"
                 }
             ],
             "compounds": [
@@ -8004,6 +8247,66 @@
                     },
                     "method": "ASTM D4294",
                     "name": "Sulfur Content"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 300.8558685396902
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TPH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 149.55710251015566
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TSH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "measurement": {
+                        "unit": "mg/g",
+                        "unit_type": "massfraction",
+                        "value": 151.29876602953462
+                    },
+                    "method": "ESTS 2002a",
+                    "name": "GC-TAH (mg/g Oil) (ESTS 2002a):"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 49.706416486387695
+                    },
+                    "name": "GC-TSH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 50.293583513612326
+                    },
+                    "name": "GC-TAH/GC-TPH (%)"
+                },
+                {
+                    "groups": [
+                        "Hydrocarbon Content Ratio (ESTS 2002a):"
+                    ],
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 6.130597078958157
+                    },
+                    "name": "Resolved Peaks/TPH (%)"
                 }
             ],
             "compounds": [
