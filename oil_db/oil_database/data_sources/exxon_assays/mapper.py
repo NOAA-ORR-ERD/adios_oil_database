@@ -84,7 +84,7 @@ MAPPING = {
     },
     norm('Neutralization number (TAN), MG/GM'): {
         'attr': 'Total Acid Number',
-        'unit': 'mg/kg',
+        'unit': 'mg/g',
         'cls': MassFraction,
         'element_of': 'industry_properties',
     },
@@ -119,7 +119,6 @@ MAPPING = {
         'attr': 'Conradson Carbon Residue',
         'unit': '%',
         'cls': MassFraction,
-        'convert_from': '%',
         'element_of': 'industry_properties',
     },
     norm('N-Heptane Insolubles (C7 Asphaltenes), wt%'): {
