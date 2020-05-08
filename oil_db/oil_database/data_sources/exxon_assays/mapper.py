@@ -187,8 +187,6 @@ MAPPING = {
     #
     # Bunch of distillation props (not a simple map)
     #
-    # Freeze point, F
-    #
     norm('Freeze point, F'): {
         'attr': 'Freeze Point',
         'unit': 'C',
@@ -365,8 +363,8 @@ def set_boiling_point_range(samples, cut_table):
         - Initial boiling point (IBF)
         - End boiling point (EP)
     '''
-    initial_bp = cut_table['ibp, f'][0]
-    final_bp = cut_table['ep, f'][-1]
+    initial_bp = sigfigs(cut_table['ibp, f'][0], 5)
+    final_bp = sigfigs(cut_table['ep, f'][-1], 5)
 
     for sample_prev, sample in zip(samples, samples[1:]):
         prev_max_temp = to_number(sample_prev.name.split()[-1])
@@ -396,7 +394,7 @@ def apply_map(data, cut_table, samples):
 
 def set_sample_property(samples, row, attr, unit, cls,
                         convert_from=None, element_of=None,
-                        num_digits=4):
+                        num_digits=5):
     """
     reads a row from the spreadsheet, and sets the sample properties
 
@@ -455,7 +453,7 @@ def process_cut_table(oil, samples, cut_table):
         try:
             rho = uc.convert("SG", "g/cm^3", val)
             sample.physical_properties.densities.append(DensityPoint(
-                density=Density(value=round(rho, 8), unit="g/cm^3"),
+                density=Density(value=sigfigs(rho, 5), unit="g/cm^3"),
                 ref_temp=Temperature(value=15.6, unit="C"),
             ))
 
@@ -473,7 +471,7 @@ def process_cut_table(oil, samples, cut_table):
             try:
                 sample.physical_properties.kinematic_viscosities.append(
                     KinematicViscosityPoint(
-                        viscosity=KinematicViscosity(value=round(val, 8),
+                        viscosity=KinematicViscosity(value=sigfigs(val, 5),
                                                      unit="cSt"),
                         ref_temp=Temperature(value=40, unit="C"),
                     )
