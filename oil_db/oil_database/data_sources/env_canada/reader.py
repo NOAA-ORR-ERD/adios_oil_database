@@ -5,6 +5,8 @@ from collections import defaultdict
 
 from openpyxl import load_workbook
 
+from oil_database.util import sigfigs
+
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
@@ -125,8 +127,10 @@ class EnvCanadaOilExcelFile(object):
             Note: the Excel sheet columns object has no direct indexing,
                   only a next().  This is why we are using walk method to get
                   our indexed columns.
+            Note: It has been decided that we will only keep 5 significant
+                  digits of any floating point values in the datasheet.
         '''
-        return list(zip(*[[cell.value for cell in col]
+        return list(zip(*[[sigfigs(cell.value, 5) for cell in col]
                           for i, col in enumerate(self.db_sheet.columns)
                           if i in self.col_indexes[name]]))
 
