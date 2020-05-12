@@ -33,8 +33,6 @@ from oil_database.models.oil.physical_properties import PhysicalProperties
 from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
 from oil_database.models.oil.sara import Sara
 
-from pprint import pprint
-
 logger = logging.getLogger(__name__)
 
 
@@ -483,6 +481,7 @@ def process_cut_table(oil, samples, cut_table):
     if norm("Distillation type, TBP") not in cut_table:
         raise ValueError("I don't recognise this distillation data. \n"
                          'Expected: "Distillation type, TBP"')
+
     for name, row in cut_table.items():
         if norm("vol%, F") in name or name == norm("IBP, F"):
             # looks like a distillation cut.
@@ -491,13 +490,15 @@ def process_cut_table(oil, samples, cut_table):
             for sample, val in zip(samples, row):
                 if val is not None:
                     val = sigfigs(uc.convert("F", "C", val), 5)
-                    sample.distillation_data.append(DistCut(
+
+                    sample.distillation_data.cuts.append(DistCut(
                         fraction=MassFraction(value=percent, unit="%"),
                         vapor_temp=Temperature(value=val, unit="C")
                     ))
+
     # sort them
     for sample in samples:
-        sample.distillation_data.sort(key=lambda c: c.fraction.value)
+        sample.distillation_data.cuts.sort(key=lambda c: c.fraction.value)
 
     oil.sub_samples = samples
 

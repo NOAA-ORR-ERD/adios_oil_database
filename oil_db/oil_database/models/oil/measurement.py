@@ -1,7 +1,7 @@
 '''
     Classes for storing measured values within an Oil record
 '''
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
 from ..common.measurement import (Time,
@@ -63,6 +63,15 @@ class DistCutList(JSON_List):
     def validate(self):
         # do validation here
         pass
+
+
+@dataclass_to_json
+@dataclass
+class Distillation:
+    type: str = None
+    method: str = None
+    end_point: Temperature = None
+    cuts: DistCutList = field(default_factory=DistCutList)
 
 
 @dataclass_to_json

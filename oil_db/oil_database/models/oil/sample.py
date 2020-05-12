@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from ..common.utilities import dataclass_to_json, JSON_List
 
 from ..common.measurement import MassFraction, VolumeFraction, Temperature
-from .measurement import DistCutList
+from .measurement import Distillation
 
 from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
@@ -39,7 +39,7 @@ class Sample:
     environmental_behavior: EnvironmentalBehavior = None
     SARA: Sara = None
 
-    distillation_data: DistCutList = field(default_factory=DistCutList)
+    distillation_data: Distillation = field(default_factory=Distillation)
 
     compounds: CompoundList = field(default_factory=CompoundList)
 
