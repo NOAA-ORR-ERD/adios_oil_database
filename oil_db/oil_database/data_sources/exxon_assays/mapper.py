@@ -482,6 +482,9 @@ def process_cut_table(oil, samples, cut_table):
         raise ValueError("I don't recognise this distillation data. \n"
                          'Expected: "Distillation type, TBP"')
 
+    for sample in samples:
+        sample.distillation_data.type = 'volume'
+
     for name, row in cut_table.items():
         if norm("vol%, F") in name or name == norm("IBP, F"):
             # looks like a distillation cut.
@@ -495,6 +498,13 @@ def process_cut_table(oil, samples, cut_table):
                         fraction=MassFraction(value=percent, unit="%"),
                         vapor_temp=Temperature(value=val, unit="C")
                     ))
+        elif name == norm('EP, F'):
+            for sample, val in zip(samples, row):
+                if val is not None:
+                    val = sigfigs(uc.convert("F", "C", val), 5)
+
+                    sample.distillation_data.end_point = Temperature(value=val,
+                                                                     unit="C")
 
     # sort them
     for sample in samples:

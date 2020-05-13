@@ -372,6 +372,10 @@ class TestExxonMapper():
                 assert cut.vapor_temp.unit == "C"
                 assert cut.fraction.unit == "%"
 
+    def test_dist_type(self):
+        for sample in ExxonMapper(self.record).sub_samples:
+            assert sample.distillation_data.type == 'volume'
+
     @pytest.mark.parametrize("samp_ind, cut_index, fraction, temp_f",
                              [(0, 0, 0.0, -57.641),
                               (0, 4, 30.0, 364.28),
@@ -386,6 +390,24 @@ class TestExxonMapper():
         assert cut.fraction.value == fraction
         assert isclose(cut.vapor_temp.value,
                        sigfigs(uc.convert("F", "C", temp_f), 5))
+
+    @pytest.mark.parametrize("sample_idx, expected",
+                             [(0, 1453.75),
+                              (1, None),
+                              (5, 649.13),
+                              (7, 1504.63),
+                              ])
+    def test_dist_end_point(self, sample_idx, expected):
+        samples = ExxonMapper(self.record).sub_samples
+
+        if expected is None:
+            assert samples[sample_idx].distillation_data.end_point is None
+        else:
+            expected_c = sigfigs(uc.convert("F", "C", expected), 5)
+            end_point = samples[sample_idx].distillation_data.end_point
+
+            assert isclose(end_point.value, expected_c)
+            assert end_point.unit == 'C'
 
     def test_no_cuts_in_butane(self):
         assert (ExxonMapper(self.record).sub_samples[1]
