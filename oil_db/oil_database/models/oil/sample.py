@@ -16,6 +16,7 @@ from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
 from .sara import Sara
 from .ccme import CCME
+from .ests_fractions import ESTSFractions
 
 from .compound import CompoundList
 
@@ -50,6 +51,8 @@ class Sample:
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
 
     CCME: CCME = None
+
+    ESTS_hydrocarbon_fractions: ESTSFractions = None
 
     miscellaneous: CompoundList = field(default_factory=CompoundList)
 
