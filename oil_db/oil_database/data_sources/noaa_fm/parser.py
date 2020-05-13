@@ -319,16 +319,23 @@ class OilLibraryRecordParser(ParserBase):
         return ret
 
     @property
-    def distillation_data(self):
+    def cuts(self):
         ret = []
         cuts = self.get_property_sets(15, 'cut',
                                       ('vapor_temp_k', 'liquid_temp_k',
                                        'fraction'),
                                       ('vapor_temp_k', 'fraction'))
 
+        if self.cut_units in ('volume', 'Volume'):
+            unit_type = 'volumefraction'
+        else:
+            unit_type = 'massfraction'
+
         for c in cuts:
             value = {
-                'fraction': {'value': c['fraction'], 'unit': '1'},
+                'fraction': {'value': c['fraction'],
+                             'unit': '1',
+                             'unit_type': unit_type},
                 'vapor_temp': {'value': c['vapor_temp_k'], 'unit': 'K'},
             }
 

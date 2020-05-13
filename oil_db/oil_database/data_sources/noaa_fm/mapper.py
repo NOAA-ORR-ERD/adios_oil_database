@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 from numbers import Number
-from collections import defaultdict
 import logging
 from math import isclose
 
 from ..mapper import MapperBase
 
 from oil_database.models.oil.oil import Oil
-
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -157,6 +154,24 @@ class OilLibraryAttributeMapper(MapperBase):
                      'API',
                      'comments'):
             ret[attr] = getattr(self, attr)
+
+        return ret
+
+    @property
+    def distillation_data(self):
+        ret = {}
+
+        if self.cut_units is None:
+            ret['type'] = 'mass'  # default
+        elif self.cut_units.lower() == 'weight':
+            ret['type'] = 'mass'
+        else:
+            ret['type'] = 'volume'
+
+        # ret['method'] = None  # no data in filemaker
+        # ret['end_point'] = None  # no data in filemaker
+
+        ret['cuts'] = self.cuts
 
         return ret
 
