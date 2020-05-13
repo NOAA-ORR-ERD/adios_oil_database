@@ -508,14 +508,13 @@ class EnvCanadaSampleMapper(MapperBase):
 
         for k in list(ret.keys()):
             ret[k] = self.measurement(ret[k], 'mg/g', 'massfraction')
-            ret[f'ccme_{k}'.upper()] = ret.pop(k)
+            ret[f'{k}'.upper()] = ret.pop(k)
 
-        ret['total_GC_TPH'] = self.measurement(
-            self.parser.deep_get('gc_tph_f1_plus_f2'
-                                 '.total_tph_gc_detected_tph_undetected_tph'),
-            'mg/g',
-            'massfraction'
-        )
+        return ret
+
+    @property
+    def ESTS_hydrocarbon_fractions(self):
+        ret = {}
 
         groups = [
             ('saturates', 'ccme_f1'),
@@ -527,9 +526,6 @@ class EnvCanadaSampleMapper(MapperBase):
             ret[attr] = list(self.compounds_in_group(name, None,
                                                      'mg/g', 'Mass Fraction',
                                                      False))
-
-        ret['GC_TPH'] = [c for c in ret['GC_TPH']
-                         if not c['name'].startswith('TOTAL TPH ')]
 
         return ret
 

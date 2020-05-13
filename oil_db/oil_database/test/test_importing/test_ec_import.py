@@ -1570,20 +1570,15 @@ class TestEnvCanadaSampleMapper(object):
 
     @pytest.mark.parametrize('oil_id, index, expected', [
         ('2234', 0, {
-            'fractions': (15.584, 50.056,
-                          193.13, 40.226, 690),
-            'list_sizes': [8, 8, 8],
+            'fractions': (15.584, 50.056, 193.13, 40.226),
          }),
         ('561', 0, {
-            'fractions': (67.75, 170.81,
-                          302.21, 59.841, None),
-            'list_sizes': [0, 0, 0],
+            'fractions': (67.75, 170.81, 302.21, 59.841),
          }),
     ])
     def test_ccme(self, oil_id, index, expected):
         '''
-            CCME object is a hybrid of struct attributes with a few
-            compound lists thrown in.
+            CCME object is a struct.
         '''
         parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
                                        self.reader.file_props)
@@ -1593,8 +1588,7 @@ class TestEnvCanadaSampleMapper(object):
 
         assert type(ccme) == dict
 
-        for attr, fraction in zip(('CCME_F1', 'CCME_F2', 'CCME_F3', 'CCME_F4',
-                                   'total_GC_TPH'),
+        for attr, fraction in zip(('F1', 'F2', 'F3', 'F4'),
                                   expected['fractions']):
             assert attr in ccme
 
@@ -1603,7 +1597,28 @@ class TestEnvCanadaSampleMapper(object):
 
             assert ccme[attr]['value'] == fraction
 
-        assert expected['list_sizes'] == [len(ccme[attr]) for attr in
+    @pytest.mark.parametrize('oil_id, index, expected', [
+        ('2234', 0, {
+            'list_sizes': [8, 8, 9],
+         }),
+        ('561', 0, {
+            'list_sizes': [0, 0, 0],
+         }),
+    ])
+    def test_ests_fractions(self, oil_id, index, expected):
+        '''
+            ESTS_hydrocarbon_fractions object is a struct consisting of
+            attributes that are compound lists.
+        '''
+        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
+                                       self.reader.file_props)
+        sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
+
+        ests_fractions = sub_mapper.ESTS_hydrocarbon_fractions
+
+        assert type(ests_fractions) == dict
+
+        assert expected['list_sizes'] == [len(ests_fractions[attr]) for attr in
                                           ('saturates',
                                            'aromatics',
                                            'GC_TPH')]
