@@ -5,7 +5,14 @@ from numbers import Number
 class MapperBase:
     def measurement(self, value, unit, unit_type=None,
                     standard_deviation=None, replicates=None):
-        ret = {'value': value, 'unit': unit}
+        mm_value = self.min_max(value)
+
+        if mm_value[0] == mm_value[1]:
+            ret = {'value': value, 'unit': unit}
+        else:
+            ret = {'min_value': mm_value[0],
+                   'max_value': mm_value[1],
+                   'unit': unit}
 
         if unit_type is not None:
             ret['unit_type'] = unit_type

@@ -8,8 +8,6 @@ from slugify import Slugify
 from oil_database.models.oil.oil import Oil
 from ..mapper import MapperBase
 
-from pprint import pprint
-
 custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
@@ -182,10 +180,11 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def distillation_data(self):
-        ret = []
+        ret = {}
+        cuts = []
 
         # First the boiling point distribution data (if present)
-        for frac in list(range(5, 101, 5)) + ['initial_boiling_point', 'fbp']:
+        for frac in list(range(5, 101, 5)) + ['initial_boiling_point']:
             if frac == 100:
                 frac_lbl = self.parser.slugify('1')
             elif isinstance(frac, Number):
@@ -193,18 +192,13 @@ class EnvCanadaSampleMapper(MapperBase):
             else:
                 frac_lbl = frac
 
-            if frac == 'initial_boiling_point':
-                frac = 0.0
-            elif frac == 'fbp':
-                # This should probably not be used because based on the
-                # data in the spreadsheet, fbp is somewhere between 95% and
-                # 100%, but we don't know exactly where.
-                frac = 97.5
-
             ref_temp = self.parser.boiling_point_distribution[frac_lbl]
 
+            if frac == 'initial_boiling_point':
+                frac = 0.0
+
             if ref_temp is not None:
-                ret.append({
+                cuts.append({
                     'fraction': self.measurement(frac, '%'),
                     'vapor_temp': self.measurement(ref_temp, 'C')
                 })
@@ -215,13 +209,22 @@ class EnvCanadaSampleMapper(MapperBase):
             frac = self.parser.boiling_point_cumulative_fraction[temp_lbl]
 
             if frac is not None:
-                ret.append({
+                cuts.append({
                     'fraction': self.measurement(frac, '%'),
                     'vapor_temp': self.measurement(ref_temp, 'C')
                 })
 
-        # There is a single method field associated with the cuts.
-        # Do we do anything with it?
+        # Based on the data in the spreadsheet, fbp is somewhere between the
+        # 95% temperature and the 100% temperature, but we can't determine
+        # the fraction.  So we assign it to the end_point attribute, similar
+        # to the Exxon data.
+        ret['end_point'] = self.measurement(
+            self.parser.boiling_point_distribution['fbp'], 'C'
+        )
+
+        ret['type'] = 'mass'
+        ret['method'] = self.parser.boiling_point_cumulative_fraction['method']
+        ret['cuts'] = cuts
 
         return ret
 
