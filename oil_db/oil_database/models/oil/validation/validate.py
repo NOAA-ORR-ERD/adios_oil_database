@@ -142,10 +142,10 @@ def val_check_for_distillation_cuts(oil):
         return None
 
     try:
-        if not sample.distillation_data:
-            return WARNINGS["W007"]
+        if not sample.distillation_data.cuts:
+            return WARNINGS['W007']
     except AttributeError:
-        return WARNINGS["W007"]
+        return WARNINGS['W007']
     return None
 
 

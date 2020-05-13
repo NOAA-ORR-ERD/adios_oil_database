@@ -1033,260 +1033,195 @@
           "_cls": "oil_database.models.common.float_unit.ConcentrationInWaterUnit"
         }
       },
-      "distillation_data": [
-        {
+      "distillation_data": {
+          "type": "mass",
           "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 5,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 333.45
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 10,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 365.05
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 15,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 392.55
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 20,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 421.05
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 25,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 453.75
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 30,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 488.85
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 35,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 520.85
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 40,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 550.85
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 45,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 581.15
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 50,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 612.25
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 55,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 644.35
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 60,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 677.45
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 65,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 709.45
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 70,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 746.45
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 75,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 789.55
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 80,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 840.75
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 85,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 895.75
-          }
-        },
-        {
-          "method": "Merged ASTM D6730 Modified and ASTM D7169",
-          "fraction": {
-            "value": 90,
-            "unit": "%",
-            "_cls": "oil_database.models.common.float_unit.FloatUnit"
-          },
-          "vapor_temp": {
-            "_cls": "oil_database.models.common.float_unit.TemperatureUnit",
-            "unit": "K",
-            "from_unit": "C",
-            "value": 953.35
-          }
-        }
-      ],
+          "end_point":  {"unit": "C",
+                         "value": 392.55
+                         },
+          "cuts": [
+              {
+                  "fraction": {
+                      "value": 5,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 333.45
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 10,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 365.05
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 15,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 392.55
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 20,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 421.05
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 25,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 453.75
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 30,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 488.85
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 35,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 520.85
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 40,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 550.85
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 45,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 581.15
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 50,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 612.25
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 55,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 644.35
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 60,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 677.45
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 65,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 709.45
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 70,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 746.45
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 75,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 789.55
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 80,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 840.75
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 85,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 895.75
+                  }
+              },
+              {
+                  "fraction": {
+                      "value": 90,
+                      "unit": "%"
+                  },
+                  "vapor_temp": {
+                      "unit": "K",
+                      "value": 953.35
+                  }
+              }
+      ]},
+
       "evaporation_eqs": [
         {
           "equation": "(A + BT) ln t",
