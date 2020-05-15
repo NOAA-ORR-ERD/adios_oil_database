@@ -59,104 +59,107 @@
                     "name": "polars"
                 }
             ],
-            "distillation_data": [
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.01
+            "distillation_data": {
+                "cuts": [
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.01
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 37.0
+                        }
                     },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 37.0
-                    }
-                },
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.05
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.05
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 95.0
+                        }
                     },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 95.0
-                    }
-                },
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.1
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.1
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 111.0
+                        }
                     },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 111.0
-                    }
-                },
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.15
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.15
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 126.0
+                        }
                     },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 126.0
-                    }
-                },
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.2
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.2
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 142.0
+                        }
                     },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 142.0
-                    }
-                },
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.25
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.25
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 155.0
+                        }
                     },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 155.0
-                    }
-                },
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.3
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.3
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 189.0
+                        }
                     },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 189.0
+                    {
+                        "fraction": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.34
+                        },
+                        "vapor_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 213.0
+                        }
                     }
-                },
-                {
-                    "fraction": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.34
-                    },
-                    "vapor_temp": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 213.0
-                    }
-                }
-            ],
+                ],
+                "type": "mass"
+            },
             "environmental_behavior": {
                 "emulsions": [
                     {
