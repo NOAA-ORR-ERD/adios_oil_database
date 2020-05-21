@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import re
-from collections import defaultdict
 import logging
 
 from ..parser import ParserBase, join_with, parse_time, date_only
@@ -13,10 +12,7 @@ logger = logging.getLogger(__name__)
 label_map = {
     'acenaphthylene_acl': 'acenaphthylene',
     'acenaphthene_ace': 'acenaphthene',
-    'adhesion_g_cm2_ests_1996': 'adhesion',
-    'alkylated_total_aromatic_hydrocarbons_pahs_ug_g_oil_ests_2002a': 'alkylated_total_pahs',
     'anthracene_an': 'anthracene',
-    'aromatics_f2_ests_2002a': 'aromatics_f2',
     'benz_a_anthracene_baa': 'benz_a_anthracene',
     'benzo_a_pyrene_bap': 'benzo_a_pyrene',
     'benzo_b_fluoranthene_bbf': 'benzo_b_fluoranthene',
@@ -24,73 +20,36 @@ label_map = {
     'benzo_ghi_perylene_bgp': 'benzo_ghi_perylene',
     'benzo_k_fluoranthene_bkf': 'benzo_k_fluoranthene',
     'biphenyl_bph': 'biphenyl',
-    'benzene_and_alkynated_benzene_ests_2002b': 'benzene_and_alkynated_benzene',
-    'biomarkers_ug_g_ests_2002a': 'biomarkers',
-    'btex_group_ug_g_ests_2002b': 'btex_group',
     'calculated_api_gravity': 'gravity',
     'c21_tricyclic_terpane_c21t': 'c21_tricyclic_terpane',
     'c22_tricyclic_terpane_c22t': 'c22_tricyclic_terpane',
     'c23_tricyclic_terpane_c23t': 'c23_tricyclic_terpane',
     'c24_tricyclic_terpane_c24t': 'c24_tricyclic_terpane',
-    'c4_c6_alkyl_benzenes_ug_g_ests_2002b': 'c4_c6_alkyl_benzenes',
     'ccme_f1': 'f1',
     'ccme_f2': 'f2',
     'ccme_f3': 'f3',
     'ccme_f4': 'f4',
-    'ccme_fractions_mg_g_oil_ests_2002a': 'ccme_fractions',
-    'chemical_dispersibility_with_corexit_9500_dispersant_swirling_flask_test_astm_f2059': 'chemical_dispersibility_with_corexit_9500',
-    'density_at_0_5_c_g_ml_astm_d5002': 'density_at_0_5_c',
-    'density_at_15_c_g_ml_astm_d5002': 'density_at_15_c',
-    'density_0_c_g_ml': 'density_0_c',
-    'density_5_c_g_ml': 'density_5_c',
-    'density_15_c_g_ml': 'density_15_c',
+    'chemical_dispersibility_swirling_flask_test': 'chemical_dispersibility',
     'dibenzo_ah_anthracene_da': 'dibenzo_ah_anthracene',
-    'emulsion_at_15_degc_on_the_day_of_formation_ests_1998_2': 'emulsion_at_15_c_day_0',
-    'emulsion_at_15_degc_one_week_after_formation_ests_1998b': 'emulsion_at_15_c_day_7',
-    'ests_emergencies_sciences_and_technologies_code': 'ests_code',
-    'evaporation_ests_1998_1': 'evaporation',
-    'parameters_for_evaporation_equation_mass_loss': 'evaporation_mass_loss',
+    'ests_emergencies_sciences_technologies_code': 'ests_code',
     'fluoranthene_fl': 'fluoranthene',
     'gas_chromatography_total_aromatic_hydrocarbon_gc_tah': 'tah',
     'gas_chromatography_total_petroleum_hydrocarbon_gc_tph': 'tph',
-    'gas_chromatography_total_satuare_hydrocarbon_gc_tsh': 'tsh',
-    'gc_tah_mg_g_oil_ests_2002a': 'gc_total_aromatic_hydrocarbon',
+    'gas_chromatography_total_saturate_hydrocarbon_gc_tsh': 'tsh',
     'gc_tah_gc_tph': 'tah_tph',
-    'gc_tph_f1_f2_ests_2002a': 'gc_tph_f1_plus_f2',
-    'gc_tph_mg_g_oil_ests_2002a': 'gc_total_petroleum_hydrocarbon',
-    'gc_tsh_mg_g_oil_ests_2002a': 'gc_total_saturate_hydrocarbon',
     'gc_tsh_gc_tph': 'tsh_tph',
-    'headspace_analysis_mg_g_oil_ests_2002b': 'headspace_analysis',
     'hopane_h30': 'hopane',
-    'hydrocarbon_content_ratio_ests_2002a': 'hydrocarbon_content_ratio',
     'indeno_1_2_3_cd_pyrene_ip': 'indeno_1_2_3_cd_pyrene',
-    'interfacial_tension_0_c_oil_water': 'ift_0_c_oil_water',
-    'interfacial_tension_5_c_oil_water': 'ift_5_c_oil_water',
-    'interfacial_tension_15_c_oil_water': 'ift_15_c_oil_water',
-    'interfacial_tension_0_c_oil_salt_water_3_3_nacl': 'ift_0_c_oil_seawater',
-    'interfacial_tension_5_c_oil_salt_water_3_3_nacl': 'ift_5_c_oil_seawater',
-    'interfacial_tension_15_c_oil_salt_water_3_3_nacl': 'ift_15_c_oil_seawater',
-    'n_alkanes_ug_g_oil_ests_2002a': 'n_alkanes',
-    'other_priority_pahs_ug_g_oil': 'other_priority_pahs',
     'pentakishomohopane_22r_h35r': 'pentakishomohopane_22r',
     'pentakishomohopane_22s_h35s': 'pentakishomohopane_22s',
+    'petroleum_hydrocarbon_fractions_ccme': 'ccme',
+    'petroleum_hydrocarbon_saturates_fraction': 'ests_saturates',
+    'petroleum_hydrocarbon_aromatics_fraction': 'ests_aromatics',
+    'petroleum_hydrocarbon_gc_tph_saturates_aromatics_fractions': 'ests_tph',
     'pyrene_py': 'pyrene',
     'perylene_pe': 'perylene',
-    'saturates_f1_ests_2002a': 'saturates_f1',
-    'sulfur_content_astm_d4294': 'sulfur_content',
-    'surface_interfacial_tension_at_0_5_c_mn_m_or_dynes_cm': 'ift_at_0_5_c',
-    'surface_interfacial_tension_at_15_c_mn_m_or_dynes_cm': 'ift_at_15_c',
-    'surface_tension_0_c_oil_air': 'ift_0_c_oil_air',
-    'surface_tension_5_c_oil_air': 'ift_5_c_oil_air',
-    'surface_tension_15_c_oil_air': 'ift_15_c_oil_air',
     'tetrakishomohopane_22r_h34r': 'tetrakishomohopane_22r',
     'tetrakishomohopane_22s_h34s': 'tetrakishomohopane_22s',
-    'viscosity_at_0_5_c_mpa_s': 'viscosity_at_0_5_c',
-    'viscosity_at_0_c_mpa_s': 'viscosity_at_0_c',
-    'viscosity_at_5_c_mpa_s': 'viscosity_at_5_c',
-    'viscosity_at_15_c_mpa_s': 'viscosity_at_15_c',
-    'water_content_astm_e203': 'water_content',
-    'wax_content_ests_1994': 'wax_content',
     '_18a_22_29_30_trisnorneohopane_c27ts': '_18a_22_29_30_trisnorneohopane',
     '_17a_h_22_29_30_trisnorhopane_c27tm': '_17a_h_22_29_30_trisnorhopane',
     '_14ss_h_17ss_h_20_cholestane_c27assss': '_14b_h_17b_h_20_cholestane',
@@ -103,7 +62,6 @@ label_map = {
     '_30_homohopane_22r_h31r': '_30_homohopane_22r',
     '_30_homohopane_22s_h31s': '_30_homohopane_22s',
     '_30_norhopane_h29': '_30_norhopane',
-
 }
 
 
@@ -120,7 +78,7 @@ class EnvCanadaRecordParser(ParserBase):
           values corresponding to the weathered subsamples that exist for the
           oil record.
     '''
-    def __init__(self, values, file_props):
+    def __init__(self, values, conditions, file_props):
         '''
             :param values: A dictionary of property values.
             :type values: A dictionary structure with raw property names
@@ -131,8 +89,8 @@ class EnvCanadaRecordParser(ParserBase):
                               as keys, and associated values.
         '''
         self.values = self._slugify_keys(values)
+        self.conditions = self._slugify_keys(conditions)
         self.labels = self._generate_labels(values)
-        self._propagate_merged_cells()
         self.file_props = file_props
 
     def _slugify_keys(self, obj):
@@ -208,42 +166,6 @@ class EnvCanadaRecordParser(ParserBase):
             labels = labels['value'][l]
 
         return labels['label']
-
-    def _propagate_merged_cells(self):
-        '''
-            Some rows within the columns of an oil are merged in the excel
-            spreadsheet into one cell.  This is to imply that all columns
-            should have the merged value.  But when parsing the columns,
-            only the first one will have the value.
-            So as a preprocessing step, we will propagate these values to all
-            cells within that row
-
-            In addition, some method fields are implied to be for multiple
-            grouped categories, but the field only lies within one of the
-            categories.
-            So we need to copy it to the other category
-        '''
-        propagate = [('viscosity_at_0_5_c', 'method'),
-                     ('ift_at_0_5_c', 'method'),
-                     ('ift_at_15_c', 'method'),
-                     ('flash_point_c', 'method'),
-                     ('pour_point_c', 'method'),
-                     ('boiling_point_cumulative_weight_fraction', 'method'),
-                     ('hydrocarbon_group_content', 'method'),
-                     ]
-
-        for cat, attr in propagate:
-            cells = self.values[cat][attr]
-            if cells[0] is not None:
-                self.values[cat][attr] = [cells[0] for _c in cells]
-
-        copy_to = [('viscosity_at_0_5_c', 'method', 'viscosity_at_15_c'),
-                   ('boiling_point_cumulative_weight_fraction', 'method',
-                    'boiling_point_distribution_temperature_c')
-                   ]
-
-        for cat, attr, other_cat in copy_to:
-            self.values[other_cat][attr] = self.values[cat][attr]
 
     @property
     @join_with(' ')
@@ -407,7 +329,7 @@ class EnvCanadaRecordParser(ParserBase):
             props_i = self.vertical_slice(i)
             props_i['weathering'] = w
 
-            yield EnvCanadaSampleParser(props_i, self.labels)
+            yield EnvCanadaSampleParser(props_i, self.conditions, self.labels)
 
     def dict(self):
         ret = {}
@@ -434,42 +356,19 @@ class EnvCanadaSampleParser(ParserBase):
     '''
     attr_map = {
         # any attributes that are a simple mapping of the data
-        'adhesion': 'adhesion',
-        'benzene': 'benzene_and_alkynated_benzene',
-        'benzonaphthothiophenes': 'benzonaphthothiophenes',
-        'biomarkers': 'biomarkers',
+        'benzene': 'benzene_alkylated_benzene',
         'boiling_point_distribution': ('boiling_point_distribution_'
-                                       'temperature_c'),
+                                       'temperature'),
         'boiling_point_cumulative_fraction': ('boiling_point_'
                                               'cumulative_weight_fraction'),
-        'btex_group': 'btex_group',
-        'c4_c6_alkyl_benzenes': 'c4_c6_alkyl_benzenes',
         'ccme': 'ccme_fractions',
         'ccme_f1': 'saturates_f1',
         'ccme_f2': 'aromatics_f2',
         'ccme_tph': 'gc_tph_f1_plus_f2',
-        'chemical_dispersibility': 'chemical_dispersibility_with_corexit_9500',
-        'chrysenes': 'chrysenes',
-        'dibenzothiophenes': 'dibenzothiophenes',
-        'flash_point': 'flash_point_c',
-        'fluorenes': 'fluorenes',
-        'gc_total_petroleum_hydrocarbon': 'gc_total_petroleum_hydrocarbon',
-        'gc_total_saturate_hydrocarbon': 'gc_total_saturate_hydrocarbon',
-        'gc_total_aromatic_hydrocarbon': 'gc_total_aromatic_hydrocarbon',
-        'headspace_analysis': 'headspace_analysis',
-        'hydrocarbon_content_ratio': 'hydrocarbon_content_ratio',
-        'n_alkanes': 'n_alkanes',
-        'naphthalenes': 'naphthalenes',
-        'other_priority_pahs': 'other_priority_pahs',
-        'phenanthrenes': 'phenanthrenes',
-        'pour_point': 'pour_point_c',
         'sara_total_fractions': 'hydrocarbon_group_content',
-        'sulfur_content': 'sulfur_content',
-        'water_content': 'water_content',
-        'wax_content': 'wax_content',
     }
 
-    def __init__(self, values, labels):
+    def __init__(self, values, conditions, labels):
         '''
             :param values: A dictionary of property values.
             :type values: A dictionary structure with raw property names
@@ -477,20 +376,7 @@ class EnvCanadaSampleParser(ParserBase):
         '''
         self.values = values
         self.labels = labels
-
-    def get_interface_properties(self):
-        '''
-            These are all the property names that define the data in an
-            Environment Canada record.
-            Our source data cannot be directly mapped to our object dict, so
-            we don't directly map any data items.  We will simply roll up
-            all the defined properties.
-        '''
-        props = set([p for p in dir(self.__class__)
-                     if isinstance(getattr(self.__class__, p), property)])
-
-        for p in props:
-            yield p, getattr(self, p)
+        self.conditions = conditions
 
     def dict(self):
         attrs = set(self.attr_map.keys())
@@ -521,10 +407,13 @@ class EnvCanadaSampleParser(ParserBase):
             the simplified name
         '''
         try:
-            ret = self.values[self.attr_map[name]]
+            ret = self.values[name]
         except Exception:
-            logger.info(f'{self.__class__.__name__}.{name} not found')
-            raise
+            try:
+                ret = self.values[self.attr_map[name]]
+            except Exception:
+                logger.info(f'{self.__class__.__name__}.{name} not found')
+                raise
 
         return ret
 
@@ -556,89 +445,99 @@ class EnvCanadaSampleParser(ParserBase):
     @property
     def densities(self):
         '''
-            There are two categories, density at 15C, and density at 0/5C.
+            There is now a single category, density.
+            Attributes within the category conform to an expected sequential
+            block consisting of:
+            - Density
+            - Standard Deviation
+            - Replicates
+            - Method
+
+            There will be 3 such blocks in the category
         '''
-        ret = defaultdict(list)
+        ret = dict(list(self.values['density'].items()))
 
-        items = (list(self.values['density_at_15_c'].items()) +
-                 list(self.values['density_at_0_5_c'].items()))
-
-        for k, v in items:
-            if k in ('standard_deviation', 'replicates'):
-                ret[k].append(v)
-            else:
-                ret[k] = v
+        for attr in ('ref_temp', 'unit'):
+            ret[attr] = [d[attr]
+                         for d in self.conditions['density']['density']]
 
         return ret
 
     @property
     def dvis(self):
         '''
-            There are two categories, viscosity at 15C, and viscosity at 0/5C.
+            There is now a single viscosity category.
 
             Note: Sometimes there is a greater than ('>') indication for a
                   viscosity value.  In this case, we parse the float value
                   as an interval with the operator indicating whether it is
                   a min or a max.
         '''
-        ret = defaultdict(list)
+        ret = dict(list(self.values['viscosity'].items()))
 
-        items = (list(self.values['viscosity_at_15_c'].items()) +
-                 list(self.values['viscosity_at_0_5_c'].items()))
-
-        for k, v in items:
-            if k in ('standard_deviation', 'replicates'):
-                ret[k].append(v)
-            else:
-                ret[k] = v
+        for attr in ('ref_temp', 'unit', 'condition'):
+            ret[attr] = [d[attr]
+                         for d in self.conditions['viscosity']['viscosity']]
 
         return ret
 
     @property
     def ifts(self):
         '''
-            Getting interfacial tensions out of this datasheet is a bit tricky,
-            but understandably so since we are dealing with a number of
-            dimensional parameters (temperature, interface, weathering).
-            There are two categories, surface/interfacial tension at 15C, and
-            surface/interfacial tension at 0/5C.
+            Now the only tricky bit is to merge the surface/interfacial tension
+            attributes.
         '''
-        ret = defaultdict(list)
+        ret = dict(list(self.values['surface_interfacial_tension'].items()))
+        conditions = self.conditions['surface_interfacial_tension']
 
-        items = (list(self.values['ift_at_15_c'].items()) +
-                 list(self.values['ift_at_0_5_c'].items()))
+        # Reconcile the surface/interfacial tensions
+        # We need to order them as [sft, ift, ift, sft, ift, ift, ...]
+        sfts = ret['surface_tension']
+        ifts = ret['interfacial_tension']
+        n = 2  # the stride of our ift list
 
-        for k, v in items:
-            if k in ('standard_deviation', 'replicates', 'method'):
-                ret[k].append(v)
-            else:
-                ret[k] = v
+        ret['interfacial_tension'] = []
+        for sft, ift in zip(sfts,
+                            [ifts[i:i + n] for i in range(0, len(ifts), n)]):
+            ret['interfacial_tension'].extend([sft] + ift)
 
-        for k in ('standard_deviation', 'replicates'):
-            # flatten the list
-            ret[k] = [i for sub in ret[k] for i in sub]
+        ret.pop('surface_tension', None)
+
+        # Now add our conditions
+        # We also need to reconcile surface/interfacial here
+        sfts = conditions['surface_tension']
+        ifts = conditions['interfacial_tension']
+
+        ifts_res = []
+        for sft, ift in zip(sfts,
+                            [ifts[i:i + n] for i in range(0, len(ifts), n)]):
+            ifts_res.extend([sft] + ift)
+
+        for attr in ('ref_temp', 'unit', 'condition'):
+            ret[attr] = [
+                d[attr]
+                for d in ifts_res
+            ]
+
+        ret['interface'] = ret.pop('condition', None)
 
         return ret
 
     @property
     def evaporation_eqs(self):
-        ret = defaultdict(list)
-
-        items = (list(self.values['evaporation'].items()) +
-                 list(self.values['evaporation_mass_loss'].items()))
-
-        ret.update(items)
-
-        return ret
+        return dict(list(self.values['evaporation_equation'].items()))
 
     @property
     def emulsions(self):
-        for category, age in (('emulsion_at_15_c_day_0', 0),
-                              ('emulsion_at_15_c_day_7', 7)):
-            emul = dict(self.values[category].items())
-            emul['age'] = age
+        '''
+            The emulsions struct is more complicated in that it is a mixed bag
+            of different measurements, each with their own units, temperatures,
+            and age.  So we just pass the conditions as a separate attribute.
+        '''
+        ret = dict(list(self.values['emulsion'].items()))
+        ret['conditions'] = self.conditions['emulsion']
 
-            yield emul
+        return ret
 
     @property
     def chromatography(self):
@@ -654,8 +553,8 @@ class EnvCanadaSampleParser(ParserBase):
             - Values Units are split between mg/g and percent.
         '''
         return dict(
-            list(self.values['gc_total_petroleum_hydrocarbon'].items()) +
-            list(self.values['gc_total_saturate_hydrocarbon'].items()) +
-            list(self.values['gc_total_aromatic_hydrocarbon'].items()) +
+            list(self.values['gc_tph'].items()) +
+            list(self.values['gc_tsh'].items()) +
+            list(self.values['gc_tah'].items()) +
             list(self.values['hydrocarbon_content_ratio'].items())
         )

@@ -6,6 +6,7 @@
     Either we test it correctly, or we test it in an episodic manner on the
     real dataset.
 '''
+from numbers import Number
 from pathlib import Path
 
 import pytest
@@ -19,10 +20,11 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaSampleMapper)
 
 from pprint import pprint
+import pdb
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
-data_file = example_dir / "EnvCanadaTestSet.xlsx"
+data_file = example_dir / "EnvCanadaTestSetNew.xlsm"
 
 
 class TestEnvCanadaOilExcelFile(object):
@@ -44,48 +46,70 @@ class TestEnvCanadaOilExcelFile(object):
         assert reader.name == data_file
 
         # just test that the file props reference the correct document info
-        assert reader.file_props['name'] == 'EnvCanadaTestSet.xlsx'
-        assert reader.file_props['creator'] == 'Mirnaghi,Fatemeh [NCR]'
+        assert reader.file_props['name'] == 'EnvCanadaTestSetNew.xlsm'
+        assert reader.file_props['creator'] is None
 
         # We should have five oil records
-        assert reader.col_indexes == {'2234': [2, 3, 4, 5, 6],
-                                      '2713': [7, 8, 9, 10],
-                                      '540': [11, 12],
-                                      '506': [13, 14, 15, 16],
-                                      '561': [17, 18, 19, 20]}
+        assert reader.col_indexes == {'2234': [5, 6, 7, 8, 9],
+                                      '506': [10, 11, 12, 13],
+                                      '2713': [14, 15, 16, 17],
+                                      '540': [18, 19],
+                                      '561': [20, 21, 22, 23],
+                                      }
 
         # There are literally hundreds of fields here, so let's just check
         # some of the individual category/field combinations
+        pprint(list(reader.field_indexes.keys()))
+
         assert reader.field_indexes[None]['Oil'] == [0]
         assert reader.field_indexes[None]['Weathered %:'] == [5]
 
         # the last row in our spreadsheet
+        pprint(reader.field_indexes['Biomarkers'])
         assert (reader.field_indexes
-                ['Biomarkers (µg/g) (ESTS 2002a):']
-                ['14ß(H),17ß(H)-20-Ethylcholestane(C29αßß)']) == [341]
+                ['Biomarkers']
+                ['14ß(H),17ß(H)-20-Ethylcholestane (C29αßß)']) == [446]
 
     def test_get_record(self):
         print('opening reader...')
         reader = EnvCanadaOilExcelFile(data_file)
 
         print('get rec = 2234...')
-        rec = reader.get_record('2234')
+        rec, conditions, file_props = reader.get_record('2234')
 
         # There are literally hundreds of fields here, so let's just check
         # some of the individual category/field combinations
-        assert rec[None]['Oil'] == ['Access West Winter Blend ',
+        assert rec[None]['Oil'] == ['Access West Blend Winter',
                                     None, None, None, None]
         assert rec[None]['Weathered %:'] == [0, 0.0853, 0.1686, 0.2534, 0.2645]
 
         # the last row in our spreadsheet
         assert np.allclose(rec
-                           ['Biomarkers (µg/g) (ESTS 2002a):']
-                           ['14ß(H),17ß(H)-20-Ethylcholestane(C29αßß)'],
+                           ['Biomarkers']
+                           ['14ß(H),17ß(H)-20-Ethylcholestane (C29αßß)'],
                            [240.15,
                             254.44,
                             278.78,
                             291.54,
                             304.77])
+
+        # now the content of our conditions
+        assert conditions[None]['Oil'] == {
+            'unit': 'Unit of measurment',
+            'ref_temp': 'Temperature',
+            'condition': 'Condition of analysis',
+        }
+        assert (conditions
+                ['Biomarkers']
+                ['14ß(H),17ß(H)-20-Ethylcholestane (C29αßß)'] == {
+                    'unit': 'µg/g',
+                    'ref_temp': None,
+                    'condition': None,
+                 })
+
+        # Now the content of the returned file props
+        assert file_props['name'] == 'EnvCanadaTestSetNew.xlsm'
+        assert file_props['creator'] is None
 
     def test_get_records(self):
         reader = EnvCanadaOilExcelFile(data_file)
@@ -98,7 +122,7 @@ class TestEnvCanadaOilExcelFile(object):
         for r in recs:
             # each item coming from records() is a record set containing
             # record data and file props
-            assert len(r) == 2
+            assert len(r) == 3
 
 
 class TestEnvCanadaRecordParser(object):
@@ -126,14 +150,16 @@ class TestEnvCanadaRecordParser(object):
             This is because the reference_date will sometimes need the
             file props if the reference field contains no date information.
         '''
-        data = self.reader.get_record(oil_id)
-        parser = EnvCanadaRecordParser(data, None)  # should construct fine
+        data, _conditions, _file_props = self.reader.get_record(oil_id)
+
+        # should construct fine
+        parser = EnvCanadaRecordParser(data, None, None)
 
         assert parser.reference['year'] == expected
 
     @pytest.mark.parametrize('oil_id, expected', [
         ('2713', 2016),
-        ('2234', 2017),
+        ('2234', 2015),
     ])
     def test_init_valid_data_and_file_props(self, oil_id, expected):
         '''
@@ -141,8 +167,8 @@ class TestEnvCanadaRecordParser(object):
             reference field contains no date information.  check that the
             file props are correctly parsed.
         '''
-        data = self.reader.get_record(oil_id)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, _conditions, file_props = self.reader.get_record(oil_id)
+        parser = EnvCanadaRecordParser(data, None, file_props)
 
         assert parser.reference['year'] == expected
 
@@ -154,17 +180,17 @@ class TestEnvCanadaRecordParser(object):
          '_14ss_h_17ss_h_20_ethylcholestane_c29assss'),
     ])
     def test_slugify(self, label, expected):
-        data = self.reader.get_record('2234')
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record('2234')
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         assert parser.slugify(label) == expected
 
     @pytest.mark.parametrize('path, expected', [
-        ('gc_total_aromatic_hydrocarbon',
-         'GC-TAH (mg/g Oil) (ESTS 2002a):'),
-        ('gc_total_aromatic_hydrocarbon.tah',
+        ('gc_tah',
+         'GC-TAH'),
+        ('gc_tah.tah',
          'Gas Chromatography-Total aromatic hydrocarbon (GC-TAH)'),
-        (['gc_total_aromatic_hydrocarbon', 'tah'],
+        (['gc_tah', 'tah'],
          'Gas Chromatography-Total aromatic hydrocarbon (GC-TAH)'),
         pytest.param('bogus', 'does not matter',
                      marks=pytest.mark.raises(exception=KeyError)),
@@ -172,40 +198,40 @@ class TestEnvCanadaRecordParser(object):
                      marks=pytest.mark.raises(exception=KeyError)),
     ])
     def test_get_label(self, path, expected):
-        data = self.reader.get_record('2234')
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record('2234')
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         assert parser.get_label(path) == expected
 
     @pytest.mark.parametrize('rec, attr, expected', [
-        ('2234', 'name', 'Access West Winter Blend'),
+        ('2234', 'name', 'Access West Blend Winter'),
         ('2234', 'oil_id', 'EC002234'),
         ('2234', 'ests_codes', ['2234.1.1 A', '2234.1.4.1 ', '2234.1.3.1 ',
                                 '2234.1.2.1 ', '2234.1.5.1 ']),
         ('2234', 'weathering', [0.0, 0.0853, 0.1686, 0.2534, 0.2645]),
-        ('2713', 'reference', {'reference': 'Hollebone, 2016. ',
+        ('2713', 'reference', {'reference': 'Hollebone, 2016',
                                'year': 2016}),
         ('2234', 'sample_date', '2013-04-08'),
-        ('2234', 'comments', 'Via  CanmetENERGY, Natural Resources Canada'),
+        ('2234', 'comments', 'Via CanmetEnergy, Natural Resources Canada'),
         ('2234', 'location', 'Alberta, Canada'),
         ('2234', 'product_type', 'crude'),
         ('540', 'product_type', 'refined'),
     ])
     def test_attrs(self, rec, attr, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         assert getattr(parser, attr) == expected
 
     @pytest.mark.parametrize('rec, attr, index, expected', [
-        ('2234', 'api_gravity.gravity', 0, 20.93),
+        ('2234', 'api_gravity.gravity', 0, 20.927),
         ('2234', 'api_gravity.gravity', 4, 8.01),
         ('2234', 'biomarkers._14b_h_17b_h_20_ethylcholestane', 0, 240.15),
         ('2234', 'biomarkers._14b_h_17b_h_20_ethylcholestane', 4, 304.77),
     ])
     def test_vertical_slice(self, rec, attr, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         subsample = parser.vertical_slice(index)
 
@@ -213,7 +239,7 @@ class TestEnvCanadaRecordParser(object):
         assert np.isclose(subsample[l1][l2], expected)
 
     @pytest.mark.parametrize('rec, attr, index, default, expected', [
-        ('2234', 'api_gravity.gravity', 0, None, 20.93),
+        ('2234', 'api_gravity.gravity', 0, None, 20.927),
         ('2234', 'api_gravity.gravity', 4, None, 8.01),
         ('2234', 'biomarkers._14b_h_17b_h_20_ethylcholestane', 0, None,
          240.15),
@@ -222,8 +248,8 @@ class TestEnvCanadaRecordParser(object):
         ('2234', 'bogus.bogus', 0, 0, 0),
     ])
     def test_samples(self, rec, attr, index, default, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
 
@@ -235,7 +261,7 @@ class TestEnvCanadaSampleParser(object):
     reader = EnvCanadaOilExcelFile(data_file)
 
     @pytest.mark.parametrize('rec, attr, index, default, expected', [
-        ('2234', 'api_gravity.gravity', 0, None, 20.93),
+        ('2234', 'api_gravity.gravity', 0, None, 20.927),
         ('2234', 'api_gravity.gravity', 4, None, 8.01),
         ('2234', 'biomarkers._14b_h_17b_h_20_ethylcholestane', 0, None,
          240.15),
@@ -244,8 +270,8 @@ class TestEnvCanadaSampleParser(object):
         ('2234', 'bogus.bogus', 0, 0, 0),
     ])
     def test_deep_get(self, rec, attr, index, default, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
 
@@ -253,12 +279,12 @@ class TestEnvCanadaSampleParser(object):
                            expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2234', 0, 20.93),
+        ('2234', 0, 20.927),
         ('2234', 4, 8.01),
     ])
     def test_api(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
 
@@ -266,61 +292,159 @@ class TestEnvCanadaSampleParser(object):
 
     def compare_expected(self, value, expected):
         '''
-            compare a dict value to an expected dict
+            compare a value to an expected value
         '''
+        if not type(value) == type(expected):
+            return False
+
         if isinstance(value, list):
             return all([self.compare_expected(*args)
                         for args in zip(value, expected)])
-        else:
+        elif isinstance(value, dict):
+            ret = []
+
             for k, v in value.items():
-                # wouldn't it be nice if np.isclose could handle things like
-                # strings and NoneTypes?
-                if v is None or isinstance(v, str):
-                    return v == expected[k]
-                elif isinstance(v, list):
-                    return np.allclose([v_i for v_i in v if v_i is not None],
-                                       [v_i for v_i in expected[k]
-                                        if v_i is not None])
-                else:
-                    return np.allclose(v, expected[k])
+                ret.append(self.compare_expected(v, expected[k]))
+
+            return all(ret)
+        elif isinstance(value, Number):
+            return np.isclose(value, expected)
+        else:
+            return value == expected
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2234', 0, {'density_15_c': 0.92526,
-                     'standard_deviation': [0.00050914, 0.0003377],
-                     'replicates': [3, 3],
-                     'density_0_c': 0.93988,
-                     'density_5_c': None}),
-        ('2234', 4, {'density_15_c': 1.014,
-                     'standard_deviation': [1.5275e-06, 4.5092e-06],
-                     'replicates': [3, 3],
-                     'density_0_c': 1.0211,
-                     'density_5_c': None}),
+        ('2234', 0, {'density': [0.92526, None, 0.93988],
+                     'method': ['ASTM D5002', None, 'ASTM D5002'],
+                     'ref_temp': ['15 ̊C', '5 ̊C', '0 ̊C'],
+                     'replicates': [3, None, 3],
+                     'standard_deviation': [0.00050914, None, 0.0003377],
+                     'unit': ['g/mL', 'g/mL', 'g/mL']}),
+        ('2234', 4, {'density': [1.014, None, 1.0211],
+                     'method': ['ASTM D5002', None, 'ASTM D5002'],
+                     'ref_temp': ['15 ̊C', '5 ̊C', '0 ̊C'],
+                     'replicates': [3, None, 3],
+                     'standard_deviation': [1.5275e-06, None, 4.5092e-06],
+                     'unit': ['g/mL', 'g/mL', 'g/mL']}),
     ])
     def test_densities(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
+
+        pprint(samples[index].densities)
 
         assert self.compare_expected(samples[index].densities, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2234', 0, {'method': 'ESTS 2001',
-                     'replicates': [3, 3],
-                     'standard_deviation': [8.27103, 24.4404],
-                     'viscosity_at_0_c': 1300,
-                     'viscosity_at_15_c': 350,
-                     'viscosity_at_5_c': None}),
-        ('2234', 4, {'method': 'ESTS 2001',
-                     'replicates': [3, 3],
-                     'standard_deviation': [119300.0, None],
-                     'viscosity_at_0_c': '>1E+8',
-                     'viscosity_at_15_c': 7909000.0,
-                     'viscosity_at_5_c': None}),
+        ('2234', 0, {
+            'condition': [
+                'Newtonian behavoir (Shear rate independent)',
+                '(Non-Newtonian) Shear rate=100 1/s',
+                '(Non-Newtonian) Shear rate=10 1/s',
+                '(Non-Newtonian) Shear rate=1 1/s',
+                '(Non-Newtonian) Shear rate=0.1 1/s',
+                'Unkown behavoir',
+                'Newtonian behavoir (Shear rate independent)',
+                '(Non-Newtonian) Shear rate=100 1/s',
+                '(Non-Newtonian) Shear rate=10 1/s',
+                '(Non-Newtonian) Shear rate= 1 1/s',
+                '(Non-Newtonian) Shear rate=0.01 1/s',
+                'Unkown behavoir',
+                'Newtonian behavoir (Shear rate independent)',
+                '(Non-Newtonian) Shear rate=100 1/s',
+                '(Non-Newtonian) Shear rate=10 1/s',
+                '(Non-Newtonian) Shear rate= 1 1/s',
+                '(Non-Newtonian) Shear rate=0.01 1/s',
+                'Unkown behavoir'
+            ],
+            'method': [
+                '12.06/x.x/M', None, None, None, None, None,
+                None, None, None, None, None, None,
+                '12.06/x.x/M', None, None, None, None, None
+            ],
+            'ref_temp': [
+                '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C',
+                '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C',
+                '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C'
+            ],
+            'replicates': [
+                3, None, None, None, None, None,
+                None, None, None, None, None, None,
+                3, None, None, None, None, None
+            ],
+            'standard_deviation': [
+                8.271, None, None, None, None, None,
+                None, None, None, None, None, None,
+                24.44, None, None, None, None, None
+            ],
+            'unit': [
+                'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s',
+                'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s',
+                'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s'
+            ],
+            'viscosity': [
+                350, None, None, None, None, None,
+                None, None, None, None, None, None,
+                1300, None, None, None, None, None
+            ]
+         }),
+        ('2234', 4, {
+            'condition': [
+                'Newtonian behavoir (Shear rate independent)',
+                '(Non-Newtonian) Shear rate=100 1/s',
+                '(Non-Newtonian) Shear rate=10 1/s',
+                '(Non-Newtonian) Shear rate=1 1/s',
+                '(Non-Newtonian) Shear rate=0.1 1/s',
+                'Unkown behavoir',
+                'Newtonian behavoir (Shear rate independent)',
+                '(Non-Newtonian) Shear rate=100 1/s',
+                '(Non-Newtonian) Shear rate=10 1/s',
+                '(Non-Newtonian) Shear rate= 1 1/s',
+                '(Non-Newtonian) Shear rate=0.01 1/s',
+                'Unkown behavoir',
+                'Newtonian behavoir (Shear rate independent)',
+                '(Non-Newtonian) Shear rate=100 1/s',
+                '(Non-Newtonian) Shear rate=10 1/s',
+                '(Non-Newtonian) Shear rate= 1 1/s',
+                '(Non-Newtonian) Shear rate=0.01 1/s',
+                'Unkown behavoir'
+            ],
+            'method': [
+                None, None, None, '12.06/x.x/M', None, None,
+                None, None, None, None, None, None,
+                None, None, None, None, None, None
+            ],
+            'ref_temp': [
+                '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C',
+                '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C',
+                '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C'
+            ],
+            'replicates': [
+                None, None, None, 3, None, None,
+                None, None, None, None, None, None,
+                None, None, None, None, None, None
+            ],
+            'standard_deviation': [
+                None, None, None, 119300.0, None, None,
+                None, None, None, None, None, None,
+                None, None, None, None, None, None
+            ],
+            'unit': [
+                'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s',
+                'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s',
+                'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s', 'mPa.s'
+            ],
+            'viscosity': [
+                None, None, None, 7909000, None, None,
+                None, None, None, None, None, None,
+                None, None, None, None, None, None
+            ]
+        }),
     ])
     def test_dvis(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].dvis)
@@ -328,44 +452,88 @@ class TestEnvCanadaSampleParser(object):
         assert self.compare_expected(samples[index].dvis, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2234', 0, {'ift_0_c_oil_air': 31.147,
-                     'ift_0_c_oil_seawater': 24.96,
-                     'ift_0_c_oil_water': 24.78,
-                     'ift_15_c_oil_air': 30.197,
-                     'ift_15_c_oil_seawater': 23.827,
-                     'ift_15_c_oil_water': 24.237,
-                     'ift_5_c_oil_air': None,
-                     'ift_5_c_oil_seawater': None,
-                     'ift_5_c_oil_water': None,
-                     'method': ['ESTS 2008', 'ESTS 2008'],
-                     'replicates': [None, None, None, None, None, None],
-                     'standard_deviation': [0.11372,
-                                            0.045092,
-                                            0.020817,
-                                            0.15044,
-                                            0.13454,
-                                            0.24637]}),
-        ('2234', 4, {'ift_0_c_oil_air': 'Too Viscous',
-                     'ift_0_c_oil_seawater': 'Too Viscous',
-                     'ift_0_c_oil_water': 'Too Viscous',
-                     'ift_15_c_oil_air': 'Too Viscous',
-                     'ift_15_c_oil_seawater': 'Too Viscous',
-                     'ift_15_c_oil_water': 'Too Viscous',
-                     'ift_5_c_oil_air': None,
-                     'ift_5_c_oil_seawater': None,
-                     'ift_5_c_oil_water': None,
-                     'method': ['ESTS 2008', 'ESTS 2008'],
-                     'replicates': [None, None, None, None, None, None],
-                     'standard_deviation': ['Too Viscous',
-                                            'Too Viscous',
-                                            'Too Viscous',
-                                            'Too Viscous',
-                                            'Too Viscous',
-                                            'Too Viscous']}),
+        ('2234', 0, {
+            'interface': [
+                'Oil/ air interface',
+                'Oil/water interface',
+                'Oil/salt water, 3.3% NaCl interface',
+                'Oil/ air interface',
+                'Oil/water interface',
+                'Oil/salt water, 3.3% NaCl interface',
+                'Oil/ air interface',
+                'Oil/water interface',
+                'Oil/salt water, 3.3% NaCl interface'
+            ],
+            'interfacial_tension': [
+                30.197, 24.237, 23.827,
+                None, None, None,
+                31.147, 24.78, 24.96
+            ],
+            'method': [
+                '12.12/x.x/M', '12.12/x.x/M', '12.12/x.x/M',
+                None, None, None,
+                '12.12/x.x/M', '12.12/x.x/M', '12.12/x.x/M'
+            ],
+            'ref_temp': [
+                '15 ̊C', '15 ̊C', '15 ̊C',
+                '5 ̊C', '5 ̊C', '5 ̊C',
+                '0 ̊C', '0 ̊C', '0 ̊C'
+            ],
+            'replicates': [3, 3, 3, None, None, None, 3, 3, 3],
+            'standard_deviation': [
+                0.11372, 0.045092, 0.020817,
+                None, None, None,
+                0.15044, 0.13454, 0.24637
+            ],
+            'unit': [
+                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
+                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
+                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm'
+            ]
+         }),
+        ('2234', 4, {
+            'interface': [
+                'Oil/ air interface',
+                'Oil/water interface',
+                'Oil/salt water, 3.3% NaCl interface',
+                'Oil/ air interface',
+                'Oil/water interface',
+                'Oil/salt water, 3.3% NaCl interface',
+                'Oil/ air interface',
+                'Oil/water interface',
+                'Oil/salt water, 3.3% NaCl interface'
+            ],
+            'interfacial_tension': [
+                'Too Viscous', 'Too Viscous', 'Too Viscous',
+                None, None, None,
+                'Too Viscous', 'Too Viscous', 'Too Viscous'
+            ],
+            'method': [
+                '12.12/x.x/M', '12.12/x.x/M', '12.12/x.x/M',
+                None, None, None,
+                '12.12/x.x/M', '12.12/x.x/M', '12.12/x.x/M'
+            ],
+            'ref_temp': [
+                '15 ̊C', '15 ̊C', '15 ̊C',
+                '5 ̊C', '5 ̊C', '5 ̊C',
+                '0 ̊C', '0 ̊C', '0 ̊C'
+            ],
+            'replicates': [3, 3, 3, None, None, None, 3, 3, 3],
+            'standard_deviation': [
+                'Too Viscous', None, None,
+                None, None, None,
+                None, None, None
+            ],
+            'unit': [
+                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
+                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
+                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm'
+            ]
+         }),
     ])
     def test_ifts(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].ifts)
@@ -383,8 +551,8 @@ class TestEnvCanadaSampleParser(object):
                      'standard_deviation': None}),
     ])
     def test_flash_point(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].flash_point)
@@ -402,8 +570,8 @@ class TestEnvCanadaSampleParser(object):
                      'standard_deviation': None}),
     ])
     def test_pour_point(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].pour_point)
@@ -459,8 +627,8 @@ class TestEnvCanadaSampleParser(object):
                      'method': 'ASTM D7169'}),
     ])
     def test_boiling_point_distribution(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].boiling_point_distribution)
@@ -513,8 +681,8 @@ class TestEnvCanadaSampleParser(object):
                     'temperature_c': None}),
     ])
     def test_boiling_point_cumulative_fraction(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].boiling_point_cumulative_fraction)
@@ -532,8 +700,8 @@ class TestEnvCanadaSampleParser(object):
                      'standard_deviation': 3.09}),
     ])
     def test_adhesion(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].adhesion)
@@ -542,23 +710,25 @@ class TestEnvCanadaSampleParser(object):
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2234', 0, {'a_for_ev_a_b_ln_t_c': None,
-                     'a_for_ev_a_bt_ln_t': 1.72,
-                     'a_for_ev_a_bt_sqrt_t': None,
+                     'a_for_ev_a_b_ln_t': 1.72,
+                     'a_for_ev_a_b_sqrt_t': None,
                      'b_for_ev_a_b_ln_t_c': None,
-                     'b_for_ev_a_bt_ln_t': 0.045,
-                     'b_for_ev_a_bt_sqrt_t': None,
-                     'c_for_ev_a_b_ln_t_c': None}),
+                     'b_for_ev_a_b_ln_t': 0.045,
+                     'b_for_ev_a_b_sqrt_t': None,
+                     'c_for_ev_a_b_ln_t_c': None,
+                     'method': '13.01/x.x/M'}),
         ('2234', 4, {'a_for_ev_a_b_ln_t_c': None,
-                     'a_for_ev_a_bt_ln_t': None,
-                     'a_for_ev_a_bt_sqrt_t': None,
+                     'a_for_ev_a_b_ln_t': None,
+                     'a_for_ev_a_b_sqrt_t': None,
                      'b_for_ev_a_b_ln_t_c': None,
-                     'b_for_ev_a_bt_ln_t': None,
-                     'b_for_ev_a_bt_sqrt_t': None,
-                     'c_for_ev_a_b_ln_t_c': None}),
+                     'b_for_ev_a_b_ln_t': None,
+                     'b_for_ev_a_b_sqrt_t': None,
+                     'c_for_ev_a_b_ln_t_c': None,
+                     'method': None}),
     ])
     def test_evaporation_eqs(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].evaporation_eqs)
@@ -566,65 +736,253 @@ class TestEnvCanadaSampleParser(object):
         assert self.compare_expected(samples[index].evaporation_eqs, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2234', 0, [{'complex_modulus_pa': 40,
-                      'complex_viscosity_pa_s': 7.0975,
-                      'loss_modulus_pa': 40,
-                      'replicates': [6, 9],
-                      'standard_deviation': [18, 6, 17, 1.2, 2.9, 2.3],
-                      'storage_modulus_pa': 13.823,
-                      'tan_delta_v_e': 3.135,
-                      'visual_stability': 'Entrained',
-                      'water_content_w_w': 39.787},
-                     {'complex_modulus_pa': 30,
-                      'complex_viscosity_pa_s': 4.9798,
-                      'loss_modulus_pa': 30,
-                      'replicates': [6, 9],
-                      'standard_deviation': [7, 0.96, 6.9, 4.1, 1.1, 1.8],
-                      'storage_modulus_pa': 2.4437,
-                      'tan_delta_v_e': 13.883,
-                      'visual_stability': None,
-                      'water_content_w_w': 15.592}]),
-        ('2234', 4, [{'complex_modulus_pa': None,
-                      'complex_viscosity_pa_s': None,
-                      'loss_modulus_pa': None,
-                      'replicates': [None, None],
-                      'standard_deviation': [None, None, None, None, None,
-                                             None],
-                      'storage_modulus_pa': None,
-                      'tan_delta_v_e': None,
-                      'visual_stability': 'Did not form',
-                      'water_content_w_w': None},
-                     {'complex_modulus_pa': None,
-                      'complex_viscosity_pa_s': None,
-                      'loss_modulus_pa': None,
-                      'replicates': [None, None],
-                      'standard_deviation': [None, None, None, None, None,
-                                             None],
-                      'storage_modulus_pa': None,
-                      'tan_delta_v_e': None,
-                      'visual_stability': None,
-                      'water_content_w_w': None}]),
+        ('2234', 0, {
+            'conditions': {
+                'emulsion_complex_modulus': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                ],
+                'emulsion_complex_viscosity': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa.s'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa.s'}
+                ],
+                'emulsion_loss_modulus': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                ],
+                'emulsion_storage_modulus': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                ],
+                'emulsion_tan_delta_v_e': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}],
+                'emulsion_visual_stability': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}],
+                'emulsion_water_content': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': '%w/w'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': '%w/w'}],
+                'method': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': None, 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': None, 'unit': None}],
+                'replicates': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}],
+                'standard_deviation': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}]},
+            'emulsion_complex_modulus': [45, 31],
+            'emulsion_complex_viscosity': [7.0975, 4.9798],
+            'emulsion_loss_modulus': [42, 31],
+            'emulsion_storage_modulus': [13.823, 2.4437],
+            'emulsion_tan_delta_v_e': [3.135, 12],
+            'emulsion_visual_stability': ['Entrained', None],
+            'emulsion_water_content': [39.787, 15.592],
+            'method': ['13.02/x.x/M', '13.02/x.x/M'],
+            'replicates': [6, 6, 6, 6, 6, 9, 6, 6, 6, 5, 6, 9],
+            'standard_deviation': [7, 3, 6, 0.4, 1, 2.3,
+                                   7, 0.96, 6.9, 2, 1.1, 1.8]
+         }),
+        ('2234', 4, {
+            'conditions': {
+                'emulsion_complex_modulus': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                ],
+                'emulsion_complex_viscosity': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa.s'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa.s'}
+                ],
+                'emulsion_loss_modulus': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                ],
+                'emulsion_storage_modulus': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                ],
+                'emulsion_tan_delta_v_e': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}
+                ],
+                'emulsion_visual_stability': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}
+                ],
+                'emulsion_water_content': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': '%w/w'},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': '%w/w'}
+                ],
+                'method': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': None, 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': None, 'unit': None}
+                ],
+                'replicates': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}
+                ],
+                'standard_deviation': [
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'On the day of formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None},
+                    {'condition': 'One week after formation',
+                     'ref_temp': '15 °C', 'unit': None}
+                ]
+            },
+            'emulsion_complex_modulus': [None, None],
+            'emulsion_complex_viscosity': [None, None],
+            'emulsion_loss_modulus': [None, None],
+            'emulsion_storage_modulus': [None, None],
+            'emulsion_tan_delta_v_e': [None, None],
+            'emulsion_visual_stability': ['Did not form', None],
+            'emulsion_water_content': [None, None],
+            'method': [None, None],
+            'replicates': [None, None, None, None, None, None,
+                           None, None, None, None, None, None],
+            'standard_deviation': [None, None, None, None, None, None,
+                                   None, None, None, None, None, None]
+         }),
     ])
     def test_emulsion(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(list(samples[index].emulsions))
+        pprint(samples[index].emulsions)
 
-        assert self.compare_expected(list(samples[index].emulsions), expected)
+        assert self.compare_expected(samples[index].emulsions, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2713', 0, {'dispersant_effectiveness': 45.851,
+                     'method': 'ASTM F2059',
                      'replicates': 6,
                      'standard_deviation': 3.5196}),
         ('2713', 3, {'dispersant_effectiveness': '<10',
+                     'method': 'ASTM F2059',
                      'replicates': 6,
-                     'standard_deviation': 1.6195}),
+                     'standard_deviation': None}),
     ])
     def test_chemical_dispersibility(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].chemical_dispersibility)
@@ -633,16 +991,18 @@ class TestEnvCanadaSampleParser(object):
                                      expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2713', 0, {'replicates': 3,
+        ('2713', 0, {'method': 'ASTM D4294',
+                     'replicates': 3,
                      'standard_deviation': 0,
                      'sulfur_content': 0.9}),
-        ('2713', 3, {'replicates': 3,
+        ('2713', 3, {'method': 'ASTM D4294',
+                     'replicates': 3,
                      'standard_deviation': 0.01,
                      'sulfur_content': 1.4}),
     ])
     def test_sulfur_content(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].sulfur_content)
@@ -650,16 +1010,18 @@ class TestEnvCanadaSampleParser(object):
         assert self.compare_expected(samples[index].sulfur_content, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2713', 0, {'replicates': 3,
+        ('2713', 0, {'method': 'ASTM E203',
+                     'replicates': 3,
                      'standard_deviation': 0.01,
                      'water_content': 0.27}),
-        ('2713', 3, {'replicates': 3,
+        ('2713', 3, {'method': 'ASTM E203',
+                     'replicates': 3,
                      'standard_deviation': 0,
                      'water_content': 0.1}),
     ])
     def test_water_content(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].water_content)
@@ -667,16 +1029,18 @@ class TestEnvCanadaSampleParser(object):
         assert self.compare_expected(samples[index].water_content, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2713', 0, {'replicates': 3,
+        ('2713', 0, {'method': '12.11/2.0/M',
+                     'replicates': 3,
                      'standard_deviation': 0.13574,
                      'waxes': 3.9794}),
-        ('2713', 3, {'replicates': 3,
+        ('2713', 3, {'method': '12.11/2.0/M',
+                     'replicates': 3,
                      'standard_deviation': 0.39541,
                      'waxes': 6.0319}),
     ])
     def test_wax_content(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].wax_content)
@@ -686,22 +1050,22 @@ class TestEnvCanadaSampleParser(object):
     @pytest.mark.parametrize('rec, index, expected', [
         ('2713', 0, {'aromatics': 31.9,
                      'asphaltene': 3.9794,
-                     'method': [None, 'ESTS 2014'],
+                     'method': '12.11/3.0/M',
                      'replicates': [3, 3],
                      'resin': 6.4506,
                      'saturates': 57.9,
                      'standard_deviation': [0.21576, 0.13574]}),
         ('2713', 3, {'aromatics': 30.1,
                      'asphaltene': 7.7224,
-                     'method': [None, 'ESTS 2014'],
+                     'method': '12.11/3.0/M',
                      'replicates': [3, 3],
                      'resin': 10.705,
                      'saturates': 51.5,
                      'standard_deviation': [0.52482, 0.20592]}),
     ])
     def test_sara_total_fractions(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].sara_total_fractions)
@@ -710,12 +1074,16 @@ class TestEnvCanadaSampleParser(object):
                                      expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('561', 0, {'benzene': 1883.6}),
-        ('561', 3, {'benzene': 0}),
+        ('561', 0, {None: None}),
+        ('561', 3, {None: None}),
     ])
     def test_benzene(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        '''
+            Note: The category header for the benzene groups no longer contains
+                  any data.  It's all in the other groups.
+        '''
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].benzene)
@@ -723,18 +1091,20 @@ class TestEnvCanadaSampleParser(object):
         assert self.compare_expected(samples[index].benzene, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('561', 0, {'ethylbenzene': 1199.7,
+        ('561', 0, {'benzene': 1883.6,
+                    'ethylbenzene': 1199.7,
                     'm_p_xylene': 3092.5,
                     'o_xylene': 1619.2,
                     'toluene': 4173.3}),
-        ('561', 3, {'ethylbenzene': 0,
+        ('561', 3, {'benzene': 0,
+                    'ethylbenzene': 0,
                     'm_p_xylene': 0,
                     'o_xylene': 0,
                     'toluene': 0}),
     ])
     def test_btex_group(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].btex_group)
@@ -752,6 +1122,7 @@ class TestEnvCanadaSampleParser(object):
                     'amylbenzene': 63.835,
                     'isobutylbenzene': 73.443,
                     'isopropylbenzene': 11968.0,
+                    'method': '5.02/x.x/M',
                     'n_hexylbenzene': 83.745,
                     'propylebenzene': 711.48}),
         ('561', 3, {'_1_2_3_trimethylbenzene': 4.6633,
@@ -764,12 +1135,13 @@ class TestEnvCanadaSampleParser(object):
                     'amylbenzene': 25.917,
                     'isobutylbenzene': 0.85681,
                     'isopropylbenzene': 0,
+                    'method': '5.02/x.x/M',
                     'n_hexylbenzene': 75.861,
                     'propylebenzene': 0.35799}),
     ])
     def test_c4_c6_alkyl_benzenes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].c4_c6_alkyl_benzenes)
@@ -777,6 +1149,7 @@ class TestEnvCanadaSampleParser(object):
         assert self.compare_expected(samples[index].c4_c6_alkyl_benzenes,
                                      expected)
 
+    @pytest.mark.skip
     @pytest.mark.parametrize('rec, index, expected', [
         ('561', 0, {'c5_group': 49.414,
                     'c6_group': 54.823,
@@ -794,8 +1167,12 @@ class TestEnvCanadaSampleParser(object):
                     'n_c8': 0}),
     ])
     def test_headspace_analysis(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        '''
+            Note: The April 2020 datasheet has no headspace information.
+                  We will skip this test for now.
+        '''
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].headspace_analysis)
@@ -804,13 +1181,15 @@ class TestEnvCanadaSampleParser(object):
                                      expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2234', 0, {'resolved_peaks_tph': 9.0821,
+        ('2234', 0, {'method': '5.03/x.x/M',
+                     'resolved_peaks_tph': 9.0821,
                      'tah': 134.62,
                      'tah_tph': 45.006,
                      'tph': 299.0,
                      'tsh': 164.38,
                      'tsh_tph': 54.994}),
-        ('2234', 3, {'resolved_peaks_tph': 7.2719,
+        ('2234', 3, {'method': '5.03/x.x/M',
+                     'resolved_peaks_tph': 7.2719,
                      'tah': 155.18,
                      'tah_tph': 49.618,
                      'tph': 312.74,
@@ -818,8 +1197,8 @@ class TestEnvCanadaSampleParser(object):
                      'tsh_tph': 50.382}),
     ])
     def test_chromatography(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].chromatography)
@@ -837,8 +1216,8 @@ class TestEnvCanadaSampleParser(object):
                      'f4': 31.447}),
     ])
     def test_ccme(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].ccme)
@@ -863,14 +1242,14 @@ class TestEnvCanadaSampleParser(object):
                      'n_c34': 16.9,
                      'n_c8_to_n_c10': 1.89}),
     ])
-    def test_ccme_f1(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+    def test_ests_saturates(self, rec, index, expected):
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ccme_f1)
+        pprint(samples[index].ests_saturates)
 
-        assert self.compare_expected(samples[index].ccme_f1, expected)
+        assert self.compare_expected(samples[index].ests_saturates, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2234', 0, {'n_c10_to_n_c12': 2.17,
@@ -890,14 +1269,14 @@ class TestEnvCanadaSampleParser(object):
                      'n_c34': 23.92,
                      'n_c8_to_n_c10': 1.51}),
     ])
-    def test_ccme_f2(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+    def test_ests_aromatics(self, rec, index, expected):
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ccme_f2)
+        pprint(samples[index].ests_aromatics)
 
-        assert self.compare_expected(samples[index].ccme_f2, expected)
+        assert self.compare_expected(samples[index].ests_aromatics, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2234', 0, {'n_c10_to_n_c12': 14.17,
@@ -919,14 +1298,14 @@ class TestEnvCanadaSampleParser(object):
                      'n_c8_to_n_c10': 2.5,
                      'total_tph_gc_detected_tph_undetected_tph': 540}),
     ])
-    def test_ccme_tph(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+    def test_ests_tph(self, rec, index, expected):
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ccme_tph)
+        pprint(samples[index].ests_tph)
 
-        assert self.compare_expected(samples[index].ccme_tph, expected)
+        assert self.compare_expected(samples[index].ests_tph, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2713', 0, {'c0_n': 501.23,
@@ -941,8 +1320,8 @@ class TestEnvCanadaSampleParser(object):
                      'c4_n': 1361.2}),
     ])
     def test_naphthalenes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].naphthalenes)
@@ -962,8 +1341,8 @@ class TestEnvCanadaSampleParser(object):
                      'c4_p': 273.87}),
     ])
     def test_phenanthrenes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].phenanthrenes)
@@ -981,8 +1360,8 @@ class TestEnvCanadaSampleParser(object):
                      'c3_d': 415.56}),
     ])
     def test_dibenzothiophenes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].dibenzothiophenes)
@@ -1001,8 +1380,8 @@ class TestEnvCanadaSampleParser(object):
                      'c3_f': 341.1}),
     ])
     def test_fluorenes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].fluorenes)
@@ -1022,8 +1401,8 @@ class TestEnvCanadaSampleParser(object):
                      'c4_b': 170.6}),
     ])
     def test_benzonaphthothiophenes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].benzonaphthothiophenes)
@@ -1042,8 +1421,8 @@ class TestEnvCanadaSampleParser(object):
                      'c3_c': 118.69}),
     ])
     def test_chrysenes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].chrysenes)
@@ -1053,7 +1432,7 @@ class TestEnvCanadaSampleParser(object):
     @pytest.mark.parametrize('rec, index, expected', [
         ('2713', 0, {'acenaphthene': 14.77,
                      'acenaphthylene': 13.582,
-                     'anthracene': 3.317,
+                     'anthracene': 3.3171,
                      'benz_a_anthracene': 2.8115,
                      'benzo_a_pyrene': 2.083,
                      'benzo_b_fluoranthene': 4.7402,
@@ -1064,6 +1443,7 @@ class TestEnvCanadaSampleParser(object):
                      'dibenzo_ah_anthracene': 1.1867,
                      'fluoranthene': 5.1809,
                      'indeno_1_2_3_cd_pyrene': 0.55658,
+                     'method': '5.03/x.x/M',
                      'perylene': 3.2858,
                      'pyrene': 15.784}),
         ('2713', 3, {'acenaphthene': 13.492,
@@ -1078,13 +1458,14 @@ class TestEnvCanadaSampleParser(object):
                      'biphenyl': 124.33,
                      'dibenzo_ah_anthracene': 1.3269,
                      'fluoranthene': 5.519,
-                     'indeno_1_2_3_cd_pyrene': 0.58978,
+                     'indeno_1_2_3_cd_pyrene': 0.58979,
+                     'method': '5.03/x.x/M',
                      'perylene': 3.9403,
-                     'pyrene': 16.28}),
+                     'pyrene': 16.281}),
     ])
     def test_other_priority_pahs(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].other_priority_pahs)
@@ -1112,7 +1493,7 @@ class TestEnvCanadaSampleParser(object):
                      'c26': 1212.8,
                      'c27': 1152.1,
                      'c28': 1081.8,
-                     'c29': 876.0,
+                     'c29': 876.02,
                      'c30': 690.68,
                      'c31': 576.11,
                      'c32': 479.66,
@@ -1130,6 +1511,7 @@ class TestEnvCanadaSampleParser(object):
                      'c44': None,
                      'c8': None,
                      'c9': 4101.7,
+                     'method': '5.03/x.x/M',
                      'phytane': 882.09,
                      'pristane': 1037.1}),
         ('2713', 3, {'c10': 0.48342,
@@ -1169,12 +1551,13 @@ class TestEnvCanadaSampleParser(object):
                      'c44': None,
                      'c8': None,
                      'c9': 1.2005,
+                     'method': '5.03/x.x/M',
                      'phytane': 1105.6,
                      'pristane': 1403.9}),
     ])
     def test_n_alkanes(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].n_alkanes)
@@ -1197,8 +1580,9 @@ class TestEnvCanadaSampleParser(object):
                      'c21_tricyclic_terpane': 35.308,
                      'c22_tricyclic_terpane': 16.578,
                      'c23_tricyclic_terpane': 106.74,
-                     'c24_tricyclic_terpane': 55.27,
+                     'c24_tricyclic_terpane': 55.274,
                      'hopane': 71.864,
+                     'method': '5.03/x.x/M',
                      'pentakishomohopane_22r': 19.834,
                      'pentakishomohopane_22s': 30.081,
                      'tetrakishomohopane_22r': 31.932,
@@ -1220,14 +1604,15 @@ class TestEnvCanadaSampleParser(object):
                      'c23_tricyclic_terpane': 126.43,
                      'c24_tricyclic_terpane': 65.354,
                      'hopane': 89.128,
+                     'method': '5.03/x.x/M',
                      'pentakishomohopane_22r': 22.688,
                      'pentakishomohopane_22s': 35.872,
                      'tetrakishomohopane_22r': 39.214,
                      'tetrakishomohopane_22s': 60.809}),
     ])
     def test_biomarkers(self, rec, index, expected):
-        data = self.reader.get_record(rec)
-        parser = EnvCanadaRecordParser(data, self.reader.file_props)
+        data, conditions, file_props = self.reader.get_record(rec)
+        parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
         pprint(samples[index].biomarkers)

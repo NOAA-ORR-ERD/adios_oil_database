@@ -5,10 +5,7 @@ from collections import defaultdict
 
 from openpyxl import load_workbook
 
-from oil_database.util import sigfigs
-
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
+from oil_database.util import sigfigs, strip
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +37,7 @@ class EnvCanadaOilExcelFile(object):
 
         self.col_indexes = self._get_oil_column_indexes()
         self.field_indexes = self._get_row_field_names()
+        self._conditions = None
 
     def _get_oil_column_indexes(self):
         '''
@@ -63,7 +61,7 @@ class EnvCanadaOilExcelFile(object):
         col_headers = defaultdict(list)
 
         for idx, col in enumerate(self.db_sheet.columns):
-            if idx >= 2:
+            if idx >= 5:
                 # all columns should have a valid ESTS code
                 ests_code = str(col[4].value).split('.')[0]
                 col_headers[ests_code].append(idx)
@@ -97,6 +95,13 @@ class EnvCanadaOilExcelFile(object):
         row_prev_name = None
 
         for idx, row in enumerate(self.db_sheet.rows):
+            if idx == 0:
+                # First row needs to setup the header fields, so we make the
+                # first cell an empty field regardless what is actually in
+                # there. (The April 2020 update of this file contained a bunch
+                # of garbage text)
+                row[0].value = None
+
             if all([(r.value is None) for r in row[:2]]):
                 category_name, field_name = None, None
             elif row[0].value is not None:
@@ -140,7 +145,7 @@ class EnvCanadaOilExcelFile(object):
             one.
         '''
         for name in self.col_indexes:
-            yield (self.get_record(name), self.file_props)
+            yield self.get_record(name)
 
     def get_record(self, name):
         '''
@@ -174,4 +179,64 @@ class EnvCanadaOilExcelFile(object):
 
             ret[cat] = cat_values
 
-        return ret
+        return ret, self.conditions, self.file_props
+
+    @property
+    def conditions(self):
+        '''
+            The April 2020 update of the Environment Canada datasheet contained
+            a few extra columns that contained data concerning the testing
+            conditions for the measurements.
+
+            This information is indexed in the same way as the field data,
+            but we only need to create it one time upon opening the file.
+        '''
+        if self._conditions is None:
+            ret = {}
+            record_data = self._get_conditions_columns()
+
+            for cat, sub_cat in self.field_indexes.items():
+                cat_values = {}
+
+                for f, idxs in sub_cat.items():
+                    values_i = [record_data[i] for i in idxs]
+
+                    for i, v in enumerate(values_i):
+                        unit, ref_temp, condition = v
+                        values_i[i] = {
+                            'unit': unit,
+                            'ref_temp': ref_temp,
+                            'condition': condition
+                        }
+
+                    if len(values_i) == 1:
+                        values_i = values_i[0]
+
+                    cat_values[f] = values_i
+
+                ret[cat] = cat_values
+
+            self._conditions = ret
+
+        return self._conditions
+
+    def _get_conditions_columns(self):
+        '''
+            The April 2020 update of the Environment Canada datasheet contained
+            a few extra columns that contained data concerning the testing
+            conditions for the measurements. They are:
+            - Unit of Measurement: Instead of annotating the category and/or
+                                   field names with unit information, they
+                                   put this information into a dedicated column
+            - Temperature: Instead of annotating temperature information into
+                           the field names, they put this information into a
+                           dedicated column.
+            - Conditions of analysis: Other significant information concerning
+                                      the measurements taken seem to be entered
+                                      here.  Most significantly, non-newtonian
+                                      shear rate for viscosities.  This was not
+                                      there before.
+        '''
+        return list(zip(*[[sigfigs(strip(cell.value), 5) for cell in col]
+                          for i, col in enumerate(self.db_sheet.columns)
+                          if i in [2, 3, 4]]))

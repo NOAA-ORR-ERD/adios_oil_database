@@ -9,7 +9,6 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
 
-from .values import ProductType, Reference
 from .metadata import MetaData
 from .sample import SampleList
 

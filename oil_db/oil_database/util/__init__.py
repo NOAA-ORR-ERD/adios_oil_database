@@ -12,3 +12,10 @@ def sigfigs(x, sig=6):
         return round(x, sig - int(floor(log10(abs(x)))) - 1)
     except (ValueError, TypeError):
         return x
+
+
+def strip(value):
+    try:
+        return value.strip()
+    except (ValueError, TypeError, AttributeError):
+        return value
