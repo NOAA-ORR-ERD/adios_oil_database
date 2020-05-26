@@ -57,14 +57,28 @@ class EnvCanadaOilExcelFile(object):
               either natural or simulated in a laboratory.
             - We will return a dict with oil names as keys and a list of
               associated column indexes as values.
+
+            Note: the April 2020 version of this datasheet has a single oil
+                  record for which the ESTS code cells have been merged into
+                  A single cell.  This has created a "gap" cell with a null
+                  value.  So we need to remember the previous cell value.
         '''
         col_headers = defaultdict(list)
 
+        prev_code = None
         for idx, col in enumerate(self.db_sheet.columns):
             if idx >= 5:
-                # all columns should have a valid ESTS code
-                ests_code = str(col[4].value).split('.')[0]
+                ests_code = col[4].value
+
+                if ests_code is None:
+                    ests_code = prev_code
+                else:
+                    ests_code = str(ests_code).split('.')[0]
+                    ests_code = str(int(ests_code))
+
                 col_headers[ests_code].append(idx)
+
+                prev_code = ests_code
 
         return col_headers
 

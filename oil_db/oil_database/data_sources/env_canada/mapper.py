@@ -37,6 +37,10 @@ class EnvCanadaRecordMapper(MapperBase):
         self._labels = None
 
     @property
+    def oil_id(self):
+        return self.record.oil_id
+
+    @property
     def sub_samples(self):
         return [EnvCanadaSampleMapper(s, w)
                 for s, w in zip(self.record.sub_samples,

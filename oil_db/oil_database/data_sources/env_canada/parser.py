@@ -249,8 +249,10 @@ class EnvCanadaRecordParser(ParserBase):
             the petroleum substance, and the rest identify a degree of
             weathering.  So we will use just the first one.
         '''
-        primary_codes = set([str(c).split('.')[0]
-                             for c in self.ests_codes])
+        primary_codes = set([str(int(str(c).split('.')[0]))
+                             for c in self.ests_codes
+                             if c is not None])
+
         assert len(primary_codes) == 1
 
         return primary_codes.pop()
@@ -479,11 +481,7 @@ class EnvCanadaSampleParser(ParserBase):
         try:
             ret = self.values[name]
         except Exception:
-            try:
-                ret = self.values[self.attr_map[name]]
-            except Exception:
-                logger.info(f'{self.__class__.__name__}.{name} not found')
-                raise
+            ret = self.values[self.attr_map[name]]
 
         return ret
 

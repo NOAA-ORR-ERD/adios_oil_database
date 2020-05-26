@@ -296,8 +296,8 @@ def _add_oillib_files(settings):
 
 def _add_ec_files(settings):
     ec_files = '\n'.join([os.path.join(data_path, 'env_canada', fn)
-                          for fn in ('Physiochemical properties of '
-                                     'petroleum products-EN.xlsx',)])
+                          for fn in ('April 2020-Physiochemical_properties_'
+                                     'of_petroleum_products. EN.xlsm',)])
 
     settings['oildb.ec_files'] = ec_files
 
