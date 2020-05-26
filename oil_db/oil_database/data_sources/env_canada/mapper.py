@@ -126,7 +126,7 @@ class EnvCanadaSampleMapper(MapperBase):
                      'distillation_data',
                      'compounds',
                      'bulk_composition',
-                     'headspace_analysis',
+                     # 'headspace_analysis',
                      'CCME'):
             rec[attr] = getattr(self, attr)
 
@@ -134,49 +134,40 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def densities(self):
-        ret = []
+        ret = self.transpose_dict_of_lists(self.parser.densities)
 
-        for item in (('density_0_c', 0.0, 1, 1),
-                     ('density_5_c', 5.0, 1, 1),
-                     ('density_15_c', 15.0, 0, 0)):
-            rho_lbl, ref_temp, std_idx, repl_idx = item
+        for item in ret:
+            item['density'] = {
+                'value': item.pop('density'),
+                'unit': item.pop('unit'),
+                'standard_deviation': item.pop('standard_deviation'),
+                'replicates': item.pop('replicates')
+            }
 
-            rho = self.parser.densities[rho_lbl]
-            std_dev = self.parser.densities['standard_deviation'][std_idx]
-            replicates = self.parser.densities['replicates'][repl_idx]
+            # these items might be used later, but right now we ignore them
+            item.pop('method')
 
-            if rho is not None:
-                ret.append({
-                    'density': self.measurement(rho, 'g/mL',
-                                                standard_deviation=std_dev,
-                                                replicates=replicates),
-                    'ref_temp': self.measurement(ref_temp, 'C')
-                })
-
-        return ret
+        return sorted([r for r in ret if r['density']['value'] is not None],
+                      key=lambda x: x['ref_temp']['value'])
 
     @property
     def dynamic_viscosities(self):
-        ret = []
+        ret = self.transpose_dict_of_lists(self.parser.dvis)
 
-        for item in (('viscosity_at_0_c', 0.0, 1, 1),
-                     ('viscosity_at_5_c', 5.0, 1, 1),
-                     ('viscosity_at_15_c', 15.0, 0, 0)):
-            mu_lbl, ref_temp, std_idx, repl_idx = item
+        for item in ret:
+            item['viscosity'] = {
+                'value': item.pop('viscosity'),
+                'unit': item.pop('unit'),
+                'standard_deviation': item.pop('standard_deviation'),
+                'replicates': item.pop('replicates')
+            }
 
-            mu = self.parser.dvis[mu_lbl]
-            std_dev = self.parser.dvis['standard_deviation'][std_idx]
-            replicates = self.parser.dvis['replicates'][repl_idx]
+            # these items might be used later, but right now we ignore them
+            item.pop('condition')
+            item.pop('method')
 
-            if mu is not None:
-                ret.append({
-                    'viscosity': self.measurement(mu, 'mPa.s',
-                                                  standard_deviation=std_dev,
-                                                  replicates=replicates),
-                    'ref_temp': self.measurement(ref_temp, 'C')
-                })
-
-        return ret
+        return sorted([r for r in ret if r['viscosity']['value'] is not None],
+                      key=lambda x: x['ref_temp']['value'])
 
     @property
     def distillation_data(self):
@@ -222,8 +213,12 @@ class EnvCanadaSampleMapper(MapperBase):
             self.parser.boiling_point_distribution['fbp'], 'C'
         )
 
+        ret['method'] = self.parser.boiling_point_distribution['method']
+        if ret['method'] is None:
+            ret['method'] = (self.parser
+                             .boiling_point_cumulative_fraction['method'])
+
         ret['type'] = 'mass'
-        ret['method'] = self.parser.boiling_point_cumulative_fraction['method']
         ret['cuts'] = cuts
 
         return ret
@@ -266,35 +261,24 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def interfacial_tensions(self):
-        ret = []
-        method = self.parser.ifts['method']
+        ret = self.transpose_dict_of_lists(self.parser.ifts)
 
-        for intf, temp, std_idx, method_idx in (('air',       0.0, 3, 1),
-                                                ('water',     0.0, 4, 1),
-                                                ('seawater',  0.0, 5, 1),
-                                                ('air',       5.0, 3, 1),
-                                                ('water',     5.0, 4, 1),
-                                                ('seawater',  5.0, 5, 1),
-                                                ('air',      15.0, 0, 0),
-                                                ('water',    15.0, 1, 0),
-                                                ('seawater', 15.0, 2, 0)):
-            lbl = f'ift_{int(temp)}_c_oil_{intf}'
-            value = self.parser.ifts[lbl]
+        for item in ret:
+            if_map = {
+                'Oil/ air interface': 'air',
+                'Oil/water interface': 'water',
+                'Oil/salt water, 3.3% NaCl interface': 'seawater'
+            }
+            item['interface'] = if_map[item['interface']]
 
-            if value is not None:
-                std_dev = self.parser.ifts['standard_deviation'][std_idx]
-                repl = self.parser.ifts['replicates'][std_idx]
+            item['tension'] = {
+                'value': item.pop('interfacial_tension'),
+                'unit': item.pop('unit'),
+                'standard_deviation': item.pop('standard_deviation'),
+                'replicates': item.pop('replicates')
+            }
 
-                ret.append({
-                    'interface': intf,
-                    'tension': self.measurement(value, 'mN/m',
-                                                standard_deviation=std_dev,
-                                                replicates=repl),
-                    'ref_temp': self.measurement(temp, 'C'),
-                    'method': method[method_idx]
-                })
-
-        return ret
+        return [r for r in ret if r['tension']['value'] is not None]
 
     @property
     def dispersibilities(self):
@@ -322,31 +306,57 @@ class EnvCanadaSampleMapper(MapperBase):
     @property
     def emulsions(self):
         ret = []
-        for e in self.parser.emulsions:
-            emul = dict(e.items())
 
-            for long_name, name, unit, std_idx, repl_idx in (
-                ('complex_modulus_pa', 'complex_modulus', 'Pa', 0, 0),
-                ('storage_modulus_pa', 'storage_modulus', 'Pa', 1, 0),
-                ('loss_modulus_pa', 'loss_modulus', 'Pa', 2, 0),
-                ('tan_delta_v_e', 'tan_delta', '%', 3, 0),
-                ('complex_viscosity_pa_s', 'complex_viscosity', 'Pa.s', 4, 0),
-                ('water_content_w_w', 'water_content', '%', 5, 1),
-            ):
-                emul.update([
-                    (name, self.measurement(
-                        emul.pop(long_name, None), unit,
-                        standard_deviation=emul['standard_deviation'][std_idx],
-                        replicates=emul['replicates'][repl_idx]
-                     ))
-                ])
+        age_map = {'On the day of formation': 0,
+                   'One week after formation': 7}
 
-            emul.pop('standard_deviation', None)
-            emul.pop('replicates', None)
-            emul['age'] = {'value': emul['age'], 'unit': 'day'}
-            emul['method'] = 'ESTS 1998-2'
+        emulsions = self.parser.emulsions
+        replicates = emulsions.pop('replicates')
+        std_dev = emulsions.pop('standard_deviation')
+        conditions = emulsions.pop('conditions')
 
-            ret.append(emul)
+        # need corresponding lists of:
+        # - emulsion
+        # - condition
+        # - standard deviation
+        # - replicates
+        emulsions = self.transpose_dict_of_lists(emulsions)
+        conditions = self.transpose_dict_of_lists(conditions)
+
+        n = 6  # the stride of our measurement lists
+        std_dev = [std_dev[i:i + n] for i in range(0, len(std_dev), n)]
+        replicates = [replicates[i:i + n]
+                      for i in range(0, len(replicates), n)]
+
+        for idx, (emul, cond, dev, repl) in enumerate(zip(emulsions,
+                                                          conditions,
+                                                          std_dev,
+                                                          replicates)):
+            ret.append({})
+
+            ret[idx]['method'] = emul['method']
+            ret[idx]['visual_stability'] = emul['emulsion_visual_stability']
+
+            ret[idx]['age'] = {
+                'unit': 'day',
+                'value': age_map[
+                    cond['emulsion_visual_stability']['condition']
+                ]
+            }
+
+            for i, attr in enumerate(('emulsion_complex_modulus',
+                                      'emulsion_storage_modulus',
+                                      'emulsion_loss_modulus',
+                                      'emulsion_tan_delta_v_e',
+                                      'emulsion_complex_viscosity',
+                                      'emulsion_water_content')):
+                ret[idx][attr] = {}
+                ret[idx][attr]['value'] = emul[attr]
+                ret[idx][attr]['unit'] = cond[attr]['unit']
+                ret[idx][attr]['standard_deviation'] = dev[i]
+                ret[idx][attr]['replicates'] = repl[i]
+
+                ret[idx][attr[len('emulsion_'):]] = ret[idx].pop(attr)
 
         return ret
 
@@ -360,8 +370,7 @@ class EnvCanadaSampleMapper(MapperBase):
         ret = {}
         sara_category = self.parser.sara_total_fractions
 
-        ret['method'] = ', '.join([i for i in sara_category['method']
-                                   if i is not None])
+        ret['method'] = sara_category['method']
 
         for src_name, name, idx, in (('saturates', 'saturates', 0),
                                      ('aromatics', 'aromatics', 0),
@@ -404,25 +413,24 @@ class EnvCanadaSampleMapper(MapperBase):
         ret = []
 
         groups = [
-            ('benzene', None, 'ug/g', 'Mass Fraction', False),
             ('btex_group', None, 'ug/g', 'Mass Fraction', False),
             ('c4_c6_alkyl_benzenes', None, 'ug/g', 'Mass Fraction', False),
-            ('naphthalenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
-             False),
-            ('phenanthrenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
-             False),
-            ('dibenzothiophenes', 'alkylated_total_pahs', 'ug/g',
+            ('naphthalenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
              'Mass Fraction', False),
-            ('fluorenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
-             False),
-            ('benzonaphthothiophenes', 'alkylated_total_pahs', 'ug/g',
+            ('phenanthrenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
              'Mass Fraction', False),
-            ('chrysenes', 'alkylated_total_pahs', 'ug/g', 'Mass Fraction',
-             False),
-            ('other_priority_pahs', 'alkylated_total_pahs', 'ug/g',
+            ('dibenzothiophenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
              'Mass Fraction', False),
-            ('n_alkanes', None, 'ug/g', 'Mass Fraction', False),
-            ('biomarkers', None, 'ug/g', 'Mass Fraction', False),
+            ('fluorenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+             'Mass Fraction', False),
+            ('benzonaphthothiophenes', 'alkylated_aromatic_hydrocarbons',
+             'ug/g', 'Mass Fraction', False),
+            ('chrysenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+             'Mass Fraction', False),
+            ('other_priority_pahs', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+             'Mass Fraction', True),
+            ('n_alkanes', None, 'ug/g', 'Mass Fraction', True),
+            ('biomarkers', None, 'ug/g', 'Mass Fraction', True),
         ]
 
         for group_args in groups:
@@ -431,19 +439,19 @@ class EnvCanadaSampleMapper(MapperBase):
 
         return ret
 
-    @property
-    def headspace_analysis(self):
-        ret = []
-
-        groups = [
-            ('headspace_analysis', None, 'mg/g', 'Mass Fraction', False),
-        ]
-
-        for group_args in groups:
-            for c in self.compounds_in_group(*group_args):
-                ret.append(c)
-
-        return ret
+    # @property
+    # def headspace_analysis(self):
+    #     ret = []
+    #
+    #     groups = [
+    #         ('headspace_analysis', None, 'mg/g', 'Mass Fraction', False),
+    #     ]
+    #
+    #     for group_args in groups:
+    #         for c in self.compounds_in_group(*group_args):
+    #             ret.append(c)
+    #
+    #     return ret
 
     @property
     def bulk_composition(self):
@@ -463,12 +471,12 @@ class EnvCanadaSampleMapper(MapperBase):
         ret = []
 
         for attr, map_to, unit, method in (
-            ('wax_content', 'waxes', '%', 'ESTS 1994'),
-            ('water_content', None, '%', 'ASTM E203'),
-            ('sulfur_content', None, '%', 'ASTM D4294'),
-            ('gc_total_petroleum_hydrocarbon', 'tph', 'mg/g', 'ESTS 2002a'),
-            ('gc_total_saturate_hydrocarbon', 'tsh', 'mg/g', 'ESTS 2002a'),
-            ('gc_total_aromatic_hydrocarbon', 'tah', 'mg/g', 'ESTS 2002a'),
+            ('wax_content', 'waxes', '%', None),
+            ('water_content', None, '%', None),
+            ('sulfur_content', None, '%', None),
+            ('gc_tph', 'tph', 'mg/g', 'ESTS 2002a'),
+            ('gc_tsh', 'tsh', 'mg/g', 'ESTS 2002a'),
+            ('gc_tah', 'tah', 'mg/g', 'ESTS 2002a'),
         ):
             label = self.parser.get_label(attr)
 
@@ -485,6 +493,9 @@ class EnvCanadaSampleMapper(MapperBase):
             value['unit'] = unit
             value['unit_type'] = 'massfraction'
 
+            if method is None:
+                method = value.pop('method')
+
             ret.append(self.compound(label,
                                      self.measurement(**value),
                                      method=method,
@@ -493,7 +504,7 @@ class EnvCanadaSampleMapper(MapperBase):
         # this one isn't as simple as the rest
         groups = [
             ('hydrocarbon_content_ratio', 'hydrocarbon_content_ratio',
-             '%', 'Mass Fraction', False),
+             '%', 'Mass Fraction', True),
         ]
 
         for group_args in groups:
@@ -504,7 +515,7 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def CCME(self):
-        ret = dict(self.parser.values['ccme_fractions'].items())
+        ret = dict(self.parser.values['ccme'].items())
 
         for k in list(ret.keys()):
             ret[k] = self.measurement(ret[k], 'mg/g', 'massfraction')
@@ -516,11 +527,9 @@ class EnvCanadaSampleMapper(MapperBase):
     def ESTS_hydrocarbon_fractions(self):
         ret = {}
 
-        groups = [
-            ('saturates', 'ccme_f1'),
-            ('aromatics', 'ccme_f2'),
-            ('GC_TPH', 'ccme_tph'),
-        ]
+        groups = [('saturates', 'ests_saturates'),
+                  ('aromatics', 'ests_aromatics'),
+                  ('GC_TPH', 'ests_tph')]
 
         for attr, name in groups:
             ret[attr] = list(self.compounds_in_group(name, None,
@@ -575,8 +584,8 @@ class EnvCanadaSampleMapper(MapperBase):
                     }
                 }
         '''
-        suffix = '_' + custom_slugify(unit)
         cat_obj = getattr(self.parser, category)
+        conditions = self.parser.get_conditions(category)
 
         if group_category is not None:
             group_name = self.parser.get_label(group_category)
@@ -595,10 +604,30 @@ class EnvCanadaSampleMapper(MapperBase):
             std_dev = cat_obj['standard_deviation']
 
         for k, v in cat_obj.items():
-            if v is not None and (k.endswith(suffix) or not filter_compounds):
+            if (v is not None and
+                    k != 'method' and
+                    (conditions[k]['unit'] == unit or
+                     not filter_compounds)):
                 attr_label = self.parser.get_label([category, k])
 
                 yield self.compound(attr_label,
                                     self.measurement(v, unit, unit_type,
                                                      std_dev, replicates),
                                     method=method, groups=[group_name])
+
+    def transpose_dict_of_lists(self, obj):
+        '''
+            A common step with the parsed data is to convert a dict containing
+            an orthoganal set of list values into a list of dicts, each dict
+            having an indexed slice of the list values
+        '''
+        ret = []
+
+        for k, v in obj.items():
+            for idx, v_i in enumerate(v):
+                if len(ret) <= idx:
+                    ret.append({k: v_i})
+                else:
+                    ret[idx][k] = v_i
+
+        return ret

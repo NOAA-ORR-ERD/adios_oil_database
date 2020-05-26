@@ -9,6 +9,8 @@ from math import log10, floor
 
 def sigfigs(x, sig=6):
     try:
+        if isinstance(x, str):
+            x = float(x)
         return round(x, sig - int(floor(log10(abs(x)))) - 1)
     except (ValueError, TypeError):
         return x

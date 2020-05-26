@@ -315,13 +315,21 @@ class TestEnvCanadaSampleParser(object):
     @pytest.mark.parametrize('rec, index, expected', [
         ('2234', 0, {'density': [0.92526, None, 0.93988],
                      'method': ['ASTM D5002', None, 'ASTM D5002'],
-                     'ref_temp': ['15 ̊C', '5 ̊C', '0 ̊C'],
+                     'ref_temp': [
+                         {'unit': 'C', 'value': 15.0},
+                         {'unit': 'C', 'value': 5.0},
+                         {'unit': 'C', 'value': 0.0},
+                     ],
                      'replicates': [3, None, 3],
                      'standard_deviation': [0.00050914, None, 0.0003377],
                      'unit': ['g/mL', 'g/mL', 'g/mL']}),
         ('2234', 4, {'density': [1.014, None, 1.0211],
                      'method': ['ASTM D5002', None, 'ASTM D5002'],
-                     'ref_temp': ['15 ̊C', '5 ̊C', '0 ̊C'],
+                     'ref_temp': [
+                         {'unit': 'C', 'value': 15.0},
+                         {'unit': 'C', 'value': 5.0},
+                         {'unit': 'C', 'value': 0.0},
+                     ],
                      'replicates': [3, None, 3],
                      'standard_deviation': [1.5275e-06, None, 4.5092e-06],
                      'unit': ['g/mL', 'g/mL', 'g/mL']}),
@@ -364,9 +372,24 @@ class TestEnvCanadaSampleParser(object):
                 '12.06/x.x/M', None, None, None, None, None
             ],
             'ref_temp': [
-                '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C',
-                '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C',
-                '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C'
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
             ],
             'replicates': [
                 3, None, None, None, None, None,
@@ -416,9 +439,24 @@ class TestEnvCanadaSampleParser(object):
                 None, None, None, None, None, None
             ],
             'ref_temp': [
-                '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C', '15 ̊C',
-                '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C', '5 ̊C',
-                '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C', '0 ̊C'
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
             ],
             'replicates': [
                 None, None, None, 3, None, None,
@@ -475,9 +513,15 @@ class TestEnvCanadaSampleParser(object):
                 '12.12/x.x/M', '12.12/x.x/M', '12.12/x.x/M'
             ],
             'ref_temp': [
-                '15 ̊C', '15 ̊C', '15 ̊C',
-                '5 ̊C', '5 ̊C', '5 ̊C',
-                '0 ̊C', '0 ̊C', '0 ̊C'
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
             ],
             'replicates': [3, 3, 3, None, None, None, 3, 3, 3],
             'standard_deviation': [
@@ -486,9 +530,9 @@ class TestEnvCanadaSampleParser(object):
                 0.15044, 0.13454, 0.24637
             ],
             'unit': [
-                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
-                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
-                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm'
+                'mN/m', 'mN/m', 'mN/m',
+                'mN/m', 'mN/m', 'mN/m',
+                'mN/m', 'mN/m', 'mN/m'
             ]
          }),
         ('2234', 4, {
@@ -514,9 +558,15 @@ class TestEnvCanadaSampleParser(object):
                 '12.12/x.x/M', '12.12/x.x/M', '12.12/x.x/M'
             ],
             'ref_temp': [
-                '15 ̊C', '15 ̊C', '15 ̊C',
-                '5 ̊C', '5 ̊C', '5 ̊C',
-                '0 ̊C', '0 ̊C', '0 ̊C'
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 15.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 5.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0},
+                {'unit': 'C', 'value': 0.0}
             ],
             'replicates': [3, 3, 3, None, None, None, 3, 3, 3],
             'standard_deviation': [
@@ -525,9 +575,9 @@ class TestEnvCanadaSampleParser(object):
                 None, None, None
             ],
             'unit': [
-                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
-                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm',
-                'mN/m or dynes/cm', 'mN/m or dynes/cm', 'mN/m or dynes/cm'
+                'mN/m', 'mN/m', 'mN/m',
+                'mN/m', 'mN/m', 'mN/m',
+                'mN/m', 'mN/m', 'mN/m'
             ]
          }),
     ])
@@ -656,7 +706,7 @@ class TestEnvCanadaSampleParser(object):
                     '_650': 80.04,
                     '_700': None,
                     '_80': 5.44,
-                    'method': 'ESTS 2001',
+                    'method': '5.10/x.x/M',
                     'temperature_c': None}),
         ('506', 3, {'_100': 0,
                     '_120': 0,
@@ -677,7 +727,7 @@ class TestEnvCanadaSampleParser(object):
                     '_650': 79.3,
                     '_700': None,
                     '_80': 0,
-                    'method': 'ESTS 2001',
+                    'method': '5.10/x.x/M',
                     'temperature_c': None}),
     ])
     def test_boiling_point_cumulative_fraction(self, rec, index, expected):
@@ -693,9 +743,11 @@ class TestEnvCanadaSampleParser(object):
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2713', 0, {'adhesion': 18.03,
+                     'method': '12.12/x.x/M',
                      'replicates': 3,
                      'standard_deviation': 1.05}),
         ('2713', 3, {'adhesion': 56.39,
+                     'method': '12.12/x.x/M',
                      'replicates': 3,
                      'standard_deviation': 3.09}),
     ])
@@ -740,98 +792,148 @@ class TestEnvCanadaSampleParser(object):
             'conditions': {
                 'emulsion_complex_modulus': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa', 'unit_type': 'pressure',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa', 'unit_type': 'pressure',
+                     'converted': True}
                 ],
                 'emulsion_complex_viscosity': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa.s'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa.s', 'unit_type': 'dynamicviscosity',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa.s'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa.s', 'unit_type': 'dynamicviscosity',
+                     'converted': True}
                 ],
                 'emulsion_loss_modulus': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa', 'unit_type': 'pressure',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa', 'unit_type': 'pressure',
+                     'converted': True}
                 ],
                 'emulsion_storage_modulus': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa', 'unit_type': 'pressure',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': 'Pa', 'unit_type': 'pressure',
+                     'converted': True}
                 ],
                 'emulsion_tan_delta_v_e': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}],
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True}],
                 'emulsion_visual_stability': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}],
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True}],
                 'emulsion_water_content': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': '%w/w'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0},
+                     'unit': '%', 'unit_type': 'massfraction',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': '%w/w'}],
+                     'ref_temp':  {'unit': 'C', 'value': 15.0},
+                     'unit': '%', 'unit_type': 'massfraction',
+                     'converted': True}],
                 'method': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': None, 'unit': None},
+                     'ref_temp': None, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': None, 'unit': None}],
+                     'ref_temp': None, 'unit': None,
+                     'converted': True}],
                 'replicates': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}],
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True}],
                 'standard_deviation': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}]},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True}]},
             'emulsion_complex_modulus': [45, 31],
             'emulsion_complex_viscosity': [7.0975, 4.9798],
             'emulsion_loss_modulus': [42, 31],
@@ -848,103 +950,157 @@ class TestEnvCanadaSampleParser(object):
             'conditions': {
                 'emulsion_complex_modulus': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa',
+                     'unit_type': 'pressure',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa',
+                     'unit_type': 'pressure',
+                     'converted': True}
                 ],
                 'emulsion_complex_viscosity': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa.s'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa.s',
+                     'unit_type': 'dynamicviscosity',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa.s'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa.s',
+                     'unit_type': 'dynamicviscosity',
+                     'converted': True}
                 ],
                 'emulsion_loss_modulus': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa',
+                     'unit_type': 'pressure',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa',
+                     'unit_type': 'pressure',
+                     'converted': True}
                 ],
                 'emulsion_storage_modulus': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa',
+                     'unit_type': 'pressure',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': 'Pa'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': 'Pa',
+                     'unit_type': 'pressure',
+                     'converted': True}
                 ],
                 'emulsion_tan_delta_v_e': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'unit_type': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'unit_type': None,
+                     'converted': True}
                 ],
                 'emulsion_visual_stability': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'unit_type': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'unit_type': None,
+                     'converted': True}
                 ],
                 'emulsion_water_content': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': '%w/w'},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': '%',
+                     'unit_type': 'massfraction',
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': '%w/w'}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': '%',
+                     'unit_type': 'massfraction',
+                     'converted': True}
                 ],
                 'method': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': None, 'unit': None},
+                     'ref_temp': None, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': None, 'unit': None}
+                     'ref_temp': None, 'unit': None,
+                     'converted': True}
                 ],
                 'replicates': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True}
                 ],
                 'standard_deviation': [
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'On the day of formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None},
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True},
                     {'condition': 'One week after formation',
-                     'ref_temp': '15 °C', 'unit': None}
+                     'ref_temp': {'unit': 'C', 'value': 15.0}, 'unit': None,
+                     'converted': True}
                 ]
             },
             'emulsion_complex_modulus': [None, None],
@@ -1649,7 +1805,7 @@ class TestEnvCanadaRecordMapper(object):
                   'metadata.name': 'Alaska North Slope [2015]',
                   'metadata.source_id': '2713',
                   'metadata.location': 'Alaska, USA',
-                  'metadata.reference': {'reference': 'Hollebone, 2016. ',
+                  'metadata.reference': {'reference': 'Hollebone, 2016',
                                          'year': 2016},
                   'metadata.sample_date': '2015-03-22',
                   'metadata.product_type': 'crude',
@@ -1666,8 +1822,7 @@ class TestEnvCanadaRecordMapper(object):
             This is because the reference_date will sometimes need the
             file props if the reference field contains no date information.
         '''
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         mapper = EnvCanadaRecordMapper(parser)
         py_json = mapper.py_json()
 
@@ -1707,8 +1862,7 @@ class TestEnvCanadaSampleMapper(object):
             This is because the reference_date will sometimes need the
             file props if the reference field contains no date information.
         '''
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         mapper = EnvCanadaRecordMapper(parser)
         sub_mapper = mapper.sub_samples[0]
 
@@ -1741,7 +1895,7 @@ class TestEnvCanadaSampleMapper(object):
         ]),
         ('2713', 0, 'distillation_data', {
             "type": "mass",
-            "method": "Merged ASTM D6730 Modified and ASTM D7169",
+            "method": "Merged ASTM D7169 & ASTM D6730 mod.",
             "end_point": {'min_value': 720.0, 'max_value': None, 'unit': 'C'},
             "cuts": [
                 {'fraction': {'unit': '%', 'value': 5},
@@ -1789,40 +1943,40 @@ class TestEnvCanadaSampleMapper(object):
         ('2713', 0, 'flash_point', None),
         ('2713', 0, 'interfacial_tensions', [
             {'interface': 'air',
-             'method': 'ESTS 2008',
-             'tension': {'value': 27.69, 'unit': 'mN/m',
-                         'standard_deviation': 0.82, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C'}},
-            {'interface': 'water',
-             'method': 'ESTS 2008',
-             'tension': {'value': 24.09, 'unit': 'mN/m',
-                         'standard_deviation': 0.17, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C'}
-             },
-            {'interface': 'seawater',
-             'method': 'ESTS 2008',
-             'tension': {'value': 22.81, 'unit': 'mN/m',
-                         'standard_deviation': 0.18, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C'}
-             },
-            {'interface': 'air',
-             'method': 'ESTS 2008',
+             'method': '12.12/x.x/M',
              'tension': {'value': 27.14, 'unit': 'mN/m',
                          'standard_deviation': 0.18, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              },
             {'interface': 'water',
-             'method': 'ESTS 2008',
+             'method': '12.12/x.x/M',
              'tension': {'value': 21.32, 'unit': 'mN/m',
                          'standard_deviation': 0.27, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              },
             {'interface': 'seawater',
-             'method': 'ESTS 2008',
+             'method': '12.12/x.x/M',
              'tension': {'value': 19.75, 'unit': 'mN/m',
                          'standard_deviation': 0.35, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
-             }
+             },
+            {'interface': 'air',
+             'method': '12.12/x.x/M',
+             'tension': {'value': 27.69, 'unit': 'mN/m',
+                         'standard_deviation': 0.82, 'replicates': 3},
+             'ref_temp': {'value': 0.0, 'unit': 'C'}},
+            {'interface': 'water',
+             'method': '12.12/x.x/M',
+             'tension': {'value': 24.09, 'unit': 'mN/m',
+                         'standard_deviation': 0.17, 'replicates': 3},
+             'ref_temp': {'value': 0.0, 'unit': 'C'}
+             },
+            {'interface': 'seawater',
+             'method': '12.12/x.x/M',
+             'tension': {'value': 22.81, 'unit': 'mN/m',
+                         'standard_deviation': 0.18, 'replicates': 3},
+             'ref_temp': {'value': 0.0, 'unit': 'C'}
+             },
          ]),
         ('2713', 0, 'dispersibilities', [
             {'dispersant': 'Corexit 9500',
@@ -1833,38 +1987,38 @@ class TestEnvCanadaSampleMapper(object):
          ]),
         ('2234', 0, 'emulsions', [
             {'age': {'unit': 'day', 'value': 0},
-             'method': 'ESTS 1998-2',
+             'method': '13.02/x.x/M',
              'visual_stability': 'Entrained',
-             'complex_modulus': {'value': 40, 'unit': 'Pa',
-                                 'standard_deviation': 18, 'replicates': 6},
+             'complex_modulus': {'value': 45, 'unit': 'Pa',
+                                 'standard_deviation': 7, 'replicates': 6},
              'complex_viscosity': {'value': 7.0975, 'unit': 'Pa.s',
-                                   'standard_deviation': 2.9, 'replicates': 6},
-             'loss_modulus': {'value': 40, 'unit': 'Pa',
-                              'standard_deviation': 17, 'replicates': 6},
+                                   'standard_deviation': 1, 'replicates': 6},
+             'loss_modulus': {'value': 42, 'unit': 'Pa',
+                              'standard_deviation': 6, 'replicates': 6},
              'storage_modulus': {'value': 13.823, 'unit': 'Pa',
-                                 'standard_deviation': 6, 'replicates': 6},
-             'tan_delta': {'value': 3.135, 'unit': '%',
-                           'standard_deviation': 1.2, 'replicates': 6},
+                                 'standard_deviation': 3, 'replicates': 6},
+             'tan_delta_v_e': {'value': 3.135, 'unit': None,
+                               'standard_deviation': 0.4, 'replicates': 6},
              'water_content': {'value': 39.787, 'unit': '%',
                                'standard_deviation': 2.3, 'replicates': 9}},
             {'age': {'unit': 'day', 'value': 7},
-             'method': 'ESTS 1998-2',
+             'method': '13.02/x.x/M',
              'visual_stability': None,
-             'complex_modulus': {'value': 30, 'unit': 'Pa',
+             'complex_modulus': {'value': 31, 'unit': 'Pa',
                                  'standard_deviation': 7, 'replicates': 6},
              'complex_viscosity': {'value': 4.9798, 'unit': 'Pa.s',
                                    'standard_deviation': 1.1, 'replicates': 6},
-             'loss_modulus': {'value': 30, 'unit': 'Pa',
+             'loss_modulus': {'value': 31, 'unit': 'Pa',
                               'standard_deviation': 6.9, 'replicates': 6},
              'storage_modulus': {'value': 2.4437, 'unit': 'Pa',
                                  'standard_deviation': 0.96, 'replicates': 6},
-             'tan_delta': {'value': 13.883, 'unit': '%',
-                           'standard_deviation': 4.1, 'replicates': 6},
+             'tan_delta_v_e': {'value': 12, 'unit': None,
+                               'standard_deviation': 2, 'replicates': 5},
              'water_content': {'value': 15.592, 'unit': '%',
                                'standard_deviation': 1.8, 'replicates': 9}}
          ]),
         ('2713', 0, 'SARA', {
-            'method': 'ESTS 2014',
+            'method': '12.11/3.0/M',
             'aromatics': {'value': 31.9, 'unit': '%',
                           'standard_deviation': 0.21576,
                           'replicates': 3},
@@ -1880,8 +2034,7 @@ class TestEnvCanadaSampleMapper(object):
          }),
     ])
     def test_attribute(self, oil_id, index, attr, expected):
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         pprint(getattr(sub_mapper, attr))
@@ -1892,23 +2045,20 @@ class TestEnvCanadaSampleMapper(object):
             'list_size': 91,
             'compound_attrs': ('name', 'method', 'groups', 'measurement'),
             'total_groups': {
-                'Alkylated Total Aromatic Hydrocarbons (PAHs) (µg/g oil) '
-                '(ESTS 2002a):',
-                'Biomarkers (µg/g) (ESTS 2002a):',
-                'n-Alkanes (µg/g oil) (ESTS 2002a):',
+                'Alkylated Aromatic Hydrocarbons',
+                'Biomarkers',
+                'n-Alkanes',
             }
          }),
         ('561', 0, 'compounds', {
             'list_size': 114,
             'compound_attrs': ('name', 'method', 'groups', 'measurement'),
             'total_groups': {
-                'Alkylated Total Aromatic Hydrocarbons (PAHs) (µg/g oil) '
-                '(ESTS 2002a):',
-                'C4-C6 Alkyl Benzenes (µg/g) (ESTS 2002b):',
-                'Biomarkers (µg/g) (ESTS 2002a):',
-                'BTEX group (µg/g) (ESTS 2002b)',
-                'n-Alkanes (µg/g oil) (ESTS 2002a):',
-                'Benzene and Alkynated Benzene (ESTS 2002b)'
+                'Alkylated Aromatic Hydrocarbons',
+                'C4-C6 Alkyl Benzenes',
+                'Biomarkers',
+                'BTEX group',
+                'n-Alkanes',
             }
          }),
         ('2234', 0, 'bulk_composition', {
@@ -1916,22 +2066,22 @@ class TestEnvCanadaSampleMapper(object):
             'compound_attrs': ('name', 'method', 'measurement'),
             'total_groups': None
          }),
-        ('2234', 0, 'headspace_analysis', {
-            'list_size': 0,
-            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
-            'total_groups': set()
-         }),
-        ('561', 0, 'headspace_analysis', {
-            'list_size': 7,
-            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
-            'total_groups': {
-                'Headspace Analysis (mg/g oil) (ESTS 2002b):'
-            }
-         }),
+        # headspace no longer
+        # ('2234', 0, 'headspace_analysis', {
+        #     'list_size': 0,
+        #     'compound_attrs': ('name', 'method', 'groups', 'measurement'),
+        #     'total_groups': set()
+        #  }),
+        # ('561', 0, 'headspace_analysis', {
+        #     'list_size': 7,
+        #     'compound_attrs': ('name', 'method', 'groups', 'measurement'),
+        #     'total_groups': {
+        #         'Headspace Analysis (mg/g oil) (ESTS 2002b):'
+        #     }
+        #  }),
     ])
     def test_compound_list(self, oil_id, index, attr, expected):
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         compounds = getattr(sub_mapper, attr)
@@ -1939,6 +2089,7 @@ class TestEnvCanadaSampleMapper(object):
         # We won't be checking every single compound since there are typically
         # over one hundred to check.  We will verify general properties of our
         # compound list though
+        #pprint(compounds)
         assert type(compounds) == list
         assert len(compounds) == expected['list_size']
 
@@ -1965,8 +2116,7 @@ class TestEnvCanadaSampleMapper(object):
         '''
             CCME object is a struct.
         '''
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         ccme = sub_mapper.CCME
@@ -1995,8 +2145,7 @@ class TestEnvCanadaSampleMapper(object):
             ESTS_hydrocarbon_fractions object is a struct consisting of
             attributes that are compound lists.
         '''
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         ests_fractions = sub_mapper.ESTS_hydrocarbon_fractions
@@ -2017,8 +2166,7 @@ class TestEnvCanadaSampleMapper(object):
             CCME object is a hybrid of struct attributes with a few
             compound lists thrown in.
         '''
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         phys = sub_mapper.physical_properties
@@ -2040,8 +2188,7 @@ class TestEnvCanadaSampleMapper(object):
             CCME object is a hybrid of struct attributes with a few
             compound lists thrown in.
         '''
-        parser = EnvCanadaRecordParser(self.reader.get_record(oil_id),
-                                       self.reader.file_props)
+        parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         env = sub_mapper.environmental_behavior

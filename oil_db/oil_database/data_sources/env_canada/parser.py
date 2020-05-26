@@ -2,6 +2,8 @@
 import re
 import logging
 
+from oil_database.util import sigfigs
+
 from ..parser import ParserBase, join_with, parse_time, date_only
 
 logger = logging.getLogger(__name__)
@@ -90,7 +92,10 @@ class EnvCanadaRecordParser(ParserBase):
         '''
         self.values = self._slugify_keys(values)
         self.conditions = self._slugify_keys(conditions)
+
         self.labels = self._generate_labels(values)
+        self._convert_conditions_units()
+
         self.file_props = file_props
 
     def _slugify_keys(self, obj):
@@ -148,6 +153,60 @@ class EnvCanadaRecordParser(ParserBase):
             return ret
         else:
             return None
+
+    def _convert_conditions_units(self, conditions=None):
+        if conditions is None:
+            conditions = self.conditions
+
+        if (isinstance(conditions, dict) and
+                'converted' in conditions and
+                conditions['converted'] is True):
+            pass
+        elif isinstance(conditions, dict) and 'condition' in conditions:
+            self._convert_condition(conditions)
+            conditions['converted'] = True
+        elif isinstance(conditions, dict):
+            for _k, v in conditions.items():
+                self._convert_conditions_units(v)
+        elif isinstance(conditions, list):
+            [self._convert_conditions_units(v)
+             for v in conditions]
+
+    def _convert_condition(self, condition):
+        # ref_temp needs to be converted to Temperature type
+        try:
+            ref_temp, unit = re.findall(r'([0-9]+).+([CFK])',
+                                        condition['ref_temp'])[0]
+            ref_temp = sigfigs(ref_temp)
+            condition['ref_temp'] = {'value': ref_temp, 'unit': unit}
+        except (TypeError, IndexError):
+            # probably encountered a None, which is fine.  We will just leave
+            # it alone and move to the next one.
+            pass
+
+        # unit needs to be converted to PyNUCOS unit/unit_type
+        unit_map = {
+            '% w/w': ('%', 'massfraction'),
+            '%w/w': ('%', 'massfraction'),
+            'µg/g': ('ug/g', 'massfraction'),
+            'mg/g': ('mg/g', 'massfraction'),
+            'Pa.s': ('Pa.s', 'dynamicviscosity'),
+            'mPa.s': ('mPa.s', 'dynamicviscosity'),
+            'Pa': ('Pa', 'pressure'),
+            'kPa': ('kPa', 'pressure'),
+            'mN/m or dynes/cm': ('mN/m', 'interfacialtension'),
+            'g/cm2': ('g/cm^2', 'needleadhesion'),
+            'g/mL': ('g/mL', 'density'),
+            '̊C': ('C', 'temperature'),
+        }
+
+        try:
+            unit, unit_type = unit_map[condition['unit']]
+            condition['unit'] = unit
+            condition['unit_type'] = unit_type
+        except KeyError:
+            # print(f'unit key "{condition["unit"]}" not found')
+            pass
 
     def get_label(self, nav_list):
         '''
@@ -362,10 +421,14 @@ class EnvCanadaSampleParser(ParserBase):
         'boiling_point_cumulative_fraction': ('boiling_point_'
                                               'cumulative_weight_fraction'),
         'ccme': 'ccme_fractions',
-        'ccme_f1': 'saturates_f1',
-        'ccme_f2': 'aromatics_f2',
-        'ccme_tph': 'gc_tph_f1_plus_f2',
         'sara_total_fractions': 'hydrocarbon_group_content',
+        'emulsion_complex_modulus': 'complex_modulus',
+        'emulsion_complex_viscosity': 'complex_viscosity',
+        'emulsion_loss_modulus': 'loss_modulus',
+        'emulsion_storage_modulus': 'storage_modulus',
+        'emulsion_tan_delta_v_e': 'tan_delta_v_e',
+        'emulsion_visual_stability': 'visual_stability',
+        'emulsion_water_content': 'water_content',
     }
 
     def __init__(self, values, conditions, labels):
@@ -384,7 +447,14 @@ class EnvCanadaSampleParser(ParserBase):
         [attrs.add(p) for p in dir(self.__class__)
          if isinstance(getattr(self.__class__, p), property)]
 
-        return dict([(a, getattr(self, a)) for a in attrs])
+        vals = []
+        for a in attrs:
+            try:
+                vals.append((a, getattr(self, a)))
+            except KeyError:
+                pass
+
+        return dict(vals)
 
     def deep_get(self, attr_path, default=None):
         if isinstance(attr_path, str):
@@ -437,6 +507,21 @@ class EnvCanadaSampleParser(ParserBase):
                 labels = labels['value'][self.attr_map[l]]
 
         return labels['label']
+
+    def get_conditions(self, name):
+        '''
+            The conditions object is indexed in the same way as the values.
+        '''
+        try:
+            ret = self.conditions[name]
+        except Exception:
+            try:
+                ret = self.conditions[self.attr_map[name]]
+            except Exception:
+                logger.info(f'{self.__class__.__name__}.{name} not found')
+                raise
+
+        return ret
 
     @property
     def api(self):
