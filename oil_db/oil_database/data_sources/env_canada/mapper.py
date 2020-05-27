@@ -131,7 +131,8 @@ class EnvCanadaSampleMapper(MapperBase):
                      'compounds',
                      'bulk_composition',
                      # 'headspace_analysis',
-                     'CCME'):
+                     'CCME',
+                     'ESTS_hydrocarbon_fractions'):
             rec[attr] = getattr(self, attr)
 
         return rec
