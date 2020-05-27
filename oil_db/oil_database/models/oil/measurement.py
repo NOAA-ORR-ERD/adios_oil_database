@@ -114,7 +114,7 @@ class Emulsion:
     # Todo: this seems to be just unit-less float, but it is a measurement
     #       with standard_deviation & replicates.  Well MassFraction will do
     #       for now.  But NUCOS needs to be updated.
-    tan_delta: MassFraction = None
+    tan_delta_v_e: MassFraction = None
 
     complex_viscosity: DynamicViscosity = None
 
