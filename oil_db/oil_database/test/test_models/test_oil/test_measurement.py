@@ -324,9 +324,9 @@ class TestEmulsion:
                     'loss_modulus': {'value': 1.0, 'unit': 'Pa',
                                      'standard_deviation': 1.2,
                                      'replicates': 3},
-                    'tan_delta': {'value': 10.0, 'unit': '%',
-                                  'standard_deviation': 1.2,
-                                  'replicates': 3},
+                    'tan_delta_v_e': {'value': 10.0, 'unit': '%',
+                                      'standard_deviation': 1.2,
+                                      'replicates': 3},
                     'complex_viscosity': {'value': 100.0, 'unit': 'cP',
                                           'standard_deviation': 1.2,
                                           'replicates': 3},
@@ -341,7 +341,7 @@ class TestEmulsion:
         json_obj['complex_modulus']['unit_type'] = None
         json_obj['storage_modulus']['unit_type'] = None
         json_obj['loss_modulus']['unit_type'] = None
-        json_obj['tan_delta']['unit_type'] = 'massfraction'
+        json_obj['tan_delta_v_e']['unit_type'] = 'massfraction'
         json_obj['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj['water_content']['unit_type'] = 'massfraction'
 
@@ -366,9 +366,9 @@ class TestEmulsionList:
                      'loss_modulus': {'value': 1.0, 'unit': 'Pa',
                                       'standard_deviation': 1.2,
                                       'replicates': 3},
-                     'tan_delta': {'value': 10.0, 'unit': '%',
-                                   'standard_deviation': 1.2,
-                                   'replicates': 3},
+                     'tan_delta_v_e': {'value': 10.0, 'unit': '%',
+                                       'standard_deviation': 1.2,
+                                       'replicates': 3},
                      'complex_viscosity': {'value': 100.0, 'unit': 'cP',
                                            'standard_deviation': 1.2,
                                            'replicates': 3},
@@ -383,7 +383,7 @@ class TestEmulsionList:
         json_obj[0]['complex_modulus']['unit_type'] = None
         json_obj[0]['storage_modulus']['unit_type'] = None
         json_obj[0]['loss_modulus']['unit_type'] = None
-        json_obj[0]['tan_delta']['unit_type'] = 'massfraction'
+        json_obj[0]['tan_delta_v_e']['unit_type'] = 'massfraction'
         json_obj[0]['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj[0]['water_content']['unit_type'] = 'massfraction'
 
