@@ -543,7 +543,7 @@ class EnvCanadaSampleMapper(MapperBase):
             for item in ret[attr]:
                 item.pop('groups')
 
-        ret['method'] = None
+        ret['method'] = 'Hollebone, Bruce (2020) Personal communication'
 
         return ret
 
