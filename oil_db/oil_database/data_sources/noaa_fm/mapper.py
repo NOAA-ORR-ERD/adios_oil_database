@@ -5,6 +5,7 @@ from math import isclose
 
 from ..mapper import MapperBase
 
+from oil_database.util import sigfigs
 from oil_database.models.oil.oil import Oil
 
 logger = logging.getLogger(__name__)
@@ -24,13 +25,13 @@ class OilLibraryAttributeMapper(MapperBase):
                  'metadata',
                  'status',
                  'sub_samples')
-    fresh_sample_props = ('environmental_behavior',
-                          'SARA',
+    fresh_sample_props = ('SARA',
                           'distillation_data',
                           'compounds',
                           'bulk_composition',
                           'industry_properties')
-    weathered_sample_props = ('physical_properties',)
+    weathered_sample_props = ('physical_properties',
+                              'environmental_behavior')
 
     def __init__(self, record):
         '''
@@ -122,7 +123,7 @@ class OilLibraryAttributeMapper(MapperBase):
 
         if isinstance(sample_id, str):
             attrs['name'] = sample_id
-            attrs['short_name'] = '{}...'.format(sample_id[:12])
+            attrs['short_name'] = f'{sample_id[:12]}...'
             attrs['fraction_weathered'] = None
             attrs['boiling_point_range'] = None
         elif isclose(sample_id, 0):
@@ -132,8 +133,8 @@ class OilLibraryAttributeMapper(MapperBase):
             attrs['boiling_point_range'] = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
-            attrs['name'] = '{}% Weathered'.format(sample_id * 100)
-            attrs['short_name'] = '{}% Weathered'.format(sample_id * 100)
+            attrs['name'] = f'{sigfigs(sample_id * 100)}% Weathered'
+            attrs['short_name'] = f'{sigfigs(sample_id * 100)}% Weathered'
             attrs['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
             attrs['boiling_point_range'] = None
         else:
@@ -175,8 +176,7 @@ class OilLibraryAttributeMapper(MapperBase):
 
         return ret
 
-    @property
-    def environmental_behavior(self):
+    def environmental_behavior(self, weathering):
         '''
             Notes:
             - there is a dispersability_temp_k, but it does not fit with the
@@ -186,8 +186,12 @@ class OilLibraryAttributeMapper(MapperBase):
         '''
         ret = {}
 
+        # weathered attributes
         for attr in ('emulsions',):
-            ret[attr] = getattr(self, attr, None)
+            values = self.filter_weathered_attr(attr, weathering)
+
+            if len(values) > 0:
+                ret[attr] = values
 
         return ret
 

@@ -391,27 +391,48 @@ class OilLibraryRecordParser(ParserBase):
     @property
     def emulsions(self):
         '''
-            Oil Library records do have some attributes related to emulsions:
-            - emuls_constant_min (???)
-            - emuls_constant_max (???)
-            - water_content_emulsion (probably maps to water_content)
-
-            But it is not clear how to map this information to our emulsion
-            object.  Basically we will just use the water content for now.
+            Oil Library records have some attributes related to emulsions:
+            - emuls_constant_min: Zero percent emulsion weathered amount
+            - emuls_constant_max: Max percent emulsion weathered amount
+            - water_content_emulsion: water content at max weathered
 
             - Age will be set to the day of formation
             - Temperature will be set to 15C (288.15K)
         '''
         ret = []
 
-        water_content = self.water_content_emulsion
+        water = self.water_content_emulsion
 
-        if water_content is not None:
-            ret.append({
-                'water_content': {'value': water_content, 'unit': '1'},
-                'age': {'value': 0.0, 'unit': 'day'},
-                'ref_temp': {'value': 288.15, 'unit': 'K'},
-            })
+        if water is not None:
+            emuls_min = self.emuls_constant_min
+            emuls_max = self.emuls_constant_max
+
+            if emuls_min is None and emuls_max is None:
+                # apply water to the fresh sample
+                ret.append({
+                    'water_content': {'value': water, 'unit': '1'},
+                    'age': {'value': 0.0, 'unit': 'day'},
+                    'ref_temp': {'value': 288.15, 'unit': 'K'},
+                    'weathering': 0.0,
+                })
+            else:
+                if emuls_min not in (None, 0.0):
+                    # we have a min weathering sample
+                    ret.append({
+                        'water_content': {'value': 0.0, 'unit': '1'},
+                        'age': {'value': 0.0, 'unit': 'day'},
+                        'ref_temp': {'value': 288.15, 'unit': 'K'},
+                        'weathering': emuls_min,
+                    })
+
+                if emuls_max is not None:
+                    # we have a max weathering sample
+                    ret.append({
+                        'water_content': {'value': water, 'unit': '1'},
+                        'age': {'value': 0.0, 'unit': 'day'},
+                        'ref_temp': {'value': 288.15, 'unit': 'K'},
+                        'weathering': emuls_max,
+                    })
 
         return ret
 
@@ -458,6 +479,13 @@ class OilLibraryRecordParser(ParserBase):
             - KVis
             - Dvis
 
+            In addition to these weathered attributes, the emulsion constant
+            attributes are applied in the context of weathered samples.
+            - The min emulsification constant is Emuls_Constant_Min.  Its value
+              is a weathered amount.
+            - The max emulsification constant is Emuls_Constant_Max.  Its value
+              is a weathered amount.
+
             All other attributes should be implicitly regarded as fresh oil
             measurements.
         '''
@@ -467,5 +495,10 @@ class OilLibraryRecordParser(ParserBase):
             if k.endswith('weathering') and k != 'weathering':
                 v = 0.0 if v is None else v
                 weathered_amounts.add(v)
+
+        for attr in ('emuls_constant_min', 'emuls_constant_max'):
+            v = getattr(self, attr)
+            v = 0.0 if v is None else v
+            weathered_amounts.add(v)
 
         return sorted(list(weathered_amounts))

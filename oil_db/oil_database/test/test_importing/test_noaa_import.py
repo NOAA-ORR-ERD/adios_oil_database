@@ -183,10 +183,14 @@ class TestOilLibraryRecordParser:
         ('AD00025', 'wax_content', 0.069),
         ('AD00025', 'water_content_emulsion', 0.9),
         ('AD00025', 'emulsions', [
-            {'water_content': {'value': 0.9, 'unit': '1'},
-             'age': {'value': 0.0, 'unit': 'day'},
-             'ref_temp': {'value': 288.15, 'unit': 'K'},
-             },
+            {'age': {'unit': 'day', 'value': 0.0},
+             'ref_temp': {'unit': 'K', 'value': 288.15},
+             'water_content': {'unit': '1', 'value': 0.0},
+             'weathering': 0.148},
+            {'age': {'unit': 'day', 'value': 0.0},
+             'ref_temp': {'unit': 'K', 'value': 288.15},
+             'water_content': {'unit': '1', 'value': 0.9},
+             'weathering': 0.255}
          ]),
         ('AD00025', 'emuls_constant_min', 0.148),
         ('AD00025', 'emuls_constant_max', 0.255),
@@ -385,6 +389,7 @@ class TestOilLibraryRecordParser:
             'saturates': {'value': 0.842, 'unit': '1'},
          }),
         ('AD00005', 'SARA', None),
+        ('AD00025', 'weathering', [0.0, 0.148, 0.255]),
         ('AD01987', 'weathering', [0.0, 0.31]),
         ('AD02068', 'weathering', [0.0, 0.11, 0.26]),
     ])
@@ -665,10 +670,31 @@ class TestOilLibraryAttributeMapper:
         assert phys[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
+        ('AD00010', 0, 'emulsions', None),
+        ('AD00017', 0, 'emulsions', [
+            {'age': {'unit': 'day', 'value': 0.0},
+             'ref_temp': {'unit': 'K', 'value': 288.15},
+             'water_content': {'unit': '1', 'value': 0.71}}
+         ]),
         ('AD00020', 0, 'emulsions', [
             {'age': {'unit': 'day', 'value': 0.0},
              'ref_temp': {'unit': 'K', 'value': 288.15},
              'water_content': {'unit': '1', 'value': 0.89}}
+         ]),
+        ('AD00025', 1, 'emulsions', [
+            {'age': {'unit': 'day', 'value': 0.0},
+             'ref_temp': {'unit': 'K', 'value': 288.15},
+             'water_content': {'unit': '1', 'value': 0.0}}
+         ]),
+        ('AD00025', 2, 'emulsions', [
+            {'age': {'unit': 'day', 'value': 0.0},
+             'ref_temp': {'unit': 'K', 'value': 288.15},
+             'water_content': {'unit': '1', 'value': 0.9}}
+         ]),
+        ('AD00025', -1, 'emulsions', [
+            {'age': {'unit': 'day', 'value': 0.0},
+             'ref_temp': {'unit': 'K', 'value': 288.15},
+             'water_content': {'unit': '1', 'value': 0.9}}
          ]),
     ])
     def test_environmental_behavior(self, oil_id, index, attr, expected):
@@ -676,9 +702,12 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         environ = mapper.sub_samples[index]['environmental_behavior']
 
-        pprint(environ)
-        pprint(environ[attr])
-        assert environ[attr] == expected
+        if expected is None:
+            assert attr not in environ
+        else:
+            pprint(environ)
+            pprint(environ[attr])
+            assert environ[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
         ('AD00017', 0, 'saturates', {'unit': '1', 'value': 0.8}),
