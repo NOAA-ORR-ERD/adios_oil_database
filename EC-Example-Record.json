@@ -41,9 +41,6 @@
             "ESTS_hydrocarbon_fractions": {
                 "GC_TPH": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -52,9 +49,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -63,9 +57,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -74,9 +65,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -85,9 +73,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -96,9 +81,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -107,9 +89,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -118,9 +97,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -129,9 +105,6 @@
                         "name": "n-C34+"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -142,9 +115,6 @@
                 ],
                 "aromatics": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -153,9 +123,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -164,9 +131,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -175,9 +139,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -186,9 +147,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -197,9 +155,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -208,9 +163,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -219,9 +171,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -232,9 +181,6 @@
                 ],
                 "saturates": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -243,9 +189,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -254,9 +197,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -265,9 +205,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -276,9 +213,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -287,9 +221,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -298,9 +229,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -309,9 +237,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2069,9 +1994,6 @@
             "ESTS_hydrocarbon_fractions": {
                 "GC_TPH": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2080,9 +2002,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2091,9 +2010,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2102,9 +2018,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2113,9 +2026,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2124,9 +2034,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2135,9 +2042,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2146,9 +2050,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2157,9 +2058,6 @@
                         "name": "n-C34+"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2170,9 +2068,6 @@
                 ],
                 "aromatics": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2181,9 +2076,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2192,9 +2084,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2203,9 +2092,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2214,9 +2100,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2225,9 +2108,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2236,9 +2116,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2247,9 +2124,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2260,9 +2134,6 @@
                 ],
                 "saturates": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2271,9 +2142,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2282,9 +2150,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2293,9 +2158,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2304,9 +2166,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2315,9 +2174,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2326,9 +2182,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -2337,9 +2190,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4094,9 +3944,6 @@
             "ESTS_hydrocarbon_fractions": {
                 "GC_TPH": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4105,9 +3952,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4116,9 +3960,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4127,9 +3968,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4138,9 +3976,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4149,9 +3984,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4160,9 +3992,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4171,9 +4000,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4182,9 +4008,6 @@
                         "name": "n-C34+"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4195,9 +4018,6 @@
                 ],
                 "aromatics": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4206,9 +4026,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4217,9 +4034,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4228,9 +4042,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4239,9 +4050,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4250,9 +4058,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4261,9 +4066,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4272,9 +4074,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4285,9 +4084,6 @@
                 ],
                 "saturates": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4296,9 +4092,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4307,9 +4100,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4318,9 +4108,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4329,9 +4116,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4340,9 +4124,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4351,9 +4132,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -4362,9 +4140,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6104,9 +5879,6 @@
             "ESTS_hydrocarbon_fractions": {
                 "GC_TPH": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6115,9 +5887,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6126,9 +5895,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6137,9 +5903,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6148,9 +5911,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6159,9 +5919,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6170,9 +5927,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6181,9 +5935,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6192,9 +5943,6 @@
                         "name": "n-C34+"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6205,9 +5953,6 @@
                 ],
                 "aromatics": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6216,9 +5961,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6227,9 +5969,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6238,9 +5977,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6249,9 +5985,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6260,9 +5993,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6271,9 +6001,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6282,9 +6009,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6295,9 +6019,6 @@
                 ],
                 "saturates": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6306,9 +6027,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6317,9 +6035,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6328,9 +6043,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6339,9 +6051,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6350,9 +6059,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6361,9 +6067,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -6372,9 +6075,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8113,9 +7813,6 @@
             "ESTS_hydrocarbon_fractions": {
                 "GC_TPH": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8124,9 +7821,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8135,9 +7829,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8146,9 +7837,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8157,9 +7845,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8168,9 +7853,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8179,9 +7861,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8190,9 +7869,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8201,9 +7877,6 @@
                         "name": "n-C34+"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8214,9 +7887,6 @@
                 ],
                 "aromatics": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8225,9 +7895,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8236,9 +7903,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8247,9 +7911,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8258,9 +7919,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8269,9 +7927,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8280,9 +7935,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8291,9 +7943,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Aromatics Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8304,9 +7953,6 @@
                 ],
                 "saturates": [
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8315,9 +7961,6 @@
                         "name": "n-C8 to n-C10"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8326,9 +7969,6 @@
                         "name": "n-C10 to n-C12"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8337,9 +7977,6 @@
                         "name": "n-C12 to n-C16"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8348,9 +7985,6 @@
                         "name": "n-C16 to n-C20"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8359,9 +7993,6 @@
                         "name": "n-C20 to n-C24"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8370,9 +8001,6 @@
                         "name": "n-C24 to n-C28"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
@@ -8381,9 +8009,6 @@
                         "name": "n-C28 to n-C34"
                     },
                     {
-                        "groups": [
-                            "Petroleum Hydrocarbon Saturates Fraction"
-                        ],
                         "measurement": {
                             "unit": "mg/g",
                             "unit_type": "massfraction",
