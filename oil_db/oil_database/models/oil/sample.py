@@ -71,7 +71,7 @@ class Sample:
             if self.name.lower() == 'fresh oil sample':
                 self.short_name = 'Fresh Oil'
             else:
-                self.short_name = '{}...'.format(self.name[:12])
+                self.short_name = f'{self.name[:12]}...'
 
 
 class SampleList(JSON_List):

@@ -30,7 +30,8 @@ class TestESTSFractions:
 
         assert set(py_json.keys()) == {'saturates',
                                        'aromatics',
-                                       'GC_TPH'}
+                                       'GC_TPH',
+                                       'method'}
 
     def test_small(self):
         '''

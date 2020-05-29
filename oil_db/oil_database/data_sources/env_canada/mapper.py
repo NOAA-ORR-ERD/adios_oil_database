@@ -540,6 +540,10 @@ class EnvCanadaSampleMapper(MapperBase):
             ret[attr] = list(self.compounds_in_group(name, None,
                                                      'mg/g', 'Mass Fraction',
                                                      False))
+            for item in ret[attr]:
+                item.pop('groups')
+
+        ret['method'] = None
 
         return ret
 

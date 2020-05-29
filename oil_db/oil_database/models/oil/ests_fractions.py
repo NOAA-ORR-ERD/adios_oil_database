@@ -18,6 +18,8 @@ class ESTSFractions:
 
     (https://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html)
     """
+    method: str = None
+
     saturates: CompoundList = field(default_factory=CompoundList)
     aromatics: CompoundList = field(default_factory=CompoundList)
     GC_TPH: CompoundList = field(default_factory=CompoundList)
