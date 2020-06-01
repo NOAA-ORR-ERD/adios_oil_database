@@ -36,6 +36,17 @@ from oil_database.models.oil.sara import Sara
 logger = logging.getLogger(__name__)
 
 
+def next_id():
+    '''
+        Generate the next oil record identifier
+    '''
+    if not hasattr(next_id, 'count'):
+        next_id.count = 0
+    next_id.count += 1
+
+    return next_id.count
+
+
 def norm(string):
     """
     normalizes a string for comparing
@@ -253,11 +264,12 @@ def ExxonMapper(record):
 
     reference = read_header(data)
 
-    oil_id, sample_names = read_identification(data)
+    oil_id, ref_id, sample_names = read_identification(data)
 
     oil = Oil(oil_id=oil_id)
     oil.metadata.name = name
     oil.metadata.reference = reference
+    oil.metadata.source_id = ref_id
 
     samples = SampleList([Sample(**sample_id_attrs(name))
                           for name in sample_names
@@ -297,7 +309,7 @@ def read_header(data):
 def read_identification(data):
     row = next_non_empty(data)
 
-    return f'EX-{row[0]}', row[1:]
+    return f'EX{next_id():06}', f'{row[0]}', row[1:]
 
 
 def sample_id_attrs(name):
