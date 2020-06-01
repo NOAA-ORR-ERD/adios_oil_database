@@ -7,7 +7,8 @@
         "name": "Access West Blend Winter",
         "product_type": "crude",
         "reference": {
-            "year": 2015
+            "reference": "Personal communication from Fatemeh Mirnaghi (ESTS), date: April 21, 2020.",
+            "year": 2020
         },
         "sample_date": "2013-04-08",
         "source_id": "2234"
@@ -179,6 +180,7 @@
                         "name": "n-C34+"
                     }
                 ],
+                "method": "Hollebone, Bruce (2020) Personal communication",
                 "saturates": [
                     {
                         "measurement": {
@@ -2132,6 +2134,7 @@
                         "name": "n-C34+"
                     }
                 ],
+                "method": "Hollebone, Bruce (2020) Personal communication",
                 "saturates": [
                     {
                         "measurement": {
@@ -4082,6 +4085,7 @@
                         "name": "n-C34+"
                     }
                 ],
+                "method": "Hollebone, Bruce (2020) Personal communication",
                 "saturates": [
                     {
                         "measurement": {
@@ -6017,6 +6021,7 @@
                         "name": "n-C34+"
                     }
                 ],
+                "method": "Hollebone, Bruce (2020) Personal communication",
                 "saturates": [
                     {
                         "measurement": {
@@ -7951,6 +7956,7 @@
                         "name": "n-C34+"
                     }
                 ],
+                "method": "Hollebone, Bruce (2020) Personal communication",
                 "saturates": [
                     {
                         "measurement": {

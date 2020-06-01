@@ -137,18 +137,14 @@ class TestEnvCanadaRecordParser(object):
             _parser = EnvCanadaRecordParser(None, None)
 
     @pytest.mark.parametrize('oil_id, expected', [
-        ('2713', 2016),
-        pytest.param('2234', 2017,
-                     marks=pytest.mark.raises(exception=TypeError)),
+        ('2713', 2020),
     ])
-    def test_init_valid_data(self, oil_id, expected):
+    def test_init_valid_data_only(self, oil_id, expected):
         '''
             We are being fairly light on the parameter checking in our
-            constructor.  So if no file props are passed in, we can still
-            construct the parser, but accessing reference_date could raise
-            a TypeError.
-            This is because the reference_date will sometimes need the
-            file props if the reference field contains no date information.
+            constructor.  So if None values are passed in for conditions and
+            file_props, we can still construct the parser, but accessing
+            certain sample properties could raise an exception.
         '''
         data, _conditions, _file_props = self.reader.get_record(oil_id)
 
@@ -158,8 +154,8 @@ class TestEnvCanadaRecordParser(object):
         assert parser.reference['year'] == expected
 
     @pytest.mark.parametrize('oil_id, expected', [
-        ('2713', 2016),
-        ('2234', 2015),
+        ('2713', 2020),
+        ('2234', 2020),
     ])
     def test_init_valid_data_and_file_props(self, oil_id, expected):
         '''
@@ -209,8 +205,10 @@ class TestEnvCanadaRecordParser(object):
         ('2234', 'ests_codes', ['2234.1.1 A', '2234.1.4.1 ', '2234.1.3.1 ',
                                 '2234.1.2.1 ', '2234.1.5.1 ']),
         ('2234', 'weathering', [0.0, 0.0853, 0.1686, 0.2534, 0.2645]),
-        ('2713', 'reference', {'reference': 'Hollebone, 2016',
-                               'year': 2016}),
+        ('2713', 'reference', {'reference': 'Personal communication from '
+                                            'Fatemeh Mirnaghi (ESTS), '
+                                            'date: April 21, 2020.',
+                               'year': 2020}),
         ('2234', 'sample_date', '2013-04-08'),
         ('2234', 'comments', 'Via CanmetEnergy, Natural Resources Canada'),
         ('2234', 'location', 'Alberta, Canada'),
@@ -1805,8 +1803,11 @@ class TestEnvCanadaRecordMapper(object):
                   'metadata.name': 'Alaska North Slope [2015]',
                   'metadata.source_id': '2713',
                   'metadata.location': 'Alaska, USA',
-                  'metadata.reference': {'reference': 'Hollebone, 2016',
-                                         'year': 2016},
+                  'metadata.reference': {'reference': 'Personal communication '
+                                                      'from Fatemeh Mirnaghi '
+                                                      '(ESTS), '
+                                                      'date: April 21, 2020.',
+                                         'year': 2020},
                   'metadata.sample_date': '2015-03-22',
                   'metadata.product_type': 'crude',
                   'metadata.API': 31.32,

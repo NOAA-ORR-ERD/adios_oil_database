@@ -282,26 +282,14 @@ class EnvCanadaRecordParser(ParserBase):
     @property
     def reference(self):
         '''
-            The reference content can have:
-            - no content:  In this case we take the created date of the
-                           Excel file.
-            - one year (YYYY):  In this case we parse the year as an int and
-                                form a datetime with it.
-            - multiple years (YYYY): In this case we use the highest numeric
-                                     year (most recent) and form a datetime
-                                     with it.
+            It has been decided that we will at this time use a hard-coded
+            reference for all records coming from the Env. Canada datasheet.
         '''
-        ref_text = ' '.join([f for f in self.values[None]['reference']
-                            if f is not None])
-
-        occurrences = [int(n) for n in re.compile(r'\d{4}').findall(ref_text)]
-
-        if len(occurrences) == 0:
-            ref_year = self.file_props['created'].year
-        else:
-            ref_year = max(occurrences)
-
-        return {'reference': ref_text, 'year': ref_year}
+        return {
+            'reference': 'Personal communication from Fatemeh Mirnaghi (ESTS)'
+                         ', date: April 21, 2020.',
+            'year': 2020
+        }
 
     @property
     @date_only
