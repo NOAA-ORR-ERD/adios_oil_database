@@ -137,6 +137,12 @@ class EnvCanadaSampleMapper(MapperBase):
 
         return rec
 
+    def __getattr__(self, name):
+        '''
+            anything we don't explicitly define should fall through here
+        '''
+        return getattr(self.parser, name)
+
     @property
     def densities(self):
         ret = self.transpose_dict_of_lists(self.parser.densities)
@@ -283,6 +289,8 @@ class EnvCanadaSampleMapper(MapperBase):
                 'replicates': item.pop('replicates')
             }
 
+            item['method'] = self.prepend_ests(item['method'])
+
         return [r for r in ret if r['tension']['value'] is not None]
 
     @property
@@ -339,7 +347,7 @@ class EnvCanadaSampleMapper(MapperBase):
                                                           replicates)):
             ret.append({})
 
-            ret[idx]['method'] = emul['method']
+            ret[idx]['method'] = self.prepend_ests(emul['method'])
             ret[idx]['visual_stability'] = emul['emulsion_visual_stability']
 
             ret[idx]['age'] = {
@@ -375,7 +383,7 @@ class EnvCanadaSampleMapper(MapperBase):
         ret = {}
         sara_category = self.parser.sara_total_fractions
 
-        ret['method'] = sara_category['method']
+        ret['method'] = self.prepend_ests(sara_category['method'])
 
         for src_name, name, idx, in (('saturates', 'saturates', 0),
                                      ('aromatics', 'aromatics', 0),
@@ -499,7 +507,7 @@ class EnvCanadaSampleMapper(MapperBase):
             value['unit_type'] = 'massfraction'
 
             if method is None:
-                method = value.pop('method')
+                method = self.prepend_ests(value.pop('method'))
 
             ret.append(self.compound(label,
                                      self.measurement(**value),
@@ -562,7 +570,8 @@ class EnvCanadaSampleMapper(MapperBase):
     def environmental_behavior(self):
         ret = {}
 
-        for attr in ('dispersibilities', 'emulsions'):
+        for attr in ('dispersibilities', 'emulsions', 'adhesion',
+                     'ests_evaporation_test'):
             ret[attr] = getattr(self, attr)
 
         return ret
@@ -604,7 +613,7 @@ class EnvCanadaSampleMapper(MapperBase):
         method, replicates, std_dev = None, None, None
 
         if 'method' in cat_obj:
-            method = cat_obj['method']
+            method = self.prepend_ests(cat_obj['method'])
 
         if 'replicates' in cat_obj:
             replicates = cat_obj['replicates']
@@ -640,3 +649,12 @@ class EnvCanadaSampleMapper(MapperBase):
                     ret[idx][k] = v_i
 
         return ret
+
+    def prepend_ests(self, method):
+        try:
+            if len(method.split('/')) == 3:
+                return f'ESTS: {method}'
+        except AttributeError:
+            pass
+
+        return method

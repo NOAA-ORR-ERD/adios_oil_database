@@ -509,6 +509,15 @@ class EnvCanadaSampleParser(ParserBase):
 
         return ret
 
+    def prepend_ests(self, method):
+        try:
+            if len(method.split('/')) == 3:
+                return f'ESTS: {method}'
+        except AttributeError:
+            pass
+
+        return method
+
     @property
     def api(self):
         return self.deep_get('api_gravity.gravity')
@@ -549,6 +558,21 @@ class EnvCanadaSampleParser(ParserBase):
         for attr in ('ref_temp', 'unit', 'condition'):
             ret[attr] = [d[attr]
                          for d in self.conditions['viscosity']['viscosity']]
+
+        return ret
+
+    @property
+    def adhesion(self):
+        ret = dict(list(self.values['adhesion'].items()))
+
+        if ret['adhesion'] is None:
+            return None
+
+        conditions = self.conditions['adhesion']['adhesion']
+
+        ret['value'] = ret.pop('adhesion')
+        ret['unit'] = conditions['unit']
+        ret['method'] = self.prepend_ests(ret['method'])
 
         return ret
 
@@ -595,8 +619,12 @@ class EnvCanadaSampleParser(ParserBase):
         return ret
 
     @property
-    def evaporation_eqs(self):
-        return dict(list(self.values['evaporation_equation'].items()))
+    def ests_evaporation_test(self):
+        ret = dict(list(self.values['evaporation_equation'].items()))
+
+        ret['method'] = self.prepend_ests(ret['method'])
+
+        return ret
 
     @property
     def emulsions(self):

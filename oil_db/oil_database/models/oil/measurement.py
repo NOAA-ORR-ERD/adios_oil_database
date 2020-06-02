@@ -124,3 +124,16 @@ class Emulsion:
 
 class EmulsionList(JSON_List):
     item_type = Emulsion
+
+
+@dataclass_to_json
+@dataclass
+class ESTSEvaporationTest:
+    a_for_ev_a_b_ln_t_c: float = None
+    a_for_ev_a_b_ln_t: float = None
+    a_for_ev_a_b_sqrt_t: float = None
+    b_for_ev_a_b_ln_t_c: float = None
+    b_for_ev_a_b_ln_t: float = None
+    b_for_ev_a_b_sqrt_t: float = None
+    c_for_ev_a_b_ln_t_c: float = None
+    method: str = None

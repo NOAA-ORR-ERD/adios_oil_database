@@ -20,7 +20,6 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaSampleMapper)
 
 from pprint import pprint
-import pdb
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -740,12 +739,12 @@ class TestEnvCanadaSampleParser(object):
                                      expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
-        ('2713', 0, {'adhesion': 18.03,
-                     'method': '12.12/x.x/M',
+        ('2713', 0, {'value': 18.03, 'unit': 'g/cm^2',
+                     'method': 'ESTS: 12.12/x.x/M',
                      'replicates': 3,
                      'standard_deviation': 1.05}),
-        ('2713', 3, {'adhesion': 56.39,
-                     'method': '12.12/x.x/M',
+        ('2713', 3, {'value': 56.39, 'unit': 'g/cm^2',
+                     'method': 'ESTS: 12.12/x.x/M',
                      'replicates': 3,
                      'standard_deviation': 3.09}),
     ])
@@ -766,7 +765,7 @@ class TestEnvCanadaSampleParser(object):
                      'b_for_ev_a_b_ln_t': 0.045,
                      'b_for_ev_a_b_sqrt_t': None,
                      'c_for_ev_a_b_ln_t_c': None,
-                     'method': '13.01/x.x/M'}),
+                     'method': 'ESTS: 13.01/x.x/M'}),
         ('2234', 4, {'a_for_ev_a_b_ln_t_c': None,
                      'a_for_ev_a_b_ln_t': None,
                      'a_for_ev_a_b_sqrt_t': None,
@@ -781,9 +780,10 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].evaporation_eqs)
+        pprint(samples[index].ests_evaporation_test)
 
-        assert self.compare_expected(samples[index].evaporation_eqs, expected)
+        assert self.compare_expected(samples[index].ests_evaporation_test,
+                                     expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
         ('2234', 0, {
@@ -1944,36 +1944,36 @@ class TestEnvCanadaSampleMapper(object):
         ('2713', 0, 'flash_point', None),
         ('2713', 0, 'interfacial_tensions', [
             {'interface': 'air',
-             'method': '12.12/x.x/M',
+             'method': 'ESTS: 12.12/x.x/M',
              'tension': {'value': 27.14, 'unit': 'mN/m',
                          'standard_deviation': 0.18, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              },
             {'interface': 'water',
-             'method': '12.12/x.x/M',
+             'method': 'ESTS: 12.12/x.x/M',
              'tension': {'value': 21.32, 'unit': 'mN/m',
                          'standard_deviation': 0.27, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              },
             {'interface': 'seawater',
-             'method': '12.12/x.x/M',
+             'method': 'ESTS: 12.12/x.x/M',
              'tension': {'value': 19.75, 'unit': 'mN/m',
                          'standard_deviation': 0.35, 'replicates': 3},
              'ref_temp': {'value': 15.0, 'unit': 'C'}
              },
             {'interface': 'air',
-             'method': '12.12/x.x/M',
+             'method': 'ESTS: 12.12/x.x/M',
              'tension': {'value': 27.69, 'unit': 'mN/m',
                          'standard_deviation': 0.82, 'replicates': 3},
              'ref_temp': {'value': 0.0, 'unit': 'C'}},
             {'interface': 'water',
-             'method': '12.12/x.x/M',
+             'method': 'ESTS: 12.12/x.x/M',
              'tension': {'value': 24.09, 'unit': 'mN/m',
                          'standard_deviation': 0.17, 'replicates': 3},
              'ref_temp': {'value': 0.0, 'unit': 'C'}
              },
             {'interface': 'seawater',
-             'method': '12.12/x.x/M',
+             'method': 'ESTS: 12.12/x.x/M',
              'tension': {'value': 22.81, 'unit': 'mN/m',
                          'standard_deviation': 0.18, 'replicates': 3},
              'ref_temp': {'value': 0.0, 'unit': 'C'}
@@ -1988,7 +1988,7 @@ class TestEnvCanadaSampleMapper(object):
          ]),
         ('2234', 0, 'emulsions', [
             {'age': {'unit': 'day', 'value': 0},
-             'method': '13.02/x.x/M',
+             'method': 'ESTS: 13.02/x.x/M',
              'visual_stability': 'Entrained',
              'complex_modulus': {'value': 45, 'unit': 'Pa',
                                  'standard_deviation': 7, 'replicates': 6},
@@ -2003,7 +2003,7 @@ class TestEnvCanadaSampleMapper(object):
              'water_content': {'value': 39.787, 'unit': '%',
                                'standard_deviation': 2.3, 'replicates': 9}},
             {'age': {'unit': 'day', 'value': 7},
-             'method': '13.02/x.x/M',
+             'method': 'ESTS: 13.02/x.x/M',
              'visual_stability': None,
              'complex_modulus': {'value': 31, 'unit': 'Pa',
                                  'standard_deviation': 7, 'replicates': 6},
@@ -2019,7 +2019,7 @@ class TestEnvCanadaSampleMapper(object):
                                'standard_deviation': 1.8, 'replicates': 9}}
          ]),
         ('2713', 0, 'SARA', {
-            'method': '12.11/3.0/M',
+            'method': 'ESTS: 12.11/3.0/M',
             'aromatics': {'value': 31.9, 'unit': '%',
                           'standard_deviation': 0.21576,
                           'replicates': 3},
@@ -2090,7 +2090,6 @@ class TestEnvCanadaSampleMapper(object):
         # We won't be checking every single compound since there are typically
         # over one hundred to check.  We will verify general properties of our
         # compound list though
-        #pprint(compounds)
         assert type(compounds) == list
         assert len(compounds) == expected['list_size']
 
@@ -2180,11 +2179,15 @@ class TestEnvCanadaSampleMapper(object):
                      'interfacial_tensions'):
             assert attr in phys
 
-    @pytest.mark.parametrize('oil_id, index', [
-        ('2234', 0),
-        ('561', 0),
+    @pytest.mark.parametrize('oil_id, index, attrs', [
+        ('2234', 0, ('adhesion', 'dispersibilities', 'emulsions',
+                     'ests_evaporation_test')),
+        ('506', 0, ('adhesion', 'dispersibilities', 'emulsions',
+                    'ests_evaporation_test')),
+        ('561', 0, ('adhesion', 'dispersibilities', 'emulsions',
+                    'ests_evaporation_test')),
     ])
-    def test_environmental_behavior(self, oil_id, index):
+    def test_environmental_behavior(self, oil_id, index, attrs):
         '''
             CCME object is a hybrid of struct attributes with a few
             compound lists thrown in.
@@ -2198,5 +2201,5 @@ class TestEnvCanadaSampleMapper(object):
         assert type(env) == dict
 
         # env canada has no kinematic viscosities
-        for attr in ('dispersibilities', 'emulsions'):
+        for attr in attrs:
             assert attr in env

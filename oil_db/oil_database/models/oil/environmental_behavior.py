@@ -9,7 +9,8 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
 
-from .measurement import DispersibilityList, EmulsionList
+from ..common.measurement import NeedleAdhesion
+from .measurement import DispersibilityList, EmulsionList, ESTSEvaporationTest
 
 
 @dataclass_to_json
@@ -17,3 +18,5 @@ from .measurement import DispersibilityList, EmulsionList
 class EnvironmentalBehavior:
     dispersibilities: DispersibilityList = field(default_factory=DispersibilityList)
     emulsions: EmulsionList = field(default_factory=EmulsionList)
+    adhesion: NeedleAdhesion = None
+    ests_evaporation_test: ESTSEvaporationTest = field(default_factory=ESTSEvaporationTest)

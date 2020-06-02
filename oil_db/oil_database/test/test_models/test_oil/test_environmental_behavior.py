@@ -30,8 +30,10 @@ class TestPhysicalProperties:
         s = EnvironmentalBehavior()
         py_json = s.py_json(sparse=False)
 
-        assert set(py_json.keys()) == {'dispersibilities',
-                                       'emulsions'}
+        assert set(py_json.keys()) == {'adhesion',
+                                       'dispersibilities',
+                                       'emulsions',
+                                       'ests_evaporation_test'}
 
     def test_add_non_existing(self):
         s = EnvironmentalBehavior()
@@ -58,8 +60,10 @@ class TestPhysicalProperties:
 
         py_json = p.py_json(sparse=False)  # the non-sparse version
 
-        assert set(py_json.keys()) == {'dispersibilities',
-                                       'emulsions'}
+        assert set(py_json.keys()) == {'adhesion',
+                                       'dispersibilities',
+                                       'emulsions',
+                                       'ests_evaporation_test'}
 
         # Now test some real stuff:
         disp = py_json['dispersibilities']
