@@ -259,7 +259,7 @@
                     "unit_type": "massfraction",
                     "value": 15
                 },
-                "method": "12.11/1.0/M",
+                "method": "ESTS: 12.11/1.0/M",
                 "resins": {
                     "unit": "%",
                     "unit_type": "massfraction",
@@ -278,7 +278,7 @@
                         "unit_type": "massfraction",
                         "value": 1
                     },
-                    "method": "12.11/2.0/M",
+                    "method": "ESTS: 12.11/2.0/M",
                     "name": "Wax Content"
                 },
                 {
@@ -337,7 +337,7 @@
                         "unit_type": "massfraction",
                         "value": 54.994
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
                 },
                 {
@@ -349,7 +349,7 @@
                         "unit_type": "massfraction",
                         "value": 45.006
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
                 },
                 {
@@ -361,7 +361,7 @@
                         "unit_type": "massfraction",
                         "value": 9.0821
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
                 }
             ],
@@ -617,7 +617,7 @@
                         "unit_type": "massfraction",
                         "value": 7.5703
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Biphenyl (Bph)"
                 },
                 {
@@ -629,7 +629,7 @@
                         "unit_type": "massfraction",
                         "value": 0
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthylene (Acl)"
                 },
                 {
@@ -641,7 +641,7 @@
                         "unit_type": "massfraction",
                         "value": 1.3667
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthene (Ace)"
                 },
                 {
@@ -653,7 +653,7 @@
                         "unit_type": "massfraction",
                         "value": 1.992
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Anthracene (An)"
                 },
                 {
@@ -665,7 +665,7 @@
                         "unit_type": "massfraction",
                         "value": 2.2849
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Fluoranthene (Fl)"
                 },
                 {
@@ -677,7 +677,7 @@
                         "unit_type": "massfraction",
                         "value": 10.03
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pyrene (Py)"
                 },
                 {
@@ -689,7 +689,7 @@
                         "unit_type": "massfraction",
                         "value": 1.3183
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benz(a)anthracene (BaA)"
                 },
                 {
@@ -701,7 +701,7 @@
                         "unit_type": "massfraction",
                         "value": 4.9025
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(b)fluoranthene (BbF)"
                 },
                 {
@@ -713,7 +713,7 @@
                         "unit_type": "massfraction",
                         "value": 1.0072
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(k)fluoranthene (BkF)"
                 },
                 {
@@ -725,7 +725,7 @@
                         "unit_type": "massfraction",
                         "value": 5.0616
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(e)pyrene (BeP)"
                 },
                 {
@@ -737,7 +737,7 @@
                         "unit_type": "massfraction",
                         "value": 3.3801
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(a)pyrene (BaP)"
                 },
                 {
@@ -749,7 +749,7 @@
                         "unit_type": "massfraction",
                         "value": 11.066
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Perylene (Pe)"
                 },
                 {
@@ -761,7 +761,7 @@
                         "unit_type": "massfraction",
                         "value": 2.6717
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Indeno(1,2,3-cd)pyrene (IP)"
                 },
                 {
@@ -773,7 +773,7 @@
                         "unit_type": "massfraction",
                         "value": 0.87754
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Dibenzo(ah)anthracene (DA)"
                 },
                 {
@@ -785,7 +785,7 @@
                         "unit_type": "massfraction",
                         "value": 3.2617
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(ghi)perylene (BgP)"
                 },
                 {
@@ -797,7 +797,7 @@
                         "unit_type": "massfraction",
                         "value": 1282.0
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C9"
                 },
                 {
@@ -809,7 +809,7 @@
                         "unit_type": "massfraction",
                         "value": 980.48
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C10"
                 },
                 {
@@ -821,7 +821,7 @@
                         "unit_type": "massfraction",
                         "value": 736.58
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C11"
                 },
                 {
@@ -833,7 +833,7 @@
                         "unit_type": "massfraction",
                         "value": 542.97
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C12"
                 },
                 {
@@ -845,7 +845,7 @@
                         "unit_type": "massfraction",
                         "value": 445.55
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C13"
                 },
                 {
@@ -857,7 +857,7 @@
                         "unit_type": "massfraction",
                         "value": 406.09
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C14"
                 },
                 {
@@ -869,7 +869,7 @@
                         "unit_type": "massfraction",
                         "value": 393.67
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C15"
                 },
                 {
@@ -881,7 +881,7 @@
                         "unit_type": "massfraction",
                         "value": 298.51
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C16"
                 },
                 {
@@ -893,7 +893,7 @@
                         "unit_type": "massfraction",
                         "value": 273.52
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C17"
                 },
                 {
@@ -905,7 +905,7 @@
                         "unit_type": "massfraction",
                         "value": 139.8
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pristane"
                 },
                 {
@@ -917,7 +917,7 @@
                         "unit_type": "massfraction",
                         "value": 228.6
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C18"
                 },
                 {
@@ -929,7 +929,7 @@
                         "unit_type": "massfraction",
                         "value": 119.77
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Phytane"
                 },
                 {
@@ -941,7 +941,7 @@
                         "unit_type": "massfraction",
                         "value": 207.74
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C19"
                 },
                 {
@@ -953,7 +953,7 @@
                         "unit_type": "massfraction",
                         "value": 191.21
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C20"
                 },
                 {
@@ -965,7 +965,7 @@
                         "unit_type": "massfraction",
                         "value": 176.6
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21"
                 },
                 {
@@ -977,7 +977,7 @@
                         "unit_type": "massfraction",
                         "value": 158.94
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22"
                 },
                 {
@@ -989,7 +989,7 @@
                         "unit_type": "massfraction",
                         "value": 141.56
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23"
                 },
                 {
@@ -1001,7 +1001,7 @@
                         "unit_type": "massfraction",
                         "value": 132.65
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24"
                 },
                 {
@@ -1013,7 +1013,7 @@
                         "unit_type": "massfraction",
                         "value": 122.86
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C25"
                 },
                 {
@@ -1025,7 +1025,7 @@
                         "unit_type": "massfraction",
                         "value": 106.56
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C26"
                 },
                 {
@@ -1037,7 +1037,7 @@
                         "unit_type": "massfraction",
                         "value": 87.218
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C27"
                 },
                 {
@@ -1049,7 +1049,7 @@
                         "unit_type": "massfraction",
                         "value": 69.194
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C28"
                 },
                 {
@@ -1061,7 +1061,7 @@
                         "unit_type": "massfraction",
                         "value": 56.281
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C29"
                 },
                 {
@@ -1073,7 +1073,7 @@
                         "unit_type": "massfraction",
                         "value": 49.559
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C30"
                 },
                 {
@@ -1085,7 +1085,7 @@
                         "unit_type": "massfraction",
                         "value": 41.957
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C31"
                 },
                 {
@@ -1097,7 +1097,7 @@
                         "unit_type": "massfraction",
                         "value": 30.488
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C32"
                 },
                 {
@@ -1109,7 +1109,7 @@
                         "unit_type": "massfraction",
                         "value": 24.341
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C33"
                 },
                 {
@@ -1121,7 +1121,7 @@
                         "unit_type": "massfraction",
                         "value": 17.975
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C34"
                 },
                 {
@@ -1133,7 +1133,7 @@
                         "unit_type": "massfraction",
                         "value": 14.794
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C35"
                 },
                 {
@@ -1145,7 +1145,7 @@
                         "unit_type": "massfraction",
                         "value": 12.105
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C36"
                 },
                 {
@@ -1157,7 +1157,7 @@
                         "unit_type": "massfraction",
                         "value": 11.151
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C37"
                 },
                 {
@@ -1169,7 +1169,7 @@
                         "unit_type": "massfraction",
                         "value": 7.0482
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C38"
                 },
                 {
@@ -1181,7 +1181,7 @@
                         "unit_type": "massfraction",
                         "value": 5.0231
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C39"
                 },
                 {
@@ -1193,7 +1193,7 @@
                         "unit_type": "massfraction",
                         "value": 35.308
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21 tricyclic terpane (C21T)"
                 },
                 {
@@ -1205,7 +1205,7 @@
                         "unit_type": "massfraction",
                         "value": 16.578
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22 tricyclic terpane (C22T)"
                 },
                 {
@@ -1217,7 +1217,7 @@
                         "unit_type": "massfraction",
                         "value": 106.74
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23 tricyclic terpane (C23T)"
                 },
                 {
@@ -1229,7 +1229,7 @@
                         "unit_type": "massfraction",
                         "value": 55.274
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24 tricyclic terpane (C24T)"
                 },
                 {
@@ -1241,7 +1241,7 @@
                         "unit_type": "massfraction",
                         "value": 27.1
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Norhopane (H29)"
                 },
                 {
@@ -1253,7 +1253,7 @@
                         "unit_type": "massfraction",
                         "value": 71.864
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Hopane (H30)"
                 },
                 {
@@ -1265,7 +1265,7 @@
                         "unit_type": "massfraction",
                         "value": 213.11
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22S (H31S)"
                 },
                 {
@@ -1277,7 +1277,7 @@
                         "unit_type": "massfraction",
                         "value": 255.6
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22R (H31R)"
                 },
                 {
@@ -1289,7 +1289,7 @@
                         "unit_type": "massfraction",
                         "value": 109.6
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22S (H32S)"
                 },
                 {
@@ -1301,7 +1301,7 @@
                         "unit_type": "massfraction",
                         "value": 82.208
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22R (H32R)"
                 },
                 {
@@ -1313,7 +1313,7 @@
                         "unit_type": "massfraction",
                         "value": 64.934
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22S (H33S)"
                 },
                 {
@@ -1325,7 +1325,7 @@
                         "unit_type": "massfraction",
                         "value": 47.996
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22R (H33R)"
                 },
                 {
@@ -1337,7 +1337,7 @@
                         "unit_type": "massfraction",
                         "value": 49.561
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22S (H34S)"
                 },
                 {
@@ -1349,7 +1349,7 @@
                         "unit_type": "massfraction",
                         "value": 31.932
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22R (H34R)"
                 },
                 {
@@ -1361,7 +1361,7 @@
                         "unit_type": "massfraction",
                         "value": 30.081
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22S (H35S)"
                 },
                 {
@@ -1373,7 +1373,7 @@
                         "unit_type": "massfraction",
                         "value": 19.834
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22R (H35R)"
                 },
                 {
@@ -1385,7 +1385,7 @@
                         "unit_type": "massfraction",
                         "value": 32.296
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "18\u03b1,22,29,30-trisnorneohopane (C27Ts)"
                 },
                 {
@@ -1397,7 +1397,7 @@
                         "unit_type": "massfraction",
                         "value": 22.315
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "17\u03b1(H)-22,29,30-Trisnorhopane (C27Tm)"
                 },
                 {
@@ -1409,7 +1409,7 @@
                         "unit_type": "massfraction",
                         "value": 187.86
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Cholestane (C27\u03b1\u00df\u00df)"
                 },
                 {
@@ -1421,7 +1421,7 @@
                         "unit_type": "massfraction",
                         "value": 151.53
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Methylcholestane (C28\u03b1\u00df\u00df)"
                 },
                 {
@@ -1433,7 +1433,7 @@
                         "unit_type": "massfraction",
                         "value": 240.15
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Ethylcholestane (C29\u03b1\u00df\u00df)"
                 }
             ],
@@ -1718,7 +1718,7 @@
                             "unit_type": null,
                             "value": 42
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 3,
@@ -1768,7 +1768,7 @@
                             "unit_type": null,
                             "value": 31
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 0.96,
@@ -1790,7 +1790,12 @@
                             "value": 15.592
                         }
                     }
-                ]
+                ],
+                "ests_evaporation_test": {
+                    "a_for_ev_a_b_ln_t": 1.72,
+                    "b_for_ev_a_b_ln_t": 0.045,
+                    "method": "ESTS: 13.01/x.x/M"
+                }
             },
             "fraction_weathered": {
                 "unit": "1",
@@ -1867,7 +1872,7 @@
                 "interfacial_tensions": [
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -1883,7 +1888,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -1899,7 +1904,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -1915,7 +1920,7 @@
                     },
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -1931,7 +1936,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -1947,7 +1952,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -2213,7 +2218,7 @@
                     "unit_type": "massfraction",
                     "value": 16
                 },
-                "method": "12.11/1.0/M",
+                "method": "ESTS: 12.11/1.0/M",
                 "resins": {
                     "unit": "%",
                     "unit_type": "massfraction",
@@ -2232,7 +2237,7 @@
                         "unit_type": "massfraction",
                         "value": 1.6
                     },
-                    "method": "12.11/2.0/M",
+                    "method": "ESTS: 12.11/2.0/M",
                     "name": "Wax Content"
                 },
                 {
@@ -2291,7 +2296,7 @@
                         "unit_type": "massfraction",
                         "value": 54.679
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
                 },
                 {
@@ -2303,7 +2308,7 @@
                         "unit_type": "massfraction",
                         "value": 45.321
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
                 },
                 {
@@ -2315,7 +2320,7 @@
                         "unit_type": "massfraction",
                         "value": 8.9457
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
                 }
             ],
@@ -2571,7 +2576,7 @@
                         "unit_type": "massfraction",
                         "value": 7.881
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Biphenyl (Bph)"
                 },
                 {
@@ -2583,7 +2588,7 @@
                         "unit_type": "massfraction",
                         "value": 0
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthylene (Acl)"
                 },
                 {
@@ -2595,7 +2600,7 @@
                         "unit_type": "massfraction",
                         "value": 1.5096
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthene (Ace)"
                 },
                 {
@@ -2607,7 +2612,7 @@
                         "unit_type": "massfraction",
                         "value": 2.1376
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Anthracene (An)"
                 },
                 {
@@ -2619,7 +2624,7 @@
                         "unit_type": "massfraction",
                         "value": 2.5201
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Fluoranthene (Fl)"
                 },
                 {
@@ -2631,7 +2636,7 @@
                         "unit_type": "massfraction",
                         "value": 10.972
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pyrene (Py)"
                 },
                 {
@@ -2643,7 +2648,7 @@
                         "unit_type": "massfraction",
                         "value": 1.3125
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benz(a)anthracene (BaA)"
                 },
                 {
@@ -2655,7 +2660,7 @@
                         "unit_type": "massfraction",
                         "value": 5.369
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(b)fluoranthene (BbF)"
                 },
                 {
@@ -2667,7 +2672,7 @@
                         "unit_type": "massfraction",
                         "value": 1.1283
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(k)fluoranthene (BkF)"
                 },
                 {
@@ -2679,7 +2684,7 @@
                         "unit_type": "massfraction",
                         "value": 5.7084
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(e)pyrene (BeP)"
                 },
                 {
@@ -2691,7 +2696,7 @@
                         "unit_type": "massfraction",
                         "value": 3.8106
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(a)pyrene (BaP)"
                 },
                 {
@@ -2703,7 +2708,7 @@
                         "unit_type": "massfraction",
                         "value": 12.18
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Perylene (Pe)"
                 },
                 {
@@ -2715,7 +2720,7 @@
                         "unit_type": "massfraction",
                         "value": 2.6126
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Indeno(1,2,3-cd)pyrene (IP)"
                 },
                 {
@@ -2727,7 +2732,7 @@
                         "unit_type": "massfraction",
                         "value": 1.0051
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Dibenzo(ah)anthracene (DA)"
                 },
                 {
@@ -2739,7 +2744,7 @@
                         "unit_type": "massfraction",
                         "value": 3.2969
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(ghi)perylene (BgP)"
                 },
                 {
@@ -2751,7 +2756,7 @@
                         "unit_type": "massfraction",
                         "value": 1287.6
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C9"
                 },
                 {
@@ -2763,7 +2768,7 @@
                         "unit_type": "massfraction",
                         "value": 1018.8
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C10"
                 },
                 {
@@ -2775,7 +2780,7 @@
                         "unit_type": "massfraction",
                         "value": 779.47
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C11"
                 },
                 {
@@ -2787,7 +2792,7 @@
                         "unit_type": "massfraction",
                         "value": 584.56
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C12"
                 },
                 {
@@ -2799,7 +2804,7 @@
                         "unit_type": "massfraction",
                         "value": 474.93
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C13"
                 },
                 {
@@ -2811,7 +2816,7 @@
                         "unit_type": "massfraction",
                         "value": 439.65
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C14"
                 },
                 {
@@ -2823,7 +2828,7 @@
                         "unit_type": "massfraction",
                         "value": 420.24
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C15"
                 },
                 {
@@ -2835,7 +2840,7 @@
                         "unit_type": "massfraction",
                         "value": 318.36
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C16"
                 },
                 {
@@ -2847,7 +2852,7 @@
                         "unit_type": "massfraction",
                         "value": 293.28
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C17"
                 },
                 {
@@ -2859,7 +2864,7 @@
                         "unit_type": "massfraction",
                         "value": 157.03
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pristane"
                 },
                 {
@@ -2871,7 +2876,7 @@
                         "unit_type": "massfraction",
                         "value": 244.19
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C18"
                 },
                 {
@@ -2883,7 +2888,7 @@
                         "unit_type": "massfraction",
                         "value": 129.04
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Phytane"
                 },
                 {
@@ -2895,7 +2900,7 @@
                         "unit_type": "massfraction",
                         "value": 221.59
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C19"
                 },
                 {
@@ -2907,7 +2912,7 @@
                         "unit_type": "massfraction",
                         "value": 202.73
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C20"
                 },
                 {
@@ -2919,7 +2924,7 @@
                         "unit_type": "massfraction",
                         "value": 188.65
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21"
                 },
                 {
@@ -2931,7 +2936,7 @@
                         "unit_type": "massfraction",
                         "value": 170.47
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22"
                 },
                 {
@@ -2943,7 +2948,7 @@
                         "unit_type": "massfraction",
                         "value": 153.74
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23"
                 },
                 {
@@ -2955,7 +2960,7 @@
                         "unit_type": "massfraction",
                         "value": 146.73
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24"
                 },
                 {
@@ -2967,7 +2972,7 @@
                         "unit_type": "massfraction",
                         "value": 133.05
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C25"
                 },
                 {
@@ -2979,7 +2984,7 @@
                         "unit_type": "massfraction",
                         "value": 115.7
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C26"
                 },
                 {
@@ -2991,7 +2996,7 @@
                         "unit_type": "massfraction",
                         "value": 93.237
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C27"
                 },
                 {
@@ -3003,7 +3008,7 @@
                         "unit_type": "massfraction",
                         "value": 74.891
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C28"
                 },
                 {
@@ -3015,7 +3020,7 @@
                         "unit_type": "massfraction",
                         "value": 62.174
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C29"
                 },
                 {
@@ -3027,7 +3032,7 @@
                         "unit_type": "massfraction",
                         "value": 53.524
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C30"
                 },
                 {
@@ -3039,7 +3044,7 @@
                         "unit_type": "massfraction",
                         "value": 45.313
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C31"
                 },
                 {
@@ -3051,7 +3056,7 @@
                         "unit_type": "massfraction",
                         "value": 32.316
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C32"
                 },
                 {
@@ -3063,7 +3068,7 @@
                         "unit_type": "massfraction",
                         "value": 27.914
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C33"
                 },
                 {
@@ -3075,7 +3080,7 @@
                         "unit_type": "massfraction",
                         "value": 20.491
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C34"
                 },
                 {
@@ -3087,7 +3092,7 @@
                         "unit_type": "massfraction",
                         "value": 16.759
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C35"
                 },
                 {
@@ -3099,7 +3104,7 @@
                         "unit_type": "massfraction",
                         "value": 13.65
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C36"
                 },
                 {
@@ -3111,7 +3116,7 @@
                         "unit_type": "massfraction",
                         "value": 11.798
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C37"
                 },
                 {
@@ -3123,7 +3128,7 @@
                         "unit_type": "massfraction",
                         "value": 8.1552
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C38"
                 },
                 {
@@ -3135,7 +3140,7 @@
                         "unit_type": "massfraction",
                         "value": 6.1468
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C39"
                 },
                 {
@@ -3147,7 +3152,7 @@
                         "unit_type": "massfraction",
                         "value": 37.331
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21 tricyclic terpane (C21T)"
                 },
                 {
@@ -3159,7 +3164,7 @@
                         "unit_type": "massfraction",
                         "value": 17.821
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22 tricyclic terpane (C22T)"
                 },
                 {
@@ -3171,7 +3176,7 @@
                         "unit_type": "massfraction",
                         "value": 113.84
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23 tricyclic terpane (C23T)"
                 },
                 {
@@ -3183,7 +3188,7 @@
                         "unit_type": "massfraction",
                         "value": 59.195
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24 tricyclic terpane (C24T)"
                 },
                 {
@@ -3195,7 +3200,7 @@
                         "unit_type": "massfraction",
                         "value": 27.562
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Norhopane (H29)"
                 },
                 {
@@ -3207,7 +3212,7 @@
                         "unit_type": "massfraction",
                         "value": 79.005
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Hopane (H30)"
                 },
                 {
@@ -3219,7 +3224,7 @@
                         "unit_type": "massfraction",
                         "value": 224.82
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22S (H31S)"
                 },
                 {
@@ -3231,7 +3236,7 @@
                         "unit_type": "massfraction",
                         "value": 266.89
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22R (H31R)"
                 },
                 {
@@ -3243,7 +3248,7 @@
                         "unit_type": "massfraction",
                         "value": 117.61
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22S (H32S)"
                 },
                 {
@@ -3255,7 +3260,7 @@
                         "unit_type": "massfraction",
                         "value": 86.891
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22R (H32R)"
                 },
                 {
@@ -3267,7 +3272,7 @@
                         "unit_type": "massfraction",
                         "value": 69.393
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22S (H33S)"
                 },
                 {
@@ -3279,7 +3284,7 @@
                         "unit_type": "massfraction",
                         "value": 51.042
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22R (H33R)"
                 },
                 {
@@ -3291,7 +3296,7 @@
                         "unit_type": "massfraction",
                         "value": 52.382
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22S (H34S)"
                 },
                 {
@@ -3303,7 +3308,7 @@
                         "unit_type": "massfraction",
                         "value": 34.207
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22R (H34R)"
                 },
                 {
@@ -3315,7 +3320,7 @@
                         "unit_type": "massfraction",
                         "value": 31.861
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22S (H35S)"
                 },
                 {
@@ -3327,7 +3332,7 @@
                         "unit_type": "massfraction",
                         "value": 20.841
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22R (H35R)"
                 },
                 {
@@ -3339,7 +3344,7 @@
                         "unit_type": "massfraction",
                         "value": 34.49
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "18\u03b1,22,29,30-trisnorneohopane (C27Ts)"
                 },
                 {
@@ -3351,7 +3356,7 @@
                         "unit_type": "massfraction",
                         "value": 24.04
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "17\u03b1(H)-22,29,30-Trisnorhopane (C27Tm)"
                 },
                 {
@@ -3363,7 +3368,7 @@
                         "unit_type": "massfraction",
                         "value": 203.58
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Cholestane (C27\u03b1\u00df\u00df)"
                 },
                 {
@@ -3375,7 +3380,7 @@
                         "unit_type": "massfraction",
                         "value": 160.53
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Methylcholestane (C28\u03b1\u00df\u00df)"
                 },
                 {
@@ -3387,7 +3392,7 @@
                         "unit_type": "massfraction",
                         "value": 254.44
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Ethylcholestane (C29\u03b1\u00df\u00df)"
                 }
             ],
@@ -3671,7 +3676,7 @@
                             "unit_type": null,
                             "value": 85
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 2.8,
@@ -3721,7 +3726,7 @@
                             "unit_type": null,
                             "value": 90
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 5.3,
@@ -3820,7 +3825,7 @@
                 "interfacial_tensions": [
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3836,7 +3841,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3852,7 +3857,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3868,7 +3873,7 @@
                     },
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3884,7 +3889,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3899,7 +3904,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -4164,7 +4169,7 @@
                     "unit_type": "massfraction",
                     "value": 17
                 },
-                "method": "12.11/1.0/M",
+                "method": "ESTS: 12.11/1.0/M",
                 "resins": {
                     "unit": "%",
                     "unit_type": "massfraction",
@@ -4183,7 +4188,7 @@
                         "unit_type": "massfraction",
                         "value": 2
                     },
-                    "method": "12.11/2.0/M",
+                    "method": "ESTS: 12.11/2.0/M",
                     "name": "Wax Content"
                 },
                 {
@@ -4242,7 +4247,7 @@
                         "unit_type": "massfraction",
                         "value": 53.232
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
                 },
                 {
@@ -4254,7 +4259,7 @@
                         "unit_type": "massfraction",
                         "value": 46.768
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
                 },
                 {
@@ -4266,7 +4271,7 @@
                         "unit_type": "massfraction",
                         "value": 8.7567
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
                 }
             ],
@@ -4522,7 +4527,7 @@
                         "unit_type": "massfraction",
                         "value": 8.2307
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Biphenyl (Bph)"
                 },
                 {
@@ -4534,7 +4539,7 @@
                         "unit_type": "massfraction",
                         "value": 0
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthylene (Acl)"
                 },
                 {
@@ -4546,7 +4551,7 @@
                         "unit_type": "massfraction",
                         "value": 1.5628
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthene (Ace)"
                 },
                 {
@@ -4558,7 +4563,7 @@
                         "unit_type": "massfraction",
                         "value": 2.2288
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Anthracene (An)"
                 },
                 {
@@ -4570,7 +4575,7 @@
                         "unit_type": "massfraction",
                         "value": 2.6797
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Fluoranthene (Fl)"
                 },
                 {
@@ -4582,7 +4587,7 @@
                         "unit_type": "massfraction",
                         "value": 11.525
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pyrene (Py)"
                 },
                 {
@@ -4594,7 +4599,7 @@
                         "unit_type": "massfraction",
                         "value": 1.9732
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benz(a)anthracene (BaA)"
                 },
                 {
@@ -4606,7 +4611,7 @@
                         "unit_type": "massfraction",
                         "value": 5.4908
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(b)fluoranthene (BbF)"
                 },
                 {
@@ -4618,7 +4623,7 @@
                         "unit_type": "massfraction",
                         "value": 1.205
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(k)fluoranthene (BkF)"
                 },
                 {
@@ -4630,7 +4635,7 @@
                         "unit_type": "massfraction",
                         "value": 5.675
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(e)pyrene (BeP)"
                 },
                 {
@@ -4642,7 +4647,7 @@
                         "unit_type": "massfraction",
                         "value": 3.5045
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(a)pyrene (BaP)"
                 },
                 {
@@ -4654,7 +4659,7 @@
                         "unit_type": "massfraction",
                         "value": 12.534
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Perylene (Pe)"
                 },
                 {
@@ -4666,7 +4671,7 @@
                         "unit_type": "massfraction",
                         "value": 2.4784
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Indeno(1,2,3-cd)pyrene (IP)"
                 },
                 {
@@ -4678,7 +4683,7 @@
                         "unit_type": "massfraction",
                         "value": 1.059
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Dibenzo(ah)anthracene (DA)"
                 },
                 {
@@ -4690,7 +4695,7 @@
                         "unit_type": "massfraction",
                         "value": 3.0241
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(ghi)perylene (BgP)"
                 },
                 {
@@ -4702,7 +4707,7 @@
                         "unit_type": "massfraction",
                         "value": 1150.6
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C9"
                 },
                 {
@@ -4714,7 +4719,7 @@
                         "unit_type": "massfraction",
                         "value": 1050.0
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C10"
                 },
                 {
@@ -4726,7 +4731,7 @@
                         "unit_type": "massfraction",
                         "value": 851.54
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C11"
                 },
                 {
@@ -4738,7 +4743,7 @@
                         "unit_type": "massfraction",
                         "value": 638.91
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C12"
                 },
                 {
@@ -4750,7 +4755,7 @@
                         "unit_type": "massfraction",
                         "value": 533.09
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C13"
                 },
                 {
@@ -4762,7 +4767,7 @@
                         "unit_type": "massfraction",
                         "value": 491.17
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C14"
                 },
                 {
@@ -4774,7 +4779,7 @@
                         "unit_type": "massfraction",
                         "value": 480.53
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C15"
                 },
                 {
@@ -4786,7 +4791,7 @@
                         "unit_type": "massfraction",
                         "value": 361.08
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C16"
                 },
                 {
@@ -4798,7 +4803,7 @@
                         "unit_type": "massfraction",
                         "value": 336.06
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C17"
                 },
                 {
@@ -4810,7 +4815,7 @@
                         "unit_type": "massfraction",
                         "value": 161.31
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pristane"
                 },
                 {
@@ -4822,7 +4827,7 @@
                         "unit_type": "massfraction",
                         "value": 278.01
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C18"
                 },
                 {
@@ -4834,7 +4839,7 @@
                         "unit_type": "massfraction",
                         "value": 144.08
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Phytane"
                 },
                 {
@@ -4846,7 +4851,7 @@
                         "unit_type": "massfraction",
                         "value": 253.67
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C19"
                 },
                 {
@@ -4858,7 +4863,7 @@
                         "unit_type": "massfraction",
                         "value": 231.44
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C20"
                 },
                 {
@@ -4870,7 +4875,7 @@
                         "unit_type": "massfraction",
                         "value": 213.16
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21"
                 },
                 {
@@ -4882,7 +4887,7 @@
                         "unit_type": "massfraction",
                         "value": 193.67
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22"
                 },
                 {
@@ -4894,7 +4899,7 @@
                         "unit_type": "massfraction",
                         "value": 174.74
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23"
                 },
                 {
@@ -4906,7 +4911,7 @@
                         "unit_type": "massfraction",
                         "value": 158.64
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24"
                 },
                 {
@@ -4918,7 +4923,7 @@
                         "unit_type": "massfraction",
                         "value": 144.7
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C25"
                 },
                 {
@@ -4930,7 +4935,7 @@
                         "unit_type": "massfraction",
                         "value": 130.57
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C26"
                 },
                 {
@@ -4942,7 +4947,7 @@
                         "unit_type": "massfraction",
                         "value": 107.25
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C27"
                 },
                 {
@@ -4954,7 +4959,7 @@
                         "unit_type": "massfraction",
                         "value": 83.888
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C28"
                 },
                 {
@@ -4966,7 +4971,7 @@
                         "unit_type": "massfraction",
                         "value": 68.964
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C29"
                 },
                 {
@@ -4978,7 +4983,7 @@
                         "unit_type": "massfraction",
                         "value": 59.647
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C30"
                 },
                 {
@@ -4990,7 +4995,7 @@
                         "unit_type": "massfraction",
                         "value": 51.851
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C31"
                 },
                 {
@@ -5002,7 +5007,7 @@
                         "unit_type": "massfraction",
                         "value": 37.919
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C32"
                 },
                 {
@@ -5014,7 +5019,7 @@
                         "unit_type": "massfraction",
                         "value": 33.985
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C33"
                 },
                 {
@@ -5026,7 +5031,7 @@
                         "unit_type": "massfraction",
                         "value": 23.12
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C34"
                 },
                 {
@@ -5038,7 +5043,7 @@
                         "unit_type": "massfraction",
                         "value": 18.229
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C35"
                 },
                 {
@@ -5050,7 +5055,7 @@
                         "unit_type": "massfraction",
                         "value": 13.573
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C36"
                 },
                 {
@@ -5062,7 +5067,7 @@
                         "unit_type": "massfraction",
                         "value": 13.7
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C37"
                 },
                 {
@@ -5074,7 +5079,7 @@
                         "unit_type": "massfraction",
                         "value": 10.214
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C38"
                 },
                 {
@@ -5086,7 +5091,7 @@
                         "unit_type": "massfraction",
                         "value": 5.8176
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C39"
                 },
                 {
@@ -5098,7 +5103,7 @@
                         "unit_type": "massfraction",
                         "value": 38.819
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21 tricyclic terpane (C21T)"
                 },
                 {
@@ -5110,7 +5115,7 @@
                         "unit_type": "massfraction",
                         "value": 18.294
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22 tricyclic terpane (C22T)"
                 },
                 {
@@ -5122,7 +5127,7 @@
                         "unit_type": "massfraction",
                         "value": 117.08
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23 tricyclic terpane (C23T)"
                 },
                 {
@@ -5134,7 +5139,7 @@
                         "unit_type": "massfraction",
                         "value": 59.963
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24 tricyclic terpane (C24T)"
                 },
                 {
@@ -5146,7 +5151,7 @@
                         "unit_type": "massfraction",
                         "value": 30.095
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Norhopane (H29)"
                 },
                 {
@@ -5158,7 +5163,7 @@
                         "unit_type": "massfraction",
                         "value": 83.035
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Hopane (H30)"
                 },
                 {
@@ -5170,7 +5175,7 @@
                         "unit_type": "massfraction",
                         "value": 250.99
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22S (H31S)"
                 },
                 {
@@ -5182,7 +5187,7 @@
                         "unit_type": "massfraction",
                         "value": 305.98
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22R (H31R)"
                 },
                 {
@@ -5194,7 +5199,7 @@
                         "unit_type": "massfraction",
                         "value": 131.08
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22S (H32S)"
                 },
                 {
@@ -5206,7 +5211,7 @@
                         "unit_type": "massfraction",
                         "value": 98.159
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22R (H32R)"
                 },
                 {
@@ -5218,7 +5223,7 @@
                         "unit_type": "massfraction",
                         "value": 79.609
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22S (H33S)"
                 },
                 {
@@ -5230,7 +5235,7 @@
                         "unit_type": "massfraction",
                         "value": 56.379
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22R (H33R)"
                 },
                 {
@@ -5242,7 +5247,7 @@
                         "unit_type": "massfraction",
                         "value": 57.771
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22S (H34S)"
                 },
                 {
@@ -5254,7 +5259,7 @@
                         "unit_type": "massfraction",
                         "value": 36.786
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22R (H34R)"
                 },
                 {
@@ -5266,7 +5271,7 @@
                         "unit_type": "massfraction",
                         "value": 33.645
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22S (H35S)"
                 },
                 {
@@ -5278,7 +5283,7 @@
                         "unit_type": "massfraction",
                         "value": 21.799
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22R (H35R)"
                 },
                 {
@@ -5290,7 +5295,7 @@
                         "unit_type": "massfraction",
                         "value": 34.255
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "18\u03b1,22,29,30-trisnorneohopane (C27Ts)"
                 },
                 {
@@ -5302,7 +5307,7 @@
                         "unit_type": "massfraction",
                         "value": 22.547
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "17\u03b1(H)-22,29,30-Trisnorhopane (C27Tm)"
                 },
                 {
@@ -5314,7 +5319,7 @@
                         "unit_type": "massfraction",
                         "value": 212.83
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Cholestane (C27\u03b1\u00df\u00df)"
                 },
                 {
@@ -5326,7 +5331,7 @@
                         "unit_type": "massfraction",
                         "value": 173.57
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Methylcholestane (C28\u03b1\u00df\u00df)"
                 },
                 {
@@ -5338,7 +5343,7 @@
                         "unit_type": "massfraction",
                         "value": 278.78
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Ethylcholestane (C29\u03b1\u00df\u00df)"
                 }
             ],
@@ -5610,7 +5615,7 @@
                             "unit_type": null,
                             "value": 430
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 23,
@@ -5660,7 +5665,7 @@
                             "unit_type": null,
                             "value": 500
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 20,
@@ -5759,7 +5764,7 @@
                 "interfacial_tensions": [
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5775,7 +5780,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5790,7 +5795,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5805,7 +5810,7 @@
                     },
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5820,7 +5825,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5835,7 +5840,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -6100,7 +6105,7 @@
                     "unit_type": "massfraction",
                     "value": 23
                 },
-                "method": "12.11/1.0/M",
+                "method": "ESTS: 12.11/1.0/M",
                 "resins": {
                     "unit": "%",
                     "unit_type": "massfraction",
@@ -6119,7 +6124,7 @@
                         "unit_type": "massfraction",
                         "value": 2.1
                     },
-                    "method": "12.11/2.0/M",
+                    "method": "ESTS: 12.11/2.0/M",
                     "name": "Wax Content"
                 },
                 {
@@ -6177,7 +6182,7 @@
                         "unit_type": "massfraction",
                         "value": 50.382
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
                 },
                 {
@@ -6189,7 +6194,7 @@
                         "unit_type": "massfraction",
                         "value": 49.618
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
                 },
                 {
@@ -6201,7 +6206,7 @@
                         "unit_type": "massfraction",
                         "value": 7.2719
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
                 }
             ],
@@ -6457,7 +6462,7 @@
                         "unit_type": "massfraction",
                         "value": 5.4036
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Biphenyl (Bph)"
                 },
                 {
@@ -6469,7 +6474,7 @@
                         "unit_type": "massfraction",
                         "value": 0
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthylene (Acl)"
                 },
                 {
@@ -6481,7 +6486,7 @@
                         "unit_type": "massfraction",
                         "value": 1.3724
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthene (Ace)"
                 },
                 {
@@ -6493,7 +6498,7 @@
                         "unit_type": "massfraction",
                         "value": 2.4621
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Anthracene (An)"
                 },
                 {
@@ -6505,7 +6510,7 @@
                         "unit_type": "massfraction",
                         "value": 2.9797
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Fluoranthene (Fl)"
                 },
                 {
@@ -6517,7 +6522,7 @@
                         "unit_type": "massfraction",
                         "value": 12.542
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pyrene (Py)"
                 },
                 {
@@ -6529,7 +6534,7 @@
                         "unit_type": "massfraction",
                         "value": 1.5279
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benz(a)anthracene (BaA)"
                 },
                 {
@@ -6541,7 +6546,7 @@
                         "unit_type": "massfraction",
                         "value": 5.8802
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(b)fluoranthene (BbF)"
                 },
                 {
@@ -6553,7 +6558,7 @@
                         "unit_type": "massfraction",
                         "value": 1.5007
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(k)fluoranthene (BkF)"
                 },
                 {
@@ -6565,7 +6570,7 @@
                         "unit_type": "massfraction",
                         "value": 5.932
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(e)pyrene (BeP)"
                 },
                 {
@@ -6577,7 +6582,7 @@
                         "unit_type": "massfraction",
                         "value": 4.733
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(a)pyrene (BaP)"
                 },
                 {
@@ -6589,7 +6594,7 @@
                         "unit_type": "massfraction",
                         "value": 13.418
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Perylene (Pe)"
                 },
                 {
@@ -6601,7 +6606,7 @@
                         "unit_type": "massfraction",
                         "value": 2.455
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Indeno(1,2,3-cd)pyrene (IP)"
                 },
                 {
@@ -6613,7 +6618,7 @@
                         "unit_type": "massfraction",
                         "value": 1.0222
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Dibenzo(ah)anthracene (DA)"
                 },
                 {
@@ -6625,7 +6630,7 @@
                         "unit_type": "massfraction",
                         "value": 3.0855
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(ghi)perylene (BgP)"
                 },
                 {
@@ -6637,7 +6642,7 @@
                         "unit_type": "massfraction",
                         "value": 7.6836
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C9"
                 },
                 {
@@ -6649,7 +6654,7 @@
                         "unit_type": "massfraction",
                         "value": 0.29287
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C10"
                 },
                 {
@@ -6661,7 +6666,7 @@
                         "unit_type": "massfraction",
                         "value": 5.6648
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C11"
                 },
                 {
@@ -6673,7 +6678,7 @@
                         "unit_type": "massfraction",
                         "value": 49.39
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C12"
                 },
                 {
@@ -6685,7 +6690,7 @@
                         "unit_type": "massfraction",
                         "value": 160.27
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C13"
                 },
                 {
@@ -6697,7 +6702,7 @@
                         "unit_type": "massfraction",
                         "value": 288.14
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C14"
                 },
                 {
@@ -6709,7 +6714,7 @@
                         "unit_type": "massfraction",
                         "value": 389.58
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C15"
                 },
                 {
@@ -6721,7 +6726,7 @@
                         "unit_type": "massfraction",
                         "value": 342.52
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C16"
                 },
                 {
@@ -6733,7 +6738,7 @@
                         "unit_type": "massfraction",
                         "value": 335.07
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C17"
                 },
                 {
@@ -6745,7 +6750,7 @@
                         "unit_type": "massfraction",
                         "value": 156.03
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pristane"
                 },
                 {
@@ -6757,7 +6762,7 @@
                         "unit_type": "massfraction",
                         "value": 286.58
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C18"
                 },
                 {
@@ -6769,7 +6774,7 @@
                         "unit_type": "massfraction",
                         "value": 149.04
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Phytane"
                 },
                 {
@@ -6781,7 +6786,7 @@
                         "unit_type": "massfraction",
                         "value": 263.69
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C19"
                 },
                 {
@@ -6793,7 +6798,7 @@
                         "unit_type": "massfraction",
                         "value": 243.93
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C20"
                 },
                 {
@@ -6805,7 +6810,7 @@
                         "unit_type": "massfraction",
                         "value": 227.63
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21"
                 },
                 {
@@ -6817,7 +6822,7 @@
                         "unit_type": "massfraction",
                         "value": 201.98
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22"
                 },
                 {
@@ -6829,7 +6834,7 @@
                         "unit_type": "massfraction",
                         "value": 184.46
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23"
                 },
                 {
@@ -6841,7 +6846,7 @@
                         "unit_type": "massfraction",
                         "value": 169.88
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24"
                 },
                 {
@@ -6853,7 +6858,7 @@
                         "unit_type": "massfraction",
                         "value": 153.46
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C25"
                 },
                 {
@@ -6865,7 +6870,7 @@
                         "unit_type": "massfraction",
                         "value": 141.67
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C26"
                 },
                 {
@@ -6877,7 +6882,7 @@
                         "unit_type": "massfraction",
                         "value": 111.87
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C27"
                 },
                 {
@@ -6889,7 +6894,7 @@
                         "unit_type": "massfraction",
                         "value": 89.946
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C28"
                 },
                 {
@@ -6901,7 +6906,7 @@
                         "unit_type": "massfraction",
                         "value": 75.646
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C29"
                 },
                 {
@@ -6913,7 +6918,7 @@
                         "unit_type": "massfraction",
                         "value": 63.609
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C30"
                 },
                 {
@@ -6925,7 +6930,7 @@
                         "unit_type": "massfraction",
                         "value": 55.471
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C31"
                 },
                 {
@@ -6937,7 +6942,7 @@
                         "unit_type": "massfraction",
                         "value": 41.406
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C32"
                 },
                 {
@@ -6949,7 +6954,7 @@
                         "unit_type": "massfraction",
                         "value": 34.291
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C33"
                 },
                 {
@@ -6961,7 +6966,7 @@
                         "unit_type": "massfraction",
                         "value": 25.49
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C34"
                 },
                 {
@@ -6973,7 +6978,7 @@
                         "unit_type": "massfraction",
                         "value": 21.584
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C35"
                 },
                 {
@@ -6985,7 +6990,7 @@
                         "unit_type": "massfraction",
                         "value": 15.846
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C36"
                 },
                 {
@@ -6997,7 +7002,7 @@
                         "unit_type": "massfraction",
                         "value": 14.059
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C37"
                 },
                 {
@@ -7009,7 +7014,7 @@
                         "unit_type": "massfraction",
                         "value": 9.9552
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C38"
                 },
                 {
@@ -7021,7 +7026,7 @@
                         "unit_type": "massfraction",
                         "value": 6.1303
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C39"
                 },
                 {
@@ -7033,7 +7038,7 @@
                         "unit_type": "massfraction",
                         "value": 40.403
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21 tricyclic terpane (C21T)"
                 },
                 {
@@ -7045,7 +7050,7 @@
                         "unit_type": "massfraction",
                         "value": 19.201
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22 tricyclic terpane (C22T)"
                 },
                 {
@@ -7057,7 +7062,7 @@
                         "unit_type": "massfraction",
                         "value": 122.54
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23 tricyclic terpane (C23T)"
                 },
                 {
@@ -7069,7 +7074,7 @@
                         "unit_type": "massfraction",
                         "value": 63.089
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24 tricyclic terpane (C24T)"
                 },
                 {
@@ -7081,7 +7086,7 @@
                         "unit_type": "massfraction",
                         "value": 31.373
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Norhopane (H29)"
                 },
                 {
@@ -7093,7 +7098,7 @@
                         "unit_type": "massfraction",
                         "value": 87.257
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Hopane (H30)"
                 },
                 {
@@ -7105,7 +7110,7 @@
                         "unit_type": "massfraction",
                         "value": 262.15
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22S (H31S)"
                 },
                 {
@@ -7117,7 +7122,7 @@
                         "unit_type": "massfraction",
                         "value": 319.19
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22R (H31R)"
                 },
                 {
@@ -7129,7 +7134,7 @@
                         "unit_type": "massfraction",
                         "value": 136.9
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22S (H32S)"
                 },
                 {
@@ -7141,7 +7146,7 @@
                         "unit_type": "massfraction",
                         "value": 101.84
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22R (H32R)"
                 },
                 {
@@ -7153,7 +7158,7 @@
                         "unit_type": "massfraction",
                         "value": 83.082
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22S (H33S)"
                 },
                 {
@@ -7165,7 +7170,7 @@
                         "unit_type": "massfraction",
                         "value": 58.482
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22R (H33R)"
                 },
                 {
@@ -7177,7 +7182,7 @@
                         "unit_type": "massfraction",
                         "value": 59.051
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22S (H34S)"
                 },
                 {
@@ -7189,7 +7194,7 @@
                         "unit_type": "massfraction",
                         "value": 37.783
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22R (H34R)"
                 },
                 {
@@ -7201,7 +7206,7 @@
                         "unit_type": "massfraction",
                         "value": 34.651
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22S (H35S)"
                 },
                 {
@@ -7213,7 +7218,7 @@
                         "unit_type": "massfraction",
                         "value": 22.197
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22R (H35R)"
                 },
                 {
@@ -7225,7 +7230,7 @@
                         "unit_type": "massfraction",
                         "value": 34.947
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "18\u03b1,22,29,30-trisnorneohopane (C27Ts)"
                 },
                 {
@@ -7237,7 +7242,7 @@
                         "unit_type": "massfraction",
                         "value": 23.284
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "17\u03b1(H)-22,29,30-Trisnorhopane (C27Tm)"
                 },
                 {
@@ -7249,7 +7254,7 @@
                         "unit_type": "massfraction",
                         "value": 221.99
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Cholestane (C27\u03b1\u00df\u00df)"
                 },
                 {
@@ -7261,7 +7266,7 @@
                         "unit_type": "massfraction",
                         "value": 182.12
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Methylcholestane (C28\u03b1\u00df\u00df)"
                 },
                 {
@@ -7273,7 +7278,7 @@
                         "unit_type": "massfraction",
                         "value": 291.54
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Ethylcholestane (C29\u03b1\u00df\u00df)"
                 }
             ],
@@ -7545,7 +7550,7 @@
                             "unit_type": null,
                             "value": 12183
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 3,
                             "standard_deviation": 501,
@@ -7595,7 +7600,7 @@
                             "unit_type": null,
                             "value": 14800
                         },
-                        "method": "13.02/x.x/M",
+                        "method": "ESTS: 13.02/x.x/M",
                         "storage_modulus": {
                             "replicates": 2,
                             "standard_deviation": 136,
@@ -7694,7 +7699,7 @@
                 "interfacial_tensions": [
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7710,7 +7715,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7725,7 +7730,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7740,7 +7745,7 @@
                     },
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7755,7 +7760,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7770,7 +7775,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -8035,7 +8040,7 @@
                     "unit_type": "massfraction",
                     "value": 27
                 },
-                "method": "12.11/1.0/M",
+                "method": "ESTS: 12.11/1.0/M",
                 "resins": {
                     "unit": "%",
                     "unit_type": "massfraction",
@@ -8054,7 +8059,7 @@
                         "unit_type": "massfraction",
                         "value": 2.1
                     },
-                    "method": "12.11/2.0/M",
+                    "method": "ESTS: 12.11/2.0/M",
                     "name": "Wax Content"
                 },
                 {
@@ -8112,7 +8117,7 @@
                         "unit_type": "massfraction",
                         "value": 49.706
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
                 },
                 {
@@ -8124,7 +8129,7 @@
                         "unit_type": "massfraction",
                         "value": 50.294
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
                 },
                 {
@@ -8136,7 +8141,7 @@
                         "unit_type": "massfraction",
                         "value": 6.1306
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
                 }
             ],
@@ -8392,7 +8397,7 @@
                         "unit_type": "massfraction",
                         "value": 2.4151
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Biphenyl (Bph)"
                 },
                 {
@@ -8404,7 +8409,7 @@
                         "unit_type": "massfraction",
                         "value": 0
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthylene (Acl)"
                 },
                 {
@@ -8416,7 +8421,7 @@
                         "unit_type": "massfraction",
                         "value": 0.73288
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Acenaphthene (Ace)"
                 },
                 {
@@ -8428,7 +8433,7 @@
                         "unit_type": "massfraction",
                         "value": 2.1719
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Anthracene (An)"
                 },
                 {
@@ -8440,7 +8445,7 @@
                         "unit_type": "massfraction",
                         "value": 3.061
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Fluoranthene (Fl)"
                 },
                 {
@@ -8452,7 +8457,7 @@
                         "unit_type": "massfraction",
                         "value": 13.483
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pyrene (Py)"
                 },
                 {
@@ -8464,7 +8469,7 @@
                         "unit_type": "massfraction",
                         "value": 1.7113
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benz(a)anthracene (BaA)"
                 },
                 {
@@ -8476,7 +8481,7 @@
                         "unit_type": "massfraction",
                         "value": 6.1977
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(b)fluoranthene (BbF)"
                 },
                 {
@@ -8488,7 +8493,7 @@
                         "unit_type": "massfraction",
                         "value": 1.1482
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(k)fluoranthene (BkF)"
                 },
                 {
@@ -8500,7 +8505,7 @@
                         "unit_type": "massfraction",
                         "value": 6.2978
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(e)pyrene (BeP)"
                 },
                 {
@@ -8512,7 +8517,7 @@
                         "unit_type": "massfraction",
                         "value": 3.6396
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(a)pyrene (BaP)"
                 },
                 {
@@ -8524,7 +8529,7 @@
                         "unit_type": "massfraction",
                         "value": 13.964
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Perylene (Pe)"
                 },
                 {
@@ -8536,7 +8541,7 @@
                         "unit_type": "massfraction",
                         "value": 2.4335
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Indeno(1,2,3-cd)pyrene (IP)"
                 },
                 {
@@ -8548,7 +8553,7 @@
                         "unit_type": "massfraction",
                         "value": 1.1033
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Dibenzo(ah)anthracene (DA)"
                 },
                 {
@@ -8560,7 +8565,7 @@
                         "unit_type": "massfraction",
                         "value": 3.2883
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Benzo(ghi)perylene (BgP)"
                 },
                 {
@@ -8572,7 +8577,7 @@
                         "unit_type": "massfraction",
                         "value": 5.0135
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C9"
                 },
                 {
@@ -8584,7 +8589,7 @@
                         "unit_type": "massfraction",
                         "value": 0.27143
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C10"
                 },
                 {
@@ -8596,7 +8601,7 @@
                         "unit_type": "massfraction",
                         "value": 0.61884
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C11"
                 },
                 {
@@ -8608,7 +8613,7 @@
                         "unit_type": "massfraction",
                         "value": 2.2939
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C12"
                 },
                 {
@@ -8620,7 +8625,7 @@
                         "unit_type": "massfraction",
                         "value": 20.945
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C13"
                 },
                 {
@@ -8632,7 +8637,7 @@
                         "unit_type": "massfraction",
                         "value": 99.177
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C14"
                 },
                 {
@@ -8644,7 +8649,7 @@
                         "unit_type": "massfraction",
                         "value": 234.04
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C15"
                 },
                 {
@@ -8656,7 +8661,7 @@
                         "unit_type": "massfraction",
                         "value": 275.93
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C16"
                 },
                 {
@@ -8668,7 +8673,7 @@
                         "unit_type": "massfraction",
                         "value": 316.61
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C17"
                 },
                 {
@@ -8680,7 +8685,7 @@
                         "unit_type": "massfraction",
                         "value": 144.92
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pristane"
                 },
                 {
@@ -8692,7 +8697,7 @@
                         "unit_type": "massfraction",
                         "value": 287.59
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C18"
                 },
                 {
@@ -8704,7 +8709,7 @@
                         "unit_type": "massfraction",
                         "value": 147.12
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Phytane"
                 },
                 {
@@ -8716,7 +8721,7 @@
                         "unit_type": "massfraction",
                         "value": 270.97
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C19"
                 },
                 {
@@ -8728,7 +8733,7 @@
                         "unit_type": "massfraction",
                         "value": 257.19
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C20"
                 },
                 {
@@ -8740,7 +8745,7 @@
                         "unit_type": "massfraction",
                         "value": 237.83
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21"
                 },
                 {
@@ -8752,7 +8757,7 @@
                         "unit_type": "massfraction",
                         "value": 217.79
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22"
                 },
                 {
@@ -8764,7 +8769,7 @@
                         "unit_type": "massfraction",
                         "value": 193.85
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23"
                 },
                 {
@@ -8776,7 +8781,7 @@
                         "unit_type": "massfraction",
                         "value": 182.57
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24"
                 },
                 {
@@ -8788,7 +8793,7 @@
                         "unit_type": "massfraction",
                         "value": 159.06
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C25"
                 },
                 {
@@ -8800,7 +8805,7 @@
                         "unit_type": "massfraction",
                         "value": 145.97
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C26"
                 },
                 {
@@ -8812,7 +8817,7 @@
                         "unit_type": "massfraction",
                         "value": 120.33
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C27"
                 },
                 {
@@ -8824,7 +8829,7 @@
                         "unit_type": "massfraction",
                         "value": 97.31
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C28"
                 },
                 {
@@ -8836,7 +8841,7 @@
                         "unit_type": "massfraction",
                         "value": 80.13
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C29"
                 },
                 {
@@ -8848,7 +8853,7 @@
                         "unit_type": "massfraction",
                         "value": 68.169
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C30"
                 },
                 {
@@ -8860,7 +8865,7 @@
                         "unit_type": "massfraction",
                         "value": 58.098
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C31"
                 },
                 {
@@ -8872,7 +8877,7 @@
                         "unit_type": "massfraction",
                         "value": 45.322
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C32"
                 },
                 {
@@ -8884,7 +8889,7 @@
                         "unit_type": "massfraction",
                         "value": 37.935
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C33"
                 },
                 {
@@ -8896,7 +8901,7 @@
                         "unit_type": "massfraction",
                         "value": 24.636
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C34"
                 },
                 {
@@ -8908,7 +8913,7 @@
                         "unit_type": "massfraction",
                         "value": 20.94
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C35"
                 },
                 {
@@ -8920,7 +8925,7 @@
                         "unit_type": "massfraction",
                         "value": 16.148
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C36"
                 },
                 {
@@ -8932,7 +8937,7 @@
                         "unit_type": "massfraction",
                         "value": 15.302
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C37"
                 },
                 {
@@ -8944,7 +8949,7 @@
                         "unit_type": "massfraction",
                         "value": 11.386
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C38"
                 },
                 {
@@ -8956,7 +8961,7 @@
                         "unit_type": "massfraction",
                         "value": 6.6121
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C39"
                 },
                 {
@@ -8968,7 +8973,7 @@
                         "unit_type": "massfraction",
                         "value": 41.662
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C21 tricyclic terpane (C21T)"
                 },
                 {
@@ -8980,7 +8985,7 @@
                         "unit_type": "massfraction",
                         "value": 19.78
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C22 tricyclic terpane (C22T)"
                 },
                 {
@@ -8992,7 +8997,7 @@
                         "unit_type": "massfraction",
                         "value": 126.43
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C23 tricyclic terpane (C23T)"
                 },
                 {
@@ -9004,7 +9009,7 @@
                         "unit_type": "massfraction",
                         "value": 65.354
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "C24 tricyclic terpane (C24T)"
                 },
                 {
@@ -9016,7 +9021,7 @@
                         "unit_type": "massfraction",
                         "value": 34.527
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Norhopane (H29)"
                 },
                 {
@@ -9028,7 +9033,7 @@
                         "unit_type": "massfraction",
                         "value": 89.128
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Hopane (H30)"
                 },
                 {
@@ -9040,7 +9045,7 @@
                         "unit_type": "massfraction",
                         "value": 271.87
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22S (H31S)"
                 },
                 {
@@ -9052,7 +9057,7 @@
                         "unit_type": "massfraction",
                         "value": 320.93
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30-Homohopane-22R (H31R)"
                 },
                 {
@@ -9064,7 +9069,7 @@
                         "unit_type": "massfraction",
                         "value": 141.89
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22S (H32S)"
                 },
                 {
@@ -9076,7 +9081,7 @@
                         "unit_type": "massfraction",
                         "value": 105.7
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Bishomohopane-22R (H32R)"
                 },
                 {
@@ -9088,7 +9093,7 @@
                         "unit_type": "massfraction",
                         "value": 85.826
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22S (H33S)"
                 },
                 {
@@ -9100,7 +9105,7 @@
                         "unit_type": "massfraction",
                         "value": 60.458
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "30,31-Trishomohopane-22R (H33R)"
                 },
                 {
@@ -9112,7 +9117,7 @@
                         "unit_type": "massfraction",
                         "value": 60.809
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22S (H34S)"
                 },
                 {
@@ -9124,7 +9129,7 @@
                         "unit_type": "massfraction",
                         "value": 39.214
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Tetrakishomohopane-22R (H34R)"
                 },
                 {
@@ -9136,7 +9141,7 @@
                         "unit_type": "massfraction",
                         "value": 35.872
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22S (H35S)"
                 },
                 {
@@ -9148,7 +9153,7 @@
                         "unit_type": "massfraction",
                         "value": 22.688
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "Pentakishomohopane-22R (H35R)"
                 },
                 {
@@ -9160,7 +9165,7 @@
                         "unit_type": "massfraction",
                         "value": 35.934
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "18\u03b1,22,29,30-trisnorneohopane (C27Ts)"
                 },
                 {
@@ -9172,7 +9177,7 @@
                         "unit_type": "massfraction",
                         "value": 23.623
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "17\u03b1(H)-22,29,30-Trisnorhopane (C27Tm)"
                 },
                 {
@@ -9184,7 +9189,7 @@
                         "unit_type": "massfraction",
                         "value": 234.6
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Cholestane (C27\u03b1\u00df\u00df)"
                 },
                 {
@@ -9196,7 +9201,7 @@
                         "unit_type": "massfraction",
                         "value": 191.25
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Methylcholestane (C28\u03b1\u00df\u00df)"
                 },
                 {
@@ -9208,7 +9213,7 @@
                         "unit_type": "massfraction",
                         "value": 304.77
                     },
-                    "method": "5.03/x.x/M",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "14\u00df(H),17\u00df(H)-20-Ethylcholestane (C29\u03b1\u00df\u00df)"
                 }
             ],
@@ -9577,7 +9582,7 @@
                 "interfacial_tensions": [
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9593,7 +9598,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9608,7 +9613,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9623,7 +9628,7 @@
                     },
                     {
                         "interface": "air",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9638,7 +9643,7 @@
                     },
                     {
                         "interface": "water",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9653,7 +9658,7 @@
                     },
                     {
                         "interface": "seawater",
-                        "method": "12.12/x.x/M",
+                        "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
