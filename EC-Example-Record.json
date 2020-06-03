@@ -307,7 +307,7 @@
                         "unit_type": "massfraction",
                         "value": 299.0
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TPH"
                 },
                 {
@@ -316,7 +316,7 @@
                         "unit_type": "massfraction",
                         "value": 164.38
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH"
                 },
                 {
@@ -325,7 +325,7 @@
                         "unit_type": "massfraction",
                         "value": 134.62
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH"
                 },
                 {
@@ -2266,7 +2266,7 @@
                         "unit_type": "massfraction",
                         "value": 317.29
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TPH"
                 },
                 {
@@ -2275,7 +2275,7 @@
                         "unit_type": "massfraction",
                         "value": 173.43
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH"
                 },
                 {
@@ -2284,7 +2284,7 @@
                         "unit_type": "massfraction",
                         "value": 143.86
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH"
                 },
                 {
@@ -4217,7 +4217,7 @@
                         "unit_type": "massfraction",
                         "value": 356.33
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TPH"
                 },
                 {
@@ -4226,7 +4226,7 @@
                         "unit_type": "massfraction",
                         "value": 189.69
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH"
                 },
                 {
@@ -4235,7 +4235,7 @@
                         "unit_type": "massfraction",
                         "value": 166.64
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH"
                 },
                 {
@@ -6152,7 +6152,7 @@
                         "unit_type": "massfraction",
                         "value": 312.74
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TPH"
                 },
                 {
@@ -6161,7 +6161,7 @@
                         "unit_type": "massfraction",
                         "value": 157.56
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH"
                 },
                 {
@@ -6170,7 +6170,7 @@
                         "unit_type": "massfraction",
                         "value": 155.18
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH"
                 },
                 {
@@ -7668,6 +7668,11 @@
                             "unit_type": "temperature",
                             "value": 0.0
                         },
+                        "shear_rate": {
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity",
+                            "value": 0.01
+                        },
                         "viscosity": {
                             "replicates": 3,
                             "standard_deviation": 2233500.0,
@@ -7681,6 +7686,11 @@
                             "unit": "C",
                             "unit_type": "temperature",
                             "value": 15.0
+                        },
+                        "shear_rate": {
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity",
+                            "value": 10.0
                         },
                         "viscosity": {
                             "replicates": 3,
@@ -8087,7 +8097,7 @@
                         "unit_type": "massfraction",
                         "value": 300.86
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TPH"
                 },
                 {
@@ -8096,7 +8106,7 @@
                         "unit_type": "massfraction",
                         "value": 149.56
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TSH"
                 },
                 {
@@ -8105,7 +8115,7 @@
                         "unit_type": "massfraction",
                         "value": 151.3
                     },
-                    "method": "ESTS 2002a",
+                    "method": "ESTS: 5.03/x.x/M",
                     "name": "GC-TAH"
                 },
                 {
@@ -9564,6 +9574,11 @@
                             "unit": "C",
                             "unit_type": "temperature",
                             "value": 15.0
+                        },
+                        "shear_rate": {
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity",
+                            "value": 1.0
                         },
                         "viscosity": {
                             "replicates": 3,

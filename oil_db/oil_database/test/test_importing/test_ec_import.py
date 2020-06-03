@@ -1887,13 +1887,27 @@ class TestEnvCanadaSampleMapper(object):
              'ref_temp': {'value': 15.0, 'unit': 'C'}}
          ]),
         ('2713', 0, 'dynamic_viscosities', [
-            {'viscosity': {'value': 17.92, 'unit': 'mPa.s',
-                           'standard_deviation': 0.001, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C'}},
-            {'viscosity': {'value': 9.852, 'unit': 'mPa.s',
-                           'standard_deviation': 0.0098, 'replicates': 3},
-             'ref_temp': {'unit': 'C', 'value': 15.0}}
-        ]),
+            {'method': 'ASTM D7042',
+             'ref_temp': {'value': 0.0, 'unit': 'C'},
+             'viscosity': {'value': 17.92, 'unit': 'mPa.s',
+                           'standard_deviation': 0.001, 'replicates': 3}},
+            {'method': 'ASTM D7042',
+             'ref_temp': {'unit': 'C', 'value': 15.0},
+             'viscosity': {'value': 9.852, 'unit': 'mPa.s',
+                           'standard_deviation': 0.0098, 'replicates': 3}}
+         ]),
+        ('2234', 3, 'dynamic_viscosities', [
+            {'method': 'ESTS: 12.06/x.x/M',
+             'ref_temp': {'unit': 'C', 'value': 0.0},
+             'shear_rate': {'unit': '1/s', 'value': 0.01},
+             'viscosity': {'value': 90000000, 'unit': 'mPa.s',
+                           'standard_deviation': 2233500.0, 'replicates': 3}},
+            {'method': 'ESTS: 12.06/x.x/M',
+             'ref_temp': {'unit': 'C', 'value': 15.0},
+             'shear_rate': {'unit': '1/s', 'value': 10.0},
+             'viscosity': {'value': 1000000, 'unit': 'mPa.s',
+                           'standard_deviation': 67002.0, 'replicates': 3}}
+         ]),
         ('2713', 0, 'distillation_data', {
             "type": "mass",
             "method": "Merged ASTM D7169 & ASTM D6730 mod.",

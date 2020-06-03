@@ -173,9 +173,19 @@ class EnvCanadaSampleMapper(MapperBase):
                 'replicates': item.pop('replicates')
             }
 
-            # these items might be used later, but right now we ignore them
+            item['method'] = self.prepend_ests(item['method'])
+
+            value, unit = item['condition'].split()[-2:]
+
+            if unit == '1/s':
+                try:
+                    value = float(value.split('=')[1])
+                except IndexError:
+                    value = float(value)
+
+                item['shear_rate'] = {'value': value, 'unit': unit}
+
             item.pop('condition')
-            item.pop('method')
 
         return sorted([r for r in ret if r['viscosity']['value'] is not None],
                       key=lambda x: x['ref_temp']['value'])

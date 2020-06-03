@@ -11,7 +11,8 @@ from ..common.measurement import (Time,
                                   DynamicViscosity,
                                   KinematicViscosity,
                                   InterfacialTension,
-                                  NeedleAdhesion)
+                                  NeedleAdhesion,
+                                  AngularVelocity)
 
 
 @dataclass_to_json
@@ -30,6 +31,7 @@ class DensityList(JSON_List):
 class DynamicViscosityPoint:
     viscosity: DynamicViscosity
     ref_temp: Temperature
+    shear_rate: AngularVelocity = None
 
 
 class DynamicViscosityList(JSON_List):

@@ -210,3 +210,7 @@ class NeedleAdhesion(MeasurementBase):
 
 class InterfacialTension(MeasurementBase):
     unit_type = "interfacialtension"
+
+
+class AngularVelocity(MeasurementBase):
+    unit_type = 'angularvelocity'
