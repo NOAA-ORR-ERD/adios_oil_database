@@ -483,13 +483,17 @@ class EnvCanadaSampleMapper(MapperBase):
         '''
         ret = []
 
+        gc_method = self.prepend_ests(
+            self.parser.hydrocarbon_content_ratio['method']
+        )
+
         for attr, map_to, unit, method in (
             ('wax_content', 'waxes', '%', None),
             ('water_content', None, '%', None),
             ('sulfur_content', None, '%', None),
-            ('gc_tph', 'tph', 'mg/g', 'ESTS 2002a'),
-            ('gc_tsh', 'tsh', 'mg/g', 'ESTS 2002a'),
-            ('gc_tah', 'tah', 'mg/g', 'ESTS 2002a'),
+            ('gc_tph', 'tph', 'mg/g', gc_method),
+            ('gc_tsh', 'tsh', 'mg/g', gc_method),
+            ('gc_tah', 'tah', 'mg/g', gc_method),
         ):
             label = self.parser.get_label(attr)
 
@@ -506,7 +510,7 @@ class EnvCanadaSampleMapper(MapperBase):
             value['unit'] = unit
             value['unit_type'] = 'massfraction'
 
-            if method is None:
+            if method is None and 'method' in value:
                 method = self.prepend_ests(value.pop('method'))
 
             ret.append(self.compound(label,

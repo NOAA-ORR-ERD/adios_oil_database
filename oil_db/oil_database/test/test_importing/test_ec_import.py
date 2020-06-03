@@ -2067,7 +2067,7 @@ class TestEnvCanadaSampleMapper(object):
             'compound_attrs': ('name', 'method', 'measurement'),
             'total_groups': None
          }),
-        # headspace no longer
+        # headspace is no longer included in the datasheet
         # ('2234', 0, 'headspace_analysis', {
         #     'list_size': 0,
         #     'compound_attrs': ('name', 'method', 'groups', 'measurement'),
