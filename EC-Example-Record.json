@@ -1729,7 +1729,7 @@
                         "tan_delta_v_e": {
                             "replicates": 6,
                             "standard_deviation": 0.4,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 3.135
                         },
                         "visual_stability": "Entrained",
@@ -1779,7 +1779,7 @@
                         "tan_delta_v_e": {
                             "replicates": 5,
                             "standard_deviation": 2,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 12
                         },
                         "water_content": {
@@ -3687,7 +3687,7 @@
                         "tan_delta_v_e": {
                             "replicates": 6,
                             "standard_deviation": 0.36,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 3.0267
                         },
                         "visual_stability": "Entrained",
@@ -3737,7 +3737,7 @@
                         "tan_delta_v_e": {
                             "replicates": 6,
                             "standard_deviation": 0.88,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 5.91
                         },
                         "water_content": {
@@ -5626,7 +5626,7 @@
                         "tan_delta_v_e": {
                             "replicates": 6,
                             "standard_deviation": 0.18,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 2.5
                         },
                         "visual_stability": "Entrained",
@@ -5676,7 +5676,7 @@
                         "tan_delta_v_e": {
                             "replicates": 6,
                             "standard_deviation": 0.33,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 2.5617
                         },
                         "water_content": {
@@ -7561,7 +7561,7 @@
                         "tan_delta_v_e": {
                             "replicates": 3,
                             "standard_deviation": 0.39,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 3.9433
                         },
                         "visual_stability": "Entrained",
@@ -7611,7 +7611,7 @@
                         "tan_delta_v_e": {
                             "replicates": 2,
                             "standard_deviation": 0.035,
-                            "unit_type": "massfraction",
+                            "unit_type": "unitless",
                             "value": 4.225
                         },
                         "water_content": {
@@ -9491,7 +9491,7 @@
                             "unit_type": null
                         },
                         "tan_delta_v_e": {
-                            "unit_type": "massfraction"
+                            "unit_type": "unitless"
                         },
                         "visual_stability": "Did not form",
                         "water_content": {
@@ -9522,7 +9522,7 @@
                             "unit_type": null
                         },
                         "tan_delta_v_e": {
-                            "unit_type": "massfraction"
+                            "unit_type": "unitless"
                         },
                         "water_content": {
                             "unit": "%",
