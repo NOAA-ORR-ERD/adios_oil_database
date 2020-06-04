@@ -168,8 +168,13 @@ class Temperature(MeasurementBase):
             super().convert_to(new_unit)
             self.standard_deviation = new_std
 
+
 class Unitless(MeasurementBase):
     unit_type = "unitless"
+
+    def convert_to(self, *args, **kwargs):
+        raise TypeError("You can not convert a Unitless measurement")
+
 
 class Time(MeasurementBase):
     unit_type = "time"

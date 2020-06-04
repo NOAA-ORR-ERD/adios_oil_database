@@ -121,10 +121,10 @@ class TestUnitLess:
         assert model.standard_deviation == 1.2
         assert model.replicates == 3
 
-    # def test_convert_to(self):
-    #     model = Unitless(value=12.34)
-    #     with pytest.raises("ValueError"):
-    #         model.convert_to('C')
+    def test_convert_to(self):
+        model = Unitless(value=12.34)
+        with pytest.raises(TypeError):
+            model.convert_to('C')
 
 
 
