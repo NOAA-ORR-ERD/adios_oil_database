@@ -15,6 +15,7 @@ from ..common.validators import EnumValidator
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
+# fixme: why is this here?
 
 class ProductType(str):
     _valid_types = ('crude',
@@ -167,6 +168,8 @@ class Temperature(MeasurementBase):
             super().convert_to(new_unit)
             self.standard_deviation = new_std
 
+class Unitless(MeasurementBase):
+    unit_type = "unitless"
 
 class Time(MeasurementBase):
     unit_type = "time"

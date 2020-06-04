@@ -16,4 +16,5 @@ from .measurement import (ProductType,
                           KinematicViscosity,
                           Pressure,
                           NeedleAdhesion,
-                          InterfacialTension)
+                          InterfacialTension,
+                          Unitless)

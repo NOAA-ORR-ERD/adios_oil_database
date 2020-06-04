@@ -16,9 +16,10 @@ from oil_database.models.common import (ProductType,
                                         KinematicViscosity,
                                         Pressure,
                                         NeedleAdhesion,
-                                        InterfacialTension)
+                                        InterfacialTension,
+                                        Unitless)
 
-
+# Fixme: why is this in this test file ???
 class TestProductType:
     @pytest.mark.parametrize("product_type", ('crude',
                                               'refined',
@@ -43,6 +44,88 @@ class TestProductType:
         result = pt.validate()
         assert len(result) == 1
         assert result[0].startswith("W003:")
+
+
+class TestUnitLess:
+    def test_init_empty(self):
+        model = Unitless()
+
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'unitless'}
+
+        # non-sparse should have all attributes present with None values
+        py_json = model.py_json(sparse=False)
+
+        assert py_json['unit_type'] == 'unitless'
+        for attr in ('value',
+                     'unit',
+                     'min_value',
+                     'max_value',
+                     'standard_deviation',
+                     'replicates'):
+            assert py_json[attr] is None
+
+
+    def test_value(self):
+        model = Unitless(value=0.123)
+
+        assert model.value == 0.123
+        assert model.min_value is None
+        assert model.max_value is None
+        assert model.unit is None
+
+        assert model.standard_deviation is None
+        assert model.replicates is None
+
+    def test_min_max(self):
+        model = Temperature(min_value=0.1, max_value=0.2)
+
+        assert model.value is None
+        assert model.min_value == 0.1
+        assert model.max_value == 0.2
+        assert model.unit is None
+
+        assert model.standard_deviation is None
+        assert model.replicates is None
+
+    def test_py_json(self):
+        model = Unitless(value=1.1,
+                            standard_deviation=0.5,
+                            replicates=5)
+        py_json = model.py_json()
+
+        print(py_json)
+
+        assert len(py_json) == 4  # (no unit field)
+        assert 'unit' not in py_json
+
+        assert py_json['value'] == 1.1
+        assert py_json['unit_type'] == 'unitless'
+
+        assert py_json['standard_deviation'] == 0.5
+        assert py_json['replicates'] == 5
+
+    def test_from_py_json(self):
+        model = Unitless.from_py_json({'value': 1.1,
+                                          'standard_deviation': 1.2,
+                                          'replicates': 3})
+
+        assert model.value == 1.1
+        assert model.min_value is None
+        assert model.max_value is None
+        assert model.unit is None
+        assert model.unit_type == 'unitless'
+
+        assert model.standard_deviation == 1.2
+        assert model.replicates == 3
+
+    # def test_convert_to(self):
+    #     model = Unitless(value=12.34)
+    #     with pytest.raises("ValueError"):
+    #         model.convert_to('C')
+
 
 
 class TestUnittedValue:
