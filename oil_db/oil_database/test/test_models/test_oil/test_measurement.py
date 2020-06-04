@@ -314,26 +314,28 @@ class TestEmulsion:
             _model = Emulsion.from_py_json({})
 
     def test_from_json(self):
-        json_obj = {'age': {'value': 0.0, 'unit': 'day', 'unit_type': 'time'},
-                    'complex_modulus': {'value': 1.0, 'unit': 'Pa',
-                                        'standard_deviation': 1.2,
-                                        'replicates': 3},
-                    'storage_modulus': {'value': 1.0, 'unit': 'Pa',
-                                        'standard_deviation': 1.2,
-                                        'replicates': 3},
-                    'loss_modulus': {'value': 1.0, 'unit': 'Pa',
-                                     'standard_deviation': 1.2,
-                                     'replicates': 3},
-                    'tan_delta_v_e': {'value': 10.0, 'unit': '%',
-                                      'standard_deviation': 1.2,
-                                      'replicates': 3},
-                    'complex_viscosity': {'value': 100.0, 'unit': 'cP',
-                                          'standard_deviation': 1.2,
-                                          'replicates': 3},
-                    'water_content': {'value': 10.0, 'unit': '%',
-                                      'standard_deviation': 1.2,
-                                      'replicates': 3},
-                    }
+        json_obj = {
+            'age': {'value': 0.0, 'unit': 'day', 'unit_type': 'time'},
+            'complex_modulus': {'value': 1.0, 'unit': 'Pa',
+                                'standard_deviation': 1.2,
+                                'replicates': 3},
+            'storage_modulus': {'value': 1.0, 'unit': 'Pa',
+                                'standard_deviation': 1.2,
+                                'replicates': 3},
+            'loss_modulus': {'value': 1.0, 'unit': 'Pa',
+                             'standard_deviation': 1.2,
+                             'replicates': 3},
+            'tan_delta_v_e': {'value': 10.0,
+                              'standard_deviation': 1.2,
+                              'replicates': 3},
+            'complex_viscosity': {'value': 100.0, 'unit': 'cP',
+                                  'standard_deviation': 1.2,
+                                  'replicates': 3},
+            'water_content': {'value': 10.0, 'unit': '%',
+                              'standard_deviation': 1.2,
+                              'replicates': 3},
+        }
+
         model = Emulsion.from_py_json(json_obj)
 
         # the measurement classes will add unit_type, so we add it to more
@@ -341,7 +343,7 @@ class TestEmulsion:
         json_obj['complex_modulus']['unit_type'] = None
         json_obj['storage_modulus']['unit_type'] = None
         json_obj['loss_modulus']['unit_type'] = None
-        json_obj['tan_delta_v_e']['unit_type'] = 'massfraction'
+        json_obj['tan_delta_v_e']['unit_type'] = 'unitless'
         json_obj['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj['water_content']['unit_type'] = 'massfraction'
 
@@ -356,26 +358,28 @@ class TestEmulsionList:
         assert EmulsionList.from_py_json([]).py_json() == []
 
     def test_from_json(self):
-        json_obj = [{'age': {'value': 0.0, 'unit': 'day', 'unit_type': 'time'},
-                     'complex_modulus': {'value': 1.0, 'unit': 'Pa',
-                                         'standard_deviation': 1.2,
-                                         'replicates': 3},
-                     'storage_modulus': {'value': 1.0, 'unit': 'Pa',
-                                         'standard_deviation': 1.2,
-                                         'replicates': 3},
-                     'loss_modulus': {'value': 1.0, 'unit': 'Pa',
-                                      'standard_deviation': 1.2,
-                                      'replicates': 3},
-                     'tan_delta_v_e': {'value': 10.0, 'unit': '%',
-                                       'standard_deviation': 1.2,
-                                       'replicates': 3},
-                     'complex_viscosity': {'value': 100.0, 'unit': 'cP',
-                                           'standard_deviation': 1.2,
-                                           'replicates': 3},
-                     'water_content': {'value': 10.0, 'unit': '%',
-                                       'standard_deviation': 1.2,
-                                       'replicates': 3},
-                     }]
+        json_obj = [{
+            'age': {'value': 0.0, 'unit': 'day', 'unit_type': 'time'},
+            'complex_modulus': {'value': 1.0, 'unit': 'Pa',
+                                'standard_deviation': 1.2,
+                                'replicates': 3},
+            'storage_modulus': {'value': 1.0, 'unit': 'Pa',
+                                'standard_deviation': 1.2,
+                                'replicates': 3},
+            'loss_modulus': {'value': 1.0, 'unit': 'Pa',
+                             'standard_deviation': 1.2,
+                             'replicates': 3},
+            'tan_delta_v_e': {'value': 10.0,
+                              'standard_deviation': 1.2,
+                              'replicates': 3},
+            'complex_viscosity': {'value': 100.0, 'unit': 'cP',
+                                  'standard_deviation': 1.2,
+                                  'replicates': 3},
+            'water_content': {'value': 10.0, 'unit': '%',
+                              'standard_deviation': 1.2,
+                              'replicates': 3},
+        }]
+
         model = EmulsionList.from_py_json(json_obj)
 
         # the measurement classes will add unit_type, so we add it to more
@@ -383,7 +387,7 @@ class TestEmulsionList:
         json_obj[0]['complex_modulus']['unit_type'] = None
         json_obj[0]['storage_modulus']['unit_type'] = None
         json_obj[0]['loss_modulus']['unit_type'] = None
-        json_obj[0]['tan_delta_v_e']['unit_type'] = 'massfraction'
+        json_obj[0]['tan_delta_v_e']['unit_type'] = 'unitless'
         json_obj[0]['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj[0]['water_content']['unit_type'] = 'massfraction'
 

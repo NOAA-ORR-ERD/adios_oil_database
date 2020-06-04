@@ -7,6 +7,7 @@ from ..common.utilities import dataclass_to_json, JSON_List
 from ..common.measurement import (Time,
                                   Temperature,
                                   MassFraction,
+                                  Unitless,
                                   Density,
                                   DynamicViscosity,
                                   KinematicViscosity,
@@ -116,7 +117,7 @@ class Emulsion:
     # Todo: this seems to be just unit-less float, but it is a measurement
     #       with standard_deviation & replicates.  Well MassFraction will do
     #       for now.  But NUCOS needs to be updated.
-    tan_delta_v_e: MassFraction = None
+    tan_delta_v_e: Unitless = None
 
     complex_viscosity: DynamicViscosity = None
 
