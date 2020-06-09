@@ -92,6 +92,20 @@ class InterfacialTensionList(JSON_List):
 
 @dataclass_to_json
 @dataclass
+class PourPoint:
+    measurement: Temperature = None
+    method: str = None
+
+
+@dataclass_to_json
+@dataclass
+class FlashPoint:
+    measurement: Temperature = None
+    method: str = None
+
+
+@dataclass_to_json
+@dataclass
 class Dispersibility:
     dispersant: str
     effectiveness: MassFraction

@@ -365,9 +365,11 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": -7.5524901
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": -7.5524901
+                    }
                 }
             },
             "short_name": "Fresh Oil"
@@ -1144,9 +1146,11 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": -110.62739
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": -110.62739
+                    }
                 }
             },
             "short_name": "Hvy Naphtha ..."
@@ -1494,9 +1498,11 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": -63.955108
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": -63.955108
+                    }
                 }
             },
             "short_name": "Kerosene 330..."
@@ -1844,9 +1850,11 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": -20.369906
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": -20.369906
+                    }
                 }
             },
             "short_name": "Diesel 480 -..."
@@ -2168,9 +2176,11 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": 32.912857
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": 32.912857
+                    }
                 }
             },
             "short_name": "Vacuum Gas O..."
@@ -2500,9 +2510,11 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": 49.534636
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": 49.534636
+                    }
                 }
             },
             "short_name": "Vacuum Resid..."

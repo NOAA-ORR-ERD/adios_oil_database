@@ -252,6 +252,9 @@ class OilLibraryRecordParser(ParserBase):
             ret['min_value'] = min_value
             ret['max_value'] = max_value
 
+        if ret is not None:
+            ret = {'measurement': ret}
+
         return ret
 
     @property
@@ -268,6 +271,9 @@ class OilLibraryRecordParser(ParserBase):
         else:
             ret['min_value'] = min_value
             ret['max_value'] = max_value
+
+        if ret is not None:
+            ret = {'measurement': ret}
 
         return ret
 

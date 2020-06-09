@@ -1953,9 +1953,19 @@ class TestEnvCanadaSampleMapper(object):
                  'vapor_temp': {'unit': 'C', 'value': -11.7}}
             ]
          }),
-        ('2713', 0, 'pour_point', {'value': -51, 'unit': 'C',
-                                   'standard_deviation': 2, 'replicates': 3}),
+        ('561', 0, 'pour_point', None),
+        ('2713', 0, 'pour_point', {'method': 'ASTM D97',
+                                   'measurement': {'value': -51, 'unit': 'C',
+                                                   'standard_deviation': 2,
+                                                   'replicates': 3}}
+         ),
         ('2713', 0, 'flash_point', None),
+        ('2713', 1, 'flash_point', {'method': 'ASTM D7094',
+                                    'measurement': {'value': 23.33,
+                                                    'unit': 'C',
+                                                    'standard_deviation': 1.15,
+                                                    'replicates': 3}}
+         ),
         ('2713', 0, 'interfacial_tensions', [
             {'interface': 'air',
              'method': 'ESTS: 12.12/x.x/M',

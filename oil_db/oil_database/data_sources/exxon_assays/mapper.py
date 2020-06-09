@@ -85,7 +85,7 @@ MAPPING = {
         'element_of': 'bulk_composition',
     },
     norm('Pour point, F'): {
-        'attr': 'physical_properties.pour_point',
+        'attr': 'physical_properties.pour_point.measurement',
         'unit': 'C',
         'cls': Temperature,
         'num_digits': 8,
@@ -429,7 +429,15 @@ def set_sample_property(samples, row, attr, unit, cls,
 
                 if len(attr) > 1:
                     for a in attr[:-1]:
-                        sample = getattr(sample, a)
+                        child_value = getattr(sample, a)
+
+                        if child_value is None:
+                            # get a default value from the parent dataclass
+                            # annotation
+                            child_value = sample.__dataclass_fields__[a].type()
+                            setattr(sample, a, child_value)
+
+                        sample = child_value
 
                 setattr(sample, attr[-1],
                         cls(sigfigs(val, num_digits), unit=unit))

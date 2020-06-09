@@ -1865,9 +1865,12 @@
                     }
                 ],
                 "flash_point": {
-                    "max_value": -5.0,
-                    "unit": "C",
-                    "unit_type": "temperature"
+                    "measurement": {
+                        "max_value": -5.0,
+                        "unit": "C",
+                        "unit_type": "temperature"
+                    },
+                    "method": "ASTM D7094"
                 },
                 "interfacial_tensions": [
                     {
@@ -1968,9 +1971,12 @@
                     }
                 ],
                 "pour_point": {
-                    "max_value": -25.0,
-                    "unit": "C",
-                    "unit_type": "temperature"
+                    "measurement": {
+                        "max_value": -25.0,
+                        "unit": "C",
+                        "unit_type": "temperature"
+                    },
+                    "method": "ASTM D97"
                 }
             },
             "short_name": "Fresh Oil"
@@ -3818,9 +3824,12 @@
                     }
                 ],
                 "flash_point": {
-                    "max_value": -5.0,
-                    "unit": "C",
-                    "unit_type": "temperature"
+                    "measurement": {
+                        "max_value": -5.0,
+                        "unit": "C",
+                        "unit_type": "temperature"
+                    },
+                    "method": "ASTM D7094"
                 },
                 "interfacial_tensions": [
                     {
@@ -3919,9 +3928,12 @@
                     }
                 ],
                 "pour_point": {
-                    "max_value": -25.0,
-                    "unit": "C",
-                    "unit_type": "temperature"
+                    "measurement": {
+                        "max_value": -25.0,
+                        "unit": "C",
+                        "unit_type": "temperature"
+                    },
+                    "method": "ASTM D97"
                 }
             },
             "short_name": "8.53% Weathered"
@@ -5757,9 +5769,12 @@
                     }
                 ],
                 "flash_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": 29
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": 29
+                    },
+                    "method": "ASTM D7094"
                 },
                 "interfacial_tensions": [
                     {
@@ -5855,9 +5870,12 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": -6
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": -6
+                    },
+                    "method": "ASTM D97"
                 }
             },
             "short_name": "16.86% Weathered"
@@ -7702,9 +7720,12 @@
                     }
                 ],
                 "flash_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": 159
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": 159
+                    },
+                    "method": "ASTM D7094"
                 },
                 "interfacial_tensions": [
                     {
@@ -7800,9 +7821,12 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": 24
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": 24
+                    },
+                    "method": "ASTM D97"
                 }
             },
             "short_name": "25.34% Weathered"
@@ -9590,9 +9614,12 @@
                     }
                 ],
                 "flash_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": 173
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": 173
+                    },
+                    "method": "ASTM D7094"
                 },
                 "interfacial_tensions": [
                     {
@@ -9688,9 +9715,12 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "C",
-                    "unit_type": "temperature",
-                    "value": 33
+                    "measurement": {
+                        "unit": "C",
+                        "unit_type": "temperature",
+                        "value": 33
+                    },
+                    "method": "ASTM D97"
                 }
             },
             "short_name": "26.45% Weathered"

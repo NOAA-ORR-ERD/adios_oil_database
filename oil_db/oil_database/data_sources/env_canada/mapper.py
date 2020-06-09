@@ -246,6 +246,7 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def flash_point(self):
+        ret = {}
         fp = dict(self.parser.flash_point.items())
 
         value = self.min_max(fp.pop('flash_point', None))
@@ -258,12 +259,14 @@ class EnvCanadaSampleMapper(MapperBase):
             fp['min_value'], fp['max_value'] = value
 
         fp['unit'] = 'C'
-        fp.pop('method', None)
+        ret['method'] = fp.pop('method', None)
+        ret['measurement'] = fp
 
-        return fp
+        return ret
 
     @property
     def pour_point(self):
+        ret = {}
         pp = dict(self.parser.pour_point.items())
 
         value = self.min_max(pp.pop('pour_point', None))
@@ -276,9 +279,10 @@ class EnvCanadaSampleMapper(MapperBase):
             pp['min_value'], pp['max_value'] = value
 
         pp['unit'] = 'C'
-        pp.pop('method', None)
+        ret['method'] = pp.pop('method', None)
+        ret['measurement'] = pp
 
-        return pp
+        return ret
 
     @property
     def interfacial_tensions(self):

@@ -182,9 +182,11 @@
                     }
                 ],
                 "flash_point": {
-                    "unit": "K",
-                    "unit_type": "temperature",
-                    "value": 280.0
+                    "measurement": {
+                        "unit": "K",
+                        "unit_type": "temperature",
+                        "value": 280.0
+                    }
                 },
                 "interfacial_tensions": [
                     {
@@ -241,9 +243,11 @@
                     }
                 ],
                 "pour_point": {
-                    "unit": "K",
-                    "unit_type": "temperature",
-                    "value": 265.0
+                    "measurement": {
+                        "unit": "K",
+                        "unit_type": "temperature",
+                        "value": 265.0
+                    }
                 }
             },
             "short_name": "Fresh Oil"

@@ -9,18 +9,19 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
 
-from ..common.measurement import Temperature
 from .measurement import (DensityList,
                           DynamicViscosityList,
                           KinematicViscosityList,
-                          InterfacialTensionList)
+                          InterfacialTensionList,
+                          PourPoint,
+                          FlashPoint)
 
 
 @dataclass_to_json
 @dataclass
 class PhysicalProperties:
-    pour_point: Temperature = None
-    flash_point: Temperature = None
+    pour_point: PourPoint = None
+    flash_point: FlashPoint = None
 
     densities: DensityList = field(default_factory=DensityList)
     kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)
