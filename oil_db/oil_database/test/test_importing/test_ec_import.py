@@ -6,14 +6,17 @@
     Either we test it correctly, or we test it in an episodic manner on the
     real dataset.
 '''
+import os
 from numbers import Number
 from pathlib import Path
+import json
 
 import pytest
 import numpy as np
 
 from openpyxl.utils.exceptions import InvalidFileException
 
+import oil_database
 from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
                                                   EnvCanadaRecordParser,
                                                   EnvCanadaRecordMapper,
@@ -1830,6 +1833,27 @@ class TestEnvCanadaRecordMapper(object):
         for k, v in expected.items():
             if v is not None:
                 assert self.deep_get(py_json, k) == v
+
+    def test_save_to_json(self):
+        '''
+            Save an example .json file.  This is not so much a test, but a job
+            to provide sample data that people can look at.
+        '''
+        parser = EnvCanadaRecordParser(*self.reader.get_record('2234'))
+        mapper = EnvCanadaRecordMapper(parser)
+        py_json = mapper.py_json()
+
+        py_json['status'] = []
+
+        filename = 'EC-Example-Record.json'
+        file_path = os.path.sep.join(
+            oil_database.__file__.split(os.path.sep)[:-3] + ['examples',
+                                                             filename]
+        )
+
+        print(f'saving to: {file_path}')
+        with open(file_path, 'w') as fd:
+            json.dump(py_json, fd, indent=4, sort_keys=True)
 
 
 class TestEnvCanadaSampleMapper(object):

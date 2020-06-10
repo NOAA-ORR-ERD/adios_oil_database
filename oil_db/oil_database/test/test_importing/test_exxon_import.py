@@ -6,13 +6,16 @@ lot of it (Or writing it all by hand)
 
 but still handy to have some tests to run the code while under development
 """
+import os
 from pathlib import Path
 from math import isclose
+import json
 
 import pytest
 
 import unit_conversion as uc
 
+import oil_database
 from oil_database.util import sigfigs
 from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonMapper,
@@ -412,3 +415,23 @@ class TestExxonMapper():
     def test_no_cuts_in_butane(self):
         assert (ExxonMapper(self.record).sub_samples[1]
                 .distillation_data.cuts == [])
+
+    def test_save_to_json(self):
+        '''
+            Save an example .json file.  This is not so much a test, but a job
+            to provide sample data that people can look at.
+        '''
+        mapper = ExxonMapper(self.record)
+        py_json = mapper.py_json()
+
+        py_json['status'] = []
+
+        filename = 'EX-Example-Record.json'
+        file_path = os.path.sep.join(
+            oil_database.__file__.split(os.path.sep)[:-3] + ['examples',
+                                                             filename]
+        )
+
+        print(f'saving to: {file_path}')
+        with open(file_path, 'w') as fd:
+            json.dump(py_json, fd, indent=4, sort_keys=True)

@@ -6,10 +6,13 @@
     Either we test it correctly, or we test it in an episodic manner on the
     real dataset.
 '''
+import os
 from pathlib import Path
+import json
 
 import pytest
 
+import oil_database
 from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
                                                OilLibraryRecordParser,
                                                OilLibraryAttributeMapper,
@@ -884,3 +887,24 @@ class TestOilLibraryAttributeMapper:
 
         pprint(sample[attr])
         assert sample[attr] == expected
+
+    def test_save_to_json(self):
+        '''
+            Save an example .json file.  This is not so much a test, but a job
+            to provide sample data that people can look at.
+        '''
+        parser = OilLibraryRecordParser(*self.reader.get_record('AD00025'))
+        mapper = OilLibraryAttributeMapper(parser)
+        py_json = mapper.py_json()
+
+        py_json['status'] = []
+
+        filename = 'AD-Example-Record.json'
+        file_path = os.path.sep.join(
+            oil_database.__file__.split(os.path.sep)[:-3] + ['examples',
+                                                             filename]
+        )
+
+        print(f'saving to: {file_path}')
+        with open(file_path, 'w') as fd:
+            json.dump(py_json, fd, indent=4, sort_keys=True)
