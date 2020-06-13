@@ -631,16 +631,20 @@ class TestOilLibraryAttributeMapper:
                                                       'value': 243.0}}),
         ('AD02068', 0, 'flash_point', {'measurement': {'unit': 'K',
                                                        'value': 305.0}}),
-        ('AD02068', 0, 'interfacial_tensions', [
-            {'interface': 'seawater',
-             'method': None,
-             'ref_temp': {'unit': 'K', 'value': 273.0},
-             'tension': {'unit': 'N/m', 'value': 0.0153}}
-         ]),
         pytest.param('AD01998', 1, 'pour_point', None,
                      marks=pytest.mark.raises(exception=KeyError)),
         pytest.param('AD01998', 1, 'flash_point', None,
                      marks=pytest.mark.raises(exception=KeyError)),
+        ('AD00025', 0, 'interfacial_tension_water', [
+            {'method': None,
+             'ref_temp': {'unit': 'K', 'value': 288.0},
+             'tension': {'unit': 'N/m', 'value': 0.0215}}
+         ]),
+        ('AD00025', 0, 'interfacial_tension_seawater', [
+            {'method': None,
+             'ref_temp': {'unit': 'K', 'value': 288.0},
+             'tension': {'unit': 'N/m', 'value': 0.015}}
+         ]),
         pytest.param('AD01998', 1, 'interfacial_tensions', None,
                      marks=pytest.mark.raises(exception=KeyError)),
         # weathered properties will show up in multiple samples

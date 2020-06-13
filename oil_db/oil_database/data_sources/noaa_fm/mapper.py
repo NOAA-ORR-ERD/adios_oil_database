@@ -289,7 +289,10 @@ class OilLibraryAttributeMapper(MapperBase):
 
         # fresh only attributes
         if isclose(weathering, 0.0):
-            for attr in ('pour_point', 'flash_point', 'interfacial_tensions'):
+            for attr in ('pour_point', 'flash_point',
+                         'interfacial_tension_air',
+                         'interfacial_tension_water',
+                         'interfacial_tension_seawater'):
                 value = getattr(self, attr)
 
                 if value is not None:

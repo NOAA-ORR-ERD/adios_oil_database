@@ -395,6 +395,36 @@ class OilLibraryRecordParser(ParserBase):
         return ret
 
     @property
+    def interfacial_tension_air(self):
+        ret = list(filter(lambda t: t['interface'] == 'air',
+                          self.interfacial_tensions))
+
+        for r in ret:
+            r.pop('interface')
+
+        return ret
+
+    @property
+    def interfacial_tension_water(self):
+        ret = list(filter(lambda t: t['interface'] == 'water',
+                          self.interfacial_tensions))
+
+        for r in ret:
+            r.pop('interface')
+
+        return ret
+
+    @property
+    def interfacial_tension_seawater(self):
+        ret = list(filter(lambda t: t['interface'] == 'seawater',
+                          self.interfacial_tensions))
+
+        for r in ret:
+            r.pop('interface')
+
+        return ret
+
+    @property
     def emulsions(self):
         '''
             Oil Library records have some attributes related to emulsions:

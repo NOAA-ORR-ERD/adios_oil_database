@@ -20,13 +20,17 @@ class TestPhysicalProperties:
                      'densities',
                      'kinematic_viscosities',
                      'dynamic_viscosities',
-                     'interfacial_tensions'):
+                     'interfacial_tension_air',
+                     'interfacial_tension_water',
+                     'interfacial_tension_seawater'):
             assert hasattr(s, attr)
 
         assert type(s.densities) == DensityList
         assert type(s.kinematic_viscosities) == KinematicViscosityList
         assert type(s.dynamic_viscosities) == DynamicViscosityList
-        assert type(s.interfacial_tensions) == InterfacialTensionList
+        assert type(s.interfacial_tension_air) == InterfacialTensionList
+        assert type(s.interfacial_tension_water) == InterfacialTensionList
+        assert type(s.interfacial_tension_seawater) == InterfacialTensionList
 
     def test_json(self):
         s = PhysicalProperties()
@@ -43,7 +47,9 @@ class TestPhysicalProperties:
                                        'densities',
                                        'kinematic_viscosities',
                                        'dynamic_viscosities',
-                                       'interfacial_tensions'}
+                                       'interfacial_tension_air',
+                                       'interfacial_tension_water',
+                                       'interfacial_tension_seawater'}
 
     def test_add_non_existing(self):
         s = PhysicalProperties()

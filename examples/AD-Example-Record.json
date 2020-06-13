@@ -188,22 +188,8 @@
                         "value": 280.0
                     }
                 },
-                "interfacial_tensions": [
+                "interfacial_tension_seawater": [
                     {
-                        "interface": "water",
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 288.0
-                        },
-                        "tension": {
-                            "unit": "N/m",
-                            "unit_type": "interfacialtension",
-                            "value": 0.0215
-                        }
-                    },
-                    {
-                        "interface": "seawater",
                         "ref_temp": {
                             "unit": "K",
                             "unit_type": "temperature",
@@ -213,6 +199,20 @@
                             "unit": "N/m",
                             "unit_type": "interfacialtension",
                             "value": 0.015
+                        }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 288.0
+                        },
+                        "tension": {
+                            "unit": "N/m",
+                            "unit_type": "interfacialtension",
+                            "value": 0.0215
                         }
                     }
                 ],
