@@ -1872,9 +1872,8 @@
                     },
                     "method": "ASTM D7094"
                 },
-                "interfacial_tensions": [
+                "interfacial_tension_air": [
                     {
-                        "interface": "air",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -1890,23 +1889,23 @@
                         }
                     },
                     {
-                        "interface": "water",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
-                            "value": 15.0
+                            "value": 0.0
                         },
                         "tension": {
                             "replicates": 3,
-                            "standard_deviation": 0.045092,
+                            "standard_deviation": 0.15044,
                             "unit": "mN/m",
                             "unit_type": "interfacialtension",
-                            "value": 24.237
+                            "value": 31.147
                         }
-                    },
+                    }
+                ],
+                "interfacial_tension_seawater": [
                     {
-                        "interface": "seawater",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -1922,39 +1921,6 @@
                         }
                     },
                     {
-                        "interface": "air",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "standard_deviation": 0.15044,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": 31.147
-                        }
-                    },
-                    {
-                        "interface": "water",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "standard_deviation": 0.13454,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": 24.78
-                        }
-                    },
-                    {
-                        "interface": "seawater",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -1967,6 +1933,38 @@
                             "unit": "mN/m",
                             "unit_type": "interfacialtension",
                             "value": 24.96
+                        }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "standard_deviation": 0.045092,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": 24.237
+                        }
+                    },
+                    {
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 0.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "standard_deviation": 0.13454,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": 24.78
                         }
                     }
                 ],
@@ -3831,9 +3829,8 @@
                     },
                     "method": "ASTM D7094"
                 },
-                "interfacial_tensions": [
+                "interfacial_tension_air": [
                     {
-                        "interface": "air",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -3849,23 +3846,23 @@
                         }
                     },
                     {
-                        "interface": "water",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
-                            "value": 15.0
+                            "value": 0.0
                         },
                         "tension": {
                             "replicates": 3,
-                            "standard_deviation": 0.10693,
+                            "standard_deviation": 0.18037,
                             "unit": "mN/m",
                             "unit_type": "interfacialtension",
-                            "value": 28.013
+                            "value": 31.877
                         }
-                    },
+                    }
+                ],
+                "interfacial_tension_seawater": [
                     {
-                        "interface": "seawater",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -3881,23 +3878,6 @@
                         }
                     },
                     {
-                        "interface": "air",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "standard_deviation": 0.18037,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": 31.877
-                        }
-                    },
-                    {
-                        "interface": "water",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -3910,9 +3890,25 @@
                             "unit_type": "interfacialtension",
                             "value": "Too Viscous"
                         }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "standard_deviation": 0.10693,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": 28.013
+                        }
                     },
                     {
-                        "interface": "seawater",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -5776,9 +5772,8 @@
                     },
                     "method": "ASTM D7094"
                 },
-                "interfacial_tensions": [
+                "interfacial_tension_air": [
                     {
-                        "interface": "air",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -5794,7 +5789,22 @@
                         }
                     },
                     {
-                        "interface": "water",
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 0.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": "Too Viscous"
+                        }
+                    }
+                ],
+                "interfacial_tension_seawater": [
+                    {
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -5809,7 +5819,22 @@
                         }
                     },
                     {
-                        "interface": "seawater",
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 0.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": "Too Viscous"
+                        }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -5824,37 +5849,6 @@
                         }
                     },
                     {
-                        "interface": "air",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": "Too Viscous"
-                        }
-                    },
-                    {
-                        "interface": "water",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": "Too Viscous"
-                        }
-                    },
-                    {
-                        "interface": "seawater",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -7727,9 +7721,8 @@
                     },
                     "method": "ASTM D7094"
                 },
-                "interfacial_tensions": [
+                "interfacial_tension_air": [
                     {
-                        "interface": "air",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -7745,7 +7738,22 @@
                         }
                     },
                     {
-                        "interface": "water",
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 0.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": "Too Viscous"
+                        }
+                    }
+                ],
+                "interfacial_tension_seawater": [
+                    {
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -7760,7 +7768,22 @@
                         }
                     },
                     {
-                        "interface": "seawater",
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 0.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": "Too Viscous"
+                        }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -7775,37 +7798,6 @@
                         }
                     },
                     {
-                        "interface": "air",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": "Too Viscous"
-                        }
-                    },
-                    {
-                        "interface": "water",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": "Too Viscous"
-                        }
-                    },
-                    {
-                        "interface": "seawater",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -9621,9 +9613,8 @@
                     },
                     "method": "ASTM D7094"
                 },
-                "interfacial_tensions": [
+                "interfacial_tension_air": [
                     {
-                        "interface": "air",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -9639,7 +9630,22 @@
                         }
                     },
                     {
-                        "interface": "water",
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 0.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": "Too Viscous"
+                        }
+                    }
+                ],
+                "interfacial_tension_seawater": [
+                    {
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -9654,7 +9660,22 @@
                         }
                     },
                     {
-                        "interface": "seawater",
+                        "method": "ESTS: 12.12/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 0.0
+                        },
+                        "tension": {
+                            "replicates": 3,
+                            "unit": "mN/m",
+                            "unit_type": "interfacialtension",
+                            "value": "Too Viscous"
+                        }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",
@@ -9669,37 +9690,6 @@
                         }
                     },
                     {
-                        "interface": "air",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": "Too Viscous"
-                        }
-                    },
-                    {
-                        "interface": "water",
-                        "method": "ESTS: 12.12/x.x/M",
-                        "ref_temp": {
-                            "unit": "C",
-                            "unit_type": "temperature",
-                            "value": 0.0
-                        },
-                        "tension": {
-                            "replicates": 3,
-                            "unit": "mN/m",
-                            "unit_type": "interfacialtension",
-                            "value": "Too Viscous"
-                        }
-                    },
-                    {
-                        "interface": "seawater",
                         "method": "ESTS: 12.12/x.x/M",
                         "ref_temp": {
                             "unit": "C",

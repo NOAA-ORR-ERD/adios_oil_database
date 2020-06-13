@@ -2224,7 +2224,9 @@ class TestEnvCanadaSampleMapper(object):
         # env canada has no kinematic viscosities
         for attr in ('pour_point', 'flash_point',
                      'densities', 'dynamic_viscosities',
-                     'interfacial_tensions'):
+                     'interfacial_tension_air',
+                     'interfacial_tension_water',
+                     'interfacial_tension_seawater'):
             assert attr in phys
 
     @pytest.mark.parametrize('oil_id, index, attrs', [

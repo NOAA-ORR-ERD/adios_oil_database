@@ -308,6 +308,36 @@ class EnvCanadaSampleMapper(MapperBase):
         return [r for r in ret if r['tension']['value'] is not None]
 
     @property
+    def interfacial_tension_air(self):
+        ret = list(filter(lambda t: t['interface'] == 'air',
+                          self.interfacial_tensions))
+
+        for r in ret:
+            r.pop('interface')
+
+        return ret
+
+    @property
+    def interfacial_tension_water(self):
+        ret = list(filter(lambda t: t['interface'] == 'water',
+                          self.interfacial_tensions))
+
+        for r in ret:
+            r.pop('interface')
+
+        return ret
+
+    @property
+    def interfacial_tension_seawater(self):
+        ret = list(filter(lambda t: t['interface'] == 'seawater',
+                          self.interfacial_tensions))
+
+        for r in ret:
+            r.pop('interface')
+
+        return ret
+
+    @property
     def dispersibilities(self):
         value = self.parser.chemical_dispersibility['dispersant_effectiveness']
 
@@ -579,7 +609,9 @@ class EnvCanadaSampleMapper(MapperBase):
 
         for attr in ('pour_point', 'flash_point',
                      'densities', 'dynamic_viscosities',
-                     'interfacial_tensions'):
+                     'interfacial_tension_air',
+                     'interfacial_tension_water',
+                     'interfacial_tension_seawater'):
             ret[attr] = getattr(self, attr)
 
         return ret

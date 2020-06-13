@@ -80,9 +80,9 @@ class Distillation:
 @dataclass_to_json
 @dataclass
 class InterfacialTensionPoint:
-    interface: str
     tension: InterfacialTension
     ref_temp: Temperature
+    interface: str = None
     method: str = None
 
 

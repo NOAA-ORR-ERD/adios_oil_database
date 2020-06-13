@@ -27,4 +27,6 @@ class PhysicalProperties:
     kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)
     dynamic_viscosities: DynamicViscosityList = field(default_factory=DynamicViscosityList)
 
-    interfacial_tensions: InterfacialTensionList = field(default_factory=InterfacialTensionList)
+    interfacial_tension_air: InterfacialTensionList = field(default_factory=InterfacialTensionList)
+    interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
+    interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)
