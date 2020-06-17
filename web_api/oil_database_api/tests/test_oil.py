@@ -329,12 +329,12 @@ class OilTests(OilTestBase):
                 assert k in oil['metadata']
 
             sample = [s for s in oil['sub_samples']
-                      if s['name'] == 'Fresh Oil Sample'][0]
+                      if s['metadata']['name'] == 'Fresh Oil Sample'][0]
 
             sample_attrs = ('name',
                             'short_name')
             for k in sample_attrs:
-                assert k in sample  # required
+                assert k in sample['metadata']  # required
 
     def test_post_no_payload(self):
         self.testapp.post_json('/oils', status=400)
