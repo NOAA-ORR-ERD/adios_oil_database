@@ -4,6 +4,7 @@
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
+from ..common.measurement import MassFraction, Temperature
 
 from .values import ProductType, Reference
 
@@ -20,3 +21,12 @@ class MetaData:
     API: float = None
     comments: str = ''
     labels: list = field(default_factory=list)
+
+
+@dataclass_to_json
+@dataclass
+class SampleMetaData:
+    name: str = "Fresh Oil Sample"
+    short_name: str = None
+    fraction_weathered: MassFraction = None
+    boiling_point_range: Temperature = None

@@ -10,8 +10,9 @@ from dataclasses import dataclass, field
 from ..common.utilities import dataclass_to_json, JSON_List
 
 from ..common.measurement import MassFraction, VolumeFraction, Temperature
-from .measurement import Distillation
 
+from .measurement import Distillation
+from .metadata import SampleMetaData
 from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
 from .sara import Sara
@@ -29,11 +30,8 @@ class Sample:
 
     could be fresh oil, or weathered samples, or distillation cuts, or ...
     """
-    # metadata:
-    name: str = "Fresh Oil Sample"
-    short_name: str = None
-    fraction_weathered: MassFraction = None
-    boiling_point_range: Temperature = None
+    metadata: SampleMetaData = field(default_factory=SampleMetaData)
+
     cut_volume: VolumeFraction = None  # from Exxon data
 
     physical_properties: PhysicalProperties = None
@@ -63,15 +61,16 @@ class Sample:
     extra_data: dict = field(default_factory=dict)
 
     def __post_init__(self):
-        if self.name is not None:
-            if self.name.lower() == 'whole crude':
-                self.name = 'Fresh Oil Sample'
+        metadata = self.metadata
+        if metadata.name is not None:
+            if metadata.name.lower() == 'whole crude':
+                metadata.name = 'Fresh Oil Sample'
 
-        if self.short_name is None and self.name is not None:
-            if self.name.lower() == 'fresh oil sample':
-                self.short_name = 'Fresh Oil'
+        if metadata.short_name is None and metadata.name is not None:
+            if metadata.name.lower() == 'fresh oil sample':
+                metadata.short_name = 'Fresh Oil'
             else:
-                self.short_name = f'{self.name[:12]}...'
+                metadata.short_name = f'{self.name[:12]}...'
 
 
 class SampleList(JSON_List):

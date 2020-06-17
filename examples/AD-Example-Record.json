@@ -160,12 +160,15 @@
                 ],
                 "type": "mass"
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.0
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.0
+                },
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil"
             },
-            "name": "Fresh Oil Sample",
             "physical_properties": {
                 "densities": [
                     {
@@ -249,8 +252,7 @@
                         "value": 265.0
                     }
                 }
-            },
-            "short_name": "Fresh Oil"
+            }
         },
         {
             "environmental_behavior": {
@@ -269,13 +271,15 @@
                     }
                 ]
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.148
-            },
-            "name": "14.8% Weathered",
-            "short_name": "14.8% Weathered"
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.148
+                },
+                "name": "14.8% Weathered",
+                "short_name": "14.8% Weathered"
+            }
         },
         {
             "environmental_behavior": {
@@ -294,13 +298,15 @@
                     }
                 ]
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.255
-            },
-            "name": "25.5% Weathered",
-            "short_name": "25.5% Weathered"
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.255
+                },
+                "name": "25.5% Weathered",
+                "short_name": "25.5% Weathered"
+            }
         }
     ]
 }

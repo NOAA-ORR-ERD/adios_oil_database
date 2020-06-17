@@ -616,10 +616,10 @@ class TestOilLibraryAttributeMapper:
         ('AD02068', -1, 'boiling_point_range', None),
         ('AD02068', -1, 'boiling_point_range', None),
     ])
-    def test_sample_attribute(self, oil_id, index, attr, expected):
+    def test_sample_metadata_attribute(self, oil_id, index, attr, expected):
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
-        sample = mapper.sub_samples[index]
+        sample = mapper.sub_samples[index]['metadata']
 
         pprint(sample[attr])
         assert sample[attr] == expected
@@ -889,8 +889,8 @@ class TestOilLibraryAttributeMapper:
         # pprint(oil)
         sample = oil['sub_samples'][index]
 
-        pprint(sample[attr])
-        assert sample[attr] == expected
+        pprint(sample['metadata'][attr])
+        assert sample['metadata'][attr] == expected
 
     def test_save_to_json(self):
         '''

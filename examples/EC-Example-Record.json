@@ -1797,12 +1797,15 @@
                     "method": "ESTS: 13.01/x.x/M"
                 }
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.0
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.0
+                },
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil"
             },
-            "name": "Fresh Oil Sample",
             "physical_properties": {
                 "densities": [
                     {
@@ -1976,8 +1979,7 @@
                     },
                     "method": "ASTM D97"
                 }
-            },
-            "short_name": "Fresh Oil"
+            }
         },
         {
             "CCME": {
@@ -3754,12 +3756,15 @@
                     }
                 ]
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.0853
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.0853
+                },
+                "name": "8.53% Weathered",
+                "short_name": "8.53% Weathered"
             },
-            "name": "8.53% Weathered",
             "physical_properties": {
                 "densities": [
                     {
@@ -3931,8 +3936,7 @@
                     },
                     "method": "ASTM D97"
                 }
-            },
-            "short_name": "8.53% Weathered"
+            }
         },
         {
             "CCME": {
@@ -5697,12 +5701,15 @@
                     }
                 ]
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.1686
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.1686
+                },
+                "name": "16.86% Weathered",
+                "short_name": "16.86% Weathered"
             },
-            "name": "16.86% Weathered",
             "physical_properties": {
                 "densities": [
                     {
@@ -5871,8 +5878,7 @@
                     },
                     "method": "ASTM D97"
                 }
-            },
-            "short_name": "16.86% Weathered"
+            }
         },
         {
             "CCME": {
@@ -7636,12 +7642,15 @@
                     }
                 ]
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.2534
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.2534
+                },
+                "name": "25.34% Weathered",
+                "short_name": "25.34% Weathered"
             },
-            "name": "25.34% Weathered",
             "physical_properties": {
                 "densities": [
                     {
@@ -7820,8 +7829,7 @@
                     },
                     "method": "ASTM D97"
                 }
-            },
-            "short_name": "25.34% Weathered"
+            }
         },
         {
             "CCME": {
@@ -9547,12 +9555,15 @@
                     }
                 ]
             },
-            "fraction_weathered": {
-                "unit": "1",
-                "unit_type": "massfraction",
-                "value": 0.2645
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.2645
+                },
+                "name": "26.45% Weathered",
+                "short_name": "26.45% Weathered"
             },
-            "name": "26.45% Weathered",
             "physical_properties": {
                 "densities": [
                     {
@@ -9712,8 +9723,7 @@
                     },
                     "method": "ASTM D97"
                 }
-            },
-            "short_name": "26.45% Weathered"
+            }
         }
     ]
 }

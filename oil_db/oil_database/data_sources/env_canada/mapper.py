@@ -97,33 +97,32 @@ class EnvCanadaSampleMapper(MapperBase):
         self.generate_sample_id_attrs(sample_id)
 
     def generate_sample_id_attrs(self, sample_id):
+        m = {}
+
         if sample_id == 0:
-            self.name = 'Fresh Oil Sample'
-            self.short_name = 'Fresh Oil'
-            self.fraction_weathered = {'value': sample_id, 'unit': '1'}
-            self.boiling_point_range = None
+            m['name'] = 'Fresh Oil Sample'
+            m['short_name'] = 'Fresh Oil'
+            m['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
+            m['boiling_point_range'] = None
         elif isinstance(sample_id, str):
-            self.name = sample_id
-            self.short_name = '{}...'.format(sample_id[:12])
-            self.fraction_weathered = None
-            self.boiling_point_range = None
+            m['name'] = sample_id
+            m['short_name'] = '{}...'.format(sample_id[:12])
+            m['fraction_weathered'] = None
+            m['boiling_point_range'] = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
-            self.name = '{:.4g}% Weathered'.format(sample_id * 100)
-            self.short_name = '{:.4g}% Weathered'.format(sample_id * 100)
-            self.fraction_weathered = {'value': sample_id, 'unit': '1'}
-            self.boiling_point_range = None
+            m['name'] = '{:.4g}% Weathered'.format(sample_id * 100)
+            m['short_name'] = '{:.4g}% Weathered'.format(sample_id * 100)
+            m['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
+            m['boiling_point_range'] = None
         else:
             logger.warning("Can't generate IDs for sample: ", sample_id)
 
-        return self
+        self.metadata = m
 
     def dict(self):
         rec = self.parser.dict()
-        for attr in ('name',
-                     'short_name',
-                     'fraction_weathered',
-                     'boiling_point_range',
+        for attr in ('metadata',
                      'physical_properties',
                      'environmental_behavior',
                      'SARA',

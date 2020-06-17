@@ -6,6 +6,7 @@ from oil_database.models.oil.measurement import (DensityPoint,
                                                  DensityList)
 
 from oil_database.models.oil.sample import Sample, SampleList
+from oil_database.models.oil.metadata import SampleMetaData
 from oil_database.models.oil.physical_properties import PhysicalProperties
 
 
@@ -13,58 +14,59 @@ class TestSample:
     def test_init(self):
         s = Sample()
 
-        for attr in ('name', 'short_name',
-                     'fraction_weathered',
-                     'boiling_point_range',
-                     'cut_volume',
-                     'physical_properties',
-                     'environmental_behavior',
-                     'compounds',
-                     'bulk_composition',
-                     'distillation_data',
+        for attr in ('CCME',
+                     'ESTS_hydrocarbon_fractions',
                      'SARA',
-                     'CCME',
+                     'bulk_composition',
+                     'compounds',
+                     'cut_volume',
+                     'distillation_data',
+                     'environmental_behavior',
+                     'extra_data',
                      'headspace_analysis',
+                     'industry_properties',
+                     'metadata',
                      'miscellaneous',
-                     'extra_data'):
+                     'physical_properties'):
             assert hasattr(s, attr)
 
-        assert s.name == "Fresh Oil Sample"
-        assert s.short_name == "Fresh Oil"
+        assert s.metadata.name == "Fresh Oil Sample"
+        assert s.metadata.short_name == "Fresh Oil"
 
     def test_json(self):
-        s = Sample(short_name="short",
-                   name="a longer name that is more descriptive")
+        s = Sample(metadata=SampleMetaData(
+            short_name="short",
+            name="a longer name that is more descriptive"
+        ))
         py_json = s.py_json()  # the sparse version
 
-        assert tuple(py_json.keys()) == ('name', 'short_name')
+        assert tuple(py_json['metadata'].keys()) == ('name', 'short_name')
 
     def test_json_non_sparse(self):
         s = Sample()
         py_json = s.py_json(sparse=False)
 
-        for attr in ('name', 'short_name',
-                     'fraction_weathered',
-                     'boiling_point_range',
-                     'cut_volume',
-                     'physical_properties',
-                     'environmental_behavior',
-                     'compounds',
-                     'bulk_composition',
-                     'distillation_data',
+        for attr in ('CCME',
+                     'ESTS_hydrocarbon_fractions',
                      'SARA',
-                     'CCME',
+                     'bulk_composition',
+                     'compounds',
+                     'cut_volume',
+                     'distillation_data',
+                     'environmental_behavior',
+                     'extra_data',
                      'headspace_analysis',
+                     'industry_properties',
+                     'metadata',
                      'miscellaneous',
-                     'extra_data'):
+                     'physical_properties'):
             assert attr in py_json
 
-        assert py_json['name'] == "Fresh Oil Sample"
-        assert py_json['short_name'] == "Fresh Oil"
+        assert py_json['metadata']['name'] == "Fresh Oil Sample"
+        assert py_json['metadata']['short_name'] == "Fresh Oil"
 
     def test_add_non_existing(self):
-        s = Sample(short_name="short",
-                   name="a longer name that is more descriptive")
+        s = Sample()
 
         with pytest.raises(AttributeError):
             s.something_random = 43
@@ -76,12 +78,14 @@ class TestSample:
         Note: This is more an integration test.  Each complex attribute of the
               Sample should have its own pytests
         """
-        s = Sample(short_name="short",
-                   name="a longer name that is more descriptive")
+        s = Sample(metadata=SampleMetaData(
+            short_name="short",
+            name="a longer name that is more descriptive")
+        )
         p = PhysicalProperties()
 
-        s.fraction_weathered = 0.23
-        s.boiling_point_range = None
+        s.metadata.fraction_weathered = 0.23
+        s.metadata.boiling_point_range = None
 
         p.densities = DensityList([
             DensityPoint(density=Density(value=0.8751, unit="kg/m^3",
@@ -98,13 +102,25 @@ class TestSample:
 
         py_json = s.py_json(sparse=False)  # the non-sparse version
 
-        for name in ('fraction_weathered',
-                     'boiling_point_range',
+        for name in ('CCME',
+                     'ESTS_hydrocarbon_fractions',
+                     'SARA',
+                     'bulk_composition',
+                     'compounds',
+                     'cut_volume',
+                     'distillation_data',
+                     'environmental_behavior',
+                     'extra_data',
+                     'headspace_analysis',
+                     'industry_properties',
+                     'metadata',
+                     'miscellaneous',
                      'physical_properties'):
             assert name in py_json
 
-        assert py_json['name'] == "a longer name that is more descriptive"
-        assert py_json['short_name'] == "short"
+        assert py_json['metadata']['name'] == ('a longer name that is more '
+                                               'descriptive')
+        assert py_json['metadata']['short_name'] == "short"
 
         for name in ('densities',
                      'kinematic_viscosities',

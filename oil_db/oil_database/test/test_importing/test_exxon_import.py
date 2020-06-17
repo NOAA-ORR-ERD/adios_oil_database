@@ -138,8 +138,8 @@ class TestExxonMapper():
         samples = ExxonMapper(self.record).sub_samples
 
         assert len(samples) == 8
-        assert samples[index].name == expected['name']
-        assert samples[index].short_name == expected['short_name']
+        assert samples[index].metadata.name == expected['name']
+        assert samples[index].metadata.short_name == expected['short_name']
 
     @pytest.mark.parametrize("index, expected", [
         (0, None),
@@ -157,7 +157,7 @@ class TestExxonMapper():
         samples = ExxonMapper(self.record).sub_samples
 
         assert len(samples) == 8
-        assert samples[index].boiling_point_range == expected
+        assert samples[index].metadata.boiling_point_range == expected
 
     @pytest.mark.parametrize("index, expected", [
         (0, VolumeFraction(100.0, unit="%")),

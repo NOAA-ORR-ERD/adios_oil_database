@@ -28,6 +28,7 @@ from oil_database.models.oil.values import Reference
 from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.sample import Sample, SampleList
 
+from oil_database.models.oil.metadata import SampleMetaData
 from oil_database.models.oil.compound import Compound
 from oil_database.models.oil.physical_properties import PhysicalProperties
 from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
@@ -313,16 +314,13 @@ def read_identification(data):
 
 
 def sample_id_attrs(name):
-    kwargs = {}
-
     if name == 'Whole crude':
-        kwargs['name'] = 'Fresh Oil Sample'
-        kwargs['short_name'] = 'Fresh Oil'
+        name = 'Fresh Oil Sample'
+        short_name = 'Fresh Oil'
     else:
-        kwargs['name'] = name
-        kwargs['short_name'] = f'{name[:12]}...'
+        short_name = f'{name[:12]}...'
 
-    return kwargs
+    return {'metadata': SampleMetaData(name=name, short_name=short_name)}
 
 
 def create_middle_tier_objs(samples):
@@ -377,21 +375,21 @@ def set_boiling_point_range(samples, cut_table):
     final_bp = sigfigs(cut_table['ep, f'][-1], 5)
 
     for sample_prev, sample in zip(samples, samples[1:]):
-        prev_max_temp = to_number(sample_prev.name.split()[-1])
+        prev_max_temp = to_number(sample_prev.metadata.name.split()[-1])
         min_temp, _sep, max_temp = [to_number(n)
-                                    for n in sample.name.split()[-3:]]
+                                    for n in sample.metadata.name.split()[-3:]]
 
         if min_temp == 'IBP':
             min_temp = initial_bp
         elif not isinstance(min_temp, float):
             min_temp = prev_max_temp
 
-        sample.boiling_point_range = Temperature(min_value=min_temp,
-                                                 max_value=max_temp,
-                                                 unit='F')
+        sample.metadata.boiling_point_range = Temperature(min_value=min_temp,
+                                                          max_value=max_temp,
+                                                          unit='F')
 
     # fix the last sample
-    last_bpr = samples[-1].boiling_point_range
+    last_bpr = samples[-1].metadata.boiling_point_range
     last_bpr.min_value = last_bpr.max_value
     last_bpr.max_value = final_bp
 

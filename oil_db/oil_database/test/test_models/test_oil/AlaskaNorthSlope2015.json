@@ -1239,10 +1239,12 @@
           "value": 1768.138995
         }
       },
-      "name": "Fresh Oil Sample",
-      "short_name": "Fresh Oil",
-      "boiling_point_range": null,
-      "fraction_weathered": {"value": 0.0, "unit": "1"}
+      "metadata": {
+          "name": "Fresh Oil Sample",
+          "short_name": "Fresh Oil",
+          "boiling_point_range": null,
+          "fraction_weathered": {"value": 0.0, "unit": "1"}
+      }
     },
     {
       "chromatography": {
@@ -2520,10 +2522,12 @@
           "value": 2941.995
         }
       },
-      "name": "12.42% Weathered",
-      "short_name": "12.42% Weathered",
-      "boiling_point_range": null,
-      "fraction_weathered": {"value": 0.1242, "unit": "1"}
+      "metadata": {
+          "name": "12.42% Weathered",
+          "short_name": "12.42% Weathered",
+          "boiling_point_range": null,
+          "fraction_weathered": {"value": 0.1242, "unit": "1"}
+      }
     },
     {
       "chromatography": {
@@ -3801,10 +3805,12 @@
           "value": 3361.71962
         }
       },
-      "name": "24.56% Weathered",
-      "short_name": "24.56% Weathered",
-      "boiling_point_range": null,
-      "fraction_weathered": {"value": 0.2456, "unit": "1"}
+      "metadata": {
+          "name": "24.56% Weathered",
+          "short_name": "24.56% Weathered",
+          "boiling_point_range": null,
+          "fraction_weathered": {"value": 0.2456, "unit": "1"}
+      }
     },
     {
       "chromatography": {
@@ -5112,10 +5118,12 @@
           "value": 5529.969935
         }
       },
-      "name": "36.76% Weathered",
-      "short_name": "36.76% Weathered",
-      "boiling_point_range": null,
-      "fraction_weathered": {"value": 0.3676, "unit": "1"}
+      "metadata": {
+          "name": "36.76% Weathered",
+          "short_name": "36.76% Weathered",
+          "boiling_point_range": null,
+          "fraction_weathered": {"value": 0.3676, "unit": "1"}
+      }
     }
   ]
 }

@@ -1894,14 +1894,16 @@ class TestEnvCanadaSampleMapper(object):
         assert type(sub_mapper) == EnvCanadaSampleMapper
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
-        ('2713', 0, 'name', 'Fresh Oil Sample'),
-        ('2713', -1, 'name', '36.76% Weathered'),
-        ('540', 0, 'name', 'Fresh Oil Sample'),
-        ('540', -1, 'name', '7.45% Weathered'),
-        ('2713', 0, 'short_name', 'Fresh Oil'),
-        ('2713', -1, 'short_name', '36.76% Weathered'),
-        ('2713', 0, 'fraction_weathered', {'value': 0.0, 'unit': '1'}),
-        ('2713', 0, 'boiling_point_range', None),
+        ('2713', 0, 'metadata', {'boiling_point_range': None,
+                                 'fraction_weathered': {'unit': '1',
+                                                        'value': 0.0},
+                                 'name': 'Fresh Oil Sample',
+                                 'short_name': 'Fresh Oil'}),
+        ('2713', -1, 'metadata', {'boiling_point_range': None,
+                                  'fraction_weathered': {'unit': '1',
+                                                         'value': 0.3676},
+                                  'name': '36.76% Weathered',
+                                  'short_name': '36.76% Weathered'}),
         ('2713', 0, 'densities', [
             {'density': {'value': 0.8751, 'unit': 'g/mL',
                          'standard_deviation': 0, 'replicates': 3},

@@ -120,8 +120,8 @@ class TestOil:
         print("working with:", oil.metadata.name)
 
         assert len(oil.sub_samples) == 4
-        assert oil.sub_samples[0].name == "Fresh Oil Sample"
-        assert oil.sub_samples[3].name == "36.76% Weathered"
+        assert oil.sub_samples[0].metadata.name == "Fresh Oil Sample"
+        assert oil.sub_samples[3].metadata.name == "36.76% Weathered"
 
 
 class TestMetaData:

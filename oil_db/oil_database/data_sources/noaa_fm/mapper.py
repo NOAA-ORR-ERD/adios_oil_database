@@ -100,7 +100,8 @@ class OilLibraryAttributeMapper(MapperBase):
         return samples
 
     def sample(self, weathering):
-        ret = self.generate_sample_id_attrs(weathering)
+        ret = {}
+        ret['metadata'] = self.generate_sample_id_attrs(weathering)
 
         for attr in self.weathered_sample_props:
             value = getattr(self, attr)(weathering)

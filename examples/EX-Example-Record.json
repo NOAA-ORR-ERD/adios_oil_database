@@ -308,7 +308,10 @@
                     "name": "Reid Vapor Pressure"
                 }
             ],
-            "name": "Fresh Oil Sample",
+            "metadata": {
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil"
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -369,8 +372,7 @@
                         "value": -43.50085
                     }
                 }
-            },
-            "short_name": "Fresh Oil"
+            }
         },
         {
             "SARA": {
@@ -379,12 +381,6 @@
                     "unit_type": "volumefraction",
                     "value": 0
                 }
-            },
-            "boiling_point_range": {
-                "max_value": 60.0,
-                "min_value": -57.641,
-                "unit": "F",
-                "unit_type": "temperature"
             },
             "bulk_composition": [
                 {
@@ -462,7 +458,16 @@
                     "name": "Total Acid Number"
                 }
             ],
-            "name": "Butane and Lighter IBP - 60F",
+            "metadata": {
+                "boiling_point_range": {
+                    "max_value": 60.0,
+                    "min_value": -57.641,
+                    "unit": "F",
+                    "unit_type": "temperature"
+                },
+                "name": "Butane and Lighter IBP - 60F",
+                "short_name": "Butane and L..."
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -516,8 +521,7 @@
                         }
                     }
                 ]
-            },
-            "short_name": "Butane and L..."
+            }
         },
         {
             "SARA": {
@@ -526,12 +530,6 @@
                     "unit_type": "volumefraction",
                     "value": 0
                 }
-            },
-            "boiling_point_range": {
-                "max_value": 165.0,
-                "min_value": 60.0,
-                "unit": "F",
-                "unit_type": "temperature"
             },
             "bulk_composition": [
                 {
@@ -760,7 +758,16 @@
                     "name": "Total Acid Number"
                 }
             ],
-            "name": "Lt. Naphtha C5 - 165F",
+            "metadata": {
+                "boiling_point_range": {
+                    "max_value": 165.0,
+                    "min_value": 60.0,
+                    "unit": "F",
+                    "unit_type": "temperature"
+                },
+                "name": "Lt. Naphtha C5 - 165F",
+                "short_name": "Lt. Naphtha ..."
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -814,8 +821,7 @@
                         }
                     }
                 ]
-            },
-            "short_name": "Lt. Naphtha ..."
+            }
         },
         {
             "SARA": {
@@ -824,12 +830,6 @@
                     "unit_type": "volumefraction",
                     "value": 10.219
                 }
-            },
-            "boiling_point_range": {
-                "max_value": 330.0,
-                "min_value": 165.0,
-                "unit": "F",
-                "unit_type": "temperature"
             },
             "bulk_composition": [
                 {
@@ -1089,7 +1089,16 @@
                     "name": "Cloud Point"
                 }
             ],
-            "name": "Hvy Naphtha 165 - 330F",
+            "metadata": {
+                "boiling_point_range": {
+                    "max_value": 330.0,
+                    "min_value": 165.0,
+                    "unit": "F",
+                    "unit_type": "temperature"
+                },
+                "name": "Hvy Naphtha 165 - 330F",
+                "short_name": "Hvy Naphtha ..."
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -1150,8 +1159,7 @@
                         "value": -79.133389
                     }
                 }
-            },
-            "short_name": "Hvy Naphtha ..."
+            }
         },
         {
             "SARA": {
@@ -1160,12 +1168,6 @@
                     "unit_type": "volumefraction",
                     "value": 16.406
                 }
-            },
-            "boiling_point_range": {
-                "max_value": 480.0,
-                "min_value": 330.0,
-                "unit": "F",
-                "unit_type": "temperature"
             },
             "bulk_composition": [
                 {
@@ -1441,7 +1443,16 @@
                     "name": "Aniline Point"
                 }
             ],
-            "name": "Kerosene 330 - 480F",
+            "metadata": {
+                "boiling_point_range": {
+                    "max_value": 480.0,
+                    "min_value": 330.0,
+                    "unit": "F",
+                    "unit_type": "temperature"
+                },
+                "name": "Kerosene 330 - 480F",
+                "short_name": "Kerosene 330..."
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -1502,8 +1513,7 @@
                         "value": -54.825335
                     }
                 }
-            },
-            "short_name": "Kerosene 330..."
+            }
         },
         {
             "SARA": {
@@ -1512,12 +1522,6 @@
                     "unit_type": "volumefraction",
                     "value": 25.962
                 }
-            },
-            "boiling_point_range": {
-                "max_value": 650.0,
-                "min_value": 480.0,
-                "unit": "F",
-                "unit_type": "temperature"
             },
             "bulk_composition": [
                 {
@@ -1793,7 +1797,16 @@
                     "name": "Aniline Point"
                 }
             ],
-            "name": "Diesel 480 - 650F",
+            "metadata": {
+                "boiling_point_range": {
+                    "max_value": 650.0,
+                    "min_value": 480.0,
+                    "unit": "F",
+                    "unit_type": "temperature"
+                },
+                "name": "Diesel 480 - 650F",
+                "short_name": "Diesel 480 -..."
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -1854,8 +1867,7 @@
                         "value": -17.585803
                     }
                 }
-            },
-            "short_name": "Diesel 480 -..."
+            }
         },
         {
             "SARA": {
@@ -1869,12 +1881,6 @@
                     "unit_type": "massfraction",
                     "value": 0
                 }
-            },
-            "boiling_point_range": {
-                "max_value": 1000.0,
-                "min_value": 650.0,
-                "unit": "F",
-                "unit_type": "temperature"
             },
             "bulk_composition": [
                 {
@@ -2119,7 +2125,16 @@
                     "name": "Aniline Point"
                 }
             ],
-            "name": "Vacuum Gas Oil 650 - 1000F",
+            "metadata": {
+                "boiling_point_range": {
+                    "max_value": 1000.0,
+                    "min_value": 650.0,
+                    "unit": "F",
+                    "unit_type": "temperature"
+                },
+                "name": "Vacuum Gas Oil 650 - 1000F",
+                "short_name": "Vacuum Gas O..."
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -2180,8 +2195,7 @@
                         "value": 30.101697
                     }
                 }
-            },
-            "short_name": "Vacuum Gas O..."
+            }
         },
         {
             "SARA": {
@@ -2195,12 +2209,6 @@
                     "unit_type": "massfraction",
                     "value": 1.9672
                 }
-            },
-            "boiling_point_range": {
-                "max_value": 1504.6,
-                "min_value": 1000.0,
-                "unit": "F",
-                "unit_type": "temperature"
             },
             "bulk_composition": [
                 {
@@ -2453,7 +2461,16 @@
                     "name": "Conradson Carbon Residue"
                 }
             ],
-            "name": "Vacuum Residue 1000F+",
+            "metadata": {
+                "boiling_point_range": {
+                    "max_value": 1504.6,
+                    "min_value": 1000.0,
+                    "unit": "F",
+                    "unit_type": "temperature"
+                },
+                "name": "Vacuum Residue 1000F+",
+                "short_name": "Vacuum Resid..."
+            },
             "physical_properties": {
                 "densities": [
                     {
@@ -2514,8 +2531,7 @@
                         "value": 52.126851
                     }
                 }
-            },
-            "short_name": "Vacuum Resid..."
+            }
         }
     ]
 }
