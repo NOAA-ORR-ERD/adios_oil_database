@@ -244,7 +244,7 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
             try:
                 oil_obj = mapper_cls(parser_cls(*record_data))
 
-                #link_oil_to_labels(oil_obj)
+                link_oil_to_labels(oil_obj)
 
                 if hasattr(oil_obj, 'py_json'):
                     oil_pyjson = oil_obj.py_json()

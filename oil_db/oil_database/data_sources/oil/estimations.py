@@ -11,11 +11,13 @@ from scipy.optimize import curve_fit
 from oil_database.util import estimations as est
 from oil_database.util.json import ObjFromDict
 
-from oil_database.models.common.float_unit import (UnitClassLU,
-                                                   TemperatureUnit,
-                                                   DensityUnit,
-                                                   DynamicViscosityUnit,
-                                                   KinematicViscosityUnit)
+from oil_database.models.common.measurement import (Time,
+                                                    Temperature,
+                                                    MassFraction,
+                                                    Density,
+                                                    DynamicViscosity,
+                                                    KinematicViscosity,
+                                                    InterfacialTension)
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -57,11 +59,17 @@ class OilEstimation(object):
         All interfaces assume a self.record member, which is the contained
         oil object.
     '''
+    unit_class_lu = {'time': Time,
+                     'massfraction': MassFraction,
+                     'temperature': Temperature,
+                     'density': Density,
+                     'dynamicviscosity': DynamicViscosity,
+                     'kinematicviscosity': KinematicViscosity,
+                     'interfacialtension': InterfacialTension,
+                     }
+
     def __init__(self, imported_rec):
-        if hasattr(imported_rec, 'dict'):
-            # we are dealing with a mapper object, convert to data object
-            self.record = imported_rec.dict()
-        elif hasattr(imported_rec, 'py_json'):
+        if hasattr(imported_rec, 'py_json'):
             # we are dealing with a mapper object, convert to data object
             self.record = imported_rec.py_json()
         else:
@@ -71,10 +79,11 @@ class OilEstimation(object):
         self.record = ObjFromDict(self._add_float_units(self.record))
 
         try:
-            self.record.name  # simply access the name to see if it is there
+            # simply access the name to see if it is there
+            self.record.metadata.name
         except Exception as e:
             try:
-                self.record.oil_name
+                self.record.metadata.oil_name
             except Exception:
                 raise ValueError(e)
 
@@ -93,7 +102,7 @@ class OilEstimation(object):
                 'unit_type' in data and
                 any([(k in data)
                      for k in ('value', 'max_value', 'min_value')])):
-            py_class = UnitClassLU[data['unit_type']]
+            py_class = self.unit_class_lu[data['unit_type']]
             data.pop('unit_type', None)
 
             return py_class(**data)
@@ -140,20 +149,20 @@ class OilEstimation(object):
         '''
             sample_id will normally indicate a weathering amount, but
             there will be cases where it will indicate something else,
-            such as distiallate fraction.
+            such as distillate fraction.
             We will default to a weathering amount of 0.0 (fresh)
 
             There will most likely not be multiple fresh samples, but in this
             case we just choose the first one.
         '''
         try:
-            product_type = self.record.product_type
+            product_type = self.record.metadata.product_type
         except AttributeError:
             product_type = None
 
         try:
-            samples = [s for s in self.record.samples
-                       if s.name == name]
+            samples = [s for s in self.record.sub_samples
+                       if s.metadata.name == name]
         except (AttributeError, TypeError):
             return None
 
@@ -431,8 +440,8 @@ class OilSampleEstimation(object):
             kg_m_3, ref_temp_k = est.density_from_api(api.gravity)
 
             densities.append(ObjFromDict({
-                'density': DensityUnit(value=kg_m_3, unit='kg/m^3'),
-                'ref_temp': TemperatureUnit(value=ref_temp_k, unit='K')
+                'density': Density(value=kg_m_3, unit='kg/m^3'),
+                'ref_temp': Temperature(value=ref_temp_k, unit='K')
             }))
 
         return sorted(densities, key=lambda d: d.ref_temp.value)
@@ -594,9 +603,9 @@ class OilSampleEstimation(object):
 
         for k in sorted(non_redundant_keys):
             yield ObjFromDict({
-                'ref_temp': TemperatureUnit(value=k, unit='K'),
-                'viscosity': DynamicViscosityUnit(value=dvis_dict[k],
-                                                  unit='kg/(m s)')
+                'ref_temp': Temperature(value=k, unit='K'),
+                'viscosity': DynamicViscosity(value=dvis_dict[k],
+                                              unit='kg/(m s)')
             })
 
     def dvis_to_kvis(self, kg_ms, ref_temp_k):
@@ -630,9 +639,9 @@ class OilSampleEstimation(object):
         agg = dict(dvis_list)
         agg.update(kvis_list)
 
-        return [ObjFromDict({'viscosity': KinematicViscosityUnit(value=k,
-                                                                 unit='m^2/s'),
-                             'ref_temp': TemperatureUnit(value=t, unit='K')
+        return [ObjFromDict({'viscosity': KinematicViscosity(value=k,
+                                                             unit='m^2/s'),
+                             'ref_temp': Temperature(value=t, unit='K')
                              })
                 for t, k in sorted(agg.items())]
 

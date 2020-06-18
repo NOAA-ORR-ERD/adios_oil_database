@@ -42,7 +42,7 @@ class OilLibraryAttributeMapper(MapperBase):
         '''
         self.record = record
         self.status = None
-        self.labels = None
+        self.labels = []
 
     def __getattr__(self, name):
         '''
@@ -154,7 +154,8 @@ class OilLibraryAttributeMapper(MapperBase):
                      # 'sample_date',  # not available in datasheet
                      'product_type',
                      'API',
-                     'comments'):
+                     'comments',
+                     'labels'):
             ret[attr] = getattr(self, attr)
 
         return ret

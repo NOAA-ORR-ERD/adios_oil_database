@@ -61,7 +61,8 @@ def link_oil_to_labels(oil):
         Here, we have a single oil and we would like to link it to one or more
         labels based on its properties.
     '''
-    oil.labels = []
+    labels = oil.metadata['labels']
+
     sample = OilEstimation(oil).get_sample()
 
     if sample is None:
@@ -69,68 +70,68 @@ def link_oil_to_labels(oil):
                     .format(oil.oil_id))
         return
 
-    if is_crude_light(sample):
-        oil.labels.extend(['Crude', 'Light'])
+    if is_crude_light(oil):
+        labels.extend(['Crude', 'Light'])
 
-    if is_crude_medium(sample):
-        oil.labels.extend(['Crude', 'Medium'])
+    if is_crude_medium(oil):
+        labels.extend(['Crude', 'Medium'])
 
-    if is_crude_heavy(sample):
-        oil.labels.extend(['Crude', 'Heavy'])
+    if is_crude_heavy(oil):
+        labels.extend(['Crude', 'Heavy'])
 
-    if is_refined_fuel_oil_1(sample):
-        oil.labels.extend(['Refined',
-                           'Light',
-                           'Fuel Oil 1',
-                           'Gasoline',
-                           'Kerosene'])
+    if is_refined_fuel_oil_1(oil, sample):
+        labels.extend(['Refined',
+                       'Light',
+                       'Fuel Oil 1',
+                       'Gasoline',
+                       'Kerosene'])
 
-    if is_refined_fuel_oil_2(sample):
-        oil.labels.extend(['Refined',
-                           'Fuel Oil 2',
-                           'Diesel',
-                           'Heating Oil'])
+    if is_refined_fuel_oil_2(oil, sample):
+        labels.extend(['Refined',
+                       'Fuel Oil 2',
+                       'Diesel',
+                       'Heating Oil'])
 
-    if is_refined_ifo(sample):
-        oil.labels.extend(['Refined',
-                           'Intermediate',
-                           'Fuel Oil'])
+    if is_refined_ifo(oil, sample):
+        labels.extend(['Refined',
+                       'Intermediate',
+                       'Fuel Oil'])
 
-    if is_refined_fuel_oil_6(sample):
-        oil.labels.extend(['Refined',
-                           'Heavy',
-                           'Fuel Oil 6',
-                           'HFO',
-                           'Bunker',
-                           'Group V'])
+    if is_refined_fuel_oil_6(oil, sample):
+        labels.extend(['Refined',
+                       'Heavy',
+                       'Fuel Oil 6',
+                       'HFO',
+                       'Bunker',
+                       'Group V'])
 
     if is_generic(oil):
-        oil.labels.extend(['Other', 'Generic'])
+        labels.extend(['Other', 'Generic'])
 
-    if len(oil.labels) == 0:
-        oil.labels.extend(['Other'])
+    if len(labels) == 0:
+        labels.extend(['Other'])
 
 
 def is_crude(oil):
-    return (oil.product_type is not None and
-            oil.product_type.lower() == 'crude')
+    return (oil.metadata['product_type'] is not None and
+            oil.metadata['product_type'].lower() == 'crude')
 
 
 def is_refined(oil):
-    return (oil.product_type is not None and
-            oil.product_type.lower() == 'refined')
+    return (oil.metadata['product_type'] is not None and
+            oil.metadata['product_type'].lower() == 'refined')
 
 
 def api_min(oil, oil_api):
-    api = oil.get_api()
+    api = oil.metadata['API']
 
-    return api is not None and api.gravity > oil_api
+    return api is not None and api > oil_api
 
 
 def api_max(oil, oil_api):
-    api = oil.get_api()
+    api = oil.metadata['API']
 
-    return api is not None and api.gravity < oil_api
+    return api is not None and api < oil_api
 
 
 def is_crude_light(oil):
@@ -164,7 +165,7 @@ def is_refined_light_products(oil):
     raise NotImplementedError
 
 
-def is_refined_fuel_oil_1(oil):
+def is_refined_fuel_oil_1(oil, sample):
     '''
        Category Name:
        - Fuel oil #1/gasoline/kerosene
@@ -180,10 +181,10 @@ def is_refined_fuel_oil_1(oil):
     '''
     return (is_refined(oil) and
             api_min(oil, 35.0) and
-            is_within_viscosity_range(oil, kvis_max=2.5))
+            is_within_viscosity_range(sample, kvis_max=2.5))
 
 
-def is_refined_fuel_oil_2(oil):
+def is_refined_fuel_oil_2(oil, sample):
     '''
        Category Name:
        - Fuel oil #2/Diesel/Heating Oil
@@ -199,10 +200,10 @@ def is_refined_fuel_oil_2(oil):
     return (is_refined(oil) and
             api_min(oil, 30.0) and
             api_max(oil, 39.0) and
-            is_within_viscosity_range(oil, kvis_min=2.5, kvis_max=4.0))
+            is_within_viscosity_range(sample, kvis_min=2.5, kvis_max=4.0))
 
 
-def is_refined_ifo(oil):
+def is_refined_ifo(oil, sample):
     '''
        Category Name:
        - Intermediate Fuel Oil
@@ -218,10 +219,10 @@ def is_refined_ifo(oil):
     return (is_refined(oil) and
             api_min(oil, 15.0) and
             api_max(oil, 30.0) and
-            is_within_viscosity_range(oil, kvis_min=4.0, kvis_max=200.0))
+            is_within_viscosity_range(sample, kvis_min=4.0, kvis_max=200.0))
 
 
-def is_refined_fuel_oil_6(oil):
+def is_refined_fuel_oil_6(oil, sample):
     '''
        Category Name:
        - Fuel Oil #6/Bunker/Heavy Fuel Oil/Group V
@@ -235,7 +236,7 @@ def is_refined_fuel_oil_6(oil):
     '''
     return (is_refined(oil) and
             api_max(oil, 15.0) and
-            is_within_viscosity_range(oil, kvis_min=200.0))
+            is_within_viscosity_range(sample, kvis_min=200.0))
 
 
 def is_generic(oil):

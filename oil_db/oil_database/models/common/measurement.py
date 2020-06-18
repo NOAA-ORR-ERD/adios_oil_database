@@ -15,8 +15,8 @@ from ..common.validators import EnumValidator
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
-# fixme: why is this here?
 
+# fixme: why is this here?
 class ProductType(str):
     _valid_types = ('crude',
                     'refined',
