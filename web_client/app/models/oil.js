@@ -2,18 +2,10 @@ import DS from 'ember-data';
 const { Model, attr } = DS;
 
 export default Model.extend({
-  // These attributes are used in the table columns of the search
-  name: attr(),
-  productType: attr(),
-  location: attr(),
-  reference: attr(),
-  referenceDate: attr(),
-  sampleDate: attr(),
-  comments: attr(),
-  categories: attr(),
+  // These attributes are used in the table columns of the search as well as
+  // the full records
+  metadata: attr(),
   status: attr(),
-  api: attr(),
-  viscosity: attr(),
-
-  samples: attr()
+  subSamples: attr(),
+  extraData: attr()
 });

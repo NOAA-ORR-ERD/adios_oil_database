@@ -222,10 +222,10 @@ def get_search_params(request):
 
     if query != '':
         query_out.update({
-            "$or": [{'name': {'$regex': query,
-                              '$options': 'i'}},
-                    {'location': {'$regex': query,
-                                  '$options': 'i'}}]
+            "$or": [{'metadata.name': {'$regex': query,
+                                       '$options': 'i'}},
+                    {'metadata.location': {'$regex': query,
+                                           '$options': 'i'}}]
         })
 
     try:
@@ -441,12 +441,13 @@ def get_oil_searchable_fields(oil):
         meta = oil['metadata']
 
         return {'_id': oil.get('oil_id'),
-                'name': meta.get('name', None),
-                'location': meta.get('location', None),
-                'product_type': meta.get('product_type', None),
-                'API': meta.get('API'),
-                'labels': meta.get('labels', []),
-                # fixme: We should probably should do something smarter here
+                'metadata': {
+                    'name': meta.get('name', None),
+                    'location': meta.get('location', None),
+                    'product_type': meta.get('product_type', None),
+                    'API': meta.get('API'),
+                    'labels': meta.get('labels', []),
+                },
                 'status': oil.get('status', []),
                 }
     except Exception:
