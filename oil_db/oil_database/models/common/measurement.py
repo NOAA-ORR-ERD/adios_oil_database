@@ -3,7 +3,7 @@
     these are structures that contain a floating point value and an associated
     unit
 '''
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 from unit_conversion import convert
 
@@ -132,7 +132,6 @@ class MeasurementBase(MeasurementDataclass):
         return pj
 
     def convert_to(self, new_unit):
-        # fixme: should this return a new object instead of mutating?
         new_vals = {att: None for att in ('value', 'min_value', 'max_value',
                                           'standard_deviation')}
 
@@ -151,6 +150,20 @@ class MeasurementBase(MeasurementDataclass):
 
         self.__dict__.update(new_vals)
 
+        return self
+
+    def copy(self):
+        '''
+            There will be cases where we want to be non-destructive, such as
+            a function that needs to convert to different units to perform
+            calculations, but return the results in the original units.
+
+            And since our convert function does an in-place update, we will
+            need a way to preserve the original contents of our dataclass
+            before the conversion happens.
+        '''
+        return self.__class__(**asdict(self))
+
 
 class Temperature(MeasurementBase):
     unit_type = "temperature"
@@ -167,6 +180,8 @@ class Temperature(MeasurementBase):
                               self.standard_deviation)
             super().convert_to(new_unit)
             self.standard_deviation = new_std
+
+        return self
 
 
 class Unitless(MeasurementBase):

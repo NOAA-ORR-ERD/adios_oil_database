@@ -254,10 +254,10 @@ def is_generic(oil):
 def is_within_viscosity_range(oil_sample, kvis_min=None, kvis_max=None):
     category_temp = 273.15 + 38
 
-    if oil_sample.kvis_at_temp(category_temp) is None:
-        return False
-
     viscosity = oil_sample.kvis_at_temp(category_temp)
+
+    if viscosity is None:
+        return False
 
     if kvis_min is not None and kvis_max is not None:
         return (viscosity > kvis_min) and (viscosity <= kvis_max)

@@ -6,7 +6,7 @@ import pytest
 from oil_database.util.json import ObjFromDict
 from oil_database.data_sources.oil.estimations import (OilEstimation,
                                                        OilSampleEstimation)
-from oil_database.models.common.float_unit import TemperatureUnit
+from oil_database.models.common.measurement import Temperature
 
 np = docutils = pytest.importorskip("numpy")
 
@@ -14,8 +14,12 @@ np = docutils = pytest.importorskip("numpy")
 class TestOilEstimation():
     @pytest.mark.parametrize(
         'oil',
-        [{'name': 'Oil Name'},
-         {'oil_name': 'Oil Name'},
+        [{'metadata': {'name': 'Oil Name'}},
+         {'metadata': {'oil_name': 'Oil Name'}},
+         pytest.param({'name': 'Oil Name'},
+                      marks=pytest.mark.raises(exception=ValueError)),
+         pytest.param({'oil_name': 'Oil Name'},
+                      marks=pytest.mark.raises(exception=ValueError)),
          pytest.param(None, marks=pytest.mark.raises(exception=TypeError)),
          pytest.param(0.0, marks=pytest.mark.raises(exception=ValueError)),
          pytest.param('string', marks=pytest.mark.raises(exception=ValueError)),
@@ -32,8 +36,8 @@ class TestOilEstimation():
 
     @pytest.mark.parametrize(
         'oil',
-        [{'name': 'Oil Name'},
-         {'oil_name': 'Oil Name'},
+        [{'metadata': {'name': 'Oil Name'}},
+         {'metadata': {'oil_name': 'Oil Name'}},
          ]
     )
     def test_repr(self, oil):
@@ -43,21 +47,21 @@ class TestOilEstimation():
 
     @pytest.mark.parametrize(
         'oil',
-        [{'name': 'Oil Name',
+        [{'metadata': {'name': 'Oil Name'},
           'temperature': {'value': 293.0, 'unit': 'K',
                           'unit_type': 'Temperature'
                           }
           },
          ]
     )
-    def test_float_units(self, oil):
+    def test_measurement(self, oil):
         oil_est = OilEstimation(oil)
 
-        assert isinstance(oil_est.record.temperature, TemperatureUnit)
+        assert isinstance(oil_est.record.temperature, Temperature)
 
     @pytest.mark.parametrize(
         'oil',
-        [{'name': 'Oil Name',
+        [{'metadata': {'name': 'Oil Name'},
           'some_temp': 293.0
           },
          ]
@@ -70,28 +74,40 @@ class TestOilEstimation():
     @pytest.mark.parametrize(
         'oil, sample_id, product_type, expected',
         [
-         ({'name': 'Oil Name'}, None, None, None),
-         ({'name': 'Oil Name', 'samples': None}, None, None, None),
-         ({'name': 'Oil Name', 'samples': {}}, None, None, None),
-         ({'name': 'Oil Name',
-           'samples': [{'name': 'Fresh Oil Sample'}]},
+         ({'metadata': {'name': 'Oil Name'}}, None, None, None),
+         ({'metadata': {'name': 'Oil Name'}, 'samples': None}, None, None, None),
+         ({'metadata': {'name': 'Oil Name'}, 'samples': {}}, None, None, None),
+         ({'metadata': {'name': 'Oil Name'},
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'}
+           }]
+           },
           '10% Weathered', None, None),
-         ({'name': 'Oil Name',
-           'samples': [{'name': 'Fresh Oil Sample'}]},
-          None, None, {'name': 'Fresh Oil Sample'}),
-         ({'name': 'Oil Name',
-           'samples': [{'name': 'Fresh Oil Sample'}]},
-          'Fresh Oil Sample', None, {'name': 'Fresh Oil Sample'}),
-         ({'name': 'Oil Name',
-           'samples': [{'name': '10% Weathered'}]},
-          '10% Weathered', None, {'name': '10% Weathered'}),
+         ({'metadata': {'name': 'Oil Name'},
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'}
+           }]},
+          None, None, {'metadata': {'name': 'Fresh Oil Sample'}}),
+         ({'metadata': {'name': 'Oil Name'},
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'}
+           }]},
+          'Fresh Oil Sample', None, {'metadata': {'name': 'Fresh Oil Sample'}}
+          ),
+         ({'metadata': {'name': 'Oil Name'},
+           'sub_samples': [{
+               'metadata': {'name': '10% Weathered'}
+           }]
+           },
+          '10% Weathered', None, {'metadata': {'name': '10% Weathered'}}),
          ]
     )
     def test_get_sample(self, oil, sample_id, product_type, expected):
         oil_est = OilEstimation(oil)
 
         if expected is not None:
-            expected = OilSampleEstimation(ObjFromDict(expected), product_type)
+            expected = OilSampleEstimation(ObjFromDict(expected),
+                                           product_type, 10.0)
 
         if sample_id is None:
             print('get_sample(): ', oil_est.get_sample())
@@ -108,19 +124,20 @@ class TestOilEstimation():
     @pytest.mark.parametrize(
         'oil, product_type, expected',
         [
-         ({'name': 'Oil Name'}, None, None),
-         ({'name': 'Oil Name', 'samples': None}, None, None),
-         ({'name': 'Oil Name', 'samples': {}}, None, None),
-         ({'name': 'Oil Name',
-           'samples': [{'sample_id': 'w=0.0'}]},
-          None, {'sample_id': 'w=0.0'}),
+         ({'metadata': {'name': 'Oil Name'}}, None, None),
+         ({'metadata': {'name': 'Oil Name'}, 'samples': None}, None, None),
+         ({'metadata': {'name': 'Oil Name'}, 'samples': {}}, None, None),
+         ({'metadata': {'name': 'Oil Name'},
+           'sub_samples': [{'metadata': {'sample_id': 'w=0.0'}}]},
+          None, {'metadata': {'sample_id': 'w=0.0'}}),
          ]
     )
     def test_get_first_sample(self, oil, product_type, expected):
         oil_est = OilEstimation(oil)
 
         if expected is not None:
-            expected = OilSampleEstimation(ObjFromDict(expected), product_type)
+            expected = OilSampleEstimation(ObjFromDict(expected),
+                                           product_type, 10.0)
 
         print('get_first_sample(): ', oil_est.get_first_sample())
 
@@ -195,7 +212,7 @@ class TestOilEstimationTemperature():
          ]
     )
     def test_closest_to_temperature(self, obj_list, temperature, expected):
-        oil_est = OilEstimation({'name': 'Oil Name'})
+        oil_est = OilEstimation({'metadata': {'name': 'Oil Name'}})
 
         if obj_list is not None:
             obj_list = [ObjFromDict(oil_est._add_float_units(o))
@@ -313,7 +330,7 @@ class TestOilEstimationTemperature():
          ]
     )
     def test_bounding_temperatures(self, obj_list, temperature, expected):
-        oil_est = OilEstimation({'name': 'Oil Name'})
+        oil_est = OilEstimation({'metadata': {'name': 'Oil Name'}})
 
         if obj_list is not None:
             obj_list = [ObjFromDict(oil_est._add_float_units(o))
@@ -337,101 +354,111 @@ class TestOilEstimationPointTemperatures():
     @pytest.mark.parametrize(
         'oil, sample_id, estimate, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None, None, (None, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no pour point, but has dvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'dvis': [
-                   {'viscosity': {
-                        'value': 0.023, 'unit': 'kg/(m s)',
-                        'unit_type': 'Dynamic Viscosity'},
-                    'ref_temp': {
-                        'value': 288.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'dynamic_viscosities': [
+                       {'viscosity': {
+                            'value': 0.023, 'unit': 'kg/(m s)',
+                            'unit_type': 'Dynamic Viscosity'},
+                        'ref_temp': {
+                            'value': 288.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+               }
            }]
            },
           None, None, (None, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a single pour point attribute',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'pour_points': [{
-                   'ref_temp': {'value': 265.0,
-                                'unit': 'K',
-                                'unit_type': 'Temperature'}
-               }],
-               'kvis': None,
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'pour_points': [{
+                       'ref_temp': {'value': 265.0,
+                                    'unit': 'K',
+                                    'unit_type': 'Temperature'}
+                   }],
+                   'kinematic_viscosities': None,
+               }
            }]
            },
           None, None, (265.0, 265.0)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no pour point, but has kvis & dvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'dvis': [
-                   {'viscosity': {
-                        'value': 0.023, 'unit': 'kg/(m s)',
-                        'unit_type': 'Dynamic Viscosity'},
-                    'ref_temp': {
-                        'value': 288.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
-               'kvis': [
-                   {'viscosity': {
-                        'value': 0.0001333, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 311.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'dynamic_viscosities': [
+                       {'viscosity': {
+                            'value': 0.023, 'unit': 'kg/(m s)',
+                            'unit_type': 'Dynamic Viscosity'},
+                        'ref_temp': {
+                            'value': 288.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 0.0001333, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 311.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+               }
            }]
            },
           None, None, (None, 200.0)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no pour point, but has kvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'kvis': [
-                   {'viscosity': {
-                        'value': 0.0001333, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 311.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 0.0001333, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 311.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ]
+               }
            }]
            },
           None, None, (None, 200.0)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': ('This record has no pour point, '
                         'but has dvis and density'),
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'dvis': [
-                   {'viscosity': {
-                        'value': 0.3851, 'unit': 'kg/(m s)',
-                        'unit_type': 'Dynamic Viscosity'},
-                    'ref_temp': {
-                        'value': 288.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
-               'densities': [
-                   {'density': {
-                       'value': 800.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.0, 'unit': 'K',
-                        'unit_type': 'Temperature'},
-                    }
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'dynamic_viscosities': [
+                       {'viscosity': {
+                            'value': 0.3851, 'unit': 'kg/(m s)',
+                            'unit_type': 'Dynamic Viscosity'},
+                        'ref_temp': {
+                            'value': 288.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+                   'densities': [
+                       {'density': {
+                           'value': 800.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.0, 'unit': 'K',
+                            'unit_type': 'Temperature'},
+                        }
+                   ]
+               }
            }]
            },
           None, None, (None, 200.0)),
@@ -462,82 +489,78 @@ class TestOilEstimationPointTemperatures():
     @pytest.mark.parametrize(
         'oil, sample_id, estimate, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None, None, (None, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': ('This record has no flash point, '
                         'but has cuts & sara fractions'),
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.35, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 531.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.4, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 543.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.45, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 559.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
-               'sara_total_fractions': [
-                   {'fraction': {
-                       'value': 0.895, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'sara_type': 'Saturates'},
-                   {'fraction': {
-                       'value': 0.093, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'sara_type': 'Aromatics'},
-                   {'fraction': {
-                       'value': 0.0, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'sara_type': 'Resins'},
-                   {'fraction': {
-                       'value': 0.01, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'sara_type': 'Asphaltenes'}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.35, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 531.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.4, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 543.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.45, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 559.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               },
+               'SARA': {
+                   'saturates': {'value': 0.895, 'unit': 'fraction',
+                                 'unit_type': 'massfraction'},
+                   'aromatics': {'value': 0.093, 'unit': 'fraction',
+                                 'unit_type': 'massfraction'},
+                   'resins': {'value': 0.0, 'unit': 'fraction',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 0.01, 'unit': 'fraction',
+                                   'unit_type': 'massfraction'},
+               }
 
 
            }]
            },
           None, None, (424.41, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has no flash point, but has api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None, None, (423.6, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a flash point',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'flash_points': [
-                   {'ref_temp': {
-                       'value': 273.15, 'unit': 'K',
-                       'unit_type': 'Temperature'}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'flash_points': [
+                       {'ref_temp': {
+                           'value': 273.15, 'unit': 'K',
+                           'unit_type': 'Temperature'}
+                        }
+                   ],
+               }
            }]
            },
           None, None, (273.15, 273.15)),
@@ -570,51 +593,43 @@ class TestOilEstimationDensities():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has one api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
-          {'gravity': 10.0}),
-         ({'name': 'Oil Name',
-           'comments': 'This record has multiple api gravities',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0},
-                        {'gravity': 20.0},
-                        {'gravity': 30.0}]
-           }]
-           },
-          {'gravity': 10.0}),
-         ({'name': 'Oil Name',
+          10.0),
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no api gravity, but has density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 894.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'density': {
-                       'value': 89.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 894.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'density': {
+                           'value': 89.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        }
+                   ],
+               }
            }]
            },
           None),
@@ -626,61 +641,48 @@ class TestOilEstimationDensities():
 
         res = oil_est.get_sample().get_api()
 
-        if expected is not None:
-            expected = ObjFromDict(expected)
-
         assert res == expected
 
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None),
-         ({'name': 'Oil Name',
-           'comments': 'This record has one api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-           }]
-           },
-          10.0),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has multiple api gravities',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [
-                   {'gravity': 10.0},
-                   {'gravity': 20.0},
-                   {'gravity': 30.0}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           10.0),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no api gravity, but has density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 994.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 994.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        }
+                   ],
+               }
            }]
            },
           10.0),
@@ -698,18 +700,18 @@ class TestOilEstimationDensities():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has one api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           [
@@ -719,44 +721,28 @@ class TestOilEstimationDensities():
                          'unit_type': 'Temperature'}
             }
            ]),
-         ({'name': 'Oil Name',
-           'comments': 'This record has multiple api gravities',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [
-                   {'gravity': 10.0},
-                   {'gravity': 20.0},
-                   {'gravity': 30.0}
-               ],
-           }]
-           },
-          [
-           {'density': {'value': 1000.0, 'unit': 'kg/m^3',
-                        'unit_type': 'Density'},
-            'ref_temp': {'value': 288.15, 'unit': 'K',
-                         'unit_type': 'Temperature'}
-            }
-           ]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no api gravity, but has density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 994.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 994.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        }
+                   ],
+               }
            }]
            },
           [
@@ -789,76 +775,68 @@ class TestOilEstimationDensities():
     @pytest.mark.parametrize(
         'oil, temp_k, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has one api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None, 1000.0),
-         ({'name': 'Oil Name',
-           'comments': 'This record has multiple api gravities',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [
-                   {'gravity': 10.0},
-                   {'gravity': 20.0},
-                   {'gravity': 30.0}
-               ],
-           }]
-           },
-          None, 1000.0),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no api gravity, but has density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 994.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 994.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        }
+                   ],
+               }
            }]
            },
           None, 1000.0),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no api gravity, but has density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 994.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 994.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        }
+                   ],
+               }
            }]
            },
           273.15, 994.0),
@@ -881,53 +859,43 @@ class TestOilEstimationDensities():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has one api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           1000.0),
-         ({'name': 'Oil Name',
-           'comments': 'This record has multiple api gravities',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [
-                   {'gravity': 10.0},
-                   {'gravity': 20.0},
-                   {'gravity': 30.0}
-               ],
-           }]
-           },
-          1000.0),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no api gravity, but has density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 994.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 994.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        }
+                   ],
+               }
            }]
            },
           1000.0),
@@ -949,26 +917,28 @@ class TestOilEstimationDynamicViscosities():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has just dvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'dvis': [
-                   {'viscosity': {
-                       'value': 0.025, 'unit': 'kg/(m s)',
-                       'unit_type': 'Dynamic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'dynamic_viscosities': [
+                       {'viscosity': {
+                           'value': 0.025, 'unit': 'kg/(m s)',
+                           'unit_type': 'Dynamic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [
@@ -980,52 +950,56 @@ class TestOilEstimationDynamicViscosities():
                'unit_type': 'Temperature'}
             },
            ]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has 1 kvis and 1 redundant dvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'kvis': [
-                   {'viscosity': {
-                        'value': 0.0001333, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
-               'dvis': [
-                   {'viscosity': {
-                       'value': 0.025, 'unit': 'kg/(m s)',
-                       'unit_type': 'Dynamic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 0.0001333, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+                   'dynamic_viscosities': [
+                       {'viscosity': {
+                           'value': 0.025, 'unit': 'kg/(m s)',
+                           'unit_type': 'Dynamic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': ('This record has 1 kvis '
                         'and 1 barely non-redundant dvis'),
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'kvis': [
-                   {'viscosity': {
-                        'value': 0.0001333, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
-               'dvis': [
-                   {'viscosity': {
-                       'value': 0.025, 'unit': 'kg/(m s)',
-                       'unit_type': 'Dynamic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 0.0001333, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+                   'dynamic_viscosities': [
+                       {'viscosity': {
+                           'value': 0.025, 'unit': 'kg/(m s)',
+                           'unit_type': 'Dynamic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.0, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [
@@ -1057,74 +1031,82 @@ class TestOilEstimationDynamicViscosities():
     @pytest.mark.parametrize(
         'oil, kg_ms, temp_k, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None, None, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has only density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           None, None, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has only density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           1000.0, None, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has only density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           None, 273.15, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has only density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           1000.0, 273.15, 1.0),
@@ -1146,25 +1128,27 @@ class TestOilEstimationKinematicViscosities():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has only kvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'kvis': [
-                   {'viscosity': {
-                        'value': 1.0, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 1.0, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+               }
            }]
            },
           [
@@ -1176,19 +1160,21 @@ class TestOilEstimationKinematicViscosities():
                 'unit_type': 'Temperature'}
             },
            ]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has only dvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'dvis': [
-                   {'viscosity': {
-                       'value': 1000.0, 'unit': 'kg/(m s)',
-                       'unit_type': 'Dynamic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'dynamic_viscosities': [
+                       {'viscosity': {
+                           'value': 1000.0, 'unit': 'kg/(m s)',
+                           'unit_type': 'Dynamic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           []),
@@ -1213,47 +1199,51 @@ class TestOilEstimationKinematicViscosities():
     @pytest.mark.parametrize(
         'oil, temp_k, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           273.15, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has one kvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'kvis': [
-                   {'viscosity': {
-                        'value': 1.0, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 1.0, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+               }
            }]
            },
           None, None),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has one kvis',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'kvis': [
-                   {'viscosity': {
-                        'value': 1.0, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 273.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 1.0, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 273.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+               }
            }]
            },
           273.15, 1.0),
@@ -1278,81 +1268,71 @@ class TestOilEstimationDistillationFractions():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           (None, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a single Resin',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+               }
            }]
            },
           (0.1, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a single asphaltene',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           (None, 0.1)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a resin and an asphaltene',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           (0.1, 0.1)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has density & viscosity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
-               'kvis': [
-                   {'viscosity': {
-                        'value': 1.0, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 1.0, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+               }
            }]
            },
           (0.277228, 0.177545)),
@@ -1376,81 +1356,71 @@ class TestOilEstimationDistillationFractions():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           (None, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a single Saturate',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Saturates',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'saturates': {'value': 10.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+               }
            }]
            },
           (0.1, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a single Aromatic',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Aromatics',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'aromatics': {'value': 10.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+               }
            }]
            },
           (None, 0.1)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a Saturate and an Aromatic',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Saturates',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Aromatics',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'saturates': {'value': 10.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                   'aromatics': {'value': 10.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+               }
            }]
            },
           (0.1, 0.1)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has density & viscosity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
-               'kvis': [
-                   {'viscosity': {
-                        'value': 1.0, 'unit': 'm^2/s',
-                        'unit_type': 'Kinematic Viscosity'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}}
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+                   'kinematic_viscosities': [
+                       {'viscosity': {
+                            'value': 1.0, 'unit': 'm^2/s',
+                            'unit_type': 'Kinematic Viscosity'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}}
+                   ],
+               }
            }]
            },
           (0.318597, 0.22663)),
@@ -1476,82 +1446,72 @@ class TestOilEstimationDistillationCuts():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           ([], [])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           ([], [])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           ([305.771, 384.353, 462.278, 538.126, 609.218,
             671.537, 715.374, 732.825, 735.064, 733.869],
            [0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72, 0.8])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           ([305.771, 384.353, 462.278, 538.126, 609.218,
@@ -1577,82 +1537,72 @@ class TestOilEstimationDistillationCuts():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           ([], [])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           ([], [])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           ([305.771, 384.353, 462.278, 538.126, 609.218,
             671.537, 715.374, 732.825, 735.064, 733.869],
            [0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           ([305.771, 384.353, 462.278, 538.126, 609.218,
@@ -1680,38 +1630,32 @@ class TestOilEstimationComponentMethods():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           ([], [])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           ([], [])),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           [
@@ -1719,45 +1663,41 @@ class TestOilEstimationComponentMethods():
            538.126, 538.126, 609.218, 609.218, 671.537, 671.537,
            715.374, 715.374, 732.825, 732.825, 735.064, 735.064,
            733.869, 733.869, 1015.0, 1015.0]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [
@@ -1785,38 +1725,32 @@ class TestOilEstimationComponentMethods():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           [
@@ -1826,45 +1760,41 @@ class TestOilEstimationComponentMethods():
            'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
            'Saturates', 'Aromatics', 'Saturates', 'Aromatics',
            'Resins', 'Asphaltenes']),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [
@@ -1890,38 +1820,32 @@ class TestOilEstimationComponentMethods():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           [70.6564, 60.6398, 106.593, 93.9145, 151.944,
@@ -1929,45 +1853,41 @@ class TestOilEstimationComponentMethods():
            347.666, 329.491, 410.487, 394.411, 438.748,
            424.151, 442.525, 428.152, 440.504, 426.011,
            800.0, 1000.0]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [70.6564, 60.6398, 106.593, 93.9145, 151.944,
@@ -1991,38 +1911,32 @@ class TestOilEstimationComponentMethods():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           [682.928, 819.514, 737.032, 884.439, 783.81,
@@ -2030,45 +1944,41 @@ class TestOilEstimationComponentMethods():
            887.7, 1065.24, 906.61, 1087.93, 913.923,
            1096.71, 914.853, 1097.82, 914.357, 1097.23,
            1100.0, 1100.0]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [682.928, 819.514, 737.032, 884.439, 783.81,
@@ -2092,83 +2002,73 @@ class TestOilEstimationComponentMethods():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           [0.683541, 0.82025, 0.737694, 0.885233, 0.784514, 0.941416,
            0.825266, 0.99032, 0.860116, 1.032139, 0.888497, 1.066197,
            0.907424, 1.08891, 0.914744, 1.097692, 0.915674, 1.098809,
            0.915178, 1.09821, 1.100988, 1.100988]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [0.683541, 0.82025, 0.737694, 0.885233, 0.784514, 0.941416,
@@ -2191,83 +2091,73 @@ class TestOilEstimationComponentMethods():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has a single api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           []),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has an api and both inert fractions',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               }
            }]
            },
           [0.0728861, 0.00711392, 0.0586267, 0.0213733, 0.0417972, 0.0382028,
            0.0195837, 0.0604163,  0.0195837, 0.0604163, 0.0195837, 0.0604163,
            0.0195837, 0.0604163,  0.0195837, 0.0604163, 0.0195837, 0.0604163,
            0.0195837, 0.0604163,  0.1,       0.1]),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has distillation cuts',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'sara_total_fractions': [
-                   {'sara_type': 'Resins',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-                   {'sara_type': 'Asphaltenes',
-                    'fraction': {
-                        'value': 10.0, 'unit': '%',
-                        'unit_type': 'Float'}
-                    },
-               ],
-               'cuts': [
-                   {'fraction': {
-                       'value': 0.16, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 423.6, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.48, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 738.26, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-                   {'fraction': {
-                       'value': 0.8, 'unit': 'fraction',
-                       'unit_type': 'Float'},
-                    'vapor_temp': {
-                        'value': 1052.92, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'SARA': {
+                   'resins': {'value': 10.0, 'unit': '%',
+                              'unit_type': 'massfraction'},
+                   'asphaltenes': {'value': 10.0, 'unit': '%',
+                                   'unit_type': 'massfraction'},
+               },
+               'distillation_data': {
+                   'cuts': [
+                       {'fraction': {
+                           'value': 0.16, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 423.6, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.48, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 738.26, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                       {'fraction': {
+                           'value': 0.8, 'unit': 'fraction',
+                           'unit_type': 'massfraction'},
+                        'vapor_temp': {
+                            'value': 1052.92, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           [0.0728861, 0.00711392, 0.0586267, 0.0213733, 0.0417972, 0.0382028,
@@ -2292,51 +2182,51 @@ class TestOilEstimationSurfaceTensions():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           (None, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an oil-water tension',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               "ifts": [
-                   {"interface": "water",
-                    "tension": {
-                       "value": 0.0275, "unit": "N/m",
-                       "unit_type": "Interfacial Tension"},
-                    "ref_temp": {
-                        "value": 273.0, "unit": "K",
-                        "unit_type": "Temperature"}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'interfacial_tension_water': {
+                       'tension': {'value': 0.0275, 'unit': 'N/m',
+                                   'unit_type': 'Interfacial Tension'},
+                       'ref_temp': {'value': 273.0, 'unit': 'K',
+                                    'unit_type': 'Temperature'}
+                   },
+               }
            }]
            },
           (0.0275, 273.0)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name',
+                        'API': 10.0},
            'comments': 'This record has one api gravity',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'apis': [{'gravity': 10.0}],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           (0.036429, 288.15)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has only density',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'densities': [
-                   {'density': {
-                       'value': 1000.0, 'unit': 'kg/m^3',
-                       'unit_type': 'Density'},
-                    'ref_temp': {
-                        'value': 288.15, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'densities': [
+                       {'density': {
+                           'value': 1000.0, 'unit': 'kg/m^3',
+                           'unit_type': 'Density'},
+                        'ref_temp': {
+                            'value': 288.15, 'unit': 'K',
+                            'unit_type': 'Temperature'}
+                        },
+                   ],
+               }
            }]
            },
           (0.036429, 288.15)),
@@ -2356,27 +2246,25 @@ class TestOilEstimationSurfaceTensions():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           (None, None)),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an oil-seawater tension',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'ifts': [
-                   {'interface': 'seawater',
-                    'tension': {
-                       'value': 0.0275, 'unit': 'N/m',
-                       'unit_type': 'Interfacial Tension'},
-                    'ref_temp': {
-                        'value': 273.0, 'unit': 'K',
-                        'unit_type': 'Temperature'}
-                    },
-               ]
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'physical_properties': {
+                   'interfacial_tension_seawater': {
+                       'tension': {'value': 0.0275, 'unit': 'N/m',
+                                   'unit_type': 'Interfacial Tension'},
+                       'ref_temp': {'value': 273.0, 'unit': 'K',
+                                    'unit_type': 'Temperature'}
+                   },
+               }
            }]
            },
           (0.0275, 273.0)),
@@ -2398,26 +2286,26 @@ class TestOilEstimationEmulsion():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has no product type',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           0.0),
-         ({'name': 'Oil Name',
-           'product_type': 'Crude',
+         ({'metadata': {'name': 'Oil Name',
+                        'product_type': 'Crude'},
            'comments': 'This record is crude',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           0.9),
-         ({'name': 'Oil Name',
-           'product_type': 'Refined',
+         ({'metadata': {'name': 'Oil Name',
+                        'product_type': 'Refined'},
            'comments': 'This record is crude',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           0.0),
@@ -2437,18 +2325,18 @@ class TestOilEstimationEmulsion():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           None),
-         ({'name': 'Oil Name',
-           'product_type': 'Refined',
+         ({'metadata': {'name': 'Oil Name',
+                        'product_type': 'Refined'},
            'comments': 'This record has a refined type',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           1.0),
@@ -2476,10 +2364,10 @@ class TestOilEstimationMisc():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           0.0),
@@ -2502,23 +2390,21 @@ class TestOilEstimationMisc():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           0.035),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an adhesion',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               'adhesions': [
-                   {'adhesion': {
-                       'value': 0.28, 'unit': 'N/m^2',
-                       'unit_type': 'Pressure'}
-                    },
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'environmental_behavior': {
+                   'adhesion': {'value': 0.28, 'unit': 'N/m^2',
+                                'unit_type': 'needleadhesion'}
+               }
            }]
            },
           0.28),
@@ -2541,23 +2427,24 @@ class TestOilEstimationMisc():
     @pytest.mark.parametrize(
         'oil, expected',
         [
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has an empty sample',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
            }]
            },
           0.0),
-         ({'name': 'Oil Name',
+         ({'metadata': {'name': 'Oil Name'},
            'comments': 'This record has a single sulfur',
-           'samples': [{
-               'name': 'Fresh Oil Sample',
-               "sulfur": [
-                   {"fraction": {
-                       "value": 0.0015, "unit": "fraction",
-                       "unit_type": "Float"}
-                    }
-               ],
+           'sub_samples': [{
+               'metadata': {'name': 'Fresh Oil Sample'},
+               'bulk_composition': [
+                   {
+                       'measurement': {'value': 0.0015, 'unit': 'fraction',
+                                       'unit_type': 'massfraction'},
+                       'name': 'Sulfur Content'
+                    },
+               ]
            }]
            },
           0.0015),
