@@ -34,15 +34,34 @@ class EnvCanadaRecordMapper(MapperBase):
             raise ValueError(f'{self.__class__.__name__}(): '
                              'invalid parser passed in')
         self._status = None
-        self._labels = None
+        self._labels = []
 
     @property
     def oil_id(self):
         return self.record.oil_id
 
     @property
+    def oil_labels(self):
+        return self._labels
+
+    @oil_labels.setter
+    def oil_labels(self, value):
+        self._labels = value
+
+    @property
     def metadata(self):
-        return self.record.metadata
+        ret = self.record.metadata
+        ret['labels'] = self.oil_labels
+
+        return ret
+
+    @metadata.setter
+    def metadata(self, value):
+        '''
+            Only allow the labels to be set
+        '''
+        if 'labels' in value:
+            self.oil_labels = value['labels']
 
     @property
     def sub_samples(self):

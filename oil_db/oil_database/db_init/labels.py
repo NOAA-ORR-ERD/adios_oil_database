@@ -18,6 +18,9 @@ import logging
 
 from oil_database.data_sources.oil import OilEstimation
 
+from pprint import pprint
+import pdb
+
 logger = logging.getLogger(__name__)
 
 
@@ -61,7 +64,10 @@ def link_oil_to_labels(oil):
         Here, we have a single oil and we would like to link it to one or more
         labels based on its properties.
     '''
-    labels = []
+    try:
+        labels = oil.metadata['labels']
+    except TypeError:
+        labels = oil.metadata.labels
 
     sample = OilEstimation(oil).get_sample()
 
