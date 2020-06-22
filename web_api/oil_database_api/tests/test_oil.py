@@ -445,7 +445,7 @@ class TestOilSort(OilTestBase):
                                 'sort=name')
 
         result = resp.json_body
-        names = [rec['name'] for rec in result]
+        names = [rec['metadata']['name'] for rec in result]
 
         # we are sorting case insensitive
         assert names == sorted(names, reverse=True, key=lambda x: x.lower())
@@ -464,7 +464,7 @@ class TestOilSort(OilTestBase):
                                 'sort=name')
 
         result = resp.json_body
-        names = [rec['name'] for rec in result]
+        names = [rec['metadata']['name'] for rec in result]
 
         # we are sorting case insensitive
         assert names == sorted(names, reverse=False, key=lambda x: x.lower())
@@ -482,7 +482,7 @@ class TestOilSort(OilTestBase):
 
         result = resp.json_body
 
-        apis = [rec['API'] for rec in result]
+        apis = [rec['metadata']['API'] for rec in result]
 
         assert max(apis) <= 50
         assert min(apis) >= 26

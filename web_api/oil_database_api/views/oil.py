@@ -165,9 +165,9 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
             # filter out the apis that don't match our criteria
             low, high = post_opts['apis']
 
-            if ('API' not in rec or
-                    rec['API'] is None or
-                    not low <= rec['API'] <= high):
+            if ('API' not in rec['metadata'] or
+                    rec['metadata']['API'] is None or
+                    not low <= rec['metadata']['API'] <= high):
                 continue
 
         if 'labels' in post_opts:
@@ -181,13 +181,13 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
             if not all([(l in rec_labels) for l in labels]):
                 continue
 
-        if rec[field] is not None:
+        if rec['metadata'][field] is not None:
             results.append(rec)
         else:
             none_results.append(rec)
 
     sorted_res = sorted(results,
-                        key=lambda x: x[field],
+                        key=lambda x: x['metadata'][field],
                         reverse=(direction == DESCENDING))
 
     if direction == ASCENDING:
