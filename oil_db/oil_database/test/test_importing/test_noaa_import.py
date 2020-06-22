@@ -453,7 +453,7 @@ class TestOilLibraryAttributeMapper:
                                  'production.  Product considered an '
                                  'Arabian medium crude.')
          ),
-        ('AD00009', 'labels', None),
+        ('AD00009', 'labels', []),
         ('AD00009', 'product_type', 'crude'),
         ('AD00009', 'API', 28.0),
         ('AD00009', 'status', None),
