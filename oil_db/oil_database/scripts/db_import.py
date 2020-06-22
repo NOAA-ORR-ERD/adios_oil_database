@@ -246,10 +246,7 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
 
                 link_oil_to_labels(oil_obj)
 
-                if hasattr(oil_obj, 'py_json'):
-                    oil_pyjson = oil_obj.py_json()
-                else:
-                    oil_pyjson = oil_obj.dict()
+                oil_pyjson = oil_obj.py_json()
 
                 validate(oil_pyjson)
 

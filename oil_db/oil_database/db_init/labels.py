@@ -61,7 +61,7 @@ def link_oil_to_labels(oil):
         Here, we have a single oil and we would like to link it to one or more
         labels based on its properties.
     '''
-    labels = oil.metadata['labels']
+    labels = []
 
     sample = OilEstimation(oil).get_sample()
 
@@ -111,15 +111,32 @@ def link_oil_to_labels(oil):
     if len(labels) == 0:
         labels.extend(['Other'])
 
+    try:
+        oil.metadata['labels'] = labels
+    except TypeError:
+        oil.metadata.labels = labels
+
 
 def is_crude(oil):
-    return (oil.metadata['product_type'] is not None and
-            oil.metadata['product_type'].lower() == 'crude')
+    try:
+        return ('product_type' in oil.metadata and
+                oil.metadata['product_type'] is not None and
+                oil.metadata['product_type'].lower() == 'crude')
+    except TypeError:
+        return (hasattr(oil.metadata, 'product_type') and
+                oil.metadata.product_type is not None and
+                oil.metadata.product_type.lower() == 'crude')
 
 
 def is_refined(oil):
-    return (oil.metadata['product_type'] is not None and
-            oil.metadata['product_type'].lower() == 'refined')
+    try:
+        return ('product_type' in oil.metadata and
+                oil.metadata['product_type'] is not None and
+                oil.metadata['product_type'].lower() == 'refined')
+    except TypeError:
+        return (hasattr(oil.metadata, 'product_type') and
+                oil.metadata.product_type is not None and
+                oil.metadata.product_type.lower() == 'refined')
 
 
 def api_min(oil, oil_api):
@@ -248,7 +265,15 @@ def is_generic(oil):
           in the OilLibTest data file.  Basically these oils have a name
           that is prefixed with '*GENERIC'.
     '''
-    return oil.name.startswith('*GENERIC')
+    try:
+        ret = oil.metadata.get('name', None)
+    except AttributeError:
+        ret = oil.metadata.name
+
+    if ret is not None:
+        return ret.startswith('*GENERIC')
+    else:
+        return None
 
 
 def is_within_viscosity_range(oil_sample, kvis_min=None, kvis_max=None):

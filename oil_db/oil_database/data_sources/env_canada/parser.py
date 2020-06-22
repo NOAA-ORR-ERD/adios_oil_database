@@ -367,10 +367,22 @@ class EnvCanadaRecordParser(ParserBase):
                      'reference',
                      'sample_date',
                      'product_type',
+                     'API',
                      'comments'):
             ret[attr] = getattr(self, attr)
 
         return ret
+
+    @property
+    def API(self):
+        for i, w in enumerate(self.weathering):
+            if w == 0.0:
+                props_i = self.vertical_slice(i)
+
+                return props_i['api_gravity']['gravity']
+
+        # else no fresh sample
+        return None
 
     @property
     def sub_samples(self):
@@ -572,6 +584,7 @@ class EnvCanadaSampleParser(ParserBase):
 
         ret['value'] = ret.pop('adhesion')
         ret['unit'] = conditions['unit']
+        ret['unit_type'] = conditions['unit_type']
         ret['method'] = self.prepend_ests(ret['method'])
 
         return ret

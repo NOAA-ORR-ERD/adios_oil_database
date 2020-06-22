@@ -12,13 +12,18 @@ from oil_database.util import estimations as est
 from oil_database.util.json import ObjFromDict
 
 from oil_database.models.common.measurement import (Time,
+                                                    Length,
                                                     Temperature,
                                                     MassFraction,
+                                                    VolumeFraction,
                                                     Density,
                                                     DynamicViscosity,
                                                     KinematicViscosity,
                                                     InterfacialTension,
-                                                    NeedleAdhesion)
+                                                    NeedleAdhesion,
+                                                    Pressure,
+                                                    AngularVelocity,
+                                                    Unitless)
 
 
 def _linear_curve(x, a, b):
@@ -58,13 +63,20 @@ class OilEstimation(object):
         oil object.
     '''
     unit_class_lu = {'time': Time,
+                     'length': Length,
                      'massfraction': MassFraction,
+                     'volumefraction': VolumeFraction,
                      'temperature': Temperature,
                      'density': Density,
                      'dynamicviscosity': DynamicViscosity,
                      'kinematicviscosity': KinematicViscosity,
                      'interfacialtension': InterfacialTension,
                      'needleadhesion': NeedleAdhesion,
+                     'pressure': Pressure,
+                     'angularvelocity': AngularVelocity,
+                     'unitless': Unitless,
+                     'Pa': Pressure,
+                     'g/cm^2': NeedleAdhesion
                      }
 
     def __init__(self, imported_rec):
@@ -101,9 +113,14 @@ class OilEstimation(object):
                 'unit_type' in data and
                 any([(k in data)
                      for k in ('value', 'max_value', 'min_value')])):
-            py_class = self.unit_class_lu[
-                ''.join(data['unit_type'].lower().split())
-            ]
+            try:
+                py_class = self.unit_class_lu[
+                    ''.join(data['unit_type'].lower().split())
+                ]
+            except (IndexError, AttributeError):
+                # try looking up by Unit
+                py_class = self.unit_class_lu[data['unit']]
+
             data.pop('unit_type', None)
 
             return py_class(**data)
@@ -660,7 +677,6 @@ class OilSampleEstimation(object):
         kvis_list = self.aggregate_kvis()
 
         if len(kvis_list) == 0:
-            print('no viscosities!')
             return None
 
         closest_kvis = self.closest_to_temperature(kvis_list, temp_k)
@@ -684,7 +700,6 @@ class OilSampleEstimation(object):
                 ref_kvis = closest_kvis.viscosity.copy().convert_to('m^2/s')
                 ref_temp_k = closest_kvis.ref_temp.copy().convert_to('K')
         else:
-            print('no closest viscosity!')
             return None
 
         if self._k_v2 is None:

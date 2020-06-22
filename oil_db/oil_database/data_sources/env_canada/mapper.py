@@ -41,6 +41,10 @@ class EnvCanadaRecordMapper(MapperBase):
         return self.record.oil_id
 
     @property
+    def metadata(self):
+        return self.record.metadata
+
+    @property
     def sub_samples(self):
         return [EnvCanadaSampleMapper(s, w)
                 for s, w in zip(self.record.sub_samples,
@@ -413,6 +417,11 @@ class EnvCanadaSampleMapper(MapperBase):
                 ret[idx][attr]['replicates'] = repl[i]
 
                 ret[idx][attr[len('emulsion_'):]] = ret[idx].pop(attr)
+
+            for attr in ('complex_modulus',
+                         'storage_modulus',
+                         'loss_modulus'):
+                ret[idx][attr]['unit_type'] = 'pressure'
 
         return ret
 

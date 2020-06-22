@@ -42,7 +42,7 @@ class OilLibraryAttributeMapper(MapperBase):
         '''
         self.record = record
         self.status = None
-        self.labels = []
+        self.labels = None
 
     def __getattr__(self, name):
         '''
