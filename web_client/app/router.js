@@ -12,7 +12,7 @@ Router.map(function() {
   this.route('oils', function() {
     this.route('show', { path: '/:oil_id' });
   });
-  this.route('categories');
+  this.route('labels');
 });
 
 export default Router;

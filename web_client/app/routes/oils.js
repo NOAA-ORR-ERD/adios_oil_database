@@ -16,15 +16,15 @@ export default Route.extend({
                 return this.store.peekAll('oil');
             })(),
 
-            categories: (async () => {
+            labels: (async () => {
                 let config = await this.store.findRecord('config', 'main.json');
-                var adapter = await this.store.adapterFor('category');
+                var adapter = await this.store.adapterFor('label');
 
                 if (adapter.host !== config.webApi) {
                   adapter = await adapter.reopen({host: config.webApi});
                 }
 
-                return this.store.findAll('category');
+                return this.store.findAll('label');
             })(),
         });
     },

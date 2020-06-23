@@ -62,7 +62,7 @@ export default Component.extend(TableCommon, {
             label: 'Labels',
             valuePath: 'metadata.labels',
             classNames: 'text-nowrap',
-            cellComponent: 'table/cell/categories',
+            cellComponent: 'table/cell/label',
             width: '150px',
             minResizeWidth: 100,
             resizable: true,
@@ -80,7 +80,7 @@ export default Component.extend(TableCommon, {
     },
 
     fetchLabels() {
-        return this.get('store').findAll('category')
+        return this.get('store').findAll('label')
         .then(function(response) {
             return response.toArray().map(i => {return i.name});
         });
