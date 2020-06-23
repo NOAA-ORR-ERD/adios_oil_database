@@ -178,11 +178,11 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
 
         if 'labels' in post_opts:
             # filter out the categories that don't match our criteria
-            if rec['categories'] is None:
+            if rec['metadata']['labels'] is None:
                 continue
 
             labels = [l.lower() for l in post_opts['labels']]
-            rec_labels = [c.lower() for c in rec['categories']]
+            rec_labels = [c.lower() for c in rec['metadata']['labels']]
 
             if not all([(l in rec_labels) for l in labels]):
                 continue

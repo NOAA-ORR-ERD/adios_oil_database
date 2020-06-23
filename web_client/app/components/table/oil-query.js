@@ -7,6 +7,7 @@ import TableCommon from 'ember-oil-db/mixins/table-common';
 export default Component.extend(TableCommon, {
     // our query option properties
     q: '',
+    sort: 'metadata.name',
 
     columns: computed(function() {
         return [{
