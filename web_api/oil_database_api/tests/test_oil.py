@@ -442,7 +442,7 @@ class TestOilSort(OilTestBase):
                                 'qApi=&'
                                 'qLabels=&'
                                 'dir=desc&'
-                                'sort=name')
+                                'sort=metadata.name')
 
         result = resp.json_body
         names = [rec['metadata']['name'] for rec in result]
@@ -461,7 +461,7 @@ class TestOilSort(OilTestBase):
                                 'qApi=&'
                                 'qLabels=&'
                                 'dir=asc&'
-                                'sort=name')
+                                'sort=metadata.name')
 
         result = resp.json_body
         names = [rec['metadata']['name'] for rec in result]
@@ -478,14 +478,20 @@ class TestOilSort(OilTestBase):
         We really should build up the url from parameters, but I'm lazy now.
         """
 
-        resp = self.testapp.get("/oils?dir=asc&limit=20&page=0&q=&qApi=26%2C50&qLabels=&sort=api")
+        resp = self.testapp.get('/oils?'
+                                'dir=asc&'
+                                'limit=20&'
+                                'page=0&'
+                                'q=&'
+                                'qApi=26%2C50&'
+                                'qLabels=&'
+                                'sort=api')
 
         result = resp.json_body
 
         apis = [rec['metadata']['API'] for rec in result]
 
-        assert max(apis) <= 50
         assert min(apis) >= 26
+        assert max(apis) <= 50
 
         assert apis == sorted(apis)
-
