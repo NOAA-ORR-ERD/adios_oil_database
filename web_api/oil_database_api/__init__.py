@@ -7,7 +7,7 @@ import datetime
 import json
 
 from pyramid.config import Configurator
-from pyramid.response import Response
+from pyramid.response import Response, FileResponse
 from pyramid.renderers import JSON as JSONRenderer
 
 from .common.views import cors_policy
@@ -50,7 +50,7 @@ def get_json(request):
     return json.loads(request.text, ensure_ascii=False)
 
 
-def about(request):
+def about(_request):
     """
         A simple view that give a little hello message if you hit the server
         directly
@@ -88,7 +88,7 @@ def json_datetime_part(o):
         return o.isoformat()
 
 
-def main(global_config, **settings):
+def main(_global_config, **settings):
 
     print("*****running main of API****")
     load_cors_origins(settings, 'cors_policy.origins')
@@ -98,8 +98,8 @@ def main(global_config, **settings):
 
     config.add_request_method(get_json, 'json', reify=True)
     renderer = JSONRenderer(
-        serializer=lambda v, **kw: json.dumps(v, default=json_datetime_part,
-                                              sort_keys=True, indent=4)
+        serializer=lambda v, **_kw: json.dumps(v, default=json_datetime_part,
+                                               sort_keys=True, indent=4)
     )
 
     config.add_renderer('json', renderer)
@@ -113,8 +113,8 @@ def main(global_config, **settings):
     from .views import oil
     config.add_cornice_service(oil.oil_api)
 
-    from .views.category import category_api
-    config.add_cornice_service(category_api)
+    from .views.label import label_api
+    config.add_cornice_service(label_api)
 
     from .views.capabilities import capabilities_api
     config.add_cornice_service(capabilities_api)
@@ -143,8 +143,7 @@ def main(global_config, **settings):
 
         def home(request):
             """serving up index.html"""
-            return pyramid.response.FileResponse(client_path + "/index.html",
-                                                 request)
+            return FileResponse(client_path + "/index.html", request)
 
         # this way has not been tested.
         config.add_route("home", "/")

@@ -28,8 +28,6 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
 from oil_database.db_init.labels import link_oil_to_labels
 from oil_database.models.oil.validation.validate import validate
 
-from pprint import pprint
-
 logger = logging.getLogger(__name__)
 
 # All oil library data files are assumed to be in a common data folder

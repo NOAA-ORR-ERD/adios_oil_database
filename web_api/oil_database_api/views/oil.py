@@ -1,5 +1,6 @@
 """ Cornice services.
 """
+from itertools import zip_longest
 import logging
 
 import ujson
@@ -18,9 +19,6 @@ from oil_database.models.oil.validation.validate import validate
 
 from oil_database_api.common.views import (cors_policy,
                                            obj_id_from_url)
-
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
 
 logger = logging.getLogger(__name__)
 
@@ -52,12 +50,16 @@ def memoize_oil_arg(func):
 
 
 def decamelize(str_in):
+    ret = []
     words = []
     start = 0
 
     try:
-        for i, c in enumerate(str_in):
-            if c.isupper() and i > 0:
+        for i, (l, r) in enumerate(zip_longest(str_in, str_in[1:])):
+            if i > 0 and not l.isupper() and r is not None and r.isupper():
+                words.append(str_in[start:i+1])
+                start = i + 1
+            elif i > 0 and l.isupper() and r is not None and not r.isupper():
                 words.append(str_in[start:i])
                 start = i
 
@@ -65,7 +67,15 @@ def decamelize(str_in):
     except Exception:
         return None
 
-    return '_'.join([w.lower() for w in words])
+    for i, w in enumerate(words):
+        if w[-1] == '.':
+            ret.append(w)
+        elif i == len(words) - 1:
+            ret.append(w)
+        else:
+            ret.extend([w, '_'])
+
+    return ''.join([w.lower() for w in ret])
 
 
 @oil_api.get()
@@ -146,12 +156,8 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
 
     if len(sort) >= 1 and len(sort[0]) >= 2:
         field, direction = sort[0]
-
-        # get rid of the 'metadata.' prefix.  We don't want it for a
-        # post-process sort.
-        field = field.split('.')[-1]
     else:
-        field, direction = 'name', ASCENDING
+        field, direction = 'metadata.name', ASCENDING
 
     cursor = oils.find(search_opts)
 
@@ -181,13 +187,13 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
             if not all([(l in rec_labels) for l in labels]):
                 continue
 
-        if rec['metadata'][field] is not None:
+        if deep_get(rec, field) is not None:
             results.append(rec)
         else:
             none_results.append(rec)
 
     sorted_res = sorted(results,
-                        key=lambda x: x['metadata'][field],
+                        key=lambda x: deep_get(x, field),
                         reverse=(direction == DESCENDING))
 
     if direction == ASCENDING:
@@ -256,14 +262,13 @@ def get_sort_params(request):
               metadata attribute.  So to do a MongoDB sort, we need to
               specify the full field path in dotted notation.
     '''
-    sort = decamelize(request.GET.get('sort', None))
+    sort = request.GET.get('sort', None)
+    print(f'sort params: {sort}')
 
     if sort == 'id':
         sort = '_id'
     elif sort == 'api':
         sort = 'metadata.API'
-    else:
-        sort = f'metadata.{sort}'
 
     direction = ({'asc': ASCENDING,
                   'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
@@ -424,6 +429,16 @@ def fix_oil_id(oil_json, obj_id=None):
         oil_json['_id'] = oil_json['oil_id']
     else:
         raise ValueError('oil_id field is required')
+
+
+def deep_get(rec, path):
+    if isinstance(path, str):
+        path = path.split('.')
+
+    if len(path) == 1:
+        return rec[path[0]]
+    else:
+        return deep_get(rec[path[0]], path[1:])
 
 
 @memoize_oil_arg
