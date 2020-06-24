@@ -58,6 +58,11 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
                OilLibraryCsvFile,
                OilLibraryRecordParser,
                OilLibraryAttributeMapper],
+              ['Norway Filemaker', 'oildb.nor_files',
+               None,
+               OilLibraryCsvFile,
+               OilLibraryRecordParser,
+               OilLibraryAttributeMapper],
               ['Environment Canada', 'oildb.ec_files',
                None,
                EnvCanadaOilExcelFile,
@@ -278,6 +283,7 @@ def _add_datafiles(settings):
         so we need to add any oil import data files to the settings structure
     '''
     _add_oillib_files(settings)
+    _add_norway_files(settings)
     _add_ec_files(settings)
     _add_exxon_files(settings)
 
@@ -287,6 +293,13 @@ def _add_oillib_files(settings):
                               for fn in ('OilLib.txt',)])
 
     settings['oildb.fm_files'] = oillib_files
+
+
+def _add_norway_files(settings):
+    oillib_files = '\n'.join([os.path.join(data_path, 'norway', fn)
+                              for fn in ('OilLibNorway.txt',)])
+
+    settings['oildb.nor_files'] = oillib_files
 
 
 def _add_ec_files(settings):

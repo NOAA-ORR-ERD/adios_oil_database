@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import sys
-import logging
 from datetime import datetime
+import logging
 from itertools import zip_longest
+
+from dateutil import parser
 
 logger = logging.getLogger(__name__)
 
@@ -223,10 +225,8 @@ class OilLibraryCsvFile:
     def file_props(self):
         version, created, app = self.__version__
 
-        try:
-            created_date = datetime.strptime(created, '%m/%d/%Y')
-        except ValueError:
-            created_date = datetime.strptime(created, '%m/%d/%y')
+        created_date = parser.parse(created,
+                                    default=datetime(1970, 1, 1, 0, 0))
 
         return {'version': version,
                 'created': created_date,
