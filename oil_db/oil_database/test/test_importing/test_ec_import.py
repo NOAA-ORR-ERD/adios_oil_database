@@ -1871,7 +1871,10 @@ class TestEnvCanadaSampleMapper(object):
         with pytest.raises(TypeError):
             _mapper = EnvCanadaSampleMapper(None)
 
-        mapper = EnvCanadaSampleMapper(None, None)
+        with pytest.raises(TypeError):
+            _mapper = EnvCanadaSampleMapper(None, None)
+
+        mapper = EnvCanadaSampleMapper(None, None, None)
 
         with pytest.raises(AttributeError):
             mapper.dict()
@@ -1900,12 +1903,14 @@ class TestEnvCanadaSampleMapper(object):
                                  'fraction_weathered': {'unit': '1',
                                                         'value': 0.0},
                                  'name': 'Fresh Oil Sample',
-                                 'short_name': 'Fresh Oil'}),
+                                 'short_name': 'Fresh Oil',
+                                 'sample_id': '2713.1'}),
         ('2713', -1, 'metadata', {'boiling_point_range': None,
                                   'fraction_weathered': {'unit': '1',
                                                          'value': 0.3676},
                                   'name': '36.76% Weathered',
-                                  'short_name': '36.76% Weathered'}),
+                                  'short_name': '36.76% Weathered',
+                                  'sample_id': '2713.2.1'}),
         ('2713', 0, 'densities', [
             {'density': {'value': 0.8751, 'unit': 'g/mL',
                          'standard_deviation': 0, 'replicates': 3},

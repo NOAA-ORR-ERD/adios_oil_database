@@ -65,9 +65,10 @@ class EnvCanadaRecordMapper(MapperBase):
 
     @property
     def sub_samples(self):
-        return [EnvCanadaSampleMapper(s, w)
-                for s, w in zip(self.record.sub_samples,
-                                self.record.weathering)]
+        return [EnvCanadaSampleMapper(s, w, c)
+                for s, w, c in zip(self.record.sub_samples,
+                                   self.record.weathering,
+                                   self.record.ests_codes)]
 
     def resolve_oil_api(self, record):
         if len(record['sub_samples']) > 0:
@@ -115,31 +116,37 @@ class EnvCanadaRecordMapper(MapperBase):
 
 
 class EnvCanadaSampleMapper(MapperBase):
-    def __init__(self, parser, sample_id):
+    def __init__(self, parser, sample_id, ests_code):
         self.parser = parser
-        self.generate_sample_id_attrs(sample_id)
+        self.generate_sample_id_attrs(sample_id, ests_code)
 
-    def generate_sample_id_attrs(self, sample_id):
+    def generate_sample_id_attrs(self, sample_id, ests_code):
+        '''
+            sample_id: The value we will use to internally identify a sample.
+                       This will be mapped to metadata.name
+            ests_code: This is the identifier that Env Canada uses for oil
+                       samples. This will be mapped to metadata.sample_id
+        '''
         m = {}
 
         if sample_id == 0:
             m['name'] = 'Fresh Oil Sample'
             m['short_name'] = 'Fresh Oil'
             m['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
-            m['boiling_point_range'] = None
         elif isinstance(sample_id, str):
             m['name'] = sample_id
             m['short_name'] = '{}...'.format(sample_id[:12])
             m['fraction_weathered'] = None
-            m['boiling_point_range'] = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
             m['name'] = '{:.4g}% Weathered'.format(sample_id * 100)
             m['short_name'] = '{:.4g}% Weathered'.format(sample_id * 100)
             m['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
-            m['boiling_point_range'] = None
         else:
             logger.warning("Can't generate IDs for sample: ", sample_id)
+
+        m['boiling_point_range'] = None
+        m['sample_id'] = str(ests_code)
 
         self.metadata = m
 
