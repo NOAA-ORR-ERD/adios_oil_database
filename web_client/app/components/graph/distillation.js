@@ -9,7 +9,7 @@ export default class Distillation extends LineChart {
     yScaleMinRange = [0];
 
     initData() {
-        let cuts = this.args.oil.cuts;
+        let cuts = this.args.oil.distillation_data.cuts;
         let data = [];
 
         let distinct_w;
