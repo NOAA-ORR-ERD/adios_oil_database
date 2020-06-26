@@ -12,18 +12,18 @@ export default class SubSample extends Component {
         }
         else {
             // just choose the first tab
-            return slugify(this.args.oil.samples[0].name);
+            return slugify(this.args.oil.subSamples[0].metadata.name);
         }
     }
 
     get navTabProperties() {
         let savedTab = this.sampleTab();
 
-        return this.args.oil.samples.map(s => {
-            let tabName = slugify(s.name);
+        return this.args.oil.subSamples.map(s => {
+            let tabName = slugify(s.metadata.name);
             let ret = {
-                'name': s.name,
-                'short_name': s.short_name,
+                'name': s.metadata.name,
+                'short_name': s.metadata.short_name,
                 'id': tabName + '-nav-tab',
                 'href': '#' + tabName,
                 'aria-controls': tabName
@@ -49,11 +49,11 @@ export default class SubSample extends Component {
     get tabPaneProperties() {
         let sampleTab = this.sampleTab();
 
-        return this.args.oil.samples.map(s => {
-            let tabName = slugify(s.name);
+        return this.args.oil.subSamples.map(s => {
+            let tabName = slugify(s.metadata.name);
             let ret = {
-                'name': s.name,
-                'short_name': s.short_name,
+                'name': s.metadata.name,
+                'short_name': s.metadata.short_name,
                 'id': tabName,
                 'aria-labelledby': tabName + '-nav-tab'
             };
@@ -90,7 +90,7 @@ export default class SubSample extends Component {
 
     @action
     updateShortSampleName(idx) {
-        this.args.oil.samples[idx].short_name = event.target.value;
+        this.args.oil.subSamples[idx].metadata.short_name = event.target.value;
         this.args.submit(this.args.oil);
     }
 

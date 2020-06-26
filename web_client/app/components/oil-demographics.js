@@ -2,21 +2,21 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 import moment from 'moment';
-import { isBlank , isNone} from '@ember/utils';
+import { isBlank } from '@ember/utils';
 
 export default class Composition extends Component {
-    @tracked oilCategories = undefined;
-    @tracked selectedCategories = undefined;
+    @tracked oilLabels = undefined;
+    @tracked selectedLabels = undefined;
 
     constructor() {
         super(...arguments);
 
-        this.oilCategories = this.getOilCategories();
-        this.selectedCategories = this.args.oil.categories;
+        this.oilLabels = this.getOilLabels();
+        this.selectedLabels = this.args.oil.metadata.labels;
     }
 
-    getOilCategories() {
-        return this.args.oil.store.findAll('category').then(function(response) {
+    getOilLabels() {
+        return this.args.oil.store.findAll('label').then(function(response) {
             return response.toArray().map(i => {return i.name});
         });
     }
@@ -26,21 +26,10 @@ export default class Composition extends Component {
         let enteredAPI = event.target.value;
 
         if (isBlank(enteredAPI)) {
-            delete this.args.oil.samples.get(0).apis;
-            // in case there is api on top level
-            if (!isNone(this.args.oil.api)) {
-                delete this.args.oil.api;
-            }
+            delete this.args.oil.metadata.API;
         }
         else {
-            if (isNone(this.args.oil.samples.get(0).apis)) {
-                this.args.oil.samples.get(0).apis = [{gravity: Number(enteredAPI)}];
-            }
-            else {
-                this.args.oil.samples.get(0).apis.set('0.gravity',  Number(enteredAPI));
-            }
-
-            this.args.oil.api = Number(enteredAPI);
+            this.args.oil.metadata.API = Number(enteredAPI);
         }
 
         this.args.submit(this.args.oil);
@@ -48,46 +37,46 @@ export default class Composition extends Component {
 
     @action
     updateLocation(event) {
-        this.args.oil.location = event.target.value;
+        this.args.oil.metadata.location = event.target.value;
         this.args.submit(this.args.oil);
     }
 
     @action
     updateType(event) {
-        this.args.oil.productType = event.target.value;
+        this.args.oil.metadata.product_type = event.target.value;
         this.args.submit(this.args.oil);
     }
 
     @action
-    updateCategories(selectedCategories) {
-        this.selectedCategories = selectedCategories;
-        this.args.oil.categories = selectedCategories;
+    updateLabels(selectedLabels) {
+        this.selectedLabels = selectedLabels;
+        this.args.oil.metadata.labels = selectedLabels;
         this.args.submit(this.args.oil);
     }
 
     @action
     updateReference(event) {
-        this.args.oil.reference = event.target.value;
+        this.args.oil.metadata.reference = event.target.value;
         this.args.submit(this.args.oil);
     }
 
     @action
     updateReferenceDate(event) {
-        this.args.oil.referenceDate = moment(event.target.value, "YYYY-MM-DD")
-            .tz("Europe/London").unix();
+        this.args.oil.metadata.reference.year = event.target.value;
         this.args.submit(this.args.oil);
     }
 
     @action
     updateSampleReceivedDate(event) {
-        this.args.oil.sampleDate = moment(event.target.value, "YYYY-MM-DD")
-            .tz("Europe/London").unix();
+        this.args.oil.metadata.sample_date = (moment(event.target.value,
+                                                     "YYYY-MM-DD")
+                                              .tz("Europe/London").unix());
         this.args.submit(this.args.oil);
     }
 
     @action
     updateComments(event) {
-        this.args.oil.comments = event.target.value;
+        this.args.oil.metadata.comments = event.target.value;
         this.args.submit(this.args.oil);
     }
 

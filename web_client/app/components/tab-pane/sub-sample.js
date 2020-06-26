@@ -5,12 +5,12 @@ import $ from 'jquery';
 
 export default class SubSample extends Component {
     get sample() {
-        return this.args.oil.samples.find(s => s.name === this.args.sampleName);
+        return this.args.oil.subSamples.find(s => s.metadata.name === this.args.sampleName);
     }
 
     get sampleIndex() {
         // get an index of the current sample - to use one for component ID
-        return this.args.oil.samples.findIndex(s => s.name === this.args.sampleName);
+        return this.args.oil.subSamples.findIndex(s => s.metadata.name === this.args.sampleName);
     }
 
     sampleTab() {
@@ -20,7 +20,7 @@ export default class SubSample extends Component {
         }
         else {
             // just choose the first tab
-            return slugify(this.args.oil.samples[0].name);
+            return slugify(this.args.oil.subSamples[0].metadata.name);
         }
     }
 
@@ -44,7 +44,7 @@ export default class SubSample extends Component {
         // - When we switch to a sample tab for the first time, it's sampletab->physical
         // - When we switch to it after that, it's sampletab->lastactive
         let ret = false;
-        let currentSampleTab = '#' + slugify(this.sample.name);
+        let currentSampleTab = '#' + slugify(this.sample.metadata.name);
 
         if (currentSampleTab === this.args.sampleTab) {
             // we are at least on the right sample

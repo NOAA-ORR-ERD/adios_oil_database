@@ -18,7 +18,7 @@
         <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Location:</label>
           {{#if this.args.editable}}
-            {{#let (if this.args.oil.location this.args.oil.location "") as |oilLocation|}}
+            {{#let (if this.args.oil.metadata.location this.args.oil.metadata.location "") as |oilLocation|}}
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilLocation}}
@@ -27,7 +27,7 @@
               />
             {{/let}}
           {{else}}
-            {{#let (if this.args.oil.location this.args.oil.location "None") as |oilLocationV|}}
+            {{#let (if this.args.oil.metadata.location this.args.oil.metadata.location "None") as |oilLocationV|}}
               <span class="p-1">{{oilLocationV}}</span>
             {{/let}}
           {{/if}}
@@ -40,8 +40,7 @@
         {{! API }}
         <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">API:</label>
-          {{#let (if (not (is-empty this.args.oil.samples.[0].apis))
-            (round-relative this.args.oil.samples.[0].apis.[0].gravity 2) "") as |oilAPI|}}
+          {{#let (round-relative this.args.oil.metadata.API 2) as |oilAPI|}}
             {{#if this.args.editable}}
               <Input
                 @id="api"
@@ -52,10 +51,10 @@
                 @change={{action "updateAPI"}}
                 @size="6" />
             {{else}}
-              {{#if (is-empty this.args.oil.samples.[0].apis)}}
+              {{#if (is-empty this.args.oil.metadata.API)}}
                 <span class="p-1">No Value</span>
               {{else}}
-                <span class="p-1">{{this.args.oil.samples.0.apis.0.gravity}}</span>
+                <span class="p-1">{{this.args.oil.metadata.API}}</span>
               {{/if}}
             {{/if}}
           {{/let}}
@@ -67,7 +66,7 @@
           {{#if this.args.editable}}
             <select class="p-1 mt-1 overflow-hidden bg-transparent border" onchange={{action "updateType"}}>
               {{#each this.args.oilTypes as |oilType|}}
-                {{#if (eq this.args.oil.productType oilType)}}
+                {{#if (eq this.args.oil.metadata.product_type oilType)}}
                   <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
                   <option class="bg-light">{{oilType}}</option>
@@ -75,14 +74,14 @@
               {{/each}}
             </select>
           {{else}}
-            <span class="p-1">{{this.args.oil.productType}}</span>
+            <span class="p-1">{{this.args.oil.metadata.product_type}}</span>
           {{/if}}
         </div>
 
       </div>
 
       <div class="row pl-0 mb-3">
-        {{! Categories }}
+        {{! Labels }}
         <div class="col-12 pl-0 form-inline d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Labels:</label>
@@ -91,16 +90,16 @@
           {{#if this.args.editable}}
             <PowerSelectMultiple @class="bg-warning border-0"
               @placeholder="Select some categories..."
-              @selected={{this.selectedCategories}}
-              @options={{this.oilCategories}}
-              @onChange={{action "updateCategories"}}
+              @selected={{this.selectedLabels}}
+              @options={{this.oilLabels}}
+              @onChange={{action "updateLabels"}}
               @onKeydown={{this.handleKeydown}} as |name|>
               <span class="bg-transparent border-0">{{name}}</span>
             </PowerSelectMultiple>
           {{else}}
-            {{#each this.args.oil.categories as |category|}}
+            {{#each this.args.oil.metadata.labels as |label|}}
               <span class="list-item-category">
-                {{category}}
+                {{label}}
               </span>
             {{else}}
               <span>None</span>
@@ -118,7 +117,9 @@
       <div class="row mb-1">
         <div class="col-12 input-group">        
           <label class="p-1 input-group-text font-weight-bold">Reference:</label>
-          {{#let (if this.args.oil.reference this.args.oil.reference (if this.args.editable "" "None")) as |oilReference|}}
+          {{#let (if this.args.oil.metadata.reference.reference
+                  this.args.oil.metadata.reference.reference
+                  (if this.args.editable "" "None")) as |oilReference|}}
             <Textarea
               @class="p-1 reference-textarea overflow-hidden bg-transparent border"
               @value={{oilReference}}
@@ -137,8 +138,9 @@
         <div class="col-sm-12 col-md-6 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
           {{! Europe/London is how we lookup GMT in moment.js }}
-          {{#let (if this.args.oil.referenceDate (moment-format (unix this.args.oil.referenceDate) 
-            "YYYY-MM-DD" timeZone="Europe/London") (if this.args.editable "" "None")) as |oilReferenceDate|}}
+          {{#let (if this.args.oil.metadata.reference.year
+                  this.args.oil.metadata.reference.year
+                  (if this.args.editable "" "None")) as |oilReferenceDate|}}
             {{#if this.args.editable}}
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
@@ -156,8 +158,9 @@
         <div class="col-sm-12 col-md-6 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
           {{! Europe/London is how we lookup GMT in moment.js }}
-          {{#let (if this.args.oil.sampleDate (moment-format (unix this.args.oil.sampleDate)
-            "YYYY-MM-DD" timeZone="Europe/London") (if this.args.editable "" "None")) as |oilSampleDate|}}
+          {{#let (if this.args.oil.metadata.sample_date
+                  (moment-format (unix this.args.oil.metadata.sample_date) "YYYY-MM-DD" timeZone="Europe/London")
+                  (if this.args.editable "" "None")) as |oilSampleDate|}}
             {{#if this.args.editable}}
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
@@ -182,7 +185,9 @@
       <label class="pl-1 font-weight-bold">Comments:</label>
     </div>
     <div class="col-12 p-0 input-group">
-      {{#let (if this.args.oil.comments this.args.oil.comments (if this.args.editable "" "None")) as |oilComments|}}
+      {{#let (if this.args.oil.metadata.comments
+              this.args.oil.metadata.comments
+              (if this.args.editable "" "None")) as |oilComments|}}
         <Textarea
           @class="p-1 flex-fill bg-transparent border"
           @value={{oilComments}}
