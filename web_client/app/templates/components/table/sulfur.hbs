@@ -12,8 +12,8 @@
       @submit={{this.submit}}
     />
   {{else}}
-    {{#if this.args.oil.sulfur.fraction}}
-      {{value-unit (convert-unit this.args.oil.sulfur.fraction "%") 2}}
+    {{#if this.sulfurContent}}
+      {{value-unit (convert-unit this.sulfurContent "%") 2}}
     {{else}}
       No Data
     {{/if}}

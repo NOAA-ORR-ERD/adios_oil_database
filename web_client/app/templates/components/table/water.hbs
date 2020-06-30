@@ -12,8 +12,8 @@
       @submit={{this.submit}}
     />
   {{else}}
-    {{#if this.args.oil.water.fraction}}
-      {{value-unit (convert-unit this.args.oil.water.fraction "%") 2}}
+    {{#if this.waterContent}}
+      {{value-unit (convert-unit this.waterContent "%") 2}}
     {{else}}
       No Data
     {{/if}}
