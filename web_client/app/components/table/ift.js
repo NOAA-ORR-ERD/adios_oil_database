@@ -5,6 +5,7 @@ import { action, set } from "@ember/object";
 export default class Ift extends Component {
 
     @tracked iftsArray;
+    
     // TODO - process updates like deepGet/deepSet from range-value-input
     // but do not return null - remove correspondent subobject instead
     @tracked interface;
@@ -12,8 +13,21 @@ export default class Ift extends Component {
     constructor() {
         super(...arguments);
 
-        this.iftsArray = this.args.oil.ifts;
-        if(Array.isArray(this.iftsArray)) {
+        this.iftsArray = [];
+
+        let ifts = this.args.oil.physical_properties.interfacial_tension_air;
+        ifts.setEach('interface', 'air');
+        this.iftsArray = this.iftsArray.concat(ifts)
+
+        ifts = this.args.oil.physical_properties.interfacial_tension_water;
+        ifts.setEach('interface', 'water');
+        this.iftsArray = this.iftsArray.concat(ifts)
+
+        ifts = this.args.oil.physical_properties.interfacial_tension_seawater;
+        ifts.setEach('interface', 'seawater');
+        this.iftsArray = this.iftsArray.concat(ifts)
+
+        if (Array.isArray(this.iftsArray)) {
             this.interface = this.iftsArray.map(function(x) { return x.interface; });
         } else {
             this.interface = [];
