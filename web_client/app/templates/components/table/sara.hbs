@@ -24,12 +24,11 @@
         {{#each-in this.properties as |attr value|}}
           <tr>
             <td>{{value.label}}</td>
-            {{#if (find-by "sara_type" value.label this.saraArray)}}
-              {{#with (find-by "sara_type" value.label this.saraArray) as |sara|}}
+            {{#if (get this.args.oil.SARA attr)}}
+              {{#with (get this.args.oil.SARA attr) as |sara|}}
                 <td>
-                  {{!-- was: <td>{{value-unit sara.fraction 3}}</td> --}}
                   <Common::ValueUnitInput
-                    @valueObject={{sara.fraction}}
+                    @valueObject={{sara}}
                     @valueUnit="%"
                     @valuePrecision={{2}}
                     @editable={{this.args.editable}}

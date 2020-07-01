@@ -4,14 +4,12 @@ import { action, set } from "@ember/object";
 
 export default class Sara extends Component {
     @tracked properties;
-    @tracked saraArray;
     @tracked oil;
 
     constructor() {
         super(...arguments);
 
         this.oil = this.args.oil;
-        this.saraArray = this.args.oil.sara_total_fractions;
         this.readPropertyTypes(this.args.store, 'sara_total_fractions.json');
 
     }
