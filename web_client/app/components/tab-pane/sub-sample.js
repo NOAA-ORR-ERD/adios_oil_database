@@ -69,7 +69,7 @@ export default class SubSample extends Component {
         return [
             ['physical', 'Physical Properties'],
             ['distillation', 'Distillation Data'],
-            ['composition', 'Composition'],
+            ['compounds', 'Compounds'],
             ['environmental', 'Environmental Behavior']
         ].map((item) => {
             let [tabName, label] = item;
@@ -101,7 +101,7 @@ export default class SubSample extends Component {
         return [
             ['physical', 'tab-pane/physical'],
             ['distillation', 'tab-pane/distillation'],
-            ['composition', 'tab-pane/composition'],
+            ['compounds', 'tab-pane/compounds'],
             ['environmental', 'tab-pane/environmental']
         ].map((item) => {
             let [tabName, componentName] = item;

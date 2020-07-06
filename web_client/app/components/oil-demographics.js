@@ -4,7 +4,7 @@ import { action } from "@ember/object";
 import moment from 'moment';
 import { isBlank } from '@ember/utils';
 
-export default class Composition extends Component {
+export default class OilDemographics extends Component {
     @tracked oilLabels = undefined;
     @tracked selectedLabels = undefined;
 
