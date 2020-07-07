@@ -1,0 +1,28 @@
+<div class="detail-section">
+
+  {{#each-in this.tableGroups as |group items|}}
+    <h5><center>{{group}}</center></h5>
+
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Measurement</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each items as |item|}}
+          <tr>
+            <td>{{item.name}}</td>
+            <td>{{value-unit item.measurement 2}}</td>
+            <td>{{item.method}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  {{/each-in}}
+
+</div>
