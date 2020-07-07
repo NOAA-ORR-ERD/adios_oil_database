@@ -1,0 +1,18 @@
+<div class="container-fluid">
+
+  <TabPane::PaneHeader
+    @oil={{this.args.oil}}
+    @editable={{this.args.editable}}
+    @submit={{this.args.submit}}
+    @sampleName={{this.args.sampleName}}
+  />
+
+  <Common::GroupedTables
+    @oil={{this.args.oil}}
+    @store={{this.args.store}}
+    @editable={{this.args.editable}}
+    @submit={{this.args.submit}}
+    @propertyName="bulk_composition"
+  />
+
+</div>
