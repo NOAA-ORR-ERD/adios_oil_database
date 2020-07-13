@@ -73,15 +73,19 @@ class ExxonDataReader:
 
         Note: you'd think this would be a single call in openpyxl, but I
               couldn't find it
+        Note: Recently, a new format for the Exxon assays has appeared, which
+              contains 2 sheets.  For the moment, we can fail to parse the
+              new formatted information, but reading the first sheet should not
+              fail.
         """
 
         wb = load_workbook(filename, data_only=True)
 
         sheetnames = wb.sheetnames
 
-        if len(sheetnames) != 1:
-            raise ValueError(f'file: {filename} does not have '
-                             'one and only one sheet')
+        if len(sheetnames) < 1:
+            raise ValueError(f'file: {filename} does not contain '
+                             'any sheets')
 
         sheet = wb[sheetnames[0]]
 

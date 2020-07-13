@@ -258,9 +258,10 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
                 print('Duplicate fields for {}: {}'
                       .format(tc.change(oil_obj.oil_id, 'red'), e))
                 error_count += 1
-            except ValueError as e:
-                print('Value error for {}: {}'
-                      .format(tc.change(oil_obj.oil_id, 'red'), e))
+            except (ValueError, TypeError) as e:
+                print('{} for {}: {}'
+                      .format(e.__class__.__name__,
+                              tc.change(oil_obj.oil_id, 'red'), e))
                 error_count += 1
             else:
                 success_count += 1
