@@ -143,7 +143,7 @@ class EnvCanadaSampleMapper(MapperBase):
             m['short_name'] = '{:.4g}% Weathered'.format(sample_id * 100)
             m['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
         else:
-            logger.warning("Can't generate IDs for sample: ", sample_id)
+            logger.warning(f"Can't generate IDs for sample: {sample_id}")
 
         m['boiling_point_range'] = None
         m['sample_id'] = str(ests_code)
