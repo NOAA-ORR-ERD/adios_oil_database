@@ -37,7 +37,7 @@ export default class Distillation extends LineChart {
 
             data.push({
                 values: weathered_cuts.map((c) => ([
-                    c.fraction.value,
+                    convertUnit([c.fraction, '%']).value,
                     convertUnit([c.vapor_temp, 'C']).value
                     ])),
                     color: 'grey'
