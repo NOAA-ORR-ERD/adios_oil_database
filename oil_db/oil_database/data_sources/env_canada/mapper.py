@@ -430,6 +430,8 @@ class EnvCanadaSampleMapper(MapperBase):
                 ]
             }
 
+            ret[idx]['ref_temp'] = cond['emulsion_visual_stability']['ref_temp']
+
             for i, attr in enumerate(('emulsion_complex_modulus',
                                       'emulsion_storage_modulus',
                                       'emulsion_loss_modulus',

@@ -123,6 +123,8 @@ class Emulsion:
     age: Time
     water_content: MassFraction
 
+    ref_temp: Temperature = None
+
     # Pa units, some kind of pressure/stress.
     # Adhesion provides the right units
     complex_modulus: NeedleAdhesion = None
