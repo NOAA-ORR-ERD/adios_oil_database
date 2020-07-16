@@ -10,6 +10,10 @@
           "dataType": "value-unit",
           "unit": "%",
           "precision": 3
+      },
+      "method": {
+          "label": "Method",
+          "dataType": "string"
       }
   }
 }

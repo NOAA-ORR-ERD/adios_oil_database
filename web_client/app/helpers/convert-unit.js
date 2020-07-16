@@ -14,8 +14,13 @@ export function convertUnit([valueUnitObj,
 
   let copyObj = $.extend(true, {}, valueUnitObj);
 
+  if (copyObj.unit_type === 'unitless') {
+      return copyObj;  // no conversion
+  }
+
   let compatibleWithIn = Object.values(Nucos.Converters).filter(c => {
-    return c.Synonyms.hasOwnProperty(copyObj.unit.toLowerCase().replace(/\s/g,''));
+    return c.Synonyms.hasOwnProperty(copyObj.unit.toLowerCase()
+                                     .replace(/[\s.]/g, ''));
   });
 
   if (compatibleWithIn.length === 0) {
@@ -23,7 +28,8 @@ export function convertUnit([valueUnitObj,
   }
 
   let compatibleWithOut = compatibleWithIn.filter(c => {
-    return c.Synonyms.hasOwnProperty(newUnit.toLowerCase().replace(/\s/g,''));
+    return c.Synonyms.hasOwnProperty(newUnit.toLowerCase()
+                                     .replace(/[\s.]/g, ''));
   });
 
   if (compatibleWithOut.length === 1) {

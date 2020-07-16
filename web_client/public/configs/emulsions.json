@@ -49,7 +49,8 @@
       },
       "tan_delta_v_e": {
           "label": "Tan Delta (V/E)",
-          "dataType": "number",
+          "dataType": "value-unit",
+          "unit": "fraction",
           "precision": 2
       }
   }

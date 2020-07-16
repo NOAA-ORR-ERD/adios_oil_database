@@ -5,18 +5,22 @@ export function valueUnitUnit([valueUnitObj,
   if (valueUnitObj == null) {return '';}
 
   let u = valueUnitObj.unit;
+  let uType = valueUnitObj.unit_type;
   let sep = ' ';
 
   // SI Kelvin units don't have a degree, so are not included here.
   let tempUnits = new Set(['F', 'C']);
   let fractionUnits = new Set(['1', 'fraction'])
 
-  if (tempUnits.has(u)) {
+  if (typeof u === 'undefined' && uType === 'unitless') {
+      return '';
+  }
+  else if (tempUnits.has(u)) {
     sep = '°';
     return ` ${sep}${u}`;
   }
   else if (fractionUnits.has(u)) {
-    return ``;
+    return '';
   }
   else {
     let new_u = u.replace('^2', '\u00B2')

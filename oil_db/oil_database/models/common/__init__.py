@@ -17,4 +17,5 @@ from .measurement import (ProductType,
                           Pressure,
                           NeedleAdhesion,
                           InterfacialTension,
-                          Unitless)
+                          Unitless,
+                          Dimensionless)

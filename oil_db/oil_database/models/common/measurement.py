@@ -185,10 +185,21 @@ class Temperature(MeasurementBase):
 
 
 class Unitless(MeasurementBase):
+    '''
+        This is a type that has no unit at all.
+    '''
     unit_type = "unitless"
 
     def convert_to(self, *args, **kwargs):
         raise TypeError("You can not convert a Unitless measurement")
+
+
+class Dimensionless(MeasurementBase):
+    '''
+        This is a type that can be converted to generic fractional amounts,
+        but does not refer to a particular measurable quantity.
+    '''
+    unit_type = "dimensionless"
 
 
 class Time(MeasurementBase):

@@ -11,17 +11,17 @@
 
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.args.oil}}
+        @oil={{this.args.oil.environmental_behavior}}
         @store={{this.args.store}}
         @editable={{this.args.editable}}
         @submit={{this.args.submit}}
         @tableTitle="Chemical Dispersibility"
-        @propertyName="chemical_dispersibility"
+        @propertyName="dispersibilities"
       />
     </div>
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.args.oil}}
+        @oil={{this.args.oil.environmental_behavior}}
         @store={{this.args.store}}
         @editable={{this.args.editable}}
         @submit={{this.args.submit}}
