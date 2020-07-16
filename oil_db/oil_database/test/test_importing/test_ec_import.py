@@ -2046,6 +2046,7 @@ class TestEnvCanadaSampleMapper(object):
         ('2234', 0, 'emulsions', [
             {'age': {'unit': 'day', 'value': 0},
              'method': 'ESTS: 13.02/x.x/M',
+             'ref_temp': {'unit': 'C', 'value': 15.0},
              'visual_stability': 'Entrained',
              'complex_modulus': {'value': 45, 'unit': 'Pa',
                                  'unit_type': 'pressure',
@@ -2064,6 +2065,7 @@ class TestEnvCanadaSampleMapper(object):
                                'standard_deviation': 2.3, 'replicates': 9}},
             {'age': {'unit': 'day', 'value': 7},
              'method': 'ESTS: 13.02/x.x/M',
+             'ref_temp': {'unit': 'C', 'value': 15.0},
              'visual_stability': None,
              'complex_modulus': {'value': 31, 'unit': 'Pa',
                                  'unit_type': 'pressure',

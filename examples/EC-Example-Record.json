@@ -1719,6 +1719,11 @@
                             "value": 42
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 3,
@@ -1769,6 +1774,11 @@
                             "value": 31
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 0.96,
@@ -3684,6 +3694,11 @@
                             "value": 85
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 2.8,
@@ -3734,6 +3749,11 @@
                             "value": 90
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 5.3,
@@ -5630,6 +5650,11 @@
                             "value": 430
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 23,
@@ -5680,6 +5705,11 @@
                             "value": 500
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 6,
                             "standard_deviation": 20,
@@ -7572,6 +7602,11 @@
                             "value": 12183
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 3,
                             "standard_deviation": 501,
@@ -7622,6 +7657,11 @@
                             "value": 14800
                         },
                         "method": "ESTS: 13.02/x.x/M",
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "replicates": 2,
                             "standard_deviation": 136,
@@ -9514,6 +9554,11 @@
                             "unit": "Pa",
                             "unit_type": null
                         },
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
+                        },
                         "storage_modulus": {
                             "unit": "Pa",
                             "unit_type": null
@@ -9544,6 +9589,11 @@
                         "loss_modulus": {
                             "unit": "Pa",
                             "unit_type": null
+                        },
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 15.0
                         },
                         "storage_modulus": {
                             "unit": "Pa",

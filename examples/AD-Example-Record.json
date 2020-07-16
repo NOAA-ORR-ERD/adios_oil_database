@@ -263,6 +263,11 @@
                             "unit_type": "time",
                             "value": 0.0
                         },
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 288.15
+                        },
                         "water_content": {
                             "unit": "1",
                             "unit_type": "massfraction",
@@ -289,6 +294,11 @@
                             "unit": "day",
                             "unit_type": "time",
                             "value": 0.0
+                        },
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 288.15
                         },
                         "water_content": {
                             "unit": "1",
