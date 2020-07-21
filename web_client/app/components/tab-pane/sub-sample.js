@@ -5,12 +5,12 @@ import $ from 'jquery';
 
 export default class SubSample extends Component {
     get sample() {
-        return this.args.oil.subSamples.find(s => s.metadata.name === this.args.sampleName);
+        return this.args.oil.sub_samples.find(s => s.metadata.name === this.args.sampleName);
     }
 
     get sampleIndex() {
         // get an index of the current sample - to use one for component ID
-        return this.args.oil.subSamples.findIndex(s => s.metadata.name === this.args.sampleName);
+        return this.args.oil.sub_samples.findIndex(s => s.metadata.name === this.args.sampleName);
     }
 
     sampleTab() {
@@ -20,7 +20,7 @@ export default class SubSample extends Component {
         }
         else {
             // just choose the first tab
-            return slugify(this.args.oil.subSamples[0].metadata.name);
+            return slugify(this.args.oil.sub_samples[0].metadata.name);
         }
     }
 

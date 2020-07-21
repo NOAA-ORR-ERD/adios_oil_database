@@ -19,7 +19,7 @@ export default class SubSample extends Component {
     get navTabProperties() {
         let savedTab = this.sampleTab();
 
-        return this.args.oil.subSamples.map(s => {
+        return this.args.oil.sub_samples.map(s => {
             let tabName = slugify(s.metadata.name);
             let ret = {
                 'name': s.metadata.name,
@@ -49,7 +49,7 @@ export default class SubSample extends Component {
     get tabPaneProperties() {
         let sampleTab = this.sampleTab();
 
-        return this.args.oil.subSamples.map(s => {
+        return this.args.oil.sub_samples.map(s => {
             let tabName = slugify(s.metadata.name);
             let ret = {
                 'name': s.metadata.name,

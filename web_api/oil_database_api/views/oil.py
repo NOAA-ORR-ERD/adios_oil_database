@@ -100,7 +100,7 @@ def get_oils(request):
         res = oils.find_one({'_id': obj_id})
 
         if res is not None:
-            return res
+            return get_oil_all_fields(res)
         else:
             raise HTTPNotFound()
     else:
@@ -116,18 +116,26 @@ def get_oils(request):
         sort = get_sort_params(request)
 
         if len(post_opts.keys()) > 0:
-            return list(search_with_post_sort(oils,
-                                              start, stop,
-                                              search_opts, post_opts,
-                                              sort))
+            return json_api_results(*search_with_post_sort(oils,
+                                                           start, stop,
+                                                           search_opts,
+                                                           post_opts,
+                                                           sort))
         else:
-            return list(search_with_sort(oils,
-                                         start, stop,
-                                         search_opts, sort))
+            return json_api_results(*search_with_sort(oils,
+                                                      start, stop,
+                                                      search_opts, sort))
+
+
+def json_api_results(results, total):
+    return {'data': results,
+            'meta': {'total': total}
+            }
 
 
 def search_with_sort(oils, start, stop, search_opts, sort_opts):
-    logger.info('search #rows: {}'.format(oils.count_documents(search_opts)))
+    total = oils.count_documents(search_opts)
+    logger.info('search #rows: {}'.format(total))
 
     cursor = oils.find(search_opts)
 
@@ -140,9 +148,10 @@ def search_with_sort(oils, start, stop, search_opts, sort_opts):
                   .sort(sort_opts)
                   )
 
-    return [get_oil_searchable_fields(o)
-            for i, o in enumerate(cursor)
-            if i >= start and i < stop]
+    return [[get_oil_searchable_fields(o)
+             for i, o in enumerate(cursor)
+             if i >= start and i < stop],
+            total]
 
 
 def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
@@ -201,8 +210,11 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
     else:
         agg_results = sorted_res + none_results
 
-    return [o for i, o in enumerate(agg_results)
-            if i >= start and i < stop]
+    total = len(agg_results)
+
+    return [[o for i, o in enumerate(agg_results)
+             if i >= start and i < stop],
+            total]
 
 
 def get_search_params(request):
@@ -455,17 +467,34 @@ def get_oil_searchable_fields(oil):
     try:
         meta = oil['metadata']
 
+        # id, type, & attributes are required top-level attributes in order to
+        # comply with the JSON API specification for a resource object.
+        # source: https://jsonapi.org/format/
         return {'_id': oil.get('oil_id'),
-                'metadata': {
-                    'name': meta.get('name', None),
-                    'location': meta.get('location', None),
-                    'product_type': meta.get('product_type', None),
-                    'API': meta.get('API'),
-                    'labels': meta.get('labels', []),
+                'type': 'oils',
+                'attributes': {
+                    'metadata': {
+                        'name': meta.get('name', None),
+                        'location': meta.get('location', None),
+                        'product_type': meta.get('product_type', None),
+                        'API': meta.get('API'),
+                        'labels': meta.get('labels', []),
+                    },
+                    'status': oil.get('status', []),
                 },
-                'status': oil.get('status', []),
                 }
     except Exception:
         logger.info('oil failed searchable fields {}: {}'
                     .format(oil['oil_id'], oil['name']))
         raise
+
+
+def get_oil_all_fields(oil):
+    '''
+        Get the full record in JSON API compliant form.
+    '''
+    return {
+        'data': {'_id': oil.get('oil_id'),
+                 'type': 'oils',
+                 'attributes': oil},
+        }

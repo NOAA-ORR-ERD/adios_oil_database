@@ -6,6 +6,6 @@ export default Model.extend({
   // the full records
   metadata: attr(),
   status: attr(),
-  subSamples: attr(),
-  extraData: attr()
+  sub_samples: attr(),
+  extra_data: attr()
 });
