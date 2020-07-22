@@ -179,30 +179,31 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
         if 'apis' in post_opts:
             # filter out the apis that don't match our criteria
             low, high = post_opts['apis']
+            rec_attrs = rec['attributes']
 
-            if ('API' not in rec['metadata'] or
-                    rec['metadata']['API'] is None or
-                    not low <= rec['metadata']['API'] <= high):
+            if ('API' not in rec_attrs['metadata'] or
+                    rec_attrs['metadata']['API'] is None or
+                    not low <= rec_attrs['metadata']['API'] <= high):
                 continue
 
         if 'labels' in post_opts:
             # filter out the categories that don't match our criteria
-            if rec['metadata']['labels'] is None:
+            if rec_attrs['metadata']['labels'] is None:
                 continue
 
             labels = [l.lower() for l in post_opts['labels']]
-            rec_labels = [c.lower() for c in rec['metadata']['labels']]
+            rec_labels = [c.lower() for c in rec_attrs['metadata']['labels']]
 
             if not all([(l in rec_labels) for l in labels]):
                 continue
 
-        if deep_get(rec, field) is not None:
+        if deep_get(rec_attrs, field) is not None:
             results.append(rec)
         else:
             none_results.append(rec)
 
     sorted_res = sorted(results,
-                        key=lambda x: deep_get(x, field),
+                        key=lambda x: deep_get(x['attributes'], field),
                         reverse=(direction == DESCENDING))
 
     if direction == ASCENDING:

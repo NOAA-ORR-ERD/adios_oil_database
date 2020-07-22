@@ -268,20 +268,12 @@ class OilTests(OilTestBase):
         resp = self.testapp.get('/oils')
         oils = resp.json_body
 
-        assert oils == []
+        assert isinstance(oils, dict)
 
-        # for r in oils:
-        #     for k in ('name',
-        #               'oil_id',
-        #               'status',
-        #               'location',
-        #               'product_type',
-        #               'apis',
-        #               'pour_point',
-        #               'viscosity',
-        #               'categories',
-        #               'categories_str'):
-        #         assert k in r
+        for k in ('data', 'meta'):
+            assert k in oils
+
+        assert oils['data'] == []
 
     def test_get_invalid_id(self):
         self.testapp.get('/oils/{}'.format('bogus'), status=404)
@@ -308,7 +300,12 @@ class OilTests(OilTestBase):
             resp = self.testapp.get('/oils/{0}'.format(oil_id))
             oil = resp.json_body
 
-            print('oil: ', oil['_id'])
+            assert isinstance(oil, dict)
+
+            for k in ('data',):
+                assert k in oil
+
+            print('oil: ', oil['data']['_id'])
 
             # the oil_database module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
@@ -318,7 +315,7 @@ class OilTests(OilTestBase):
                       'metadata',
                       'status',
                       'sub_samples'):
-                assert k in oil
+                assert k in oil['data']['attributes']
 
             for k in ('name',
                       'source_id',
@@ -326,9 +323,9 @@ class OilTests(OilTestBase):
                       'reference',
                       'product_type',
                       'API'):
-                assert k in oil['metadata']
+                assert k in oil['data']['attributes']['metadata']
 
-            sample = [s for s in oil['sub_samples']
+            sample = [s for s in oil['data']['attributes']['sub_samples']
                       if s['metadata']['name'] == 'Fresh Oil Sample'][0]
 
             sample_attrs = ('name',
@@ -390,7 +387,7 @@ class OilTests(OilTestBase):
         # test inserted
         #
         resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
-        oil_json = resp.json_body
+        oil_json = resp.json_body['data']['attributes']
 
         assert oil_json['_id'] == 'AD99999'
         assert oil_json['apis'][0]['gravity'] == 28.0
@@ -409,7 +406,7 @@ class OilTests(OilTestBase):
         # test updated
         #
         resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
-        oil_json = resp.json_body
+        oil_json = resp.json_body['data']['attributes']
 
         assert oil_json['apis'][0]['gravity'] == 33.0
 
@@ -444,8 +441,9 @@ class TestOilSort(OilTestBase):
                                 'dir=desc&'
                                 'sort=metadata.name')
 
-        result = resp.json_body
-        names = [rec['metadata']['name'] for rec in result]
+        result = resp.json_body['data']
+        print(result)
+        names = [rec['attributes']['metadata']['name'] for rec in result]
 
         # we are sorting case insensitive
         assert names == sorted(names, reverse=True, key=lambda x: x.lower())
@@ -463,8 +461,8 @@ class TestOilSort(OilTestBase):
                                 'dir=asc&'
                                 'sort=metadata.name')
 
-        result = resp.json_body
-        names = [rec['metadata']['name'] for rec in result]
+        result = resp.json_body['data']
+        names = [rec['attributes']['metadata']['name'] for rec in result]
 
         # we are sorting case insensitive
         assert names == sorted(names, reverse=False, key=lambda x: x.lower())
@@ -489,7 +487,7 @@ class TestOilSort(OilTestBase):
 
         result = resp.json_body
 
-        apis = [rec['metadata']['API'] for rec in result]
+        apis = [rec['attributes']['metadata']['API'] for rec in result['data']]
 
         assert min(apis) >= 26
         assert max(apis) <= 50
