@@ -143,6 +143,9 @@ setup(name=pkg_name,
                                         ('oil_db_backup = '
                                          'oil_database.scripts.db_backup'
                                          ':backup_db_cmd'),
+                                        ('oil_db_restore = '
+                                         'oil_database.scripts.db_restore'
+                                         ':restore_db_cmd'),
                                         ],
                     },
       zip_safe=False,

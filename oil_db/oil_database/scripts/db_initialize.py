@@ -9,6 +9,7 @@ from pymongo.errors import ConnectionFailure
 from oil_database.util.db_connection import connect_mongodb
 from oil_database.util.settings import file_settings, default_settings
 from oil_database.db_init.labels import (load_labels, print_all_labels)
+from oil_database.db_init.database import drop_db, create_indices
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
@@ -88,38 +89,3 @@ def prompt_drop_db():
                  'existing database!\n'
                  'Are you sure you want to re-initialize it? (y/n): ')
     return len(resp) > 0 and resp.lower()[0] == 'y'
-
-
-def drop_db(client, db_name):
-    print('\nDropping db {}...'.format(db_name))
-    try:
-        if db_name in client.database_names():
-            print('Dropping database "{}"...'.format(db_name), end="")
-            client.drop_database(db_name)
-            print('Dropped')
-    except ConnectionFailure:
-        print('Could not connect to MongoDB!')
-        raise
-    except Exception:
-        print('Failed to drop Oil database!')
-        raise
-
-
-def create_indices(db):
-    print('\ncreating indices on db {}...'.format(db.name))
-
-    try:
-        # We have come to a consensus that unique (name, location, ref)
-        # is not necessary.
-        # db.oil.create_index([('name', ASCENDING),
-        #                      ('location', ASCENDING),
-        #                      ('reference_date', ASCENDING)],
-        #                     unique=True)
-        print('Oil collection indices: {}'
-              .format(list(db.oil.index_information().keys())))
-    except ConnectionFailure:
-        print('Could not connect to MongoDB!')
-        raise
-    except Exception:
-        print('Failed to drop Oil database!')
-        raise

@@ -7,6 +7,8 @@ import datetime
 import logging
 from argparse import ArgumentParser
 
+from bson import ObjectId
+
 from oil_database.util.db_connection import connect_mongodb
 from oil_database.util.settings import file_settings, default_settings
 
@@ -116,18 +118,22 @@ def export_to_file(base_path, collection_name, record):
         add_folder(os.path.join(base_path, collection_name), record_name[:2])
 
         filename = os.path.join(base_path, collection_name,
-                                record_name[:2], record_name)
+                                record_name[:2], f'{record_name}.json')
     else:
-        filename = os.path.join(base_path, collection_name, record_name)
+        filename = os.path.join(base_path, collection_name,
+                                f'{record_name}.json')
 
     json.dump(record, open(filename, 'w'),
-              default=json_datetime_part, sort_keys=True, indent=4)
+              default=json_handle_unparseable,
+              sort_keys=True, indent=4)
 
 
-def json_datetime_part(o):
+def json_handle_unparseable(o):
     '''
         This is only necessary if we are using the builtin json module
         ujson and orjson have no problems with datetime content.
     '''
-    if isinstance(o, datetime.datetime):
+    if isinstance(o, ObjectId):
+        return str(o)
+    elif isinstance(o, datetime.datetime):
         return o.isoformat()
