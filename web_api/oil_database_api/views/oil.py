@@ -357,19 +357,32 @@ def update_oil(request):
         raise HTTPBadRequest
 
     try:
-        fix_oil_id(json_obj, obj_id)
+        oil_obj = get_oil_from_json_req(json_obj)
+        fix_oil_id(oil_obj, obj_id)
         try:
-            validate(json_obj)
+            validate(oil_obj)
         except Exception as e:  # anything goes wrong with the validation
             logger.error(f'Validation Error: {obj_id}: {e}')
         (request.db.oil_database.oil
-         .replace_one({'_id': json_obj['_id']}, json_obj))
+         .replace_one({'_id': oil_obj['_id']}, oil_obj))
 
-        memoized_results.pop(json_obj['_id'], None)
+        memoized_results.pop(oil_obj['_id'], None)
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return fix_bson_ids(json_obj)
+    return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
+
+
+@oil_api.patch()
+def patch_oil(request):
+    '''
+        This seems kinda new.
+        It is apparently used for partial record updates, and is what the
+        ember JSON-API adapters use when updating records.
+
+        https://tools.ietf.org/html/rfc5789#section-2
+    '''
+    return update_oil(request)
 
 
 @oil_api.delete()
@@ -425,6 +438,13 @@ def new_oil_id(request):
     return '{}{:06d}'.format(id_prefix, max_seq)
 
 
+def get_oil_from_json_req(json_obj):
+    oil_obj = json_obj['data']['attributes']
+    oil_obj['_id'] = json_obj['data']['_id']
+
+    return oil_obj
+
+
 def fix_oil_id(oil_json, obj_id=None):
     '''
         Okay, pymongo lets you specify the id of a new record, but it needs
@@ -442,6 +462,15 @@ def fix_oil_id(oil_json, obj_id=None):
         oil_json['_id'] = oil_json['oil_id']
     else:
         raise ValueError('oil_id field is required')
+
+
+def generate_jsonapi_response_from_oil(oil_obj):
+    json_obj = {'data': {'attributes': oil_obj}}
+
+    json_obj['data']['_id'] = oil_obj['_id']
+    json_obj['data']['type'] = 'oils'
+
+    return json_obj
 
 
 def deep_get(rec, path):
