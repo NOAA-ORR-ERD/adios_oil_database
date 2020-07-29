@@ -92,14 +92,9 @@ def load_collection(db, base_path, collection_name):
         for name in filenames:
             if name.endswith('.json'):
                 obj_path = f'{dirname}/{name}'
-                print(obj_path)
                 obj = json.load(open(obj_path, 'r'))
-                fix_obj_id(obj, collection)
 
-                if collection_name == 'label':
-                    print(obj)
-                else:
-                    print(obj['_id'])
+                fix_obj_id(obj, collection)
 
                 collection.insert_one(obj)
 
