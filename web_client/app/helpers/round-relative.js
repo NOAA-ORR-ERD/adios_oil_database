@@ -7,7 +7,7 @@ export function roundRelative([num,
     return 0.0;
   }
   else if (Math.abs(num) > 1.0) {
-    return Math.round(num * 10 ** tol) / 10 ** tol;
+    return Math.round(num * (10 ** tol)) / (10 ** tol);
   }
   else if (num) {
     let scale = 10 ** (tol - 1 - Math.floor(Math.log10(Math.abs(num))));

@@ -1,5 +1,4 @@
-import DS from 'ember-data';
-const { Model, attr } = DS;
+import Model, { attr } from '@ember-data/model';
 
 export default Model.extend({
   // These attributes are used in the table columns of the search as well as

@@ -1,4 +1,4 @@
-import RESTAdapter from 'ember-data/adapters/rest';
+import RESTAdapter from '@ember-data/adapter/rest';
 
 export default RESTAdapter.extend({
 });
