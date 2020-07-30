@@ -12,7 +12,7 @@ module('Integration | Component | common/list-properties-table', function(hooks)
 
     await render(hbs`<Common::ListPropertiesTable />`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom(this.element).hasText('');
 
     // Template block usage:
     await render(hbs`
@@ -21,6 +21,6 @@ module('Integration | Component | common/list-properties-table', function(hooks)
       </Common::ListPropertiesTable>
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom(this.element).hasText('template block text');
   });
 });

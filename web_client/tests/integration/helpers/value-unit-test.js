@@ -12,6 +12,6 @@ module('Integration | Helper | value-unit', function(hooks) {
 
     await render(hbs`{{value-unit inputValue}}`);
 
-    assert.equal(this.element.textContent.trim(), '1234');
+    assert.dom(this.element).hasText('1234');
   });
 });

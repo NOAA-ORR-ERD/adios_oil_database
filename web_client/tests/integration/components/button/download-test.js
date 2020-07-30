@@ -12,7 +12,7 @@ module('Integration | Component | button/download', function(hooks) {
 
     await render(hbs`<Button::Download />`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom(this.element).hasText('');
 
     // Template block usage:
     await render(hbs`
@@ -21,6 +21,6 @@ module('Integration | Component | button/download', function(hooks) {
       </Button::Download>
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom(this.element).hasText('template block text');
   });
 });

@@ -12,6 +12,6 @@ module('Integration | Helper | value-unit-range', function(hooks) {
 
     await render(hbs`{{value-unit-range inputValue}}`);
 
-    assert.equal(this.element.textContent.trim(), '1234');
+    assert.dom(this.element).hasText('1234');
   });
 });

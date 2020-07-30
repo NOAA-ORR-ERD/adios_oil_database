@@ -1,10 +1,11 @@
+import { oneWay } from '@ember/object/computed';
 import Mixin from '@ember/object/mixin';
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { inject as service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
-     
+
 import Table from 'ember-light-table';
 
 /* eslint-disable ember/no-new-mixins */
@@ -17,7 +18,7 @@ export default Mixin.create({
   dir: 'asc',
   sort: 'name',
 
-  isLoading: computed.oneWay('fetchRecords.isRunning'),
+  isLoading: oneWay('fetchRecords.isRunning'),
   canLoadMore: true,
   enableSync: true,
 
