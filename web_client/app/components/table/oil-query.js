@@ -81,7 +81,7 @@ export default Component.extend(TableCommon, {
     },
 
     fetchLabels() {
-        return this.get('store').findAll('label')
+        return this.store.findAll('label')
         .then(function(response) {
             return response.toArray().map(i => {return i.name});
         });
@@ -110,9 +110,9 @@ export default Component.extend(TableCommon, {
 
     actions: {
         onSearchChange() {
-            this.get('data').clear();
+            this.data.clear();
             this.set('page', 0);
-            this.get('fetchRecords').perform();
+            this.fetchRecords.perform();
         }
     }
 });

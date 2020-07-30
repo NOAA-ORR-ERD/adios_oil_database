@@ -31,15 +31,15 @@ export default Mixin.create({
   init() {
     this._super(...arguments);
 
-    this.set('data', this.get('model').toArray());
+    this.set('data', this.model.toArray());
 
     let table = Table.create({
-		columns: this.get('columns'),
-		rows: this.get('data'),
-		enableSync: this.get('enableSync')
+		columns: this.columns,
+		rows: this.data,
+		enableSync: this.enableSync
     });
 
-    let sortColumn = table.get('allColumns').findBy('valuePath', this.get('sort'));
+    let sortColumn = table.get('allColumns').findBy('valuePath', this.sort);
 
     // Setup initial sort column
     if (sortColumn) {
@@ -52,9 +52,9 @@ export default Mixin.create({
   fetchRecords: task(function*() {
     let queryOptions = this.getQueryOptions();
 
-    let records = yield this.get('store').query('oil', queryOptions);
+    let records = yield this.store.query('oil', queryOptions);
 
-    this.get('data').pushObjects(records.toArray());
+    this.data.pushObjects(records.toArray());
     this.set('meta', records.get('meta'));
 
     this.set('canLoadMore', !isEmpty(records));
@@ -72,8 +72,8 @@ export default Mixin.create({
 
   actions: {
       onScrolledToBottom() {
-          if (this.get('canLoadMore')) {
-              this.get('fetchRecords').perform();
+          if (this.canLoadMore) {
+              this.fetchRecords.perform();
           }
       },
 
@@ -85,7 +85,7 @@ export default Mixin.create({
                           canLoadMore: true,
                           page: 0
               });
-              this.get('data').clear();
+              this.data.clear();
               this.set('page', 0);
 
               // Not sure if this is behavior coming from the newly upgraded

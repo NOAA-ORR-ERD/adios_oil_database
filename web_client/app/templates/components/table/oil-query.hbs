@@ -18,14 +18,12 @@
             <strong>API </strong>
           </div>
           <div class="col-sm-8 col-lg-9 col-xl-10">
-            {{range-slider start=(array 0 100)
-              min=0
-              max=100
-              step=1
-              connect=true
-              tooltips=true
-              on-change=(action (pipe (action (mut this.selectedApi)) (action "onSearchChange")))
-              }}
+            <RangeSlider
+              @start={{array 0 100}} @min={{0}} @max={{100}} @step={{1}}
+              @connect={{true}}
+              @tooltips={{true}}
+              @on-change={{action (pipe (action (mut this.selectedApi)) (action "onSearchChange"))}}
+            />
           </div>
         </div>
       </div>
@@ -55,25 +53,24 @@
     </div>
   </div>
 
-  {{t.head
-    onColumnClick=(action "onColumnClick")
-    iconAscending="fa fa-angle-up"
-    iconDescending="fa fa-angle-down"
-    resizeOnDrag=true
-    fixed=true
-  }}
+  <t.head
+    @onColumnClick={{action "onColumnClick"}}
+    @iconAscending="fa fa-angle-up"
+    @iconDescending="fa fa-angle-down"
+    @resizeOnDrag={{true}}
+    @fixed={{true}}
+  />
 
-  {{#t.body
-    canSelect=false
-    enableScaffolding=true
-    onScrolledToBottom=(action "onScrolledToBottom")
-    as |body|
-  }}
+  <t.body
+    @canSelect={{false}}
+    @enableScaffolding={{true}}
+    @onScrolledToBottom={{action "onScrolledToBottom"}} as |body|
+  >
     {{#if isLoading}}
-      {{#body.loader}}
-        {{table/loader}}
-      {{/body.loader}}
+      <body.loader>
+        <Table::Loader />
+      </body.loader>
     {{/if}}
-  {{/t.body}}
+  </t.body>
 
 {{/light-table}}

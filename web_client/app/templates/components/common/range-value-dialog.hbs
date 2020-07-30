@@ -9,13 +9,13 @@
 }}
 
 {{!-- based on ember-modal-dialog with ember-tether --}}
-{{#modal-dialog
-  onClose=(action "closeModalDialog")
-  translucentOverlay=false
-  targetAttachment="center left"
-  tetherTarget=componentId
-  attachment="center left"
-}}
+<ModalDialog
+  @onClose={{action "closeModalDialog"}}
+  @translucentOverlay={{false}}
+  @targetAttachment="center left"
+  @tetherTarget={{componentId}}
+  @attachment="center left"
+>
   <div id="scalar-range-dialog" class="card">
     {{!-- dialog header --}}
     <h5 class="card-header text-center p-1">
@@ -94,4 +94,4 @@
       </div>
     </div>
   </div>
-{{/modal-dialog}}
+</ModalDialog>

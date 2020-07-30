@@ -12,12 +12,12 @@
 
       {{!-- back to oil list control --}}
       <div class="mr-2 d-inline-block">
-        {{#link-to "oils"}}
+        <LinkTo @route="oils">
           <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
             data-toggle="tooltip" title="Back to List">
             &lt; Back to List
           </button>
-        {{/link-to}}
+        </LinkTo>
 
         {{!-- oil status --}}
         <strong>

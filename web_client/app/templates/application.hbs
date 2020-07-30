@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3">
 
-    {{#link-to "index" class="navbar-brand"}}
+    <LinkTo @route="index" class="navbar-brand">
       <span class="adios-logo" role="img" aria-label="ADIOS Oil Database"/>
-    {{/link-to}}
+    </LinkTo>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -13,15 +13,15 @@
       <ul class="navbar-nav mr-auto">
 
         <li class="nav-item active">
-          {{#link-to "about" class="nav-link"}}
+          <LinkTo @route="about" class="nav-link">
             About <span class="sr-only">(current)</span>
-          {{/link-to}}
+          </LinkTo>
         </li>
 
         <li class="nav-item active">
-          {{#link-to "contact" class="nav-link"}}
+          <LinkTo @route="contact" class="nav-link">
             Contact <span class="sr-only">(current)</span>
-          {{/link-to}}
+          </LinkTo>
         </li>
 
       </ul>
