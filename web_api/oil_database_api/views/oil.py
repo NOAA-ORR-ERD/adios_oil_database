@@ -175,11 +175,11 @@ def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
 
     for o in cursor:
         rec = get_oil_searchable_fields(o)
+        rec_attrs = rec['attributes']
 
         if 'apis' in post_opts:
             # filter out the apis that don't match our criteria
             low, high = post_opts['apis']
-            rec_attrs = rec['attributes']
 
             if ('API' not in rec_attrs['metadata'] or
                     rec_attrs['metadata']['API'] is None or
@@ -310,7 +310,7 @@ def insert_oil(request):
         raise HTTPBadRequest(e)
 
     try:
-        validate(json_obj)
+        oil_obj = get_oil_from_json_req(json_obj)
     except Exception as e:  # anything goes wrong with the validation
         # note: ideally the validation should NEVER raise an Exception!
         # but if it does, we need to log it
@@ -320,23 +320,25 @@ def insert_oil(request):
         logger.error(f'Validation Error: {e}')
 
     try:
-        logger.info('oil.name: {}'.format(json_obj['name']))
+        logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
 
-        if 'oil_id' in json_obj:
-            json_obj['_id'] = json_obj['oil_id']
+        if 'oil_id' in oil_obj:
+            oil_obj['_id'] = oil_obj['oil_id']
         else:
-            json_obj['_id'] = json_obj['oil_id'] = new_oil_id(request)
+            oil_obj['_id'] = oil_obj['oil_id'] = new_oil_id(request)
 
-        json_obj['_id'] = (request.db.oil_database.oil
-                           .insert_one(json_obj)
-                           .inserted_id)
+        validate(oil_obj)
+
+        oil_obj['_id'] = (request.db.oil_database.oil
+                          .insert_one(oil_obj)
+                          .inserted_id)
     except DuplicateKeyError as e:
         raise HTTPConflict(detail=e)
     except Exception as e:
         logger.error(e)
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return fix_bson_ids(json_obj)
+    return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
 
 
 @oil_api.put()
@@ -359,10 +361,12 @@ def update_oil(request):
     try:
         oil_obj = get_oil_from_json_req(json_obj)
         fix_oil_id(oil_obj, obj_id)
+
         try:
             validate(oil_obj)
         except Exception as e:  # anything goes wrong with the validation
             logger.error(f'Validation Error: {obj_id}: {e}')
+
         (request.db.oil_database.oil
          .replace_one({'_id': oil_obj['_id']}, oil_obj))
 
@@ -440,7 +444,10 @@ def new_oil_id(request):
 
 def get_oil_from_json_req(json_obj):
     oil_obj = json_obj['data']['attributes']
-    oil_obj['_id'] = json_obj['data']['_id']
+
+    if '_id' in json_obj['data']:
+        # won't have an id if we are inserting
+        oil_obj['_id'] = json_obj['data']['_id']
 
     return oil_obj
 

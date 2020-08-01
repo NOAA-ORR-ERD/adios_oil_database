@@ -3,66 +3,72 @@
 """
 
 
-basic_noaa_fm = {u'_cls': u'oil_database.models.oil.oil.Oil',
-                 u'oil_id': u'AD99999',
-                 u'adhesions': [],
-                 u'alkanes': None,
-                 u'alkylated_pahs': None,
-                 u'apis': [{u'_cls': u'oil_database.models.oil.api.ApiGravity',
-                            u'gravity': 28.0,
-                            u'weathering': 0.0}],
-                 u'benzene': [],
-                 u'biomarkers': None,
-                 u'categories': [],
-                 u'ccme': None,
-                 u'ccme_f1': None,
-                 u'ccme_f2': None,
-                 u'ccme_tph': None,
-                 u'chromatography': None,
-                 u'comments': None,
-                 u'conradson': [],
-                 u'corexit': None,
-                 u'cuts': [],
-                 u'densities': [],
-                 u'dvis': [],
-                 u'emulsions': [],
-                 u'evaporation_eqs': None,
-                 u'flash_points': [],
-                 u'headspace': None,
-                 u'ifts': [],
-                 u'kvis': [{u'_cls': u'oil_database.models.oil.kvis.KVis',
-                            u'ref_temp': {u'_cls': u'oil_database.models.common.float_unit.TemperatureUnit',
-                                          u'unit': u'K',
-                                          u'value': 294.0},
-                            u'viscosity': {u'_cls': u'oil_database.models.common.float_unit.KinematicViscosityUnit',
-                                           u'unit': u'm^2/s',
-                                           u'value': 2.5e-05},
-                            u'weathering': 0.0},
-                           {u'_cls': u'oil_database.models.oil.kvis.KVis',
-                            u'ref_temp': {u'_cls': u'oil_database.models.common.float_unit.TemperatureUnit',
-                                          u'unit': u'K',
-                                          u'value': 311.0},
-                            u'viscosity': {u'_cls': u'oil_database.models.common.float_unit.KinematicViscosityUnit',
-                                           u'unit': u'm^2/s',
-                                           u'value': 1.44e-05},
-                            u'weathering': 0.0}],
-                 u'location': u'WRC',
-                 u'name': u'BASIC NOAA FILEMAKER TEST RECORD',
-                 u'pour_points': [{u'_cls': u'oil_database.models.oil.pour_point.PourPoint',
-                                   u'max_temp': {u'_cls': u'oil_database.models.common.float_unit.TemperatureUnit',
-                                                 u'unit': u'K',
-                                                 u'value': 244.0},
-                                   u'min_temp': {u'_cls': u'oil_database.models.common.float_unit.TemperatureUnit',
-                                                 u'unit': u'K',
-                                                 u'value': 244.0},
-                                   u'weathering': 0.0}],
-                 u'product_type': u'crude',
-                 u'reference': u'derived from the abu safah oil record',
-                 u'reference_date': 725846400,
-                 u'sara_total_fractions': [],
-                 u'status': [],
-                 u'sulfur': [],
-                 u'toxicities': [],
-                 u'water': None,
-                 u'wax_content': []}
-
+basic_noaa_fm = {
+    'metadata': {
+        'API': 28.0,
+        'labels': ['Crude', 'Medium'],
+        'location': 'WRC',
+        'name': 'BASIC NOAA FILEMAKER TEST RECORD',
+        'product_type': 'crude',
+        'reference': {
+            'reference': 'Derived from the Abu Safah oil record',
+            'year': 1993
+        },
+        'source_id': 'AD00009'
+    },
+    'oil_id': 'AD99999',
+    'status': [
+        'W007: No distillation data provided'
+    ],
+    'sub_samples': [
+        {
+            'distillation_data': {
+                'type': 'mass'
+            },
+            'metadata': {
+                'fraction_weathered': {
+                    'unit': '1',
+                    'unit_type': 'massfraction',
+                    'value': 0.0
+                },
+                'name': 'Fresh Oil Sample',
+                'short_name': 'Fresh Oil'
+            },
+            'physical_properties': {
+                'kinematic_viscosities': [
+                    {
+                        'ref_temp': {
+                            'unit': 'K',
+                            'unit_type': 'temperature',
+                            'value': 294.0
+                        },
+                        'viscosity': {
+                            'unit': 'm^2/s',
+                            'unit_type': 'kinematicviscosity',
+                            'value': 2.5e-05
+                        }
+                    },
+                    {
+                        'ref_temp': {
+                            'unit': 'K',
+                            'unit_type': 'temperature',
+                            'value': 311.0
+                        },
+                        'viscosity': {
+                            'unit': 'm^2/s',
+                            'unit_type': 'kinematicviscosity',
+                            'value': 1.44e-05
+                        }
+                    }
+                ],
+                'pour_point': {
+                    'measurement': {
+                        'unit': 'K',
+                        'unit_type': 'temperature',
+                        'value': 244.0
+                    }
+                }
+            }
+        }
+    ]
+}

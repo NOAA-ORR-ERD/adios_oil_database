@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 argp = ArgumentParser(description='Database Query Arguments:')
+
 argp.add_argument('--query', action='store_true',
                   help=(''))
 argp.add_argument('--config', nargs=1,

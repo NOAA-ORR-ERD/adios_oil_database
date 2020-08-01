@@ -13,6 +13,8 @@ import copy
 from .base import FunctionalTestBase
 from .sample_oils import basic_noaa_fm
 
+from pprint import pprint
+
 
 class OilTestBase(FunctionalTestBase):
     '''
@@ -20,6 +22,21 @@ class OilTestBase(FunctionalTestBase):
         content.  They are not pytests in and of themselves, but return a
         valid status.
     '''
+    def jsonapi_request(self, oil_obj):
+        json_obj = {'data': {'attributes': oil_obj}}
+
+        json_obj['data']['type'] = 'oils'
+
+        return json_obj
+
+    def jsonapi_to_oil(self, jsonapi_obj):
+        oil_obj = jsonapi_obj['data']['attributes']
+
+        if '_id' in jsonapi_obj['data']:
+            oil_obj['_id'] = jsonapi_obj['data']['_id']
+
+        return oil_obj
+
     def api_valid(self, api_gravity):
         for k in ('gravity',):
             if k not in api_gravity:
@@ -372,52 +389,82 @@ class OilTests(OilTestBase):
         #
         # test not inserted
         #
+        print(f'test {oil_json["oil_id"]} not inserted...')
         self.testapp.get('/oils/{}'.format(oil_json['oil_id']), status=404)
 
         #
         # insert
         #
-        resp = self.testapp.post_json('/oils', params=oil_json)
-        oil_json = resp.json_body
+        print('insert...')
+        resp = self.testapp.post_json('/oils',
+                                      params=self.jsonapi_request(oil_json))
+        oil_json = self.jsonapi_to_oil(resp.json_body)
 
         assert oil_json['_id'] == 'AD99999'
-        assert oil_json['apis'][0]['gravity'] == 28.0
+        assert oil_json['metadata']['API'] == 28.0
 
         #
         # test inserted
         #
+        print('test inserted...')
         resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
-        oil_json = resp.json_body['data']['attributes']
+        oil_json = self.jsonapi_to_oil(resp.json_body)
 
         assert oil_json['_id'] == 'AD99999'
-        assert oil_json['apis'][0]['gravity'] == 28.0
+        assert oil_json['metadata']['API'] == 28.0
 
         #
         # update
         #
-        oil_json['apis'][0]['gravity'] = 33.0
+        print('update...')
+        oil_json['metadata']['API'] = 33.0
 
-        resp = self.testapp.put_json('/oils', params=oil_json)
-        oil_json = resp.json_body
+        resp = self.testapp.put_json('/oils',
+                                     params=self.jsonapi_request(oil_json))
+        oil_json = self.jsonapi_to_oil(resp.json_body)
 
-        assert oil_json['apis'][0]['gravity'] == 33.0
+        assert oil_json['metadata']['API'] == 33.0
 
         #
         # test updated
         #
+        print('test updated...')
         resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
-        oil_json = resp.json_body['data']['attributes']
+        oil_json = self.jsonapi_to_oil(resp.json_body)
 
-        assert oil_json['apis'][0]['gravity'] == 33.0
+        assert oil_json['metadata']['API'] == 33.0
+
+        #
+        # patch
+        #
+        print('patch...')
+        oil_json['metadata']['API'] = 44.0
+
+        resp = self.testapp.patch_json('/oils',
+                                       params=self.jsonapi_request(oil_json))
+        oil_json = self.jsonapi_to_oil(resp.json_body)
+
+        assert oil_json['metadata']['API'] == 44.0
+
+        #
+        # test patched
+        #
+        print('test patched...')
+        resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
+        oil_json = self.jsonapi_to_oil(resp.json_body)
+
+        assert oil_json['metadata']['API'] == 44.0
 
         #
         # delete
         #
+        print('delete...')
         self.testapp.delete('/oils/{}'.format(oil_json['_id']))
 
         #
         # test deleted
         #
+        print('test deleted...')
         self.testapp.get('/oils/{}'.format(oil_json['_id']), status=404)
 
 
