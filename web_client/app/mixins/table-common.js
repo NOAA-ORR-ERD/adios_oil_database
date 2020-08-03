@@ -1,6 +1,5 @@
 import { oneWay } from '@ember/object/computed';
 import Mixin from '@ember/object/mixin';
-import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { inject as service } from '@ember/service';
 
