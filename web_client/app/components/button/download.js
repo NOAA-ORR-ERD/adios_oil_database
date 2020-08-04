@@ -8,11 +8,15 @@ export default class Download extends Component {
 
     @action
     downloadOil() {
-        let fileName = slugify(this.args.oil.name);
+        let fileName = slugify(this.args.oil.metadata.name);
+        let content = this.args.oil.serialize();
+        let oil = content['data']['attributes']
+
+        oil['_id'] = oil['metadata']['oil_id'] = this.args.oil.id;
 
         this.download.asJSON(
             `${fileName}.json`,
-            JSON.stringify(this.args.oil.serialize(), null, 2)
+            JSON.stringify(oil, null, 2)
         );
     }
 }
