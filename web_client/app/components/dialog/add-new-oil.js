@@ -46,11 +46,19 @@ export default class AddNewOilDlg extends Component {
     @action
     submitForm() {
         this.args.submit({
-            name: this.name,
-            samples: [{
-                name: 'Fresh Oil Sample',
-                short_name: 'Fresh Oil',
-                fraction_weathered: 0
+            metadata: {
+                name: this.name
+            },
+            sub_samples: [{
+                metadata: {
+                    name: 'Fresh Oil Sample',
+                    short_name: 'Fresh Oil',
+                    fraction_weathered: {
+                        unit: '1',
+                        unit_type: 'massfraction',
+                        value: 0
+                    }
+                }
             }]
         });
 
