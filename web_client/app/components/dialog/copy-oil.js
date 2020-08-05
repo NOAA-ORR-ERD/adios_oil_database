@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from "@ember/object";
+import { action, set } from "@ember/object";
 import $ from 'jquery';
 
 export default class CopyOilDlg extends Component {
@@ -9,7 +9,7 @@ export default class CopyOilDlg extends Component {
     constructor() {
         super(...arguments);
 
-        this.oilName = `Copy of ${this.args.oil.name}`;
+        this.oilName = `Copy of ${this.args.oil.metadata.name}`;
     }
 
     get formFilledOut() {
@@ -53,7 +53,7 @@ export default class CopyOilDlg extends Component {
     submitForm() {
         let oil = this.args.oil.toJSON();
 
-        oil.name = this.oilName;
+        set(oil.metadata, 'name', this.oilName);
         delete oil.id;
 
         this.args.submit(oil);
