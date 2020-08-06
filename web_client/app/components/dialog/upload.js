@@ -22,8 +22,8 @@ export default class UploadDlg extends Component {
             }
             catch(e) {
                 alert("File Loading Error: " +
-                    "This does not look like a valid ADIOS database " +
-                    "JSON file. Please check the filename and try again.");
+                      "This does not look like a valid ADIOS database " +
+                      "JSON file. Please check the filename and try again.");
                 return;
             }
         }
@@ -31,9 +31,6 @@ export default class UploadDlg extends Component {
             alert('File is empty!');
             return;
         }
-
-        oilData['productType'] = oilData['product_type']
-        oilData['referenceDate'] = oilData['reference_date']
 
         delete oilData['id'];
 
