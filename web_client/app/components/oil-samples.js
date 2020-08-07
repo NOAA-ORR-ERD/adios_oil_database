@@ -90,7 +90,7 @@ export default class SubSample extends Component {
 
     @action
     updateShortSampleName(idx) {
-        this.args.oil.subSamples[idx].metadata.short_name = event.target.value;
+        this.args.oil.sub_samples[idx].metadata.short_name = event.target.value;
         this.args.submit(this.args.oil);
     }
 

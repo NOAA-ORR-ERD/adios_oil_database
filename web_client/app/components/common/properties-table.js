@@ -20,9 +20,8 @@ export default class PropertiesTable extends Component {
 
     initBaseProperty() {
         let names = this.args.propertyName.split('.');
-        
-        
         this.baseProperty = this.args.oil;
+
         for (let i = 0; i < names.length; i++) {
             if (this.baseProperty[names[i]]) {
                 this.baseProperty = this.baseProperty[names[i]];
