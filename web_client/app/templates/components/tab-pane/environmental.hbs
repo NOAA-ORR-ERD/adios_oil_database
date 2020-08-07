@@ -11,23 +11,23 @@
 
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.args.oil.environmental_behavior}}
+        @oil={{this.args.oil}}
         @store={{this.args.store}}
         @editable={{this.args.editable}}
         @submit={{this.args.submit}}
         @tableTitle="Chemical Dispersibility"
-        @propertyName="dispersibilities"
+        @propertyName="environmental_behavior.dispersibilities"
       />
     </div>
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.args.oil.environmental_behavior}}
+        @oil={{this.args.oil}}
         @store={{this.args.store}}
         @editable={{this.args.editable}}
         @submit={{this.args.submit}}
         @tableTitle="Emulsion Properties"
         @templateName="emulsions"
-        @propertyName="emulsions"
+        @propertyName="environmental_behavior.emulsions"
         @headerPosition="side"
       />
     </div>
