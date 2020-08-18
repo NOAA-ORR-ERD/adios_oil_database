@@ -501,7 +501,7 @@ def process_cut_table(oil, samples, cut_table):
                          'Expected: "Distillation type, TBP"')
 
     for sample in samples:
-        sample.distillation_data.type = 'volume'
+        sample.distillation_data.type = 'volume fraction'
 
     for name, row in cut_table.items():
         if norm("vol%, F") in name or name == norm("IBP, F"):

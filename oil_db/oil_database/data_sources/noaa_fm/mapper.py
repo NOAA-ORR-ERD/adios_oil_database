@@ -167,9 +167,9 @@ class OilLibraryAttributeMapper(MapperBase):
         if self.cut_units is None:
             ret['type'] = 'mass'  # default
         elif self.cut_units.lower() == 'weight':
-            ret['type'] = 'mass'
+            ret['type'] = 'mass fraction'
         else:
-            ret['type'] = 'volume'
+            ret['type'] = 'volume fraction'
 
         # ret['method'] = None  # no data in filemaker
         # ret['end_point'] = None  # no data in filemaker

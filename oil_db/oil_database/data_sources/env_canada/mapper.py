@@ -268,7 +268,7 @@ class EnvCanadaSampleMapper(MapperBase):
             ret['method'] = (self.parser
                              .boiling_point_cumulative_fraction['method'])
 
-        ret['type'] = 'mass'
+        ret['type'] = 'mass fraction'
         ret['cuts'] = cuts
 
         return ret
