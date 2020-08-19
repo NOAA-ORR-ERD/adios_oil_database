@@ -132,9 +132,11 @@ export default class AddSampleDlg extends Component {
             }
 
             newSample = {
-                'name': name,
-                'short_name': shortName,
-                'fraction_weathered': this.weatheredFraction
+                'metadata': {
+                    'name': name,
+                    'short_name': shortName,
+                    'fraction_weathered': this.weatheredFraction
+                }
             };
             break;
         case this.SampleTypes.distillate:
@@ -154,6 +156,7 @@ export default class AddSampleDlg extends Component {
             }
 
             newSample = {
+                'metadata': {
                     'name': name,
                     'short_name': shortName,
                     'boiling_point_range': {
@@ -161,7 +164,8 @@ export default class AddSampleDlg extends Component {
                         'min_value': min,
                         'max_value': max
                     }
-                };
+                }
+            };
             break;
         case this.SampleTypes.nameOnly:
             name = this.sampleName;
@@ -174,14 +178,16 @@ export default class AddSampleDlg extends Component {
             }
 
             newSample = {
+                'metadata': {
                     'name': name,
                     'short_name': shortName
-                };
+                }
+            };
             break;
         }
 
         let oil = this.args.oil;
-        oil.samples.pushObject(newSample);
+        oil.sub_samples.pushObject(newSample);
         this.args.submit(oil);
     }
 
