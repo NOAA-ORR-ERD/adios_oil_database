@@ -1942,7 +1942,7 @@ class TestEnvCanadaSampleMapper(object):
                            'standard_deviation': 67002.0, 'replicates': 3}}
          ]),
         ('2713', 0, 'distillation_data', {
-            "type": "mass",
+            "type": "mass fraction",
             "method": "Merged ASTM D7169 & ASTM D6730 mod.",
             "end_point": {'min_value': 720.0, 'max_value': None, 'unit': 'C'},
             "cuts": [

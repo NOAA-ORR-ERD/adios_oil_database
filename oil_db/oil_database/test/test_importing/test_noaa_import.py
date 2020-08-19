@@ -531,7 +531,7 @@ class TestOilLibraryAttributeMapper:
                                                     'unit': 'K'}}),
         ('AD00020', 'flash_point', None),
         ('AD00025', 'distillation_data', {
-            'type': 'mass',
+            'type': 'mass fraction',
             'cuts': [
                 {'fraction': {'unit': '1', 'unit_type': 'massfraction',
                               'value': 0.01},
@@ -745,7 +745,7 @@ class TestOilLibraryAttributeMapper:
 
     @pytest.mark.parametrize('oil_id, index, expected', [
         ('AD00025', 0, {
-            'type': 'mass',
+            'type': 'mass fraction',
             'cuts': [
                 {'fraction': {'unit': '1', 'unit_type': 'massfraction',
                               'value': 0.01},
@@ -780,7 +780,7 @@ class TestOilLibraryAttributeMapper:
                  'liquid_temp': {'unit': 'K', 'value': 304.0},
                  'vapor_temp': {'unit': 'K', 'value': 213.0}}],
         }),
-        ('AD00020', 0, {'cuts': [], 'type': 'mass'}),
+        ('AD00020', 0, {'cuts': [], 'type': 'mass fraction'}),
     ])
     def test_distillation_data(self, oil_id, index, expected):
         rec = self.reader.get_record(oil_id)

@@ -377,7 +377,7 @@ class TestExxonMapper():
 
     def test_dist_type(self):
         for sample in ExxonMapper(self.record).sub_samples:
-            assert sample.distillation_data.type == 'volume'
+            assert sample.distillation_data.type == 'volume fraction'
 
     @pytest.mark.parametrize("samp_ind, cut_index, fraction, temp_f",
                              [(0, 0, 0.0, -57.641),

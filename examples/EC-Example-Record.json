@@ -1674,7 +1674,7 @@
                     "value": 522
                 },
                 "method": "ASTM D7169",
-                "type": "mass"
+                "type": "mass fraction"
             },
             "environmental_behavior": {
                 "dispersibilities": [
@@ -3650,7 +3650,7 @@
                     "value": 521
                 },
                 "method": "ASTM D7169",
-                "type": "mass"
+                "type": "mass fraction"
             },
             "environmental_behavior": {
                 "dispersibilities": [
@@ -5618,7 +5618,7 @@
                     "value": 519
                 },
                 "method": "ASTM D7169",
-                "type": "mass"
+                "type": "mass fraction"
             },
             "environmental_behavior": {
                 "emulsions": [
@@ -7570,7 +7570,7 @@
                     "value": 516
                 },
                 "method": "ASTM D7169",
-                "type": "mass"
+                "type": "mass fraction"
             },
             "environmental_behavior": {
                 "emulsions": [
@@ -9532,7 +9532,7 @@
                     "value": 511
                 },
                 "method": "ASTM D7169",
-                "type": "mass"
+                "type": "mass fraction"
             },
             "environmental_behavior": {
                 "emulsions": [

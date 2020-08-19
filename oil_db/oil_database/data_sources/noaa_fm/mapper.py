@@ -165,7 +165,7 @@ class OilLibraryAttributeMapper(MapperBase):
         ret = {}
 
         if self.cut_units is None:
-            ret['type'] = 'mass'  # default
+            ret['type'] = 'mass fraction'  # default
         elif self.cut_units.lower() == 'weight':
             ret['type'] = 'mass fraction'
         else:

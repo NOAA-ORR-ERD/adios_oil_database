@@ -280,7 +280,7 @@
                     "unit_type": "temperature",
                     "value": 789.86
                 },
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
@@ -446,7 +446,7 @@
                 "value": 2.3128
             },
             "distillation_data": {
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
@@ -746,7 +746,7 @@
                     "unit_type": "temperature",
                     "value": 73.681
                 },
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
@@ -1046,7 +1046,7 @@
                     "unit_type": "temperature",
                     "value": 165.07
                 },
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
@@ -1392,7 +1392,7 @@
                     "unit_type": "temperature",
                     "value": 248.47
                 },
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
@@ -1746,7 +1746,7 @@
                     "unit_type": "temperature",
                     "value": 342.85
                 },
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
@@ -2097,7 +2097,7 @@
                     "unit_type": "temperature",
                     "value": 536.43
                 },
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
@@ -2441,7 +2441,7 @@
                     "unit_type": "temperature",
                     "value": 818.13
                 },
-                "type": "volume"
+                "type": "volume fraction"
             },
             "industry_properties": [
                 {
