@@ -65,15 +65,17 @@ def link_oil_to_labels(oil):
         labels based on its properties.
     '''
     try:
-        labels = oil.metadata['labels']
+        labels = oil['metadata']['labels']
     except TypeError:
         labels = oil.metadata.labels
+    except KeyError:
+        labels = []
 
     sample = OilEstimation(oil).get_sample()
 
     if sample is None:
         logger.warn('oil: {} has no fresh sample.  Skipping Categorization.'
-                    .format(oil.oil_id))
+                    .format(oil['oil_id']))
         return
 
     if is_crude_light(oil):
@@ -118,17 +120,17 @@ def link_oil_to_labels(oil):
         labels.extend(['Other'])
 
     try:
-        oil.metadata['labels'] = labels
+        oil['metadata']['labels'] = labels
     except TypeError:
         oil.metadata.labels = labels
 
 
 def is_crude(oil):
     try:
-        return ('product_type' in oil.metadata and
-                oil.metadata['product_type'] is not None and
-                oil.metadata['product_type'].lower() == 'crude')
-    except TypeError:
+        return ('product_type' in oil['metadata'] and
+                oil['metadata']['product_type'] is not None and
+                oil['metadata']['product_type'].lower() == 'crude')
+    except KeyError:
         return (hasattr(oil.metadata, 'product_type') and
                 oil.metadata.product_type is not None and
                 oil.metadata.product_type.lower() == 'crude')
@@ -136,23 +138,23 @@ def is_crude(oil):
 
 def is_refined(oil):
     try:
-        return ('product_type' in oil.metadata and
-                oil.metadata['product_type'] is not None and
-                oil.metadata['product_type'].lower() == 'refined')
-    except TypeError:
+        return ('product_type' in oil['metadata'] and
+                oil['metadata']['product_type'] is not None and
+                oil['metadata']['product_type'].lower() == 'refined')
+    except KeyError:
         return (hasattr(oil.metadata, 'product_type') and
                 oil.metadata.product_type is not None and
                 oil.metadata.product_type.lower() == 'refined')
 
 
 def api_min(oil, oil_api):
-    api = oil.metadata['API']
+    api = oil['metadata'].get('API', None)
 
     return api is not None and api > oil_api
 
 
 def api_max(oil, oil_api):
-    api = oil.metadata['API']
+    api = oil['metadata'].get('API', None)
 
     return api is not None and api < oil_api
 
@@ -272,7 +274,7 @@ def is_generic(oil):
           that is prefixed with '*GENERIC'.
     '''
     try:
-        ret = oil.metadata.get('name', None)
+        ret = oil['metadata'].get('name', None)
     except AttributeError:
         ret = oil.metadata.name
 
