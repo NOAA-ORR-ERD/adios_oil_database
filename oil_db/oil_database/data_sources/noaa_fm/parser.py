@@ -107,7 +107,7 @@ class OilLibraryRecordParser(ParserBase):
             occurrences = []
         else:
             occurrences = [int(n)
-                           for n in re.compile(r'\d{4}').findall(ref_text)]
+                           for n in re.compile(r'\b\d{4}\b').findall(ref_text)]
 
         if len(occurrences) == 0:
             ref_year = self.file_props['created'].year

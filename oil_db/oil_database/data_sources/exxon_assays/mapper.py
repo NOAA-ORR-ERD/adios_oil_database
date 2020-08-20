@@ -269,6 +269,7 @@ def ExxonMapper(record):
 
     oil = Oil(oil_id=oil_id)
     oil.metadata.name = name
+    oil.metadata.product_type = 'crude'
     oil.metadata.reference = reference
     oil.metadata.source_id = ref_id
 
@@ -297,7 +298,7 @@ def read_header(data):
         to the samples Exxon info in the header
     '''
     ref_text = "\n".join([next(data)[0] for _ in range(3)])
-    years = [int(n) for n in re.compile(r'\d{4}').findall(ref_text)]
+    years = [int(n) for n in re.compile(r'\b\d{4}\b').findall(ref_text)]
 
     if len(years) == 0:
         ref_year = None  # need to get file props from the .xlsx file
