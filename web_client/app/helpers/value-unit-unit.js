@@ -12,7 +12,7 @@ export function valueUnitUnit([valueUnitObj,
   let tempUnits = new Set(['F', 'C']);
   let fractionUnits = new Set(['1', 'fraction'])
 
-  if (typeof u === 'undefined' && uType === 'unitless') {
+  if (typeof u === 'undefined' || uType === 'unitless') {
       return '';
   }
   else if (tempUnits.has(u)) {

@@ -8,7 +8,10 @@ export function convertUnit([valueUnitObj,
                              newUnit,
                              unitType,
                              ...rest]) {  // eslint-disable-line no-unused-vars
-  if (!valueUnitObj) {
+  if (!valueUnitObj ||
+      !valueUnitObj.hasOwnProperty('unit')) {
+    // if we don't have a value, we just return
+    // if we don't have a unit, then we are likely unitless, and return
     return valueUnitObj;
   }
 
@@ -19,7 +22,8 @@ export function convertUnit([valueUnitObj,
   }
 
   let compatibleWithIn = Object.values(Nucos.Converters).filter(c => {
-    return c.Synonyms.hasOwnProperty(copyObj.unit.toLowerCase()
+    return c.Synonyms.hasOwnProperty((copyObj.unit || '')
+                                     .toLowerCase()
                                      .replace(/[\s.]/g, ''));
   });
 

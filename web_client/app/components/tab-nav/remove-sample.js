@@ -6,7 +6,7 @@ export default class RemoveSample extends Component {
     removeSample(sampleIndex) {
         // remove the sample
         let oil = this.args.oil;
-        oil.samples.removeAt(sampleIndex, 1);
+        oil.sub_samples.removeAt(sampleIndex, 1);
 
         this.args.submit(oil);
     }
