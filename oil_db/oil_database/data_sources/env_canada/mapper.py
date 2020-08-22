@@ -451,6 +451,9 @@ class EnvCanadaSampleMapper(MapperBase):
                          'loss_modulus'):
                 ret[idx][attr]['unit_type'] = 'pressure'
 
+            for attr in ('tan_delta_v_e',):
+                ret[idx][attr]['unit_type'] = 'unitless'
+
         return ret
 
     @property
