@@ -17,20 +17,20 @@ export default class GroupedTables extends Component {
     get tableGroups() {
         // We have a list of items that belong to one or more groups.
         // We want to turn it into a dict of grouped items
-        return this.baseProperty.map( (c) => {
+        return this.baseProperty.map( (c, i) => {
             if (c.groups) {
                 return c.groups.map( (g) => {
-                    return [g, c];
+                    return [g, c, i];
                 });
             }
             else {
-                return [['Ungrouped', c]];
+                return [['Ungrouped', c, i]];
             }
         })
         .reduce((acc, e) => {
-            let [k, v] = e[0];
+            let [k, v, i] = e[0];
             acc[k] = (acc[k] ? acc[k]: []);
-            acc[k].push(v);
+            acc[k].push({'value': v, 'index': i});
             return acc;
         }, {})
     }
