@@ -6,6 +6,10 @@
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Measurement</th>
+
+      <th scope="col" title="standard deviation">&sigma;</th>
+
+      <th scope="col">replicates</th>
       <th scope="col">Method</th>
 
       {{#if this.args.editable}}
@@ -24,9 +28,69 @@
   <tbody>
     {{#each this.args.items as |item index|}}
       <tr>
-        <td>{{item.value.name}}</td>
-        <td>{{value-unit item.value.measurement 2}}</td>
-        <td>{{item.value.method}}</td>
+        <td>
+          {{#if this.args.editable}}
+            <Input @class="p-1 overflow-hidden bg-transparent border"
+              @value={{item.value.name}}
+              @placeholder="Enter Value"
+              @change={{fn this.updateValue item}}
+              size={{24}}
+            />
+          {{else}}
+            {{item.value.name}}
+          {{/if}}
+        </td>
+
+        <td>
+          <Common::ValueUnitInput
+            @valueObject={{item.value.measurement}}
+            @editable={{this.args.editable}}
+            @submit={{this.updateValue}}
+            @valueUnit={{item.value.measurement.unit}}
+            @valuePrecision={{2}}
+          />
+
+        </td>
+
+        <td>
+          {{#if this.args.editable}}
+            <Input @class="p-1 overflow-hidden bg-transparent border"
+              @value={{item.value.measurement.standard_deviation}}
+              @placeholder="Enter Value"
+              @change={{fn this.updateValue item}}
+              size={{10}}
+            />
+          {{else}}
+            {{item.value.measurement.standard_deviation}}
+          {{/if}}
+        </td>
+
+        <td>
+          {{#if this.args.editable}}
+            <Input @class="p-1 overflow-hidden bg-transparent border"
+              @value={{item.value.measurement.replicates}}
+              @placeholder="Enter Value"
+              @change={{fn this.updateValue item}}
+              size={{10}}
+            />
+          {{else}}
+            {{item.value.measurement.replicates}}
+          {{/if}}
+        </td>
+
+        <td>
+          {{#if this.args.editable}}
+            <Input @class="p-1 overflow-hidden bg-transparent border"
+              @value={{item.value.method}}
+              @placeholder="Enter Value"
+              @change={{fn this.updateValue item}}
+              size={{10}}
+            />
+          {{else}}
+            {{item.value.method}}
+          {{/if}}
+        </td>
+
 
         {{#if this.args.editable}}
           <td class="border-0">

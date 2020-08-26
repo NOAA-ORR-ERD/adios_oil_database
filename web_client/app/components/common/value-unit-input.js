@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from "@ember/object";
+import { action, set } from "@ember/object";
 import { valueUnitUnit } from 'ember-oil-db/helpers/value-unit-unit';
 
 export default class ValueUnitInput extends Component {
@@ -25,6 +25,11 @@ export default class ValueUnitInput extends Component {
                 unit: this.args.valueUnit
             };
         }
+
+        Object.entries(this.valueObject).forEach(([key, item]) => {
+            set(this.args.valueObject, key, item);
+        });
+
         this.args.submit(this.valueObject);
     }
 }

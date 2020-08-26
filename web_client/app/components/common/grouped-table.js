@@ -3,17 +3,12 @@ import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
 
 export default class GroupedTable extends Component {
-    @tracked baseProperty;
+    @tracked baseProperty = [];
 
     constructor() {
         super(...arguments);
 
-        if (this.args.baseProperty) {
-            this.baseProperty = this.args.baseProperty;
-        }
-        else {
-            this.baseProperty = [];
-        }
+        this.baseProperty = this.args.baseProperty;
     }
 
     @action
@@ -59,4 +54,5 @@ export default class GroupedTable extends Component {
     updateValue(enteredValue) {
         this.args.submit(enteredValue);
     }
+
 }
