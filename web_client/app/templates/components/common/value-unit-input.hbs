@@ -27,9 +27,17 @@
         size="10"
       />
     {{/if}}
-    <label class="input-group-text">
-      {{this.beaUnit}}
-    </label>
+
+    {{#if editUnit}}
+      <Button::SelectUnit
+        @baseProperty={{this.beaUnit}}
+        @defaultUnit={{this.args.defaultUnit}}
+        @change={{action "updateUnit"}}
+       />
+    {{else}}
+      <label class="input-group-text">{{this.beaUnit}}</label>
+    {{/if}}
+
   </div>
 {{else}}
   {{#if (or this.valueObject.value (eq this.args.valueObject.value 0))}}

@@ -1,0 +1,16 @@
+<button type="button"
+ {{on "click" this.launchSelectDialog}}
+ {{did-insert this.setComponentElement}}
+ >
+  {{this.baseProperty}}
+</button>
+
+{{#if this.selectingUnit}}
+  <Dialog::SelectUnit
+    @baseProperty={{this.baseProperty}}
+    @parent={{this.element}}
+    @defaultUnit={{this.args.defaultUnit}}
+    @closeModal={{this.closeSelectDialog}}
+    @ok={{this.args.change}}
+  />
+{{/if}}

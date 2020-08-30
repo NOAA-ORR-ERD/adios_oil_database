@@ -21,6 +21,7 @@
     <h5 class="card-header text-center p-1">
       {{this.args.valueTitle}} ({{this.beaUnit}})
     </h5>
+
     {{!-- dialog body --}}
     <div class="card-body p-1">
       {{!-- range input --}}
@@ -83,15 +84,21 @@
           {{on "change" this.changeValue}}
         />
       </div>
+
       {{!-- dialog Cancel and Save buttons --}}
       <div class="row d-flex justify-content-end mx-2">
-        <button type="button" class="btn btn-secondary btn-sm mr-2" onClick={{action "closeModalDialog"}}>
+        <button type="button" class="btn btn-secondary btn-sm mr-2"
+                onClick={{action "closeModalDialog"}}
+         >
           Cancel
         </button>
-        <button type="button" class="btn btn-primary btn-sm" onClick={{action "onSave"}}>
+        <button type="button" class="btn btn-primary btn-sm"
+                onClick={{action "onSave"}}
+         >
           Save
         </button>
       </div>
+
     </div>
   </div>
 </ModalDialog>
