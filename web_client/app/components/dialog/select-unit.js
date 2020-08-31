@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action, set } from "@ember/object";
+import { action } from "@ember/object";
 import $ from 'jquery';
 
 import Nucos from 'nucos/nucos';

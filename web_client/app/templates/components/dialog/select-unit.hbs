@@ -26,7 +26,7 @@
                 {{on "change" this.updateUnit}}
         >
           {{#each this.unitNames as |name|}}
-            <option value={{name}} selected={{if (eq name this.unit) 'true'}}>
+            <option value={{name}} selected={{if (eq name this.unit) "true"}}>
               {{name}}
             </option>
           {{/each}}
