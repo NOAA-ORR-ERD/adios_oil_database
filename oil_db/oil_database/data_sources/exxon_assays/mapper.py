@@ -478,19 +478,24 @@ def process_cut_table(oil, samples, cut_table):
             pass
 
     # viscosity
-    # fixme: -- maybe should parse the labels for temp, etc?
-    #          wait till next version
     for lbl in ("Viscosity at 20C/68F, cSt",
                 "Viscosity at 40C/104F, cSt",
                 "Viscosity at 50C/122F, cSt"):
         row = cut_table[norm(lbl)]
+
+        temps = re.compile(r'\d+C').findall(lbl)
+        if len(temps) > 0:
+            temp_c = float(temps[0][:-1])
+        else:
+            temp_c = None
+
         for sample, val in zip(samples, row):
             try:
                 sample.physical_properties.kinematic_viscosities.append(
                     KinematicViscosityPoint(
                         viscosity=KinematicViscosity(value=sigfigs(val, 5),
                                                      unit="cSt"),
-                        ref_temp=Temperature(value=40, unit="C"),
+                        ref_temp=Temperature(value=temp_c, unit="C"),
                     )
                 )
             except Exception:
