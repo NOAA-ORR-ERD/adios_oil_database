@@ -2,7 +2,6 @@
     Test our Synonym model class
 '''
 import pytest
-from pydantic import ValidationError
 
 from oil_database.models.common import Synonym
 
@@ -10,7 +9,7 @@ from oil_database.models.common import Synonym
 class TestSynonym():
     @pytest.mark.parametrize('name', [
         pytest.param(None,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         ('Synonym'),
     ])
     def test_init(self, name):

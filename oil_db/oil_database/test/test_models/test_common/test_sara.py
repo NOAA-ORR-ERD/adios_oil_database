@@ -3,8 +3,6 @@
 '''
 import pytest
 
-from pydantic import ValidationError
-
 from oil_database.models.common import (SARAFraction, SARADensity,
                                         MolecularWeight)
 
@@ -12,15 +10,15 @@ from oil_database.models.common import (SARAFraction, SARADensity,
 class TestSaraFraction():
     @pytest.mark.parametrize('sara_type, fraction', [
         pytest.param(None, None,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param(None, 0.1,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param('Saturates', None,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param('bogus', 0.1,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         pytest.param('Saturates', 'bogus',
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         ('Saturates', 0.1),
     ])
     def test_init_required(self, sara_type, fraction):
@@ -50,13 +48,13 @@ class TestSaraFraction():
         [(288.15, 0.1, 0.1, 1.0, 'method'),
          ('288.15', '0.1', '0.1', '1.0', 0xdeadbeef),
          pytest.param('nope', 0.1, 0.1, 1.0, 'method',
-                      marks=pytest.mark.raises(exception=ValidationError)),
+                      marks=pytest.mark.raises(exception=ValueError)),
          pytest.param(288.15, 'nope', 0.1, 1.0, 'method',
-                      marks=pytest.mark.raises(exception=ValidationError)),
+                      marks=pytest.mark.raises(exception=ValueError)),
          pytest.param(288.15, 0.1, 'nope', 1.0, 'method',
-                      marks=pytest.mark.raises(exception=ValidationError)),
+                      marks=pytest.mark.raises(exception=ValueError)),
          pytest.param(288.15, 0.1, 0.1, 'nope', 'method',
-                      marks=pytest.mark.raises(exception=ValidationError)),
+                      marks=pytest.mark.raises(exception=ValueError)),
          ]
     )
     def test_init_optional(self, ref_temp, weathering,
@@ -78,15 +76,15 @@ class TestSaraFraction():
 class TestSaraDensity():
     @pytest.mark.parametrize('sara_type, kg_m_3', [
         pytest.param(None, None,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param(None, 1000.0,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param('Saturates', None,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param('bogus', 1000.0,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         pytest.param('Saturates', 'bogus',
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         ('Saturates', 1000.0),
     ])
     def test_init_required(self, sara_type, kg_m_3):
@@ -112,9 +110,9 @@ class TestSaraDensity():
         (288.15, 0.1),
         ('288.15', '0.1'),
         pytest.param('nope', 0.1,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         pytest.param(288.15, 'nope',
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
     ])
     def test_init_optional(self, ref_temp, weathering):
         sara_obj = SARADensity(sara_type='Aromatics', kg_m_3=1000.0,
@@ -128,15 +126,15 @@ class TestSaraDensity():
 class TestMolecularWeight():
     @pytest.mark.parametrize('sara_type, g_mol', [
         pytest.param(None, None,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param(None, 100.0,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param('Saturates', None,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=TypeError)),
         pytest.param('bogus', 100.0,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         pytest.param('Saturates', 'bogus',
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         ('Saturates', 100.0),
     ])
     def test_init_required(self, sara_type, g_mol):
@@ -162,9 +160,9 @@ class TestMolecularWeight():
         (288.15, 0.1),
         ('288.15', '0.1'),
         pytest.param('nope', 0.1,
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
         pytest.param(288.15, 'nope',
-                     marks=pytest.mark.raises(exception=ValidationError)),
+                     marks=pytest.mark.raises(exception=ValueError)),
     ])
     def test_init_optional(self, ref_temp, weathering):
         sara_obj = MolecularWeight(sara_type='Aromatics', g_mol=1000.0,
