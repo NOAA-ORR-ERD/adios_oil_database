@@ -67,9 +67,16 @@
     @onScrolledToBottom={{action "onScrolledToBottom"}} as |body|
   >
     {{#if isLoading}}
-      <body.loader>
+      {{#body.loader}}
         <Table::Loader />
-      </body.loader>
+      {{/body.loader}}
+    {{else if table.isEmpty}}
+      {{#body.no-data}}
+        <center>
+          <p><strong>Sorry, your filter produced no results</strong></p>
+          To widen your search, change or remove filters above
+        </center>
+      {{/body.no-data}}
     {{/if}}
   </t.body>
 
