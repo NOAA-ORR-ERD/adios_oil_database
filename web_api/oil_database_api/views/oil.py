@@ -515,6 +515,7 @@ def get_oil_searchable_fields(oil):
                         'location': meta.get('location', None),
                         'product_type': meta.get('product_type', None),
                         'API': meta.get('API'),
+                        'sample_date': meta.get('sample_date', ''),
                         'labels': meta.get('labels', []),
                     },
                     'status': oil.get('status', []),
