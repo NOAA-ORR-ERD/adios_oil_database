@@ -5,7 +5,7 @@
         <div class="row h-100 ml-1 align-items-center">
           <input class="form-control"
             value={{q}}
-            placeholder="Search..."
+            placeholder="Search Name or Location"
             oninput={{action (pipe (action (mut q)) (action "onSearchChange")) value="target.value"}}
           >
         </div>
