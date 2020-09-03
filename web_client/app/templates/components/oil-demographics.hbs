@@ -82,11 +82,13 @@
 
       <div class="row pl-0 mb-3">
         {{! Labels }}
-        <div class="col-12 pl-0 form-inline d-flex align-items-center">
+        <div class="col-1 pl-0 form-inline d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Labels:</label>
           </div>
 
+        </div>
+        <div class="col-7">
           {{#if this.args.editable}}
             <PowerSelectMultiple @class="bg-warning border-0"
               @placeholder="Select some categories..."

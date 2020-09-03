@@ -148,6 +148,10 @@ td:empty::after{
     font-weight: 500;
 }
 
+ul.ember-power-select-options {
+    columns: 3
+}
+
 .lt-sort-icon {
     float: left !important;
     margin: 3px;
