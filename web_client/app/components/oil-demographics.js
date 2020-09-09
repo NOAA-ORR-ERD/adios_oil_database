@@ -78,8 +78,10 @@ export default class OilDemographics extends Component {
     @action
     updateSampleReceivedDate(event) {
         set(this.args.oil.metadata, 'sample_date',
-            (moment(event.target.value, "YYYY-MM-DD")
-             .tz("Europe/London").unix()));
+            moment(event.target.value, 'YYYY-MM-DD')
+            .tz('Europe/London').format('YYYY-MM-DD')
+        );
+
         this.args.submit(this.args.oil);
     }
 

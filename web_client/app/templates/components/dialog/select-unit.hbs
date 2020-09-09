@@ -26,10 +26,7 @@
                 {{on "change" this.updateUnit}}
         >
           {{#each this.primaryUnitNames as |primaryName|}}
-            <option
-             value={{get primaryName 0}}
-             selected={{if (get primaryName 1) true}}
-            >
+            <option value={{get primaryName 0}} selected={{get primaryName 1}}>
               {{get primaryName 0}}
             </option>
           {{/each}}
