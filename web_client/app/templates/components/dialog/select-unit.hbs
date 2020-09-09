@@ -25,9 +25,12 @@
         <select name="unit" id="unit"
                 {{on "change" this.updateUnit}}
         >
-          {{#each this.unitNames as |name|}}
-            <option value={{name}} selected={{if (eq name this.unit) "true"}}>
-              {{name}}
+          {{#each this.primaryUnitNames as |primaryName|}}
+            <option
+             value={{get primaryName 0}}
+             selected={{if (get primaryName 1) true}}
+            >
+              {{get primaryName 0}}
             </option>
           {{/each}}
         </select>

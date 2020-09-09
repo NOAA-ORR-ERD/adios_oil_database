@@ -36,15 +36,18 @@ export default class SelectUnitDialog extends Component {
         return this.compatibleConverters.map((i) => {return i.Name});
     }
 
-    get unitNames() {
+    get primaryUnitNames() {
         if (this.unitType) {
-            return Object.keys(this.unitType.Synonyms);
+            let selected = Object.keys(this.unitType.PrimaryUnitNames).map(i => i === this.unitType.Synonyms[this.unit]);
+            
+            return Object.values(this.unitType.PrimaryUnitNames).map((v, i) => {
+                return [v, selected[i]];
+            });
         }
         else {
             return [];
         }
     }
-
 
     @action
     setModalEvents(element) {
@@ -68,7 +71,15 @@ export default class SelectUnitDialog extends Component {
 
     @action
     updateUnit(event) {
-        this.unit = event.target.value;
+        let primaryName = Object.keys(this.unitType.PrimaryUnitNames).find(key => {
+            return this.unitType.PrimaryUnitNames[key] === event.target.value;
+        });
+
+        let value = Object.entries(this.unitType.Synonyms).filter( ([k, v]) => {
+            return (v === primaryName && k !== primaryName);})
+            .map( ([k,]) => {return k})[0];
+
+        this.unit = value;
     }
 
     @action
