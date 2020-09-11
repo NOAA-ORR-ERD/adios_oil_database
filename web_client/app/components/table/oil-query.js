@@ -63,6 +63,7 @@ export default Component.extend(TableCommon, {
             label: 'Date',
             valuePath: 'metadata.sample_date',
             classNames: 'text-nowrap',
+            cellComponent: 'table/cell/sample-date',
             width: '100px',
             minResizeWidth: 60,
             resizable: true,
