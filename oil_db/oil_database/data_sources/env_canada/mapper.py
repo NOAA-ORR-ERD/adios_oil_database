@@ -509,24 +509,24 @@ class EnvCanadaSampleMapper(MapperBase):
         ret = []
 
         groups = [
-            ('btex_group', None, 'ug/g', 'Mass Fraction', False),
-            ('c4_c6_alkyl_benzenes', None, 'ug/g', 'Mass Fraction', False),
-            ('naphthalenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+            ('btex_group', None, 'µg/g', 'Mass Fraction', False),
+            ('c4_c6_alkyl_benzenes', None, 'µg/g', 'Mass Fraction', False),
+            ('naphthalenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
              'Mass Fraction', False),
-            ('phenanthrenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+            ('phenanthrenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
              'Mass Fraction', False),
-            ('dibenzothiophenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+            ('dibenzothiophenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
              'Mass Fraction', False),
-            ('fluorenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+            ('fluorenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
              'Mass Fraction', False),
             ('benzonaphthothiophenes', 'alkylated_aromatic_hydrocarbons',
-             'ug/g', 'Mass Fraction', False),
-            ('chrysenes', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+             'µg/g', 'Mass Fraction', False),
+            ('chrysenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
              'Mass Fraction', False),
-            ('other_priority_pahs', 'alkylated_aromatic_hydrocarbons', 'ug/g',
+            ('other_priority_pahs', 'alkylated_aromatic_hydrocarbons', 'µg/g',
              'Mass Fraction', True),
-            ('n_alkanes', None, 'ug/g', 'Mass Fraction', True),
-            ('biomarkers', None, 'ug/g', 'Mass Fraction', True),
+            ('n_alkanes', None, 'µg/g', 'Mass Fraction', True),
+            ('biomarkers', None, 'µg/g', 'Mass Fraction', True),
         ]
 
         for group_args in groups:
