@@ -1,6 +1,6 @@
 import logging
 
-from pymongo import MongoClient
+from oil_database.session import Session
 
 logger = logging.getLogger(__name__)
 
@@ -11,5 +11,6 @@ def connect_mongodb(settings):
     '''
     host = settings['mongodb.host']
     port = int(settings['mongodb.port'])
+    database = settings['mongodb.database']
 
-    return MongoClient(host=host, port=port)
+    return Session(host=host, port=port, database=database)
