@@ -68,6 +68,14 @@ class Session():
         '''
         return {"$or": [dict([i]) for i in opts.items()]}
 
+    def __getattr__(self, name):
+        '''
+            Any referenced attributes that are not explicitly defined in this
+            class will be assumed to belong to the mongo client.  So we will
+            pass them down.
+        '''
+        return getattr(self.mongo_client, name)
+
 
 
 
