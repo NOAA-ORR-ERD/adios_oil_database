@@ -230,9 +230,6 @@ def get_search_params(request):
                 filtered.
         - qLabels: A list of label strings that will be matched against the oil
                    labels to filter the results.
-
-        Note: some search directives cannot be easily turned into a MongoDB
-              search, so instead they will be used to filter the results.
     '''
     query_out = {}
     post_out = {}
@@ -241,30 +238,42 @@ def get_search_params(request):
 
     if query != '':
         query_out.update({
-            "$or": [{'metadata.name': {'$regex': query,
+            '$or': [{'metadata.name': {'$regex': query,
                                        '$options': 'i'}},
                     {'metadata.location': {'$regex': query,
                                            '$options': 'i'}}]
         })
 
     try:
-        apis = request.GET.get('qApi', '').split(',')
-        low, high = [float(a) for a in apis]
+        low, high = [float(a) for a in request.GET.get('qApi', '').split(',')]
 
         if low > high:
             low, high = high, low
 
-        post_out['apis'] = [low, high]
+        query_out.update({
+            'metadata.API': {'$gte': low, '$lte': high},
+        })
     except Exception:
         # couldn't parse items into float interval.  Continue without adding
-        # the post-processing step.
+        # the query parameters.
         pass
 
     labels = request.GET.get('qLabels', '')
 
     if labels != '':
         labels = labels.split(',')
-        post_out['labels'] = labels
+
+    if len(labels) == 1:
+        query_out.update({
+            'metadata.labels': {'$in': labels}
+        })
+    elif len(labels) > 1:
+        labels = [{'metadata.labels': {'$in': [l]}}
+                  for l in labels]
+
+        query_out.update({
+            '$and': labels
+        })
 
     return query_out, post_out
 
@@ -283,9 +292,8 @@ def get_sort_params(request):
     elif sort == 'api':
         sort = 'metadata.API'
 
-    direction = ({'asc': ASCENDING,
-                  'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
-                                          ASCENDING))
+    direction = ({'asc': ASCENDING, 'desc': DESCENDING}
+                 .get(request.GET.get('dir', 'asc'), ASCENDING))
 
     logger.info('(sort, direction): ({}, {})'.format(sort, direction))
 

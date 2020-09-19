@@ -16,20 +16,101 @@ session = connect_mongodb(settings)
 
 
 # The general purpose query function (this will be very verbose)
-print('Open query...')
-for rec in session.query():
-    pprint(rec)
+#print('Open query...')
+#for rec in session.query():
+#    pprint(rec)
 
 print('Query by id...')
-for rec in session.query(id='AD00020'):
+print('Return only the name & location fields...')
+for rec in session.query(oil_id='AD00020',
+                         projection=['metadata.name',
+                                     'metadata.location']):
     pprint(rec)
 
 
 print('\n\nQuery by name and location, inclusive and case-sensitive.')
 print('Return only the name & location fields...')
-for idx, rec in enumerate(session.query(name='Alaska North Slope',
-                                        location='Alaska North Slope',
+for idx, rec in enumerate(session.query(text='Alaska North Slope',
                                         projection=['metadata.name',
-                                                    'metadata.location'],
-                                        ignore_case=False, inclusive=True)):
+                                                    'metadata.location'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by labels = ["Crude", "Medium"]')
+print('Return only the name & labels fields...')
+for idx, rec in enumerate(session.query(labels=['Crude', 'Medium'],
+                                        projection=['metadata.name',
+                                                    'metadata.labels'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by labels = "Crude,Medium"]')
+print('Return only the name & labels fields...')
+for idx, rec in enumerate(session.query(labels='Crude,Medium',
+                                        projection=['metadata.name',
+                                                    'metadata.labels'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by labels = "Crude, Medium"]')
+print('Return only the name & labels fields...')
+for idx, rec in enumerate(session.query(labels='Crude, Medium',
+                                        projection=['metadata.name',
+                                                    'metadata.labels'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by api = 50')
+print('Return only the name & API fields...')
+for idx, rec in enumerate(session.query(api=50,
+                                        projection=['metadata.name',
+                                                    'metadata.API'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by api = [50]')
+print('Return only the name & API fields...')
+for idx, rec in enumerate(session.query(api=[50],
+                                        projection=['metadata.name',
+                                                    'metadata.API'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by api = [None, 10]')
+print('Return only the name & API fields...')
+for idx, rec in enumerate(session.query(api=[None, 10],
+                                        projection=['metadata.name',
+                                                    'metadata.API'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by api = [10, 15]')
+print('Return only the name & API fields...')
+for idx, rec in enumerate(session.query(api=[10, 15],
+                                        projection=['metadata.name',
+                                                    'metadata.API'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by api = "10,15"')
+print('Return only the name & API fields...')
+for idx, rec in enumerate(session.query(api='10,15',
+                                        projection=['metadata.name',
+                                                    'metadata.API'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by api = "10, 15"')
+print('Return only the name & API fields...')
+for idx, rec in enumerate(session.query(api='10, 15',
+                                        projection=['metadata.name',
+                                                    'metadata.API'])):
+    pprint(f'{idx}: {rec}')
+
+
+print('\n\nQuery by api = [15, 10]')
+print('Return only the name & API fields...')
+for idx, rec in enumerate(session.query(api=[15, 10],
+                                        projection=['metadata.name',
+                                                    'metadata.API'])):
     pprint(f'{idx}: {rec}')
