@@ -1,0 +1,251 @@
+{
+    "_id": "AD00020",
+    "metadata": {
+        "API": 26.8,
+        "labels": [
+            "Crude",
+            "Medium"
+        ],
+        "location": "ALASKA",
+        "name": "ALASKA NORTH SLOPE",
+        "product_type": "crude",
+        "reference": {
+            "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario.",
+            "year": 1996
+        },
+        "source_id": "AD00020"
+    },
+    "oil_id": "AD00020",
+    "status": [
+        "W007: No distillation data provided"
+    ],
+    "sub_samples": [
+        {
+            "SARA": {
+                "asphaltenes": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.02
+                }
+            },
+            "bulk_composition": [
+                {
+                    "measurement": {
+                        "unit": "1",
+                        "unit_type": "massfraction",
+                        "value": 0.89
+                    },
+                    "name": "water_content"
+                },
+                {
+                    "measurement": {
+                        "unit": "1",
+                        "unit_type": "massfraction",
+                        "value": 0.07
+                    },
+                    "name": "wax_content"
+                },
+                {
+                    "measurement": {
+                        "unit": "1",
+                        "unit_type": "massfraction",
+                        "value": 0.0104
+                    },
+                    "name": "sulfur"
+                },
+                {
+                    "measurement": {
+                        "unit": "ppm",
+                        "unit_type": "massfraction",
+                        "value": 14.7
+                    },
+                    "name": "nickel"
+                },
+                {
+                    "measurement": {
+                        "unit": "ppm",
+                        "unit_type": "massfraction",
+                        "value": 33.9
+                    },
+                    "name": "vanadium"
+                }
+            ],
+            "distillation_data": {
+                "type": "mass"
+            },
+            "environmental_behavior": {
+                "emulsions": [
+                    {
+                        "age": {
+                            "unit": "day",
+                            "unit_type": "time",
+                            "value": 0.0
+                        },
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 288.15
+                        },
+                        "water_content": {
+                            "unit": "1",
+                            "unit_type": "massfraction",
+                            "value": 0.89
+                        }
+                    }
+                ]
+            },
+            "industry_properties": [
+                {
+                    "measurement": {
+                        "unit": "bar",
+                        "unit_type": "massfraction",
+                        "value": 0.19
+                    },
+                    "name": "Reid Vapor Pressure"
+                }
+            ],
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.0
+                },
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil"
+            },
+            "physical_properties": {
+                "densities": [
+                    {
+                        "density": {
+                            "unit": "kg/m^3",
+                            "unit_type": "density",
+                            "value": 904.0
+                        },
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 273.0
+                        }
+                    }
+                ],
+                "dynamic_viscosities": [
+                    {
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 288.0
+                        },
+                        "viscosity": {
+                            "unit": "kg/(m s)",
+                            "unit_type": "dynamicviscosity",
+                            "value": 0.023
+                        }
+                    }
+                ],
+                "interfacial_tension_seawater": [
+                    {
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 273.0
+                        },
+                        "tension": {
+                            "unit": "N/m",
+                            "unit_type": "interfacialtension",
+                            "value": 0.0
+                        }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 273.0
+                        },
+                        "tension": {
+                            "unit": "N/m",
+                            "unit_type": "interfacialtension",
+                            "value": 0.0261
+                        }
+                    }
+                ],
+                "kinematic_viscosities": [
+                    {
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 311.0
+                        },
+                        "viscosity": {
+                            "unit": "m^2/s",
+                            "unit_type": "kinematicviscosity",
+                            "value": 4.24e-05
+                        }
+                    }
+                ],
+                "pour_point": {
+                    "measurement": {
+                        "unit": "K",
+                        "unit_type": "temperature",
+                        "value": 265.0
+                    }
+                }
+            }
+        },
+        {
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.09
+                },
+                "name": "9.0% Weathered",
+                "short_name": "9.0% Weathered"
+            },
+            "physical_properties": {
+                "densities": [
+                    {
+                        "density": {
+                            "unit": "kg/m^3",
+                            "unit_type": "density",
+                            "value": 920.0
+                        },
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 273.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "metadata": {
+                "fraction_weathered": {
+                    "unit": "1",
+                    "unit_type": "massfraction",
+                    "value": 0.16
+                },
+                "name": "16.0% Weathered",
+                "short_name": "16.0% Weathered"
+            },
+            "physical_properties": {
+                "densities": [
+                    {
+                        "density": {
+                            "unit": "kg/m^3",
+                            "unit_type": "density",
+                            "value": 934.0
+                        },
+                        "ref_temp": {
+                            "unit": "K",
+                            "unit_type": "temperature",
+                            "value": 273.0
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
