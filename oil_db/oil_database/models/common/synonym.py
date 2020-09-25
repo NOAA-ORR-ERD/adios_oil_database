@@ -1,8 +1,8 @@
-#
-# Model class definitions for embedded content in our oil records
-#
-from pydantic import BaseModel
+from dataclasses import dataclass
+from ..common.utilities import dataclass_to_json
 
 
-class Synonym(BaseModel):
+@dataclass_to_json
+@dataclass
+class Synonym:
     name: str

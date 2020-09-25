@@ -82,11 +82,13 @@
 
       <div class="row pl-0 mb-3">
         {{! Labels }}
-        <div class="col-12 pl-0 form-inline d-flex align-items-center">
+        <div class="col-1 pl-0 form-inline d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">Labels:</label>
           </div>
 
+        </div>
+        <div class="col-7">
           {{#if this.args.editable}}
             <PowerSelectMultiple @class="bg-warning border-0"
               @placeholder="Select some categories..."
@@ -135,7 +137,7 @@
       <div class="row">
 
         {{! Reference Date }}
-        <div class="col-sm-12 col-md-6 input-group align-items-center">
+        <div class="col-sm-12 col-md-5 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Reference Date:</label>
           {{! Europe/London is how we lookup GMT in moment.js }}
           {{#let (if this.args.oil.metadata.reference.year
@@ -146,6 +148,7 @@
                 @class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilReferenceDate}}
                 @placeholder="Enter Date"
+                @size="7"
                 @change={{action "updateReferenceDate"}}
               />
             {{else}}
@@ -155,17 +158,18 @@
         </div>
 
         {{! Sample Received Date }}
-        <div class="col-sm-12 col-md-6 input-group align-items-center">
+        <div class="col-sm-12 col-md-7 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Sample Received Date:</label>
           {{! Europe/London is how we lookup GMT in moment.js }}
           {{#let (if this.args.oil.metadata.sample_date
-                  (moment-format (unix this.args.oil.metadata.sample_date) "YYYY-MM-DD" timeZone="Europe/London")
+                  this.args.oil.metadata.sample_date
                   (if this.args.editable "" "None")) as |oilSampleDate|}}
             {{#if this.args.editable}}
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilSampleDate}}
                 @placeholder="Enter Date"
+                @size="12"
                 @change={{action "updateSampleReceivedDate"}}
               />
             {{else}}

@@ -1942,7 +1942,7 @@ class TestEnvCanadaSampleMapper(object):
                            'standard_deviation': 67002.0, 'replicates': 3}}
          ]),
         ('2713', 0, 'distillation_data', {
-            "type": "mass",
+            "type": "mass fraction",
             "method": "Merged ASTM D7169 & ASTM D6730 mod.",
             "end_point": {'min_value': 720.0, 'max_value': None, 'unit': 'C'},
             "cuts": [
@@ -2060,6 +2060,7 @@ class TestEnvCanadaSampleMapper(object):
                                  'unit_type': 'pressure',
                                  'standard_deviation': 3, 'replicates': 6},
              'tan_delta_v_e': {'value': 3.135, 'unit': None,
+                               'unit_type': 'unitless',
                                'standard_deviation': 0.4, 'replicates': 6},
              'water_content': {'value': 39.787, 'unit': '%',
                                'standard_deviation': 2.3, 'replicates': 9}},
@@ -2079,6 +2080,7 @@ class TestEnvCanadaSampleMapper(object):
                                  'unit_type': 'pressure',
                                  'standard_deviation': 0.96, 'replicates': 6},
              'tan_delta_v_e': {'value': 12, 'unit': None,
+                               'unit_type': 'unitless',
                                'standard_deviation': 2, 'replicates': 5},
              'water_content': {'value': 15.592, 'unit': '%',
                                'standard_deviation': 1.8, 'replicates': 9}}

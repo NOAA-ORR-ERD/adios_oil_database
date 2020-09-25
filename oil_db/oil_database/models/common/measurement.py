@@ -35,8 +35,6 @@ class ProductType(str):
 @dataclass_to_json
 @dataclass
 class UnittedValue:
-    # fixme: could this use the FloatUnit stuff?
-    #        it certainly needs more "smarts"
     """
     Data structure to hold a value with a unit
 
@@ -71,8 +69,6 @@ class UnittedValue:
 @dataclass_to_json
 @dataclass
 class UnittedRange:
-    # fixme: could this use the FloatUnit stuff?
-    #        it certainly needs more "smarts"
     """
     Data structure to hold a range of values with a unit
 

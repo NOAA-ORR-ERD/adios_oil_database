@@ -77,9 +77,30 @@ export default class OilDemographics extends Component {
 
     @action
     updateSampleReceivedDate(event) {
-        set(this.args.oil.metadata, 'sample_date',
-            (moment(event.target.value, "YYYY-MM-DD")
-             .tz("Europe/London").unix()));
+        let sampleDate = event.target.value;
+        let currentYear = moment().utcOffset(0).year();
+
+        if (sampleDate.match(/^\d{1,4}$/)) {
+            // YYYY is a special case
+            let year = parseInt(sampleDate.match(/^\d{1,4}/)[0]);
+            if (year < 1900 || year > currentYear) sampleDate = '';
+
+            set(this.args.oil.metadata, 'sample_date', sampleDate);
+        }
+        else {
+            sampleDate = moment(sampleDate, 'YYYY-MM-DD')
+                         .utcOffset(0).format('YYYY-MM-DD');
+
+            if (sampleDate === 'Invalid date') sampleDate = '';
+
+            if (sampleDate) {
+                let year = parseInt(sampleDate.match(/^\d{4}/)[0]);
+                if (year < 1900) sampleDate = '';
+            }
+
+            set(this.args.oil.metadata, 'sample_date', sampleDate);
+        }
+
         this.args.submit(this.args.oil);
     }
 

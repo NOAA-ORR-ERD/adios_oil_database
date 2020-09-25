@@ -7,25 +7,25 @@
 from enum import Enum
 
 
-class ProductTypeEnum(str, Enum):
+class ProductTypeEnum(Enum):
     crude = 'crude'
     refined = 'refined'
 
 
-class SaraTypeEnum(str, Enum):
+class SaraTypeEnum(Enum):
     saturates = 'Saturates'
     aromatics = 'Aromatics'
     resins = 'Resins'
     asphaltenes = 'Asphaltenes'
 
 
-class ToxicityTypeEnum(str, Enum):
+class ToxicityTypeEnum(Enum):
     ec = 'EC'  # effective concentration
     lc = 'LC'  # lethal concentration
 
 
 # for use in the Emulsion related models
-class VisualStabilityEnum(str, Enum):
+class VisualStabilityEnum(Enum):
     entrained = 'Entrained'
     did_not_form = 'Did not form'
     unstable = 'Unstable'
@@ -34,7 +34,7 @@ class VisualStabilityEnum(str, Enum):
 
 
 # for use in the interfacial tension related models
-class InterfaceTypeEnum(str, Enum):
+class InterfaceTypeEnum(Enum):
     air = 'air'
     water = 'water'
     seawater = 'seawater'

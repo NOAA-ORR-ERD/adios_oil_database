@@ -269,6 +269,7 @@ def ExxonMapper(record):
 
     oil = Oil(oil_id=oil_id)
     oil.metadata.name = name
+    oil.metadata.product_type = 'crude'
     oil.metadata.reference = reference
     oil.metadata.source_id = ref_id
 
@@ -297,7 +298,7 @@ def read_header(data):
         to the samples Exxon info in the header
     '''
     ref_text = "\n".join([next(data)[0] for _ in range(3)])
-    years = [int(n) for n in re.compile(r'\d{4}').findall(ref_text)]
+    years = [int(n) for n in re.compile(r'\b\d{4}\b').findall(ref_text)]
 
     if len(years) == 0:
         ref_year = None  # need to get file props from the .xlsx file
@@ -477,19 +478,24 @@ def process_cut_table(oil, samples, cut_table):
             pass
 
     # viscosity
-    # fixme: -- maybe should parse the labels for temp, etc?
-    #          wait till next version
     for lbl in ("Viscosity at 20C/68F, cSt",
                 "Viscosity at 40C/104F, cSt",
                 "Viscosity at 50C/122F, cSt"):
         row = cut_table[norm(lbl)]
+
+        temps = re.compile(r'\d+C').findall(lbl)
+        if len(temps) > 0:
+            temp_c = float(temps[0][:-1])
+        else:
+            temp_c = None
+
         for sample, val in zip(samples, row):
             try:
                 sample.physical_properties.kinematic_viscosities.append(
                     KinematicViscosityPoint(
                         viscosity=KinematicViscosity(value=sigfigs(val, 5),
                                                      unit="cSt"),
-                        ref_temp=Temperature(value=40, unit="C"),
+                        ref_temp=Temperature(value=temp_c, unit="C"),
                     )
                 )
             except Exception:
@@ -501,7 +507,7 @@ def process_cut_table(oil, samples, cut_table):
                          'Expected: "Distillation type, TBP"')
 
     for sample in samples:
-        sample.distillation_data.type = 'volume'
+        sample.distillation_data.type = 'volume fraction'
 
     for name, row in cut_table.items():
         if norm("vol%, F") in name or name == norm("IBP, F"):

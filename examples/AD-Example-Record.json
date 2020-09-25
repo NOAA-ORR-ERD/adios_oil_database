@@ -158,7 +158,7 @@
                         }
                     }
                 ],
-                "type": "mass"
+                "type": "mass fraction"
             },
             "metadata": {
                 "fraction_weathered": {

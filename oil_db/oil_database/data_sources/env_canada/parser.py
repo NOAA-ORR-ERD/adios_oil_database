@@ -188,7 +188,7 @@ class EnvCanadaRecordParser(ParserBase):
         unit_map = {
             '% w/w': ('%', 'massfraction'),
             '%w/w': ('%', 'massfraction'),
-            'µg/g': ('ug/g', 'massfraction'),
+            'µg/g': ('µg/g', 'massfraction'),
             'mg/g': ('mg/g', 'massfraction'),
             'Pa.s': ('Pa.s', 'dynamicviscosity'),
             'mPa.s': ('mPa.s', 'dynamicviscosity'),

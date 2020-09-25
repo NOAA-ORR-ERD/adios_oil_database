@@ -19,6 +19,7 @@ from oil_database.models.common import (ProductType,
                                         InterfacialTension,
                                         Unitless)
 
+
 # Fixme: why is this in this test file ???
 class TestProductType:
     @pytest.mark.parametrize("product_type", ('crude',
@@ -46,7 +47,7 @@ class TestProductType:
         assert result[0].startswith("W003:")
 
 
-class TestUnitLess:
+class TestUnitless:
     def test_init_empty(self):
         model = Unitless()
 
@@ -67,7 +68,6 @@ class TestUnitLess:
                      'replicates'):
             assert py_json[attr] is None
 
-
     def test_value(self):
         model = Unitless(value=0.123)
 
@@ -80,7 +80,7 @@ class TestUnitLess:
         assert model.replicates is None
 
     def test_min_max(self):
-        model = Temperature(min_value=0.1, max_value=0.2)
+        model = Unitless(min_value=0.1, max_value=0.2)
 
         assert model.value is None
         assert model.min_value == 0.1
@@ -92,8 +92,8 @@ class TestUnitLess:
 
     def test_py_json(self):
         model = Unitless(value=1.1,
-                            standard_deviation=0.5,
-                            replicates=5)
+                         standard_deviation=0.5,
+                         replicates=5)
         py_json = model.py_json()
 
         print(py_json)
@@ -109,8 +109,8 @@ class TestUnitLess:
 
     def test_from_py_json(self):
         model = Unitless.from_py_json({'value': 1.1,
-                                          'standard_deviation': 1.2,
-                                          'replicates': 3})
+                                       'standard_deviation': 1.2,
+                                       'replicates': 3})
 
         assert model.value == 1.1
         assert model.min_value is None
@@ -125,7 +125,6 @@ class TestUnitLess:
         model = Unitless(value=12.34)
         with pytest.raises(TypeError):
             model.convert_to('C')
-
 
 
 class TestUnittedValue:

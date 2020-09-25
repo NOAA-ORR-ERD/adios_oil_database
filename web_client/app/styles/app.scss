@@ -24,6 +24,10 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
     padding: 0.12rem;
 }
 
+td:empty::after{
+  content: "\00a0";
+}
+
 .input-group-text {
     border: none;
     background-color: inherit;
@@ -142,6 +146,10 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 }
 .ember-power-select-multiple-option {
     font-weight: 500;
+}
+
+ul.ember-power-select-options {
+    columns: 3
 }
 
 .lt-sort-icon {
