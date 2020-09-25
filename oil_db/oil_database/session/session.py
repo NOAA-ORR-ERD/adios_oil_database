@@ -1,10 +1,15 @@
 # The Oil Database Session object
 from numbers import Number
 
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING, DESCENDING
 
 
 class Session():
+    sort_direction = {'asc': ASCENDING,
+                      'ascending': ASCENDING,
+                      'desc': DESCENDING,
+                      'descending': DESCENDING}
+
     def __init__(self, host, port, database):
         self.mongo_client = MongoClient(host=host, port=port)
 
@@ -12,11 +17,13 @@ class Session():
         self.oil = self.db.oil  # the oil collection
 
     def query(self, oil_id=None, text=None, api=None, labels=None,
+              sort=None, page=None,
               **kwargs):
         '''
             The Mongodb find() function has a bunch of parameters, but we are
             mainly interested in find(filter=None, projection=None), where:
             - filter: The filtering terms
+            - $orderby: the ordering of our results
             - projection: The field names to be returned
 
             query options:
@@ -27,16 +34,58 @@ class Session():
                    filtered.
             - labels: A list of label strings that will be matched against the
                       oil labels to filter the results.
+
+            sort options: A list of options consisting of
+                          ('field_name', 'direction')
+            - field_name: The name of a field to be used for sorting.  Dotted
+                          notation can be used to specify fields within fields.
+            - direction: Specifies whether to sort in ascending or descending
+                         order. Can be any of:
+                         {'asc',
+                          'ascending',
+                          'desc',
+                          'descending'}
+
+            Note: MongoDB 3.6 has changed how they compare array fields in a
+                  sort.  It used to compare the arrays element-by-element,
+                  continuing until any "ties" were broken.  Now it only
+                  compares the highest/lowest valued element, apparently
+                  ignoring the rest.
+
+                  Reference: https://docs.mongodb.com/manual/release-notes/3.6-compatibility/#array-sort-behavior
+
+                  For this reason, a MongoDB query will not properly sort our
+                  status and labels array fields, at least not in a simple way.
         '''
+        filter_opts = self.filter_options(oil_id, text, api, labels)
+        sort = self.sort_options(sort)
+        projection = kwargs.get('projection', None)
+
+        ret = self.oil.find(filter=filter_opts, projection=projection)
+
+        if sort is not None:
+            print('sort: ', sort)
+            ret = ret.sort(sort)
+
+        start, stop = self.parse_interval_arg(page)
+
+        return ret[start:stop]
+
+    def filter_options(self, oil_id, text, api, labels):
         filter_opts = {}
         filter_opts.update(self.id_arg(oil_id))
         filter_opts.update(self.text_arg(text))
         filter_opts.update(self.api_arg(api))
         filter_opts.update(self.labels_arg(labels))
 
-        projection = kwargs.get('projection', None)
+        return filter_opts
 
-        return self.oil.find(filter=filter_opts, projection=projection)
+    def sort_options(self, sort):
+        if sort is None:
+            return sort
+        else:
+            return [(opt[0], self.sort_direction.get(opt[1], ASCENDING))
+                    for opt in sort]
 
     def id_arg(self, obj_id):
         return {} if obj_id is None else {'_id': obj_id}
@@ -61,42 +110,16 @@ class Session():
                                         self.location_arg(text_to_match)])
 
     def api_arg(self, apis):
-        '''
-            apis can be a number, string, or list
-            - If it is a number, we will assume it is a minimum api
-            - If it is a list length 1, we will assume it is a minimum api
-            - If it is a list greater than 2, we will only use the first 2
-              elements as a min/max
-            - If it is a string, we will try to parse it as a set of comma
-              separated values.
-        '''
-        if apis is None:
-            return {}
-        elif isinstance(apis, Number):
-            low, high = apis, None
-        elif isinstance(apis, str):
-            try:
-                apis = [float(a) for a in apis.split(',')]
-            except Exception:
-                # something non-numeric was passed in
-                apis = [None, None]
-
-            low = apis[0]
-            high = None if len(apis) < 2 else apis[1]
-        else:
-            # assume it is a list
-            low = None if len(apis) < 1 else apis[0]
-            high = None if len(apis) < 2 else apis[1]
+        low, high = self.parse_interval_arg(apis)
 
         if low is not None and high is not None:
-            if low > high:
-                low, high = high, low
-
             return {'metadata.API': {'$gte': low, '$lte': high}}
         elif low is not None:
             return {'metadata.API': {'$gte': low}}
         elif high is not None:
             return {'metadata.API': {'$lte': high}}
+        else:
+            return {}
 
     def labels_arg(self, labels):
         if labels is None:
@@ -111,6 +134,40 @@ class Session():
                                         for l in labels])
         else:
             return {}
+
+    def parse_interval_arg(self, interval):
+        '''
+            An interval argument can be a number, string, or list
+            - If it is a number, we will assume it is a minimum
+            - If it is a list length 1, we will assume it is a minimum
+            - If it is a list greater than 2, we will only use the first 2
+              elements as a min/max
+            - If it is a string, we will try to parse it as a set of comma
+              separated values.
+        '''
+        if interval is None:
+            low, high = None, None
+        elif isinstance(interval, Number):
+            low, high = interval, None
+        elif isinstance(interval, str):
+            try:
+                interval = [float(i) for i in interval.split(',')]
+            except Exception:
+                # something non-numeric was passed in
+                interval = [None, None]
+
+            low = interval[0]
+            high = None if len(interval) < 2 else interval[1]
+        else:
+            # assume it is a list
+            low = None if len(interval) < 1 else interval[0]
+            high = None if len(interval) < 2 else interval[1]
+
+        if low is not None and high is not None:
+            if low > high:
+                low, high = high, low
+
+        return low, high
 
     def make_inclusive(self, opts):
         '''

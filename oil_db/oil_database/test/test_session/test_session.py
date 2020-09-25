@@ -7,6 +7,8 @@ from oil_database.util.db_connection import connect_mongodb
 from oil_database.scripts.db_initialize import init_db
 from oil_database.scripts.db_restore import restore_db
 
+from pprint import pprint
+
 here = Path(__file__).resolve().parent
 
 
@@ -35,6 +37,21 @@ class SessionTestBase:
         print('\nteardown_class()...')
         init_db(cls.settings, show_prompt=False)
 
+    @classmethod
+    def deep_get(cls, obj, attr_path, default=None):
+        if isinstance(attr_path, str):
+            attr_path = attr_path.split('.')
+
+        attrs, current = attr_path, obj
+
+        try:
+            for p in attrs:
+                current = current[p]
+
+            return current
+        except KeyError:
+            return default
+
 
 class TestSessionQuery(SessionTestBase):
     def test_init(self):
@@ -45,14 +62,14 @@ class TestSessionQuery(SessionTestBase):
     def test_query(self):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query())
+        *recs, = session.query()
 
         assert len(recs) == 26  # our test set size
 
     def test_query_with_projection(self):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query(projection=['metadata.name']))
+        *recs, = session.query(projection=['metadata.name'])
 
         assert len(recs) == 26  # our test set size
 
@@ -69,7 +86,7 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_id(self):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query(oil_id='AD00020'))
+        *recs, = session.query(oil_id='AD00020')
 
         assert len(recs) == 1
         assert recs[0]['_id'] == 'AD00020'
@@ -78,7 +95,7 @@ class TestSessionQuery(SessionTestBase):
         session = connect_mongodb(self.settings)
 
         q_text = 'Alaska North Slope'
-        recs = list(session.query(text=q_text))
+        *recs, = session.query(text=q_text)
 
         assert len(recs) == 3
 
@@ -86,7 +103,7 @@ class TestSessionQuery(SessionTestBase):
             assert q_text.lower() in rec['metadata']['name'].lower()
 
         q_text = 'Saudi Arabia'
-        recs = list(session.query(text=q_text))
+        *recs, = session.query(text=q_text)
 
         assert len(recs) == 4
 
@@ -101,7 +118,7 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_labels(self, labels, expected):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query(labels=labels))
+        *recs, = session.query(labels=labels)
 
         assert len(recs) == 6
 
@@ -120,7 +137,7 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_api(self, api, len_results, expected):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query(api=api))
+        *recs, = session.query(api=api)
 
         assert len(recs) == len_results
 
@@ -132,3 +149,67 @@ class TestSessionQuery(SessionTestBase):
 
             if _max is not None:
                 assert rec['metadata']['API'] <= _max
+
+    @pytest.mark.parametrize('field, direction', [
+        ('_id', 'asc'),
+        ('metadata.name', 'asc'),
+        ('metadata.name', 'desc'),
+        ('metadata.location', 'asc'),
+        ('metadata.product_type', 'asc'),
+        ('metadata.API', 'asc'),
+        ('metadata.sample_date', 'asc'),
+        # ('metadata.labels', 'asc'),
+        # ('status', 'asc'),
+    ])
+    def test_query_sort(self, field, direction):
+        '''
+            Note: MongoDB 3.6 has changed how they compare array fields in a
+                  sort.  It used to compare the arrays element-by-element,
+                  continuing until any "ties" were broken.  Now it only
+                  compares the highest/lowest valued element, ignoring the
+                  rest.
+                  For this reason, a MongoDB query will not properly sort our
+                  status and labels array fields, at least not in a simple way.
+        '''
+        session = connect_mongodb(self.settings)
+
+        *recs, = session.query(sort=[(field, direction)],
+                               projection=['metadata.labels'])
+
+        assert len(recs) == 26
+
+        for rec1, rec2 in zip(recs, recs[1:]):
+            value1 = self.deep_get(rec1, field, default=None)
+            value2 = self.deep_get(rec2, field, default=None)
+
+            print(value1, value2)
+
+            if direction == 'desc':
+                if value1 is not None and value2 is not None:
+                    assert value1 >= value2
+                elif value1 is None and value2 is not None:
+                    # None value is less than a real value
+                    assert False
+            else:
+                if value1 is not None and value2 is not None:
+                    assert value1 <= value2
+                elif value2 is None and value1 is not None:
+                    # None value is less than a real value
+                    assert False
+
+    @pytest.mark.parametrize('page, expected', [
+        ([0, 10], 10),
+        ([10, 0], 10),
+        (0, 26),
+        (10, 16),
+        ([20, 30], 6),
+        ('0,10', 10),
+        ('0, 10', 10),
+    ])
+    def test_query_with_paging(self, page, expected):
+        session = connect_mongodb(self.settings)
+
+        *recs, = session.query(page=page)
+
+        assert len(recs) == expected
+
