@@ -12,11 +12,14 @@ from ..common.validators import EnumValidator
 
 # why are these oil specific???
 # There should be a project-wide repository for warnings & errors
+
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
 
 # fixme: why is this here?
+# it should be in validation, and the list itself should probably
+# be in a data file or something.
 class ProductType(str):
     _valid_types = ('crude',
                     'refined',
