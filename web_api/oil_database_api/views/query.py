@@ -32,7 +32,7 @@ def query_oils(request):
     except Exception:
         raise cors_exception(request, HTTPBadRequest)
 
-    db = request.db_oil_database
+    db = request.mdb_client.oil_database
 
     table_name = json_request.get('table', 'oil')
     query = json_request.get('query', {})

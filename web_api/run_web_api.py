@@ -22,7 +22,6 @@ if False:
     import pkg_resources.py2_warn  # only in setuptools 45
     import pyramid_tm
     import cornice  # this needs to be the noaa fork for now.
-    import pyramid_mongodb2
 
 
 # the ones we actually need

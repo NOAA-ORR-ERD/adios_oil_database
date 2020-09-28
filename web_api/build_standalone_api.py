@@ -11,14 +11,6 @@ from pathlib import Path
 extra_modules = ['pkg_resources.py2_warn',
                  'pyramid_tm',
                  'cornice',
-                 'pyramid_mongodb2',
-#                 'oil_database_api.views',
-# these to try to get config.scan() to work -- but alas ...
-#                  'oil_database_api.views.capabilities',
-#                  'oil_database_api.views.distinct',
-# #                 'oil_database_api.views.oil',  # this causes an infinite recursion
-#                  'oil_database_api.views.category',
-#                  'oil_database_api.views.query',
                  ]
 
 hidden_imports = []

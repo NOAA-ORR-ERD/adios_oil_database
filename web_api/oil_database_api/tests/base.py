@@ -16,8 +16,7 @@ class FunctionalTestBase(TestCase):
                                             'http://localhost:8080'),
                     'pyramid.default_locale_name': 'en',
                     'pyramid.includes': ('pyramid_tm\n'
-                                         'cornice\n'
-                                         'pyramid_mongodb2'),
+                                         'cornice'),
                     'pyramid.debug_notfound': 'false',
                     'pyramid.debug_routematch': 'false',
                     'pyramid.debug_authorization': 'false',

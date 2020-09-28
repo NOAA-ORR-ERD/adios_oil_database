@@ -27,7 +27,7 @@ oil_api = Service(name='oil', path='/oils*obj_id',
 
 
 # fixme: this could be a class attribute, and make memoize a class
-#        might be good to mange the cache better, etc.
+#        might be good to manage the cache better, etc.
 #        and keep all the functionality together
 #        e.g. clearing the cache when the record changes
 memoized_results = {}  # so it is visible to other functions
@@ -85,7 +85,7 @@ def get_oils(request):
         1. Return the searchable fields for all oils in JSON format.
         2. Return the JSON record of a particular oil.
 
-        GET OPTIIONS:
+        GET OPTIONS:
         - limit: The max number of result items
         - page: The page number {0...N} of result items. (pagesize = limit)
     '''
@@ -94,7 +94,7 @@ def get_oils(request):
     logger.info('GET /oils: id: {}, options: {}'
                 .format(obj_id, request.GET))
 
-    oils = request.db.oil_database.oil
+    oils = request.mdb_client.oil_database.oil
 
     if obj_id is not None:
         res = oils.find_one({'_id': obj_id})
@@ -337,7 +337,7 @@ def insert_oil(request):
 
         validate(oil_obj)
 
-        oil_obj['_id'] = (request.db.oil_database.oil
+        oil_obj['_id'] = (request.mdb_client.oil_database.oil
                           .insert_one(oil_obj)
                           .inserted_id)
     except DuplicateKeyError as e:
@@ -375,7 +375,7 @@ def update_oil(request):
         except Exception as e:  # anything goes wrong with the validation
             logger.error(f'Validation Error: {obj_id}: {e}')
 
-        (request.db.oil_database.oil
+        (request.mdb_client.oil_database.oil
          .replace_one({'_id': oil_obj['_id']}, oil_obj))
 
         memoized_results.pop(oil_obj['_id'], None)
@@ -403,7 +403,7 @@ def delete_oil(request):
 
     if obj_id is not None:
 
-        res = (request.db.oil_database.oil
+        res = (request.mdb_client.oil_database.oil
                .delete_one({'_id': obj_id}))
 
         if res.deleted_count == 0:

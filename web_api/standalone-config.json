@@ -16,8 +16,7 @@
 "pyramid.debug_routematch": false,
 "pyramid.default_locale_name": "en",
 "pyramid.includes": ["pyramid_tm",
-                     "cornice",
-                     "pyramid_mongodb2"
+                     "cornice"
                      ],
 
 "cors_policy.origins": ["http://0.0.0.0:9898",

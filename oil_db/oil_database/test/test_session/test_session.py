@@ -166,8 +166,8 @@ class TestSessionQuery(SessionTestBase):
             Note: MongoDB 3.6 has changed how they compare array fields in a
                   sort.  It used to compare the arrays element-by-element,
                   continuing until any "ties" were broken.  Now it only
-                  compares the highest/lowest valued element, ignoring the
-                  rest.
+                  compares the highest/lowest valued element, apparently
+                  ignoring the rest.
                   For this reason, a MongoDB query will not properly sort our
                   status and labels array fields, at least not in a simple way.
         '''
