@@ -17,7 +17,7 @@ class Session():
         self.oil = self.db.oil  # the oil collection
 
     def query(self, oil_id=None, text=None, api=None, labels=None,
-              sort=None, page=None,
+              sort=None, sort_case_sensitive=False, page=None,
               **kwargs):
         '''
             The Mongodb find() function has a bunch of parameters, but we are
@@ -64,7 +64,9 @@ class Session():
         ret = self.oil.find(filter=filter_opts, projection=projection)
 
         if sort is not None:
-            print('sort: ', sort)
+            if sort_case_sensitive is False:
+                ret = ret.collation({'locale': 'en'})
+
             ret = ret.sort(sort)
 
         start, stop = self.parse_interval_arg(page)
