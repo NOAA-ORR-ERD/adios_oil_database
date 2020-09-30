@@ -29,7 +29,7 @@ def get_labels(request):
         2. Return the JSON record of a particular label.
     '''
     obj_id = obj_id_from_url(request)
-    labels = request.db.oil_database.label
+    labels = request.mdb_client.oil_database.label
 
     if obj_id is not None:
         try:
@@ -72,7 +72,7 @@ def insert_labels(request):
             json_obj['_id'] = ObjectId(json_obj['_id'])
             print('insert_label(): requested _id: ', json_obj['_id'])
 
-        json_obj['_id'] = (request.db.oil_database.label
+        json_obj['_id'] = (request.mdb_client.oil_database.label
                            .insert_one(json_obj)
                            .inserted_id)
         print('insert_label(): _id: ', json_obj['_id'])
@@ -107,7 +107,7 @@ def update_label(request):
         json_obj['_id'] = ObjectId(json_obj['_id'])
         print('update_label(): _id: ', json_obj['_id'])
 
-        (request.db.oil_database.label
+        (request.mdb_client.oil_database.label
          .replace_one({'_id': json_obj['_id']}, json_obj))
 
         print('put label success!!')
@@ -123,7 +123,7 @@ def delete_label(request):
 
     if obj_id is not None:
         try:
-            res = (request.db.oil_database.label
+            res = (request.mdb_client.oil_database.label
                    .delete_one({'_id': ObjectId(obj_id)}))
         except InvalidId as e:
             raise HTTPBadRequest(e)

@@ -49,7 +49,7 @@ def init_db_cmd(argv=sys.argv):
         raise
 
 
-def init_db(settings):
+def init_db(settings, show_prompt=True):
     '''
         Here is where we create and initialize our database.  This is what
         we want to do:
@@ -63,12 +63,13 @@ def init_db(settings):
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
 
-    if settings['mongodb.database'] in client.list_database_names():
-        if prompt_drop_db():
-            print('Alright then...continuing on...')
-        else:
-            print('Ok, quitting the database initialization now...')
-            return
+    if show_prompt:
+        if settings['mongodb.database'] in client.list_database_names():
+            if prompt_drop_db():
+                print('Alright then...continuing on...')
+            else:
+                print('Ok, quitting the database initialization now...')
+                return
 
     drop_db(client, settings['mongodb.database'])
 

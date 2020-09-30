@@ -6,6 +6,8 @@ import datetime
 
 import json
 
+from oil_database.session import Session
+
 from pyramid.config import Configurator
 from pyramid.response import Response, FileResponse
 from pyramid.renderers import JSON as JSONRenderer
@@ -25,25 +27,19 @@ def load_cors_origins(settings, key):
     print(cors_policy['origins'])
 
 
-def generate_mongodb2_settings(settings):
-    '''
-        These settings are required by pyramid_mongodb2.
-        We build them from our original settings.
-
-        An example mongo URI is:
-            mongodb://username:password@mongodb.host.com:27017/authdb
-
-        But we don't use all the options for connecting (yet)
-    '''
+def attach_pymongo(config, settings):
     host = settings['mongodb.host'].strip()
-    # So it can be an int or a str
-    port = str(settings['mongodb.port']).strip()
+    port = int(settings['mongodb.port'])
     db_name = settings['mongodb.database']
 
-    mongo_uri = 'mongodb://{}:{}'.format(host, port)
+    # build mongo client and attach to request registry
+    config.registry.db = Session(host=host, port=port, database=db_name)
 
-    settings['mongo_uri'] = mongo_uri
-    settings['mongo_dbs'] = db_name
+    # add request method
+    def add_db(_request):
+        return config.registry.db
+
+    config.add_request_method(add_db, 'mdb_client', reify=True)
 
 
 def get_json(request):
@@ -92,9 +88,10 @@ def main(_global_config, **settings):
 
     print("*****running main of API****")
     load_cors_origins(settings, 'cors_policy.origins')
-    generate_mongodb2_settings(settings)
 
     config = Configurator(settings=settings)
+
+    attach_pymongo(config, settings)
 
     config.add_request_method(get_json, 'json', reify=True)
     renderer = JSONRenderer(

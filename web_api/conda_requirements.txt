@@ -13,8 +13,7 @@ pymongo>=3.6.0
 
 pyramid>=1.10.1
 pyramid_tm
-pyramid_debugtoolbar  # will eventually be brought in by pyramid_mongodb2
-pyramid_mongodb2
+pyramid_debugtoolbar
 simplejson  # required by cornice
 cornice>=3.4.4  # Use the NOAA fork with pip for PyInstaller
 paste

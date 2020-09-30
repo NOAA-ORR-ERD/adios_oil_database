@@ -1,6 +1,5 @@
 """ Cornice services.
 """
-from itertools import zip_longest
 import logging
 
 import ujson
@@ -11,7 +10,6 @@ from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPConflict,
                                     HTTPUnsupportedMediaType)
 
-from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
@@ -26,10 +24,6 @@ oil_api = Service(name='oil', path='/oils*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
-# fixme: this could be a class attribute, and make memoize a class
-#        might be good to mange the cache better, etc.
-#        and keep all the functionality together
-#        e.g. clearing the cache when the record changes
 memoized_results = {}  # so it is visible to other functions
 
 
@@ -49,55 +43,21 @@ def memoize_oil_arg(func):
     return memoized_func
 
 
-def decamelize(str_in):
-    ret = []
-    words = []
-    start = 0
-
-    try:
-        for i, (l, r) in enumerate(zip_longest(str_in, str_in[1:])):
-            if i > 0 and not l.isupper() and r is not None and r.isupper():
-                words.append(str_in[start:i+1])
-                start = i + 1
-            elif i > 0 and l.isupper() and r is not None and not r.isupper():
-                words.append(str_in[start:i])
-                start = i
-
-        words.append(str_in[start:])
-    except Exception:
-        return None
-
-    for i, w in enumerate(words):
-        if w[-1] == '.':
-            ret.append(w)
-        elif i == len(words) - 1:
-            ret.append(w)
-        else:
-            ret.extend([w, '_'])
-
-    return ''.join([w.lower() for w in ret])
-
-
 @oil_api.get()
 def get_oils(request):
     '''
         We will do one of two possible things here.
         1. Return the searchable fields for all oils in JSON format.
         2. Return the JSON record of a particular oil.
-
-        GET OPTIIONS:
-        - limit: The max number of result items
-        - page: The page number {0...N} of result items. (pagesize = limit)
     '''
     obj_id = obj_id_from_url(request)
 
-    logger.info('GET /oils: id: {}, options: {}'
-                .format(obj_id, request.GET))
+    logger.info('GET /oils: id: {}, options: {}'.format(obj_id, request.GET))
 
-    oils = request.db.oil_database.oil
+    client = request.mdb_client
 
     if obj_id is not None:
-        res = oils.find_one({'_id': obj_id})
+        res = client.oil.find_one({'_id': obj_id})
 
         if res is not None:
             return get_oil_all_fields(res)
@@ -112,116 +72,24 @@ def get_oils(request):
         except Exception as e:
             raise HTTPBadRequest(e)
 
-        search_opts, post_opts = get_search_params(request)
+        search_opts = get_search_params(request)
         sort = get_sort_params(request)
 
-        if len(post_opts.keys()) > 0:
-            return json_api_results(*search_with_post_sort(oils,
-                                                           start, stop,
-                                                           search_opts,
-                                                           post_opts,
-                                                           sort))
-        else:
-            return json_api_results(*search_with_sort(oils,
-                                                      start, stop,
-                                                      search_opts, sort))
+        return json_api_results(client.query(page=[start, stop],
+                                             sort=sort,
+                                             **search_opts))
 
 
-def json_api_results(results, total):
-    return {'data': results,
-            'meta': {'total': total}
+def json_api_results(results):
+    return {'data': [{'attributes': r} for r in results],
+            'meta': {'total': results.count()}
             }
-
-
-def search_with_sort(oils, start, stop, search_opts, sort_opts):
-    total = oils.count_documents(search_opts)
-    logger.info('search #rows: {}'.format(total))
-
-    cursor = oils.find(search_opts)
-
-    if len(sort_opts) > 0:
-        cursor = (cursor
-                  .collation({
-                      'locale': 'en_US',
-                      'strength': 1,
-                  })
-                  .sort(sort_opts)
-                  )
-
-    return [[get_oil_searchable_fields(o)
-             for i, o in enumerate(cursor)
-             if i >= start and i < stop],
-            total]
-
-
-def search_with_post_sort(oils, start, stop, search_opts, post_opts, sort):
-    '''
-        Apply our sort options after the database query.  This is very slow
-        compared to simply applying the sort to the database query itself,
-        but is necessary on a couple fields because the value cannot be
-        determined until after the record is fetched.
-    '''
-    logger.info('post-sort...')
-
-    if len(sort) >= 1 and len(sort[0]) >= 2:
-        field, direction = sort[0]
-    else:
-        field, direction = 'metadata.name', ASCENDING
-
-    cursor = oils.find(search_opts)
-
-    results = []
-    none_results = []
-
-    for o in cursor:
-        rec = get_oil_searchable_fields(o)
-        rec_attrs = rec['attributes']
-
-        if 'apis' in post_opts:
-            # filter out the apis that don't match our criteria
-            low, high = post_opts['apis']
-
-            if ('API' not in rec_attrs['metadata'] or
-                    rec_attrs['metadata']['API'] is None or
-                    not low <= rec_attrs['metadata']['API'] <= high):
-                continue
-
-        if 'labels' in post_opts:
-            # filter out the categories that don't match our criteria
-            if rec_attrs['metadata']['labels'] is None:
-                continue
-
-            labels = [l.lower() for l in post_opts['labels']]
-            rec_labels = [c.lower() for c in rec_attrs['metadata']['labels']]
-
-            if not all([(l in rec_labels) for l in labels]):
-                continue
-
-        if deep_get(rec_attrs, field) is not None:
-            results.append(rec)
-        else:
-            none_results.append(rec)
-
-    sorted_res = sorted(results,
-                        key=lambda x: deep_get(x['attributes'], field),
-                        reverse=(direction == DESCENDING))
-
-    if direction == ASCENDING:
-        agg_results = none_results + sorted_res
-    else:
-        agg_results = sorted_res + none_results
-
-    total = len(agg_results)
-
-    return [[o for i, o in enumerate(agg_results)
-             if i >= start and i < stop],
-            total]
 
 
 def get_search_params(request):
     '''
-        Process the incoming search directives and convert them into MongoDB
-        compatible search parameters.
+        Process the incoming search directives and convert them into search
+        parameters compatible with Session.query().
 
         query options:
         - q: A string that is matched against the oil name, location.  The
@@ -230,43 +98,22 @@ def get_search_params(request):
                 filtered.
         - qLabels: A list of label strings that will be matched against the oil
                    labels to filter the results.
-
-        Note: some search directives cannot be easily turned into a MongoDB
-              search, so instead they will be used to filter the results.
     '''
     query_out = {}
-    post_out = {}
 
-    query = request.GET.get('q', '')
+    text = request.GET.get('q')
+    if text != '':
+        query_out.update({'text': text})
 
-    if query != '':
-        query_out.update({
-            "$or": [{'metadata.name': {'$regex': query,
-                                       '$options': 'i'}},
-                    {'metadata.location': {'$regex': query,
-                                           '$options': 'i'}}]
-        })
+    api = request.GET.get('qApi')
+    if api != '':
+        query_out.update({'api': api})
 
-    try:
-        apis = request.GET.get('qApi', '').split(',')
-        low, high = [float(a) for a in apis]
-
-        if low > high:
-            low, high = high, low
-
-        post_out['apis'] = [low, high]
-    except Exception:
-        # couldn't parse items into float interval.  Continue without adding
-        # the post-processing step.
-        pass
-
-    labels = request.GET.get('qLabels', '')
-
+    labels = request.GET.get('qLabels')
     if labels != '':
-        labels = labels.split(',')
-        post_out['labels'] = labels
+        query_out.update({'labels': labels})
 
-    return query_out, post_out
+    return query_out
 
 
 def get_sort_params(request):
@@ -275,22 +122,18 @@ def get_sort_params(request):
               metadata attribute.  So to do a MongoDB sort, we need to
               specify the full field path in dotted notation.
     '''
-    sort = request.GET.get('sort', None)
-    print(f'sort params: {sort}')
+    sort = request.GET.get('sort')
+    direction = request.GET.get('dir', 'asc')
 
     if sort == 'id':
         sort = '_id'
     elif sort == 'api':
         sort = 'metadata.API'
 
-    direction = ({'asc': ASCENDING,
-                  'desc': DESCENDING}.get(request.GET.get('dir', 'asc'),
-                                          ASCENDING))
-
     logger.info('(sort, direction): ({}, {})'.format(sort, direction))
 
     if sort is None:
-        return []
+        return None
     else:
         return [(sort, direction)]
 
@@ -302,8 +145,6 @@ def insert_oil(request):
     try:
         json_obj = ujson.loads(request.body)
 
-        # Since we are only expecting a dictionary struct here, let's raise
-        # an exception in any other case.
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
     except Exception as e:
@@ -311,12 +152,7 @@ def insert_oil(request):
 
     try:
         oil_obj = get_oil_from_json_req(json_obj)
-    except Exception as e:  # anything goes wrong with the validation
-        # note: ideally the validation should NEVER raise an Exception!
-        # but if it does, we need to log it
-        # There is no obj_id here -- is there something else we can put
-        # in the log?
-        # logger.error(f'Validation Error: {obj_id}: {e}')
+    except Exception as e:
         logger.error(f'Validation Error: {e}')
 
     try:
@@ -329,7 +165,7 @@ def insert_oil(request):
 
         validate(oil_obj)
 
-        oil_obj['_id'] = (request.db.oil_database.oil
+        oil_obj['_id'] = (request.mdb_client.oil
                           .insert_one(oil_obj)
                           .inserted_id)
     except DuplicateKeyError as e:
@@ -351,8 +187,6 @@ def update_oil(request):
     try:
         json_obj = ujson.loads(request.body)
 
-        # Since we are only expecting a dictionary struct here, let's raise
-        # an exception in any other case.
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
     except Exception:
@@ -364,10 +198,10 @@ def update_oil(request):
 
         try:
             validate(oil_obj)
-        except Exception as e:  # anything goes wrong with the validation
+        except Exception as e:
             logger.error(f'Validation Error: {obj_id}: {e}')
 
-        (request.db.oil_database.oil
+        (request.mdb_client.oil
          .replace_one({'_id': oil_obj['_id']}, oil_obj))
 
         memoized_results.pop(oil_obj['_id'], None)
@@ -395,7 +229,7 @@ def delete_oil(request):
 
     if obj_id is not None:
 
-        res = (request.db.oil_database.oil
+        res = (request.mdb_client.oil
                .delete_one({'_id': obj_id}))
 
         if res.deleted_count == 0:
@@ -478,16 +312,6 @@ def generate_jsonapi_response_from_oil(oil_obj):
     json_obj['data']['type'] = 'oils'
 
     return json_obj
-
-
-def deep_get(rec, path):
-    if isinstance(path, str):
-        path = path.split('.')
-
-    if len(path) == 1:
-        return rec[path[0]]
-    else:
-        return deep_get(rec[path[0]], path[1:])
 
 
 @memoize_oil_arg
