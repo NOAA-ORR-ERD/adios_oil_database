@@ -295,16 +295,54 @@ class OilTests(OilTestBase):
     def test_get_invalid_id(self):
         self.testapp.get('/oils/{}'.format('bogus'), status=404)
 
-    def test_get_valid_id(self):
+    def test_get_valid_no_options(self):
         '''
-            Note: We are basing our tests on webtest(unittest), so
-                  parametrization doesn't work.
-
             Note: The web server does not have any control over the correctness
                   of the oil records, and so should not have any responsibility
                   for it.  So for this test, we will just test that we did
                   in fact get something that looks like an oil record at a
                   high level.
+
+            Note: We do in fact need to check that we are conforming to the
+                  JSON-API specification however.
+        '''
+        resp = self.testapp.get('/oils')
+        res = resp.json_body
+
+        assert isinstance(res, dict)
+        assert 'data' in res
+        assert 'meta' in res
+
+        assert 'total' in res['meta']
+        assert res['meta']['total'] == len(res['data'])
+        assert res['meta']['total'] == 0
+
+    def test_get_valid_with_limit_option(self):
+        params = {'limit': 20}
+        resp = self.testapp.get('/oils', params=params)
+        res = resp.json_body
+
+        assert isinstance(res, dict)
+        assert 'data' in res
+        assert 'meta' in res
+
+        assert 'total' in res['meta']
+        assert res['meta']['total'] == len(res['data'])
+        assert res['meta']['total'] == 20
+
+        for rec in res['data']:
+            assert '_id' in rec
+
+            print('\noil attributes: ', rec['attributes'].keys())
+            for k in ('metadata',
+                      'status'):
+                # we are only expecting searchable fields
+                assert k in rec['attributes']
+
+    def test_get_valid_id(self):
+        '''
+            Note: We are basing our tests on webtest(unittest), so
+                  parametrization doesn't work.
         '''
         for oil_id in ('AD00009',
                        'AD00020',
