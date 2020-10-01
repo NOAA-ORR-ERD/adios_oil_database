@@ -6,16 +6,16 @@
       <Common::RangeValueInput
         @valueTitle="Flash Point"
         @valueObject={{this.args.oil}}
-        @valueName="flash_point.ref_temp"
+        @valueName="physical_properties.flash_point.measurement"
         @valueUnit="C"
         @valuePrecision="2"
         @sampleIndex={{this.args.sampleIndex}}
         @submit={{this.submit}}
       />
     {{else}}
-      {{#if this.args.oil.flash_point.ref_temp}}
+      {{#if this.args.oil.physical_properties.flash_point.measurement}}
         <span>
-          {{value-unit (convert-unit this.args.oil.flash_point.ref_temp "C") 2}}
+          {{value-unit (convert-unit this.args.oil.physical_properties.flash_point.measurement "C") 2}}
         </span>
       {{else}}
         No Data
