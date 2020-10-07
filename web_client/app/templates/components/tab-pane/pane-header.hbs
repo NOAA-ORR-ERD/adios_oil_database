@@ -2,7 +2,7 @@
   {{#if this.args.editable}}
     <Input
       @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
-      @value={{this.args.oil.name}}
+      @value={{this.args.oil.metadata.name}}
       @placeholder="Enter Sample Name"
       @change={{action this.args.submit this.args.oil}}
     />
