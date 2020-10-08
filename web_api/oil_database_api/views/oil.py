@@ -81,9 +81,10 @@ def get_oils(request):
 
 
 def json_api_results(results):
+    total = results.count()
     data = [get_oil_searchable_fields(r) for r in results]
     ret = {'data': data,
-           'meta': {'total': len(data)}
+           'meta': {'total': total}
            }
 
     return ret
