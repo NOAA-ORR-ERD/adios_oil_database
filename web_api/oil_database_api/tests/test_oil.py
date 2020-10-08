@@ -314,8 +314,8 @@ class OilTests(OilTestBase):
         assert 'meta' in res
 
         assert 'total' in res['meta']
-        assert res['meta']['total'] == len(res['data'])
-        assert res['meta']['total'] == 0
+        assert len(res['data']) == 0
+        assert res['meta']['total'] >= 0
 
     def test_get_valid_with_limit_option(self):
         params = {'limit': 20}
@@ -327,8 +327,8 @@ class OilTests(OilTestBase):
         assert 'meta' in res
 
         assert 'total' in res['meta']
-        assert res['meta']['total'] == len(res['data'])
-        assert res['meta']['total'] == 20
+        assert len(res['data']) == 20
+        assert res['meta']['total'] >= 20
 
         for rec in res['data']:
             assert '_id' in rec
