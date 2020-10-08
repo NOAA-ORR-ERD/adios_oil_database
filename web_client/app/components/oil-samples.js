@@ -12,7 +12,7 @@ export default class SubSample extends Component {
         }
         else {
             // just choose the first tab
-            return slugify(this.args.oil.subSamples[0].metadata.name);
+            return slugify(this.args.oil.subSamples[0].metadata.short_name);
         }
     }
 
@@ -20,7 +20,7 @@ export default class SubSample extends Component {
         let savedTab = this.sampleTab();
 
         return this.args.oil.sub_samples.map(s => {
-            let tabName = slugify(s.metadata.name);
+            let tabName = slugify(s.metadata.short_name);
             let ret = {
                 'name': s.metadata.name,
                 'short_name': s.metadata.short_name,
@@ -50,7 +50,7 @@ export default class SubSample extends Component {
         let sampleTab = this.sampleTab();
 
         return this.args.oil.sub_samples.map(s => {
-            let tabName = slugify(s.metadata.name);
+            let tabName = slugify(s.metadata.short_name);
             let ret = {
                 'name': s.metadata.name,
                 'short_name': s.metadata.short_name,

@@ -5,12 +5,12 @@ import $ from 'jquery';
 
 export default class SubSample extends Component {
     get sample() {
-        return this.args.oil.sub_samples.find(s => s.metadata.name === this.args.sampleName);
+        return this.args.oil.sub_samples.find(s => s.metadata.short_name === this.args.sampleName);
     }
 
     get sampleIndex() {
         // get an index of the current sample - to use one for component ID
-        return this.args.oil.sub_samples.findIndex(s => s.metadata.name === this.args.sampleName);
+        return this.args.oil.sub_samples.findIndex(s => s.metadata.short_name === this.args.sampleName);
     }
 
     sampleTab() {
@@ -20,7 +20,7 @@ export default class SubSample extends Component {
         }
         else {
             // just choose the first tab
-            return slugify(this.args.oil.sub_samples[0].metadata.name);
+            return slugify(this.args.oil.sub_samples[0].metadata.short_name);
         }
     }
 
@@ -35,7 +35,7 @@ export default class SubSample extends Component {
         }
         else {
             // just choose the first category in the fresh sample
-            return 'fresh-oil-sample-physical';
+            return 'fresh-oil-physical';
         }
     }
 
@@ -44,7 +44,7 @@ export default class SubSample extends Component {
         // - When we switch to a sample tab for the first time, it's sampletab->physical
         // - When we switch to it after that, it's sampletab->lastactive
         let ret = false;
-        let currentSampleTab = '#' + slugify(this.sample.metadata.name);
+        let currentSampleTab = '#' + slugify(this.sample.metadata.short_name);
 
         if (currentSampleTab === this.args.sampleTab) {
             // we are at least on the right sample
@@ -109,6 +109,7 @@ export default class SubSample extends Component {
             ['industry-properties', 'tab-pane/industry-properties']
         ].map((item) => {
             let [tabName, componentName] = item;
+
             let ret = {
                 'id': this.sampleTab() + '-' + tabName,
                 'aria-labelledby': this.sampleTab() + '-' + tabName + '-nav-tab',
