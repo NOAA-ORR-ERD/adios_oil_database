@@ -7,7 +7,7 @@ export default class SampleDate extends Component {
     constructor() {
         super(...arguments);
         
-        let sampleDate = this.args.row.content.metadata.sample_date;
-        this.sampleYear = (sampleDate.match(/^\d{4}/)||[])[0];
+        let sampleDate = (this.args.row.content.metadata.sample_date || '');
+        this.sampleYear = (sampleDate.match(/^\d{4}/) || [])[0];
     }
 }
