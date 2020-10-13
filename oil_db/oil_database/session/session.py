@@ -92,6 +92,12 @@ class Session():
     def id_arg(self, obj_id):
         return {} if obj_id is None else {'_id': obj_id}
 
+    def id_filter_arg(self, obj_id):
+        if obj_id is None:
+            return {}
+        else:
+            return {'_id': {'$regex': obj_id, '$options': 'i'}}
+
     def name_arg(self, name):
         if name is None:
             return {}
@@ -108,8 +114,16 @@ class Session():
         if text_to_match is None:
             return {}
         else:
-            return self.make_inclusive([self.name_arg(text_to_match),
-                                        self.location_arg(text_to_match)])
+            ret = []
+
+            for w in text_to_match.split():
+                ret.append(self.make_inclusive([self.id_filter_arg(w),
+                                                self.name_arg(w),
+                                                self.location_arg(w)]))
+
+            ret = self.make_exclusive(ret)
+
+            return ret
 
     def api_arg(self, apis):
         low, high = self.parse_interval_arg(apis)
