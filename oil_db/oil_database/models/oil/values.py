@@ -15,12 +15,26 @@ from .validation.errors import ERRORS
 
 from dataclasses import dataclass
 
+PRODUCT_TYPES = ('Crude Oil, NOS',
+                 'Condensate',
+                 'Bitumen Blend',
+                 'Refined Product, NOS',
+                 'Fuel Oil, NOS',
+                 'Distillate Fuel Oil',
+                 'Petroleum-Derived Solvent',
+                 'Residual Fuel Oil',
+                 'Bio-Petroleum Fuel Blend',
+                 'Bio Fuel Oil',
+                 'Lube Oil',
+                 'Refinery Intermediate',
+                 'Natural Plant Oil',
+                 'Dielectric Oil',
+                 'Other'
+                 )
+
 
 class ProductType(str):
-    _valid_types = ('crude',
-                    'refined',
-                    'bitumen product',
-                    'other')
+    _valid_types = PRODUCT_TYPES
     _validator = EnumValidator(_valid_types,
                                WARNINGS["W003"],
                                case_insensitive=True)
