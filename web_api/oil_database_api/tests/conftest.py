@@ -4,6 +4,7 @@ Configuration setup for pytest tests.
 
 import pytest
 from webtest import TestApp
+from webtest.app import AppError
 
 from oil_database_api import main
 

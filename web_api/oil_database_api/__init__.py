@@ -113,6 +113,9 @@ def main(_global_config, **settings):
     from .views.label import label_api
     config.add_cornice_service(label_api)
 
+    from .views.product_types import product_types_api
+    config.add_cornice_service(product_types_api)
+
     from .views.capabilities import capabilities_api
     config.add_cornice_service(capabilities_api)
 

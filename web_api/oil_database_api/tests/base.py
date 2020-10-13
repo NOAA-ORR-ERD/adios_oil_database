@@ -30,7 +30,7 @@ class FunctionalTestBase(TestCase):
                     'help_dir': './help'
                     }
 
-        return settings
+        return get_settings
 
     def setUp(self):
         here = os.path.dirname(__file__)

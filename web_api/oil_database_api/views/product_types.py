@@ -12,13 +12,13 @@ from oil_database.models.oil.values import PRODUCT_TYPES
 
 logger = logging.getLogger(__name__)
 
-product_type_api = Service(name='product_types',
-                           path='/product_types',
-                           description="Endpoint for getting product types",
-                           cors_policy=cors_policy)
+product_types_api = Service(name='product_types',
+                            path='/product_types',
+                            description="Endpoint for getting product types",
+                            cors_policy=cors_policy)
 
 
-@product_type_api.get()
+@product_types_api.get()
 def get_product_types(request):
     '''
     returns all the product types
