@@ -262,7 +262,7 @@ def new_oil_id(request):
     id_prefix = 'XX'
     max_seq = 0
 
-    cursor = (request.db.oil_database.oil
+    cursor = (request.mdb_client.oil
               .find({'_id': {'$regex': '^{}'.format(id_prefix)}}, {'_id'}))
     for row in cursor:
         oil_id = row['_id']
