@@ -1,27 +1,27 @@
 
 import pytest
 
-from oil_database.models.oil.values import ProductType, Reference
+from oil_database.models.oil.values import (ProductType,
+                                            Reference,
+                                            PRODUCT_TYPES,
+                                            )
+
+product_types_lower = [pt.lower() for pt in PRODUCT_TYPES]
 
 
-@pytest.mark.parametrize("product_type", ('crude',
-                                          'refined',
-                                          'bitumen product',
-                                          'Refined',
-                                          'Bitumen Product',
-                                          'other'))
+@pytest.mark.parametrize("product_type", tuple(product_types_lower))
 def test_ProductType_validation(product_type):
     pt = ProductType(product_type)
 
     assert pt.validate() == []
 
 
-@pytest.mark.parametrize("product_type", ('crud',
-                                          'rfined',
-                                          'bitumen',
-                                          'Reefined',
-                                          'Biitumen Product',
-                                          'random'))
+@pytest.mark.parametrize("product_type", ('Crud Oil, NOS',
+                                          'Residual Fuel Oils',
+                                          'Refinery Interminal',
+                                          'Natural Planting Oil',
+                                          'Others'
+                                          ))
 def test_ProductType_validation_invalid(product_type):
     pt = ProductType(product_type)
 
