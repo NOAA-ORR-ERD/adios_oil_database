@@ -31,6 +31,7 @@
     {{#if editUnit}}
       <Button::SelectUnit
         @baseProperty={{this.beaUnit}}
+        @unitType={{this.args.valueObject.unit_type}}
         @defaultUnit={{this.args.defaultUnit}}
         @change={{action "updateUnit"}}
        />
