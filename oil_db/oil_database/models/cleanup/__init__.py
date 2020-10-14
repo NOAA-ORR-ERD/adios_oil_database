@@ -2,6 +2,16 @@
 cleanup modules
 
 all cleanup classes are registered here
+
+so far:
+ - compute density from API
+
+possible things to cleanup:
+
+* normalizing units for various things
+
+* putting distillation cuts in order
+
 """
 
 # you need to import a cleanup class here to get it registered

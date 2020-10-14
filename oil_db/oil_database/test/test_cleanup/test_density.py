@@ -23,12 +23,13 @@ def no_api_with_density():
     oil = Oil(oil_id='XXXXXX')
 
     print(oil)
-    print(oil.sub_samples)
+
+    # create a sample for fresh oil
     s = Sample()
-    oil.sub_samples.append(s)
+
     # add some densities
-    p = PhysicalProperties()
-    s.physical_properties = p
+    # p = PhysicalProperties()
+    p = s.physical_properties
     p.densities = DensityList([
         DensityPoint(density=Density(value=0.8751, unit="kg/m^3"),
                      ref_temp=Temperature(value=15.0, unit="C")),
@@ -36,7 +37,29 @@ def no_api_with_density():
                      ref_temp=Temperature(value=25.0, unit="C"))
     ])
 
+    oil.sub_samples.append(s)
+
     return oil
+
+def test_check_no_API():
+    oil = no_api_with_density()
+
+    fixer = FixAPI(oil)
+    results = fixer.check()
+
+    assert results.startswith(f"Cleanup: {fixer.ID}:")
+    assert "No API value provided" in results
+
+
+def test_check_API_is_there():
+    oil = no_api_with_density()
+    oil.metadata.API = 32.0
+
+    fixer = FixAPI(oil)
+
+    results = fixer.check()
+
+    assert results is None
 
 
 def test_add_density():
@@ -46,8 +69,8 @@ def test_add_density():
     assert oil.metadata.API is None
 
     fixer = FixAPI(oil)
-    results = fixer.check()
 
     print(results)
 
+    assert results
     assert False

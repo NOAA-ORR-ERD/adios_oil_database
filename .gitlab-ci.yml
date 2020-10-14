@@ -25,7 +25,7 @@ test_develop:
         - oil_db_init
         - oil_db_import --all
 
-        - pytest oil_database
+        - pytest --mongo oil_database
 
         # Install & test the oil_library_api package
         - cd ../web_api

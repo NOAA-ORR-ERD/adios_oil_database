@@ -65,6 +65,28 @@ class TestSample:
         assert py_json['metadata']['name'] == "Fresh Oil Sample"
         assert py_json['metadata']['short_name'] == "Fresh Oil"
 
+    @pytest.mark.parametrize("attr", ['CCME',
+                                      # 'ESTS_hydrocarbon_fractions',
+                                      'SARA',
+                                      'bulk_composition',
+                                      'compounds',
+                                      'distillation_data',
+                                      'environmental_behavior',
+                                      'extra_data',
+                                      'headspace_analysis',
+                                      'industry_properties',
+                                      'metadata',
+                                      'miscellaneous',
+                                      'physical_properties'])
+    def test_default_empty_attributes(self, attr):
+        """
+        test that various attributes get a default empty object, rather than None
+        """
+        s = Sample()
+
+        assert getattr(s, attr) is not None
+
+
     def test_add_non_existing(self):
         s = Sample()
 

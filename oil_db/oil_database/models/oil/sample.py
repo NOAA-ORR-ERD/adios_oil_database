@@ -34,9 +34,9 @@ class Sample:
 
     cut_volume: VolumeFraction = None  # from Exxon data
 
-    physical_properties: PhysicalProperties = None
-    environmental_behavior: EnvironmentalBehavior = None
-    SARA: Sara = None
+    physical_properties: PhysicalProperties = field(default_factory=PhysicalProperties)
+    environmental_behavior: EnvironmentalBehavior = field(default_factory=EnvironmentalBehavior)
+    SARA: Sara = field(default_factory=Sara)
 
     distillation_data: Distillation = field(default_factory=Distillation)
 
@@ -48,16 +48,13 @@ class Sample:
 
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
 
-    CCME: CCME = None
+    CCME: CCME = field(default_factory=CCME)
 
     ESTS_hydrocarbon_fractions: ESTSFractions = None
 
     miscellaneous: CompoundList = field(default_factory=CompoundList)
 
-    # Assorted:
-
-    # From Exxon Dist cut data
-
+    # a place to store arbitrary extra data.
     extra_data: dict = field(default_factory=dict)
 
     def __post_init__(self):

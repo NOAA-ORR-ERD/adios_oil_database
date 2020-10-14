@@ -11,6 +11,10 @@ from pprint import pprint
 
 here = Path(__file__).resolve().parent
 
+# Pass the --mongo command line option if you want these to run.
+# they require a mongo database to be running on localhost
+pytestmark = pytest.mark.mongo
+
 
 class SessionTestBase:
     settings = {'mongodb.host': 'localhost',
