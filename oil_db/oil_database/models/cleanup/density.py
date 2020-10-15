@@ -49,18 +49,35 @@ class FixAPI(Cleanup):
 
         :returns: a message of what could be done, or what was done.
         """
-        self.check_for_valid_api(oil)
+        self.check_for_valid_api()
 
-    def check_for_valid_api(self, oil):
+    def check_for_valid_api(self):
         """
         check is the API value is already valid
         """
-        API = oil.metadata.API
+        API = self.oil.metadata.API
 
-        densities = oil.sub_samples[0].physical_properties.densities
+        densities = self.oil.sub_samples[0].physical_properties.densities
 
-        if API is None:
-            return [f"Cleanup: {self.ID}: No API value provided"]
+        density_at_15 = self.find_density_near_15C()
 
     def find_density_near_15C(self):
-        pass
+        densities = self.oil.sub_samples[0].physical_properties.densities
+
+        #create normalized list of densities
+        density_table = []
+        for density_point in densities:
+            print(density_point)
+            d = density_point.density
+            t = density_point.ref_temp
+            density_table.append((d, t))
+        print(density_table)
+
+
+
+
+
+
+
+
+

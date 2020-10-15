@@ -131,6 +131,20 @@ class MeasurementBase(MeasurementDataclass):
         return pj
 
     def convert_to(self, new_unit):
+        """
+        cCnvert this Measurement object to the specified new unit
+
+        The object is mutated in place.
+
+        If the conversion can not be performed, an Exception will
+        be raised, and the object not altered.
+
+        This will also return the object (self) -- but that is a
+        deprecated feature -- do not use it!
+
+        If you want a new object, use `converted_to` instead
+        """
+
         new_vals = {att: None for att in ('value', 'min_value', 'max_value',
                                           'standard_deviation')}
 
@@ -150,6 +164,14 @@ class MeasurementBase(MeasurementDataclass):
         self.__dict__.update(new_vals)
 
         return self
+
+    def converted_to(self, new_unit):
+        """
+        returns a new Measurement object, converted to the units specified
+        """
+        new = self.copy()
+        new.convert_to(new_unit)
+        return new
 
     def copy(self):
         '''

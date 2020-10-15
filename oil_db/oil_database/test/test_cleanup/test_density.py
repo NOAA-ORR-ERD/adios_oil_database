@@ -2,6 +2,7 @@
 tests for density related cleanup
 """
 
+from math import isclose
 import pytest
 
 from oil_database.models.oil.oil import Oil
@@ -70,7 +71,8 @@ def test_add_density():
 
     fixer = FixAPI(oil)
 
-    print(results)
+    fixer.cleanup()
 
-    assert results
+    assert isclose(oil.metadata.API, 1.614e+05)
+
     assert False

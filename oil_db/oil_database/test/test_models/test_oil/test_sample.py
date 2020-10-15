@@ -83,9 +83,7 @@ class TestSample:
         test that various attributes get a default empty object, rather than None
         """
         s = Sample()
-
         assert getattr(s, attr) is not None
-
 
     def test_add_non_existing(self):
         s = Sample()

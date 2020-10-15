@@ -126,6 +126,11 @@ class TestUnitless:
         with pytest.raises(TypeError):
             model.convert_to('C')
 
+    def test_converted_to(self):
+        model = Unitless(value=12.34)
+        with pytest.raises(TypeError):
+            model.converted_to('C')
+
 
 class TestUnittedValue:
     def test_init(self):
@@ -323,6 +328,18 @@ class TestTemperature:
         assert model.value == 0.0
         assert model.unit == 'C'
 
+    def test_converted_to(self):
+        model = Temperature(value=273.15, unit='K')
+        new = model.converted_to('C')
+
+        assert model is not new
+
+        assert model.value == 273.15
+        assert model.unit == 'K'
+
+        assert new.value == 0.0
+        assert new.unit == 'C'
+
 
 class TestLength:
     '''
@@ -432,6 +449,12 @@ class TestDensity:
         assert model.value == 1.0
         assert model.unit == 'g/cm^3'
 
+    def test_convert_to_API(self):
+        model = Density(value=900.0, unit='kg/m^3')
+        model.convert_to('API')
+
+        assert math.isclose(model.value, 25.585438, rel_tol=1e-7)
+        assert model.unit == 'API'
 
 class TestDynamicViscosity:
     '''
