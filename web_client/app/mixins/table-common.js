@@ -30,7 +30,7 @@ export default Mixin.create({
   init() {
     this._super(...arguments);
 
-    this.set('data', this.model.toArray());
+    this.set('data', []);
 
     let table = Table.create({
 		columns: this.columns,

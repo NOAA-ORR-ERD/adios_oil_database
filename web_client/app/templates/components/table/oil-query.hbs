@@ -19,7 +19,7 @@
           </div>
           <div class="col-sm-8 col-lg-9 col-xl-10">
             <RangeSlider
-              @start={{array 0 100}} @min={{0}} @max={{100}} @step={{1}}
+              @start={{this.selectedApi}} @min={{0}} @max={{100}} @step={{1}}
               @connect={{true}}
               @tooltips={{true}}
               @on-change={{action (pipe (action (mut this.selectedApi)) (action "onSearchChange"))}}

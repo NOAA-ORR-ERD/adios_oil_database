@@ -8,6 +8,7 @@ export default Component.extend(TableCommon, {
     // our query option properties
     q: '',
     sort: 'metadata.name',
+    limit: 50,
 
     columns: computed(function() {
         return [{
@@ -79,13 +80,14 @@ export default Component.extend(TableCommon, {
     }),
 
     init() {
+        // this.savedFilters should be coming from the controller
+        this.q = this.savedFilters['text'];
+        this.selectedApi = this.savedFilters['api'];
+        this.selectedLabels = this.savedFilters['labels'];
+
         this._super(...arguments);
 
-        this.labels = this.labels || [];
-        this.selectedLabels = this.selectedLabels || [];
         this.set('labels', this.fetchLabels());
-
-        this.selectedApi = this.selectedApi || [];
     },
 
     fetchLabels() {
@@ -118,6 +120,10 @@ export default Component.extend(TableCommon, {
 
     actions: {
         onSearchChange() {
+            this.savedFilters['text'] = this.q;
+            this.savedFilters['api'] = this.selectedApi;
+            this.savedFilters['labels'] = this.selectedLabels;
+
             this.data.clear();
             this.set('page', 0);
             this.fetchRecords.perform();
