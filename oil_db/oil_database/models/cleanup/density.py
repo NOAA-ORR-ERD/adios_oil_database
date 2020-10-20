@@ -1,6 +1,10 @@
 """
 cleanups that work with density
 """
+import math
+from operator import itemgetter
+
+import unit_conversion as uc
 
 from .cleanup import Cleanup
 
@@ -8,12 +12,16 @@ from .cleanup import Cleanup
 class FixAPI(Cleanup):
     """
     adds (or replaces) the API value, from the density measurements
+
+    NOTE: this could be extended to interpolate, but it that actually needed?
     """
     ID = "001"
 
+    DENSITY_TOL = 1.0  # how close do we need to be to 15C to convert to API
+
     def check(self):
         """
-        checks ot see if there is somethign to fix
+        checks ot see if there is something to fix
 
         if so, a message is returned
 
@@ -32,10 +40,13 @@ class FixAPI(Cleanup):
         if API is None:
             density = self.find_density_near_15C()
             if density:
-                return f"Cleanup: {self.ID}: No API value provided -- can be computed from density"
+                return (f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
+                         " -- can be computed from density")
+            else:
+                return (f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
+                         " -- can NOT be computed from density")
 
-        return None
-
+        return ""
 
     def cleanup(self):
         """
@@ -49,7 +60,12 @@ class FixAPI(Cleanup):
 
         :returns: a message of what could be done, or what was done.
         """
-        self.check_for_valid_api()
+        density_at_15 = self.find_density_near_15C()
+
+        if density_at_15:
+            API = uc.convert("density", "kg/m^3", "API", density_at_15)
+            self.oil.metadata.API = API
+            return f"Cleanup: {self.ID}: Set API for {self.oil.oil_id} to {API}."
 
     def check_for_valid_api(self):
         """
@@ -57,21 +73,47 @@ class FixAPI(Cleanup):
         """
         API = self.oil.metadata.API
 
-        densities = self.oil.sub_samples[0].physical_properties.densities
+        # densities = self.oil.sub_samples[0].physical_properties.densities
 
         density_at_15 = self.find_density_near_15C()
 
-    def find_density_near_15C(self):
+        if uc.convert("density", "kg/m^3", "API", density_at_15) == API:
+            return True
+        else:
+            return False
+
+    def build_density_table(self):
+        """
+        build a density table from the data:
+        list of (density, temp) pairs
+        """
+
         densities = self.oil.sub_samples[0].physical_properties.densities
 
-        #create normalized list of densities
+        # create normalized list of densities
         density_table = []
         for density_point in densities:
-            print(density_point)
-            d = density_point.density
-            t = density_point.ref_temp
+            d = density_point.density.converted_to("kg/m^3").value
+            t = density_point.ref_temp.converted_to("C").value
             density_table.append((d, t))
-        print(density_table)
+        return density_table
+
+    def find_density_near_15C(self):
+        """
+        returns the density (in kg/m^3) withing DENSITY_TOL of 15C
+
+````````# note: this could be cleaner with numpy -- but for so few values?
+        """
+        density_table = self.build_density_table()
+        min_diff = math.inf
+        for i, d in enumerate(density_table):
+            if d[1] < min_diff:
+                min_diff = d[1] - 15.0
+                min_ind = i
+        if abs(min_diff) <= self.DENSITY_TOL:
+            return density_table[min_ind][0]
+        else:
+            return None
 
 
 

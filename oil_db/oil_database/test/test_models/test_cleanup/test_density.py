@@ -32,9 +32,9 @@ def no_api_with_density():
     # p = PhysicalProperties()
     p = s.physical_properties
     p.densities = DensityList([
-        DensityPoint(density=Density(value=0.8751, unit="kg/m^3"),
+        DensityPoint(density=Density(value=0.8751, unit="g/cm^3"),
                      ref_temp=Temperature(value=15.0, unit="C")),
-        DensityPoint(density=Density(value=0.99, unit="kg/m^3"),
+        DensityPoint(density=Density(value=0.99, unit="g/cm^3"),
                      ref_temp=Temperature(value=25.0, unit="C"))
     ])
 
@@ -42,10 +42,13 @@ def no_api_with_density():
 
     return oil
 
+
 def test_check_no_API():
     oil = no_api_with_density()
 
     fixer = FixAPI(oil)
+    print("in test: API:",oil.metadata.API)
+
     results = fixer.check()
 
     assert results.startswith(f"Cleanup: {fixer.ID}:")
@@ -53,6 +56,10 @@ def test_check_no_API():
 
 
 def test_check_API_is_there():
+    """
+    if there is an API, check() should return tehempty string
+    """
+
     oil = no_api_with_density()
     oil.metadata.API = 32.0
 
@@ -60,7 +67,7 @@ def test_check_API_is_there():
 
     results = fixer.check()
 
-    assert results is None
+    assert results is ""
 
 
 def test_add_density():
@@ -73,6 +80,29 @@ def test_add_density():
 
     fixer.cleanup()
 
-    assert isclose(oil.metadata.API, 1.614e+05)
+    assert isclose(oil.metadata.API, 30.06, rel_tol=1e4)
 
-    assert False
+
+def test_find_density_near_15C():
+    oil = no_api_with_density()
+
+    fixer = FixAPI(oil)
+
+    result = fixer.find_density_near_15C()
+
+    assert result == 875.1
+
+
+def test_find_density_near_15C_none():
+    oil = no_api_with_density()
+
+    oil.sub_samples[0].physical_properties.densities[0].ref_temp.value = 17.0
+    fixer = FixAPI(oil)
+
+    result = fixer.find_density_near_15C()
+
+    assert result is None
+
+
+
+
