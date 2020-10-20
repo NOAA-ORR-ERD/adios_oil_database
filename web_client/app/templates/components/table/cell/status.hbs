@@ -1,5 +1,7 @@
-{{#if value}}
-  <i class="fa fa-exclamation-triangle status-error"></i>
+{{#if this.hasErrors}}
+  <i class="fa fa-times status-error"></i>
+{{else if this.hasWarnings}}
+  <i class="fa fa-exclamation-triangle status-warning"></i>
 {{else}}
   <i class="fa fa-check-circle status-good"></i>
 {{/if}}

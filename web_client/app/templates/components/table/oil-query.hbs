@@ -55,8 +55,9 @@
 
   <t.head
     @onColumnClick={{action "onColumnClick"}}
-    @iconAscending="fa fa-angle-up"
-    @iconDescending="fa fa-angle-down"
+    @iconSortable='fa fa-sort'
+    @iconAscending='fa fa-sort-asc'
+    @iconDescending='fa fa-sort-desc'
     @resizeOnDrag={{true}}
     @fixed={{true}}
   />
