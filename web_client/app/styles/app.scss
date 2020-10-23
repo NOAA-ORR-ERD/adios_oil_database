@@ -67,7 +67,8 @@ td:empty::after{
 }
 
 .status-warning {
-  color: $orange;
+  // color: $orange;
+  color: $yellow;
 }
 
 .status-error {

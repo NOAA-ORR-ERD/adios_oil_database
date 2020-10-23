@@ -3,6 +3,7 @@
     properties that are contained within an oil record that has been
     queried from the oil database.
 '''
+from copy import deepcopy
 from importlib import import_module
 
 import numpy as np
@@ -84,7 +85,7 @@ class OilEstimation(object):
             # we are dealing with a mapper object, convert to data object
             self.record = imported_rec.py_json()
         else:
-            self.record = imported_rec
+            self.record = deepcopy(imported_rec)
 
         # convert our record dict into an obj with attributes
         self.record = ObjFromDict(self._add_float_units(self.record))

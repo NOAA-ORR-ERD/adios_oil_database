@@ -1,5 +1,5 @@
 <ModalDialog
-  @onClose={{this.args.closeModal}}
+  @onClose={{this.closeModal}}
   @translucentOverlay={{false}}
   @targetAttachment="center left"
   @tetherTarget={{this.args.parent}}
@@ -18,7 +18,9 @@
                 {{on "change" this.updateUnitType}}
         >
           {{#each this.unitTypeNames as |name|}}
-            <option value={{name}}>{{name}}</option>
+            <option value={{get name 0}} selected={{get name 1}}>
+              {{get name 0}}
+            </option>
           {{/each}}
         </select>
 
