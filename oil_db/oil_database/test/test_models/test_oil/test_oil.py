@@ -18,8 +18,12 @@ OIL_ID = 'AD00123'
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    Path(__file__).parent / "AlaskaNorthSlope2015.json"
+    Path(__file__).parent / "ExampleFullRecord.json"
 ))
+
+# BIG_RECORD = json.load(open(
+#     Path(__file__).parent / "AD00602.json"
+# ))
 
 
 class TestOil:
@@ -119,9 +123,9 @@ class TestOil:
 
         print("working with:", oil.metadata.name)
 
-        assert len(oil.sub_samples) == 4
+        assert len(oil.sub_samples) == 5
         assert oil.sub_samples[0].metadata.name == "Fresh Oil Sample"
-        assert oil.sub_samples[3].metadata.name == "36.76% Weathered"
+        assert oil.sub_samples[3].metadata.name == "25.34% Weathered"
 
 
 class TestMetaData:
@@ -212,3 +216,42 @@ class TestMetaData:
 
         setattr(oil.metadata, attr, value)
         assert getattr(oil.metadata, attr) == expected['value']
+
+
+
+class TestFullRecordMetadata:
+    """
+    tests loading a full record (or pretty full) from JSON
+    """
+
+    oil = Oil.from_py_json(BIG_RECORD)
+
+    def test_oil_id(self):
+        oil = self.oil
+        print(oil.oil_id)
+
+        assert oil.oil_id == "EC002234"
+
+
+    @pytest.mark.parametrize("attr, value", [("location", "Alberta, Canada"),
+                                             ('name', 'Access West Blend Winter'),
+                                             ('source_id', '2234'),
+                                             ('sample_date', '2013-04-08'),
+                                        ])
+    def test_location(self, attr, value):
+        metadata = self.oil.metadata
+
+        print(vars(metadata))
+        assert getattr(metadata, attr) == value
+
+
+
+
+
+
+
+
+
+
+
+

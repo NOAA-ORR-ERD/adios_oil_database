@@ -21,18 +21,15 @@ class FixAPI(Cleanup):
 
     def check(self):
         """
-        checks ot see if there is something to fix
+        checks to see if there is something to fix
 
-        if so, a message is returned
+        returns: flag, msg
 
-        if not, then None is returned
+        if nothing is needed, flag is None
+        if something can be cleaned up, flag is True
+        if something is wrong, but can not be cleaned up, flag is False
 
-        fixme: there are really three options:
-               1) Nothing to fix
-               2) Something broken, but not fixable
-               3) Something to fix that is fixable
-               But 2) should be caught by validation, so not doing it here
-                      -- maybe cleanup and validation should be better integrated?
+        fixme: -- maybe cleanup and validation should be better integrated?
         """
         API = self.oil.metadata.API
 
@@ -40,13 +37,13 @@ class FixAPI(Cleanup):
         if API is None:
             density = self.find_density_near_15C()
             if density:
-                return (f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
-                         " -- can be computed from density")
+                return (True, f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
+                               " -- can be computed from density")
             else:
-                return (f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
-                         " -- can NOT be computed from density")
+                return (False, f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
+                                " -- can NOT be computed from density")
 
-        return ""
+        return None, "API is fine"
 
     def cleanup(self):
         """
@@ -64,7 +61,7 @@ class FixAPI(Cleanup):
 
         if density_at_15:
             API = uc.convert("density", "kg/m^3", "API", density_at_15)
-            self.oil.metadata.API = API
+            self.oil.metadata.API = round(API, 2)
             return f"Cleanup: {self.ID}: Set API for {self.oil.oil_id} to {API}."
 
     def check_for_valid_api(self):
