@@ -9,11 +9,15 @@ import copy
 
 from oil_database.models.oil.validation.validate import validate
 
+# # NOTE: this should be updated when the data model is updated.
+# BIG_RECORD = json.load(open(
+#     Path(__file__).parent / "AlaskaNorthSlope2015.json"
+# ))
+
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    Path(__file__).parent / "AlaskaNorthSlope2015.json"
+    Path(__file__).parent / "ExampleFullRecord.json"
 ))
-
 
 @pytest.fixture
 def big_record():
