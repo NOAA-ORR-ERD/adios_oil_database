@@ -5,6 +5,8 @@ This maps to the JSON used in the DB
 
 Having a Python class makes it easier to write importing, validating etc, code.
 """
+import json
+
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
@@ -34,3 +36,43 @@ class Oil:
             raise TypeError("You must supply a non-empty oil_id")
         else:
             self._id = self.oil_id
+
+    @classmethod
+    def from_file(cls, infile):
+        """
+        load an Oil object from the passed in JSON file
+
+        it can be either a path or an open file object
+
+        NOTE: this could be in the decorator -- but we only really need it
+              for a full record.
+        """
+        try:
+            py_json = json.load(infile)
+        except AttributeError:
+            # must not be an open file-like object
+            py_json = json.load(open(infile, encoding='utf-8'))
+
+        return cls.from_py_json(py_json)
+
+    def to_file(self, infile):
+        """
+        save an Oil object as JSON to the passed in file
+
+        it can be either a path or a writable open file object
+
+        NOTE: this could be in the decorator -- but we only really need it
+              for a full record.
+        """
+        try:
+            json.dump(self.py_json(), infile)
+        except AttributeError:
+            # must not be an open file-like object
+            json.dump(self.py_json(), open(infile, 'w', encoding='utf-8'), indent=4)
+
+        return None
+
+
+
+
+

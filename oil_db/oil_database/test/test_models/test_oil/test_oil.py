@@ -1,6 +1,7 @@
 """
 Tests of the data model class
 """
+
 import json
 from pathlib import Path
 
@@ -16,9 +17,12 @@ from pprint import pprint
 
 OIL_ID = 'AD00123'
 
+HERE = Path(__file__).parent
+OUTPUT_DIR = HERE / "output"
+
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    Path(__file__).parent / "ExampleFullRecord.json"
+    HERE / "ExampleFullRecord.json"
 ))
 
 # BIG_RECORD = json.load(open(
@@ -244,6 +248,84 @@ class TestFullRecordMetadata:
         print(vars(metadata))
         assert getattr(metadata, attr) == value
 
+
+def test_from_file_name():
+    """
+    test loading a Oil object directly from a file name
+    """
+    oil = Oil.from_file(HERE / "ExampleFullRecord.json")
+
+    # maybe it would be better to do more of a test,
+    # but the full loading should be tested elsewhere
+    assert oil.oil_id == "EC002234"
+
+
+def test_from_file():
+    """
+    test loading a Oil object directly from a file name
+    """
+    oil = Oil.from_file(open(HERE / "ExampleFullRecord.json", encoding="utf-8"))
+
+    # maybe it would be better to do more of a test,
+    # but the full loading should be tested elsewhere
+    assert oil.oil_id == "EC002234"
+
+
+def test_to_file_name():
+    """
+    test saving an oil object to a filename
+    """
+    oil = Oil.from_py_json(BIG_RECORD)
+    oil.to_file(OUTPUT_DIR / "temp_to_file.json")
+
+    # read it back as JSON
+    with open(OUTPUT_DIR / "temp_to_file.json", encoding="utf-8") as infile:
+        data = json.load(infile)
+
+    assert data["oil_id"] == 'EC002234'
+
+def test_to_open_file():
+    """
+    test saving an oil object to a filename
+    """
+    oil = Oil.from_py_json(BIG_RECORD)
+    oil.to_file(open(OUTPUT_DIR / "temp_to_file.json", 'w', encoding="utf-8"))
+
+    # read it back as JSON
+    with open(OUTPUT_DIR / "temp_to_file.json", encoding="utf-8") as infile:
+        data = json.load(infile)
+
+    assert data["oil_id"] == 'EC002234'
+
+
+def test_round_trip():
+    """
+    tests that a large Oil object loaded from JSON, then saved as JSON,
+    then reloaded again, results in an equal object
+
+    Prompted by, and tested with, a record that was saved from Mongo, in which the
+    attributes are in a different order, but should mean the same thing.
+
+    """
+    filein = HERE / "EC000506.json"
+    fileout = OUTPUT_DIR / "temp_oil.json"
+
+    # read it in:
+    oilin = Oil.from_file(filein)
+
+    # check that they are not exactly the same
+    oilin.to_file(fileout)
+
+    file1 = open(filein, encoding="utf-8").read().strip()
+    file2 = open(fileout, encoding="utf-8").read().strip()
+
+    assert not file1 == file2, "output is the same as input -- test not fully valid"
+
+    # read the new one to an Oil object
+
+    oilout = Oil.from_file(fileout)
+
+    assert oilin == oilout
 
 
 
