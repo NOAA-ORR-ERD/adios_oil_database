@@ -1,14 +1,18 @@
 # from math import isclose
 import json
 
-# import pytest
+from pathlib import Path
+
+from pprint import pprint
 
 from oil_database.models.oil.measurement import MassFraction
 from oil_database.models.oil.compound import Compound, CompoundList
 
 from oil_database.models.oil.ests_fractions import ESTSFractions
 
-from pprint import pprint
+
+HERE = Path(__file__).parent
+OUTPUT_DIR = HERE / "output"
 
 
 class TestESTSFractions:
@@ -72,8 +76,10 @@ class TestESTSFractions:
         print("the pyjson form:")
         pprint(py_json)
 
-        # # dump the json:
-        # json.dump(py_json, open("example_ccme.json", 'w'), indent=4)
+        # dump the json:
+        json.dump(py_json,
+                  open(OUTPUT_DIR / "example_ests_fraction.json", 'w'),
+                  indent=4)
 
         # test the round trip
         ccme2 = ESTSFractions.from_py_json(py_json)
@@ -153,8 +159,10 @@ class TestESTSFractions:
         py_json = ccme.py_json()
         pprint(py_json)
 
-        # dump the json:
-        json.dump(py_json, open("example_ccme.json", 'w'), indent=4)
+        # # dump the json:
+        # json.dump(py_json,
+        #           open(OUTPUT_DIR / "example_ests_fraction.json", 'w'),
+        #           indent=4)
 
         # test the round trip
         ccme2 = ESTSFractions.from_py_json(py_json)

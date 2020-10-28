@@ -1,14 +1,17 @@
-# from math import isclose
 import json
 
 # import pytest
 
 from oil_database.models.oil.measurement import MassFraction
-from oil_database.models.oil.compound import Compound, CompoundList
 
 from oil_database.models.oil.ccme import CCME
 
 from pprint import pprint
+
+from pathlib import Path
+
+HERE = Path(__file__).parent
+OUTPUT_DIR = HERE / "output"
 
 
 class TestCCME:
@@ -73,7 +76,7 @@ class TestCCME:
         pprint(py_json)
 
         # dump the json:
-        json.dump(py_json, open("example_ccme.json", 'w'), indent=4)
+        # json.dump(py_json, open(OUTPUT_DIR / "example_ccme.json", 'w'), indent=4)
 
         # test the round trip
         ccme2 = CCME.from_py_json(py_json)

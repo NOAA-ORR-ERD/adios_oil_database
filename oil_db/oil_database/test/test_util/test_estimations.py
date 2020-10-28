@@ -332,6 +332,8 @@ class TestComponentDensities(object):
                            rtol=0.001)
 
 
+# skipping, as we don't need it now, and it's raising warnings.
+@pytest.mark.skip
 class TestHydrocarbonCharacterization(object):
     '''
         Note: I have little intuition in regards to whether these numbers
