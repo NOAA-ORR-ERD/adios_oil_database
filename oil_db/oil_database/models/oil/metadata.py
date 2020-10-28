@@ -21,6 +21,7 @@ class MetaData:
     API: float = None
     comments: str = ''
     labels: list = field(default_factory=list)
+    model_completeness: float = None
 
 
 @dataclass_to_json

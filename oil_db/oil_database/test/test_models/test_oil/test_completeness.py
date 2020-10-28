@@ -5,7 +5,7 @@ from oil_database.models.oil.completeness import completeness
 
 class TestAllCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'This should have everything.  100% score'},
           'sub_samples': [
               {
@@ -40,7 +40,12 @@ class TestAllCompleteness:
                       ],
                   },
                   'environmental_behavior': {'emulsions': [
-                      {'value': 10, 'unit': '%', 'unit_type': 'massfraction'}
+                      {
+                          'age': {"value": 0, "unit": "day",
+                                  "unit_type": "time"},
+                          'water_content': {'value': 10, 'unit': '%',
+                                            'unit_type': 'massfraction'}
+                      }
                   ]},
                   'distillation_data': {'cuts': [
                           {
@@ -87,7 +92,7 @@ class TestAllCompleteness:
 
 class TestDistillationCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just distillation, 2 cuts.  30% score'},
           'sub_samples': [
               {
@@ -109,7 +114,7 @@ class TestDistillationCompleteness:
           ]
           },
          30),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just distillation, 2 cuts, '
                                   'partial fraction range.  15% score'},
           'sub_samples': [
@@ -139,7 +144,7 @@ class TestDistillationCompleteness:
 
 class TestViscosityCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just one viscosity. 5% score'},
           'sub_samples': [
               {
@@ -157,7 +162,7 @@ class TestViscosityCompleteness:
           ]
           },
          5),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Second viscosity. 10% score'},
           'sub_samples': [
               {
@@ -181,7 +186,7 @@ class TestViscosityCompleteness:
           ]
           },
          10),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Second viscosity, '
                                   'partial temperature range. 7.5% score'},
           'sub_samples': [
@@ -206,7 +211,7 @@ class TestViscosityCompleteness:
           ]
           },
          7.5),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just one weathered viscosity.  10% score'},
           'sub_samples': [
               {
@@ -233,7 +238,7 @@ class TestViscosityCompleteness:
 
 class TestDensityCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just one density.  10% score'},
           'sub_samples': [
               {
@@ -251,7 +256,7 @@ class TestDensityCompleteness:
           ]
           },
          10),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Second density.  15% score'},
           'sub_samples': [
               {
@@ -275,7 +280,7 @@ class TestDensityCompleteness:
           ]
           },
          15),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Second density, '
                                   'partial temperature range. 12.5% score'},
           'sub_samples': [
@@ -300,7 +305,7 @@ class TestDensityCompleteness:
           ]
           },
          12.5),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just weathered density.  10% score'},
           'sub_samples': [
               {
@@ -327,25 +332,35 @@ class TestDensityCompleteness:
 
 class TestEmulsionCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just emulsion.  25% score'},
           'sub_samples': [
               {
                   'environmental_behavior': {'emulsions': [
-                      {'value': 10, 'unit': '%', 'unit_type': 'massfraction'}
+                      {
+                          'age': {"value": 0, "unit": "day",
+                                  "unit_type": "time"},
+                          'water_content': {'value': 10, 'unit': '%',
+                                            'unit_type': 'massfraction'}
+                      }
                   ]},
               },
           ]
           },
          25),
-        ({'_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'weathered sample emulsion.  25% score'},
           'sub_samples': [
               {
               },
               {
                   'environmental_behavior': {'emulsions': [
-                      {'value': 10, 'unit': '%', 'unit_type': 'massfraction'}
+                      {
+                          'age': {"value": 0, "unit": "day",
+                                  "unit_type": "time"},
+                          'water_content': {'value': 10, 'unit': '%',
+                                            'unit_type': 'massfraction'}
+                      }
                   ]},
               },
           ]

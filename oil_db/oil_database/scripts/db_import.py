@@ -23,10 +23,9 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser,
                                                     ExxonMapper)
 
-
-# from oil_database.db_init.validation import oil_record_validation
 from oil_database.db_init.labels import link_oil_to_labels
 from oil_database.models.oil.validation.validate import validate
+from oil_database.models.oil.completeness import set_completeness
 
 logger = logging.getLogger(__name__)
 
@@ -252,6 +251,7 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
                 link_oil_to_labels(oil_pyjson)
 
                 validate(oil_pyjson)
+                set_completeness(oil_pyjson)
 
                 oil_collection.insert_one(oil_pyjson)
             except DuplicateKeyError as e:

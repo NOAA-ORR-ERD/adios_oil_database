@@ -25,7 +25,7 @@ export default Component.extend(TableCommon, {
             label: 'ID',
             valuePath: 'id',
             classNames: 'text-nowrap',
-            width: '110px',
+            width: '90px',
             searchable: true,
             resizable: true,
             minResizeWidth: 75
@@ -61,11 +61,18 @@ export default Component.extend(TableCommon, {
             minResizeWidth: 60,
             resizable: true,
         }, {
+            label: 'Score',
+            valuePath: 'metadata.model_completeness',
+            classNames: 'text-nowrap',
+            width: '70px',
+            minResizeWidth: 60,
+            resizable: true,
+        }, {
             label: 'Date',
             valuePath: 'metadata.sample_date',
             classNames: 'text-nowrap',
             cellComponent: 'table/cell/sample-date',
-            width: '100px',
+            width: '60px',
             minResizeWidth: 60,
             resizable: true,
         }, {

@@ -14,6 +14,7 @@ from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
 from oil_database.models.oil.validation.validate import validate
+from oil_database.models.oil.completeness import set_completeness
 
 from oil_database_api.common.views import (cors_policy,
                                            obj_id_from_url)
@@ -168,6 +169,7 @@ def insert_oil(request):
             oil_obj['_id'] = oil_obj['oil_id'] = new_oil_id(request)
 
         validate(oil_obj)
+        set_completeness(oil_obj)
 
         oil_obj['_id'] = (request.mdb_client.oil
                           .insert_one(oil_obj)
@@ -204,6 +206,8 @@ def update_oil(request):
             validate(oil_obj)
         except Exception as e:
             logger.error(f'Validation Error: {obj_id}: {e}')
+
+        set_completeness(oil_obj)
 
         (request.mdb_client.oil
          .replace_one({'_id': oil_obj['_id']}, oil_obj))
@@ -345,6 +349,8 @@ def get_oil_searchable_fields(oil):
                         'API': meta.get('API'),
                         'sample_date': meta.get('sample_date', ''),
                         'labels': meta.get('labels', []),
+                        'model_completeness': meta.get('model_completeness',
+                                                       None),
                     },
                     'status': oil.get('status', []),
                 },
