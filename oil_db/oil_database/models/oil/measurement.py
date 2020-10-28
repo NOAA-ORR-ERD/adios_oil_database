@@ -120,20 +120,25 @@ class DispersibilityList(JSON_List):
 @dataclass_to_json
 @dataclass
 class Emulsion:
-    age: Time
-    water_content: MassFraction
+    """
+    There is no use for an empty Emulsion object
+
+    But there is a use for one that has an arbitrary subset of fields,
+
+    so making them all optional
+    """
+    age: Time = None
+    water_content: MassFraction = None
 
     ref_temp: Temperature = None
 
     # Pa units, some kind of pressure/stress.
     # Adhesion provides the right units
+    # but we shouldnt use it - so Pressure?
     complex_modulus: NeedleAdhesion = None
     storage_modulus: NeedleAdhesion = None
     loss_modulus: NeedleAdhesion = None
 
-    # Todo: this seems to be just unit-less float, but it is a measurement
-    #       with standard_deviation & replicates.  Well MassFraction will do
-    #       for now.  But NUCOS needs to be updated.
     tan_delta_v_e: Unitless = None
 
     complex_viscosity: DynamicViscosity = None

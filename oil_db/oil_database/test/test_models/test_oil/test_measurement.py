@@ -306,12 +306,20 @@ class TestDispersibilityList:
 
 class TestEmulsion:
     def test_init_empty(self):
-        with pytest.raises(TypeError):
-            _model = Emulsion()
+        """
+        this should work, if uesless
+        """
+        model = Emulsion()
+
+        assert model.age is None
+        assert model.complex_modulus is None
+        # and the rest, but how much can you test?
 
     def test_from_json_empty(self):
-        with pytest.raises(TypeError):
-            _model = Emulsion.from_py_json({})
+
+        model = Emulsion.from_py_json({})
+
+        assert model == Emulsion()
 
     def test_from_json(self):
         json_obj = {
@@ -340,6 +348,8 @@ class TestEmulsion:
 
         # the measurement classes will add unit_type, so we add it to more
         # easily compare the output
+        # Huh? -- just test the model!
+
         json_obj['complex_modulus']['unit_type'] = None
         json_obj['storage_modulus']['unit_type'] = None
         json_obj['loss_modulus']['unit_type'] = None
@@ -347,6 +357,23 @@ class TestEmulsion:
         json_obj['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj['water_content']['unit_type'] = 'massfraction'
 
+        assert model.py_json() == json_obj
+
+    def test_from_partial_json(self):
+        """ Should be able to load an incomplete object """
+        json_obj = {
+            'water_content': {'value': 10.0, 'unit': '%',
+                              'standard_deviation': 1.2,
+                              'replicates': 3},
+        }
+
+        model = Emulsion.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['water_content']['unit_type'] = 'massfraction'
+
+        # this works, because py_json is sparse by default
         assert model.py_json() == json_obj
 
 
