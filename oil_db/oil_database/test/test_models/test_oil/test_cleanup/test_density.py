@@ -16,7 +16,7 @@ from oil_database.models.oil.sample import (Sample)
 from oil_database.models.oil.sample import (PhysicalProperties)
 
 
-from oil_database.models.cleanup.density import FixAPI
+from oil_database.models.oil.cleanup.density import FixAPI
 
 
 def no_api_with_density():
