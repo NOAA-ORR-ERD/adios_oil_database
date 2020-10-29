@@ -1,6 +1,11 @@
 """
 tests of the validation code
 """
+"""
+tests of the validation code
+
+most need to be updated to test validating an Oil object directly
+"""
 
 import pytest
 import json
@@ -9,15 +14,14 @@ import copy
 
 from oil_database.models.oil.validation.validate import validate
 
-# # NOTE: this should be updated when the data model is updated.
-# BIG_RECORD = json.load(open(
-#     Path(__file__).parent / "AlaskaNorthSlope2015.json"
-# ))
+
+HERE = Path(__file__).parent
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    Path(__file__).parent / "ExampleFullRecord.json"
+    HERE.parent / "ExampleFullRecord.json"
 ))
+
 
 @pytest.fixture
 def big_record():

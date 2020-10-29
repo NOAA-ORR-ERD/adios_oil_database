@@ -39,16 +39,13 @@ from .errors import ERRORS
 logger = logging.getLogger(__name__)
 
 
-def validate(oil_json):
+def validate_json(oil_json):
     """
-    validate the oil record.
+    validate a json-compatible-python record
 
-    validation messages are added to the status field of the record
-
-    :param oil: The oil record to be validated, in json-compatible python
-                data structure.
-
+    The "status" field is updated in place, with no other alterations of the record
     """
+
     try:
         oil = Oil.from_py_json(oil_json)
     except TypeError as err:
@@ -58,6 +55,18 @@ def validate(oil_json):
             return
         else:
             raise
+
+    validate_oil(oil)
+
+    oil_json["status"] = oil.status
+
+
+def validate_oil(oil):
+    """
+    validate an Oil object
+
+    oil.status is updated in place
+    """
 
     messages = set()
 
@@ -70,7 +79,24 @@ def validate(oil_json):
         if msg:
             messages.add(msg)
 
-    oil_json["status"] = list(messages)
+    # set the oil status
+    oil.status = list(messages)
+
+
+def validate(oil):
+    """
+    validate the oil record.
+
+    validation messages are added to the status field of the record
+
+    :param oil: The oil record to be validated, as an Oil object or
+                in json-compatible python data structure.
+
+    """
+    if isinstance(oil, Oil):
+        validate_oil(oil)
+    else:
+        validate_json(oil)
 
 
 def val_has_reasonable_name(oil):
