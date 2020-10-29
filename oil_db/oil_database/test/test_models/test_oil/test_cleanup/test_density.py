@@ -6,15 +6,14 @@ from math import isclose
 import pytest
 
 from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.measurement import (DensityPoint,
-                                                 DensityList,
-                                                 Density,
-                                                 Temperature,
-                                                 )
+from oil_database.models.oil.physical_properties import (DensityPoint,
+                                                         DensityList,
+                                                         )
+from oil_database.models.common.measurement import (Density,
+                                                    Temperature,
+                                                    )
 
 from oil_database.models.oil.sample import (Sample)
-from oil_database.models.oil.sample import (PhysicalProperties)
-
 
 from oil_database.models.oil.cleanup.density import FixAPI
 

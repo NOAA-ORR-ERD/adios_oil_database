@@ -2,13 +2,158 @@ import pytest
 
 from oil_database.models.common.measurement import Temperature, Density
 
-from oil_database.models.oil.measurement import (DensityPoint,
-                                                 DensityList,
-                                                 KinematicViscosityList,
-                                                 DynamicViscosityList,
-                                                 InterfacialTensionList)
+from oil_database.models.oil.physical_properties import (PhysicalProperties,
+                                                         DensityPoint,
+                                                         DensityList,
+                                                         InterfacialTensionList,
+                                                         DynamicViscosityPoint,
+                                                         DynamicViscosityList,
+                                                         KinematicViscosityPoint,
+                                                         KinematicViscosityList,)
 
-from oil_database.models.oil.physical_properties import PhysicalProperties
+
+class TestDensityPoint:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = DensityPoint()
+
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = DensityPoint.from_py_json({})
+
+    def test_from_json(self):
+        json_obj = {'density': {'value': 900.0, 'unit': 'kg/m^3',
+                                'standard_deviation': 1.2, 'replicates': 3},
+                    'ref_temp': {'value': 273.15, 'unit': 'K',
+                                 'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = DensityPoint.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['density']['unit_type'] = 'density'
+        json_obj['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestDensityList:
+    def test_init_empty(self):
+        assert DensityList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert DensityList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'density': {'value': 900.0, 'unit': 'kg/m^3',
+                                 'standard_deviation': 1.2, 'replicates': 3},
+                     'ref_temp': {'value': 273.15, 'unit': 'K',
+                                  'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = DensityList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['density']['unit_type'] = 'density'
+        json_obj[0]['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestDynamicViscosityPoint:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = DynamicViscosityPoint()
+
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = DynamicViscosityPoint.from_py_json({})
+
+    def test_from_json(self):
+        json_obj = {'viscosity': {'value': 100.0, 'unit': 'cP',
+                                  'standard_deviation': 1.2, 'replicates': 3},
+                    'ref_temp': {'value': 273.15, 'unit': 'K',
+                                 'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = DynamicViscosityPoint.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['viscosity']['unit_type'] = 'dynamicviscosity'
+        json_obj['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestDynamicViscosityList:
+    def test_init_empty(self):
+        assert DynamicViscosityList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert DynamicViscosityList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'viscosity': {'value': 100.0, 'unit': 'cP',
+                                   'standard_deviation': 1.2, 'replicates': 3},
+                     'ref_temp': {'value': 273.15, 'unit': 'K',
+                                  'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = DynamicViscosityList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['viscosity']['unit_type'] = 'dynamicviscosity'
+        json_obj[0]['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestKinematicViscosityPoint:
+    def test_init_empty(self):
+        with pytest.raises(TypeError):
+            _model = KinematicViscosityPoint()
+
+    def test_from_json_empty(self):
+        with pytest.raises(TypeError):
+            _model = KinematicViscosityPoint.from_py_json({})
+
+    def test_from_json(self):
+        json_obj = {'viscosity': {'value': 100.0, 'unit': 'cSt',
+                                  'standard_deviation': 1.2, 'replicates': 3},
+                    'ref_temp': {'value': 273.15, 'unit': 'K',
+                                 'standard_deviation': 1.2, 'replicates': 3}
+                    }
+        model = KinematicViscosityPoint.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj['viscosity']['unit_type'] = 'kinematicviscosity'
+        json_obj['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
+
+
+class TestKinematicViscosityList:
+    def test_init_empty(self):
+        assert KinematicViscosityList().py_json() == []
+
+    def test_from_json_empty(self):
+        assert KinematicViscosityList.from_py_json([]).py_json() == []
+
+    def test_from_json(self):
+        json_obj = [{'viscosity': {'value': 100.0, 'unit': 'cSt',
+                                   'standard_deviation': 1.2, 'replicates': 3},
+                     'ref_temp': {'value': 273.15, 'unit': 'K',
+                                  'standard_deviation': 1.2, 'replicates': 3}
+                     }]
+        model = KinematicViscosityList.from_py_json(json_obj)
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj[0]['viscosity']['unit_type'] = 'kinematicviscosity'
+        json_obj[0]['ref_temp']['unit_type'] = 'temperature'
+
+        assert model.py_json() == json_obj
 
 
 class TestPhysicalProperties:

@@ -17,38 +17,6 @@ from ..common.measurement import (Time,
                                   AngularVelocity)
 
 
-@dataclass_to_json
-@dataclass
-class DensityPoint:
-    density: Density
-    ref_temp: Temperature
-
-
-class DensityList(JSON_List):
-    item_type = DensityPoint
-
-
-@dataclass_to_json
-@dataclass
-class DynamicViscosityPoint:
-    viscosity: DynamicViscosity
-    ref_temp: Temperature
-    shear_rate: AngularVelocity = None
-
-
-class DynamicViscosityList(JSON_List):
-    item_type = DynamicViscosityPoint
-
-
-@dataclass_to_json
-@dataclass
-class KinematicViscosityPoint:
-    viscosity: KinematicViscosity
-    ref_temp: Temperature
-
-
-class KinematicViscosityList(JSON_List):
-    item_type = KinematicViscosityPoint
 
 
 @dataclass_to_json
@@ -89,20 +57,6 @@ class InterfacialTensionPoint:
 
 class InterfacialTensionList(JSON_List):
     item_type = InterfacialTensionPoint
-
-
-@dataclass_to_json
-@dataclass
-class PourPoint:
-    measurement: Temperature = None
-    method: str = None
-
-
-@dataclass_to_json
-@dataclass
-class FlashPoint:
-    measurement: Temperature = None
-    method: str = None
 
 
 @dataclass_to_json

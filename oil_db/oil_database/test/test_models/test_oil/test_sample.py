@@ -2,12 +2,12 @@ import pytest
 
 from oil_database.models.common.measurement import Temperature, Density
 
-from oil_database.models.oil.measurement import (DensityPoint,
-                                                 DensityList)
-
 from oil_database.models.oil.sample import Sample, SampleList
 from oil_database.models.oil.metadata import SampleMetaData
-from oil_database.models.oil.physical_properties import PhysicalProperties
+from oil_database.models.oil.physical_properties import (PhysicalProperties,
+                                                         DensityPoint,
+                                                         DensityList,
+                                                         )
 
 
 class TestSample:
