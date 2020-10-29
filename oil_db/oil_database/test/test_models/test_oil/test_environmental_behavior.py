@@ -2,9 +2,9 @@ import pytest
 
 from oil_database.models.common.measurement import MassFraction
 
-from oil_database.models.oil.measurement import (Dispersibility,
-                                                 DispersibilityList,
-                                                 EmulsionList)
+from oil_database.models.oil.properties import (Dispersibility,
+                                                DispersibilityList,
+                                                EmulsionList)
 
 from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
 

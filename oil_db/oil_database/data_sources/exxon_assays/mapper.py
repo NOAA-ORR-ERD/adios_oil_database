@@ -20,9 +20,10 @@ from oil_database.models.common.measurement import (UnittedValue,
                                                     KinematicViscosity,
                                                     Pressure)
 
-from oil_database.models.oil.measurement import (DensityPoint,
-                                                 KinematicViscosityPoint,
-                                                 DistCut)
+from oil_database.models.oil.physical_properties import (DensityPoint,
+                                                         KinematicViscosityPoint,
+                                                         )
+from oil_database.models.oil.properties import DistCut
 from oil_database.models.oil.values import Reference
 
 from oil_database.models.oil.oil import Oil

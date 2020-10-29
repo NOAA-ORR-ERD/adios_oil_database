@@ -2,10 +2,6 @@ import pytest
 
 from oil_database.models.common.measurement import MassFraction
 
-from oil_database.models.oil.measurement import (Dispersibility,
-                                                 DispersibilityList,
-                                                 EmulsionList)
-
 from oil_database.models.oil.sara import Sara
 
 
@@ -52,7 +48,8 @@ class TestSARA:
         """
         s = Sara()
 
-        s.saturates = MassFraction(value=10.0, unit="%",
+        s.saturates = MassFraction(value=10.0,
+                                   unit="%",
                                    standard_deviation=1.2,
                                    replicates=3)
 

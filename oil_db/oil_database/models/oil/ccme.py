@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from ..common.utilities import dataclass_to_json
 
-from .measurement import MassFraction
+from ..common.measurement import MassFraction
 
 
 @dataclass_to_json

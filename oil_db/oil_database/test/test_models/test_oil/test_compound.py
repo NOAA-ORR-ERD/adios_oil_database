@@ -1,7 +1,7 @@
 # from math import isclose
 # import pytest
 
-from oil_database.models.oil.measurement import MassFraction
+from oil_database.models.common.measurement import MassFraction
 from oil_database.models.oil.compound import Compound, CompoundList
 
 

@@ -9,15 +9,15 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
 
-from ..common.measurement import MassFraction, VolumeFraction, Temperature
+from ..common.measurement import VolumeFraction
 
-from .measurement import Distillation
+from .properties import Distillation
 from .metadata import SampleMetaData
 from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
 from .sara import Sara
-from .ccme import CCME
 from .ests_fractions import ESTSFractions
+from .ccme import CCME
 
 from .compound import CompoundList
 

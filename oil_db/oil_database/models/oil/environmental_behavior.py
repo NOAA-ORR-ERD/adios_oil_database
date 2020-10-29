@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from ..common.utilities import dataclass_to_json
 
 from ..common.measurement import NeedleAdhesion
-from .measurement import DispersibilityList, EmulsionList, ESTSEvaporationTest
+from .properties import DispersibilityList, EmulsionList, ESTSEvaporationTest
 
 
 @dataclass_to_json

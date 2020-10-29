@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pprint import pprint
 
-from oil_database.models.oil.measurement import MassFraction
+from oil_database.models.common.measurement import MassFraction
 from oil_database.models.oil.compound import Compound, CompoundList
 
 from oil_database.models.oil.ests_fractions import ESTSFractions

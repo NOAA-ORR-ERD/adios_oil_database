@@ -11,7 +11,7 @@
 '''
 import logging
 
-from .measurement import MassFraction, Temperature
+from ..common.measurement import MassFraction, Temperature
 
 logger = logging.getLogger(__name__)
 
