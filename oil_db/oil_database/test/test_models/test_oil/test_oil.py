@@ -38,6 +38,31 @@ class TestOil:
         with pytest.raises(TypeError):
             Oil()
 
+    def test_wrong_thing_in_oil_id(self):
+        """
+        it's easy to accidentally pass whoh knows what into the id param
+
+        that should get flagged if it doesn't make sense
+        """
+        whoops = {'oil_id': 'AD00123',
+                  'metadata': {'name': 'An oil name'}
+                  }
+        with pytest.raises(ValueError):
+            Oil(whoops)
+
+    def test_bad_oil_id(self):
+        """
+        it's easy to accidentally pass who knows what into the id param
+
+        a really long string probaly isn't waht you meant
+        """
+        whoops = {'oil_id': 'AD00123',
+                  'metadata': {'name': 'An oil name',
+                               'comments': "an arbitrary comment"},
+                  }
+        with pytest.raises(ValueError):
+            Oil(str(whoops))
+
     def test_empty_oil_id(self):
         """ you must specify at least an oil_id """
         with pytest.raises(TypeError):

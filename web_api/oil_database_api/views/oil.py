@@ -13,7 +13,7 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 from pymongo.errors import DuplicateKeyError
 
 from oil_database.util.json import fix_bson_ids
-from oil_database.models.oil.validation.validate import validate
+from oil_database.models.oil.validation.validate import validate_json
 from oil_database.models.oil.completeness import set_completeness
 
 from oil_database_api.common.views import (cors_policy,
@@ -168,8 +168,9 @@ def insert_oil(request):
         else:
             oil_obj['_id'] = oil_obj['oil_id'] = new_oil_id(request)
 
-        validate(oil_obj)
-        set_completeness(oil_obj)
+        oil = validate_json(oil_obj)
+        set_completeness(oil)
+        oil_obj = oil.py_json()
 
         oil_obj['_id'] = (request.mdb_client.oil
                           .insert_one(oil_obj)
@@ -203,12 +204,12 @@ def update_oil(request):
         fix_oil_id(oil_obj, obj_id)
 
         try:
-            validate(oil_obj)
+            oil = validate_json(oil_obj)
         except Exception as e:
             logger.error(f'Validation Error: {obj_id}: {e}')
 
-        set_completeness(oil_obj)
-
+        set_completeness(oil)
+        oil_obj = oil.py_json()
         (request.mdb_client.oil
          .replace_one({'_id': oil_obj['_id']}, oil_obj))
 

@@ -43,6 +43,8 @@ def validate_json(oil_json):
     """
     validate a json-compatible-python record
 
+    An Oil object is returned, if it's possible to do so.
+
     The "status" field is updated in place, with no other alterations of the record
     """
 
@@ -52,16 +54,16 @@ def validate_json(oil_json):
         if "argument: 'oil_id'" in err.args[0]:
             print(err)
             oil_json["status"] = ERRORS["E001"]
-            return
+            raise TypeError(ERRORS["E001"])
         else:
             raise
 
-    validate_oil(oil)
+    validate(oil)
 
-    oil_json["status"] = oil.status
+    return oil
 
 
-def validate_oil(oil):
+def validate(oil):
     """
     validate an Oil object
 
@@ -83,20 +85,20 @@ def validate_oil(oil):
     oil.status = list(messages)
 
 
-def validate(oil):
-    """
-    validate the oil record.
+# def validate(oil):
+#     """
+#     validate the oil record.
 
-    validation messages are added to the status field of the record
+#     validation messages are added to the status field of the record
 
-    :param oil: The oil record to be validated, as an Oil object or
-                in json-compatible python data structure.
+#     :param oil: The oil record to be validated, as an Oil object or
+#                 in json-compatible python data structure.
 
-    """
-    if isinstance(oil, Oil):
-        validate_oil(oil)
-    else:
-        validate_json(oil)
+#     """
+#     if isinstance(oil, Oil):
+#         validate_oil(oil)
+#     else:
+#         validate_json(oil)
 
 
 def val_has_reasonable_name(oil):
