@@ -34,6 +34,10 @@ class Oil:
         '''
         if self.oil_id == "":
             raise TypeError("You must supply a non-empty oil_id")
+        elif not isinstance(self.oil_id, str):
+            raise ValueError("oil_id must be a string")
+        elif len(self.oil_id) > 64:  # arbitry limit to catch ridiculous ones
+            raise ValueError("oil_id must be a string less than 65 charactors in length")
         else:
             self._id = self.oil_id
 

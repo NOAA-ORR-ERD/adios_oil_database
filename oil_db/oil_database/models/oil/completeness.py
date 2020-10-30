@@ -17,31 +17,23 @@ from .oil import Oil
 logger = logging.getLogger(__name__)
 
 
-def set_completeness(oil_json):
-    if 'metadata' not in oil_json:
-        oil_json['metadata'] = {}
-
-    oil_json['metadata']['model_completeness'] = completeness(oil_json)
+# is this function needed???
+def set_completeness(oil):
+    oil.metadata.model_completeness = completeness(oil)
 
 
-def completeness(oil_json):
+def completeness(oil):
     '''
         Calculate the completeness of the data contained in an oil record.
 
         :param oil: The oil record to be validated, in json-compatible python
                     data structure.
     '''
-    try:
-        oil = Oil.from_py_json(oil_json)
-    except Exception as e:
-        logger.error(f'Error creating Oil object: {e}')
-        return 0
-
     res = 0
     for check_func in CHECKS:
         res += check_func(oil)
 
-    return round(res * 10.0, 2)
+    return round(res * 10.0)
 
 
 def check_emulsion_water_content(oil):

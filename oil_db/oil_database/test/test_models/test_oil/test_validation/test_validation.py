@@ -1,8 +1,5 @@
 """
 tests of the validation code
-"""
-"""
-tests of the validation code
 
 most need to be updated to test validating an Oil object directly
 """
@@ -12,7 +9,9 @@ import json
 from pathlib import Path
 import copy
 
-from oil_database.models.oil.validation.validate import validate
+from oil_database.models.oil.oil import Oil
+from oil_database.models.oil.validation.validate import (validate_json,
+                                                         validate)
 
 
 HERE = Path(__file__).parent
@@ -25,7 +24,7 @@ BIG_RECORD = json.load(open(
 
 @pytest.fixture
 def big_record():
-    return copy.deepcopy(BIG_RECORD)
+    return Oil.from_py_json(BIG_RECORD)
 
 
 @pytest.fixture
@@ -33,14 +32,14 @@ def no_type_oil():
     no_type_oil = {'oil_id': 'AD00123',
                    'metadata': {'name': 'An oil name'}
                    }
-    return no_type_oil
+    return Oil.from_py_json(no_type_oil)
 
 
 def snippet_in_oil_status(snippet, oil):
     """
     checks if the particular snippet in one of the messages
     """
-    for msg in oil["status"]:
+    for msg in oil.status:
         if snippet in msg:
             return True
     return False
@@ -54,11 +53,14 @@ def snippet_not_in_oil_status(snippet, oil):
 
 
 def test_no_id():
-    oil = {}
-    validate(oil)
-
-    assert ("E001: Record has no oil_id: every record must have an ID"
-            in oil['status'])
+    """
+    should get a particular ValueError if you try an invalid dict
+    """
+    try:
+        validate_json({"this": 3})
+    except TypeError as err:
+        assert ("E001: Record has no oil_id: every record must have an ID"
+                in str(err))
 
 
 @pytest.mark.parametrize("name", ["  ",
@@ -66,12 +68,11 @@ def test_no_id():
                                   "4",
                                   "this"
                                   ])
+
 def test_reasonable_name(name):
     # unreasonable names should fail
-    oil = {
-        'oil_id': 'AD00123',
-        'metadata': {"name": name}
-        }
+    oil = Oil(oil_id='AD00123')
+    oil.metadata.name = name
     validate(oil)
 
     assert snippet_in_oil_status("W001:", oil)
@@ -84,64 +85,53 @@ def test_no_type(no_type_oil):
 
 
 def test_bad_type(no_type_oil):
-    no_type_oil['metadata']['product_type'] = "Fred"
+    no_type_oil.metadata.product_type = "Fred"
     validate(no_type_oil)
 
-    print(no_type_oil["status"])
     assert snippet_in_oil_status("W003:", no_type_oil)
 
 
 def test_correct_type(no_type_oil):
-    no_type_oil['metadata']['product_type'] = "Crude"
+    no_type_oil.metadata.product_type = "Crude"
     validate(no_type_oil)
 
-    print(no_type_oil["status"])
-    for msg in no_type_oil["status"]:
+    print(no_type_oil.status)
+    for msg in no_type_oil.status:
         assert not msg.startswith("W001")
         assert not msg.startswith("W002")
-
-
-def test_big_record(big_record):
-    """
-    making sure that this works with a pretty complete record
-
-    all this tests is that it doesn't barf
-    """
-    validate(big_record)
-
-    print(big_record["status"])
 
 
 def test_big_record_no_type(big_record):
     """
     remove the product type from the record
     """
-    big_record['metadata']['product_type'] = None
+    oil = big_record
+    oil.metadata.product_type = None
 
-    validate(big_record)
+    validate(oil)
 
-    print(big_record["status"])
+    print(oil.status)
 
-    assert snippet_in_oil_status("W002", big_record)
+    assert snippet_in_oil_status("W002", oil)
 
 
 def test_no_api_crude(no_type_oil):
     oil = no_type_oil
-    oil['metadata']['product_type'] = "Crude"
+    oil.metadata.product_type = "Crude"
     validate(oil)
     assert snippet_in_oil_status("E002:", oil)
 
 
 def test_no_api_not_crude(no_type_oil):
     oil = no_type_oil
-    oil['product_type'] = "Refined"
+    oil.metadata.product_type = "Refined"
     validate(oil)
     assert snippet_in_oil_status("W004:", oil)
 
 
 def test_api_outragious(no_type_oil):
     oil = no_type_oil
-    oil['metadata']['API'] = -200
+    oil.metadata.API = -200
     validate(oil)
     assert snippet_in_oil_status("W005:", oil)
 
@@ -194,8 +184,10 @@ def test_no_distillation_cuts(big_record):
     oil = big_record
 
     # remove the cut data
-    oil['sub_samples'][0]['distillation_data'] = []
+    oil.sub_samples[0].distillation_data = []
     validate(oil)
-    print(oil["status"])
+    print(oil.status)
 
     assert snippet_in_oil_status("W007:", oil)
+
+

@@ -1,5 +1,6 @@
 import pytest
 
+from oil_database.models.oil.oil import Oil
 from oil_database.models.oil.completeness import completeness
 
 
@@ -87,7 +88,8 @@ class TestAllCompleteness:
          100),
     ])
     def test_completeness_score(self, oil_json, expected):
-        assert completeness(oil_json) == expected
+        oil = Oil.from_py_json(oil_json)
+        assert completeness(oil) == expected
 
 
 class TestDistillationCompleteness:
@@ -139,7 +141,8 @@ class TestDistillationCompleteness:
          15),
     ])
     def test_completeness_score(self, oil_json, expected):
-        assert completeness(oil_json) == expected
+        oil = Oil.from_py_json(oil_json)
+        assert completeness(oil) == expected
 
 
 class TestViscosityCompleteness:
@@ -210,7 +213,7 @@ class TestViscosityCompleteness:
               },
           ]
           },
-         7.5),
+         8),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just one weathered viscosity.  10% score'},
           'sub_samples': [
@@ -233,7 +236,8 @@ class TestViscosityCompleteness:
          10),
     ])
     def test_completeness_score(self, oil_json, expected):
-        assert completeness(oil_json) == expected
+        oil = Oil.from_py_json(oil_json)
+        assert completeness(oil) == expected
 
 
 class TestDensityCompleteness:
@@ -304,7 +308,7 @@ class TestDensityCompleteness:
               },
           ]
           },
-         12.5),
+         12.0),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           'metadata': {'comment': 'Just weathered density.  10% score'},
           'sub_samples': [
@@ -327,7 +331,8 @@ class TestDensityCompleteness:
          10),
     ])
     def test_completeness_score(self, oil_json, expected):
-        assert completeness(oil_json) == expected
+        oil = Oil.from_py_json(oil_json)
+        assert completeness(oil) == expected
 
 
 class TestEmulsionCompleteness:
@@ -368,4 +373,6 @@ class TestEmulsionCompleteness:
          25),
     ])
     def test_completeness_score(self, oil_json, expected):
-        assert completeness(oil_json) == expected
+        oil = Oil.from_py_json(oil_json)
+        assert completeness(oil) == expected
+
