@@ -71,11 +71,11 @@ class OilLibraryRecordParser(ParserBase):
 
     @property
     def oil_id(self):
-        return self.adios_oil_id
+        return self.source_id
 
     @property
     def _id(self):
-        return self.adios_oil_id
+        return self.source_id
 
     @property
     def name(self):
