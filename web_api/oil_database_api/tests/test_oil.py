@@ -14,6 +14,8 @@ from .base import FunctionalTestBase
 from .sample_oils import basic_noaa_fm
 
 from pprint import pprint
+from builtins import isinstance, dict
+from anaconda_project import status
 
 
 class OilTestBase(FunctionalTestBase):
@@ -348,9 +350,9 @@ class OilTests(OilTestBase):
                        'AD00020',
                        'AD00025',
                        'AD01759',
-                       'EC002234',
-                       'EC000506',
-                       'EC000561'):
+                       'EC02234',
+                       'EC00506',
+                       'EC00561'):
             print(f'checking for {oil_id}')
             resp = self.testapp.get('/oils/{0}'.format(oil_id))
             oil = resp.json_body
@@ -362,15 +364,19 @@ class OilTests(OilTestBase):
 
             print('oil: ', oil['data']['_id'])
 
-            # the oil_database module has its own tests for all the oil
+            # The oil_database module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
 
             for k in ('_id',
                       'oil_id',
                       'metadata',
-                      'status',
                       'sub_samples'):
                 assert k in oil['data']['attributes']
+
+            # optional status
+            if 'status' in oil['data']['attributes']:
+                status = oil['data']['attributes']
+                assert isinstance(status, list)
 
             for k in ('name',
                       'source_id',

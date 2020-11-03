@@ -203,7 +203,7 @@ class TestEnvCanadaRecordParser(object):
 
     @pytest.mark.parametrize('rec, attr, expected', [
         ('2234', 'name', 'Access West Blend Winter'),
-        ('2234', 'oil_id', 'EC002234'),
+        ('2234', 'oil_id', 'EC02234'),
         ('2234', 'ests_codes', ['2234.1.1 A', '2234.1.4.1 ', '2234.1.3.1 ',
                                 '2234.1.2.1 ', '2234.1.5.1 ']),
         ('2234', 'weathering', [0.0, 0.0853, 0.1686, 0.2534, 0.2645]),
@@ -1803,8 +1803,8 @@ class TestEnvCanadaRecordMapper(object):
             _mapper = EnvCanadaRecordMapper(None)
 
     @pytest.mark.parametrize('oil_id, expected', [
-        ('2713', {'_id': 'EC002713',
-                  'oil_id': 'EC002713',
+        ('2713', {'_id': 'EC02713',
+                  'oil_id': 'EC02713',
                   'metadata.name': 'Alaska North Slope [2015]',
                   'metadata.source_id': '2713',
                   'metadata.location': 'Alaska, USA',
