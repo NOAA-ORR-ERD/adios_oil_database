@@ -15,7 +15,6 @@ from .sample_oils import basic_noaa_fm
 
 from pprint import pprint
 from builtins import isinstance, dict
-from anaconda_project import status
 
 
 class OilTestBase(FunctionalTestBase):
