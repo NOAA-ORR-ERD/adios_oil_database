@@ -374,7 +374,7 @@ class OilTests(OilTestBase):
 
             # optional status
             if 'status' in oil['data']['attributes']:
-                status = oil['data']['attributes']
+                status = oil['data']['attributes']['status']
                 assert isinstance(status, list)
 
             for k in ('name',
