@@ -312,7 +312,7 @@ def read_header(data):
 def read_identification(data):
     row = next_non_empty(data)
 
-    return f'EX{next_id():06}', f'{row[0]}', row[1:]
+    return f'EX{next_id():05}', f'{row[0]}', row[1:]
 
 
 def sample_id_attrs(name):

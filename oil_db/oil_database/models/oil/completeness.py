@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 # is this function needed???
+# answer: SRP, it's the right thing to do
 def set_completeness(oil):
     oil.metadata.model_completeness = completeness(oil)
 
@@ -204,8 +205,6 @@ def check_weathered_viscosity(oil):
 
 
 def is_measurement_good(measurement):
-    print([(getattr(measurement, a, None) is None)
-                    for a in ('value', 'unit', 'unit_type')])
     return not any([(getattr(measurement, a, None) is None)
                     for a in ('value', 'unit', 'unit_type')])
 

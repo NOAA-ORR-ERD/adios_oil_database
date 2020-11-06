@@ -67,15 +67,15 @@ class OilLibraryRecordParser(ParserBase):
 
     @property
     def source_id(self):
-        return self.adios_oil_id
+        return f'{self.adios_oil_id[:2]}{int(self.adios_oil_id[2:]):05}'
 
     @property
     def oil_id(self):
-        return self.adios_oil_id
+        return self.source_id
 
     @property
     def _id(self):
-        return self.adios_oil_id
+        return self.source_id
 
     @property
     def name(self):

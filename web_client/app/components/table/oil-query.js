@@ -75,15 +75,19 @@ export default Component.extend(TableCommon, {
             width: '4em',
             minResizeWidth: 60,
             resizable: true,
-        }, {
-            label: 'Labels',
-            valuePath: 'metadata.labels',
-            classNames: 'text-nowrap',
-            cellComponent: 'table/cell/label',
-            width: '9em',
-            minResizeWidth: 100,
-            resizable: true,
-        }];
+        }
+        // We will keep this around in comment form for debugging
+        // should the need arise
+        //{
+        //    label: 'Labels',
+        //    valuePath: 'metadata.labels',
+        //    classNames: 'text-nowrap',
+        //    cellComponent: 'table/cell/label',
+        //    width: '9em',
+        //    minResizeWidth: 100,
+        //    resizable: true,
+        //}
+        ];
     }),
 
     init() {

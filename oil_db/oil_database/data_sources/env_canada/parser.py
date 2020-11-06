@@ -259,7 +259,7 @@ class EnvCanadaRecordParser(ParserBase):
 
     @property
     def oil_id(self):
-        return 'EC{:06.0f}'.format(int(self.source_id))
+        return f'EC{int(self.source_id):05}'
 
     @property
     def weathering(self):
