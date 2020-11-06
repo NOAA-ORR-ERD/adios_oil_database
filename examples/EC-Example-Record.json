@@ -1701,7 +1701,7 @@
                             "replicates": 6,
                             "standard_deviation": 7,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 45
                         },
                         "complex_viscosity": {
@@ -1715,7 +1715,7 @@
                             "replicates": 6,
                             "standard_deviation": 6,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 42
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -1728,7 +1728,7 @@
                             "replicates": 6,
                             "standard_deviation": 3,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 13.823
                         },
                         "tan_delta_v_e": {
@@ -1756,7 +1756,7 @@
                             "replicates": 6,
                             "standard_deviation": 7,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 31
                         },
                         "complex_viscosity": {
@@ -1770,7 +1770,7 @@
                             "replicates": 6,
                             "standard_deviation": 6.9,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 31
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -1783,7 +1783,7 @@
                             "replicates": 6,
                             "standard_deviation": 0.96,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 2.4437
                         },
                         "tan_delta_v_e": {
@@ -3676,7 +3676,7 @@
                             "replicates": 6,
                             "standard_deviation": 7.7,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 89.652
                         },
                         "complex_viscosity": {
@@ -3690,7 +3690,7 @@
                             "replicates": 6,
                             "standard_deviation": 7.8,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 85
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -3703,7 +3703,7 @@
                             "replicates": 6,
                             "standard_deviation": 2.8,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 28.273
                         },
                         "tan_delta_v_e": {
@@ -3731,7 +3731,7 @@
                             "replicates": 6,
                             "standard_deviation": 18,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 90
                         },
                         "complex_viscosity": {
@@ -3745,7 +3745,7 @@
                             "replicates": 6,
                             "standard_deviation": 18,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 90
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -3758,7 +3758,7 @@
                             "replicates": 6,
                             "standard_deviation": 5.3,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 15.494
                         },
                         "tan_delta_v_e": {
@@ -5632,7 +5632,7 @@
                             "replicates": 6,
                             "standard_deviation": 38,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 470
                         },
                         "complex_viscosity": {
@@ -5646,7 +5646,7 @@
                             "replicates": 6,
                             "standard_deviation": 32,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 430
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -5659,7 +5659,7 @@
                             "replicates": 6,
                             "standard_deviation": 23,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 180
                         },
                         "tan_delta_v_e": {
@@ -5687,7 +5687,7 @@
                             "replicates": 6,
                             "standard_deviation": 24,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 530
                         },
                         "complex_viscosity": {
@@ -5701,7 +5701,7 @@
                             "replicates": 6,
                             "standard_deviation": 25,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 500
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -5714,7 +5714,7 @@
                             "replicates": 6,
                             "standard_deviation": 20,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 200
                         },
                         "tan_delta_v_e": {
@@ -7584,7 +7584,7 @@
                             "replicates": 3,
                             "standard_deviation": 1299,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 12573
                         },
                         "complex_viscosity": {
@@ -7598,7 +7598,7 @@
                             "replicates": 3,
                             "standard_deviation": 1233,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 12183
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -7611,7 +7611,7 @@
                             "replicates": 3,
                             "standard_deviation": 501,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 3114
                         },
                         "tan_delta_v_e": {
@@ -7639,7 +7639,7 @@
                             "replicates": 2,
                             "standard_deviation": 474,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 15200
                         },
                         "complex_viscosity": {
@@ -7653,7 +7653,7 @@
                             "replicates": 2,
                             "standard_deviation": 460,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 14800
                         },
                         "method": "ESTS: 13.02/x.x/M",
@@ -7666,7 +7666,7 @@
                             "replicates": 2,
                             "standard_deviation": 136,
                             "unit": "Pa",
-                            "unit_type": null,
+                            "unit_type": "pressure",
                             "value": 3500
                         },
                         "tan_delta_v_e": {
@@ -9544,7 +9544,7 @@
                         },
                         "complex_modulus": {
                             "unit": "Pa",
-                            "unit_type": null
+                            "unit_type": "pressure"
                         },
                         "complex_viscosity": {
                             "unit": "Pa.s",
@@ -9552,7 +9552,7 @@
                         },
                         "loss_modulus": {
                             "unit": "Pa",
-                            "unit_type": null
+                            "unit_type": "pressure"
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -9561,7 +9561,7 @@
                         },
                         "storage_modulus": {
                             "unit": "Pa",
-                            "unit_type": null
+                            "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
                             "unit_type": "unitless"
@@ -9580,7 +9580,7 @@
                         },
                         "complex_modulus": {
                             "unit": "Pa",
-                            "unit_type": null
+                            "unit_type": "pressure"
                         },
                         "complex_viscosity": {
                             "unit": "Pa.s",
@@ -9588,7 +9588,7 @@
                         },
                         "loss_modulus": {
                             "unit": "Pa",
-                            "unit_type": null
+                            "unit_type": "pressure"
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -9597,7 +9597,7 @@
                         },
                         "storage_modulus": {
                             "unit": "Pa",
-                            "unit_type": null
+                            "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
                             "unit_type": "unitless"

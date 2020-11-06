@@ -196,18 +196,18 @@ class TestEmulsion:
 
         model = Emulsion.from_py_json(json_obj)
 
-        # the measurement classes will add unit_type, so we add it to more
-        # easily compare the output
-        # Huh? -- just test the model!
+        assert model.complex_modulus.unit_type == "pressure"
+        assert model.complex_modulus.value == 1.0
+        assert model.complex_modulus.unit == "Pa"
 
-        json_obj['complex_modulus']['unit_type'] = None
-        json_obj['storage_modulus']['unit_type'] = None
-        json_obj['loss_modulus']['unit_type'] = None
-        json_obj['tan_delta_v_e']['unit_type'] = 'unitless'
-        json_obj['complex_viscosity']['unit_type'] = 'dynamicviscosity'
-        json_obj['water_content']['unit_type'] = 'massfraction'
+        assert model.age.value == 0.0
 
-        assert model.py_json() == json_obj
+        assert model.storage_modulus.standard_deviation == 1.2
+
+        assert model.loss_modulus.replicates == 3
+        assert model.tan_delta_v_e.value == 10.0
+        assert model.complex_viscosity.unit == 'cP'
+        assert model.water_content.unit_type == 'massfraction'
 
     def test_from_partial_json(self):
         """ Should be able to load an incomplete object """
@@ -228,6 +228,7 @@ class TestEmulsion:
 
 
 class TestEmulsionList:
+    # NOTE: this is redundant testing from above!
     def test_init_empty(self):
         assert EmulsionList().py_json() == []
 
@@ -261,9 +262,9 @@ class TestEmulsionList:
 
         # the measurement classes will add unit_type, so we add it to more
         # easily compare the output
-        json_obj[0]['complex_modulus']['unit_type'] = None
-        json_obj[0]['storage_modulus']['unit_type'] = None
-        json_obj[0]['loss_modulus']['unit_type'] = None
+        json_obj[0]['complex_modulus']['unit_type'] = "pressure"
+        json_obj[0]['storage_modulus']['unit_type'] = "pressure"
+        json_obj[0]['loss_modulus']['unit_type'] = "pressure"
         json_obj[0]['tan_delta_v_e']['unit_type'] = 'unitless'
         json_obj[0]['complex_viscosity']['unit_type'] = 'dynamicviscosity'
         json_obj[0]['water_content']['unit_type'] = 'massfraction'

@@ -13,11 +13,8 @@ from ..common.measurement import (Time,
                                   DynamicViscosity,
                                   KinematicViscosity,
                                   InterfacialTension,
-                                  NeedleAdhesion,
+                                  Pressure,
                                   AngularVelocity)
-
-
-
 
 @dataclass_to_json
 @dataclass
@@ -88,10 +85,10 @@ class Emulsion:
 
     # Pa units, some kind of pressure/stress.
     # Adhesion provides the right units
-    # but we shouldnt use it - so Pressure?
-    complex_modulus: NeedleAdhesion = None
-    storage_modulus: NeedleAdhesion = None
-    loss_modulus: NeedleAdhesion = None
+    # but we shouldn't use it - so Pressure?
+    complex_modulus: Pressure = None
+    storage_modulus: Pressure = None
+    loss_modulus: Pressure = None
 
     tan_delta_v_e: Unitless = None
 
