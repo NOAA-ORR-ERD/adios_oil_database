@@ -95,6 +95,8 @@ export default Component.extend(TableCommon, {
         this.q = this.savedFilters['text'];
         this.selectedApi = this.savedFilters['api'];
         this.selectedLabels = this.savedFilters['labels'];
+        this.sort = Object.keys(this.savedFilters['sort'])[0];
+        this.dir = Object.values(this.savedFilters['sort'])[0];
 
         this._super(...arguments);
 
@@ -138,6 +140,27 @@ export default Component.extend(TableCommon, {
             this.data.clear();
             this.set('page', 0);
             this.fetchRecords.perform();
+        },
+
+        onColumnClick(column) {
+            if (column.sorted) {
+                let sort = column.get('valuePath');
+                let dir = (column.ascending ? 'asc' : 'desc');
+
+                this.savedFilters['sort'] = {[sort]: dir};
+
+                this.setProperties({
+                    dir: dir,
+                    sort: sort,
+                    canLoadMore: true,
+                    page: 0
+                });
+
+                this.data.clear();
+                this.set('page', 0);
+
+                this.get('fetchRecords').perform();
+            }
         }
     }
 });

@@ -84,16 +84,11 @@ export default Mixin.create({
                           canLoadMore: true,
                           page: 0
               });
+
               this.data.clear();
               this.set('page', 0);
 
-              // Not sure if this is behavior coming from the newly upgraded
-              // version of ember-light-table, or a new version of
-              // ember-scrollable.  But clearing the data automatically triggers
-              // onScrolledToBottom upon rerender.
-              // 
-              // So doing a fetch here is unnecessary.
-              //this.get('fetchRecords').perform();
+              this.get('fetchRecords').perform();
           }
       }
   }
