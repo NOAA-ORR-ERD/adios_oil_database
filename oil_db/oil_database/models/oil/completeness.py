@@ -84,7 +84,7 @@ def check_second_density(oil):
         ss = oil.sub_samples[0]
         densities = ss.physical_properties.densities
 
-        temps = [d.ref_temp.convert_to('C').value
+        temps = [d.ref_temp.converted_to('C').value
                  for d in densities]
 
         if len(temps) >= 2:
@@ -133,7 +133,7 @@ def check_second_viscosity(oil):
 
         temps = []
         for v_i in (kvis, dvis):
-            temps.extend([v.ref_temp.convert_to('C').value for v in v_i])
+            temps.extend([v.ref_temp.converted_to('C').value for v in v_i])
 
         if len(temps) >= 2:
             t1, *_, t2 = sorted([t for t in temps if t is not None])
@@ -156,7 +156,7 @@ def check_distillation(oil):
         ss = oil.sub_samples[0]
         cuts = ss.distillation_data.cuts
 
-        fractions = [c.fraction.convert_to('fraction').value for c in cuts]
+        fractions = [c.fraction.converted_to('fraction').value for c in cuts]
 
         if len(fractions) >= 2:
             f1, *_, f2 = sorted([f for f in fractions if f is not None])

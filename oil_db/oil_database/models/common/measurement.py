@@ -132,7 +132,7 @@ class MeasurementBase(MeasurementDataclass):
 
     def convert_to(self, new_unit):
         """
-        cCnvert this Measurement object to the specified new unit
+        Convert this Measurement object to the specified new unit
 
         The object is mutated in place.
 
@@ -163,7 +163,7 @@ class MeasurementBase(MeasurementDataclass):
 
         self.__dict__.update(new_vals)
 
-        return self
+        return None
 
     def converted_to(self, new_unit):
         """

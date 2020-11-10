@@ -262,7 +262,7 @@ class OilSampleEstimation(object):
             num = len(obj_list) - 1
 
         temp_diffs = np.array([
-            abs(obj.ref_temp.copy().convert_to('K').value - temp_k)
+            abs(obj.ref_temp.converted_to('K').value - temp_k)
             for obj in obj_list
         ]).T
 
@@ -316,7 +316,7 @@ class OilSampleEstimation(object):
             # range where the lowest and highest are basically the same.
             obj_list *= 2
 
-        geq_temps = temperature >= [obj.ref_temp.copy().convert_to('K').value
+        geq_temps = temperature >= [obj.ref_temp.converted_to('K').value
                                     for obj in obj_list]
 
         if geq_temps.shape[-1] == 0:
@@ -356,7 +356,7 @@ class OilSampleEstimation(object):
 
         try:
             pp_temp = self.record.physical_properties.pour_points
-            pp_temp = pp_temp[0].ref_temp.copy().convert_to('K')
+            pp_temp = pp_temp[0].ref_temp.converted_to('K')
 
             if hasattr(pp_temp, 'min_value') and pp_temp.min_value is not None:
                 min_k = pp_temp.min_value
@@ -374,8 +374,8 @@ class OilSampleEstimation(object):
             lowest_kvis = self.lowest_temperature(self.aggregate_kvis())
 
             if lowest_kvis is not None:
-                kvis = lowest_kvis.viscosity.copy().convert_to('m^2/s').value
-                temp_k = lowest_kvis.ref_temp.copy().convert_to('K').value
+                kvis = lowest_kvis.viscosity.converted_to('m^2/s').value
+                temp_k = lowest_kvis.ref_temp.converted_to('K').value
                 max_k = est.pour_point_from_kvis(kvis, temp_k)
 
         return min_k, max_k
@@ -385,7 +385,7 @@ class OilSampleEstimation(object):
 
         try:
             fp_temp = self.record.physical_properties.flash_points
-            fp_temp = fp_temp[0].ref_temp.copy().convert_to('K')
+            fp_temp = fp_temp[0].ref_temp.converted_to('K')
 
             if hasattr(fp_temp, 'min_value') and fp_temp.min_value is not None:
                 min_k = fp_temp.min_value
@@ -532,8 +532,8 @@ class OilSampleEstimation(object):
 
         temperature = np.array(temperature)
         closest_values = np.array(
-            [[(d.density.copy().convert_to('kg/m^3').value,
-               d.ref_temp.copy().convert_to('K').value)
+            [[(d.density.converted_to('kg/m^3').value,
+               d.ref_temp.converted_to('K').value)
               for d in r]
              for r in closest_densities]
         )
@@ -574,10 +574,10 @@ class OilSampleEstimation(object):
 
         try:
             # sequence of ranges
-            densities = np.array([[d.density.copy().convert_to('kg/m^3').value
+            densities = np.array([[d.density.converted_to('kg/m^3').value
                                    for d in r]
                                   for r in closest_densities])
-            ref_temps = np.array([[d.ref_temp.copy().convert_to('K').value
+            ref_temps = np.array([[d.ref_temp.converted_to('K').value
                                    for d in r]
                                   for r in closest_densities])
 
@@ -589,9 +589,9 @@ class OilSampleEstimation(object):
             return densities[:, 0], ref_temps[:, 0]
         except TypeError:
             # single range
-            densities = np.array([d.density.copy().convert_to('kg/m^3').value
+            densities = np.array([d.density.converted_to('kg/m^3').value
                                   for d in closest_densities])
-            ref_temps = np.array([d.ref_temp.copy().convert_to('K').value
+            ref_temps = np.array([d.ref_temp.converted_to('K').value
                                   for d in closest_densities])
 
             if np.all(temperature > ref_temps):
@@ -606,16 +606,16 @@ class OilSampleEstimation(object):
         if kvis_list is None:
             kvis_list = []
 
-        kvis_dict = dict([(k.ref_temp.copy().convert_to('K').value,
-                           k.viscosity.copy().convert_to('m^2/s').value)
+        kvis_dict = dict([(k.ref_temp.converted_to('K').value,
+                           k.viscosity.converted_to('m^2/s').value)
                           for k in kvis_list])
 
         dvis_list = getattr(phys, 'dynamic_viscosities', [])
         if dvis_list is None:
             dvis_list = []
 
-        dvis_dict = dict([(d.ref_temp.copy().convert_to('K').value,
-                           d.viscosity.copy().convert_to('kg/(m s)').value)
+        dvis_dict = dict([(d.ref_temp.converted_to('K').value,
+                           d.viscosity.converted_to('kg/(m s)').value)
                           for d in dvis_list])
 
         non_redundant_keys = set(dvis_dict.keys()).difference(kvis_dict.keys())
@@ -642,8 +642,8 @@ class OilSampleEstimation(object):
         if kvis_list is None:
             kvis_list = []
 
-        kvis_list = [(k.ref_temp.copy().convert_to('K').value,
-                      k.viscosity.copy().convert_to('m^2/s').value)
+        kvis_list = [(k.ref_temp.converted_to('K').value,
+                      k.viscosity.converted_to('m^2/s').value)
                      for k in kvis_list]
 
         dvis_list = []
@@ -686,8 +686,8 @@ class OilSampleEstimation(object):
             try:
                 # treat as a list
                 ref_kvis, ref_temp_k = zip(
-                    *[(kv.viscosity.copy().convert_to('m^2/s'),
-                       kv.ref_temp.copy().convert_to('K'))
+                    *[(kv.viscosity.converted_to('m^2/s'),
+                       kv.ref_temp.converted_to('K'))
                       for kv in closest_kvis]
                 )
 
@@ -698,8 +698,8 @@ class OilSampleEstimation(object):
                     ref_kvis, ref_temp_k = ref_kvis[0], ref_temp_k[0]
             except TypeError:
                 # treat as a scalar
-                ref_kvis = closest_kvis.viscosity.copy().convert_to('m^2/s')
-                ref_temp_k = closest_kvis.ref_temp.copy().convert_to('K')
+                ref_kvis = closest_kvis.viscosity.converted_to('m^2/s')
+                ref_temp_k = closest_kvis.ref_temp.converted_to('K')
         else:
             return None
 
@@ -741,8 +741,8 @@ class OilSampleEstimation(object):
             return None
 
         ref_temp_k, ref_kvis = zip(
-            *[(k.ref_temp.copy().convert_to('K').value,
-               k.viscosity.copy().convert_to('m^2/s').value)
+            *[(k.ref_temp.converted_to('K').value,
+               k.viscosity.converted_to('m^2/s').value)
               for k in kvis_list]
         )
 
@@ -778,11 +778,11 @@ class OilSampleEstimation(object):
 
         f_res = getattr(sara, 'resins', None)
         if f_res is not None:
-            f_res = f_res.copy().convert_to('fraction').value
+            f_res = f_res.converted_to('fraction').value
 
         f_asph = getattr(sara, 'asphaltenes', None)
         if f_asph is not None:
-            f_asph = f_asph.copy().convert_to('fraction').value
+            f_asph = f_asph.converted_to('fraction').value
 
         if f_res is None or f_asph is None:
             # try to estimate if we can't get values from our record
@@ -805,11 +805,11 @@ class OilSampleEstimation(object):
 
         f_sat = getattr(sara, 'saturates', None)
         if f_sat is not None:
-            f_sat = f_sat.copy().convert_to('fraction').value
+            f_sat = f_sat.converted_to('fraction').value
 
         f_arom = getattr(sara, 'aromatics', None)
         if f_arom is not None:
-            f_arom = f_arom.copy().convert_to('fraction').value
+            f_arom = f_arom.converted_to('fraction').value
 
         if f_sat is None or f_arom is None:
             # try to estimate if we can't get values from our record
@@ -837,7 +837,7 @@ class OilSampleEstimation(object):
             cuts = []
 
         if len(cuts) > 0:
-            BP_i, fevap_i = zip(*[(c.vapor_temp.copy().convert_to('K').value,
+            BP_i, fevap_i = zip(*[(c.vapor_temp.converted_to('K').value,
                                    c.fraction.value)
                                   for c in cuts])
         else:
@@ -1066,8 +1066,8 @@ class OilSampleEstimation(object):
         ift = getattr(phys, 'interfacial_tension_water', None)
 
         if ift is not None:
-            ow_st = ift.tension.copy().convert_to('N/m').value
-            ref_temp_k = ift.ref_temp.copy().convert_to('K').value
+            ow_st = ift.tension.converted_to('N/m').value
+            ref_temp_k = ift.ref_temp.converted_to('K').value
 
             return ow_st, ref_temp_k
 
@@ -1091,8 +1091,8 @@ class OilSampleEstimation(object):
         ift = getattr(phys, 'interfacial_tension_seawater', None)
 
         if ift is not None:
-            osw_st = ift.tension.copy().convert_to('N/m').value
-            ref_temp_k = ift.ref_temp.copy().convert_to('K').value
+            osw_st = ift.tension.converted_to('N/m').value
+            ref_temp_k = ift.ref_temp.converted_to('K').value
 
             return osw_st, ref_temp_k
 
@@ -1233,6 +1233,6 @@ class OilSampleEstimation(object):
                    if b.name.lower().find('sulfur') >= 0]
 
         if len(sulfurs) > 0:
-            return sulfurs[0].measurement.copy().convert_to('fraction').value
+            return sulfurs[0].measurement.converted_to('fraction').value
         else:
             return 0.0
