@@ -12,31 +12,34 @@ from oil_database.models.oil.values import PRODUCT_TYPES
 
 
 def test_get_product_types(testapp):
-    resp = testapp.get("/product_types")
+    resp = testapp.get("/product-types")
 
     result = resp.json_body
-    print(type(result))
-    print(result)
+    product_types = [r['name'] for r in result]
 
-    assert result == list(PRODUCT_TYPES)
+    print(type(product_types))
+    print(product_types)
+    assert product_types == sorted(PRODUCT_TYPES)
 
 
 def test_post(testapp):
     """
-    should get an error with a post attempt
+    should get an error 405 Method Not Allowed
     """
-    with pytest.raises(AppError):
-        testapp.post_json("/product_types", params={"arbitrary": 'data'})
+    testapp.post_json("/product-types", params={"arbitrary": 'data'},
+                      status=405)
 
 
 def test_put(testapp):
     """
-    should get an error with a put attempt
+    should get an error 405 Method Not Allowed
     """
-    with pytest.raises(AppError):
-        testapp.put_json("/product_types", params={"arbitrary": 'data'})
+    testapp.put_json("/product-types", params={"arbitrary": 'data'},
+                     status=405)
 
 
 def test_delete_bad_req(testapp):
-    with pytest.raises(AppError):
-        testapp.delete('/product_types', status=400)
+    """
+    should get an error 405 Method Not Allowed
+    """
+    testapp.delete('/product-types', status=405)
