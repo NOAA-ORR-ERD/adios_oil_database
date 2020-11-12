@@ -65,11 +65,16 @@
           <label class="p-1 input-group-text font-weight-bold">Type:</label>
           {{#if this.args.editable}}
             <select class="p-1 mt-1 overflow-hidden bg-transparent border" onchange={{action "updateType"}}>
-              {{#each this.args.oilTypes as |oilType|}}
-                {{#if (eq this.args.oil.metadata.product_type oilType)}}
-                  <option class="bg-light" selected>{{oilType}}</option>
+              {{#if (contains this.args.oil.metadata.product_type (map-by "name" this.oilTypes))}}
+              {{else}}
+                <option class="bg-light" selected>{{this.args.oil.metadata.product_type}}</option>
+              {{/if}}
+
+              {{#each this.oilTypes as |oilType|}}
+                {{#if (eq this.args.oil.metadata.product_type oilType.name)}}
+                  <option class="bg-light" selected>{{oilType.name}}</option>
                 {{else}}
-                  <option class="bg-light">{{oilType}}</option>
+                  <option class="bg-light">{{oilType.name}}</option>
                 {{/if}}
               {{/each}}
             </select>
@@ -93,7 +98,7 @@
             <PowerSelectMultiple @class="bg-warning border-0"
               @placeholder="Select some categories..."
               @selected={{this.selectedLabels}}
-              @options={{this.oilLabels}}
+              @options={{map-by "name" this.oilLabels}}
               @onChange={{action "updateLabels"}}
               @onKeydown={{this.handleKeydown}} as |name|>
               <span class="bg-transparent border-0">{{name}}</span>

@@ -13,6 +13,7 @@ Router.map(function() {
     this.route('show', { path: '/:oil_id' });
   });
   this.route('labels');
+  this.route('product-types');
 });
 
 export default Router;

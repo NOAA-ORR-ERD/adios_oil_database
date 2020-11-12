@@ -5,20 +5,24 @@ import moment from 'moment';
 import { isBlank } from '@ember/utils';
 
 export default class OilDemographics extends Component {
+    @tracked oilTypes = undefined;
     @tracked oilLabels = undefined;
     @tracked selectedLabels = undefined;
 
     constructor() {
         super(...arguments);
 
+        this.oilTypes = this.getOilTypes();
         this.oilLabels = this.getOilLabels();
         this.selectedLabels = this.args.oil.metadata.labels;
     }
 
+    getOilTypes() {
+        return this.args.oil.store.findAll('product-type');
+    }
+
     getOilLabels() {
-        return this.args.oil.store.findAll('label').then(function(response) {
-            return response.toArray().map(i => {return i.name});
-        });
+        return this.args.oil.store.findAll('label');
     }
 
     @action
