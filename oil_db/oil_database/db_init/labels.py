@@ -17,46 +17,22 @@
 import logging
 
 from oil_database.data_sources.oil import OilEstimation
-
-from pprint import pprint
-import pdb
+from oil_database.models.common.label import labels_to_types
 
 logger = logging.getLogger(__name__)
 
 
 def load_labels(db):
-    '''
-        It has been decided that our labels will operate in a similar
-        manner to a simple tagging system.  So this will simply be a
-        collection of tag names.
-    '''
-    for name in ('Crude',
-                 'Refined',
-                 'Condensate',
-                 'Light',
-                 'Medium',
-                 'Intermediate',
-                 'Heavy',
-                 'Gasoline',
-                 'Kerosene',
-                 'Fuel Oil',
-                 'Fuel Oil 1',
-                 'Fuel Oil 2',
-                 'Fuel Oil 6',
-                 'HFO',
-                 'Diesel',
-                 'Heating Oil',
-                 'Bunker',
-                 'Group V',
-                 'Other'):
-        db.label.insert_one({'name': name})
+    for name, product_types in labels_to_types.primary.items():
+        db.label.insert_one({'name': name,
+                             'product_types': list(product_types)})
 
 
 def print_all_labels(db):
     logger.info('Labels in the database...')
 
     for label in db.label.find({}):
-        logger.info('\t{}'.format(label['name']))
+        logger.info(f'\t{label["name"]}')
 
 
 def link_oil_to_labels(oil):

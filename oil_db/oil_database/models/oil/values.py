@@ -29,7 +29,6 @@ class Reference(ReferenceBase):
 
     @classmethod
     def validate(cls, value):
-        print("Reference validator called")
         year = value.year
         if not year:
             return [WARNINGS["W008"]]
