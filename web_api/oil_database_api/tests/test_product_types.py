@@ -15,11 +15,11 @@ def test_get_product_types(testapp):
     resp = testapp.get("/product-types")
 
     result = resp.json_body
-    product_types = [r['name'] for r in result]
+    product_types = result[0]['product_types']
 
     print(type(product_types))
     print(product_types)
-    assert product_types == sorted(PRODUCT_TYPES)
+    assert product_types == list(PRODUCT_TYPES)
 
 
 def test_post(testapp):

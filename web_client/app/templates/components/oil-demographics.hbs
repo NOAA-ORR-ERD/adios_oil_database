@@ -65,16 +65,16 @@
           <label class="p-1 input-group-text font-weight-bold">Type:</label>
           {{#if this.args.editable}}
             <select class="p-1 mt-1 overflow-hidden bg-transparent border" onchange={{action "updateType"}}>
-              {{#if (contains this.args.oil.metadata.product_type (map-by "name" this.oilTypes))}}
+              {{#if (contains this.args.oil.metadata.product_type (map-by "name" this.oilTypes.product_types))}}
               {{else}}
                 <option class="bg-light" selected>{{this.args.oil.metadata.product_type}}</option>
               {{/if}}
 
-              {{#each this.oilTypes as |oilType|}}
-                {{#if (eq this.args.oil.metadata.product_type oilType.name)}}
-                  <option class="bg-light" selected>{{oilType.name}}</option>
+              {{#each this.oilTypes.firstObject.product_types as |oilType|}}
+                {{#if (eq this.args.oil.metadata.product_type oilType)}}
+                  <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
-                  <option class="bg-light">{{oilType.name}}</option>
+                  <option class="bg-light">{{oilType}}</option>
                 {{/if}}
               {{/each}}
             </select>

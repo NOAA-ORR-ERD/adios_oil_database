@@ -23,8 +23,6 @@ def get_product_types(request):
     returns all the product types
     '''
     obj_id = obj_id_from_url(request)
-    product_types = [{'name': p, '_id': i}
-                     for i, p in enumerate(sorted(PRODUCT_TYPES))]
 
     if obj_id is not None:
         try:
@@ -32,12 +30,8 @@ def get_product_types(request):
         except TypeError as e:
             raise HTTPBadRequest(e)
 
-        matches = [p for p in product_types if p['_id'] == obj_id]
-
-        if len(matches) >= 1:
-            return matches[0]
-        else:
-            print((obj_id,))
+        if obj_id != 0:
             raise HTTPNotFound()
+        return {'_id': 0, 'product_types': PRODUCT_TYPES}
     else:
-        return product_types
+        return [{'_id': 0, 'product_types': PRODUCT_TYPES}]
