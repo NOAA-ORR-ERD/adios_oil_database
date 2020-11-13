@@ -64,9 +64,10 @@ def _from_py_json(cls, py_json, allow_none=False):
                 # it's not, so we just use the value
                 arg_dict[fieldname] = py_json[fieldname]
             except TypeError:
-                print(f'TypeError in {cls.__name__}._from_py_json(): '
-                      f'field: {fieldname}')
-                raise
+                # print(f'TypeError in {cls.__name__}._from_py_json(): '
+                #       f'field: {fieldname}')
+                raise TypeError(f'TypeError in {cls.__name__}._from_py_json(): '
+                                f'field: {fieldname}')
 
     obj = cls(**arg_dict)
     return obj
@@ -80,15 +81,18 @@ def _validate(self):
 
     The top-level validator extends the existing list
     """
+    # print("validate called in: ", type(self))
     messages = []
     for fieldname, fieldobj in self.__dataclass_fields__.items():
         value = getattr(self, fieldname)
+        # print(f"trying to validate: {fieldname} with value: {repr(value)}")
         try:
             # validate with the type's validate method
             messages.extend(fieldobj.type.validate(value))
         except AttributeError:  # This one doesn't have a validate method.
             pass
 
+    # print(f"in {type(self)} -- messages:\n", messages)
     return messages
 
 

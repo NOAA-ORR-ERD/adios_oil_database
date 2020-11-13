@@ -3,6 +3,7 @@
 import pytest
 from oil_database.models.common.validators import (EnumValidator,
                                                    FloatRangeValidator,
+                                                   YearValidator,
                                                    )
 
 from oil_database.models.oil.validation.warnings import WARNINGS
@@ -88,5 +89,32 @@ class TestFloatRangeValidator:
         assert str(min) in result[0]
         assert str(max) in result[0]
 
+class TestYearValidator:
+
+    @pytest.mark.parametrize("min, max, value", [(1700, 2050, 1700),
+                                                 (1700, 2050, 2050),
+                                                 (1700, 2050, 2020),
+                                                 (1700, 2050, "1965"),
+                                                 ])
+    def test_valid(self, min, max, value):
+        val = YearValidator(min, max)
+
+        result = val(value)
+        assert result == []
+
+    @pytest.mark.parametrize("min, max, value", [(1700, 2050, 1699),
+                                                 (1700, 2050, 2051),
+                                                 (1700, 2050, "20-20"),
+                                                 ])
+    def test_invalid(self, min, max, value):
+        val = YearValidator(min, max)
+
+        result = val(value)
+        print("result", result)
+        assert len(result) == 1
+        assert result[0].startswith('ValidationError:')# ' 101 is not between 0 and 100')
+        assert str(value) in result[0]
+        assert str(min) in result[0]
+        assert str(max) in result[0]
 
 

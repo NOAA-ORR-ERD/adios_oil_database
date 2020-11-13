@@ -6,7 +6,8 @@ from dataclasses import dataclass, field
 from ..common.utilities import dataclass_to_json
 from ..common.measurement import MassFraction, Temperature
 
-from .values import ProductType, Reference
+from .values import Reference
+from .product_type import ProductType
 
 
 @dataclass_to_json

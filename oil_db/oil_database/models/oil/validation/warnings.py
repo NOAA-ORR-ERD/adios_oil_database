@@ -10,7 +10,9 @@ WARNINGS = {"W001": "Record name: {} is not very descriptive",
             "W004": "No api value provided",
             "W005": "API value: {api} seems unlikely",
             "W006": "No density values provided",
-            "W007": "No distillation data provided"
+            "W007": "No distillation data provided",
+            "W008": "No reference year provided",
             }
 
 WARNINGS = {code: (code + ": " + msg) for code, msg in WARNINGS.items()}
+

@@ -70,5 +70,42 @@ class FloatRangeValidator:
         else:
             return []
 
+class YearValidator:
+    """
+    Validator for float values that can only be a given range
+
+    range is inclusive (<= and >=)
+    """
+    def __init__(self, min_year, max_year, err_msg=None):
+        """
+        :param min: minimum year allowed
+
+        :param max: maximum year allowed
+
+        :param err_msg: The error message that should be used on failure.
+                        Should be a format string that takes three parameters:
+                        default is:
+                            "ValidationError: {} is not between {} and {}"
+        """
+        self.min = min_year
+        self.max = max_year
+
+        if err_msg is None:
+            self.err_msg = "ValidationError: {} is not a year between {} and {}"
+        else:
+            self.err_msg = err_msg
+
+    def __call__(self, value):
+        try:
+            value = int(value)
+        except ValueError:
+            return [self.err_msg.format(value, self.min, self.max)]
+
+        if not self.min <= value <= self.max:
+            return [self.err_msg.format(value, self.min, self.max)]
+        else:
+            return []
+
+
 
 

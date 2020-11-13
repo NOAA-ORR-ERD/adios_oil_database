@@ -6,7 +6,7 @@ Functional tests for the product_types API
 import pytest
 from webtest.app import AppError
 
-from oil_database.models.oil.values import PRODUCT_TYPES
+from oil_database.models.oil.product_types import PRODUCT_TYPES
 
 # NOTE: testapp coming from conftest.py
 

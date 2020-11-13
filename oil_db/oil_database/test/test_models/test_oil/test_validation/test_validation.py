@@ -79,8 +79,15 @@ def test_reasonable_name(name):
 
 
 def test_no_type(no_type_oil):
+
+    # print("oil.metadata")
+
+    # print(no_type_oil.metadata)
     validate(no_type_oil)
 
+    # print("status after validating")
+    # for s in no_type_oil.status:
+    #     print(s)
     assert snippet_in_oil_status("W002:", no_type_oil)
 
 
@@ -88,6 +95,8 @@ def test_bad_type(no_type_oil):
     no_type_oil.metadata.product_type = "Fred"
     validate(no_type_oil)
 
+    for s in no_type_oil.status:
+        print(s)
     assert snippet_in_oil_status("W003:", no_type_oil)
 
 
@@ -190,4 +199,34 @@ def test_no_distillation_cuts(big_record):
 
     assert snippet_in_oil_status("W007:", oil)
 
+
+def test_none_year_in_reference(big_record):
+    oil = big_record
+
+    oil.metadata.reference.year = None
+
+    validate(oil)
+
+    assert snippet_in_oil_status("W008", oil)
+
+
+def test_bad_year_in_reference(big_record):
+    oil = big_record
+
+    oil.metadata.reference.year = -2000
+
+    validate(oil)
+
+    assert snippet_in_oil_status("E004", oil)
+
+
+def test_good_year_in_reference(big_record):
+    oil = big_record
+
+    oil.metadata.reference.year = 2020
+
+    validate(oil)
+
+    assert snippet_not_in_oil_status("W1111", oil)
+    assert snippet_not_in_oil_status("E1111", oil)
 

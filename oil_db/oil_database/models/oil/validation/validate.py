@@ -113,24 +113,24 @@ def val_has_reasonable_name(oil):
         return None
 
 
-def val_has_product_type(oil):
-    '''
-    Oil records should have a product type
-    '''
-    valid_types = ('crude',
-                   'refined',
-                   'bitumen product',
-                   'other')
+# def val_has_product_type(oil):
+#     '''
+#     Oil records should have a product type
+#     '''
+#     valid_types = ('crude',
+#                    'refined',
+#                    'bitumen product',
+#                    'other')
 
-    if not oil.metadata.product_type:
-        return WARNINGS["W002"]
-    elif not oil.metadata.product_type.lower() in ('crude',
-                                                   'refined',
-                                                   'bitumen product',
-                                                   'other'):
-        return WARNINGS["W003"].format(oil.metadata.product_type, valid_types)
-    else:
-        return None
+#     if not oil.metadata.product_type:
+#         return WARNINGS["W002"]
+#     elif not oil.metadata.product_type.lower() in ('crude',
+#                                                    'refined',
+#                                                    'bitumen product',
+#                                                    'other'):
+#         return WARNINGS["W003"].format(oil.metadata.product_type, valid_types)
+#     else:
+#         return None
 
 
 def val_check_api(oil):

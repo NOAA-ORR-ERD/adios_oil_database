@@ -6,7 +6,7 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 
 from oil_database_api.common.views import cors_policy, obj_id_from_url
 
-from oil_database.models.oil.values import PRODUCT_TYPES
+from oil_database.models.oil.product_type import PRODUCT_TYPES
 
 
 logger = logging.getLogger(__name__)
