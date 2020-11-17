@@ -16,7 +16,8 @@ class Session():
         self.db = getattr(self.mongo_client, database)
         self.oil = self.db.oil  # the oil collection
 
-    def query(self, oil_id=None, text=None, api=None, labels=None,
+    def query(self, oil_id=None,
+              text=None, api=None, labels=None, product_type=None,
               sort=None, sort_case_sensitive=False, page=None,
               **kwargs):
         '''
@@ -57,7 +58,8 @@ class Session():
                   For this reason, a MongoDB query will not properly sort our
                   status and labels array fields, at least not in a simple way.
         '''
-        filter_opts = self.filter_options(oil_id, text, api, labels)
+        filter_opts = self.filter_options(oil_id, text, api, labels,
+                                          product_type)
         sort = self.sort_options(sort)
         projection = kwargs.get('projection', None)
 
@@ -73,11 +75,12 @@ class Session():
 
         return ret[start:stop]
 
-    def filter_options(self, oil_id, text, api, labels):
+    def filter_options(self, oil_id, text, api, labels, product_type):
         filter_opts = {}
         filter_opts.update(self.id_arg(oil_id))
         filter_opts.update(self.text_arg(text))
         filter_opts.update(self.api_arg(api))
+        filter_opts.update(self.product_type_arg(product_type))
         filter_opts.update(self.labels_arg(labels))
 
         return filter_opts
@@ -136,6 +139,12 @@ class Session():
             return {'metadata.API': {'$lte': high}}
         else:
             return {}
+
+    def product_type_arg(self, product_type):
+        if product_type is None:
+            return {}
+        else:
+            return {'metadata.product_type': product_type}
 
     def labels_arg(self, labels):
         if labels is None:
