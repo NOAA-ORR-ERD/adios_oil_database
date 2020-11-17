@@ -101,22 +101,20 @@ def get_search_params(request):
              matching will be case insensitive.
         - qApi: A range of numbers in which the API of the oil will be
                 filtered.
+        - qType: The type of oil to match when filtering the results.
         - qLabels: A list of label strings that will be matched against the oil
                    labels to filter the results.
     '''
     query_out = {}
+    xform_opts = {'q': 'text',
+                  'qApi': 'api',
+                  'qType': 'product_type',
+                  'qLabels': 'labels'
+                  }
 
-    text = request.GET.get('q')
-    if text != '':
-        query_out.update({'text': text})
-
-    api = request.GET.get('qApi')
-    if api != '':
-        query_out.update({'api': api})
-
-    labels = request.GET.get('qLabels')
-    if labels != '':
-        query_out.update({'labels': labels})
+    for k, v in request.GET.items():
+        if k in xform_opts and v not in (None, ''):
+            query_out[xform_opts[k]] = v
 
     return query_out
 

@@ -126,7 +126,6 @@ export default Component.extend(TableCommon, {
         queryOptions['qLabels'] = this.selectedLabels.join();
 
         if (this.selectedType) {
-            console.log('qType: ', this.selectedType);
             queryOptions['qType'] = this.selectedType;
         }
 
