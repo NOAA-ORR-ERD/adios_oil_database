@@ -316,9 +316,9 @@ class EnvCanadaRecordParser(ParserBase):
     @property
     def product_type(self):
         if self._product_type_is_probably_refined():
-            return 'refined'
+            return 'Refined Product, NOS'
         else:
-            return 'crude'
+            return 'Crude Oil, NOS'
 
     def _product_type_is_probably_refined(self):
         '''
@@ -339,7 +339,7 @@ class EnvCanadaRecordParser(ParserBase):
                         'ifo', 'hfo', 'lube'):
                 return True
 
-        # check for specific 2-word tokens
+        # check for specific n-grams of size 2
         for token in zip(words, words[1:]):
             if token in (('bunker', 'c'),
                          ('swepco', '737')):

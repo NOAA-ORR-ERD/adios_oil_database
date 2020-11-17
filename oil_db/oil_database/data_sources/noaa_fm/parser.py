@@ -175,10 +175,9 @@ class OilLibraryRecordParser(ParserBase):
 
     @property
     def product_type(self):
-        if self._product_type is not None:
-            return self._product_type.lower()
-        else:
-            return None
+        xform = {'crude': 'Crude Oil, NOS',
+                 'refined': 'Refined Product, NOS'}
+        return xform.get(f'{self._product_type}'.lower(), None)
 
     @property
     def cut_units(self):
