@@ -94,13 +94,19 @@ export default Component.extend(TableCommon, {
         // this.savedFilters should be coming from the controller
         this.q = this.savedFilters['text'];
         this.selectedApi = this.savedFilters['api'];
+        this.selectedType = this.savedFilters['product_type'];
         this.selectedLabels = this.savedFilters['labels'];
         this.sort = Object.keys(this.savedFilters['sort'])[0];
         this.dir = Object.values(this.savedFilters['sort'])[0];
 
-        this._super(...arguments);
-
+        this.set('productTypes', this.fetchProductTypes());
         this.set('labels', this.fetchLabels());
+
+        this._super(...arguments);
+    },
+
+    fetchProductTypes() {
+        return this.store.findAll('product-type');
     },
 
     fetchLabels() {
@@ -119,6 +125,11 @@ export default Component.extend(TableCommon, {
 
         queryOptions['qLabels'] = this.selectedLabels.join();
 
+        if (this.selectedType) {
+            console.log('qType: ', this.selectedType);
+            queryOptions['qType'] = this.selectedType;
+        }
+
         if (this.selectedApi.join() === '0,100') {
             // We are at the upper and lower limits of our slider control,
             // which we intend to mean that no API query options are specified.
@@ -135,6 +146,7 @@ export default Component.extend(TableCommon, {
         onSearchChange() {
             this.savedFilters['text'] = this.q;
             this.savedFilters['api'] = this.selectedApi;
+            this.savedFilters['product_type'] = this.selectedType;
             this.savedFilters['labels'] = this.selectedLabels;
 
             this.data.clear();

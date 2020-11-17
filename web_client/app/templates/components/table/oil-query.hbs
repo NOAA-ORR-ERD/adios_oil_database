@@ -29,7 +29,32 @@
       </div>
 
       <div class="col-6">
-        <div class="row h-100 align-items-center">
+
+
+        <div class="row h-75 align-items-center">
+          <div class="col-2 pr-0 align-right">
+            <strong>Type</strong>
+          </div>
+          <div class="col-10 ml-0">
+            <select class="p-1 mt-1 overflow-hidden bg-transparent border"
+                onChange={{action (pipe (action (mut this.selectedType) value="target.value")
+                                        (action "onSearchChange") )}}
+            >
+              <option class="bg-light"></option>
+
+              {{#each this.productTypes.firstObject.product_types as |oilType|}}
+                {{#if (eq oilType this.selectedType)}}
+                  <option class="bg-light" selected="true">{{oilType}}</option>
+                {{else}}
+                  <option class="bg-light">{{oilType}}</option>
+                {{/if}}
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+
+        <div class="row h-75 align-items-center">
           <div class="col-2 pr-0 align-right">
             <strong>Labels</strong>
           </div>
@@ -43,6 +68,8 @@
             </PowerSelectMultiple>
           </div>
         </div>
+
+
       </div>
 
     </div>
