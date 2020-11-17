@@ -25,7 +25,7 @@ export default Component.extend(TableCommon, {
             label: 'ID',
             valuePath: 'id',
             classNames: 'text-nowrap',
-            width: '6em',
+            width: '5em',
             searchable: true,
             resizable: true,
             minResizeWidth: 75
@@ -48,7 +48,7 @@ export default Component.extend(TableCommon, {
             label: 'Type',
             valuePath: 'metadata.product_type',
             classNames: 'text-nowrap',
-            width: '5em',
+            width: '12em',
             minResizeWidth: 80,
             searchable: true,
             resizable: true,
