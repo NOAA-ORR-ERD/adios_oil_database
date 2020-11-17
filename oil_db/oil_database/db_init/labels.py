@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_labels(db):
-    for name, product_types in labels_to_types.primary.items():
+    for name, product_types in labels_to_types.left.items():
         db.label.insert_one({'name': name,
                              'product_types': list(product_types)})
 
