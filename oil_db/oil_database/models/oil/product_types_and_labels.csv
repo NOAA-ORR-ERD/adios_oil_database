@@ -1,0 +1,21 @@
+This describes which labels can be associated with specific product types,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Labels can be added as need arises.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+NOTE: This table will be used to populate the Product Types and Labels System in the software.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"Created Sept.18, 2020 by Robert",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+DATA TABLE:,(data table follows this row),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TYPE: V,LABEL ->,Crude Oil,Light Crude,Medium Crude,Heavy Crude,Bitumen Blend,Condensate,Refined Product,Fuel Oil,Distillate Fuel,Residual Fuel,Bio Fuel Oil,Jet Fuel,Kerosene,Aviation Gas,MDO,Diesel,No. 2 Fuel Oil,Home Heating Oil,IFO,HFO,Heavy Fuel Oil,No. 6 Fuel Oil,Bunker C,Group V,Lube Oil,Refinery Intermediate,Natural Plant Oil,Dielectric Oil,Transformer Oil,Tight Oil,Vacuum Gas Oil
+Crude Oil NOS,,x,x,x,x,x,,,,,,,,,,,,,,,,,,,x,,,,,,x,
+Condensate,,x,x,,,,x,,,,,,,,,,,,,,,,,,,,,,,,,
+Bitumen Blend,,x,,,x,x,,x,,,,,,,,,,,,,,,,,x,,x,,,,,
+Refined Product NOS,,,,,,x,,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,,x,x,,
+Fuel Oil NOS,,,,,,,,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,,,,,,,
+Distillate Fuel Oil,,,,,,,,x,x,x,,x,x,x,x,x,x,x,x,x,,,,,,,,,,,,
+Petroleum-Derived Solvent,,,,,,,,x,,,,,,,,,,,,,,,,,,,,,,,,
+Residual Fuel Oil,,,,,,,,x,x,,x,x,,,,x,,,,x,x,x,,x,x,,,,,,,
+Bio-fuel Oil,,,,,,,,x,x,x,,x,x,x,x,x,x,x,x,x,x,x,,,,,,x,,,,
+Bio-Petroleum Fuel Oil,,,,,,,,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,,,,,,x,,,,
+Lube Oil,,,,,,,,x,,,,,,,,,,,,,,,,,,x,x,x,,,,
+Refinery Intermediate,,,,,,x,,x,,,,,,,,,,,,,,,,,x,,x,,,,,x
+Natural Plant Oil,,,,,,,,x,x,x,x,x,,,,,,,,,,,,,,,,x,,,,
+Dielectric Oil,,,,,,,,x,,,,,,,,,,,,,,,,,,,,,x,x,,
+Other,,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,,,x,x,,,,,x,x,x,x,x,x,x
