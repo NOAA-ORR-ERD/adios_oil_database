@@ -9,6 +9,7 @@ Having a Python class makes it easier to write importing, validating etc, code.
 from pathlib import Path
 import csv
 
+from oil_database.util.many_many import ManyMany
 from ..common.validators import EnumValidator
 from .validation.warnings import WARNINGS
 
@@ -64,6 +65,9 @@ def load_from_csv_file(filepath=None):
 
 PRODUCT_TYPE_LABEL_MAPPING = load_from_csv_file()
 PRODUCT_TYPES = tuple(PRODUCT_TYPE_LABEL_MAPPING)
+
+labels_to_types = ManyMany(PRODUCT_TYPE_LABEL_MAPPING)
+
 
 class ProductType(str):
     _valid_types = PRODUCT_TYPES

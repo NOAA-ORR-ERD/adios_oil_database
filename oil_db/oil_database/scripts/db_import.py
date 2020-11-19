@@ -23,7 +23,8 @@ from oil_database.data_sources.exxon_assays import (ExxonDataReader,
                                                     ExxonRecordParser,
                                                     ExxonMapper)
 
-from oil_database.db_init.labels import link_oil_to_labels
+# obsolete -- need totally new code.
+#from oil_database.db_init.labels import link_oil_to_labels
 from oil_database.models.oil.validation.validate import validate_json
 from oil_database.models.oil.completeness import set_completeness
 
@@ -248,7 +249,9 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
 
                 oil_pyjson = oil_obj.py_json()
 
-                link_oil_to_labels(oil_pyjson)
+                # this is obsolete code
+                # and shouldn't happen on import anyway
+                # link_oil_to_labels(oil_pyjson)
 
                 oil = validate_json(oil_pyjson)
                 set_completeness(oil)

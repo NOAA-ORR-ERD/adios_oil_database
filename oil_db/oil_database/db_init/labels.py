@@ -17,7 +17,7 @@
 import logging
 
 from oil_database.data_sources.oil import OilEstimation
-from oil_database.models.common.label import labels_to_types
+from oil_database.models.oil.product_type import labels_to_types
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,7 @@ def print_all_labels(db):
         logger.info(f'\t{label["name"]}')
 
 
+# Fixme: need to seriously update this code -- and put it somewhere else.
 def link_oil_to_labels(oil):
     '''
         Here, we have a single oil and we would like to link it to one or more
