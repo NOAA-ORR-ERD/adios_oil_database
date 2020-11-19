@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from ..common.utilities import dataclass_to_json
 
 
@@ -10,4 +10,4 @@ class Label:
         narrow down the list of oils he/she is interested in.
     '''
     name: str
-    product_type: list
+    product_type: list = field(default_factory=list)
