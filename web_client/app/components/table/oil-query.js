@@ -45,7 +45,7 @@ export default Component.extend(TableCommon, {
             minResizeWidth: 100,
             resizable: true,
         }, {
-            label: 'Type',
+            label: 'Product Type',
             valuePath: 'metadata.product_type',
             classNames: 'text-nowrap',
             width: '12em',
