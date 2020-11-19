@@ -214,8 +214,8 @@ class TestEnvCanadaRecordParser(object):
         ('2234', 'sample_date', '2013-04-08'),
         ('2234', 'comments', 'Via CanmetEnergy, Natural Resources Canada'),
         ('2234', 'location', 'Alberta, Canada'),
-        ('2234', 'product_type', 'Crude Oil, NOS'),
-        ('540', 'product_type', 'Refined Product, NOS'),
+        ('2234', 'product_type', 'Crude Oil NOS'),
+        ('540', 'product_type', 'Refined Product NOS'),
     ])
     def test_attrs(self, rec, attr, expected):
         data, conditions, file_props = self.reader.get_record(rec)
@@ -1814,7 +1814,7 @@ class TestEnvCanadaRecordMapper(object):
                                                       'date: April 21, 2020.',
                                          'year': 2020},
                   'metadata.sample_date': '2015-03-22',
-                  'metadata.product_type': 'Crude Oil, NOS',
+                  'metadata.product_type': 'Crude Oil NOS',
                   'metadata.API': 31.32,
                   'metadata.comments': None,
                   }),

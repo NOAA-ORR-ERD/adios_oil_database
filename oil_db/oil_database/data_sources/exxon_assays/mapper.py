@@ -270,7 +270,7 @@ def ExxonMapper(record):
 
     oil = Oil(oil_id=oil_id)
     oil.metadata.name = name
-    oil.metadata.product_type = 'Crude Oil, NOS'
+    oil.metadata.product_type = 'Crude Oil NOS'
     oil.metadata.reference = reference
     oil.metadata.source_id = ref_id
 

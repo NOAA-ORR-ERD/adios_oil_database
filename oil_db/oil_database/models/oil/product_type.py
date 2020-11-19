@@ -66,7 +66,7 @@ def load_from_csv_file(filepath=None):
 PRODUCT_TYPE_LABEL_MAPPING = load_from_csv_file()
 PRODUCT_TYPES = tuple(PRODUCT_TYPE_LABEL_MAPPING)
 
-labels_to_types = ManyMany(PRODUCT_TYPE_LABEL_MAPPING)
+types_to_labels = ManyMany(PRODUCT_TYPE_LABEL_MAPPING)
 
 
 class ProductType(str):

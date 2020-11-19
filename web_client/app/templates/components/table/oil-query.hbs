@@ -30,14 +30,13 @@
 
       <div class="col-6">
 
-
         <div class="row h-75 align-items-center">
           <div class="col-2 pr-0 align-right">
             <strong>Type</strong>
           </div>
           <div class="col-10 ml-0">
             <select class="p-1 mt-1 overflow-hidden bg-transparent border"
-                onChange={{action (pipe (action (mut this.selectedType) value="target.value")
+                onChange={{action (pipe (action "onTypeSelected")
                                         (action "onSearchChange") )}}
             >
               <option class="bg-light"></option>
@@ -53,7 +52,6 @@
           </div>
         </div>
 
-
         <div class="row h-75 align-items-center">
           <div class="col-2 pr-0 align-right">
             <strong>Labels</strong>
@@ -61,14 +59,13 @@
           <div class="col-10 ml-0">
             <PowerSelectMultiple
               @selected={{this.selectedLabels}}
-              @options={{this.labels}}
+              @options={{this.filteredLabels}}
               @onChange={{action (pipe (action (mut this.selectedLabels)) (action "onSearchChange"))}}
               @onKeydown={{this.handleKeydown}} as |name|>
               {{name}}
             </PowerSelectMultiple>
           </div>
         </div>
-
 
       </div>
 

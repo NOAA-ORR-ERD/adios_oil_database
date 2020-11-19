@@ -175,8 +175,8 @@ class OilLibraryRecordParser(ParserBase):
 
     @property
     def product_type(self):
-        xform = {'crude': 'Crude Oil, NOS',
-                 'refined': 'Refined Product, NOS'}
+        xform = {'crude': 'Crude Oil NOS',
+                 'refined': 'Refined Product NOS'}
         return xform.get(f'{self._product_type}'.lower(), None)
 
     @property

@@ -17,13 +17,13 @@
 import logging
 
 from oil_database.data_sources.oil import OilEstimation
-from oil_database.models.oil.product_type import labels_to_types
+from oil_database.models.oil.product_type import types_to_labels
 
 logger = logging.getLogger(__name__)
 
 
 def load_labels(db):
-    for name, product_types in labels_to_types.left.items():
+    for name, product_types in types_to_labels.right.items():
         db.label.insert_one({'name': name,
                              'product_types': list(product_types)})
 

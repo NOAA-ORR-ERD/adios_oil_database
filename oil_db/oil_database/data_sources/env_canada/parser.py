@@ -316,9 +316,9 @@ class EnvCanadaRecordParser(ParserBase):
     @property
     def product_type(self):
         if self._product_type_is_probably_refined():
-            return 'Refined Product, NOS'
+            return 'Refined Product NOS'
         else:
-            return 'Crude Oil, NOS'
+            return 'Crude Oil NOS'
 
     def _product_type_is_probably_refined(self):
         '''

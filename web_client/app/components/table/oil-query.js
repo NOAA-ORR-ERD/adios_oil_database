@@ -91,6 +91,9 @@ export default Component.extend(TableCommon, {
     }),
 
     init() {
+        this.set('productTypes', this.fetchProductTypes());
+        this.set('labels', this.fetchLabels());
+
         // this.savedFilters should be coming from the controller
         this.q = this.savedFilters['text'];
         this.selectedApi = this.savedFilters['api'];
@@ -98,11 +101,10 @@ export default Component.extend(TableCommon, {
         this.selectedLabels = this.savedFilters['labels'];
         this.sort = Object.keys(this.savedFilters['sort'])[0];
         this.dir = Object.values(this.savedFilters['sort'])[0];
-
-        this.set('productTypes', this.fetchProductTypes());
-        this.set('labels', this.fetchLabels());
-
+        
         this._super(...arguments);
+
+        this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
     },
 
     fetchProductTypes() {
@@ -110,10 +112,18 @@ export default Component.extend(TableCommon, {
     },
 
     fetchLabels() {
-        return this.store.findAll('label')
-        .then(function(response) {
-            return response.toArray().map(i => {return i.name});
-        });
+        return this.store.findAll('label');
+    },
+    
+    getFilteredLabels(productType) {
+        if (productType) {
+            return this.get('labels').filter(i => {
+                return i.product_types.includes(productType);
+            }).mapBy('name');
+        }
+        else {
+            return this.get('labels').mapBy('name');
+        }
     },
 
     getQueryOptions() {
@@ -172,6 +182,22 @@ export default Component.extend(TableCommon, {
 
                 this.get('fetchRecords').perform();
             }
+        },
+
+        onTypeSelected(event) {
+            this.set('selectedType', event.target.value);
+
+            // now we need to filter our labels with the selected type
+            this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
+            console.log('filtered labels: ', this.filteredLabels);
+
         }
     }
 });
+
+
+
+
+
+
+

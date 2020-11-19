@@ -155,8 +155,8 @@ class TestOilLibraryRecordParser:
         ('AD00009', 'oil_id', 'AD00009'),
         ('AD00009', 'location', 'SAUDI ARABIA'),
         ('AD00009', 'field_name', 'ABU SAFAH'),
-        ('AD00009', 'product_type', 'Crude Oil, NOS'),
-        ('AD00025', 'product_type', 'Refined Product, NOS'),
+        ('AD00009', 'product_type', 'Crude Oil NOS'),
+        ('AD00025', 'product_type', 'Refined Product NOS'),
         ('AD00005', 'synonyms', [{'name': 'ABSORBENT OIL'}]),
         ('AD00009', 'reference', {'reference': ('Williams, R., ARAMCO, Letter '
                                                 'to Lehr, W.,  NOAA, '
@@ -454,7 +454,7 @@ class TestOilLibraryAttributeMapper:
                                  'Arabian medium crude.')
          ),
         ('AD00009', 'labels', []),
-        ('AD00009', 'product_type', 'Crude Oil, NOS'),
+        ('AD00009', 'product_type', 'Crude Oil NOS'),
         ('AD00009', 'API', 28.0),
         ('AD00009', 'status', None),
         # ('AD00009', 'sub_samples', None),  # we'll test this later
@@ -594,7 +594,7 @@ class TestOilLibraryAttributeMapper:
                                  'production.  Product considered an '
                                  'Arabian medium crude.')
          ),
-        ('AD00009', 'product_type', 'Crude Oil, NOS'),
+        ('AD00009', 'product_type', 'Crude Oil NOS'),
         ('AD00009', 'API', 28.0),
     ])
     def test_metadata(self, oil_id, attr, expected):
