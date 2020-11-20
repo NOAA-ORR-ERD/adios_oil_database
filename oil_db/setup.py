@@ -27,7 +27,7 @@ def get_version(pkg_name):
 pkg_name = 'oil_database'
 here = Path(__file__).resolve().parent
 # here = os.path.abspath(os.path.dirname(__file__))
-README = (here / '../README.md').open().read()
+README = (here / 'README.md').open().read()
 pkg_version = get_version(pkg_name)
 
 db_name = 'oil_database'
@@ -125,8 +125,15 @@ setup(name=pkg_name,
       url='',
       packages=find_packages(),
       include_package_data=True,
-      package_data={'oil_database': ['OilLib',
-                                     'tests/*.py']},
+      # package_data={'oil_database': ['OilLib',
+      #                                'tests/*.py']},
+      package_data={'oil_database': ["models/oil/product_types_and_labels.csv",
+                                     "test/test_models/test_oil/example_products.csv",
+                                     "test/test_models/test_oil/ExampleFullRecord.json",
+                                     "test/test_models/test_oil/EC000506.json",
+                                     # so the output dir will be there.
+                                     "/test/test_models/test_oil/output/empty_file",
+                                     ]},
       cmdclass={'init_db': init_database,
                 'cleanall': cleanall,
                 'test': PyTest,
