@@ -39,7 +39,7 @@
                 onChange={{action (pipe (action "onTypeSelected")
                                         (action "onSearchChange") )}}
             >
-              <option class="bg-light"></option>
+              <option class="bg-light">None</option>
 
               {{#each this.productTypes.firstObject.product_types as |oilType|}}
                 {{#if (eq oilType this.selectedType)}}

@@ -64,13 +64,16 @@
         <div class="col-sm-12 col-md-6 pl-0 form-inline align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Product Type:</label>
           {{#if this.args.editable}}
-            <select class="p-1 mt-1 overflow-hidden bg-transparent border" onchange={{action "updateType"}}>
-              {{#if (contains this.args.oil.metadata.product_type (map-by "name" this.oilTypes.product_types))}}
+            <select class="p-1 mt-1 overflow-hidden bg-transparent border"
+                onchange={{action "updateType"}}
+            >
+              {{#if (contains this.args.oil.metadata.product_type
+                              this.args.productTypes.firstObject.product_types)}}
               {{else}}
                 <option class="bg-light" selected>{{this.args.oil.metadata.product_type}}</option>
               {{/if}}
 
-              {{#each this.oilTypes.firstObject.product_types as |oilType|}}
+              {{#each this.args.productTypes.firstObject.product_types as |oilType|}}
                 {{#if (eq this.args.oil.metadata.product_type oilType)}}
                   <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
@@ -98,7 +101,7 @@
             <PowerSelectMultiple @class="bg-warning border-0"
               @placeholder="Select some labels for the oil..."
               @selected={{this.selectedLabels}}
-              @options={{map-by "name" this.oilLabels}}
+              @options={{this.filteredLabels}}
               @onChange={{action "updateLabels"}}
               @onKeydown={{this.handleKeydown}} as |name|>
               <span class="bg-transparent border-0">{{name}}</span>

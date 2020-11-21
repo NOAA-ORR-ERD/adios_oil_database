@@ -2,8 +2,15 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   model() {
-      const oilsModel = this.modelFor('oils');
+      this.models = this.modelFor('oils');
 
-      return this.store.peekAll('oil', {param: oilsModel});
+      return this.store.peekAll('oil', {param: this.models.oil});
+  },
+
+  setupController(controller, model) {
+      controller.set('labels', this.models.labels);
+      controller.set('productTypes', this.models.productTypes);
+      
+      this._super(controller, model);
   }
 });

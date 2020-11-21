@@ -91,9 +91,6 @@ export default Component.extend(TableCommon, {
     }),
 
     init() {
-        this.set('productTypes', this.fetchProductTypes());
-        this.set('labels', this.fetchLabels());
-
         // this.savedFilters should be coming from the controller
         this.q = this.savedFilters['text'];
         this.selectedApi = this.savedFilters['api'];
@@ -107,15 +104,9 @@ export default Component.extend(TableCommon, {
         this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
     },
 
-    fetchProductTypes() {
-        return this.store.findAll('product-type');
-    },
-
-    fetchLabels() {
-        return this.store.findAll('label');
-    },
-    
     getFilteredLabels(productType) {
+        if (productType === 'None') {productType = ''}
+
         if (productType) {
             return this.get('labels').filter(i => {
                 return i.product_types.includes(productType);
@@ -185,12 +176,15 @@ export default Component.extend(TableCommon, {
         },
 
         onTypeSelected(event) {
-            this.set('selectedType', event.target.value);
+            if (event.target.value === 'None') {
+                this.set('selectedType', '');
+            }
+            else {
+                this.set('selectedType', event.target.value);
+            }
 
             // now we need to filter our labels with the selected type
             this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
-            console.log('filtered labels: ', this.filteredLabels);
-
         }
     }
 });

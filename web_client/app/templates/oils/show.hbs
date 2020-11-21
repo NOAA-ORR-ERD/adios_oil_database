@@ -75,6 +75,8 @@
   <div class="content">
     <OilDemographics
       @oil={{this.model}}
+      @labels={{this.labels}}
+      @productTypes={{this.productTypes}}
       @editable={{this.editable}}
       @submit={{action send "updateOil"}}
       @oilTypes={{array

@@ -4,10 +4,10 @@ import slugify from 'ember-slugify';
 
 export default Route.extend({
     model(params) {
-        const oils = this.modelFor('oils');
+        this.models = this.modelFor('oils');
 
-        return this.store.findRecord('oil', params.oil_id, {param: oils,
-            reload: true });
+        return this.store.findRecord('oil', params.oil_id,
+                                     {param: this.models.oil, reload: true });
     },
 
     resetEditable: on('deactivate', function() {
@@ -17,7 +17,9 @@ export default Route.extend({
     }),
 
     setupController(controller, model) {
-        //super.setupController(controller, model);
+        controller.set('labels', this.models.labels);
+        controller.set('productTypes', this.models.productTypes);
+
         this._super(controller, model);
 
         // Our current sample tabs at the start of the page load would be the

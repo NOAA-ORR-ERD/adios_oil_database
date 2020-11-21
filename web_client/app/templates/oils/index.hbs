@@ -17,6 +17,11 @@
   </div>
 </div>
 
-<Table::OilQuery @model={{this.model}} @savedFilters={{this.savedFilters}}/>
+<Table::OilQuery
+  @model={{this.model}}
+  @labels={{this.labels}}
+  @productTypes={{this.productTypes}}
+  @savedFilters={{this.savedFilters}}
+/>
 
 {{outlet}}

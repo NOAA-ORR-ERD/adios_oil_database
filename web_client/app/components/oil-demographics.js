@@ -5,24 +5,27 @@ import moment from 'moment';
 import { isBlank } from '@ember/utils';
 
 export default class OilDemographics extends Component {
-    @tracked oilTypes = undefined;
-    @tracked oilLabels = undefined;
-    @tracked selectedLabels = undefined;
+    @tracked selectedLabels;
+    @tracked filteredLabels;
 
     constructor() {
         super(...arguments);
 
-        this.oilTypes = this.getOilTypes();
-        this.oilLabels = this.getOilLabels();
         this.selectedLabels = this.args.oil.metadata.labels;
+        this.filteredLabels = this.getFilteredLabels(
+            this.args.oil.metadata.product_type
+        );
     }
 
-    getOilTypes() {
-        return this.args.oil.store.findAll('product-type');
-    }
-
-    getOilLabels() {
-        return this.args.oil.store.findAll('label');
+    getFilteredLabels(productType) {
+        if (productType) {
+            return this.args.labels.filter(i => {
+                return i.product_types.includes(productType);
+            }).mapBy('name');
+        }
+        else {
+            return this.args.labels.mapBy('name');
+        }
     }
 
     @action
@@ -48,6 +51,11 @@ export default class OilDemographics extends Component {
     @action
     updateType(event) {
         set(this.args.oil.metadata, 'product_type', event.target.value);
+
+        this.filteredLabels = this.getFilteredLabels(
+                this.args.oil.metadata.product_type
+        );
+
         this.args.submit(this.args.oil);
     }
 

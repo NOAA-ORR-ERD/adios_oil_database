@@ -56,34 +56,34 @@ def link_oil_to_labels(oil):
         return
 
     if is_crude_light(oil):
-        labels.extend(['Crude', 'Light'])
+        labels.extend(['Crude Oil', 'Light Crude'])
 
     if is_crude_medium(oil):
-        labels.extend(['Crude', 'Medium'])
+        labels.extend(['Crude Oil', 'Medium Crude'])
 
     if is_crude_heavy(oil):
-        labels.extend(['Crude', 'Heavy'])
+        labels.extend(['Crude Oil', 'Heavy Crude'])
 
     if is_refined_fuel_oil_1(oil, sample):
-        labels.extend(['Refined',
+        labels.extend(['Refined Product',
                        'Light',
-                       'Fuel Oil 1',
+                       'No. 1 Fuel Oil',
                        'Gasoline',
                        'Kerosene'])
 
     if is_refined_fuel_oil_2(oil, sample):
-        labels.extend(['Refined',
-                       'Fuel Oil 2',
+        labels.extend(['Refined Product',
+                       'No. 2 Fuel Oil',
                        'Diesel',
                        'Heating Oil'])
 
     if is_refined_ifo(oil, sample):
-        labels.extend(['Refined',
+        labels.extend(['Refined Product',
                        'Intermediate',
                        'Fuel Oil'])
 
     if is_refined_fuel_oil_6(oil, sample):
-        labels.extend(['Refined',
+        labels.extend(['Refined Product',
                        'Heavy',
                        'Fuel Oil 6',
                        'HFO',
