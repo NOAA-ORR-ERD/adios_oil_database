@@ -59,8 +59,8 @@ class InterfacialTensionList(JSON_List):
 @dataclass_to_json
 @dataclass
 class Dispersibility:
-    dispersant: str
-    effectiveness: MassFraction
+    dispersant: str = None
+    effectiveness: MassFraction = None
     method: str = None
 
 
