@@ -110,12 +110,18 @@ class TestInterfacialTensionList:
 
 class TestDispersibility:
     def test_init_empty(self):
-        with pytest.raises(TypeError):
-            _model = Dispersibility()
+        model = Dispersibility()
+
+        assert model.dispersant is None
+        assert model.effectiveness is None
+        assert model.method is None
 
     def test_from_json_empty(self):
-        with pytest.raises(TypeError):
-            _model = Dispersibility.from_py_json({})
+        model = Dispersibility.from_py_json({})
+
+        assert model.dispersant is None
+        assert model.effectiveness is None
+        assert model.method is None
 
     def test_from_json(self):
         json_obj = {'dispersant': 'corexit',
