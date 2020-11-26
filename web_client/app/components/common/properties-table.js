@@ -11,24 +11,34 @@ export default class PropertiesTable extends Component {
         super(...arguments);
 
         this.initTemplateName();
+        this.readPropertiesFromTemplate();
+
         this.initBaseProperty();
         this.initBoldTitle();
         this.initBoldHeader();
 
-        this.readPropertiesFromTemplate();
     }
 
     initBaseProperty() {
         let names = this.args.propertyName.split('.');
         this.baseProperty = this.args.oil;
 
-        for (let i = 0; i < names.length; i++) {
-            if (this.baseProperty[names[i]]) {
-                this.baseProperty = this.baseProperty[names[i]];
+        if (names.length > 1) {
+            for (let i = 0; i < names.length - 1; i++) {
+                if (this.baseProperty[names[i]]) {
+                    this.baseProperty = this.baseProperty[names[i]];
+                }
+                else {
+                    this.baseProperty = this.baseProperty[names[i]] = {};
+                }
             }
-            else {
-                this.baseProperty = this.baseProperty[names[i]] = {};
-            }
+        }
+
+        if (this.baseProperty[names.lastObject]) {
+            this.baseProperty = this.baseProperty[names.lastObject];
+        }
+        else {
+            this.baseProperty = this.baseProperty[names.lastObject] = [];
         }
     }
 
