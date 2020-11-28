@@ -4,10 +4,10 @@
 
     <div class="col-6">
 
-      <div class="row pl-0 mb-3">
+      <div class="row pl-0 mb-1">
 
         {{! Oil ID }}
-        <div class="col-sm-12 col-md-6 pl-0 input-group d-flex align-items-center">
+        <div class="col-sm-12 col-md-5 pl-0 input-group d-flex align-items-center">
           <div class="input-group-prepend">
             <label class="p-1 input-group-text font-weight-bold">ID:</label>
           </div>
@@ -15,7 +15,7 @@
         </div>
 
         {{! Location }}
-        <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
+        <div class="col-sm-12 col-md-7 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Location:</label>
           {{#if this.args.editable}}
             {{#let (if this.args.oil.metadata.location this.args.oil.metadata.location "") as |oilLocation|}}
@@ -35,10 +35,10 @@
 
       </div>
 
-      <div class="row pl-0 mb-3">
+      <div class="row pl-0 mb-1">
 
         {{! API }}
-        <div class="col-sm-12 col-md-6 pl-0 input-group align-items-center">
+        <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">API:</label>
           {{#let (round-relative this.args.oil.metadata.API 2) as |oilAPI|}}
             {{#if this.args.editable}}
@@ -61,7 +61,7 @@
         </div>
 
         {{! Type }}
-        <div class="col-sm-12 col-md-6 pl-0 form-inline align-items-center">
+        <div class="col-sm-12 col-md-7 pl-0 form-inline align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Product Type:</label>
           {{#if this.args.editable}}
             <select class="p-1 mt-1 overflow-hidden bg-transparent border"
@@ -88,7 +88,7 @@
 
       </div>
 
-      <div class="row pl-0 mb-3">
+      <div class="row pl-0 mb-1">
         {{! Labels }}
         <div class="col-1 pl-0 form-inline d-flex align-items-center">
           <div class="input-group-prepend">
@@ -96,7 +96,7 @@
           </div>
 
         </div>
-        <div class="col-7">
+        <div class="col-7 d-flex align-items-center">
           {{#if this.args.editable}}
             <PowerSelectMultiple @class="bg-warning border-0"
               @placeholder="Select some labels for the oil..."
@@ -112,10 +112,36 @@
                 {{label}}
               </span>
             {{else}}
-              <span>None</span>
+              <span class="p-1">None</span>
             {{/each}}
           {{/if}}
 
+        </div>
+      </div>
+
+      <div class="row pl-0 mb-1">
+        <div class="col-5 d-flex pl-0">
+          {{! Additional Identifiers }}
+          {{#if this.args.editable}}
+            <Common::ListTable
+              @oil={{this.args.oil}}
+              @store={{this.args.oil.store}}
+              @editable={{this.args.editable}}
+              @submit={{this.updateAdditionalIds}}   {{! not there}}
+              @tableTitle=""
+              @templateName="identifiers"
+              @propertyName="metadata.additional_identifiers"
+            />
+          {{else}}
+            <div class="input-group-prepend">
+              <label class="p-1 input-group-text font-weight-bold">Additional Identifiers:</label>
+            </div>
+            {{#each this.args.oil.metadata.additional_identifiers as |id|}}
+              <span class="p-1">{{id}}</span>
+            {{else}}
+              <span class="p-1">None</span>
+            {{/each}}
+          {{/if}}
         </div>
       </div>
 

@@ -67,6 +67,11 @@ export default class OilDemographics extends Component {
     }
 
     @action
+    updateAdditionalIds(event) {
+        this.args.submit(this.args.oil);
+    }
+
+    @action
     updateReference(event) {
         set(this.args.oil.metadata.reference, 'reference', event.target.value);
         this.args.submit(this.args.oil);

@@ -25,10 +25,6 @@ export default class GroupedTable extends Component {
             basePropertyIdx = this.args.items[index - 1].index + 1;
         }
 
-        console.log('insert row before item ', basePropertyIdx);
-
-        console.log('value: ', this.baseProperty[basePropertyIdx]);
-
         let newEntry = {
             'groups': [this.args.group],
             'measurement': {},

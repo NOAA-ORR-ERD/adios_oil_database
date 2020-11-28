@@ -1,0 +1,10 @@
+{
+  "id": "identifiers.json",
+  "template": {
+      "identifier": {
+          "label": "Additional Identifiers",
+          "dataType": "string",
+          "size": 20
+      }
+  }
+}

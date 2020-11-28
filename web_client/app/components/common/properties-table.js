@@ -42,6 +42,25 @@ export default class PropertiesTable extends Component {
         }
     }
 
+    syncBaseProperty() {
+        // reattach baseProperty to the oil property
+        let names = this.args.propertyName.split('.');
+        let tempProperty = this.args.oil;
+
+        if (names.length > 1) {
+            for (let i = 0; i < names.length - 1; i++) {
+                if (tempProperty[names[i]]) {
+                    tempProperty = tempProperty[names[i]];
+                }
+                else {
+                    tempProperty = tempProperty[names[i]] = {};
+                }
+            }
+        }
+
+        set(tempProperty, names.lastObject, this.baseProperty);
+    }
+
     initBoldTitle() {
         if (typeof this.args.boldTitle === 'undefined') {
             this.boldTitle = true;  // default

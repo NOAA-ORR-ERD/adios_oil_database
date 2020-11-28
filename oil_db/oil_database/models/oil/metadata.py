@@ -15,6 +15,7 @@ from .product_type import ProductType
 class MetaData:
     name: str = ''
     source_id: str = ''
+    additional_identifiers: list = field(default_factory=list)
     location: str = ''
     reference: Reference = field(default_factory=Reference)
     sample_date: str = ''

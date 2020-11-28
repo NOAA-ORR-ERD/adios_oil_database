@@ -124,7 +124,6 @@ export default class RangeValueInput extends Component {
             this.inputValue = null;
         }
 
-        console.log('setting this.valueObject...');
         this.valueObject = this.valueObject; // ember! - reset tracked object
 
         if (this.args.submit) {
