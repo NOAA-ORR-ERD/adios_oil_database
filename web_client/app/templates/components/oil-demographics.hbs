@@ -37,27 +37,10 @@
 
       <div class="row pl-0 mb-1">
 
-        {{! API }}
+        {{! Source Identifier (not editable) }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
-          <label class="p-1 input-group-text font-weight-bold">API:</label>
-          {{#let (round-relative this.args.oil.metadata.API 2) as |oilAPI|}}
-            {{#if this.args.editable}}
-              <Input
-                @id="api"
-                @type="text"
-                @class="p-1 overflow-hidden bg-transparent border"
-                @placeholder="API value"
-                @value={{oilAPI}}
-                @change={{action "updateAPI"}}
-                @size="6" />
-            {{else}}
-              {{#if (is-empty this.args.oil.metadata.API)}}
-                <span class="p-1">No Value</span>
-              {{else}}
-                <span class="p-1">{{this.args.oil.metadata.API}}</span>
-              {{/if}}
-            {{/if}}
-          {{/let}}
+          <label class="p-1 input-group-text font-weight-bold">Source ID:</label>
+          <span class="p-1">{{this.args.oil.metadata.source_id}}</span>
         </div>
 
         {{! Type }}
@@ -84,6 +67,29 @@
           {{else}}
             <span class="p-1">{{this.args.oil.metadata.product_type}}</span>
           {{/if}}
+        </div>
+
+        {{! API }}
+        <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold">API:</label>
+          {{#let (round-relative this.args.oil.metadata.API 2) as |oilAPI|}}
+            {{#if this.args.editable}}
+              <Input
+                @id="api"
+                @type="text"
+                @class="p-1 overflow-hidden bg-transparent border"
+                @placeholder="API value"
+                @value={{oilAPI}}
+                @change={{action "updateAPI"}}
+                @size="6" />
+            {{else}}
+              {{#if (is-empty this.args.oil.metadata.API)}}
+                <span class="p-1">No Value</span>
+              {{else}}
+                <span class="p-1">{{this.args.oil.metadata.API}}</span>
+              {{/if}}
+            {{/if}}
+          {{/let}}
         </div>
 
       </div>
