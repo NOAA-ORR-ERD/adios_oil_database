@@ -67,7 +67,7 @@ export default class OilDemographics extends Component {
     }
 
     @action
-    updateAdditionalIds(event) {
+    updateAdditionalIds() {
         this.args.submit(this.args.oil);
     }
 

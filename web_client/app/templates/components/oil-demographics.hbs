@@ -120,9 +120,9 @@
       </div>
 
       <div class="row pl-0 mb-1">
-        <div class="col-5 d-flex pl-0">
-          {{! Additional Identifiers }}
-          {{#if this.args.editable}}
+        {{! Additional Identifiers }}
+        {{#if this.args.editable}}
+          <div class="col-6 d-flex pl-0">
             <Common::ListTable
               @oil={{this.args.oil}}
               @store={{this.args.oil.store}}
@@ -132,17 +132,23 @@
               @templateName="identifiers"
               @propertyName="metadata.additional_identifiers"
             />
-          {{else}}
-            <div class="input-group-prepend">
-              <label class="p-1 input-group-text font-weight-bold">Additional Identifiers:</label>
+          </div>
+        {{else}}
+          <div class="col-4 d-flex pl-0">
+            <label class="p-1 input-group-text font-weight-bold">Additional Identifiers:</label>
+          </div>
+          <div class="col-8 d-flex pl-0">
+            <div class="row pl-0 mb-1">
+              {{#each this.args.oil.metadata.additional_identifiers as |id|}}
+                <span class="list-item-category">
+                  {{id}}
+                </span>
+              {{else}}
+                <span class="p-1">None</span>
+              {{/each}}
             </div>
-            {{#each this.args.oil.metadata.additional_identifiers as |id|}}
-              <span class="p-1">{{id}}</span>
-            {{else}}
-              <span class="p-1">None</span>
-            {{/each}}
-          {{/if}}
-        </div>
+          </div>
+        {{/if}}
       </div>
 
     </div>

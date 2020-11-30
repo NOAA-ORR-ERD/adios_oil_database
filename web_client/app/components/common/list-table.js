@@ -1,9 +1,7 @@
 import PropertiesTable from './properties-table';
 
 import { tracked } from '@glimmer/tracking';
-import { action, set } from "@ember/object";
-
-import slugify from 'ember-slugify';
+import { action } from "@ember/object";
 
 
 export default class ListTable extends PropertiesTable {
