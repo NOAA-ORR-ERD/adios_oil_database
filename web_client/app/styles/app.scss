@@ -136,15 +136,28 @@ td:empty::after{
 
 .list-item-category {
     border: 1px solid gray;
-    border-radius: 4px;
-    color: #ffffff;
-    background-color: #17a2b8;
+    border-radius: 2px;
+    //color: #ffffff;
+    //background-color: #17a2b8;
     padding: 0 4px;
     display: inline-block;
     line-height: 1.45;
     float: left;
     margin: 2px 0 2px 3px;
 }
+
+.list-item-identifier {
+    border: 1px solid gray;
+    border-radius: 2px;
+    //color: #ffffff;
+    //background-color: #17a2b8;
+    padding: 0 4px;
+    display: inline-block;
+    line-height: 1.45;
+    float: left;
+    margin: 2px 0 2px 3px;
+}
+
 .ember-power-select-multiple-option {
     font-weight: 500;
 }
