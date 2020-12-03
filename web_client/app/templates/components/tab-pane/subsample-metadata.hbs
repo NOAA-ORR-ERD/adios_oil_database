@@ -90,7 +90,7 @@
               @class="p-1 reference-textarea overflow-hidden bg-transparent border"
               @value={{sampleDescription}}
               @placeholder="Enter description"
-              @change={{action this.args.submit this.args.oil}}
+              @change={{action "updateDescription"}}
               rows="4"
               disabled={{not this.args.editable}}
             />

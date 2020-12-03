@@ -32,5 +32,6 @@ class SampleMetaData:
     name: str = "Fresh Oil Sample"
     short_name: str = None
     sample_id: str = None
+    description: str = None
     fraction_weathered: MassFraction = None
     boiling_point_range: Temperature = None
