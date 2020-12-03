@@ -72,7 +72,8 @@ export default class SubSample extends Component {
             ['compounds', 'Compounds'],
             ['bulk-composition', 'Bulk Composition'],
             ['environmental', 'Environmental Behavior'],
-            ['industry-properties', 'Industry Properties']
+            ['industry-properties', 'Industry Properties'],
+            ['metadata', 'Metadata']
         ].map((item) => {
             let [tabName, label] = item;
             let ret = {
@@ -106,7 +107,8 @@ export default class SubSample extends Component {
             ['compounds', 'tab-pane/compounds'],
             ['bulk-composition', 'tab-pane/bulk-composition'],
             ['environmental', 'tab-pane/environmental'],
-            ['industry-properties', 'tab-pane/industry-properties']
+            ['industry-properties', 'tab-pane/industry-properties'],
+            ['metadata', 'tab-pane/subsample-metadata']
         ].map((item) => {
             let [tabName, componentName] = item;
 

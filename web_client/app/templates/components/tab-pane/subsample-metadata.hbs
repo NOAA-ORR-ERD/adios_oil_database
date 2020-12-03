@@ -1,0 +1,104 @@
+<div class="container-fluid">
+  <div class="row pt-1">
+
+    <div class="col-xs-6 col-sm-6 col-lg-4">
+      <div class="row pl-0 mb-1">
+        <strong>Subsample Name:&nbsp;</strong>
+        {{#if this.args.editable}}
+          <Input
+            @class="p-0 flex-fill bg-transparent border"
+            @value={{this.args.oil.metadata.name}}
+            @placeholder="Enter Sample Name"
+            @change={{action this.args.submit this.args.oil}}
+          />
+        {{else}}
+          {{this.args.oil.metadata.name}}
+        {{/if}}
+      </div>
+
+      <div class="row pl-0 mb-1">
+        <strong>Short Name:&nbsp;</strong>
+        {{#if this.args.editable}}
+          <Input
+            @class="p-0 flex-fill bg-transparent border"
+            @value={{this.args.oil.metadata.short_name}}
+            @placeholder="Enter Short Name"
+            @change={{action this.args.submit this.args.oil}}
+          />
+        {{else}}
+          {{this.args.oil.metadata.short_name}}
+        {{/if}}
+      </div>
+
+      <div class="row pl-0 mb-1">
+        <strong>Sample ID:&nbsp;</strong>
+        {{#if this.args.editable}}
+          <Input
+            @class="p-0 flex-fill bg-transparent border"
+            @value={{this.args.oil.metadata.sample_id}}
+            @placeholder="Enter Sample ID"
+            @change={{action this.args.submit this.args.oil}}
+            size="10"
+          />
+        {{else}}
+          {{this.args.oil.metadata.sample_id}}
+        {{/if}}
+      </div>
+
+      <div class="row pl-0 mb-1">
+        <form class="form-inline justify-content-center" role="form">
+          <div class="form-group">
+            <strong>Weathered Fraction:&nbsp;</strong>
+            <Common::ValueUnitInput
+              @valueObject={{this.args.oil.metadata.fraction_weathered}}
+              @valueUnit="%"
+              @valuePrecision={{2}}
+              @editable={{this.args.editable}}
+              @submit={{action this.args.submit this.args.oil}}
+            />
+          </div>
+        </form>
+      </div>
+
+      <div class="row pl-0 mb-1">
+        <strong>BP Range:&nbsp;</strong>
+        {{#if this.args.editable}}
+          <Common::RangeValueInput
+              @valueTitle="BP Range"
+              @valueObject={{this.args.oil}}
+              @valueName="metadata.boiling_point_range"
+              @valueUnit="C"
+              @valuePrecision="2"
+              @sampleIndex={{this.args.sampleIndex}}
+              @submit={{this.submit}}
+          />
+        {{else}}
+          {{value-unit (convert-unit this.args.oil.metadata.boiling_point_range "C") 2}}
+        {{/if}}
+      </div>
+
+    </div>
+
+    <div class="col-xs-6 col-sm-6 col-lg-4">
+      <div class="row pl-1 mb-1">
+        <div class="col-12 input-group">        
+          <label class="p-1 input-group-text font-weight-bold">Description:</label>
+          {{#let (if this.args.oil.metadata.description
+                  this.args.oil.metadata.description
+                  (if this.args.editable "" "None")) as |sampleDescription|}}
+            <Textarea
+              @class="p-1 reference-textarea overflow-hidden bg-transparent border"
+              @value={{sampleDescription}}
+              @placeholder="Enter description"
+              @change={{action this.args.submit this.args.oil}}
+              rows="4"
+              disabled={{not this.args.editable}}
+            />
+          {{/let}}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
