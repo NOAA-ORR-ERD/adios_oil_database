@@ -70,7 +70,7 @@
               @valueUnit="C"
               @valuePrecision="2"
               @sampleIndex={{this.args.sampleIndex}}
-              @submit={{this.submit}}
+              @submit={{action this.args.submit this.args.oil}}
           />
         {{else}}
           {{value-unit (convert-unit this.args.oil.metadata.boiling_point_range "C") 2}}
