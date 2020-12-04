@@ -113,6 +113,14 @@ class Session():
         else:
             return {'metadata.location': {'$regex': location, '$options': 'i'}}
 
+    def alternate_names_arg(self, name):
+        if name is None:
+            return {}
+        else:
+            return {'metadata.alternate_names': { '$elemMatch': {
+                '$regex': name, '$options': 'i'
+            }}}
+
     def text_arg(self, text_to_match):
         if text_to_match is None:
             return {}
@@ -122,7 +130,8 @@ class Session():
             for w in text_to_match.split():
                 ret.append(self.make_inclusive([self.id_filter_arg(w),
                                                 self.name_arg(w),
-                                                self.location_arg(w)]))
+                                                self.location_arg(w),
+                                                self.alternate_names_arg(w)]))
 
             ret = self.make_exclusive(ret)
 
