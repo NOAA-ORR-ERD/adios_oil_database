@@ -1,0 +1,10 @@
+{
+  "id": "alternate-names.json",
+  "template": {
+      "alternate_names": {
+          "label": "Alternate Names",
+          "dataType": "string",
+          "size": 20
+      }
+  }
+}
