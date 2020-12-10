@@ -1850,6 +1850,7 @@
                 ],
                 "dynamic_viscosities": [
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -1864,6 +1865,7 @@
                         }
                     },
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3820,6 +3822,7 @@
                 ],
                 "dynamic_viscosities": [
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3834,6 +3837,7 @@
                         }
                     },
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5776,6 +5780,7 @@
                 ],
                 "dynamic_viscosities": [
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5790,6 +5795,7 @@
                         }
                     },
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7728,6 +7734,7 @@
                 ],
                 "dynamic_viscosities": [
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7747,6 +7754,7 @@
                         }
                     },
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9652,6 +9660,7 @@
                 ],
                 "dynamic_viscosities": [
                     {
+                        "method": "ESTS: 12.06/x.x/M",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",

@@ -23,6 +23,7 @@ from oil_database.models.common.measurement import (Temperature,
 class DensityPoint:
     density: Density
     ref_temp: Temperature
+    method: str = None
 
 
 class DensityList(JSON_List):
@@ -35,6 +36,7 @@ class DynamicViscosityPoint:
     viscosity: DynamicViscosity
     ref_temp: Temperature
     shear_rate: AngularVelocity = None
+    method: str = None
 
 
 class DynamicViscosityList(JSON_List):
@@ -46,6 +48,8 @@ class DynamicViscosityList(JSON_List):
 class KinematicViscosityPoint:
     viscosity: KinematicViscosity
     ref_temp: Temperature
+    shear_rate: AngularVelocity = None
+    method: str = None
 
 
 class KinematicViscosityList(JSON_List):
