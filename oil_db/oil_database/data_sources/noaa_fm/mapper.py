@@ -130,16 +130,18 @@ class OilLibraryAttributeMapper(MapperBase):
         elif isclose(sample_id, 0):
             attrs['name'] = 'Fresh Oil Sample'
             attrs['short_name'] = 'Fresh Oil'
-            attrs['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
+            attrs['fraction_weathered'] = {'value': sample_id,
+                                           'unit': 'fraction'}
             attrs['boiling_point_range'] = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
             attrs['name'] = f'{sigfigs(sample_id * 100)}% Weathered'
             attrs['short_name'] = f'{sigfigs(sample_id * 100)}% Weathered'
-            attrs['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
+            attrs['fraction_weathered'] = {'value': sample_id,
+                                           'unit': 'fraction'}
             attrs['boiling_point_range'] = None
         else:
-            logger.warn("Can't generate IDs for sample: ", sample_id)
+            logger.warn('Cannot generate IDs for sample: ', sample_id)
 
         return attrs
 
@@ -205,7 +207,7 @@ class OilLibraryAttributeMapper(MapperBase):
                        just a fractional value maybe?)
         '''
         ret = []
-        for attr, unit in (('benzene', '1'),):
+        for attr, unit in (('benzene', 'fraction'),):
             value = getattr(self, attr, None)
 
             if value is not None:
@@ -233,14 +235,14 @@ class OilLibraryAttributeMapper(MapperBase):
         '''
         ret = []
         for attr, map_to, unit in (('water_content_emulsion', 'water_content',
-                                    '1'),
-                                   ('wax_content', None, '1'),
-                                   ('sulfur', None, '1'),
-                                   ('naphthenes', None, '1'),
-                                   ('paraffins', None, '1'),
+                                    'fraction'),
+                                   ('wax_content', None, 'fraction'),
+                                   ('sulfur', None, 'fraction'),
+                                   ('naphthenes', None, 'fraction'),
+                                   ('paraffins', None, 'fraction'),
                                    ('nickel', None, 'ppm'),
                                    ('vanadium', None, 'ppm'),
-                                   ('polars', None, '1')):
+                                   ('polars', None, 'fraction')):
             value = getattr(self, attr, None)
 
             if value is not None:
@@ -269,9 +271,10 @@ class OilLibraryAttributeMapper(MapperBase):
         for attr, map_to, unit in (('reid_vapor_pressure',
                                     'Reid Vapor Pressure', 'bar'),
                                    ('conrandson_crude',
-                                    'Conradson Carbon Residue (CCR)', '1'),
+                                    'Conradson Carbon Residue (CCR)',
+                                    'fraction'),
                                    ('conrandson_residuum',
-                                    'Conradson Residuum', '1')):
+                                    'Conradson Residuum', 'fraction')):
             value = getattr(self, attr, None)
 
             if value is not None:

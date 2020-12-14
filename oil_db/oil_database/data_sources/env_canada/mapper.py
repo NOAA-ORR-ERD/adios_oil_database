@@ -132,7 +132,7 @@ class EnvCanadaSampleMapper(MapperBase):
         if sample_id == 0:
             m['name'] = 'Fresh Oil Sample'
             m['short_name'] = 'Fresh Oil'
-            m['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
+            m['fraction_weathered'] = {'value': sample_id, 'unit': 'fraction'}
         elif isinstance(sample_id, str):
             m['name'] = sample_id
             m['short_name'] = '{}...'.format(sample_id[:12])
@@ -141,9 +141,9 @@ class EnvCanadaSampleMapper(MapperBase):
             # we will assume this is a simple fractional weathered amount
             m['name'] = '{:.4g}% Weathered'.format(sample_id * 100)
             m['short_name'] = '{:.4g}% Weathered'.format(sample_id * 100)
-            m['fraction_weathered'] = {'value': sample_id, 'unit': '1'}
+            m['fraction_weathered'] = {'value': sample_id, 'unit': 'fraction'}
         else:
-            logger.warning(f"Can't generate IDs for sample: {sample_id}")
+            logger.warning(f'Cannot generate IDs for sample: {sample_id}')
 
         m['boiling_point_range'] = None
         m['sample_id'] = str(ests_code)
@@ -679,13 +679,13 @@ class EnvCanadaSampleMapper(MapperBase):
 
             Example of content:
                 {
-                    'name': "1-Methyl-2-Isopropylbenzene",
-                    'method': "ESTS 2002b",
-                    'groups': ["C4-C6 Alkyl Benzenes", ...],
+                    'name': '1-Methyl-2-Isopropylbenzene',
+                    'method': 'ESTS 2002b',
+                    'groups': ['C4-C6 Alkyl Benzenes', ...],
                     'measurement': {
                         value: 3.4,
-                        unit: "ppm",
-                        unit_type: "Mass Fraction",
+                        unit: 'ppm',
+                        unit_type: 'massfraction',
                         replicates: 3,
                         standard_deviation: 0.1
                     }

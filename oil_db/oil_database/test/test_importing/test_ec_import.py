@@ -24,9 +24,9 @@ from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
 
 from pprint import pprint
 
-example_dir = Path(__file__).resolve().parent / "example_data"
-example_index = example_dir / "index.txt"
-data_file = example_dir / "EnvCanadaTestSetNew.xlsm"
+example_dir = Path(__file__).resolve().parent / 'example_data'
+example_index = example_dir / 'index.txt'
+data_file = example_dir / 'EnvCanadaTestSetNew.xlsm'
 
 
 class TestEnvCanadaOilExcelFile(object):
@@ -1900,13 +1900,13 @@ class TestEnvCanadaSampleMapper(object):
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
         ('2713', 0, 'metadata', {'boiling_point_range': None,
-                                 'fraction_weathered': {'unit': '1',
+                                 'fraction_weathered': {'unit': 'fraction',
                                                         'value': 0.0},
                                  'name': 'Fresh Oil Sample',
                                  'short_name': 'Fresh Oil',
                                  'sample_id': '2713.1'}),
         ('2713', -1, 'metadata', {'boiling_point_range': None,
-                                  'fraction_weathered': {'unit': '1',
+                                  'fraction_weathered': {'unit': 'fraction',
                                                          'value': 0.3676},
                                   'name': '36.76% Weathered',
                                   'short_name': '36.76% Weathered',
@@ -1942,10 +1942,10 @@ class TestEnvCanadaSampleMapper(object):
                            'standard_deviation': 67002.0, 'replicates': 3}}
          ]),
         ('2713', 0, 'distillation_data', {
-            "type": "mass fraction",
-            "method": "Merged ASTM D7169 & ASTM D6730 mod.",
-            "end_point": {'min_value': 720.0, 'max_value': None, 'unit': 'C'},
-            "cuts": [
+            'type': 'mass fraction',
+            'method': 'Merged ASTM D7169 & ASTM D6730 mod.',
+            'end_point': {'min_value': 720.0, 'max_value': None, 'unit': 'C'},
+            'cuts': [
                 {'fraction': {'unit': '%', 'value': 5},
                  'vapor_temp': {'unit': 'C', 'value': 60.3}},
                 {'fraction': {'unit': '%', 'value': 10},

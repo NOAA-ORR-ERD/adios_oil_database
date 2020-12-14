@@ -1809,7 +1809,7 @@
             },
             "metadata": {
                 "fraction_weathered": {
-                    "unit": "1",
+                    "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.0
                 },
@@ -3781,7 +3781,7 @@
             },
             "metadata": {
                 "fraction_weathered": {
-                    "unit": "1",
+                    "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.0853
                 },
@@ -5739,7 +5739,7 @@
             },
             "metadata": {
                 "fraction_weathered": {
-                    "unit": "1",
+                    "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.1686
                 },
@@ -7693,7 +7693,7 @@
             },
             "metadata": {
                 "fraction_weathered": {
-                    "unit": "1",
+                    "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.2534
                 },
@@ -9619,7 +9619,7 @@
             },
             "metadata": {
                 "fraction_weathered": {
-                    "unit": "1",
+                    "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.2645
                 },

@@ -339,7 +339,7 @@ class OilLibraryRecordParser(ParserBase):
         for c in cuts:
             value = {
                 'fraction': {'value': c['fraction'],
-                             'unit': '1',
+                             'unit': 'fraction',
                              'unit_type': unit_type},
                 'vapor_temp': {'value': c['vapor_temp_k'], 'unit': 'K'},
             }
@@ -445,7 +445,7 @@ class OilLibraryRecordParser(ParserBase):
             if emuls_min is None and emuls_max is None:
                 # apply water to the fresh sample
                 ret.append({
-                    'water_content': {'value': water, 'unit': '1'},
+                    'water_content': {'value': water, 'unit': 'fraction'},
                     'age': {'value': 0.0, 'unit': 'day'},
                     'ref_temp': {'value': 288.15, 'unit': 'K'},
                     'weathering': 0.0,
@@ -454,7 +454,7 @@ class OilLibraryRecordParser(ParserBase):
                 if emuls_min not in (None, 0.0):
                     # we have a min weathering sample
                     ret.append({
-                        'water_content': {'value': 0.0, 'unit': '1'},
+                        'water_content': {'value': 0.0, 'unit': 'fraction'},
                         'age': {'value': 0.0, 'unit': 'day'},
                         'ref_temp': {'value': 288.15, 'unit': 'K'},
                         'weathering': emuls_min,
@@ -463,7 +463,7 @@ class OilLibraryRecordParser(ParserBase):
                 if emuls_max is not None:
                     # we have a max weathering sample
                     ret.append({
-                        'water_content': {'value': water, 'unit': '1'},
+                        'water_content': {'value': water, 'unit': 'fraction'},
                         'age': {'value': 0.0, 'unit': 'day'},
                         'ref_temp': {'value': 288.15, 'unit': 'K'},
                         'weathering': emuls_max,
@@ -479,10 +479,10 @@ class OilLibraryRecordParser(ParserBase):
         crude = self.conrandson_crude
 
         if residue is not None:
-            ret['residue'] = {'value': residue, 'unit': '1'}
+            ret['residue'] = {'value': residue, 'unit': 'fraction'}
 
         if crude is not None:
-            ret['crude'] = {'value': crude, 'unit': '1'}
+            ret['crude'] = {'value': crude, 'unit': 'fraction'}
 
         if len(ret) == 0:
             ret = None
@@ -497,7 +497,7 @@ class OilLibraryRecordParser(ParserBase):
             fraction = getattr(self, sara_type)
 
             if fraction is not None:
-                ret[sara_type] = {'value': fraction, 'unit': '1'}
+                ret[sara_type] = {'value': fraction, 'unit': 'fraction'}
 
         if len(ret) == 0:
             ret = None
