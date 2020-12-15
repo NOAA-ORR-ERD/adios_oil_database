@@ -184,9 +184,6 @@ class EnvCanadaSampleMapper(MapperBase):
                 'replicates': item.pop('replicates')
             }
 
-            # these items might be used later, but right now we ignore them
-            item.pop('method')
-
         return sorted([r for r in ret if r['density']['value'] is not None],
                       key=lambda x: x['ref_temp']['value'])
 

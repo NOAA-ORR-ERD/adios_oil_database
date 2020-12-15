@@ -69,6 +69,7 @@ class FlashPoint:
     measurement: Temperature = None
     method: str = None
 
+
 @dataclass_to_json
 @dataclass
 class InterfacialTensionPoint:
@@ -77,8 +78,10 @@ class InterfacialTensionPoint:
     interface: str = None
     method: str = None
 
+
 class InterfacialTensionList(JSON_List):
     item_type = InterfacialTensionPoint
+
 
 @dataclass_to_json
 @dataclass
