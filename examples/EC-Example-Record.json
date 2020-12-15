@@ -1827,6 +1827,7 @@
                             "unit_type": "density",
                             "value": 0.93988
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -1841,6 +1842,7 @@
                             "unit_type": "density",
                             "value": 0.92526
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3799,6 +3801,7 @@
                             "unit_type": "density",
                             "value": 0.96458
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -3813,6 +3816,7 @@
                             "unit_type": "density",
                             "value": 0.95309
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5757,6 +5761,7 @@
                             "unit_type": "density",
                             "value": 0.99486
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -5771,6 +5776,7 @@
                             "unit_type": "density",
                             "value": 0.98462
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7711,6 +7717,7 @@
                             "unit_type": "density",
                             "value": 1.0214
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -7725,6 +7732,7 @@
                             "unit_type": "density",
                             "value": 1.0127
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9637,6 +9645,7 @@
                             "unit_type": "density",
                             "value": 1.0211
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",
@@ -9651,6 +9660,7 @@
                             "unit_type": "density",
                             "value": 1.014
                         },
+                        "method": "ASTM D5002",
                         "ref_temp": {
                             "unit": "C",
                             "unit_type": "temperature",

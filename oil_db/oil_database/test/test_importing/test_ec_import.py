@@ -1914,10 +1914,12 @@ class TestEnvCanadaSampleMapper(object):
         ('2713', 0, 'densities', [
             {'density': {'value': 0.8751, 'unit': 'g/mL',
                          'standard_deviation': 0, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C'}},
+             'ref_temp': {'value': 0.0, 'unit': 'C'},
+             'method': 'ASTM D5002'},
             {'density': {'value': 0.8639, 'unit': 'g/mL',
                          'standard_deviation': 0, 'replicates': 3},
-             'ref_temp': {'value': 15.0, 'unit': 'C'}}
+             'ref_temp': {'value': 15.0, 'unit': 'C'},
+             'method': 'ASTM D5002'}
          ]),
         ('2713', 0, 'dynamic_viscosities', [
             {'method': 'ASTM D7042',
