@@ -96,33 +96,28 @@
 
       <div class="row pl-0 mb-1">
         {{! Labels }}
-        <div class="col-1 pl-0 form-inline d-flex align-items-center">
-          <div class="input-group-prepend">
-            <label class="p-1 input-group-text font-weight-bold">Labels:</label>
-          </div>
-
+        <div class="input-group-prepend">
+          <label class="p-1 input-group-text font-weight-bold">Labels:</label>
         </div>
-        <div class="col-7 d-flex align-items-center">
-          {{#if this.args.editable}}
-            <PowerSelectMultiple @class="bg-warning border-0"
-              @placeholder="Select some labels for the oil..."
-              @selected={{this.selectedLabels}}
-              @options={{this.filteredLabels}}
-              @onChange={{action "updateLabels"}}
-              @onKeydown={{this.handleKeydown}} as |name|>
-              <span class="bg-transparent border-0">{{name}}</span>
-            </PowerSelectMultiple>
+
+        {{#if this.args.editable}}
+          <PowerSelectMultiple @class="bg-warning border-0"
+            @placeholder="Select some labels for the oil..."
+            @selected={{this.selectedLabels}}
+            @options={{this.filteredLabels}}
+            @onChange={{action "updateLabels"}}
+            @onKeydown={{this.handleKeydown}} as |name|>
+            <span class="bg-transparent border-0">{{name}}</span>
+          </PowerSelectMultiple>
+        {{else}}
+          {{#each this.args.oil.metadata.labels as |label|}}
+            <span class="list-item-category">
+              {{label}}
+            </span>
           {{else}}
-            {{#each this.args.oil.metadata.labels as |label|}}
-              <span class="list-item-category">
-                {{label}}
-              </span>
-            {{else}}
-              <span class="p-1">None</span>
-            {{/each}}
-          {{/if}}
-
-        </div>
+            <span class="p-1">None</span>
+          {{/each}}
+        {{/if}}
       </div>
 
       <div class="row pl-0 mb-1">
@@ -140,19 +135,16 @@
             />
           </div>
         {{else}}
-          <div class="col-3 d-flex pl-0">
-            <label class="p-1 input-group-text font-weight-bold">Alternate Names:</label>
-          </div>
-          <div class="col-8 d-flex pl-0 align-items-center">
-            <div class="row pl-1 mb-0">
-              {{#each this.args.oil.metadata.alternate_names as |id|}}
-                <span class="list-item-alternate-names">
-                  {{id}}
-                </span>
-              {{else}}
-                <span class="p-1">None</span>
-              {{/each}}
-            </div>
+          <label class="p-1 input-group-text font-weight-bold">Alternate Names:</label>
+          &nbsp;
+          <div class="col pl-1 mb-0">
+            {{#each this.args.oil.metadata.alternate_names as |id|}}
+              <span class="list-item-alternate-names">
+                {{id}}
+              </span>
+            {{else}}
+              <span class="p-1">None</span>
+            {{/each}}
           </div>
         {{/if}}
       </div>
