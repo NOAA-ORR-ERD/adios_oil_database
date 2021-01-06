@@ -16,6 +16,7 @@ records_with_dvis_data = {}
 outfile = open("viscosity_data.csv", 'w')
 outfile.write('Name, ID, "Kin. Values", "Dyn. Values"\n')
 
+records_with_dist_cuts = []
 
 # Look through all the data for viscosity
 for oil, path in dbs.get_all_records(data_dir):
@@ -30,6 +31,10 @@ for oil, path in dbs.get_all_records(data_dir):
 
     outfile.write(f'"{oil.metadata.name}", {oil.oil_id}, {len(kvis)}, {len(dvis)}\n')
 
+
+    if len(fresh.distillation_data.cuts) >= 3 and max(len(kvis), len(dvis)) == 1:
+        records_with_dist_cuts.append(oil.metadata.name)
+
 print("Available viscosity Data:")
 print("num_values   Kinematic   Dynamic")
 for i in range(10):
@@ -38,8 +43,11 @@ for i in range(10):
     except KeyError:
         pass
 
+print("records with dist cuts but only one viscosity:")
+# for n in records_with_dist_cuts:
+#     print(n)
 
-
+print(f"A total of {len(records_with_dist_cuts)} records that could be used with the Abu-Eishah:1999 appraoch for viscosity with temp")
 
 
 

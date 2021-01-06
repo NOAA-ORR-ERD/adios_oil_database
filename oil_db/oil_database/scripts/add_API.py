@@ -16,27 +16,11 @@ import json
 
 from oil_database.models.oil.oil import Oil
 from oil_database.models.cleanup.density import FixAPI
+from oil_database.scripting import get_all_records
 
 
 class Fake():
     oil_id = "XXXXXXXXX"
-
-
-def get_all_records(data_dir):
-    """
-    a generator that gets all the records, returning them one by one
-    as record, path pairs
-
-    :param data_dir: the directory that holds the data
-    """
-    dir = Path(data_dir)
-    for fname in dir.rglob("*.json"):
-        with open(fname, encoding='utf-8') as jfile:
-            pyjson = json.load(jfile)
-        rec = Oil.from_py_json(pyjson)
-
-        yield rec, fname
-
 
 if __name__ == "__main__":
     try:
