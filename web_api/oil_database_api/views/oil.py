@@ -78,14 +78,18 @@ def get_oils(request):
 
         return json_api_results(client.query(page=[start, stop],
                                              sort=sort,
-                                             **search_opts))
+                                             **search_opts),
+                                limit)
 
 
-def json_api_results(results):
+def json_api_results(results, page_size):
     total = results.count()
+    pages = total / page_size if page_size > 0 else 1
+
     data = [get_oil_searchable_fields(r) for r in results]
     ret = {'data': data,
-           'meta': {'total': total}
+           'meta': {'total': total,
+                    'totalPages': pages}
            }
 
     return ret
