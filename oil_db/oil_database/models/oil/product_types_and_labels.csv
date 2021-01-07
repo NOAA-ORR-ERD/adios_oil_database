@@ -3,9 +3,9 @@ Labels can be added as need arises.,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 NOTE: This table will be used to populate the Product Types and Labels System in the software.,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 "Created Sept.18, 2020 by Robert",,,,,,,,,,,,,,,,,,,,,,,,,,,,
 DATA TABLE:,(data table follows this row),,,,,,,,,,,,,,,,,,,,,,,,,,,
-TYPE:,LABEL ->,Crude Oil,Light Crude,Medium Crude,Heavy Crude,Bitumen,Condensate,Refined Product,Fuel Oil,Distillate Fuel,Residual Fuel,Jet Fuel,Kerosene,Aviation Gas,MDO,Diesel,No. 2 Fuel Oil,Home Heating Oil,IFO,HFO,Heavy Fuel Oil,No. 6 Fuel Oil,Bunker C,Group V,Transformer Oil,Tight Oil,Fracking Oil,Vacuum Gas Oil
+TYPE:,LABEL ->,Crude Oil,Light Crude,Medium Crude,Heavy Crude,Bitumen,Condensate,Refined Product,Fuel Oil,Distillate Fuel,Residual Fuel,Jet Fuel,Kerosene,Aviation Gas,MDO,Diesel,No. 2 Fuel Oil,Home Heating Oil,IFO,HFO,Heavy Fuel Oil,No. 6 Fuel Oil,Bunker C,Group V,Transformer Oil,Shale Oil,Fracking Oil,Vacuum Gas Oil
 Crude Oil NOS,,x,x,x,x,x,,,,,,,,,,,,,,,,,,x,,x,x,
-Shale Oil,,x,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tight Oil,,x,,,,,,,,,,,,,,,,,,,,,,,,,,
 Condensate,,x,x,,,,x,,,,,,,,,,,,,,,,,,,,,
 Bitumen Blend,,x,,,x,x,,x,,,,,,,,,,,,,,,,x,,,,
 Refined Product NOS,,,,,,,,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,,,
