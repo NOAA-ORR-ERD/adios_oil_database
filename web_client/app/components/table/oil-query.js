@@ -1,6 +1,9 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 
+import { isEmpty } from '@ember/utils';
+import { task } from 'ember-concurrency';
+
 import TableCommon from 'ember-oil-db/mixins/table-common';
 
 
@@ -103,6 +106,20 @@ export default Component.extend(TableCommon, {
 
         this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
     },
+
+    fetchRecords: task(function*() {
+        while (this.get('canLoadMore')) {
+            let queryOptions = this.getQueryOptions();
+            let records = yield this.store.query('oil', queryOptions);
+
+            this.data.pushObjects(records.toArray());
+            this.set('meta', records.get('meta'));
+
+            this.incrementProperty('page');
+            this.set('canLoadMore', !isEmpty(records));
+            // yield timeout(1000);  // wait 1s
+        }
+    }).restartable(),
 
     getFilteredLabels(productType) {
         if (productType === 'None') {productType = ''}
