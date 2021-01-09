@@ -59,6 +59,11 @@ class Oil:
 
         return cls.from_py_json(py_json)
 
+    def reset_validation(self):
+        msgs = self.validate()
+        self.status = msgs
+        return msgs
+
     def to_file(self, infile):
         """
         save an Oil object as JSON to the passed in file

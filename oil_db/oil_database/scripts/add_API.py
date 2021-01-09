@@ -11,22 +11,33 @@ Testing! -- not entirely sure if it breaks the records!
 """
 
 import sys
-from pathlib import Path
 import json
 
-from oil_database.models.oil.oil import Oil
-from oil_database.models.cleanup.density import FixAPI
+from oil_database.models.oil.cleanup.density import FixAPI
 from oil_database.scripting import get_all_records
 
+USAGE = """
+add_API data_dir [dry_run]
 
-class Fake():
-    oil_id = "XXXXXXXXX"
+data_dir is the dir where the data are: the script will recursively
+search for JSON files
 
-if __name__ == "__main__":
+If "dry_run" is on the command line, it will report what it would do,
+but not save any changes
+"""
+
+
+def main():
+    try:
+        sys.argv.remove("dry_run")
+        dry_run = True
+    except ValueError:
+        dry_run = False
+
     try:
         base_dir = sys.argv[1]
     except IndexError:
-        print("you must pass in the base dir where the data are stored")
+        print(USAGE)
         sys.exit(1)
 
     for rec, pth in get_all_records(base_dir):
@@ -40,11 +51,15 @@ if __name__ == "__main__":
             print("Cleaning up!")
             fixer.cleanup()
             print("API is now:", rec.metadata.API)
-            print("Saving out:", pth)
-            with open(pth, 'w', encoding='utf-8') as outfile:
-                json.dump(rec.py_json(), outfile, indent=4)
+            if not dry_run:
+                print("Saving out:", pth)
+                rec.to_file(pth)
+            else:
+                print("Nothing saved")
 
 
+if __name__ == "__main__":
+    main()
 
 
 
