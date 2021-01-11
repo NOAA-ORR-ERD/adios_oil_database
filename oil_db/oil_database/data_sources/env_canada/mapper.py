@@ -101,7 +101,7 @@ class EnvCanadaRecordMapper(MapperBase):
                                    'has no API & no 15C density')
                     api = None
 
-            record['metadata']['API'] = sigfigs(api, 3)
+            record['metadata']['API'] = round(api, 1)
 
     def py_json(self):
         rec = self.record.dict()
