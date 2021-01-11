@@ -5,6 +5,7 @@ import logging
 
 from slugify import Slugify
 
+from oil_database.util import sigfigs
 from oil_database.models.oil.oil import Oil
 from ..mapper import MapperBase
 
@@ -100,7 +101,7 @@ class EnvCanadaRecordMapper(MapperBase):
                                    'has no API & no 15C density')
                     api = None
 
-            record['metadata']['API'] = api
+            record['metadata']['API'] = sigfigs(api, 3)
 
     def py_json(self):
         rec = self.record.dict()
