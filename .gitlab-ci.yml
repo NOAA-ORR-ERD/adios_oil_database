@@ -9,6 +9,7 @@ test_develop:
 
     script:
         # Install & test the oil_library package
+        - echo "ip_resolve=4" >> /etc/yum.conf
         - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
         - yum install mongodb-org -y
         - mongod --config /etc/mongod.conf &
