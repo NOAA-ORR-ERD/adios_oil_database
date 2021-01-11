@@ -40,6 +40,8 @@ test_develop:
 
 build_api:
     stage: build1
+    image: registry.orr.noaa.gov/erd/centos-conda
+
     script:
         - echo "ip_resolve=4" >> /etc/yum.conf
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -51,6 +53,8 @@ build_api:
 
 build_client:
     stage: build2
+    image: registry.orr.noaa.gov/erd/centos-conda
+
     script:
         - echo "ip_resolve=4" >> /etc/yum.conf
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
