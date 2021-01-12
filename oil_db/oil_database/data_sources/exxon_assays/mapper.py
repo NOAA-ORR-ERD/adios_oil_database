@@ -265,6 +265,8 @@ def ExxonMapper(record):
     data = iter(data)
 
     reference = read_header(data)
+    reference.reference += '\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
+    reference.year = 2020
 
     oil_id, ref_id, sample_names = read_identification(data)
 
