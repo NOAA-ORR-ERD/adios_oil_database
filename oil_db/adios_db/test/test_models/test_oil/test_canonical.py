@@ -5,7 +5,7 @@ This may not longer serve any purpose
 """
 
 
-from oil_database.models.oil import canonical
+from adios_db.models.oil import canonical
 
 
 def test_get_new_oil():

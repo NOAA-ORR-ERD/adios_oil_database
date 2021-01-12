@@ -1,8 +1,8 @@
 import pytest
 
-from oil_database.models.common.measurement import MassFraction
+from adios_db.models.common.measurement import MassFraction
 
-from oil_database.models.oil.sara import Sara
+from adios_db.models.oil.sara import Sara
 
 
 class TestSARA:

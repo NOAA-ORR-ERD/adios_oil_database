@@ -1,6 +1,6 @@
 import logging
 
-from oil_database.session import Session
+from ..session import Session
 
 logger = logging.getLogger(__name__)
 

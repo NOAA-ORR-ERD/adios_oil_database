@@ -1,12 +1,12 @@
 import pytest
 
-from oil_database.models.common.measurement import MassFraction
+from adios_db.models.common.measurement import MassFraction
 
-from oil_database.models.oil.properties import (Dispersibility,
+from adios_db.models.oil.properties import (Dispersibility,
                                                 DispersibilityList,
                                                 EmulsionList)
 
-from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
+from adios_db.models.oil.environmental_behavior import EnvironmentalBehavior
 
 
 class TestPhysicalProperties:

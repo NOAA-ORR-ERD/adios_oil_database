@@ -1,6 +1,6 @@
 
 
-from oil_database.models.oil.values import (Reference,
+from adios_db.models.oil.values import (Reference,
                                             )
 
 

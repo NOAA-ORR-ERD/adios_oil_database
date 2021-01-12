@@ -8,7 +8,7 @@ for *some* cases.
 Add more when you find bugs
 """
 
-from oil_database.models.oil.oil import Oil
+from adios_db.models.oil.oil import Oil
 
 
 def test_make_oil_from_partial():

@@ -1,7 +1,7 @@
 import pytest
 
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.completeness import completeness
+from adios_db.models.oil.oil import Oil
+from adios_db.models.oil.completeness import completeness
 
 
 class TestAllCompleteness:

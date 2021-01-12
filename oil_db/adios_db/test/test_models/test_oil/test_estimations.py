@@ -3,10 +3,10 @@
 '''
 import pytest
 
-from oil_database.util.json import ObjFromDict
-from oil_database.data_sources.oil.estimations import (OilEstimation,
+from adios_db.util.json import ObjFromDict
+from adios_db.data_sources.oil.estimations import (OilEstimation,
                                                        OilSampleEstimation)
-from oil_database.models.common.measurement import Temperature
+from adios_db.models.common.measurement import Temperature
 
 np = docutils = pytest.importorskip("numpy")
 

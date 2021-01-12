@@ -1,8 +1,8 @@
 # from math import isclose
 # import pytest
 
-from oil_database.models.common.measurement import MassFraction
-from oil_database.models.oil.compound import Compound, CompoundList
+from adios_db.models.common.measurement import MassFraction
+from adios_db.models.oil.compound import Compound, CompoundList
 
 
 EXAMPLE = {"name": "1-Methyl-2-Isopropylbenzene",

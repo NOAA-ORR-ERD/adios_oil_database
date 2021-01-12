@@ -2,7 +2,7 @@ import os
 
 from configparser import ConfigParser
 
-from oil_database.util.db_connection import connect_mongodb
+from adios_db.util.db_connection import connect_mongodb
 
 
 def db_setup():
@@ -16,6 +16,6 @@ def db_setup():
 
     print(config)
 
-    settings = dict(config['app:oil_database'].items())
+    settings = dict(config['app:adios_db'].items())
 
     return connect_mongodb(settings)

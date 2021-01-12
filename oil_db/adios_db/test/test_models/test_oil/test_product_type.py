@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from oil_database.models.oil.product_type import (ProductType,
+from adios_db.models.oil.product_type import (ProductType,
                                                   PRODUCT_TYPES,
                                                   load_from_csv_file,
                                                   )

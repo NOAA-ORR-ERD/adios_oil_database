@@ -1,10 +1,10 @@
 import pytest
 
-from oil_database.models.common.measurement import Temperature, Density
+from adios_db.models.common.measurement import Temperature, Density
 
-from oil_database.models.oil.sample import Sample, SampleList
-from oil_database.models.oil.metadata import SampleMetaData
-from oil_database.models.oil.physical_properties import (PhysicalProperties,
+from adios_db.models.oil.sample import Sample, SampleList
+from adios_db.models.oil.metadata import SampleMetaData
+from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                          DensityPoint,
                                                          DensityList,
                                                          )

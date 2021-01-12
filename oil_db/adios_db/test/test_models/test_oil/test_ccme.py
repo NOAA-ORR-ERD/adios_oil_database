@@ -2,9 +2,9 @@ import json
 
 # import pytest
 
-from oil_database.models.common.measurement import MassFraction
+from adios_db.models.common.measurement import MassFraction
 
-from oil_database.models.oil.ccme import CCME
+from adios_db.models.oil.ccme import CCME
 
 from pprint import pprint
 

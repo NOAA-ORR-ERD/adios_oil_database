@@ -1,6 +1,6 @@
 import pytest
 
-from oil_database.models.oil.properties import (DistCut,
+from adios_db.models.oil.properties import (DistCut,
                                                 DistCutList,
                                                 InterfacialTensionPoint,
                                                 InterfacialTensionList,

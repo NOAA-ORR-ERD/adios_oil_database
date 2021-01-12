@@ -5,10 +5,10 @@ from pathlib import Path
 
 from pprint import pprint
 
-from oil_database.models.common.measurement import MassFraction
-from oil_database.models.oil.compound import Compound, CompoundList
+from adios_db.models.common.measurement import MassFraction
+from adios_db.models.oil.compound import Compound, CompoundList
 
-from oil_database.models.oil.ests_fractions import ESTSFractions
+from adios_db.models.oil.ests_fractions import ESTSFractions
 
 
 HERE = Path(__file__).parent

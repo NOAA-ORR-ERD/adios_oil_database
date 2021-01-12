@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.metadata import MetaData
-from oil_database.models.oil.values import Reference
+from adios_db.models.oil.oil import Oil
+from adios_db.models.oil.metadata import MetaData
+from adios_db.models.oil.values import Reference
 
 
 from pprint import pprint
