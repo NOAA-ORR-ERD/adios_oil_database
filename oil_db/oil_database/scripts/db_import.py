@@ -50,7 +50,8 @@ def add_all(settings):
             print('\tPerforming import on dataset: {}'.format(label))
 
             import_records(settings[config],
-                           record_cls, reader_cls, parser_cls, mapper_cls)
+                           record_cls, reader_cls, parser_cls, mapper_cls,
+                           overwrite=settings['overwrite'])
 
 
 menu_items = (['NOAA Filemaker', 'oildb.fm_files',
@@ -82,6 +83,8 @@ argp = ArgumentParser(description='Database Import Arguments:')
 argp.add_argument('--all', action='store_true',
                   help=('Import all datasets, bypassing the menus, and quit '
                         'the application when finished.'))
+argp.add_argument('--overwrite', action='store_true',
+                  help=('Overwrite any duplicate records'))
 argp.add_argument('--config', nargs=1,
                   help=('Specify a *.ini file to supply application settings. '
                         'If not specified, the default is to use a local '
@@ -103,6 +106,11 @@ def import_db_cmd(argv=sys.argv):
         print('Using default settings')
         settings = default_settings()
         _add_datafiles(settings)
+
+    if args.overwrite:
+        settings['overwrite'] = True
+    else:
+        settings['overwrite'] = False
 
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
@@ -165,7 +173,8 @@ def import_db(settings):
 
                 begin = datetime.now()
                 import_records(settings[config], oil_collection,
-                               reader_cls, parser_cls, mapper_cls)
+                               reader_cls, parser_cls, mapper_cls,
+                               overwrite=settings['overwrite'])
                 end = datetime.now()
 
                 print('time elapsed: {}'.format(end - begin))
@@ -209,7 +218,8 @@ def get_chosen_menu_item(choice):
         return None
 
 
-def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
+def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
+                   overwrite=False):
     '''
         Add the records from a data source.
         the config value should be a file list.
@@ -258,9 +268,20 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls):
 
                 oil_collection.insert_one(oil.py_json())
             except DuplicateKeyError as e:
-                print('Duplicate fields for {}: {}'
-                      .format(tc.change(oil_obj.oil_id, 'red'), e))
-                error_count += 1
+                if overwrite is True:
+                    try:
+                        oil_collection.replace_one({'_id': oil_obj.oil_id},
+                                                   oil.py_json())
+                    except Exception as e:
+                        print('Oil update failed for {}: {}'
+                              .format(tc.change(oil_obj.oil_id, 'red'), e))
+                        error_count += 1
+                    else:
+                        success_count += 1
+                else:
+                    print('Duplicate fields for {}: {}'
+                          .format(tc.change(oil_obj.oil_id, 'red'), e))
+                    error_count += 1
             except (ValueError, TypeError) as e:
                 print('{} for {}: {}'
                       .format(e.__class__.__name__,
