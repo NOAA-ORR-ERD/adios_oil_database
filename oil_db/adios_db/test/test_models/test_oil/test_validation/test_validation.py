@@ -7,11 +7,10 @@ most need to be updated to test validating an Oil object directly
 import pytest
 import json
 from pathlib import Path
-import copy
 
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.validation.validate import (validate_json,
-                                                         validate)
+from adios_db.models.oil.oil import Oil
+from adios_db.models.oil.validation.validate import (validate_json,
+                                                     validate)
 
 
 HERE = Path(__file__).parent

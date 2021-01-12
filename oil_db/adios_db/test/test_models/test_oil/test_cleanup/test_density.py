@@ -3,19 +3,18 @@ tests for density related cleanup
 """
 
 from math import isclose
-import pytest
 
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.physical_properties import (DensityPoint,
-                                                         DensityList,
-                                                         )
-from oil_database.models.common.measurement import (Density,
-                                                    Temperature,
-                                                    )
+from adios_db.models.oil.oil import Oil
+from adios_db.models.oil.physical_properties import (DensityPoint,
+                                                     DensityList,
+                                                     )
+from adios_db.models.common.measurement import (Density,
+                                                Temperature,
+                                                )
 
-from oil_database.models.oil.sample import (Sample)
+from adios_db.models.oil.sample import (Sample)
 
-from oil_database.models.oil.cleanup.density import FixAPI
+from adios_db.models.oil.cleanup.density import FixAPI
 
 
 def no_api_with_density():

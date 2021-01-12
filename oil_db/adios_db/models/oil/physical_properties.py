@@ -9,13 +9,12 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
 
-from oil_database.models.common.measurement import (Temperature,
-                                                    Density,
-                                                    DynamicViscosity,
-                                                    KinematicViscosity,
-                                                    AngularVelocity,
-                                                    InterfacialTension
-                                                    )
+from ..common.measurement import (Temperature,
+                                  Density,
+                                  DynamicViscosity,
+                                  KinematicViscosity,
+                                  AngularVelocity,
+                                  InterfacialTension)
 
 
 @dataclass_to_json

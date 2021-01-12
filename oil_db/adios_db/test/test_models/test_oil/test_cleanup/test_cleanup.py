@@ -2,7 +2,7 @@
 cleanup classes that work with density
 """
 
-from oil_database.models.oil.cleanup import Cleanup, ALL_CLEANUPS, CLEANUP_MAPPING
+from adios_db.models.oil.cleanup import Cleanup, ALL_CLEANUPS, CLEANUP_MAPPING
 
 
 def test_ALL_CLEANUPS():

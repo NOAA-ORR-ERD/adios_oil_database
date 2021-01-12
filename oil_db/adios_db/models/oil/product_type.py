@@ -9,7 +9,7 @@ Having a Python class makes it easier to write importing, validating etc, code.
 from pathlib import Path
 import csv
 
-from oil_database.util.many_many import ManyMany
+from ...util.many_many import ManyMany
 from ..common.validators import EnumValidator
 from .validation.warnings import WARNINGS
 
