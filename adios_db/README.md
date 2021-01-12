@@ -1,4 +1,4 @@
-# Oil Database Mangement Package
+# Oil Database Management Package
 
 This is a Python package for managing a collection of records about oil used
 for oil spill response.
@@ -79,10 +79,11 @@ If you want to import fresh data from the delivered data sources:
 For development, you may need to clean out the install, and want to install in "develop" or "editable" mode.
 
 ```
-python setup.py cleanall
-python setup.py develop --uninstall
-python setup.py develop
-yes | oil_db_init
+python setup.py clean
+pip uninstall adios_db
+pip install -e ./
+oil_db_init
+# optionally:
 oil_db_import --all
 ```
 
