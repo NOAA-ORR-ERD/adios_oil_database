@@ -7,20 +7,11 @@ NOTE: this is really only designed to be run once, but
       I'm keeping it here as an example for future, similar work
 """
 
-#!/usr/bin/env python
-
-"""
-generates a validation report from a collection of oil JSON files
-"""
-
 import sys
-import datetime
-import json
 import csv
 
-from oil_database.models.oil.cleanup.density import FixAPI
-from oil_database.models.oil.product_type import PRODUCT_TYPES
-from oil_database.scripting import get_all_records
+from adios_db.models.oil.product_type import PRODUCT_TYPES
+from adios_db.scripting import get_all_records
 
 USAGE = """
 add_product_types data_dir [dry_run]

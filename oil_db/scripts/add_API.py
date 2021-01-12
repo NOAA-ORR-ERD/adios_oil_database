@@ -13,8 +13,8 @@ Testing! -- not entirely sure if it breaks the records!
 import sys
 import json
 
-from oil_database.models.oil.cleanup.density import FixAPI
-from oil_database.scripting import get_all_records
+from adios_db.models.oil.cleanup.density import FixAPI
+from adios_db.scripting import get_all_records
 
 USAGE = """
 add_API data_dir [dry_run]

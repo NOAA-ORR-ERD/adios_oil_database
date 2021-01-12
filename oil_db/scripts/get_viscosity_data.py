@@ -6,7 +6,7 @@ script to see what viscosity data are available
 
 import sys
 
-import oil_database.scripting as dbs
+import adios_db.scripting as dbs
 
 data_dir = sys.argv[1]
 

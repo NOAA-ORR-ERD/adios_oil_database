@@ -8,8 +8,7 @@ import sys
 import datetime
 import json
 
-from oil_database.models.oil.cleanup.density import FixAPI
-from oil_database.scripting import get_all_records
+from adios_db.scripting import get_all_records
 
 USAGE = """
 validation_report data_dir ["save"]

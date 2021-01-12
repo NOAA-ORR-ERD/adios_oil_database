@@ -6,9 +6,13 @@ import os
 import logging
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
-import requests
-import lxml.html
-
+try:
+    import requests
+    import lxml.html
+except ImportError:
+    print("you need the lxml and requests package to use this script")
+    print("try: `pip install lxml requests` or `conda install lxml requests`")
+    raise
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

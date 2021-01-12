@@ -1,7 +1,7 @@
 # mockup of what we would like in order to separate
 # the mongodb API from our code
-from oil_database.util.db_connection import connect_mongodb
-from oil_database.util.settings import file_settings
+from adios_db.util.db_connection import connect_mongodb
+from adios_db.util.settings import file_settings
 from pprint import pprint
 
 
