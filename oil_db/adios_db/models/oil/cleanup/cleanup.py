@@ -15,7 +15,7 @@ class Cleanup:
         initialize a Cleanup object with an oil object
 
         :param oil: the oil object you want to clean up
-        :type oil: oil_database.models.oil.oil.OIl
+        :type oil: adios_db.models.oil.oil.OIl
         """
         self.oil = oil
 

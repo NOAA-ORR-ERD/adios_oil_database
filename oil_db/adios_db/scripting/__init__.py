@@ -5,7 +5,7 @@ Assorted utilities to help with writing scripts that use the oil database
 from pathlib import Path
 import json
 
-from oil_database.models.oil.oil import Oil
+from adios_db.models.oil.oil import Oil
 
 
 def get_all_records(data_dir):

@@ -6,11 +6,11 @@ from configparser import ConfigParser
 def default_settings():
     return {'mongodb.host': 'localhost',
             'mongodb.port': 27017,
-            'mongodb.database': 'oil_database',
-            'mongodb.alias': 'oil-db-app'}
+            'mongodb.database': 'adios_db',
+            'mongodb.alias': 'adios-db-app'}
 
 
-def file_settings(config_file, section='app:oil_database'):
+def file_settings(config_file, section='app:adios_db'):
     config = ConfigParser()
     config.read(config_file)
 

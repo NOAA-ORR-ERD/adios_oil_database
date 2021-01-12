@@ -1,20 +1,18 @@
 import sys
 
-from pymongo import MongoClient
 
-from oil_database.util.db_connection import connect_mongodb
-from oil_database.data_sources.oil.estimations import OilEstimation
+from adios_db.util.db_connection import connect_mongodb
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
 client = connect_mongodb({'mongodb.host': 'localhost',
                           'mongodb.port': 27017,
-                          'mongodb.database': 'oil_database',
+                          'mongodb.database': 'adios_db',
                           'mongodb.alias': 'oil-db-app'})
 
 
-db = client.oil_database
+db = client.adios_db
 records = db.imported_record
 oils = db.oil
 

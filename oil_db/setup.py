@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 import os
-import sys
 import fnmatch
 import shutil
 from pathlib import Path
 
 from setuptools import setup, find_packages
-from distutils.command.clean import clean
-
-from setuptools import Command
-from setuptools.command.test import test as TestCommand
 
 
 def get_version(pkg_name):
@@ -82,7 +77,7 @@ def clean_files():
 #         pass
 
 #     def run(self):
-#         from oil_database.scripts.db_initialize import init_db_cmd
+#         from adios_db.scripts.db_initialize import init_db_cmd
 
 #         init_db_cmd(('oil_db_init',))
 
@@ -102,7 +97,7 @@ def clean_files():
 #         # no idea why it doesn't work to call pytest.main
 #         # import pytest
 #         # errno = pytest.main(self.test_args)
-#         errno = os.system('py.test --pyargs oil_database')
+#         errno = os.system('py.test --pyargs adios_db')
 #         sys.exit(errno)
 
 
@@ -130,7 +125,7 @@ setup(name=pkg_name,
       url='',
       packages=find_packages(),
       include_package_data=True,
-      package_data={'oil_database': ["models/oil/product_types_and_labels.csv",
+      package_data={'adios_db': ["models/oil/product_types_and_labels.csv",
                                      "test/test_models/test_oil/example_products.csv",
                                      "test/test_models/test_oil/ExampleFullRecord.json",
                                      "test/test_models/test_oil/EC000506.json",
@@ -138,19 +133,19 @@ setup(name=pkg_name,
                                      "/test/test_models/test_oil/output/empty_file",
                                      ]},
       entry_points={'console_scripts': [('oil_db_init = '
-                                         'oil_database.scripts.db_initialize'
+                                         'adios_db.scripts.db_initialize'
                                          ':init_db_cmd'),
                                         ('oil_db_import = '
-                                         'oil_database.scripts.db_import'
+                                         'adios_db.scripts.db_import'
                                          ':import_db_cmd'),
                                         ('oil_query = '
-                                         'oil_database.scripts.oil_query'
+                                         'adios_db.scripts.oil_query'
                                          ':oil_query_cmd'),
                                         ('oil_db_backup = '
-                                         'oil_database.scripts.db_backup'
+                                         'adios_db.scripts.db_backup'
                                          ':backup_db_cmd'),
                                         ('oil_db_restore = '
-                                         'oil_database.scripts.db_restore'
+                                         'adios_db.scripts.db_restore'
                                          ':restore_db_cmd'),
                                         ],
                     },
