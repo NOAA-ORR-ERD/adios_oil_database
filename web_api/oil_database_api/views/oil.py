@@ -12,11 +12,11 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 
 from pymongo.errors import DuplicateKeyError
 
-from oil_database.util.json import fix_bson_ids
-from oil_database.models.oil.validation.validate import validate_json
-from oil_database.models.oil.completeness import set_completeness
+from adios_db.util.json import fix_bson_ids
+from adios_db.models.oil.validation.validate import validate_json
+from adios_db.models.oil.completeness import set_completeness
 
-from oil_database_api.common.views import (cors_policy,
+from adios_db_api.common.views import (cors_policy,
                                            obj_id_from_url)
 
 logger = logging.getLogger(__name__)

@@ -1,13 +1,12 @@
 """
 Functional tests for the Model Web API
 
-FIXME: WE should hve tests that test the API, not everything else!
+FIXME: We should have tests that test the API, not everything else!
 
 And getting sample_oils from the oil filemaker data makes me really nervous
 
-
-
 """
+
 import copy
 
 from .base import FunctionalTestBase
@@ -48,7 +47,7 @@ class OilTestBase(FunctionalTestBase):
 
         return True
 
-    def densitiy_valid(self, density):
+    def density_valid(self, density):
         for k in ('ref_temp', 'density'):
             if k not in density:
                 return False

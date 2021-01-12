@@ -6,7 +6,7 @@ import datetime
 
 import json
 
-from oil_database.session import Session
+from adios_db.session import Session
 
 from pyramid.config import Configurator
 from pyramid.response import Response, FileResponse
@@ -102,7 +102,7 @@ def main(_global_config, **settings):
     config.add_renderer('json', renderer)
 
     config.include("cornice")
-    # config.scan("oil_database_api.views")
+    # config.scan("adios_db_api.views")
 
     # Attempt to set up the rest by hand -- scanning is not working when
     # bundled by py2app

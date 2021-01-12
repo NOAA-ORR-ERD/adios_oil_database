@@ -7,9 +7,9 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 
 from bson.objectid import ObjectId
 
-from oil_database.util.json import fix_bson_ids
+from adios_db.util.json import fix_bson_ids
 
-from oil_database_api.common.views import cors_policy, obj_id_from_url
+from adios_db_api.common.views import cors_policy, obj_id_from_url
 
 
 logger = logging.getLogger(__name__)

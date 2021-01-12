@@ -6,7 +6,7 @@ import os
 from unittest import TestCase
 from webtest import TestApp
 
-from oil_database_api import main
+from adios_db_api import main
 
 
 class FunctionalTestBase(TestCase):
@@ -23,7 +23,7 @@ class FunctionalTestBase(TestCase):
                     'pyramid.reload_templates': 'true',
                     'mongodb.host': 'localhost',
                     'mongodb.port': '27017',
-                    'mongodb.database': 'oil_database',
+                    'mongodb.database': 'adios_db',
                     'mongodb.alias': 'oil-db-app',
                     'caps.can_modify_db': 'false',
                     'install_path': '.',

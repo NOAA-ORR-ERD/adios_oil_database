@@ -13,7 +13,7 @@ from pyramid.scripts.common import parse_vars
 
 from pymodm.errors import DoesNotExist
 
-from oil_database.util.db_connection import connect_modb
+from adios_db.util.db_connection import connect_modb
 
 ###
 #
@@ -110,14 +110,14 @@ def main(argv=sys.argv, proc=plot_oil_viscosities):
 
     setup_logging(config_uri)
     settings = get_appsettings(config_uri,
-                               name='oil_database_api',
+                               name='adios_db_api',
                                options=options)
 
     # One more time, this is annoying.  We have to connect to *something*
     # in order for us to even import our model classes.
     connect_modb(settings)
     global Oil
-    from oil_database.models.oil import Oil
+    from adios_db.models.oil import Oil
 
     try:
         proc(settings)

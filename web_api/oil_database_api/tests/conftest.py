@@ -20,7 +20,7 @@ SETTINGS = {'cors_policy.origins': ('http://0.0.0.0:8080\n'
             'pyramid.reload_templates': 'true',
             'mongodb.host': 'localhost',
             'mongodb.port': '27017',
-            'mongodb.database': 'oil_database',
+            'mongodb.database': 'adios_db',
             'mongodb.alias': 'oil-db-app',
             'caps.can_modify_db': 'false',
             'install_path': '.',

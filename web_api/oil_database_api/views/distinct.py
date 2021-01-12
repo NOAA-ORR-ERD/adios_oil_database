@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from cornice import Service
 
-from oil_database_api.common.views import cors_policy
+from adios_db_api.common.views import cors_policy
 
 distinct_api = Service(name='distinct', path='/distinct',
                        description=('List the distinct values of the '
@@ -25,8 +25,8 @@ def get_distinct(request):
 
     attrs = ('location',)
 
-    oils = request.db.oil_database.oil
-    categories = request.db.oil_database.category
+    oils = request.db.adios_db.oil
+    categories = request.db.adios_db.category
 
     for ir_attrs in oils.find({}, projection=attrs + ('categories',)):
         for a in attrs:

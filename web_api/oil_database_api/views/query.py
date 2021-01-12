@@ -5,10 +5,10 @@ from cornice import Service
 
 from pyramid.httpexceptions import HTTPBadRequest
 
-from oil_database.util.json import jsonify_model_obj
+from adios_db.util.json import jsonify_model_obj
 
-from oil_database_api.common.views import (cors_policy,
-                                           cors_exception)
+from adios_db_api.common.views import (cors_policy,
+                                       cors_exception)
 
 log = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ def query_oils(request):
     except Exception:
         raise cors_exception(request, HTTPBadRequest)
 
-    db = request.mdb_client.oil_database
+    db = request.mdb_client.adios_db
 
     table_name = json_request.get('table', 'oil')
     query = json_request.get('query', {})
