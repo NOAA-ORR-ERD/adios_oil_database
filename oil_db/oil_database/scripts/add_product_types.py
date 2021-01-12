@@ -6,19 +6,9 @@ Add the product types to all records, from a CSV file
 NOTE: this is really only designed to be run once, but
       I'm keeping it here as an example for future, similar work
 """
-
-#!/usr/bin/env python
-
-"""
-generates a validation report from a collection of oil JSON files
-"""
-
 import sys
-import datetime
-import json
 import csv
 
-from oil_database.models.oil.cleanup.density import FixAPI
 from oil_database.models.oil.product_type import PRODUCT_TYPES
 from oil_database.scripting import get_all_records
 
@@ -32,10 +22,12 @@ If "dry_run" is on the command line, it will report what it would do,
 but not save any changes
 """
 
+
 def read_the_csv_file(csv_name):
     print("Reading product types from:", csv_name)
     with open(csv_name) as csvfile:
-        data = {(row[0][:2] + row[0][-5:]): row[1:] for row in csv.reader(csvfile, delimiter="\t")}
+        data = {(row[0][:2] + row[0][-5:]): row[1:]
+                for row in csv.reader(csvfile, delimiter="\t")}
     print(f"loaded {len(data) - 1} records")
     return data
 
@@ -89,6 +81,3 @@ def add_them(data):
 if __name__ == "__main__":
     data = read_the_csv_file("Evaluation_Of_Oil_Type_List - temp.tsv")
     add_them(data)
-
-
-
