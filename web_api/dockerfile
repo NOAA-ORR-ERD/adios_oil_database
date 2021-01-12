@@ -3,6 +3,8 @@
 
 FROM registry.orr.noaa.gov/erd/centos-conda
 
+RUN echo "ip_resolve=4" >> /etc/yum.conf
+
 RUN yum update -y
 RUN yum install -y redis
 
