@@ -3,7 +3,7 @@
 '''
 import pytest
 
-from oil_database.models.common import Synonym
+from adios_db.models.common import Synonym
 
 
 class TestSynonym():

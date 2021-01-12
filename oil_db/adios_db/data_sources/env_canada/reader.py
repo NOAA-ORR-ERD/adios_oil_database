@@ -5,7 +5,7 @@ from collections import defaultdict
 
 from openpyxl import load_workbook
 
-from oil_database.util import sigfigs, strip
+from ...util import sigfigs, strip
 
 logger = logging.getLogger(__name__)
 

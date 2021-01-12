@@ -7,26 +7,26 @@ from argparse import ArgumentParser
 
 from pymongo.errors import DuplicateKeyError
 
-from oil_database.util.term import TermColor as tc
-from oil_database.util.db_connection import connect_mongodb
-from oil_database.util.settings import file_settings, default_settings
+from adios_db.util.term import TermColor as tc
+from adios_db.util.db_connection import connect_mongodb
+from adios_db.util.settings import file_settings, default_settings
 
-from oil_database.data_sources.noaa_fm import (OilLibraryCsvFile,
-                                               OilLibraryRecordParser,
-                                               OilLibraryAttributeMapper)
+from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
+                                           OilLibraryRecordParser,
+                                           OilLibraryAttributeMapper)
 
-from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
-                                                  EnvCanadaRecordParser,
-                                                  EnvCanadaRecordMapper)
+from adios_db.data_sources.env_canada import (EnvCanadaOilExcelFile,
+                                              EnvCanadaRecordParser,
+                                              EnvCanadaRecordMapper)
 
-from oil_database.data_sources.exxon_assays import (ExxonDataReader,
-                                                    ExxonRecordParser,
-                                                    ExxonMapper)
+from adios_db.data_sources.exxon_assays import (ExxonDataReader,
+                                                ExxonRecordParser,
+                                                ExxonMapper)
 
 # obsolete -- need totally new code.
-#from oil_database.db_init.labels import link_oil_to_labels
-from oil_database.models.oil.validation.validate import validate_json
-from oil_database.models.oil.completeness import set_completeness
+#from adios_db.db_init.labels import link_oil_to_labels
+from adios_db.models.oil.validation.validate import validate_json
+from adios_db.models.oil.completeness import set_completeness
 
 logger = logging.getLogger(__name__)
 

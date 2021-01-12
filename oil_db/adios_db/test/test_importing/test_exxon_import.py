@@ -15,14 +15,14 @@ import pytest
 
 import unit_conversion as uc
 
-import oil_database
-from oil_database.util import sigfigs
-from oil_database.data_sources.exxon_assays import (ExxonDataReader,
-                                                    ExxonMapper,
-                                                    ExxonRecordParser
-                                                    )
+import adios_db
+from adios_db.util import sigfigs
+from adios_db.data_sources.exxon_assays import (ExxonDataReader,
+                                                ExxonMapper,
+                                                ExxonRecordParser
+                                                )
 
-from oil_database.models.common.measurement import (Temperature,
+from adios_db.models.common.measurement import (Temperature,
                                                     VolumeFraction)
 
 example_dir = Path(__file__).resolve().parent / "example_data"
@@ -428,7 +428,7 @@ class TestExxonMapper():
 
         filename = 'EX-Example-Record.json'
         file_path = os.path.sep.join(
-            oil_database.__file__.split(os.path.sep)[:-3] + ['examples',
+            adios_db.__file__.split(os.path.sep)[:-3] + ['examples',
                                                              filename]
         )
 

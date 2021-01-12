@@ -2,7 +2,7 @@ import pytest
 
 from bson.objectid import ObjectId
 
-from oil_database.util.json import (fix_bson_ids,
+from adios_db.util.json import (fix_bson_ids,
                                     json_to_bson_obj_id,
                                     ObjFromDict)
 

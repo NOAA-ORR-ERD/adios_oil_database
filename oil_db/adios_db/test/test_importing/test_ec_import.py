@@ -16,11 +16,11 @@ import numpy as np
 
 from openpyxl.utils.exceptions import InvalidFileException
 
-import oil_database
-from oil_database.data_sources.env_canada import (EnvCanadaOilExcelFile,
-                                                  EnvCanadaRecordParser,
-                                                  EnvCanadaRecordMapper,
-                                                  EnvCanadaSampleMapper)
+import adios_db
+from adios_db.data_sources.env_canada import (EnvCanadaOilExcelFile,
+                                              EnvCanadaRecordParser,
+                                              EnvCanadaRecordMapper,
+                                              EnvCanadaSampleMapper)
 
 from pprint import pprint
 
@@ -1849,7 +1849,7 @@ class TestEnvCanadaRecordMapper(object):
 
         filename = 'EC-Example-Record.json'
         file_path = os.path.sep.join(
-            oil_database.__file__.split(os.path.sep)[:-3] + ['examples',
+            adios_db.__file__.split(os.path.sep)[:-3] + ['examples',
                                                              filename]
         )
 

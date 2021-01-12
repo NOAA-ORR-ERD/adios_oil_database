@@ -6,8 +6,8 @@ import os
 import logging
 from argparse import ArgumentParser
 
-from oil_database.util.db_connection import connect_mongodb
-from oil_database.util.settings import file_settings, default_settings
+from adios_db.util.db_connection import connect_mongodb
+from adios_db.util.settings import file_settings, default_settings
 
 logger = logging.getLogger(__name__)
 

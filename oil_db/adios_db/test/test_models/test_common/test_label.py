@@ -3,7 +3,7 @@ Test our Label model class
 '''
 import pytest
 
-from oil_database.models.common import Label
+from adios_db.models.common import Label
 
 
 class TestLabel():

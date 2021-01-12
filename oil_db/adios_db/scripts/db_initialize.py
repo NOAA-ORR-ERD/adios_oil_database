@@ -4,12 +4,10 @@ import io
 import logging
 from argparse import ArgumentParser
 
-from pymongo.errors import ConnectionFailure
-
-from oil_database.util.db_connection import connect_mongodb
-from oil_database.util.settings import file_settings, default_settings
-from oil_database.db_init.labels import (load_labels, print_all_labels)
-from oil_database.db_init.database import drop_db, create_indices
+from adios_db.util.db_connection import connect_mongodb
+from adios_db.util.settings import file_settings, default_settings
+from adios_db.db_init.labels import (load_labels, print_all_labels)
+from adios_db.db_init.database import drop_db, create_indices
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)

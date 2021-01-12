@@ -1,8 +1,9 @@
 
 import pytest
 
-from oil_database.util.csv import (CSVFile, CSVFileWithHeader,
-                                   FileHeaderLengthError)
+from adios_db.util.csv import (CSVFile,
+                               CSVFileWithHeader,
+                               FileHeaderLengthError)
 
 
 @pytest.fixture(scope='session')

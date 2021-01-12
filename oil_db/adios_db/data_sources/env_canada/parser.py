@@ -2,7 +2,7 @@
 import re
 import logging
 
-from oil_database.util import sigfigs
+from adios_db.util import sigfigs
 
 from ..parser import ParserBase, join_with, parse_time, date_only
 

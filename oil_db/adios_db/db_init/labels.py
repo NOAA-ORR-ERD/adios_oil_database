@@ -16,8 +16,8 @@
 '''
 import logging
 
-from oil_database.data_sources.oil import OilEstimation
-from oil_database.models.oil.product_type import types_to_labels
+from adios_db.data_sources.oil import OilEstimation
+from adios_db.models.oil.product_type import types_to_labels
 
 logger = logging.getLogger(__name__)
 

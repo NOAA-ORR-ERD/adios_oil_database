@@ -10,30 +10,30 @@ import logging
 
 import unit_conversion as uc
 
-from oil_database.util import sigfigs
-from oil_database.models.common.measurement import (UnittedValue,
-                                                    Length,
-                                                    Temperature,
-                                                    MassFraction,
-                                                    VolumeFraction,
-                                                    Density,
-                                                    KinematicViscosity,
-                                                    Pressure)
+from ...util import sigfigs
+from ...models.common.measurement import (UnittedValue,
+                                          Length,
+                                          Temperature,
+                                          MassFraction,
+                                          VolumeFraction,
+                                          Density,
+                                          KinematicViscosity,
+                                          Pressure)
 
-from oil_database.models.oil.physical_properties import (DensityPoint,
-                                                         KinematicViscosityPoint,
-                                                         )
-from oil_database.models.oil.properties import DistCut
-from oil_database.models.oil.values import Reference
+from ...models.oil.physical_properties import (DensityPoint,
+                                               KinematicViscosityPoint,
+                                               )
+from ...models.oil.properties import DistCut
+from ...models.oil.values import Reference
 
-from oil_database.models.oil.oil import Oil
-from oil_database.models.oil.sample import Sample, SampleList
+from ...models.oil.oil import Oil
+from ...models.oil.sample import Sample, SampleList
 
-from oil_database.models.oil.metadata import SampleMetaData
-from oil_database.models.oil.compound import Compound
-from oil_database.models.oil.physical_properties import PhysicalProperties
-from oil_database.models.oil.environmental_behavior import EnvironmentalBehavior
-from oil_database.models.oil.sara import Sara
+from ...models.oil.metadata import SampleMetaData
+from ...models.oil.compound import Compound
+from ...models.oil.physical_properties import PhysicalProperties
+from ...models.oil.environmental_behavior import EnvironmentalBehavior
+from ...models.oil.sara import Sara
 
 logger = logging.getLogger(__name__)
 

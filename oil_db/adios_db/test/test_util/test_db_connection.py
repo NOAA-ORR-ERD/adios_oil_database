@@ -14,7 +14,7 @@ import pytest
 # Pass the --mongo command line option if you want these to run.
 pytestmark = pytest.mark.mongo
 
-from oil_database.util.db_connection import connect_mongodb
+from adios_db.util.db_connection import connect_mongodb
 
 
 @pytest.fixture
@@ -24,7 +24,7 @@ def mongodb_settings():
     '''
     return {'mongodb.host': 'localhost',
             'mongodb.port': 27017,
-            'mongodb.database': 'oil_database',
+            'mongodb.database': 'adios_db',
             'mongodb.alias': 'oil-db-app'}
 
 

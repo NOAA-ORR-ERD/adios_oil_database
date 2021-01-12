@@ -4,8 +4,8 @@ NOTE: this really should be more extensivly tested!
 
 from dataclasses import dataclass, field
 
-from oil_database.models.common.utilities import (JSON_List,
-                                                  dataclass_to_json)
+from adios_db.models.common.utilities import (JSON_List,
+                                              dataclass_to_json)
 
 import pytest
 

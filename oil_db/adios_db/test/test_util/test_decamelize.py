@@ -1,7 +1,7 @@
 
 import pytest
 
-from oil_database.util.decamelize import (separate_camelcase,
+from adios_db.util.decamelize import (separate_camelcase,
                                           camelcase_to_sep,
                                           camelcase_to_space,
                                           camelcase_to_underscore)

@@ -1,6 +1,6 @@
 import pytest
 
-from oil_database.util.term import TermColor
+from adios_db.util.term import TermColor
 
 
 class TestTermColor(object):

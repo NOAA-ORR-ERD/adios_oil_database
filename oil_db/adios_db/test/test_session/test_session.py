@@ -3,11 +3,10 @@ from pathlib import Path
 
 import pytest
 
-from oil_database.util.db_connection import connect_mongodb
-from oil_database.scripts.db_initialize import init_db
-from oil_database.scripts.db_restore import restore_db
+from adios_db.util.db_connection import connect_mongodb
+from adios_db.scripts.db_initialize import init_db
+from adios_db.scripts.db_restore import restore_db
 
-from pprint import pprint
 
 here = Path(__file__).resolve().parent
 
@@ -19,7 +18,7 @@ pytestmark = pytest.mark.mongo
 class SessionTestBase:
     settings = {'mongodb.host': 'localhost',
                 'mongodb.port': '27017',
-                'mongodb.database': 'oil_database_test',
+                'mongodb.database': 'adios_db_test',
                 'mongodb.alias': 'oil-db-app',
                 }
 

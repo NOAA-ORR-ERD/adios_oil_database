@@ -2,7 +2,7 @@
 import pytest
 import math
 
-from oil_database.models.common import (ProductType,
+from adios_db.models.common import (ProductType,
                                         UnittedValue,
                                         UnittedRange,
                                         MeasurementBase,

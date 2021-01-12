@@ -12,7 +12,7 @@ np = docutils = pytest.importorskip("numpy")
 
 # import numpy as np
 
-from oil_database.util.estimations import (density_from_api,
+from adios_db.util.estimations import (density_from_api,
                                            api_from_density,
                                            density_at_temp,
                                            vol_expansion_coeff,

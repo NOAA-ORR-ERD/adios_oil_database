@@ -5,8 +5,8 @@ from math import isclose
 
 from ..mapper import MapperBase
 
-from oil_database.util import sigfigs
-from oil_database.models.oil.oil import Oil
+from adios_db.util import sigfigs
+from adios_db.models.oil.oil import Oil
 
 logger = logging.getLogger(__name__)
 

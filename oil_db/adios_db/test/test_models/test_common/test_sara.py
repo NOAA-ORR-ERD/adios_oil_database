@@ -3,7 +3,7 @@
 '''
 import pytest
 
-from oil_database.models.common import (SARAFraction, SARADensity,
+from adios_db.models.common import (SARAFraction, SARADensity,
                                         MolecularWeight)
 
 

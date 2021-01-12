@@ -5,8 +5,8 @@ import logging
 
 from slugify import Slugify
 
-from oil_database.util import sigfigs
-from oil_database.models.oil.oil import Oil
+from adios_db.util import sigfigs
+from adios_db.models.oil.oil import Oil
 from ..mapper import MapperBase
 
 custom_slugify = Slugify(to_lower=True, separator='_')

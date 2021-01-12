@@ -5,7 +5,7 @@ these test the ones in the __init__.py
 """
 
 import pytest
-from oil_database import util
+from adios_db import util
 
 
 @pytest.mark.parametrize("val, num_figs, expected",
