@@ -4,7 +4,7 @@ tests for making a GNOME Oil
 """
 
 from pathlib import Path
-
+from math import isclose
 # import pytest
 
 from adios_db.models.oil.oil import Oil
@@ -27,11 +27,14 @@ def test_metadata():
     assert data['api'] == FullOil.metadata.API
     assert data['adios_oil_id'] == "EC002234"
 
+
 def test_physical_properties():
 
     data = make_gnome_oil(FullOil)
 
-    assert data['flash_point'] == 268.15
+    assert isclose(data['flash_point'], 268.15)
+    assert isclose(data['pour_point'], 248.15)
+
 
 def test_densities():
 

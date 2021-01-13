@@ -76,6 +76,7 @@ def make_gnome_oil(oil):
     phys_props = oil.sub_samples[0].physical_properties
 
     go['flash_point'] = phys_props.flash_point.measurement.converted_to('K').max_value
+    go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').max_value
 
     # fixme: We need to get the weathered densities, if they are there.
     densities = get_density_data(oil, density_units="kg/m^3", temp_units="K")
