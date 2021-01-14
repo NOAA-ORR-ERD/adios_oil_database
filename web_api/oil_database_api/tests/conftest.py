@@ -6,7 +6,7 @@ import pytest
 from webtest import TestApp
 from webtest.app import AppError
 
-from oil_database_api import main
+from adios_db_api import main
 
 
 SETTINGS = {'cors_policy.origins': ('http://0.0.0.0:8080\n'

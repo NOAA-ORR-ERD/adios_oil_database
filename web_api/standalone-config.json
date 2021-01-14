@@ -7,7 +7,7 @@
 
 "mongodb.host": "localhost",
 "mongodb.port": 27017,
-"mongodb.database": "oil_database",
+"mongodb.database": "adios_db",
 "mongodb.alias": "oil-db-app",
 
 "pyramid.reload_templates": true,

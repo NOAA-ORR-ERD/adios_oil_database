@@ -1,4 +1,4 @@
-# conda requirements file for the oil_database_api package.
+# conda requirements file for the adios_db_api package.
 
 # These should all be in one of the following channels:
 # 1: conda-forge
@@ -8,8 +8,7 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-mongodb>=4.2.0
-pymongo>=3.11.0
+python=3.8.*
 
 pyramid>=1.10.1
 pyramid_tm

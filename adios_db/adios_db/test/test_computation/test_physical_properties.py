@@ -10,10 +10,7 @@ from adios_db.models.oil.oil import Oil
 from adios_db.computation.physical_properties import get_density_data
 
 ExampleRecordFile = Path(__file__).parent.parent / "test_models" / "test_oil" / "ExampleFullRecord.json"
-
 FullOil = Oil.from_file(ExampleRecordFile)
-
-print(FullOil)
 
 
 def test_get_density_data_defaults():

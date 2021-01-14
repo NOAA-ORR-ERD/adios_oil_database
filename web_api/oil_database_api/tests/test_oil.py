@@ -12,7 +12,6 @@ import copy
 from .base import FunctionalTestBase
 from .sample_oils import basic_noaa_fm
 
-from pprint import pprint
 from builtins import isinstance, dict
 
 
@@ -22,6 +21,7 @@ class OilTestBase(FunctionalTestBase):
         content.  They are not pytests in and of themselves, but return a
         valid status.
     '''
+
     def jsonapi_request(self, oil_obj):
         json_obj = {'data': {'attributes': oil_obj}}
 
@@ -362,7 +362,7 @@ class OilTests(OilTestBase):
 
             print('oil: ', oil['data']['_id'])
 
-            # The oil_database module has its own tests for all the oil
+            # The adios_db module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
 
             for k in ('_id',

@@ -14,6 +14,8 @@ from pyramid.renderers import JSON as JSONRenderer
 
 from .common.views import cors_policy
 
+__version__ = "0.2.1"
+
 
 def load_cors_origins(settings, key):
     print("loading cors policy", key)

@@ -2,24 +2,38 @@
 import os
 import glob
 import shutil
+from pathlib import Path
 
 from setuptools import setup, find_packages
 from distutils.command.clean import clean
 
+
+def get_version(pkg_name):
+    """
+    Reads the version string from the package __init__ and returns it
+    """
+    with open(os.path.join(pkg_name, "__init__.py")) as init_file:
+        for line in init_file:
+            parts = line.strip().partition("=")
+            if parts[0].strip() == "__version__":
+                return parts[2].strip().strip("'").strip('"')
+    return None
+
+pkg_name = 'adios_db_api'
+
 # could run setup from anywhere
-here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, '../README.md')).read()
-pkg_name = 'oil_database_api'
-pkg_version = '0.0.1'
+here = Path(__file__).parent()
+README = open(here / '../README.md').read()
+pkg_version = get_version(pkg_name)
 
 
-requires = ['plaster_pastedeploy',
+requires = [  # 'plaster_pastedeploy',
             'pyramid',
-            'pyramid_mako',
+              # 'pyramid_mako',
             'pyramid_debugtoolbar',
             'waitress']
 
-tests_require = ['WebTest >= 1.3.1',  # py3 compat
+tests_require = ['WebTest >= 1.3.1',
                  'pytest',
                  'pytest-cov']
 
@@ -54,43 +68,43 @@ class cleanall(clean):
 setup(name=pkg_name,
       version=pkg_version,
       description=('{}: {}'.format(pkg_name,
-                                   'The NOAA oil library '
+                                   'The NOAA ADIOS Database '
                                    'web API server')),
       classifiers=['Programming Language :: Python',
-                   'Framework :: Pylons',
+                   'Framework :: Pyramid',
                    'Topic :: Internet :: WWW/HTTP',
                    'Topic :: Internet :: WWW/HTTP :: WSGI :: Application'
                    ],
       keywords='adios gnome oilspill weathering trajectory modeling',
-      author='ADIOS/GNOME team at NOAA ORR',
+      author='GNOME team at NOAA ORR',
       author_email='orr.gnome@noaa.gov',
-      package_data={'oil_database_api': ['tests/*.py']},
-      url='',
+      url='https://response.restoration.noaa.gov/oil-and-chemical-spills/oil-spills/response-tools/gnome-suite-oil-spill-modeling.html',
       cmdclass={'cleanall': cleanall,
                 },
       packages=find_packages(),
-      include_package_data=True,
+      # include_package_data=True,
       extras_require={'testing': tests_require,
                       },
       install_requires=requires,
-      entry_points={'paste.app_factory': ['main = oil_database_api:main', ],
+      entry_points={'paste.app_factory': ['main = adios_db_api:main', ],
                     'console_scripts': ['{} = {}:{}'
-                                        .format('export_oil_database',
-                                                'oil_database_api.scripts.reports',
+                                        .format('export_adios_db',
+                                                'adios_db_api.scripts.reports',
                                                 'export'),
                                         '{} = {}:{}'
-                                        .format('audit_oil_database',
-                                                'oil_database_api.scripts.reports',
+                                        .format('audit_adios_db',
+                                                'adios_db_api.scripts.reports',
                                                 'audit'),
                                         '{} = {}:{}'
                                         .format('audit_oil_cuts',
-                                                'oil_database_api.scripts.reports',
+                                                'adios_db_api.scripts.reports',
                                                 'audit_cuts'),
-                                        '{} = {}:{}'
-                                        .format('plot_oil_viscosity',
-                                                'oil_database_api.scripts.plot_oil_viscosity',
-                                                'main'),
+                                        # '{} = {}:{}'
+                                        # .format('plot_oil_viscosity',
+                                        #         'adios_db_api.scripts.plot_oil_viscosity',
+                                        #         'main'),
                                         ],
                     },
       zip_safe=False,
       )
+
