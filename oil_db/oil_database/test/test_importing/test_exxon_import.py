@@ -342,12 +342,12 @@ class TestExxonMapper():
     @pytest.mark.parametrize("attr, indexes, values", [
         ('saturates', range(8), [None, None, None, None,
                                  None, None, None, None]),
-        ('aromatics', range(8), [33.1, 0, 0, 10.219,
-                                 16.406, 25.962, 45.628, 84.273]),
+        ('aromatics', range(8), [None, None, None, None,
+                                 None, None, None, None]),
         ('resins', range(8), [None, None, None, None,
                               None, None, None, None]),
-        ('asphaltenes', range(8), [0.34274, None, None, None,
-                                   None, None, 0, 1.9672]),
+        ('asphaltenes', range(8), [None, None, None, None,
+                                 None, None, None, None]),
     ])
     def test_sara(self, attr, indexes, values):
         '''
@@ -356,6 +356,9 @@ class TestExxonMapper():
             - Asphaltenes
 
             Note: saturates and resins are not found in the Exxon Assays
+            Note: We have decided that instead of C7 asphaltenes & aromatics
+                  going into SARA, we will put them into the bulk_composition
+                  list.
         '''
         samples = ExxonMapper(self.record).sub_samples
 
