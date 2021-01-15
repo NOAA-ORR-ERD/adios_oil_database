@@ -29,4 +29,8 @@ def get_density_data(oil, density_units="kg/m^3", temp_units="K"):
     return density_table
 
 
+def get_kinematic_viscosity_at_temp(temp,
+                                    kvis_units='cSt',
+                                    temp_units='C')
+
 
