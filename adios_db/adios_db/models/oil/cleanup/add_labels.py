@@ -9,7 +9,7 @@ The criteria follows the ASTM (and others) standards, where we can
 from math import inf
 
 from ..product_type import types_to_labels
-
+from ....computation.physical_properties import get_kinematic_viscosity_at_temp
 
 # # These are the current ones that aren't mapped yet:
 # 'Bitumen', 'Shale Oil', 'Fracking Oil',  'Group V',
@@ -27,6 +27,7 @@ label_map = {
    'Medium Crude': {"api_min": 22.3, "api_max": 31.1, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
    'Heavy Crude': {"api_min": -inf, "api_max": 22.3, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
 }
+
 
 def add_labels_to_oil(oil):
     """
@@ -51,9 +52,9 @@ def is_label(oil, label):
         return False
 
     api = oil.metadata.api
-    kvis = get_kvis(temp=data['kvis_temp'],
-                    kvis_units='cSt',
-                    temp_units='C')
+    kvis = get_kinematic_viscosity_at_temp(temp=data['kvis_temp'],
+                                           kvis_units='cSt',
+                                           temp_units='C')
 
     return (data['api_min'] <= api < data['api_max']
             and data['kvis_min'] <= api < data['kvis_max'])

@@ -31,6 +31,9 @@ def get_density_data(oil, density_units="kg/m^3", temp_units="K"):
 
 def get_kinematic_viscosity_at_temp(temp,
                                     kvis_units='cSt',
-                                    temp_units='C')
+                                    temp_units='C'):
+    raise NotImplementedError
+
+
 
 
