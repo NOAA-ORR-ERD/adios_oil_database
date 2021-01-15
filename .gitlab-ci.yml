@@ -17,7 +17,9 @@ test_develop:
         # mongo should have been installed by conda
         # - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
         # - yum install mongodb-org -y
-        - mongod --config /etc/mongod.conf &
+        # - mongod --config /etc/mongod.conf &
+        - cd ..
+        - mongod --config mongo_config_dev.yml &
 
         # - cd data/exxon_assays
         # - python ./download_exxon_assays.py
@@ -26,15 +28,15 @@ test_develop:
         - adios_db_init
         - adios_db_import --all
 
-        - pytest --mongo oil_database
+        - pytest --mongo adios_db/adios_db
 
         # Install & test the oil_library_api package
-        - cd ../web_api
+        - cd web_api
         - conda install --file conda_requirements.txt
         # - pip install -r pip_requirements.txt
         - pip install -e ./
 
-        - pytest oil_database_api
+        - pytest adios_db_api
     tags:
         - docker
 
@@ -42,8 +44,8 @@ build_api:
     stage: build1
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/gnome/oil_database/oil_database/api
-        - docker push registry.orr.noaa.gov/gnome/oil_database/oil_database/api
+        - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/gnome/adios_db/adios_db/api
+        - docker push registry.orr.noaa.gov/gnome/adios_db/adios_db/api
     tags:
         - shell
         - build
@@ -52,8 +54,8 @@ build_client:
     stage: build2
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build -f web_client/dockerfile . -t registry.orr.noaa.gov/gnome/oil_database/oil_database/client
-        - docker push registry.orr.noaa.gov/gnome/oil_database/oil_database/client
+        - docker build -f web_client/dockerfile . -t registry.orr.noaa.gov/gnome/adios_db/adios_db/client
+        - docker push registry.orr.noaa.gov/gnome/adios_db/adios_db/client
     tags:
         - shell
         - build

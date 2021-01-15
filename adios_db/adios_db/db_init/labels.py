@@ -16,7 +16,7 @@
 '''
 import logging
 
-from adios_db.data_sources.oil import OilEstimation
+#from adios_db.data_sources.oil import OilEstimation
 from adios_db.models.oil.product_type import types_to_labels
 
 logger = logging.getLogger(__name__)

@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings, default_settings
-from adios_db.db_init.labels import (load_labels, print_all_labels)
+# from adios_db.db_init.labels import (load_labels, print_all_labels)
 from adios_db.db_init.database import drop_db, create_indices
 
 from pprint import PrettyPrinter
