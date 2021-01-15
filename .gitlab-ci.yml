@@ -10,14 +10,12 @@ test_develop:
     script:
         # Install & test the oil_library package
         - cd adios_db
-        - conda install --file conda_requirements.txt
-        # - pip install -r pip_requirements.txt
+        - conda install -y --file conda_requirements.txt
         - pip install -e ./
 
         # mongo should have been installed by conda
         # - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
         # - yum install mongodb-org -y
-        # - mongod --config /etc/mongod.conf &
         - cd ..
         - mongod --config mongo_config_dev.yml &
 
@@ -32,8 +30,7 @@ test_develop:
 
         # Install & test the oil_library_api package
         - cd web_api
-        - conda install --file conda_requirements.txt
-        # - pip install -r pip_requirements.txt
+        - conda install -y --file conda_requirements.txt
         - pip install -e ./
 
         - pytest adios_db_api
