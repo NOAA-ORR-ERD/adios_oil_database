@@ -3,8 +3,10 @@
 
 FROM registry.orr.noaa.gov/erd/centos-conda
 
+RUN echo "ip_resolve=4" >> /etc/yum.conf
+
 RUN yum update -y
-RUN yum install -y redis
+# RUN yum install -y redis
 
 COPY ./ /adios-db/
 
@@ -12,7 +14,6 @@ RUN cp /adios-db/platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
 RUN yum install mongodb-org -y
 
 RUN cd adios-db/adios_db && conda install --file conda_requirements.txt
-# RUN cd adios-db/adios_db && pip install -r pip_requirements.txt
 RUN cd adios-db/adios_db && pip install -e ./
 
 # RUN cd adios-db/adios_db/data/exxon_assays && python ./download_exxon_assays.py
@@ -21,7 +22,6 @@ RUN mongod --config mongo_config_dev.yml & --fork && cd adios-db/adios_db && adi
 RUN mongod --config mongo_config_dev.yml & --fork && cd adios-db/adios_db && adios_db_import --all
 
 RUN cd adios-db/web_api && conda install --file conda_requirements.txt
-# RUN cd adios-db/web_api && pip install -r pip_requirements.txt
 RUN cd adios-db/web_api && pip install -e ./
 
 RUN mkdir /config

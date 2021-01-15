@@ -23,10 +23,12 @@ If "dry_run" is on the command line, it will report what it would do,
 but not save any changes
 """
 
+
 def read_the_csv_file(csv_name):
     print("Reading product types from:", csv_name)
     with open(csv_name) as csvfile:
-        data = {(row[0][:2] + row[0][-5:]): row[1:] for row in csv.reader(csvfile, delimiter="\t")}
+        data = {(row[0][:2] + row[0][-5:]): row[1:]
+                for row in csv.reader(csvfile, delimiter="\t")}
     print(f"loaded {len(data) - 1} records")
     return data
 
@@ -80,6 +82,3 @@ def add_them(data):
 if __name__ == "__main__":
     data = read_the_csv_file("Evaluation_Of_Oil_Type_List - temp.tsv")
     add_them(data)
-
-
-

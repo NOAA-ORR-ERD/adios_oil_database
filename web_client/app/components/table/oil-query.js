@@ -117,7 +117,6 @@ export default Component.extend(TableCommon, {
 
             this.incrementProperty('page');
             this.set('canLoadMore', !isEmpty(records));
-            // yield timeout(1000);  // wait 1s
         }
     }).restartable(),
 
@@ -168,6 +167,8 @@ export default Component.extend(TableCommon, {
 
             this.data.clear();
             this.set('page', 0);
+            this.set('canLoadMore', true);
+
             this.fetchRecords.perform();
         },
 
@@ -187,6 +188,7 @@ export default Component.extend(TableCommon, {
 
                 this.data.clear();
                 this.set('page', 0);
+                this.set('canLoadMore', true);
 
                 this.get('fetchRecords').perform();
             }

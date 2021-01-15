@@ -133,9 +133,10 @@ MAPPING = {
         'element_of': 'industry_properties',
     },
     norm('N-Heptane Insolubles (C7 Asphaltenes), wt%'): {
-        'attr': 'SARA.asphaltenes',
+        'attr': 'N-Heptane Insolubles (C7 Asphaltenes)',
         'unit': '%',
         'cls': MassFraction,
+        'element_of': 'bulk_composition',
     },
     norm('Nickel, ppm'): {
         'attr': 'Nickel Mass Fraction',
@@ -191,9 +192,10 @@ MAPPING = {
         'element_of': 'bulk_composition',
     },
     norm('Aromatics (FIA), vol %'): {
-        'attr': 'SARA.aromatics',
+        'attr': 'Aromatics (FIA)',
         'unit': '%',
         'cls': VolumeFraction,
+        'element_of': 'bulk_composition',
     },
     #
     # Bunch of distillation props (not a simple map)
@@ -265,6 +267,9 @@ def ExxonMapper(record):
     data = iter(data)
 
     reference = read_header(data)
+    reference.reference += ('\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
+                            '\nAccessed: Dec 9th, 2020')
+    reference.year = 2020
 
     oil_id, ref_id, sample_names = read_identification(data)
 
