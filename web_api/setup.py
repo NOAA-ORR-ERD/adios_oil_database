@@ -22,7 +22,7 @@ def get_version(pkg_name):
 pkg_name = 'adios_db_api'
 
 # could run setup from anywhere
-here = Path(__file__).parent()
+here = Path(__file__).parent
 README = open(here / '../README.md').read()
 pkg_version = get_version(pkg_name)
 

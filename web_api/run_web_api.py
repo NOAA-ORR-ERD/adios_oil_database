@@ -7,7 +7,7 @@ This version gets its settings from a JSON file.
 
 Usage:
 
-python run_web_api.py stand_alone_config.json
+python run_web_api.py standalone-config.json
 
 NOTE: this is missing logger configuration -- that should be added.
 """
