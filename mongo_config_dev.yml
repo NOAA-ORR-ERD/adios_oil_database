@@ -15,6 +15,6 @@ systemLog:
   logAppend: true
 
 processManagement:
-  fork: true
+  fork: false
   pidFilePath: "/var/run/mongodb/mongod.pid"  # location of pidfile
   timeZoneInfo: "/usr/share/zoneinfo"
