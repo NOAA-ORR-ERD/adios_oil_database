@@ -18,8 +18,8 @@ RUN cd adios-db/adios_db && pip install -e ./
 
 # RUN cd adios-db/adios_db/data/exxon_assays && python ./download_exxon_assays.py
 
-RUN mongod --config mongo_config_dev.yml --fork && cd adios-db/adios_db && adios_db_init
-RUN mongod --config mongo_config_dev.yml --fork && cd adios-db/adios_db && adios_db_import --all
+RUN mongod --config adios-db/mongo_config_dev.yml --fork && cd adios-db/adios_db && adios_db_init
+RUN mongod --config adios-db/mongo_config_dev.yml --fork && cd adios-db/adios_db && adios_db_import --all
 
 RUN cd adios-db/web_api && conda install --file conda_requirements.txt
 RUN cd adios-db/web_api && pip install -e ./
