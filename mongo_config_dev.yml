@@ -1,8 +1,24 @@
 # configuration for mongodb
 
 net:
+  bindIp: 127.0.0.1
   port: 27017  # this is the mongo default
+  wireObjectCheck : false
+  unixDomainSocket: 
+      enabled : true
 
 storage:
+  engine: wiredTiger
   dbPath: mongo_files
+  directoryPerDB: true
+  journal:
+      enabled: true
 
+systemLog:
+  destination: file
+  path: "/var/log/mongodb/mongod.log"
+  logAppend: true
+  timeStampFormat: iso8601-utc
+
+processManagement:
+  fork: true
