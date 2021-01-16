@@ -5,6 +5,7 @@ import shutil
 from pathlib import Path
 
 from setuptools import setup, find_packages
+from distutils.command.clean import clean
 
 
 def get_version(pkg_name):
