@@ -15,8 +15,8 @@ test_develop:
 
         - echo "ip_resolve=4" >> /etc/yum.conf
         # mongo should have been installed by conda
-        # - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
-        # - yum install mongodb-org -y
+        - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
+        - yum install mongodb-org -y
 
         - conda install -y requests lxml
         - cd data/exxon_assays
