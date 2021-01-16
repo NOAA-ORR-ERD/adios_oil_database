@@ -11,7 +11,7 @@ storage:
 
 systemLog:
   destination: file
-  path: "~/log/mongodb/mongod.log"
+  path: "/var/log/mongod.log"
   logAppend: true
 
 processManagement:
