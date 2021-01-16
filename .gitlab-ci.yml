@@ -24,7 +24,8 @@ test_develop:
 
         - cd ../../..
 
-        - mongod --config mongo_config_dev.yml &
+        - mongod --config /etc/mongod.conf &
+        #- mongod --config mongo_config_dev.yml &
 
         - adios_db_init
         - adios_db_import --all
