@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 
-import TableCommon from 'ember-oil-db/mixins/table-common';
+import TableCommon from 'adios-db/mixins/table-common';
 
 
 export default Component.extend(TableCommon, {

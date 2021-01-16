@@ -2,7 +2,7 @@
 
 module.exports = function(environment) {
   let ENV = {
-    modulePrefix: 'ember-oil-db',
+    modulePrefix: 'adios-db',
     environment,
     rootURL: '/',
     locationType: 'auto',
