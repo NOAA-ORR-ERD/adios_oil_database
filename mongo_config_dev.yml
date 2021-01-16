@@ -2,9 +2,6 @@
 
 net:
   port: 27017  # this is the mongo default
-  wireObjectCheck : false
-  unixDomainSocket: 
-      enabled : true
 
 storage:
   engine: wiredTiger
