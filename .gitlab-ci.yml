@@ -47,9 +47,10 @@ build_api:
     stage: build1
 
     script:
+        # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/gnome/adios_db/adios_db/api
-        - docker push registry.orr.noaa.gov/gnome/adios_db/adios_db/api
+        - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/gnome/oil_database/oil_database/api
+        - docker push registry.orr.noaa.gov/gnome/oil_database/oil_database/api
     tags:
         - shell
         - build
@@ -59,8 +60,8 @@ build_client:
 
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build -f web_client/dockerfile . -t registry.orr.noaa.gov/gnome/adios_db/adios_db/client
-        - docker push registry.orr.noaa.gov/gnome/adios_db/adios_db/client
+        - docker build -f web_client/dockerfile . -t registry.orr.noaa.gov/gnome/oil_database/oil_database/client
+        - docker push registry.orr.noaa.gov/gnome/oil_database/oil_database/client
     tags:
         - shell
         - build
