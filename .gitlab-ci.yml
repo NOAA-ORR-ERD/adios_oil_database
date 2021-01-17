@@ -15,6 +15,7 @@ test_develop:
         - yum install mongodb-org -y
 
         - mongod --config /etc/mongod.conf &
+        - cat /etc/mongod.conf
         #- mongod --config mongo_config_dev.yml &
 
         - conda install -y requests lxml
