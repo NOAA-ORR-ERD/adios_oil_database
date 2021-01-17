@@ -9,31 +9,32 @@ test_develop:
 
     script:
         # Install & test the oil_library package
-        - cd adios_db
-        - conda install -y --file conda_requirements.txt
-        - pip install -e ./
-
         - echo "ip_resolve=4" >> /etc/yum.conf
         # mongo should have been installed by conda
         - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
         - yum install mongodb-org -y
 
-        - conda install -y requests lxml
-        - cd data/exxon_assays
-        - python ./download_exxon_assays.py
-
-        - cd ../../..
-
         - mongod --config /etc/mongod.conf &
         #- mongod --config mongo_config_dev.yml &
+
+        - conda install -y requests lxml
+
+        - cd adios_db
+        - conda install -y --file conda_requirements.txt
+        - pip install -e ./
+
+
+        - cd data/exxon_assays
+        - python ./download_exxon_assays.py
+        - cd -
 
         - adios_db_init
         - adios_db_import --all
 
-        - pytest --mongo adios_db/adios_db
+        - pytest --mongo adios_db
 
         # Install & test the oil_library_api package
-        - cd web_api
+        - cd ../web_api
         - conda install -y --file conda_requirements.txt
         - pip install -e ./
 
