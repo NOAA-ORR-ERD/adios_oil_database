@@ -10,13 +10,15 @@ test_develop:
     script:
         # Install & test the oil_library package
         - echo "ip_resolve=4" >> /etc/yum.conf
-        # mongo should have been installed by conda
-        - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
-        - yum install mongodb-org -y
+        - yum update -y
 
-        - mongod --config /etc/mongod.conf &
-        - cat /etc/mongod.conf
-        #- mongod --config mongo_config_dev.yml &
+        # mongo should have been installed by conda, but conda doesn't reserve
+        # places for the logs, the database, and the pidfile
+        - mkdir /var/lib/mongo
+        - mkdir /var/log/mongodb
+        - mkdir /var/run/mongodb
+
+        - mongod --config mongo_config_dev.yml &
 
         - conda install -y requests lxml
 
