@@ -12,13 +12,6 @@ test_develop:
         - echo "ip_resolve=4" >> /etc/yum.conf
         - yum update -y
 
-        # mongo should have been installed by conda, but conda doesn't reserve
-        # places for the logs, the database, and the pidfile
-        - mkdir /var/lib/mongo
-        - mkdir /var/log/mongodb
-        - mkdir /var/run/mongodb
-
-        - mongod --config mongo_config_dev.yml &
 
         - conda install -y requests lxml
 
@@ -26,6 +19,13 @@ test_develop:
         - conda install -y --file conda_requirements.txt
         - pip install -e ./
 
+        # mongo should have been installed by conda, but conda doesn't reserve
+        # places for the logs, the database, and the pidfile
+        - mkdir /var/lib/mongo
+        - mkdir /var/log/mongodb
+        - mkdir /var/run/mongodb
+
+        - mongod --config mongo_config_dev.yml &
 
         - cd data/exxon_assays
         - python ./download_exxon_assays.py
