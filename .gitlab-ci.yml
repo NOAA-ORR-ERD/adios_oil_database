@@ -25,6 +25,7 @@ test_develop:
         - mkdir /var/log/mongodb
         - mkdir /var/run/mongodb
 
+        - pwd
         - mongod --config ../mongo_config_dev.yml &
 
         - cd data/exxon_assays
