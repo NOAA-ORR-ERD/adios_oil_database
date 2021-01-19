@@ -10,8 +10,11 @@ RUN yum update -y
 
 COPY ./ /adios-db/
 
-RUN cp /adios-db/platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
-RUN yum install mongodb-org -y
+#RUN cp /adios-db/platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
+#RUN yum install mongodb-org -y
+RUN ls -l /var/log
+RUN ls -l /var/run
+RUN ls -l /usr/share/zoneinfo
 
 RUN cd adios-db/adios_db && conda install --file conda_requirements.txt
 RUN cd adios-db/adios_db && pip install -e ./
