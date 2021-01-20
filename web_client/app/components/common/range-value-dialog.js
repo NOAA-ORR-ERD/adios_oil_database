@@ -1,12 +1,13 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
-import { valueUnitUnit } from 'ember-oil-db/helpers/value-unit-unit';
-import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
-import { valueUnit } from 'ember-oil-db/helpers/value-unit';
+import { valueUnitUnit } from 'adios-db/helpers/value-unit-unit';
+import { convertUnit } from 'adios-db/helpers/convert-unit';
+import { valueUnit } from 'adios-db/helpers/value-unit';
 import $ from 'jquery';
 
 const ESC_KEY = 27;
+
 
 export default class RangeValueDialog extends Component {
     

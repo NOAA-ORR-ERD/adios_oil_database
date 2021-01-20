@@ -14,7 +14,7 @@ from pyramid.scripts.common import get_config_loader
 import pkg_resources.py2_warn  # only in setuptools 45
 import pyramid_tm
 # import cornice  # this is gotten by copying it in later.
-import oil_database_api.views
+import adios_db_api.views
 
 
 class ServerCommand(object):

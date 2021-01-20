@@ -1,8 +1,20 @@
 # configuration for mongodb
 
 net:
+  bindIp: 127.0.0.1  # Enter 0.0.0.0,:: to bind to all IPv4 and IPv6 addresses or, alternatively, use the net.bindIpAll setting.
   port: 27017  # this is the mongo default
 
 storage:
-  dbPath: mongo_files
+   dbPath: "/var/lib/mongo"
+   journal:
+     enabled: true
 
+systemLog:
+  destination: file
+  logAppend: true
+  path: "/var/log/mongodb/mongod.log"
+
+processManagement:
+  fork: false
+  pidFilePath: "/var/run/mongodb/mongod.pid"  # location of pidfile
+  timeZoneInfo: "/usr/share/zoneinfo"
