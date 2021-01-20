@@ -36,7 +36,7 @@ class MetaData:
             if self.product_type in DOESNT_NEED_API:
                 msgs.append(WARNINGS["W004"])
             else:
-                msgs.append(ERRORS["E002"])
+                msgs.append(ERRORS["E030"])
         elif not (-60.0 < api < 100):  # somewhat arbitrary limits
             msgs.append(WARNINGS["W005"].format(api=api))
 

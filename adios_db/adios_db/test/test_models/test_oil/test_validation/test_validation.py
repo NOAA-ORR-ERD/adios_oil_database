@@ -57,8 +57,9 @@ def test_no_id():
     """
     try:
         validate_json({"this": 3})
-    except TypeError as err:
-        assert ("E001: Record has no oil_id: every record must have an ID"
+    except ValueError as err:
+        print(str(err))
+        assert ("E010: Record has no oil_id: every record must have an ID"
                 in str(err))
 
 
@@ -127,7 +128,7 @@ def test_no_api_crude(no_type_oil):
     oil = no_type_oil
     oil.metadata.product_type = "Crude Oil NOS"
     validate(oil)
-    assert snippet_in_oil_status("E002:", oil)
+    assert snippet_in_oil_status("E030:", oil)
 
 
 def test_no_api_not_crude(no_type_oil):
@@ -147,7 +148,7 @@ def test_api_outragious(no_type_oil):
 def test_no_subsamples(no_type_oil):
     oil = no_type_oil
     validate(oil)
-    assert snippet_in_oil_status("E003", oil)
+    assert snippet_in_oil_status("E031", oil)
 
 
 def test_api_real_record(big_record):
@@ -216,7 +217,7 @@ def test_bad_year_in_reference(big_record):
 
     validate(oil)
 
-    assert snippet_in_oil_status("E004", oil)
+    assert snippet_in_oil_status("E012", oil)
 
 
 def test_good_year_in_reference(big_record):

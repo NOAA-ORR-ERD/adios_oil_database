@@ -80,7 +80,7 @@ class SampleList(JSON_List):
         msgs = []
         # make sure there's at least one subsample
         if len(self) == 0:
-            msgs.append(ERRORS["E003"])
+            msgs.append(ERRORS["E031"])
         else:
             # check for densities
             # note: would be good to be smart about the temp densities are at

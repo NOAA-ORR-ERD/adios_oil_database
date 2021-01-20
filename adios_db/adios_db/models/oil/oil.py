@@ -71,17 +71,38 @@ class Oil:
 
         return cls.from_py_json(py_json)
 
+    @staticmethod
+    def _validate_id(id):
+        if self.oil_id == "":
+            raise TypeError("You must supply a non-empty oil_id")
+        elif not isinstance(self.oil_id, str):
+            raise ValueError("oil_id must be a string")
+        elif len(self.oil_id) > 32:  # arbitrary limit to catch ridiculous ones
+            raise ValueError("oil_id must be a string less than 32 characters in length")
+
+
     def validate(self):
+        """
+        validation specific to the Oil object itself
+
+        validation of sub-objects is automatically applied
+        """
         msgs = []
-        # check for subsamples
-        if not self.sub_samples:
-            msgs.append(ERRORS["E003"])
+
+        # Validate ID
+        if (not 0 < len(self.oil_id) <= 32
+            or not isinstance(self.oil_id, str)):
+
+            msgs.append(ERRORS["E001"].format(self.oil_id))
 
         return msgs
 
     def reset_validation(self):
+        """
+        calls the validate method, and updates the status with the result
+        """
         msgs = self.validate()
-        self.status = msgs
+        self.status = list(set(msgs))
         return msgs
 
     def to_file(self, infile):
