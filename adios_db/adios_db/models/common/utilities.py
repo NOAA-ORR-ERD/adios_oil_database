@@ -4,7 +4,6 @@ Tools for helping make our data models.
 So far: making dataclasses read/writable as JSON
 """
 
-
 def something(val):
     '''
         much like python's "Truthy" and Falsey", but we want some values
@@ -89,7 +88,13 @@ def dataclass_to_json(cls):
         The top-level validator extends the existing list
         """
         # print("validate called in: ", type(self))
-        messages = []
+
+        # first see if there is a "private" one:
+        try:
+            messages = self._validate()
+        except AttributeError:
+            messages = []
+
         for fieldname, fieldobj in self.__dataclass_fields__.items():
             value = getattr(self, fieldname)
             # print(f"trying to validate: {fieldname} with value: {repr(value)}")
@@ -113,6 +118,8 @@ def dataclass_to_json(cls):
 
     cls.py_json = py_json
     cls.from_py_json = from_py_json
+    if hasattr(cls, "validate"):
+        cls._validate = cls.validate
     cls.validate = validate
     cls.__setattr__ = __setattr__
 

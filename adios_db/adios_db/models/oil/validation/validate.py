@@ -32,10 +32,9 @@ from ..oil import Oil
 
 import logging
 
-from ..product_type import DOESNT_NEED_API
 
 # Putting these all here so we can keep track more easily
-from .warnings import WARNINGS
+# from .warnings import WARNINGS
 from .errors import ERRORS
 
 logger = logging.getLogger(__name__)
@@ -54,7 +53,6 @@ def validate_json(oil_json):
         oil = Oil.from_py_json(oil_json)
     except TypeError as err:
         if "argument: 'oil_id'" in err.args[0]:
-            print(err)
             oil_json["status"] = ERRORS["E001"]
             raise TypeError(ERRORS["E001"])
         else:
@@ -77,11 +75,11 @@ def validate(oil):
     # first call Oil Object's validate
     messages.update(oil.validate())
 
-    # then the stand-alone ones
-    for val_fun in VALIDATORS:
-        msg = val_fun(oil)
-        if msg:
-            messages.add(msg)
+    # # then the stand-alone ones
+    # for val_fun in VALIDATORS:
+    #     msg = val_fun(oil)
+    #     if msg:
+    #         messages.add(msg)
 
     # set the oil status
     oil.status = list(messages)
@@ -103,16 +101,16 @@ def validate(oil):
 #         validate_json(oil)
 
 
-def val_has_reasonable_name(oil):
-    """
-    right now, reasonable is more than 5 characters
+# def val_has_reasonable_name(oil):
+#     """
+#     right now, reasonable is more than 5 characters
 
-    we may want to add more later
-    """
-    if len(oil.metadata.name.strip()) < 5:
-        return WARNINGS["W001"].format(oil.metadata.name)
-    else:
-        return None
+#     we may want to add more later
+#     """
+#     if len(oil.metadata.name.strip()) < 5:
+#         return WARNINGS["W001"].format(oil.metadata.name)
+#     else:
+#         return None
 
 
 # def val_has_product_type(oil):
@@ -135,49 +133,49 @@ def val_has_reasonable_name(oil):
 #         return None
 
 
-def val_check_api(oil):
-    api = oil.metadata.API
-    ptype = oil.metadata.product_type
-    if api is None:
-        if ptype in DOESNT_NEED_API:
-            return WARNINGS["W004"]
-        else:
-            return ERRORS["E002"]
-    if not (-60.0 < api < 100):  # somewhat arbitrary limits
-        return WARNINGS["W005"].format(api=api)
+# def val_check_api(oil):
+#     api = oil.metadata.API
+#     ptype = oil.metadata.product_type
+#     if api is None:
+#         if ptype in DOESNT_NEED_API:
+#             return WARNINGS["W004"]
+#         else:
+#             return ERRORS["E002"]
+#     if not (-60.0 < api < 100):  # somewhat arbitrary limits
+#         return WARNINGS["W005"].format(api=api)
 
 
-def val_check_for_samples(oil):
-    if not oil.sub_samples:
-        return ERRORS["E003"]
+# def val_check_for_samples(oil):
+#     if not oil.sub_samples:
+#         return ERRORS["E003"]
 
 
-def val_check_for_densities(oil):
-    # note: would be good to be smart about temp densities are at
-    if not oil.sub_samples:
-        return WARNINGS["W006"]
+# def val_check_for_densities(oil):
+#     # note: would be good to be smart about temp densities are at
+#     if not oil.sub_samples:
+#         return WARNINGS["W006"]
 
-    if (oil.sub_samples[0].physical_properties is None or
-            oil.sub_samples[0].physical_properties.densities is None):
-        return WARNINGS["W006"]
+#     if (oil.sub_samples[0].physical_properties is None or
+#             oil.sub_samples[0].physical_properties.densities is None):
+#         return WARNINGS["W006"]
 
-    return None
-
-
-def val_check_for_distillation_cuts(oil):
-    try:
-        sample = oil.sub_samples[0]
-    except (AttributeError, IndexError):
-        return None
-
-    try:
-        if not sample.distillation_data.cuts:
-            return WARNINGS['W007']
-    except AttributeError:
-        return WARNINGS['W007']
-    return None
+#     return None
 
 
-# build a list of all the validators:
+# def val_check_for_distillation_cuts(oil):
+#     try:
+#         sample = oil.sub_samples[0]
+#     except (AttributeError, IndexError):
+#         return None
 
-VALIDATORS = [val for name, val in vars().items() if name.startswith("val_")]
+#     try:
+#         if not sample.distillation_data.cuts:
+#             return WARNINGS['W007']
+#     except AttributeError:
+#         return WARNINGS['W007']
+#     return None
+
+
+# # build a list of all the validators:
+
+# VALIDATORS = [val for name, val in vars().items() if name.startswith("val_")]

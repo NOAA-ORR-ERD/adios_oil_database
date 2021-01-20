@@ -14,6 +14,9 @@ from ..common.utilities import dataclass_to_json
 from .metadata import MetaData
 from .sample import SampleList
 
+from .validation.warnings import WARNINGS
+from .validation.errors import ERRORS
+
 
 @dataclass_to_json
 @dataclass
@@ -68,9 +71,13 @@ class Oil:
 
         return cls.from_py_json(py_json)
 
-    def _validate(self):
-        print("Oil's validate called")
+    def validate(self):
+        msgs = []
+        # check for subsamples
+        if not self.sub_samples:
+            msgs.append(ERRORS["E003"])
 
+        return msgs
 
     def reset_validation(self):
         msgs = self.validate()

@@ -7,7 +7,10 @@ from ..common.utilities import dataclass_to_json
 from ..common.measurement import MassFraction, Temperature
 
 from .values import Reference
-from .product_type import ProductType
+from .product_type import ProductType, DOESNT_NEED_API
+
+from .validation.warnings import WARNINGS
+from .validation.errors import ERRORS
 
 
 @dataclass_to_json
@@ -24,6 +27,25 @@ class MetaData:
     comments: str = ''
     labels: list = field(default_factory=list)
     model_completeness: float = None
+
+    def validate(self):
+        msgs = []
+        # check for API
+        api = self.API
+        if api is None:
+            if self.product_type in DOESNT_NEED_API:
+                msgs.append(WARNINGS["W004"])
+            else:
+                msgs.append(ERRORS["E002"])
+        elif not (-60.0 < api < 100):  # somewhat arbitrary limits
+            msgs.append(WARNINGS["W005"].format(api=api))
+
+        # Check for a reasonable name
+        # right now, reasonable is more than 5 characters -- we may want to add more later
+        if len(self.name.strip()) < 5:
+            msgs.append(WARNINGS["W001"].format(self.name))
+
+        return msgs
 
 
 @dataclass_to_json
