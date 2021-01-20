@@ -125,14 +125,14 @@ def test_big_record_no_type(big_record):
 
 def test_no_api_crude(no_type_oil):
     oil = no_type_oil
-    oil.metadata.product_type = "Crude"
+    oil.metadata.product_type = "Crude Oil NOS"
     validate(oil)
     assert snippet_in_oil_status("E002:", oil)
 
 
 def test_no_api_not_crude(no_type_oil):
     oil = no_type_oil
-    oil.metadata.product_type = "Refined"
+    oil.metadata.product_type = "Solvent"
     validate(oil)
     assert snippet_in_oil_status("W004:", oil)
 

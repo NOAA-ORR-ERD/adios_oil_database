@@ -68,6 +68,14 @@ PRODUCT_TYPES = tuple(PRODUCT_TYPE_LABEL_MAPPING)
 
 types_to_labels = ManyMany(PRODUCT_TYPE_LABEL_MAPPING)
 
+# I'd much rather not hard-code this, but how else to do it?
+# this is used by the validation code
+DOESNT_NEED_API = set(('Refined Product NOS',
+                       'Refinery Intermediate',
+                       'Solvent',
+                       'Natural Plant Oil',
+                       'Other'))
+
 
 class ProductType(str):
     _valid_types = PRODUCT_TYPES

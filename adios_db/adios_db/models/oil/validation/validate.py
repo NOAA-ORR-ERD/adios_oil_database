@@ -32,6 +32,8 @@ from ..oil import Oil
 
 import logging
 
+from ..product_type import DOESNT_NEED_API
+
 # Putting these all here so we can keep track more easily
 from .warnings import WARNINGS
 from .errors import ERRORS
@@ -136,12 +138,11 @@ def val_has_reasonable_name(oil):
 def val_check_api(oil):
     api = oil.metadata.API
     ptype = oil.metadata.product_type
-    if ptype and ptype.lower() == "crude":
-        if api is None:
-            return ERRORS["E002"]
-    else:
-        if api is None:
+    if api is None:
+        if ptype in DOESNT_NEED_API:
             return WARNINGS["W004"]
+        else:
+            return ERRORS["E002"]
     if not (-60.0 < api < 100):  # somewhat arbitrary limits
         return WARNINGS["W005"].format(api=api)
 

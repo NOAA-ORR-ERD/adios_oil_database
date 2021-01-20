@@ -41,6 +41,15 @@ class Oil:
         else:
             self._id = self.oil_id
 
+    def __str__(self):
+        """
+        need a custom str here, so we don't get a huge dump of the entire tree of data
+        """
+        return (f"{self.metadata.name}\n"
+                f"ID: {self.oil_id}\n"
+                f"Product Type: {self.metadata.product_type}"
+                )
+
     @classmethod
     def from_file(cls, infile):
         """
@@ -58,6 +67,10 @@ class Oil:
             py_json = json.load(open(infile, encoding='utf-8'))
 
         return cls.from_py_json(py_json)
+
+    def _validate(self):
+        print("Oil's validate called")
+
 
     def reset_validation(self):
         msgs = self.validate()
