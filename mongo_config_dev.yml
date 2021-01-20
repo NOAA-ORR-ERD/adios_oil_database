@@ -5,16 +5,16 @@ net:
   port: 27017  # this is the mongo default
 
 storage:
-   dbPath: "/builds/gnome/oil_database/oil_database/mongo_files"
+   dbPath: "/var/lib/mongo"
    journal:
      enabled: true
 
 systemLog:
   destination: file
   logAppend: true
-  path: "/builds/gnome/oil_database/oil_database/mongo_files/mongod.log"
+  path: "/var/log/mongodb/mongod.log"
 
 processManagement:
   fork: false
-  pidFilePath: "/builds/gnome/oil_database/oil_database/mongo_files/mongod.pid"  # location of pidfile
+  pidFilePath: "/var/run/mongodb/mongod.pid"  # location of pidfile
   timeZoneInfo: "/usr/share/zoneinfo"
