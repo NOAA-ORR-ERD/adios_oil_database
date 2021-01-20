@@ -5,7 +5,8 @@
         "name": "HOOPS Blend",
         "product_type": "Crude Oil NOS",
         "reference": {
-            "reference": "ExxonMobil\nRefining and Supply Company\n22777 Springwoods Village Parkway,\nSpring, TX 77389"
+            "reference": "ExxonMobil\nRefining and Supply Company\n22777 Springwoods Village Parkway,\nSpring, TX 77389\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download\nAccessed: Dec 9th, 2020",
+            "year": 2020
         },
         "source_id": "HOOPS16F"
     },
@@ -13,18 +14,6 @@
     "status": [],
     "sub_samples": [
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 33.1
-                },
-                "asphaltenes": {
-                    "unit": "%",
-                    "unit_type": "massfraction",
-                    "value": 0.34274
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -65,6 +54,14 @@
                         "value": 968.12
                     },
                     "name": "Nitrogen Mass Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 0.34274
+                    },
+                    "name": "N-Heptane Insolubles (C7 Asphaltenes)"
                 },
                 {
                     "measurement": {
@@ -121,6 +118,14 @@
                         "value": 31.362
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 33.1
+                    },
+                    "name": "Aromatics (FIA)"
                 }
             ],
             "cut_volume": {
@@ -375,13 +380,6 @@
             }
         },
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 0
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -438,6 +436,14 @@
                         "value": 0.0
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 0
+                    },
+                    "name": "Aromatics (FIA)"
                 }
             ],
             "cut_volume": {
@@ -524,13 +530,6 @@
             }
         },
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 0
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -587,6 +586,14 @@
                         "value": 8.0856
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 0
+                    },
+                    "name": "Aromatics (FIA)"
                 }
             ],
             "cut_volume": {
@@ -824,13 +831,6 @@
             }
         },
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 10.219
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -887,6 +887,14 @@
                         "value": 33.16
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 10.219
+                    },
+                    "name": "Aromatics (FIA)"
                 }
             ],
             "cut_volume": {
@@ -1162,13 +1170,6 @@
             }
         },
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 16.406
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -1225,6 +1226,14 @@
                         "value": 40.822
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 16.406
+                    },
+                    "name": "Aromatics (FIA)"
                 },
                 {
                     "measurement": {
@@ -1516,13 +1525,6 @@
             }
         },
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 25.962
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -1579,6 +1581,14 @@
                         "value": 47.458
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 25.962
+                    },
+                    "name": "Aromatics (FIA)"
                 },
                 {
                     "measurement": {
@@ -1870,18 +1880,6 @@
             }
         },
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 45.628
-                },
-                "asphaltenes": {
-                    "unit": "%",
-                    "unit_type": "massfraction",
-                    "value": 0
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -1926,6 +1924,14 @@
                 {
                     "measurement": {
                         "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 0
+                    },
+                    "name": "N-Heptane Insolubles (C7 Asphaltenes)"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
                         "unit_type": "volumefraction",
                         "value": 18.992
                     },
@@ -1938,6 +1944,14 @@
                         "value": 35.381
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 45.628
+                    },
+                    "name": "Aromatics (FIA)"
                 }
             ],
             "cut_volume": {
@@ -2198,18 +2212,6 @@
             }
         },
         {
-            "SARA": {
-                "aromatics": {
-                    "unit": "%",
-                    "unit_type": "volumefraction",
-                    "value": 84.273
-                },
-                "asphaltenes": {
-                    "unit": "%",
-                    "unit_type": "massfraction",
-                    "value": 1.9672
-                }
-            },
             "bulk_composition": [
                 {
                     "measurement": {
@@ -2253,6 +2255,14 @@
                 },
                 {
                     "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 1.9672
+                    },
+                    "name": "N-Heptane Insolubles (C7 Asphaltenes)"
+                },
+                {
+                    "measurement": {
                         "unit": "ppm",
                         "unit_type": "massfraction",
                         "value": 46.969
@@ -2282,6 +2292,14 @@
                         "value": 13.435
                     },
                     "name": "Naphthene Volume Fraction"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "volumefraction",
+                        "value": 84.273
+                    },
+                    "name": "Aromatics (FIA)"
                 }
             ],
             "cut_volume": {

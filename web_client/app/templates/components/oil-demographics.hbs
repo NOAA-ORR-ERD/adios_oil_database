@@ -161,7 +161,7 @@
                   this.args.oil.metadata.reference.reference
                   (if this.args.editable "" "None")) as |oilReference|}}
             <Textarea
-              @class="p-1 reference-textarea overflow-hidden bg-transparent border"
+              @class="p-1 reference-textarea overflow-auto bg-transparent border"
               @value={{oilReference}}
               @placeholder="Enter reference"
               @change={{action "updateReference"}}

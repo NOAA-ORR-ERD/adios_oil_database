@@ -7,7 +7,7 @@ This version gets its settings from a JSON file.
 
 Usage:
 
-python run_web_api.py stand_alone_config.json
+python run_web_api.py standalone-config.json
 
 NOTE: this is missing logger configuration -- that should be added.
 """
@@ -32,7 +32,7 @@ import json
 import logging.config
 
 import waitress
-import oil_database_api
+import adios_db_api
 
 print("Starting the Web API")
 
@@ -64,7 +64,7 @@ with open(settings_file) as settings:
     settings = json.load(settings)
 
 # find install info:
-install_path = Path(oil_database_api.__file__).parent
+install_path = Path(adios_db_api.__file__).parent
 help_dir = install_path / "help"
 
 settings['install_path'] = install_path,
@@ -99,7 +99,7 @@ logging.config.fileConfig(log_config_file)
 
 
 # create the app
-app = oil_database_api.main(global_config, **settings)
+app = adios_db_api.main(global_config, **settings)
 
 # start the server
 waitress.serve(app, host=api_host, port=api_port)

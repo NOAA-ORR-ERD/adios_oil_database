@@ -1,5 +1,0 @@
-# pip requirements file for the oil_database_api package.
-# These packages are not available via conda
-
-# only need this if you want to build with PyInstaller
-# https://github.com/NOAA-ORR-ERD/cornice/archive/v4.1.0-noaa.tar.gz

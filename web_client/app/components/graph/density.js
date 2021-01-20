@@ -1,7 +1,7 @@
 import { line } from 'd3-shape';
 
 import LineChart from './line-chart';
-import { convertUnit } from 'ember-oil-db/helpers/convert-unit';
+import { convertUnit } from 'adios-db/helpers/convert-unit';
 
 
 export default class Density extends LineChart {

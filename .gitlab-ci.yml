@@ -10,31 +10,38 @@ test_develop:
     script:
         # Install & test the oil_library package
         - echo "ip_resolve=4" >> /etc/yum.conf
-        - cp platform/centos/mongodb-org-4.2.repo /etc/yum.repos.d
-        - yum install mongodb-org -y
-        - mongod --config /etc/mongod.conf &
+        - yum update -y
 
-        - cd oil_db
-        - conda install --file conda_requirements.txt
-        - pip install -r pip_requirements.txt
-        - python setup.py develop
+
+        - conda install -y requests lxml
+
+        - cd adios_db
+        - conda install -y --file conda_requirements.txt
+        - pip install -e ./
+
+        # mongo should have been installed by conda, but conda doesn't reserve
+        # places for the logs, the database, and the pidfile
+        - mkdir /var/lib/mongo
+        - mkdir /var/log/mongodb
+        - mkdir /var/run/mongodb
+
+        - mongod --config ../mongo_config_dev.yml &
 
         - cd data/exxon_assays
         - python ./download_exxon_assays.py
         - cd -
 
-        - oil_db_init
-        - oil_db_import --all
+        - adios_db_init
+        - adios_db_import --all
 
-        - pytest --mongo oil_database
+        - pytest --mongo adios_db
 
         # Install & test the oil_library_api package
         - cd ../web_api
-        - conda install --file conda_requirements.txt
-        - pip install -r pip_requirements.txt
-        - python setup.py develop
+        - conda install -y --file conda_requirements.txt
+        - pip install -e ./
 
-        - pytest oil_database_api
+        - pytest adios_db_api
     tags:
         - docker
 
@@ -42,6 +49,7 @@ build_api:
     stage: build1
 
     script:
+        # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build -f web_api/dockerfile . -t registry.orr.noaa.gov/gnome/oil_database/oil_database/api
         - docker push registry.orr.noaa.gov/gnome/oil_database/oil_database/api

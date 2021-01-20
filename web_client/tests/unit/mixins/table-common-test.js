@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import TableCommonMixin from 'ember-oil-db/mixins/table-common';
+import TableCommonMixin from 'adios-db/mixins/table-common';
 import { module, test } from 'qunit';
 
 /* eslint-disable ember/no-new-mixins */
