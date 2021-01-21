@@ -13,24 +13,12 @@ from ...util.many_many import ManyMany
 from ..common.validators import EnumValidator
 from .validation.warnings import WARNINGS
 
-# this is now loaded from a file -- see end of this module
 
-# PRODUCT_TYPES = ('Crude Oil, NOS',
-#                  'Condensate',
-#                  'Bitumen Blend',
-#                  'Refined Product, NOS',
-#                  'Fuel Oil, NOS',
-#                  'Distillate Fuel Oil',
-#                  'Petroleum-Derived Solvent',
-#                  'Residual Fuel Oil',
-#                  'Bio-Petroleum Fuel Blend',
-#                  'Bio Fuel Oil',
-#                  'Lube Oil',
-#                  'Refinery Intermediate',
-#                  'Natural Plant Oil',
-#                  'Dielectric Oil',
-#                  'Other'
-#                  )
+class TypeLabelsMap(ManyMany):
+
+    product_types = ManyMany.right
+    labels = ManyMany.left
+
 
 def load_from_csv_file(filepath=None):
     """
@@ -66,7 +54,7 @@ def load_from_csv_file(filepath=None):
 PRODUCT_TYPE_LABEL_MAPPING = load_from_csv_file()
 PRODUCT_TYPES = tuple(PRODUCT_TYPE_LABEL_MAPPING)
 
-types_to_labels = ManyMany(PRODUCT_TYPE_LABEL_MAPPING)
+types_to_labels = TypeLabelsMap(PRODUCT_TYPE_LABEL_MAPPING)
 
 
 class ProductType(str):

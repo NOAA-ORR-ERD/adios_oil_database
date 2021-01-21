@@ -2,11 +2,11 @@
 Add labels to a record -- for those that we can use some automatic criteria for
 
 For a given product type:
-  some labels can be determined from API and/or Viscosity ranges.
+    some labels can be determined from API and/or Viscosity ranges.
 
 The criteria follows the ASTM (and others) standards, where we can
 '''
-from math import inf
+from math import inf, nan
 
 from ..product_type import types_to_labels
 from ....computation.physical_properties import get_kinematic_viscosity_at_temp
@@ -22,11 +22,43 @@ from ....computation.physical_properties import get_kinematic_viscosity_at_temp
 
 # this maps the labels according to API and kinematic viscosity (cStat given temp in C) ranges.
 label_map = {
-#  'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
-   'Light Crude':  {"api_min": 31.1, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-   'Medium Crude': {"api_min": 22.3, "api_max": 31.1, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-   'Heavy Crude': {"api_min": -inf, "api_max": 22.3, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-}
+    # 'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    #  These are all no bounds:
+    'Crude Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    'Shale Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    'Fuel Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    # 'Home Heating Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    #  these have API limits
+    'Fracking Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    'Light Crude':  {"api_min": 31.1, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Medium Crude': {"api_min": 22.3, "api_max": 31.1, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Heavy Crude': {"api_min": -inf, "api_max": 22.3, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Group V': {"api_min": -inf, "api_max": 10.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Heavy Fuel Oil': {"api_min": -inf, "api_max": 15.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'HFO': {"api_min": -inf, "api_max": 15.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+
+             }
+
+
+def get_suggested_labels(oil):
+    """
+    get the labels suggested for this oil
+
+    :param oil: the oil object to get the labels for
+    :type oil: Oil object
+    """
+    labels = set()
+    pt = oil.metadata.product_type
+    if pt == "Other":  #  we don't want any labels auto added for Other
+        return labels
+    try:
+        for label in types_to_labels.left[oil.metadata.product_type]:
+            if is_label(oil, label):
+                labels.add(label)
+    except KeyError:
+        pass
+
+    return labels
 
 
 def add_labels_to_oil(oil):
@@ -51,13 +83,14 @@ def is_label(oil, label):
     except KeyError:
         return False
 
-    api = oil.metadata.api
-    kvis = get_kinematic_viscosity_at_temp(temp=data['kvis_temp'],
-                                           kvis_units='cSt',
-                                           temp_units='C')
+    api = oil.metadata.API
+    kvis = 0.0  # a placeholder
+    # kvis = get_kinematic_viscosity_at_temp(temp=data['kvis_temp'],
+    #                                        kvis_units='cSt',
+    #                                        temp_units='C')
 
     return (data['api_min'] <= api < data['api_max']
-            and data['kvis_min'] <= api < data['kvis_max'])
+            and data['kvis_min'] <= kvis < data['kvis_max'])
 
 
 
