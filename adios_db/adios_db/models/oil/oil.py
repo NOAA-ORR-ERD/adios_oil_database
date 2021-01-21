@@ -60,7 +60,12 @@ class Oil:
         return cls.from_py_json(py_json)
 
     def reset_validation(self):
-        msgs = self.validate()
+        """
+        calls the validate method, and updates the status with the result
+
+        NOTE: duplicates are removed
+        """
+        msgs = list(set(self.validate()))
         self.status = msgs
         return msgs
 
