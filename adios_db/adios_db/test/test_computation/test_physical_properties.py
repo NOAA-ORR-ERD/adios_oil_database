@@ -12,6 +12,7 @@ from adios_db.computation.physical_properties import (get_density_data,
                                                       get_kinematic_viscosity_data,
                                                       get_dynamic_viscosity_data,
                                                       density_at_temp,
+                                                      KinematicViscosity
                                                       )
 
 
@@ -61,8 +62,10 @@ def test_get_dynamic_viscosity_data_defaults():
     print(dv)
 
     assert len(dv) == 2
-    assert dv[0] == (1300.0, 273.15)
-    assert dv[1] == (350.0, 288.15)
+    assert isclose(dv[0][0], 1.3)
+    assert isclose(dv[0][1], 273.15)
+    assert isclose(dv[1][0], .35)
+    assert isclose(dv[1][1], 288.15)
 
 
 def test_get_dynamic_viscosity_data_units():
@@ -82,6 +85,21 @@ def test_density_at_temp():
     assert density_at_temp(densities, 288.15) == 980.0
     assert density_at_temp(densities, 273.15) == 990.0
 
+class Test_KinematicViscosity:
+
+    kv = KinematicViscosity(FullOil)
+
+    def test_initilization(self):
+        print(self.kv.kviscs)
+        print(self.kv.temps)
+
+        assert len(self.kv.kviscs) == 2
+        assert len(self.kv.temps) == 2
+
+    def test_values_at_known_temps(self):
+        assert self.kv.kviscs
+        assert isclose(self.kv.at_temp(273.15), 1383.0, rel_tol=1e-3)
+        assert isclose(self.kv.at_temp(288.15), 378.3, rel_tol=1e-3)
 
 
 

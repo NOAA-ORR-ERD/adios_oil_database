@@ -6,6 +6,83 @@ oil record
 from operator import itemgetter
 import numpy as np
 
+import unit_conversion as uc
+
+
+class KinematicViscosity:
+    """
+    class to hold and do calculations on kinematic viscosity
+
+    data is stored internally in standard units:
+    temperature in Kelvin
+    viscosity in m^2/s
+    """
+    def __init__(self, oil):
+        """
+        initialize from an oil object
+        """
+        data = get_kinematic_viscosity_data(oil, units='m^2/s', temp_units="K")
+        self.kviscs, self.temps = zip(*data)
+        self.determine_visc_constants()
+
+    def at_temp(self, temp, kvisc_units='m^2/s', temp_units="K"):
+        """
+        Compute the kinematic viscosity of the oil as a function of temperature
+
+        :param temp_k: temperatures to compute at: can be scalar or array of values.
+                       should be in Kelvin
+
+        viscosity as a function of temp is given by:
+        v = A exp(k_v2 / T)
+
+        with constants determined from measured data
+        """
+        temp = np.asarray(temp)
+        temp = uc.convert('temperature', temp_units, 'K', temp)
+
+        kvisc = self._visc_A * np.exp(self._k_v2 / temp)
+
+        kvisc = uc.convert('kinematic viscosity', 'm^2/s', kvisc_units, kvisc)
+        return kvisc
+
+    def determine_visc_constants(self):
+        '''
+        viscosity as a function of temp is given by:
+
+        v = A exp(k_v2 / T)
+
+        The constants, A and k_v2 are determined from the viscosity data:
+
+        If only one data point, a default value for k_vs is used:
+           2100 K, based on analysis of data in the ADIOS database as of 2018
+
+        If two data points, the two constants are directly computed
+
+        If three or more, the constants are computed by a least squares fit.
+        '''
+        # find viscosity measurements with zero weathering
+
+        # this sets:
+        self._k_v2 = None # decay constant for viscosity curve
+        self._visc_A = None
+
+        kvis = self.kviscs
+        kvis_ref_temps = self.temps
+
+        if len(kvis) == 1:  # use default k_v2
+            self._k_v2 = 2100.0
+            self._visc_A = kvis[0] * np.exp(-self._k_v2 / kvis_ref_temps[0])
+        else:
+            # do a least squares fit to the data
+            # viscs = np.array(kvis)
+            # temps = np.array(kvis_ref_temps)
+            b = np.log(kvis)
+            A = np.c_[np.ones_like(b), 1.0 / np.array(kvis_ref_temps)]
+            x, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
+            self._k_v2 = x[1]
+            self._visc_A = np.exp(x[0])
+        return
+
 
 def get_density_data(oil, units="kg/m^3", temp_units="K"):
     """
@@ -32,7 +109,7 @@ def get_density_data(oil, units="kg/m^3", temp_units="K"):
     return density_table
 
 
-def get_kinematic_viscosity_data(oil, units="cSt", temp_units="K"):
+def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
 
     """
     Return a table of kinematic viscosity data:
@@ -66,7 +143,8 @@ def get_kinematic_viscosity_data(oil, units="cSt", temp_units="K"):
     else:
         return []
 
-def get_dynamic_viscosity_data(oil, units="cP", temp_units="K"):
+
+def get_dynamic_viscosity_data(oil, units="PaS", temp_units="K"):
 
     """
     Return a table of kinematic viscosity data:

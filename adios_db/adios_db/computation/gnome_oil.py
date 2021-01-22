@@ -21,8 +21,8 @@ def get_empty_dict():
            "densities": [],
            "density_ref_temps": [],
            "density_weathering": [],
-           "kvis": [],
-           "kvis_ref_temps": [],
+           "kvis": [],  # m/s^2
+           "kvis_ref_temps": [],  # K
            "kvis_weathering": [],
            # PCs:
            "mass_fraction": [],
