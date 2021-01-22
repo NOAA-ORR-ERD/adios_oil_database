@@ -222,25 +222,27 @@
   </div>
 
   {{! Comments }}
-  <div class="row p-0 mb-3">
-    <div class="col-12 p-0">
-      <label class="pl-1 font-weight-bold">Comments:</label>
+  {{#if (or this.args.oil.metadata.comments this.args.editable) }}
+    <div class="row p-0 mb-3">
+      <div class="col-12 p-0 input-group">
+        <label class="pl-1 font-weight-bold">Comments:</label>
+        &nbsp;
+        {{#let (if this.args.oil.metadata.comments
+                this.args.oil.metadata.comments
+                (if this.args.editable "" "None")) as |oilComments|}}
+          <Textarea
+            @class="p-1 flex-fill overflow-auto bg-transparent border"
+            @value={{oilComments}}
+            @rows="2"
+            @placeholder="Enter comments"
+            @change={{action "updateComments"}}
+            disabled={{not this.args.editable}}
+          />
+        {{/let}}
+      </div>
     </div>
-    <div class="col-12 p-0 input-group">
-      {{#let (if this.args.oil.metadata.comments
-              this.args.oil.metadata.comments
-              (if this.args.editable "" "None")) as |oilComments|}}
-        <Textarea
-          @class="p-1 flex-fill bg-transparent border"
-          @value={{oilComments}}
-          @rows="3"
-          @placeholder="Enter comments"
-          @change={{action "updateComments"}}
-          disabled={{not this.args.editable}}
-        />
-      {{/let}}
-    </div>
-  </div>
+  {{/if}}
+
 
   {{!-- status message --}}
   <div class="row pl-0">
