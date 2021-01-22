@@ -39,11 +39,11 @@
                 onChange={{action (pipe (action "onTypeSelected")
                                         (action "onSearchChange") )}}
             >
-              <option class="bg-light">None</option>
+              <option class="bg-light" value="">unspecified</option>
 
               {{#each this.productTypes.firstObject.product_types as |oilType|}}
                 {{#if (eq oilType this.selectedType)}}
-                  <option class="bg-light" selected="true">{{oilType}}</option>
+                  <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
                   <option class="bg-light">{{oilType}}</option>
                 {{/if}}
@@ -60,6 +60,7 @@
             <PowerSelectMultiple
               @selected={{this.selectedLabels}}
               @options={{this.filteredLabels}}
+              @placeholder="unspecified"
               @onChange={{action (pipe (action (mut this.selectedLabels)) (action "onSearchChange"))}}
               @onKeydown={{this.handleKeydown}} as |name|>
               {{name}}
