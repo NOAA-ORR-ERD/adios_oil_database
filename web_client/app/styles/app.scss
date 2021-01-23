@@ -98,13 +98,11 @@ td:empty::after{
 }
 .footer{
     padding: 15px 0;
-    //background: #2F4F4F;
     img{
         width: 64px;
         height: 64px;
     }
     .nav{
-        margin-top: 20px;
         li{
             a{
                 @include transition(all .2s);

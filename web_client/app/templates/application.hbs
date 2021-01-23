@@ -35,9 +35,36 @@
   <footer class="footer bg-secondary">
     <div class="container-fluid">
       <div class="row align-items-center">
-        <div class="col-12 pl-4">
+        <div class="col-1 pl-4">
           <img src="/assets/images/NOAA_logo.svg" alt="">
-          <a href="http://response.restoration.noaa.gov/" class="footer-link" target="_blank" rel="noopener">NOAA Office of Response &amp; Restoration</a>
+        </div>
+        <div class="col-11">
+          <div class="row align-items-center">
+            <ul class="nav nav-pills">
+              <li>
+                <a href="http://www.commerce.gov/" class="footer-link" target="_blank">US DOC</a>
+              </li>
+              <li>
+                <a href="http://www.noaa.gov" target="_blank">NOAA</a>
+              </li>
+              <li>
+                <a href="http://oceanservice.noaa.gov/" target="_blank">NOS</a>
+              </li>
+              <li>
+                <a href="http://response.restoration.noaa.gov/" class="footer-link" target="_blank" rel="noopener">NOAA Office of Response &amp; Restoration</a>
+              </li>
+              <li>
+                <LinkTo @route="disclaimer" class="nav-link">
+                  Disclaimer <span class="sr-only">(current)</span>
+                </LinkTo>
+              </li>
+              <li>
+                <LinkTo @route="privacy" class="nav-link">
+                  Privacy Policy <span class="sr-only">(current)</span>
+                </LinkTo>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
