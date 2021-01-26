@@ -25,7 +25,7 @@ test_develop:
         - mkdir /var/log/mongodb
         - mkdir /var/run/mongodb
 
-        - mongod --config ../mongo_config_dev.yml &
+        - mongod --config ../mongo_config_test.yml &
 
         - cd data/exxon_assays
         - python ./download_exxon_assays.py

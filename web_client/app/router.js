@@ -14,6 +14,8 @@ Router.map(function() {
   });
   this.route('labels');
   this.route('product-types');
+  this.route('disclaimer');
+  this.route('privacy');
 });
 
 export default Router;

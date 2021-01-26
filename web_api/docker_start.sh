@@ -1,7 +1,5 @@
 #!/bin/bash
 
-mongod --config /etc/mongod.conf &
-
 echo "Starting our server on host:port:"
 egrep -w "host|port" /config/config.ini
 

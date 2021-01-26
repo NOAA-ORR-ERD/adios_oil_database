@@ -10,6 +10,7 @@ from bson import ObjectId
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings, default_settings
 from adios_db.db_init.database import drop_db, create_indices
+from adios_db.models.oil.oil import Oil
 
 logger = logging.getLogger(__name__)
 
@@ -89,26 +90,17 @@ def load_collection(db, base_path, collection_name):
     for (dirname, _, filenames) in os.walk(collection_path):
         for name in filenames:
             if name.endswith('.json'):
-                obj_path = f'{dirname}/{name}'
-                obj = json.load(open(obj_path, 'r'))
-
-                fix_obj_id(obj, collection)
+                obj = get_obj_json(f'{dirname}/{name}', collection_name)
 
                 collection.insert_one(obj)
 
 
-def fix_obj_id(obj, collection):
-    '''
-        MongoDB uses an ObjectId type for its identifiers in most non special
-        cases.  This is not parseable to JSON.  So when backing up our data,
-        we turn it into a string.
-        This means we need to turn them back into ObjectId's when restoring.
-        The collection doesn't seem to have a way of querying the datatype for
-        _id, so we need to do this in a more hacked way.
-        Right now the only collection that doesn't use the ObjectId type is the
-        oil collection, so that's what we will key on.
-    '''
-    if collection.name != 'oil':
-        obj['_id'] = ObjectId(obj['_id'])
+def get_obj_json(obj_path, collection_name):
+    obj = json.load(open(obj_path, 'r'))
+
+    if collection_name == 'oil':
+        obj = Oil.from_py_json(obj)
+        obj.reset_validation()
+        obj = obj.py_json()
 
     return obj
