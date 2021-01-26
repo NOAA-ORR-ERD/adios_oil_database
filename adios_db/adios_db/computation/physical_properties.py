@@ -4,9 +4,48 @@ oil record
 """
 
 from operator import itemgetter
+from math import isclose
 import numpy as np
 
+
 import unit_conversion as uc
+
+
+class Density:
+    """
+    class to hold and do calculations on density
+
+    data is stored internally in standard units:
+    temperature in Kelvin
+    density in kg/m^3
+    """
+    def __init__(self, oil):
+        """
+        initialize from an oil object
+        """
+        data = get_density_data(oil, units='kg/m^3', temp_units="K")
+        self.densities, self.temps = zip(*data)
+        self.initialize()
+
+    def initialize(self):
+        """
+        Initialize the expansion coefficient
+
+        For outside the measured range
+        """
+        # if there is only one density, use a default
+        # Note: no idea where these values came from
+        if len(self.densities) == 1:
+            d = self.densities[0]
+            t = self.temps[0]
+            if abs(t - 288.16) < 5.0:  # measurement within 5 deg of 15 C
+                # API 30 threshold
+                self.k_rho_default = 0.0009 if d < 875 else 0.0008
+            else:
+                self.k_rho_default = 0.00085  # who knows?
+        else:
+            raise NotImplementedError("can't do more than one density yet")
+
 
 
 class KinematicViscosity:

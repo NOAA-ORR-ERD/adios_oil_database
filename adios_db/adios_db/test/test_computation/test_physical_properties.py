@@ -5,15 +5,21 @@ tests for the Physical Properties computation code
 from math import isclose
 from pathlib import Path
 
-# import pytest
+import pytest
 
 from adios_db.models.oil.oil import Oil
+from adios_db.models.oil.sample import Sample
+from adios_db.models.oil.physical_properties import DensityPoint
+from adios_db.models.common import measurement as meas
+
 from adios_db.computation.physical_properties import (get_density_data,
                                                       get_kinematic_viscosity_data,
                                                       get_dynamic_viscosity_data,
                                                       density_at_temp,
-                                                      KinematicViscosity
+                                                      KinematicViscosity,
+                                                      Density,
                                                       )
+
 
 
 ExampleRecordFile = Path(__file__).parent.parent / "test_models" / "test_oil" / "ExampleFullRecord.json"
@@ -78,12 +84,46 @@ def test_get_dynamic_viscosity_data_units():
     assert dv[1] == (3.50, 15.0)
 
 
-def test_density_at_temp():
-    densities = [(980.0, 288.15),
-                 (990, 273.15)]
+class TestDensity:
+    """
+    tests of the density class
+    """
+    def make_oil_with_densities(self, densities, temps):
+        oil = Oil(oil_id = "DENSITY_TESTER")
+        sample = Sample()
+        sample.metadata.name = "only density"
+        oil.sub_samples.append(sample)
+        for d, t in zip(densities, temps):
+            dp = DensityPoint(meas.Density(d, unit="kg/m^3"),
+                              meas.Temperature(t, unit="K"))
+            sample.physical_properties.densities.append(dp)
+        return oil
 
-    assert density_at_temp(densities, 288.15) == 980.0
-    assert density_at_temp(densities, 273.15) == 990.0
+    @pytest.mark.parametrize("density, temp, k_rho",
+                             [(800, 288.16, 0.0009),
+                              (990, 288.16, 0.0008),
+                              (800, 293.0, 0.0009),  # a bit higher than 15C
+                              (990, 285.0, 0.0008),  # a bit lower than 15C
+                              (800, 294.0, 0.00085),  # much higher than 15C
+                              (990, 283.00, 0.00085),  # much lower than 15C
+                              ])
+    def test_initiliaze_one_density_low_density(self, density, temp, k_rho):
+
+        oil = self.make_oil_with_densities([density], [temp])
+        dc = Density(oil)
+
+        print(dc.k_rho_default)
+        assert dc.k_rho_default == k_rho
+
+    def test_density_at_temp(self):
+
+
+        densities = [(980.0, 288.15),
+                     (990, 273.15)]
+
+        assert density_at_temp(densities, 288.15) == 980.0
+        assert density_at_temp(densities, 273.15) == 990.0
+
 
 class Test_KinematicViscosity:
 
