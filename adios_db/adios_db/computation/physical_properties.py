@@ -21,9 +21,23 @@ class Density:
     """
     def __init__(self, oil):
         """
-        initialize from an oil object
+        Initialize a density calculator
+
+        :param oil: an Oil object -- the density data will be extracted
+
+        or
+
+        :param oil: Sequence of density/temperature pairs:
+                    ``[(980.0, 288.15), (990.0, 273.15)])``
+
+        If data pairs, units must be kg/m^3 and K
         """
-        data = get_density_data(oil, units='kg/m^3', temp_units="K")
+        try:
+            data = get_density_data(oil, units='kg/m^3', temp_units="K")
+        except AttributeError:
+            # not an oil object -- assume it's a table of data in the correct form
+            data = oil
+        data = sorted(data, key=itemgetter(1))
         self.densities, self.temps = zip(*data)
         self.initialize()
 
@@ -35,6 +49,10 @@ class Density:
         """
         # if there is only one density, use a default
         # Note: no idea where these values came from
+
+        if not np.all(np.diff(self.temps) > 0):
+            raise ValueError("temperatures must be discreet")
+
         if len(self.densities) == 1:
             d = self.densities[0]
             t = self.temps[0]
@@ -43,9 +61,41 @@ class Density:
                 self.k_rho_default = 0.0009 if d < 875 else 0.0008
             else:
                 self.k_rho_default = 0.00085  # who knows?
+        elif len(self.densities) > 1:
+            # do a linear fit to the points
+            # this should exactly match if there are only two.
+            b = self.densities
+            A = np.c_[np.ones_like(b), np.array(self.temps)]
+            x, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
+            self.k_rho_default = x[1]
         else:
-            raise NotImplementedError("can't do more than one density yet")
+            raise ValueError("Density needs at least one density value")
 
+    def at_temp(self, temp):
+        """
+        density(s) at the provided temperature(s)
+
+        :param temp: scalar or sequence of temp in K
+
+        densities will be returned as kg/m^3
+        """
+        temp = np.asarray(temp)
+        scaler = True if temp.shape == () else False
+        temp.shape = (-1,)
+
+        densities = np.interp(temp,
+                              self.temps,
+                              self.densities,
+                              left=-np.inf,
+                              right=np.inf)
+
+        left = (densities == -np.inf)
+        densities[left] = self.densities[0] + (self.k_rho_default * (temp[left] - self.temps[0]))
+
+        right = (densities == np.inf)
+        densities[right] = self.densities[-1] + (self.k_rho_default * (temp[right] - self.temps[-1]))
+
+        return densities if not scaler else densities[0]
 
 
 class KinematicViscosity:
