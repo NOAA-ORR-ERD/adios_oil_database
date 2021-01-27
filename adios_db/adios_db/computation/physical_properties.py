@@ -112,7 +112,7 @@ class KinematicViscosity:
         """
         data = get_kinematic_viscosity_data(oil, units='m^2/s', temp_units="K")
         self.kviscs, self.temps = zip(*data)
-        self.determine_visc_constants()
+        self.initialize()
 
     def at_temp(self, temp, kvisc_units='m^2/s', temp_units="K"):
         """
@@ -134,7 +134,7 @@ class KinematicViscosity:
         kvisc = uc.convert('kinematic viscosity', 'm^2/s', kvisc_units, kvisc)
         return kvisc
 
-    def determine_visc_constants(self):
+    def initialize(self):
         '''
         viscosity as a function of temp is given by:
 
@@ -225,15 +225,15 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
 
     dvisc = oil.sub_samples[0].physical_properties.dynamic_viscosities
     if len(dvisc) > 0:
-        dvisc = get_dynamic_viscosity_data(oil, units="cP", temp_units="K")
-        densities = get_density_data(oil, units="g/cm^3", temp_units="K")
-        visc_table = convert_dvisc_to_kvisc(dvisc, densities)
+        dvisc = get_dynamic_viscosity_data(oil, units="Pa s", temp_units="K")
+        density = Density(oil)
+        visc_table = convert_dvisc_to_kvisc(dvisc, density)
         return visc_table
     else:
         return []
 
 
-def get_dynamic_viscosity_data(oil, units="PaS", temp_units="K"):
+def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
 
     """
     Return a table of kinematic viscosity data:
@@ -267,35 +267,37 @@ def get_dynamic_viscosity_data(oil, units="PaS", temp_units="K"):
         return []
 
 
-def convert_dvisc_to_kvisc(dvisc, densities):
+def convert_dvisc_to_kvisc(dvisc, density):
     """
     convert dynamic viscosity to kinematic viscosity
+
+    :param density: an initialized Density object
 
     dvisc and densities are tables as returned from:
       get_dynamic_viscosity_data
       get_density_data
-    units: cP, g/cm^3, K
+    units: viscosity: Pas or kg/(m s)
     """
     kvisc_table = []
     for (dv, temp) in dvisc:
-        kv = dv / density_at_temp(densities, temp)
+        kv = dv / density.at_temp(temp)
         kvisc_table.append((kv, temp))
     return kvisc_table
 
 
-def density_at_temp(densities, temp, units="kg/m^3", temp_units="K"):
-    # sort them to make sure
-    densities = sorted(densities, key=itemgetter(1))
-    dens, temps = zip(*densities)
+# def density_at_temp(densities, temp, units="kg/m^3", temp_units="K"):
+#     # sort them to make sure
+#     densities = sorted(densities, key=itemgetter(1))
+#     dens, temps = zip(*densities)
 
-    return np.interp(temp, temps, dens)
+#     return np.interp(temp, temps, dens)
 
 
 
-def get_kinematic_viscosity_at_temp(temp,
-                                    kvis_units='cSt',
-                                    temp_units='C'):
-    raise NotImplementedError
+# def get_kinematic_viscosity_at_temp(temp,
+#                                     kvis_units='cSt',
+#                                     temp_units='C'):
+#     raise NotImplementedError
 
 
 

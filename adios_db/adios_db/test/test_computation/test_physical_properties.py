@@ -15,7 +15,6 @@ from adios_db.models.common import measurement as meas
 from adios_db.computation.physical_properties import (get_density_data,
                                                       get_kinematic_viscosity_data,
                                                       get_dynamic_viscosity_data,
-                                                      density_at_temp,
                                                       KinematicViscosity,
                                                       Density,
                                                       )
@@ -199,6 +198,15 @@ class TestDensity:
         assert  D[0] < 980
         assert  D[1] > 990
 
+    def test_density_at_temp_single_out_of_range(self):
+
+        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
+        dc = Density([(990.0, 270.0),
+                      ])
+
+        D = dc.at_temp(260)
+
+        assert  D  ==  1000
 
 
 
