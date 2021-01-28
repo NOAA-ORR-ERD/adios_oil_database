@@ -11,6 +11,7 @@ from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings, default_settings
 from adios_db.db_init.database import drop_db, create_indices
 from adios_db.models.oil.oil import Oil
+from bson.errors import InvalidId
 
 logger = logging.getLogger(__name__)
 
@@ -102,5 +103,15 @@ def get_obj_json(obj_path, collection_name):
         obj = Oil.from_py_json(obj)
         obj.reset_validation()
         obj = obj.py_json()
+    else:
+        try:
+            # just fix the ID if it is there
+            obj['_id'] = ObjectId(obj['_id'])
+        except (KeyError, InvalidId, TypeError):
+            # id doesn't exist, or maybe it exists, but isn't convertible
+            # to an ObjectId type.  Either way, just leave it alone.
+            # MongoDB will generate an ID if missing or use the existing one
+            # regardless of its type.
+            pass
 
     return obj
