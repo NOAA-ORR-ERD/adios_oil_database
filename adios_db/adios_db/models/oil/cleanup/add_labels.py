@@ -9,7 +9,7 @@ The criteria follows the ASTM (and others) standards, where we can
 from math import inf, nan
 
 from ..product_type import types_to_labels
-from ....computation.physical_properties import get_kinematic_viscosity_at_temp
+from ....computation.physical_properties import KinematicViscosity
 
 # # These are the current ones that aren't mapped yet:
 # 'Bitumen', 'Shale Oil', 'Fracking Oil',  'Group V',

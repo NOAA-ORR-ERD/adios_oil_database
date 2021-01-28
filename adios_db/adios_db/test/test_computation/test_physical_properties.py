@@ -55,10 +55,10 @@ def test_get_kinematic_viscosity_data_defaults():
 
     assert len(kv) == 2
 
-    assert isclose(kv[0][0], 1383.155, rel_tol=1e-6)
-    assert isclose(kv[0][1], 273.15, rel_tol=1e-6)
-    assert isclose(kv[1][0], 378.272, rel_tol=1e-6)
-    assert isclose(kv[1][1], 288.15, rel_tol=1e-6)
+    assert isclose(kv[0][0], .001383155, rel_tol=1e-6)  # kvisc
+    assert isclose(kv[0][1], 273.15, rel_tol=1e-6)  # temp
+    assert isclose(kv[1][0], .000378272, rel_tol=1e-6)  # kvisc
+    assert isclose(kv[1][1], 288.15, rel_tol=1e-6)  # temp
 
 
 def test_get_dynamic_viscosity_data_defaults():
@@ -99,12 +99,12 @@ class TestDensity:
         return oil
 
     @pytest.mark.parametrize("density, temp, k_rho",
-                             [(800, 288.16, 0.0009),
-                              (990, 288.16, 0.0008),
-                              (800, 293.0, 0.0009),  # a bit higher than 15C
-                              (990, 285.0, 0.0008),  # a bit lower than 15C
-                              (800, 294.0, 0.00085),  # much higher than 15C
-                              (990, 283.00, 0.00085),  # much lower than 15C
+                             [(800, 288.16, -0.0009),
+                              (990, 288.16, -0.0008),
+                              (800, 293.0, -0.0009),  # a bit higher than 15C
+                              (990, 285.0, -0.0008),  # a bit lower than 15C
+                              (800, 294.0, -0.00085),  # much higher than 15C
+                              (990, 283.00, -0.00085),  # much lower than 15C
                               ])
     def test_initiliaze_one_density(self, density, temp, k_rho):
 
@@ -176,6 +176,9 @@ class TestDensity:
         # densities = [(980.0, 288.15),
         #              (990.0, 273.15)]
 
+
+        print("k_rho_default:", dc.k_rho_default)
+
         D = dc.at_temp((275, 286))
 
         assert  984 < D[0] < 990
@@ -206,7 +209,7 @@ class TestDensity:
 
         D = dc.at_temp(260)
 
-        assert  D  ==  1000
+        assert  D  ==  990 - (10 * -0.00085)
 
 
 
@@ -222,9 +225,12 @@ class Test_KinematicViscosity:
         assert len(self.kv.temps) == 2
 
     def test_values_at_known_temps(self):
+        print(self.kv.kviscs)
+        print(self.kv.temps)
+
         assert self.kv.kviscs
-        assert isclose(self.kv.at_temp(273.15), 1383.0, rel_tol=1e-3)
-        assert isclose(self.kv.at_temp(288.15), 378.3, rel_tol=1e-3)
+        assert isclose(self.kv.at_temp(273.15), 0.001383, rel_tol=1e-3)
+        assert isclose(self.kv.at_temp(288.15), 0.0003783, rel_tol=1e-3)
 
 
 

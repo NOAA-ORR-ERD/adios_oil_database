@@ -58,9 +58,9 @@ class Density:
             t = self.temps[0]
             if abs(t - 288.16) < 5.0:  # measurement within 5 deg of 15 C
                 # API 30 threshold
-                self.k_rho_default = 0.0009 if d < 875 else 0.0008
+                self.k_rho_default = -0.0009 if d < 875 else -0.0008
             else:
-                self.k_rho_default = 0.00085  # who knows?
+                self.k_rho_default = -0.00085  # who knows?
         elif len(self.densities) > 1:
             # do a linear fit to the points
             # this should exactly match if there are only two.
