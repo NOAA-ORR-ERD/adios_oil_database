@@ -25,7 +25,7 @@ class FunctionalTestBase(TestCase):
                     'mongodb.port': '27017',
                     'mongodb.database': 'adios_db',
                     'mongodb.alias': 'oil-db-app',
-                    'caps.can_modify_db': 'false',
+                    'caps.can_modify_db': 'true',
                     'install_path': '.',
                     'help_dir': './help'
                     }

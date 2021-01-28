@@ -12,7 +12,9 @@ from bson.errors import InvalidId
 
 from adios_db.util.json import fix_bson_ids
 
-from adios_db_api.common.views import cors_policy, obj_id_from_url
+from adios_db_api.common.views import (cors_policy,
+                                       obj_id_from_url,
+                                       can_modify_db)
 
 
 logger = logging.getLogger(__name__)
@@ -38,7 +40,6 @@ def get_labels(request):
             raise HTTPBadRequest(e)
 
         if res is not None:
-            print('res: ', res)
             return fix_bson_ids(res)
         else:
             raise HTTPNotFound()
@@ -47,6 +48,7 @@ def get_labels(request):
 
 
 @label_api.post()
+@can_modify_db
 def insert_labels(request):
     try:
         json_obj = ujson.loads(request.body)
@@ -83,6 +85,7 @@ def insert_labels(request):
 
 
 @label_api.put()
+@can_modify_db
 def update_label(request):
     try:
         json_obj = ujson.loads(request.body)
@@ -118,6 +121,7 @@ def update_label(request):
 
 
 @label_api.delete()
+@can_modify_db
 def delete_label(request):
     obj_id = obj_id_from_url(request)
 

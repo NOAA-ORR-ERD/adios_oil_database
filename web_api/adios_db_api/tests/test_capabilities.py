@@ -14,6 +14,9 @@ class CapabilitiesTests(FunctionalTestBase):
         resp = self.testapp.get('/capabilities')
         caps = resp.json_body
 
-        print(caps)
+        assert caps[0]['can_modify_db'] == 'true'
 
-        assert caps['can_modify_db'] == 'false'
+        resp = self.testapp.get('/capabilities/0')
+        caps = resp.json_body
+
+        assert caps['can_modify_db'] == 'true'

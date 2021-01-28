@@ -32,6 +32,7 @@ def get_product_types(request):
 
         if obj_id != 0:
             raise HTTPNotFound()
+
         return {'_id': 0, 'product_types': PRODUCT_TYPES}
     else:
         return [{'_id': 0, 'product_types': PRODUCT_TYPES}]

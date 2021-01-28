@@ -19,6 +19,7 @@ export default Route.extend({
     setupController(controller, model) {
         controller.set('labels', this.models.labels);
         controller.set('productTypes', this.models.productTypes);
+        controller.set('capabilities', this.models.capabilities);
 
         this._super(controller, model);
 

@@ -16,6 +16,7 @@ Router.map(function() {
   this.route('product-types');
   this.route('disclaimer');
   this.route('privacy');
+  this.route('capabilities');
 });
 
 export default Router;
