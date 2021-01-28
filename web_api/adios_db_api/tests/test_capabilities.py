@@ -16,4 +16,4 @@ class CapabilitiesTests(FunctionalTestBase):
 
         print(caps)
 
-        assert caps['can_modify_db'] == 'false'
+        assert caps['can_modify_db'] == 'true'
