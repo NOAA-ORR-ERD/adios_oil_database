@@ -114,7 +114,7 @@ class KinematicViscosity:
         self.kviscs, self.temps = zip(*data)
         self.initialize()
 
-    def at_temp(self, temp, kvisc_units='m^2/s', temp_units="K"):
+    def at_temp(self, temp, kvis_units='m^2/s', temp_units="K"):
         """
         Compute the kinematic viscosity of the oil as a function of temperature
 
@@ -131,7 +131,7 @@ class KinematicViscosity:
 
         kvisc = self._visc_A * np.exp(self._k_v2 / temp)
 
-        kvisc = uc.convert('kinematic viscosity', 'm^2/s', kvisc_units, kvisc)
+        kvisc = uc.convert('kinematic viscosity', 'm^2/s', kvis_units, kvisc)
         return kvisc
 
     def initialize(self):
@@ -274,9 +274,12 @@ def convert_dvisc_to_kvisc(dvisc, density):
     :param density: an initialized Density object
 
     dvisc and densities are tables as returned from:
-      get_dynamic_viscosity_data
-      get_density_data
+
+     - ``get_dynamic_viscosity_data``
+     - ``get_density_data``
+
     units: viscosity: Pas or kg/(m s)
+           density: kg/m^3
     """
     kvisc_table = []
     for (dv, temp) in dvisc:

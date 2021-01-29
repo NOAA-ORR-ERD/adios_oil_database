@@ -11,7 +11,12 @@ Welcome to ADIOS Oil Database's documentation!
    :caption: Contents:
 
    overview
-   reference
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference
+
+   api/adios_db.rst
 
 
 Indices and tables
