@@ -84,10 +84,13 @@ def is_label(oil, label):
         return False
 
     api = oil.metadata.API
-    KV = KinematicViscosity(oil)
-    kvis = KN.at_temp(temp=data['kvis_temp'],
-                      kvis_units='cSt',
-                      temp_units='C')
+    try:
+        KV = KinematicViscosity(oil)
+        kvis = KV.at_temp(temp=data['kvis_temp'],
+                          kvis_units='cSt',
+                          temp_units='C')
+    except:  # not a good idea, but whatevr when wrong, I don't want it to crash
+      kvis = 1.0  # arbitrary
 
     return (data['api_min'] <= api < data['api_max']
             and data['kvis_min'] <= kvis < data['kvis_max'])
