@@ -69,6 +69,9 @@ class Sample:
             else:
                 metadata.short_name = f'{self.name[:12]}...'
 
+    def __repr__(self):
+        f"sample: {self.metadata.name}\n{self.metadata.description}"
+
 
 class SampleList(JSON_List):
     item_type = Sample
