@@ -20,6 +20,7 @@ class ImportFileHeaderContentError(Exception):
 class OilLibraryCsvFile:
     ''' A specialized file reader for the OilLib and CustLib
         flat datafiles.
+
         - We will use universal newline support to designate
           a line of text.
         - Additionally, each line contains a number of fields

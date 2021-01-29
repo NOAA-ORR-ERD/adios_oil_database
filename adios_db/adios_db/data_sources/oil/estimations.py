@@ -7,7 +7,10 @@ from copy import deepcopy
 from importlib import import_module
 
 import numpy as np
-from scipy.optimize import curve_fit
+try:  # not used anymore, so this allows importing without scipy
+    from scipy.optimize import curve_fit
+except ImportError:
+    pass
 
 from adios_db.util import estimations as est
 from adios_db.util.json import ObjFromDict

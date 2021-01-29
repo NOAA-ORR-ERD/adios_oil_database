@@ -4,14 +4,6 @@ adios\_db.util package
 Submodules
 ----------
 
-adios\_db.util.csv module
--------------------------
-
-.. automodule:: adios_db.util.csv
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 adios\_db.util.db\_connection module
 ------------------------------------
 
