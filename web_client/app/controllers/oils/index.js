@@ -10,4 +10,7 @@ export default class IndexController extends OilsController {
         'sort': {'metadata.name': 'asc'}
     };
 
+    get canModifyDb() {
+        return this.capabilities.firstObject.can_modify_db == 'true';
+    }
 }
