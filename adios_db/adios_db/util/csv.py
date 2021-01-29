@@ -13,13 +13,18 @@ class FileHeaderContentError(Exception):
 
 
 class CSVFile(object):
-    ''' A file reader for flat datafiles in .csv format
-        - We will use universal newline support to designate
-          a line of text.
-        - Each line contains a number of fields separated by a designated
-          character. (default '\t').  The resulting parsed sequence of lines
-          and fields attempts to represent tabular data.
+    # FixMe: what does this do that the buil-in csv reader doesn't ??
     '''
+    A file reader for flat datafiles in .csv format
+
+    - We will use universal newline support to designate
+      a line of text.
+
+    - Each line contains a number of fields separated by a designated
+      character. (default ``\t``).  The resulting parsed sequence of lines
+      and fields attempts to represent tabular data.
+    '''
+
     def __init__(self, name, field_delim='\t'):
         '''
             :param name: The name of the oil library import file

@@ -97,9 +97,9 @@ class FixAPI(Cleanup):
 
     def find_density_near_15C(self):
         """
-        returns the density (in kg/m^3) withing DENSITY_TOL of 15C
+        returns the density (in kg/m3) within DENSITY_TOL of 15C
 
-````````# note: this could be cleaner with numpy -- but for so few values?
+        Note: this could be cleaner with numpy -- but for so few values?
         """
         density_table = self.build_density_table()
         min_diff = math.inf
