@@ -20,7 +20,7 @@ from ....computation.physical_properties import KinematicViscosity
 # 'HFO', 'MDO', 'Fuel Oil', 'Vacuum Gas Oil'
 
 
-# this maps the labels according to API and kinematic viscosity (cStat given temp in C) ranges.
+# this maps the labels according to API and kinematic viscosity (cSt at given temp in C) ranges.
 label_map = {
     # 'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
     #  These are all no bounds:
@@ -84,17 +84,13 @@ def is_label(oil, label):
         return False
 
     api = oil.metadata.API
-    kvis = 0.0  # a placeholder
-    # kvis = get_kinematic_viscosity_at_temp(temp=data['kvis_temp'],
-    #                                        kvis_units='cSt',
-    #                                        temp_units='C')
+    KV = KinematicViscosity(oil)
+    kvis = KN.at_temp(temp=data['kvis_temp'],
+                      kvis_units='cSt',
+                      temp_units='C')
 
     return (data['api_min'] <= api < data['api_max']
             and data['kvis_min'] <= kvis < data['kvis_max'])
-
-
-
-
 
 
 
