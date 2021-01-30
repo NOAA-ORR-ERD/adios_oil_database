@@ -24,12 +24,12 @@ from ....computation.physical_properties import KinematicViscosity
 label_map = {
     # 'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
     #  These are all no bounds:
-    'Crude Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
-    'Shale Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
-    'Fuel Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    'Crude Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Shale Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Fuel Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     # 'Home Heating Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
     #  these have API limits
-    'Fracking Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    'Fracking Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Light Crude':  {"api_min": 31.1, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Medium Crude': {"api_min": 22.3, "api_max": 31.1, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Heavy Crude': {"api_min": -inf, "api_max": 22.3, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
@@ -84,17 +84,21 @@ def is_label(oil, label):
         return False
 
     api = oil.metadata.API
-    try:
-        KV = KinematicViscosity(oil)
-        kvis = KV.at_temp(temp=data['kvis_temp'],
-                          kvis_units='cSt',
-                          temp_units='C')
-    except:  # not a good idea, but whatevr when wrong, I don't want it to crash
-      kvis = 1.0  # arbitrary
+    # check API:
+    is_label = True if data['api_min'] <= api < data['api_max'] else False
 
-    return (data['api_min'] <= api < data['api_max']
-            and data['kvis_min'] <= kvis < data['kvis_max'])
+    if is_label and (data['kvis_min'] is not -inf
+                     or data['kvis_max'] is not inf):  # check viscosity limits
+        try:
+            KV = KinematicViscosity(oil)
+            kvis = KV.at_temp(temp=data['kvis_temp'],
+                              kvis_units='cSt',
+                              temp_units='C')
+            is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
+        except ZeroDivisionError:
+            is_label = False
 
+    return is_label
 
 
 # def link_oil_to_labels(oil):

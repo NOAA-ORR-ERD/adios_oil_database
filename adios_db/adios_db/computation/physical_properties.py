@@ -111,7 +111,11 @@ class KinematicViscosity:
         initialize from an oil object
         """
         data = get_kinematic_viscosity_data(oil, units='m^2/s', temp_units="K")
-        self.kviscs, self.temps = zip(*data)
+        if data:
+            self.kviscs, self.temps = zip(*data)
+        else:
+            self.kviscs = []
+            self.temps = []
         self.initialize()
 
     def at_temp(self, temp, kvis_units='m^2/s', temp_units="K"):
@@ -213,7 +217,10 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
 
     """
 
-    kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
+    try:
+        kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
+    except IndexError:  # no subsamples at all!
+        return []
 
     if len(kvisc) > 0:
         visc_table = []
