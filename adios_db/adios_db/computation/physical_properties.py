@@ -310,5 +310,82 @@ def convert_dvisc_to_kvisc(dvisc, density):
 #     raise NotImplementedError
 
 
+def bullwinkle_fraction(oil):
+
+    Ni = 0
+    Va = 0
+    try:
+        bulk_composition = oil.sub_samples[0].bulk_composition
+        for element in bulk_composition:
+            if element.name == "nickel":
+                Ni = element.measurement.value
+    except:
+        Ni = 0.
+    try:
+        bulk_composition = oil.sub_samples[0].bulk_composition
+        for element in bulk_composition:
+            if element.name == "vanadium":
+                Va = element.measurement.value
+    except:
+        Va = 0.
+        
+    try:
+        f_asph = oil.sub_samples[0].SARA.asphaltenes.value
+    except:
+        f_asph = 0.
+
+    #need to go through subsamples checking for weathered data
+    #if oil.metadata.emuls_constant_max is not None:
+        #bullwinkle_fraction = emuls_constant_max
+
+    if oil.metadata.product_type == "refined":
+        bullwinkle_fraction = 1.0
+    else:
+        oil_api = oil.metadata.API
+        if (Ni > 0.0 and Va > 0.0 and Ni + Va > 15.0):
+            print (Ni+Va)
+            bullwinkle_fraction = 0.0
+        elif f_asph > 0:
+            bullwinkle_fraction = 0.20219 - 0.168 * np.log10(f_asph)
+            bullwinkle_fraction = np.clip(bullwinkle_fraction, 0.0, 0.303)
+        elif oil_api < 26.0:
+            bullwinkle_fraction = 0.08
+        elif oil_api > 50.0:
+            bullwinkle_fraction = 0.303
+        else:
+            bullwinkle_fraction = (-1.038 - 0.78935 * np.log10(1.0 / oil_api))
+
+        bullwinkle_fraction = _adios2_new_bull_calc(bullwinkle_fraction, oil_api)
+
+    return bullwinkle_fraction
+
+
+def _adios2_new_bull_calc(bullwinkle_fraction, oil_api):
+    """
+    From the Adios2 c++ file OilInitialize.cpp, there is functionality
+    inside the function CAdiosData::Bullwinkle() which is annotated
+    in the code as 'new bull calc'.
+
+    It uses the following definitions:
+    - TG, Documented as the value 'dT/df - evaporation'.
+          I can only assume this is the initial fractional rate of
+          evaporation.
+    - TBP, Documented as the 'ADIOS 1 liquid boiling point
+          (bubble pt)'.
+    - BullAdios1, which appears to be used to scale-average the
+                  initially computed bullwinkle fraction.
+      get_density_data
+    Regardless, in order to approximate what Adios2 is doing, we
+    need this modification of our bullwinkle fraction.
+    """
+
+    t_g = 1356.7 - 247.36 * np.log(oil_api)
+    t_bp = 532.98 - 3.1295 * oil_api
+    bull_adios1 = (483.0 - t_bp) / t_g
+
+    bull_adios1 = np.clip(bull_adios1, 0.0, 0.4)
+
+    return 0.5 * (bullwinkle_fraction + bull_adios1)
+    
 
 
