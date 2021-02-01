@@ -343,7 +343,6 @@ def bullwinkle_fraction(oil):
     else:
         oil_api = oil.metadata.API
         if (Ni > 0.0 and Va > 0.0 and Ni + Va > 15.0):
-            print (Ni+Va)
             bullwinkle_fraction = 0.0
         elif f_asph > 0:
             bullwinkle_fraction = 0.20219 - 0.168 * np.log10(f_asph)
