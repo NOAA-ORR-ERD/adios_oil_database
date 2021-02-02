@@ -310,6 +310,31 @@ def convert_dvisc_to_kvisc(dvisc, density):
 #     raise NotImplementedError
 
 
+def get_distillation_cuts(oil, units="fraction", temp_units="K"):
+    """
+    Return a table of distillation data:
+
+    list of (cut fraction, temp) pairs
+
+    :param oil: the oil object to get data from
+
+    :param units="fraction": units you want the density in
+
+    :param temp_units="K": units you want the temperature in
+
+    """
+
+    distillation_cuts = oil.sub_samples[0].distillation_data.cuts
+
+    # create normalized list of densities
+    cuts_table = []
+    for cut in distillation_cuts:
+        f = cut.fraction.converted_to(units).value
+        t = cut.vapor_temp.converted_to(temp_units).value
+        cuts_table.append((f, t))
+    return cuts_table
+
+
 def bullwinkle_fraction(oil):
 
     Ni = 0
