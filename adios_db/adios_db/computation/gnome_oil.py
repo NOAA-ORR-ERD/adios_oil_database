@@ -83,7 +83,7 @@ def make_gnome_oil(oil):
     else:
         if phys_props.flash_point.measurement.max_value is not None:
             go['flash_point'] = phys_props.flash_point.measurement.converted_to('K').max_value
-        else
+        else:
             go['flash_point'] = phys_props.flash_point.measurement.converted_to('K').value
 
     pour_point = phys_props.pour_point
@@ -92,7 +92,7 @@ def make_gnome_oil(oil):
     else:
         if phys_props.pour_point.measurement.max_value is not None:
             go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').max_value
-        else
+        else:
             go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').value
 
     # fixme: We need to get the weathered densities, if they are there.
