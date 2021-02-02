@@ -224,7 +224,7 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
 
     if len(kvisc) > 0:
         visc_table = []
-        for visc_point in viscosities:
+        for visc_point in kvisc:
             d = visc_point.viscosity.converted_to(units).value
             t = visc_point.ref_temp.converted_to(temp_units).value
             visc_table.append((d, t))
