@@ -11,33 +11,79 @@ from math import inf, nan
 from ..product_type import types_to_labels
 from ....computation.physical_properties import KinematicViscosity
 
-# # These are the current ones that aren't mapped yet:
-# 'Bitumen', 'Shale Oil', 'Fracking Oil',  'Group V',
-# , , 'Crude Oil', 'Condensate', 'Refined Product',
-# 'No. 2 Fuel Oil', 'Kerosene', 'Diesel', 'Jet Fuel', 'Residual Fuel',
-# 'IFO', 'Home Heating Oil', 'Heavy Fuel Oil', 'No. 6 Fuel Oil',
-# 'Aviation Gas', 'Distillate Fuel', 'Transformer Oil', 'Bunker C',
-# 'HFO', 'MDO', 'Fuel Oil', 'Vacuum Gas Oil'
+# # Here are all the Product Types:
+# ('Crude Oil NOS',
+#  'Tight Oil',
+#  'Condensate',
+#  'Bitumen Blend',
+#  'Refined Product NOS',
+#  'Fuel Oil NOS',
+#  'Distillate Fuel Oil',
+#  'Residual Fuel Oil',
+#  'Refinery Intermediate',
+#  'Solvent',
+#  'Bio-fuel Oil',
+#  'Bio-Petro Fuel Oil',
+#  'Natural Plant Oil',
+#  'Lube Oil',
+#  'Dielectric Oil',
+#  'Other')
 
+# # These are the current labels that aren't mapped yet:
+
+
+# , 'MDO', 'Vacuum Gas Oil'
+
+# these are the labels with no criteria for density or viscosity
+# THat is, if it's a "Crude Oil NOS", it's a 'Crude Oil'
+synonyms_for_product_types = {'Crude Oil',
+                              'Shale Oil',
+                              'Fracking Oil',
+                              'Fuel Oil',
+                              'Residual Fuel',
+                              'Refined Product',
+                              'Condensate'
+                              'Transformer Oil',
+                              }
+
+
+# these are labels that are synonymous
+synonyms_for_labels = {'Heavy Fuel Oil': ['HFO', 'No. 6 Fuel Oil', 'Bunker C'],
+                       'Kerosene': ['Jet Fuel'],
+                       'No. 2 Fuel Oil': ['Diesel','Home Heating Oil'],
+                       }
+
+no_criteria = {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15}
+label_map = {label: no_criteria for label in synonyms_for_product_types}
 
 # this maps the labels according to API and kinematic viscosity (cSt at given temp in C) ranges.
-label_map = {
+label_map.update({
     # 'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
-    #  These are all no bounds:
-    'Crude Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Shale Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Fuel Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    # 'Home Heating Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
-    #  these have API limits
-    'Fracking Oil': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Light Crude':  {"api_min": 31.1, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Medium Crude': {"api_min": 22.3, "api_max": 31.1, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Heavy Crude': {"api_min": -inf, "api_max": 22.3, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Group V': {"api_min": -inf, "api_max": 10.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Heavy Fuel Oil': {"api_min": -inf, "api_max": 15.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'HFO': {"api_min": -inf, "api_max": 15.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
 
-             }
+    'Heavy Fuel Oil': {"api_min": -inf, "api_max": 15.0, "kvis_min": 200, "kvis_max": inf, 'kvis_temp': 50},
+
+    # pretty much made this up ... non-newtonian
+    'Bitumen': {"api_min": -inf, "api_max": 10, "kvis_min": 2000, "kvis_max": inf, 'kvis_temp': 50},
+
+
+    # Refined light products
+    'No. 2 Fuel Oil': {"api_min": 30, "api_max": 39, "kvis_min": 2.5, "kvis_max": 4, 'kvis_temp': 38},
+    'Kerosene': {"api_min": 47.6, "api_max": 67.8, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 38},
+    'Aviation Gas': {"api_min": 47.6, "api_max": 70.8, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 38},
+    'Gasoline': {"api_min": 59.7, "api_max": 76.6, "kvis_min": -inf, "kvis_max": 2.5, 'kvis_temp': 38},
+
+    # Interemdiate Fuel Oils
+    'MDO':  {"api_min": 30, "api_max": 42, "kvis_min": 8, "kvis_max": 11, 'kvis_temp': 40},
+    'IFO':  {"api_min": 15, "api_max": 30, "kvis_min": 4, "kvis_max": 200, 'kvis_temp': 38},
+
+    })
+
+for label, synonyms in synonyms_for_labels.items():
+    label_map.update({syn: label_map[label] for syn in synonyms})
 
 
 def get_suggested_labels(oil):
@@ -83,17 +129,25 @@ def is_label(oil, label):
     except KeyError:
         return False
 
+    print('\nchecking:', label)
+
     api = oil.metadata.API
+
+    print("API:", api)
     # check API:
     is_label = True if data['api_min'] <= api < data['api_max'] else False
 
-    if is_label and (data['kvis_min'] is not -inf
-                     or data['kvis_max'] is not inf):  # check viscosity limits
+    print(is_label, data['kvis_min'], data['kvis_max'])
+    if is_label and ((data['kvis_min'] != -inf)
+                     or (data['kvis_max'] != inf)):  # check viscosity limits
+        print("checking viscosity")
         try:
             KV = KinematicViscosity(oil)
             kvis = KV.at_temp(temp=data['kvis_temp'],
                               kvis_units='cSt',
                               temp_units='C')
+            print("viscosity is:", kvis)
+            print("limits are:", data['kvis_min'], data['kvis_max'])
             is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
         except ZeroDivisionError:
             is_label = False
@@ -342,3 +396,21 @@ def is_label(oil, label):
 #         return viscosity <= kvis_max
 #     else:
 #         return True
+
+# Data from: https://www.sigma2c.com/16api_gravity.html
+
+#                Specific Gravity  API
+# Naphtha light       0.66-0.70
+# Naphtha medium      0.70-0.75
+# Naphtha heavy       0.75-0.80
+# Crude oil           0.80-0.97
+# Aviation gasoline   0.70-0.78....47.6--70.6
+# Kerosene            0.71-0.79    47.6--67.8
+# Gasoline            0.68-0.74    59.7--76.6
+# Gas oil             0.78-0.86    33.0--49.9
+# Diesel oil          0.82-0.90    25.7--41.1
+# Lubricating oil     0.82-0.92
+# Fuel oil            0.92-0.99
+# Asphaslitc bitumen  1.00-1.10
+
+

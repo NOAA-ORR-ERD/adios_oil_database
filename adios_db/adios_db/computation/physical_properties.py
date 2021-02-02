@@ -224,7 +224,7 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
 
     if len(kvisc) > 0:
         visc_table = []
-        for visc_point in viscosities:
+        for visc_point in kvisc:
             d = visc_point.viscosity.converted_to(units).value
             t = visc_point.ref_temp.converted_to(temp_units).value
             visc_table.append((d, t))
@@ -328,7 +328,7 @@ def bullwinkle_fraction(oil):
                 Va = element.measurement.value
     except:
         Va = 0.
-        
+
     try:
         f_asph = oil.sub_samples[0].SARA.asphaltenes.value
     except:
@@ -386,6 +386,6 @@ def _adios2_new_bull_calc(bullwinkle_fraction, oil_api):
     bull_adios1 = np.clip(bull_adios1, 0.0, 0.4)
 
     return 0.5 * (bullwinkle_fraction + bull_adios1)
-    
+
 
 
