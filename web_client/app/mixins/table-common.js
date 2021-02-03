@@ -71,9 +71,10 @@ export default Mixin.create({
 
   actions: {
       onScrolledToBottom() {
-          if (this.canLoadMore) {
-              this.fetchRecords.perform();
-          }
+          // We define this function because it seems to be required for
+          // ember-light-table, but since we are loading the whole table
+          // anyway, there is no need to check for any more records when
+          // we scroll to the bottom
       },
 
       onColumnClick(column) {

@@ -8,6 +8,8 @@ import TableCommon from 'adios-db/mixins/table-common';
 
 
 export default Component.extend(TableCommon, {
+    enableSync: false,
+
     // our query option properties
     q: '',
     sort: 'metadata.name',
@@ -105,15 +107,16 @@ export default Component.extend(TableCommon, {
         this._super(...arguments);
 
         this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
+        this.fetchRecords.perform();
     },
 
     fetchRecords: task(function*() {
         while (this.canLoadMore) {
-            let queryOptions = this.getQueryOptions();
-            let records = yield this.store.query('oil', queryOptions);
+            let records = yield this.store.query('oil', this.getQueryOptions());
 
-            this.data.pushObjects(records.toArray());
             this.set('meta', records.get('meta'));
+            this.data.pushObjects(records.toArray());
+            yield this.get('table').pushRows(records.toArray());
 
             this.incrementProperty('page');
             this.set('canLoadMore', !isEmpty(records));
@@ -168,6 +171,7 @@ export default Component.extend(TableCommon, {
             this.savedFilters['labels'] = this.selectedLabels;
 
             this.data.clear();
+            this.get('table').setRows([]);
             this.set('page', 0);
             this.set('canLoadMore', true);
 
@@ -189,6 +193,7 @@ export default Component.extend(TableCommon, {
                 });
 
                 this.data.clear();
+                this.get('table').setRows([]);
                 this.set('page', 0);
                 this.set('canLoadMore', true);
 
@@ -197,12 +202,8 @@ export default Component.extend(TableCommon, {
         },
 
         onTypeSelected(event) {
-            if (event.target.value === 'None') {
-                this.set('selectedType', '');
-            }
-            else {
-                this.set('selectedType', event.target.value);
-            }
+            this.set('selectedType',
+                     event.target.value === 'None' ? '' : event.target.value);
 
             // now we need to filter our labels with the selected type
             this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
