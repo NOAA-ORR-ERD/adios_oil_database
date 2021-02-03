@@ -108,7 +108,7 @@ export default Component.extend(TableCommon, {
     },
 
     fetchRecords: task(function*() {
-        while (this.get('canLoadMore')) {
+        while (this.canLoadMore) {
             let queryOptions = this.getQueryOptions();
             let records = yield this.store.query('oil', queryOptions);
 
@@ -124,21 +124,23 @@ export default Component.extend(TableCommon, {
         if (productType === 'None') {productType = ''}
 
         if (productType) {
-            return this.get('labels').filter(i => {
+            return this.labels.filter(i => {
                 return i.product_types.includes(productType);
             }).mapBy('name');
         }
         else {
-            return this.get('labels').mapBy('name');
+            return this.labels.mapBy('name');
         }
     },
 
     getQueryOptions() {
-        let queryOptions = this.getProperties(['page',
-            'limit',
-            'sort',
-            'dir',
-            'q']);
+        let queryOptions = {
+                page: this.page,
+                limit: this.limit,
+                sort: this.sort,
+                dir: this.dir,
+                q: this.q
+        }
 
         queryOptions['qLabels'] = this.selectedLabels.join();
 
@@ -190,7 +192,7 @@ export default Component.extend(TableCommon, {
                 this.set('page', 0);
                 this.set('canLoadMore', true);
 
-                this.get('fetchRecords').perform();
+                this.fetchRecords.perform();
             }
         },
 

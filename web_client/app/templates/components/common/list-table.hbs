@@ -1,9 +1,9 @@
 <div class="table-responsive">
   <center>
     {{#if this.boldTitle}}
-      <strong>{{this.args.tableTitle}}</strong>
+      <strong>{{@tableTitle}}</strong>
     {{else}}
-      {{this.args.tableTitle}}
+      {{@tableTitle}}
     {{/if}}
   </center>
 
@@ -16,7 +16,7 @@
         {{/each-in}}
 
 
-        {{#if this.args.editable}}
+        {{#if @editable}}
           <td class="border-0">
             <button type="button"
               {{on "click" (fn this.addEmptyTableRow 0)}}
@@ -30,7 +30,7 @@
     </thead>
 
     <tbody>
-      {{#if (or this.args.editable anyDataPresent)}}
+      {{#if (or @editable anyDataPresent)}}
         {{#each this.baseProperty as |row index|}}
           <tr>
             {{#each-in this.properties as |attr value|}}
@@ -38,13 +38,13 @@
                 {{#if (eq value.dataType "value-unit")}}
                   <Common::ValueUnitInput
                     @valueObject={{row}}
-                    @editable={{this.args.editable}}
+                    @editable={{@editable}}
                     @submit={{fn this.updateListValue index}}
                     @valueUnit={{value.unit}}
                     @valuePrecision={{value.precision}}
                   />
                 {{else if (eq value.dataType "string")}}
-                  {{#if this.args.editable}}
+                  {{#if @editable}}
                     <Input @class="p-1 overflow-hidden bg-transparent border"
                       @value={{row}}
                       @placeholder="Enter Value"
@@ -55,7 +55,7 @@
                     <span class="p-1">{{row}}</span>
                   {{/if}}
                 {{else if (eq value.dataType "number")}}
-                  {{#if this.args.editable}}
+                  {{#if @editable}}
                     <Input @class="p-1 overflow-hidden bg-transparent border"
                       @value={{row}}
                       @placeholder="Enter Value"
@@ -70,7 +70,7 @@
               </td>
             {{/each-in}}
 
-            {{#if this.args.editable}}
+            {{#if @editable}}
               <td class="border-0">
                 <button type="button"
                   {{on "click" (fn this.deleteTableRow index)}}

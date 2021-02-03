@@ -1,5 +1,5 @@
-import DS from 'ember-data';
+import RESTAdapter from '@ember-data/adapter/rest';
 
 
-export default class ApplicationAdapter extends DS.RESTAdapter {
+export default class ApplicationAdapter extends RESTAdapter {
 }

@@ -67,6 +67,8 @@ export default class RangeValueDialog extends Component {
     }
 
     willDestroy() {
+        super.willDestroy();
+
         $('body').off('keyup.modal-dialog');
     }
     

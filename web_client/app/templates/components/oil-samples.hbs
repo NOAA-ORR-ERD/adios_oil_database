@@ -11,7 +11,7 @@
       >
 
 
-        {{#if this.args.editable}}
+        {{#if @editable}}
           <Input
             @class="p-1 overflow-hidden bg-transparent border"
             @value={{props.short_name}}
@@ -22,21 +22,21 @@
         {{/if}}
 
         {{#if idx}}
-          {{#if this.args.editable}}
+          {{#if @editable}}
             <TabNav::RemoveSample
-              @oil={{this.args.oil}}
+              @oil={{@oil}}
               @index={{idx}}
-              @submit={{this.args.submit}}
+              @submit={{@submit}}
             />
           {{/if}}
         {{/if}}
       </a>
     {{/each}}
 
-    {{#if this.args.editable}}
+    {{#if @editable}}
       <TabNav::AddSample
-        @oil={{this.args.oil}}
-        @submit={{this.args.submit}}
+        @oil={{@oil}}
+        @submit={{@submit}}
       />
     {{/if}}
 
@@ -51,13 +51,13 @@
       class={{props.class}}
     >
       <TabPane::SubSample
-        @oil={{this.args.oil}}
-        @store={{this.args.oil.store}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
-        @sampleTab={{this.args.sampleTab}}
-        @categoryTab={{this.args.categoryTab}}
-        @updateCategoryTab={{this.args.updateCategoryTab}}
+        @oil={{@oil}}
+        @store={{@oil.store}}
+        @editable={{@editable}}
+        @submit={{@submit}}
+        @sampleTab={{@sampleTab}}
+        @categoryTab={{@categoryTab}}
+        @updateCategoryTab={{@updateCategoryTab}}
         @sampleName={{props.short_name}}
       />
     </div>

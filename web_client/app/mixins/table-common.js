@@ -61,12 +61,12 @@ export default Mixin.create({
   }).restartable(),
 
   getQueryOptions() {
-      return this.getProperties([
-          'page',
-          'limit',
-          'sort',
-          'dir'
-      ]);
+      return {
+          page: this.page,
+          limit: this.limit,
+          sort: this.sort,
+          dir: this.dir
+      }
   },
 
   actions: {
@@ -88,7 +88,7 @@ export default Mixin.create({
               this.data.clear();
               this.set('page', 0);
 
-              this.get('fetchRecords').perform();
+              this.fetchRecords.perform();
           }
       }
   }

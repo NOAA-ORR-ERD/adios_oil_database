@@ -1,72 +1,72 @@
 <center>
-  {{#if this.args.editable}}
+  {{#if @editable}}
     <Input
       @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
-      @value={{this.args.oil.metadata.name}}
+      @value={{@oil.metadata.name}}
       @placeholder="Enter Sample Name"
-      @change={{action this.args.submit this.args.oil}}
+      @change={{action @submit @oil}}
     />
   {{else}}
     <h4>
-      {{this.args.oil.metadata.name}}
+      {{@oil.metadata.name}}
     </h4>
   {{/if}}
 
-  {{#if (or this.args.oil.metadata.fraction_weathered this.args.oil.metadata.boiling_point_range)}}
+  {{#if (or @oil.metadata.fraction_weathered @oil.metadata.boiling_point_range)}}
     <p class="small">
-      {{#if (or this.args.oil.metadata.fraction_weathered this.args.editable)}}
+      {{#if (or @oil.metadata.fraction_weathered @editable)}}
         <form class="form-inline justify-content-center" role="form">
           <div class="form-group">
             <strong>Weathered Fraction:&nbsp;</strong>
             <Common::ValueUnitInput
-              @valueObject={{this.args.oil.metadata.fraction_weathered}}
+              @valueObject={{@oil.metadata.fraction_weathered}}
               @valueUnit="%"
               @valuePrecision={{2}}
-              @editable={{this.args.editable}}
-              @submit={{action this.args.submit this.args.oil}}
+              @editable={{@editable}}
+              @submit={{action @submit @oil}}
             />
           </div>
         </form>
       {{/if}}
 
-      {{#if (or this.args.oil.metadata.boiling_point_range this.args.editable)}}
+      {{#if (or @oil.metadata.boiling_point_range @editable)}}
         <strong>
           BP Range:
         </strong>
-        {{#if this.args.editable}}
+        {{#if @editable}}
           <Common::RangeValueInput
               @valueTitle="BP Range"
-              @valueObject={{this.args.oil}}
+              @valueObject={{@oil}}
               @valueName="metadata.boiling_point_range"
               @valueUnit="C"
               @valuePrecision="2"
-              @sampleIndex={{this.args.sampleIndex}}
+              @sampleIndex={{@sampleIndex}}
               @submit={{this.submit}}
           />
         {{else}}
-          {{value-unit (convert-unit this.args.oil.metadata.boiling_point_range "C") 2}}
+          {{value-unit (convert-unit @oil.metadata.boiling_point_range "C") 2}}
         {{/if}}
 
       {{/if}}
 
-      {{!-- {{#if this.args.oil.boiling_point_range}}
-            {{#if this.args.oil.fraction_weathered}}
+      {{!-- {{#if @oil.boiling_point_range}}
+            {{#if @oil.fraction_weathered}}
             <br>
             {{/if}}
 
-            {{#if this.args.editable}}
+            {{#if @editable}}
             <Common::RangeValueInput
                 @valueTitle="BP Range:"
-                @valueObject={{this.args.oil}}
+                @valueObject={{@oil}}
                 @valueName="boiling_point_range"
                 @valueUnit="C"
                 @valuePrecision="2"
-                @sampleIndex={{this.args.sampleIndex}}
+                @sampleIndex={{@sampleIndex}}
                 @submit={{this.submit}}
             />
             {{else}}
             <strong>BP Range:</strong>
-            {{value-unit this.args.oil.boiling_point_range 2}}
+            {{value-unit @oil.boiling_point_range 2}}
             {{/if}}
         {{/if}} --}}
     </p>

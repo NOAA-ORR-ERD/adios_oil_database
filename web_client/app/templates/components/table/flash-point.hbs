@@ -2,20 +2,20 @@
   <div class="table-responsive d-flex input-group align-items-center">
     <label class="p-1 input-group-text font-weight-bold">Flash Point:</label>
 
-    {{#if this.args.editable}}
+    {{#if @editable}}
       <Common::RangeValueInput
         @valueTitle="Flash Point"
-        @valueObject={{this.args.oil}}
+        @valueObject={{@oil}}
         @valueName="physical_properties.flash_point.measurement"
         @valueUnit="C"
         @valuePrecision="2"
-        @sampleIndex={{this.args.sampleIndex}}
+        @sampleIndex={{@sampleIndex}}
         @submit={{this.submit}}
       />
     {{else}}
-      {{#if this.args.oil.physical_properties.flash_point.measurement}}
+      {{#if @oil.physical_properties.flash_point.measurement}}
         <span>
-          {{value-unit (convert-unit this.args.oil.physical_properties.flash_point.measurement "C") 2}}
+          {{value-unit (convert-unit @oil.physical_properties.flash_point.measurement "C") 2}}
         </span>
       {{else}}
         No Data

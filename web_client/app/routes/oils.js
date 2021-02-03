@@ -1,9 +1,10 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
+import { action } from "@ember/object";
 
-export default Route.extend({
+
+export default class OilsRoute extends Route {
     model() {
-
         return hash({
             oils: (async () => {
                 let config = await this.store.findRecord('config', 'main.json');
@@ -49,33 +50,32 @@ export default Route.extend({
                 return this.store.findAll('capability');
             })(),
         });
-    },
+    }
 
     setupController(controller, models) {
         controller.setProperties(models);
-    },
-
-    actions: {
-        updateOil(oil) {
-            oil.save();
-        },
-
-        createOil(oil) {
-            let newOil = this.store.createRecord('oil', oil);
-
-            newOil.save().then(function(result) {
-                this.transitionTo('oils.show', result.id);
-            }.bind(this));
-        },
-        
-        deleteOil(oil) {
-            oil.deleteRecord();
-            oil.save().then(function(result) {
-                result._internalModel.unloadRecord();
-                this.transitionTo('oils.index');
-            }.bind(this));
-        }
-        
     }
 
-});
+    @action
+    updateOil(oil) {
+        oil.save();
+    }
+
+    @action
+    createOil(oil) {
+        let newOil = this.store.createRecord('oil', oil);
+        
+        newOil.save().then(function(result) {
+            this.transitionTo('oils.show', result.id);
+        }.bind(this));
+    }
+
+    @action
+    deleteOil(oil) {
+        oil.deleteRecord();
+        oil.save().then(function(result) {
+            result._internalModel.unloadRecord();
+            this.transitionTo('oils.index');
+        }.bind(this));
+    }
+}

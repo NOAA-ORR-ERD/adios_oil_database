@@ -1,5 +1,3 @@
-import Component from '@glimmer/component';
+import templateOnly from '@ember/component/template-only';
 
-export default class PaneHeader extends Component {
-    
-}
+export default templateOnly();
