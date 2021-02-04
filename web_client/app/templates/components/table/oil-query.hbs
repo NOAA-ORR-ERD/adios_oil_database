@@ -41,7 +41,7 @@
             >
               <option class="bg-light" value="">unspecified</option>
 
-              {{#each this.productTypes.firstObject.product_types as |oilType|}}
+              {{#each @productTypes.firstObject.product_types as |oilType|}}
                 {{#if (eq oilType this.selectedType)}}
                   <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
@@ -90,7 +90,7 @@
   <t.body
     @canSelect={{false}}
     @enableScaffolding={{true}}
-    @onScrolledToBottom={{action "onScrolledToBottom"}} as |body|
+    @autoHideScrollbar={{false}} as |body|
   >
     {{#if isLoading}}
       {{#body.loader}}

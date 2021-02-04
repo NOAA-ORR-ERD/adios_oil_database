@@ -1,149 +1,161 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action, setProperties } from "@ember/object";
 
+import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 
-import TableCommon from 'adios-db/mixins/table-common';
+import Table from 'ember-light-table';
 
 
-export default Component.extend(TableCommon, {
-    enableSync: false,
+export default class NewOilQuery extends Component {
+    @service store;
+    enableSync = false;
 
     // our query option properties
-    q: '',
-    sort: 'metadata.name',
-    limit: 50,
+    @tracked q;
+    @tracked sort = 'metadata.name';
+    @tracked dir = 'asc';
+    @tracked meta;
+    @tracked selectedType;
 
-    columns: computed(function() {
-        return [{
-            label: 'Status',
-            valuePath: 'status',
-            resizable: true,
-            minResizeWidth: 80,
-            width: '5em',
-            cellComponent: 'table/cell/status',
-            classNames: 'text-nowrap',
-            searchable: true,
-            align: "center",
-        }, {
-            label: 'ID',
-            valuePath: 'id',
-            classNames: 'text-nowrap',
-            width: '5em',
-            searchable: true,
-            resizable: true,
-            minResizeWidth: 75
-        }, {
-            label: 'Name',
-            valuePath: 'metadata.name',
-            cellComponent: 'table/cell/oil-name',
-            classNames: 'text-nowrap',
-            searchable: true,
-            minResizeWidth: 100,
-            resizable: true,
-        }, {
-            label: 'Location',
-            valuePath: 'metadata.location',
-            classNames: 'text-nowrap',
-            searchable: true,
-            minResizeWidth: 100,
-            resizable: true,
-        }, {
-            label: 'Product Type',
-            valuePath: 'metadata.product_type',
-            classNames: 'text-nowrap',
-            width: '12em',
-            minResizeWidth: 80,
-            searchable: true,
-            resizable: true,
-        }, {
-            label: 'API',
-            valuePath: 'metadata.API',
-            classNames: 'text-nowrap',
-            cellComponent: 'table/cell/api',
-            width: '4em',
-            minResizeWidth: 60,
-            resizable: true,
-        }, {
-            label: 'Score',
-            valuePath: 'metadata.model_completeness',
-            classNames: 'text-nowrap',
-            width: '5em',
-            minResizeWidth: 60,
-            resizable: true,
-        }, {
-            label: 'Date',
-            valuePath: 'metadata.sample_date',
-            classNames: 'text-nowrap',
-            cellComponent: 'table/cell/sample-date',
-            width: '4em',
-            minResizeWidth: 60,
-            resizable: true,
+    page = 0;
+    limit = 50;    
+    canLoadMore = true;
+    data = [];
+
+    get isLoading() {
+        return this.fetchRecords.isRunning;
+    }
+
+    columns = [{
+        label: 'Status',
+        valuePath: 'status',
+        cellComponent: 'table/cell/status',
+        width: '5em',
+        minResizeWidth: 80,
+        classNames: 'text-nowrap',
+        resizable: true,
+        searchable: true,
+        align: "center",
+    }, {
+        label: 'ID',
+        valuePath: 'id',
+        width: '5em',
+        minResizeWidth: 75,
+        classNames: 'text-nowrap',
+        searchable: true,
+        resizable: true,
+    }, {
+        label: 'Name',
+        valuePath: 'metadata.name',
+        cellComponent: 'table/cell/oil-name',
+        classNames: 'text-nowrap',
+        searchable: true,
+        minResizeWidth: 100,
+        resizable: true,
+    }, {
+        label: 'Location',
+        valuePath: 'metadata.location',
+        minResizeWidth: 100,
+        classNames: 'text-nowrap',
+        searchable: true,
+        resizable: true,
+    }, {
+        label: 'Product Type',
+        valuePath: 'metadata.product_type',
+        width: '12em',
+        minResizeWidth: 80,
+        classNames: 'text-nowrap',
+        searchable: true,
+        resizable: true,
+    }, {
+        label: 'API',
+        valuePath: 'metadata.API',
+        cellComponent: 'table/cell/api',
+        width: '4em',
+        minResizeWidth: 60,
+        classNames: 'text-nowrap',
+        resizable: true,
+    }, {
+        label: 'Score',
+        valuePath: 'metadata.model_completeness',
+        width: '5em',
+        minResizeWidth: 60,
+        classNames: 'text-nowrap',
+        resizable: true,
+    }, {
+        label: 'Date',
+        valuePath: 'metadata.sample_date',
+        cellComponent: 'table/cell/sample-date',
+        width: '4em',
+        minResizeWidth: 60,
+        classNames: 'text-nowrap',
+        resizable: true,
+    }];
+    // We will keep this around in comment form for debugging
+    // should the need arise
+    //{
+    //    label: 'Labels',
+    //    valuePath: 'metadata.labels',
+    //    classNames: 'text-nowrap',
+    //    cellComponent: 'table/cell/label',
+    //    width: '9em',
+    //    minResizeWidth: 100,
+    //    resizable: true,
+    //}
+
+    constructor() {
+        super(...arguments);
+
+        // this.args.savedFilters should be coming from the controller
+        this.q = this.args.savedFilters['text'];
+        this.selectedApi = this.args.savedFilters['api'];
+        this.selectedType = this.args.savedFilters['product_type'];
+        this.selectedLabels = this.args.savedFilters['labels'];
+        this.sort = Object.keys(this.args.savedFilters['sort'])[0];
+        this.dir = Object.values(this.args.savedFilters['sort'])[0];
+
+        this.table = Table.create({
+            columns: this.columns,
+            rows: this.data,
+            enableSync: this.enableSync
+        });
+
+        let sortColumn = this.table.allColumns.findBy('valuePath', this.sort);
+
+        // Setup initial sort column
+        if (sortColumn) {
+          sortColumn.set('sorted', true);
         }
-        // We will keep this around in comment form for debugging
-        // should the need arise
-        //{
-        //    label: 'Labels',
-        //    valuePath: 'metadata.labels',
-        //    classNames: 'text-nowrap',
-        //    cellComponent: 'table/cell/label',
-        //    width: '9em',
-        //    minResizeWidth: 100,
-        //    resizable: true,
-        //}
-        ];
-    }),
 
-    init() {
-        // this.savedFilters should be coming from the controller
-        this.q = this.savedFilters['text'];
-        this.selectedApi = this.savedFilters['api'];
-        this.selectedType = this.savedFilters['product_type'];
-        this.selectedLabels = this.savedFilters['labels'];
-        this.sort = Object.keys(this.savedFilters['sort'])[0];
-        this.dir = Object.values(this.savedFilters['sort'])[0];
-        
-        this._super(...arguments);
-
-        this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
         this.fetchRecords.perform();
-    },
+    }
 
-    fetchRecords: task(function*() {
-        while (this.canLoadMore) {
-            let records = yield this.store.query('oil', this.getQueryOptions());
+    get filteredLabels() {
+        let productType = this.selectedType;
 
-            this.set('meta', records.get('meta'));
-            this.data.pushObjects(records.toArray());
-            yield this.get('table').pushRows(records.toArray());
-
-            this.incrementProperty('page');
-            this.set('canLoadMore', !isEmpty(records));
-        }
-    }).restartable(),
-
-    getFilteredLabels(productType) {
         if (productType === 'None') {productType = ''}
 
         if (productType) {
-            return this.labels.filter(i => {
+            return this.args.labels.filter(i => {
                 return i.product_types.includes(productType);
             }).mapBy('name');
         }
         else {
-            return this.labels.mapBy('name');
+            return this.args.labels.mapBy('name');
         }
-    },
+    }
 
-    getQueryOptions() {
+    get queryOptions() {
         let queryOptions = {
                 page: this.page,
                 limit: this.limit,
                 sort: this.sort,
                 dir: this.dir,
                 q: this.q
-        }
+        };
 
         queryOptions['qLabels'] = this.selectedLabels.join();
 
@@ -161,59 +173,67 @@ export default Component.extend(TableCommon, {
         }
 
         return queryOptions;
-    },
-
-    actions: {
-        onSearchChange() {
-            this.savedFilters['text'] = this.q;
-            this.savedFilters['api'] = this.selectedApi;
-            this.savedFilters['product_type'] = this.selectedType;
-            this.savedFilters['labels'] = this.selectedLabels;
-
-            this.data.clear();
-            this.get('table').setRows([]);
-            this.set('page', 0);
-            this.set('canLoadMore', true);
-
-            this.fetchRecords.perform();
-        },
-
-        onColumnClick(column) {
-            if (column.sorted) {
-                let sort = column.get('valuePath');
-                let dir = (column.ascending ? 'asc' : 'desc');
-
-                this.savedFilters['sort'] = {[sort]: dir};
-
-                this.setProperties({
-                    dir: dir,
-                    sort: sort,
-                    canLoadMore: true,
-                    page: 0
-                });
-
-                this.data.clear();
-                this.get('table').setRows([]);
-                this.set('page', 0);
-                this.set('canLoadMore', true);
-
-                this.fetchRecords.perform();
-            }
-        },
-
-        onTypeSelected(event) {
-            this.set('selectedType',
-                     event.target.value === 'None' ? '' : event.target.value);
-
-            // now we need to filter our labels with the selected type
-            this.set('filteredLabels', this.getFilteredLabels(this.selectedType));
-        }
     }
-});
 
+    @(task(function*() {
+        while (this.canLoadMore) {
+            let records = yield this.store.query('oil', this.queryOptions);
 
+            this.meta = records.meta;
+            this.data.pushObjects(records.toArray());
+            yield this.table.pushRows(records.toArray());
 
+            this.page++;
+            this.canLoadMore = !isEmpty(records);
+        }
+    }).restartable()) fetchRecords;
 
+    @action onSearchChange() {
+        this.args.savedFilters['text'] = this.q;
+        this.args.savedFilters['api'] = this.selectedApi;
+        this.args.savedFilters['product_type'] = this.selectedType;
+        this.args.savedFilters['labels'] = this.selectedLabels;
 
+        this.data.clear();
+        this.table.setRows([]);
+        this.page = 0;
+        this.canLoadMore = true;
 
+        this.fetchRecords.perform();
+    }
 
+    @action onColumnClick(column) {
+        let sort, dir;
+
+        if (this.sort === column.valuePath) {
+            // we already clicked on this before
+            sort = this.sort;
+            dir = (this.dir === 'asc' ? 'desc' : 'asc');
+        }
+        else {
+            // newly clicked column
+            sort = column.valuePath;
+            dir = 'asc';
+        }
+
+        this.args.savedFilters['sort'] = {[sort]: dir};
+
+        setProperties(this, {
+            dir: dir,
+            sort: sort,
+            canLoadMore: true,
+            page: 0
+        });
+
+        this.data.clear();
+        this.table.setRows([]);
+        this.page = 0;
+        this.canLoadMore = true;
+
+        this.fetchRecords.perform();
+    }
+
+    @action onTypeSelected(event) {
+        this.selectedType = event.target.value === 'None' ? '' : event.target.value;
+    }
+}
