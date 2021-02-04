@@ -50,7 +50,7 @@
             <select class="p-1 mt-1 overflow-hidden bg-transparent border"
                 onchange={{action "updateType"}}
             >
-              {{#if (contains @oil.metadata.product_type
+              {{#if (includes @oil.metadata.product_type
                               @productTypes.firstObject.product_types)}}
               {{else}}
                 <option class="bg-light" selected>{{@oil.metadata.product_type}}</option>
