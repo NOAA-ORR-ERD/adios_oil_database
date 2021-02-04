@@ -140,7 +140,7 @@ export default class SubSample extends Component {
         //       and it throws warnings when the app starts.
         //       Unfortunately, JQuery is the only way to add an event listener
         //       to a bootstrap tab.
-        $(element).off("shown.bs.tab").on('shown.bs.tab', this, this.shown);
+        $(element).off("shown.bs.tab").on('shown.bs.tab', this, this.shown);  // eslint-disable-line ember/no-jquery
     }
 
     @action

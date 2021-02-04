@@ -32,7 +32,7 @@ export default class CopyOilDlg extends Component {
         //       Unfortunately, JQuery is the only way to add an event listener
         //       to a bootstrap modal.
         //       Don't believe me?  https://stackoverflow.com/questions/24211185/twitter-bootstrap-why-do-modal-events-work-in-jquery-but-not-in-pure-js
-        $(element).on('shown.bs.modal', this.shown);
+        $(element).on('shown.bs.modal', this.shown);  // eslint-disable-line ember/no-jquery
     }
 
     @action
