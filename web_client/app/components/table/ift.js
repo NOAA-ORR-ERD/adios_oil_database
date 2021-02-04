@@ -18,19 +18,19 @@ export default class Ift extends Component {
         let ifts = (this.args.oil.physical_properties||{}).interfacial_tension_air;
         if (ifts) {
             ifts.setEach('interface', 'air');
-            this.iftsArray = this.iftsArray.concat(ifts)
+            this.iftsArray.push(...ifts);
         }
 
         ifts = (this.args.oil.physical_properties||{}).interfacial_tension_water;
         if (ifts) {
             ifts.setEach('interface', 'water');
-            this.iftsArray = this.iftsArray.concat(ifts)
+            this.iftsArray.push(...ifts);
         }
 
         ifts = (this.args.oil.physical_properties||{}).interfacial_tension_seawater;
         if (ifts) {
             ifts.setEach('interface', 'seawater');
-            this.iftsArray = this.iftsArray.concat(ifts)
+            this.iftsArray.push(...ifts);
         }
 
         if (Array.isArray(this.iftsArray)) {
