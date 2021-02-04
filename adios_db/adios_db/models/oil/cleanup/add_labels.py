@@ -6,7 +6,7 @@ For a given product type:
 
 The criteria follows the ASTM (and others) standards, where we can
 '''
-from math import inf, nan
+from math import inf
 
 from ..product_type import types_to_labels
 from ....computation.physical_properties import KinematicViscosity
@@ -31,11 +31,10 @@ from ....computation.physical_properties import KinematicViscosity
 
 # # These are the current labels that aren't mapped yet:
 
-
-# , 'MDO', 'Vacuum Gas Oil'
+# 'MDO', 'Vacuum Gas Oil'
 
 # these are the labels with no criteria for density or viscosity
-# THat is, if it's a "Crude Oil NOS", it's a 'Crude Oil'
+# e.g, if it's a "Crude Oil NOS", it's a 'Crude Oil'
 synonyms_for_product_types = {'Crude Oil',
                               'Shale Oil',
                               'Fracking Oil',
@@ -47,10 +46,10 @@ synonyms_for_product_types = {'Crude Oil',
                               }
 
 
-# these are labels that are synonymous
+# these are labels that are synonymous to other labels
 synonyms_for_labels = {'Heavy Fuel Oil': ['HFO', 'No. 6 Fuel Oil', 'Bunker C'],
                        'Kerosene': ['Jet Fuel'],
-                       'No. 2 Fuel Oil': ['Diesel','Home Heating Oil'],
+                       'No. 2 Fuel Oil': ['Diesel', 'Home Heating Oil'],
                        }
 
 no_criteria = {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15}
@@ -129,27 +128,27 @@ def is_label(oil, label):
     except KeyError:
         return False
 
-    print('\nchecking:', label)
-
     api = oil.metadata.API
 
-    print("API:", api)
     # check API:
-    is_label = True if data['api_min'] <= api < data['api_max'] else False
+    if ((data['api_min'] != -inf)
+        or (data['api_max'] != inf)):
+        if api is None:
+            is_label = False
+        else:
+            is_label = True if data['api_min'] <= api < data['api_max'] else False
+    else:
+        is_label = True
 
-    print(is_label, data['kvis_min'], data['kvis_max'])
     if is_label and ((data['kvis_min'] != -inf)
                      or (data['kvis_max'] != inf)):  # check viscosity limits
-        print("checking viscosity")
         try:
             KV = KinematicViscosity(oil)
             kvis = KV.at_temp(temp=data['kvis_temp'],
                               kvis_units='cSt',
                               temp_units='C')
-            print("viscosity is:", kvis)
-            print("limits are:", data['kvis_min'], data['kvis_max'])
             is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
-        except ZeroDivisionError:
+        except (ZeroDivisionError, ValueError): # if it can't do this, we don't apply the label
             is_label = False
 
     return is_label

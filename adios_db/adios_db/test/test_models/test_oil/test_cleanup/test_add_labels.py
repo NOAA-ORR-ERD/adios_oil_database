@@ -36,6 +36,17 @@ def test_add_labels_to_oil_no_product_type():
     assert get_suggested_labels(oil) == set()
 
 
+def test_add_labels_to_oil_no_API():
+    '''
+    this oil should get only labels with no API limits
+    '''
+    oil = Oil('XXXXX')
+    oil.metadata.product_type = 'Crude Oil NOS'
+
+    assert get_suggested_labels(oil) == set(['Crude Oil'])
+
+
+
 def test_add_labels_to_oil_no_labels_other():
     '''
     we should never get a label for 'Other'
