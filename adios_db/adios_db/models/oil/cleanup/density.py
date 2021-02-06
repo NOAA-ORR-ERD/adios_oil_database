@@ -105,10 +105,11 @@ class FixAPI(Cleanup):
         density_table = self.build_density_table()
         min_diff = math.inf
         for i, d in enumerate(density_table):
-            if d[1] < min_diff:
-                min_diff = d[1] - 15.0
+            diff = abs(d[1] - 15.0)
+            if diff < min_diff:
+                min_diff = diff
                 min_ind = i
-        if abs(min_diff) <= self.DENSITY_TOL:
+        if min_diff <= self.DENSITY_TOL:
             return density_table[min_ind][0]
         else:
             return None
