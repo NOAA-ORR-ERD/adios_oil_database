@@ -14,6 +14,7 @@ class FixAPI(Cleanup):
     adds (or replaces) the API value, from the density measurements
 
     NOTE: this could be extended to interpolate, but it that actually needed?
+          There is code in the computation.physical_properties package to help, if needed.
     """
     ID = "001"
 
