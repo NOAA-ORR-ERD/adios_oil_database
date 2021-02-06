@@ -37,9 +37,14 @@ class Density:
         except AttributeError:
             # not an oil object -- assume it's a table of data in the correct form
             data = oil
-        data = sorted(data, key=itemgetter(1))
-        self.densities, self.temps = zip(*data)
+        if data:
+            data = sorted(data, key=itemgetter(1))
+            self.densities, self.temps = zip(*data)
+        else:
+            self.densities = []
+            self.temps = []
         self.initialize()
+
 
     def initialize(self):
         """
@@ -110,8 +115,14 @@ class KinematicViscosity:
         """
         initialize from an oil object
         """
-        data = get_kinematic_viscosity_data(oil, units='m^2/s', temp_units="K")
+        try:
+            data = get_kinematic_viscosity_data(oil, units='m^2/s', temp_units="K")
+        except AttributeError:
+            # not an oil object -- assume it's a table of data in the correct form
+            data = oil
+
         if data:
+            data = sorted(data, key=itemgetter(1))
             self.kviscs, self.temps = zip(*data)
         else:
             self.kviscs = []

@@ -97,7 +97,7 @@ def test_json_list():
 def test_json_list_repr():
     jl = JSON_List([1, 2, 3, 4])
 
-    assert repr(jl) == "JSON_List([1, 2, 3, 4], item_type=None)"
+    assert repr(jl) == "JSON_List([1, 2, 3, 4])"
 
 
 def test_json_list_pyjson_simple():

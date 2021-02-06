@@ -98,6 +98,16 @@ class TestDensity:
             sample.physical_properties.densities.append(dp)
         return oil
 
+    def test_initilization_zero_densities(self):
+        """
+        no density data -- ValueError trying to initilize a Density object
+        """
+        oil = self.make_oil_with_densities([], [])
+
+        with pytest.raises(ValueError):
+            dc = Density(oil)
+
+
     @pytest.mark.parametrize("density, temp, k_rho",
                              [(800, 288.16, -0.0009),
                               (990, 288.16, -0.0008),

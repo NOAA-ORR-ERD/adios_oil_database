@@ -121,7 +121,7 @@ class JSON_List(list):
     A regular list can only be converted to JSON if it has
     JSON-able objects in it.
 
-    Note: msut be subclassed, and the item_type attribute set
+    Note: must be subclassed, and the item_type attribute set
     """
     item_type = None
 
@@ -153,8 +153,8 @@ class JSON_List(list):
         return jl
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}({super().__repr__()}, "
-                f"item_type={self.item_type})")
+        return f"{self.__class__.__name__}({list.__repr__(self)})"
+
 
     # def __str__(self):
     #     # why don't either of this work? it's using this repr ??
