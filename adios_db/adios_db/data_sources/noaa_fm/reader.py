@@ -201,7 +201,7 @@ class OilLibraryCsvFile:
     def export(self, filename):
         self.rewind()
 
-        file_out = open(filename, 'w')
+        file_out = open(filename, 'w', encoding="utf-8")
 
         if self.__version__ is not None:
             logger.debug(self.field_delim.join(self.__version__))

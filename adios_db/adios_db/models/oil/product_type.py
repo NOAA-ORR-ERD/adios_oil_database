@@ -33,7 +33,7 @@ def load_from_csv_file(filepath=None):
     if filepath is None:
         filepath = Path(__file__).parent / "product_types_and_labels.csv"
 
-    with open(filepath, newline='') as csvfile:
+    with open(filepath, newline='', encoding="utf-8") as csvfile:
         # skip the header:
         while True:
             line = csvfile.readline()

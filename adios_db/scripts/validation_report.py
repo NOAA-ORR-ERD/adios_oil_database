@@ -33,7 +33,7 @@ def main():
         print(USAGE)
         sys.exit(1)
 
-    with open("adios_db_validation.txt", 'w') as outfile:
+    with open("adios_db_validation.txt", 'w', encoding="utf-8") as outfile:
         outfile.write("Validation of data in: \n")
         outfile.write(base_dir)
         outfile.write("\n")

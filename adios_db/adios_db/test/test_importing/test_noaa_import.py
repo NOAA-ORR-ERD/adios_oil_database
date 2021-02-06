@@ -910,5 +910,5 @@ class TestOilLibraryAttributeMapper:
         )
 
         print(f'saving to: {file_path}')
-        with open(file_path, 'w') as fd:
+        with open(file_path, 'w', encoding="utf-8") as fd:
             json.dump(py_json, fd, indent=4, sort_keys=True)

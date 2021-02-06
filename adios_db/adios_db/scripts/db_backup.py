@@ -124,7 +124,7 @@ def export_to_file(base_path, collection_name, record):
         filename = os.path.join(base_path, collection_name,
                                 f'{record_name}.json')
 
-    json.dump(record, open(filename, 'w'),
+    json.dump(record, open(filename, 'w', encoding="utf-8"),
               default=json_handle_unparseable,
               sort_keys=True, indent=4)
 

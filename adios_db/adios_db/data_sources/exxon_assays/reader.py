@@ -38,7 +38,7 @@ class ExxonDataReader:
         self.index = self._read_index(data_index_file)
 
     def _read_index(self, data_index_file):
-        with open(data_index_file) as indexfile:
+        with open(data_index_file, encoding="utf-8") as indexfile:
             header = indexfile.readline().strip()
             if header.split() != ['oil_name', 'file']:
                 raise ValueError(f"This: {data_index_file}\n"

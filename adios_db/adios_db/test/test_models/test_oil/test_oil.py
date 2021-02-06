@@ -22,7 +22,7 @@ OUTPUT_DIR = HERE / "output"
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    HERE / "ExampleFullRecord.json"
+    HERE / "ExampleFullRecord.json", encoding="utf-8"
 ))
 
 # BIG_RECORD = json.load(open(
@@ -90,7 +90,6 @@ class TestOil:
         result = repr(oil)
 
         assert result.startswith("Oil(")
-        print("ID:", oil.oil_id)
         assert "oil_id='EC002234'" in result
 
     def test_init_minimal(self):

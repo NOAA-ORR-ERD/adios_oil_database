@@ -17,7 +17,7 @@ HERE = Path(__file__).parent
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    HERE.parent / "ExampleFullRecord.json"
+    HERE.parent / "ExampleFullRecord.json", encoding="utf-8"
 ))
 
 
