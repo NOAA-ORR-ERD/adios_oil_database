@@ -14,6 +14,9 @@ from ..common.utilities import dataclass_to_json
 from .metadata import MetaData
 from .sample import SampleList
 
+from .validation.warnings import WARNINGS
+from .validation.errors import ERRORS
+
 
 @dataclass_to_json
 @dataclass
@@ -41,6 +44,15 @@ class Oil:
         else:
             self._id = self.oil_id
 
+    def __str__(self):
+        """
+        need a custom str here, so we don't get a huge dump of the entire tree of data
+        """
+        return (f"{self.metadata.name}\n"
+                f"ID: {self.oil_id}\n"
+                f"Product Type: {self.metadata.product_type}"
+                )
+
     @classmethod
     def from_file(cls, infile):
         """
@@ -59,15 +71,38 @@ class Oil:
 
         return cls.from_py_json(py_json)
 
+    @staticmethod
+    def _validate_id(id):
+        if self.oil_id == "":
+            raise TypeError("You must supply a non-empty oil_id")
+        elif not isinstance(self.oil_id, str):
+            raise ValueError("oil_id must be a string")
+        elif len(self.oil_id) > 32:  # arbitrary limit to catch ridiculous ones
+            raise ValueError("oil_id must be a string less than 32 characters in length")
+
+
+    def validate(self):
+        """
+        validation specific to the Oil object itself
+
+        validation of sub-objects is automatically applied
+        """
+        msgs = []
+
+        # Validate ID
+        if (not 0 < len(self.oil_id) <= 32
+            or not isinstance(self.oil_id, str)):
+
+            msgs.append(ERRORS["E001"].format(self.oil_id))
+
+        return msgs
+
     def reset_validation(self):
         """
         calls the validate method, and updates the status with the result
-
-        NOTE: duplicates are removed
         """
-        msgs = list(set(self.validate()))
-        self.status = msgs
-        return msgs
+        msgs = self.validate()
+        self.status = list(set(msgs))
 
     def to_file(self, infile):
         """

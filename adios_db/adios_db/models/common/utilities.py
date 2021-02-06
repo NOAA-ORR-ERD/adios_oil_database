@@ -13,105 +13,118 @@ def something(val):
     return ((val == 0) or (val is not None) and val)
 
 
-def _py_json(self, sparse=True):
+def dataclass_to_json(cls):
     """
-    function to convert a dataclass to json compatible python
+    class decorator that adds the ability to save a dataclass as JSON
 
-    :param sparse=True: If sparse is True, only non-empty fields will be
-                        written. If False, then all fields will be included.
-
-    NOTE: could we use the dataclasses built-in .asdict?
-          It would not support sparse.
+    All fields must be either JSON-able Python types or
+    have be a type with a _to_json method
     """
-    json_obj = {}
-    for fieldname in self.__dataclass_fields__.keys():
-        val = getattr(self, fieldname)
-        try:  # convert to json
-            val = val.py_json(sparse=sparse)
-        except AttributeError:
-            pass
 
-        if not sparse:
-            json_obj[fieldname] = val
-        elif something(val):
-            json_obj[fieldname] = val
+    @classmethod
+    def from_py_json(cls, py_json, allow_none=False):
+        """
+        classmethod to create a dataclass from json compatible python data
+        structure.
+        """
+        arg_dict = {}
 
-    return json_obj
+        if py_json is None and allow_none is True:
+            # the parent object defined an attribute with a default of None
+            # We could actually allow other default types, but this one is common
+            return py_json
 
+        for fieldname, fieldobj in cls.__dataclass_fields__.items():
+            if fieldname in py_json:
+                allow_none = True if fieldobj.default is None else False
 
-@classmethod
-def _from_py_json(cls, py_json, allow_none=False):
-    """
-    classmethod to create a dataclass from json compatible python data
-    structure.
-    """
-    arg_dict = {}
+                try:  # see if it's "one of ours"
+                    arg_dict[fieldname] = (fieldobj.type
+                                           .from_py_json(py_json[fieldname],
+                                                         allow_none=allow_none))
+                except AttributeError:
+                    # it's not, so we just use the value
+                    arg_dict[fieldname] = py_json[fieldname]
+                except TypeError:
+                    # print(f'TypeError in {cls.__name__}._from_py_json(): '
+                    #       f'field: {fieldname}')
+                    raise TypeError(f'TypeError in {cls.__name__}._from_py_json(): '
+                                    f'field: {fieldname}')
 
-    if py_json is None and allow_none is True:
-        # the parent object defined an attribute with a default of None
-        # We could actually allow other default types, but this one is common
-        return py_json
+        obj = cls(**arg_dict)
+        return obj
 
-    for fieldname, fieldobj in cls.__dataclass_fields__.items():
-        if fieldname in py_json:
-            allow_none = True if fieldobj.default is None else False
+    def py_json(self, sparse=True):
+        """
+        function to convert a dataclass to json compatible python
 
-            try:  # see if it's "one of ours"
-                arg_dict[fieldname] = (fieldobj.type
-                                       .from_py_json(py_json[fieldname],
-                                                     allow_none=allow_none))
+        :param sparse=True: If sparse is True, only non-empty fields will be
+                            written. If False, then all fields will be included.
+
+        NOTE: could we use the dataclasses built-in .asdict?
+              It would not support sparse.
+        """
+        json_obj = {}
+        for fieldname in self.__dataclass_fields__.keys():
+            val = getattr(self, fieldname)
+            try:  # convert to json
+                val = val.py_json(sparse=sparse)
             except AttributeError:
-                # it's not, so we just use the value
-                arg_dict[fieldname] = py_json[fieldname]
-            except TypeError:
-                # print(f'TypeError in {cls.__name__}._from_py_json(): '
-                #       f'field: {fieldname}')
-                raise TypeError(f'TypeError in {cls.__name__}._from_py_json(): '
-                                f'field: {fieldname}')
+                pass
 
-    obj = cls(**arg_dict)
-    return obj
+            if not sparse:
+                json_obj[fieldname] = val
+            elif something(val):
+                json_obj[fieldname] = val
+
+        return json_obj
 
 
-def _validate(self):
-    """
-    Function to validate a dataclass with fields that have validate methods.
+    def validate(self):
+        """
+        Function to validate a dataclass with fields that have validate methods.
 
-    The validate methods are expected to return a list of validation messages.
+        The validate methods are expected to return a list of validation messages.
 
-    The top-level validator extends the existing list
-    """
-    # print("validate called in: ", type(self))
-    messages = []
-    for fieldname, fieldobj in self.__dataclass_fields__.items():
-        value = getattr(self, fieldname)
-        # print(f"trying to validate: {fieldname} with value: {repr(value)}")
+        The top-level validator extends the existing list
+        """
+        # print("validate called in: ", type(self))
+
+        # first see if there is a "private" one:
         try:
-            # validate with the type's validate method
-            messages.extend(fieldobj.type.validate(value))
-        except AttributeError:  # This one doesn't have a validate method.
-            pass
+            messages = self._validate()
+        except AttributeError:
+            messages = []
 
-    # print(f"in {type(self)} -- messages:\n", messages)
-    return messages
+        for fieldname, fieldobj in self.__dataclass_fields__.items():
+            value = getattr(self, fieldname)
+            # print(f"trying to validate: {fieldname} with value: {repr(value)}")
+            try:
+                # validate with the type's validate method
+                messages.extend(fieldobj.type.validate(value))
+            except AttributeError:  # This one doesn't have a validate method.
+                pass
 
+        # print(f"in {type(self)} -- messages:\n", messages)
+        return messages
 
-def __setattr__(self, name, val):
-    try:
-        _fieldobj = self.__dataclass_fields__[name]
-    except KeyError:
-        raise AttributeError(f"You can only set existing attributes: "
-                             f"{self.__class__.__name__}.{name} "
-                             "does not exist")
-    self.__dict__[name] = val
+    def __setattr__(self, name, val):
+        try:
+            _fieldobj = self.__dataclass_fields__[name]
+        except KeyError:
+            raise AttributeError(f"You can only set existing attributes: "
+                                 f"{self.__class__.__name__}.{name} "
+                                 "does not exist")
+        self.__dict__[name] = val
 
-    # Better not to try to convert type here
-    # That made it too inflexible
-    # try:
-    #     # try to make it the right type, but store it anyway.
-    #     self.__dict__[name] = fieldobj.type(val)
-    # except TypeError:
-    #     self.__dict__[name] = val
+    cls.py_json = py_json
+    cls.from_py_json = from_py_json
+    if hasattr(cls, "validate"):
+        cls._validate = cls.validate
+    cls.validate = validate
+    cls.__setattr__ = __setattr__
+
+    return cls
 
 
 class JSON_List(list):
@@ -162,16 +175,16 @@ class JSON_List(list):
     #     # return list.__str__(self)
 
 
-def dataclass_to_json(cls):
-    """
-    class decorator that adds the ability to save a dataclass as JSON
+# def dataclass_to_json(cls):
+#     """
+#     class decorator that adds the ability to save a dataclass as JSON
 
-    All fields must be either JSON-able Python types or
-    have be a type with a _to_json method
-    """
-    cls.py_json = _py_json
-    cls.from_py_json = _from_py_json
-    cls.validate = _validate
-    cls.__setattr__ = __setattr__
+#     All fields must be either JSON-able Python types or
+#     have be a type with a _to_json method
+#     """
+#     cls.py_json = _py_json
+#     cls.from_py_json = _from_py_json
+#     cls.validate = _validate
+#     cls.__setattr__ = __setattr__
 
-    return cls
+#     return cls

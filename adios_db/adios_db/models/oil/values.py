@@ -24,7 +24,7 @@ class ReferenceBase:
 class Reference(ReferenceBase):
     _validator = YearValidator(1600,
                                2050,
-                               ERRORS["E004"],
+                               ERRORS["E012"],
                                )
 
     @classmethod
