@@ -6,14 +6,12 @@
 
     <div class="align-content-right">
       {{#if this.canModifyDb}}
-        <Button::AddNewOil
-          @submit={{action send "createOil"}}
-        />
+        <Button::AddNewOil @submit={{action send "createOil"}} />
 
-        <Button::Upload
-          @submit={{action send "createOil"}}
-        />
+        <Button::Upload @submit={{action send "createOil"}} />
       {{/if}}
+
+      <Button::ReportProblemQuery/>
 
     </div>
   </div>

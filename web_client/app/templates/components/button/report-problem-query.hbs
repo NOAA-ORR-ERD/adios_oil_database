@@ -1,0 +1,12 @@
+<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
+        title="Report a Problem"
+        data-toggle="modal"
+        data-target="#reportProblemDialog" >
+  Report a Problem
+</button>
+
+<Dialog::ReportProblem
+  @destination={{this.destination}}
+  @subject={{this.subject}}
+  @body={{this.body}}
+/>
