@@ -5,16 +5,16 @@ net:
   port: 27017  # this is the mongo default
 
 storage:
-   dbPath: "/var/lib/mongo"
+   dbPath: "<path_to_project>/mongo_files"
    journal:
      enabled: true
 
 systemLog:
   destination: file
   logAppend: true
-  path: "/var/log/mongodb/mongod.log"
+  path: "<path_to_project>/mongo_files/mongod.log"
 
 processManagement:
   fork: false
-  pidFilePath: "/var/run/mongodb/mongod.pid"  # location of pidfile
+  pidFilePath: "<path_to_project>/mongo_files/mongod.pid"  # location of pidfile
   timeZoneInfo: "/usr/share/zoneinfo"

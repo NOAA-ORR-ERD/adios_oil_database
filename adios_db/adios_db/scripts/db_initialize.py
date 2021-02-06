@@ -49,14 +49,20 @@ def init_db_cmd(argv=sys.argv):
 
 def init_db(settings, show_prompt=True):
     '''
-        Here is where we create and initialize our database.  This is what
-        we want to do:
-        - if the database is already there, we prompt for recreation
-        - if the database does not exist, or we are prompted for recreation:
-            - drop the database
-            - create the tables (if necessary)
-            - load the basic infrastructure data:
-                - Labels
+    Here is where we create and initialize our database.  This is what
+    we want to do:
+
+    - if the database is already there, we prompt for recreation
+
+    - if the database does not exist, or we are prompted for recreation:
+
+        - drop the database
+
+        - create the tables (if necessary)
+
+        - load the basic infrastructure data:
+
+            - Labels
     '''
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)

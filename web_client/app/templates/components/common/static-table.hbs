@@ -1,16 +1,16 @@
 <div class="detail-section">
   <div class="table-responsive">
-    <center>
+    <div class="text-center">
       {{#if this.boldTitle}}
-        <strong>{{this.args.tableTitle}}</strong>
+        <strong>{{@tableTitle}}</strong>
       {{else}}
-        {{this.args.tableTitle}}
+        {{@tableTitle}}
       {{/if}}
-    </center>
+    </div>
 
     <table class="table table-hover table-bordered">
       <tbody>
-        {{#if (or this.args.editable anyDataPresent)}}
+        {{#if (or @editable anyDataPresent)}}
           {{#each-in this.properties as |attr value|}}
             <tr>
               {{!-- <td>{{attr}}</td> --}}
@@ -18,9 +18,9 @@
               <td>
                 <Common::ValueUnitInput
                   @valueObject={{get this.baseProperty attr}}
-                  @valueUnit={{this.args.valueUnit}}
-                  @valuePrecision={{this.args.valuePrecision}}
-                  @editable={{this.args.editable}}
+                  @valueUnit={{@valueUnit}}
+                  @valuePrecision={{@valuePrecision}}
+                  @editable={{@editable}}
                   @submit={{fn this.updateCellValue attr}}
                 />
               </td>
@@ -31,8 +31,6 @@
             <td>No Data</td>
           </tr>
         {{/if}}
-
-
       </tbody>
     </table>
 

@@ -23,8 +23,7 @@ from adios_db.data_sources.exxon_assays import (ExxonDataReader,
                                                 ExxonRecordParser,
                                                 ExxonMapper)
 
-# obsolete -- need totally new code.
-#from adios_db.db_init.labels import link_oil_to_labels
+
 from adios_db.models.oil.validation.validate import validate_json
 from adios_db.models.oil.completeness import set_completeness
 
@@ -134,18 +133,18 @@ def import_db_cmd(argv=sys.argv):
 
 def import_db(settings):
     '''
-        Here is where we perform an import of records into our database from
-        one or more predefined datasets.
+      Here is where we perform an import of records into our database from
+      one or more predefined datasets.
 
-        This is what we want to do:
-        - pull up a console menu so the user can choose the dataset to import
-        - prompt for a numbered item in the menu or quit response
-        - if numbered item:
-            - import the chosen item
-        - else if quit:
-            - exit the program
-        - repeat from the beginning
+      This is what we want to do:
 
+      - pull up a console menu so the user can choose the dataset to import
+      - prompt for a numbered item in the menu or quit response
+      - if numbered item:
+          - import the chosen item
+      - else if quit:
+          - exit the program
+      - repeat from the beginning
     '''
     quit_app = False
 

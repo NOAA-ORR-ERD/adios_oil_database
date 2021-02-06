@@ -12,6 +12,7 @@
 import logging
 
 from .oil import Oil
+
 # from ..common.measurement import MassFraction, Temperature
 
 logger = logging.getLogger(__name__)
@@ -75,10 +76,12 @@ def check_density(oil):
 
 def check_second_density(oil):
     '''
-        Fresh oil: Second density separated by temperature.
-                   Score = deltaT/40 but not greater than 0.5
-                   - maxDeltaT: The difference between the lowest and highest
-                                measurement in the set.
+    Fresh oil: Second density separated by temperature.
+
+    Score = deltaT/40 but not greater than 0.5
+
+    maxDeltaT: The difference between the lowest and highest
+    measurement in the set.
     '''
     if len(oil.sub_samples) > 0:
         ss = oil.sub_samples[0]
@@ -99,7 +102,7 @@ def check_second_density(oil):
 
 def check_viscosity(oil):
     '''
-        Fresh oil: One viscosity. Score = 0.5
+    Fresh oil: One viscosity. Score = 0.5
     '''
     if len(oil.sub_samples) > 0:
         ss = oil.sub_samples[0]
@@ -121,10 +124,12 @@ def check_viscosity(oil):
 
 def check_second_viscosity(oil):
     '''
-        Fresh oil: Second viscosity at a different temperature.
-                   Score = maxDeltaT/40, but not greater than 0.5
-                   - maxDeltaT: The difference between the lowest and highest
-                                measurement in the set.
+    Fresh oil: Second viscosity at a different temperature.
+
+    Score = maxDeltaT/40, but not greater than 0.5
+
+    maxDeltaT: The difference between the lowest and highest
+    measurement in the set.
     '''
     if len(oil.sub_samples) > 0:
         ss = oil.sub_samples[0]
@@ -147,10 +152,12 @@ def check_second_viscosity(oil):
 
 def check_distillation(oil):
     '''
-        Fresh oil: Two Distillation cuts separated by mass or volume fraction.
-                   Score = 3 * maxDeltaFraction
-                   - maxDeltaFraction: The difference between the lowest and
-                                       highest measurement in the set
+    Fresh oil: Two Distillation cuts separated by mass or volume fraction.
+
+    Score = 3 * maxDeltaFraction
+
+    maxDeltaFraction: The difference between the lowest and
+    highest measurement in the set
     '''
     if len(oil.sub_samples) > 0:
         ss = oil.sub_samples[0]

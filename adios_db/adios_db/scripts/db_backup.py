@@ -52,15 +52,16 @@ def backup_db_cmd(argv=sys.argv):
 
 def backup_db(settings, base_path):
     '''
-        Here is where we backup our database.  This is what we want to do:
-        - If the database does not exist, we flag an error and exit:
-        - If the database is already there:
-            - Gather the collections by name
-            - We want to start with an empty folder, so clear the base path
-            - For each collection:
-                - Create a subfolder under our path using the collection name
-                - Iterate the objects in the collection
-                - Save the objects as <basepath>/<collection>/<object>
+    Here is where we backup our database.  This is what we want to do:
+
+    - If the database does not exist, we flag an error and exit:
+    - If the database is already there:
+        - Gather the collections by name
+        - We want to start with an empty folder, so clear the base path
+        - For each collection:
+            - Create a subfolder under our path using the collection name
+            - Iterate the objects in the collection
+            - Save the objects as <basepath>/<collection>/<object>
     '''
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
@@ -123,7 +124,7 @@ def export_to_file(base_path, collection_name, record):
         filename = os.path.join(base_path, collection_name,
                                 f'{record_name}.json')
 
-    json.dump(record, open(filename, 'w'),
+    json.dump(record, open(filename, 'w', encoding="utf-8"),
               default=json_handle_unparseable,
               sort_keys=True, indent=4)
 

@@ -4,6 +4,7 @@ Tools for helping make our data models.
 So far: making dataclasses read/writable as JSON
 """
 
+
 def something(val):
     '''
         much like python's "Truthy" and Falsey", but we want some values
@@ -165,5 +166,25 @@ class JSON_List(list):
         return jl
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}({super().__repr__()}, "
-                f"item_type={self.item_type})")
+        return f"{self.__class__.__name__}({list.__repr__(self)})"
+
+
+    # def __str__(self):
+    #     # why don't either of this work? it's using this repr ??
+    #     # return super().__str__()
+    #     # return list.__str__(self)
+
+
+# def dataclass_to_json(cls):
+#     """
+#     class decorator that adds the ability to save a dataclass as JSON
+
+#     All fields must be either JSON-able Python types or
+#     have be a type with a _to_json method
+#     """
+#     cls.py_json = _py_json
+#     cls.from_py_json = _from_py_json
+#     cls.validate = _validate
+#     cls.__setattr__ = __setattr__
+
+#     return cls

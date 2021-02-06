@@ -10,6 +10,8 @@ from bson import ObjectId
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings, default_settings
 from adios_db.db_init.database import drop_db, create_indices
+from adios_db.models.oil.oil import Oil
+from bson.errors import InvalidId
 
 logger = logging.getLogger(__name__)
 
@@ -51,16 +53,25 @@ def restore_db_cmd(argv=sys.argv):
 
 def restore_db(settings, base_path):
     '''
-        Here is where we restore our database.  This is what we want to do:
-        - If the restore path does not exist, we flag an error and exit:
-        - Otherwise:
-            - If the database does not exist, create it
-            - If the database is already there, initialize it
-            - Gather the collection names by directory name
-            - For each collection name:
-                - create the collection
-                - for each object in the collection directory
-                    - Save the objects
+    Here is where we restore our database.  This is what we want to do:
+
+    If the restore path does not exist, we flag an error and exit.
+
+    Otherwise:
+
+    - If the database does not exist, create it
+
+    - If the database is already there, initialize it
+
+    - Gather the collection names by directory name
+
+    - For each collection name:
+
+        - create the collection
+
+        - for each object in the collection directory
+
+            - Save the objects
     '''
     if not os.path.exists(base_path):
         print(f'No path named {base_path}!')
@@ -89,26 +100,27 @@ def load_collection(db, base_path, collection_name):
     for (dirname, _, filenames) in os.walk(collection_path):
         for name in filenames:
             if name.endswith('.json'):
-                obj_path = f'{dirname}/{name}'
-                obj = json.load(open(obj_path, 'r'))
-
-                fix_obj_id(obj, collection)
+                obj = get_obj_json(f'{dirname}/{name}', collection_name)
 
                 collection.insert_one(obj)
 
 
-def fix_obj_id(obj, collection):
-    '''
-        MongoDB uses an ObjectId type for its identifiers in most non special
-        cases.  This is not parseable to JSON.  So when backing up our data,
-        we turn it into a string.
-        This means we need to turn them back into ObjectId's when restoring.
-        The collection doesn't seem to have a way of querying the datatype for
-        _id, so we need to do this in a more hacked way.
-        Right now the only collection that doesn't use the ObjectId type is the
-        oil collection, so that's what we will key on.
-    '''
-    if collection.name != 'oil':
-        obj['_id'] = ObjectId(obj['_id'])
+def get_obj_json(obj_path, collection_name):
+    obj = json.load(open(obj_path, 'r'), encoding="utf-8")
+
+    if collection_name == 'oil':
+        obj = Oil.from_py_json(obj)
+        obj.reset_validation()
+        obj = obj.py_json()
+    else:
+        try:
+            # just fix the ID if it is there
+            obj['_id'] = ObjectId(obj['_id'])
+        except (KeyError, InvalidId, TypeError):
+            # id doesn't exist, or maybe it exists, but isn't convertible
+            # to an ObjectId type.  Either way, just leave it alone.
+            # MongoDB will generate an ID if missing or use the existing one
+            # regardless of its type.
+            pass
 
     return obj

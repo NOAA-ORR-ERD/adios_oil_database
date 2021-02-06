@@ -26,11 +26,11 @@
       >
         {{component props.componentName
           oil=this.sample
-          store=this.args.store
-          editable=this.args.editable
+          store=@store
+          editable=@editable
           submit=(action "submitSample")
           sampleIndex=this.sampleIndex
-          sampleName=this.args.sampleName}}
+          sampleName=@sampleName}}
       </div>
     {{/if}}
   {{/each}}

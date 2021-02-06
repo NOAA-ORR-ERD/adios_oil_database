@@ -3,10 +3,10 @@
 
     {{#each-in this.tableGroups as |group items|}}
       <Common::GroupedTable
-        @oil={{this.args.oil}}
-        @store={{this.args.store}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @oil={{@oil}}
+        @store={{@store}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @baseProperty={{this.baseProperty}}
         @group={{group}}
         @items={{items}}

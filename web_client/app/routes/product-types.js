@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-export default Route.extend({
+export default class ProductTypesRoute extends Route {
     model() {
         return (async () => {
             let config = await this.store.findRecord('config', 'main.json');
@@ -13,4 +13,4 @@ export default Route.extend({
             return this.store.findAll('product-type');
         })();
     }
-});
+}

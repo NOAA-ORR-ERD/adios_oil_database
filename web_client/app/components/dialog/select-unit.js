@@ -50,7 +50,13 @@ export default class SelectUnitDialog extends Component {
             }
         };
 
-        $('body').on('keyup.modal-dialog', closeOnEscapeKey);
+        // Note: Ember doesn't want you to use JQuery for some purity reason,
+        //       and it throws warnings when the app starts.
+        //       But this is the recommended way to add an escape listener
+        //       to an ember-modal-dialog according to their README.
+        //
+        //       https://github.com/yapplabs/ember-modal-dialog#keyboard-shortcuts
+        $('body').on('keyup.modal-dialog', closeOnEscapeKey);  // eslint-disable-line ember/no-jquery
     }
 
     get unitTypeNames() {
@@ -79,10 +85,10 @@ export default class SelectUnitDialog extends Component {
         }
     }
 
-    @action
-    setModalEvents(element) {
-        $(element).modal('show');
-    }
+    //@action
+    //setModalEvents(element) {
+    //    $(element).modal('show');
+    //}
 
     @action
     updateUnitType(event) {

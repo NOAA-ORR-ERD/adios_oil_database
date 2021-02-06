@@ -41,14 +41,16 @@
 
         <div class="col-xs-4 mt-2 text-center">
           {{!-- edit mode switch control --}}
-          <XToggle
-            @theme="ios"
-            @showLabels={{true}}
-            @onLabel="Edit"
-            @offLabel="View"
-            @value={{this.editable}}
-            @onToggle={{action (mut this.editable)}}
-          />
+          {{#if this.canModifyDb}}
+            <XToggle
+              @theme="ios"
+              @showLabels={{true}}
+              @onLabel="Edit"
+              @offLabel="View"
+              @value={{this.editable}}
+              @onToggle={{action (mut this.editable)}}
+            />
+          {{/if}}
         </div>
       </div>
     </div>
@@ -57,15 +59,19 @@
       <div class="d-flex">
         <Button::Download @oil={{this.model}} />
 
-        <Button::CopyOil
-          @oil={{this.model}}
-          @submit={{action send "createOil"}}
-        />
+        {{#if this.canModifyDb}}
+          <Button::CopyOil
+            @oil={{this.model}}
+            @submit={{action send "createOil"}}
+          />
+        {{/if}}
 
-        <Button::DeleteOil
-          @oil={{this.model}}
-          @submit={{action send "deleteOil"}}
-        />
+        {{#if this.canModifyDb}}
+          <Button::DeleteOil
+            @oil={{this.model}}
+            @submit={{action send "deleteOil"}}
+          />
+        {{/if}}
 
       </div>
     </div>

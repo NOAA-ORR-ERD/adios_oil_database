@@ -8,6 +8,10 @@ export default class ShowController extends Controller {
         '#fresh-oil-sample': '#fresh-oil-sample-physical'
     };
 
+    get canModifyDb() {
+        return this.capabilities.firstObject.can_modify_db == 'true';
+    }
+
     @action
     updateSampleTab(newTab) {
         this.currentSampleTab = newTab;

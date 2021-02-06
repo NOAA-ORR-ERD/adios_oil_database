@@ -22,7 +22,7 @@ OUTPUT_DIR = HERE / "output"
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    HERE / "ExampleFullRecord.json"
+    HERE / "ExampleFullRecord.json", encoding="utf-8"
 ))
 
 # BIG_RECORD = json.load(open(
@@ -54,7 +54,7 @@ class TestOil:
         """
         it's easy to accidentally pass who knows what into the id param
 
-        a really long string probaly isn't waht you meant
+        a really long string probably isn't what you meant
         """
         whoops = {'oil_id': 'AD00123',
                   'metadata': {'name': 'An oil name',
@@ -67,6 +67,30 @@ class TestOil:
         """ you must specify at least an oil_id """
         with pytest.raises(TypeError):
             Oil(oil_id="")
+
+    def test_repr_minimal(self):
+        """
+        The repr should be reasonable
+        """
+        oil = Oil("XX00000")
+
+        result = repr(oil)
+
+        assert result.startswith("Oil(")
+        assert "oil_id='XX00000'" in result
+
+    def test_repr_full(self):
+        """
+        The repr should be reasonable
+
+        This is a "full" record
+        """
+        oil = Oil.from_py_json(BIG_RECORD)
+
+        result = repr(oil)
+
+        assert result.startswith("Oil(")
+        assert "oil_id='EC002234'" in result
 
     def test_init_minimal(self):
         '''

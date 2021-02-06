@@ -1,15 +1,15 @@
 <div class="detail-section">
   <div class="table-responsive">
-    <center>
+    <div class="text-center">
       {{#if this.boldTitle}}
-        <strong>{{this.args.tableTitle}}</strong>
+        <strong>{{@tableTitle}}</strong>
       {{else}}
-        {{this.args.tableTitle}}
+        {{@tableTitle}}
       {{/if}}
-    </center>
+    </div>
 
     <table class="table table-hover table-bordered">
-      {{#if this.args.editable}}
+      {{#if @editable}}
         <thead>
           <tr>
             {{#each (range 0 this.baseProperty.length true) as |index|}}
@@ -35,7 +35,7 @@
       {{/if}}
 
       <tbody>
-        {{#if (or this.args.editable anyDataPresent)}}
+        {{#if (or @editable anyDataPresent)}}
           {{#each-in this.properties as |attr value|}}
             <tr>
               <th scope="col">{{value.label}}</th>
@@ -45,13 +45,13 @@
                   {{#if (eq value.dataType "value-unit")}}
                     <Common::ValueUnitInput
                       @valueObject={{get col attr}}
-                      @editable={{this.args.editable}}
+                      @editable={{@editable}}
                       @submit={{fn this.updateListValue index attr}}
                       @valueUnit={{value.unit}}
                       @valuePrecision={{value.precision}}
                     />
                   {{else if (eq value.dataType "string")}}
-                    {{#if this.args.editable}}
+                    {{#if @editable}}
                       <Input @class="p-1 overflow-hidden bg-transparent border"
                         @value={{get col attr}}
                         @placeholder="Enter Value"
@@ -62,7 +62,7 @@
                       <span class="p-1">{{get col attr}}</span>
                     {{/if}}
                   {{else if (eq value.dataType "number")}}
-                    {{#if this.args.editable}}
+                    {{#if @editable}}
                       <Input @class="p-1 overflow-hidden bg-transparent border"
                         @value={{get col attr}}
                         @placeholder="Enter Value"

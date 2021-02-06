@@ -12,7 +12,8 @@ def get_version(pkg_name):
     """
     Reads the version string from the package __init__ and returns it
     """
-    with open(os.path.join(pkg_name, "__init__.py")) as init_file:
+    with open(Path(pkg_name) / "__init__.py",
+              encoding="utf-8") as init_file:
         for line in init_file:
             parts = line.strip().partition("=")
             if parts[0].strip() == "__version__":

@@ -299,7 +299,7 @@ def ExxonMapper(record):
 def read_header(data):
     '''
         fixme: this should probably be more flexible
-               but we can wait 'till we get data that doesn't match
+        but we can wait 'till we get data that doesn't match
         it could / should read the whole dist cut table, then map it
         to the samples Exxon info in the header
     '''
@@ -342,15 +342,17 @@ def create_middle_tier_objs(samples):
 
 def read_cut_table(sample_names, data):
     '''
-        Read the rest of the rows and save them in a dictionary.
-        - key: first field of the row
-        - value: the rest of the fields as a list.  The index position in the
-          list will be correlated to the sample names that were captured.
+    Read the rest of the rows and save them in a dictionary.
 
-        Note: Some datasheets (curlew) have some empty columns in between
-              the sample data and the properties column.  So we need to make
-              sure there actually exists a sample name field before adding
-              it to our cut table data.
+    - key: first field of the row
+
+    - value: the rest of the fields as a list.  The index position in the
+             list will be correlated to the sample names that were captured.
+
+    :note: Some datasheets (curlew) have some empty columns in between
+           the sample data and the properties column.  So we need to make
+           sure there actually exists a sample name field before adding
+           it to our cut table data.
     '''
     cut_table = {}
 
@@ -414,13 +416,18 @@ def set_sample_property(samples, row, attr, unit, cls,
     reads a row from the spreadsheet, and sets the sample properties
 
     Notes:
+
     - optional rounding to "num_digits" digits
-    - optional converting to unit from convert_from (if the the data aren't in
-    the right units)
+
+    - optional converting to unit from convert_from
+      (if the the data aren't in the right units)
+
     - These values are now kept in a list of compounds held by the
       bulk_composition attribute
+
     - Ideally, the name & groups of each compound would have the
       original field text from the datasheet.
+
     """
     for sample, val in zip(samples, row):
         if val is not None and val not in ('NotAvailable',):

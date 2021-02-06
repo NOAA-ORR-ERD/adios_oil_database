@@ -6,14 +6,14 @@
         editable - boolean
         submit - submit changes function
  --}}
-{{#if this.args.editable}}
+{{#if @editable}}
   <div class="input-group">
-    {{#if (or this.args.valueObject.value (eq this.args.valueObject.value 0))}}
+    {{#if (or @valueObject.value (eq @valueObject.value 0))}}
       <Input
         @type="text"
         @class="bg-transparent border form-control"
-        @value={{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
-          this.args.valuePrecision true}}
+        @value={{value-unit (convert-unit @valueObject @valueUnit)
+          @valuePrecision true}}
         @change={{action "updateValue"}}
         size="10"
       />
@@ -31,8 +31,8 @@
     {{#if editUnit}}
       <Button::SelectUnit
         @baseProperty={{this.beaUnit}}
-        @unitType={{this.args.valueObject.unit_type}}
-        @defaultUnit={{this.args.defaultUnit}}
+        @unitType={{@valueObject.unit_type}}
+        @defaultUnit={{@defaultUnit}}
         @change={{action "updateUnit"}}
        />
     {{else}}
@@ -41,9 +41,9 @@
 
   </div>
 {{else}}
-  {{#if (or this.valueObject.value (eq this.args.valueObject.value 0))}}
-    {{value-unit (convert-unit this.args.valueObject this.args.valueUnit)
-      this.args.valuePrecision}}
+  {{#if (or this.valueObject.value (eq @valueObject.value 0))}}
+    {{value-unit (convert-unit @valueObject @valueUnit)
+      @valuePrecision}}
   {{else}}
     &nbsp;
   {{/if}}

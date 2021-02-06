@@ -9,20 +9,22 @@ logger = logging.getLogger(__name__)
 
 class OilLibraryRecordParser(ParserBase):
     '''
-        A record parsing class for the NOAA Oil Library spreadsheet.
-        - We manage a list of properties extracted from an Excel row for an
-          oil.
-        - The raw data from the Excel file will be a flat list, even for
-          multidimensional properties like densities, viscosities, and
-          distillation cuts.
+    A record parsing class for the NOAA Oil Library spreadsheet.
+
+    - We manage a list of properties extracted from an Excel row for an
+      oil.
+    - The raw data from the Excel file will be a flat list, even for
+      multidimensional properties like densities, viscosities, and
+      distillation cuts.
     '''
+
     def __init__(self, values, file_props):
         '''
-            :param values: A dict of property names/values.
+        :param values: A dict of property names/values.
 
-            Basically, we will do some light massaging of the names and values
-            of our incoming properties, and then we will directly apply them
-            to our __dict__.
+        Basically, we will do some light massaging of the names and values
+        of our incoming properties, and then we will directly apply them
+        to our __dict__.
         '''
         self.__dict__.update(self._privatize_data_properties(
             self._slugify_keys(values)
@@ -31,9 +33,9 @@ class OilLibraryRecordParser(ParserBase):
 
     def _slugify_keys(self, obj):
         '''
-            Generate a structure like the incoming data, but with keys that
-            have been 'slugified', which is to say turned into a string that
-            is suitable for use as an object attribute.
+        Generate a structure like the incoming data, but with keys that
+        have been 'slugified', which is to say turned into a string that
+        is suitable for use as an object attribute.
         '''
         if isinstance(obj, (tuple, list, set, frozenset)):
             return [self._slugify_keys(v) for v in obj]
@@ -45,12 +47,12 @@ class OilLibraryRecordParser(ParserBase):
 
     def _privatize_data_properties(self, obj):
         '''
-            Certain named data properties need to be handled as special cases
-            by the parser.  This will be handled with a property definition
-            that sometimes has the same name as the original data property.
+        Certain named data properties need to be handled as special cases
+        by the parser.  This will be handled with a property definition
+        that sometimes has the same name as the original data property.
 
-            So to ensure the original property doesn't get clobbered, we need
-            to turn them into private members (add an underscore to the name).
+        So to ensure the original property doesn't get clobbered, we need
+        to turn them into private members (add an underscore to the name).
         '''
         for name in ('reference',
                      'synonyms',
@@ -92,14 +94,14 @@ class OilLibraryRecordParser(ParserBase):
     @property
     def reference(self):
         '''
-            The reference content can have:
-            - no content:  In this case we take the created date of the
-                           .csv file header.
-            - one year (YYYY):  In this case we parse the year as an int and
-                                form a datetime with it.
-            - multiple years (YYYY): In this case we use the highest numeric
-                                     year (most recent) and form a datetime
-                                     with it.
+        The reference content can have:
+
+        - no content:  In this case we take the created date of the
+          .csv file header.
+        - one year (YYYY):  In this case we parse the year as an int and
+          form a datetime with it.
+        - multiple years (YYYY): In this case we use the highest numeric
+          year (most recent) and form a datetime with it.
         '''
         ref_text = self._reference
 
@@ -203,14 +205,19 @@ class OilLibraryRecordParser(ParserBase):
             or may not be filled with data.
             For these property sets, the column names are organized with the
             following naming convention:
-                '<attr><instance>_<sub_attr>'
 
-            Where:
-                <attr>     = The name of the attribute list.
-                <instance> = An index in the range [1...N+1] where N is the
-                             number of instances in the list.
-                <sub_attr> = The name of an attribute contained within an
-                             instance of the list.
+            ``<attr><instance>_<sub_attr>``
+
+            <attr>
+              The name of the attribute list.
+
+            <instance>
+              An index in the range [1...N+1] where N is the
+              number of instances in the list.
+
+            <sub_attr>
+              The name of an attribute contained within an
+              instance of the list.
 
             Basically we will return a set of object properties for each
             instance that contains a defined set of required argument
@@ -507,22 +514,24 @@ class OilLibraryRecordParser(ParserBase):
     @property
     def weathering(self):
         '''
-            A NOAA Filemaker record is a flat row of data, but there are some
-            attributes that have weathering associated with their measured
-            values.  These attributes are:
-            - Density
-            - KVis
-            - Dvis
+        A NOAA Filemaker record is a flat row of data, but there are some
+        attributes that have weathering associated with their measured
+        values.  These attributes are:
 
-            In addition to these weathered attributes, the emulsion constant
-            attributes are applied in the context of weathered samples.
-            - The min emulsification constant is Emuls_Constant_Min.  Its value
-              is a weathered amount.
-            - The max emulsification constant is Emuls_Constant_Max.  Its value
-              is a weathered amount.
+        - Density
+        - KVis
+        - Dvis
 
-            All other attributes should be implicitly regarded as fresh oil
-            measurements.
+        In addition to these weathered attributes, the emulsion constant
+        attributes are applied in the context of weathered samples.
+
+        - The min emulsification constant is Emuls_Constant_Min.  Its value
+          is a weathered amount.
+        - The max emulsification constant is Emuls_Constant_Max.  Its value
+          is a weathered amount.
+
+        All other attributes should be implicitly regarded as fresh oil
+        measurements.
         '''
         weathered_amounts = set((0.0,))
 

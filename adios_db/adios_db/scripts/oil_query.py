@@ -24,28 +24,30 @@ argp.add_argument('--config', nargs=1,
 
 def oil_query_cmd(argv=sys.argv):
     '''
-        command-line parsing our oil_query.
+    command-line parsing our oil_query.
 
-        Examples of how we want to use this on the command-line:
-        - oil_query  # fails.  We need to specify something
-        - oil_query -k <identifier> (--key=<identifier>)
-                    This will query for a single oil identified by its ID
-        - oil_query -q <query_string> (--query=<query_string>)
-                    This will search for all records that match the criteria
-                    specified in the query string.
+    Examples of how we want to use this on the command-line:
 
-        The query string will consist of comma separated specifiers:
+    - oil_query  # fails.  We need to specify something
 
-            "<specifier1>, <specifier2>, ... <specifierN>"
+    - oil_query -k <identifier> (--key=<identifier>)
+      This will query for a single oil identified by its ID
 
-        Each specifier provides increased filtering of results.  A specifier
-        has the format:
+    - oil_query -q <query_string> (--query=<query_string>)
+      This will search for all records that match the criteria
+      specified in the query string.
 
-            "option=filter"
+    The query string will consist of comma separated specifiers:
 
-        Here are the list of specifiers:
-        - q
+        "<specifier1>, <specifier2>, ... <specifierN>"
+
+    Each specifier provides increased filtering of results.  A specifier
+    has the format:
+
+    "option=filter"
+
     '''
+
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
 

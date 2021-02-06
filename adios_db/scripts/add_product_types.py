@@ -26,7 +26,7 @@ but not save any changes
 
 def read_the_csv_file(csv_name):
     print("Reading product types from:", csv_name)
-    with open(csv_name) as csvfile:
+    with open(csv_name, encoding="utf-8") as csvfile:
         data = {(row[0][:2] + row[0][-5:]): row[1:]
                 for row in csv.reader(csvfile, delimiter="\t")}
     print(f"loaded {len(data) - 1} records")
@@ -34,8 +34,8 @@ def read_the_csv_file(csv_name):
 
 
 def add_them(data):
-    missing = open("missing_records.csv", 'w')
-    name_mismatch = open("name_mismatch_records.csv", 'w')
+    missing = open("missing_records.csv", 'w', , encoding="utf-8")
+    name_mismatch = open("name_mismatch_records.csv", 'w', encoding="utf-8")
     try:
         sys.argv.remove("dry_run")
         dry_run = True
