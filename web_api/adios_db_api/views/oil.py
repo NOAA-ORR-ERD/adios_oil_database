@@ -374,6 +374,8 @@ def get_oil_all_fields(oil):
     '''
         Get the full record in JSON API compliant form.
     '''
+    del oil['_id']
+
     return {
         'data': {'_id': oil.get('oil_id'),
                  'type': 'oils',

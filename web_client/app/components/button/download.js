@@ -12,8 +12,6 @@ export default class Download extends Component {
         let content = this.args.oil.serialize();
         let oil = content['data']['attributes']
 
-        oil['_id'] = oil['metadata']['oil_id'] = this.args.oil.id;
-
         this.download.asJSON(
             `${fileName}.json`,
             JSON.stringify(oil, null, 2)
