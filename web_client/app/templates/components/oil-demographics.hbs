@@ -136,14 +136,13 @@
           </div>
         {{else}}
           <label class="p-1 input-group-text font-weight-bold">Alternate Names:</label>
-          &nbsp;
-          <div class="col pl-1 mb-0">
+          <div class="col pl-1">
             {{#each @oil.metadata.alternate_names as |id|}}
               <span class="list-item-alternate-names">
                 {{id}}
               </span>
             {{else}}
-              <span class="p-1">None</span>
+              <span class="p-1 input-group-text">None</span>
             {{/each}}
           </div>
         {{/if}}
