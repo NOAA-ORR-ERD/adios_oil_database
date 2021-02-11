@@ -365,8 +365,7 @@ class OilTests(OilTestBase):
             # The adios_db module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
 
-            for k in ('_id',
-                      'oil_id',
+            for k in ('oil_id',
                       'metadata',
                       'sub_samples'):
                 assert k in oil['data']['attributes']
