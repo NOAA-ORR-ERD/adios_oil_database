@@ -1,20 +1,27 @@
 # configuration for mongodb
+#
+# these are the setting used in the Session tests
+
+# this one designed to be run in the current working dir in the git repo.
+# you can start mongo with
+# mongod -f mongo_config_dev.yml
+
 
 net:
   bindIp: 127.0.0.1  # Enter 0.0.0.0,:: to bind to all IPv4 and IPv6 addresses or, alternatively, use the net.bindIpAll setting.
   port: 27017  # this is the mongo default
 
 storage:
-   dbPath: "<path_to_project>/mongo_files"
+   dbPath: "./mongo_files"
    journal:
      enabled: true
 
 systemLog:
   destination: file
   logAppend: true
-  path: "<path_to_project>/mongo_files/mongod.log"
+  path: "./mongo_files/mongod.log"
 
 processManagement:
   fork: false
-  pidFilePath: "<path_to_project>/mongo_files/mongod.pid"  # location of pidfile
+  pidFilePath: "./mongo_files/mongod.pid"  # location of pidfile
   timeZoneInfo: "/usr/share/zoneinfo"

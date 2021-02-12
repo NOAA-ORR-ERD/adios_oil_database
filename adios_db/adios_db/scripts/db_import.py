@@ -256,31 +256,28 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
             try:
                 oil_obj = mapper_cls(parser_cls(*record_data))
 
-                oil_pyjson = oil_obj.py_json()
-
-                # this is obsolete code
-                # and shouldn't happen on import anyway
-                # link_oil_to_labels(oil_pyjson)
-
-                oil = validate_json(oil_pyjson)
-                set_completeness(oil)
+                oil_obj.update_validation()
+                # oil = validate_json(oil_pyjson)
+                set_completeness(oil_obj)
 
                 oil_collection.insert_one(oil.py_json())
             except DuplicateKeyError as e:
-                if overwrite is True:
-                    try:
-                        oil_collection.replace_one({'_id': oil_obj.oil_id},
-                                                   oil.py_json())
-                    except Exception as e:
-                        print('Oil update failed for {}: {}'
-                              .format(tc.change(oil_obj.oil_id, 'red'), e))
-                        error_count += 1
-                    else:
-                        success_count += 1
-                else:
-                    print('Duplicate fields for {}: {}'
-                          .format(tc.change(oil_obj.oil_id, 'red'), e))
-                    error_count += 1
+                # This code should be in the Session object
+                raise NotImplementedError("importing code needs to be fixed for duplicates")
+                # if overwrite is True:
+                #     try:
+                #         oil_collection.replace_one({'_id': oil_obj.oil_id},
+                #                                    oil.py_json())
+                #     except Exception as e:
+                #         print('Oil update failed for {}: {}'
+                #               .format(tc.change(oil_obj.oil_id, 'red'), e))
+                #         error_count += 1
+                #     else:
+                #         success_count += 1
+                # else:
+                #     print('Duplicate fields for {}: {}'
+                #           .format(tc.change(oil_obj.oil_id, 'red'), e))
+                #     error_count += 1
             except (ValueError, TypeError) as e:
                 print('{} for {}: {}'
                       .format(e.__class__.__name__,

@@ -86,7 +86,9 @@ def restore_db(settings, base_path):
 
     # load the database
     for collection_name in os.listdir(base_path):
-        load_collection(db, base_path, collection_name)
+        # filter out dotfiles
+        if not collection_name.startswith("."):
+            load_collection(db, base_path, collection_name)
 
     create_indices(db)
 
@@ -109,18 +111,8 @@ def get_obj_json(obj_path, collection_name):
     obj = json.load(open(obj_path, 'r'), encoding="utf-8")
 
     if collection_name == 'oil':
-        obj = Oil.from_py_json(obj)
-        obj.reset_validation()
-        obj = obj.py_json()
-    else:
-        try:
-            # just fix the ID if it is there
-            obj['_id'] = ObjectId(obj['_id'])
-        except (KeyError, InvalidId, TypeError):
-            # id doesn't exist, or maybe it exists, but isn't convertible
-            # to an ObjectId type.  Either way, just leave it alone.
-            # MongoDB will generate an ID if missing or use the existing one
-            # regardless of its type.
-            pass
+        oil = Oil.from_py_json(obj)
+        oil.reset_validation()
+        obj = oil.py_json()
 
     return obj

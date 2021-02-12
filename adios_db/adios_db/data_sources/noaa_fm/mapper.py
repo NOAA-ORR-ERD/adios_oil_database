@@ -20,8 +20,7 @@ class OilLibraryAttributeMapper(MapperBase):
         named attributes that are suitable for creation of a NOAA Oil Database
         record.
     '''
-    oil_props = ('_id',
-                 'oil_id',
+    oil_props = ('oil_id',
                  'metadata',
                  'status',
                  'sub_samples')

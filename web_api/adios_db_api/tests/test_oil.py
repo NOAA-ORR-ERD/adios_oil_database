@@ -2,9 +2,6 @@
 Functional tests for the Model Web API
 
 FIXME: We should have tests that test the API, not everything else!
-
-And getting sample_oils from the oil filemaker data makes me really nervous
-
 """
 
 import copy
@@ -424,6 +421,7 @@ class OilTests(OilTestBase):
     def test_delete_bad_req(self):
         self.testapp.delete('/oils/{}'.format('bogus_id'), status=404)
 
+
     def test_crud(self):
         oil_json = copy.deepcopy(basic_noaa_fm)
 
@@ -441,17 +439,18 @@ class OilTests(OilTestBase):
                                       params=self.jsonapi_request(oil_json))
         oil_json = self.jsonapi_to_oil(resp.json_body)
 
-        assert oil_json['_id'] == 'AD99999'
+        assert oil_json['oil_id'] == 'AD99999'
         assert oil_json['metadata']['API'] == 28.0
 
         #
         # test inserted
         #
         print('test inserted...')
-        resp = self.testapp.get('/oils/{0}'.format(oil_json['_id']))
+        print("trying to get:", oil_json['oil_id'])
+        resp = self.testapp.get('/oils/{0}'.format(oil_json['oil_id']))
         oil_json = self.jsonapi_to_oil(resp.json_body)
 
-        assert oil_json['_id'] == 'AD99999'
+        assert oil_json['oil_id'] == 'AD99999'
         assert oil_json['metadata']['API'] == 28.0
 
         #
