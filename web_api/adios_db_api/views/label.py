@@ -31,110 +31,13 @@ def get_labels(request):
         2. Return the JSON record of a particular label.
     '''
     obj_id = obj_id_from_url(request)
-    labels = request.mdb_client.adios_db.label
 
-    if obj_id is not None:
-        try:
-            res = labels.find_one({'_id': ObjectId(obj_id)})
-        except InvalidId as e:
-            raise HTTPBadRequest(e)
-
-        if res is not None:
-            return fix_bson_ids(res)
-        else:
-            raise HTTPNotFound()
-    else:
-        return fix_bson_ids(list(labels.find({})))
-
-
-@label_api.post()
-@can_modify_db
-def insert_labels(request):
     try:
-        json_obj = ujson.loads(request.body)
-
-        # Since we are only expecting a dictionary struct here, let's raise
-        # an exception in any other case.
-        if not isinstance(json_obj, dict):
-            raise ValueError('JSON dict is the only acceptable payload')
-    except Exception as e:
+        res = request.mdb_client.get_labels(obj_id)
+    except ValueError as e:
         raise HTTPBadRequest(e)
 
-    try:
-        # We don't have our data classes anymore so we need to inject
-        # at least a little bit of sanity here.  We will fail if we don't
-        # have at least these attributes.
-        required_attrs = ('name',)
-        if any([a not in json_obj for a in required_attrs]):
-            raise ValueError('Label insert objects must have at least '
-                             'these attributes: {}'
-                             .format(required_attrs))
-
-        if '_id' in json_obj:
-            json_obj['_id'] = ObjectId(json_obj['_id'])
-            print('insert_label(): requested _id: ', json_obj['_id'])
-
-        json_obj['_id'] = (request.mdb_client.adios_db.label
-                           .insert_one(json_obj)
-                           .inserted_id)
-        print('insert_label(): _id: ', json_obj['_id'])
-    except Exception as e:
-        raise HTTPUnsupportedMediaType(detail=e)
-
-    return fix_bson_ids(json_obj)
-
-
-@label_api.put()
-@can_modify_db
-def update_label(request):
-    try:
-        json_obj = ujson.loads(request.body)
-
-        # Since we are only expecting a dictionary struct here, let's raise
-        # an exception in any other case.
-        if not isinstance(json_obj, dict):
-            raise ValueError('JSON dict is the only acceptable payload')
-    except Exception:
-        raise HTTPBadRequest
-
-    try:
-        print('putting label object: {}'.format(json_obj))
-
-        # We will fail if we don't have at least these attributes.
-        required_attrs = ('_id', 'name',)
-        if any([a not in json_obj for a in required_attrs]):
-            raise ValueError('Label update objects must have at least '
-                             'these attributes: {}'
-                             .format(required_attrs))
-
-        json_obj['_id'] = ObjectId(json_obj['_id'])
-        print('update_label(): _id: ', json_obj['_id'])
-
-        (request.mdb_client.adios_db.label
-         .replace_one({'_id': json_obj['_id']}, json_obj))
-
-        print('put label success!!')
-    except Exception as e:
-        raise HTTPUnsupportedMediaType(detail=e)
-
-    return fix_bson_ids(json_obj)
-
-
-@label_api.delete()
-@can_modify_db
-def delete_label(request):
-    obj_id = obj_id_from_url(request)
-
-    if obj_id is not None:
-        try:
-            res = (request.mdb_client.adios_db.label
-                   .delete_one({'_id': ObjectId(obj_id)}))
-        except InvalidId as e:
-            raise HTTPBadRequest(e)
-
-        if res.deleted_count == 0:
-            raise HTTPNotFound()
-
-        return res
+    if res is None:
+        raise HTTPNotFound('label object not found')
     else:
-        raise HTTPBadRequest
+        return res

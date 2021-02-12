@@ -3,6 +3,8 @@ from numbers import Number
 
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
+from adios_db.models.oil.product_type import (types_to_labels)
+
 
 class Session():
 
@@ -53,7 +55,8 @@ class Session():
                 A list of label strings that will be matched against the
                 oil labels to filter the results.
 
-        **sort options:** A list of options consisting of ('field_name', 'direction')
+        **sort options:** A list of options consisting of ('field_name',
+                                                           'direction')
 
             field_name:
                 The name of a field to be used for sorting.  Dotted
@@ -140,7 +143,7 @@ class Session():
         if name is None:
             return {}
         else:
-            return {'metadata.alternate_names': { '$elemMatch': {
+            return {'metadata.alternate_names': {'$elemMatch': {
                 '$regex': name, '$options': 'i'
             }}}
 
@@ -258,6 +261,38 @@ class Session():
             return {'$and': [dict([i]) for i in opts.items()]}
         else:
             return {'$and': opts}
+
+    def get_labels(self, identifier=None):
+        '''
+            Right now we are getting labels and associated product types
+            from the adios_db model code.  But it would be better managed
+            if we eventually migrate this to labels stored in a database
+            collection.
+        '''
+        # get the whole list of labels
+        labels = [{'name': label, 'product_types': sorted(list(types))}
+                  for (label, types) in types_to_labels.right.items()]
+
+        # so it's at least somewhat consistent, we sort and then enumerate
+        # our labels
+        labels.sort(key=lambda i: i['name'])
+
+        for idx, obj in enumerate(labels):
+            obj['_id'] = idx
+
+        if identifier is None:
+            return labels
+        else:
+            try:
+                identifier = int(identifier)
+            except ValueError as e:
+                e.args = ('label identifiers are integer only',)
+                raise
+
+            # get a single label
+            label = [i for i in labels if i['_id'] == identifier]
+
+            return label[0] if len(label) > 0 else None
 
     def __getattr__(self, name):
         '''

@@ -216,3 +216,38 @@ class TestSessionQuery(SessionTestBase):
 
         assert len(recs) == expected
 
+
+class TestSessionGetLabels(SessionTestBase):
+    def test_init(self):
+        session = connect_mongodb(self.settings)
+
+        assert hasattr(session, 'get_labels')  # our object, not mongodb
+
+    def test_all_labels(self):
+        session = connect_mongodb(self.settings)
+
+        recs = session.get_labels()
+
+        # This could change with the updates to the product_type/label
+        # associations
+        assert len(recs) == 27
+
+    def test_one_label_good(self):
+        session = connect_mongodb(self.settings)
+
+        for _id in (0, '0'):
+            rec = session.get_labels(_id)
+
+            for attr in ('name', 'product_types'):
+                assert attr in rec
+
+    def test_one_label_bad(self):
+        session = connect_mongodb(self.settings)
+
+        # test non-existent, but valid IDs
+        assert session.get_labels(-1) is None
+        assert session.get_labels('-1') is None
+
+        # test an id that can't even be used
+        with pytest.raises(ValueError):
+            session.get_labels('bogus')
