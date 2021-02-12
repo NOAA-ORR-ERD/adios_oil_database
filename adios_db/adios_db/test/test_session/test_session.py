@@ -52,7 +52,6 @@ class SessionTestBase:
     def deep_get(cls, obj, attr_path, default=None):
         if isinstance(attr_path, str):
             attr_path = attr_path.split('.')
-
         attrs, current = attr_path, obj
 
         try:
@@ -97,10 +96,10 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_id(self):
         session = connect_mongodb(self.settings)
 
-        recs = session.query(oil_id='AD00020')
+        recs = session.query(oil_id='AD0020')
 
         assert len(recs) == 1
-        assert recs[0]['oil_id'] == 'AD00020'
+        assert recs[0]['oil_id'] == 'AD0020'
 
     def test_query_by_name_location(self):
         session = connect_mongodb(self.settings)

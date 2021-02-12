@@ -1,129 +1,129 @@
 {
+    "oil_id": "AD00084",
     "_id": "AD00084",
     "metadata": {
+        "name": "AUTOMOTIVE GASOLINE, EXXON",
+        "source_id": "AD00084",
+        "reference": {
+            "year": 1991,
+            "reference": "Dietrich, S. 1991. EXXON Company, USA, Operations Support Department, Technical Division, Bayway Refinery, Letter to Debra Simecek-Beatty, NOAA"
+        },
+        "product_type": "Distillate Fuel Oil",
         "API": 60.0,
         "comments": "WARNING: Benzene content of product is only an estimate and not a measured value.",
         "labels": [
-            "Refined",
-            "Light",
-            "Fuel Oil 1",
-            "Gasoline",
-            "Kerosene"
+            "Kerosene",
+            "Fuel Oil",
+            "Jet Fuel",
+            "Aviation Gas",
+            "Refined Product"
         ],
-        "name": "AUTOMOTIVE GASOLINE, EXXON",
-        "product_type": "refined",
-        "reference": {
-            "reference": "Dietrich, S. 1991. EXXON Company, USA, Operations Support Department, Technical Division, Bayway Refinery, Letter to Debra Simecek-Beatty, NOAA",
-            "year": 1991
-        },
-        "source_id": "AD00084"
+        "model_completeness": 42
     },
-    "oil_id": "AD00084",
-    "status": [],
     "sub_samples": [
         {
-            "compounds": [
-                {
-                    "measurement": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.05
-                    },
-                    "name": "benzene"
-                }
-            ],
-            "distillation_data": {
-                "cuts": [
-                    {
-                        "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.01
-                        },
-                        "vapor_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 299.0
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.1
-                        },
-                        "vapor_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 314.0
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.5
-                        },
-                        "vapor_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 369.0
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.9
-                        },
-                        "vapor_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 439.0
-                        }
-                    }
-                ],
-                "type": "volume"
-            },
             "metadata": {
-                "fraction_weathered": {
-                    "unit": "1",
-                    "unit_type": "massfraction",
-                    "value": 0.0
-                },
                 "name": "Fresh Oil Sample",
-                "short_name": "Fresh Oil"
+                "short_name": "Fresh Oil",
+                "fraction_weathered": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
             },
             "physical_properties": {
-                "flash_point": {
+                "pour_point": {
                     "measurement": {
                         "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 255.0
+                        "max_value": 255.0,
+                        "unit_type": "temperature"
+                    }
+                },
+                "flash_point": {
+                    "measurement": {
+                        "value": 255.0,
+                        "unit": "K",
+                        "unit_type": "temperature"
                     }
                 },
                 "kinematic_viscosities": [
                     {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 311.0
-                        },
                         "viscosity": {
+                            "value": 1e-06,
                             "unit": "m^2/s",
-                            "unit_type": "kinematicviscosity",
-                            "value": 1e-06
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 311.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
                         }
                     }
-                ],
-                "pour_point": {
+                ]
+            },
+            "distillation_data": {
+                "type": "volume fraction",
+                "cuts": [
+                    {
+                        "fraction": {
+                            "value": 0.01,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        },
+                        "vapor_temp": {
+                            "value": 299.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.1,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        },
+                        "vapor_temp": {
+                            "value": 314.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.5,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        },
+                        "vapor_temp": {
+                            "value": 369.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.9,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        },
+                        "vapor_temp": {
+                            "value": 439.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
+            "compounds": [
+                {
+                    "name": "benzene",
                     "measurement": {
-                        "max_value": 255.0,
-                        "unit": "K",
-                        "unit_type": "temperature"
+                        "value": 0.05,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
                     }
                 }
-            }
+            ]
         }
     ]
 }

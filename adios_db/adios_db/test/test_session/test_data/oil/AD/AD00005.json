@@ -1,86 +1,83 @@
 {
+    "oil_id": "AD00005",
     "_id": "AD00005",
     "metadata": {
-        "labels": [
-            "Other"
-        ],
         "name": "ABSORPTION OIL",
-        "product_type": "crude",
+        "source_id": "AD00005",
         "reference": {
-            "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario.",
-            "year": 1996
+            "year": 1996,
+            "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario."
         },
-        "source_id": "AD00005"
+        "product_type": "Refinery Intermediate",
+        "labels": [
+            "Refined Product"
+        ],
+        "model_completeness": 15
     },
-    "oil_id": "AD00005",
-    "status": [
-        "W007: No distillation data provided",
-        "E002: Crude Oils must have an API"
-    ],
     "sub_samples": [
         {
-            "distillation_data": {
-                "type": "mass"
-            },
             "metadata": {
-                "fraction_weathered": {
-                    "unit": "1",
-                    "unit_type": "massfraction",
-                    "value": 0.0
-                },
                 "name": "Fresh Oil Sample",
-                "short_name": "Fresh Oil"
+                "short_name": "Fresh Oil",
+                "fraction_weathered": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
             },
             "physical_properties": {
+                "flash_point": {
+                    "measurement": {
+                        "value": 380.0,
+                        "unit": "K",
+                        "unit_type": "temperature"
+                    }
+                },
                 "densities": [
                     {
                         "density": {
+                            "value": 848.0,
                             "unit": "kg/m^3",
-                            "unit_type": "density",
-                            "value": 848.0
+                            "unit_type": "density"
                         },
                         "ref_temp": {
+                            "value": 293.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 293.0
+                            "unit_type": "temperature"
                         }
                     }
                 ],
                 "dynamic_viscosities": [
                     {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 293.0
-                        },
                         "viscosity": {
+                            "value": 0.008,
                             "unit": "kg/(m s)",
-                            "unit_type": "dynamicviscosity",
-                            "value": 0.008
+                            "unit_type": "dynamicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 293.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
                         }
                     }
                 ],
-                "flash_point": {
-                    "measurement": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 380.0
-                    }
-                },
                 "interfacial_tension_water": [
                     {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 293.0
-                        },
                         "tension": {
+                            "value": 0.05,
                             "unit": "N/m",
-                            "unit_type": "interfacialtension",
-                            "value": 0.05
+                            "unit_type": "interfacialtension"
+                        },
+                        "ref_temp": {
+                            "value": 293.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
                         }
                     }
                 ]
+            },
+            "distillation_data": {
+                "type": "mass fraction"
             }
         }
     ]

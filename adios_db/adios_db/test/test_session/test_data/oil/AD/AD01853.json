@@ -1,189 +1,189 @@
 {
+    "oil_id": "AD01853",
     "_id": "AD01853",
     "metadata": {
+        "name": "AIRILE, BP",
+        "source_id": "AD01853",
+        "location": "AUSTRALIA",
+        "reference": {
+            "year": 1998,
+            "reference": "Gilbert, T., Austrlian Maritime Safety Authority., Letter to William Lehr, NOAA, March 24, 1998."
+        },
+        "product_type": "Crude Oil NOS",
         "API": 43.2,
         "labels": [
-            "Crude",
-            "Light"
+            "Crude Oil",
+            "Light Crude"
         ],
-        "location": "AUSTRALIA",
-        "name": "AIRILE, BP",
-        "product_type": "crude",
-        "reference": {
-            "reference": "Gilbert, T., Austrlian Maritime Safety Authority., Letter to William Lehr, NOAA, March 24, 1998.",
-            "year": 1998
-        },
-        "source_id": "AD01853"
+        "model_completeness": 39
     },
-    "oil_id": "AD01853",
-    "status": [],
     "sub_samples": [
         {
-            "SARA": {
-                "asphaltenes": {
-                    "unit": "1",
-                    "unit_type": "massfraction",
-                    "value": 0.0008
-                }
-            },
-            "bulk_composition": [
-                {
-                    "measurement": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.012
-                    },
-                    "name": "wax_content"
-                },
-                {
-                    "measurement": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.0003
-                    },
-                    "name": "sulfur"
-                },
-                {
-                    "measurement": {
-                        "unit": "ppm",
-                        "unit_type": "massfraction",
-                        "value": 1
-                    },
-                    "name": "nickel"
-                },
-                {
-                    "measurement": {
-                        "unit": "ppm",
-                        "unit_type": "massfraction",
-                        "value": 0.5
-                    },
-                    "name": "vanadium"
-                }
-            ],
-            "distillation_data": {
-                "cuts": [
-                    {
-                        "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.233
-                        },
-                        "vapor_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 422.0
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.524
-                        },
-                        "vapor_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 505.0
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.852
-                        },
-                        "vapor_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 615.0
-                        }
-                    }
-                ],
-                "type": "volume"
-            },
-            "industry_properties": [
-                {
-                    "measurement": {
-                        "unit": "bar",
-                        "unit_type": "massfraction",
-                        "value": 0.125
-                    },
-                    "name": "Reid Vapor Pressure"
-                },
-                {
-                    "measurement": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.0019
-                    },
-                    "name": "Conradson Residuum"
-                }
-            ],
             "metadata": {
-                "fraction_weathered": {
-                    "unit": "1",
-                    "unit_type": "massfraction",
-                    "value": 0.0
-                },
                 "name": "Fresh Oil Sample",
-                "short_name": "Fresh Oil"
+                "short_name": "Fresh Oil",
+                "fraction_weathered": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
             },
             "physical_properties": {
+                "pour_point": {
+                    "measurement": {
+                        "value": 255.0,
+                        "unit": "K",
+                        "unit_type": "temperature"
+                    }
+                },
+                "flash_point": {
+                    "measurement": {
+                        "value": 250.0,
+                        "unit": "K",
+                        "unit_type": "temperature"
+                    }
+                },
                 "densities": [
                     {
                         "density": {
+                            "value": 809.0,
                             "unit": "kg/m^3",
-                            "unit_type": "density",
-                            "value": 809.0
+                            "unit_type": "density"
                         },
                         "ref_temp": {
+                            "value": 288.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 288.0
+                            "unit_type": "temperature"
                         }
                     }
                 ],
-                "flash_point": {
-                    "measurement": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 250.0
-                    }
-                },
                 "kinematic_viscosities": [
                     {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 293.0
-                        },
                         "viscosity": {
+                            "value": 2.54e-06,
                             "unit": "m^2/s",
-                            "unit_type": "kinematicviscosity",
-                            "value": 2.54e-06
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 293.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
                         }
                     },
                     {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 313.0
-                        },
                         "viscosity": {
+                            "value": 1.77e-06,
                             "unit": "m^2/s",
-                            "unit_type": "kinematicviscosity",
-                            "value": 1.77e-06
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 313.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
                         }
                     }
-                ],
-                "pour_point": {
+                ]
+            },
+            "SARA": {
+                "asphaltenes": {
+                    "value": 0.0008,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
+            },
+            "distillation_data": {
+                "type": "volume fraction",
+                "cuts": [
+                    {
+                        "fraction": {
+                            "value": 0.233,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        },
+                        "vapor_temp": {
+                            "value": 422.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.524,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        },
+                        "vapor_temp": {
+                            "value": 505.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.852,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        },
+                        "vapor_temp": {
+                            "value": 615.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
+            "bulk_composition": [
+                {
+                    "name": "wax_content",
                     "measurement": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 255.0
+                        "value": 0.012,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
+                    }
+                },
+                {
+                    "name": "sulfur",
+                    "measurement": {
+                        "value": 0.0003,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
+                    }
+                },
+                {
+                    "name": "nickel",
+                    "measurement": {
+                        "value": 1,
+                        "unit": "ppm",
+                        "unit_type": "massfraction"
+                    }
+                },
+                {
+                    "name": "vanadium",
+                    "measurement": {
+                        "value": 0.5,
+                        "unit": "ppm",
+                        "unit_type": "massfraction"
                     }
                 }
-            }
+            ],
+            "industry_properties": [
+                {
+                    "name": "Reid Vapor Pressure",
+                    "measurement": {
+                        "value": 0.125,
+                        "unit": "bar",
+                        "unit_type": "massfraction"
+                    }
+                },
+                {
+                    "name": "Conradson Residuum",
+                    "measurement": {
+                        "value": 0.0019,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
+                    }
+                }
+            ]
         }
     ]
 }

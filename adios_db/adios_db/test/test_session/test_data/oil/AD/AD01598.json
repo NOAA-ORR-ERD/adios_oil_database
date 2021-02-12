@@ -1,110 +1,105 @@
 {
+    "oil_id": "AD01598",
     "_id": "AD01598",
     "metadata": {
-        "API": 15.8,
-        "labels": [
-            "Other"
-        ],
         "name": "ASPHALT CHARGED STOCK",
-        "product_type": "refined",
+        "source_id": "AD01598",
         "reference": {
-            "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario.",
-            "year": 1996
+            "year": 1996,
+            "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario."
         },
-        "source_id": "AD01598"
+        "product_type": "Other",
+        "API": 15.8,
+        "model_completeness": 19
     },
-    "oil_id": "AD01598",
-    "status": [
-        "W007: No distillation data provided"
-    ],
     "sub_samples": [
         {
-            "SARA": {
-                "asphaltenes": {
-                    "unit": "1",
-                    "unit_type": "massfraction",
-                    "value": 0.17
-                }
-            },
-            "bulk_composition": [
-                {
-                    "measurement": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.2
-                    },
-                    "name": "wax_content"
-                },
-                {
-                    "measurement": {
-                        "unit": "1",
-                        "unit_type": "massfraction",
-                        "value": 0.026
-                    },
-                    "name": "sulfur"
-                }
-            ],
-            "distillation_data": {
-                "type": "mass"
-            },
             "metadata": {
-                "fraction_weathered": {
-                    "unit": "1",
-                    "unit_type": "massfraction",
-                    "value": 0.0
-                },
                 "name": "Fresh Oil Sample",
-                "short_name": "Fresh Oil"
+                "short_name": "Fresh Oil",
+                "fraction_weathered": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
             },
             "physical_properties": {
+                "pour_point": {
+                    "measurement": {
+                        "unit": "K",
+                        "min_value": 323.0,
+                        "unit_type": "temperature"
+                    }
+                },
                 "densities": [
                     {
                         "density": {
+                            "value": 958.0,
                             "unit": "kg/m^3",
-                            "unit_type": "density",
-                            "value": 958.0
+                            "unit_type": "density"
                         },
                         "ref_temp": {
+                            "value": 273.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 273.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "density": {
+                            "value": 960.0,
                             "unit": "kg/m^3",
-                            "unit_type": "density",
-                            "value": 960.0
+                            "unit_type": "density"
                         },
                         "ref_temp": {
+                            "value": 288.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 288.0
+                            "unit_type": "temperature"
                         }
                     }
                 ],
                 "dynamic_viscosities": [
                     {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 311.0
-                        },
                         "viscosity": {
+                            "value": 3700.0,
                             "unit": "kg/(m s)",
-                            "unit_type": "dynamicviscosity",
-                            "value": 3700.0
+                            "unit_type": "dynamicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 311.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
                         }
                     }
-                ],
-                "pour_point": {
+                ]
+            },
+            "SARA": {
+                "asphaltenes": {
+                    "value": 0.17,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
+            },
+            "distillation_data": {
+                "type": "mass fraction"
+            },
+            "bulk_composition": [
+                {
+                    "name": "wax_content",
                     "measurement": {
-                        "min_value": 323.0,
-                        "unit": "K",
-                        "unit_type": "temperature"
+                        "value": 0.2,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
+                    }
+                },
+                {
+                    "name": "sulfur",
+                    "measurement": {
+                        "value": 0.026,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
                     }
                 }
-            }
+            ]
         }
     ]
 }
