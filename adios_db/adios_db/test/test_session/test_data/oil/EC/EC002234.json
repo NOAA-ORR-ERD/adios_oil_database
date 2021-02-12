@@ -1,5 +1,5 @@
 {
-    "_id": "EC002234",
+    "_id": "EC02234",
     "metadata": {
         "API": 20.927,
         "comments": "Via CanmetEnergy, Natural Resources Canada",
@@ -13,7 +13,7 @@
         "sample_date": "2013-04-08",
         "source_id": "2234"
     },
-    "oil_id": "EC002234",
+    "oil_id": "EC02234",
     "status": [],
     "sub_samples": [
         {

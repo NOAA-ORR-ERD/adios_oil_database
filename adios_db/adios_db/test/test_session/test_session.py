@@ -15,6 +15,10 @@ here = Path(__file__).resolve().parent
 pytestmark = pytest.mark.mongo
 
 
+def restore_test_db(settings):
+    restore_db(settings, here/'test_data')
+
+
 class SessionTestBase:
     settings = {'mongodb.host': 'localhost',
                 'mongodb.port': '27017',
@@ -32,7 +36,7 @@ class SessionTestBase:
         '''
         print('\nsetup_class()...')
 
-        restore_db(cls.settings, os.path.join(here, 'test_data'))
+        restore_test_db(cls.settings)
 
     @classmethod
     def teardown_class(cls):

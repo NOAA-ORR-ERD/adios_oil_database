@@ -1,5 +1,5 @@
 {
-    "_id": "EC000540",
+    "_id": "EC00540",
     "metadata": {
         "API": 12.001,
         "name": "Bunker C - IFO-300 [1994]",
@@ -11,7 +11,7 @@
         "sample_date": "1994-08-15",
         "source_id": "540"
     },
-    "oil_id": "EC000540",
+    "oil_id": "EC00540",
     "status": [],
     "sub_samples": [
         {

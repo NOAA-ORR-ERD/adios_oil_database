@@ -1,5 +1,5 @@
 {
-    "_id": "EX000026",
+    "_id": "EX00026",
     "metadata": {
         "API": 35.2,
         "labels": [
@@ -12,7 +12,7 @@
         },
         "source_id": "HOOPS16F"
     },
-    "oil_id": "EX000026",
+    "oil_id": "EX00026",
     "status": [
         "W002: Record has no product type"
     ],
