@@ -12,6 +12,13 @@ class Session():
                       'descending': DESCENDING}
 
     def __init__(self, host, port, database):
+        """
+        Initialize a mongodb backed session
+
+        :param host: hostname of mongo server
+        :param port: port of mongo server
+        :param database: database name used for this data.
+        """
         self.mongo_client = MongoClient(host=host, port=port)
 
         self.db = getattr(self.mongo_client, database)
@@ -23,20 +30,14 @@ class Session():
               projection=None,
               **kwargs):
         '''
-        query the database accouding to various criteria
+        Query the database according to various criteria
 
-        :returns: an iterator of json blobs of the data asked for
+        :returns: an iterator of dicts (json-compatible) of the data asked for
 
-        The Mongodb find() function has a bunch of parameters, but we are
-        mainly interested in ``find(filter=None, orderby, projection=None)``
 
         Where:
 
-          filter:
-            The filtering terms
-
-          orderby:
-            the ordering of our results
+        **Filtering**
 
           projection:
             The field names to be returned
@@ -73,6 +74,9 @@ class Session():
                       'desc',
                       'descending'}
 
+        The Mongodb find() function has a bunch of parameters, but we are
+        mainly interested in ``find(filter=None, orderby, projection=None)``
+
         .. note::
 
             MongoDB 3.6 has changed how they compare array fields in a
@@ -85,6 +89,7 @@ class Session():
 
             For this reason, a MongoDB query will not properly sort our
             status and labels array fields, at least not in a simple way.
+
         '''
         filter_opts = self.filter_options(oil_id, text, api, labels,
                                           product_type)
@@ -103,7 +108,6 @@ class Session():
 
         start, stop = self.parse_interval_arg(page)
 
-        print("the return object:", type(ret), ret)
         return self._strip_id(ret[start:stop])
 
     def filter_options(self, oil_id, text, api, labels, product_type):

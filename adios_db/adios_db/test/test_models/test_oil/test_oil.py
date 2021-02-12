@@ -68,6 +68,27 @@ class TestOil:
         with pytest.raises(TypeError):
             Oil(oil_id="")
 
+    def test__id_ignored(self):
+        """
+        checks that the an _id attrobute of a dict will get ignored
+        """
+        oil = Oil.from_py_json({'oil_id': "XX123456",
+                                '_id': 1234567,
+                                'metadata': {'name': "An oil name"},
+                                }
+                               )
+
+        assert oil.oil_id == "XX123456"
+
+        with pytest.raises(AttributeError):
+            _id = oil._id
+        assert oil.metadata.name == "An oil name"
+
+        joil = oil.py_json()
+
+        assert '_id' not in joil
+
+
     def test_repr_minimal(self):
         """
         The repr should be reasonable

@@ -7,8 +7,8 @@ try:
       from bson.objectid import ObjectId
 
       from adios_db.util.json import (fix_bson_ids,
-                                          json_to_bson_obj_id,
-                                          ObjFromDict)
+                                      json_to_bson_obj_id,
+                                      ObjFromDict)
 except ImportError:
     pass  # skipping anyway
 
