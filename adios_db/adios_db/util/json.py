@@ -4,58 +4,59 @@
 #     These are general functions to be used primarily for helping us deal
 #     with an incoming JSON oil record.
 # '''
-# from bson.objectid import ObjectId
+from bson.objectid import ObjectId
 
 
-# def jsonify_model_obj(obj):
-#     if obj is None:
-#         return obj
+def jsonify_model_obj(obj):
+    if obj is None:
+        return obj
 
-#     try:
-#         # if we are a PyMODM object, we transform it to a dict
-#         obj_dict = obj.to_son().to_dict()
-#     except Exception:
-#         obj_dict = obj
+    try:
+        # if we are a PyMODM object, we transform it to a dict
+        obj_dict = obj.to_son().to_dict()
+    except Exception:
+        obj_dict = obj
 
-#     fix_bson_ids(obj_dict)
+    fix_bson_ids(obj_dict)
 
-#     return obj_dict
+    return obj_dict
 
 
-# def fix_bson_ids(json_data):
-#     '''
-#         JSON, specifically the ujson package, is having problems representing
-#         the BSON special ObjectId fields.  So we need to turn them into
-#         something representable, like a string, before sending our JSON back
-#         in a response.
-#     '''
-#     if isinstance(json_data, ObjectId):
-#         return str(json_data)
-#     elif isinstance(json_data, dict):
-#         for k, v in json_data.items():
-#             if k == '_cls':
-#                 # chris doesn't want to expose the entire python module path
-#                 # not sure if this is a good idea, might make it harder to
-#                 # reconstruct the objects on a round trip.
-#                 v = v.split('.')[-1]
+def fix_bson_ids(json_data):
+    # FixME: if we don't use the _id field do we need this at all?
+    '''
+        JSON, specifically the ujson package, is having problems representing
+        the BSON special ObjectId fields.  So we need to turn them into
+        something representable, like a string, before sending our JSON back
+        in a response.
+    '''
+    if isinstance(json_data, ObjectId):
+        return str(json_data)
+    elif isinstance(json_data, dict):
+        for k, v in json_data.items():
+            if k == '_cls':
+                # chris doesn't want to expose the entire python module path
+                # not sure if this is a good idea, might make it harder to
+                # reconstruct the objects on a round trip.
+                v = v.split('.')[-1]
 
-#             json_data[k] = fix_bson_ids(v)
+            json_data[k] = fix_bson_ids(v)
 
-#         return json_data
-#     elif isinstance(json_data, (list, tuple)):
-#         for i, v in enumerate(json_data):
-#             json_data[i] = fix_bson_ids(v)
+        return json_data
+    elif isinstance(json_data, (list, tuple)):
+        for i, v in enumerate(json_data):
+            json_data[i] = fix_bson_ids(v)
 
-#         return json_data
-#     elif isinstance(json_data, set):
-#         tmp_list = list(json_data)
+        return json_data
+    elif isinstance(json_data, set):
+        tmp_list = list(json_data)
 
-#         for i, v in enumerate(tmp_list):
-#             tmp_list[i] = fix_bson_ids(v)
+        for i, v in enumerate(tmp_list):
+            tmp_list[i] = fix_bson_ids(v)
 
-#         return set(tmp_list)
-#     else:
-#         return json_data
+        return set(tmp_list)
+    else:
+        return json_data
 
 
 # def json_to_bson_obj_id(json_data):

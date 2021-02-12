@@ -1,7 +1,54 @@
 # The Oil Database Session object
 from numbers import Number
-
+import warnings
 from pymongo import MongoClient, ASCENDING, DESCENDING
+
+
+class CursorWrapper():
+    """
+    wraps a mongodb cursor to provide an iterator that we can do some filtering on,
+    while not losing all its methods
+
+    At this point, all it's doing is removing the _id key
+
+    Seems like a lot of effort for that, but the alternative is to realize the entire
+    thing into a list -- which may be a bad idea.
+
+    Rant: why doesn't a mongo cursor have a __len__ rather than using .count()?
+          to make it more like a regular Sequence?
+    """
+    def __init__(self, cursor):
+        self.cursor = cursor
+
+    def __iter__(self):
+        self.cursor = iter(self.cursor)
+        return self
+
+    def __next__(self):
+        obj = next(self.cursor)
+        obj.pop('_id', None)
+        return obj
+
+    def __len__(self):
+        return self.cursor.count()
+
+    def __getitem__(self, idx):
+        return self.cursor[idx]
+    # def count(self, *args, **kwargs):
+    #     return self.cursor.count(*args, **kwargs)
+
+    def __getattr__(self, attr):
+        """
+        Pass anything else on to the imbedded cursor
+
+        Just in case -- we really should document whats being used.
+        """
+        warnings.warn("ideally, we should not be using mongo "
+                      "cursor methods directly."
+                      f": `{attr}` Should be wrapped somehow",
+                      DeprecationWarning)
+
+        return getattr(self.cursor, attr)
 
 
 class Session():
@@ -108,7 +155,7 @@ class Session():
 
         start, stop = self.parse_interval_arg(page)
 
-        return self._strip_id(ret[start:stop])
+        return CursorWrapper(ret[start:stop])
 
     def filter_options(self, oil_id, text, api, labels, product_type):
         filter_opts = {}

@@ -55,12 +55,15 @@ def get_oils(request):
     '''
     obj_id = obj_id_from_url(request)
 
+    print("In get_oils, looking for:", obj_id)
+
     logger.info('GET /oils: id: {}, options: {}'.format(obj_id, request.GET))
 
     client = request.mdb_client
 
     if obj_id is not None:
-        res = client.oil.find_one({'_id': obj_id})
+        # Fixme: why is this not using the adios_db Session?
+        res = client.oil.find_one({'oil_id': obj_id})
 
         if res is not None:
             return get_oil_all_fields(res)
@@ -135,7 +138,7 @@ def get_sort_params(request):
     direction = request.GET.get('dir', 'asc')
 
     if sort == 'id':
-        sort = '_id'
+        sort = 'oil_id'
     elif sort == 'api':
         sort = 'metadata.API'
 
@@ -168,18 +171,18 @@ def insert_oil(request):
     try:
         logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
 
-        if 'oil_id' in oil_obj:
-            oil_obj['_id'] = oil_obj['oil_id']
-        else:
-            oil_obj['_id'] = oil_obj['oil_id'] = new_oil_id(request)
+        # if 'oil_id' in oil_obj:
+        #     oil_obj['_id'] = oil_obj['oil_id']
+        # else:
+        #     oil_obj['_id'] = oil_obj['oil_id'] = new_oil_id(request)
 
         oil = validate_json(oil_obj)
         set_completeness(oil)
         oil_obj = oil.py_json()
 
-        oil_obj['_id'] = (request.mdb_client.oil
-                          .insert_one(oil_obj)
-                          .inserted_id)
+        # oil_obj['_id'] = (request.mdb_client.oil
+        #                   .insert_one(oil_obj)
+        #                   .inserted_id)
     except DuplicateKeyError as e:
         raise HTTPConflict(detail=e)
     except Exception as e:
@@ -217,9 +220,9 @@ def update_oil(request):
         set_completeness(oil)
         oil_obj = oil.py_json()
         (request.mdb_client.oil
-         .replace_one({'_id': oil_obj['_id']}, oil_obj))
+         .replace_one({'oil_id': oil_obj['oil_id']}, oil_obj))
 
-        memoized_results.pop(oil_obj['_id'], None)
+        memoized_results.pop(oil_obj['oil_id'], None)
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
@@ -379,3 +382,4 @@ def get_oil_all_fields(oil):
                  'type': 'oils',
                  'attributes': oil},
         }
+

@@ -68,14 +68,14 @@ class TestSessionQuery(SessionTestBase):
     def test_query(self):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query())
+        recs = session.query()
 
         assert len(recs) == 26  # our test set size
 
     def test_query_with_projection(self):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query(projection=['metadata.name']))
+        recs = session.query(projection=['metadata.name'])
 
         assert len(recs) == 26  # our test set size
 
@@ -92,7 +92,7 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_id(self):
         session = connect_mongodb(self.settings)
 
-        recs = list(session.query(oil_id='AD00020'))
+        recs = session.query(oil_id='AD00020')
 
         assert len(recs) == 1
         assert recs[0]['oil_id'] == 'AD00020'

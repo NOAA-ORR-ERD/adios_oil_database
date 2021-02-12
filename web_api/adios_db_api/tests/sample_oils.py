@@ -2,8 +2,10 @@
     Sample oil records for testing.
 """
 
+from adios_db.models.oil.oil import Oil
 
-basic_noaa_fm = {
+
+basic_noaa_fm_pyjson = {
     'metadata': {
         'API': 28.0,
         'labels': ['Crude', 'Medium'],
@@ -72,3 +74,7 @@ basic_noaa_fm = {
         }
     ]
 }
+
+#  Round tripping through the Oil object to make sure it's consistent
+basic_noaa_fm = Oil.from_py_json(basic_noaa_fm_pyjson).py_json()
+

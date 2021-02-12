@@ -395,14 +395,3 @@ def test_round_trip():
     oilout = Oil.from_file(fileout)
 
     assert oilin == oilout
-
-
-
-
-
-
-
-
-
-
-
