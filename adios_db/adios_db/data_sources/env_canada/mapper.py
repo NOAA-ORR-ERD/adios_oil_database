@@ -107,7 +107,6 @@ class EnvCanadaRecordMapper(MapperBase):
     def py_json(self):
         rec = self.record.dict()
 
-        rec['_id'] = rec['oil_id']
         rec['sub_samples'] = [s.dict() for s in self.sub_samples]
 
         self.resolve_oil_api(rec)

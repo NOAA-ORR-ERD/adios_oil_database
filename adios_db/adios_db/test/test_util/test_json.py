@@ -1,10 +1,16 @@
 import pytest
 
-from bson.objectid import ObjectId
+pytestmark = pytest.mark.skipif(True,
+                                reason="skipping these -- code no longer needed")
 
-from adios_db.util.json import (fix_bson_ids,
-                                    json_to_bson_obj_id,
-                                    ObjFromDict)
+try:
+      from bson.objectid import ObjectId
+
+      from adios_db.util.json import (fix_bson_ids,
+                                          json_to_bson_obj_id,
+                                          ObjFromDict)
+except ImportError:
+    pass  # skipping anyway
 
 
 class TestBson(object):

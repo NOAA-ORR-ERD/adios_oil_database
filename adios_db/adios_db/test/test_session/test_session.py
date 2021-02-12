@@ -3,6 +3,8 @@ from pathlib import Path
 
 import pytest
 
+from adios_db.models.oil.oil import Oil
+
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.scripts.db_initialize import init_db
 from adios_db.scripts.db_restore import restore_db
@@ -12,6 +14,7 @@ here = Path(__file__).resolve().parent
 
 # Pass the --mongo command line option if you want these to run.
 # they require a mongo database to be running on localhost
+
 pytestmark = pytest.mark.mongo
 
 
@@ -30,14 +33,14 @@ class SessionTestBase:
             - Init the database
             - Load a set of test data into the database
         '''
-        print('\nsetup_class()...')
+        # print('\nsetup_class()...')
 
         restore_db(cls.settings, os.path.join(here, 'test_data'))
 
     @classmethod
     def teardown_class(cls):
         'Clean up any data the model generated after running tests.'
-        print('\nteardown_class()...')
+        # print('\nteardown_class()...')
         init_db(cls.settings, show_prompt=False)
 
     @classmethod
@@ -65,40 +68,40 @@ class TestSessionQuery(SessionTestBase):
     def test_query(self):
         session = connect_mongodb(self.settings)
 
-        *recs, = session.query()
+        recs = list(session.query())
 
         assert len(recs) == 26  # our test set size
 
     def test_query_with_projection(self):
         session = connect_mongodb(self.settings)
 
-        *recs, = session.query(projection=['metadata.name'])
+        recs = list(session.query(projection=['metadata.name']))
 
         assert len(recs) == 26  # our test set size
 
         for rec in recs:
-            # We should only get the id plus one field
+            # We should only get the oil_id plus one field
             # That field should be in the proper context however
-            assert len(rec.keys()) == 2
-            assert '_id' in rec
+            assert len(rec) == 2
+            assert 'oil_id' in rec
             assert 'metadata' in rec
 
-            assert len(rec['metadata'].keys()) == 1
+            assert len(rec['metadata']) == 1
             assert 'name' in rec['metadata']
 
     def test_query_by_id(self):
         session = connect_mongodb(self.settings)
 
-        *recs, = session.query(oil_id='AD00020')
+        recs = list(session.query(oil_id='AD00020'))
 
         assert len(recs) == 1
-        assert recs[0]['_id'] == 'AD00020'
+        assert recs[0]['oil_id'] == 'AD00020'
 
     def test_query_by_name_location(self):
         session = connect_mongodb(self.settings)
 
         q_text = 'Alaska North Slope'
-        *recs, = session.query(text=q_text)
+        recs = list(session.query(text=q_text))
 
         assert len(recs) == 3
 
@@ -185,8 +188,6 @@ class TestSessionQuery(SessionTestBase):
             value1 = self.deep_get(rec1, field, default=None)
             value2 = self.deep_get(rec2, field, default=None)
 
-            print(value1, value2)
-
             if direction == 'desc':
                 if value1 is not None and value2 is not None:
                     assert value1 >= value2
@@ -216,3 +217,22 @@ class TestSessionQuery(SessionTestBase):
 
         assert len(recs) == expected
 
+
+class TestSessionInserting(SessionTestBase):
+    """
+    testing adding oil records to the DB
+    """
+    def test_add_one_record(self):
+        session = connect_mongodb(self.settings)
+
+        ID = "XX00000"
+        # create a minimal oil
+        oil = Oil(ID)
+
+        # add it:
+        session.insert_oil_record(oil)
+
+        result = list(session.query(oil_id=ID))
+
+        assert len(result) == 1
+        assert result[0]['oil_id'] == ID

@@ -20,8 +20,13 @@ class Session():
     def query(self, oil_id=None,
               text=None, api=None, labels=None, product_type=None,
               sort=None, sort_case_sensitive=False, page=None,
+              projection=None,
               **kwargs):
         '''
+        query the database accouding to various criteria
+
+        :returns: an iterator of json blobs of the data asked for
+
         The Mongodb find() function has a bunch of parameters, but we are
         mainly interested in ``find(filter=None, orderby, projection=None)``
 
@@ -84,8 +89,10 @@ class Session():
         filter_opts = self.filter_options(oil_id, text, api, labels,
                                           product_type)
         sort = self.sort_options(sort)
-        projection = kwargs.get('projection', None)
 
+        if projection is not None:
+            # make sure we always get the oil_id
+            projection = ['oil_id'] + list(projection)
         ret = self.oil.find(filter=filter_opts, projection=projection)
 
         if sort is not None:
@@ -96,7 +103,8 @@ class Session():
 
         start, stop = self.parse_interval_arg(page)
 
-        return ret[start:stop]
+        print("the return object:", type(ret), ret)
+        return self._strip_id(ret[start:stop])
 
     def filter_options(self, oil_id, text, api, labels, product_type):
         filter_opts = {}
@@ -116,13 +124,13 @@ class Session():
                     for opt in sort]
 
     def id_arg(self, obj_id):
-        return {} if obj_id is None else {'_id': obj_id}
+        return {} if obj_id is None else {'oil_id': obj_id}
 
     def id_filter_arg(self, obj_id):
         if obj_id is None:
             return {}
         else:
-            return {'_id': {'$regex': obj_id, '$options': 'i'}}
+            return {'oil_id': {'$regex': obj_id, '$options': 'i'}}
 
     def name_arg(self, name):
         if name is None:
@@ -245,7 +253,7 @@ class Session():
 
     def make_exclusive(self, opts):
         '''
-            Normally, the filtering options will be exclusive, i. e. if we are
+            Normally, the filtering options will be exclusive, i.e. if we are
             searching on name='alaska' and location='north', we would only get
             records that satisfy both criteria (criteria are AND'd together).
 
@@ -259,7 +267,28 @@ class Session():
         else:
             return {'$and': opts}
 
+    def insert_oil_record(self, oil, overwrite=False):
+        """
+        add a new oil record to the oil collection
+
+        :param oil: an Oil object to add
+
+        :param overwrite=False: whether to overwrite an existing
+                                record if it already exists.
+        """
+        obj = oil.py_json()
+
+        self.oil.insert_one(obj)
+
+    @staticmethod
+    def _strip_id(cursor):
+        for rec in cursor:
+            rec.pop('_id', None)
+            yield rec
+
     def __getattr__(self, name):
+        # FixMe: This should be fully hiding the mongo client
+        #        so probably should NOT do this!
         '''
             Any referenced attributes that are not explicitly defined in this
             class will be assumed to belong to the mongo client.  So we will
