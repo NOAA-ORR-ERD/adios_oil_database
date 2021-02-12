@@ -1,5 +1,5 @@
 {
-    "_id": "EC000561",
+    "_id": "EC00561",
     "metadata": {
         "API": 34.10941925516727,
         "comments": "Via Cook Inlet Regional Advisory Council",
@@ -13,7 +13,7 @@
         "sample_date": "2003-11-21",
         "source_id": "561"
     },
-    "oil_id": "EC000561",
+    "oil_id": "EC00561",
     "status": [
         "W007: No distillation data provided"
     ],

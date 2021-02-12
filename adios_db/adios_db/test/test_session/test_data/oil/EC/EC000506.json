@@ -1,5 +1,5 @@
 {
-    "_id": "EC000506",
+    "_id": "EC00506",
     "metadata": {
         "API": 30.039,
         "comments": "Via Exxon -Mobil",
@@ -13,7 +13,7 @@
         "sample_date": "2002-06-26",
         "source_id": "506"
     },
-    "oil_id": "EC000506",
+    "oil_id": "EC00506",
     "status": [],
     "sub_samples": [
         {

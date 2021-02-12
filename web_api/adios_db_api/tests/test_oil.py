@@ -344,7 +344,7 @@ class OilTests(OilTestBase):
         for oil_id in ('AD00009',
                        'AD00020',
                        'AD00025',
-                       'AD01759',
+                       #'AD01759',
                        'EC02234',
                        'EC00506',
                        'EC00561'):
