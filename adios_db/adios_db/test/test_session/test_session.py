@@ -118,16 +118,16 @@ class TestSessionQuery(SessionTestBase):
             assert q_text.lower() in rec['metadata']['location'].lower()
 
     @pytest.mark.parametrize('labels, expected', [
-        (['Crude', 'Medium'], ['Crude', 'Medium']),
-        ('Crude,Medium', ['Crude', 'Medium']),
-        ('Crude, Medium', ['Crude', 'Medium']),
+        (['Crude Oil', 'Medium Crude'], ['Crude Oil', 'Medium Crude']),
+        ('Crude Oil,Medium Crude', ['Crude Oil', 'Medium Crude']),
+        ('Crude Oil, Medium Crude', ['Crude Oil', 'Medium Crude']),
     ])
     def test_query_by_labels(self, labels, expected):
         session = connect_mongodb(self.settings)
 
         *recs, = session.query(labels=labels)
 
-        assert len(recs) == 6
+        assert len(recs) == 8
 
         for rec in recs:
             assert rec['metadata']['labels'] == expected
