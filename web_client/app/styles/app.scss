@@ -96,6 +96,26 @@ td:empty::after{
 .nav-link.active {
   text-decoration: underline;
 }
+
+// This seems unreasonably specific, but that's the only way
+// to override the .footer settings.
+.modal-body {
+    .form {
+        .row {
+            p {
+                a {
+                    font-size: 1rem;
+                    color: #007bff;
+                    padding: 0 0;
+                    &:hover{
+                        background: #c8c8c8;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .footer{
     padding: 15px 0;
     img{
