@@ -55,8 +55,6 @@ def get_oils(request):
     '''
     obj_id = obj_id_from_url(request)
 
-    print("In get_oils, looking for:", obj_id)
-
     logger.info('GET /oils: id: {}, options: {}'.format(obj_id, request.GET))
 
     client = request.mdb_client
@@ -175,14 +173,16 @@ def insert_oil(request):
         #     oil_obj['_id'] = oil_obj['oil_id']
         # else:
         #     oil_obj['_id'] = oil_obj['oil_id'] = new_oil_id(request)
+        if 'oil_id' not in oil_obj:
+            oil_obj['oil_id'] = new_oil_id(request)
 
         oil = validate_json(oil_obj)
         set_completeness(oil)
         oil_obj = oil.py_json()
 
-        # oil_obj['_id'] = (request.mdb_client.oil
-        #                   .insert_one(oil_obj)
-        #                   .inserted_id)
+        mongo_id = (request.mdb_client.oil
+                           .insert_one(oil_obj)
+                           .inserted_id)
     except DuplicateKeyError as e:
         raise HTTPConflict(detail=e)
     except Exception as e:
@@ -210,7 +210,6 @@ def update_oil(request):
 
     try:
         oil_obj = get_oil_from_json_req(json_obj)
-        fix_oil_id(oil_obj, obj_id)
 
         try:
             oil = validate_json(oil_obj)
@@ -226,7 +225,8 @@ def update_oil(request):
     except Exception as e:
         raise HTTPUnsupportedMediaType(detail=e)
 
-    return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
+#    return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
+    return generate_jsonapi_response_from_oil(oil_obj)
 
 
 @oil_api.patch()
@@ -250,7 +250,7 @@ def delete_oil(request):
     if obj_id is not None:
 
         res = (request.mdb_client.oil
-               .delete_one({'_id': obj_id}))
+               .delete_one({'oil_id': obj_id}))
 
         if res.deleted_count == 0:
             raise HTTPNotFound()
@@ -263,6 +263,7 @@ def delete_oil(request):
 
 
 def new_oil_id(request):
+    # fixme: this should be in the adios_db package
     '''
         Query the database for the next highest ID with a prefix of XX
         The current implementation is to walk the oil IDs, filter for the
@@ -299,30 +300,31 @@ def new_oil_id(request):
 def get_oil_from_json_req(json_obj):
     oil_obj = json_obj['data']['attributes']
 
-    if '_id' in json_obj['data']:
+    if 'oil_id' in json_obj['data']:
         # won't have an id if we are inserting
-        oil_obj['_id'] = json_obj['data']['_id']
+        oil_obj['oil_id'] = json_obj['data']['oil_id']
 
     return oil_obj
 
 
-def fix_oil_id(oil_json, obj_id=None):
-    '''
-        Okay, pymongo lets you specify the id of a new record, but it needs
-        to be the '_id' field. So we need to ensure that the '_id' field
-        exists.
-        The rule then is that:
-        - Ember json serializer PUTs the id in the URL, so we look for it there
-          first.
-        - the 'oil_id' is a required field, and the '_id' field will be copied
-          from it.
-    '''
-    if obj_id is not None:
-        oil_json['_id'] = oil_json['oil_id'] = obj_id
-    elif 'oil_id' in oil_json:
-        oil_json['_id'] = oil_json['oil_id']
-    else:
-        raise ValueError('oil_id field is required')
+# no longer neededL only oil_id is used
+# def fix_oil_id(oil_json, obj_id=None):
+#     '''
+#         Okay, pymongo lets you specify the id of a new record, but it needs
+#         to be the '_id' field. So we need to ensure that the '_id' field
+#         exists.
+#         The rule then is that:
+#         - Ember json serializer PUTs the id in the URL, so we look for it there
+#           first.
+#         - the 'oil_id' is a required field, and the '_id' field will be copied
+#           from it.
+#     '''
+#     if obj_id is not None:
+#         oil_json['_id'] = oil_json['oil_id'] = obj_id
+#     elif 'oil_id' in oil_json:
+#         oil_json['_id'] = oil_json['oil_id']
+#     else:
+#         raise ValueError('oil_id field is required')
 
 
 def generate_jsonapi_response_from_oil(oil_obj):

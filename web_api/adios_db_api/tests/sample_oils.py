@@ -6,9 +6,10 @@ from adios_db.models.oil.oil import Oil
 
 
 basic_noaa_fm_pyjson = {
+    'oil_id': 'AD99999',
     'metadata': {
         'API': 28.0,
-        'labels': ['Crude', 'Medium'],
+        'labels': ['Crude Oil', 'Medium Crude'],
         'location': 'WRC',
         'name': 'BASIC NOAA FILEMAKER TEST RECORD',
         'product_type': 'crude',
@@ -18,7 +19,6 @@ basic_noaa_fm_pyjson = {
         },
         'source_id': 'AD00009'
     },
-    'oil_id': 'AD99999',
     'status': [
         'W007: No distillation data provided'
     ],

@@ -106,6 +106,10 @@ def load_collection(db, base_path, collection_name):
 
                 collection.insert_one(obj)
 
+    # Index the oil_id field
+    if collection_name == 'oil':
+        resp = collection.create_index("oil_id")
+
 
 def get_obj_json(obj_path, collection_name):
     obj = json.load(open(obj_path, 'r'), encoding="utf-8")
