@@ -96,10 +96,10 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_id(self):
         session = connect_mongodb(self.settings)
 
-        recs = session.query(oil_id='AD0020')
+        recs = session.query(oil_id='AD00020')
 
         assert len(recs) == 1
-        assert recs[0]['oil_id'] == 'AD0020'
+        assert recs[0]['oil_id'] == 'AD00020'
 
     def test_query_by_name_location(self):
         session = connect_mongodb(self.settings)
@@ -121,16 +121,20 @@ class TestSessionQuery(SessionTestBase):
             assert q_text.lower() in rec['metadata']['location'].lower()
 
     @pytest.mark.parametrize('labels, expected', [
-        (['Crude', 'Medium'], ['Crude', 'Medium']),
-        ('Crude,Medium', ['Crude', 'Medium']),
-        ('Crude, Medium', ['Crude', 'Medium']),
+        (['Crude Oil', 'Medium Crude'], ['Crude Oil', 'Medium Crude']),
+        ('Crude Oil,Medium Crude', ['Crude Oil', 'Medium Crude']),
+        ('Crude Oil, Medium Crude', ['Crude Oil', 'Medium Crude']),
     ])
     def test_query_by_labels(self, labels, expected):
         session = connect_mongodb(self.settings)
 
-        *recs, = session.query(labels=labels)
+        recs = session.query(labels=labels)
 
-        assert len(recs) == 6
+        print("query results")
+        for rec in recs:
+            print(rec['metadata']['labels'])
+
+        assert len(recs) > 4  # so it's not too fragile if the data changes
 
         for rec in recs:
             assert rec['metadata']['labels'] == expected
