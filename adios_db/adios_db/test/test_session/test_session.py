@@ -130,7 +130,6 @@ class TestSessionQuery(SessionTestBase):
 
         recs = session.query(labels=labels)
 
-        print("query results")
         for rec in recs:
             print(rec['metadata']['labels'])
 
