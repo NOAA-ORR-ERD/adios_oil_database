@@ -8,8 +8,8 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-python=3.8.*
-numpy>=1.18
+python=3.9.*
+numpy>=1.20
 
 mongodb>=4.2.0
 pymongo>=3.11.0
@@ -25,5 +25,5 @@ pytest-cov>=2.6.0
 pytest-timeout>=1.2.1
 pytest-raises>=0.11
 
-pynucos>=2.9.1
+pynucos>=2.10
 
