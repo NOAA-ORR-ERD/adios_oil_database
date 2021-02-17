@@ -14,14 +14,6 @@ Subpackages
 Submodules
 ----------
 
-adios\_db.test.test\_models.test\_oil.test\_canonical module
-------------------------------------------------------------
-
-.. automodule:: adios_db.test.test_models.test_oil.test_canonical
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 adios\_db.test.test\_models.test\_oil.test\_ccme module
 -------------------------------------------------------
 

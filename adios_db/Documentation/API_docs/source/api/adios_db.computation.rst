@@ -4,6 +4,14 @@ adios\_db.computation package
 Submodules
 ----------
 
+adios\_db.computation.estimations module
+----------------------------------------
+
+.. automodule:: adios_db.computation.estimations
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.computation.gnome\_oil module
 ---------------------------------------
 
