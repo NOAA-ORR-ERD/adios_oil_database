@@ -1,12 +1,71 @@
 # ADIOS Oil Database
 
-## Tl;dr
+ADIOS Oil Database project: system for managing oil properties data for use in Oil Spill Response
+
+This repository contains three packages:
+
+``adios_db``: Python Package for managing the data.
+
+``adios_db_api``: A Python / Pyramid web application that provides a JSON-API for accessing the data.
+
+``ADIOS web_client``: Ember-JS based Web browser client for searching, viewing, and modifying the data.
+
+## Installing
+
+The easiest way to get all the dependencies, etc is to use conda. YOu will need to have the conda-forge channel in order to get all the required packages.
+
+### ``adios_db``
+
+#### Setup and activate a conda environment:
+
+```
+conda create -n adios_db --file adios_db/conda_requirements.txt
+conda activate adios_db
+```
+
+#### Install the package
+
+```
+cd adios_db
+```
+
+For development (editable mode):
+
+```
+pip install -e .
+```
+
+For use (regular install):
+
+```
+pip install .
+```
+
+#### Testing the adios_db package
+
+While developing:
+
+```
+cd adios_db/test
+
+pytest
+```
+The installed version:
+
+```
+pytest --pyargs adios_db
+```
+
+
+
+
+## Running the Full App locally
 
 * Setup and activate a conda environment:
 
 ```
-conda create -n adiosdb python=3.7`
-conda activate adiosdb
+conda create -n adios_db --file adios_db/conda_requirements.txt
+conda activate adios_db
 ```
 * Setup everything:
 
@@ -22,13 +81,9 @@ python run_app.py
 
 ## Dev Process:
 
-As of Jan, 2019, we are in a push to get an MVP working to deliver to BSEE. So we are working in the develop branch, and actively pushing changes. When its gets more stable, we will start pushing to master, but for now -- do everything in develop.
+As of Feb, 2021, the project is still under active development.
+So we are working in the develop branch in an internal NOAA git repository. When its gets more stable, we will start pushing to master, but for now -- reach out to NOAA (gitHub issues are good for questions)if you want the latests and greatest.
 
-i.e.:
-
-If it's not trivial, and might step on others' toes, create a branch for a new feature or fix, when you are happy with it, "rebase" -- i.e. merge the latest develop into your branch. If it's all working, merge it all into develop.
-
-When you push to develop, the CI should run at least some tests, so you'll know if you accidentally broke something -- fix it if you did :-)
 
 # Overview
 
@@ -75,11 +130,11 @@ As Electron embeds node, we need to start up the Pyramid app and mongod from jav
 
 ## Components
 
-### `oil_db`:
+### `adios_db`:
 
 Python package for managing the data -- using a MongoDB back end.
 
-### `web_api`:
+### `adios_db_api`:
 
 Python (Pyramid) web server for interaction between the database and the Web client.
 
@@ -146,25 +201,25 @@ The webclient needs node, which can be installed in various way, but can also be
 conda install nodejs
 ```
 
-### Installing the oil_database package:
+### Installing the adios_db package:
 
 ```
-cd oil_db
+cd adios_db
 
-python setup.py develop
+pip install -e .
 ```
 
 This will install it in "develop" or "editable" mode -- so as you change the source code, the changes will be seen immediately without having to re-install.
 
 #### testing
 
-`pytest --pyargs oil_database`
+`pytest --pyargs adios_db`
 
 
 NOTE: this will skip the database connection tests. If you have mongo running, you can turn them on by running pytest from within the test dir, and passing the --mongo flag:
 
 ```
-cd oil_database/test
+cd adios_db/test
 
 pytest --mongo
 ```
@@ -174,7 +229,7 @@ pytest --mongo
 ```
 cd ../web_api
 
-python setup.py develop
+pip install -e .
 ```
 
 ### Starting mongodb:
@@ -192,7 +247,7 @@ Create an empty DB
 ```
 oil_db_init
 ```
-Import the data we have so far:
+Import the data we have so far (only if you want )
 
 ```
 oil_db_import --all
@@ -229,7 +284,7 @@ See the README in the web_client dir.
 
 ## Project team:
 
-Program Manager (and primary contact with BSEE): Chris Barker
+Program Manager: Chris Barker
 
 Project Manager and lead chemist: Robert Jones
 
