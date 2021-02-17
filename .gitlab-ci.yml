@@ -10,6 +10,7 @@ variables:
   SECURE_ANALYZERS_PREFIX: "registry.gitlab.com/gitlab-org/security-products/analyzers"
   CS_MAJOR_VERSION: 3
   CLAIR_OUTPUT: High
+  CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
   DAST_WEBSITE: https://adios-stage.orr.noaa.gov
   DAST_USE_AJAX_SPIDER: "true"
 
@@ -26,7 +27,6 @@ container_scanning:
     # for details
     GIT_STRATEGY: none
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-    CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
   allow_failure: true
   services:
     - name: $CLAIR_DB_IMAGE
