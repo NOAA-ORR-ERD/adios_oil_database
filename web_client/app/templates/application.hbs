@@ -35,9 +35,41 @@
   <footer class="footer bg-secondary">
     <div class="container-fluid">
       <div class="row align-items-center">
-        <div class="col-12 pl-4">
-          <img src="/assets/images/NOAA_logo.svg" alt="">
-          <a href="http://response.restoration.noaa.gov/" class="footer-link" target="_blank" rel="noopener">NOAA Office of Response &amp; Restoration</a>
+        <div class="col-1 pl-4">
+          <img src="/assets/images/NOAA_logo.svg" alt="" role="presentation">
+        </div>
+        <div class="col-11">
+          <div class="row align-items-center">
+            <ul class="nav nav-pills">
+              <li>
+                <a href="http://www.commerce.gov/" class="footer-link" target="_blank" rel="noopener noreferrer">US DOC</a>
+              </li>
+              <li>
+                <a href="http://www.noaa.gov" class="footer-link" target="_blank" rel="noopener noreferrer">NOAA</a>
+              </li>
+              <li>
+                <a href="http://oceanservice.noaa.gov/" class="footer-link" target="_blank" rel="noopener noreferrer">NOS</a>
+              </li>
+              <li>
+                <a href="http://response.restoration.noaa.gov/" class="footer-link" target="_blank" rel="noopener noreferrer">
+                  NOAA Office of Response &amp; Restoration
+                </a>
+              </li>
+              <li>
+                <LinkTo @route="disclaimer" class="nav-link">
+                  Disclaimer <span class="sr-only">(current)</span>
+                </LinkTo>
+              </li>
+              <li>
+                <LinkTo @route="privacy" class="nav-link">
+                  Privacy Policy <span class="sr-only">(current)</span>
+                </LinkTo>
+              </li>
+              <li>
+                <Button::Survey/>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

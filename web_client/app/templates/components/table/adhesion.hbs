@@ -2,19 +2,19 @@
   <div class="table-responsive d-flex input-group align-items-center">
     <label class="p-1 input-group-text font-weight-bold">Adhesion:</label>
 
-    {{#if this.args.editable}}
+    {{#if @editable}}
       <Common::RangeValueInput
         @valueTitle="Adhesion"
-        @valueObject={{this.args.oil}}
+        @valueObject={{@oil}}
         @valueName="adhesion.adhesion"
         @valueUnit="N/m^2"
         @valuePrecision="2"
-        @sampleIndex={{this.args.sampleIndex}}
+        @sampleIndex={{@sampleIndex}}
         @submit={{this.submit}}
       />
     {{else}}
-      {{#if this.args.oil.adhesion.adhesion}}
-        {{value-unit this.args.oil.adhesion.adhesion 3}}
+      {{#if @oil.adhesion.adhesion}}
+        {{value-unit @oil.adhesion.adhesion 3}}
       {{else}}
         No Data
       {{/if}}

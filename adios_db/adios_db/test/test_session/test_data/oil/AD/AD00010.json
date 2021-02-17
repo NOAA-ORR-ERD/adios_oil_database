@@ -1,169 +1,169 @@
 {
+    "oil_id": "AD00010",
     "_id": "AD00010",
     "metadata": {
+        "name": "ABU SAFAH, ARAMCO",
+        "source_id": "AD00010",
+        "location": "RAS TANURA, SAUDI ARABIA",
+        "reference": {
+            "year": 1992,
+            "reference": "Zaindin, A., May 18, 1992, Global Oil Spill Coordination Group, Dhahran, Saudi Arabia, Letter to V. Barnes, Aramco Services Company."
+        },
+        "product_type": "Crude Oil NOS",
         "API": 28.4,
         "comments": "Crude sample represents 1989 winter production.  Product considered an Arabian medium crude.",
         "labels": [
-            "Crude",
-            "Medium"
+            "Crude Oil",
+            "Medium Crude"
         ],
-        "location": "RAS TANURA, SAUDI ARABIA",
-        "name": "ABU SAFAH, ARAMCO",
-        "product_type": "crude",
-        "reference": {
-            "reference": "Zaindin, A., May 18, 1992, Global Oil Spill Coordination Group, Dhahran, Saudi Arabia, Letter to V. Barnes, Aramco Services Company.",
-            "year": 1992
-        },
-        "source_id": "AD00010"
+        "model_completeness": 24
     },
-    "oil_id": "AD00010",
-    "status": [],
     "sub_samples": [
         {
+            "metadata": {
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil",
+                "fraction_weathered": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
+            },
+            "physical_properties": {
+                "pour_point": {
+                    "measurement": {
+                        "value": 255.0,
+                        "unit": "K",
+                        "unit_type": "temperature"
+                    }
+                },
+                "kinematic_viscosities": [
+                    {
+                        "viscosity": {
+                            "value": 2.24e-05,
+                            "unit": "m^2/s",
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 294.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "viscosity": {
+                            "value": 1.29e-05,
+                            "unit": "m^2/s",
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 311.0,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
             "distillation_data": {
+                "type": "volume fraction",
                 "cuts": [
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.203
+                            "value": 0.203,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 450.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 450.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.227
+                            "value": 0.227,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 464.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 464.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.253
+                            "value": 0.253,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 478.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 478.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.277
+                            "value": 0.277,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 491.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 491.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.3
+                            "value": 0.3,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 505.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 505.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.323
+                            "value": 0.323,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 519.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 519.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.347
+                            "value": 0.347,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 533.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 533.0
+                            "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "unit": "1",
-                            "unit_type": "massfraction",
-                            "value": 0.373
+                            "value": 0.373,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
                         },
                         "vapor_temp": {
+                            "value": 547.0,
                             "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 547.0
+                            "unit_type": "temperature"
                         }
                     }
-                ],
-                "type": "volume"
-            },
-            "metadata": {
-                "fraction_weathered": {
-                    "unit": "1",
-                    "unit_type": "massfraction",
-                    "value": 0.0
-                },
-                "name": "Fresh Oil Sample",
-                "short_name": "Fresh Oil"
-            },
-            "physical_properties": {
-                "kinematic_viscosities": [
-                    {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 294.0
-                        },
-                        "viscosity": {
-                            "unit": "m^2/s",
-                            "unit_type": "kinematicviscosity",
-                            "value": 2.24e-05
-                        }
-                    },
-                    {
-                        "ref_temp": {
-                            "unit": "K",
-                            "unit_type": "temperature",
-                            "value": 311.0
-                        },
-                        "viscosity": {
-                            "unit": "m^2/s",
-                            "unit_type": "kinematicviscosity",
-                            "value": 1.29e-05
-                        }
-                    }
-                ],
-                "pour_point": {
-                    "measurement": {
-                        "unit": "K",
-                        "unit_type": "temperature",
-                        "value": 255.0
-                    }
-                }
+                ]
             }
         }
     ]

@@ -1,20 +1,20 @@
 <div class="container-fluid">
 
   <TabPane::PaneHeader
-    @oil={{this.args.oil}}
-    @editable={{this.args.editable}}
-    @submit={{this.args.submit}}
-    @sampleName={{this.args.sampleName}}
+    @oil={{@oil}}
+    @editable={{@editable}}
+    @submit={{@submit}}
+    @sampleName={{@sampleName}}
   />
 
   <div class="row">
 
     <div class="col-3">
       <Common::StaticTable
-        @store={{this.args.store}}
-        @oil={{this.args.oil}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @store={{@store}}
+        @oil={{@oil}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @tableTitle="CCME Fractions"
         @propertyName="ccme"
         @valueUnit="mg/g"
@@ -24,10 +24,10 @@
 
     <div class="col-3">
       <Common::PropertiesTable
-        @store={{this.args.store}}
-        @oil={{this.args.oil}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @store={{@store}}
+        @oil={{@oil}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @tableTitle="Saturates (F1)"
         @templateName="ccme_f1"
         @propertyName="ccme_f1"
@@ -36,10 +36,10 @@
 
     <div class="col-3">
       <Common::PropertiesTable
-        @store={{this.args.store}}
-        @oil={{this.args.oil}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @store={{@store}}
+        @oil={{@oil}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @tableTitle="Aromatics (F2)"
         @templateName="ccme_f2"
         @propertyName="ccme_f2"
@@ -48,10 +48,10 @@
 
     <div class="col-3">
       <Common::PropertiesTable
-        @store={{this.args.store}}
-        @oil={{this.args.oil}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @store={{@store}}
+        @oil={{@oil}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @tableTitle="GC-TPH (F1 + F2)"
         @templateName="ccme_tph"
         @propertyName="ccme_tph"

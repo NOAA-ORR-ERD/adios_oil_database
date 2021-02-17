@@ -103,7 +103,6 @@ class Oil:
         """
         msgs = self.validate()
         self.status = list(set(msgs))
-        return msgs
 
     def to_file(self, infile):
         """

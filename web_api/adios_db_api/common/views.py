@@ -7,6 +7,8 @@ import logging
 
 import ujson
 
+from pyramid.httpexceptions import HTTPForbidden
+
 cors_policy = {'credentials': True}
 
 logger = logging.getLogger(__name__)
@@ -67,3 +69,16 @@ def cors_response(request, response):
                              ','.join((req_method, 'OPTIONS')))
 
     return response
+
+
+def can_modify_db(func):
+    '''
+        Decorator function to test if database modification is allowed.
+    '''
+    def wrapper_func(request):
+        if request.registry.settings['caps.can_modify_db'].lower() == 'true':
+            return func(request)
+        else:
+            raise HTTPForbidden('Access Forbidden')
+
+    return wrapper_func

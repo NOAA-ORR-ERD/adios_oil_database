@@ -15,16 +15,16 @@
 
 <div class="detail-section">
   <div class="table-responsive">
-    <strong>{{this.args.tableTitle}}:</strong>
+    <strong>{{@tableTitle}}:</strong>
 
     <table class="table table-hover table-bordered">
       <thead aria-controls={{this.tableId}}
              aria-expanded="false">
         <tr>
-          <th scope="col">{{this.args.leftColumnTitle}}</th>
-          <th scope="col">{{this.args.rightColumnTitle}}</th>
+          <th scope="col">{{@leftColumnTitle}}</th>
+          <th scope="col">{{@rightColumnTitle}}</th>
 
-          {{#if this.args.editable}}
+          {{#if @editable}}
             <td class="border-0">
               <button type="button"
                 {{on "click" (fn this.addEmptyTableRow 0)}}
@@ -41,23 +41,23 @@
           <tr>
             <td>
               <Common::ValueUnitInput
-                @valueObject={{get value this.args.leftColumnValueName}}
-                @valueUnit={{this.args.leftColumnUnit}}
-                @valuePrecision={{this.args.leftColumnPrecision}}
-                @editable={{this.args.editable}}
-                @submit={{fn this.updateCellValue index this.args.leftColumnValueName}}
+                @valueObject={{get value @leftColumnValueName}}
+                @valueUnit={{@leftColumnUnit}}
+                @valuePrecision={{@leftColumnPrecision}}
+                @editable={{@editable}}
+                @submit={{fn this.updateCellValue index @leftColumnValueName}}
               />
             </td>
             <td>
               <Common::ValueUnitInput
-                @valueObject={{get value this.args.rightColumnValueName}}
-                @valueUnit={{this.args.rightColumnUnit}}
-                @valuePrecision={{this.args.rightColumnPrecision}}
-                @editable={{this.args.editable}}
-                @submit={{fn this.updateCellValue index this.args.rightColumnValueName}}
+                @valueObject={{get value @rightColumnValueName}}
+                @valueUnit={{@rightColumnUnit}}
+                @valuePrecision={{@rightColumnPrecision}}
+                @editable={{@editable}}
+                @submit={{fn this.updateCellValue index @rightColumnValueName}}
               />
             </td>
-            {{#if this.args.editable}}
+            {{#if @editable}}
               <td class="border-0">
                 <button type="button"
                   {{on "click" (fn this.deleteTableRow index)}}
@@ -74,7 +74,7 @@
             {{/if}}
           </tr>
         {{/each}}
-        {{#unless this.args.editable}}
+        {{#unless @editable}}
           {{#unless this.valueArray}}
             <tr><td>No Data</td></tr>
           {{/unless}}

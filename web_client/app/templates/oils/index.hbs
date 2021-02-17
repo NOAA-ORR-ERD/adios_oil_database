@@ -5,13 +5,13 @@
     </div>
 
     <div class="align-content-right">
-      <Button::AddNewOil
-        @submit={{action send "createOil"}}
-      />
+      {{#if this.canModifyDb}}
+        <Button::AddNewOil @submit={{action send "createOil"}} />
 
-      <Button::Upload
-        @submit={{action send "createOil"}}
-      />
+        <Button::Upload @submit={{action send "createOil"}} />
+      {{/if}}
+
+      <Button::ReportProblemQuery/>
 
     </div>
   </div>
@@ -21,6 +21,7 @@
   @model={{this.model}}
   @labels={{this.labels}}
   @productTypes={{this.productTypes}}
+  @capabilities={{this.capabilities}}
   @savedFilters={{this.savedFilters}}
 />
 

@@ -93,6 +93,32 @@ def test_find_density_near_15C():
 
     assert result == 875.1
 
+def test_find_density_near_15C_two_values():
+    """
+    these are data that failed with earlier version
+
+    [(995.0, -0.14999999999997726),
+     (989.0, 14.850000000000023)]
+    """
+
+    oil = no_api_with_density()
+    densities = oil.sub_samples[0].physical_properties.densities
+
+    densities[0].density.value = .995
+    # densities[0].density.unit = 'kg/m^3'
+    densities[0].ref_temp.value = -0.14999999999997726
+
+    densities[1].density.value = .989
+    # densities[0].density.unit = 'kg/m^3'
+    densities[1].ref_temp.value = 14.85
+
+
+    fixer = FixAPI(oil)
+
+    result = fixer.find_density_near_15C()
+
+    assert result == 989.0
+
 
 def test_find_density_near_15C_none():
     oil = no_api_with_density()

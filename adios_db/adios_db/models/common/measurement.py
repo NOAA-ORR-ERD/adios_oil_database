@@ -105,7 +105,7 @@ class MeasurementDataclass:
     min_value: float = None
     max_value: float = None
     standard_deviation: float = None
-    replicates: float = None
+    replicates: int = None
 
 
 class MeasurementBase(MeasurementDataclass):

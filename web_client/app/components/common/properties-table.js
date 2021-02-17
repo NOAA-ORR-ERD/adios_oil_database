@@ -7,6 +7,8 @@ export default class PropertiesTable extends Component {
     @tracked baseProperty;
     @tracked properties;
 
+    deep_value = (obj, path, defaultVal) => path.split(".").reduce((o, key) => o && o[key] ? o[key] : defaultVal, obj);
+
     constructor() {
         super(...arguments);
 
@@ -20,26 +22,7 @@ export default class PropertiesTable extends Component {
     }
 
     initBaseProperty() {
-        let names = this.args.propertyName.split('.');
-        this.baseProperty = this.args.oil;
-
-        if (names.length > 1) {
-            for (let i = 0; i < names.length - 1; i++) {
-                if (this.baseProperty[names[i]]) {
-                    this.baseProperty = this.baseProperty[names[i]];
-                }
-                else {
-                    this.baseProperty = this.baseProperty[names[i]] = {};
-                }
-            }
-        }
-
-        if (this.baseProperty[names.lastObject]) {
-            this.baseProperty = this.baseProperty[names.lastObject];
-        }
-        else {
-            this.baseProperty = this.baseProperty[names.lastObject] = [];
-        }
+        this.baseProperty = this.deep_value(this.args.oil, this.args.propertyName, []);
     }
 
     syncBaseProperty() {

@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-dark"
+<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
         title="Add New Oil"
         data-toggle="modal"
         data-target="#addNewOilDialog" >
@@ -6,5 +6,5 @@
 </button>
 
 <Dialog::AddNewOil
-  @submit={{this.args.submit}}
+  @submit={{@submit}}
 />

@@ -3,8 +3,11 @@ from numbers import Number
 
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
+from adios_db.models.oil.product_type import (types_to_labels)
+
 
 class Session():
+
     sort_direction = {'asc': ASCENDING,
                       'ascending': ASCENDING,
                       'desc': DESCENDING,
@@ -21,42 +24,65 @@ class Session():
               sort=None, sort_case_sensitive=False, page=None,
               **kwargs):
         '''
-            The Mongodb find() function has a bunch of parameters, but we are
-            mainly interested in find(filter=None, projection=None), where:
-            - filter: The filtering terms
-            - $orderby: the ordering of our results
-            - projection: The field names to be returned
+        The Mongodb find() function has a bunch of parameters, but we are
+        mainly interested in ``find(filter=None, orderby, projection=None)``
 
-            query options:
-            - oil_id: The identifier of a specific record
-            - text: A string that is matched against the oil name, location.
-                    The matching will be case insensitive.
-            - api: A range of numbers in which the API of the oil will be
-                   filtered.
-            - labels: A list of label strings that will be matched against the
-                      oil labels to filter the results.
+        Where:
 
-            sort options: A list of options consisting of
-                          ('field_name', 'direction')
-            - field_name: The name of a field to be used for sorting.  Dotted
-                          notation can be used to specify fields within fields.
-            - direction: Specifies whether to sort in ascending or descending
-                         order. Can be any of:
-                         {'asc',
-                          'ascending',
-                          'desc',
-                          'descending'}
+          filter:
+            The filtering terms
 
-            Note: MongoDB 3.6 has changed how they compare array fields in a
-                  sort.  It used to compare the arrays element-by-element,
-                  continuing until any "ties" were broken.  Now it only
-                  compares the highest/lowest valued element, apparently
-                  ignoring the rest.
+          orderby:
+            the ordering of our results
 
-                  Reference: https://docs.mongodb.com/manual/release-notes/3.6-compatibility/#array-sort-behavior
+          projection:
+            The field names to be returned
 
-                  For this reason, a MongoDB query will not properly sort our
-                  status and labels array fields, at least not in a simple way.
+        **query options:**
+
+            oil_id:
+                The identifier of a specific record
+
+            text:
+                A string that is matched against the oil name, location.
+                The matching will be case insensitive.
+
+            api:
+                A range of numbers in which the API of the oil will be
+                filtered.
+
+            labels:
+                A list of label strings that will be matched against the
+                oil labels to filter the results.
+
+        **sort options:** A list of options consisting of ('field_name',
+                                                           'direction')
+
+            field_name:
+                The name of a field to be used for sorting.  Dotted
+                notation can be used to specify fields within fields.
+
+            direction:
+                Specifies whether to sort in ascending or descending
+                order. Can be any of::
+
+                     {'asc',
+                      'ascending',
+                      'desc',
+                      'descending'}
+
+        .. note::
+
+            MongoDB 3.6 has changed how they compare array fields in a
+            sort. It used to compare the arrays element-by-element,
+            continuing until any "ties" were broken.  Now it only
+            compares the highest/lowest valued element, apparently
+            ignoring the rest.
+
+            Reference: https://docs.mongodb.com/manual/release-notes/3.6-compatibility/#array-sort-behavior
+
+            For this reason, a MongoDB query will not properly sort our
+            status and labels array fields, at least not in a simple way.
         '''
         filter_opts = self.filter_options(oil_id, text, api, labels,
                                           product_type)
@@ -117,7 +143,7 @@ class Session():
         if name is None:
             return {}
         else:
-            return {'metadata.alternate_names': { '$elemMatch': {
+            return {'metadata.alternate_names': {'$elemMatch': {
                 '$regex': name, '$options': 'i'
             }}}
 
@@ -171,13 +197,17 @@ class Session():
 
     def parse_interval_arg(self, interval):
         '''
-            An interval argument can be a number, string, or list
-            - If it is a number, we will assume it is a minimum
-            - If it is a list length 1, we will assume it is a minimum
-            - If it is a list greater than 2, we will only use the first 2
-              elements as a min/max
-            - If it is a string, we will try to parse it as a set of comma
-              separated values.
+        An interval argument can be a number, string, or list
+
+        - If it is a number, we will assume it is a minimum
+
+        - If it is a list length 1, we will assume it is a minimum
+
+        - If it is a list greater than 2, we will only use the first 2
+          elements as a min/max
+
+        - If it is a string, we will try to parse it as a set of comma
+          separated values.
         '''
         if interval is None:
             low, high = None, None
@@ -231,6 +261,38 @@ class Session():
             return {'$and': [dict([i]) for i in opts.items()]}
         else:
             return {'$and': opts}
+
+    def get_labels(self, identifier=None):
+        '''
+            Right now we are getting labels and associated product types
+            from the adios_db model code.  But it would be better managed
+            if we eventually migrate this to labels stored in a database
+            collection.
+        '''
+        # get the whole list of labels
+        labels = [{'name': label, 'product_types': sorted(list(types))}
+                  for (label, types) in types_to_labels.right.items()]
+
+        # so it's at least somewhat consistent, we sort and then enumerate
+        # our labels
+        labels.sort(key=lambda i: i['name'])
+
+        for idx, obj in enumerate(labels):
+            obj['_id'] = idx
+
+        if identifier is None:
+            return labels
+        else:
+            try:
+                identifier = int(identifier)
+            except ValueError as e:
+                e.args = ('label identifiers are integer only',)
+                raise
+
+            # get a single label
+            label = [i for i in labels if i['_id'] == identifier]
+
+            return label[0] if len(label) > 0 else None
 
     def __getattr__(self, name):
         '''

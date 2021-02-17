@@ -11,7 +11,7 @@
   <Input
     @class="p-1 bg-transparent border"
     @type="text"
-    @value={{value-unit (convert-unit this.inputValue this.args.valueUnit) this.args.valuePrecision}}
+    @value={{value-unit (convert-unit this.inputValue @valueUnit) @valuePrecision}}
     @focus-in={{action "openModalDialog"}}
     id={{this.componentId}}
   />
@@ -28,9 +28,9 @@
 {{#if this.isShowingModal}}
   <Common::RangeValueDialog
     @valueObject={{this.inputValue}}
-    @valueTitle={{this.args.valueTitle}}
-    @valueUnit={{this.args.valueUnit}}
-    @valuePrecision={{this.args.valuePrecision}}
+    @valueTitle={{@valueTitle}}
+    @valueUnit={{@valueUnit}}
+    @valuePrecision={{@valuePrecision}}
     @componentId={{concat "#" this.componentId}}  {{!-- #! --}}
     @closeModalDialog={{this.closeModalDialog}}
     @updateValue={{this.updateValue}}

@@ -11,8 +11,8 @@
         </tr>
       </thead>
       <tbody id="conradson-tbody">
-        {{#if this.args.oil.conradson}}
-          {{#each this.args.oil.conradson as |conradson|}}
+        {{#if @oil.conradson}}
+          {{#each @oil.conradson as |conradson|}}
             <tr>
               {{#if conradson.crude}}
                 <td>Crude</td>

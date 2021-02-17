@@ -1,20 +1,25 @@
 # configuration for mongodb
 
+# this is set up to be run from the main dir in the repo
+# to start:
+# mongod -f mongo_config_dev.yml
+
 net:
   bindIp: 127.0.0.1  # Enter 0.0.0.0,:: to bind to all IPv4 and IPv6 addresses or, alternatively, use the net.bindIpAll setting.
   port: 27017  # this is the mongo default
 
 storage:
-   dbPath: "/var/lib/mongo"
+   dbPath: "./mongo_files"
    journal:
      enabled: true
 
-systemLog:
-  destination: file
-  logAppend: true
-  path: "/var/log/mongodb/mongod.log"
+# uncomment if you want it logged to a file rather than stdout
+# systemLog:
+#   destination: file
+#   path: "./mongo_files/mongod.log"
+#   logAppend: false
 
 processManagement:
   fork: false
-  pidFilePath: "/var/run/mongodb/mongod.pid"  # location of pidfile
+  pidFilePath: "./mongo_files/mongod.pid"  # location of pidfile
   timeZoneInfo: "/usr/share/zoneinfo"

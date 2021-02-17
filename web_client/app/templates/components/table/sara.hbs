@@ -1,6 +1,8 @@
 <div class="detail-section">
   <div class="table-responsive">
-    <center><strong>SARA Total Fractions:</strong></center>
+    <div class="text-center">
+      <strong>SARA Total Fractions:</strong>
+    </div>
 
     <table class="table table-hover table-bordered">
       <tbody id="sara-tbody">
@@ -8,26 +10,26 @@
         {{#each-in this.properties as |attr value|}}
           <tr>
             <td>{{value.label}}</td>
-            {{#if (get this.args.oil.SARA attr)}}
-              {{#with (get this.args.oil.SARA attr) as |sara|}}
+            {{#if (get @oil.SARA attr)}}
+              {{#with (get @oil.SARA attr) as |sara|}}
                 <td>
                   <Common::ValueUnitInput
                     @valueObject={{sara}}
                     @valueUnit="%"
                     @valuePrecision={{2}}
-                    @editable={{this.args.editable}}
+                    @editable={{@editable}}
                     @submit={{fn this.updateCellValue (get value "label")}}
                   />
                 </td>
               {{/with}}
             {{else}}
-              {{#if this.args.editable}}
+              {{#if @editable}}
                 <td>
                   <Common::ValueUnitInput
                     @valueObject=""
                     @valueUnit="%"
                     @valuePrecision={{2}}
-                    @editable={{this.args.editable}}
+                    @editable={{@editable}}
                     @submit={{fn this.updateCellValue (get value "label")}}
                   />
                 </td>

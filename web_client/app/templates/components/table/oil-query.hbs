@@ -39,11 +39,11 @@
                 onChange={{action (pipe (action "onTypeSelected")
                                         (action "onSearchChange") )}}
             >
-              <option class="bg-light">None</option>
+              <option class="bg-light" value="">unspecified</option>
 
-              {{#each this.productTypes.firstObject.product_types as |oilType|}}
+              {{#each @productTypes.firstObject.product_types as |oilType|}}
                 {{#if (eq oilType this.selectedType)}}
-                  <option class="bg-light" selected="true">{{oilType}}</option>
+                  <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
                   <option class="bg-light">{{oilType}}</option>
                 {{/if}}
@@ -60,6 +60,7 @@
             <PowerSelectMultiple
               @selected={{this.selectedLabels}}
               @options={{this.filteredLabels}}
+              @placeholder="unspecified"
               @onChange={{action (pipe (action (mut this.selectedLabels)) (action "onSearchChange"))}}
               @onKeydown={{this.handleKeydown}} as |name|>
               {{name}}
@@ -89,7 +90,7 @@
   <t.body
     @canSelect={{false}}
     @enableScaffolding={{true}}
-    @onScrolledToBottom={{action "onScrolledToBottom"}} as |body|
+    @autoHideScrollbar={{false}} as |body|
   >
     {{#if isLoading}}
       {{#body.loader}}
@@ -97,10 +98,12 @@
       {{/body.loader}}
     {{else if table.isEmpty}}
       {{#body.no-data}}
-        <center>
-          <p><strong>Sorry, your filter produced no results</strong></p>
+        <p class="text-center">
+          <strong>Sorry, your filter produced no results</strong>
+        </p>
+        <p class="text-center">
           To widen your search, change or remove filters above
-        </center>
+        </p>
       {{/body.no-data}}
     {{/if}}
   </t.body>

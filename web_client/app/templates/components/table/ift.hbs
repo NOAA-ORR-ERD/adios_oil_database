@@ -12,7 +12,7 @@
               <th scope="col">Tension</th>
               <th scope="col">Temperature</th>
 
-              {{#if this.args.editable}}
+              {{#if @editable}}
                 <td class="border-0">
                   <button type="button"
                     {{on "click" (fn this.addEmptyTableRow 0)}}
@@ -28,9 +28,9 @@
             {{#each this.iftsArray as |ift index|}}
               <tr>
                 <td>
-                  {{#if this.args.editable}}
+                  {{#if @editable}}
                     <select class="p-1 flex-fill bg-transparent border" {{on "change" (fn this.updateInterface index)}}>
-                      {{#each this.args.interfaces as |interface|}}
+                      {{#each @interfaces as |interface|}}
                         {{#if (eq ift.interface interface)}}
                           <option class="bg-light" selected>{{interface}}</option>
                         {{else}}
@@ -47,7 +47,7 @@
                     @valueObject={{ift.tension}}
                     @valueUnit={{"N/m"}}
                     @valuePrecision={{3}}
-                    @editable={{this.args.editable}}
+                    @editable={{@editable}}
                     @submit={{fn this.updateAttr index "tension"}}
                   />
                 </td>
@@ -56,12 +56,12 @@
                     @valueObject={{ift.ref_temp}}
                     @valueUnit={{"C"}}
                     @valuePrecision={{2}}
-                    @editable={{this.args.editable}}
+                    @editable={{@editable}}
                     @submit={{fn this.updateAttr index "ref_temp"}}
                   />
                 </td>
 
-                {{#if this.args.editable}}
+                {{#if @editable}}
                   <td class="border-0">
                     <button type="button"
                       {{on "click" (fn this.deleteTableRow index)}}

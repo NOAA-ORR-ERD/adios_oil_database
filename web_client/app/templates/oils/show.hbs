@@ -8,7 +8,7 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-4 col-xs-12">
+    <div class="col-xs-12 col-sm-4">
 
       {{!-- back to oil list control --}}
       <div class="mr-2 d-inline-block">
@@ -36,36 +36,44 @@
 
     </div>
 
-    <div class="col-sm-4 col-xs-12">
+    <div class="col-xs-12 col-sm-4">
       <div class="row align-items-center justify-content-center">
 
         <div class="col-xs-4 mt-2 text-center">
           {{!-- edit mode switch control --}}
-          <XToggle
-            @theme="ios"
-            @showLabels={{true}}
-            @onLabel="Edit"
-            @offLabel="View"
-            @value={{this.editable}}
-            @onToggle={{action (mut this.editable)}}
-          />
+          {{#if this.canModifyDb}}
+            <XToggle
+              @theme="ios"
+              @showLabels={{true}}
+              @onLabel="Edit"
+              @offLabel="View"
+              @value={{this.editable}}
+              @onToggle={{action (mut this.editable)}}
+            />
+          {{/if}}
         </div>
       </div>
     </div>
 
-    <div class="col-xs-6 col-sm-4 col-lg-3 offset-lg-1">
+    <div class="col-xs-6 col-sm-4 col-lg-3">
       <div class="d-flex">
         <Button::Download @oil={{this.model}} />
 
-        <Button::CopyOil
-          @oil={{this.model}}
-          @submit={{action send "createOil"}}
-        />
+        {{#if this.canModifyDb}}
+          <Button::CopyOil
+            @oil={{this.model}}
+            @submit={{action send "createOil"}}
+          />
+        {{/if}}
 
-        <Button::DeleteOil
-          @oil={{this.model}}
-          @submit={{action send "deleteOil"}}
-        />
+        {{#if this.canModifyDb}}
+          <Button::DeleteOil
+            @oil={{this.model}}
+            @submit={{action send "deleteOil"}}
+          />
+        {{/if}}
+
+        <Button::ReportProblemOil @oil={{this.model}} />
 
       </div>
     </div>

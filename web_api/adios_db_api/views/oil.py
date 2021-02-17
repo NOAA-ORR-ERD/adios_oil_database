@@ -17,7 +17,9 @@ from adios_db.models.oil.validation.validate import validate_json
 from adios_db.models.oil.completeness import set_completeness
 
 from adios_db_api.common.views import (cors_policy,
-                                           obj_id_from_url)
+                                       obj_id_from_url,
+                                       can_modify_db)
+
 
 logger = logging.getLogger(__name__)
 
@@ -146,6 +148,7 @@ def get_sort_params(request):
 
 
 @oil_api.post()
+@can_modify_db
 def insert_oil(request):
     logger.info('POST /oils')
 
@@ -187,6 +190,7 @@ def insert_oil(request):
 
 
 @oil_api.put()
+@can_modify_db
 def update_oil(request):
     # ember JSON serializer PUTs the id of the object in the URL
     obj_id = obj_id_from_url(request)
@@ -223,6 +227,7 @@ def update_oil(request):
 
 
 @oil_api.patch()
+@can_modify_db
 def patch_oil(request):
     '''
         This seems kinda new.
@@ -235,6 +240,7 @@ def patch_oil(request):
 
 
 @oil_api.delete()
+@can_modify_db
 def delete_oil(request):
     obj_id = obj_id_from_url(request)
 
@@ -368,6 +374,8 @@ def get_oil_all_fields(oil):
     '''
         Get the full record in JSON API compliant form.
     '''
+    oil.pop('_id', None)
+
     return {
         'data': {'_id': oil.get('oil_id'),
                  'type': 'oils',

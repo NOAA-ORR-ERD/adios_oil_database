@@ -6,6 +6,8 @@ import os
 from unittest import TestCase
 from webtest import TestApp
 
+from adios_db.test.test_session.test_session import restore_test_db
+
 from adios_db_api import main
 
 
@@ -23,9 +25,9 @@ class FunctionalTestBase(TestCase):
                     'pyramid.reload_templates': 'true',
                     'mongodb.host': 'localhost',
                     'mongodb.port': '27017',
-                    'mongodb.database': 'adios_db',
+                    'mongodb.database': 'adios_db_test',
                     'mongodb.alias': 'oil-db-app',
-                    'caps.can_modify_db': 'false',
+                    'caps.can_modify_db': 'true',
                     'install_path': '.',
                     'help_dir': './help'
                     }
@@ -37,6 +39,8 @@ class FunctionalTestBase(TestCase):
         self.project_root = os.path.abspath(os.path.dirname(here))
 
         self.settings = self.get_settings()
+
+        restore_test_db(self.settings)
         app = main(None, **self.settings)
 
         self.testapp = TestApp(app)

@@ -38,7 +38,9 @@ class Sample:
     cut_volume: VolumeFraction = None  # from Exxon data
 
     physical_properties: PhysicalProperties = field(default_factory=PhysicalProperties)
+
     environmental_behavior: EnvironmentalBehavior = field(default_factory=EnvironmentalBehavior)
+
     SARA: Sara = field(default_factory=Sara)
 
     distillation_data: Distillation = field(default_factory=Distillation)
@@ -71,6 +73,9 @@ class Sample:
                 metadata.short_name = 'Fresh Oil'
             else:
                 metadata.short_name = f'{self.name[:12]}...'
+
+    def __repr__(self):
+        return f"sample: {self.metadata.name}\n{self.metadata.description}"
 
 
 class SampleList(JSON_List):

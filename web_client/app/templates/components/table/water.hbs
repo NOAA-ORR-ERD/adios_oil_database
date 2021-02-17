@@ -1,14 +1,14 @@
 <div class="detail-section">
   <strong>Water Content:</strong>
 
-  {{#if this.args.editable}}
+  {{#if @editable}}
     <Common::RangeValueInput
       @valueTitle="Water Content"
-      @valueObject={{this.args.oil}}
+      @valueObject={{@oil}}
       @valueName="water.fraction"
       @valueUnit="%"
       @valuePrecision="2"
-      @sampleIndex={{this.args.sampleIndex}}
+      @sampleIndex={{@sampleIndex}}
       @submit={{this.submit}}
     />
   {{else}}

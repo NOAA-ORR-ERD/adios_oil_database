@@ -10,6 +10,8 @@ from bson import ObjectId
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings, default_settings
 from adios_db.db_init.database import drop_db, create_indices
+from adios_db.models.oil.oil import Oil
+from bson.errors import InvalidId
 
 logger = logging.getLogger(__name__)
 
@@ -51,16 +53,25 @@ def restore_db_cmd(argv=sys.argv):
 
 def restore_db(settings, base_path):
     '''
-        Here is where we restore our database.  This is what we want to do:
-        - If the restore path does not exist, we flag an error and exit:
-        - Otherwise:
-            - If the database does not exist, create it
-            - If the database is already there, initialize it
-            - Gather the collection names by directory name
-            - For each collection name:
-                - create the collection
-                - for each object in the collection directory
-                    - Save the objects
+    Here is where we restore our database.  This is what we want to do:
+
+    If the restore path does not exist, we flag an error and exit.
+
+    Otherwise:
+
+    - If the database does not exist, create it
+
+    - If the database is already there, initialize it
+
+    - Gather the collection names by directory name
+
+    - For each collection name:
+
+        - create the collection
+
+        - for each object in the collection directory
+
+            - Save the objects
     '''
     if not os.path.exists(base_path):
         print(f'No path named {base_path}!')
@@ -75,7 +86,9 @@ def restore_db(settings, base_path):
 
     # load the database
     for collection_name in os.listdir(base_path):
-        load_collection(db, base_path, collection_name)
+        # filter out dotfiles
+        if not collection_name.startswith("."):
+            load_collection(db, base_path, collection_name)
 
     create_indices(db)
 
@@ -89,26 +102,21 @@ def load_collection(db, base_path, collection_name):
     for (dirname, _, filenames) in os.walk(collection_path):
         for name in filenames:
             if name.endswith('.json'):
-                obj_path = f'{dirname}/{name}'
-                obj = json.load(open(obj_path, 'r'))
-
-                fix_obj_id(obj, collection)
+                obj = get_obj_json(f'{dirname}/{name}', collection_name)
 
                 collection.insert_one(obj)
 
+    # Index the oil_id field
+    if collection_name == 'oil':
+        resp = collection.create_index("oil_id")
 
-def fix_obj_id(obj, collection):
-    '''
-        MongoDB uses an ObjectId type for its identifiers in most non special
-        cases.  This is not parseable to JSON.  So when backing up our data,
-        we turn it into a string.
-        This means we need to turn them back into ObjectId's when restoring.
-        The collection doesn't seem to have a way of querying the datatype for
-        _id, so we need to do this in a more hacked way.
-        Right now the only collection that doesn't use the ObjectId type is the
-        oil collection, so that's what we will key on.
-    '''
-    if collection.name != 'oil':
-        obj['_id'] = ObjectId(obj['_id'])
+
+def get_obj_json(obj_path, collection_name):
+    obj = json.load(open(obj_path, 'r'), encoding="utf-8")
+
+    if collection_name == 'oil':
+        oil = Oil.from_py_json(obj)
+        oil.reset_validation()
+        obj = oil.py_json()
 
     return obj

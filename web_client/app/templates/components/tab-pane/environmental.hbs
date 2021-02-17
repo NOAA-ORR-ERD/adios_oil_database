@@ -1,31 +1,31 @@
 <div class="container-fluid">
 
   <TabPane::PaneHeader
-    @oil={{this.args.oil}}
-    @editable={{this.args.editable}}
-    @submit={{this.args.submit}}
-    @sampleName={{this.args.sampleName}}
-    @sampleIndex={{this.args.sampleIndex}}
+    @oil={{@oil}}
+    @editable={{@editable}}
+    @submit={{@submit}}
+    @sampleName={{@sampleName}}
+    @sampleIndex={{@sampleIndex}}
   />
 
   <div class="row">
 
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.args.oil}}
-        @store={{this.args.store}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @oil={{@oil}}
+        @store={{@store}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @tableTitle="Chemical Dispersibility"
         @propertyName="environmental_behavior.dispersibilities"
       />
     </div>
     <div class="col-6">
       <Common::ListPropertiesTable
-        @oil={{this.args.oil}}
-        @store={{this.args.store}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @oil={{@oil}}
+        @store={{@store}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @tableTitle="Emulsion Properties"
         @templateName="emulsions"
         @propertyName="environmental_behavior.emulsions"

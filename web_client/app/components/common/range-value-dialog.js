@@ -63,11 +63,20 @@ export default class RangeValueDialog extends Component {
                 this.closeModalDialog(); 
             }
         };   
-        $('body').on('keyup.modal-dialog', closeOnEscapeKey);
+
+        // Note: Ember doesn't want you to use JQuery for some purity reason,
+        //       and it throws warnings when the app starts.
+        //       But this is the recommended way to add an escape listener
+        //       to an ember-modal-dialog according to their README.
+        //
+        //       https://github.com/yapplabs/ember-modal-dialog#keyboard-shortcuts
+        $('body').on('keyup.modal-dialog', closeOnEscapeKey);  // eslint-disable-line ember/no-jquery
     }
 
     willDestroy() {
-        $('body').off('keyup.modal-dialog');
+        super.willDestroy();
+
+        $('body').off('keyup.modal-dialog');  // eslint-disable-line ember/no-jquery
     }
     
 

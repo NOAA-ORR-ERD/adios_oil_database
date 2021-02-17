@@ -1,19 +1,19 @@
 <div class="container-fluid">
 
   <TabPane::PaneHeader
-    @oil={{this.args.oil}}
-    @editable={{this.args.editable}}
-    @submit={{this.args.submit}}
-    @sampleName={{this.args.sampleName}}
-    @sampleIndex={{this.args.sampleIndex}}
+    @oil={{@oil}}
+    @editable={{@editable}}
+    @submit={{@submit}}
+    @sampleName={{@sampleName}}
+    @sampleIndex={{@sampleIndex}}
   />
 
   <div class="row">
     <div class="col-lg-4">
       <Common::ValueUnitTable
-        @valueArray={{this.args.oil.distillation_data.cuts}}
-        @editable={{this.args.editable}}
-        @submit={{this.args.submit}}
+        @valueArray={{@oil.distillation_data.cuts}}
+        @editable={{@editable}}
+        @submit={{@submit}}
         @tableTitle="Distillation Cuts"
         @leftColumnTitle="Mass Fraction"
         @leftColumnValueName="fraction"
@@ -30,8 +30,8 @@
       <strong>Distillation Graph:</strong>
 
       <Graph::Distillation
-        @oil={{this.args.oil}}
-        @sampleName={{this.args.sampleName}}
+        @oil={{@oil}}
+        @sampleName={{@sampleName}}
       />
     </div>
 

@@ -13,7 +13,7 @@ data_dir = sys.argv[1]
 records_with_kvis_data = {}
 records_with_dvis_data = {}
 
-outfile = open("viscosity_data.csv", 'w')
+outfile = open("viscosity_data.csv", 'w', encoding="utf-8")
 outfile.write('Name, ID, "Kin. Values", "Dyn. Values"\n')
 
 records_with_dist_cuts = []

@@ -1,0 +1,102 @@
+<div id="surveyDialog" class="modal fade" role="dialog" tabindex="-1"
+     aria-labelledby="surveyDialogLabel" aria-hidden="true"
+     {{did-insert this.setModalEvents}}
+     >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="surveyDialogLabel">
+          Website Survey
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body overflow-auto">
+        <div class="form">
+          <div class="row">
+            <p>
+              We want to know what you think about the services and products you
+              are receiving on the ADIOS Oil Database site, and whether you have
+              suggestions about how the site could be improved or made more
+              useful.
+            </p>
+
+            <p>
+              If you would like to share your opinion with us, please take our
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScsblsmjHv6qcXL5q2ju2te7BHNCJUnSBEuykyv1W3rj3RZrg/viewform"
+                 target="_blank" rel="noopener noreferrer">
+                  website satisfaction survey.
+              </a>
+              It is 11 questions long and takes
+              about 5 minute to complete.
+            </p>
+
+            <p>
+              We will review the feedback and use it to improve our site;
+              however, we will not respond to any comments provided via the
+              survey. If you would like a response to a specific question,
+              please email us at
+
+              <a href="mailto:orr.adios@noaa.gov">orr.adios@noaa.gov</a>
+
+              (rather than putting it in the survey).
+            </p>
+
+            <p>
+              Responding to this survey is completely voluntary.
+              No confidentiality can be provided for responses, and you need
+              not supply your name or address.
+              Any information you provide will be used to for the sole purpose
+              of improving NOAA's products and services, in particular the
+              website you’re using now.
+            </p>
+
+            <p>
+              Responses to this survey will not be treated as official
+              correspondence to the agency, so you may not receive a reply from
+              NOAA.
+              Do not use this survey to provide public comments on rulemakings,
+              respond to solicitations, or communicate about any official agency
+              action.
+              Instead, provide your comments or feedback as described in the
+              action you want to respond to, or use a designated channel for
+              official comments (for example, www.regulations.gov to comment
+              on notices of rulemaking).
+            </p>
+
+            <p>
+              Public reporting burden for this collection of information is
+              estimated to average 5 minutes. Send comments regarding this
+              burden estimate or any other aspect of this collection of
+              information, including suggestions for reducing this burden, to:
+            </p>
+
+            <p>
+              Sarah Brabson, CIO-PPA1, Station 9826<br>
+              1315 East-West Highway, Silver Spring, MD 20910<br>
+              301-713-3333 ext 204
+            </p>
+
+            <p>
+              Notwithstanding any other provision of the law, no person is
+              required to respond to, nor shall any person be subject to a
+              penalty to comply with, a collection of information subject to the
+              requirements of the Paperwork Reduction Act, unless that collection
+              of information displays a currently valid OMB Control Number.
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                {{ref this "okButton"}} >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

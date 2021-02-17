@@ -15,7 +15,7 @@ export function convertUnit([valueUnitObj,
     return valueUnitObj;
   }
 
-  let copyObj = $.extend(true, {}, valueUnitObj);
+  let copyObj = $.extend(true, {}, valueUnitObj);  // eslint-disable-line ember/no-jquery
 
   if (copyObj.unit_type === 'unitless') {
       return copyObj;  // no conversion

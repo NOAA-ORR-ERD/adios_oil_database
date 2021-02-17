@@ -1,14 +1,14 @@
 <div class="detail-section">
   <strong>Sulfur Content:</strong>
 
-  {{#if this.args.editable}}
+  {{#if @editable}}
     <Common::RangeValueInput
       @valueTitle="Sulfur Content"
-      @valueObject={{this.args.oil}}
+      @valueObject={{@oil}}
       @valueName="sulfur.fraction"
       @valueUnit="%"
       @valuePrecision="2"
-      @sampleIndex={{this.args.sampleIndex}}
+      @sampleIndex={{@sampleIndex}}
       @submit={{this.submit}}
     />
   {{else}}

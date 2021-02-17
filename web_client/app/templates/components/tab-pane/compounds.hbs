@@ -1,18 +1,18 @@
 <div class="container-fluid">
 
   <TabPane::PaneHeader
-    @oil={{this.args.oil}}
-    @editable={{this.args.editable}}
-    @submit={{this.args.submit}}
-    @sampleName={{this.args.sampleName}}
-    @sampleIndex={{this.args.sampleIndex}}
+    @oil={{@oil}}
+    @editable={{@editable}}
+    @submit={{@submit}}
+    @sampleName={{@sampleName}}
+    @sampleIndex={{@sampleIndex}}
   />
 
   <Common::GroupedTables
-    @oil={{this.args.oil}}
-    @store={{this.args.store}}
-    @editable={{this.args.editable}}
-    @submit={{this.args.submit}}
+    @oil={{@oil}}
+    @store={{@store}}
+    @editable={{@editable}}
+    @submit={{@submit}}
     @propertyName="compounds"
   />
 
