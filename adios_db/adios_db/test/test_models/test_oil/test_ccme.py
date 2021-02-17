@@ -21,7 +21,8 @@ class TestCCME:
         for attr in ('F1',
                      'F2',
                      'F3',
-                     'F4'):
+                     'F4',
+                     'method'):
             assert hasattr(ccme, attr)
 
     def test_json_empty(self):
@@ -35,7 +36,8 @@ class TestCCME:
         assert set(py_json.keys()) == {'F1',
                                        'F2',
                                        'F3',
-                                       'F4'}
+                                       'F4',
+                                       'method'}
 
     def test_small(self):
         '''

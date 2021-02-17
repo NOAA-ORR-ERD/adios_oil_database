@@ -22,3 +22,5 @@ class CCME:
     F2: MassFraction = None
     F3: MassFraction = None
     F4: MassFraction = None
+    method: str = None
+
