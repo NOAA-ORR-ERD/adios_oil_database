@@ -26,6 +26,7 @@ container_scanning:
     # for details
     GIT_STRATEGY: none
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
+    CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
   allow_failure: true
   services:
     - name: $CLAIR_DB_IMAGE
