@@ -11,7 +11,11 @@ import sys
 from pathlib import Path
 from shutil import copyfile
 
-noaa_data_dir = sys.argv[1]
+try:
+    noaa_data_dir = sys.argv[1]
+except IndexError:
+    print("you must pass in the dir of the NOAA data")
+    sys.exit()
 
 # find records to update:
 
