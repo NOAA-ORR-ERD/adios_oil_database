@@ -39,7 +39,7 @@ class TestCCME:
                                        'F4',
                                        'method'}
 
-    def test_small(self):
+    def test_with_ccme(self):
         '''
             Generally we should keep our pytests small, testing one thing at a
             time.
@@ -52,11 +52,6 @@ class TestCCME:
         ccme.F4 = MassFraction(unit="mg/g", value=40)
 
         py_json = ccme.py_json()
-        print("the pyjson form:")
-        pprint(py_json)
-
-        # # dump the json:
-        # json.dump(py_json, open("example_ccme.json", 'w'), indent=4)
 
         # test the round trip
         ccme2 = CCME.from_py_json(py_json)
@@ -73,6 +68,7 @@ class TestCCME:
         ccme.F2 = MassFraction(unit="mg/g", value=50)
         ccme.F3 = MassFraction(unit="mg/g", value=193)
         ccme.F4 = MassFraction(unit="mg/g", value=40)
+        ccme.method = "a method name"
 
         py_json = ccme.py_json()
         pprint(py_json)
@@ -84,3 +80,5 @@ class TestCCME:
         ccme2 = CCME.from_py_json(py_json)
 
         assert ccme2 == ccme
+
+

@@ -46,8 +46,6 @@ def dataclass_to_json(cls):
                     # it's not, so we just use the value
                     arg_dict[fieldname] = py_json[fieldname]
                 except TypeError:
-                    # print(f'TypeError in {cls.__name__}._from_py_json(): '
-                    #       f'field: {fieldname}')
                     raise TypeError(f'TypeError in {cls.__name__}._from_py_json(): '
                                     f'field: {fieldname}')
 

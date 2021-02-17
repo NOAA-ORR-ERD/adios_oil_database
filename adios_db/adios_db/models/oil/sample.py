@@ -17,8 +17,8 @@ from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
 from .sara import Sara
 from .ests_fractions import ESTSFractions
-from .ccme import CCME
-
+# need the namespace for ccme, as using the fieldname the same as the class breaks things.
+from . import ccme
 from .compound import CompoundList
 
 from .validation.warnings import WARNINGS
@@ -53,7 +53,7 @@ class Sample:
 
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
 
-    CCME: CCME = field(default_factory=CCME)
+    CCME: ccme.CCME = field(default_factory=ccme.CCME)
 
     ESTS_hydrocarbon_fractions: ESTSFractions = None
 
