@@ -15,106 +15,104 @@ variables:
   DAST_USE_AJAX_SPIDER: "true"
 
 stages:
-    - test
-    - build
-    - verify
+  - test
+  - build
+  - verify
 
 test_develop:
-    stage: test
-    image: registry.orr.noaa.gov/erd/centos-conda
-    tags:
-        - docker
+  stage: test
+  image: registry.orr.noaa.gov/erd/centos-conda
+  tags:
+    - docker
 
-    before_script:
-        - echo "ip_resolve=4" >> /etc/yum.conf
-        - yum update -y
-        - conda install -y requests lxml
+  before_script:
+    - echo "ip_resolve=4" >> /etc/yum.conf
+    - yum update -y
+    - conda install -y requests lxml
         
-    script:
-        # Install & test the oil_library package
-        - cd adios_db
-        - conda install -y --file conda_requirements.txt
-        - pip install -e ./
+  script:
+    # Install & test the oil_library package
+    - cd adios_db
+    - conda install -y --file conda_requirements.txt
+    - pip install -e ./
 
-        # mongo should have been installed by conda, but conda doesn't reserve
-        # places for the logs, the database, and the pidfile
-        - mkdir /var/lib/mongo
-        - mkdir /var/log/mongodb
-        - mkdir /var/run/mongodb
+    # mongo should have been installed by conda, but conda doesn't reserve
+    # places for the logs, the database, and the pidfile
+    - mkdir /var/lib/mongo
+    - mkdir /var/log/mongodb
+    - mkdir /var/run/mongodb
 
-        - mongod --config ../mongo_config_test.yml &
+    - mongod --config ../mongo_config_test.yml &
 
-        - cd data/exxon_assays
-        - python ./download_exxon_assays.py
-        - cd -
+    - cd data/exxon_assays
+    - python ./download_exxon_assays.py
+    - cd -
 
-        - adios_db_init
-        - adios_db_import --all
+    - adios_db_init
+    - adios_db_import --all
 
-        - pytest --mongo adios_db
+    - pytest --mongo adios_db
 
-        # Install & test the oil_library_api package
-        - cd ../web_api
-        - conda install -y --file conda_requirements.txt
-        - pip install -e ./
+    # Install & test the oil_library_api package
+    - cd ../web_api
+    - conda install -y --file conda_requirements.txt
+    - pip install -e ./
 
-        - pytest adios_db_api
+    - pytest adios_db_api
 
 build_api_stage:
-    stage: build
-    tags:
-        - build
-    variables:
-        # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
-        IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api-stage
-    script:
-        # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build . -f web_api/dockerfile -t $IMAGE_TAG
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker push $IMAGE_TAG
+  stage: build
+  tags:
+    - build
+  variables:
+    # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api-stage
+  script:
+    # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build . -f web_api/dockerfile -t $IMAGE_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $IMAGE_TAG
 
 build_client_stage:
-    stage: build
-    tags:
-        - build
-    variables:
-        # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
-        IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-stage
-    script:
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build . -f web_client/dockerfile -t $IMAGE_TAG
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker push $IMAGE_TAG
+  stage: build
+  tags:
+    - build
+  variables:
+    # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-stage
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build . -f web_client/dockerfile -t $IMAGE_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $IMAGE_TAG
 
 scan-api-stage:
-    stage: verify
-    image: "$CS_ANALYZER_IMAGE"
-    variables:
-        CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-        DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-stage
-
-        # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
-        # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
-        CLAIR_DB_IMAGE_TAG: "latest"
-        CLAIR_DB_IMAGE: "$SECURE_ANALYZERS_PREFIX/clair-vulnerabilities-db:$CLAIR_DB_IMAGE_TAG"
-
-        # Override the GIT_STRATEGY variable in your `.gitlab-ci.yml` file and set it to `fetch` if you want to provide a `clair-whitelist.yml`
-        # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
-        # for details
-        GIT_STRATEGY: none
-    allow_failure: true
-    services:
-        - name: $CLAIR_DB_IMAGE
-          alias: clair-vulnerabilities-db
-    script:
-        - /analyzer run
-    artifacts:
-        reports:
-            container_scanning: gl-container-scanning-report.json
-    dependencies: []
-    rules:
-        - if: $CONTAINER_SCANNING_DISABLED
-            when: never
-        - if: $CI_COMMIT_BRANCH &&
-              $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
+  stage: verify
+  image: "$CS_ANALYZER_IMAGE"
+  variables:
+    CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-stage
+    # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
+    # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
+    CLAIR_DB_IMAGE_TAG: "latest"
+    CLAIR_DB_IMAGE: "$SECURE_ANALYZERS_PREFIX/clair-vulnerabilities-db:$CLAIR_DB_IMAGE_TAG"
+    # Override the GIT_STRATEGY variable in your `.gitlab-ci.yml` file and set it to `fetch` if you want to provide a `clair-whitelist.yml`
+    # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
+    # for details
+    GIT_STRATEGY: none
+  allow_failure: true
+  services:
+    - name: $CLAIR_DB_IMAGE
+      alias: clair-vulnerabilities-db
+  script:
+    - /analyzer run
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
+  dependencies: []
+  rules:
+    - if: $CONTAINER_SCANNING_DISABLED
+      when: never
+    - if: $CI_COMMIT_BRANCH &&
+        $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
