@@ -1,6 +1,11 @@
 adios\_db.scripts package
 =========================
 
+.. automodule:: adios_db.scripts
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -40,14 +45,6 @@ adios\_db.scripts.oil\_query module
 -----------------------------------
 
 .. automodule:: adios_db.scripts.oil_query
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.scripts
    :members:
    :undoc-members:
    :show-inheritance:

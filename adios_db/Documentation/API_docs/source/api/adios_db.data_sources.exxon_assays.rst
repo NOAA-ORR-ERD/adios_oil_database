@@ -1,6 +1,11 @@
 adios\_db.data\_sources.exxon\_assays package
 =============================================
 
+.. automodule:: adios_db.data_sources.exxon_assays
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -24,14 +29,6 @@ adios\_db.data\_sources.exxon\_assays.reader module
 ---------------------------------------------------
 
 .. automodule:: adios_db.data_sources.exxon_assays.reader
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.data_sources.exxon_assays
    :members:
    :undoc-members:
    :show-inheritance:

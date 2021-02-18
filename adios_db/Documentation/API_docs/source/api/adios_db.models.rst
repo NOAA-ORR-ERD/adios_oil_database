@@ -1,6 +1,11 @@
 adios\_db.models package
 ========================
 
+.. automodule:: adios_db.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -9,11 +14,3 @@ Subpackages
 
    adios_db.models.common
    adios_db.models.oil
-
-Module contents
----------------
-
-.. automodule:: adios_db.models
-   :members:
-   :undoc-members:
-   :show-inheritance:

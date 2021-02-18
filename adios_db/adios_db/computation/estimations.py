@@ -1,6 +1,6 @@
 """
-estimations for filling out the missing properties of an
-oil record
+Estimation code for filling out the missing properties of an
+oil record that may be needed for modeling, etc.
 """
 
 import numpy as np

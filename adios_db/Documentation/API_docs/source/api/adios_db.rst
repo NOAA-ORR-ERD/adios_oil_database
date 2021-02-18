@@ -1,6 +1,11 @@
 adios\_db package
 =================
 
+.. automodule:: adios_db
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -14,13 +19,4 @@ Subpackages
    adios_db.scripting
    adios_db.scripts
    adios_db.session
-   adios_db.test
    adios_db.util
-
-Module contents
----------------
-
-.. automodule:: adios_db
-   :members:
-   :undoc-members:
-   :show-inheritance:

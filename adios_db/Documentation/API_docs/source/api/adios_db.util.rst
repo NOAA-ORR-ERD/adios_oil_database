@@ -1,6 +1,11 @@
 adios\_db.util package
 ======================
 
+.. automodule:: adios_db.util
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -56,14 +61,6 @@ adios\_db.util.term module
 --------------------------
 
 .. automodule:: adios_db.util.term
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.util
    :members:
    :undoc-members:
    :show-inheritance:
