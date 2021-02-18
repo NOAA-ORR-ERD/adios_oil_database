@@ -1,6 +1,11 @@
 adios\_db.data\_sources package
 ===============================
 
+.. automodule:: adios_db.data_sources
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -27,14 +32,6 @@ adios\_db.data\_sources.parser module
 -------------------------------------
 
 .. automodule:: adios_db.data_sources.parser
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.data_sources
    :members:
    :undoc-members:
    :show-inheritance:

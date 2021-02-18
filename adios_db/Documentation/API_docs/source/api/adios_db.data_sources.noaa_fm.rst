@@ -1,6 +1,11 @@
 adios\_db.data\_sources.noaa\_fm package
 ========================================
 
+.. automodule:: adios_db.data_sources.noaa_fm
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -32,14 +37,6 @@ adios\_db.data\_sources.noaa\_fm.scoring module
 -----------------------------------------------
 
 .. automodule:: adios_db.data_sources.noaa_fm.scoring
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.data_sources.noaa_fm
    :members:
    :undoc-members:
    :show-inheritance:

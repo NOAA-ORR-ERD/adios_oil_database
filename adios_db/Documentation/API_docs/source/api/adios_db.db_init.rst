@@ -1,6 +1,11 @@
 adios\_db.db\_init package
 ==========================
 
+.. automodule:: adios_db.db_init
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -16,14 +21,6 @@ adios\_db.db\_init.labels module
 --------------------------------
 
 .. automodule:: adios_db.db_init.labels
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.db_init
    :members:
    :undoc-members:
    :show-inheritance:

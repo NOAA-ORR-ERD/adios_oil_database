@@ -3,7 +3,7 @@ dataclass to hold the CCME data
 
 CCME is kind of a special case, so this nails it down
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
 
@@ -22,3 +22,6 @@ class CCME:
     F2: MassFraction = None
     F3: MassFraction = None
     F4: MassFraction = None
+    method: str = None
+
+

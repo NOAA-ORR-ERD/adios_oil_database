@@ -1,6 +1,11 @@
 adios\_db.data\_sources.env\_canada package
 ===========================================
 
+.. automodule:: adios_db.data_sources.env_canada
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -24,14 +29,6 @@ adios\_db.data\_sources.env\_canada.reader module
 -------------------------------------------------
 
 .. automodule:: adios_db.data_sources.env_canada.reader
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.data_sources.env_canada
    :members:
    :undoc-members:
    :show-inheritance:

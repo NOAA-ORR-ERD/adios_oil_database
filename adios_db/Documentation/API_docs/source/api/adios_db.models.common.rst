@@ -1,6 +1,11 @@
 adios\_db.models.common package
 ===============================
 
+.. automodule:: adios_db.models.common
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -56,14 +61,6 @@ adios\_db.models.common.validators module
 -----------------------------------------
 
 .. automodule:: adios_db.models.common.validators
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.models.common
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,6 +1,11 @@
 adios\_db.models.oil.cleanup package
 ====================================
 
+.. automodule:: adios_db.models.oil.cleanup
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -24,14 +29,6 @@ adios\_db.models.oil.cleanup.density module
 -------------------------------------------
 
 .. automodule:: adios_db.models.oil.cleanup.density
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.models.oil.cleanup
    :members:
    :undoc-members:
    :show-inheritance:

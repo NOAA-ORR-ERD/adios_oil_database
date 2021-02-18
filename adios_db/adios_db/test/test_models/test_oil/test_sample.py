@@ -1,13 +1,16 @@
 import pytest
 
-from adios_db.models.common.measurement import Temperature, Density
-
+from adios_db.models.common.measurement import (Temperature,
+                                                Density,
+                                                MassFraction,
+                                                )
 from adios_db.models.oil.sample import Sample, SampleList
 from adios_db.models.oil.metadata import SampleMetaData
+from adios_db.models.oil.ccme import CCME
 from adios_db.models.oil.physical_properties import (PhysicalProperties,
-                                                         DensityPoint,
-                                                         DensityList,
-                                                         )
+                                                     DensityPoint,
+                                                     DensityList,
+                                                     )
 
 
 class TestSample:
@@ -153,6 +156,33 @@ class TestSample:
 
         assert type(dens) == list
         assert dens[0]['density']['value'] == 0.8751
+
+def test_sample_with_ccme():
+    """
+    testing loading a sample with ccme data from py_json
+    """
+    ccme = CCME()
+
+    ccme.F1 = MassFraction(unit="mg/g", value=15.58)
+    ccme.F2 = MassFraction(unit="mg/g", value=50)
+    ccme.F3 = MassFraction(unit="mg/g", value=193)
+    ccme.F4 = MassFraction(unit="mg/g", value=40)
+    ccme.method = "a method name"
+
+    s = Sample(metadata=SampleMetaData(
+               short_name="short",
+               name="a longer name that is more descriptive")
+               )
+    s.metadata.fraction_weathered = MassFraction(value=16, unit="%")
+    s.metadata.boiling_point_range = None
+    s.CCME = ccme
+
+    sample_json = s.py_json()
+
+    s2 = Sample.from_py_json(sample_json)
+
+
+    assert s == s2
 
 
 class TestSampleList:

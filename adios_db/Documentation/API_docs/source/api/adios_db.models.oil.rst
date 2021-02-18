@@ -1,6 +1,11 @@
 adios\_db.models.oil package
 ============================
 
+.. automodule:: adios_db.models.oil
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -121,14 +126,6 @@ adios\_db.models.oil.values module
 ----------------------------------
 
 .. automodule:: adios_db.models.oil.values
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.models.oil
    :members:
    :undoc-members:
    :show-inheritance:

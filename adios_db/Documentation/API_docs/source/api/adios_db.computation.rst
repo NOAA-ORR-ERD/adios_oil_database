@@ -1,6 +1,11 @@
 adios\_db.computation package
 =============================
 
+.. automodule:: adios_db.computation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -24,14 +29,6 @@ adios\_db.computation.physical\_properties module
 -------------------------------------------------
 
 .. automodule:: adios_db.computation.physical_properties
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: adios_db.computation
    :members:
    :undoc-members:
    :show-inheritance:
