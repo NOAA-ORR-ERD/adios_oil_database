@@ -18,6 +18,7 @@ stages:
   - test
   - build
   - verify
+  - deploy
 
 test_develop:
   stage: test
@@ -60,13 +61,13 @@ test_develop:
 
     - pytest adios_db_api
 
-build_api_stage:
+build_api:
   stage: build
   tags:
     - build
   variables:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api-stage
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
   script:
     # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -74,25 +75,25 @@ build_api_stage:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG
 
-build_client_stage:
+build_client:
   stage: build
   tags:
     - build
   variables:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-stage
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_client/dockerfile -t $IMAGE_TAG
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG
 
-scan-api-stage:
+scan-api:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api-stage
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
     # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
     # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
     CLAIR_DB_IMAGE_TAG: "latest"
@@ -117,12 +118,12 @@ scan-api-stage:
     - if: $CI_COMMIT_BRANCH &&
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
-scan-client-stage:
+scan-client:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-stage
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
     # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
     # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
     CLAIR_DB_IMAGE_TAG: "latest"
@@ -146,3 +147,43 @@ scan-client-stage:
       when: never
     - if: $CI_COMMIT_BRANCH &&
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
+
+deploy_api_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_api_stage
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+    CONTAINER_NAME: adios_db_web_api
+    PORT_MAPPING: 8004:9898
+    CONFIG_BASE: /data/adios_oil_db/oildb-deploy/config
+    OIL_DATA: /data/adios_oil_db/noaa-oil-data
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      -v $CONFIG_BASE/web_api:/config
+      -v $OIL_DATA:/noaa-oil-data
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
+
+stop_api_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: adios_db_web_api
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy
