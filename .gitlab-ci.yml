@@ -225,4 +225,41 @@ stop_api_stage:
   tags:
     - adios-stage
     - deploy
-    
+
+deploy_client_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_client_stage
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+    CONTAINER_NAME: adios_db_web_client
+    PORT_MAPPING: 8003:4200
+    CONFIG_BASE: /data/adios_oil_db/oildb-deploy/config
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      -v $CONFIG_BASE/web_client:/config
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
+
+stop_client_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: adios_db_web_client
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy
