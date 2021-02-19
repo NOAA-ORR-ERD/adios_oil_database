@@ -1756,10 +1756,7 @@
                         "unit_type": "massfraction"
                     }
                 }
-            ],
-            "ESTS_hydrocarbon_fractions": {
-                "method": "Hollebone, Bruce (2020) Personal communication"
-            }
+            ]
         },
         {
             "metadata": {
