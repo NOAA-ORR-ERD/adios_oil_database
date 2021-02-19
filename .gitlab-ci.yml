@@ -148,6 +148,44 @@ scan-client:
     - if: $CI_COMMIT_BRANCH &&
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
+deploy_mongodb_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_mongodb_stage
+  variables:
+    IMAGE_TAG: mongo:latest
+    CONTAINER_NAME: mongodb
+    PORT_MAPPING: 127.0.0.1:27017:27017
+    DB_LOCATION: /data/adios_oil_db/data/db
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      -v $DB_LOCATION:/data/db
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
+
+stop_mongodb_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: mongodb
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy
+
 deploy_api_stage:
   stage: deploy
   environment:
@@ -187,3 +225,4 @@ stop_api_stage:
   tags:
     - adios-stage
     - deploy
+    
