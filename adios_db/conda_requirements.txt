@@ -20,10 +20,19 @@ python-dateutil
 lxml>=4.4.1
 requests>=2.22.0
 
+# This provided the unit_conversion package
+# https://github.com/NOAA-ORR-ERD/PyNUCOS
+pynucos>=2.10
+
+
+# for testing
 pytest>=3.8.0
 pytest-cov>=2.6.0
 pytest-timeout>=1.2.1
 pytest-raises>=0.11
 
-pynucos>=2.10
+# for the docs
+sphinx
+sphinx_rtd_theme
+
 
