@@ -1,6 +1,5 @@
 {
     "oil_id": "EC02234",
-    "_id": "EC02234",
     "metadata": {
         "name": "Access West Blend Winter",
         "source_id": "2234",
@@ -1771,28 +1770,29 @@
             ],
             "CCME": {
                 "F1": {
+                    "value": 15.584,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 15.584
+                    "unit_type": "massfraction"
                 },
                 "F2": {
+                    "value": 50.056,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 50.056
+                    "unit_type": "massfraction"
                 },
                 "F3": {
+                    "value": 193.13,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 193.13
+                    "unit_type": "massfraction"
                 },
                 "F4": {
+                    "value": 40.226,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 40.226
-                }
+                    "unit_type": "massfraction"
+                },
+                "method": "ESTS 5.03/x.x/M"
             },
             "ESTS_hydrocarbon_fractions": {
-                "method": "Hollebone, Bruce (2020) Personal communication",
+                "method": "ESTS 5.03/x.x/M",
                 "saturates": [
                     {
                         "name": "n-C8 to n-C10",
@@ -3743,24 +3743,24 @@
             ],
             "CCME": {
                 "F1": {
+                    "value": 15.502,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 15.502
+                    "unit_type": "massfraction"
                 },
                 "F2": {
+                    "value": 53.261,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 53.261
+                    "unit_type": "massfraction"
                 },
                 "F3": {
+                    "value": 207.7,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 207.7
+                    "unit_type": "massfraction"
                 },
                 "F4": {
+                    "value": 40.822,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 40.822
+                    "unit_type": "massfraction"
                 }
             },
             "ESTS_hydrocarbon_fractions": {
@@ -5700,24 +5700,24 @@
             ],
             "CCME": {
                 "F1": {
+                    "value": 15.302,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 15.302
+                    "unit_type": "massfraction"
                 },
                 "F2": {
+                    "value": 60.108,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 60.108
+                    "unit_type": "massfraction"
                 },
                 "F3": {
+                    "value": 248.14,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 248.14
+                    "unit_type": "massfraction"
                 },
                 "F4": {
+                    "value": 32.784,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 32.784
+                    "unit_type": "massfraction"
                 }
             },
             "ESTS_hydrocarbon_fractions": {
@@ -7666,24 +7666,24 @@
             ],
             "CCME": {
                 "F1": {
+                    "value": 1.6231,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 1.6231
+                    "unit_type": "massfraction"
                 },
                 "F2": {
+                    "value": 28.16,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 28.16
+                    "unit_type": "massfraction"
                 },
                 "F3": {
+                    "value": 251.51,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 251.51
+                    "unit_type": "massfraction"
                 },
                 "F4": {
+                    "value": 31.447,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 31.447
+                    "unit_type": "massfraction"
                 }
             },
             "ESTS_hydrocarbon_fractions": {
@@ -9574,24 +9574,24 @@
             ],
             "CCME": {
                 "F1": {
+                    "value": 1.5985,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 1.5985
+                    "unit_type": "massfraction"
                 },
                 "F2": {
+                    "value": 14.829,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 14.829
+                    "unit_type": "massfraction"
                 },
                 "F3": {
+                    "value": 248.2,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 248.2
+                    "unit_type": "massfraction"
                 },
                 "F4": {
+                    "value": 36.232,
                     "unit": "mg/g",
-                    "unit_type": "massfraction",
-                    "value": 36.232
+                    "unit_type": "massfraction"
                 }
             },
             "ESTS_hydrocarbon_fractions": {

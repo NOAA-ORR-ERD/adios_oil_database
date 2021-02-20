@@ -20,23 +20,11 @@ storage:
    journal:
      enabled: true
 
-<<<<<<< HEAD
 # uncomment if you want it logged to a file rather than stdout
 # systemLog:
 #   destination: file
 #   path: "./mongo_files/mongod.log"
 #   logAppend: false
-||||||| merged common ancestors
-systemLog:
-  destination: file
-  logAppend: true
-  path: "<path_to_project>/mongo_files/mongod.log"
-=======
-systemLog:
-  destination: file
-  logAppend: true
-  path: "./mongo_files/mongod.log"
->>>>>>> oil_id_updated
 
 processManagement:
   fork: false
