@@ -1,9 +1,56 @@
 # The Oil Database Session object
 from numbers import Number
-
+import warnings
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
-from adios_db.models.oil.product_type import (types_to_labels)
+from ..models.oil.product_type import types_to_labels
+
+
+class CursorWrapper():
+    """
+    wraps a mongodb cursor to provide an iterator that we can do some filtering on,
+    while not losing all its methods
+
+    At this point, all it's doing is removing the _id key
+
+    Seems like a lot of effort for that, but the alternative is to realize the entire
+    thing into a list -- which may be a bad idea.
+
+    Rant: why doesn't a mongo cursor have a __len__ rather than using .count()?
+          to make it more like a regular Sequence?
+    """
+    def __init__(self, cursor):
+        self.cursor = cursor
+
+    def __iter__(self):
+        self.cursor = iter(self.cursor)
+        return self
+
+    def __next__(self):
+        obj = next(self.cursor)
+        obj.pop('_id', None)
+        return obj
+
+    def __len__(self):
+        return self.cursor.count()
+
+    def __getitem__(self, idx):
+        return self.cursor[idx]
+    # def count(self, *args, **kwargs):
+    #     return self.cursor.count(*args, **kwargs)
+
+    def __getattr__(self, attr):
+        """
+        Pass anything else on to the imbedded cursor
+
+        Just in case -- we really should document whats being used.
+        """
+        warnings.warn("ideally, we should not be using mongo "
+                      "cursor methods directly."
+                      f": `{attr}` Should be wrapped somehow",
+                      DeprecationWarning)
+
+        return getattr(self.cursor, attr)
 
 
 class Session():
@@ -14,6 +61,13 @@ class Session():
                       'descending': DESCENDING}
 
     def __init__(self, host, port, database):
+        """
+        Initialize a mongodb backed session
+
+        :param host: hostname of mongo server
+        :param port: port of mongo server
+        :param database: database name used for this data.
+        """
         self.mongo_client = MongoClient(host=host, port=port)
 
         self.db = getattr(self.mongo_client, database)
@@ -22,18 +76,17 @@ class Session():
     def query(self, oil_id=None,
               text=None, api=None, labels=None, product_type=None,
               sort=None, sort_case_sensitive=False, page=None,
+              projection=None,
               **kwargs):
         '''
-        The Mongodb find() function has a bunch of parameters, but we are
-        mainly interested in ``find(filter=None, orderby, projection=None)``
+        Query the database according to various criteria
+
+        :returns: an iterator of dicts (json-compatible) of the data asked for
+
 
         Where:
 
-          filter:
-            The filtering terms
-
-          orderby:
-            the ordering of our results
+        **Filtering**
 
           projection:
             The field names to be returned
@@ -71,6 +124,9 @@ class Session():
                       'desc',
                       'descending'}
 
+        The Mongodb find() function has a bunch of parameters, but we are
+        mainly interested in ``find(filter=None, orderby, projection=None)``
+
         .. note::
 
             MongoDB 3.6 has changed how they compare array fields in a
@@ -83,12 +139,15 @@ class Session():
 
             For this reason, a MongoDB query will not properly sort our
             status and labels array fields, at least not in a simple way.
+
         '''
         filter_opts = self.filter_options(oil_id, text, api, labels,
                                           product_type)
         sort = self.sort_options(sort)
-        projection = kwargs.get('projection', None)
 
+        if projection is not None:
+            # make sure we always get the oil_id
+            projection = ['oil_id'] + list(projection)
         ret = self.oil.find(filter=filter_opts, projection=projection)
 
         if sort is not None:
@@ -99,7 +158,7 @@ class Session():
 
         start, stop = self.parse_interval_arg(page)
 
-        return ret[start:stop]
+        return CursorWrapper(ret[start:stop])
 
     def filter_options(self, oil_id, text, api, labels, product_type):
         filter_opts = {}
@@ -119,13 +178,13 @@ class Session():
                     for opt in sort]
 
     def id_arg(self, obj_id):
-        return {} if obj_id is None else {'_id': obj_id}
+        return {} if obj_id is None else {'oil_id': obj_id}
 
     def id_filter_arg(self, obj_id):
         if obj_id is None:
             return {}
         else:
-            return {'_id': {'$regex': obj_id, '$options': 'i'}}
+            return {'oil_id': {'$regex': obj_id, '$options': 'i'}}
 
     def name_arg(self, name):
         if name is None:
@@ -248,7 +307,7 @@ class Session():
 
     def make_exclusive(self, opts):
         '''
-            Normally, the filtering options will be exclusive, i. e. if we are
+            Normally, the filtering options will be exclusive, i.e. if we are
             searching on name='alaska' and location='north', we would only get
             records that satisfy both criteria (criteria are AND'd together).
 
@@ -270,8 +329,8 @@ class Session():
             collection.
         '''
         # get the whole list of labels
-        labels = [{'name': label, 'product_types': sorted(list(types))}
-                  for (label, types) in types_to_labels.right.items()]
+        labels = [{'name': label, 'product_types': sorted(types)}
+                  for (label, types) in types_to_labels.product_types.items()]
 
         # so it's at least somewhat consistent, we sort and then enumerate
         # our labels
@@ -294,7 +353,22 @@ class Session():
 
             return label[0] if len(label) > 0 else None
 
+    def insert_oil_record(self, oil, overwrite=False):
+        """
+        add a new oil record to the oil collection
+
+        :param oil: an Oil object to add
+
+        :param overwrite=False: whether to overwrite an existing
+                                record if it already exists.
+        """
+        obj = oil.py_json()
+
+        self.oil.insert_one(obj)
+
     def __getattr__(self, name):
+        # FixMe: This should be fully hiding the mongo client
+        #        so probably should NOT do this!
         '''
             Any referenced attributes that are not explicitly defined in this
             class will be assumed to belong to the mongo client.  So we will

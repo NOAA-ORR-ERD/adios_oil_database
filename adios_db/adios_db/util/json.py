@@ -1,9 +1,9 @@
-'''
-    JSON Oil record utility functions.
+# '''
+#     JSON Oil record utility functions.
 
-    These are general functions to be used primarily for helping us deal
-    with an incoming JSON oil record.
-'''
+#     These are general functions to be used primarily for helping us deal
+#     with an incoming JSON oil record.
+# '''
 from bson.objectid import ObjectId
 
 
@@ -23,6 +23,7 @@ def jsonify_model_obj(obj):
 
 
 def fix_bson_ids(json_data):
+    # FixME: if we don't use the _id field do we need this at all?
     '''
         JSON, specifically the ujson package, is having problems representing
         the BSON special ObjectId fields.  So we need to turn them into
@@ -58,71 +59,71 @@ def fix_bson_ids(json_data):
         return json_data
 
 
-def json_to_bson_obj_id(json_data):
-    '''
-        JSON, specifically the ujson package, is having problems representing
-        the BSON special fields.  So any BSON id fields will probably not have
-        an ObjectId type, but a string.  So we need to turn it into an ObjectId
-        in order to use it.
-        - We will not traverse the entire structure for the moment.
-        - We will let the caller handle any exceptions
-    '''
-    if ('_id' in json_data and
-            json_data['_id'] is not None and
-            not isinstance(json_data['_id'], ObjectId)):
-        json_data['_id'] = ObjectId(json_data['_id'])
+# def json_to_bson_obj_id(json_data):
+#     '''
+#         JSON, specifically the ujson package, is having problems representing
+#         the BSON special fields.  So any BSON id fields will probably not have
+#         an ObjectId type, but a string.  So we need to turn it into an ObjectId
+#         in order to use it.
+#         - We will not traverse the entire structure for the moment.
+#         - We will let the caller handle any exceptions
+#     '''
+#     if ('_id' in json_data and
+#             json_data['_id'] is not None and
+#             not isinstance(json_data['_id'], ObjectId)):
+#         json_data['_id'] = ObjectId(json_data['_id'])
 
 
-class ObjFromDict(object):
-    '''
-        Generalized method for interpreting a nested data structure of
-        dicts, lists, and values, such as that coming from a parsed
-        JSON string.  We consume this data structure and represent it
-        as a structure of linked python objects.
+# class ObjFromDict(object):
+#     '''
+#         Generalized method for interpreting a nested data structure of
+#         dicts, lists, and values, such as that coming from a parsed
+#         JSON string.  We consume this data structure and represent it
+#         as a structure of linked python objects.
 
-        So instead of needing to access our data like this:
-            json_obj['densities'][0]['ref_temp_k']
-        we can do this instead:
-            json_obj.densities[0].ref_temp_k
-    '''
-    def __init__(self, data):
-        try:
-            for name, value in data.items():
-                setattr(self, name, self._wrap(value))
-        except AttributeError:
-            raise ValueError('Top level of JSON structure must be dict')
+#         So instead of needing to access our data like this:
+#             json_obj['densities'][0]['ref_temp_k']
+#         we can do this instead:
+#             json_obj.densities[0].ref_temp_k
+#     '''
+#     def __init__(self, data):
+#         try:
+#             for name, value in data.items():
+#                 setattr(self, name, self._wrap(value))
+#         except AttributeError:
+#             raise ValueError('Top level of JSON structure must be dict')
 
-    def _wrap(self, value):
-        if isinstance(value, (tuple, list, set, frozenset)):
-            return type(value)([self._wrap(v) for v in value])
-        elif isinstance(value, dict):
-            return ObjFromDict(value)
-        else:
-            return value
+#     def _wrap(self, value):
+#         if isinstance(value, (tuple, list, set, frozenset)):
+#             return type(value)([self._wrap(v) for v in value])
+#         elif isinstance(value, dict):
+#             return ObjFromDict(value)
+#         else:
+#             return value
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
-        else:
-            return False
+#     def __eq__(self, other):
+#         if isinstance(other, self.__class__):
+#             return self.__dict__ == other.__dict__
+#         else:
+#             return False
 
-    def __lt__(self, other):
-        if isinstance(other, self.__class__):
-            return sorted(self.__dict__.items()) < sorted(other.__dict__.items())
-        else:
-            return False
+#     def __lt__(self, other):
+#         if isinstance(other, self.__class__):
+#             return sorted(self.__dict__.items()) < sorted(other.__dict__.items())
+#         else:
+#             return False
 
-    def __gt__(self, other):
-        if isinstance(other, self.__class__):
-            return sorted(self.__dict__.items()) > sorted(other.__dict__.items())
-        else:
-            return False
+#     def __gt__(self, other):
+#         if isinstance(other, self.__class__):
+#             return sorted(self.__dict__.items()) > sorted(other.__dict__.items())
+#         else:
+#             return False
 
-    def __ne__(self, other):
-        return not self == other
+#     def __ne__(self, other):
+#         return not self == other
 
-    def __ge__(self, other):
-        return not self < other
+#     def __ge__(self, other):
+#         return not self < other
 
-    def __le__(self, other):
-        return not self > other
+#     def __le__(self, other):
+#         return not self > other

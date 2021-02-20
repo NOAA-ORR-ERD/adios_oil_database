@@ -68,6 +68,27 @@ class TestOil:
         with pytest.raises(TypeError):
             Oil(oil_id="")
 
+    def test__id_ignored(self):
+        """
+        checks that the an _id attrobute of a dict will get ignored
+        """
+        oil = Oil.from_py_json({'oil_id': "XX123456",
+                                '_id': 1234567,
+                                'metadata': {'name': "An oil name"},
+                                }
+                               )
+
+        assert oil.oil_id == "XX123456"
+
+        with pytest.raises(AttributeError):
+            _id = oil._id
+        assert oil.metadata.name == "An oil name"
+
+        joil = oil.py_json()
+
+        assert '_id' not in joil
+
+
     def test_repr_minimal(self):
         """
         The repr should be reasonable
@@ -100,8 +121,7 @@ class TestOil:
         oil = Oil(oil_id=OIL_ID)
         assert oil.oil_id == OIL_ID
 
-        for attr in ('oil_id', '_id',
-                     'metadata', 'sub_samples', 'status', 'extra_data'):
+        for attr in ('oil_id', 'metadata', 'sub_samples', 'status', 'extra_data'):
             assert hasattr(oil, attr)
 
     def test_add_new_attribute(self):
@@ -127,8 +147,8 @@ class TestOil:
         py_json = oil.py_json()
 
         assert py_json["oil_id"] == OIL_ID
-        assert py_json["_id"] == OIL_ID
-        assert len(py_json) == 2
+        # assert py_json["_id"] == OIL_ID
+        assert len(py_json) == 1
 
     def test_json_minimal_nonsparse(self):
         oil = Oil(oil_id=OIL_ID)
@@ -136,10 +156,10 @@ class TestOil:
 
         pprint(py_json)
 
-        assert len(py_json) == 6
+        assert len(py_json) == 5
 
-        for attr in ['_id',
-                     'oil_id',
+        for attr in ['oil_id',
+                     # '_id',
                      'metadata',
                      'sub_samples',
                      'status',
@@ -375,14 +395,3 @@ def test_round_trip():
     oilout = Oil.from_file(fileout)
 
     assert oilin == oilout
-
-
-
-
-
-
-
-
-
-
-

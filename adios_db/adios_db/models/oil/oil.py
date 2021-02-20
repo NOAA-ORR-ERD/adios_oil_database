@@ -22,7 +22,7 @@ from .validation.errors import ERRORS
 @dataclass
 class Oil:
     oil_id: str  # required
-    _id: str = ''
+#     _id: str = ''
 
     metadata: MetaData = field(default_factory=MetaData)
     sub_samples: SampleList = field(default_factory=SampleList)
@@ -41,8 +41,8 @@ class Oil:
             raise ValueError("oil_id must be a string")
         elif len(self.oil_id) > 64:  # arbitrary limit to catch ridiculous ones
             raise ValueError("oil_id must be a string less than 65 characters in length")
-        else:
-            self._id = self.oil_id
+        # else:
+        #     self._id = self.oil_id
 
     def __str__(self):
         """
