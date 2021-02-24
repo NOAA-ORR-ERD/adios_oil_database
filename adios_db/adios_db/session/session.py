@@ -249,7 +249,7 @@ class Session():
         if len(labels) == 1:
             return {'metadata.labels': {'$in': labels}}
         elif len(labels) > 1:
-            return self.make_exclusive([{'metadata.labels': {'$in': [l]}}
+            return self.make_inclusive([{'metadata.labels': {'$in': [l]}}
                                         for l in labels])
         else:
             return {}
