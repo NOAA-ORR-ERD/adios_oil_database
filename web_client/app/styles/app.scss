@@ -56,9 +56,10 @@ td:empty::after{
 .noaa-logo {
     background: url(../assets/images/NOAA_logo.svg);
     background-size: contain;
+    background-position-x: center;
     background-repeat: no-repeat;
-    height: 120px;
-    width: 120px;
+    height: 60px;
+    width: 60px;
     position: relative;
 }
 
@@ -117,7 +118,7 @@ td:empty::after{
 }
 
 .footer{
-    padding: 15px 0;
+    padding: 5px 0;
     img{
         width: 64px;
         height: 64px;
