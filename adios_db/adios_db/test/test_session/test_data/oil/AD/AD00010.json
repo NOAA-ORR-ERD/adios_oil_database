@@ -12,6 +12,7 @@
         "API": 28.4,
         "comments": "Crude sample represents 1989 winter production.  Product considered an Arabian medium crude.",
         "labels": [
+            "Crude Oil NOS",
             "Crude Oil",
             "Medium Crude"
         ],

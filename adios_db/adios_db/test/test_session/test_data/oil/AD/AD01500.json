@@ -12,7 +12,8 @@
         "API": 45.22,
         "labels": [
             "Fuel Oil",
-            "Refined Product"
+            "Refined Product",
+            "Distillate Fuel Oil"
         ],
         "model_completeness": 42
     },

@@ -11,9 +11,10 @@
         "product_type": "Residual Fuel Oil",
         "API": 12.0,
         "labels": [
-            "Fuel Oil",
+            "Residual Fuel",
+            "Residual Fuel Oil",
             "Refined Product",
-            "Residual Fuel"
+            "Fuel Oil"
         ],
         "model_completeness": 90
     },

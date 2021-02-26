@@ -9,6 +9,9 @@
         },
         "product_type": "Other",
         "API": 15.8,
+        "labels": [
+            "Other"
+        ],
         "model_completeness": 19
     },
     "sub_samples": [

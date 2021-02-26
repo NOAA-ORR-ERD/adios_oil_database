@@ -11,11 +11,13 @@
         "API": 60.0,
         "comments": "WARNING: Benzene content of product is only an estimate and not a measured value.",
         "labels": [
-            "Kerosene",
             "Fuel Oil",
+            "Refined Product",
+            "Distillate Fuel Oil",
+            "Gasoline",
             "Jet Fuel",
-            "Aviation Gas",
-            "Refined Product"
+            "Kerosene",
+            "Aviation Gas"
         ],
         "model_completeness": 42
     },

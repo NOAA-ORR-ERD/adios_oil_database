@@ -9,7 +9,8 @@
         },
         "product_type": "Refinery Intermediate",
         "labels": [
-            "Refined Product"
+            "Refined Product",
+            "Refinery Intermediate"
         ],
         "model_completeness": 15
     },

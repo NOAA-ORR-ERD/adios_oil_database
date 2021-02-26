@@ -10,6 +10,7 @@
         "product_type": "Crude Oil NOS",
         "API": 35.2,
         "labels": [
+            "Crude Oil NOS",
             "Crude Oil",
             "Light Crude"
         ],
