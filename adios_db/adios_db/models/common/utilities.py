@@ -31,7 +31,8 @@ def dataclass_to_json(cls):
 
         if py_json is None and allow_none is True:
             # the parent object defined an attribute with a default of None
-            # We could actually allow other default types, but this one is common
+            # We could actually allow other default types, but this one is
+            # common
             return py_json
 
         for fieldname, fieldobj in cls.__dataclass_fields__.items():
@@ -41,12 +42,14 @@ def dataclass_to_json(cls):
                 try:  # see if it's "one of ours"
                     arg_dict[fieldname] = (fieldobj.type
                                            .from_py_json(py_json[fieldname],
-                                                         allow_none=allow_none))
+                                                         allow_none=allow_none)
+                                           )
                 except AttributeError:
                     # it's not, so we just use the value
                     arg_dict[fieldname] = py_json[fieldname]
                 except TypeError:
-                    raise TypeError(f'TypeError in {cls.__name__}._from_py_json(): '
+                    raise TypeError(f'TypeError in '
+                                    f'{cls.__name__}._from_py_json(): '
                                     f'field: {fieldname}')
 
         obj = cls(**arg_dict)
@@ -57,7 +60,8 @@ def dataclass_to_json(cls):
         function to convert a dataclass to json compatible python
 
         :param sparse=True: If sparse is True, only non-empty fields will be
-                            written. If False, then all fields will be included.
+                            written. If False, then all fields will be
+                            included.
 
         NOTE: could we use the dataclasses built-in .asdict?
               It would not support sparse.
@@ -77,17 +81,14 @@ def dataclass_to_json(cls):
 
         return json_obj
 
-
     def validate(self):
         """
-        Function to validate a dataclass with fields that have validate methods.
-
-        The validate methods are expected to return a list of validation messages.
+        Function to validate a dataclass with fields that have validate
+        methods.  The validate methods are expected to return a list of
+        validation messages.
 
         The top-level validator extends the existing list
         """
-        # print("validate called in: ", type(self))
-
         # first see if there is a "private" one:
         try:
             messages = self._validate()
@@ -96,14 +97,12 @@ def dataclass_to_json(cls):
 
         for fieldname, fieldobj in self.__dataclass_fields__.items():
             value = getattr(self, fieldname)
-            # print(f"trying to validate: {fieldname} with value: {repr(value)}")
             try:
                 # validate with the type's validate method
                 messages.extend(fieldobj.type.validate(value))
             except AttributeError:  # This one doesn't have a validate method.
                 pass
 
-        # print(f"in {type(self)} -- messages:\n", messages)
         return messages
 
     def __setattr__(self, name, val):
@@ -165,9 +164,3 @@ class JSON_List(list):
 
     def __repr__(self):
         return f"{self.__class__.__name__}({list.__repr__(self)})"
-
-
-    # def __str__(self):
-    #     # why don't either of this work? it's using this repr ??
-    #     # return super().__str__()
-    #     # return list.__str__(self)

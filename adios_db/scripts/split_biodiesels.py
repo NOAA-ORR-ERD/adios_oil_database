@@ -32,6 +32,7 @@ import logging
 from argparse import ArgumentParser
 from pathlib import Path
 from itertools import zip_longest
+import copy
 
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import SampleList
@@ -102,7 +103,8 @@ def split_biodiesels(base_path):
                                                          names, comments):
                     sample_id = sample.metadata.sample_id
 
-                    oil_new = Oil.from_py_json(oil_orig.py_json())
+                    oil_new = copy.deepcopy(oil_orig)
+
                     oil_new.metadata.name = name
                     oil_new.metadata.comments = comment
                     oil_new.oil_id = make_new_oil_id('EC', sample_id)
