@@ -7,7 +7,7 @@ TYPE:,LABEL ->,Crude Oil,Light Crude,Medium Crude,Heavy Crude,Bitumen,Refined Pr
 Crude Oil NOS,,x,x,x,x,x,,,,,,,,,,,,,,,,,,x,,,,
 Tight Oil,,x,,,,,,,,,,,,,,,,,,,,,,,,x,x,
 Condensate,,x,x,,,,,,,,,,,,,,,,,,,,,,,,,
-Bitumen Blend,,x,,,x,x,x,,,,,,,,,,,,,,,,,x,,,,
+Bitumen Blend,,x,,,x,x,,,,,,,,,,,,,,,,,,x,,,,
 Bitumen,,x,,,,x,,,,,,,,,,,,,,,,,,x,,,,
 Refined Product NOS,,,,,,,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,,,
 Fuel Oil NOS,,,,,,,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,,,,
