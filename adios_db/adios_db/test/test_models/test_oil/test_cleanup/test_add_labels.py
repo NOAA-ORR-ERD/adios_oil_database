@@ -43,19 +43,19 @@ def test_add_labels_to_oil_no_API():
     oil = Oil('XXXXX')
     oil.metadata.product_type = 'Crude Oil NOS'
 
-    assert get_suggested_labels(oil) == set(['Crude Oil'])
+    assert get_suggested_labels(oil) == set(['Crude Oil', 'Crude Oil NOS'])
 
 
 
 def test_add_labels_to_oil_no_labels_other():
     '''
-    we should never get a label for 'Other'
+    we should only get itself for 'Other'
     '''
     oil = Oil('XXXXX')
     oil.metadata.API = 32.0
     oil.metadata.product_type = 'Other'
 
-    assert get_suggested_labels(oil) == set()
+    assert get_suggested_labels(oil) == set(['Other'])
 
 
 @pytest.mark.parametrize('pt, api, labels', [('Crude Oil NOS', 32.0, {'Light Crude', 'Crude Oil'}),
@@ -69,12 +69,11 @@ def test_add_labels_to_oil_no_labels_other():
                                              ]
                          )
 def test_add_labels_to_oil_api(pt, api, labels):
-    '''
-    we should never get a label for 'Other'
-    '''
+
     oil = Oil('XXXXX')
     oil.metadata.API = api
     oil.metadata.product_type = pt
+    labels.add(pt)  # everything should have its product type as a label
 
     print("Product type:", pt)
     print("API:", api)
@@ -100,6 +99,8 @@ def test_add_labels_to_oil_api_and_visc(pt, api, kvis, kvis_temp, labels):
     oil = Oil('XXXXX')
     oil.metadata.API = api
     oil.metadata.product_type = pt
+    labels.add(pt)  # everything should have its product type as a label
+
     add_kin_viscosity_to_oil(oil, (kvis,), 15, 'cSt', kvis_temp, 'C')
 
     print("Product type:", pt)

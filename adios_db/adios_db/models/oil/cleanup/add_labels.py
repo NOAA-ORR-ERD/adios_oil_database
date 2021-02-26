@@ -95,7 +95,9 @@ def get_suggested_labels(oil):
     labels = set()
     pt = oil.metadata.product_type
     # everything gets its product type as a label as well
-    labels.add(pt)
+    # unless it has no product type
+    if pt:
+        labels.add(pt)
     if pt == "Other":  # we don't want any labels auto added for Other
         return labels
     try:
