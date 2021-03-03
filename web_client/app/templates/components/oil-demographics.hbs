@@ -68,6 +68,9 @@
             <span class="p-1">{{@oil.metadata.product_type}}</span>
           {{/if}}
         </div>
+      </div>
+
+      <div class="row pl-0 mb-1">
 
         {{! API }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
@@ -90,6 +93,12 @@
               {{/if}}
             {{/if}}
           {{/let}}
+        </div>
+        
+        {{! Model Completeness (not editable) }}
+        <div class="col-sm-12 col-md-7 pl-0 form-inline align-items-center">
+          <label class="p-1 input-group-text font-weight-bold">Completeness:</label>
+          <span class="p-1">{{@oil.metadata.model_completeness}}</span>
         </div>
 
       </div>
