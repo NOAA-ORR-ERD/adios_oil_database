@@ -22,7 +22,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos7-python3
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3
   tags:
     - docker
 
