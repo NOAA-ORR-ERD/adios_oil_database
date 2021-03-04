@@ -29,8 +29,8 @@ test_develop:
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
-    - conda update -y conda
     - conda install -y python=3.9
+    - conda update -y conda
 
   script:
     # install all the requirements
@@ -46,7 +46,7 @@ test_develop:
     - mkdir /var/log/mongodb
     - mkdir /var/run/mongodb
 
-    - mongod --config ../mongo_config_test.yml &
+    - mongod --config mongo_config_test.yml &
 
     # Install & test the adios_db package
     - cd adios_db
