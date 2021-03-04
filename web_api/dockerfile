@@ -16,7 +16,7 @@ RUN mkdir /var/log/mongodb
 RUN mkdir /var/run/mongodb
 
 # install deps
-RUN conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+RUN cd adios-db && conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
 
 RUN cd adios-db/adios_db && pip install -e ./
 
