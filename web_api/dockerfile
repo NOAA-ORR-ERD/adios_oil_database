@@ -1,7 +1,7 @@
 # Oil Database Web API Docker configuration
 #
 
-FROM registry.orr.noaa.gov/erd/centos7-python3
+FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3
 
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
