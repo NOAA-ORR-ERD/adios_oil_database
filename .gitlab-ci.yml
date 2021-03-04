@@ -32,6 +32,10 @@ test_develop:
     - echo "python version:"
     - which python
     - python --version
+    - conda update conda
+    - conda install python=3.9
+    - python --version
+
 #    - conda install -y requests lxml
 
   script:
