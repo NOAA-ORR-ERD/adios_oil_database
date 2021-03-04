@@ -29,34 +29,39 @@ test_develop:
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
-    - conda install -y requests lxml
-        
+#    - conda install -y requests lxml
+
   script:
-    # Install & test the oil_library package
+    # install all the requirements
+    - conda install -y --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+
+    # Install & test the adios_db package
     - cd adios_db
-    - conda install -y --file conda_requirements.txt
     - pip install -e ./
 
     # mongo should have been installed by conda, but conda doesn't reserve
     # places for the logs, the database, and the pidfile
+    # note: maybe we should update the test config so we don't need this??
+    #.      and then we could save the logs, etc as an artifact as well.
+
     - mkdir /var/lib/mongo
     - mkdir /var/log/mongodb
     - mkdir /var/run/mongodb
 
     - mongod --config ../mongo_config_test.yml &
 
-    - cd data/exxon_assays
-    - python ./download_exxon_assays.py
-    - cd -
+    # no longer doing all this importing for tests!
+    # - cd data/exxon_assays
+    # - python ./download_exxon_assays.py
+    # - cd -
 
-    - adios_db_init
-    - adios_db_import --all
+    # - adios_db_init
+    # - adios_db_import --all
 
     - pytest --mongo adios_db
 
     # Install & test the oil_library_api package
     - cd ../web_api
-    - conda install -y --file conda_requirements.txt
     - pip install -e ./
 
     - pytest adios_db_api
