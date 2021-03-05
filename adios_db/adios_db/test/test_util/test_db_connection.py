@@ -14,7 +14,10 @@ import pytest
 # Pass the --mongo command line option if you want these to run.
 pytestmark = pytest.mark.mongo
 
-from adios_db.util.db_connection import connect_mongodb
+try:
+    from adios_db.util.db_connection import connect_mongodb
+except ModuleNotFoundError:
+    pass  # Don't want to error out if these tests are skipped
 
 
 @pytest.fixture

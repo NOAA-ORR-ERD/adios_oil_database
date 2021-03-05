@@ -94,11 +94,11 @@ class SampleList(JSON_List):
                     or self[0].physical_properties.densities is None):
                 msgs.append(WARNINGS["W006"])
 
-            # check_for_distillation_cuts
-            try:
-                if not self[0].distillation_data.cuts:
-                    msgs.append(WARNINGS['W007'])
-            except AttributeError:
-                msgs.append(WARNINGS['W007'])
+            # # check_for_distillation_cuts
+            # try:
+            #     if not self[0].distillation_data.cuts:
+            #         msgs.append(WARNINGS['W007'])
+            # except AttributeError:
+            #     msgs.append(WARNINGS['W007'])
 
         return msgs

@@ -181,23 +181,24 @@ def test_no_densities(big_record):
     assert snippet_not_in_oil_status("W006:", oil)
 
 
-def test_distillation_cuts(big_record):
-    oil = big_record
+# No longer checking for distillation cuts.
+# def test_distillation_cuts(big_record):
+#     oil = big_record
 
-    validate(oil)
+#     validate(oil)
 
-    assert snippet_not_in_oil_status("W007:", oil)
+#     assert snippet_not_in_oil_status("W007:", oil)
 
 
-def test_no_distillation_cuts(big_record):
-    oil = big_record
+# def test_no_distillation_cuts(big_record):
+#     oil = big_record
 
-    # remove the cut data
-    oil.sub_samples[0].distillation_data = []
-    validate(oil)
-    print(oil.status)
+#     # remove the cut data
+#     oil.sub_samples[0].distillation_data = []
+#     validate(oil)
+#     print(oil.status)
 
-    assert snippet_in_oil_status("W007:", oil)
+#     assert snippet_in_oil_status("W007:", oil)
 
 
 def test_none_year_in_reference(big_record):

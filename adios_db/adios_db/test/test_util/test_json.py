@@ -3,6 +3,13 @@ import pytest
 pytestmark = pytest.mark.skipif(True,
                                 reason="skipping these -- code no longer needed")
 
+# Pass the --mongo command line option if you want these to run.
+# they require a mongo database to be running on localhost
+
+pytestmark = pytest.mark.mongo
+
+print("IN TEST:", pytest.mark.mongo)
+
 try:
       from bson.objectid import ObjectId
 
@@ -10,7 +17,11 @@ try:
                                       json_to_bson_obj_id,
                                       ObjFromDict)
 except ImportError:
-    pass  # skipping anyway
+    # so this can run when the tests are skipped
+    # if pymongo isn't there
+    class ObjectId:
+        def __init__(self, id):
+            pass
 
 
 class TestBson(object):

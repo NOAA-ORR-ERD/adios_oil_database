@@ -6,10 +6,12 @@ import pytest
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.product_type import types_to_labels
 
-from adios_db.util.db_connection import connect_mongodb
-from adios_db.scripts.db_initialize import init_db
-from adios_db.scripts.db_restore import restore_db
-
+try:
+    from adios_db.util.db_connection import connect_mongodb
+    from adios_db.scripts.db_initialize import init_db
+    from adios_db.scripts.db_restore import restore_db
+except ModuleNotFoundError:
+    pass  # we don't want this to fail if these tests are skipped
 
 here = Path(__file__).resolve().parent
 
