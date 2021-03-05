@@ -40,11 +40,16 @@ synonyms_for_product_types = {'Crude Oil',
                               'Fracking Oil',
                               'Fuel Oil',
                               'Residual Fuel',
+                              'Distillate Fuel',
                               'Refined Product',
-                              'Condensate'
                               'Transformer Oil',
                               }
-
+# If it's an exact match, then it's definitely a synonym
+for pt, labels in types_to_labels.labels.items():
+    for label in labels:
+        if label == pt:
+            print(f"adding: {label}")
+            synonyms_for_product_types.add(label)
 
 # these are labels that are synonymous to other labels
 synonyms_for_labels = {'Heavy Fuel Oil': ['HFO', 'No. 6 Fuel Oil', 'Bunker C'],
