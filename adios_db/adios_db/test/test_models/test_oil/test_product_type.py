@@ -47,8 +47,7 @@ def test_load_from_csv_file():
     mapping = load_from_csv_file(example_file)
 
     assert list(mapping.keys()) == ['Crude Oil NOS', 'Condensate', 'Bitumen Blend']
-    assert mapping['Crude Oil NOS'] == {'Crude Oil NOS',
-                                        'Light Crude',
+    assert mapping['Crude Oil NOS'] == {'Light Crude',
                                         'Tight Oil',
                                         'Crude Oil',
                                         'Medium Crude',
@@ -57,17 +56,18 @@ def test_load_from_csv_file():
                                         'Bitumen Blend'}
 
 
-def test_product_types_labels():
-    """
-    checks that all the product types are listed in the labels
+# we are no longer adding all the product types to the labels
+# def test_product_types_labels():
+#     """
+#     checks that all the product types are listed in the labels
 
-    This is using the data loaded in the module
-    """
+#     This is using the data loaded in the module
+#     """
 
-    print(types_to_labels.labels.keys())
+#     print(types_to_labels.labels.keys())
 
-    for pt, labels in types_to_labels.labels.items():
-        assert pt in labels
+#     for pt, labels in types_to_labels.labels.items():
+#         assert pt in labels
 
 
 

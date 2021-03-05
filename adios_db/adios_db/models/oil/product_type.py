@@ -59,7 +59,8 @@ def load_from_csv_file(filepath=None):
                 if val.strip():
                     ptypes_labels.setdefault(pt, set()).add(labels[i])
             # add the pt to the labels
-            ptypes_labels.setdefault(pt, set()).add(pt)
+            # not doing this anymore.
+            # ptypes_labels.setdefault(pt, set()).add(pt)
         return ptypes_labels
 
 
