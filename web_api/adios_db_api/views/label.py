@@ -1,20 +1,11 @@
 import logging
 
-import ujson
-
 from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
-                                    HTTPNotFound,
-                                    HTTPUnsupportedMediaType)
-
-from bson.objectid import ObjectId
-from bson.errors import InvalidId
-
-from adios_db.util.json import fix_bson_ids
+                                    HTTPNotFound)
 
 from adios_db_api.common.views import (cors_policy,
-                                       obj_id_from_url,
-                                       can_modify_db)
+                                       obj_id_from_url)
 
 
 logger = logging.getLogger(__name__)
@@ -35,7 +26,8 @@ def get_labels(request):
     try:
         res = request.mdb_client.get_labels(obj_id)
     except ValueError as e:
-        raise HTTPBadRequest(e)
+        raise logger.error(e)
+        raise HTTPBadRequest("Bad object ID")
 
     if res is None:
         raise HTTPNotFound('label object not found')
