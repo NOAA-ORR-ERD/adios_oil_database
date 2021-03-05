@@ -56,6 +56,10 @@ class LabelTests(LabelTestBase):
 
             assert c_id == cat['_id']
 
+    # For the moment, we are hard-coding the labels to match a .csv file
+    # in the adios_db python package.  So we can't perform any modifications.
+    # The labels might go back into the database sometime though, so instead of
+    # deleting these tests, we will skip them.
     @pytest.mark.skip
     def test_post_no_payload(self):
         self.testapp.post_json('/labels', status=400)

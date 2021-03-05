@@ -26,7 +26,7 @@ def get_labels(request):
     try:
         res = request.mdb_client.get_labels(obj_id)
     except ValueError as e:
-        raise logger.error(e)
+        logger.error(e)
         raise HTTPBadRequest("Bad object ID")
 
     if res is None:
