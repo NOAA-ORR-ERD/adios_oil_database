@@ -208,6 +208,10 @@ ul.ember-power-select-options {
 .scrollbar-width-tester {
     position: absolute;
 }
+.tse-scrollbar.vertical .drag-handle {
+  right: 2px;
+  width: 0.7em;
+}
 
 $ember-power-select-multiple-selection-background-color: #17a2b8;
 $ember-power-select-multiple-selection-color: #ffffff;
