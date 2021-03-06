@@ -74,7 +74,8 @@ def get_oils(request):
             start, stop = [limit * i for i in (page, page + 1)]
             logger.info('start, stop = {}, {}'.format(start, stop))
         except Exception as e:
-            raise HTTPBadRequest(e)
+            logger.error(e)
+            raise HTTPBadRequest("Could not determine paging range")
 
         search_opts = get_search_params(request)
         sort = get_sort_params(request)
@@ -159,20 +160,18 @@ def insert_oil(request):
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
     except Exception as e:
-        raise HTTPBadRequest(e)
+        logger.error(e)
+        raise HTTPBadRequest("Error parsing oil JSON")
 
     try:
         oil_obj = get_oil_from_json_req(json_obj)
     except Exception as e:
         logger.error(f'Validation Error: {e}')
+        raise HTTPBadRequest("Error validating oil JSON")
 
     try:
         logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
 
-        # if 'oil_id' in oil_obj:
-        #     oil_obj['_id'] = oil_obj['oil_id']
-        # else:
-        #     oil_obj['_id'] = oil_obj['oil_id'] = new_oil_id(request)
         if 'oil_id' not in oil_obj:
             oil_obj['oil_id'] = new_oil_id(request)
 
@@ -183,11 +182,14 @@ def insert_oil(request):
         mongo_id = (request.mdb_client.oil
                            .insert_one(oil_obj)
                            .inserted_id)
+        logger.info(f'insert oil with mongo ID: {mongo_id}, '
+                    f'oil ID: {oil_obj["oil_id"]}')
     except DuplicateKeyError as e:
-        raise HTTPConflict(detail=e)
+        logger.error(e)
+        raise HTTPConflict('Insert failed: Duplicate Key')
     except Exception as e:
         logger.error(e)
-        raise HTTPUnsupportedMediaType(detail=e)
+        raise HTTPUnsupportedMediaType("Unknown Error")
 
     return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
 
@@ -206,7 +208,7 @@ def update_oil(request):
         if not isinstance(json_obj, dict):
             raise ValueError('JSON dict is the only acceptable payload')
     except Exception:
-        raise HTTPBadRequest
+        raise HTTPBadRequest('Could not parse oil JSON')
 
     try:
         oil_obj = get_oil_from_json_req(json_obj)
@@ -223,9 +225,9 @@ def update_oil(request):
 
         memoized_results.pop(oil_obj['oil_id'], None)
     except Exception as e:
-        raise HTTPUnsupportedMediaType(detail=e)
+        logger.error(e)
+        raise HTTPUnsupportedMediaType()
 
-#    return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
     return generate_jsonapi_response_from_oil(oil_obj)
 
 
@@ -259,7 +261,7 @@ def delete_oil(request):
 
         return res
     else:
-        raise HTTPBadRequest
+        raise HTTPBadRequest()
 
 
 def new_oil_id(request):
@@ -307,26 +309,6 @@ def get_oil_from_json_req(json_obj):
     return oil_obj
 
 
-# no longer neededL only oil_id is used
-# def fix_oil_id(oil_json, obj_id=None):
-#     '''
-#         Okay, pymongo lets you specify the id of a new record, but it needs
-#         to be the '_id' field. So we need to ensure that the '_id' field
-#         exists.
-#         The rule then is that:
-#         - Ember json serializer PUTs the id in the URL, so we look for it there
-#           first.
-#         - the 'oil_id' is a required field, and the '_id' field will be copied
-#           from it.
-#     '''
-#     if obj_id is not None:
-#         oil_json['_id'] = oil_json['oil_id'] = obj_id
-#     elif 'oil_id' in oil_json:
-#         oil_json['_id'] = oil_json['oil_id']
-#     else:
-#         raise ValueError('oil_id field is required')
-
-
 def generate_jsonapi_response_from_oil(oil_obj):
     json_obj = {'data': {'attributes': oil_obj}}
 
@@ -346,7 +328,6 @@ def get_oil_searchable_fields(oil):
     However, searching on bad records being bad is, well, OK.
     As long as it doesn't crash
     '''
-    # unpack the relevant fields
     try:
         meta = oil['metadata']
 
@@ -386,4 +367,3 @@ def get_oil_all_fields(oil):
                  'type': 'oils',
                  'attributes': oil},
         }
-

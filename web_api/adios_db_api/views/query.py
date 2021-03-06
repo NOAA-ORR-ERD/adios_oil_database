@@ -43,7 +43,7 @@ def query_oils(request):
     if table_name in db.list_collection_names():
         collection = getattr(db, table_name)
     else:
-        raise HTTPBadRequest('Invalid table name {}!'.format(table_name))
+        raise HTTPBadRequest('Invalid table name')
 
     log.info('<< ' + log_prefix)
 

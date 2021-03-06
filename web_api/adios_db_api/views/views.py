@@ -1,6 +1,6 @@
 """ Cornice services.
 
-    Nothing here now -- it was jsut for testing
+    Nothing here now -- it was just for testing
 """
 pass
 
@@ -14,4 +14,3 @@ pass
 # def get_info(request):
 #     """Returns Hello in JSON."""
 #     return {'Hello': ', welcome to the Oil Database API!!'}
-

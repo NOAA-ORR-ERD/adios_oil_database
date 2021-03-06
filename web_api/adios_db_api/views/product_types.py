@@ -28,7 +28,8 @@ def get_product_types(request):
         try:
             obj_id = int(obj_id)
         except TypeError as e:
-            raise HTTPBadRequest(e)
+            logger.error(e)
+            raise HTTPBadRequest('Bad Object ID')
 
         if obj_id != 0:
             raise HTTPNotFound()
