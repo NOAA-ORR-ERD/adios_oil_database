@@ -35,7 +35,8 @@ def add_the_labels():
 
     base_dir, dry_run = process_input(USAGE)
 
-    with open("labels.txt", 'w') as outfile:
+    with open("labels.csv", 'w') as outfile:
+        outfile.write("ID, Name, Product Type, Labels\n")
 
         for oil, pth in get_all_records(base_dir):
 
@@ -51,7 +52,7 @@ def add_the_labels():
                 if not replace:
                     labels.update(oil.metadata.labels)
 
-                outfile.write(f"{id}: {name}\nProduct Type: {pt}\nLabels: {labels}\n\n")
+                outfile.write(f"{id}, {name}, {pt}, {str(labels).strip('{}')}\n")
                 if not dry_run:
                     print("Saving out:", pth)
                     oil.metadata.labels = list(labels)

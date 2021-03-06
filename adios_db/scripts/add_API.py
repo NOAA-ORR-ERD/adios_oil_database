@@ -47,16 +47,18 @@ def main():
         fixer = FixAPI(rec)
         flag, msg = fixer.check()
         if flag is True:
-            print(msg)
-            print("Cleaning up!")
-            fixer.cleanup()
-            print("API is now:", rec.metadata.API)
-            if not dry_run:
-                print("Saving out:", pth)
-                rec.to_file(pth)
+            if rec.metadata.product_type == "Crude Oil NOS":
+                print(msg)
+                print("Cleaning up!")
+                fixer.cleanup()
+                print("API is now:", rec.metadata.API)
+                if not dry_run:
+                    print("Saving out:", pth)
+                    rec.to_file(pth)
+                else:
+                    print("Nothing saved")
             else:
-                print("Nothing saved")
-
+                print("Not changing it -- it's a:", rec.metadata.product_type )
 
 if __name__ == "__main__":
     main()
