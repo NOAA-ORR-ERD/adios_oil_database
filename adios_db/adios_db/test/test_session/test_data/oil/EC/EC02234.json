@@ -13,9 +13,8 @@
         "API": 20.93,
         "comments": "Via CanmetEnergy, Natural Resources Canada",
         "labels": [
-            "Heavy Crude",
             "Crude Oil",
-            "Bitumen Blend"
+            "Heavy Crude"
         ],
         "model_completeness": 94
     },

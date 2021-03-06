@@ -7,6 +7,7 @@ from pathlib import Path
 import json
 
 from adios_db.models.oil.oil import Oil
+from adios_db.models.oil.location_coordinates import LocationCoordinates
 
 
 def get_all_records(data_dir):

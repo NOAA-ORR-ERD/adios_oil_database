@@ -11,9 +11,8 @@
         "product_type": "Crude Oil NOS",
         "API": 13.6,
         "labels": [
-            "Heavy Crude",
-            "Crude Oil NOS",
-            "Crude Oil"
+            "Crude Oil",
+            "Heavy Crude"
         ],
         "model_completeness": 49
     },
