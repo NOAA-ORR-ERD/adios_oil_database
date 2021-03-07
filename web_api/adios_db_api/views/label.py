@@ -5,12 +5,13 @@ from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound)
 
 from adios_db_api.common.views import (cors_policy,
+                                       cors_response,
                                        obj_id_from_url)
 
 
 logger = logging.getLogger(__name__)
 
-label_api = Service(name='label', path='/labels*obj_id',
+label_api = Service(name='label', path='/labels/*obj_id',
                     description="Label APIs", cors_policy=cors_policy)
 
 

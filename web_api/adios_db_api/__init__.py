@@ -77,6 +77,24 @@ def about(_request):
     return Response(msg)
 
 
+def default_not_found_response(_request):
+    msg = '''
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <title>404 Not Found</title>
+          </head>
+          <body>
+            <h1>404 Not Found</h1>
+
+            The resource could not be found.<br>
+            <br>
+          </body>
+        </html>
+    '''
+    return Response(msg, status='404 Not Found')
+
+
 def json_datetime_part(o):
     '''
         This is only necessary if we are using the builtin json module
@@ -165,5 +183,6 @@ def main(_global_config, **settings):
     # setup the about endpoint
     config.add_route('about', '/about')
     config.add_view(about, route_name='about')
+    config.add_notfound_view(default_not_found_response, append_slash=True)
 
     return config.make_wsgi_app()

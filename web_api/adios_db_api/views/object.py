@@ -14,7 +14,7 @@ from adios_db_api.common.views import cors_policy, obj_id_from_url
 
 logger = logging.getLogger(__name__)
 
-object_api = Service(name='object', path='/object*obj_id',
+object_api = Service(name='object', path='/object/*obj_id',
                      description="Get an object by ID",
                      cors_policy=cors_policy)
 
@@ -33,12 +33,17 @@ def get_object(request):
     if obj_id is None:
         raise HTTPBadRequest('Object ID required')
     else:
-        db = request.db
+        db = request.mdb_client.db
+
+        try:
+            obj_id = ObjectId(obj_id)
+        except Exception:
+            pass  # just use the obj_id as-is
 
         for cname in db.collection_names():
             collection = getattr(db, cname)
 
-            obj = collection.find_one({'_id': ObjectId(obj_id)})
+            obj = collection.find_one({'_id': obj_id})
 
             if obj is None:
                 continue
