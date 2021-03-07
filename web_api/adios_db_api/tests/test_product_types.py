@@ -12,7 +12,8 @@ from adios_db.models.oil.product_type import PRODUCT_TYPES
 
 
 def test_get_product_types(testapp):
-    resp = testapp.get("/product-types")
+    testapp.get("/product-types", status=307)
+    resp = testapp.get("/product-types/")
 
     result = resp.json_body
     product_types = result[0]['product_types']
@@ -27,6 +28,8 @@ def test_post(testapp):
     should get an error 405 Method Not Allowed
     """
     testapp.post_json("/product-types", params={"arbitrary": 'data'},
+                      status=307)
+    testapp.post_json("/product-types/", params={"arbitrary": 'data'},
                       status=405)
 
 
@@ -35,6 +38,8 @@ def test_put(testapp):
     should get an error 405 Method Not Allowed
     """
     testapp.put_json("/product-types", params={"arbitrary": 'data'},
+                     status=307)
+    testapp.put_json("/product-types/", params={"arbitrary": 'data'},
                      status=405)
 
 
@@ -42,4 +47,5 @@ def test_delete_bad_req(testapp):
     """
     should get an error 405 Method Not Allowed
     """
-    testapp.delete('/product-types', status=405)
+    testapp.delete('/product-types', status=307)
+    testapp.delete('/product-types/', status=405)
