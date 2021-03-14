@@ -6,6 +6,7 @@ import logging
 from slugify import Slugify
 
 from dateutil import parser
+from itertools import zip_longest
 
 custom_slugify = Slugify(to_lower=True, separator='_')
 
@@ -45,14 +46,6 @@ def parse_time(func):
 
               Fortunately, dateutil will handle these without problems
     '''
-    def parse_single_datetime(date_str):
-        if isinstance(date_str, datetime):
-            return date_str
-        elif isinstance(date_str, str):
-            return parser.parse(date_str, default=datetime(1970, 1, 1, 0, 0))
-        else:
-            return None
-
     def wrapper(*args, **kwargs):
         ret = func(*args, **kwargs)
         if isinstance(ret, (tuple, list, set, frozenset)):
@@ -61,6 +54,15 @@ def parse_time(func):
             return parse_single_datetime(ret)
 
     return wrapper
+
+
+def parse_single_datetime(date_str):
+    if isinstance(date_str, datetime):
+        return date_str
+    elif isinstance(date_str, str):
+        return parser.parse(date_str, default=datetime(1970, 1, 1, 0, 0))
+    else:
+        return None
 
 
 def date_only(func):
@@ -80,6 +82,10 @@ class ParserBase(object):
     '''
         Only things that are common to all parsers
     '''
+    def __init__(self, values):
+        self.src_values = values
+        self.oil_obj = {}
+
     def slugify(self, label):
         '''
             Generate a string that is suitable for use as an object attribute.
@@ -101,3 +107,61 @@ class ParserBase(object):
         prefix = '_' if label[0].isdigit() else ''
 
         return prefix + custom_slugify(label)
+
+    def deep_set(self, obj, attr_path, value):
+        '''
+            Navigate a period ('.') delimited path of attribute values into the
+            oil data structure and set a value at that location in the
+            structure.
+
+            Example paths:
+            - sub_samples.0.metadata.sample_id  (sub_samples is assumed to be
+                                                 a list, and we go to the zero
+                                                 index for that part)
+            - physical_properties.densities.-1  (appends an item to the
+                                                 densities list)
+        '''
+        if isinstance(attr_path, str):
+            attr_path = attr_path.split('.')
+
+        attr_path, attr = attr_path[:-1], attr_path[-1]
+
+        for p, next_p in zip_longest(attr_path, attr_path[1:] + [attr]):
+            if next_p is not None and self.is_int(next_p):
+                path_value_to_generate = []
+            else:
+                path_value_to_generate = {}
+
+            if self.is_int(p):
+                p_int = int(p)
+
+                if p_int >= len(obj):
+                    obj += [None] * (p_int - len(obj) + 1)
+                elif p_int == -1:
+                    obj.append(None)
+                elif p_int < 0:  # any other negative index
+                    raise IndexError('Negative indexes other than -1 '
+                                     'are not allowed')
+
+                if obj[p_int] is None:
+                    obj[p_int] = path_value_to_generate
+            else:
+                if p not in obj:
+                    obj[p] = path_value_to_generate
+
+            if self.is_int(p):
+                obj = obj[int(p)]
+            else:
+                obj = obj[p]
+
+        if self.is_int(attr) and int(attr) == -1:
+            obj.append(value)
+        else:
+            obj[attr] = value
+
+    def is_int(self, value):
+        try:
+            int(value)
+            return True
+        except Exception:
+            return False

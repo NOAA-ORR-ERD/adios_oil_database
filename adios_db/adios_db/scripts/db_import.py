@@ -15,9 +15,9 @@ from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
                                            OilLibraryRecordParser,
                                            OilLibraryAttributeMapper)
 
-from adios_db.data_sources.env_canada import (EnvCanadaOilExcelFile,
-                                              EnvCanadaRecordParser,
-                                              EnvCanadaRecordMapper)
+from adios_db.data_sources.env_canada.v1 import EnvCanadaRecordMapper
+from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
+                                                 EnvCanadaCsvRecordParser)
 
 from adios_db.data_sources.exxon_assays import (ExxonDataReader,
                                                 ExxonRecordParser,
@@ -65,8 +65,8 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
                OilLibraryAttributeMapper],
               ['Environment Canada', 'oildb.ec_files',
                None,
-               EnvCanadaOilExcelFile,
-               EnvCanadaRecordParser,
+               EnvCanadaCsvFile,
+               EnvCanadaCsvRecordParser,
                EnvCanadaRecordMapper],
               # ('Exxon Assays', add_exxon_records)
               ['Exxon Assays', 'oildb.exxon_files',
@@ -254,18 +254,20 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
             total_count += 1
 
             try:
-                oil_obj = mapper_cls(parser_cls(*record_data))
+                parser = parser_cls(*record_data)
 
-                oil_pyjson = oil_obj.py_json()
+                #oil_obj = mapper_cls(parser_cls(*record_data))
+
+                #oil_pyjson = oil_obj.py_json()
 
                 # this is obsolete code
                 # and shouldn't happen on import anyway
                 # link_oil_to_labels(oil_pyjson)
 
-                oil = validate_json(oil_pyjson)
-                set_completeness(oil)
+                #oil = validate_json(oil_pyjson)
+                #set_completeness(oil)
 
-                oil_collection.insert_one(oil.py_json())
+                #oil_collection.insert_one(oil.py_json())
             except DuplicateKeyError as e:
                 if overwrite is True:
                     try:
@@ -328,8 +330,7 @@ def _add_norway_files(settings):
 
 def _add_ec_files(settings):
     ec_files = '\n'.join([os.path.join(data_path, 'env_canada', fn)
-                          for fn in ('April 2020-Physiochemical_properties_'
-                                     'of_petroleum_products. EN.xlsm',)])
+                          for fn in ('ests_data_03-03-2021.csv',)])
 
     settings['oildb.ec_files'] = ec_files
 
