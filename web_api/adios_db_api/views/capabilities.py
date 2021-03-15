@@ -4,10 +4,12 @@ from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound)
 
-from adios_db_api.common.views import cors_policy, obj_id_from_url
+from adios_db_api.common.views import (cors_policy,
+                                       cors_response,
+                                       obj_id_from_url)
 
 
-capabilities_api = Service(name='capabilities', path='/capabilities*obj_id',
+capabilities_api = Service(name='capabilities', path='/capabilities/*obj_id',
                            description=('List the capabilities of the '
                                         'oil database API'),
                            cors_policy=cors_policy)

@@ -23,7 +23,7 @@ from adios_db_api.common.views import (cors_policy,
 
 logger = logging.getLogger(__name__)
 
-oil_api = Service(name='oil', path='/oils*obj_id',
+oil_api = Service(name='oil', path='/oils/*obj_id',
                   description="List All Oils", cors_policy=cors_policy)
 
 
@@ -360,6 +360,7 @@ def get_oil_all_fields(oil):
     '''
         Get the full record in JSON API compliant form.
     '''
+    logger.info(f'oil object _id: {oil["_id"]}')
     oil.pop('_id', None)
 
     return {

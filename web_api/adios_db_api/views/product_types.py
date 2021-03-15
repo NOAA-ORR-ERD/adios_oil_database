@@ -12,7 +12,7 @@ from adios_db.models.oil.product_type import PRODUCT_TYPES
 logger = logging.getLogger(__name__)
 
 product_types_api = Service(name='product-types',
-                            path='/product-types*obj_id',
+                            path='/product-types/*obj_id',
                             description="Endpoint for getting product types",
                             cors_policy=cors_policy)
 
