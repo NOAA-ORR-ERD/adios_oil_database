@@ -48,7 +48,7 @@ synonyms_for_product_types = {'Crude Oil',
 for pt, labels in types_to_labels.labels.items():
     for label in labels:
         if label == pt:
-            print(f"adding: {label}")
+            # print(f"adding: {label}")
             synonyms_for_product_types.add(label)
 
 # these are labels that are synonymous to other labels

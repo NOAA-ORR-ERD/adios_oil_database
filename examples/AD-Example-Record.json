@@ -1,4 +1,5 @@
 {
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "API": 37.0,
         "comments": "This oil is a EPS standard oil for dispersant testing.",
