@@ -1,5 +1,6 @@
 {
     "oil_id": "AD00017",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "ADGO",
         "source_id": "AD00017",
