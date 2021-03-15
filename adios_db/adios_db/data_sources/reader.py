@@ -65,6 +65,9 @@ class CsvFile:
         except Exception:
             pass
 
+        if field == '':
+            field = None
+
         return field
 
     def rewind(self):

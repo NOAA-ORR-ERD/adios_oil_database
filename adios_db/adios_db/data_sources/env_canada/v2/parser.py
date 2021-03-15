@@ -57,9 +57,6 @@ class ECMeasurementDataclass:
         if self.replicates == 'N/A':
             self.replicates = None
 
-        if self.unit_of_measure is not None:
-            self.unit_of_measure = self.unit_of_measure.lower()
-
     def parse_temperature_string(self):
         if self.temperature is not None and len(self.temperature) > 0:
             self.ref_temp, self.ref_temp_unit = re.findall(r'[\d\.]*\w+',
@@ -71,7 +68,7 @@ class ECMeasurementDataclass:
 
     def determine_unit_type(self):
         try:
-            self.unit_type = UNIT_TYPES[self.unit_of_measure]
+            self.unit_type = UNIT_TYPES[self.unit_of_measure.lower()]
         except KeyError:
             self.unit_type = None
 
@@ -106,6 +103,10 @@ class ECDensity(ECMeasurement):
     value_attr = 'density'
 
 
+class ECViscosity(ECMeasurement):
+    value_attr = 'viscosity'
+
+
 mapping_list = [
     # ('property', 'mapped_property', 'to_type', 'scope'),
     ('oil_name', 'metadata.name', str, 'oil'),
@@ -115,6 +116,8 @@ mapping_list = [
     ('comments', 'metadata.comments', str, 'oil'),
     # the following mappings deal with a measurement row packaged into an obj
     ('Density.Density', 'physical_properties.densities.-1', ECDensity, 'sample'),
+    ('Dynamic Viscosity.Dynamic Viscosity',
+     'physical_properties.dynamic_viscosities.-1', ECViscosity, 'sample'),
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
@@ -250,6 +253,9 @@ class EnvCanadaCsvRecordParser(ParserBase):
         # API needs special treatment
         if self.API:
             self.deep_set(self.oil_obj, 'metadata.API', self.API)
+
+        oil_id = f'EC{int(self.oil_obj["metadata"]["source_id"]):05}'
+        self.oil_obj['oil_id'] = oil_id
 
     def set_aggregate_oil_property(self, attr):
         '''
@@ -442,6 +448,9 @@ class EnvCanadaCsvRecordParser(ParserBase):
                           experiments where measurements were taken.
             - method: A line of text showing the name of the testing method.
         '''
+        if obj_in['value'] is None:
+            return  # not a valid measurement
+
         try:
             attr = f'{obj_in["property_group"]}.{obj_in["property_name"]}'
             mapped_attr = property_map[attr]
@@ -460,7 +469,6 @@ class EnvCanadaCsvRecordParser(ParserBase):
 
         # destination type is a datatype or a class
         if hasattr(to_type, 'from_obj') and hasattr(to_type, 'py_json'):
-            print(f'to_type = {to_type}')
             value = to_type.from_obj(obj_in).py_json()
         else:
             value = "Value Not Set"
