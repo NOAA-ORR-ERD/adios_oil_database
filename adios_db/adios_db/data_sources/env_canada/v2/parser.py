@@ -34,6 +34,7 @@ class ECMeasurementDataclass:
         - method
         - ref_temp (Temperature Measurement type)
     '''
+    property_name: str = None
     value: float = None
     min_value: float = None
     max_value: float = None
@@ -178,6 +179,19 @@ class ECPourPoint(ECFlashPoint):
     pass
 
 
+class ECAdhesion(ECFlashPoint):
+    value_attr = 'adhesion'
+
+
+class ECEvaporationEq(ECMeasurement):
+    def py_json(self):
+        ret = super().py_json()
+        ret['equation'] = self.property_name
+        ret['measurement'] = ret['measurement']['value']
+
+        return ret
+
+
 mapping_list = [
     # ('property', 'mapped_property', 'to_type', 'scope'),
     ('oil_name', 'metadata.name', str, 'oil'),
@@ -200,6 +214,24 @@ mapping_list = [
     ('Pour Point.Pour Point', 'physical_properties.pour_point',
      ECPourPoint, 'sample'),
     # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
+    # Note: we will save distillation for later because it is in a different
+    #       format from everything else.
+    ('Adhesion.Adhesion', 'environmental_behavior.adhesion', ECAdhesion, 'sample'),
+    # Note: ESTS Evaporation
+    ('Evaporation Equation.A For %Ev = (A +B) Ln T',
+     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+    ('Evaporation Equation.B For %Ev = (A +B) Ln T',
+     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+    ('Evaporation Equation.A For %Ev = (A + B) Sqrt (T)',
+     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+    ('Evaporation Equation.B For %Ev = (A + B) Sqrt (T)',
+     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+    ('Evaporation Equation.A For %Ev= A+ B Ln (t+C)',
+     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+    ('Evaporation Equation.B For %Ev= A+ B Ln (t+C)',
+     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+    ('Evaporation Equation.C For %Ev= A+ B Ln (t+C)',
+     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
