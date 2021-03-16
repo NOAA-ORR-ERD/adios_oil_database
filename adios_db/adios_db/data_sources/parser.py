@@ -118,30 +118,34 @@ class ParserBase(object):
             - sub_samples.0.metadata.sample_id  (sub_samples is assumed to be
                                                  a list, and we go to the zero
                                                  index for that part)
-            - physical_properties.densities.-1  (appends an item to the
-                                                 densities list)
+            - physical_properties.densities.-1  (densities is assumed to be a
+                                                 list, goes to the last item)
+            - physical_properties.densities.+   (appends an item to the
+                                                 densities list and goes to
+                                                 that part.  the index value
+                                                 is assumed to be -1 in this
+                                                 case)
         '''
         if isinstance(attr_path, str):
             attr_path = attr_path.split('.')
 
-        attr_path, attr = attr_path[:-1], attr_path[-1]
-
-        for p, next_p in zip_longest(attr_path, attr_path[1:] + [attr]):
-            if next_p is not None and self.is_int(next_p):
+        for p, next_p in zip_longest(attr_path[:-1], attr_path[1:]):
+            if (next_p is not None and
+                    (self.is_int(next_p) or next_p == '+')):
                 path_value_to_generate = []
             else:
                 path_value_to_generate = {}
 
+            if p == '+':
+                obj.append(None)
+                p = -1
+
             if self.is_int(p):
                 p_int = int(p)
 
-                if p_int >= len(obj):
-                    obj += [None] * (p_int - len(obj) + 1)
-                elif p_int == -1:
-                    obj.append(None)
-                elif p_int < 0:  # any other negative index
-                    raise IndexError('Negative indexes other than -1 '
-                                     'are not allowed')
+                idx_size = abs(p_int) + 1 if p_int >= 0 else abs(p_int)
+                if idx_size > len(obj):
+                    obj += [None] * (idx_size - len(obj))
 
                 if obj[p_int] is None:
                     obj[p_int] = path_value_to_generate
@@ -154,10 +158,13 @@ class ParserBase(object):
             else:
                 obj = obj[p]
 
-        if self.is_int(attr) and int(attr) == -1:
-            obj.append(value)
-        else:
-            obj[attr] = value
+        attr_path, attr = attr_path[:-1], attr_path[-1]
+
+        if attr == '+':
+            obj.append(None)
+            attr = -1
+
+        obj[attr] = value
 
     def is_int(self, value):
         try:

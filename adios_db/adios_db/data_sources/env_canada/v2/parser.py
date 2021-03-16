@@ -77,10 +77,15 @@ class ECMeasurementDataclass:
             first one.
 
             Temperature units need to be stripped of the degree character
+
+            percent fractions tend to have the values ('% w/w', '% v/v').
         '''
         unit = self.unit_of_measure.split(' or ')[0]
 
         unit = unit.lstrip('°')
+
+        if unit.startswith('%'):
+            unit = '%'
 
         self.unit_of_measure = unit
 
@@ -154,6 +159,9 @@ class ECInterfacialTension(ECMeasurement):
     value_attr = 'tension'
 
     def py_json(self):
+        '''
+            What do we do when the value is 'Too Viscous'?
+        '''
         ret = super().py_json()
 
         if 'salt water' in self.condition_of_analysis:
@@ -192,6 +200,27 @@ class ECEvaporationEq(ECMeasurement):
         return ret
 
 
+class ECEmulsion(ECMeasurement):
+    def py_json(self):
+        ret = super().py_json()
+
+        ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
+        if self.condition_of_analysis.lower() == 'one week after formation':
+            ret['age']['value'] = 7
+
+        return ret
+
+
+class ECDispersibility(ECFlashPoint):
+    value_attr = 'effectiveness'
+
+    def py_json(self):
+        ret = super().py_json()
+        ret['dispersant'] = self.condition_of_analysis
+
+        return ret
+
+
 mapping_list = [
     # ('property', 'mapped_property', 'to_type', 'scope'),
     ('oil_name', 'metadata.name', str, 'oil'),
@@ -199,15 +228,17 @@ mapping_list = [
     ('source', 'metadata.location', str, 'oil'),
     ('date_sample_received', 'metadata.sample_date', datetime, 'oil'),
     ('comments', 'metadata.comments', str, 'oil'),
-    # the following mappings deal with a measurement row packaged into an obj
-    ('Density.Density', 'physical_properties.densities.-1', ECDensity, 'sample'),
+    #
+    # The following mappings deal with a measurement row packaged into an obj
+    #
+    ('Density.Density', 'physical_properties.densities.+', ECDensity, 'sample'),
     ('Dynamic Viscosity.Dynamic Viscosity',
-     'physical_properties.dynamic_viscosities.-1', ECViscosity, 'sample'),
+     'physical_properties.dynamic_viscosities.+', ECViscosity, 'sample'),
     ('Surface/Interfacial Tension.Surface Tension',
-     'physical_properties.interfacial_tension_air.-1', ECInterfacialTension,
+     'physical_properties.interfacial_tension_air.+', ECInterfacialTension,
      'sample'),
     ('Surface/Interfacial Tension.Interfacial Tension',
-     'physical_properties.interfacial_tension.-1', ECInterfacialTension,
+     'physical_properties.interfacial_tension.+', ECInterfacialTension,
      'sample'),
     ('Flash Point.Flash Point', 'physical_properties.flash_point',
      ECFlashPoint, 'sample'),
@@ -217,21 +248,43 @@ mapping_list = [
     # Note: we will save distillation for later because it is in a different
     #       format from everything else.
     ('Adhesion.Adhesion', 'environmental_behavior.adhesion', ECAdhesion, 'sample'),
-    # Note: ESTS Evaporation
+    # Note: ESTS Evaporation is better handled as a list if we choose to do it
+    #       here.
     ('Evaporation Equation.A For %Ev = (A +B) Ln T',
-     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
     ('Evaporation Equation.B For %Ev = (A +B) Ln T',
-     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
     ('Evaporation Equation.A For %Ev = (A + B) Sqrt (T)',
-     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
     ('Evaporation Equation.B For %Ev = (A + B) Sqrt (T)',
-     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
     ('Evaporation Equation.A For %Ev= A+ B Ln (t+C)',
-     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
     ('Evaporation Equation.B For %Ev= A+ B Ln (t+C)',
-     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
     ('Evaporation Equation.C For %Ev= A+ B Ln (t+C)',
-     'environmental_behavior.ests_evaporation_test.-1', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+    # Todo: Pan evaporation is something new.  Need to discuss.
+    #('Pan Evaporation (% Mass Loss).0h', 'environmental_behavior.????',
+    # ECPanEvaporation, 'sample'),
+    ('Emulsion.Emulsion Visual Stability',
+     'environmental_behavior.emulsions.+.visual_stability', ECEmulsion, 'sample'),
+    ('Emulsion.Emulsion Complex Modulus',
+     'environmental_behavior.emulsions.-1.complex_modulus', ECEmulsion, 'sample'),
+    ('Emulsion.Emulsion Storage Modulus',
+     'environmental_behavior.emulsions.-1.storage_modulus', ECEmulsion, 'sample'),
+    ('Emulsion.Emulsion Loss Modulus',
+     'environmental_behavior.emulsions.-1.loss_modulus', ECEmulsion, 'sample'),
+    ('Emulsion.Emulsion Tan Delta (V/E)',
+     'environmental_behavior.emulsions.-1.tan_delta_v_e', ECEmulsion, 'sample'),
+    ('Emulsion.Emulsion Complex Dynamic Viscosity',
+     'environmental_behavior.emulsions.-1.complex_viscosity', ECEmulsion, 'sample'),
+    ('Emulsion.Emulsion Water Content',
+     'environmental_behavior.emulsions.-1.water_content', ECEmulsion, 'sample'),
+
+    ('Chemical Dispersibility  (Swirling Flask Test).Dispersant Effectiveness',
+     'environmental_behavior.dispersibilities.+',
+     ECDispersibility, 'sample'),
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
