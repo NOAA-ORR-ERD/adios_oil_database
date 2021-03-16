@@ -35,6 +35,8 @@ class ECMeasurementDataclass:
         - ref_temp (Temperature Measurement type)
     '''
     value: float = None
+    min_value: float = None
+    max_value: float = None
     unit_of_measure: str = None
     temperature: str = None
     condition_of_analysis: str = None
@@ -45,7 +47,9 @@ class ECMeasurementDataclass:
     def __post_init__(self):
         self.treat_any_bad_initial_values()
         self.parse_temperature_string()
+        self.fix_unit()
         self.determine_unit_type()
+        self.determine_min_max()
 
     def treat_any_bad_initial_values(self):
         if self.value == '':
@@ -66,15 +70,40 @@ class ECMeasurementDataclass:
         except Exception:
             pass
 
+    def fix_unit(self):
+        '''
+            Some units are in the form 'X or Y'.  We will just choose the
+            first one.
+
+            Temperature units need to be stripped of the degree character
+        '''
+        unit = self.unit_of_measure.split(' or ')[0]
+
+        unit = unit.lstrip('°')
+
+        self.unit_of_measure = unit
+
     def determine_unit_type(self):
         try:
             self.unit_type = UNIT_TYPES[self.unit_of_measure.lower()]
         except KeyError:
             self.unit_type = None
 
+    def determine_min_max(self):
+        if isinstance(self.value, (int, float)):
+            pass
+        elif self.value[0] == '<':
+            # set max value
+            self.max_value = float(self.value[1:])
+            self.value = None
+        elif self.value[0] == '>':
+            self.min_value = float(self.value[1:])
+            self.value = None
+
 
 class ECMeasurement(ECMeasurementDataclass):
     value_attr = 'measurement'
+    ref_temp_attr = 'ref_temp'
 
     @classmethod
     def from_obj(cls, obj):
@@ -82,21 +111,34 @@ class ECMeasurement(ECMeasurementDataclass):
         return cls(**{k: v for k, v in obj.items() if k in class_fields})
 
     def py_json(self):
-        return {
+        ret = {
             self.value_attr: {
-                "value": self.value,
-                "unit": self.unit_of_measure,
-                "unit_type": self.unit_type,
-                "replicates": self.replicates,
-                "standard_deviation": self.standard_deviation,
+                'unit': self.unit_of_measure,
+                'unit_type': self.unit_type,
             },
-            "method": self.method,
-            "ref_temp": {
-                "value": self.ref_temp,
-                "unit": self.ref_temp_unit,
-                "unit_type": "temperature",
+            self.ref_temp_attr: {
+                'value': self.ref_temp,
+                'unit': self.ref_temp_unit,
+                'unit_type': 'temperature',
             }
         }
+
+        if self.min_value is not None or self.max_value is not None:
+            ret[self.value_attr]['min_value'] = self.min_value
+            ret[self.value_attr]['max_value'] = self.max_value
+        else:
+            ret[self.value_attr]['value'] = self.value
+
+        if self.standard_deviation is not None:
+            ret[self.value_attr]['standard_deviation'] = self.standard_deviation
+
+        if self.replicates is not None:
+            ret[self.value_attr]['replicates'] = self.replicates
+
+        if self.method is not None:
+            ret['method'] = self.method
+
+        return ret
 
 
 class ECDensity(ECMeasurement):
@@ -105,6 +147,35 @@ class ECDensity(ECMeasurement):
 
 class ECViscosity(ECMeasurement):
     value_attr = 'viscosity'
+
+
+class ECInterfacialTension(ECMeasurement):
+    value_attr = 'tension'
+
+    def py_json(self):
+        ret = super().py_json()
+
+        if 'salt water' in self.condition_of_analysis:
+            ret['interface'] = 'seawater'
+        elif 'air' in self.condition_of_analysis:
+            ret['interface'] = 'air'
+        else:
+            ret['interface'] = 'water'
+
+        return ret
+
+
+class ECFlashPoint(ECMeasurement):
+    def py_json(self):
+        ret = super().py_json()
+
+        del ret[self.ref_temp_attr]
+
+        return ret
+
+
+class ECPourPoint(ECFlashPoint):
+    pass
 
 
 mapping_list = [
@@ -118,6 +189,17 @@ mapping_list = [
     ('Density.Density', 'physical_properties.densities.-1', ECDensity, 'sample'),
     ('Dynamic Viscosity.Dynamic Viscosity',
      'physical_properties.dynamic_viscosities.-1', ECViscosity, 'sample'),
+    ('Surface/Interfacial Tension.Surface Tension',
+     'physical_properties.interfacial_tension_air.-1', ECInterfacialTension,
+     'sample'),
+    ('Surface/Interfacial Tension.Interfacial Tension',
+     'physical_properties.interfacial_tension.-1', ECInterfacialTension,
+     'sample'),
+    ('Flash Point.Flash Point', 'physical_properties.flash_point',
+     ECFlashPoint, 'sample'),
+    ('Pour Point.Pour Point', 'physical_properties.pour_point',
+     ECPourPoint, 'sample'),
+    # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
@@ -456,6 +538,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
             mapped_attr = property_map[attr]
             to_type = property_type_map[attr]
             scope = property_scope_map[attr]
+            logger.info(f'Mapped property path: {attr}')
         except KeyError:
             #logger.error(f'Unmapped property path: {attr}')
             return
