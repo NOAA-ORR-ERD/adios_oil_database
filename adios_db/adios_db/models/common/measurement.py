@@ -16,6 +16,23 @@ from ..common.validators import EnumValidator
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
+__all__ = ['AngularVelocity',
+           'Density',
+           'Dimensionless',
+           'DynamicViscosity',
+           'InterfacialTension',
+           'KinematicViscosity',
+           'Length',
+           'Mass',
+           'MassFraction',
+           'NeedleAdhesion',
+           'Pressure',
+           'ProductType',
+           'Temperature',
+           'Time',
+           'Unitless',
+           'VolumeFraction',
+           ]
 
 # fixme: why is this here?
 # it should be in validation, and the list itself should probably
@@ -122,6 +139,13 @@ class MeasurementBase(MeasurementDataclass):
         if self.unit is None:
             raise ValueError(f'{self.__class__.__name__}(): '
                              'need to supply a unit')
+
+    def __repr__(self):
+        atts = ((att, getattr(self, att)) for att in self.__dataclass_fields__.keys())
+        atts = (f'{att}={val}' for att, val in atts if val is not None)
+        return f'{self.__class__.__name__}({", ".join(atts)})'
+
+    __str__ = __repr__
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field

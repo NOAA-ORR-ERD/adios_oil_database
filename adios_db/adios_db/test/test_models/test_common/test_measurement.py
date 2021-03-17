@@ -2,22 +2,22 @@
 import pytest
 import math
 
-from adios_db.models.common import (ProductType,
-                                        UnittedValue,
-                                        UnittedRange,
-                                        MeasurementBase,
-                                        Temperature,
-                                        Length,
-                                        Mass,
-                                        MassFraction,
-                                        VolumeFraction,
-                                        Density,
-                                        DynamicViscosity,
-                                        KinematicViscosity,
-                                        Pressure,
-                                        NeedleAdhesion,
-                                        InterfacialTension,
-                                        Unitless)
+from adios_db.models.common.measurement import (ProductType,
+                                                UnittedValue,
+                                                UnittedRange,
+                                                MeasurementBase,
+                                                Temperature,
+                                                Length,
+                                                Mass,
+                                                MassFraction,
+                                                VolumeFraction,
+                                                Density,
+                                                DynamicViscosity,
+                                                KinematicViscosity,
+                                                Pressure,
+                                                NeedleAdhesion,
+                                                InterfacialTension,
+                                                Unitless)
 
 
 # Fixme: why is this in this test file ???
@@ -45,6 +45,24 @@ class TestProductType:
         result = pt.validate()
         assert len(result) == 1
         assert result[0].startswith("W003:")
+
+def test_str():
+    """
+    testing the str() -- only one example, but it's something
+
+    It should only provide the non-None fields
+    """
+    mass = Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6
+                )
+
+    s = str(mass)
+
+    print(s)
+    print(repr(mass))
+
+    assert s == "Mass(value=2.3, unit=kg, standard_deviation=0.2, replicates=6)"
+
+
 
 
 class TestUnitless:
