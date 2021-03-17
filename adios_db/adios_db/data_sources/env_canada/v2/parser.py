@@ -6,7 +6,7 @@ from dataclasses import dataclass, fields
 
 from numpy import isclose
 
-from unit_conversion import UNIT_TYPES
+from unit_conversion import UNIT_TYPES, ConvertDataUnits
 
 from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase, parse_single_datetime
@@ -15,6 +15,20 @@ import pdb
 from pprint import pprint
 
 logger = logging.getLogger(__name__)
+
+UNIT_TYPES_MV = {}
+
+for u_type in ('Volume Fraction', 'Mass Fraction'):
+    # UNIT_TYPES does not include mass/volume fraction units, so we need to
+    # make a list for ourselves.
+    # almost every unit in these two types is common, so we need to make a
+    # preference for one or the other, and we will prefer mass fraction types.
+    u_dict = {u: u_type.lower().replace(' ', '')
+              for u in set([i for sub
+                            in [([k] + v[1])
+                                for k, v in ConvertDataUnits[u_type].items()]
+                            for i in sub])}
+    UNIT_TYPES_MV.update(u_dict)
 
 
 @dataclass
@@ -34,6 +48,7 @@ class ECMeasurementDataclass:
         - method
         - ref_temp (Temperature Measurement type)
     '''
+    property_group: str = None
     property_name: str = None
     value: float = None
     min_value: float = None
@@ -56,11 +71,10 @@ class ECMeasurementDataclass:
         if self.value == '':
             self.value = None
 
-        if self.standard_deviation == 'N/A':
-            self.standard_deviation = None
-
-        if self.replicates == 'N/A':
-            self.replicates = None
+        for attr in ('temperature', 'condition_of_analysis',
+                     'standard_deviation', 'replicates', 'method'):
+            if getattr(self, attr) == 'N/A':
+                setattr(self, attr, None)
 
     def parse_temperature_string(self):
         if self.temperature is not None and len(self.temperature) > 0:
@@ -69,7 +83,8 @@ class ECMeasurementDataclass:
         try:
             self.ref_temp = float(self.ref_temp)
         except Exception:
-            pass
+            self.ref_temp = None
+            self.ref_temp_unit = None
 
     def fix_unit(self):
         '''
@@ -77,23 +92,33 @@ class ECMeasurementDataclass:
             first one.
 
             Temperature units need to be stripped of the degree character
-
-            percent fractions tend to have the values ('% w/w', '% v/v').
         '''
         unit = self.unit_of_measure.split(' or ')[0]
 
         unit = unit.lstrip('°')
 
-        if unit.startswith('%'):
-            unit = '%'
-
         self.unit_of_measure = unit
 
     def determine_unit_type(self):
+        # check if it is a mass/volume fraction.
+        # - until we accept a unit of measure like '% w/w' or '% v/v',
+        #   we need to change it to '%' and set the unit type explicitly
+        if self.unit_of_measure == '% w/w':
+            self.unit_of_measure = '%'
+            self.unit_type = 'massfraction'
+            return
+        elif self.unit_of_measure == '% v/v':
+            self.unit_of_measure = '%'
+            self.unit_type = 'volumefraction'
+            return
+
         try:
             self.unit_type = UNIT_TYPES[self.unit_of_measure.lower()]
         except KeyError:
-            self.unit_type = None
+            try:
+                self.unit_type = UNIT_TYPES_MV[self.unit_of_measure.lower()]
+            except KeyError:
+                self.unit_type = None
 
     def determine_min_max(self):
         if isinstance(self.value, (int, float)):
@@ -122,11 +147,6 @@ class ECMeasurement(ECMeasurementDataclass):
                 'unit': self.unit_of_measure,
                 'unit_type': self.unit_type,
             },
-            self.ref_temp_attr: {
-                'value': self.ref_temp,
-                'unit': self.ref_temp_unit,
-                'unit_type': 'temperature',
-            }
         }
 
         if self.min_value is not None or self.max_value is not None:
@@ -143,6 +163,13 @@ class ECMeasurement(ECMeasurementDataclass):
 
         if self.method is not None:
             ret['method'] = self.method
+
+        if self.ref_temp is not None:
+            ret[self.ref_temp_attr] = {
+                'value': self.ref_temp,
+                'unit': self.ref_temp_unit,
+                'unit_type': 'temperature',
+            }
 
         return ret
 
@@ -178,7 +205,8 @@ class ECFlashPoint(ECMeasurement):
     def py_json(self):
         ret = super().py_json()
 
-        del ret[self.ref_temp_attr]
+        if self.ref_temp_attr in ret:
+            del ret[self.ref_temp_attr]
 
         return ret
 
@@ -217,6 +245,24 @@ class ECDispersibility(ECFlashPoint):
     def py_json(self):
         ret = super().py_json()
         ret['dispersant'] = self.condition_of_analysis
+
+        return ret
+
+
+class ECBulkComposition(ECMeasurement):
+    def py_json(self):
+        ret = super().py_json()
+
+        if self.property_name is not None:
+            ret['name'] = self.property_name
+
+        return ret
+
+
+class ECCompound(ECBulkComposition):
+    def py_json(self):
+        ret = super().py_json()
+        ret['groups'] = [self.property_group]
 
         return ret
 
@@ -281,10 +327,33 @@ mapping_list = [
      'environmental_behavior.emulsions.-1.complex_viscosity', ECEmulsion, 'sample'),
     ('Emulsion.Emulsion Water Content',
      'environmental_behavior.emulsions.-1.water_content', ECEmulsion, 'sample'),
-
     ('Chemical Dispersibility  (Swirling Flask Test).Dispersant Effectiveness',
      'environmental_behavior.dispersibilities.+',
      ECDispersibility, 'sample'),
+    ('Sulfur Content.Sulfur Content', 'bulk_composition.+', ECBulkComposition,
+     'sample'),
+    ('Water Content.Water Content', 'bulk_composition.+', ECBulkComposition,
+     'sample'),
+    ('Wax Content.Waxes', 'bulk_composition.+', ECBulkComposition,
+     'sample'),
+    ('BTEX group.Benzene', 'compounds.+', ECCompound, 'sample'),
+    ('BTEX group.Toluene', 'compounds.+', ECCompound, 'sample'),
+    ('BTEX group.Ethylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('BTEX group.m&p-Xylene', 'compounds.+', ECCompound, 'sample'),
+    ('BTEX group.o-Xylene', 'compounds.+', ECCompound, 'sample'),
+
+    ('C3-C6 Alkyl Benzenes.Isopropylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.Propylebenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.3&4-Ethyltoluene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,3,5-Trimethylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.2-Ethyltoluene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,2,4-Trimethylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,2,3-Trimethylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.Isobutylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1-Methyl-2-isopropylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,2-Dimethyl-4-ethylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.Amylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.n-Hexylbenzene', 'compounds.+', ECCompound, 'sample'),
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
