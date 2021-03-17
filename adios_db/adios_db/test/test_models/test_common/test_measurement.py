@@ -46,11 +46,14 @@ class TestProductType:
         assert len(result) == 1
         assert result[0].startswith("W003:")
 
+
 def test_str():
     """
     testing the str() -- only one example, but it's something
 
     It should only provide the non-None fields
+
+    NOTE: this is now in the base decorator
     """
     mass = Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6
                 )
@@ -60,7 +63,7 @@ def test_str():
     print(s)
     print(repr(mass))
 
-    assert s == "Mass(value=2.3, unit=kg, standard_deviation=0.2, replicates=6)"
+    assert s == "Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6)"
 
 
 

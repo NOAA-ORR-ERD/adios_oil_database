@@ -116,6 +116,11 @@ def dataclass_to_json(cls):
                                  "does not exist")
         self.__dict__[name] = val
 
+    def __repr__(self):
+        atts = ((att, getattr(self, att)) for att in self.__dataclass_fields__.keys())
+        atts = (f'{att}={val!r}' for att, val in atts if val is not None)
+        return f'{self.__class__.__name__}({", ".join(atts)})'
+
     cls.py_json = py_json
 
     cls.from_py_json = from_py_json
@@ -125,6 +130,7 @@ def dataclass_to_json(cls):
     cls.validate = validate
 
     cls.__setattr__ = __setattr__
+    cls.__repr__ = __repr__
 
     return cls
 

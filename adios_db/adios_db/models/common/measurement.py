@@ -140,12 +140,13 @@ class MeasurementBase(MeasurementDataclass):
             raise ValueError(f'{self.__class__.__name__}(): '
                              'need to supply a unit')
 
-    def __repr__(self):
-        atts = ((att, getattr(self, att)) for att in self.__dataclass_fields__.keys())
-        atts = (f'{att}={val}' for att, val in atts if val is not None)
-        return f'{self.__class__.__name__}({", ".join(atts)})'
+    # # We want a less-noisy repr
+    # def __repr__(self):
+    #     atts = ((att, getattr(self, att)) for att in self.__dataclass_fields__.keys())
+    #     atts = (f'{att}={val}' for att, val in atts if val is not None)
+    #     return f'{self.__class__.__name__}({", ".join(atts)})'
 
-    __str__ = __repr__
+    # __str__ = __repr__
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field
