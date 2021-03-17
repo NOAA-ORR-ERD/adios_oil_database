@@ -249,7 +249,7 @@ class ECDispersibility(ECFlashPoint):
         return ret
 
 
-class ECBulkComposition(ECMeasurement):
+class ECCompoundUngrouped(ECMeasurement):
     def py_json(self):
         ret = super().py_json()
 
@@ -259,7 +259,7 @@ class ECBulkComposition(ECMeasurement):
         return ret
 
 
-class ECCompound(ECBulkComposition):
+class ECCompound(ECCompoundUngrouped):
     def py_json(self):
         ret = super().py_json()
         ret['groups'] = [self.property_group]
@@ -330,11 +330,11 @@ mapping_list = [
     ('Chemical Dispersibility  (Swirling Flask Test).Dispersant Effectiveness',
      'environmental_behavior.dispersibilities.+',
      ECDispersibility, 'sample'),
-    ('Sulfur Content.Sulfur Content', 'bulk_composition.+', ECBulkComposition,
+    ('Sulfur Content.Sulfur Content', 'bulk_composition.+', ECCompoundUngrouped,
      'sample'),
-    ('Water Content.Water Content', 'bulk_composition.+', ECBulkComposition,
+    ('Water Content.Water Content', 'bulk_composition.+', ECCompoundUngrouped,
      'sample'),
-    ('Wax Content.Waxes', 'bulk_composition.+', ECBulkComposition,
+    ('Wax Content.Waxes', 'bulk_composition.+', ECCompoundUngrouped,
      'sample'),
     ('BTEX group.Benzene', 'compounds.+', ECCompound, 'sample'),
     ('BTEX group.Toluene', 'compounds.+', ECCompound, 'sample'),
@@ -354,6 +354,91 @@ mapping_list = [
     ('C3-C6 Alkyl Benzenes.1,2-Dimethyl-4-ethylbenzene', 'compounds.+', ECCompound, 'sample'),
     ('C3-C6 Alkyl Benzenes.Amylbenzene', 'compounds.+', ECCompound, 'sample'),
     ('C3-C6 Alkyl Benzenes.n-Hexylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('GC-Detected Petroleum Hydrocarbon Content'
+     '.Gas Chromatography-Total Petroleum Hydrocarbon (GC-TPH)',
+     'bulk_composition.+', ECCompound, 'sample'),
+    ('GC-Detected Petroleum Hydrocarbon Content'
+     '.Gas Chromatography-Total Saturate Hydrocarbon (GC-TSH)',
+     'bulk_composition.+', ECCompound, 'sample'),
+    ('GC-Detected Petroleum Hydrocarbon Content'
+     '.Gas Chromatography-Total Aromatic Hydrocarbon (GC-TAH)',
+     'bulk_composition.+', ECCompound, 'sample'),
+    ('GC-Detected Petroleum Hydrocarbon Content.GC-TSH/GC-TPH',
+     'bulk_composition.+', ECCompound, 'sample'),
+    ('GC-Detected Petroleum Hydrocarbon Content.GC-TAH/GC-TPH',
+     'bulk_composition.+', ECCompound, 'sample'),
+    ('GC-Detected Petroleum Hydrocarbon Content.Resolved Peaks/TPH',
+     'bulk_composition.+', ECCompound, 'sample'),
+    # these need to be post-fixed
+    ('Petroleum Hydrocarbon Fractions-CCME.CCME F1',
+     'CCME.+', ECCompound, 'sample'),
+    ('Petroleum Hydrocarbon Fractions-CCME.CCME F2',
+     'CCME.+', ECCompound, 'sample'),
+    ('Petroleum Hydrocarbon Fractions-CCME.CCME F3',
+     'CCME.+', ECCompound, 'sample'),
+    ('Petroleum Hydrocarbon Fractions-CCME.CCME F4',
+     'CCME.+', ECCompound, 'sample'),
+
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C8 To n-C10',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C10 To n-C12',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C12 To n-C16',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C16 To n-C20',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C20 To n-C24',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C24 To n-C28',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C28 To n-C34',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Saturates Fraction.n-C34+',
+     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C8 To n-C10',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C10 To n-C12',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C12 To n-C16',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C16 To n-C20',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C20 To n-C24',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C24 To n-C28',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C28 To n-C34',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon Aromatics Fraction.n-C34+',
+     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C8 To n-C10',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C10 To n-C12',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C12 To n-C16',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C16 To n-C20',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C20 To n-C24',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C24 To n-C28',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C28 To n-C34',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.n-C34+',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
+     '.TOTAL TPH (GC Detected TPH + Undetected TPH)',
+     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
