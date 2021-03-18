@@ -11,7 +11,6 @@ from unit_conversion import UNIT_TYPES, ConvertDataUnits
 from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase, parse_single_datetime
 
-import pdb
 from pprint import pprint
 
 logger = logging.getLogger(__name__)
@@ -24,9 +23,9 @@ for u_type in ('Volume Fraction', 'Mass Fraction'):
     # almost every unit in these two types is common, so we need to make a
     # preference for one or the other, and we will prefer mass fraction types.
     u_dict = {u: u_type.lower().replace(' ', '')
-              for u in set([i for sub
-                            in [([k] + v[1])
-                                for k, v in ConvertDataUnits[u_type].items()]
+              for u in set([i for sub in [([k] + v[1])
+                                          for k, v
+                                          in ConvertDataUnits[u_type].items()]
                             for i in sub])}
     UNIT_TYPES_MV.update(u_dict)
 
@@ -219,6 +218,10 @@ class ECAdhesion(ECFlashPoint):
     value_attr = 'adhesion'
 
 
+class ECSaraFraction(ECFlashPoint):
+    pass
+
+
 class ECEvaporationEq(ECMeasurement):
     def py_json(self):
         ret = super().py_json()
@@ -277,7 +280,8 @@ mapping_list = [
     #
     # The following mappings deal with a measurement row packaged into an obj
     #
-    ('Density.Density', 'physical_properties.densities.+', ECDensity, 'sample'),
+    ('Density.Density', 'physical_properties.densities.+',
+     ECDensity, 'sample'),
     ('Dynamic Viscosity.Dynamic Viscosity',
      'physical_properties.dynamic_viscosities.+', ECViscosity, 'sample'),
     ('Surface/Interfacial Tension.Surface Tension',
@@ -293,67 +297,93 @@ mapping_list = [
     # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
     # Note: we will save distillation for later because it is in a different
     #       format from everything else.
-    ('Adhesion.Adhesion', 'environmental_behavior.adhesion', ECAdhesion, 'sample'),
+    ('Adhesion.Adhesion', 'environmental_behavior.adhesion',
+     ECAdhesion, 'sample'),
     # Note: ESTS Evaporation is better handled as a list if we choose to do it
     #       here.
     ('Evaporation Equation.A For %Ev = (A +B) Ln T',
-     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+',
+     ECEvaporationEq, 'sample'),
     ('Evaporation Equation.B For %Ev = (A +B) Ln T',
-     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+',
+     ECEvaporationEq, 'sample'),
     ('Evaporation Equation.A For %Ev = (A + B) Sqrt (T)',
-     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+',
+     ECEvaporationEq, 'sample'),
     ('Evaporation Equation.B For %Ev = (A + B) Sqrt (T)',
-     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+',
+     ECEvaporationEq, 'sample'),
     ('Evaporation Equation.A For %Ev= A+ B Ln (t+C)',
-     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+',
+     ECEvaporationEq, 'sample'),
     ('Evaporation Equation.B For %Ev= A+ B Ln (t+C)',
-     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+',
+     ECEvaporationEq, 'sample'),
     ('Evaporation Equation.C For %Ev= A+ B Ln (t+C)',
-     'environmental_behavior.ests_evaporation_test.+', ECEvaporationEq, 'sample'),
+     'environmental_behavior.ests_evaporation_test.+',
+     ECEvaporationEq, 'sample'),
     # Todo: Pan evaporation is something new.  Need to discuss.
     #('Pan Evaporation (% Mass Loss).0h', 'environmental_behavior.????',
     # ECPanEvaporation, 'sample'),
     ('Emulsion.Emulsion Visual Stability',
-     'environmental_behavior.emulsions.+.visual_stability', ECEmulsion, 'sample'),
+     'environmental_behavior.emulsions.+.visual_stability',
+     ECEmulsion, 'sample'),
     ('Emulsion.Emulsion Complex Modulus',
-     'environmental_behavior.emulsions.-1.complex_modulus', ECEmulsion, 'sample'),
+     'environmental_behavior.emulsions.-1.complex_modulus',
+     ECEmulsion, 'sample'),
     ('Emulsion.Emulsion Storage Modulus',
-     'environmental_behavior.emulsions.-1.storage_modulus', ECEmulsion, 'sample'),
+     'environmental_behavior.emulsions.-1.storage_modulus',
+     ECEmulsion, 'sample'),
     ('Emulsion.Emulsion Loss Modulus',
-     'environmental_behavior.emulsions.-1.loss_modulus', ECEmulsion, 'sample'),
+     'environmental_behavior.emulsions.-1.loss_modulus',
+     ECEmulsion, 'sample'),
     ('Emulsion.Emulsion Tan Delta (V/E)',
-     'environmental_behavior.emulsions.-1.tan_delta_v_e', ECEmulsion, 'sample'),
+     'environmental_behavior.emulsions.-1.tan_delta_v_e',
+     ECEmulsion, 'sample'),
     ('Emulsion.Emulsion Complex Dynamic Viscosity',
-     'environmental_behavior.emulsions.-1.complex_viscosity', ECEmulsion, 'sample'),
+     'environmental_behavior.emulsions.-1.complex_viscosity',
+     ECEmulsion, 'sample'),
     ('Emulsion.Emulsion Water Content',
-     'environmental_behavior.emulsions.-1.water_content', ECEmulsion, 'sample'),
+     'environmental_behavior.emulsions.-1.water_content',
+     ECEmulsion, 'sample'),
     ('Chemical Dispersibility  (Swirling Flask Test).Dispersant Effectiveness',
      'environmental_behavior.dispersibilities.+',
      ECDispersibility, 'sample'),
-    ('Sulfur Content.Sulfur Content', 'bulk_composition.+', ECCompoundUngrouped,
-     'sample'),
-    ('Water Content.Water Content', 'bulk_composition.+', ECCompoundUngrouped,
-     'sample'),
-    ('Wax Content.Waxes', 'bulk_composition.+', ECCompoundUngrouped,
-     'sample'),
+    ('Sulfur Content.Sulfur Content', 'bulk_composition.+',
+     ECCompoundUngrouped, 'sample'),
+    ('Water Content.Water Content', 'bulk_composition.+',
+     ECCompoundUngrouped, 'sample'),
+    ('Wax Content.Waxes', 'bulk_composition.+',
+     ECCompoundUngrouped, 'sample'),
     ('BTEX group.Benzene', 'compounds.+', ECCompound, 'sample'),
     ('BTEX group.Toluene', 'compounds.+', ECCompound, 'sample'),
     ('BTEX group.Ethylbenzene', 'compounds.+', ECCompound, 'sample'),
     ('BTEX group.m&p-Xylene', 'compounds.+', ECCompound, 'sample'),
     ('BTEX group.o-Xylene', 'compounds.+', ECCompound, 'sample'),
 
-    ('C3-C6 Alkyl Benzenes.Isopropylbenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.Propylebenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.3&4-Ethyltoluene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.1,3,5-Trimethylbenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.2-Ethyltoluene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.1,2,4-Trimethylbenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.1,2,3-Trimethylbenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.Isobutylbenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.1-Methyl-2-isopropylbenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.1,2-Dimethyl-4-ethylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.Isopropylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.Propylebenzene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.3&4-Ethyltoluene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,3,5-Trimethylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.2-Ethyltoluene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,2,4-Trimethylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,2,3-Trimethylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.Isobutylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1-Methyl-2-isopropylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.1,2-Dimethyl-4-ethylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
     ('C3-C6 Alkyl Benzenes.Amylbenzene', 'compounds.+', ECCompound, 'sample'),
-    ('C3-C6 Alkyl Benzenes.n-Hexylbenzene', 'compounds.+', ECCompound, 'sample'),
+    ('C3-C6 Alkyl Benzenes.n-Hexylbenzene', 'compounds.+',
+     ECCompound, 'sample'),
     ('GC-Detected Petroleum Hydrocarbon Content'
      '.Gas Chromatography-Total Petroleum Hydrocarbon (GC-TPH)',
      'bulk_composition.+', ECCompound, 'sample'),
@@ -438,6 +468,199 @@ mapping_list = [
     ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
      '.TOTAL TPH (GC Detected TPH + Undetected TPH)',
      'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+
+    ('Hydrocarbon Group Content.Saturates',
+     'SARA.saturates', ECSaraFraction, 'sample'),
+    ('Hydrocarbon Group Content.Aromatics',
+     'SARA.aromatics', ECSaraFraction, 'sample'),
+    ('Hydrocarbon Group Content.Resin',
+     'SARA.resins', ECSaraFraction, 'sample'),
+    ('Hydrocarbon Group Content.Asphaltene',
+     'SARA.asphaltenes', ECSaraFraction, 'sample'),
+
+    ('n-Alkanes.n-C8', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C9', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C10', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C11', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C12', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C13', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C14', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C15', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C16', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C17', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.Pristane', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C18', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.Phytane', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C19', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C20', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C21', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C22', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C23', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C24', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C25', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C26', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C27', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C28', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C29', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C30', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C31', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C32', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C33', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C34', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C35', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C36', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C37', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C38', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C39', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C40', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C41', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C42', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C43', 'compounds.+', ECCompound, 'sample'),
+    ('n-Alkanes.n-C44', 'compounds.+', ECCompound, 'sample'),
+
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Naphthalene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Naphthalene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C2-Naphthalene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Naphthalene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C4-Naphthalene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Phenanthrene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Phenanthrene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C2-Phenanthrene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Phenanthrene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C4-Phenanthrene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Dibenzothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Dibenzothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C2-Dibenzothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Dibenzothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Fluorene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Fluorene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C2-Fluorene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Fluorene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Fluoranthene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Fluoranthene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C2-Fluoranthene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Fluoranthene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C4-Fluoranthene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs)'
+     '.C0-Benzonaphthothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs)'
+     '.C1-Benzonaphthothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs)'
+     '.C2-Benzonaphthothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs)'
+     '.C3-Benzonaphthothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs)'
+     '.C4-Benzonaphthothiophene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Chrysene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Chrysene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C2-Chrysene',
+     'compounds.+', ECCompound, 'sample'),
+    ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Chrysene',
+     'compounds.+', ECCompound, 'sample'),
+
+    ('Other Priority PAHs.Biphenyl (Bph)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Acenaphthylene (Acl)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Acenaphthene (Ace)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Anthracene (An)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Fluoranthene (Fl)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Pyrene (Py)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Benz(a)anthracene (BaA)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Benzo(b)fluoranthene (BbF)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Benzo(k)fluoranthene (BkF)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Benzo(e)pyrene (BeP)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Benzo(a)pyrene (BaP)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Perylene (Pe)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Indeno(1,2,3-cd)pyrene (IP)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Dibenzo(ah)anthracene (DA)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Other Priority PAHs.Benzo(ghi)perylene (BgP)',
+     'compounds.+', ECCompound, 'sample'),
+
+    ('Biomarkers.C21 Tricyclic Terpane (C21T)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.C22 Tricyclic Terpane (C22T)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.C23 Tricyclic Terpane (C23T)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.C24 Tricyclic Terpane (C24T)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.18A,22,29,30-Trisnorneohopane (C27Ts)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.17a(H)-22,29,30-Trisnorhopane (C27Tm)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.30-Norhopane (H29)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.Hopane (H30)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.30-Homohopane-22S (H31S)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.30-Homohopane-22R (H31R)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.30,31-Bishomohopane-22S (H32S)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.30,31-Bishomohopane-22R (H32R)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.30,31-Trishomohopane-22S (H33S)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.30,31-Trishomohopane-22R (H33R)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.Tetrakishomohopane-22S (H34S)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.Tetrakishomohopane-22R (H34R)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.Pentakishomohopane-22S (H35S)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.Pentakishomohopane-22R (H35R)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.14ß(H),17ß(H)-20-Cholestane (C27aßß)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.20-Méthyl-14ß(H),17ß(H)-Cholestane (C28aßß)',
+     'compounds.+', ECCompound, 'sample'),
+    ('Biomarkers.20-Éthyl-14ß(H),17ß(H)-Cholestane (C29aßß)',
+     'compounds.+', ECCompound, 'sample'),
 
 ]
 
@@ -777,9 +1000,8 @@ class EnvCanadaCsvRecordParser(ParserBase):
             mapped_attr = property_map[attr]
             to_type = property_type_map[attr]
             scope = property_scope_map[attr]
-            logger.info(f'Mapped property path: {attr}')
         except KeyError:
-            #logger.error(f'Unmapped property path: {attr}')
+            logger.error(f'Unmapped property path: {attr}')
             return
 
         if scope == 'oil':
@@ -883,12 +1105,3 @@ class EnvCanadaCsvRecordParser(ParserBase):
         ret['sub_samples'] = list(self.sub_samples)
 
         return ret
-
-
-
-
-
-
-
-
-
