@@ -15,7 +15,7 @@ from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
                                            OilLibraryRecordParser,
                                            OilLibraryAttributeMapper)
 
-from adios_db.data_sources.env_canada.v1 import EnvCanadaRecordMapper
+from adios_db.data_sources.env_canada.v2 import EnvCanadaCsvRecordMapper
 from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
                                                  EnvCanadaCsvRecordParser)
 
@@ -67,7 +67,7 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
                None,
                EnvCanadaCsvFile,
                EnvCanadaCsvRecordParser,
-               EnvCanadaRecordMapper],
+               EnvCanadaCsvRecordMapper],
               # ('Exxon Assays', add_exxon_records)
               ['Exxon Assays', 'oildb.exxon_files',
                None,
@@ -254,39 +254,32 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
             total_count += 1
 
             try:
-                parser = parser_cls(*record_data)
+                oil_mapper = mapper_cls(parser_cls(*record_data))
+                oil_pyjson = oil_mapper.py_json()
 
-                #oil_obj = mapper_cls(parser_cls(*record_data))
+                oil = validate_json(oil_pyjson)
+                set_completeness(oil)
 
-                #oil_pyjson = oil_obj.py_json()
-
-                # this is obsolete code
-                # and shouldn't happen on import anyway
-                # link_oil_to_labels(oil_pyjson)
-
-                #oil = validate_json(oil_pyjson)
-                #set_completeness(oil)
-
-                #oil_collection.insert_one(oil.py_json())
+                oil_collection.insert_one(oil.py_json())
             except DuplicateKeyError as e:
                 if overwrite is True:
                     try:
-                        oil_collection.replace_one({'_id': oil_obj.oil_id},
+                        oil_collection.replace_one({'_id': oil_mapper.oil_id},
                                                    oil.py_json())
                     except Exception as e:
                         print('Oil update failed for {}: {}'
-                              .format(tc.change(oil_obj.oil_id, 'red'), e))
+                              .format(tc.change(oil_mapper.oil_id, 'red'), e))
                         error_count += 1
                     else:
                         success_count += 1
                 else:
                     print('Duplicate fields for {}: {}'
-                          .format(tc.change(oil_obj.oil_id, 'red'), e))
+                          .format(tc.change(oil_mapper.oil_id, 'red'), e))
                     error_count += 1
             except (ValueError, TypeError) as e:
                 print('{} for {}: {}'
                       .format(e.__class__.__name__,
-                              tc.change(oil_obj.oil_id, 'red'), e))
+                              tc.change(oil_mapper.oil_id, 'red'), e))
                 error_count += 1
             else:
                 success_count += 1

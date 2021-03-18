@@ -5,3 +5,4 @@
 '''
 from .reader import EnvCanadaCsvFile
 from .parser import EnvCanadaCsvRecordParser
+from .mapper import EnvCanadaCsvRecordMapper

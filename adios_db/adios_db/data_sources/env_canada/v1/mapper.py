@@ -5,7 +5,6 @@ import logging
 
 from slugify import Slugify
 
-from adios_db.util import sigfigs
 from adios_db.models.oil.oil import Oil
 from adios_db.data_sources.mapper import MapperBase
 

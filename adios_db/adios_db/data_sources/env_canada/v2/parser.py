@@ -750,9 +750,6 @@ class EnvCanadaCsvRecordParser(ParserBase):
 
         self.set_measurement_props()
 
-        print('\n\noil_obj:')
-        pprint(self.oil_obj)
-
     def prune_incoming(self, values):
         '''
             The Incoming objects contain some unwanted garbage from the
@@ -836,7 +833,8 @@ class EnvCanadaCsvRecordParser(ParserBase):
             if len(value) > 1:
                 # This is probably not a big enough problem to stop everything,
                 # but we will issue a warning.
-                logger.warning(f'More than 1 integer value found for {attr}')
+                logger.warning(f'ESTS #{self.src_values[0]["ests"]}: '
+                               f'More than 1 integer value found for {attr}')
 
             if len(value) >= 1:
                 value = list(value)[0]
@@ -850,7 +848,8 @@ class EnvCanadaCsvRecordParser(ParserBase):
             if len(value) > 1:
                 # This is probably not a big enough problem to stop everything,
                 # but we will issue a warning.
-                logger.warning(f'More than 1 datetime value found for {attr}')
+                logger.warning(f'ESTS #{self.src_values[0]["ests"]}: '
+                               f'More than 1 datetime value found for {attr}')
 
             if len(value) >= 1:
                 value = value[0]
@@ -919,13 +918,11 @@ class EnvCanadaCsvRecordParser(ParserBase):
                 short_name = f'{o["weathering_fraction"]}'[:12]
 
             self.deep_set(self.oil_obj,
-                          f'sub_samples.{idx}.metadata.sample_id',
-                          sample_id)
-            self.deep_set(self.oil_obj, f'sub_samples.{idx}.metadata.name',
-                          name)
+                          f'sub_samples.{idx}.metadata.sample_id', sample_id)
             self.deep_set(self.oil_obj,
-                          f'sub_samples.{idx}.metadata.short_name',
-                          short_name)
+                          f'sub_samples.{idx}.metadata.name', name)
+            self.deep_set(self.oil_obj,
+                          f'sub_samples.{idx}.metadata.short_name', short_name)
             self.deep_set(self.oil_obj,
                           f'sub_samples.{idx}.metadata.fraction_weathered',
                           weathering_percent)
@@ -1001,7 +998,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
             to_type = property_type_map[attr]
             scope = property_scope_map[attr]
         except KeyError:
-            logger.error(f'Unmapped property path: {attr}')
+            # logger.error(f'Unmapped property path: {attr}')
             return
 
         if scope == 'oil':
@@ -1078,30 +1075,3 @@ class EnvCanadaCsvRecordParser(ParserBase):
                 return True
 
         return False
-
-    @property
-    def metadata(self):
-        ret = {}
-
-        for attr in ('name',
-                     'source_id',
-                     'location',
-                     'reference',
-                     'sample_date',
-                     'product_type',
-                     'API',
-                     'comments'):
-            ret[attr] = getattr(self, attr)
-
-        return ret
-
-    def dict(self):
-        ret = {}
-
-        for attr in ('oil_id',
-                     'metadata'):
-            ret[attr] = getattr(self, attr)
-
-        ret['sub_samples'] = list(self.sub_samples)
-
-        return ret
