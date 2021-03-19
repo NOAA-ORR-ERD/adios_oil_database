@@ -1,5 +1,6 @@
 {
     "oil_id": "EC00540",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "Bunker C - IFO-300 [1994]",
         "source_id": "540",

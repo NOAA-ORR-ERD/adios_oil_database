@@ -27,6 +27,10 @@ def dataclass_to_json(cls):
         classmethod to create a dataclass from json compatible python data
         structure.
         """
+        # if there is a pre-processor - run it
+        if hasattr(cls, "_pre_from_py_json"):
+            py_json = cls._pre_from_py_json(py_json)
+
         arg_dict = {}
 
         if py_json is None and allow_none is True:
@@ -47,10 +51,11 @@ def dataclass_to_json(cls):
                 except AttributeError:
                     # it's not, so we just use the value
                     arg_dict[fieldname] = py_json[fieldname]
-                except TypeError:
+                except TypeError as err:
                     raise TypeError(f'TypeError in '
                                     f'{cls.__name__}._from_py_json(): '
-                                    f'field: {fieldname}')
+                                    f'field: {fieldname}\n'
+                                    f'{err.args}')
 
         obj = cls(**arg_dict)
         return obj
@@ -62,9 +67,6 @@ def dataclass_to_json(cls):
         :param sparse=True: If sparse is True, only non-empty fields will be
                             written. If False, then all fields will be
                             included.
-
-        NOTE: could we use the dataclasses built-in .asdict?
-              It would not support sparse.
         """
         json_obj = {}
         for fieldname in self.__dataclass_fields__.keys():
@@ -114,12 +116,21 @@ def dataclass_to_json(cls):
                                  "does not exist")
         self.__dict__[name] = val
 
+    def __repr__(self):
+        atts = ((att, getattr(self, att)) for att in self.__dataclass_fields__.keys())
+        atts = (f'{att}={val!r}' for att, val in atts if val is not None)
+        return f'{self.__class__.__name__}({", ".join(atts)})'
+
     cls.py_json = py_json
+
     cls.from_py_json = from_py_json
+
     if hasattr(cls, "validate"):
         cls._validate = cls.validate
     cls.validate = validate
+
     cls.__setattr__ = __setattr__
+    cls.__repr__ = __repr__
 
     return cls
 

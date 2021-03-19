@@ -213,5 +213,34 @@ def test_SimpleWithValidated():
     assert len(result) == 1
     assert result[0] == 'Invalid value: "this", should be: "this particular string"'
 
+def test_pre_from_py_json():
+
+    @dataclass_to_json
+    @dataclass
+    class SimpleClass:
+        version: str = "0.1.3"
+        name: str = ""
+        x: int = 5
+
+        @staticmethod
+        def _pre_from_py_json(py_json):
+            print("here:", py_json)
+            py_json['name'] = "a new name"
+            return py_json
+
+    pyjs = {'version': "0.1.3",
+            'name': "fred",
+            'x': 1.0}
+
+
+    sc = SimpleClass.from_py_json(pyjs)
+
+    assert sc.name == "a new name"
+
+    scjs = sc.py_json()
+
+    assert scjs == pyjs
+
+
 
 

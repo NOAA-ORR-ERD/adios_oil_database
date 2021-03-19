@@ -7,7 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from adios_db.models.oil.oil import Oil
+from adios_db.models.oil.oil import Oil, ADIOS_DATA_MODEL_VERSION
+from adios_db.models.oil.version import Version, VersionError
 from adios_db.models.oil.metadata import MetaData
 from adios_db.models.oil.values import Reference
 
@@ -40,7 +41,7 @@ class TestOil:
 
     def test_wrong_thing_in_oil_id(self):
         """
-        it's easy to accidentally pass whoh knows what into the id param
+        it's easy to accidentally pass who knows what into the id param
 
         that should get flagged if it doesn't make sense
         """
@@ -48,6 +49,7 @@ class TestOil:
                   'metadata': {'name': 'An oil name'}
                   }
         with pytest.raises(ValueError):
+            # error becasue we're passing the whole dict in
             Oil(whoops)
 
     def test_bad_oil_id(self):
@@ -70,7 +72,7 @@ class TestOil:
 
     def test__id_ignored(self):
         """
-        checks that the an _id attrobute of a dict will get ignored
+        checks that the an _id attribute of a dict will get ignored
         """
         oil = Oil.from_py_json({'oil_id': "XX123456",
                                 '_id': 1234567,
@@ -147,8 +149,9 @@ class TestOil:
         py_json = oil.py_json()
 
         assert py_json["oil_id"] == OIL_ID
-        # assert py_json["_id"] == OIL_ID
-        assert len(py_json) == 1
+        assert py_json['adios_data_model_version'] == str(ADIOS_DATA_MODEL_VERSION)
+        print(py_json)
+        assert len(py_json) == 2
 
     def test_json_minimal_nonsparse(self):
         oil = Oil(oil_id=OIL_ID)
@@ -156,10 +159,10 @@ class TestOil:
 
         pprint(py_json)
 
-        assert len(py_json) == 5
+        assert len(py_json) == 6
 
         for attr in ['oil_id',
-                     # '_id',
+                     'adios_data_model_version',
                      'metadata',
                      'sub_samples',
                      'status',
@@ -395,3 +398,37 @@ def test_round_trip():
     oilout = Oil.from_file(fileout)
 
     assert oilin == oilout
+
+def test_version_none():
+    '''
+    If it doesn't have a version string, it should get the current one.
+    '''
+    pyjs = {'oil_id': 'AD00123',
+            'metadata': {'name': 'An oil name'}
+            }
+    oil = Oil.from_py_json(pyjs)
+
+    assert oil.adios_data_model_version == ADIOS_DATA_MODEL_VERSION
+
+
+def test_version_bad():
+    '''
+    If it doesn't have a version string, it should get the current one.
+    '''
+    pyjs = {'oil_id': 'AD00123',
+            'adios_data_model_version': 1.2,
+            'metadata': {'name': 'An oil name'}
+            }
+    with pytest.raises(ValueError):
+        oil = Oil.from_py_json(pyjs)
+
+
+def test_version_too_high():
+    pyjs = {'oil_id': 'AD00123',
+            'adios_data_model_version': "2.0.0",
+            'metadata': {'name': 'An oil name'}
+            }
+    with pytest.raises(VersionError):
+        oil = Oil.from_py_json(pyjs)
+
+

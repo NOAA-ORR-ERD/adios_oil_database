@@ -1,8 +1,12 @@
 {
     "oil_id": "AD01853",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "AIRILE, BP",
         "source_id": "AD01853",
+        "alternate_names": [
+            "Airlie"
+        ],
         "location": "AUSTRALIA",
         "reference": {
             "year": 1998,

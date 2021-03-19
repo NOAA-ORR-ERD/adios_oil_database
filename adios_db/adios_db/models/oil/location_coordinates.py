@@ -51,8 +51,6 @@ class LocationCoordinates:
             try:
                 ring = coords[0]
                 x, y = ring[0]
-                print(ring)
-                print(x, y)
             except TypeError:
                 raise ValueError("Polygon coordinates must be a list of lists of points")
             if len(ring) < 4:
