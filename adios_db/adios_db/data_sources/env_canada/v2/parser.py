@@ -273,7 +273,7 @@ class ECCompound(ECCompoundUngrouped):
 mapping_list = [
     # ('property', 'mapped_property', 'to_type', 'scope'),
     ('oil_name', 'metadata.name', str, 'oil'),
-    ('ests', 'metadata.source_id', int, 'oil'),
+    ('ests', 'metadata.source_id', str, 'oil'),
     ('source', 'metadata.location', str, 'oil'),
     ('date_sample_received', 'metadata.sample_date', datetime, 'oil'),
     ('comments', 'metadata.comments', str, 'oil'),
@@ -669,13 +669,6 @@ property_type_map = {p: t for p, m, t, s in mapping_list}
 property_scope_map = {p: s for p, m, t, s in mapping_list}
 
 
-reject_list = [
-    4025,  # Marine Diesel-Burnaby BC (bad subsamples)
-    1956,  # North Star (bad subsamples)
-    662,   # Orimulsion 400 [2001] (bad subsamples)
-]
-
-
 class EnvCanadaCsvRecordParser(ParserBase):
     '''
         A record class for the Env. Canada .csv flat data file.
@@ -740,14 +733,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
         super().__init__(self.prune_incoming(values))
 
         self.set_aggregate_oil_props()
-
-        if self.oil_obj['metadata']['source_id'] in reject_list:
-            logger.warning('rejecting oil record: '
-                           f'{self.oil_obj["metadata"]["source_id"]}')
-            return
-
         self.set_aggregate_subsample_props()
-
         self.set_measurement_props()
 
     def prune_incoming(self, values):
@@ -891,7 +877,9 @@ class EnvCanadaCsvRecordParser(ParserBase):
         first_objs = [v for v in self.src_values
                       if v['property_id'] == 'Density_0']
 
-        assert self.sample_ids == [o['ests_id'] for o in first_objs]
+        first_sample_ids = [o['ests_id'] for o in first_objs]
+        if not self.sample_ids == first_sample_ids:
+            raise ValueError(f'duplicate sample_ids: {first_sample_ids}')
 
         for idx, o in enumerate(first_objs):
             sample_id = str(o['ests_id'])
@@ -943,7 +931,11 @@ class EnvCanadaCsvRecordParser(ParserBase):
         api_obj = api_obj[0] if len(api_obj) > 0 else {}
 
         weathering = api_obj['weathering_percent']
-        assert (weathering == 'None' or float(weathering.rstrip('%')) == 0.0)
+
+        if not (weathering == 'None' or float(weathering.rstrip('%')) == 0.0):
+            # first sample is not fresh, we need to get API from the
+            # fresh sample
+            return None
 
         return api_obj['value']
 

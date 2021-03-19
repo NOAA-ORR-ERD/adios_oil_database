@@ -27,6 +27,7 @@ from adios_db.data_sources.exxon_assays import (ExxonDataReader,
 from adios_db.models.oil.validation.validate import validate_json
 from adios_db.models.oil.completeness import set_completeness
 
+
 logger = logging.getLogger(__name__)
 
 # All oil library data files are assumed to be in a common data folder
