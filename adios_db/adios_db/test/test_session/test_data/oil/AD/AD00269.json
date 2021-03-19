@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00269",
-    "_id": "AD00269",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "COOK INLET, DRIFT RIVER TERMINAL",
         "source_id": "AD00269",
@@ -11,7 +11,7 @@
         },
         "product_type": "Crude Oil NOS",
         "API": 34.1,
-        "comments": "The benezene concentration is 0.12% by volume.",
+        "comments": "The benzene concentration is 0.12% by volume.",
         "labels": [
             "Crude Oil",
             "Light Crude"

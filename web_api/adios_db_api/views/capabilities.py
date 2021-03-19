@@ -1,14 +1,20 @@
+import logging
+
 from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound)
 
-from adios_db_api.common.views import cors_policy, obj_id_from_url
+from adios_db_api.common.views import (cors_policy,
+                                       cors_response,
+                                       obj_id_from_url)
 
 
-capabilities_api = Service(name='capabilities', path='/capabilities*obj_id',
+capabilities_api = Service(name='capabilities', path='/capabilities/*obj_id',
                            description=('List the capabilities of the '
                                         'oil database API'),
                            cors_policy=cors_policy)
+
+logger = logging.getLogger(__name__)
 
 
 @capabilities_api.get()
@@ -28,7 +34,8 @@ def get_capabilities(request):
         try:
             obj_id = int(obj_id)
         except TypeError as e:
-            raise HTTPBadRequest(e)
+            logger.error(e)
+            raise HTTPBadRequest()
 
         if obj_id != 0:
             raise HTTPNotFound()

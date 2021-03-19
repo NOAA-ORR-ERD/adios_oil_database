@@ -1,6 +1,6 @@
 {
     "oil_id": "EC02234",
-    "_id": "EC02234",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "Access West Blend Winter",
         "source_id": "2234",
@@ -14,9 +14,8 @@
         "API": 20.93,
         "comments": "Via CanmetEnergy, Natural Resources Canada",
         "labels": [
-            "Heavy Crude",
             "Crude Oil",
-            "Refined Product"
+            "Heavy Crude"
         ],
         "model_completeness": 94
     },
@@ -1793,7 +1792,7 @@
                 "method": "ESTS 5.03/x.x/M"
             },
             "ESTS_hydrocarbon_fractions": {
-                "method": "Hollebone, Bruce (2020) Personal communication",
+                "method": "ESTS 5.03/x.x/M",
                 "saturates": [
                     {
                         "name": "n-C8 to n-C10",

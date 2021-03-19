@@ -1,5 +1,5 @@
 {
-    "_id": "EX00068",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "API": 35.2,
         "name": "HOOPS Blend",

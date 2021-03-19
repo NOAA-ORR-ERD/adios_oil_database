@@ -1,11 +1,13 @@
 # Oil Database Web API Docker configuration
 #
 
-FROM registry.orr.noaa.gov/erd/centos-conda
+FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3
 
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
 RUN yum update -y
+RUN conda install -y python=3.9
+RUN conda update -y conda
 
 COPY ./ /adios-db/
 
@@ -13,15 +15,18 @@ RUN mkdir /var/lib/mongo
 RUN mkdir /var/log/mongodb
 RUN mkdir /var/run/mongodb
 
-RUN cd adios-db/adios_db && conda install --file conda_requirements.txt
+# install deps
+RUN cd adios-db && conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+
 RUN cd adios-db/adios_db && pip install -e ./
 
-RUN cd adios-db/adios_db/data/exxon_assays && python ./download_exxon_assays.py
+# RUN cd adios-db/adios_db/data/exxon_assays && python ./download_exxon_assays.py
 
 RUN mongod --config adios-db/mongo_config_deploy.yml && cd adios-db/adios_db && adios_db_init
-RUN mongod --config adios-db/mongo_config_deploy.yml && cd adios-db/adios_db && adios_db_import --all
 
-RUN cd adios-db/web_api && conda install --file conda_requirements.txt
+# RUN mongod --config adios-db/mongo_config_deploy.yml && cd adios-db/adios_db && adios_db_import --all
+
+# RUN cd adios-db/web_api && conda install --file conda_requirements.txt
 RUN cd adios-db/web_api && pip install -e ./
 
 RUN mkdir /config

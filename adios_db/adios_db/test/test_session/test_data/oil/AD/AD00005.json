@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00005",
-    "_id": "AD00005",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "ABSORPTION OIL",
         "source_id": "AD00005",
@@ -10,6 +10,7 @@
         },
         "product_type": "Refinery Intermediate",
         "labels": [
+            "Refinery Intermediate",
             "Refined Product"
         ],
         "model_completeness": 15

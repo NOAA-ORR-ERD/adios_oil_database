@@ -1,9 +1,12 @@
 {
     "oil_id": "AD01987",
-    "_id": "AD01987",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "ALASKA NORTH SLOPE (MIDDLE PIPELINE, 1999)",
         "source_id": "AD01987",
+        "alternate_names": [
+            "ANS"
+        ],
         "location": "ALASKA, USA",
         "reference": {
             "year": 1999,

@@ -91,16 +91,14 @@ class SampleList(JSON_List):
             # note: would be good to be smart about the temp densities are at
             # this is here because only need to check the "fresh" sample
             if (self[0].physical_properties is None
-                or self[0].physical_properties.densities is None):
-
+                    or self[0].physical_properties.densities is None):
                 msgs.append(WARNINGS["W006"])
 
-            # check_for_distillation_cuts
-            try:
-                if not self[0].distillation_data.cuts:
-                    msgs.append(WARNINGS['W007'])
-            except AttributeError:
-                msgs.append(WARNINGS['W007'])
+            # # check_for_distillation_cuts
+            # try:
+            #     if not self[0].distillation_data.cuts:
+            #         msgs.append(WARNINGS['W007'])
+            # except AttributeError:
+            #     msgs.append(WARNINGS['W007'])
 
         return msgs
-

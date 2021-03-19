@@ -8,6 +8,7 @@ import unit_conversion as uc
 
 from .cleanup import Cleanup
 
+from ....computation.physical_properties import Density
 
 class FixAPI(Cleanup):
     """
@@ -17,8 +18,6 @@ class FixAPI(Cleanup):
           There is code in the computation.physical_properties package to help, if needed.
     """
     ID = "001"
-
-    DENSITY_TOL = 1.0  # how close do we need to be to 15C to convert to API
 
     def check(self):
         """
@@ -36,6 +35,7 @@ class FixAPI(Cleanup):
 
         # densities = oil.sub_samples[0].physical_properties.densities
         if API is None:
+
             density = self.find_density_near_15C()
             if density:
                 return (True, f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
@@ -71,8 +71,6 @@ class FixAPI(Cleanup):
         """
         API = self.oil.metadata.API
 
-        # densities = self.oil.sub_samples[0].physical_properties.densities
-
         density_at_15 = self.find_density_near_15C()
 
         if uc.convert("density", "kg/m^3", "API", density_at_15) == API:
@@ -80,45 +78,13 @@ class FixAPI(Cleanup):
         else:
             return False
 
-    def build_density_table(self):
-        """
-        build a density table from the data:
-        list of (density, temp) pairs
-        """
-
-        densities = self.oil.sub_samples[0].physical_properties.densities
-
-        # create normalized list of densities
-        density_table = []
-        for density_point in densities:
-            d = density_point.density.converted_to("kg/m^3").value
-            t = density_point.ref_temp.converted_to("C").value
-            density_table.append((d, t))
-        return density_table
-
     def find_density_near_15C(self):
         """
-        returns the density (in kg/m3) within DENSITY_TOL of 15C
+        Returns the density (in kg/m3)
 
-        Note: this could be cleaner with numpy -- but for so few values?
+        It will interpolate and extrapolate as needed
         """
-        density_table = self.build_density_table()
-        min_diff = math.inf
-        for i, d in enumerate(density_table):
-            diff = abs(d[1] - 15.0)
-            if diff < min_diff:
-                min_diff = diff
-                min_ind = i
-        if min_diff <= self.DENSITY_TOL:
-            return density_table[min_ind][0]
-        else:
+        try:
+            return Density(self.oil).at_temp(uc.convert("C", "K", 15))
+        except ValueError:
             return None
-
-
-
-
-
-
-
-
-

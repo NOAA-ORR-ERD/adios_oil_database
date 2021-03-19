@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00084",
-    "_id": "AD00084",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "AUTOMOTIVE GASOLINE, EXXON",
         "source_id": "AD00084",
@@ -12,11 +12,13 @@
         "API": 60.0,
         "comments": "WARNING: Benzene content of product is only an estimate and not a measured value.",
         "labels": [
-            "Kerosene",
-            "Fuel Oil",
-            "Jet Fuel",
             "Aviation Gas",
-            "Refined Product"
+            "Distillate Fuel",
+            "Fuel Oil",
+            "Kerosene",
+            "Refined Product",
+            "Jet Fuel",
+            "Gasoline"
         ],
         "model_completeness": 42
     },

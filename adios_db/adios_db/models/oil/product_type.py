@@ -1,11 +1,12 @@
 
 """
-Main class that represents an oil record.
+Class that represents the product type
 
-This maps to the JSON used in the DB
+With validation
 
-Having a Python class makes it easier to write importing, validating etc, code.
+Also maintains the products types and labels mapping
 """
+
 from pathlib import Path
 import csv
 
@@ -15,6 +16,15 @@ from .validation.warnings import WARNINGS
 
 
 class TypeLabelsMap(ManyMany):
+    """
+    class to maintain a many to many relationship between product types and labels
+
+    The ``.product_types`` attribute is a mapping with the labels as keys,
+    and product types as values.
+
+    The ``.labels`` attribute is a mapping with the product type as keys,
+    and the associated labels as values.
+    """
 
     product_types = ManyMany.right
     labels = ManyMany.left
@@ -48,6 +58,9 @@ def load_from_csv_file(filepath=None):
             for i, val in enumerate(row[2:]):
                 if val.strip():
                     ptypes_labels.setdefault(pt, set()).add(labels[i])
+            # add the pt to the labels
+            # not doing this anymore.
+            # ptypes_labels.setdefault(pt, set()).add(pt)
         return ptypes_labels
 
 

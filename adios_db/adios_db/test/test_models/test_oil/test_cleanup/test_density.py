@@ -117,13 +117,16 @@ def test_find_density_near_15C_two_values():
 
     result = fixer.find_density_near_15C()
 
-    assert result == 989.0
+    assert isclose(result, 989.0, rel_tol=1e3)
 
 
 def test_find_density_near_15C_none():
+    """
+    if there are no density values, then this should not add an API
+    """
     oil = no_api_with_density()
 
-    oil.sub_samples[0].physical_properties.densities[0].ref_temp.value = 17.0
+    oil.sub_samples[0].physical_properties.densities = DensityList()
     fixer = FixAPI(oil)
 
     result = fixer.find_density_near_15C()

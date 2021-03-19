@@ -1803,8 +1803,7 @@ class TestEnvCanadaRecordMapper(object):
             _mapper = EnvCanadaRecordMapper(None)
 
     @pytest.mark.parametrize('oil_id, expected', [
-        ('2713', {'_id': 'EC02713',
-                  'oil_id': 'EC02713',
+        ('2713', {'oil_id': 'EC02713',
                   'metadata.name': 'Alaska North Slope [2015]',
                   'metadata.source_id': '2713',
                   'metadata.location': 'Alaska, USA',

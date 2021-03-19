@@ -8,6 +8,7 @@ from ..common.measurement import MassFraction, Temperature
 
 from .values import Reference
 from .product_type import ProductType, DOESNT_NEED_API
+from .location_coordinates import LocationCoordinates
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
@@ -27,6 +28,7 @@ class MetaData:
     comments: str = ''
     labels: list = field(default_factory=list)
     model_completeness: float = None
+    location_coordinates: LocationCoordinates = None
 
     def validate(self):
         msgs = []

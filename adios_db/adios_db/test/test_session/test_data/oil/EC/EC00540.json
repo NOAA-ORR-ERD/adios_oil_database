@@ -1,6 +1,6 @@
 {
     "oil_id": "EC00540",
-    "_id": "EC00540",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "Bunker C - IFO-300 [1994]",
         "source_id": "540",
@@ -1808,9 +1808,6 @@
                     "unit_type": "massfraction"
                 },
                 "method": "ESTS 5.03/x.x/M"
-            },
-            "ESTS_hydrocarbon_fractions": {
-                "method": "Hollebone, Bruce (2020) Personal communication"
             }
         },
         {
