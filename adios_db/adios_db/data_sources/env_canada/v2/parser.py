@@ -6,12 +6,10 @@ from dataclasses import dataclass, fields
 
 from numpy import isclose
 
-from unit_conversion import UNIT_TYPES, ConvertDataUnits
+from unit_conversion import UNIT_TYPES, ConvertDataUnits, Simplify
 
 from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase, parse_single_datetime
-
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -102,25 +100,26 @@ class ECMeasurementDataclass:
         # check if it is a mass/volume fraction.
         # - until we accept a unit of measure like '% w/w' or '% v/v',
         #   we need to change it to '%' and set the unit type explicitly
-        if self.unit_of_measure == '% w/w':
+        if self.unit_of_measure in ('% w/w', '%w/w'):
             self.unit_of_measure = '%'
             self.unit_type = 'massfraction'
             return
-        elif self.unit_of_measure == '% v/v':
+        elif self.unit_of_measure in ('% v/v', '%v/v'):
             self.unit_of_measure = '%'
             self.unit_type = 'volumefraction'
             return
 
+        unit = Simplify(self.unit_of_measure)
         try:
-            self.unit_type = UNIT_TYPES[self.unit_of_measure.lower()]
+            self.unit_type = UNIT_TYPES[unit]
         except KeyError:
             try:
-                self.unit_type = UNIT_TYPES_MV[self.unit_of_measure.lower()]
+                self.unit_type = UNIT_TYPES_MV[unit]
             except KeyError:
                 self.unit_type = None
 
     def determine_min_max(self):
-        if isinstance(self.value, (int, float)):
+        if isinstance(self.value, (int, float, type(None))):
             pass
         elif self.value[0] == '<':
             # set max value
@@ -235,9 +234,12 @@ class ECEmulsion(ECMeasurement):
     def py_json(self):
         ret = super().py_json()
 
-        ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
         if self.condition_of_analysis.lower() == 'one week after formation':
-            ret['age']['value'] = 7
+            ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 7}
+        elif self.condition_of_analysis.lower() == 'on the day of formation':
+            ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
+        else:
+            logger.warning('Can not determine emulsion age')
 
         return ret
 
@@ -981,7 +983,10 @@ class EnvCanadaCsvRecordParser(ParserBase):
                           experiments where measurements were taken.
             - method: A line of text showing the name of the testing method.
         '''
-        if obj_in['value'] is None:
+        always_add = ('Emulsion Visual Stability',)
+
+        if (obj_in['value'] is None and
+                obj_in['property_name'] not in always_add):
             return  # not a valid measurement
 
         try:
