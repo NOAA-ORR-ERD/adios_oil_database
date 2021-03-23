@@ -11,14 +11,15 @@ from unit_conversion import UNIT_TYPES, ConvertDataUnits, Simplify
 from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase, parse_single_datetime
 
+
 logger = logging.getLogger(__name__)
 
 UNIT_TYPES_MV = {}
 
 for u_type in ('Volume Fraction', 'Mass Fraction'):
     # UNIT_TYPES does not include mass/volume fraction units, so we need to
-    # make a list for ourselves.
-    # almost every unit in these two types is common, so we need to make a
+    # make our own lookup table.
+    # Almost every unit in these two types is common, so we need to make a
     # preference for one or the other, and we will prefer mass fraction types.
     u_dict = {u: u_type.lower().replace(' ', '')
               for u in set([i for sub in [([k] + v[1])
@@ -74,12 +75,20 @@ class ECMeasurementDataclass:
                 setattr(self, attr, None)
 
     def parse_temperature_string(self):
-        if self.temperature is not None and len(self.temperature) > 0:
+
+        if isinstance(self.temperature, str) and len(self.temperature) > 0:
             self.ref_temp, self.ref_temp_unit = re.findall(r'[\d\.]*\w+',
                                                            self.temperature)
-        try:
-            self.ref_temp = float(self.ref_temp)
-        except Exception:
+
+            try:
+                self.ref_temp = float(self.ref_temp)
+            except Exception:
+                self.ref_temp = None
+                self.ref_temp_unit = None
+        elif isinstance(self.temperature, (int, float)):
+            self.ref_temp = self.temperature
+            self.ref_temp_unit = 'C'  # we assume celsius if not indicated
+        else:
             self.ref_temp = None
             self.ref_temp_unit = None
 
@@ -199,7 +208,7 @@ class ECInterfacialTension(ECMeasurement):
         return ret
 
 
-class ECFlashPoint(ECMeasurement):
+class ECValueOnly(ECMeasurement):
     def py_json(self):
         ret = super().py_json()
 
@@ -209,16 +218,55 @@ class ECFlashPoint(ECMeasurement):
         return ret
 
 
-class ECPourPoint(ECFlashPoint):
+class ECFlashPoint(ECValueOnly):
     pass
 
 
-class ECAdhesion(ECFlashPoint):
+class ECPourPoint(ECValueOnly):
+    pass
+
+
+class ECAdhesion(ECValueOnly):
     value_attr = 'adhesion'
 
 
-class ECSaraFraction(ECFlashPoint):
+class ECSaraFraction(ECValueOnly):
     pass
+
+
+class BPTemperatureDistribution(ECMeasurement):
+    value_attr = 'fraction'
+    ref_temp_attr = 'vapor_temp'
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        # for this type, we need to swap value into temperature
+        self.ref_temp = self.value
+        self.ref_temp_unit = self.unit_of_measure
+
+        # for this type, we need to take the property name as the fraction
+        if self.property_name.lower() == 'initial boiling point':
+            self.value = 0.0
+        else:
+            self.value = float(self.property_name.rstrip('%'))
+
+        self.unit_type = 'massfraction'
+        self.unit_of_measure = '%'
+
+    def py_json(self):
+        ret = super().py_json()
+
+        return ret
+
+
+class BPTemperatureEndPoint(ECValueOnly):
+    pass
+
+
+class BPCumulativeWeightFraction(ECMeasurement):
+    value_attr = 'fraction'
+    ref_temp_attr = 'vapor_temp'
 
 
 class ECEvaporationEq(ECMeasurement):
@@ -297,12 +345,57 @@ mapping_list = [
     ('Pour Point.Pour Point', 'physical_properties.pour_point',
      ECPourPoint, 'sample'),
     # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
-    # Note: we will save distillation for later because it is in a different
-    #       format from everything else.
+    ('Boiling Point Distribution, Temperature.Initial Boiling Point',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.5%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.10%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.15%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.20%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.25%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.30%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.35%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.40%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.45%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.50%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.55%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.60%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.65%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.70%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.75%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.80%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.85%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.90%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.95%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.100%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.Final Boiling Point',
+     'distillation_data.end_point', BPTemperatureEndPoint, 'sample'),
+    ('Boiling Point Cumulative Weight Fraction'
+     '.Boiling Point Cumulative Weight Fraction',
+     'distillation_data.cuts.+', BPCumulativeWeightFraction, 'sample'),
     ('Adhesion.Adhesion', 'environmental_behavior.adhesion',
      ECAdhesion, 'sample'),
     # Note: ESTS Evaporation is better handled as a list if we choose to do it
-    #       here.
+    #       here.  But for now we make it look exactly like it was before.
     ('Evaporation Equation.A For %Ev = (A +B) Ln T',
      'environmental_behavior.ests_evaporation_test.+',
      ECEvaporationEq, 'sample'),

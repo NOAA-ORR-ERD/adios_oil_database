@@ -33,6 +33,7 @@ class EnvCanadaCsvRecordMapper(MapperBase):
         self.remap_adhesion()
         self.remap_emulsions()
         self.remap_interfacial_tension()
+        self.remap_cuts()
 
     def remap_SARA(self):
         for sample in self.record['sub_samples']:
@@ -111,6 +112,23 @@ class EnvCanadaCsvRecordMapper(MapperBase):
 
     def remap_interfacial_tension(self):
         pass
+
+    def remap_cuts(self):
+
+        for sample in self.record['sub_samples']:
+            cuts = sample.get('distillation_data', {}).get('cuts', None)
+            end_point = (sample.get('distillation_data', {})
+                         .get('end_point', None))
+
+            if cuts:
+                method_names = ', '.join({c['method'] for c in cuts})
+
+                sample['distillation_data']['method'] = method_names
+                sample['distillation_data']['type'] = 'mass fraction'
+
+            if end_point:
+                end_point = end_point['measurement']
+                sample['distillation_data']['end_point'] = end_point
 
     @property
     def oil_id(self):
