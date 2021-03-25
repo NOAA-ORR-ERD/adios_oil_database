@@ -9,7 +9,8 @@ from numpy import isclose
 from unit_conversion import UNIT_TYPES, ConvertDataUnits, Simplify
 
 from adios_db.util import sigfigs
-from adios_db.data_sources.parser import ParserBase, parse_single_datetime
+from adios_db.data_sources.parser import ParserBase
+from adios_db.data_sources.importer_base import parse_single_datetime
 
 
 logger = logging.getLogger(__name__)
@@ -70,7 +71,8 @@ class ECMeasurementDataclass:
             self.value = None
 
         for attr in ('temperature', 'condition_of_analysis',
-                     'standard_deviation', 'replicates', 'method'):
+                     'standard_deviation', 'replicates', 'method',
+                     'unit_of_measure'):
             if getattr(self, attr) == 'N/A':
                 setattr(self, attr, None)
 
@@ -99,16 +101,19 @@ class ECMeasurementDataclass:
 
             Temperature units need to be stripped of the degree character
         '''
-        unit = self.unit_of_measure.split(' or ')[0]
+        if self.unit_of_measure:
+            unit = self.unit_of_measure.split(' or ')[0]
+            unit = unit.lstrip('°')
 
-        unit = unit.lstrip('°')
-
-        self.unit_of_measure = unit
+            self.unit_of_measure = unit
 
     def determine_unit_type(self):
         # check if it is a mass/volume fraction.
         # - until we accept a unit of measure like '% w/w' or '% v/v',
         #   we need to change it to '%' and set the unit type explicitly
+        if self.unit_of_measure is None:
+            self.unit_type = 'unitless'
+            return
         if self.unit_of_measure in ('% w/w', '%w/w'):
             self.unit_of_measure = '%'
             self.unit_type = 'massfraction'
@@ -187,6 +192,25 @@ class ECDensity(ECMeasurement):
 
 class ECViscosity(ECMeasurement):
     value_attr = 'viscosity'
+
+    def py_json(self):
+        '''
+            What do we do when the value is 'Too Viscous'?
+        '''
+        ret = super().py_json()
+
+        value, unit = self.condition_of_analysis.split()[-2:]
+
+        if unit == '1/s':
+            try:
+                value = float(value.split('=')[1])
+            except IndexError:
+                value = float(value)
+
+            ret['shear_rate'] = {'value': value, 'unit': unit,
+                                 'unit_type': 'angularvelocity'}
+
+        return ret
 
 
 class ECInterfacialTension(ECMeasurement):
@@ -395,7 +419,9 @@ mapping_list = [
     ('Adhesion.Adhesion', 'environmental_behavior.adhesion',
      ECAdhesion, 'sample'),
     # Note: ESTS Evaporation is better handled as a list if we choose to do it
-    #       here.  But for now we make it look exactly like it was before.
+    #       here.  But for now we will make it look exactly like it was before,
+    #       and the way we will do it is by re-mapping these parts in the
+    #       mapper.
     ('Evaporation Equation.A For %Ev = (A +B) Ln T',
      'environmental_behavior.ests_evaporation_test.+',
      ECEvaporationEq, 'sample'),
@@ -494,7 +520,6 @@ mapping_list = [
      'bulk_composition.+', ECCompound, 'sample'),
     ('GC-Detected Petroleum Hydrocarbon Content.Resolved Peaks/TPH',
      'bulk_composition.+', ECCompound, 'sample'),
-    # these need to be post-fixed
     ('Petroleum Hydrocarbon Fractions-CCME.CCME F1',
      'CCME.+', ECCompound, 'sample'),
     ('Petroleum Hydrocarbon Fractions-CCME.CCME F2',
@@ -503,7 +528,6 @@ mapping_list = [
      'CCME.+', ECCompound, 'sample'),
     ('Petroleum Hydrocarbon Fractions-CCME.CCME F4',
      'CCME.+', ECCompound, 'sample'),
-
     ('Petroleum Hydrocarbon Saturates Fraction.n-C8 To n-C10',
      'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
     ('Petroleum Hydrocarbon Saturates Fraction.n-C10 To n-C12',
@@ -563,7 +587,6 @@ mapping_list = [
     ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
      '.TOTAL TPH (GC Detected TPH + Undetected TPH)',
      'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-
     ('Hydrocarbon Group Content.Saturates',
      'SARA.saturates', ECSaraFraction, 'sample'),
     ('Hydrocarbon Group Content.Aromatics',
@@ -572,7 +595,6 @@ mapping_list = [
      'SARA.resins', ECSaraFraction, 'sample'),
     ('Hydrocarbon Group Content.Asphaltene',
      'SARA.asphaltenes', ECSaraFraction, 'sample'),
-
     ('n-Alkanes.n-C8', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C9', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C10', 'compounds.+', ECCompound, 'sample'),
@@ -612,7 +634,6 @@ mapping_list = [
     ('n-Alkanes.n-C42', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C43', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C44', 'compounds.+', ECCompound, 'sample'),
-
     ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Naphthalene',
      'compounds.+', ECCompound, 'sample'),
     ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Naphthalene',
@@ -682,7 +703,6 @@ mapping_list = [
      'compounds.+', ECCompound, 'sample'),
     ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Chrysene',
      'compounds.+', ECCompound, 'sample'),
-
     ('Other Priority PAHs.Biphenyl (Bph)',
      'compounds.+', ECCompound, 'sample'),
     ('Other Priority PAHs.Acenaphthylene (Acl)',
@@ -713,7 +733,6 @@ mapping_list = [
      'compounds.+', ECCompound, 'sample'),
     ('Other Priority PAHs.Benzo(ghi)perylene (BgP)',
      'compounds.+', ECCompound, 'sample'),
-
     ('Biomarkers.C21 Tricyclic Terpane (C21T)',
      'compounds.+', ECCompound, 'sample'),
     ('Biomarkers.C22 Tricyclic Terpane (C22T)',
@@ -756,7 +775,6 @@ mapping_list = [
      'compounds.+', ECCompound, 'sample'),
     ('Biomarkers.20-Éthyl-14ß(H),17ß(H)-Cholestane (C29aßß)',
      'compounds.+', ECCompound, 'sample'),
-
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
@@ -933,7 +951,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
                                f'More than 1 datetime value found for {attr}')
 
             if len(value) >= 1:
-                value = value[0]
+                value = value[0].strftime('%Y-%m-%d')
             else:
                 value = None
         else:
@@ -1078,7 +1096,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
         '''
         always_add = ('Emulsion Visual Stability',)
 
-        if (obj_in['value'] is None and
+        if (self.value_is_invalid(obj_in['value']) and
                 obj_in['property_name'] not in always_add):
             return  # not a valid measurement
 
@@ -1165,3 +1183,6 @@ class EnvCanadaCsvRecordParser(ParserBase):
                 return True
 
         return False
+
+    def value_is_invalid(self, value):
+        return value in (None, 'N/A', 'No Flash')

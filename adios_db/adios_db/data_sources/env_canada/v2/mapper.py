@@ -4,7 +4,6 @@ import logging
 from adios_db.models.oil.oil import Oil
 from adios_db.data_sources.mapper import MapperBase
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -34,6 +33,8 @@ class EnvCanadaCsvRecordMapper(MapperBase):
         self.remap_emulsions()
         self.remap_interfacial_tension()
         self.remap_cuts()
+        self.remap_ESTS_hydrocarbon_fractions()
+        self.remap_CCME()
 
     def remap_SARA(self):
         for sample in self.record['sub_samples']:
@@ -106,22 +107,35 @@ class EnvCanadaCsvRecordMapper(MapperBase):
                         if new_vs is not None:
                             new_emul['visual_stability'] = new_vs
 
+                        new_emul['method'] = ', '.join({v['method']
+                                                        for v
+                                                        in emul.values()})
+
                     emulsions[idx] = new_emul
 
                 eb['emulsions'] = [em for em in emulsions if em]
 
     def remap_interfacial_tension(self):
-        pass
+        for sample in self.record['sub_samples']:
+            phys = sample.get('physical_properties', {})
+            ifts = (phys.get('interfacial_tension', []))
+
+            phys['interfacial_tension_water'] = [
+                t for t in ifts if t['interface'] == 'water'
+            ]
+            phys['interfacial_tension_seawater'] = [
+                t for t in ifts if t['interface'] == 'seawater'
+            ]
 
     def remap_cuts(self):
-
         for sample in self.record['sub_samples']:
             cuts = sample.get('distillation_data', {}).get('cuts', None)
             end_point = (sample.get('distillation_data', {})
                          .get('end_point', None))
 
             if cuts:
-                method_names = ', '.join({c['method'] for c in cuts})
+                method_names = ', '.join({c.get('method', '') for c in cuts})
+                [c.pop('method', '') for c in cuts]
 
                 sample['distillation_data']['method'] = method_names
                 sample['distillation_data']['type'] = 'mass fraction'
@@ -129,6 +143,30 @@ class EnvCanadaCsvRecordMapper(MapperBase):
             if end_point:
                 end_point = end_point['measurement']
                 sample['distillation_data']['end_point'] = end_point
+
+    def remap_ESTS_hydrocarbon_fractions(self):
+        for sample in self.record['sub_samples']:
+            ests_fractions = sample.get('ESTS_hydrocarbon_fractions', {})
+            gc_tph = ests_fractions.get('GC_TPH', [])
+            saturates = ests_fractions.get('saturates', [])
+            aromatics = ests_fractions.get('aromatics', [])
+
+            methods = ', '.join({f.get('method', '')
+                                 for f in gc_tph + saturates + aromatics})
+
+            ests_fractions['method'] = methods
+
+            for f in gc_tph + saturates + aromatics:
+                f.pop('method', None)
+
+    def remap_CCME(self):
+        for sample in self.record['sub_samples']:
+            ccme = sample.get('CCME', [])
+
+            new_ccme = {f['name'][-2:]: f['measurement'] for f in ccme}
+            new_ccme['method'] = ', '.join({f.get('method', '') for f in ccme})
+
+            sample['CCME'] = new_ccme
 
     @property
     def oil_id(self):

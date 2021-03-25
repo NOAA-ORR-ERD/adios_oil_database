@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 from numbers import Number
 
-from slugify import Slugify
+from .importer_base import custom_slugify, ImporterBase
 
 
-custom_slugify = Slugify(to_lower=True, separator='_')
-
-
-class MapperBase:
+class MapperBase(ImporterBase):
     def measurement(self, value, unit, unit_type=None,
                     standard_deviation=None, replicates=None):
         mm_value = self.min_max(value)
