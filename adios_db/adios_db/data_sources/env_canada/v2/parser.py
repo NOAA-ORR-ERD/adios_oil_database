@@ -67,17 +67,15 @@ class ECMeasurementDataclass:
         self.determine_min_max()
 
     def treat_any_bad_initial_values(self):
-        if self.value == '':
-            self.value = None
-
-        for attr in ('temperature', 'condition_of_analysis',
-                     'standard_deviation', 'replicates', 'method',
-                     'unit_of_measure'):
-            if getattr(self, attr) == 'N/A':
-                setattr(self, attr, None)
+        for f in fields(self.__class__):
+            if getattr(self, f.name) in ('N/A', ''):
+                setattr(self, f.name, None)
 
     def parse_temperature_string(self):
-
+        '''
+            The temperature field can have varying content, like '15 °C'
+            or simply '15', in which case we will assume it is Celsius.
+        '''
         if isinstance(self.temperature, str) and len(self.temperature) > 0:
             self.ref_temp, self.ref_temp_unit = re.findall(r'[\d\.]*\w+',
                                                            self.temperature)
@@ -89,7 +87,7 @@ class ECMeasurementDataclass:
                 self.ref_temp_unit = None
         elif isinstance(self.temperature, (int, float)):
             self.ref_temp = self.temperature
-            self.ref_temp_unit = 'C'  # we assume celsius if not indicated
+            self.ref_temp_unit = 'C'
         else:
             self.ref_temp = None
             self.ref_temp_unit = None
@@ -99,7 +97,8 @@ class ECMeasurementDataclass:
             Some units are in the form 'X or Y'.  We will just choose the
             first one.
 
-            Temperature units need to be stripped of the degree character
+            Temperature units (e.g. '°C') need to be stripped of the degree
+            character
         '''
         if self.unit_of_measure:
             unit = self.unit_of_measure.split(' or ')[0]
@@ -109,12 +108,12 @@ class ECMeasurementDataclass:
 
     def determine_unit_type(self):
         # check if it is a mass/volume fraction.
-        # - until we accept a unit of measure like '% w/w' or '% v/v',
+        # - until PyNUCOS accepts a unit of measure like '% w/w' or '% v/v',
         #   we need to change it to '%' and set the unit type explicitly
         if self.unit_of_measure is None:
             self.unit_type = 'unitless'
             return
-        if self.unit_of_measure in ('% w/w', '%w/w'):
+        elif self.unit_of_measure in ('% w/w', '%w/w'):
             self.unit_of_measure = '%'
             self.unit_type = 'massfraction'
             return
@@ -133,6 +132,11 @@ class ECMeasurementDataclass:
                 self.unit_type = None
 
     def determine_min_max(self):
+        '''
+            The value field in the Env. Canada measurement row can have
+            relational annotations like '>N' or '<N'.  In these cases, we turn
+            them into an interval pair.
+        '''
         if isinstance(self.value, (int, float, type(None))):
             pass
         elif self.value[0] == '<':
@@ -186,6 +190,15 @@ class ECMeasurement(ECMeasurementDataclass):
         return ret
 
 
+class ECValueOnly(ECMeasurement):
+    def py_json(self):
+        ret = super().py_json()
+
+        ret.pop(self.ref_temp_attr, None)
+
+        return ret
+
+
 class ECDensity(ECMeasurement):
     value_attr = 'density'
 
@@ -232,30 +245,8 @@ class ECInterfacialTension(ECMeasurement):
         return ret
 
 
-class ECValueOnly(ECMeasurement):
-    def py_json(self):
-        ret = super().py_json()
-
-        if self.ref_temp_attr in ret:
-            del ret[self.ref_temp_attr]
-
-        return ret
-
-
-class ECFlashPoint(ECValueOnly):
-    pass
-
-
-class ECPourPoint(ECValueOnly):
-    pass
-
-
 class ECAdhesion(ECValueOnly):
     value_attr = 'adhesion'
-
-
-class ECSaraFraction(ECValueOnly):
-    pass
 
 
 class BPTemperatureDistribution(ECMeasurement):
@@ -282,10 +273,6 @@ class BPTemperatureDistribution(ECMeasurement):
         ret = super().py_json()
 
         return ret
-
-
-class BPTemperatureEndPoint(ECValueOnly):
-    pass
 
 
 class BPCumulativeWeightFraction(ECMeasurement):
@@ -316,7 +303,7 @@ class ECEmulsion(ECMeasurement):
         return ret
 
 
-class ECDispersibility(ECFlashPoint):
+class ECDispersibility(ECValueOnly):
     value_attr = 'effectiveness'
 
     def py_json(self):
@@ -365,9 +352,9 @@ mapping_list = [
      'physical_properties.interfacial_tension.+', ECInterfacialTension,
      'sample'),
     ('Flash Point.Flash Point', 'physical_properties.flash_point',
-     ECFlashPoint, 'sample'),
+     ECValueOnly, 'sample'),
     ('Pour Point.Pour Point', 'physical_properties.pour_point',
-     ECPourPoint, 'sample'),
+     ECValueOnly, 'sample'),
     # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
     ('Boiling Point Distribution, Temperature.Initial Boiling Point',
      'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
@@ -412,7 +399,7 @@ mapping_list = [
     ('Boiling Point Distribution, Temperature.100%',
      'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
     ('Boiling Point Distribution, Temperature.Final Boiling Point',
-     'distillation_data.end_point', BPTemperatureEndPoint, 'sample'),
+     'distillation_data.end_point', ECValueOnly, 'sample'),
     ('Boiling Point Cumulative Weight Fraction'
      '.Boiling Point Cumulative Weight Fraction',
      'distillation_data.cuts.+', BPCumulativeWeightFraction, 'sample'),
@@ -588,13 +575,13 @@ mapping_list = [
      '.TOTAL TPH (GC Detected TPH + Undetected TPH)',
      'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
     ('Hydrocarbon Group Content.Saturates',
-     'SARA.saturates', ECSaraFraction, 'sample'),
+     'SARA.saturates', ECValueOnly, 'sample'),
     ('Hydrocarbon Group Content.Aromatics',
-     'SARA.aromatics', ECSaraFraction, 'sample'),
+     'SARA.aromatics', ECValueOnly, 'sample'),
     ('Hydrocarbon Group Content.Resin',
-     'SARA.resins', ECSaraFraction, 'sample'),
+     'SARA.resins', ECValueOnly, 'sample'),
     ('Hydrocarbon Group Content.Asphaltene',
-     'SARA.asphaltenes', ECSaraFraction, 'sample'),
+     'SARA.asphaltenes', ECValueOnly, 'sample'),
     ('n-Alkanes.n-C8', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C9', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C10', 'compounds.+', ECCompound, 'sample'),
@@ -855,16 +842,15 @@ class EnvCanadaCsvRecordParser(ParserBase):
             spreadsheet that would be better handled before we start parsing
             anything.
         '''
-        valid_fields = ('value_id', 'oil_id', 'ests_id', 'property_id',
-                        'oil_name', 'source', 'date_sample_received',
-                        'comments', 'ests', 'reference', 'weathering_fraction',
-                        'weathering_percent', 'weathering_method',
-                        'property_group', 'property_name', 'unit_of_measure',
-                        'temperature', 'condition_of_analysis', 'value',
-                        'standard_deviation', 'replicates', 'method')
+        if len(values) == 0:
+            return  # nothing to prune
+
+        keys = set(values[0].keys())
+        valid_keys = {k for k in keys if k not in ('',)}
+        bad_keys = keys.difference(valid_keys)
+
         for obj in values:
-            bad_keys = [k for k in obj.keys() if k not in valid_fields]
-            [obj.pop(k) for k in bad_keys]
+            [obj.pop(k, None) for k in bad_keys]
 
         return values
 
@@ -915,50 +901,37 @@ class EnvCanadaCsvRecordParser(ParserBase):
               attributes and we can make an exception if there is an obvious
               problem.
         '''
-        # FIGURE OUT THE TYPE OF OBJECT TO SET
         to_type = property_type_map[attr]
 
         if to_type is str:
             value = ' '.join({str(v[attr]) for v in self.src_values
-                             if v[attr] is not None
-                             and v[attr] != 'None'})
+                             if v[attr] is not None and v[attr] != 'None'})
 
-            if len(value) == 0:
-                value = None
+            value = None if len(value) == 0 else value
         elif to_type is int:
             value = {int(v[attr]) for v in self.src_values
                      if v[attr] is not None}
 
             if len(value) > 1:
-                # This is probably not a big enough problem to stop everything,
-                # but we will issue a warning.
+                # This is a problem, but not big enough to stop everything
                 logger.warning(f'ESTS #{self.src_values[0]["ests"]}: '
                                f'More than 1 integer value found for {attr}')
 
-            if len(value) >= 1:
-                value = list(value)[0]
-            else:
-                value = None
-
+            value = list(value)[0] if len(value) >= 1 else None
         elif to_type is datetime:
             value = {v[attr] for v in self.src_values if v[attr] is not None}
             value = [parse_single_datetime(v) for v in value]
 
             if len(value) > 1:
-                # This is probably not a big enough problem to stop everything,
-                # but we will issue a warning.
+                # This is a problem, but not big enough to stop everything
                 logger.warning(f'ESTS #{self.src_values[0]["ests"]}: '
                                f'More than 1 datetime value found for {attr}')
 
-            if len(value) >= 1:
-                value = value[0].strftime('%Y-%m-%d')
-            else:
-                value = None
+            value = value[0].strftime('%Y-%m-%d') if len(value) >= 1 else None
         else:
-            print(f'unimplemented type for {attr}')
+            logger.error(f'unimplemented type for {attr}')
             value = None
 
-        # SET THE VALUE
         if value:
             try:
                 self.deep_set(self.oil_obj, property_map[attr], value)
