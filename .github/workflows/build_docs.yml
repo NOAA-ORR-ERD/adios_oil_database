@@ -1,3 +1,11 @@
+on:
+  # Trigger the workflow on push request,
+  # but only for the master & develop branch
+  push:
+    branches:
+      - develop
+      - master
+
 jobs:
   build:
     name: Build and Push Sphinx Pages
