@@ -1,23 +1,96 @@
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
   - template: License-Scanning.gitlab-ci.yml
-  - template: SAST.gitlab-ci.yml
+  #- template: SAST.gitlab-ci.yml
   #- template: DAST.gitlab-ci.yml
 
 variables:
-  DS_DISABLE_DIND: "true"
-  SAST_DISABLE_DIND: "true"
   SECURE_ANALYZERS_PREFIX: "registry.gitlab.com/gitlab-org/security-products/analyzers"
   CS_MAJOR_VERSION: 3
   CLAIR_OUTPUT: High
+  DS_DISABLE_DIND: "true"
+  SAST_DISABLE_DIND: "true"
   CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
   DAST_WEBSITE: https://adios-stage.orr.noaa.gov
   DAST_USE_AJAX_SPIDER: "true"
 
-container_scanning:
+stages:
+  - test
+  - build
+  - verify
+  - deploy
+
+test_develop:
+  stage: test
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3
+  tags:
+    - docker
+
+  before_script:
+    - echo "ip_resolve=4" >> /etc/yum.conf
+    - yum update -y
+    - conda install -y python=3.9
+    - conda update -y conda
+
+  script:
+    # install all the requirements
+    - conda install -y --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+
+    # configure and start mongodb
+
+    # mongo should have been installed by conda, but conda doesn't reserve
+    # places for the logs, the database, and the pidfile
+    # note: maybe we should update the test config so we don't need this??
+    #       and then we could save the logs, etc as an artifact as well.
+    - mkdir /var/lib/mongo
+    - mkdir /var/log/mongodb
+    - mkdir /var/run/mongodb
+
+    - mongod --config mongo_config_test.yml &
+
+    # Install & test the adios_db package
+    - cd adios_db
+    - pip install -e ./
+    - pytest --mongo adios_db
+
+    # Install & test the oil_library_api package
+    - cd ../web_api
+    - pip install -e ./
+    - pytest adios_db_api
+
+build_api:
+  stage: build
+  tags:
+    - build
+  variables:
+    # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+  script:
+    # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build . -f web_api/dockerfile -t $IMAGE_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $IMAGE_TAG
+
+build_client:
+  stage: build
+  tags:
+    - build
+  variables:
+    # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build . -f web_client/dockerfile -t $IMAGE_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $IMAGE_TAG
+
+scan-api:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
   variables:
+    CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
     # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
     # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
     CLAIR_DB_IMAGE_TAG: "latest"
@@ -26,7 +99,6 @@ container_scanning:
     # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
     # for details
     GIT_STRATEGY: none
-    CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
   allow_failure: true
   services:
     - name: $CLAIR_DB_IMAGE
@@ -41,77 +113,150 @@ container_scanning:
     - if: $CONTAINER_SCANNING_DISABLED
       when: never
     - if: $CI_COMMIT_BRANCH &&
-          $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
+        $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
-stages:
-    - test
-    - build
-    - verify
+scan-client:
+  stage: verify
+  image: "$CS_ANALYZER_IMAGE"
+  variables:
+    CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+    # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
+    # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
+    CLAIR_DB_IMAGE_TAG: "latest"
+    CLAIR_DB_IMAGE: "$SECURE_ANALYZERS_PREFIX/clair-vulnerabilities-db:$CLAIR_DB_IMAGE_TAG"
+    # Override the GIT_STRATEGY variable in your `.gitlab-ci.yml` file and set it to `fetch` if you want to provide a `clair-whitelist.yml`
+    # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
+    # for details
+    GIT_STRATEGY: none
+  allow_failure: true
+  services:
+    - name: $CLAIR_DB_IMAGE
+      alias: clair-vulnerabilities-db
+  script:
+    - /analyzer run
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
+  dependencies: []
+  rules:
+    - if: $CONTAINER_SCANNING_DISABLED
+      when: never
+    - if: $CI_COMMIT_BRANCH &&
+        $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
-test_develop:
-    stage: test
-    image: registry.orr.noaa.gov/erd/centos-conda
-    tags:
-        - docker
+deploy_mongodb_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_mongodb_stage
+  variables:
+    IMAGE_TAG: mongo:latest
+    CONTAINER_NAME: mongodb
+    PORT_MAPPING: 127.0.0.1:27017:27017
+    DB_LOCATION: /data/adios_oil_db/data/db
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      -v $DB_LOCATION:/data/db
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
 
-    before_script:
-        - echo "ip_resolve=4" >> /etc/yum.conf
-        - yum update -y
-        - conda install -y requests lxml
-        
-    script:
-        # Install & test the oil_library package
-        - cd adios_db
-        - conda install -y --file conda_requirements.txt
-        - pip install -e ./
+stop_mongodb_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: mongodb
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy
 
-        # mongo should have been installed by conda, but conda doesn't reserve
-        # places for the logs, the database, and the pidfile
-        - mkdir /var/lib/mongo
-        - mkdir /var/log/mongodb
-        - mkdir /var/run/mongodb
+deploy_api_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_api_stage
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+    CONTAINER_NAME: adios_db_web_api
+    PORT_MAPPING: 8004:9898
+    CONFIG_BASE: /data/adios_oil_db/oildb-deploy/config
+    OIL_DATA: /data/adios_oil_db/noaa-oil-data
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      -v $CONFIG_BASE/web_api:/config
+      -v $OIL_DATA:/noaa-oil-data
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
 
-        - mongod --config ../mongo_config_test.yml &
+stop_api_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: adios_db_web_api
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy
 
-        - cd data/exxon_assays
-        - python ./download_exxon_assays.py
-        - cd -
+deploy_client_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_client_stage
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+    CONTAINER_NAME: adios_db_web_client
+    PORT_MAPPING: 8003:4200
+    CONFIG_BASE: /data/adios_oil_db/oildb-deploy/config
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      -v $CONFIG_BASE/web_client:/config
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
 
-        - adios_db_init
-        - adios_db_import --all
-
-        - pytest --mongo adios_db
-
-        # Install & test the oil_library_api package
-        - cd ../web_api
-        - conda install -y --file conda_requirements.txt
-        - pip install -e ./
-
-        - pytest adios_db_api
-
-build_api_stage:
-    stage: build
-    tags:
-        - build
-    variables:
-        # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
-        IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api-stage
-    script:
-        # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build . -f web_api/dockerfile -t $IMAGE_TAG
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker push $IMAGE_TAG
-
-build_client_stage:
-    stage: build
-    tags:
-        - build
-    variables:
-        # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
-        IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-stage
-    script:
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build . -f web_client/dockerfile -t $IMAGE_TAG
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker push $IMAGE_TAG
+stop_client_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: adios_db_web_client
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy

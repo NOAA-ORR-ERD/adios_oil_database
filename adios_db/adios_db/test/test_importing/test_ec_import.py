@@ -17,10 +17,10 @@ import numpy as np
 from openpyxl.utils.exceptions import InvalidFileException
 
 import adios_db
-from adios_db.data_sources.env_canada import (EnvCanadaOilExcelFile,
-                                              EnvCanadaRecordParser,
-                                              EnvCanadaRecordMapper,
-                                              EnvCanadaSampleMapper)
+from adios_db.data_sources.env_canada.v1 import (EnvCanadaOilExcelFile,
+                                                 EnvCanadaRecordParser,
+                                                 EnvCanadaRecordMapper,
+                                                 EnvCanadaSampleMapper)
 
 from pprint import pprint
 
@@ -1803,8 +1803,7 @@ class TestEnvCanadaRecordMapper(object):
             _mapper = EnvCanadaRecordMapper(None)
 
     @pytest.mark.parametrize('oil_id, expected', [
-        ('2713', {'_id': 'EC02713',
-                  'oil_id': 'EC02713',
+        ('2713', {'oil_id': 'EC02713',
                   'metadata.name': 'Alaska North Slope [2015]',
                   'metadata.source_id': '2713',
                   'metadata.location': 'Alaska, USA',

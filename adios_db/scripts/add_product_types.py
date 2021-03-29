@@ -34,7 +34,7 @@ def read_the_csv_file(csv_name):
 
 
 def add_them(data):
-    missing = open("missing_records.csv", 'w', , encoding="utf-8")
+    missing = open("missing_records.csv", 'w', encoding="utf-8")
     name_mismatch = open("name_mismatch_records.csv", 'w', encoding="utf-8")
     try:
         sys.argv.remove("dry_run")

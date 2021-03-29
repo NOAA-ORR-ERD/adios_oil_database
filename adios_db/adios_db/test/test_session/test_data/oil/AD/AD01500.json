@@ -1,6 +1,6 @@
 {
     "oil_id": "AD01500",
-    "_id": "AD01500",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "JET A-1,  MARITIME SAFETY AUTHORITY OF NEW ZEALAND",
         "source_id": "AD01500",
@@ -13,6 +13,7 @@
         "API": 45.22,
         "labels": [
             "Fuel Oil",
+            "Distillate Fuel",
             "Refined Product"
         ],
         "model_completeness": 42

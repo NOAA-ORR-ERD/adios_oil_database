@@ -18,14 +18,6 @@ Subpackages
 Submodules
 ----------
 
-adios\_db.models.oil.canonical module
--------------------------------------
-
-.. automodule:: adios_db.models.oil.canonical
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 adios\_db.models.oil.ccme module
 --------------------------------
 

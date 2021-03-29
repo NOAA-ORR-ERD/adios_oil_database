@@ -56,9 +56,10 @@ td:empty::after{
 .noaa-logo {
     background: url(../assets/images/NOAA_logo.svg);
     background-size: contain;
+    background-position-x: center;
     background-repeat: no-repeat;
-    height: 120px;
-    width: 120px;
+    height: 60px;
+    width: 60px;
     position: relative;
 }
 
@@ -117,7 +118,7 @@ td:empty::after{
 }
 
 .footer{
-    padding: 15px 0;
+    padding: 5px 0;
     img{
         width: 64px;
         height: 64px;
@@ -155,10 +156,9 @@ td:empty::after{
 .list-item-category {
     border: 1px solid gray;
     border-radius: 2px;
-    //color: #ffffff;
-    //background-color: #17a2b8;
     padding: 0 4px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     line-height: 1.45;
     float: left;
     margin: 2px 0 2px 3px;
@@ -207,6 +207,10 @@ ul.ember-power-select-options {
 }
 .scrollbar-width-tester {
     position: absolute;
+}
+.tse-scrollbar.vertical .drag-handle {
+  right: 2px;
+  width: 0.7em;
 }
 
 $ember-power-select-multiple-selection-background-color: #17a2b8;

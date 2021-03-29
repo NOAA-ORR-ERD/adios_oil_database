@@ -13,17 +13,19 @@ from ..common.utilities import dataclass_to_json
 
 from .metadata import MetaData
 from .sample import SampleList
+from .version import Version, VersionError
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
+
+ADIOS_DATA_MODEL_VERSION = Version(0, 10, 0)
 
 
 @dataclass_to_json
 @dataclass
 class Oil:
     oil_id: str  # required
-    _id: str = ''
-
+    adios_data_model_version: Version = ADIOS_DATA_MODEL_VERSION
     metadata: MetaData = field(default_factory=MetaData)
     sub_samples: SampleList = field(default_factory=SampleList)
     status: list = field(default_factory=list)
@@ -39,10 +41,8 @@ class Oil:
             raise TypeError("You must supply a non-empty oil_id")
         elif not isinstance(self.oil_id, str):
             raise ValueError("oil_id must be a string")
-        elif len(self.oil_id) > 64:  # arbitrary limit to catch ridiculous ones
-            raise ValueError("oil_id must be a string less than 65 characters in length")
-        else:
-            self._id = self.oil_id
+        # arbitrary limit to catch ridiculous ones (UUIDs are 36 chars)
+        self._validate_id(self.oil_id)
 
     def __str__(self):
         """
@@ -52,6 +52,27 @@ class Oil:
                 f"ID: {self.oil_id}\n"
                 f"Product Type: {self.metadata.product_type}"
                 )
+
+    # @property
+    # def adios_data_model_version():
+    #     return self._adios_data_model_version
+
+    # @adios_data_model.setter:
+    # def adios_data_model_version():
+
+    @staticmethod
+    def _pre_from_py_json(py_json):
+        # check the version
+        try:
+            ver = py_json['adios_data_model_version']
+            if Version.from_py_json(ver) != ADIOS_DATA_MODEL_VERSION:
+                py_json = update_json_to_current_version(py_json)
+                raise ValueError("Can't load this version of the data model")
+            py_json.pop('adios_data_model_version', None)
+        except KeyError:
+            # not versioned, assume it will work
+            pass
+        return py_json
 
     @classmethod
     def from_file(cls, infile):
@@ -73,12 +94,13 @@ class Oil:
 
     @staticmethod
     def _validate_id(id):
-        if self.oil_id == "":
+        if id == "":
             raise TypeError("You must supply a non-empty oil_id")
-        elif not isinstance(self.oil_id, str):
+        elif not isinstance(id, str):
             raise ValueError("oil_id must be a string")
-        elif len(self.oil_id) > 32:  # arbitrary limit to catch ridiculous ones
-            raise ValueError("oil_id must be a string less than 32 characters in length")
+        # arbitrary limit to catch ridiculous onesL UUID is  36 characters
+        elif len(id) > 40:
+            raise ValueError("oil_id must be a string less than 40 characters in length")
 
 
     def validate(self):
@@ -90,11 +112,10 @@ class Oil:
         msgs = []
 
         # Validate ID
-        if (not 0 < len(self.oil_id) <= 32
-            or not isinstance(self.oil_id, str)):
-
+        try:
+            self._validate_id(self.oil_id)
+        except ValueError:
             msgs.append(ERRORS["E001"].format(self.oil_id))
-
         return msgs
 
     def reset_validation(self):
@@ -120,6 +141,27 @@ class Oil:
             json.dump(self.py_json(), open(infile, 'w', encoding='utf-8'), indent=4)
 
         return None
+
+# fixme: this should probably go in a new file at some point
+# fixme: make a Version type: maybe a namedtuple? is can save as a string
+def update_json_to_current_version(py_json):
+    """
+    updates JSON for an oil object from an older version to a newer one
+    """
+
+    cur_ver = ADIOS_DATA_MODEL_VERSION
+    ver = py_json.get('adios_data_model_version')
+
+    if ver is None:
+        # assume it's the version from before we added a version
+        ver = "0.10.0"
+    ver = Version.from_py_json(ver)
+    if ver == cur_ver:  # nothing to be done
+        return py_json
+    elif ver > cur_ver:
+        raise VersionError(f"Version: {ver} is not supported by this version of Oil object")
+    else:
+        raise VersionError(f"updator not available for version: {ver}")
 
 
 

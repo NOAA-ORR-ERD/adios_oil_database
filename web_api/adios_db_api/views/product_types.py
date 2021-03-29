@@ -12,7 +12,7 @@ from adios_db.models.oil.product_type import PRODUCT_TYPES
 logger = logging.getLogger(__name__)
 
 product_types_api = Service(name='product-types',
-                            path='/product-types*obj_id',
+                            path='/product-types/*obj_id',
                             description="Endpoint for getting product types",
                             cors_policy=cors_policy)
 
@@ -28,7 +28,8 @@ def get_product_types(request):
         try:
             obj_id = int(obj_id)
         except TypeError as e:
-            raise HTTPBadRequest(e)
+            logger.error(e)
+            raise HTTPBadRequest('Bad Object ID')
 
         if obj_id != 0:
             raise HTTPNotFound()

@@ -8,11 +8,14 @@ from pathlib import Path
 import pytest
 
 from adios_db.models.oil.product_type import (ProductType,
-                                                  PRODUCT_TYPES,
-                                                  load_from_csv_file,
-                                                  )
+                                              PRODUCT_TYPES,
+                                              types_to_labels,
+                                              load_from_csv_file,
+                                              )
 
 product_types_lower = [pt.lower() for pt in PRODUCT_TYPES]
+
+example_file = Path(__file__).parent / "example_products.csv"
 
 
 @pytest.mark.parametrize("product_type",
@@ -41,8 +44,6 @@ def test_load_from_csv_file():
     """
     tests loading the product types and labels from a CSV file
     """
-    example_file = Path(__file__).parent / "example_products.csv"
-
     mapping = load_from_csv_file(example_file)
 
     assert list(mapping.keys()) == ['Crude Oil NOS', 'Condensate', 'Bitumen Blend']
@@ -53,6 +54,20 @@ def test_load_from_csv_file():
                                         'Group V',
                                         'Heavy Crude',
                                         'Bitumen Blend'}
+
+
+# we are no longer adding all the product types to the labels
+# def test_product_types_labels():
+#     """
+#     checks that all the product types are listed in the labels
+
+#     This is using the data loaded in the module
+#     """
+
+#     print(types_to_labels.labels.keys())
+
+#     for pt, labels in types_to_labels.labels.items():
+#         assert pt in labels
 
 
 

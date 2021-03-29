@@ -1,6 +1,6 @@
 {
     "oil_id": "EC00506",
-    "_id": "EC00506",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "Alaminos Canyon Block 25",
         "source_id": "506",
@@ -1756,10 +1756,7 @@
                         "unit_type": "massfraction"
                     }
                 }
-            ],
-            "ESTS_hydrocarbon_fractions": {
-                "method": "Hollebone, Bruce (2020) Personal communication"
-            }
+            ]
         },
         {
             "metadata": {

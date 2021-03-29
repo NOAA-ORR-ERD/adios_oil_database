@@ -1,9 +1,12 @@
 {
     "oil_id": "EC02713",
-    "_id": "EC02713",
+    "adios_data_model_version": "0.10.0",
     "metadata": {
         "name": "Alaska North Slope [2015]",
         "source_id": "2713",
+        "alternate_names": [
+            "ANS"
+        ],
         "location": "Alaska, USA",
         "reference": {
             "year": 2020,
@@ -1875,9 +1878,6 @@
                     "unit_type": "massfraction"
                 },
                 "method": "ESTS 5.03/x.x/M"
-            },
-            "ESTS_hydrocarbon_fractions": {
-                "method": "Hollebone, Bruce (2020) Personal communication"
             }
         },
         {

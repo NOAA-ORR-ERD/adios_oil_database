@@ -27,9 +27,7 @@ README = open(here / '../README.md').read()
 pkg_version = get_version(pkg_name)
 
 
-requires = [  # 'plaster_pastedeploy',
-            'pyramid',
-              # 'pyramid_mako',
+requires = ['pyramid',
             'pyramid_debugtoolbar',
             'waitress']
 
@@ -39,22 +37,22 @@ tests_require = ['WebTest >= 1.3.1',
 
 
 def clean_files():
-    src = os.path.join(here, pkg_name)
-    to_rm = glob.glob(os.path.join(src, r'*.pyc'))
-    to_rm.extend([os.path.join(here, '{0}.egg-info'.format(pkg_name)),
-                  os.path.join(here, 'build'),
-                  os.path.join(here, 'dist')])
+    src = here / pkg_name
+    to_rm = list(src.rglob('__pycache__'))
+    to_rm.extend([here / f'{pkg_name}.egg-info',
+                  here / 'build',
+                  here / 'dist'])
 
     for f in to_rm:
         try:
-            if os.path.isdir(f):
+            if f.is_dir:
                 shutil.rmtree(f)
             else:
                 os.remove(f)
         except Exception:
             pass
 
-        print('Deleting {0} ..'.format(f))
+        print(f'Deleting {f} ..')
 
 
 class cleanall(clean):

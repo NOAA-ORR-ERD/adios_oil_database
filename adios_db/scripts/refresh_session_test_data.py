@@ -22,8 +22,6 @@ import shutil
 from argparse import ArgumentParser
 from pathlib import Path
 
-import pdb
-
 here = Path(__file__).resolve().parent
 logger = logging.getLogger(__name__)
 FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
@@ -83,15 +81,14 @@ file_list = (
 )
 
 
-
 def refresh_test_data(base_path):
     '''
-    Here is where we refresh the data that the session pytests use.
+        Here is where we refresh the data that the session pytests use.
     '''
     logger.info('>> refresh_test_data()...')
-    
+
     dest = here.parent / 'adios_db' / 'test' / 'test_session' / 'test_data'
-    
+
     if base_path.is_dir() and dest.is_dir():
         for p in file_list:
             read_path = Path(base_path).joinpath(*p)
@@ -114,19 +111,3 @@ def refresh_test_data(base_path):
 
 if __name__ == "__main__":
     refresh_test_data_cmd(sys.argv)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

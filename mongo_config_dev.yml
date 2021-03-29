@@ -1,4 +1,11 @@
 # configuration for mongodb
+#
+# these are the setting used in the Session tests
+
+# this one designed to be run in the current working dir in the git repo.
+# you can start mongo with
+# mongod -f mongo_config_dev.yml
+
 
 # this is set up to be run from the main dir in the repo
 # to start:

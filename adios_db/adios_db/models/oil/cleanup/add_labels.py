@@ -40,11 +40,16 @@ synonyms_for_product_types = {'Crude Oil',
                               'Fracking Oil',
                               'Fuel Oil',
                               'Residual Fuel',
+                              'Distillate Fuel',
                               'Refined Product',
-                              'Condensate'
                               'Transformer Oil',
                               }
-
+# If it's an exact match, then it's definitely a synonym
+for pt, labels in types_to_labels.labels.items():
+    for label in labels:
+        if label == pt:
+            # print(f"adding: {label}")
+            synonyms_for_product_types.add(label)
 
 # these are labels that are synonymous to other labels
 synonyms_for_labels = {'Heavy Fuel Oil': ['HFO', 'No. 6 Fuel Oil', 'Bunker C'],
@@ -94,7 +99,11 @@ def get_suggested_labels(oil):
     """
     labels = set()
     pt = oil.metadata.product_type
-    if pt == "Other":  #  we don't want any labels auto added for Other
+    # everything gets its product type as a label as well
+    # unless it has no product type
+    # if pt:
+    #     labels.add(pt)
+    if pt == "Other":  # we don't want any labels auto added for Other
         return labels
     try:
         for label in types_to_labels.left[oil.metadata.product_type]:
@@ -149,7 +158,7 @@ def is_label(oil, label):
                               temp_units='C')
             is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
         except (ZeroDivisionError, ValueError): # if it can't do this, we don't apply the label
-            is_label = False
+            is_label = True
 
     return is_label
 

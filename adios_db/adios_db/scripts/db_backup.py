@@ -111,7 +111,7 @@ def add_folder(base_path, folder):
 
 
 def export_to_file(base_path, collection_name, record):
-    record_name = str(record['_id'])
+    record_name = str(record['oil_id'])
 
     if collection_name == 'oil':
         # there could be a lot of oil records, so we want to break them up by

@@ -37,7 +37,8 @@ class OilLibraryCsvFile:
         TODO: I just noticed that we are not making use of the .csv utility
               class.  We need to refactor this to use it.
     '''
-    def __init__(self, name, field_delim='\t', ignore_version=False):
+    def __init__(self, name, field_delim='\t', ignore_version=False,
+                 encoding='mac_roman'):
         '''
             :param name: The name of the oil library import file
             :type name: A path as a string or unicode
@@ -62,7 +63,7 @@ class OilLibraryCsvFile:
         self.num_columns = None
         self._row_lu = {}
 
-        self.fileobj = open(name, 'r', encoding='mac_roman')
+        self.fileobj = open(name, 'r', encoding=encoding)
         self.field_delim = field_delim
 
         self.__version__ = self.readline(cache=False)

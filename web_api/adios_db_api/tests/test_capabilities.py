@@ -11,12 +11,12 @@ class CapabilitiesTests(FunctionalTestBase):
         So we will verify the available options.
     '''
     def test_get_capabilities(self):
-        resp = self.testapp.get('/capabilities')
+        resp = self.testapp.get('/capabilities/')
         caps = resp.json_body
 
         assert caps[0]['can_modify_db'] == 'true'
 
-        resp = self.testapp.get('/capabilities/0')
+        resp = self.testapp.get('/capabilities/0/')
         caps = resp.json_body
 
         assert caps['can_modify_db'] == 'true'
