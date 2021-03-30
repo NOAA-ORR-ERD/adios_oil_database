@@ -102,7 +102,7 @@ class ECMeasurementDataclass:
         '''
         if self.unit_of_measure:
             unit = self.unit_of_measure.split(' or ')[0]
-            unit = unit.lstrip('°')
+            unit = unit.lstrip('°').lstrip('¬∞')
 
             self.unit_of_measure = unit
 

@@ -324,7 +324,7 @@ def _add_norway_files(settings):
 
 def _add_ec_files(settings):
     ec_files = '\n'.join([os.path.join(data_path, 'env_canada', fn)
-                          for fn in ('ests_data_03-03-2021.csv',)])
+                          for fn in ('opp_data_catalogue_en.csv',)])
 
     settings['oildb.ec_files'] = ec_files
 
