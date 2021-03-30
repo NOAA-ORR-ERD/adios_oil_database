@@ -13,12 +13,13 @@ logger = logging.getLogger(__name__)
 
 class OilLibraryAttributeMapper(MapperBase):
     '''
-        A translation/conversion layer for the NOAA Filemaker imported
-        record object.
-        This is intended to be used interchangeably with either a NOAA
-        Filemaker record or record parser object.  Its purpose is to generate
-        named attributes that are suitable for creation of a NOAA Oil Database
-        record.
+    A translation/conversion layer for the NOAA FileMaker imported
+    record object.
+
+    This is intended to be used interchangeably with either a NOAA
+    Filemaker record or record parser object.  Its purpose is to generate
+    named attributes that are suitable for creation of a NOAA Oil Database
+    record.
     '''
     oil_props = ('oil_id',
                  'metadata',
@@ -181,11 +182,12 @@ class OilLibraryAttributeMapper(MapperBase):
 
     def environmental_behavior(self, weathering):
         '''
-            Notes:
-            - there is a dispersability_temp_k, but it does not fit with the
-              oil model.  sample.environmental_behavior.dispersibilites is
-              for chemical dispersibility with a dispersant, and makes no
-              reference to a temperature.
+        Notes:
+
+        - there is a dispersability_temp_k, but it does not fit with the
+          oil model.  sample.environmental_behavior.dispersibilites is
+          for chemical dispersibility with a dispersant, and makes no
+          reference to a temperature.
         '''
         ret = {}
 
@@ -201,9 +203,10 @@ class OilLibraryAttributeMapper(MapperBase):
     @property
     def compounds(self):
         '''
-            Tentative Compound items:
-            - benzene (units=???, typical value=0.05 for gasoline,
-                       just a fractional value maybe?)
+        Tentative Compound items:
+
+        - benzene (units=???, typical value=0.05 for gasoline,
+          just a fractional value maybe?)
         '''
         ret = []
         for attr, unit in (('benzene', 'fraction'),):
@@ -221,16 +224,24 @@ class OilLibraryAttributeMapper(MapperBase):
     @property
     def bulk_composition(self):
         '''
-            Tentative Bulk Composition items:
-            - Water Content Emulsion
-            - Wax Content
-            - Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)
-            - Naphthenes (units=???, typical value=0.0004 for Jet A-1)
-            - Paraffins  (unit=???, 0.783 for Alberta 1992
-                          0.019 for Salmon Oil & Gas)
-            - Nickel  (unit=ppm most likely)
-            - Vanadium  (unit=ppm most likely)
-            - Polars  (unit=1 possibly, 0.0284 for Alberta 1992)
+        Tentative Bulk Composition items:
+
+        - Water Content Emulsion
+
+        - Wax Content
+
+        - Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)
+
+        - Naphthenes (units=???, typical value=0.0004 for Jet A-1)
+
+        - Paraffins  (unit=???, 0.783 for Alberta 1992
+                      0.019 for Salmon Oil & Gas)
+
+        - Nickel  (unit=ppm most likely)
+
+        - Vanadium  (unit=ppm most likely)
+
+        - Polars  (unit=1 possibly, 0.0284 for Alberta 1992)
         '''
         ret = []
         for attr, map_to, unit in (('water_content_emulsion', 'water_content',
@@ -259,12 +270,15 @@ class OilLibraryAttributeMapper(MapperBase):
     @property
     def industry_properties(self):
         '''
-            Industry Property items:
-            - Reid Vapor Pressure (min/max/avg = 0/0.81/0.295, probably bars)
-            - Conradson Crude (min/max/avg = 0.0054/0.12/0.035, probably just
-                               a fractional value)
-            - Conradson Residuum (one value, 0.0019, probably just a fractional
-                                  value)
+        Industry Property items:
+
+        - Reid Vapor Pressure (min/max/avg = 0/0.81/0.295, probably bars)
+
+        - Conradson Crude (min/max/avg = 0.0054/0.12/0.035, probably just
+          a fractional value)
+
+        - Conradson Residuum (one value, 0.0019, probably just a fractional
+          value)
         '''
         ret = []
         for attr, map_to, unit in (('reid_vapor_pressure',

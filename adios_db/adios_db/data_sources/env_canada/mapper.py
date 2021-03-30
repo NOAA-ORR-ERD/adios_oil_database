@@ -666,28 +666,29 @@ class EnvCanadaSampleMapper(MapperBase):
     def compounds_in_group(self, category, group_category,
                            unit, unit_type, filter_compounds=True):
         '''
-            :param category: The category attribute containing the data
-            :param group_category: The category attribute containing the
-                                   group label
-            :param unit: The unit.
-            :param unit_type: The type of thing that the unit measures
-                              (length, mass, etc.)
-            :param filter: Filter only those attributes that have a suffix
-                           matching the unit value.
+        :param category: The category attribute containing the data
+        :param group_category: The category attribute containing the
+                               group label
+        :param unit: The unit.
+        :param unit_type: The type of thing that the unit measures
+                          (length, mass, etc.)
+        :param filter: Filter only those attributes that have a suffix
+                       matching the unit value.
 
-            Example of content:
-                {
-                    'name': '1-Methyl-2-Isopropylbenzene',
-                    'method': 'ESTS 2002b',
-                    'groups': ['C4-C6 Alkyl Benzenes', ...],
-                    'measurement': {
-                        value: 3.4,
-                        unit: 'ppm',
-                        unit_type: 'massfraction',
-                        replicates: 3,
-                        standard_deviation: 0.1
-                    }
+        Example of content::
+
+            {
+                'name': '1-Methyl-2-Isopropylbenzene',
+                'method': 'ESTS 2002b',
+                'groups': ['C4-C6 Alkyl Benzenes', ...],
+                'measurement': {
+                    value: 3.4,
+                    unit: 'ppm',
+                    unit_type: 'massfraction',
+                    replicates: 3,
+                    standard_deviation: 0.1
                 }
+            }
         '''
         cat_obj = getattr(self.parser, category)
         conditions = self.parser.get_conditions(category)

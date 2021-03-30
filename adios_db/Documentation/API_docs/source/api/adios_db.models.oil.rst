@@ -58,6 +58,14 @@ adios\_db.models.oil.ests\_fractions module
    :undoc-members:
    :show-inheritance:
 
+adios\_db.models.oil.location\_coordinates module
+-------------------------------------------------
+
+.. automodule:: adios_db.models.oil.location_coordinates
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.models.oil.metadata module
 ------------------------------------
 
@@ -118,6 +126,14 @@ adios\_db.models.oil.values module
 ----------------------------------
 
 .. automodule:: adios_db.models.oil.values
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.models.oil.version module
+-----------------------------------
+
+.. automodule:: adios_db.models.oil.version
    :members:
    :undoc-members:
    :show-inheritance:

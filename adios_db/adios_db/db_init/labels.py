@@ -244,11 +244,14 @@ def is_refined_fuel_oil_6(oil, sample):
 def is_generic(oil):
     '''
         Category Name:
+
         - Other->Generic
+
         Criteria:
+
         - Any oils that have been generically generated.  These are found
           in the OilLibTest data file.  Basically these oils have a name
-          that is prefixed with '*GENERIC'.
+          that is prefixed with ``*GENERIC``.
     '''
     try:
         ret = oil['metadata'].get('name', None)

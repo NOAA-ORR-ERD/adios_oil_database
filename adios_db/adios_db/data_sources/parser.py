@@ -82,18 +82,20 @@ class ParserBase(object):
     '''
     def slugify(self, label):
         '''
-            Generate a string that is suitable for use as an object attribute.
-            - The strings will be snake-case, all lowercase words separated
-              by underscores.
-            - They will not start with a numeric digit.  If the original label
-              starts with a digit, the slug will be prepended with an
-              underscore ('_').
+        Generate a string that is suitable for use as an object attribute.
 
-            Note: Some unicode characters are not intuitive.  Specifically,
-                  In German orthography, the grapheme ß, called Eszett or
-                  scharfes S (Sharp S).  It looks sorta like a capital B to
-                  English readers, but converting it to 'ss' is not completely
-                  inappropriate.
+        - The strings will be snake-case, all lowercase words separated
+          by underscores.
+
+        - They will not start with a numeric digit.  If the original label
+          starts with a digit, the slug will be prepended with an
+          underscore ('_').
+
+        :Note: Some unicode characters are not intuitive.  Specifically,
+               In German orthography, the grapheme ß, called Eszett or
+               scharfes S (Sharp S).  It looks sorta like a capital B to
+               English readers, but converting it to 'ss' is not completely
+               inappropriate.
         '''
         if label is None:
             return label

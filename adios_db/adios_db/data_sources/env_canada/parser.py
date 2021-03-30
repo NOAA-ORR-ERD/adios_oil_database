@@ -69,16 +69,18 @@ label_map = {
 
 class EnvCanadaRecordParser(ParserBase):
     '''
-        A record class for the Environment Canada oil spreadsheet.  This is
-        intended to be used with a set of data representing a single record
-        from the spreadsheet.
-        - We manage a hierarcical structure of properties extracted from the
-          Excel columns for an oil.  Basically this will be a dictionary of
-          raw property category names, where each property category itself will
-          contain a dictionary of raw individual properties.
-        - The data associated with any individual property will be a list of
-          values corresponding to the weathered subsamples that exist for the
-          oil record.
+    A record class for the Environment Canada oil spreadsheet.  This is
+    intended to be used with a set of data representing a single record
+    from the spreadsheet.
+
+    - We manage a hierarcical structure of properties extracted from the
+      Excel columns for an oil.  Basically this will be a dictionary of
+      raw property category names, where each property category itself will
+      contain a dictionary of raw individual properties.
+
+    - The data associated with any individual property will be a list of
+      values corresponding to the weathered subsamples that exist for the
+      oil record.
     '''
     def __init__(self, values, conditions, file_props):
         '''
@@ -406,14 +408,16 @@ class EnvCanadaRecordParser(ParserBase):
 
 class EnvCanadaSampleParser(ParserBase):
     '''
-        A sample class for the Environment Canada oil spreadsheet.  This is
-        intended to be used with a set of data representing a single subsample
-        inside an oil record.
-        - We manage a hierarcical structure of properties similar to that of
-          the record parser
-        - The data associated with any individual property will be a single
-          scalar value corresponding to a weathered subsample that exists
-          for an oil record.
+    A sample class for the Environment Canada oil spreadsheet.  This is
+    intended to be used with a set of data representing a single subsample
+    inside an oil record.
+
+    - We manage a hierarcical structure of properties similar to that of
+      the record parser
+
+    - The data associated with any individual property will be a single
+      scalar value corresponding to a weathered subsample that exists
+      for an oil record.
     '''
     attr_map = {
         # any attributes that are a simple mapping of the data
@@ -654,15 +658,19 @@ class EnvCanadaSampleParser(ParserBase):
     @property
     def chromatography(self):
         '''
-            The Evironment Canada data sheet contains data for gas
-            chromatography analysis, which we will try to capture.
-            - We have four property groups in this case, which we will merge.
-              - GC-TPH
-              - GC-TSH
-              - GC-TAH
-              - Hydrocarbon Content Ratio
-            - Dimensional parameters are (weathering).
-            - Values Units are split between mg/g and percent.
+        The Evironment Canada data sheet contains data for gas
+        chromatography analysis, which we will try to capture.
+
+        - We have four property groups in this case, which we will merge.
+
+          - GC-TPH
+          - GC-TSH
+          - GC-TAH
+          - Hydrocarbon Content Ratio
+
+        - Dimensional parameters are (weathering).
+
+        - Values Units are split between mg/g and percent.
         '''
         return dict(
             list(self.values['gc_tph'].items()) +
