@@ -17,10 +17,10 @@ import numpy as np
 from openpyxl.utils.exceptions import InvalidFileException
 
 import adios_db
-from adios_db.data_sources.env_canada import (EnvCanadaOilExcelFile,
-                                              EnvCanadaRecordParser,
-                                              EnvCanadaRecordMapper,
-                                              EnvCanadaSampleMapper)
+from adios_db.data_sources.env_canada.v1 import (EnvCanadaOilExcelFile,
+                                                 EnvCanadaRecordParser,
+                                                 EnvCanadaRecordMapper,
+                                                 EnvCanadaSampleMapper)
 
 from pprint import pprint
 
