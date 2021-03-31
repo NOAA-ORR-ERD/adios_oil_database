@@ -166,7 +166,7 @@ class TestOil:
                      'metadata',
                      'sub_samples',
                      'status',
-                     'permanant_warnings',
+                     'permanent_warnings',
                      'extra_data',
                      ]:
             assert attr in py_json
@@ -208,7 +208,7 @@ class TestOil:
         oil = Oil('XXXXXX')
 
         warn = "Something is very wrong with this record."
-        oil.permanant_warnings.append(warn)
+        oil.permanent_warnings.append(warn)
         print(oil)
 
         msgs = oil.validate()

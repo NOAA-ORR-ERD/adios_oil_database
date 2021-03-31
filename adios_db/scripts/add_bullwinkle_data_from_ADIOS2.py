@@ -42,7 +42,8 @@ def process(adios_data, json_data_dir):
             bull_max = rec[header_map['Emuls_Constant_Max']]
 
             if water_cont or bull_max or bull_min:
-                print("Making subsamples for:")
+                print("\nMaking subsamples for:")
+                print(name)
                 print(f"{ID=}, {water_cont=}, {bull_max=}, {bull_min=}")
                 outfile.write(f"{ID} \t{name:50s}\t{water_cont:6}\t{bull_max:6}\t{bull_min:6}\n")
                 make_subsamples(ID, water_cont, bull_max, bull_min)
@@ -74,10 +75,11 @@ def make_subsamples(ID, water_cont, bull_max, bull_min):
             add_emulsion_subsample(oil, bull_max, water_cont)
             processed = True
         if bull_min == '' and bull_max == '':
-            oil.metadata.comments += ("Warning: ADIOS2 data had a value for water content, but min and max"
-                                      "emulsification constant were blank.\n"
-                                      "0.0 has been assumed, but that may not  be correct"
-                                      )
+            print("adding warning")
+            oil.permanent_warnings.append("Warning: ADIOS2 data had a value for water content, "
+                                          "but min and max emulsification constant were blank. "
+                                          "0.0 has been assumed, but that may not  be correct"
+                                          )
     else:
         if bull_min == '' or bull_max == '':
             raise Exception("min or max is empty")
