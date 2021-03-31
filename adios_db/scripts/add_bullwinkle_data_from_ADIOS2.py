@@ -106,12 +106,21 @@ def add_emulsion_to_fresh_subsample(oil, water_cont):
     emul = ads.Emulsion(water_content=ads.MassFraction(value=water_cont,
                                                        unit="fraction"),
                         )
-    fresh.environmental_behavior.emulsions.append = emul
+    fresh.environmental_behavior.emulsions.append(emul)
 
 
 def add_emulsion_subsample(oil, bull, water_cont):
     print(f"Adding Emulsion Subsample: {bull=}, {water_cont=}")
-    sample = ads.Sample()
+    # is there one already there?
+    for s in oil.sub_samples[1:]:
+        if s.metadata.fraction_weathered.value == bull:
+            print("found an existing Subsample, using that")
+            sample = s
+            break
+    else:
+        sample = ads.Sample()
+        oil.sub_samples.append(sample)
+
     if water_cont == 0:
         sample.metadata.name = "Weathered sample that did not form an emulsion"
         sample.metadata.short_name = "Didn't Emulsify"
@@ -131,11 +140,19 @@ def add_emulsion_subsample(oil, bull, water_cont):
                                                        unit="fraction"),
                         )
     sample.environmental_behavior.emulsions.append(emul)
-    oil.sub_samples.append(sample)
 
 def add_emulsion_subsample_unknown_wc(oil, bull):
     print(f"Adding Emulsion Subsample with no water content: {bull=}")
-    sample = ads.Sample()
+    # is there one already there?
+    for s in oil.sub_samples[1:]:
+        if s.metadata.fraction_weathered.value == bull:
+            print("found an existing Subsample, using that")
+            sample = s
+            break
+    else:
+        sample = ads.Sample()
+        oil.sub_samples.append(sample)
+
     sample.metadata.name = "Weathered sample that formed an emulsion"
     sample.metadata.short_name = "Emulsified"
     sample.metadata.description = ("Partially weathered sample that formed an emulsion of unknown water content.\n\n"
@@ -149,7 +166,6 @@ def add_emulsion_subsample_unknown_wc(oil, bull):
                                                        unit="fraction"),
                         )
     sample.environmental_behavior.emulsions.append(emul)
-    oil.sub_samples.append(sample)
 
 
 if __name__ == "__main__":
