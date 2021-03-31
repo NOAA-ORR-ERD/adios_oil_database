@@ -29,6 +29,7 @@ class Oil:
     metadata: MetaData = field(default_factory=MetaData)
     sub_samples: SampleList = field(default_factory=SampleList)
     status: list = field(default_factory=list)
+    permanant_warnings: list = field(default_factory=list)
     extra_data: dict = field(default_factory=dict)
 
     def __post_init__(self):
@@ -116,6 +117,8 @@ class Oil:
             self._validate_id(self.oil_id)
         except ValueError:
             msgs.append(ERRORS["E001"].format(self.oil_id))
+        # always add these:
+        msgs.extend("W000: " + m for m in self.permanant_warnings)
         return msgs
 
     def reset_validation(self):
