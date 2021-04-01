@@ -17,4 +17,7 @@ https://github.com/NOAA-ORR-ERD/PyNUCOS/archive/refs/tags/v2.10.1.tar.gz
 
 # install adios_db from git
 # NOTE: this should be doable from the local code!
--e git://github.com/NOAA-ORR-ERD/adios_oil_database.git#"egg=adios_db&subdirectory=adios_db/"
+# -e git://github.com/NOAA-ORR-ERD/adios_oil_database.git#"egg=adios_db&subdirectory=adios_db/"
+#/Users/chris.barker/Hazmat/GitLab/oil_database/adios_db/
+# For the gh-pages builder -- install from the repo
+/github/workspace/docs/adios_db/
