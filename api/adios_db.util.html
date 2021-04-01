@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>adios_db.util package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="adios_db.session package" href="adios_db.session.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../managing.html">Managing the Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computation with the ADIOS data</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="adios_db.html">adios_db package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="adios_db.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.html">adios_db.data_sources package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.html">adios_db.models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripting.html">adios_db.scripting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html">adios_db.scripts package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.session.html">adios_db.session package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">adios_db.util package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.util.db_connection">adios_db.util.db_connection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.util.decamelize">adios_db.util.decamelize module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.util.estimations">adios_db.util.estimations module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.util.json">adios_db.util.json module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.util.many_many">adios_db.util.many_many module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.util.settings">adios_db.util.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.util.term">adios_db.util.term module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ADIOS Oil Database</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="adios_db.html">adios_db package</a> &raquo;</li>
+        
+      <li>adios_db.util package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/adios_db.util.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-adios_db.util">
+<span id="adios-db-util-package"></span><h1>adios_db.util package<a class="headerlink" href="#module-adios_db.util" title="Permalink to this headline">¶</a></h1>
+<p>Assorted utilities</p>
+<p>A few right here:</p>
+<dl class="py function">
+<dt id="adios_db.util.sigfigs">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.</span></code><code class="sig-name descname"><span class="pre">sigfigs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.sigfigs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.strip">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.</span></code><code class="sig-name descname"><span class="pre">strip</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.strip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-adios_db.util.db_connection">
+<span id="adios-db-util-db-connection-module"></span><h2>adios_db.util.db_connection module<a class="headerlink" href="#module-adios_db.util.db_connection" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="adios_db.util.db_connection.connect_mongodb">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.db_connection.</span></code><code class="sig-name descname"><span class="pre">connect_mongodb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.db_connection.connect_mongodb" title="Permalink to this definition">¶</a></dt>
+<dd><p>We are using MongoDB via pymongo for our database</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-adios_db.util.decamelize">
+<span id="adios-db-util-decamelize-module"></span><h2>adios_db.util.decamelize module<a class="headerlink" href="#module-adios_db.util.decamelize" title="Permalink to this headline">¶</a></h2>
+<p>utility functions to turn camelcase into discreet separated words.</p>
+<dl class="py function">
+<dt id="adios_db.util.decamelize.camelcase_to_sep">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.decamelize.</span></code><code class="sig-name descname"><span class="pre">camelcase_to_sep</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camelcase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.decamelize.camelcase_to_sep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.decamelize.camelcase_to_space">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.decamelize.</span></code><code class="sig-name descname"><span class="pre">camelcase_to_space</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camelcase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.decamelize.camelcase_to_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.decamelize.camelcase_to_underscore">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.decamelize.</span></code><code class="sig-name descname"><span class="pre">camelcase_to_underscore</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camelcase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.decamelize.camelcase_to_underscore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.decamelize.separate_camelcase">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.decamelize.</span></code><code class="sig-name descname"><span class="pre">separate_camelcase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camelcase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.decamelize.separate_camelcase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-adios_db.util.estimations">
+<span id="adios-db-util-estimations-module"></span><h2>adios_db.util.estimations module<a class="headerlink" href="#module-adios_db.util.estimations" title="Permalink to this headline">¶</a></h2>
+<p>Oil Properties Estimations.</p>
+<p>These are primitive estimation algorithms to be used primarily for
+estimating oil properties based on known measured values.</p>
+<dl class="py function">
+<dt id="adios_db.util.estimations.api_from_density">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">api_from_density</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.api_from_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Adios2</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.aromatic_densities">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">aromatic_densities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boiling_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.aromatic_densities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.aromatic_mol_wt">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">aromatic_mol_wt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boiling_point</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.aromatic_mol_wt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Dr. M. R. Riazi,</dt><dd><p>Characterization and Properties of Petroleum Fractions
+eq. 2.48 and table 2.6</p>
+</dd>
+<dt>Note: for this to actually work in every case, we need to limit</dt><dd><p>our temperature to:
+- T_i &lt; 1015.0
+- T_i &gt; 1015.0 - exp(6.911)  (roughly about == 11.76)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.aromatics_fraction">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">aromatics_fraction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_asph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_sat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.aromatics_fraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.asphaltene_densities">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">asphaltene_densities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_boiling_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.asphaltene_densities" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Note: We pass in a boiling point to remain consistent with the other</dt><dd><p>molecular weight functions, even though it is not used.</p>
+</dd>
+<dt>Note: We return a scalar in all cases.  This should still work with</dt><dd><p>numpy array operations, but probably not with regular Python
+sequence types.
+We can fix this if the need arises.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.asphaltene_fraction">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">asphaltene_fraction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">viscosity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.asphaltene_fraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.asphaltene_mol_wt">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">asphaltene_mol_wt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_boiling_point</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.asphaltene_mol_wt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Recommendation from Bill Lehr</p>
+<dl class="simple">
+<dt>Note: We pass in a boiling point to remain consistent with the other</dt><dd><p>molecular weight functions, even though it is not used.</p>
+</dd>
+<dt>Note: We return a scalar in all cases.  This should still work with</dt><dd><p>numpy array operations, but probably not with regular Python
+sequence types.
+We can fix this if the need arises.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.bullwinkle_fraction_from_api">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">bullwinkle_fraction_from_api</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.bullwinkle_fraction_from_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Adios2</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.bullwinkle_fraction_from_asph">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">bullwinkle_fraction_from_asph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_asph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.bullwinkle_fraction_from_asph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Adios2</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.cut_temps_from_api">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">cut_temps_from_api</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.cut_temps_from_api" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Adios2 &amp; Jones R. (1997),</dt><dd><p>A Simplified Pseudo-component Oil Evaporation Model,
+Proceedings of the 20th Arctic and Marine Oil Spill Program,
+Vancouver, CA,
+Vol. 1, pp. 43-62</p>
+</dd>
+</dl>
+<p>Generate distillation cut temperatures from the oil’s API.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.density_at_temp">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">density_at_temp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_temp_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_rho_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0008</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.density_at_temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Adios2</p>
+<p>If we have an oil density at a reference temperature,
+then we can estimate what its density might be at
+another temperature.</p>
+<p>NOTE: need a reference for the coefficient of expansion</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.density_from_api">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">density_from_api</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.density_from_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Adios2</p>
+<p>API is a measure of how heavy an oil is compared to water.
+So it is a different unit for specific gravity</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.dvis_to_kvis">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">dvis_to_kvis</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dvis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.dvis_to_kvis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Definition of kinematic viscosity.</p>
+<p>Conversion from dynamic viscosity to kinematic viscosity.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.flash_point_from_api">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">flash_point_from_api</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.flash_point_from_api" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Reference: Chang A., K. Pashakanti, and Y. Liu (2012),</dt><dd><p>Integrated Process Modeling and Optimization,
+Wiley Verlag.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.flash_point_from_bp">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">flash_point_from_bp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp_k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.flash_point_from_bp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Reference: Chang A., K. Pashakanti, and Y. Liu (2012),</dt><dd><p>Integrated Process Modeling and Optimization,
+Wiley Verlag.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.fmasses_flat_dist">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">fmasses_flat_dist</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_asph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.fmasses_flat_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a flat distribution of N distillation cut fractional masses.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.fmasses_from_cuts">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">fmasses_from_cuts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_evap_i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.fmasses_from_cuts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate distillation cut fractional masses from the
+cumulative distillation fractions in the cut data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.kvis_at_temp">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">kvis_at_temp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_kvis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_temp_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_v2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2416.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.kvis_at_temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Adios2</p>
+<p>If we have an oil kinematic viscosity at a reference temperature,
+then we can estimate what its viscosity might be at
+another temperature.</p>
+<dl class="simple">
+<dt>Note: Bill’s most recent viscosity document, and an analysis of the</dt><dd><p>multi-KVis oils in our oil library suggest that a value of
+2416.0 (Abu Eishah 1999) would be a good default value for k_v2.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.oil_water_surface_tension_from_api">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">oil_water_surface_tension_from_api</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.oil_water_surface_tension_from_api" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.pour_point_from_kvis">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">pour_point_from_kvis</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_kvis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_temp_k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.pour_point_from_kvis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Adios2</p>
+<p>If we have an oil kinematic viscosity at a reference temperature,
+then we can estimate what its pour point might be.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.pour_point_from_sg_mw_kvis">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">pour_point_from_sg_mw_kvis</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">specific_gravity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_wt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kvis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.pour_point_from_sg_mw_kvis" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Dr. M. R. Riazi,</dt><dd><p>Characterization and Properties of Petroleum Fractions
+eq. 3.119</p>
+</dd>
+</dl>
+<p>Another way of estimating pour point.
+These inputs may not be available for most imported oil records.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.refractive_index">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">refractive_index</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hc_char_param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.refractive_index" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Dr. M. R. Riazi,</dt><dd><p>Characterization and Properties of Petroleum Fractions
+eq. 2.114</p>
+</dd>
+</dl>
+<p>This is the refractive index of liquid hydrocarbons at 20C,
+correlated through parameter I</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.resin_densities">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">resin_densities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_boiling_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.resin_densities" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Note: We pass in a boiling point to remain consistent with the other</dt><dd><p>molecular weight functions, even though it is not used.</p>
+</dd>
+<dt>Note: We return a scalar in all cases.  This should still work with</dt><dd><p>numpy array operations, but probably not with regular Python
+sequence types.
+We can fix this if the need arises.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.resin_fraction">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">resin_fraction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">viscosity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.resin_fraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.resin_mol_wt">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">resin_mol_wt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_boiling_point</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.resin_mol_wt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source: Recommendation from Bill Lehr</p>
+<dl class="simple">
+<dt>Note: We pass in a boiling point to remain consistent with the other</dt><dd><p>molecular weight functions, even though it is not used.</p>
+</dd>
+<dt>Note: We return a scalar in all cases.  This should still work with</dt><dd><p>numpy array operations, but probably not with regular Python
+sequence types.
+We can fix this if the need arises.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.saturate_densities">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">saturate_densities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boiling_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.saturate_densities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.saturate_mass_fraction">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">saturate_mass_fraction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmass_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_wt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific_gravity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.saturate_mass_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Dr. M. R. Riazi,</dt><dd><p>Characterization and Properties of Petroleum Fractions
+eqs. 3.77 and 3.78</p>
+</dd>
+</dl>
+<p>For a petroleum hydrocarbon fraction in which the molecular
+weight, specific gravity, and boiling point are known, we can
+estimate the fraction of that substance which contains
+saturate compounds.
+When forming his equations, Riazi deals with the PNA composition,
+which essentially means Paraffins, Naphthenes, and Aromatics.
+And for our purposes, the saturates include the paraffins and
+naphthenes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.saturate_mol_wt">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">saturate_mol_wt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boiling_point</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.saturate_mol_wt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Dr. M. R. Riazi,</dt><dd><p>Characterization and Properties of Petroleum Fractions
+eq. 2.48 and table 2.6</p>
+</dd>
+<dt>Note: for this to actually work in every case, we need to limit</dt><dd><p>our temperature to:
+- T_i &lt; 1070.0
+- T_i &gt;
+- T_i &gt; 1070.0 - exp(6.98291)  (roughly about == -8.06)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.saturates_fraction">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">saturates_fraction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">viscosity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.saturates_fraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.specific_gravity">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">specific_gravity</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.specific_gravity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specific Gravity of Oil with respect to water at 15C (definition used
+for API gravity)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.trial_densities">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">trial_densities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boiling_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watson_factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.trial_densities" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Source: Dr. M. R. Riazi,</dt><dd><p>Characterization and Properties of Petroleum Fractions
+eq. 2.13 and table 9.6</p>
+</dd>
+</dl>
+<p>Generate an initial estimate of volatile oil components based
+on boiling points and the Watson Characterization Factor.
+This is only good for estimating Aromatics &amp; Saturates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.estimations.vol_expansion_coeff">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.estimations.</span></code><code class="sig-name descname"><span class="pre">vol_expansion_coeff</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.estimations.vol_expansion_coeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the volumetric expansion coefficient of a liquid
+based on a set of two densities and their associated temperatures.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-adios_db.util.json">
+<span id="adios-db-util-json-module"></span><h2>adios_db.util.json module<a class="headerlink" href="#module-adios_db.util.json" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="adios_db.util.json.fix_bson_ids">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.json.</span></code><code class="sig-name descname"><span class="pre">fix_bson_ids</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.json.fix_bson_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>JSON, specifically the ujson package, is having problems representing
+the BSON special ObjectId fields.  So we need to turn them into
+something representable, like a string, before sending our JSON back
+in a response.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.json.jsonify_model_obj">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.json.</span></code><code class="sig-name descname"><span class="pre">jsonify_model_obj</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.json.jsonify_model_obj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-adios_db.util.many_many">
+<span id="adios-db-util-many-many-module"></span><h2>adios_db.util.many_many module<a class="headerlink" href="#module-adios_db.util.many_many" title="Permalink to this headline">¶</a></h2>
+<p>ManyMany</p>
+<p>class for managing a many to many relationship in a pair of dicts</p>
+<p>The two mappings are “left” and “right”</p>
+<p>The left one is originally populated by the initializer.</p>
+<p>After that they are equivalent – when you add something to one the other is updated.</p>
+<p>Currently there is no way to remove anything</p>
+<p>YOu can access copies of the mappings with:</p>
+<p><code class="docutils literal notranslate"><span class="pre">ManyMany.left</span></code>
+and
+<code class="docutils literal notranslate"><span class="pre">ManyMany.right</span></code></p>
+<p>They are copies, so that mutating them won’t break the internal data.</p>
+<dl class="py class">
+<dt id="adios_db.util.many_many.ManyMany">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.util.many_many.</span></code><code class="sig-name descname"><span class="pre">ManyMany</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.many_many.ManyMany" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="adios_db.util.many_many.ManyMany.add_to_left">
+<code class="sig-name descname"><span class="pre">add_to_left</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.many_many.ManyMany.add_to_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new value to the left dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – the key the value is to be added to</p></li>
+<li><p><strong>value</strong> – the value to be added</p></li>
+</ul>
+</dd>
+</dl>
+<p>If the key is already there, the value will be added to the corresponding set</p>
+<p>A new key and set will be created if it is not already there.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.util.many_many.ManyMany.add_to_right">
+<code class="sig-name descname"><span class="pre">add_to_right</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.many_many.ManyMany.add_to_right" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new value to the right dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – the key the value is to be added to</p></li>
+<li><p><strong>value</strong> – the value to be added</p></li>
+</ul>
+</dd>
+</dl>
+<p>If the key is already there, the value will be added to the corresponding set</p>
+<p>A new key and set will be created if it is not already there.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.util.many_many.ManyMany.left">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">left</span></code><a class="headerlink" href="#adios_db.util.many_many.ManyMany.left" title="Permalink to this definition">¶</a></dt>
+<dd><p>A copy of the left dict</p>
+<p>It’s a copy, so it won’t change the internal ones if mutated</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.util.many_many.ManyMany.right">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">right</span></code><a class="headerlink" href="#adios_db.util.many_many.ManyMany.right" title="Permalink to this definition">¶</a></dt>
+<dd><p>A copy of the right dict</p>
+<p>It’s a copy, so it won’t change the internal ones if mutated</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-adios_db.util.settings">
+<span id="adios-db-util-settings-module"></span><h2>adios_db.util.settings module<a class="headerlink" href="#module-adios_db.util.settings" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="adios_db.util.settings.convert_str_to_type_value">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.settings.</span></code><code class="sig-name descname"><span class="pre">convert_str_to_type_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.settings.convert_str_to_type_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>I really don’t see why the config parser can’t just do this, at least
+as an option.
+It would obviate the need for a utility module like this.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.settings.default_settings">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.settings.</span></code><code class="sig-name descname"><span class="pre">default_settings</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.settings.default_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.util.settings.file_settings">
+<code class="sig-prename descclassname"><span class="pre">adios_db.util.settings.</span></code><code class="sig-name descname"><span class="pre">file_settings</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'app:adios_db'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.settings.file_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-adios_db.util.term">
+<span id="adios-db-util-term-module"></span><h2>adios_db.util.term module<a class="headerlink" href="#module-adios_db.util.term" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="adios_db.util.term.TermColor">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.util.term.</span></code><code class="sig-name descname"><span class="pre">TermColor</span></code><a class="headerlink" href="#adios_db.util.term.TermColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="adios_db.util.term.TermColor.change">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">change</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.term.TermColor.change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Surround our string with terminal codes that will change its
+color and then change it back</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="adios_db.util.term.TermColor.color_codes">
+<code class="sig-name descname"><span class="pre">color_codes</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'blue':</span> <span class="pre">'\x1b[94m',</span> <span class="pre">'bold':</span> <span class="pre">'\x1b[1m',</span> <span class="pre">'cyan':</span> <span class="pre">'\x1b[96m',</span> <span class="pre">'darkcyan':</span> <span class="pre">'\x1b[36m',</span> <span class="pre">'end':</span> <span class="pre">'\x1b[0m',</span> <span class="pre">'green':</span> <span class="pre">'\x1b[92m',</span> <span class="pre">'purple':</span> <span class="pre">'\x1b[95m',</span> <span class="pre">'red':</span> <span class="pre">'\x1b[91m',</span> <span class="pre">'underline':</span> <span class="pre">'\x1b[4m',</span> <span class="pre">'yellow':</span> <span class="pre">'\x1b[93m'}</span></em><a class="headerlink" href="#adios_db.util.term.TermColor.color_codes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="adios_db.session.html" class="btn btn-neutral float-left" title="adios_db.session package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, NOAA Emergency Response Division.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>adios_db.session package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="adios_db.util package" href="adios_db.util.html" />
+    <link rel="prev" title="adios_db.scripts package" href="adios_db.scripts.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../managing.html">Managing the Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computation with the ADIOS data</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="adios_db.html">adios_db package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="adios_db.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.html">adios_db.data_sources package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.html">adios_db.models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripting.html">adios_db.scripting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html">adios_db.scripts package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">adios_db.session package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.session.session">adios_db.session.session module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.util.html">adios_db.util package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ADIOS Oil Database</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="adios_db.html">adios_db package</a> &raquo;</li>
+        
+      <li>adios_db.session package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/adios_db.session.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-adios_db.session">
+<span id="adios-db-session-package"></span><h1>adios_db.session package<a class="headerlink" href="#module-adios_db.session" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-adios_db.session.session">
+<span id="adios-db-session-session-module"></span><h2>adios_db.session.session module<a class="headerlink" href="#module-adios_db.session.session" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="adios_db.session.session.CursorWrapper">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.session.session.</span></code><code class="sig-name descname"><span class="pre">CursorWrapper</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.CursorWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>wraps a mongodb cursor to provide an iterator that we can do some filtering on,
+while not losing all its methods</p>
+<p>At this point, all it’s doing is removing the _id key</p>
+<p>Seems like a lot of effort for that, but the alternative is to realize the entire
+thing into a list – which may be a bad idea.</p>
+<dl class="simple">
+<dt>Rant: why doesn’t a mongo cursor have a __len__ rather than using .count()?</dt><dd><p>to make it more like a regular Sequence?</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="adios_db.session.session.Session">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.session.session.</span></code><code class="sig-name descname"><span class="pre">Session</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="adios_db.session.session.Session.alternate_names_arg">
+<code class="sig-name descname"><span class="pre">alternate_names_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.alternate_names_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.api_arg">
+<code class="sig-name descname"><span class="pre">api_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">apis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.api_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.filter_options">
+<code class="sig-name descname"><span class="pre">filter_options</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.filter_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.get_labels">
+<code class="sig-name descname"><span class="pre">get_labels</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.get_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right now we are getting labels and associated product types
+from the adios_db model code.  But it would be better managed
+if we eventually migrate this to labels stored in a database
+collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.id_arg">
+<code class="sig-name descname"><span class="pre">id_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.id_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.id_filter_arg">
+<code class="sig-name descname"><span class="pre">id_filter_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.id_filter_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.insert_oil_record">
+<code class="sig-name descname"><span class="pre">insert_oil_record</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.insert_oil_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new oil record to the oil collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>oil</strong> – an Oil object to add</p></li>
+<li><p><strong>overwrite=False</strong> – whether to overwrite an existing
+record if it already exists.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.labels_arg">
+<code class="sig-name descname"><span class="pre">labels_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.labels_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.location_arg">
+<code class="sig-name descname"><span class="pre">location_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.location_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.make_exclusive">
+<code class="sig-name descname"><span class="pre">make_exclusive</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.make_exclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normally, the filtering options will be exclusive, i.e. if we are
+searching on name=’alaska’ and location=’north’, we would only get
+records that satisfy both criteria (criteria are AND’d together).</p>
+<p>This is fine for filtering criteria that have unique names.  But
+sometimes we want multiple criteria for a single name, such as
+when we want all items in a list to match another list.  In such
+cases, we need to AND them explicitly.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.make_inclusive">
+<code class="sig-name descname"><span class="pre">make_inclusive</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.make_inclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normally, the filtering options will be exclusive, i. e. if we are
+searching on name=’alaska’ and location=’north’, we would only get
+records that satisfy both criteria (criteria are AND’d together).
+Setting the options to inclusive would yield records that satisfy
+any of the criteria (OR’d together).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.name_arg">
+<code class="sig-name descname"><span class="pre">name_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.name_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.parse_interval_arg">
+<code class="sig-name descname"><span class="pre">parse_interval_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.parse_interval_arg" title="Permalink to this definition">¶</a></dt>
+<dd><p>An interval argument can be a number, string, or list</p>
+<ul class="simple">
+<li><p>If it is a number, we will assume it is a minimum</p></li>
+<li><p>If it is a list length 1, we will assume it is a minimum</p></li>
+<li><p>If it is a list greater than 2, we will only use the first 2
+elements as a min/max</p></li>
+<li><p>If it is a string, we will try to parse it as a set of comma
+separated values.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.product_type_arg">
+<code class="sig-name descname"><span class="pre">product_type_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">product_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.product_type_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.query">
+<code class="sig-name descname"><span class="pre">query</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the database according to various criteria</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an iterator of dicts (json-compatible) of the data asked for</p>
+</dd>
+</dl>
+<p>Where:</p>
+<p><strong>Filtering</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>projection:</dt><dd><p>The field names to be returned</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>query options:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>oil_id:</dt><dd><p>The identifier of a specific record</p>
+</dd>
+<dt>text:</dt><dd><p>A string that is matched against the oil name, location.
+The matching will be case insensitive.</p>
+</dd>
+<dt>api:</dt><dd><p>A range of numbers in which the API of the oil will be
+filtered.</p>
+</dd>
+<dt>labels:</dt><dd><p>A list of label strings that will be matched against the
+oil labels to filter the results.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt><strong>sort options:</strong> A list of options consisting of (‘field_name’,</dt><dd><blockquote>
+<div><p>‘direction’)</p>
+</div></blockquote>
+<dl>
+<dt>field_name:</dt><dd><p>The name of a field to be used for sorting.  Dotted
+notation can be used to specify fields within fields.</p>
+</dd>
+<dt>direction:</dt><dd><p>Specifies whether to sort in ascending or descending
+order. Can be any of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;asc&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;ascending&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;desc&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;descending&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>The Mongodb find() function has a bunch of parameters, but we are
+mainly interested in <code class="docutils literal notranslate"><span class="pre">find(filter=None,</span> <span class="pre">orderby,</span> <span class="pre">projection=None)</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>MongoDB 3.6 has changed how they compare array fields in a
+sort. It used to compare the arrays element-by-element,
+continuing until any “ties” were broken.  Now it only
+compares the highest/lowest valued element, apparently
+ignoring the rest.</p>
+<p>Reference: <a class="reference external" href="https://docs.mongodb.com/manual/release-notes/3.6-compatibility/#array-sort-behavior">https://docs.mongodb.com/manual/release-notes/3.6-compatibility/#array-sort-behavior</a></p>
+<p>For this reason, a MongoDB query will not properly sort our
+status and labels array fields, at least not in a simple way.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="adios_db.session.session.Session.sort_direction">
+<code class="sig-name descname"><span class="pre">sort_direction</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'asc':</span> <span class="pre">1,</span> <span class="pre">'ascending':</span> <span class="pre">1,</span> <span class="pre">'desc':</span> <span class="pre">-1,</span> <span class="pre">'descending':</span> <span class="pre">-1}</span></em><a class="headerlink" href="#adios_db.session.session.Session.sort_direction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.sort_options">
+<code class="sig-name descname"><span class="pre">sort_options</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.sort_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.session.session.Session.text_arg">
+<code class="sig-name descname"><span class="pre">text_arg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_to_match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.text_arg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="adios_db.util.html" class="btn btn-neutral float-right" title="adios_db.util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="adios_db.scripts.html" class="btn btn-neutral float-left" title="adios_db.scripts package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, NOAA Emergency Response Division.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
