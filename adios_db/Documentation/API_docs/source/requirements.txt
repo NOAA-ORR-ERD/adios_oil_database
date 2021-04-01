@@ -12,6 +12,9 @@ openpyxl
 sphinx
 sphinx_rtd_theme
 
--e git://github.com/NOAA-ORR-ERD/PyNUCOS.git#egg=unit_conversion
+# install pynucos from release tarball
+https://github.com/NOAA-ORR-ERD/PyNUCOS/archive/refs/tags/v2.10.1.tar.gz
 
+# install adios_db from git
+# NOTE: this should be doable from the local code!
 -e git://github.com/NOAA-ORR-ERD/adios_oil_database.git#"egg=adios_db&subdirectory=adios_db/"
