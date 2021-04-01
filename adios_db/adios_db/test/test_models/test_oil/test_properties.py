@@ -1,13 +1,17 @@
 import pytest
 
 from adios_db.models.oil.properties import (DistCut,
-                                                DistCutList,
-                                                InterfacialTensionPoint,
-                                                InterfacialTensionList,
-                                                Dispersibility,
-                                                DispersibilityList,
-                                                Emulsion,
-                                                EmulsionList)
+                                            DistCutList,
+                                            Distillation,
+                                            InterfacialTensionPoint,
+                                            InterfacialTensionList,
+                                            Dispersibility,
+                                            DispersibilityList,
+                                            Emulsion,
+                                            EmulsionList)
+from adios_db.models.common.measurement import (Temperature,
+                                                MassFraction,
+                                                )
 
 
 class TestDistCut:
@@ -36,6 +40,9 @@ class TestDistCut:
 
 
 class TestDistCutList:
+    # note: this is over-testing, the "*List" objects are already tested
+    #       so if anything changes, better to remove most of these tests
+    #       than keep fixing them.
     def test_init_empty(self):
         assert DistCutList().py_json() == []
 
@@ -56,6 +63,56 @@ class TestDistCutList:
         json_obj[0]['vapor_temp']['unit_type'] = 'temperature'
 
         assert model.py_json() == json_obj
+
+def make_dist_cut_list(data, temp_unit='K'):
+
+    cuts = [DistCut(fraction=MassFraction(value=f, unit="fraction"),
+                    vapor_temp=Temperature(value=t, unit=temp_unit))
+            for f, t in data]
+    return DistCutList(cuts)
+
+
+class TestDistillation:
+    """
+    tests for the higher level distillation object
+    """
+    data = ((.05, 16.42),
+            (.10, 37.11),
+            (.20, 68.79),
+            (.30, 90.6),
+            (.40, 112.47),
+            (.50, 136.94),
+            (.60, 172.51),
+            (.70, 218.88),
+            (.80, 279.8),
+            (.90, 368.2),
+            (.95, 445.61),
+            )
+
+    @staticmethod
+    def make_dist_cut_list(data, temp_unit='K'):
+
+        cuts = [DistCut(fraction=MassFraction(value=f, unit="fraction"),
+                        vapor_temp=Temperature(value=t, unit=temp_unit))
+                for f, t in data]
+        return DistCutList(cuts)
+
+    def test_distillation(self):
+        dist = Distillation(type="mass fraction",
+                            method="some arbitrary method",
+                            end_point=Temperature(value=15, unit="C"),
+                            fraction_included=MassFraction(value=0.8, unit="fraction"),
+                            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+                            )
+
+        # few random things
+        assert len(dist.cuts) == 11
+        assert dist.cuts[3].fraction.value == 0.3
+        assert dist.cuts[3].vapor_temp.value == 90.6
+
+        assert dist.fraction_included == MassFraction(0.8, unit="fraction")
+
+    # need to test validation!
 
 
 class TestInterfacialTensionPoint:

@@ -24,14 +24,8 @@ class DistCut:
 
 
 class DistCutList(JSON_List):
-    """
-    needs some refactoring: should be method, for one
-    """
     item_type = DistCut
 
-    def validate(self):
-        # do validation here
-        pass
 
 
 @dataclass_to_json
@@ -40,7 +34,15 @@ class Distillation:
     type: str = None
     method: str = None
     end_point: Temperature = None
+    fraction_included: MassFraction = None
     cuts: DistCutList = field(default_factory=DistCutList)
+
+    def validate(self):
+        # do validation here
+        # should do:
+        # - check for values that are obviously bad -- e.g. units
+        # make sure type is one of "mass fraction" or "volume fraction"
+        pass
 
 
 @dataclass_to_json
