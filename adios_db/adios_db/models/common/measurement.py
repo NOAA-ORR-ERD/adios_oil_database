@@ -79,6 +79,8 @@ class MeasurementDataclass:
        (there is a __post_init, but it's not getting used for some reason)
 
        Also: None should not be an option for unit, either.
+
+       Fixme: maybe there could be a default unit for each unit type?
     """
     value: float = None
     unit: str = None
@@ -87,21 +89,15 @@ class MeasurementDataclass:
     standard_deviation: float = None
     replicates: int = None
 
+    # def __post_init__(self):
+    #     if all((attr is None)
+    #            for attr in (self.value, self.min_value, self.max_value)):
+    #         raise TypeError(f'{self.__class__.__name__}(): '
+    #                          'expected at least one value')
 
-class MeasurementBase(MeasurementDataclass):
-    # need to add these here, so they won't be overwritten by the
-    # decorator
-    unit_type = None
-
-    def __post_init__(self):
-        if all((attr is None)
-               for attr in (self.value, self.min_value, self.max_value)):
-            raise ValueError(f'{self.__class__.__name__}(): '
-                             'need to supply a value')
-
-        if self.unit is None:
-            raise ValueError(f'{self.__class__.__name__}(): '
-                             'need to supply a unit')
+    #     # if self.unit is None:
+    #     #     raise TypeError:(f'{self.__class__.__name__}(): '
+    #     #                      'expected a unit')
 
     # # We want a less-noisy repr
     # def __repr__(self):
@@ -110,6 +106,12 @@ class MeasurementBase(MeasurementDataclass):
     #     return f'{self.__class__.__name__}({", ".join(atts)})'
 
     # __str__ = __repr__
+
+
+class MeasurementBase(MeasurementDataclass):
+    # need to add these here, so they won't be overwritten by the
+    # decorator
+    unit_type = None
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field
