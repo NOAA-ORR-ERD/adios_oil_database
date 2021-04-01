@@ -376,21 +376,18 @@ data structure.</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.models.oil.compound.</span></code><code class="sig-name descname"><span class="pre">Compound</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">groups:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">measurement:</span> <span class="pre">Optional[adios_db.models.common.measurement.MassFraction]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.compound.Compound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Some compounds that will be handled by this dataclass:
-- sulfur_mass_fraction: UnittedValue = None
-- carbon_mass_fraction: UnittedValue = None
-- hydrogen_mass_fraction: UnittedValue = None
-- mercaptan_sulfur_mass_fraction: UnittedValue = None
-- nitrogen_mass_fraction: UnittedValue = None
-- ccr_percent: UnittedValue = None  # conradson carbon residue
-- calcium_mass_fraction: UnittedValue = None
-- hydrogen_sulfide_concentration: UnittedValue = None
-- salt_content: UnittedValue = None
-- paraffin_volume_fraction: UnittedValue = None
-- naphthene_volume_fraction: UnittedValue = None
-- aromatic_volume_fraction: UnittedValue = None</p>
-<p>Note: are these going in the compound list?
-- total_acid_number: UnittedValue = None
-- reid_vapor_pressure: UnittedValue = None</p>
+- sulfur_mass_fraction: MassFraction = None
+- carbon_mass_fraction: MassFraction = None
+- hydrogen_mass_fraction: MassFraction = None
+- mercaptan_sulfur_mass_fraction: MassFraction = None
+- nitrogen_mass_fraction: MassFraction = None
+- ccr_percent: MassFraction = None  # conradson carbon residue
+- calcium_mass_fraction: MassFraction = None
+- hydrogen_sulfide_concentration: MassFraction = None
+- salt_content: MassFraction = None
+- paraffin_volume_fraction: MassFraction = None
+- naphthene_volume_fraction: MassFraction = None
+- aromatic_volume_fraction: MassFraction = None</p>
 <dl class="py method">
 <dt id="adios_db.models.oil.compound.Compound.from_py_json">
 <em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_py_json</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">py_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_none</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.compound.Compound.from_py_json" title="Permalink to this definition">¶</a></dt>
@@ -814,7 +811,7 @@ validation messages.</p>
 <p>Having a Python class makes it easier to write importing, validating etc, code.</p>
 <dl class="py class">
 <dt id="adios_db.models.oil.oil.Oil">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.models.oil.oil.</span></code><code class="sig-name descname"><span class="pre">Oil</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">oil_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">adios_data_model_version:</span> <span class="pre">adios_db.models.oil.version.Version</span> <span class="pre">=</span> <span class="pre">Version(0</span></em>, <em class="sig-param"><span class="pre">10</span></em>, <em class="sig-param"><span class="pre">0)</span></em>, <em class="sig-param"><span class="pre">metadata:</span> <span class="pre">adios_db.models.oil.metadata.MetaData</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">sub_samples:</span> <span class="pre">adios_db.models.oil.sample.SampleList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">status:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">extra_data:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.oil.Oil" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.models.oil.oil.</span></code><code class="sig-name descname"><span class="pre">Oil</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">oil_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">adios_data_model_version:</span> <span class="pre">adios_db.models.oil.version.Version</span> <span class="pre">=</span> <span class="pre">Version(0</span></em>, <em class="sig-param"><span class="pre">10</span></em>, <em class="sig-param"><span class="pre">0)</span></em>, <em class="sig-param"><span class="pre">metadata:</span> <span class="pre">adios_db.models.oil.metadata.MetaData</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">sub_samples:</span> <span class="pre">adios_db.models.oil.sample.SampleList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">status:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">permanent_warnings:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">extra_data:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.oil.Oil" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt id="adios_db.models.oil.oil.Oil.adios_data_model_version">
@@ -852,6 +849,11 @@ structure.</p>
 <dl class="py attribute">
 <dt id="adios_db.models.oil.oil.Oil.oil_id">
 <code class="sig-name descname"><span class="pre">oil_id</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#adios_db.models.oil.oil.Oil.oil_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="adios_db.models.oil.oil.Oil.permanent_warnings">
+<code class="sig-name descname"><span class="pre">permanent_warnings</span></code><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#adios_db.models.oil.oil.Oil.permanent_warnings" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1515,23 +1517,17 @@ validation messages.</p>
 <dt id="adios_db.models.oil.properties.DistCutList">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.models.oil.properties.</span></code><code class="sig-name descname"><span class="pre">DistCutList</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.DistCutList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.utilities.JSON_List" title="adios_db.models.common.utilities.JSON_List"><code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.models.common.utilities.JSON_List</span></code></a></p>
-<p>needs some refactoring: should be method, for one</p>
 <dl class="py attribute">
 <dt id="adios_db.models.oil.properties.DistCutList.item_type">
 <code class="sig-name descname"><span class="pre">item_type</span></code><a class="headerlink" href="#adios_db.models.oil.properties.DistCutList.item_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#adios_db.models.oil.properties.DistCut" title="adios_db.models.oil.properties.DistCut"><code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.models.oil.properties.DistCut</span></code></a></p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="adios_db.models.oil.properties.DistCutList.validate">
-<code class="sig-name descname"><span class="pre">validate</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.DistCutList.validate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt id="adios_db.models.oil.properties.Distillation">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.models.oil.properties.</span></code><code class="sig-name descname"><span class="pre">Distillation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">end_point:</span> <span class="pre">adios_db.models.common.measurement.Temperature</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">cuts:</span> <span class="pre">adios_db.models.oil.properties.DistCutList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.Distillation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.models.oil.properties.</span></code><code class="sig-name descname"><span class="pre">Distillation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">end_point:</span> <span class="pre">adios_db.models.common.measurement.Temperature</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">fraction_included:</span> <span class="pre">adios_db.models.common.measurement.MassFraction</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">cuts:</span> <span class="pre">adios_db.models.oil.properties.DistCutList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.Distillation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt id="adios_db.models.oil.properties.Distillation.cuts">
@@ -1541,6 +1537,11 @@ validation messages.</p>
 <dl class="py attribute">
 <dt id="adios_db.models.oil.properties.Distillation.end_point">
 <code class="sig-name descname"><span class="pre">end_point</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.Temperature" title="adios_db.models.common.measurement.Temperature"><span class="pre">adios_db.models.common.measurement.Temperature</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#adios_db.models.oil.properties.Distillation.end_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="adios_db.models.oil.properties.Distillation.fraction_included">
+<code class="sig-name descname"><span class="pre">fraction_included</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">adios_db.models.common.measurement.MassFraction</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#adios_db.models.oil.properties.Distillation.fraction_included" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

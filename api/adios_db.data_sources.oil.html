@@ -188,13 +188,385 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="adios-db-data-sources-oil-package">
-<h1>adios_db.data_sources.oil package<a class="headerlink" href="#adios-db-data-sources-oil-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-adios_db.data_sources.oil">
+<span id="adios-db-data-sources-oil-package"></span><h1>adios_db.data_sources.oil package<a class="headerlink" href="#module-adios_db.data_sources.oil" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="adios-db-data-sources-oil-estimations-module">
-<h2>adios_db.data_sources.oil.estimations module<a class="headerlink" href="#adios-db-data-sources-oil-estimations-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-adios_db.data_sources.oil.estimations">
+<span id="adios-db-data-sources-oil-estimations-module"></span><h2>adios_db.data_sources.oil.estimations module<a class="headerlink" href="#module-adios_db.data_sources.oil.estimations" title="Permalink to this headline">¶</a></h2>
+<p>These are functions to be used primarily for estimating oil
+properties that are contained within an oil record that has been
+queried from the oil database.</p>
+<dl class="py class">
+<dt id="adios_db.data_sources.oil.estimations.OilEstimation">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.data_sources.oil.estimations.</span></code><code class="sig-name descname"><span class="pre">OilEstimation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imported_rec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilEstimation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>In order to provide minimal overhead, we will be setting this up as a
+group of interface classes that can be used a la carte.
+There will of course be some dependency between these, which we will
+attempt to document.</p>
+<p>All interfaces assume a self.record member, which is the contained
+oil object.</p>
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilEstimation.fq_name_to_name_and_scope">
+<code class="sig-name descname"><span class="pre">fq_name_to_name_and_scope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fully_qualified_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilEstimation.fq_name_to_name_and_scope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilEstimation.get_first_sample">
+<code class="sig-name descname"><span class="pre">get_first_sample</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilEstimation.get_first_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Just get the first sample, regardless what it is.
+We will likely only use this in the case that a fresh
+sample doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilEstimation.get_sample">
+<code class="sig-name descname"><span class="pre">get_sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Fresh</span> <span class="pre">Oil</span> <span class="pre">Sample'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilEstimation.get_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>sample_id will normally indicate a weathering amount, but
+there will be cases where it will indicate something else,
+such as distillate fraction.
+We will default to a weathering amount of 0.0 (fresh)</p>
+<p>There will most likely not be multiple fresh samples, but in this
+case we just choose the first one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilEstimation.py_class_from_name">
+<code class="sig-name descname"><span class="pre">py_class_from_name</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fully_qualified_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilEstimation.py_class_from_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="adios_db.data_sources.oil.estimations.OilEstimation.unit_class_lu">
+<code class="sig-name descname"><span class="pre">unit_class_lu</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'Pa':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.Pressure'&gt;,</span> <span class="pre">'angularvelocity':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.AngularVelocity'&gt;,</span> <span class="pre">'density':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.Density'&gt;,</span> <span class="pre">'dynamicviscosity':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.DynamicViscosity'&gt;,</span> <span class="pre">'g/cm^2':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.NeedleAdhesion'&gt;,</span> <span class="pre">'interfacialtension':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.InterfacialTension'&gt;,</span> <span class="pre">'kinematicviscosity':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.KinematicViscosity'&gt;,</span> <span class="pre">'length':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.Length'&gt;,</span> <span class="pre">'massfraction':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.MassFraction'&gt;,</span> <span class="pre">'needleadhesion':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.NeedleAdhesion'&gt;,</span> <span class="pre">'pressure':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.Pressure'&gt;,</span> <span class="pre">'temperature':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.Temperature'&gt;,</span> <span class="pre">'time':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.Time'&gt;,</span> <span class="pre">'unitless':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.Unitless'&gt;,</span> <span class="pre">'volumefraction':</span> <span class="pre">&lt;class</span> <span class="pre">'adios_db.models.common.measurement.VolumeFraction'&gt;}</span></em><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilEstimation.unit_class_lu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.data_sources.oil.estimations.</span></code><code class="sig-name descname"><span class="pre">OilSampleEstimation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.adhesion">
+<code class="sig-name descname"><span class="pre">adhesion</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.adhesion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adhesion is measured in needle adhesion units, which is completely
+different than the other pressure-like units.
+So it can not be converted to anything else.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.aggregate_kvis">
+<code class="sig-name descname"><span class="pre">aggregate_kvis</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.aggregate_kvis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.bounding_temperatures">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">bounding_temperatures</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.bounding_temperatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>General Utility Function</p>
+<p>From a list of objects containing a ref_temp attribute,
+return the object(s) that are closest to the specified
+temperature(s)
+specifically:</p>
+<ul class="simple">
+<li><p>we want the ones that immediately bound our temperature.</p></li>
+<li><p>if our temperature is high and out of bounds of the temperatures
+in our obj_list, then we return a range containing only the
+highest temperature.</p></li>
+<li><p>if our temperature is low and out of bounds of the temperatures
+in our obj_list, then we return a range containing only the
+lowest temperature.</p></li>
+</ul>
+<p>We accept only a scalar temperature or a sequence of temperatures
+We expect temperatures in Kelvin</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.bullwinkle_fraction">
+<code class="sig-name descname"><span class="pre">bullwinkle_fraction</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.bullwinkle_fraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.closest_to_temperature">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">closest_to_temperature</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.closest_to_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>General Utility Function</p>
+<p>From a list of objects containing a ref_temp attribute,
+return the object(s) that are closest to the specified
+temperature(s)</p>
+<p>We accept only a scalar temperature or a sequence of temperatures
+We expect temperatures in Kelvin</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.component_densities">
+<code class="sig-name descname"><span class="pre">component_densities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.component_densities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.component_mass_fractions">
+<code class="sig-name descname"><span class="pre">component_mass_fractions</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.component_mass_fractions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.component_mass_fractions_riazi">
+<code class="sig-name descname"><span class="pre">component_mass_fractions_riazi</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.component_mass_fractions_riazi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.component_mol_wt">
+<code class="sig-name descname"><span class="pre">component_mol_wt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.component_mol_wt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.component_specific_gravity">
+<code class="sig-name descname"><span class="pre">component_specific_gravity</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.component_specific_gravity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.component_temps">
+<code class="sig-name descname"><span class="pre">component_temps</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.component_temps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.component_types">
+<code class="sig-name descname"><span class="pre">component_types</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.component_types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.density_at_temp">
+<code class="sig-name descname"><span class="pre">density_at_temp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">288.15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.density_at_temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the oil density at a temperature or temperatures.</p>
+<p>Note: there is a catch-22 which prevents us from getting
+the min_temp in all cases:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>to estimate pour point, we need viscosities</p></li>
+<li><p>if we need to convert dynamic viscosities to
+kinematic, we need density at 15C</p></li>
+<li><p>to estimate density at temp, we need to estimate pour point</p></li>
+<li><p>…and then we recurse</p></li>
+</ul>
+<p>For this case we need to make an exception.  I think we can
+add a flag to self.pour_point() to bypass estimation and just
+give the data values.</p>
+</div></blockquote>
+<p>Note: If we have a pour point that is higher than one or more
+of our reference temperatures, then the lowest reference
+temperature will become our minimum temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.determine_k_v2">
+<code class="sig-name descname"><span class="pre">determine_k_v2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kvis_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.determine_k_v2" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value k_v2 is the coefficient of exponential decay used
+when calculating kinematic viscosity as a function of
+temperature.</p>
+<ul class="simple">
+<li><p>If the oil contains two or more viscosity measurements, then
+we will make an attempt at determining k_v2 using a least
+squares fit.</p></li>
+<li><p>Otherwise we will need to choose a reasonable average default
+value.  Bill’s most recent viscosity document, and an
+analysis of the multi-KVis oils in our oil library suggest that
+a value of 2416.0 (Abu Eishah 1999) would be a good default
+value.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.dvis_to_kvis">
+<code class="sig-name descname"><span class="pre">dvis_to_kvis</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kg_ms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_temp_k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.dvis_to_kvis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.estimate_component_densities">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">estimate_component_densities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boiling_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.estimate_component_densities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.estimate_component_mol_wt">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">estimate_component_mol_wt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boiling_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.estimate_component_mol_wt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.flash_point">
+<code class="sig-name descname"><span class="pre">flash_point</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.flash_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.flash_point_from_api">
+<code class="sig-name descname"><span class="pre">flash_point_from_api</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.flash_point_from_api" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.flash_point_from_bp">
+<code class="sig-name descname"><span class="pre">flash_point_from_bp</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.flash_point_from_bp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.get_api">
+<code class="sig-name descname"><span class="pre">get_api</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.get_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>There should only be a single API value per weathered sample.
+We return the object, not just the value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.get_api_from_densities">
+<code class="sig-name descname"><span class="pre">get_api_from_densities</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.get_api_from_densities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.get_cut_fmasses">
+<code class="sig-name descname"><span class="pre">get_cut_fmasses</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.get_cut_fmasses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.get_cut_temps">
+<code class="sig-name descname"><span class="pre">get_cut_temps</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.get_cut_temps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.get_cut_temps_fmasses">
+<code class="sig-name descname"><span class="pre">get_cut_temps_fmasses</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.get_cut_temps_fmasses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.get_densities">
+<code class="sig-name descname"><span class="pre">get_densities</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.get_densities" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of densities for the oil sample.
+We include the API as a density if:</p>
+<ul class="simple">
+<li><p>the culled list of densities does not contain a measurement
+at 15C</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.inert_fractions">
+<code class="sig-name descname"><span class="pre">inert_fractions</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.inert_fractions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.kvis_at_temp">
+<code class="sig-name descname"><span class="pre">kvis_at_temp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">288.15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.kvis_at_temp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.lowest_temperature">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">lowest_temperature</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.lowest_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>General utility function.</p>
+<p>From a list of objects containing a ref_temp attribute,
+return the object that has the lowest temperature</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.max_water_fraction_emulsion">
+<code class="sig-name descname"><span class="pre">max_water_fraction_emulsion</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.max_water_fraction_emulsion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.non_redundant_dvis">
+<code class="sig-name descname"><span class="pre">non_redundant_dvis</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.non_redundant_dvis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.normalized_cut_values">
+<code class="sig-name descname"><span class="pre">normalized_cut_values</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.normalized_cut_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.oil_seawater_surface_tension">
+<code class="sig-name descname"><span class="pre">oil_seawater_surface_tension</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.oil_seawater_surface_tension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.oil_water_surface_tension">
+<code class="sig-name descname"><span class="pre">oil_water_surface_tension</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.oil_water_surface_tension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.pour_point">
+<code class="sig-name descname"><span class="pre">pour_point</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimate_if_none</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.pour_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Note: there is a catch-22 which puts us in an infinite loop
+in some cases:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>to estimate pour point, we need viscosities</p></li>
+<li><p>if we need to convert dynamic viscosities to
+kinematic, we need density at 15C</p></li>
+<li><p>to estimate density at temp, we need to estimate pour point</p></li>
+<li><p>…and then we recurse</p></li>
+</ul>
+<p>For this case we need to make an exception.  I think we can
+add a flag here to bypass estimation and just give the
+data values.  This flag will default to True, since most
+users will want to estimate values if none are present.
+But internally, we will want the option to turn estimation
+off.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.solubility">
+<code class="sig-name descname"><span class="pre">solubility</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.solubility" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Note: imported records do not have a solubility attribute.</dt><dd><p>We just return a default.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.standard_density">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">standard_density</span></code><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.standard_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard density is simply the density at 15C, which is the
+default temperature for density_at_temp()</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.sulphur_fraction">
+<code class="sig-name descname"><span class="pre">sulphur_fraction</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.sulphur_fraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.verify_cut_fractional_masses">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">verify_cut_fractional_masses</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmass_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_sat_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_arom_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_f_sat_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.verify_cut_fractional_masses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assuming a distillate mass with a boiling point T_i,
+We propose what the component fractional masses might be.</p>
+<p>We calculate what the molecular weights and specific gravities
+likely are for saturates and aromatics at that temperature.</p>
+<p>Then we use these values, in combination with our proposed
+component fractional masses, to produce a proposed average
+molecular weight and specific gravity for the distillate.</p>
+<p>We then use Riazi’s formulas (3.77 and 3.78) to obtain the
+saturate and aromatic fractional masses that represent our
+averaged molecular weight and specific gravity.</p>
+<p>If our proposed component mass fractions were correct (or at least
+consistent with Riazi’s findings), then our computed component
+mass fractions should match.</p>
+<p>If they don’t match, then the computed component fractions should
+at least be a closer approximation to that which is consistent
+with Riazi.</p>
+<p>It is intended that we run this function iteratively to obtain a
+successively approximated value for f_sat_i and f_arom_i.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="adios_db.data_sources.oil.estimations.OilSampleEstimation.volatile_fractions">
+<code class="sig-name descname"><span class="pre">volatile_fractions</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.OilSampleEstimation.volatile_fractions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="adios_db.data_sources.oil.estimations.clamp">
+<code class="sig-prename descclassname"><span class="pre">adios_db.data_sources.oil.estimations.</span></code><code class="sig-name descname"><span class="pre">clamp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.oil.estimations.clamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>We make use of a generalized logistic function or Richard’s curve
+to generate a linear function that is clamped at x == M.
+We make use of a zeta value to tune the parameters nu, resulting in a
+smooth transition as we cross the M boundary.</p>
+</dd></dl>
+
 </div>
 </div>
 

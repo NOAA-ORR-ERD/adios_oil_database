@@ -199,9 +199,9 @@
 <dt id="adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">adios_db.data_sources.noaa_fm.mapper.</span></code><code class="sig-name descname"><span class="pre">OilLibraryAttributeMapper</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="adios_db.data_sources.html#adios_db.data_sources.mapper.MapperBase" title="adios_db.data_sources.mapper.MapperBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.data_sources.mapper.MapperBase</span></code></a></p>
-<p>A translation/conversion layer for the NOAA Filemaker imported
-record object.
-This is intended to be used interchangeably with either a NOAA
+<p>A translation/conversion layer for the NOAA FileMaker imported
+record object.</p>
+<p>This is intended to be used interchangeably with either a NOAA
 Filemaker record or record parser object.  Its purpose is to generate
 named attributes that are suitable for creation of a NOAA Oil Database
 record.</p>
@@ -223,16 +223,17 @@ like we are dealing with Pascals (N/m^2)</p>
 <dl class="py method">
 <dt id="adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.bulk_composition">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">bulk_composition</span></code><a class="headerlink" href="#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.bulk_composition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tentative Bulk Composition items:
-- Water Content Emulsion
-- Wax Content
-- Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)
-- Naphthenes (units=???, typical value=0.0004 for Jet A-1)
-- Paraffins  (unit=???, 0.783 for Alberta 1992</p>
-<blockquote>
-<div><p>0.019 for Salmon Oil &amp; Gas)</p>
-</div></blockquote>
+<dd><p>Tentative Bulk Composition items:</p>
 <ul class="simple">
+<li><p>Water Content Emulsion</p></li>
+<li><p>Wax Content</p></li>
+<li><p>Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)</p></li>
+<li><p>Naphthenes (units=???, typical value=0.0004 for Jet A-1)</p></li>
+<li><dl class="simple">
+<dt>Paraffins  (unit=???, 0.783 for Alberta 1992</dt><dd><p>0.019 for Salmon Oil &amp; Gas)</p>
+</dd>
+</dl>
+</li>
 <li><p>Nickel  (unit=ppm most likely)</p></li>
 <li><p>Vanadium  (unit=ppm most likely)</p></li>
 <li><p>Polars  (unit=1 possibly, 0.0284 for Alberta 1992)</p></li>
@@ -242,11 +243,11 @@ like we are dealing with Pascals (N/m^2)</p>
 <dl class="py method">
 <dt id="adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.compounds">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">compounds</span></code><a class="headerlink" href="#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.compounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tentative Compound items:
-- benzene (units=???, typical value=0.05 for gasoline,</p>
-<blockquote>
-<div><p>just a fractional value maybe?)</p>
-</div></blockquote>
+<dd><p>Tentative Compound items:</p>
+<ul class="simple">
+<li><p>benzene (units=???, typical value=0.05 for gasoline,
+just a fractional value maybe?)</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
@@ -257,13 +258,13 @@ like we are dealing with Pascals (N/m^2)</p>
 <dl class="py method">
 <dt id="adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.environmental_behavior">
 <code class="sig-name descname"><span class="pre">environmental_behavior</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weathering</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.environmental_behavior" title="Permalink to this definition">¶</a></dt>
-<dd><p>Notes:
-- there is a dispersability_temp_k, but it does not fit with the</p>
-<blockquote>
-<div><p>oil model.  sample.environmental_behavior.dispersibilites is
+<dd><p>Notes:</p>
+<ul class="simple">
+<li><p>there is a dispersability_temp_k, but it does not fit with the
+oil model.  sample.environmental_behavior.dispersibilites is
 for chemical dispersibility with a dispersant, and makes no
-reference to a temperature.</p>
-</div></blockquote>
+reference to a temperature.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
@@ -284,18 +285,13 @@ reference to a temperature.</p>
 <dl class="py method">
 <dt id="adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.industry_properties">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">industry_properties</span></code><a class="headerlink" href="#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.industry_properties" title="Permalink to this definition">¶</a></dt>
-<dd><p>Industry Property items:
-- Reid Vapor Pressure (min/max/avg = 0/0.81/0.295, probably bars)
-- Conradson Crude (min/max/avg = 0.0054/0.12/0.035, probably just</p>
-<blockquote>
-<div><p>a fractional value)</p>
-</div></blockquote>
+<dd><p>Industry Property items:</p>
 <ul class="simple">
-<li><dl class="simple">
-<dt>Conradson Residuum (one value, 0.0019, probably just a fractional</dt><dd><p>value)</p>
-</dd>
-</dl>
-</li>
+<li><p>Reid Vapor Pressure (min/max/avg = 0/0.81/0.295, probably bars)</p></li>
+<li><p>Conradson Crude (min/max/avg = 0.0054/0.12/0.035, probably just
+a fractional value)</p></li>
+<li><p>Conradson Residuum (one value, 0.0019, probably just a fractional
+value)</p></li>
 </ul>
 </dd></dl>
 
