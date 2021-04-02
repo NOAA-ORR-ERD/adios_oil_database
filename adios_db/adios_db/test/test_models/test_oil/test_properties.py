@@ -112,7 +112,54 @@ class TestDistillation:
 
         assert dist.fraction_included == MassFraction(0.8, unit="fraction")
 
-    # need to test validation!
+        msgs = dist.validate()
+        assert msgs == []
+
+    def test_validation_bad_temps(self):
+        dist = Distillation(type="mass fraction",
+                            method="some arbitrary method",
+                            end_point=Temperature(value=15, unit="C"),
+                            fraction_included=MassFraction(value=0.8, unit="fraction"),
+                            cuts=self.make_dist_cut_list(self.data, temp_unit='K')
+                            )
+        msgs = dist.validate()
+
+        print(msgs)
+        # make sure there is something there!
+        assert msgs
+
+        errs = sum(1 for e in msgs if 'E040:' in e)
+        assert errs == 7
+
+
+    def test_validation_bad_fraction(self):
+        dist = Distillation(type="mass fraction",
+                            method="some arbitrary method",
+                            end_point=Temperature(value=15, unit="C"),
+                            fraction_included=MassFraction(value=0.8, unit="fraction"),
+                            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+                            )
+        dist.cuts[2].fraction.value = 1.1
+        dist.cuts[4].fraction.value = -0.9
+
+        msgs = dist.validate()
+
+        errs = sum(1 for e in msgs if 'E041:' in e)
+        assert errs == 2
+
+    def test_validation_bad_type(self):
+        dist = Distillation(type="mass fractions",
+                            method="some arbitrary method",
+                            end_point=Temperature(value=15, unit="C"),
+                            fraction_included=MassFraction(value=0.8, unit="fraction"),
+                            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+                            )
+        msgs = dist.validate()
+
+        # make sure there is something there!
+        assert len(msgs) == 1
+        assert "E032:" in msgs[0]
+
 
 
 class TestInterfacialTensionPoint:

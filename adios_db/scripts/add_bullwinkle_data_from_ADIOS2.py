@@ -40,12 +40,12 @@ def process(adios_data, json_data_dir):
             water_cont = rec[header_map['Water_Content_Emulsion']]
             bull_min = rec[header_map['Emuls_Constant_Min']]
             bull_max = rec[header_map['Emuls_Constant_Max']]
-
+            refrence = rec[header_map['Reference']]
             if water_cont or bull_max or bull_min:
                 print("\nMaking subsamples for:")
                 print(name)
                 print(f"{ID=}, {water_cont=}, {bull_max=}, {bull_min=}")
-                outfile.write(f"{ID} \t{name:50s}\t{water_cont:6}\t{bull_max:6}\t{bull_min:6}\n")
+                outfile.write(f"{ID} \t{name:50s}\t{water_cont:6}\t{bull_max:6}\t{bull_min:6}\t {refrence}\n")
                 make_subsamples(ID, water_cont, bull_max, bull_min)
 
 
