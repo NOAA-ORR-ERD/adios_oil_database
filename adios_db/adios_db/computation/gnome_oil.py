@@ -6,8 +6,12 @@ NOTE: This make s JSON compatible Python structure from. which to build a GnomeO
 """
 
 import numpy as np
+from adios_db.computation import estimations as est
 from .physical_properties import get_density_data, bullwinkle_fraction, get_kinematic_viscosity_data, get_distillation_cuts
+from .physical_properties import Density, KinematicViscosity
 from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_from_api
+from scipy.optimize import curve_fit	#temporary
+from past.utils import old_div
 
 
 def get_empty_dict():
@@ -74,7 +78,7 @@ def make_gnome_oil(oil):
     go['api'] = oil.metadata.API
     go['adios_oil_id'] = oil.oil_id
 
-    #. Physical properties
+    # Physical properties
     phys_props = oil.sub_samples[0].physical_properties
 
     flash_point = phys_props.flash_point
@@ -98,10 +102,10 @@ def make_gnome_oil(oil):
     # fixme: We need to get the weathered densities, if they are there.
     densities = get_density_data(oil, units="kg/m^3", temp_units="K")
 
-    viscosities = get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K")
-
     go['densities'], go['density_ref_temps'] = zip(*densities)
     go['density_weathering'] = [0.0] * len(go['densities'])
+
+    viscosities = get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K")
 
     go['kvis'], go['kvis_ref_temps'] = zip(*viscosities)
     go['kvis_weathering'] = [0.0] * len(go['kvis'])
@@ -111,6 +115,23 @@ def make_gnome_oil(oil):
     go['solubility'] = 0
     go['k0y'] = 2.024e-06 #do we want this included?
     
+    # pseudocomponents
+    cut_temps, frac_evap = normalized_cut_values(oil)
+
+    mass_fraction = component_mass_fractions(oil)
+    mask = np.where(mass_fraction==0)
+    mol_wt = np.delete(component_mol_wt(cut_temps),mask)
+    comp_dens = np.delete(component_densities(cut_temps),mask)
+    boiling_pt = np.delete(component_temps(cut_temps),mask)
+    sara_type = np.delete(np.array(component_types(cut_temps)),mask)
+    mass_frac = np.delete(mass_fraction,mask)
+
+    go['molecular_weight'] = mol_wt.tolist()
+    go['component_density'] = comp_dens.tolist()
+    go['mass_fraction'] = mass_frac.tolist()
+    go['boiling_point'] = boiling_pt.tolist()
+    go['sara_type'] = sara_type.tolist()
+
     return go
 
 
@@ -139,20 +160,220 @@ def estimate_flash_point(oil):
     """
 
     oil_api = oil.metadata.API
-    #flash_point = None
 
     cuts = get_distillation_cuts(oil)
 
     if len(cuts) > 2:
-        #cut_temps = get_cut_temps(oil)
         lowest_cut = cuts[0]
         flash_point = flash_point_from_bp(lowest_cut[1])
     elif oil_api is not None:
         flash_point = flash_point_from_api(oil_api)
     else:
-        #est_api = est.api_from_density(density_at_temp(288.15))
-        #flash_point = flash_point_from_api(est_api)
         flash_point = None
 
     return flash_point
 
+
+def component_temps(cut_temps, N=10):
+    """
+    component temps from boiling point
+
+    """
+    component_temps = np.append(cut_temps, list(zip(cut_temps, cut_temps, cut_temps, cut_temps)))
+    len_ct = len(cut_temps)
+    new_temps = component_temps[len_ct:].copy()
+
+    return np.asarray(new_temps)
+
+def component_types(cut_temps, N=10):
+    """
+    set component SARA types
+
+    """
+    T_i = component_temps(cut_temps, N)
+
+    types_out = ['Saturates', 'Aromatics', 'Resins', 'Asphaltenes'] * int((len(T_i) / 4))
+
+    return types_out
+
+
+def component_densities(boiling_points):
+    """
+    estimate component densities from boiling point
+
+    """
+    rho_list = list(zip(est.saturate_densities(boiling_points),
+                  est.aromatic_densities(boiling_points),
+                  est.resin_densities(boiling_points),
+                  est.asphaltene_densities(boiling_points)))
+
+    return (np.asarray(rho_list)).flatten()
+
+
+def component_mol_wt(boiling_points):
+    """
+    estimate component molecular weight from boiling point
+
+    """
+    mw_list = list(zip(est.saturate_mol_wt(boiling_points),
+                  est.aromatic_mol_wt(boiling_points),
+                  est.resin_mol_wt(boiling_points),
+                  est.asphaltene_mol_wt(boiling_points)))
+
+    return (np.asarray(mw_list)).flatten()
+
+
+def inert_fractions(oil, density=None, viscosity=None):
+    """
+    resins and asphaltenes from database or estimated if None
+
+    """
+    f_res = None
+    f_asph = None
+    estimated_res = estimated_asph = False
+
+    f_res = oil.sub_samples[0].SARA.resins
+    f_asph = oil.sub_samples[0].SARA.asphaltenes
+
+    if f_res is not None:
+        f_res = f_res.converted_to('fraction').value
+    if f_asph is not None:
+        f_asph = f_asph.converted_to('fraction').value
+
+    if f_res is not None and f_asph is not None:
+        return f_res, f_asph, estimated_res, estimated_asph
+    else:
+        dens = Density(oil)
+        density = dens.at_temp(288.15)
+        kvis = KinematicViscosity(oil)
+        viscosity = kvis.at_temp(288.15)
+
+    if f_res is None:
+        f_res = est.resin_fraction(density, viscosity)
+        estimated_res = True
+
+    if f_asph is None:
+        f_asph = est.asphaltene_fraction(density, viscosity, f_res)
+        estimated_asph = True
+
+    return f_res, f_asph, estimated_res, estimated_asph
+
+#this will all be removed...
+def _linear_curve(x, a, b):
+    '''
+        Here we describe the form of a linear function for the purpose of
+        curve-fitting measured data points.
+    '''
+    return (a * x + b)
+
+
+def clamp(x, M, zeta=0.03):
+    '''
+        We make use of a generalized logistic function or Richard's curve
+        to generate a linear function that is clamped at x == M.
+        We make use of a zeta value to tune the parameters nu, resulting in a
+        smooth transition as we cross the M boundary.
+    '''
+    return (x -
+            (old_div(x, (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 + zeta)))) +
+            (old_div(M, (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 - zeta)))))
+
+
+def _inverse_linear_curve(y, a, b, M, zeta=0.12):
+    y_c = clamp(y, M, zeta)
+
+    return old_div((y_c - b), a)
+
+
+def normalized_cut_values(oil, N=10):
+    """
+    estimate cut temperatures
+
+    """
+    f_res, f_asph, _estimated_res, _estimated_asph = inert_fractions(oil)
+    cuts = get_distillation_cuts(oil)
+    oil_api = oil.metadata.API
+
+    if len(cuts) == 0:
+        BP_i = est.cut_temps_from_api(oil_api)
+        fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
+    else:
+        BP_i, fevap_i = list(zip(*[(c[1], c[0]) for c in cuts]))
+
+    popt, _pcov = curve_fit(_linear_curve, BP_i, fevap_i)
+    f_cutoff = _linear_curve(732.0, *popt)  # center of asymptote (< 739)
+    popt = popt.tolist() + [f_cutoff]
+
+    print("total inert = ",f_res + f_asph)
+    fevap_i = np.linspace(0.0, 1.0 - f_res - f_asph, (N * 2) + 1)[1:]
+    T_i = _inverse_linear_curve(fevap_i, *popt)
+
+    fevap_i = fevap_i.reshape(-1, 2)[:, 1]
+    T_i = T_i.reshape(-1, 2)[:, 0]
+
+    above_zero = T_i > 0.0
+    T_i = T_i[above_zero]
+    fevap_i = fevap_i[above_zero]
+
+    return T_i, est.fmasses_from_cuts(fevap_i)
+
+#need to replace this
+def component_mass_fractions(oil):
+    """
+    estimate pseudocomponent mass fractions
+
+    """
+    cut_temps, fmass_i = normalized_cut_values(oil)
+    measured_sat = oil.sub_samples[0].SARA.saturates
+    sat, arom, res, asph = sara_totals(oil)
+    if measured_sat is not None:
+        f_sat_i = est.saturate_mass_fraction(fmass_i,cut_temps,sat)	#scale by data value
+    else:
+        f_sat_i = est.saturate_mass_fraction(fmass_i,cut_temps)
+    f_arom_i = fmass_i - f_sat_i
+
+    f_res_i = np.zeros_like(f_sat_i)
+    f_asph_i = np.zeros_like(f_sat_i)
+
+    f_res_i[len(f_res_i)-1] = res
+    f_asph_i[len(f_asph_i)-1] = asph
+    mf_list = list(zip(f_sat_i, f_arom_i, f_res_i, f_asph_i))	# will want to zip all 4 together
+    return (np.asarray(mf_list)).flatten()
+
+def sara_totals(oil):
+    """
+    get SARA from database
+    estimate if no data
+
+    """
+    SARA = oil.sub_samples[0].SARA
+    aromatics = oil.sub_samples[0].SARA.aromatics
+    saturates = oil.sub_samples[0].SARA.saturates
+    resins = oil.sub_samples[0].SARA.resins
+    asphaltenes = oil.sub_samples[0].SARA.asphaltenes
+
+    dens = Density(oil)
+    density = dens.at_temp(288.15)
+    kvis = KinematicViscosity(oil)
+    viscosity = kvis.at_temp(288.15)
+
+    if resins is None:
+        resins_total = est.resin_fraction(density, viscosity)
+    else:
+        resins_total = resins.converted_to('fraction').value
+    if asphaltenes is None:
+        asphaltenes_total = est.asphaltene_fraction(density, viscosity, resins_total)
+    else:
+        asphaltenes_total = asphaltenes.converted_to('fraction').value
+    if saturates is None:
+        saturates_total = est.saturates_fraction(density, viscosity)
+    else:
+        saturates_total = saturates.converted_to('fraction').value
+    if aromatics is None:
+        aromatics_total = est.aromatics_fraction(resins_total,asphaltenes_total,saturates_total)
+    else:
+        aromatics_total = aromatics.converted_to('fraction').value
+
+    #print("SARA totals = ", saturates_total,aromatics_total,resins_total, asphaltenes_total)
+
+    return saturates_total, aromatics_total, resins_total, asphaltenes_total

@@ -4,6 +4,7 @@ oil record that may be needed for modeling, etc.
 """
 
 import numpy as np
+from past.utils import old_div
 
 def pour_point_from_kvis(ref_kvis, ref_temp_k):
     '''
@@ -57,6 +58,24 @@ def cut_temps_from_api(api, N=5):
     T_G = 1357.0 - 247.7 * np.log(api)
 
     return np.array([(T_0 + old_div(T_G * i, N)) for i in range(N)])
+
+
+def fmasses_flat_dist(f_res, f_asph, N=5):
+    '''
+        Generate a flat distribution of N distillation cut fractional masses.
+    '''
+    return np.array([(1.0 - f_res - f_asph) / N] * N)
+
+
+def fmasses_from_cuts(f_evap_i):
+    '''
+        Generate distillation cut fractional masses from the
+        cumulative distillation fractions in the cut data.
+    '''
+    fmass_i = np.array(f_evap_i)
+    fmass_i[1:] = np.diff(fmass_i)
+
+    return fmass_i
 
 
 def resin_fraction(density, viscosity, f_other=0.0):
@@ -215,16 +234,20 @@ def saturate_mass_fraction(fmass_i, temp_k, total_sat=None):
     k = .0877
 
     if total_sat is not None:
-        k = - (100*total_sat - 124.1069*fmass_i.sum()) / (fmass_i * T_i).sum()
-        sat_pct_i = (124.1069 - k * T_i)*100
-        #f_sat_i = fmass_i * sat_pct_i / 100.
-        #print ("f_sat_i", f_sat_i, f_sat_i.sum())
-        #for i in range(len(f_mass_i)):
-            #sum1 = f_mass_i[i]*T_i[i]
-    else:
-    #sat_pct_i = 124.1069 - .0877 * T_i
+#         sat_pct_temp = (124.1069 - k * T_i)
+#         sat_pct_i = np.clip(sat_pct_temp,0,100)
+        f_sat_i = fmass_i * sat_pct_i / 100.
+        k = (124.1069 *fmass_i.sum() - total_sat*100) / (fmass_i*T_i).sum()
         sat_pct_i = 124.1069 - k * T_i
+        f_sat_i = fmass_i * sat_pct_i / 100.
+#         scale = total_sat / f_sat_i.sum()
+#         f_sat_i = scale * f_sat_i
+#         sat_pct_i = f_sat_i / fmass_i
+    else:
+        sat_pct_i = 124.1069 - k * T_i
+        f_sat_i = fmass_i * sat_pct_i / 100.
 
-    f_sat_i = fmass_i * sat_pct_i / 100.
+    #sat_pct_i = 124.1069 - k * T_i
+    #f_sat_i = fmass_i * sat_pct_i / 100.
 
     return np.clip(f_sat_i, 0.0, fmass_i)
