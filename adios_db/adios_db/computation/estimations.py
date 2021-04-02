@@ -236,7 +236,7 @@ def saturate_mass_fraction(fmass_i, temp_k, total_sat=None):
     if total_sat is not None:
 #         sat_pct_temp = (124.1069 - k * T_i)
 #         sat_pct_i = np.clip(sat_pct_temp,0,100)
-        f_sat_i = fmass_i * sat_pct_i / 100.
+#         f_sat_i = fmass_i * sat_pct_i / 100.
         k = (124.1069 *fmass_i.sum() - total_sat*100) / (fmass_i*T_i).sum()
         sat_pct_i = 124.1069 - k * T_i
         f_sat_i = fmass_i * sat_pct_i / 100.
