@@ -4,7 +4,6 @@ oil record that may be needed for modeling, etc.
 """
 
 import numpy as np
-from past.utils import old_div
 
 def pour_point_from_kvis(ref_kvis, ref_temp_k):
     '''
@@ -57,7 +56,7 @@ def cut_temps_from_api(api, N=5):
     T_0 = 457.0 - 3.34 * api
     T_G = 1357.0 - 247.7 * np.log(api)
 
-    return np.array([(T_0 + old_div(T_G * i, N)) for i in range(N)])
+    return np.array([(T_0 + (T_G * i) / N) for i in range(N)])
 
 
 def fmasses_flat_dist(f_res, f_asph, N=5):
