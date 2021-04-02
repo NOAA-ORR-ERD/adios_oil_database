@@ -11,14 +11,15 @@ import logging
 import unit_conversion as uc
 
 from ...util import sigfigs
-from ...models.common.measurement import (UnittedValue,
-                                          Length,
+from ...models.common.measurement import (Length,
                                           Temperature,
                                           MassFraction,
                                           VolumeFraction,
                                           Density,
                                           KinematicViscosity,
-                                          Pressure)
+                                          Pressure,
+                                          Unitless,
+                                          )
 
 from ...models.oil.physical_properties import (DensityPoint,
                                                KinematicViscosityPoint,
@@ -230,7 +231,7 @@ MAPPING = {
     norm('Cetane Index 1990 (D4737),'): {
         'attr': 'Cetane Index 1990 (D4737)',
         'unit': 'dimensionless',
-        'cls': UnittedValue,
+        'cls': Unitless,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },

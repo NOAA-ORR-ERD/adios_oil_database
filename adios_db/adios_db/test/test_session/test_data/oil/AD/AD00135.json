@@ -330,13 +330,25 @@
         },
         {
             "metadata": {
-                "name": "2.7% Weathered",
-                "short_name": "2.7% Weathered",
+                "name": "Weathered sample that did not form an emulsion",
+                "short_name": "Didn't Emulsify",
+                "description": "Partially weathered sample that did not form an emulsion.\n\nSee record reference for details",
                 "fraction_weathered": {
                     "value": 0.027,
                     "unit": "fraction",
                     "unit_type": "massfraction"
                 }
+            },
+            "environmental_behavior": {
+                "emulsions": [
+                    {
+                        "water_content": {
+                            "value": 0.0,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        }
+                    }
+                ]
             }
         },
         {

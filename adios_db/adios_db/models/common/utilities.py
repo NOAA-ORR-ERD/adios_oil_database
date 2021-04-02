@@ -91,19 +91,26 @@ def dataclass_to_json(cls):
 
         The top-level validator extends the existing list
         """
+        # I have NO idea how this happens, but it does ?!?!?
+        if self is None:
+            return []
+
         # first see if there is a "private" one:
-        try:
+        if hasattr(self, '_validate'):
             messages = self._validate()
-        except AttributeError:
+        else:
             messages = []
 
         for fieldname, fieldobj in self.__dataclass_fields__.items():
             value = getattr(self, fieldname)
-            try:
-                # validate with the type's validate method
+            if hasattr(fieldobj, 'type') and hasattr(fieldobj.type, 'validate'):
                 messages.extend(fieldobj.type.validate(value))
-            except AttributeError:  # This one doesn't have a validate method.
-                pass
+            # try:
+            #     # validate with the type's validate method
+            #     messages.extend(fieldobj.type.validate(value))
+            # except AttributeError as err:  # This one doesn't have a validate method.
+            #     print("\nAttributeError:", err)
+            #     pass
 
         return messages
 

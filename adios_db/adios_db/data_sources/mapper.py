@@ -30,7 +30,8 @@ class MapperBase(ImporterBase):
     def compound(self, name, measurement, method=None, groups=None,
                  sparse=False):
         '''
-            Example of content:
+        Example of content::
+
                 {
                     'name': "1-Methyl-2-Isopropylbenzene",
                     'method': "ESTS 2002b",
