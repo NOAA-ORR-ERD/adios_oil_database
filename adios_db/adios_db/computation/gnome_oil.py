@@ -10,7 +10,7 @@ from adios_db.computation import estimations as est
 from .physical_properties import get_density_data, bullwinkle_fraction, get_kinematic_viscosity_data, get_distillation_cuts
 from .physical_properties import Density, KinematicViscosity
 from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_from_api
-from scipy.optimize import curve_fit	#temporary
+#from scipy.optimize import curve_fit	#temporary
 
 
 def get_empty_dict():
@@ -289,6 +289,7 @@ def normalized_cut_values(oil, N=10):
     estimate cut temperatures
 
     """
+    from scipy.optimize import curve_fit	#temporary
     f_res, f_asph, _estimated_res, _estimated_asph = inert_fractions(oil)
     cuts = get_distillation_cuts(oil)
     oil_api = oil.metadata.API
