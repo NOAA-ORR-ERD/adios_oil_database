@@ -17,17 +17,17 @@ RUN mkdir /var/run/mongodb
 
 # install deps
 RUN cd adios-db && conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
-
 RUN cd adios-db/adios_db && pip install -e ./
 
 # RUN cd adios-db/adios_db/data/exxon_assays && python ./download_exxon_assays.py
-
-RUN mongod --config adios-db/mongo_config_deploy.yml && cd adios-db/adios_db && adios_db_init
-
+# RUN mongod --config adios-db/mongo_config_deploy.yml && cd adios-db/adios_db && adios_db_init
 # RUN mongod --config adios-db/mongo_config_deploy.yml && cd adios-db/adios_db && adios_db_import --all
 
-# RUN cd adios-db/web_api && conda install --file conda_requirements.txt
 RUN cd adios-db/web_api && pip install -e ./
+
+# git clone our dependent projects.
+RUN cd / && git clone https://gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git --depth 1
+RUN cd / && git clone https://gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git --depth 1
 
 RUN mkdir /config
 RUN cp /adios-db/web_api/config-example.ini /config/config.ini
