@@ -18,6 +18,8 @@ class CursorWrapper():
 
     Rant: why doesn't a mongo cursor have a __len__ rather than using .count()?
           to make it more like a regular Sequence?
+
+          oh, and now count() is deprecated as well!
     """
     def __init__(self, cursor):
         self.cursor = cursor
@@ -41,7 +43,7 @@ class CursorWrapper():
 
     def __getattr__(self, attr):
         """
-        Pass anything else on to the imbedded cursor
+        Pass anything else on to the embedded cursor
 
         Just in case -- we really should document whats being used.
         """

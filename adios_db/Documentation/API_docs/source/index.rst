@@ -6,11 +6,22 @@
 Welcome to ADIOS Oil Database's documentation!
 ==============================================
 
+There are two things one might want to do with this package:
+
+1) Manage the data itself: search it, update it, add to it etc.
+   See: :ref:`managing_the_data` for some documentation of this use case.
+
+2) Extract numerical values from the data to use for computation,
+   such as initializing an oil weathering model.
+   See: :ref:`computation` for some documentation of this use case.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    overview
+   managing
+   computation
 
 .. toctree::
    :maxdepth: 2

@@ -5,7 +5,8 @@ tests for making a GNOME Oil
 
 from pathlib import Path
 from math import isclose
-# import pytest
+import pytest
+pytest.importorskip("scipy.optimize")
 
 from adios_db.models.oil.oil import Oil
 from adios_db.computation.gnome_oil import make_gnome_oil

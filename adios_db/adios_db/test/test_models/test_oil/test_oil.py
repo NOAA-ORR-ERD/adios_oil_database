@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from adios_db.models.oil.oil import Oil, ADIOS_DATA_MODEL_VERSION
-from adios_db.models.oil.version import Version, VersionError
+from adios_db.models.oil.version import VersionError
 from adios_db.models.oil.metadata import MetaData
 from adios_db.models.oil.values import Reference
 
@@ -159,13 +159,14 @@ class TestOil:
 
         pprint(py_json)
 
-        assert len(py_json) == 6
+        assert len(py_json) == 7
 
         for attr in ['oil_id',
                      'adios_data_model_version',
                      'metadata',
                      'sub_samples',
                      'status',
+                     'permanent_warnings',
                      'extra_data',
                      ]:
             assert attr in py_json
@@ -202,6 +203,19 @@ class TestOil:
         assert len(oil.sub_samples) == 5
         assert oil.sub_samples[0].metadata.name == "Fresh Oil Sample"
         assert oil.sub_samples[3].metadata.name == "25.34% Weathered"
+
+    def test_permanent_warnings(self):
+        oil = Oil('XXXXXX')
+
+        warn = "Something is very wrong with this record."
+        oil.permanent_warnings.append(warn)
+        print(oil)
+
+        msgs = oil.validate()
+
+        print(msgs)
+
+        assert "W000: " + warn in msgs
 
 
 class TestMetaData:

@@ -1,0 +1,24 @@
+# NOTE this is in the source dir help the
+# sphinx-pages GitHub Action
+
+# requirements for building the docs
+# using loading from gitHub, so that this can be run outside NOAA
+numpy>=1.20
+awesome-slugify>=1.6.5
+python-dateutil
+pymongo==3.11.0
+openpyxl
+
+sphinx
+sphinx_rtd_theme
+
+# install pynucos from release tarball
+https://github.com/NOAA-ORR-ERD/PyNUCOS/archive/refs/tags/v2.10.1.tar.gz
+
+# install adios_db from git
+# NOTE: this should be doable from the local code!
+-e git://github.com/NOAA-ORR-ERD/adios_oil_database.git#"egg=adios_db&subdirectory=adios_db/"
+
+# For the gh-pages builder -- install from the repo
+# didn't work -- the full source is not there.
+#/github/workspace/docs/adios_db/

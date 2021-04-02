@@ -11,14 +11,19 @@ logger = logging.getLogger(__name__)
 
 
 class EnvCanadaOilExcelFile(object):
-    ''' A specialized file reader for the Environment Canada oil spreadsheet.
-        - This is an Excel spreadsheet with an .xlsx extension.  We can use
-          the third party openpyxl package to reach the content.
-        - The first column in the file contains the names of oil property
-          categories.
-        - The second column in the file contains the names of specific oil
-          properties.
-        - The rest of the columns in the file contain oil property values.
+    '''
+    A specialized file reader for the Environment Canada oil spreadsheet.
+
+    - This is an Excel spreadsheet with an .xlsx extension.  We can use
+      the third party openpyxl package to reach the content.
+
+    - The first column in the file contains the names of oil property
+      categories.
+
+    - The second column in the file contains the names of specific oil
+      properties.
+
+    - The rest of the columns in the file contain oil property values.
     '''
     def __init__(self, name):
         '''
@@ -155,23 +160,26 @@ class EnvCanadaOilExcelFile(object):
 
     def get_records(self):
         '''
-            Iterate through all the oils, returning all the properties of each
-            one.
+        Iterate through all the oils, returning all the properties of each
+        one.
         '''
         for name in self.col_indexes:
             yield self.get_record(name)
 
     def get_record(self, name):
         '''
-            A 'record' coming out of our reader is a dict of dicts
-            representing the data for a single oil.
-            - The top level keys are the raw category names as seen in the
-              first column of the spreadsheet
-            - The second level keys are the raw field names that are contained
-              within the category, as seen in the second column of the
-              spreadsheet
-            - Each value in the field dict is a list representing a horizontal
-              slice of the columns that comprise the record
+        A 'record' coming out of our reader is a dict of dicts
+        representing the data for a single oil.
+
+        - The top level keys are the raw category names as seen in the
+          first column of the spreadsheet
+
+        - The second level keys are the raw field names that are contained
+          within the category, as seen in the second column of the
+          spreadsheet
+
+        - Each value in the field dict is a list representing a horizontal
+          slice of the columns that comprise the record
         '''
         ret = {}
         record_data = self._get_record_raw_columns(name)

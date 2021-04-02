@@ -113,20 +113,10 @@
             "environmental_behavior": {
                 "emulsions": [
                     {
-                        "age": {
-                            "value": 0.0,
-                            "unit": "day",
-                            "unit_type": "time"
-                        },
                         "water_content": {
                             "value": 0.89,
                             "unit": "fraction",
                             "unit_type": "massfraction"
-                        },
-                        "ref_temp": {
-                            "value": 288.15,
-                            "unit": "K",
-                            "unit_type": "temperature"
                         }
                     }
                 ]

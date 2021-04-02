@@ -13,7 +13,7 @@ except ImportError:
     pass
 
 from adios_db.util import estimations as est
-from adios_db.util.json import ObjFromDict
+# from adios_db.util.json import ObjFromDict
 
 from adios_db.models.common.measurement import (Time,
                                                     Length,
@@ -302,10 +302,13 @@ class OilSampleEstimation(object):
             return the object(s) that are closest to the specified
             temperature(s)
             specifically:
+
             - we want the ones that immediately bound our temperature.
+
             - if our temperature is high and out of bounds of the temperatures
               in our obj_list, then we return a range containing only the
               highest temperature.
+
             - if our temperature is low and out of bounds of the temperatures
               in our obj_list, then we return a range containing only the
               lowest temperature.
@@ -340,20 +343,24 @@ class OilSampleEstimation(object):
 
     def pour_point(self, estimate_if_none=True):
         '''
-            Note: there is a catch-22 which puts us in an infinite loop
-                  in some cases:
-                  - to estimate pour point, we need viscosities
-                  - if we need to convert dynamic viscosities to
-                    kinematic, we need density at 15C
-                  - to estimate density at temp, we need to estimate pour point
-                  - ...and then we recurse
+        Note: there is a catch-22 which puts us in an infinite loop
+        in some cases:
 
-                  For this case we need to make an exception.  I think we can
-                  add a flag here to bypass estimation and just give the
-                  data values.  This flag will default to True, since most
-                  users will want to estimate values if none are present.
-                  But internally, we will want the option to turn estimation
-                  off.
+          - to estimate pour point, we need viscosities
+
+          - if we need to convert dynamic viscosities to
+            kinematic, we need density at 15C
+
+          - to estimate density at temp, we need to estimate pour point
+
+          - ...and then we recurse
+
+          For this case we need to make an exception.  I think we can
+          add a flag here to bypass estimation and just give the
+          data values.  This flag will default to True, since most
+          users will want to estimate values if none are present.
+          But internally, we will want the option to turn estimation
+          off.
         '''
         min_k = max_k = None
 
@@ -440,10 +447,11 @@ class OilSampleEstimation(object):
 
     def get_densities(self):
         '''
-            return a list of densities for the oil sample.
-            We include the API as a density if:
-            - the culled list of densities does not contain a measurement
-              at 15C
+        return a list of densities for the oil sample.
+        We include the API as a density if:
+
+        - the culled list of densities does not contain a measurement
+          at 15C
         '''
         phys = getattr(self.record, 'physical_properties', None)
         densities = getattr(phys, 'densities', [])
@@ -464,21 +472,27 @@ class OilSampleEstimation(object):
 
     def density_at_temp(self, temperature=288.15):
         '''
-            Get the oil density at a temperature or temperatures.
+        Get the oil density at a temperature or temperatures.
 
-            Note: there is a catch-22 which prevents us from getting
-                  the min_temp in all casees:
-                  - to estimate pour point, we need viscosities
-                  - if we need to convert dynamic viscosities to
-                    kinematic, we need density at 15C
-                  - to estimate density at temp, we need to estimate pour point
-                  - ...and then we recurse
-                  For this case we need to make an exception.  I think we can
-                  add a flag to self.pour_point() to bypass estimation and just
-                  give the data values.
-            Note: If we have a pour point that is higher than one or more
-                  of our reference temperatures, then the lowest reference
-                  temperature will become our minimum temperature.
+        Note: there is a catch-22 which prevents us from getting
+        the min_temp in all cases:
+
+              - to estimate pour point, we need viscosities
+
+              - if we need to convert dynamic viscosities to
+                kinematic, we need density at 15C
+
+              - to estimate density at temp, we need to estimate pour point
+
+              - ...and then we recurse
+
+              For this case we need to make an exception.  I think we can
+              add a flag to self.pour_point() to bypass estimation and just
+              give the data values.
+
+        Note: If we have a pour point that is higher than one or more
+        of our reference temperatures, then the lowest reference
+        temperature will become our minimum temperature.
         '''
         shape = None
         densities = self.get_densities()
@@ -723,9 +737,11 @@ class OilSampleEstimation(object):
             The value k_v2 is the coefficient of exponential decay used
             when calculating kinematic viscosity as a function of
             temperature.
+
             - If the oil contains two or more viscosity measurements, then
               we will make an attempt at determining k_v2 using a least
               squares fit.
+
             - Otherwise we will need to choose a reasonable average default
               value.  Bill's most recent viscosity document, and an
               analysis of the multi-KVis oils in our oil library suggest that
