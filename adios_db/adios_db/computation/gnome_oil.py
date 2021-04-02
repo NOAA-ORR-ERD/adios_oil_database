@@ -11,7 +11,6 @@ from .physical_properties import get_density_data, bullwinkle_fraction, get_kine
 from .physical_properties import Density, KinematicViscosity
 from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_from_api
 from scipy.optimize import curve_fit	#temporary
-from past.utils import old_div
 
 
 def get_empty_dict():
@@ -275,14 +274,14 @@ def clamp(x, M, zeta=0.03):
         smooth transition as we cross the M boundary.
     '''
     return (x -
-            (old_div(x, (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 + zeta)))) +
-            (old_div(M, (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 - zeta)))))
+            (x / (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 + zeta))) +
+            (M / (1.0 + np.e ** (-15 * (x - M))) ** (1.0 / (1 - zeta))))
 
 
 def _inverse_linear_curve(y, a, b, M, zeta=0.12):
     y_c = clamp(y, M, zeta)
 
-    return old_div((y_c - b), a)
+    return (y_c - b) / a
 
 
 def normalized_cut_values(oil, N=10):
@@ -304,7 +303,6 @@ def normalized_cut_values(oil, N=10):
     f_cutoff = _linear_curve(732.0, *popt)  # center of asymptote (< 739)
     popt = popt.tolist() + [f_cutoff]
 
-    print("total inert = ",f_res + f_asph)
     fevap_i = np.linspace(0.0, 1.0 - f_res - f_asph, (N * 2) + 1)[1:]
     T_i = _inverse_linear_curve(fevap_i, *popt)
 
