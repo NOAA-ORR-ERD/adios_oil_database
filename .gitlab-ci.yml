@@ -63,10 +63,13 @@ build_api:
   tags:
     - build
   variables:
+    # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
   script:
-    # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
+    - git clone https://gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
+    #- git clone https://gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git
+
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_api/dockerfile -t $IMAGE_TAG
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
