@@ -67,7 +67,7 @@ build_api:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
   script:
-    - git clone https://gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
     #- git clone https://gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
