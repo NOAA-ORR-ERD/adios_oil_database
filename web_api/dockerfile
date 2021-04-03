@@ -28,7 +28,7 @@ RUN cd adios-db/web_api && pip install -e ./
 # git clone our dependent projects.
 RUN git config --global user.name "Dockerfile Build"
 RUN git config --global user.email dockerfile.build@gitlab.orr.noaa.gov
-RUN git config --global -l
+RUN cd / && git config --global -l
 
 RUN cd / && git clone https://gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git --depth 1
 RUN cd / && git clone https://gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git --depth 1
