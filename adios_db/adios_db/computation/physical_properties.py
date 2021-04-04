@@ -321,6 +321,17 @@ def convert_dvisc_to_kvisc(dvisc, density):
 #     raise NotImplementedError
 
 
+def get_pour_point(oil):
+    """
+    Return oil's pour point or None
+    """
+    phys_props = oil.sub_samples[0].physical_properties
+
+    pour_point = phys_props.pour_point
+
+    return pour_point
+
+
 def get_distillation_cuts(oil, units="fraction", temp_units="K"):
     """
     Return a table of distillation data:
@@ -344,6 +355,42 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
         t = cut.vapor_temp.converted_to(temp_units).value
         cuts_table.append((f, t))
     return cuts_table
+
+
+def max_water_fraction_emulsion(oil):
+    if oil.metadata.product_type == 'Crude Oil NOS' or oil.metadata.product_type == 'Bitumen Blend':
+        return 0.9
+    else:
+        return 0.0
+
+
+def emul_water(oil):
+    """
+    This function computes two terms used in emulsification.
+    Ymax is the maximum water fraction of a stable emulsion.
+    Smax is the maximum surface area of the water droplets inside
+    the emulsion. (from ADIOS2)
+    """
+
+    emulsion_max_water = None	#need to drill down in database for this info
+
+    if emulsion_max_water is None:		# max water content not in library
+        dens = Density(oil)
+        density = dens.at_temp(288.15)
+        kvis = KinematicViscosity(oil)
+        viscosity = kvis.at_temp(288.15)
+        dynamic_viscosity = viscosity * density
+        if(dynamic_viscosity > 0.050):
+            Ymax = 0.9 - 0.0952 * np.log(dynamic_viscosity / 0.050)
+        else:
+            Ymax = 0.9
+    else:
+        Ymax = emulsion_max_water	# stay with the value you have
+
+    #this is done is py_gnome
+    #drop_min = 1.0e-6		# min oil droplet size
+    #Smax = (6.0 / drop_min) * (Ymax / (1.0 - Ymax))
+    return Ymax
 
 
 def bullwinkle_fraction(oil):
@@ -374,7 +421,7 @@ def bullwinkle_fraction(oil):
     #if oil.metadata.emuls_constant_max is not None:
         #bullwinkle_fraction = emuls_constant_max
 
-    if oil.metadata.product_type == "refined":
+    if oil.metadata.product_type != "Crude Oil NOS" and oil.metadata.product_type != "Bitumen Blend":
         bullwinkle_fraction = 1.0
     else:
         oil_api = oil.metadata.API

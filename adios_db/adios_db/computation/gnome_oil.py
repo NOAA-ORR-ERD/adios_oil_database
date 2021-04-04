@@ -7,10 +7,10 @@ NOTE: This make s JSON compatible Python structure from. which to build a GnomeO
 
 import numpy as np
 from adios_db.computation import estimations as est
-from .physical_properties import get_density_data, bullwinkle_fraction, get_kinematic_viscosity_data, get_distillation_cuts
+from .physical_properties import get_density_data, get_kinematic_viscosity_data, get_distillation_cuts
+from .physical_properties import bullwinkle_fraction, max_water_fraction_emulsion 
 from .physical_properties import Density, KinematicViscosity
 from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_from_api
-#from scipy.optimize import curve_fit	#temporary
 
 
 def get_empty_dict():
@@ -110,7 +110,7 @@ def make_gnome_oil(oil):
     go['kvis_weathering'] = [0.0] * len(go['kvis'])
 
     go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
-    go['emulsion_water_fraction_max'] = .9	# for now
+    go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
     go['solubility'] = 0
     go['k0y'] = 2.024e-06 #do we want this included?
     
