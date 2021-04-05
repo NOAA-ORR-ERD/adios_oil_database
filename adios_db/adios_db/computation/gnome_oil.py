@@ -6,6 +6,8 @@ NOTE: This make s JSON compatible Python structure from. which to build a GnomeO
 """
 
 import numpy as np
+from adios_db.models.oil.validation.warnings import WARNINGS
+from adios_db.models.oil.validation.errors import ERRORS
 from adios_db.computation import estimations as est
 from .physical_properties import get_density_data, get_kinematic_viscosity_data, get_distillation_cuts
 from .physical_properties import bullwinkle_fraction, max_water_fraction_emulsion 
@@ -74,6 +76,8 @@ def make_gnome_oil(oil):
     # metadata:
     go = get_empty_dict()
     go['name'] = oil.metadata.name
+    if oil.metadata.API is None:
+        raise ValueError(ERRORS["E030"]+" - oil not suitable for use in Gnome")
     go['api'] = oil.metadata.API
     go['adios_oil_id'] = oil.oil_id
 
@@ -293,8 +297,9 @@ def normalized_cut_values(oil, N=10):
     f_res, f_asph, _estimated_res, _estimated_asph = inert_fractions(oil)
     cuts = get_distillation_cuts(oil)
     oil_api = oil.metadata.API
-
     if len(cuts) == 0:
+        if oil.metadata.product_type != 'Crude Oil NOS':
+            print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
         BP_i = est.cut_temps_from_api(oil_api)
         fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
     else:
