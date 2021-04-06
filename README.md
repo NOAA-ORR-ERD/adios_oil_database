@@ -10,75 +10,6 @@ This repository contains three packages:
 
 ``ADIOS web_client``: Ember-JS based Web browser client for searching, viewing, and modifying the data.
 
-## Installing
-
-The easiest way to get all the dependencies, etc is to use conda. YOu will need to have the conda-forge channel in order to get all the required packages.
-
-### ``adios_db``
-
-#### Setup and activate a conda environment:
-
-```
-conda create -n adios_db --file adios_db/conda_requirements.txt
-conda activate adios_db
-```
-
-#### Install the package
-
-```
-cd adios_db
-```
-
-For development (editable mode):
-
-```
-pip install -e .
-```
-
-For use (regular install):
-
-```
-pip install .
-```
-
-#### Testing the adios_db package
-
-While developing:
-
-```
-cd adios_db/test
-
-pytest
-```
-The installed version:
-
-```
-pytest --pyargs adios_db
-```
-
-
-
-
-## Running the Full App locally
-
-* Setup and activate a conda environment:
-
-```
-conda create -n adios_db --file adios_db/conda_requirements.txt
-conda activate adios_db
-```
-* Setup everything:
-
-```
-python run_app.py --setup
-```
-
-* Run the app:
-
-```
-python run_app.py
-```
-
 ## Dev Process:
 
 As of Feb, 2021, the project is still under active development.
@@ -126,8 +57,6 @@ For our case, we need not only a Browser, but also the oil_database_api and mong
 As Electron embeds node, we need to start up the Pyramid app and mongod from javascript, as subprocesses, and hence the need to figure out how to manage them.
 
 
-
-
 ## Components
 
 ### `adios_db`:
@@ -165,6 +94,55 @@ conda config --add channels conda-forge
   environment, but it is usually best to create an environment for
   each specific project -- each environment can have a different set of dependencies, including Python itself.
 
+
+## Installing the ``adios_db`` package:
+
+
+#### Setup and activate a conda environment:
+
+```
+conda create -n adios_db --file adios_db/conda_requirements.txt
+conda activate adios_db
+```
+
+#### Install the package
+
+```
+$ cd adios_db
+```
+
+For development (editable mode):
+
+```
+$ pip install -e .
+```
+
+For use (regular install):
+
+```
+$ pip install .
+```
+
+#### Testing the adios_db package
+
+While developing -- run pytest in the test dir:
+
+```
+$ cd adios_db/test
+
+$ pytest
+```
+
+Testing the installed version, run pytest from anywhere:
+
+```
+$ pytest --pyargs adios_db
+```
+
+## Installing the Web API
+
+### If you have not already created a conda environment:
+
 ```
 conda create -n adiosdb --file oil_db/conda_requirements.txt --file web_api/conda_requirements.txt
 ```
@@ -177,59 +155,44 @@ To use this new environment, you need to activate it:
 conda activate adiosdb
 ```
 
-There are a couple packages that are not (yet) available in conda-forge, so those need to be installed with pip:
+### If you have already created a conda environment:
+
+Activate your adios_db environment, if it's not already activated:
 
 ```
-pip install --no-deps -r oil_db/pip_requirements.txt
-
-pip install --no-deps -r web_api/pip_requirements.txt
+conda activate adiosdb
 ```
 
-(It's a good idea to use --no-deps, so that pip won't update stuff that conda already installed)
+Install the dependencies (it's good to pass the adios_db ones in, even if they have already been installed, so conda won't get confused)
+
+```
+conda install --file oil_db/conda_requirements.txt --file web_api/conda_requirements.txt
+```
 
 ## MongoDB
 
-The oil_db code needs a mongodb instance running. It can be installed in various ways, and which is best depends on platform and deployment environment. But the easiest way on Windows and Mac for development is to use conda to install it:
+The oil_db code needs a mongodb instance running to support the web_api. It can be used without mongo form most scripting activities.
+
+MongoDB can be installed in various ways, and which is best depends on platform and deployment environment. But the easiest way on Windows and Mac for development is to use conda to install it:
 
 ```
 conda install mongodb
 ```
 
+## Installing the the Web Client
+
 The webclient needs node, which can be installed in various way, but can also be gotten from conda:
 
 ```
-conda install nodejs
-```
-
-### Installing the adios_db package:
-
-```
-cd adios_db
-
-pip install -e .
-```
-
-This will install it in "develop" or "editable" mode -- so as you change the source code, the changes will be seen immediately without having to re-install.
-
-#### testing
-
-`pytest --pyargs adios_db`
-
-
-NOTE: this will skip the database connection tests. If you have mongo running, you can turn them on by running pytest from within the test dir, and passing the --mongo flag:
-
-```
-cd adios_db/test
-
-pytest --mongo
+$ conda install nodejs
 ```
 
 ### Installing the web_api package:
 
 ```
-cd ../web_api
+$ cd ../web_api
 
-pip install -e .
+$ pip install -e .
 ```
 
 ### Starting mongodb:
@@ -240,7 +203,19 @@ Mongodb needs to be running for all of the tests to work:
 
 will start the mongo daemon with the given config -- set up for development. You may want to do that it its own terminal.
 
+### Testing
+
+By default, testing will skip the database connection tests. If you have mongo running, you can turn them on by running pytest from within the test dir, and passing the --mongo flag:
+
+```
+cd adios_db/test
+
+pytest --mongo
+```
+
 ### Initializing the database:
+
+NOTE: This is a bit out of date -- it should work, but in general, you don't wnat to re-import all the data every time, but rather, work with a pre-build database, which can be loaded from JSON files.
 
 Create an empty DB
 
@@ -260,27 +235,47 @@ pytest --pyargs oil_database_api
 
 ## Running the app:
 
-To run the app, you need to be running the database (`mongod`), the API server, and the client code. There is a single script that will do that all for you:
-
-```
-run_app.py
-```
-(Make sure you are in a fully configured environment first -- i.e. `conda activate adiosdb`)
-
-Note that `ember serve` takes a while to get started, so it won't work right away.
-
-hit `^C` to stop everything.
-
-If you want to know how to run each piece, read the script, and/or read on ...
-
-## Starting the API:
+### Starting the API:
 
 `pserve --reload config-example.ini`
 
-## Running the client:
+### Running the client:
 
 See the README in the web_client dir.
 
+
+## Running the Full App locally
+
+There is an experimental script: ``run_app.py`` that you can use to run the full stack with one command. It has not been well tested or maintained.
+
+It must be run within the conda environment you want to use for this app. If you aren't doing anything else with conda, that could be the base environment, but we recommend you use one for this app.
+
+* Setup and activate a conda environment:
+
+```
+conda create -n adios_db --file adios_db/conda_requirements.txt
+conda activate adios_db
+```
+* Setup everything:
+
+```
+python run_app.py --setup
+```
+
+The ``--rebuild`` (``-r``) flag will update the dependencies and rebuild the client app.
+
+The ``--database`` (``-d``) flag will rebuild the database
+
+The ``--setup`` flag will install / update all the dependencies, and rebuild the database, but not start the server.
+
+
+* Running the app:
+
+```
+python run_app.py
+```
+
+With no flags, should run the app itself, with the existing code and data.
 
 ## Project team:
 
@@ -291,3 +286,5 @@ Project Manager and lead chemist: Robert Jones
 Chemist: Dalina Thrift-Viveros
 
 Software Developers: James Makela, Gennady Kachook
+
+Data Manager: Jeff Lankford
