@@ -7,8 +7,6 @@ RUN yum update -y && yum -y install node npm
 
 COPY ./web_client/ /web_client/
 
-RUN mkdir /config
-
 RUN cd /web_client && npm install -g n
 RUN cd /web_client && n stable
 RUN cd /web_client && node --version
@@ -19,6 +17,7 @@ RUN cd /web_client && npm --version
 
 RUN cd /web_client && npm install -g ember-cli
 
-VOLUME /config
+RUN cp /web_client/oildb-deploy/config/web_client/* /web_client/public/configs
+
 EXPOSE 4200
 ENTRYPOINT ["/web_client/docker_start.sh"]
