@@ -113,7 +113,7 @@ class TestOil:
         result = repr(oil)
 
         assert result.startswith("Oil(")
-        assert "oil_id='EC002234'" in result
+        assert "oil_id='EC02234'" in result
 
     def test_init_minimal(self):
         '''
@@ -320,7 +320,7 @@ class TestFullRecordMetadata:
         oil = self.oil
         print(oil.oil_id)
 
-        assert oil.oil_id == "EC002234"
+        assert oil.oil_id == "EC02234"
 
 
     @pytest.mark.parametrize("attr, value", [("location", "Alberta, Canada"),
@@ -343,7 +343,7 @@ def test_from_file_name():
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
-    assert oil.oil_id == "EC002234"
+    assert oil.oil_id == "EC02234"
 
 
 def test_from_file():
@@ -354,7 +354,7 @@ def test_from_file():
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
-    assert oil.oil_id == "EC002234"
+    assert oil.oil_id == "EC02234"
 
 
 def test_to_file_name():
@@ -368,7 +368,7 @@ def test_to_file_name():
     with open(OUTPUT_DIR / "temp_to_file.json", encoding="utf-8") as infile:
         data = json.load(infile)
 
-    assert data["oil_id"] == 'EC002234'
+    assert data["oil_id"] == 'EC02234'
 
 def test_to_open_file():
     """
@@ -381,7 +381,7 @@ def test_to_open_file():
     with open(OUTPUT_DIR / "temp_to_file.json", encoding="utf-8") as infile:
         data = json.load(infile)
 
-    assert data["oil_id"] == 'EC002234'
+    assert data["oil_id"] == 'EC02234'
 
 
 def test_round_trip():

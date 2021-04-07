@@ -44,7 +44,7 @@ class MetaData:
 
         # Check for a reasonable name
         # right now, reasonable is more than 5 characters -- we may want to add more later
-        if len(self.name.strip()) < 5:
+        if len(self.name.strip()) < 2:
             msgs.append(WARNINGS["W001"].format(self.name))
 
         return msgs

@@ -66,7 +66,6 @@ def test_no_id():
 @pytest.mark.parametrize("name", ["  ",
                                   "X",
                                   "4",
-                                  "this"
                                   ])
 
 def test_reasonable_name(name):

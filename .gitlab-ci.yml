@@ -63,10 +63,13 @@ build_api:
   tags:
     - build
   variables:
+    # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
   script:
-    # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git
+
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_api/dockerfile -t $IMAGE_TAG
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -80,6 +83,8 @@ build_client:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
   script:
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
+
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_client/dockerfile -t $IMAGE_TAG
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -193,16 +198,12 @@ deploy_api_stage:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
     CONTAINER_NAME: adios_db_web_api
     PORT_MAPPING: 8004:9898
-    CONFIG_BASE: /data/adios_oil_db/oildb-deploy/config
-    OIL_DATA: /data/adios_oil_db/noaa-oil-data
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
-      -v $CONFIG_BASE/web_api:/config
-      -v $OIL_DATA:/noaa-oil-data
       --restart unless-stopped $IMAGE_TAG
   tags:
     - adios-stage
@@ -233,14 +234,12 @@ deploy_client_stage:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
     CONTAINER_NAME: adios_db_web_client
     PORT_MAPPING: 8003:4200
-    CONFIG_BASE: /data/adios_oil_db/oildb-deploy/config
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
-      -v $CONFIG_BASE/web_client:/config
       --restart unless-stopped $IMAGE_TAG
   tags:
     - adios-stage
