@@ -100,8 +100,6 @@ build_client:
 scan-api:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
-  except:
-    - schedules
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
@@ -132,8 +130,6 @@ scan-api:
 scan-client:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
-  except:
-    - schedules
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
