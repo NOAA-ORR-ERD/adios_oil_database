@@ -91,7 +91,8 @@ class SampleList(JSON_List):
             # note: would be good to be smart about the temp densities are at
             # this is here because only need to check the "fresh" sample
             if (self[0].physical_properties is None
-                    or self[0].physical_properties.densities is None):
+                or not self[0].physical_properties.densities
+                ):
                 msgs.append(WARNINGS["W006"])
 
             # # check_for_distillation_cuts
@@ -101,4 +102,7 @@ class SampleList(JSON_List):
             # except AttributeError:
             #     msgs.append(WARNINGS['W007'])
 
+        # validate all the subsamples
+        for ss in self:
+            msgs.extend(ss.validate())
         return msgs

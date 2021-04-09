@@ -33,6 +33,19 @@ class Test_EnumValidator():
         assert "item" in result[0]
         assert "['this', 'That', 'the other']" in result[0]
 
+    @pytest.mark.parametrize("item, expected", [("thi", []),
+                                                ("thats", []),
+                                                (None, []),
+                                                ])
+    def test_invalid_case_insensitive(self, item, expected):
+        val = EnumValidator(["this", "That", "the other"],
+                            "item: {}, the list: {}",
+                            case_insensitive=True)
+        result = val(item)
+        print(result)
+        assert "item" in result[0]
+
+
     @pytest.mark.parametrize("item", ["tHis",
                                       "thAt"])
     def test_valid_case_insensitive(self, item):

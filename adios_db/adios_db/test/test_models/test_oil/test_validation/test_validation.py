@@ -173,11 +173,32 @@ def test_density_data(big_record):
     assert snippet_not_in_oil_status("W004:", oil)
 
 
-def test_no_densities(big_record):
+def test_no_densities_with_density(big_record):
     oil = big_record
     validate(oil)
 
     assert snippet_not_in_oil_status("W006:", oil)
+
+def test_no_densities(big_record):
+    oil = big_record
+    #print(oil.sub_samples[0])
+
+    pp = oil.sub_samples[0].physical_properties
+    del pp.densities[:]
+    validate(oil)
+
+    print(oil.status)
+
+    assert snippet_in_oil_status("W006: No density values provided", oil)
+
+
+def test_bad_value_in_dist_temp(big_record):
+    oil = big_record
+    oil.sub_samples[0].distillation_data.cuts[0].vapor_temp.value = -1000
+    validate(oil)
+    print(oil.status)
+
+    assert snippet_in_oil_status("E040: Value for distillation vapor temp", oil)
 
 
 # No longer checking for distillation cuts.
