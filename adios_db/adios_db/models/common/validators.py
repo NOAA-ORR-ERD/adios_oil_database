@@ -25,8 +25,6 @@ class EnumValidator:
         self.case_insensitive = case_insensitive
 
     def __call__(self, item):
-        print("validating:", item)
-        print(self.valid_items)
         if self.case_insensitive:
             try:
                 item = item.lower()
