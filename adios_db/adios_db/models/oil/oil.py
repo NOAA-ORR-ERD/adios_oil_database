@@ -128,7 +128,7 @@ class Oil:
         msgs = self.validate()
         self.status = list(set(msgs))
 
-    def to_file(self, infile):
+    def to_file(self, outfile, sparse=True):
         """
         save an Oil object as JSON to the passed in file
 
@@ -138,10 +138,11 @@ class Oil:
               for a full record.
         """
         try:
-            json.dump(self.py_json(), infile)
+            json.dump(self.py_json(sparse=sparse), outfile)
         except AttributeError:
             # must not be an open file-like object
-            json.dump(self.py_json(), open(infile, 'w', encoding='utf-8'), indent=4)
+            with open(outfile, 'w', encoding='utf-8') as outfile:
+                json.dump(self.py_json(sparse=sparse), outfile, indent=4)
 
         return None
 
