@@ -1,5 +1,5 @@
 {
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "API": 20.93,
         "comments": "Via CanmetEnergy, Natural Resources Canada",
@@ -1808,7 +1808,7 @@
                 }
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.0
@@ -3782,7 +3782,7 @@
                 ]
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.0853
@@ -5742,7 +5742,7 @@
                 ]
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.1686
@@ -7698,7 +7698,7 @@
                 ]
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.2534
@@ -9626,7 +9626,7 @@
                 ]
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.2645

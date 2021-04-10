@@ -417,9 +417,12 @@ def test_version_none():
     '''
     If it doesn't have a version string, it should get the current one.
     '''
-    pyjs = {'oil_id': 'AD00123',
-            'metadata': {'name': 'An oil name'}
-            }
+    oil = Oil('XXXXXX')
+    oil.metadata.name = 'An oil name'
+    pyjs = oil.py_json()
+    # remove the version:
+    pyjs.pop('adios_data_model_version', None)
+
     oil = Oil.from_py_json(pyjs)
 
     assert oil.adios_data_model_version == ADIOS_DATA_MODEL_VERSION

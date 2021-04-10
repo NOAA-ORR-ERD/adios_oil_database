@@ -107,7 +107,7 @@ class TestSample:
         )
         p = PhysicalProperties()
 
-        s.metadata.fraction_weathered = 0.23
+        s.metadata.fraction_evaporated = 0.23
         s.metadata.boiling_point_range = None
 
         p.densities = DensityList([
@@ -173,7 +173,7 @@ def test_sample_with_ccme():
                short_name="short",
                name="a longer name that is more descriptive")
                )
-    s.metadata.fraction_weathered = MassFraction(value=16, unit="%")
+    s.metadata.fraction_evaporated = MassFraction(value=16, unit="%")
     s.metadata.boiling_point_range = None
     s.CCME = ccme
 

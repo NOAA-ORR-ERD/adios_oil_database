@@ -13,12 +13,14 @@ from ..common.utilities import dataclass_to_json
 
 from .metadata import MetaData
 from .sample import SampleList
-from .version import Version, VersionError
+from .version import Version
 
-from .validation.warnings import WARNINGS
-from .validation.errors import ERRORS
+ADIOS_DATA_MODEL_VERSION = Version(0, 11, 0)
 
-ADIOS_DATA_MODEL_VERSION = Version(0, 10, 0)
+from .version_update import update_json  # noqa: E402
+
+# from .validation.warnings import WARNINGS
+from .validation.errors import ERRORS  # noqa: E402
 
 
 @dataclass_to_json
@@ -54,25 +56,16 @@ class Oil:
                 f"Product Type: {self.metadata.product_type}"
                 )
 
-    # @property
-    # def adios_data_model_version():
-    #     return self._adios_data_model_version
-
-    # @adios_data_model.setter:
-    # def adios_data_model_version():
-
     @staticmethod
     def _pre_from_py_json(py_json):
-        # check the version
-        try:
-            ver = py_json['adios_data_model_version']
-            if Version.from_py_json(ver) != ADIOS_DATA_MODEL_VERSION:
-                py_json = update_json_to_current_version(py_json)
-                raise ValueError("Can't load this version of the data model")
-            py_json.pop('adios_data_model_version', None)
-        except KeyError:
-            # not versioned, assume it will work
-            pass
+        # update the JSON version
+        py_json = update_json(py_json)
+
+        # this all now done in the update_json method
+        # ver = py_json.get('adios_data_model_version')
+        # if Version.from_py_json(ver) != ADIOS_DATA_MODEL_VERSION:
+        #     raise ValueError("Can't load this version of the data model")
+        # py_json.pop('adios_data_model_version', None)
         return py_json
 
     @classmethod
@@ -145,27 +138,6 @@ class Oil:
                 json.dump(self.py_json(sparse=sparse), outfile, indent=4)
 
         return None
-
-# fixme: this should probably go in a new file at some point
-# fixme: make a Version type: maybe a namedtuple? is can save as a string
-def update_json_to_current_version(py_json):
-    """
-    updates JSON for an oil object from an older version to a newer one
-    """
-
-    cur_ver = ADIOS_DATA_MODEL_VERSION
-    ver = py_json.get('adios_data_model_version')
-
-    if ver is None:
-        # assume it's the version from before we added a version
-        ver = "0.10.0"
-    ver = Version.from_py_json(ver)
-    if ver == cur_ver:  # nothing to be done
-        return py_json
-    elif ver > cur_ver:
-        raise VersionError(f"Version: {ver} is not supported by this version of Oil object")
-    else:
-        raise VersionError(f"updator not available for version: {ver}")
 
 
 
