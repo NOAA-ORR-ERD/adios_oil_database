@@ -261,7 +261,7 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
                 oil = validate_json(oil_pyjson)
                 set_completeness(oil)
 
-                oil_collection.insert_one(oil.py_json())
+                insert_oil(oil_collection, oil.py_json())
             except DuplicateKeyError as e:
                 if overwrite is True:
                     try:
@@ -295,6 +295,11 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
               .format(tc.change(total_count, 'bold'),
                       tc.change(success_count, 'bold'),
                       tc.change(error_count, 'bold')))
+
+
+def insert_oil(collection, py_json):
+    collection.find_one_and_replace({'oil_id': py_json['oil_id']}, py_json,
+                                    upsert=True,)
 
 
 def _add_datafiles(settings):

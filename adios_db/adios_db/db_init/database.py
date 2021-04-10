@@ -4,6 +4,7 @@
 '''
 import logging
 
+from pymongo import ASCENDING
 from pymongo.errors import ConnectionFailure
 
 logger = logging.getLogger(__name__)
@@ -28,12 +29,8 @@ def create_indices(db):
     print('\ncreating indices on db {}...'.format(db.name))
 
     try:
-        # We have come to a consensus that unique (name, location, ref)
-        # is not necessary.
-        # db.oil.create_index([('name', ASCENDING),
-        #                      ('location', ASCENDING),
-        #                      ('reference_date', ASCENDING)],
-        #                     unique=True)
+        db.oil.create_index([('oil_id', ASCENDING)], unique=True)
+
         print('Oil collection indices: {}'
               .format(list(db.oil.index_information().keys())))
     except ConnectionFailure:
