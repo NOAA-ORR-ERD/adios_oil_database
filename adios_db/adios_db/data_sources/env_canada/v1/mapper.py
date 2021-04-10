@@ -139,8 +139,8 @@ class EnvCanadaSampleMapper(MapperBase):
             m['fraction_weathered'] = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
-            m['name'] = '{:.4g}% Weathered'.format(sample_id * 100)
-            m['short_name'] = '{:.4g}% Weathered'.format(sample_id * 100)
+            m['name'] = '{:.4g}% Evaporated'.format(sample_id * 100)
+            m['short_name'] = '{:.4g}% Evaporated'.format(sample_id * 100)
             m['fraction_weathered'] = {'value': sample_id, 'unit': 'fraction'}
         else:
             logger.warning(f'Cannot generate IDs for sample: {sample_id}')

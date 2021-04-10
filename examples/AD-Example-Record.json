@@ -282,8 +282,8 @@
                     "unit_type": "massfraction",
                     "value": 0.148
                 },
-                "name": "14.8% Weathered",
-                "short_name": "14.8% Weathered"
+                "name": "14.8% Evaporated",
+                "short_name": "14.8% Evaporated"
             }
         },
         {
@@ -314,8 +314,8 @@
                     "unit_type": "massfraction",
                     "value": 0.255
                 },
-                "name": "25.5% Weathered",
-                "short_name": "25.5% Weathered"
+                "name": "25.5% Evaporated",
+                "short_name": "25.5% Evaporated"
             }
         }
     ]

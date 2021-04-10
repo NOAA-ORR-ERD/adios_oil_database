@@ -985,8 +985,8 @@ class EnvCanadaCsvRecordParser(ParserBase):
                 name = 'Fresh Oil Sample'
                 short_name = 'Fresh Oil'
             elif weathering_percent is not None:
-                name = f'{weathering_percent["value"]}% Weathered'
-                short_name = f'{weathering_percent["value"]}% Weathered'
+                name = f'{weathering_percent["value"]}% Evaporated'
+                short_name = f'{weathering_percent["value"]}% Evaporated'
             else:
                 name = f'{o["weathering_fraction"]}'
                 short_name = f'{o["weathering_fraction"]}'[:12]

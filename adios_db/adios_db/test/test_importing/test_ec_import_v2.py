@@ -249,8 +249,8 @@ class TestEnvCanadaCsvRecordMapper(object):
                                  'sample_id': '2713.1'}),
         ('2713', -1, 'metadata', {'fraction_weathered': {'unit': '%',
                                                          'value': 36.8},
-                                  'name': '36.8% Weathered',
-                                  'short_name': '36.8% Weathered',
+                                  'name': '36.8% Evaporated',
+                                  'short_name': '36.8% Evaporated',
                                   'sample_id': '2713.2.1'}),
         ('2713', 0, 'physical_properties.densities', [
             {'density': {'value': 0.8639, 'unit': 'g/mL',

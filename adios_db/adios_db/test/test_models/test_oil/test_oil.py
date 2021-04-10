@@ -202,7 +202,7 @@ class TestOil:
 
         assert len(oil.sub_samples) == 5
         assert oil.sub_samples[0].metadata.name == "Fresh Oil Sample"
-        assert oil.sub_samples[3].metadata.name == "25.34% Weathered"
+        assert oil.sub_samples[3].metadata.name == "25.34% Evaporated"
 
     def test_permanent_warnings(self):
         oil = Oil('XXXXXX')

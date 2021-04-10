@@ -84,7 +84,7 @@ class TestOilEstimation():
                'metadata': {'name': 'Fresh Oil Sample'}
            }]
            },
-          '10% Weathered', None, None),
+          '10% Evaporated', None, None),
          ({'metadata': {'name': 'Oil Name'},
            'sub_samples': [{
                'metadata': {'name': 'Fresh Oil Sample'}
@@ -98,10 +98,10 @@ class TestOilEstimation():
           ),
          ({'metadata': {'name': 'Oil Name'},
            'sub_samples': [{
-               'metadata': {'name': '10% Weathered'}
+               'metadata': {'name': '10% Evaporated'}
            }]
            },
-          '10% Weathered', None, {'metadata': {'name': '10% Weathered'}}),
+          '10% Evaporated', None, {'metadata': {'name': '10% Evaporated'}}),
          ]
     )
     def test_get_sample(self, oil, sample_id, product_type, expected):
