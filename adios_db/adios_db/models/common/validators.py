@@ -26,7 +26,10 @@ class EnumValidator:
 
     def __call__(self, item):
         if self.case_insensitive:
-            item = item.lower()
+            try:
+                item = item.lower()
+            except AttributeError:
+                pass  # so non-strings will then fail the in test, but not crash.
 
         if item not in self.valid_items:
             return [self.err_msg.format(item, self.valid_items)]

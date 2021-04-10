@@ -26,6 +26,9 @@ test_develop:
   tags:
     - docker
 
+  except:
+    - schedules
+
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
@@ -62,6 +65,8 @@ build_api:
   stage: build
   tags:
     - build
+  except:
+    - schedules
   variables:
     # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
@@ -79,6 +84,8 @@ build_client:
   stage: build
   tags:
     - build
+  except:
+    - schedules
   variables:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client

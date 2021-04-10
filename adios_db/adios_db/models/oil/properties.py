@@ -49,7 +49,7 @@ class Distillation:
 
         for cut in self.cuts:
             frac = cut.fraction.converted_to('fraction').value
-            if not (0.0 < frac < 1.0):
+            if not (0.0 <= frac <= 1.0):
                 msgs.append(ERRORS["E041"].format("distillation fraction", frac))
             vt = cut.vapor_temp.convert_to('C').value
             if vt < -100.0:
