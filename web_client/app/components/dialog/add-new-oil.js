@@ -54,7 +54,7 @@ export default class AddNewOilDlg extends Component {
                 metadata: {
                     name: 'Fresh Oil Sample',
                     short_name: 'Fresh Oil',
-                    fraction_weathered: {
+                    fraction_evaporated: {
                         unit: '1',
                         unit_type: 'massfraction',
                         value: 0

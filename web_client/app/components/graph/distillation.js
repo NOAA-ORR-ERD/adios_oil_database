@@ -14,12 +14,12 @@ export default class Distillation extends LineChart {
 
         let distinct_w;
         try {
-            distinct_w = Array.from(new Set(cuts.map(c => c.weathering)));
+            distinct_w = Array.from(new Set(cuts.map(c => c.evaporated)));
 
-            // We can optionally choose a particular weathered set py passing in
-            // a weathered arg.  But it must match an existing one.
-            if (distinct_w.includes(this.weathered)) {
-                distinct_w = [this.weathered];
+            // We can optionally choose a particular evaporated set py passing in
+            // a evaporated arg.  But it must match an existing one.
+            if (distinct_w.includes(this.evaporated)) {
+                distinct_w = [this.evaporated];
             }
         }
         catch(err) {
@@ -27,8 +27,8 @@ export default class Distillation extends LineChart {
         }
 
         distinct_w.forEach(function(w) {
-            let weathered_cuts = cuts.filter((c) => {
-                return (c.weathering === w &&
+            let evaporated_cuts = cuts.filter((c) => {
+                return (c.evaporated === w &&
                         c.fraction &&
                         c.fraction.value &&
                         c.vapor_temp &&
@@ -36,7 +36,7 @@ export default class Distillation extends LineChart {
             });
 
             data.push({
-                values: weathered_cuts.map((c) => ([
+                values: evaporated_cuts.map((c) => ([
                     convertUnit([c.fraction, '%']).value,
                     convertUnit([c.vapor_temp, 'C']).value
                     ])),

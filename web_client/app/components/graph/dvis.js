@@ -15,8 +15,8 @@ export default class Dvis extends LineChart {
         let data = [];
         let label;
 
-        if (typeof this.args.oil.fraction_weathered !== 'undefined') {
-            label = 'weathered=' + this.args.oil.fraction_weathered;
+        if (typeof this.args.oil.fraction_evaporated !== 'undefined') {
+            label = 'evaporated=' + this.args.oil.fraction_evaporated;
         }
         else if (typeof this.args.oil.boiling_point_range !== 'undefined') {
             label = 'BP range=' + this.args.oil.boiling_point_range;
@@ -24,12 +24,12 @@ export default class Dvis extends LineChart {
 
         let distinct_w;
         try {
-            distinct_w = Array.from(new Set(dvis.map(c => c.weathering)));
-            
-            // We can optionally choose a particular weathered set py passing in
-            // a weathered arg.  But it must match an existing one.
-            if (distinct_w.includes(this.weathered)) {
-                distinct_w = [this.weathered];
+            distinct_w = Array.from(new Set(dvis.map(c => c.evaporated)));
+
+            // We can optionally choose a particular evaporated set py passing in
+            // a evaporated arg.  But it must match an existing one.
+            if (distinct_w.includes(this.evaporated)) {
+                distinct_w = [this.evaporated];
             }
         }
         catch(err) {
@@ -37,11 +37,11 @@ export default class Dvis extends LineChart {
         }
 
         distinct_w.forEach(function(w) {
-            let weathered_dvis = dvis.filter((d) => (d.weathering === w));
+            let evaporated_dvis = dvis.filter((d) => (d.evaporated === w));
 
             data.push({
                 name: label,
-                values: weathered_dvis.map((d) => ([
+                values: evaporated_dvis.map((d) => ([
                     convertUnit([d.ref_temp, 'K']).value,
                     convertUnit([d.viscosity, 'cP']).value
                     ])),
