@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00038",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "ARABIAN (1996)",
         "source_id": "AD00038",
@@ -22,7 +22,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -94,8 +94,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 302.0,
-                            "unit": "K",
+                            "value": 28.850000000000023,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -106,8 +106,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 342.0,
-                            "unit": "K",
+                            "value": 68.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -118,8 +118,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 373.0,
-                            "unit": "K",
+                            "value": 99.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -130,8 +130,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 401.0,
-                            "unit": "K",
+                            "value": 127.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -142,8 +142,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 424.0,
-                            "unit": "K",
+                            "value": 150.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -154,8 +154,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 445.0,
-                            "unit": "K",
+                            "value": 171.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -166,8 +166,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 471.0,
-                            "unit": "K",
+                            "value": 197.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -178,8 +178,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 486.0,
-                            "unit": "K",
+                            "value": 212.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -190,8 +190,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 511.0,
-                            "unit": "K",
+                            "value": 237.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -202,8 +202,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 534.0,
-                            "unit": "K",
+                            "value": 260.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -214,8 +214,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 555.0,
-                            "unit": "K",
+                            "value": 281.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -226,8 +226,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 577.0,
-                            "unit": "K",
+                            "value": 303.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -238,8 +238,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 602.0,
-                            "unit": "K",
+                            "value": 328.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -250,8 +250,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 624.0,
-                            "unit": "K",
+                            "value": 350.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -262,8 +262,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 646.0,
-                            "unit": "K",
+                            "value": 372.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }

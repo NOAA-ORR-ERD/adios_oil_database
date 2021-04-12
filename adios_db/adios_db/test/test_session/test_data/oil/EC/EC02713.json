@@ -1,6 +1,6 @@
 {
     "oil_id": "EC02713",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "Alaska North Slope [2015]",
         "source_id": "2713",
@@ -27,7 +27,7 @@
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
                 "sample_id": "2713.1",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -372,7 +372,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 60.3,
+                            "value": 60.30000000000001,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -384,7 +384,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 91.9,
+                            "value": 91.89999999999998,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -396,7 +396,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 119.4,
+                            "value": 119.39999999999998,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -408,7 +408,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 147.9,
+                            "value": 147.89999999999998,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -420,7 +420,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 180.6,
+                            "value": 180.60000000000002,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -444,7 +444,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 247.7,
+                            "value": 247.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -456,7 +456,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 277.7,
+                            "value": 277.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -468,7 +468,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 308,
+                            "value": 308.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -492,7 +492,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 371.2,
+                            "value": 371.19999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -504,7 +504,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 404.3,
+                            "value": 404.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -516,7 +516,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 436.3,
+                            "value": 436.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -528,7 +528,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 473.3,
+                            "value": 473.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -588,7 +588,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": -11.7,
+                            "value": -11.699999999999989,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -1885,7 +1885,7 @@
                 "name": "12.42% Weathered",
                 "short_name": "12.42% Weathered",
                 "sample_id": "2713.2.3",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.1242,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -2235,7 +2235,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 118.3,
+                            "value": 118.30000000000001,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2247,7 +2247,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 150.4,
+                            "value": 150.39999999999998,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2283,7 +2283,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 237,
+                            "value": 237.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2295,7 +2295,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 264,
+                            "value": 264.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2319,7 +2319,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 315.7,
+                            "value": 315.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2355,7 +2355,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 397.8,
+                            "value": 397.80000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2367,7 +2367,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 425.8,
+                            "value": 425.80000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2427,7 +2427,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 619,
+                            "value": 619.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2451,7 +2451,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 72,
+                            "value": 72.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -3750,7 +3750,7 @@
                 "name": "24.56% Weathered",
                 "short_name": "24.56% Weathered",
                 "sample_id": "2713.2.2",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.2456,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -4112,7 +4112,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 223.6,
+                            "value": 223.60000000000002,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -4124,7 +4124,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 248.3,
+                            "value": 248.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -4136,7 +4136,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 271.3,
+                            "value": 271.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -4148,7 +4148,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 295.8,
+                            "value": 295.80000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -4220,7 +4220,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 441.7,
+                            "value": 441.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -4244,7 +4244,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 502.3,
+                            "value": 502.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -5615,7 +5615,7 @@
                 "name": "36.76% Weathered",
                 "short_name": "36.76% Weathered",
                 "sample_id": "2713.2.1",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.3676,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -5979,7 +5979,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 264.3,
+                            "value": 264.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6003,7 +6003,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 307.7,
+                            "value": 307.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6015,7 +6015,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 327.7,
+                            "value": 327.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6039,7 +6039,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 368.8,
+                            "value": 368.80000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6051,7 +6051,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 389.8,
+                            "value": 389.80000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6063,7 +6063,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 411.3,
+                            "value": 411.30000000000007,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6087,7 +6087,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 453.7,
+                            "value": 453.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6099,7 +6099,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 478.7,
+                            "value": 478.69999999999993,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6195,7 +6195,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 228.6,
+                            "value": 228.60000000000002,
                             "unit": "C",
                             "unit_type": "temperature"
                         }

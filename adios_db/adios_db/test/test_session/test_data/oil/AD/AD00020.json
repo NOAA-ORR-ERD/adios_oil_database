@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00020",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "ALASKA NORTH SLOPE",
         "source_id": "AD00020",
@@ -25,7 +25,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -188,7 +188,7 @@
             "metadata": {
                 "name": "9.0% Weathered",
                 "short_name": "9.0% Weathered",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.09,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -215,7 +215,7 @@
             "metadata": {
                 "name": "16.0% Weathered",
                 "short_name": "16.0% Weathered",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.16,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -238,5 +238,12 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "W000: Warning: Dynamic and Kinematic Viscosity may be out of sync",
+        "E032: Distillation type is \"None\", it must be one of: ['volume fraction', 'mass fraction']"
+    ],
+    "permanent_warnings": [
+        "Warning: Dynamic and Kinematic Viscosity may be out of sync"
     ]
 }

@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00024",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "ALBERTA (1992)",
         "source_id": "AD00024",
@@ -22,7 +22,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -125,8 +125,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 393.0,
-                            "unit": "K",
+                            "value": 119.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -137,8 +137,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 460.0,
-                            "unit": "K",
+                            "value": 186.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -149,8 +149,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 527.0,
-                            "unit": "K",
+                            "value": 253.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }

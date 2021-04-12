@@ -1,6 +1,6 @@
 {
     "oil_id": "AD01853",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "AIRILE, BP",
         "source_id": "AD01853",
@@ -25,7 +25,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -104,8 +104,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 422.0,
-                            "unit": "K",
+                            "value": 148.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -116,8 +116,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 505.0,
-                            "unit": "K",
+                            "value": 231.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -128,8 +128,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 615.0,
-                            "unit": "K",
+                            "value": 341.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
