@@ -57,5 +57,6 @@ class SampleMetaData:
     short_name: str = None
     sample_id: str = None
     description: str = None
-    fraction_weathered: MassFraction = None
+    fraction_evaporated: MassFraction = None
     boiling_point_range: Temperature = None
+

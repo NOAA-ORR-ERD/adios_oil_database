@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00084",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "AUTOMOTIVE GASOLINE, EXXON",
         "source_id": "AD00084",
@@ -27,7 +27,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -73,8 +73,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 299.0,
-                            "unit": "K",
+                            "value": 25.850000000000023,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -85,8 +85,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 314.0,
-                            "unit": "K",
+                            "value": 40.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -97,8 +97,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 369.0,
-                            "unit": "K",
+                            "value": 95.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -109,8 +109,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 439.0,
-                            "unit": "K",
+                            "value": 165.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -127,5 +127,8 @@
                 }
             ]
         }
+    ],
+    "status": [
+        "W006: No density values provided"
     ]
 }

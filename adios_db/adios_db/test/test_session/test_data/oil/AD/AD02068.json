@@ -1,6 +1,6 @@
 {
     "oil_id": "AD02068",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "COHASSET (1999)",
         "source_id": "AD02068",
@@ -22,7 +22,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -136,7 +136,7 @@
             "metadata": {
                 "name": "11.0% Weathered",
                 "short_name": "11.0% Weathered",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.11,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -201,7 +201,7 @@
             "metadata": {
                 "name": "26.0% Weathered",
                 "short_name": "26.0% Weathered",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.26,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -236,5 +236,8 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "E032: Distillation type is \"None\", it must be one of: ['volume fraction', 'mass fraction']"
     ]
 }

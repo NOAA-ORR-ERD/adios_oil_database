@@ -1,6 +1,6 @@
 {
     "oil_id": "EC00540",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "Bunker C - IFO-300 [1994]",
         "source_id": "540",
@@ -25,7 +25,7 @@
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
                 "sample_id": "540.3",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "%",
                     "unit_type": "massfraction"
@@ -1812,7 +1812,7 @@
                 "name": "7.5% Evaporated",
                 "short_name": "7.5% Evaporated",
                 "sample_id": "540.3.4.1",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 7.5,
                     "unit": "%",
                     "unit_type": "massfraction"

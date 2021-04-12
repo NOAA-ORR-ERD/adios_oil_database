@@ -1,6 +1,6 @@
 {
     "oil_id": "AD01500",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "JET A-1,  MARITIME SAFETY AUTHORITY OF NEW ZEALAND",
         "source_id": "AD01500",
@@ -23,7 +23,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -77,8 +77,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 421.0,
-                            "unit": "K",
+                            "value": 147.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -89,8 +89,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 441.0,
-                            "unit": "K",
+                            "value": 167.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -101,8 +101,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 447.0,
-                            "unit": "K",
+                            "value": 173.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -113,8 +113,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 463.0,
-                            "unit": "K",
+                            "value": 189.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -125,8 +125,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 498.0,
-                            "unit": "K",
+                            "value": 224.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }

@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00025",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "ALBERTA SWEET MIXED BLEND",
         "source_id": "AD00025",
@@ -23,7 +23,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -141,7 +141,7 @@
                         },
                         "vapor_temp": {
                             "value": 37.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -153,7 +153,7 @@
                         },
                         "vapor_temp": {
                             "value": 95.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -165,7 +165,7 @@
                         },
                         "vapor_temp": {
                             "value": 111.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -177,7 +177,7 @@
                         },
                         "vapor_temp": {
                             "value": 126.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -189,7 +189,7 @@
                         },
                         "vapor_temp": {
                             "value": 142.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -201,7 +201,7 @@
                         },
                         "vapor_temp": {
                             "value": 155.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -213,7 +213,7 @@
                         },
                         "vapor_temp": {
                             "value": 189.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -225,7 +225,7 @@
                         },
                         "vapor_temp": {
                             "value": 213.0,
-                            "unit": "K",
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -263,7 +263,7 @@
                 "name": "Weathered sample that did not form an emulsion",
                 "short_name": "Didn't Emulsify",
                 "description": "Partially weathered sample that did not form an emulsion.\n\nSee record reference for details",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.148,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -286,7 +286,7 @@
                 "name": "Weathered sample that formed an emulsion",
                 "short_name": "Emulsified",
                 "description": "Partially weathered sample that formed an emulsion.\n\nSee record reference for details",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.255,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -304,5 +304,8 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "E032: Distillation type is \"None\", it must be one of: ['volume fraction', 'mass fraction']"
     ]
 }

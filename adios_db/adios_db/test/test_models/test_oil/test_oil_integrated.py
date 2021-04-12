@@ -6,6 +6,9 @@ impossible to be comprehensive here, but at least we can make sure it works
 for *some* cases.
 
 Add more when you find bugs
+
+NOTE: this is kind of pointless now.
+
 """
 
 from adios_db.models.oil.oil import Oil
@@ -17,6 +20,10 @@ def test_make_oil_from_partial():
           'metadata': {'comments': 'A comment'},
           'sub_samples': [
               {
+                  "metadata": {
+                      "name": "Fresh Oil Sample",
+                      "short_name": "Fresh Oil",
+                      },
                   'physical_properties': {
                       'densities': [
                           {
@@ -66,6 +73,12 @@ def test_make_oil_from_partial():
                   ]}
               },
               {
+                  "metadata": {
+                  "name": "Evaporated Oil Sample",
+                  "short_name": "Evaporated Oil",
+                  "fraction_weathered": {'value': 15, 'unit': '%',
+                                          'unit_type': 'mass_fraction'}
+                  },
                   'physical_properties': {
                       'densities': [
                           {
@@ -88,9 +101,11 @@ def test_make_oil_from_partial():
           ]
         }
 
+    print(PARTIAL_JSON["sub_samples"][0]['metadata'])
 
     oil = Oil.from_py_json(PARTIAL_JSON)
 
     assert oil.oil_id == 'EC09999'
     assert oil.metadata.comments == "A comment"
     assert oil.sub_samples[0].physical_properties.densities[0].density.value == 1000
+    assert oil.sub_samples[0].metadata.name == "Fresh Oil Sample"

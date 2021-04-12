@@ -1,6 +1,6 @@
 {
     "oil_id": "EC02713",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "Alaska North Slope [2015]",
         "source_id": "2713",
@@ -27,7 +27,7 @@
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
                 "sample_id": "2713.1",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "%",
                     "unit_type": "massfraction"
@@ -1895,7 +1895,7 @@
                 "name": "12.4% Evaporated",
                 "short_name": "12.4% Evaporated",
                 "sample_id": "2713.2.3",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 12.4,
                     "unit": "%",
                     "unit_type": "massfraction"
@@ -3768,7 +3768,7 @@
                 "name": "24.6% Evaporated",
                 "short_name": "24.6% Evaporated",
                 "sample_id": "2713.2.2",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 24.6,
                     "unit": "%",
                     "unit_type": "massfraction"
@@ -5641,7 +5641,7 @@
                 "name": "36.8% Evaporated",
                 "short_name": "36.8% Evaporated",
                 "sample_id": "2713.2.1",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 36.8,
                     "unit": "%",
                     "unit_type": "massfraction"

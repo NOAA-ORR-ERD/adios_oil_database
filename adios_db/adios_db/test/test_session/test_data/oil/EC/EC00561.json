@@ -1,6 +1,6 @@
 {
     "oil_id": "EC00561",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "Cook Inlet [2003]",
         "source_id": "561",
@@ -25,7 +25,7 @@
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
                 "sample_id": "561.1",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "%",
                     "unit_type": "massfraction"
@@ -1693,7 +1693,7 @@
                 "name": "11.4% Evaporated",
                 "short_name": "11.4% Evaporated",
                 "sample_id": "561.2",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 11.4,
                     "unit": "%",
                     "unit_type": "massfraction"
@@ -3361,7 +3361,7 @@
                 "name": "25.0% Evaporated",
                 "short_name": "25.0% Evaporated",
                 "sample_id": "561.3",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 25.0,
                     "unit": "%",
                     "unit_type": "massfraction"
@@ -5024,7 +5024,7 @@
                 "name": "34.4% Evaporated",
                 "short_name": "34.4% Evaporated",
                 "sample_id": "561.4",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 34.4,
                     "unit": "%",
                     "unit_type": "massfraction"

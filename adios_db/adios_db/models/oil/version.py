@@ -7,7 +7,6 @@ import functools
 from ..common.utilities import dataclass_to_json
 
 
-
 class VersionError(ValueError):
     pass
 
@@ -45,7 +44,7 @@ class Version:
     def _parts_from_string(string):
         try:
             return tuple(int(part) for part in string.split("."))
-        except Exception as err:  # anything goes wrong, we'll raise a new error
+        except Exception:  # anything goes wrong, we'll raise a new error
             raise ValueError(f"{string} not a valid value for Version string")
 
     @classmethod
@@ -60,4 +59,3 @@ class Version:
     def __gt__(self, other):
         return ((self.major, self.minor, self.patch)
                 > (other.major, other.minor, other.patch))
-

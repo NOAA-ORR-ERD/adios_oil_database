@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00047",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "ARABIAN HEAVY, AMOCO",
         "source_id": "AD00047",
@@ -22,7 +22,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -134,8 +134,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 335.0,
-                            "unit": "K",
+                            "value": 61.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -146,8 +146,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 400.0,
-                            "unit": "K",
+                            "value": 126.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -158,8 +158,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 429.0,
-                            "unit": "K",
+                            "value": 155.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -170,8 +170,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 489.0,
-                            "unit": "K",
+                            "value": 215.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -182,8 +182,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 538.0,
-                            "unit": "K",
+                            "value": 264.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -194,8 +194,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 594.0,
-                            "unit": "K",
+                            "value": 320.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
