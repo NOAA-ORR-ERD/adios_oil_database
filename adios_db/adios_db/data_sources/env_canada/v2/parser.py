@@ -121,6 +121,8 @@ class ECMeasurementDataclass:
             self.unit_of_measure = '%'
             self.unit_type = 'volumefraction'
             return
+        elif self.unit_of_measure == 'g/m2':
+            self.unit_of_measure = 'g/m^2'
 
         unit = Simplify(self.unit_of_measure)
         try:
