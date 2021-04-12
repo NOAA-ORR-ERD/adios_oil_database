@@ -9,6 +9,9 @@ import json
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample, SampleMetaData
 from adios_db.models.oil.properties import Emulsion, EmulsionList
+from adios_db.models.oil.physical_properties import DensityPoint
+
+
 from adios_db.models.oil.location_coordinates import LocationCoordinates
 
 # this brings in all the measurement types
