@@ -6,12 +6,12 @@ from dataclasses import dataclass, fields
 
 from numpy import isclose
 
-from unit_conversion import UNIT_TYPES, ConvertDataUnits
+from unit_conversion import UNIT_TYPES, ConvertDataUnits, Simplify
 
 from adios_db.util import sigfigs
-from adios_db.data_sources.parser import ParserBase, parse_single_datetime
+from adios_db.data_sources.parser import ParserBase
+from adios_db.data_sources.importer_base import parse_single_datetime
 
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -19,8 +19,8 @@ UNIT_TYPES_MV = {}
 
 for u_type in ('Volume Fraction', 'Mass Fraction'):
     # UNIT_TYPES does not include mass/volume fraction units, so we need to
-    # make a list for ourselves.
-    # almost every unit in these two types is common, so we need to make a
+    # make our own lookup table.
+    # Almost every unit in these two types is common, so we need to make a
     # preference for one or the other, and we will prefer mass fraction types.
     u_dict = {u: u_type.lower().replace(' ', '')
               for u in set([i for sub in [([k] + v[1])
@@ -67,21 +67,28 @@ class ECMeasurementDataclass:
         self.determine_min_max()
 
     def treat_any_bad_initial_values(self):
-        if self.value == '':
-            self.value = None
-
-        for attr in ('temperature', 'condition_of_analysis',
-                     'standard_deviation', 'replicates', 'method'):
-            if getattr(self, attr) == 'N/A':
-                setattr(self, attr, None)
+        for f in fields(self.__class__):
+            if getattr(self, f.name) in ('N/A', ''):
+                setattr(self, f.name, None)
 
     def parse_temperature_string(self):
-        if self.temperature is not None and len(self.temperature) > 0:
+        '''
+            The temperature field can have varying content, like '15 °C'
+            or simply '15', in which case we will assume it is Celsius.
+        '''
+        if isinstance(self.temperature, str) and len(self.temperature) > 0:
             self.ref_temp, self.ref_temp_unit = re.findall(r'[\d\.]*\w+',
                                                            self.temperature)
-        try:
-            self.ref_temp = float(self.ref_temp)
-        except Exception:
+
+            try:
+                self.ref_temp = float(self.ref_temp)
+            except Exception:
+                self.ref_temp = None
+                self.ref_temp_unit = None
+        elif isinstance(self.temperature, (int, float)):
+            self.ref_temp = self.temperature
+            self.ref_temp_unit = 'C'
+        else:
             self.ref_temp = None
             self.ref_temp_unit = None
 
@@ -90,37 +97,49 @@ class ECMeasurementDataclass:
             Some units are in the form 'X or Y'.  We will just choose the
             first one.
 
-            Temperature units need to be stripped of the degree character
+            Temperature units (e.g. '°C') need to be stripped of the degree
+            character
         '''
-        unit = self.unit_of_measure.split(' or ')[0]
+        if self.unit_of_measure:
+            unit = self.unit_of_measure.split(' or ')[0]
+            unit = unit.lstrip('°').lstrip('¬∞')
 
-        unit = unit.lstrip('°')
-
-        self.unit_of_measure = unit
+            self.unit_of_measure = unit
 
     def determine_unit_type(self):
         # check if it is a mass/volume fraction.
-        # - until we accept a unit of measure like '% w/w' or '% v/v',
+        # - until PyNUCOS accepts a unit of measure like '% w/w' or '% v/v',
         #   we need to change it to '%' and set the unit type explicitly
-        if self.unit_of_measure == '% w/w':
+        if self.unit_of_measure is None:
+            self.unit_type = 'unitless'
+            return
+        elif self.unit_of_measure in ('% w/w', '%w/w'):
             self.unit_of_measure = '%'
             self.unit_type = 'massfraction'
             return
-        elif self.unit_of_measure == '% v/v':
+        elif self.unit_of_measure in ('% v/v', '%v/v'):
             self.unit_of_measure = '%'
             self.unit_type = 'volumefraction'
             return
+        elif self.unit_of_measure == 'g/m2':
+            self.unit_of_measure = 'g/m^2'
 
+        unit = Simplify(self.unit_of_measure)
         try:
-            self.unit_type = UNIT_TYPES[self.unit_of_measure.lower()]
+            self.unit_type = UNIT_TYPES[unit]
         except KeyError:
             try:
-                self.unit_type = UNIT_TYPES_MV[self.unit_of_measure.lower()]
+                self.unit_type = UNIT_TYPES_MV[unit]
             except KeyError:
                 self.unit_type = None
 
     def determine_min_max(self):
-        if isinstance(self.value, (int, float)):
+        '''
+            The value field in the Env. Canada measurement row can have
+            relational annotations like '>N' or '<N'.  In these cases, we turn
+            them into an interval pair.
+        '''
+        if isinstance(self.value, (int, float, type(None))):
             pass
         elif self.value[0] == '<':
             # set max value
@@ -173,12 +192,40 @@ class ECMeasurement(ECMeasurementDataclass):
         return ret
 
 
+class ECValueOnly(ECMeasurement):
+    def py_json(self):
+        ret = super().py_json()
+
+        ret.pop(self.ref_temp_attr, None)
+
+        return ret
+
+
 class ECDensity(ECMeasurement):
     value_attr = 'density'
 
 
 class ECViscosity(ECMeasurement):
     value_attr = 'viscosity'
+
+    def py_json(self):
+        '''
+            What do we do when the value is 'Too Viscous'?
+        '''
+        ret = super().py_json()
+
+        value, unit = self.condition_of_analysis.split()[-2:]
+
+        if unit == '1/s':
+            try:
+                value = float(value.split('=')[1])
+            except IndexError:
+                value = float(value)
+
+            ret['shear_rate'] = {'value': value, 'unit': unit,
+                                 'unit_type': 'angularvelocity'}
+
+        return ret
 
 
 class ECInterfacialTension(ECMeasurement):
@@ -200,26 +247,39 @@ class ECInterfacialTension(ECMeasurement):
         return ret
 
 
-class ECFlashPoint(ECMeasurement):
+class ECAdhesion(ECValueOnly):
+    value_attr = 'adhesion'
+
+
+class BPTemperatureDistribution(ECMeasurement):
+    value_attr = 'fraction'
+    ref_temp_attr = 'vapor_temp'
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        # for this type, we need to swap value into temperature
+        self.ref_temp = self.value
+        self.ref_temp_unit = self.unit_of_measure
+
+        # for this type, we need to take the property name as the fraction
+        if self.property_name.lower() == 'initial boiling point':
+            self.value = 0.0
+        else:
+            self.value = float(self.property_name.rstrip('%'))
+
+        self.unit_type = 'massfraction'
+        self.unit_of_measure = '%'
+
     def py_json(self):
         ret = super().py_json()
-
-        if self.ref_temp_attr in ret:
-            del ret[self.ref_temp_attr]
 
         return ret
 
 
-class ECPourPoint(ECFlashPoint):
-    pass
-
-
-class ECAdhesion(ECFlashPoint):
-    value_attr = 'adhesion'
-
-
-class ECSaraFraction(ECFlashPoint):
-    pass
+class BPCumulativeWeightFraction(ECMeasurement):
+    value_attr = 'fraction'
+    ref_temp_attr = 'vapor_temp'
 
 
 class ECEvaporationEq(ECMeasurement):
@@ -235,14 +295,17 @@ class ECEmulsion(ECMeasurement):
     def py_json(self):
         ret = super().py_json()
 
-        ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
         if self.condition_of_analysis.lower() == 'one week after formation':
-            ret['age']['value'] = 7
+            ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 7}
+        elif self.condition_of_analysis.lower() == 'on the day of formation':
+            ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
+        else:
+            logger.warning('Can not determine emulsion age')
 
         return ret
 
 
-class ECDispersibility(ECFlashPoint):
+class ECDispersibility(ECValueOnly):
     value_attr = 'effectiveness'
 
     def py_json(self):
@@ -291,16 +354,63 @@ mapping_list = [
      'physical_properties.interfacial_tension.+', ECInterfacialTension,
      'sample'),
     ('Flash Point.Flash Point', 'physical_properties.flash_point',
-     ECFlashPoint, 'sample'),
+     ECValueOnly, 'sample'),
     ('Pour Point.Pour Point', 'physical_properties.pour_point',
-     ECPourPoint, 'sample'),
+     ECValueOnly, 'sample'),
     # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
-    # Note: we will save distillation for later because it is in a different
-    #       format from everything else.
+    ('Boiling Point Distribution, Temperature.Initial Boiling Point',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.5%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.10%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.15%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.20%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.25%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.30%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.35%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.40%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.45%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.50%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.55%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.60%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.65%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.70%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.75%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.80%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.85%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.90%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.95%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.100%',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+    ('Boiling Point Distribution, Temperature.Final Boiling Point',
+     'distillation_data.end_point', ECValueOnly, 'sample'),
+    ('Boiling Point Cumulative Weight Fraction'
+     '.Boiling Point Cumulative Weight Fraction',
+     'distillation_data.cuts.+', BPCumulativeWeightFraction, 'sample'),
     ('Adhesion.Adhesion', 'environmental_behavior.adhesion',
      ECAdhesion, 'sample'),
     # Note: ESTS Evaporation is better handled as a list if we choose to do it
-    #       here.
+    #       here.  But for now we will make it look exactly like it was before,
+    #       and the way we will do it is by re-mapping these parts in the
+    #       mapper.
     ('Evaporation Equation.A For %Ev = (A +B) Ln T',
      'environmental_behavior.ests_evaporation_test.+',
      ECEvaporationEq, 'sample'),
@@ -399,7 +509,6 @@ mapping_list = [
      'bulk_composition.+', ECCompound, 'sample'),
     ('GC-Detected Petroleum Hydrocarbon Content.Resolved Peaks/TPH',
      'bulk_composition.+', ECCompound, 'sample'),
-    # these need to be post-fixed
     ('Petroleum Hydrocarbon Fractions-CCME.CCME F1',
      'CCME.+', ECCompound, 'sample'),
     ('Petroleum Hydrocarbon Fractions-CCME.CCME F2',
@@ -408,7 +517,6 @@ mapping_list = [
      'CCME.+', ECCompound, 'sample'),
     ('Petroleum Hydrocarbon Fractions-CCME.CCME F4',
      'CCME.+', ECCompound, 'sample'),
-
     ('Petroleum Hydrocarbon Saturates Fraction.n-C8 To n-C10',
      'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
     ('Petroleum Hydrocarbon Saturates Fraction.n-C10 To n-C12',
@@ -468,16 +576,14 @@ mapping_list = [
     ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
      '.TOTAL TPH (GC Detected TPH + Undetected TPH)',
      'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-
     ('Hydrocarbon Group Content.Saturates',
-     'SARA.saturates', ECSaraFraction, 'sample'),
+     'SARA.saturates', ECValueOnly, 'sample'),
     ('Hydrocarbon Group Content.Aromatics',
-     'SARA.aromatics', ECSaraFraction, 'sample'),
+     'SARA.aromatics', ECValueOnly, 'sample'),
     ('Hydrocarbon Group Content.Resin',
-     'SARA.resins', ECSaraFraction, 'sample'),
+     'SARA.resins', ECValueOnly, 'sample'),
     ('Hydrocarbon Group Content.Asphaltene',
-     'SARA.asphaltenes', ECSaraFraction, 'sample'),
-
+     'SARA.asphaltenes', ECValueOnly, 'sample'),
     ('n-Alkanes.n-C8', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C9', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C10', 'compounds.+', ECCompound, 'sample'),
@@ -517,7 +623,6 @@ mapping_list = [
     ('n-Alkanes.n-C42', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C43', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C44', 'compounds.+', ECCompound, 'sample'),
-
     ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C0-Naphthalene',
      'compounds.+', ECCompound, 'sample'),
     ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C1-Naphthalene',
@@ -587,7 +692,6 @@ mapping_list = [
      'compounds.+', ECCompound, 'sample'),
     ('Alkylated Polycyclic Aromatic Hydrocarbons (PAHs).C3-Chrysene',
      'compounds.+', ECCompound, 'sample'),
-
     ('Other Priority PAHs.Biphenyl (Bph)',
      'compounds.+', ECCompound, 'sample'),
     ('Other Priority PAHs.Acenaphthylene (Acl)',
@@ -618,7 +722,6 @@ mapping_list = [
      'compounds.+', ECCompound, 'sample'),
     ('Other Priority PAHs.Benzo(ghi)perylene (BgP)',
      'compounds.+', ECCompound, 'sample'),
-
     ('Biomarkers.C21 Tricyclic Terpane (C21T)',
      'compounds.+', ECCompound, 'sample'),
     ('Biomarkers.C22 Tricyclic Terpane (C22T)',
@@ -661,7 +764,6 @@ mapping_list = [
      'compounds.+', ECCompound, 'sample'),
     ('Biomarkers.20-Éthyl-14ß(H),17ß(H)-Cholestane (C29aßß)',
      'compounds.+', ECCompound, 'sample'),
-
 ]
 
 property_map = {p: m for p, m, t, s in mapping_list}
@@ -742,16 +844,15 @@ class EnvCanadaCsvRecordParser(ParserBase):
             spreadsheet that would be better handled before we start parsing
             anything.
         '''
-        valid_fields = ('value_id', 'oil_id', 'ests_id', 'property_id',
-                        'oil_name', 'source', 'date_sample_received',
-                        'comments', 'ests', 'reference', 'weathering_fraction',
-                        'weathering_percent', 'weathering_method',
-                        'property_group', 'property_name', 'unit_of_measure',
-                        'temperature', 'condition_of_analysis', 'value',
-                        'standard_deviation', 'replicates', 'method')
+        if len(values) == 0:
+            return  # nothing to prune
+
+        keys = set(values[0].keys())
+        valid_keys = {k for k in keys if k not in ('',)}
+        bad_keys = keys.difference(valid_keys)
+
         for obj in values:
-            bad_keys = [k for k in obj.keys() if k not in valid_fields]
-            [obj.pop(k) for k in bad_keys]
+            [obj.pop(k, None) for k in bad_keys]
 
         return values
 
@@ -802,50 +903,37 @@ class EnvCanadaCsvRecordParser(ParserBase):
               attributes and we can make an exception if there is an obvious
               problem.
         '''
-        # FIGURE OUT THE TYPE OF OBJECT TO SET
         to_type = property_type_map[attr]
 
         if to_type is str:
             value = ' '.join({str(v[attr]) for v in self.src_values
-                             if v[attr] is not None
-                             and v[attr] != 'None'})
+                             if v[attr] is not None and v[attr] != 'None'})
 
-            if len(value) == 0:
-                value = None
+            value = None if len(value) == 0 else value
         elif to_type is int:
             value = {int(v[attr]) for v in self.src_values
                      if v[attr] is not None}
 
             if len(value) > 1:
-                # This is probably not a big enough problem to stop everything,
-                # but we will issue a warning.
+                # This is a problem, but not big enough to stop everything
                 logger.warning(f'ESTS #{self.src_values[0]["ests"]}: '
                                f'More than 1 integer value found for {attr}')
 
-            if len(value) >= 1:
-                value = list(value)[0]
-            else:
-                value = None
-
+            value = list(value)[0] if len(value) >= 1 else None
         elif to_type is datetime:
             value = {v[attr] for v in self.src_values if v[attr] is not None}
             value = [parse_single_datetime(v) for v in value]
 
             if len(value) > 1:
-                # This is probably not a big enough problem to stop everything,
-                # but we will issue a warning.
+                # This is a problem, but not big enough to stop everything
                 logger.warning(f'ESTS #{self.src_values[0]["ests"]}: '
                                f'More than 1 datetime value found for {attr}')
 
-            if len(value) >= 1:
-                value = value[0]
-            else:
-                value = None
+            value = value[0].strftime('%Y-%m-%d') if len(value) >= 1 else None
         else:
-            print(f'unimplemented type for {attr}')
+            logger.error(f'unimplemented type for {attr}')
             value = None
 
-        # SET THE VALUE
         if value:
             try:
                 self.deep_set(self.oil_obj, property_map[attr], value)
@@ -899,8 +987,8 @@ class EnvCanadaCsvRecordParser(ParserBase):
                 name = 'Fresh Oil Sample'
                 short_name = 'Fresh Oil'
             elif weathering_percent is not None:
-                name = f'{weathering_percent["value"]}% Weathered'
-                short_name = f'{weathering_percent["value"]}% Weathered'
+                name = f'{weathering_percent["value"]}% Evaporated'
+                short_name = f'{weathering_percent["value"]}% Evaporated'
             else:
                 name = f'{o["weathering_fraction"]}'
                 short_name = f'{o["weathering_fraction"]}'[:12]
@@ -981,7 +1069,10 @@ class EnvCanadaCsvRecordParser(ParserBase):
                           experiments where measurements were taken.
             - method: A line of text showing the name of the testing method.
         '''
-        if obj_in['value'] is None:
+        always_add = ('Emulsion Visual Stability',)
+
+        if (self.value_is_invalid(obj_in['value']) and
+                obj_in['property_name'] not in always_add):
             return  # not a valid measurement
 
         try:
@@ -1067,3 +1158,6 @@ class EnvCanadaCsvRecordParser(ParserBase):
                 return True
 
         return False
+
+    def value_is_invalid(self, value):
+        return value in (None, 'N/A', 'No Flash')

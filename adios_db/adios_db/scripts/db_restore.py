@@ -84,13 +84,13 @@ def restore_db(settings, base_path):
 
     db = getattr(client, settings['mongodb.database'])
 
+    create_indices(db)
+
     # load the database
     for collection_name in os.listdir(base_path):
         # filter out dotfiles
         if not collection_name.startswith("."):
             load_collection(db, base_path, collection_name)
-
-    create_indices(db)
 
     print('\nDatabase restore done!\n')
 
@@ -105,10 +105,6 @@ def load_collection(db, base_path, collection_name):
                 obj = get_obj_json(f'{dirname}/{name}', collection_name)
 
                 collection.insert_one(obj)
-
-    # Index the oil_id field
-    if collection_name == 'oil':
-        resp = collection.create_index("oil_id")
 
 
 def get_obj_json(obj_path, collection_name):

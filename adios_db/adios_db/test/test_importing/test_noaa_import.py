@@ -607,9 +607,9 @@ class TestOilLibraryAttributeMapper:
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
         ('AD02068', 0, 'name', 'Fresh Oil Sample'),
-        ('AD02068', -1, 'name', '26.0% Weathered'),
+        ('AD02068', -1, 'name', '26.0% Evaporated'),
         ('AD02068', 0, 'short_name', 'Fresh Oil'),
-        ('AD02068', -1, 'short_name', '26.0% Weathered'),
+        ('AD02068', -1, 'short_name', '26.0% Evaporated'),
         ('AD02068', 0, 'fraction_weathered', {'unit': 'fraction', 'value': 0.0}),
         ('AD02068', -1, 'fraction_weathered', {'unit': 'fraction', 'value': 0.26}),
         ('AD02068', 0, 'boiling_point_range', None),

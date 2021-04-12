@@ -4,8 +4,9 @@ import logging
 
 from adios_db.util import sigfigs
 
-from adios_db.data_sources.parser import (ParserBase, join_with, parse_time,
-                                          date_only)
+from adios_db.data_sources.parser import ParserBase
+from adios_db.data_sources.importer_base import (join_with, parse_time,
+                                                 date_only)
 
 logger = logging.getLogger(__name__)
 

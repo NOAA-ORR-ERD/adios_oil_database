@@ -70,5 +70,5 @@ def add_them(data):
 
 
 if __name__ == "__main__":
-    data = read_the_csv_file("Evaluation_Of_Oil_Type_List_January2021.tsv")
+    data = read_the_csv_file("Evaluation_Of_Oil_Type_List - temp.tsv")
     add_them(data)

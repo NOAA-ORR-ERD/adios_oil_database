@@ -135,8 +135,8 @@ class OilLibraryAttributeMapper(MapperBase):
             attrs['boiling_point_range'] = None
         elif isinstance(sample_id, Number):
             # we will assume this is a simple fractional weathered amount
-            attrs['name'] = f'{sigfigs(sample_id * 100)}% Weathered'
-            attrs['short_name'] = f'{sigfigs(sample_id * 100)}% Weathered'
+            attrs['name'] = f'{sigfigs(sample_id * 100)}% Evaporated'
+            attrs['short_name'] = f'{sigfigs(sample_id * 100)}% Evaporated'
             attrs['fraction_weathered'] = {'value': sample_id,
                                            'unit': 'fraction'}
             attrs['boiling_point_range'] = None

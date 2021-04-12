@@ -1907,8 +1907,8 @@ class TestEnvCanadaSampleMapper(object):
         ('2713', -1, 'metadata', {'boiling_point_range': None,
                                   'fraction_weathered': {'unit': 'fraction',
                                                          'value': 0.3676},
-                                  'name': '36.76% Weathered',
-                                  'short_name': '36.76% Weathered',
+                                  'name': '36.76% Evaporated',
+                                  'short_name': '36.76% Evaporated',
                                   'sample_id': '2713.2.1'}),
         ('2713', 0, 'densities', [
             {'density': {'value': 0.8751, 'unit': 'g/mL',

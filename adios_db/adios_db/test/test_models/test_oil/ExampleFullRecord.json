@@ -2003,8 +2003,8 @@
         },
         {
             "metadata": {
-                "name": "8.53% Weathered",
-                "short_name": "8.53% Weathered",
+                "name": "8.53% Evaporated",
+                "short_name": "8.53% Evaporated",
                 "sample_id": "2234.1.4.1 ",
                 "fraction_weathered": {
                     "value": 0.0853,
@@ -3975,8 +3975,8 @@
         },
         {
             "metadata": {
-                "name": "16.86% Weathered",
-                "short_name": "16.86% Weathered",
+                "name": "16.86% Evaporated",
+                "short_name": "16.86% Evaporated",
                 "sample_id": "2234.1.3.1 ",
                 "fraction_weathered": {
                     "value": 0.1686,
@@ -5932,8 +5932,8 @@
         },
         {
             "metadata": {
-                "name": "25.34% Weathered",
-                "short_name": "25.34% Weathered",
+                "name": "25.34% Evaporated",
+                "short_name": "25.34% Evaporated",
                 "sample_id": "2234.1.2.1 ",
                 "fraction_weathered": {
                     "value": 0.2534,
@@ -7898,8 +7898,8 @@
         },
         {
             "metadata": {
-                "name": "26.45% Weathered",
-                "short_name": "26.45% Weathered",
+                "name": "26.45% Evaporated",
+                "short_name": "26.45% Evaporated",
                 "sample_id": "2234.1.5.1 ",
                 "fraction_weathered": {
                     "value": 0.2645,

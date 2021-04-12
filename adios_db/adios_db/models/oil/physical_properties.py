@@ -74,7 +74,7 @@ class FlashPoint:
 class InterfacialTensionPoint:
     tension: InterfacialTension
     ref_temp: Temperature
-    interface: str = None
+    # interface: str = None  # the interface is given in the attribute name
     method: str = None
 
 
