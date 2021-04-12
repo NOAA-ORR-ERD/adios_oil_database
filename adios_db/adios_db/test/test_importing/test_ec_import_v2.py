@@ -183,10 +183,10 @@ class TestEnvCanadaCsvRecordMapper(object):
                   'metadata.name': 'Alaska North Slope [2015]',
                   'metadata.source_id': '2713',
                   'metadata.location': 'Alaska, USA',
-                  'metadata.reference': {'reference': 'Personal communication '
-                                                      'from Mischa '
-                                                      'Bertrand-Chetty (EC), '
-                                                      'date: Mar 4, 2021.',
+                  'metadata.reference': {'reference': "Environment and Climate Change Canada, "
+                                                      "Environment Canada Crude Oil and Petroleum Product Database, "
+                                                      "Environment and Climate Change Canada, 2021.\n\n"
+                                                      "url: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5",
                                          'year': 2021},
                   'metadata.sample_date': '2015-03-22',
                   'metadata.product_type': 'Crude Oil NOS',
