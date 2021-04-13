@@ -206,6 +206,9 @@ deploy_api_stage:
     CONTAINER_NAME: adios_db_web_api
     PORT_MAPPING: 8004:9898
   script:
+    - id
+    - pwd
+    - ls -la
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
