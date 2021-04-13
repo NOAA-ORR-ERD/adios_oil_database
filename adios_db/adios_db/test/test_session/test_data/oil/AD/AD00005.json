@@ -9,6 +9,7 @@
             "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario."
         },
         "product_type": "Refinery Intermediate",
+        "comments": "The data in this record may have been compiled from multiple sources and may thus may reflect samples of varying age and composition.",
         "labels": [
             "Refinery Intermediate",
             "Refined Product"
