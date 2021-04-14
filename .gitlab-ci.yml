@@ -294,8 +294,7 @@ deploy_mongodb_public:
       -v $DB_LOCATION:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
-    - adios-public
-    - deploy
+    - prod
 
 stop_mongodb_public:
   stage: deploy
@@ -309,6 +308,5 @@ stop_mongodb_public:
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
-    - adios-public
-    - deploy
+    - prod
 
