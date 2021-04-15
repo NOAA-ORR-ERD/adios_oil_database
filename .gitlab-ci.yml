@@ -285,13 +285,15 @@ deploy_mongodb_public:
     CONTAINER_NAME: mongodb
     PORT_MAPPING: 127.0.0.1:27017:27017
     DB_LOCATION: /data/adios_oil_db/data/db
+    APP_NETWORK: adios_public_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
-    - docker service create --network adios_net
+    - docker network create -d bridge $APP_NETWORK
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
+      --network $APP_NETWORK
       -v $DB_LOCATION:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
