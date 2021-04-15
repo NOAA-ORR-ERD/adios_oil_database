@@ -92,12 +92,50 @@ class TestDensityList:
         assert len(msgs) == 0
 
     def test_validate_no_values(self):
+        """
+        it shouldn't crash with no data!
+        """
         DL = DensityList()
 
         msgs = DL.validate()
 
         print(msgs)
         assert len(msgs) == 0
+
+    def test_validate_one_value(self):
+        """
+        it shouldn't crash (or give an warning) with one value!
+        """
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+
+        DL = DensityList((dp1,))
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 0
+
+
+    def test_validate_bad_temp(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='K'),
+                           )
+        dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=20.0, unit='K'),
+                           )
+
+        DL = DensityList((dp1, dp2))
+
+        msgs = DL.validate()
+
+        print(msgs)
+
+        assert len(msgs) == 2
+        for msg in msgs:
+            assert "E040:" in msg
+            assert "Density" in msg
 
 
 class TestDynamicViscosityPoint:

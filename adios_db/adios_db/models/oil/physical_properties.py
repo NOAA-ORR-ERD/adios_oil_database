@@ -18,6 +18,37 @@ from ..common.measurement import (Temperature,
                                   AngularVelocity,
                                   InterfacialTension)
 
+class RefTempList:
+    """
+    mixin for all classes that are a list of pointts with
+    reference temperatures
+    """
+
+    def validate(self):
+        """
+        validater for anything that has a list of reference temps
+
+        e.g. density and viscosity
+        """
+        points_list = self
+        data_str = self.__class__.__name__
+        msgs = []
+        # check for odd temperatures
+        for pt in points_list:
+            temp = pt.ref_temp.converted_to('C').value
+            if temp < -100.0:  # arbitrary, but should catch K/C confusion
+                t = f"{pt.ref_temp.value:.2f} {pt.ref_temp.unit}"
+                msgs.append(ERRORS["E040"].format(data_str, t))
+
+        # check for duplicate temps
+        temps = sorted(p.ref_temp.converted_to('K').value for p in points_list)
+        diff = (abs(t2 - t1) for t1, t2 in zip(temps[1:], temps[:1]))
+        for d in diff:
+            if d < 1e-3:
+                msgs.append(ERRORS["E050"].format("Temperatures", data_str))
+
+        return msgs
+
 
 @dataclass_to_json
 @dataclass
@@ -27,22 +58,8 @@ class DensityPoint:
     method: str = None
 
 
-class DensityList(JSON_List):
+class DensityList(JSON_List, RefTempList):
     item_type = DensityPoint
-
-    def validate(self):
-        # probably lots we could do here, but this is a start
-        # fixme: this could be generalized and used elsewhere
-        #        viscosities, for example
-        msgs = []
-        # check for duplicate temps
-        temps = sorted(dp.ref_temp.converted_to('K').value for dp in self)
-        diff = (abs(t2 - t1) for t1, t2 in zip(temps[1:], temps[:1]))
-        for d in diff:
-            if d < 1e-3:
-                msgs.append(ERRORS["E050"].format("Temperatures", "Density Data"))
-        return msgs
-
 
 
 @dataclass_to_json
@@ -54,7 +71,7 @@ class DynamicViscosityPoint:
     method: str = None
 
 
-class DynamicViscosityList(JSON_List):
+class DynamicViscosityList(JSON_List, RefTempList):
     item_type = DynamicViscosityPoint
 
 
@@ -67,7 +84,7 @@ class KinematicViscosityPoint:
     method: str = None
 
 
-class KinematicViscosityList(JSON_List):
+class KinematicViscosityList(JSON_List, RefTempList):
     item_type = KinematicViscosityPoint
 
 
@@ -94,7 +111,7 @@ class InterfacialTensionPoint:
     method: str = None
 
 
-class InterfacialTensionList(JSON_List):
+class InterfacialTensionList(JSON_List, RefTempList):
     item_type = InterfacialTensionPoint
 
 
@@ -111,4 +128,7 @@ class PhysicalProperties:
     interfacial_tension_air: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)
+
+
+
 
