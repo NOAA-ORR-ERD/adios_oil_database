@@ -24,7 +24,7 @@ from ...models.common.measurement import (Length,
 from ...models.oil.physical_properties import (DensityPoint,
                                                KinematicViscosityPoint,
                                                )
-from ...models.oil.properties import DistCut
+from ...models.oil.distillation import DistCut
 from ...models.oil.values import Reference
 
 from ...models.oil.oil import Oil

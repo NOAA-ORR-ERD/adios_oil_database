@@ -7,6 +7,8 @@ Having a Python class makes it easier to write importing, validating etc, code.
 """
 from dataclasses import dataclass, field
 
+from .validation.errors import ERRORS
+
 from ..common.utilities import dataclass_to_json, JSON_List
 
 from ..common.measurement import (Temperature,
@@ -27,6 +29,20 @@ class DensityPoint:
 
 class DensityList(JSON_List):
     item_type = DensityPoint
+
+    def validate(self):
+        # probably lots we could do here, but this is a start
+        # fixme: this could be generalized and used elsewhere
+        #        viscosities, for example
+        msgs = []
+        # check for duplicate temps
+        temps = sorted(dp.ref_temp.converted_to('K').value for dp in self)
+        diff = (abs(t2 - t1) for t1, t2 in zip(temps[1:], temps[:1]))
+        for d in diff:
+            if d < 1e-3:
+                msgs.append(ERRORS["E050"].format("Temperatures", "Density Data"))
+        return msgs
+
 
 
 @dataclass_to_json

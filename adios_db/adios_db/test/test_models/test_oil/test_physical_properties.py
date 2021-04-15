@@ -3,13 +3,13 @@ import pytest
 from adios_db.models.common.measurement import Temperature, Density
 
 from adios_db.models.oil.physical_properties import (PhysicalProperties,
-                                                         DensityPoint,
-                                                         DensityList,
-                                                         InterfacialTensionList,
-                                                         DynamicViscosityPoint,
-                                                         DynamicViscosityList,
-                                                         KinematicViscosityPoint,
-                                                         KinematicViscosityList,)
+                                                     DensityPoint,
+                                                     DensityList,
+                                                     InterfacialTensionList,
+                                                     DynamicViscosityPoint,
+                                                     DynamicViscosityList,
+                                                     KinematicViscosityPoint,
+                                                     KinematicViscosityList,)
 
 
 class TestDensityPoint:
@@ -58,6 +58,46 @@ class TestDensityList:
         json_obj[0]['ref_temp']['unit_type'] = 'temperature'
 
         assert model.py_json() == json_obj
+
+    def test_validate_duplicate_values(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+        dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0.001, unit='C'),
+                           )
+
+        DL = DensityList((dp1, dp2))
+
+        msgs = DL.validate()
+
+        print(msgs)
+
+        assert len(msgs) == 1
+        assert "E050:" in msgs[0]
+
+    def test_validate_no_duplicate_values(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+        dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=15, unit='C'),
+                           )
+
+        DL = DensityList((dp1, dp2))
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 0
+
+    def test_validate_no_values(self):
+        DL = DensityList()
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 0
 
 
 class TestDynamicViscosityPoint:

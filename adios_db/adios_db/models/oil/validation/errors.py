@@ -14,6 +14,10 @@ ERRORS = {
           # E04* -- units or values
           "E040": "Value for {}: {} is out of range: unit error?",
           "E041": "Value for {}: {} must be between 0 and 1",
+
+          # E05* -- duplicates, etc
+          "E050": "Duplicate {} in {}",
+
           }
 
 ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}

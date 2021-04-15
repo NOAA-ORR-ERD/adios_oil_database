@@ -11,7 +11,7 @@ from ..common.utilities import dataclass_to_json, JSON_List
 
 from ..common.measurement import VolumeFraction
 
-from .properties import Distillation
+from .distillation import Distillation
 from .metadata import SampleMetaData
 from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
