@@ -289,6 +289,7 @@ deploy_mongodb_public:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker service create --network adios_net
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
       -v $DB_LOCATION:/data/db
