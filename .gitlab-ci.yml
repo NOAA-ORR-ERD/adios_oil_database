@@ -173,7 +173,7 @@ deploy_mongodb_stage:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create --d bridge $APP_NETWORK
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -218,7 +218,7 @@ deploy_api_stage:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create --d bridge $APP_NETWORK
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -260,7 +260,7 @@ deploy_client_stage:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create --d bridge $APP_NETWORK
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -304,7 +304,7 @@ deploy_mongodb_public:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create --d bridge $APP_NETWORK
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
