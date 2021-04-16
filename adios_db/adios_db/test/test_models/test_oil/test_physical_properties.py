@@ -5,6 +5,8 @@ from adios_db.models.common.measurement import Temperature, Density
 from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DensityPoint,
                                                      DensityList,
+                                                     InterfacialTension,
+                                                     InterfacialTensionPoint,
                                                      InterfacialTensionList,
                                                      DynamicViscosityPoint,
                                                      DynamicViscosityList,
@@ -313,3 +315,23 @@ class TestPhysicalProperties:
 
         assert type(dens) == list
         assert dens[0]['density']['value'] == 0.8751
+
+
+class Test_interfacial_tension:
+    # maybe there should be more here?
+    def test_missing_ref_temp(self):
+        # this was in the actual data -- how?
+        # note missing value for temp
+
+        itp = InterfacialTensionPoint(tension=InterfacialTension(0.03,
+                                                                 unit="N/m"),
+                                      ref_temp=Temperature(unit="K"),
+                                      )
+        itl = InterfacialTensionList((itp,))
+
+        msgs = itl.validate()
+
+        assert "E042:" in msgs[0]
+        assert "InterfacialTension" in msgs[0]
+
+

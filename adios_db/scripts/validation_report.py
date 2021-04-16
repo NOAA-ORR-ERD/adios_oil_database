@@ -11,7 +11,7 @@ import json
 from adios_db.scripting import get_all_records
 
 USAGE = """
-validation_report data_dir ["save"]
+validation_report data_dir [save]
 
 Generate a validation report for the JSON files in data_dir
 

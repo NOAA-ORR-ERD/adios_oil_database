@@ -36,6 +36,9 @@ class RefTempList:
         # check for odd temperatures
         for pt in points_list:
             temp = pt.ref_temp.converted_to('C').value
+            if temp is None:
+                msgs.append(ERRORS["E042"].format(data_str + " reference temp"))
+                return msgs
             if temp < -100.0:  # arbitrary, but should catch K/C confusion
                 t = f"{pt.ref_temp.value:.2f} {pt.ref_temp.unit}"
                 msgs.append(ERRORS["E040"].format(data_str, t))
