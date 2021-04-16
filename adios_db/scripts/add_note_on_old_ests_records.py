@@ -12,10 +12,14 @@ thus may reflect samples of varying age and composition.
 
 import adios_db.scripting as ads
 
-ADDED_COMMENT = ("The data in this record may have been compiled from "
-                 "multiple sources and may thus may reflect samples of "
-                 "varying age and composition."
-                 )
+OLD_COMMENT = ("The data in this record may have been compiled from "
+               "multiple sources and may thus may reflect samples of "
+               "varying age and composition."
+               )
+
+NEW_COMMENT = ("The data in this record may have been compiled "
+               "from multiple sources and reflect samples of "
+               "varying age and composition.")
 
 
 USAGE = """
@@ -45,7 +49,9 @@ def main():
             count += 1
             print("Adding note to:", rec.oil_id)
             print(reference.reference)
-            rec.metadata.comments = "\n".join((rec.metadata.comments, ADDED_COMMENT)).strip()
+#             rec.metadata.comments = "\n".join((rec.metadata.comments, ADDED_COMMENT)).strip()
+            rec.metadata.comments = rec.metadata.comments.replace(OLD_COMMENT,
+                                                                  NEW_COMMENT)
             if not dry_run:
                 print("Saving out:", pth)
                 rec.to_file(pth)
