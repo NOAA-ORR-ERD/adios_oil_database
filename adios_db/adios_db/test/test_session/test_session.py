@@ -15,6 +15,7 @@ except ModuleNotFoundError:
 
 here = Path(__file__).resolve().parent
 
+test_data = here.parent / "data_for_testing" / "noaa-oil-data"
 # Pass the --mongo command line option if you want these to run.
 # they require a mongo database to be running on localhost
 
@@ -22,7 +23,7 @@ pytestmark = pytest.mark.mongo
 
 
 def restore_test_db(settings):
-    restore_db(settings, here/'test_data')
+    restore_db(settings, test_data)
 
 
 class SessionTestBase:

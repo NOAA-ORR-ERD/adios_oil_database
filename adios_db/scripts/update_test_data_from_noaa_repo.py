@@ -19,7 +19,7 @@ except IndexError:
 
 # find records to update:
 
-test_data_dir = Path("../adios_db/test/test_session/test_data/oil/")
+test_data_dir = Path("../adios_db/test/data_for_testing/noaa-oil-data/oil")
 
 filenames = test_data_dir.rglob("*.json")
 
