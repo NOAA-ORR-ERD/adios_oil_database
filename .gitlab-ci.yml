@@ -282,7 +282,7 @@ deploy_mongodb_public:
     on_stop: stop_mongodb_public
   variables:
     IMAGE_TAG: mongo:latest
-    CONTAINER_NAME: mongodb
+    CONTAINER_NAME: adios_mongodb_public
     PORT_MAPPING: 127.0.0.1:27017:27017
     DB_LOCATION: /data/adios_oil_db/data/db
     APP_NETWORK: adios_public_net
@@ -306,7 +306,7 @@ stop_mongodb_public:
     action: stop
   variables:
     GIT_STRATEGY: none
-    CONTAINER_NAME: mongodb
+    CONTAINER_NAME: adios_mongodb_public
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
