@@ -20,6 +20,7 @@ OIL_ID = 'AD00123'
 
 HERE = Path(__file__).parent
 OUTPUT_DIR = HERE / "output"
+EXAMPLE_DATA_DIR = HERE.parent.parent / "data_for_testing" / "example_data"
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
@@ -393,7 +394,7 @@ def test_round_trip():
     attributes are in a different order, but should mean the same thing.
 
     """
-    filein = HERE / "EC000506.json"
+    filein = EXAMPLE_DATA_DIR / "EC000506.json"
     fileout = OUTPUT_DIR / "temp_oil.json"
 
     # read it in:

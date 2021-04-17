@@ -30,7 +30,7 @@ pkg_version = get_version(pkg_name)
 pkg_data = ["models/oil/product_types_and_labels.csv",
             "test/test_models/test_oil/example_products.csv",
             "test/test_models/test_oil/ExampleFullRecord.json",
-            "test/test_models/test_oil/EC000506.json",
+            "test/data_for_testing/example_data/EC000506.json",
             # so the output dir will be there.
             "/test/test_models/test_oil/output/empty_file",
             ]
