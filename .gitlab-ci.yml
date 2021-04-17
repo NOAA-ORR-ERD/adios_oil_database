@@ -168,12 +168,16 @@ deploy_mongodb_stage:
     CONTAINER_NAME: mongodb
     PORT_MAPPING: 127.0.0.1:27017:27017
     DB_LOCATION: /data/adios_oil_db/data/db
+    APP_NETWORK: adios_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network $APP_NETWORK
       -v $DB_LOCATION:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
@@ -205,17 +209,22 @@ deploy_api_stage:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
     CONTAINER_NAME: adios_db_web_api
     PORT_MAPPING: 8004:9898
+    APP_NETWORK: adios_net
   script:
     - id
     - pwd
     - ls -la
     - ls -la /data/adios_oil_db
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       -e MONGODB_WRITEABLE=false
+      --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
   tags:
     - adios-stage
@@ -246,12 +255,17 @@ deploy_client_stage:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
     CONTAINER_NAME: adios_db_web_client
     PORT_MAPPING: 8003:4200
+    APP_NETWORK: adios_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network adios_net
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
+      --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
   tags:
     - adios-stage
@@ -282,15 +296,17 @@ deploy_mongodb_public:
     on_stop: stop_mongodb_public
   variables:
     IMAGE_TAG: mongo:latest
-    CONTAINER_NAME: mongodb
+    CONTAINER_NAME: adios_mongodb_public
     PORT_MAPPING: 127.0.0.1:27017:27017
     DB_LOCATION: /data/adios_oil_db/data/db
     APP_NETWORK: adios_public_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
-    - docker network create -d bridge $APP_NETWORK
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       --network $APP_NETWORK
@@ -306,7 +322,7 @@ stop_mongodb_public:
     action: stop
   variables:
     GIT_STRATEGY: none
-    CONTAINER_NAME: mongodb
+    CONTAINER_NAME: adios_mongodb_public
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
