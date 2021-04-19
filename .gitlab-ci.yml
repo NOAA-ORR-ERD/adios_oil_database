@@ -373,3 +373,43 @@ stop_api_public:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
     - prod
+
+
+deploy_client_public:
+  stage: deploy
+  environment:
+    name: public
+    url: https://adios.orr.noaa.gov
+    on_stop: stop_client_public
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+    CONTAINER_NAME: adios_db_web_client_public
+    PORT_MAPPING: 8003:4200
+    APP_NETWORK: adios_public_net
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
+      --network $APP_NETWORK
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - prod
+
+stop_client_public:
+  stage: deploy
+  environment:
+    name: public
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: adios_db_web_client_public
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - prod
