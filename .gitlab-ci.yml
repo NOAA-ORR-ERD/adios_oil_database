@@ -329,3 +329,47 @@ stop_mongodb_public:
   tags:
     - prod
 
+
+deploy_api_public:
+  stage: deploy
+  environment:
+    name: public
+    url: https://adios.orr.noaa.gov
+    on_stop: stop_api_public
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+    CONTAINER_NAME: adios_db_web_api_public
+    PORT_MAPPING: 8004:9898
+    APP_NETWORK: adios_public_net
+  script:
+    - id
+    - pwd
+    - ls -la
+    - ls -la /data/adios_oil_db
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
+      -e MONGODB_WRITEABLE=false
+      --network $APP_NETWORK
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - prod
+
+stop_api_public:
+  stage: deploy
+  environment:
+    name: public
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: adios_db_web_api_public
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - prod
