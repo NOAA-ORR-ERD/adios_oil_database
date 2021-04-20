@@ -2,6 +2,8 @@
 #
 FROM nginx:latest
 
+RUN yum update -y && yum -y install node npm
+
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/web_client/ /web_client/public/configs/
 
