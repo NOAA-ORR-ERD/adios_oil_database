@@ -19,7 +19,8 @@
             "Light Crude",
             "Crude Oil"
         ],
-        "model_completeness": 94
+        "model_completeness": 94,
+        "gnome_suitable": true
     },
     "sub_samples": [
         {

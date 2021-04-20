@@ -111,7 +111,7 @@ class Oil:
             make_gnome_oil(self)
             self.metadata.gnome_suitable = True
         # if any other kind of Error -- it will raise.
-        except (ValueError, IndexError):
+        except Exception: # if it barfs for any reason it's not suitable
             self.metadata.gnome_suitable = False
         msgs = []
 

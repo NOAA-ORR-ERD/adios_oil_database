@@ -19,7 +19,8 @@
             "Crude Oil",
             "Medium Crude"
         ],
-        "model_completeness": 55
+        "model_completeness": 55,
+        "gnome_suitable": true
     },
     "sub_samples": [
         {
@@ -241,8 +242,7 @@
         }
     ],
     "status": [
-        "W000: Warning: Dynamic and Kinematic Viscosity may be out of sync",
-        "E032: Distillation type is \"None\", it must be one of: ['volume fraction', 'mass fraction']"
+        "W000: Warning: Dynamic and Kinematic Viscosity may be out of sync"
     ],
     "permanent_warnings": [
         "Warning: Dynamic and Kinematic Viscosity may be out of sync"
