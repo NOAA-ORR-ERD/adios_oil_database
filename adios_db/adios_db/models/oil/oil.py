@@ -11,6 +11,8 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
 
+from ...computation.gnome_oil import make_gnome_oil
+
 from .metadata import MetaData
 from .sample import SampleList
 from .version import Version
@@ -103,6 +105,14 @@ class Oil:
 
         validation of sub-objects is automatically applied
         """
+        # see if it can be used as a GNOME oil
+        # NOTE: this is an odd one, as it puts the information in a different place
+        try:
+            make_gnome_oil(self)
+            self.metadata.gnome_suitable = True
+        # if any other kind of Error -- it will raise.
+        except (ValueError, IndexError):
+            self.metadata.gnome_suitable = False
         msgs = []
 
         # Validate ID
