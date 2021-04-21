@@ -96,8 +96,8 @@ build_client:
     - docker build . -f web_client/dockerfile -t $IMAGE_TAG_DBG
     - docker push $IMAGE_TAG_DBG
 
-    #- docker build . -f web_client/dockerfile_prod -t $IMAGE_TAG_PROD
-    #- docker push $IMAGE_TAG_PROD
+    - docker build . -f web_client/dockerfile_prod -t $IMAGE_TAG_PROD
+    - docker push $IMAGE_TAG_PROD
 
 scan-api:
   stage: verify

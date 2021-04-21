@@ -1,8 +1,8 @@
 # Oil Database Web Client production Docker configuration
 #
-FROM nginx:latest
+FROM registry.orr.noaa.gov/erd/centos-conda
 
-RUN yum update -y && yum -y install node npm
+RUN yum update -y && yum -y install node npm nginx
 
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/web_client/ /web_client/public/configs/
@@ -20,3 +20,5 @@ RUN cd /web_client && npm install -g ember-cli
 RUN cd /web_client && ember build --environment production
 
 COPY ./web_client/dist/ /usr/share/nginx/html/
+
+ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
