@@ -19,6 +19,6 @@ RUN cd /web_client && npm install -g ember-cli
 
 RUN cd /web_client && ember build --environment production
 
-COPY ./web_client/dist/ /usr/share/nginx/html/
+COPY /web_client/dist/ /usr/share/nginx/html/
 
 ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
