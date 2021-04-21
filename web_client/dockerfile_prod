@@ -4,24 +4,29 @@ FROM registry.orr.noaa.gov/erd/centos-conda
 
 RUN yum update -y && yum -y install node npm nginx
 
-COPY ./web_client/ /web_client/
-COPY ./oildb-deploy/config/web_client/ /web_client/public/configs/
+ARG PROJECT_ROOT=$PWD
 
-RUN cd /web_client && npm install -g n
-RUN cd /web_client && n stable
-RUN cd /web_client && node --version
+WORKDIR web_client
 
-RUN cd /web_client && npm install npm@latest -g
-RUN cd /web_client && npm install
-RUN cd /web_client && npm --version
+RUN npm install -g n
+RUN n stable
+RUN node --version
 
-RUN cd /web_client && npm install -g ember-cli
+RUN npm install npm@latest -g
+RUN npm install
+RUN npm --version
 
-RUN cd /web_client && ember build --environment production
+RUN npm install -g ember-cli
 
-RUN cd /web_client && ls -la
-RUN cd /web_client && ls -la ./dist
+RUN ember build --environment production
 
-COPY /web_client/dist/ /usr/share/nginx/html/
+RUN ls -la
+RUN ls -la ./dist
+
+COPY dist/* /usr/share/nginx/html/
+
+WORKDIR $PROJECT_ROOT
+
+COPY oildb-deploy/config/web_client/* /config/
 
 ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
