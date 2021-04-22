@@ -21,6 +21,6 @@ RUN npm install -g ember-cli
 
 RUN ember build --environment production
 
-RUN cp dist/* /usr/share/nginx/html/
+RUN cp -r --remove-destination dist/* /usr/share/nginx/html/
 
 ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
