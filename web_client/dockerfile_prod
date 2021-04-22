@@ -4,6 +4,9 @@ FROM registry.orr.noaa.gov/erd/centos-conda
 
 RUN yum update -y && yum -y install node npm nginx
 
+RUN echo "$PWD"
+RUN ls -l
+
 ARG PROJECT_ROOT=$PWD
 
 WORKDIR web_client
