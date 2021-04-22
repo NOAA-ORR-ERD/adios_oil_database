@@ -7,6 +7,7 @@ RUN yum update -y && yum -y install node npm nginx
 ARG PROJECT_ROOT=$PWD
 
 WORKDIR web_client
+RUN echo "$PWD"
 
 RUN npm install -g n
 RUN n stable
