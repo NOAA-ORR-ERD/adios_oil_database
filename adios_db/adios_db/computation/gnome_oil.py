@@ -76,9 +76,12 @@ def make_gnome_oil(oil):
     # metadata:
     go = get_empty_dict()
     go['name'] = oil.metadata.name
-    if oil.metadata.API is None:
-        raise ValueError(ERRORS["E030"]+" - oil not suitable for use in Gnome")
-    go['api'] = oil.metadata.API
+
+    dens = Density(oil)
+    ref_density = dens.at_temp(288.15)
+    go['api'] = est.api_from_density(ref_density)
+    # for gnome_oil we don't treat api as data, only api from density
+    oil.metadata.API = go['api']
     go['adios_oil_id'] = oil.oil_id
 
     # Physical properties
@@ -110,10 +113,27 @@ def make_gnome_oil(oil):
 
     viscosities = get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K")
 
-    go['kvis'], go['kvis_ref_temps'] = zip(*viscosities)
-    go['kvis_weathering'] = [0.0] * len(go['kvis'])
+    if viscosities:
+        go['kvis'], go['kvis_ref_temps'] = zip(*viscosities)
+        go['kvis_weathering'] = [0.0] * len(go['kvis'])
+    else:
+        raise ValueError("Gnome oil needs at least one viscosity value")
 
-    go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
+    bullwinkle = None
+    for sub_sample in oil.sub_samples:
+        try:
+            frac_weathered = sub_sample.metadata.fraction_weathered.converted_to('fraction').value
+            if bullwinkle is None or frac_weathered > bullwinkle:
+                bullwinkle = frac_weathered
+        except:
+            frac_weathered = None
+
+    if bullwinkle is None:
+        go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
+    else:
+        go['bullwinkle_fraction'] = bullwinkle
+
+    #go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
     go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
     go['solubility'] = 0
     go['k0y'] = 2.024e-06 #do we want this included?
@@ -300,6 +320,8 @@ def normalized_cut_values(oil, N=10):
     if len(cuts) == 0:
         if oil.metadata.product_type != 'Crude Oil NOS':
             print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
+        if oil_api < 0:
+            raise ValueError(ERRORS['E030'] + "  > 0 for estimations. Oil not recommended for use in Gnome")
         BP_i = est.cut_temps_from_api(oil_api)
         fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
     else:

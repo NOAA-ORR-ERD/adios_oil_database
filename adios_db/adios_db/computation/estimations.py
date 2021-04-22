@@ -5,6 +5,15 @@ oil record that may be needed for modeling, etc.
 
 import numpy as np
 
+def api_from_density(density):
+    '''
+        Source: Adios2
+    '''
+    kg_m_3 = density
+
+    return (141.5 / kg_m_3 * 1000.0) - 131.5
+
+
 def pour_point_from_kvis(ref_kvis, ref_temp_k):
     '''
         Source: Adios2
