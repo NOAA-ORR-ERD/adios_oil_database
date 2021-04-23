@@ -10,15 +10,15 @@ RUN conda install -y python=3.9
 RUN conda update -y conda
 
 COPY ./ /adios-db/
+WORKDIR adios-db
 
 # install deps
-RUN cd adios-db && conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
-RUN cd adios-db/adios_db && pip install -e ./
-
-RUN cd adios-db/web_api && pip install -e ./
+RUN conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+RUN cd adios_db && pip install -e ./
+RUN cd web_api && pip install -e ./
 
 RUN mkdir /config
-RUN cp /adios-db/oildb-deploy/config/web_api/* /config/
+RUN cp /adios-db/oildb-deploy/config/stage/web_api/* /config/
 
 EXPOSE 9898
 ENTRYPOINT ["/adios-db/web_api/docker_start.sh"]

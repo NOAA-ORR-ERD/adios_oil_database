@@ -5,10 +5,13 @@ FROM registry.orr.noaa.gov/erd/centos-conda
 RUN yum update -y && yum -y install node npm nginx
 
 COPY ./web_client/ /web_client/
-COPY ./oildb-deploy/config/web_client/ /config/
+COPY ./oildb-deploy/config/public/web_client/ /config/
 
 WORKDIR web_client
 
+#
+# build our production web client
+#
 RUN npm install -g n
 RUN n stable
 RUN node --version
@@ -21,6 +24,21 @@ RUN npm install -g ember-cli
 
 RUN ember build --environment production
 
-RUN cp -r --remove-destination dist/* /usr/share/nginx/html/
+#
+# copy our configs to the built distribution & nginx
+#
+RUN cp /config/main.json dist/configs
+RUN cp /config/nginx.conf /etc/nginx/nginx.conf
+
+#
+# put our distribution in its own area
+#
+RUN cp -r dist /adios_client
+
+#
+# clean up
+#
+WORKDIR /
+RUN rm -rf /web_client
 
 ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
