@@ -70,7 +70,7 @@ build_api:
   variables:
     # URI format: <hostname>/<group>/<subgroup>/<project>/<module-name>
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
   script:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git
@@ -87,24 +87,28 @@ build_client:
     - schedules
   variables:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
-    IMAGE_TAG_DBG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-dbg
-    IMAGE_TAG_PROD: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+    IMAGE_TAG_DBG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client-dbg
+    IMAGE_TAG_PROD: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
   script:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_client/dockerfile -t $IMAGE_TAG_DBG
+
+    # apparently there is a timeout on the docker session, so we re-login
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_DBG
 
-    #- docker build . -f web_client/dockerfile_prod -t $IMAGE_TAG_PROD
-    #- docker push $IMAGE_TAG_PROD
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build . -f web_client/dockerfile_prod -t $IMAGE_TAG_PROD
+    - docker push $IMAGE_TAG_PROD
 
 scan-api:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
     # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
     # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
     CLAIR_DB_IMAGE_TAG: "latest"
@@ -134,7 +138,7 @@ scan-client:
   image: "$CS_ANALYZER_IMAGE"
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
     # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
     # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
     CLAIR_DB_IMAGE_TAG: "latest"
@@ -208,7 +212,7 @@ deploy_api_stage:
     url: https://adios-stage.orr.noaa.gov
     on_stop: stop_api_stage
   variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
     CONTAINER_NAME: adios_db_web_api
     PORT_MAPPING: 8004:9898
     APP_NETWORK: adios_net
@@ -254,7 +258,7 @@ deploy_client_stage:
     url: https://adios-stage.orr.noaa.gov
     on_stop: stop_client_stage
   variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client-dbg
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client-dbg
     CONTAINER_NAME: adios_db_web_client
     PORT_MAPPING: 8003:4200
     APP_NETWORK: adios_net
@@ -339,7 +343,7 @@ deploy_api_public:
     url: https://adios.orr.noaa.gov
     on_stop: stop_api_public
   variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-api
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
     CONTAINER_NAME: adios_db_web_api_public
     PORT_MAPPING: 8004:9898
     APP_NETWORK: adios_public_net
@@ -384,7 +388,7 @@ deploy_client_public:
     url: https://adios.orr.noaa.gov
     on_stop: stop_client_public
   variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA-client
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
     CONTAINER_NAME: adios_db_web_client_public
     PORT_MAPPING: 8003:80
     APP_NETWORK: adios_public_net
@@ -410,6 +414,47 @@ stop_client_public:
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client_public
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - prod
+
+deploy_proxy_public:
+  stage: deploy
+  environment:
+    name: public
+    url: https://adios.orr.noaa.gov
+    on_stop: stop_proxy_public
+  variables:
+    IMAGE_TAG: nginx
+    CONTAINER_NAME: adios_db_web_proxy_public
+    APP_NETWORK: adios_public_net
+    PORT_MAPPING: 443:443
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git /data/adios_oil_db/oildb-deploy
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
+      --network $APP_NETWORK
+      -v /data/adios_oil_db/oildb-deploy/configs/public/proxy:/etc/nginx/
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - prod
+
+stop_proxy_public:
+  stage: deploy
+  environment:
+    name: public
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: adios_db_web_proxy_public
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
