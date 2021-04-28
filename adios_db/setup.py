@@ -107,6 +107,13 @@ class cleanall(clean):
 #         errno = os.system('py.test --pyargs adios_db')
 #         sys.exit(errno)
 
+scripts = ['adios_db_init = adios_db.scripts.db_initialize:init_db_cmd',
+           'adios_db_import = adios_db.scripts.db_import:import_db_cmd',
+           'adios_db_oil_query = adios_db.scripts.oil_query:oil_query_cmd',
+           'adios_db_backup = adios_db.scripts.db_backup:backup_db_cmd',
+           'adios_db_restore = adios_db.scripts.db_restore:restore_db_cmd',
+           'adios_validate = adios_db.scripts.validation_report:main'
+           ]
 
 setup(name=pkg_name,
       version=pkg_version,
@@ -133,22 +140,6 @@ setup(name=pkg_name,
       packages=find_packages(),
       include_package_data=True,
       package_data={'adios_db': pkg_data},
-      entry_points={'console_scripts': [('adios_db_init = '
-                                         'adios_db.scripts.db_initialize'
-                                         ':init_db_cmd'),
-                                        ('adios_db_import = '
-                                         'adios_db.scripts.db_import'
-                                         ':import_db_cmd'),
-                                        ('oil_query = '
-                                         'adios_db.scripts.oil_query'
-                                         ':oil_query_cmd'),
-                                        ('adios_db_backup = '
-                                         'adios_db.scripts.db_backup'
-                                         ':backup_db_cmd'),
-                                        ('adios_db_restore = '
-                                         'adios_db.scripts.db_restore'
-                                         ':restore_db_cmd'),
-                                        ],
-                    },
+      entry_points={'console_scripts': scripts},
       zip_safe=False,
       )
