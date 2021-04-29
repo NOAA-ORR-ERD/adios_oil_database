@@ -442,7 +442,8 @@ deploy_proxy_public:
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       --network $APP_NETWORK
-      -v /data/adios_oil_db/oildb-deploy/configs/public/proxy:/etc/nginx/
+      -v /data/adios_oil_db/oildb-deploy/config/public/proxy:/etc/nginx/
+      -v /etc/ssl/certs:/etc/ssl/certs
       --restart unless-stopped $IMAGE_TAG
   tags:
     - prod
