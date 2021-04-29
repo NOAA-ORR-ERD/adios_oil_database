@@ -438,10 +438,11 @@ deploy_proxy_public:
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
-    - rm -rf /data/adios_oil_db/oildb-deploy >/dev/null 2>&1 && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git /data/adios_oil_db/oildb-deploy
+    - rm -rf /data/adios_oil_db/oildb-deploy >/dev/null 2>&1 || echo "oildb-deploy project does not exist"
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git /data/adios_oil_db/oildb-deploy
     - ls -la /data/adios_oil_db/oildb-deploy
     - ls -la /data/adios_oil_db/oildb-deploy/config/public/proxy
-    - ls -la /etc/ssl/certs
+    - ls -la /etc/ssl/certs/*
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       --network $APP_NETWORK
