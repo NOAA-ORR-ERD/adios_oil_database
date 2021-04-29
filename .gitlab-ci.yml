@@ -444,7 +444,7 @@ deploy_proxy_public:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git $OILDB_PROJ_FOLDER
     - chmod go+rw $OILDB_PROJ_FOLDER/config/public/proxy/*
     - >
-      chmod go+x
+      chmod go+rx
       $OILDB_PROJ_FOLDER
       $OILDB_PROJ_FOLDER/config
       $OILDB_PROJ_FOLDER/config/public
