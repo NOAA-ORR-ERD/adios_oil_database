@@ -442,6 +442,13 @@ deploy_proxy_public:
 
     - if [ -d $OILDB_PROJ_FOLDER ]; then rm -rf $OILDB_PROJ_FOLDER; fi
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git $OILDB_PROJ_FOLDER
+    - chmod go+rw $OILDB_PROJ_FOLDER/config/public/proxy/*
+    - >
+      chmod go+x
+      $OILDB_PROJ_FOLDER
+      $OILDB_PROJ_FOLDER/config
+      $OILDB_PROJ_FOLDER/config/public
+      $OILDB_PROJ_FOLDER/config/public/proxy
 
     - ls -la $OILDB_PROJ_FOLDER
     - ls -la $OILDB_PROJ_FOLDER/config/public/proxy
@@ -449,7 +456,7 @@ deploy_proxy_public:
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       --network $APP_NETWORK
-      -v /data/adios_oil_db/oildb-deploy/config/public/proxy:/etc/nginx/
+      -v $OILDB_PROJ_FOLDER/config/public/proxy:/etc/nginx/
       -v /etc/ssl/certs:/etc/ssl/certs
       --restart unless-stopped $IMAGE_TAG
   tags:
