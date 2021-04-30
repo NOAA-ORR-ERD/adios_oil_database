@@ -345,7 +345,7 @@ deploy_api_public:
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
     CONTAINER_NAME: adios_db_web_api_public
-    PORT_MAPPING: 8004:9898
+    PORT_MAPPING: 8001:9898
     APP_NETWORK: adios_public_net
   script:
     - id
@@ -390,7 +390,7 @@ deploy_client_public:
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
     CONTAINER_NAME: adios_db_web_client_public
-    PORT_MAPPING: 8003:80
+    PORT_MAPPING: 8000:80
     APP_NETWORK: adios_public_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
