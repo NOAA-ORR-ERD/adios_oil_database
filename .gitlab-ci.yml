@@ -314,10 +314,8 @@ deploy_mongodb_public:
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      --network $APP_NETWORK
-      -v $DB_LOCATION:/data/db
-      --restart unless-stopped $IMAGE_TAG
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
+      -p $PORT_MAPPING -v $DB_LOCATION:/data/db $IMAGE_TAG
   tags:
     - prod
 
