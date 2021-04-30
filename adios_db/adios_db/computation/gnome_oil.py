@@ -102,6 +102,8 @@ def make_gnome_oil(oil):
     else:
         if phys_props.pour_point.measurement.max_value is not None:
             go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').max_value
+        elif phys_props.pour_point.measurement.min_value is not None:
+            go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').min_value
         else:
             go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').value
 
@@ -321,7 +323,7 @@ def normalized_cut_values(oil, N=10):
         if oil.metadata.product_type != 'Crude Oil NOS':
             print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
         if oil_api < 0:
-            raise ValueError(ERRORS['E030'] + "  > 0 for estimations. Oil not recommended for use in Gnome")
+            raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
         BP_i = est.cut_temps_from_api(oil_api)
         fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
     else:
