@@ -79,6 +79,7 @@ build_api:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG
 
+    # apparently there is a timeout on the docker session, so we re-login
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_DBG
 
@@ -181,9 +182,9 @@ deploy_mongodb_stage:
   variables:
     IMAGE_TAG: mongo:latest
     CONTAINER_NAME: mongodb
+    APP_NETWORK: adios_net
     PORT_MAPPING: 127.0.0.1:27017:27017
     DB_LOCATION: /data/adios_oil_db/data/db
-    APP_NETWORK: adios_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -221,15 +222,11 @@ deploy_api_stage:
     url: https://adios-stage.orr.noaa.gov
     on_stop: stop_api_stage
   variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api-dbg
     CONTAINER_NAME: adios_db_web_api
-    PORT_MAPPING: 8004:9898
     APP_NETWORK: adios_net
+    PORT_MAPPING: 8004:9898
   script:
-    - id
-    - pwd
-    - ls -la
-    - ls -la /data/adios_oil_db
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
@@ -269,8 +266,8 @@ deploy_client_stage:
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client-dbg
     CONTAINER_NAME: adios_db_web_client
-    PORT_MAPPING: 8003:4200
     APP_NETWORK: adios_net
+    PORT_MAPPING: 8003:4200
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -355,10 +352,6 @@ deploy_api_public:
     PORT_MAPPING: 8001:9898
     APP_NETWORK: adios_public_net
   script:
-    - id
-    - pwd
-    - ls -la
-    - ls -la /data/adios_oil_db
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
