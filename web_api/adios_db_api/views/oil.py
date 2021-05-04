@@ -8,7 +8,8 @@ from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound,
                                     HTTPConflict,
-                                    HTTPUnsupportedMediaType)
+                                    HTTPUnsupportedMediaType,
+                                    HTTPInternalServerError)
 
 from pymongo.errors import DuplicateKeyError
 
@@ -80,10 +81,14 @@ def get_oils(request):
         search_opts = get_search_params(request)
         sort = get_sort_params(request)
 
-        return json_api_results(client.query(page=[start, stop],
-                                             sort=sort,
-                                             **search_opts),
-                                limit)
+        try:
+            return json_api_results(client.query(page=[start, stop],
+                                                 sort=sort,
+                                                 **search_opts),
+                                    limit)
+        except Exception as e:
+            logger.error(e)
+            raise HTTPInternalServerError(e)
 
 
 def json_api_results(results, page_size):
