@@ -308,9 +308,9 @@ deploy_mongodb_public:
     on_stop: stop_mongodb_public
   variables:
     IMAGE_TAG: mongo:latest
-    CONTAINER_NAME: adios_mongodb_public
+    CONTAINER_NAME: mongodb
+    APP_NETWORK: adios_net
     DB_LOCATION: /data/adios_oil_db/data/db
-    APP_NETWORK: adios_public_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -331,7 +331,7 @@ stop_mongodb_public:
     action: stop
   variables:
     GIT_STRATEGY: none
-    CONTAINER_NAME: adios_mongodb_public
+    CONTAINER_NAME: mongodb
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
@@ -347,8 +347,8 @@ deploy_api_public:
     on_stop: stop_api_public
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
-    CONTAINER_NAME: adios_db_web_api_public
-    APP_NETWORK: adios_public_net
+    CONTAINER_NAME: adios_db_web_api
+    APP_NETWORK: adios_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -369,7 +369,7 @@ stop_api_public:
     action: stop
   variables:
     GIT_STRATEGY: none
-    CONTAINER_NAME: adios_db_web_api_public
+    CONTAINER_NAME: adios_db_web_api
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
@@ -385,8 +385,8 @@ deploy_client_public:
     on_stop: stop_client_public
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
-    CONTAINER_NAME: adios_db_web_client_public
-    APP_NETWORK: adios_public_net
+    CONTAINER_NAME: adios_db_web_client
+    APP_NETWORK: adios_net
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -407,7 +407,7 @@ stop_client_public:
     action: stop
   variables:
     GIT_STRATEGY: none
-    CONTAINER_NAME: adios_db_web_client_public
+    CONTAINER_NAME: adios_db_web_client
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
@@ -422,8 +422,8 @@ deploy_proxy_public:
     on_stop: stop_proxy_public
   variables:
     IMAGE_TAG: nginx
-    CONTAINER_NAME: adios_db_web_proxy_public
-    APP_NETWORK: adios_public_net
+    CONTAINER_NAME: adios_db_web_proxy
+    APP_NETWORK: adios_net
     PORT_MAPPING: 443:443
     OILDB_PROJ_FOLDER: /data/adios_oil_db/oildb-deploy
   script:
@@ -463,7 +463,7 @@ stop_proxy_public:
     action: stop
   variables:
     GIT_STRATEGY: none
-    CONTAINER_NAME: adios_db_web_proxy_public
+    CONTAINER_NAME: adios_db_web_proxy
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
