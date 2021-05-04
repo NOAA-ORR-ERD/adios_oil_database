@@ -422,10 +422,8 @@ deploy_proxy_public:
     on_stop: stop_proxy_public
   variables:
     IMAGE_TAG: nginx
-    #CONTAINER_NAME: adios_db_web_proxy
-    #APP_NETWORK: adios_net
-    CONTAINER_NAME: adios_db_web_proxy_public
-    APP_NETWORK: adios_public_net
+    CONTAINER_NAME: adios_db_web_proxy
+    APP_NETWORK: adios_net
     PORT_MAPPING: 443:443
     OILDB_PROJ_FOLDER: /data/adios_oil_db/oildb-deploy
   script:
@@ -465,8 +463,7 @@ stop_proxy_public:
     action: stop
   variables:
     GIT_STRATEGY: none
-    #CONTAINER_NAME: adios_db_web_proxy
-    CONTAINER_NAME: adios_db_web_proxy_public
+    CONTAINER_NAME: adios_db_web_proxy
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
