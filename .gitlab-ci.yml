@@ -302,6 +302,8 @@ stop_client_stage:
 
 deploy_mongodb_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     url: https://adios.orr.noaa.gov
@@ -328,6 +330,8 @@ deploy_mongodb_public:
 
 stop_mongodb_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     action: stop
@@ -343,6 +347,8 @@ stop_mongodb_public:
 
 deploy_api_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     url: https://adios.orr.noaa.gov
@@ -366,6 +372,8 @@ deploy_api_public:
 
 stop_api_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     action: stop
@@ -381,6 +389,8 @@ stop_api_public:
 
 deploy_client_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     url: https://adios.orr.noaa.gov
@@ -404,6 +414,8 @@ deploy_client_public:
 
 stop_client_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     action: stop
@@ -418,6 +430,8 @@ stop_client_public:
 
 deploy_proxy_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     url: https://adios.orr.noaa.gov
@@ -460,6 +474,8 @@ deploy_proxy_public:
 
 stop_proxy_public:
   stage: deploy
+  only:
+    - production
   environment:
     name: public
     action: stop
