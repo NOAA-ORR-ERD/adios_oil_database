@@ -440,7 +440,8 @@ deploy_proxy_public:
     IMAGE_TAG: nginx
     CONTAINER_NAME: adios_db_web_proxy
     APP_NETWORK: adios_net
-    PORT_MAPPING: 443:443
+    PORT_MAPPING1: 443:443
+    PORT_MAPPING2: 80:80
     OILDB_PROJ_FOLDER: /data/adios_oil_db/oildb-deploy
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -464,11 +465,10 @@ deploy_proxy_public:
     - ls -la $OILDB_PROJ_FOLDER/config/public/proxy
     - ls -la /etc/ssl/certs/*
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      --network $APP_NETWORK
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
+      -p $PORT_MAPPING1 -p $PORT_MAPPING2
       -v $OILDB_PROJ_FOLDER/config/public/proxy:/etc/nginx/
-      -v /etc/ssl/certs:/etc/ssl/certs
-      --restart unless-stopped $IMAGE_TAG
+      -v /etc/ssl/certs:/etc/ssl/certs $IMAGE_TAG
   tags:
     - prod
 
