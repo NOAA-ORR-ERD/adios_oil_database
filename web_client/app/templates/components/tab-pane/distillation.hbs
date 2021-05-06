@@ -9,6 +9,67 @@
   />
 
   <div class="row">
+
+    {{! Distillation Type }}
+    <div class="col-sm-12 col-md-7 col-lg-4 input-group align-items-center">
+      <label class="p-0 input-group-text font-weight-bold">Distillation Type:</label>
+      {{#if @editable}}
+        {{#let (if @oil.distillation_data.type @oil.distillation_data.type "") as |distillationData|}}
+          <Input
+            @class="p-1 overflow-hidden bg-transparent border"
+            @value={{distillationData}}
+            @placeholder="Enter Distillation Type"
+            @change={{action "updateDistillationType"}}
+            disabled={{not @editable}}
+          />
+        {{/let}}
+      {{else}}
+        {{#let (if @oil.distillation_data.type @oil.distillation_data.type "None") as |distillationData|}}
+          <span class="p-1">{{distillationData}}</span>
+        {{/let}}
+      {{/if}}
+    </div>
+
+    {{! Fraction Recovered }}
+    <div class="col-sm-12 col-md-7 col-lg-4 input-group align-items-center">
+      <form class="form-inline justify-content-center" role="form">
+        <div class="form-group">
+          <strong>Fraction Recovered:&nbsp;</strong>
+          <Common::ValueUnitInput
+            @valueObject={{@oil.distillation_data.fraction_recovered}}
+            @valueUnit="%"
+            @valuePrecision={{2}}
+            @editable={{@editable}}
+            @submit={{action @submit @oil}}
+          />
+        </div>
+      </form>
+    </div>
+
+    {{! Distillation Method }}
+    <div class="col-sm-12 col-md-7 col-lg-4 input-group align-items-center">
+      <label class="p-0 input-group-text font-weight-bold">Method:</label>
+      {{#if @editable}}
+        {{#let (if @oil.distillation_data.method @oil.distillation_data.method "") as |distillationMethod|}}
+          <Input
+            @class="p-1 overflow-hidden bg-transparent border"
+            @value={{distillationMethod}}
+            @placeholder="Enter Distillation Method"
+            @change={{action "updateDistillationMethod"}}
+            disabled={{not @editable}}
+          />
+        {{/let}}
+      {{else}}
+        {{#let (if @oil.distillation_data.method @oil.distillation_data.method "None") as |distillationMethod|}}
+          <span class="p-1">{{distillationMethod}}</span>
+        {{/let}}
+      {{/if}}
+    </div>
+
+
+  </div>
+
+  <div class="row">
     <div class="col-lg-4">
       <Common::ValueUnitTable
         @valueArray={{@oil.distillation_data.cuts}}
