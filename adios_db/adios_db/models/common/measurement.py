@@ -25,6 +25,7 @@ from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
 __all__ = ['AngularVelocity',
+           'Concentration',
            'Density',
            'Dimensionless',
            'DynamicViscosity',
@@ -33,28 +34,27 @@ __all__ = ['AngularVelocity',
            'Length',
            'Mass',
            'MassFraction',
+           'VolumeFraction',
            'NeedleAdhesion',
            'Pressure',
-           'ProductType',
            'Temperature',
            'Time',
            'Unitless',
-           'VolumeFraction',
            ]
 
 # fixme: why is this here?
 # it should be in validation, and the list itself should probably
 # be in a data file or something.
-class ProductType(str):
-    _valid_types = ('crude',
-                    'refined',
-                    'bitumen product',
-                    'other')
-    _validator = EnumValidator(_valid_types, WARNINGS["W003"],
-                               case_insensitive=True)
+# class ProductType(str):
+#     _valid_types = ('crude',
+#                     'refined',
+#                     'bitumen product',
+#                     'other')
+#     _validator = EnumValidator(_valid_types, WARNINGS["W003"],
+#                                case_insensitive=True)
 
-    def validate(self):
-        return self._validator(self)
+#     def validate(self):
+#         return self._validator(self)
 
 
 @dataclass_to_json
@@ -225,6 +225,10 @@ class Length(MeasurementBase):
 
 class Mass(MeasurementBase):
     unit_type = "mass"
+
+
+class Concentration(MeasurementBase):
+    unit_type = 'concentration'
 
 
 class MassFraction(MeasurementBase):

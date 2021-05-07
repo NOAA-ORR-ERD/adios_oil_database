@@ -2,11 +2,13 @@
 import pytest
 import math
 
-from adios_db.models.common.measurement import (ProductType,
-                                                MeasurementBase,
+import unit_conversion as uc
+
+from adios_db.models.common.measurement import (MeasurementBase,
                                                 Temperature,
                                                 Length,
                                                 Mass,
+                                                Concentration,
                                                 MassFraction,
                                                 VolumeFraction,
                                                 Density,
@@ -18,31 +20,31 @@ from adios_db.models.common.measurement import (ProductType,
                                                 Unitless)
 
 
-# Fixme: why is this in this test file ???
-class TestProductType:
-    @pytest.mark.parametrize("product_type", ('crude',
-                                              'refined',
-                                              'bitumen product',
-                                              'Refined',
-                                              'Bitumen Product',
-                                              'other'))
-    def test_validation(self, product_type):
-        pt = ProductType(product_type)
+# # Fixme: why is this in this test file ???
+# class TestProductType:
+#     @pytest.mark.parametrize("product_type", ('crude',
+#                                               'refined',
+#                                               'bitumen product',
+#                                               'Refined',
+#                                               'Bitumen Product',
+#                                               'other'))
+#     def test_validation(self, product_type):
+#         pt = ProductType(product_type)
 
-        assert pt.validate() == []
+#         assert pt.validate() == []
 
-    @pytest.mark.parametrize("product_type", ('crud',
-                                              'rfined',
-                                              'bitumen',
-                                              'Reefined',
-                                              'Biitumen Product',
-                                              'random'))
-    def test_validation_invalid(self, product_type):
-        pt = ProductType(product_type)
+#     @pytest.mark.parametrize("product_type", ('crud',
+#                                               'rfined',
+#                                               'bitumen',
+#                                               'Reefined',
+#                                               'Biitumen Product',
+#                                               'random'))
+#     def test_validation_invalid(self, product_type):
+#         pt = ProductType(product_type)
 
-        result = pt.validate()
-        assert len(result) == 1
-        assert result[0].startswith("W003:")
+#         result = pt.validate()
+#         assert len(result) == 1
+#         assert result[0].startswith("W003:")
 
 
 def test_str():
@@ -446,6 +448,41 @@ class TestVolumeFraction:
         model.convert_to('%')
 
         assert model.value == 0.1
+        assert model.unit == '%'
+
+    def test_convert_to_invalid(self):
+        model = VolumeFraction(value=1.0, unit='mL/L')
+        with pytest.raises(uc.InvalidUnitError):
+            model.convert_to('g/kg')
+
+        assert model.value == 1.0
+        assert model.unit == 'mL/L'
+
+class TestConcentration:
+    '''
+    Unit used for unknown whether it's volume of mass or ??
+    '''
+    def test_init_empty(self):
+        model = Concentration()
+
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'concentration'}
+
+    def test_convert_to(self):
+        model = Concentration(value=1.0, unit='fraction')
+        model.convert_to('%')
+
+        assert model.value == 100.0
+        assert model.unit == '%'
+
+    def test_convert_to_invalid(self):
+        model = Concentration(value=50, unit='%')
+        with pytest.raises(uc.InvalidUnitError):
+            model.convert_to('g/kg')
+
+        assert model.value == 50
         assert model.unit == '%'
 
 

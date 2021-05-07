@@ -7,6 +7,8 @@ from ..common.utilities import dataclass_to_json, JSON_List
 from ..common.measurement import (Time,
                                   Temperature,
                                   MassFraction,
+                                  VolumeFraction,
+                                  Concentration,
                                   Unitless,
                                   Dimensionless,
                                   Density,
@@ -24,7 +26,7 @@ from .validation.errors import ERRORS
 @dataclass_to_json
 @dataclass
 class DistCut:
-    fraction: MassFraction
+    fraction: Concentration
     vapor_temp: Temperature
 
 
