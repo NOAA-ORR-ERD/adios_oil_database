@@ -3,7 +3,7 @@ import { convertUnit } from 'adios-db/helpers/convert-unit';
 
 
 export default class Distillation extends LineChart {
-    xLabel = 'Mass Fraction (%)';
+    xLabel = 'Fraction (%)';
     yLabel = 'Vapor Temperature (\u00B0C)';
     xScaleMinRange = [0, 100];
     yScaleMinRange = [0];
