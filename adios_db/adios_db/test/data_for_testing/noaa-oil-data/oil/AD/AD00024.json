@@ -123,7 +123,7 @@
                         "fraction": {
                             "value": 0.1,
                             "unit": "fraction",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 119.85000000000002,
@@ -135,7 +135,7 @@
                         "fraction": {
                             "value": 0.25,
                             "unit": "fraction",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 186.85000000000002,
@@ -147,7 +147,7 @@
                         "fraction": {
                             "value": 0.4,
                             "unit": "fraction",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 253.85000000000002,
