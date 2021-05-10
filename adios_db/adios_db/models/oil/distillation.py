@@ -40,7 +40,7 @@ class Distillation:
     type: str = None
     method: str = None
     end_point: Temperature = None
-    fraction_recovered: MassFraction = None
+    fraction_recovered: Concentration = None
     cuts: DistCutList = field(default_factory=DistCutList)
 
     def validate(self):
