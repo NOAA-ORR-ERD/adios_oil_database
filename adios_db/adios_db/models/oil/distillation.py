@@ -49,12 +49,26 @@ class Distillation:
             msgs.extend(EnumValidator({"mass fraction", "volume fraction"},
                                       ERRORS["E032"],
                                       case_insensitive=True)(self.type))
-        if self.fraction_recovered is not None:
-            frac_recov = self.fraction_recovered.converted_to("fraction").value
-            if not (0.0 <= frac_recov <= 1.0):
-                msgs.append(ERRORS["E041"]
-                            .format("distillation fraction recovered",
-                                    frac_recov))
+        if self.fraction_recovered is None:
+            msgs.append(WARNINGS["W009"])
+        else:
+            print(f"{self.fraction_recovered=}")
+            print(f"{self.fraction_recovered.converted_to('fraction')}")
+            frac_recov = self.fraction_recovered.converted_to("fraction")
+            if frac_recov.value is not None:
+                val = frac_recov.value
+            elif frac_recov.max_value is not None:
+                val = frac_recov.max_value
+
+            else:
+                val = None
+                msgs.append(WARNINGS["W009"])
+            if val is not None:
+                if not (0.0 <= val <= 1.0):
+                    msgs.append(ERRORS["E041"]
+                                .format("distillation fraction recovered",
+                                        val))
+
 
         for cut in self.cuts:
             frac = cut.fraction.converted_to('fraction').value
