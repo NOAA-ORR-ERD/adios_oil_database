@@ -52,8 +52,6 @@ class Distillation:
         if self.fraction_recovered is None:
             msgs.append(WARNINGS["W009"])
         else:
-            print(f"{self.fraction_recovered=}")
-            print(f"{self.fraction_recovered.converted_to('fraction')}")
             frac_recov = self.fraction_recovered.converted_to("fraction")
             if frac_recov.value is not None:
                 val = frac_recov.value
@@ -68,7 +66,6 @@ class Distillation:
                     msgs.append(ERRORS["E041"]
                                 .format("distillation fraction recovered",
                                         val))
-
 
         for cut in self.cuts:
             frac = cut.fraction.converted_to('fraction').value

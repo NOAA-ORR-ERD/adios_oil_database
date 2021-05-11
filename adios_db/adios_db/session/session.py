@@ -7,20 +7,20 @@ from ..models.oil.product_type import types_to_labels
 
 
 class CursorWrapper():
-    """
-    wraps a mongodb cursor to provide an iterator that we can do some filtering on,
-    while not losing all its methods
+    '''
+        Wraps a mongodb cursor to provide an iterator that we can do some
+        filtering on, while not losing all its methods
 
-    At this point, all it's doing is removing the _id key
+        At this point, all it's doing is removing the _id key
 
-    Seems like a lot of effort for that, but the alternative is to realize the entire
-    thing into a list -- which may be a bad idea.
+        Seems like a lot of effort for that, but the alternative is to realize
+        the entire thing into a list -- which may be a bad idea.
 
-    Rant: why doesn't a mongo cursor have a __len__ rather than using .count()?
-          to make it more like a regular Sequence?
+        Rant: why doesn't a mongo cursor have a __len__ rather than using
+              .count() to make it more like a regular Sequence?
 
-          oh, and now count() is deprecated as well!
-    """
+              oh, and now count() is deprecated as well!
+    '''
     def __init__(self, cursor):
         self.cursor = cursor
 
@@ -38,6 +38,7 @@ class CursorWrapper():
 
     def __getitem__(self, idx):
         return self.cursor[idx]
+
     # def count(self, *args, **kwargs):
     #     return self.cursor.count(*args, **kwargs)
 
@@ -77,6 +78,7 @@ class Session():
 
     def query(self, oil_id=None,
               text=None, api=None, labels=None, product_type=None,
+              gnome_suitable=None,
               sort=None, sort_case_sensitive=False, page=None,
               projection=None,
               **kwargs):
@@ -109,6 +111,11 @@ class Session():
             labels:
                 A list of label strings that will be matched against the
                 oil labels to filter the results.
+
+            gnome_suitable:
+                A Flag (True|False) that will be matched against the oil's
+                gnome_suitable boolean field to filter the results.  A None
+                value means do not filter.
 
         **sort options:** A list of options consisting of ('field_name',
                                                            'direction')
@@ -144,7 +151,8 @@ class Session():
 
         '''
         filter_opts = self.filter_options(oil_id, text, api, labels,
-                                          product_type)
+                                          product_type, gnome_suitable)
+
         sort = self.sort_options(sort)
 
         if projection is not None:
@@ -162,13 +170,15 @@ class Session():
 
         return CursorWrapper(ret[start:stop])
 
-    def filter_options(self, oil_id, text, api, labels, product_type):
+    def filter_options(self, oil_id, text, api, labels, product_type,
+                       gnome_suitable):
         filter_opts = {}
         filter_opts.update(self.id_arg(oil_id))
         filter_opts.update(self.text_arg(text))
         filter_opts.update(self.api_arg(api))
         filter_opts.update(self.product_type_arg(product_type))
         filter_opts.update(self.labels_arg(labels))
+        filter_opts.update(self.gnome_suitable_arg(gnome_suitable))
 
         return filter_opts
 
@@ -255,6 +265,18 @@ class Session():
                                         for l in labels])
         else:
             return {}
+
+    def gnome_suitable_arg(self, gnome_suitable):
+        if gnome_suitable is None:
+            return {}
+        else:
+            try:
+                gnome_suitable = gnome_suitable.lower() in ('true', '1')
+            except AttributeError:
+                gnome_suitable = bool(gnome_suitable)
+
+            return {'metadata.gnome_suitable': {'$exists': True,
+                                                '$eq': gnome_suitable}}
 
     def parse_interval_arg(self, interval):
         '''

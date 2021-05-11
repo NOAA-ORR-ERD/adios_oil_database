@@ -122,7 +122,8 @@ def get_search_params(request):
     xform_opts = {'q': 'text',
                   'qApi': 'api',
                   'qType': 'product_type',
-                  'qLabels': 'labels'
+                  'qLabels': 'labels',
+                  'qGnomeSuitable': 'gnome_suitable'
                   }
 
     for k, v in request.GET.items():
@@ -351,6 +352,7 @@ def get_oil_searchable_fields(oil):
                         'labels': meta.get('labels', []),
                         'model_completeness': meta.get('model_completeness',
                                                        None),
+                        'gnome_suitable': meta.get('gnome_suitable', None),
                     },
                     'status': oil.get('status', []),
                 },
