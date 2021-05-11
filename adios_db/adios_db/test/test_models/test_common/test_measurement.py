@@ -377,6 +377,43 @@ class TestTemperature:
 
         assert "W010:" in msgs[0]
 
+    @pytest.mark.parametrize("temp_obj, result", [(Temperature(value=273, unit='K'), 0.0),
+                                                  (Temperature(value=15.15, unit='C'), 15.0),
+                                                  (Temperature(value=14.85, unit='C'), 15.0),
+                                                  (Temperature(value=-0.15, unit='C'), 0.0),
+                                                  (Temperature(value=-0.85, unit='C'), -1.0),
+                                                  ])
+    def test_fix_C_K(self, temp_obj, result):
+        """
+        check if we can auto-fix the C-K conversion
+        """
+        temp_obj.fix_C_K()
+        assert temp_obj.unit == 'C'
+        assert temp_obj.value == result
+
+    @pytest.mark.parametrize("t, unit, result", [(273, 'K', 0.0),
+                                                 (15.15, 'C', 15.0),
+                                                 (14.85, 'C', 15.0),
+                                                 (-0.15, 'C', 0.0),
+                                                 (-0.85, 'C', -1.0),
+                                                 ])
+    def test_patch_fix_C_K(self, monkeypatch, t, unit, result):
+
+        temp_obj = Temperature(value=t, unit=unit)
+
+        assert temp_obj.value == t
+
+        print(f"{Temperature.fixCK=}")
+
+        # turn on fix
+        monkeypatch.setattr(Temperature, "fixCK", True)
+
+        print(f"{Temperature.fixCK=}")
+
+        temp_obj = Temperature(value = t, unit=unit)
+
+        assert temp_obj.unit == 'C'
+        assert temp_obj.value == result
 
 
 

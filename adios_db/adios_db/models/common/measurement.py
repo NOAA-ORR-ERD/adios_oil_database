@@ -91,11 +91,18 @@ class MeasurementDataclass:
     standard_deviation: float = None
     replicates: int = None
 
-    # def __post_init__(self):
-    #     if all((attr is None)
-    #            for attr in (self.value, self.min_value, self.max_value)):
-    #         raise TypeError(f'{self.__class__.__name__}(): '
-    #                          'expected at least one value')
+    def __post_init__(self):
+        """
+        this here so that it can get overidden in subclasses
+
+        it appears dataclasses don't add it to __init__ unless it's here
+        """
+        pass
+    #     print("MeasurementDataclass __post_init__ called")
+        # if all((attr is None)
+        #        for attr in (self.value, self.min_value, self.max_value)):
+        #     raise TypeError(f'{self.__class__.__name__}(): '
+        #                      'expected at least one value')
 
     #     # if self.unit is None:
     #     #     raise TypeError:(f'{self.__class__.__name__}(): '
@@ -182,6 +189,12 @@ class MeasurementBase(MeasurementDataclass):
 
 class Temperature(MeasurementBase):
     unit_type = "temperature"
+    fixCK = False  # you can monkey-patch this to turn it on.
+
+    def __post_init__(self):
+        print("Temperature __post_init__ called")
+        if self.fixCK:
+            self.fix_C_K()
 
     def convert_to(self, new_unit):
         # need to do the "right thing" with standard deviation
@@ -210,6 +223,36 @@ class Temperature(MeasurementBase):
                     msgs.append(WARNINGS['W010'].format(f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
                                                         f"{round(val_in_C):.2f} C"))
         return msgs
+
+    def fix_C_K(self):
+        """
+        This is a bit of a kludge:
+
+        The correct conversion from C to K is 273.16
+
+        But a lot of data sources (notably the ADIOS2 database)
+        use 273.0.
+
+        So we end up with temps like: -0.15 C instead of 0.0 C
+        This function will "correct" that.
+
+        Note: it also converts to C
+        """
+        changed = False
+        self.convert_to("C")
+        new_vals = {}
+        for attr in ("value", "min_value", "max_value"):
+            val = getattr(self, attr)
+            if val is not None:
+                decimal = val % 1
+                if isclose(decimal, 0.15) or isclose(decimal, 0.85):
+                    new_vals[attr] = round(val)
+                    changed = True
+                else:
+                    new_vals[attr] = round(val)
+        if changed:
+            self.__dict__.update(new_vals)
+        return None
 
 
 class Unitless(MeasurementBase):
