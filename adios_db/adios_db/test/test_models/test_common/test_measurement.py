@@ -391,6 +391,32 @@ class TestTemperature:
         assert temp_obj.unit == 'C'
         assert temp_obj.value == result
 
+
+#                  "name": "Butane and Lighter IBP - 60F",
+# -                    "unit": "F",
+# -                    "min_value": 151.46,
+# -                    "max_value": 60.0,
+# +                    "unit": "C",
+# +                    "min_value": 66.36666666666667,
+# +                    "max_value": 15.555555555555543,
+#                      "unit_type": "temperature"
+#                  }
+#              },
+    @pytest.mark.parametrize("temp_obj", [(Temperature(value=273, unit='F')),
+                                          (Temperature(min_value=15.15, max_value=60.0, unit='F')),
+                                          (Temperature(value=60.15, unit='F')),
+                                          (Temperature(value=0.16, unit='C')),
+                                          (Temperature(value=-0.86, unit='C')),
+                                          ])
+    def test_fix_C_K_no_change(self, temp_obj):
+        """
+        if temps are not in C or K, there should be no change.
+        """
+        t1 = temp_obj.copy()
+        temp_obj.fix_C_K()
+        assert temp_obj == t1
+
+
     @pytest.mark.parametrize("t, unit, result", [(273, 'K', 0.0),
                                                  (15.15, 'C', 15.0),
                                                  (14.85, 'C', 15.0),

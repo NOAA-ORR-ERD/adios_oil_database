@@ -98,7 +98,6 @@ class MeasurementDataclass:
         it appears dataclasses don't add it to __init__ unless it's here
         """
         pass
-    #     print("MeasurementDataclass __post_init__ called")
         # if all((attr is None)
         #        for attr in (self.value, self.min_value, self.max_value)):
         #     raise TypeError(f'{self.__class__.__name__}(): '
@@ -192,7 +191,6 @@ class Temperature(MeasurementBase):
     fixCK = False  # you can monkey-patch this to turn it on.
 
     def __post_init__(self):
-        print("Temperature __post_init__ called")
         if self.fixCK:
             self.fix_C_K()
 
@@ -213,7 +211,10 @@ class Temperature(MeasurementBase):
 
     def validate(self):
         msgs = []
-        if self is None: # how can this happen?!?!
+        if self is None:  # how can this happen?!?!
+            return msgs
+        # only do this for C or K
+        if self.unit.upper() not in {'C', 'K'}:
             return msgs
         for val in (self.value, self.min_value, self.max_value):
             if val is not None:
@@ -238,21 +239,22 @@ class Temperature(MeasurementBase):
 
         Note: it also converts to C
         """
-        changed = False
-        self.convert_to("C")
-        new_vals = {}
+        # only do this if there's a validation issue
+        for msg in self.validate():
+            if 'W010:' in msg:
+                break
+        else:  # no issue found
+            return
+
+        # convert to C
+        self.convert_to('C')
         for attr in ("value", "min_value", "max_value"):
             val = getattr(self, attr)
             if val is not None:
                 decimal = val % 1
                 if isclose(decimal, 0.15) or isclose(decimal, 0.85):
-                    new_vals[attr] = round(val)
-                    changed = True
-                else:
-                    new_vals[attr] = round(val)
-        if changed:
-            self.__dict__.update(new_vals)
-        return None
+                    setattr(self, attr, round(val))
+        return
 
 
 class Unitless(MeasurementBase):

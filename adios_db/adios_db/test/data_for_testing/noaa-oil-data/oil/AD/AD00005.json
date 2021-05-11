@@ -31,8 +31,8 @@
             "physical_properties": {
                 "flash_point": {
                     "measurement": {
-                        "value": 380.0,
-                        "unit": "K",
+                        "value": 107,
+                        "unit": "C",
                         "unit_type": "temperature"
                     }
                 },
@@ -44,8 +44,8 @@
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 293.0,
-                            "unit": "K",
+                            "value": 20,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -58,8 +58,8 @@
                             "unit_type": "dynamicviscosity"
                         },
                         "ref_temp": {
-                            "value": 293.0,
-                            "unit": "K",
+                            "value": 20,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -72,8 +72,8 @@
                             "unit_type": "interfacialtension"
                         },
                         "ref_temp": {
-                            "value": 293.0,
-                            "unit": "K",
+                            "value": 20,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }

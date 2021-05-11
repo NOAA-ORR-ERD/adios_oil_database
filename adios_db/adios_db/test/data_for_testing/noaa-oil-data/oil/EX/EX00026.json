@@ -1619,7 +1619,7 @@
             "distillation_data": {
                 "type": "volume fraction",
                 "end_point": {
-                    "value": 342.85,
+                    "value": 343,
                     "unit": "C",
                     "unit_type": "temperature"
                 },

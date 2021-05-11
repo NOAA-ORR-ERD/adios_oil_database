@@ -33,8 +33,8 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": 275.0,
-                        "unit": "K",
+                        "value": 2,
+                        "unit": "C",
                         "unit_type": "temperature"
                     }
                 },
@@ -53,8 +53,8 @@
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 273.0,
-                            "unit": "K",
+                            "value": 0,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -65,8 +65,8 @@
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 288.0,
-                            "unit": "K",
+                            "value": 15,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -79,8 +79,8 @@
                             "unit_type": "kinematicviscosity"
                         },
                         "ref_temp": {
-                            "value": 273.0,
-                            "unit": "K",
+                            "value": 0,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -91,8 +91,8 @@
                             "unit_type": "kinematicviscosity"
                         },
                         "ref_temp": {
-                            "value": 288.0,
-                            "unit": "K",
+                            "value": 15,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -105,8 +105,8 @@
                             "unit_type": "dynamicviscosity"
                         },
                         "ref_temp": {
-                            "value": 273.0,
-                            "unit": "K",
+                            "value": 0,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -117,8 +117,8 @@
                             "unit_type": "dynamicviscosity"
                         },
                         "ref_temp": {
-                            "value": 288.0,
-                            "unit": "K",
+                            "value": 15,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -131,8 +131,8 @@
                             "unit_type": "interfacialtension"
                         },
                         "ref_temp": {
-                            "value": 288.0,
-                            "unit": "K",
+                            "value": 15,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -145,8 +145,8 @@
                             "unit_type": "interfacialtension"
                         },
                         "ref_temp": {
-                            "value": 288.0,
-                            "unit": "K",
+                            "value": 15,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -184,7 +184,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 223.85000000000002,
+                            "value": 224,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -196,7 +196,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 258.85,
+                            "value": 259,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -208,7 +208,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 312.85,
+                            "value": 313,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -220,7 +220,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 358.85,
+                            "value": 359,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -232,7 +232,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 402.85,
+                            "value": 403,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -244,7 +244,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 441.85,
+                            "value": 442,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -256,7 +256,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 488.85,
+                            "value": 489,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -268,7 +268,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 542.85,
+                            "value": 543,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -280,7 +280,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 607.85,
+                            "value": 608,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -292,7 +292,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 690.85,
+                            "value": 691,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -304,7 +304,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 736.85,
+                            "value": 737,
                             "unit": "C",
                             "unit_type": "temperature"
                         }

@@ -33,8 +33,8 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": 255.0,
-                        "unit": "K",
+                        "value": -18,
+                        "unit": "C",
                         "unit_type": "temperature"
                     }
                 },
@@ -61,8 +61,8 @@
                             "unit_type": "kinematicviscosity"
                         },
                         "ref_temp": {
-                            "value": 294.0,
-                            "unit": "K",
+                            "value": 21,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -73,8 +73,8 @@
                             "unit_type": "kinematicviscosity"
                         },
                         "ref_temp": {
-                            "value": 311.0,
-                            "unit": "K",
+                            "value": 38,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -90,7 +90,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 176.85000000000002,
+                            "value": 177,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -102,7 +102,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 190.85000000000002,
+                            "value": 191,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -114,7 +114,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 204.85000000000002,
+                            "value": 205,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -126,7 +126,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 217.85000000000002,
+                            "value": 218,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -138,7 +138,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 231.85000000000002,
+                            "value": 232,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -150,7 +150,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 245.85000000000002,
+                            "value": 246,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -162,7 +162,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 259.85,
+                            "value": 260,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -174,7 +174,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 273.85,
+                            "value": 274,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
