@@ -362,6 +362,23 @@ class TestTemperature:
         assert new.value == 0.0
         assert new.unit == 'C'
 
+    @pytest.mark.parametrize("model", [Temperature(value=273, unit='K'),
+                                       Temperature(value=15.15, unit='C'),
+                                       Temperature(value=14.85, unit='C'),
+                                       Temperature(value=-0.15, unit='C'),
+                                       Temperature(value=-0.85, unit='C'),
+                                  ])
+    def test_validate_C_K_conversion_15(self, model):
+        #model = Temperature(value=273, unit='K')
+
+        msgs = model.validate()
+
+        print(msgs)
+
+        assert "W010:" in msgs[0]
+
+
+
 
 class TestLength:
     '''

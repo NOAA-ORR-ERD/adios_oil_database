@@ -1,17 +1,19 @@
 '''
-    Generic Measurement Types
+Generic Measurement Types
 
-    These are structures that handle an individual measurment:
+These are structures that handle an individual measurment:
 
-    They have a value, a unit type and a unit.
+They have a value, a unit type and a unit.
 
-    They can be converted to other units if need be.
+They can be converted to other units if need be.
 
-    They can accommodate a single value, or a range of values
+They can accommodate a single value, or a range of values
 
-    They can also accommodate a standard deviation and number of replicates.
+They can also accommodate a standard deviation and number of replicates.
 '''
+
 from dataclasses import dataclass, asdict
+from math import isclose
 
 from unit_conversion import convert
 
@@ -195,6 +197,19 @@ class Temperature(MeasurementBase):
             self.standard_deviation = new_std
 
         return self
+
+    def validate(self):
+        msgs = []
+        if self is None: # how can this happen?!?!
+            return msgs
+        for val in (self.value, self.min_value, self.max_value):
+            if val is not None:
+                val_in_C = convert(self.unit, "C", val)
+                decimal = val_in_C % 1
+                if isclose(decimal, 0.15) or isclose(decimal, 0.85):
+                    msgs.append(WARNINGS['W010'].format(f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
+                                                        f"{round(val_in_C):.2f} C"))
+        return msgs
 
 
 class Unitless(MeasurementBase):
