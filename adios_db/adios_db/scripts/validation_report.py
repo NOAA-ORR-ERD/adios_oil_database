@@ -8,6 +8,7 @@ import sys
 import datetime
 import json
 from pathlib import Path
+from operator import itemgetter
 
 from adios_db.scripting import get_all_records
 
@@ -61,9 +62,9 @@ def main():
                     outfile1.write(f" |    {msg}\n")
             if save:
                 with open(pth, 'w', encoding='utf-8') as datafile:
-                        json.dump(oil.py_json(), datafile, indent=4)
+                    json.dump(oil.py_json(), datafile, indent=4)
         # write out the report by Error Code:
-        for code, errors in validation.items():
+        for code, errors in sorted(validation.items(), key=itemgetter(0)):
 
             outfile2.write(f"\n\n{code}:\n=====\n")
             outfile2.writelines(errors)
