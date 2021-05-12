@@ -71,32 +71,32 @@ def add_them(data):
             continue
         print(f"{fraction_recovered=}")
 
-        dist_data = oil.sub_samples[0].distillation_data
-        print(dist_data.fraction_recovered)
-
-
-        if fraction_recovered == 'None':
-            dist_data.fraction_recovered = None
-            num_none += 1
-        elif fraction_recovered == "<1":
-            dist_data.fraction_recovered = Concentration(max_value=1.0, unit="fraction")
-            num_less_than_one += 1
-        else:
-            try:
-                val = float(fraction_recovered)
-                dist_data.fraction_recovered = Concentration(value=val, unit="fraction")
-                if val == 1.0:
-                    num_one += 1
-                else:
-                    num_fraction += 1
-
-            except ValueError:
-                raise
-
-        if dist_data.fraction_recovered is not None:
-            print("********************")
-            print("after adding, frac_recovered:")
+        for ss in oil.sub_samples:
+            dist_data = ss.distillation_data
             print(dist_data.fraction_recovered)
+
+            if fraction_recovered == 'None':
+                dist_data.fraction_recovered = None
+                num_none += 1
+            elif fraction_recovered == "<1":
+                dist_data.fraction_recovered = Concentration(max_value=1.0, unit="fraction")
+                num_less_than_one += 1
+            else:
+                try:
+                    val = float(fraction_recovered)
+                    dist_data.fraction_recovered = Concentration(value=val, unit="fraction")
+                    if val == 1.0:
+                        num_one += 1
+                    else:
+                        num_fraction += 1
+
+                except ValueError:
+                    raise
+
+            if dist_data.fraction_recovered is not None:
+                print("********************")
+                print("after adding, frac_recovered:")
+                print(dist_data.fraction_recovered)
 
         if not dry_run:
             print("Saving out:", pth)
