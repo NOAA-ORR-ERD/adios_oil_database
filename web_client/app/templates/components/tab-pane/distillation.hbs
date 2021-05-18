@@ -17,7 +17,6 @@
         <select class="p-1 mt-1 overflow-hidden bg-transparent border"
             onchange={{action "updateDistillationType"}}
         >
-          {{log this.distillationType}}
           {{#if (includes this.distillationType @distillationTypes)}}
           {{else}}
             <option class="bg-light" selected>{{this.distillationType}}</option>

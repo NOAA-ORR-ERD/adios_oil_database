@@ -18,6 +18,7 @@ Router.map(function() {
     this.route('disclaimer');
     this.route('privacy');
     this.route('capabilities');
+    this.route('qa-status');
 });
 
 export default Router;
