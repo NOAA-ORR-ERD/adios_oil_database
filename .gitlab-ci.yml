@@ -111,6 +111,8 @@ build_client:
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_client/dockerfile_prod -t $IMAGE_TAG_PROD
+
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_PROD
 
 scan-api:
