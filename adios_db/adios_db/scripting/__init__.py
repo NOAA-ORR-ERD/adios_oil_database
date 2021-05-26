@@ -17,6 +17,7 @@ from adios_db.models.oil.location_coordinates import LocationCoordinates
 # this brings in all the measurement types
 from adios_db.models.common.measurement import *
 
+TEST_DATA_DIR = Path(__file__).parent.parent / "test" / "data_for_testing" / "noaa-oil-data"
 
 def get_all_records(data_dir):
     """

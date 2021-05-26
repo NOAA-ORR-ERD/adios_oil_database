@@ -4,13 +4,16 @@ Code for making a "GnomeOil" from an Oil Object
 NOTE: This make s JSON compatible Python structure from. which to build a GnomeOil
 
 """
+import copy
 
 import numpy as np
+
 from adios_db.models.oil.validation.warnings import WARNINGS
 from adios_db.models.oil.validation.errors import ERRORS
+
 from adios_db.computation import estimations as est
 from .physical_properties import get_density_data, get_kinematic_viscosity_data, get_distillation_cuts
-from .physical_properties import bullwinkle_fraction, max_water_fraction_emulsion 
+from .physical_properties import bullwinkle_fraction, max_water_fraction_emulsion
 from .physical_properties import Density, KinematicViscosity
 from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_from_api
 
@@ -75,6 +78,8 @@ def make_gnome_oil(oil):
 
     # metadata:
     go = get_empty_dict()
+    # make sure we don't mess up the original oil object
+    oil = copy.deepcopy(oil)
     go['name'] = oil.metadata.name
 
     dens = Density(oil)
@@ -139,7 +144,7 @@ def make_gnome_oil(oil):
     go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
     go['solubility'] = 0
     go['k0y'] = 2.024e-06 #do we want this included?
-    
+
     # pseudocomponents
     cut_temps, frac_evap = normalized_cut_values(oil)
 
@@ -175,7 +180,7 @@ def estimate_pour_point(oil):
         #pour_point = pour_point_from_kvis(lowest_kvis[0], lowest_kvis[1])
         pour_point = (c_v1 * lowest_kvis[1]) / (c_v1 - lowest_kvis[1] * np.log(lowest_kvis[0]))
 
-    return pour_point 
+    return pour_point
 
 
 def estimate_flash_point(oil):
@@ -345,7 +350,7 @@ def normalized_cut_values(oil, N=10):
 
     return T_i, est.fmasses_from_cuts(fevap_i)
 
-#need to replace this
+# need to replace this
 def component_mass_fractions(oil):
     """
     estimate pseudocomponent mass fractions

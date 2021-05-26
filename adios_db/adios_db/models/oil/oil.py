@@ -108,7 +108,8 @@ class Oil:
         # see if it can be used as a GNOME oil
         # NOTE: this is an odd one, as it puts the information in a different place
         try:
-            make_gnome_oil(self)
+            # make a copy, as make_gnome_oil might change it in place.
+            make_gnome_oil(copy.deepcopy(self))
             self.metadata.gnome_suitable = True
         # if any other kind of Error -- it will raise.
         except Exception: # if it barfs for any reason it's not suitable
@@ -122,7 +123,7 @@ class Oil:
             msgs.append(ERRORS["E001"].format(self.oil_id))
         # always add these:
         msgs.extend("W000: " + m for m in self.permanent_warnings)
-        return msgs
+        return list(set(msgs))
 
     def reset_validation(self):
         """
