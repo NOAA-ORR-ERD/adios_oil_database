@@ -47,7 +47,8 @@ def main():
             of.write("####################################\n\n")
             of.write("Validation of data in: \n\n")
             of.write(f"``{base_dir.absolute()}``\n\n")
-            of.write(f"**Generated:** {datetime.datetime.now()}\n\n")
+            of.write("**Generated:** "
+                     f"{datetime.datetime.now().strftime('%h %d, %Y -- %H00')}\n\n")
         for oil, pth in get_all_records(base_dir):
             print("\n\n******************\n")
             print(f"processing: {oil.oil_id}: {oil.metadata.name}")
