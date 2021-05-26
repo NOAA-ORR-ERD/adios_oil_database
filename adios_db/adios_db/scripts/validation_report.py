@@ -39,8 +39,8 @@ def main():
 
     validation = {}
 
-    with (open("validation_by_record.txt", 'w', encoding="utf-8") as outfile1,
-          open("validation_by_error.txt", 'w', encoding="utf-8") as outfile2):
+    with (open("validation_by_record.rst", 'w', encoding="utf-8") as outfile1,
+          open("validation_by_error.rst", 'w', encoding="utf-8") as outfile2):
         for of in (outfile1, outfile2):
             of.write("\n####################################\n")
             of.write("ADIOS Oil Database Validation Report\n")
