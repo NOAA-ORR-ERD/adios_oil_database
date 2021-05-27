@@ -32,7 +32,7 @@ export default class NewOilQuery extends Component {
 
     columns = [{
         label: 'Status',
-        valuePath: 'status',
+        valuePath: 'filteredStatus',
         cellComponent: 'table/cell/status',
         width: '5em',
         minResizeWidth: 80,
@@ -186,8 +186,15 @@ export default class NewOilQuery extends Component {
             let records = yield this.store.query('oil', this.queryOptions);
 
             this.meta = records.meta;
-            this.data.pushObjects(records.toArray());
-            yield this.table.pushRows(records.toArray());
+
+            let recArray = records.toArray().map(i => {
+                i.filteredStatus = i.status.filter(s => {
+                    return !(this.args.warningIgnoreList||[]).includes(s.substring(0, 4));
+                }, this);
+                return i;
+            }, this);
+            this.data.pushObjects(recArray);
+            yield this.table.pushRows(recArray);
 
             this.page++;
             this.canLoadMore = !isEmpty(records);
