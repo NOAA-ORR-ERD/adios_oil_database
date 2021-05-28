@@ -1,12 +1,17 @@
 """
 Code for making a "GnomeOil" from an Oil Object
 
-NOTE: This make s JSON compatible Python structure from. which to build a GnomeOil
+See the PyGNOME code for more about GNOME's requirements
 
+NOTE: This make s JSON compatible Python structure from which to build
+a GnomeOil
 """
+
 import copy
 
 import numpy as np
+
+import unit_conversion as uc
 
 from adios_db.models.oil.validation.warnings import WARNINGS
 from adios_db.models.oil.validation.errors import ERRORS
@@ -19,6 +24,10 @@ from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_
 
 
 def get_empty_dict():
+    """
+    This provides an empty dictionary with everything that is needed
+    to generate a GNOME Oil
+    """
     return{"name": "",
            # Physical properties
            "api": None,
@@ -43,6 +52,7 @@ def get_empty_dict():
            "flash_point": None,
            "adios_oil_id": None,
            }
+
 
 def make_gnome_oil(oil):
     """
@@ -75,16 +85,15 @@ def make_gnome_oil(oil):
               "adios_oil_id=None,
 
     """
-
     # metadata:
     go = get_empty_dict()
-    # make sure we don't mess up the original oil object
+    # make sure we don't change the original oil object
     oil = copy.deepcopy(oil)
     go['name'] = oil.metadata.name
 
     dens = Density(oil)
-    ref_density = dens.at_temp(288.15)
-    go['api'] = est.api_from_density(ref_density)
+    ref_density = dens.at_temp(288.7)  # 60F in K
+    go['api'] = uc.convert('kg/m^3', 'API', ref_density)
     # for gnome_oil we don't treat api as data, only api from density
     oil.metadata.API = go['api']
     go['adios_oil_id'] = oil.oil_id
@@ -93,24 +102,27 @@ def make_gnome_oil(oil):
     phys_props = oil.sub_samples[0].physical_properties
 
     flash_point = phys_props.flash_point
-    if flash_point is None:
-        go['flash_point'] = estimate_flash_point(oil)
-    else:
-        if phys_props.flash_point.measurement.max_value is not None:
-            go['flash_point'] = phys_props.flash_point.measurement.converted_to('K').max_value
+    if flash_point is not None:
+        fp = phys_props.flash_point.measurement.converted_to('K')
+        if fp.max_value is not None:
+            go['flash_point'] = fp.max_value
         else:
-            go['flash_point'] = phys_props.flash_point.measurement.converted_to('K').value
+            go['flash_point'] = fp.value
+    # we really shouldn't do this!
+    # else:
+    #     go['flash_point'] = estimate_flash_point(oil)
 
     pour_point = phys_props.pour_point
     if pour_point is None:
         go['pour_point'] = estimate_pour_point(oil)
     else:
-        if phys_props.pour_point.measurement.max_value is not None:
-            go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').max_value
-        elif phys_props.pour_point.measurement.min_value is not None:
-            go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').min_value
-        else:
-            go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').value
+        pp = phys_props.pour_point.measurement.converted_to('K')
+        if pp.max_value is not None:
+            go['pour_point'] = pp.max_value
+        elif pp.value is not None:
+            go['pour_point'] = pp.value
+        else pp.min_value is not None:
+            go['pour_point'] = pp.min_value
 
     # fixme: We need to get the weathered densities, if they are there.
     densities = get_density_data(oil, units="kg/m^3", temp_units="K")
@@ -193,6 +205,9 @@ def estimate_flash_point(oil):
 
     cuts = get_distillation_cuts(oil)
 
+    # fixme: if we do need this, we should have a better way to get
+    #        boiling point -- the first cut is not necessarily the BP!
+    #        the IBP is stored in the distillation record, if it is known.
     if len(cuts) > 2:
         lowest_cut = cuts[0]
         flash_point = flash_point_from_bp(lowest_cut[1])
