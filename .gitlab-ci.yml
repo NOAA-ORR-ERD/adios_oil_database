@@ -265,6 +265,11 @@ deploy_oauth_api_stage:
     name: stage
     url: https://adios-stage.orr.noaa.gov
     on_stop: stop_oauth_api_stage
+  variables:
+    IMAGE_TAG: registry.orr.noaa.gov/it/oauth2-proxy:master
+    CONTAINER_NAME: auth_web_api
+    APP_NETWORK: adios_net
+    PORT_MAPPING: 8004:4180
     OAUTH2_PROXY_PROVIDER: keycloak
     OAUTH2_PROXY_CLIENT_ID: adios-database
     OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
@@ -274,13 +279,8 @@ deploy_oauth_api_stage:
     OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:8004/
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
-    OAUTH2_PROXY_EMAIL_DOMAINS: *
+    OAUTH2_PROXY_EMAIL_DOMAINS: \*
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
-  variables:
-    IMAGE_TAG: registry.orr.noaa.gov/it/oauth2-proxy:master
-    CONTAINER_NAME: auth_web_api
-    APP_NETWORK: adios_net
-    PORT_MAPPING: 8004:4180
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -358,6 +358,11 @@ deploy_oauth_client_stage:
     name: stage
     url: https://adios-stage.orr.noaa.gov
     on_stop: stop_oauth_client_stage
+  variables:
+    IMAGE_TAG: registry.orr.noaa.gov/it/oauth2-proxy:master
+    CONTAINER_NAME: auth_web_client
+    APP_NETWORK: adios_net
+    PORT_MAPPING: 8003:4180
     OAUTH2_PROXY_PROVIDER: keycloak
     OAUTH2_PROXY_CLIENT_ID: adios-database
     OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
@@ -367,13 +372,8 @@ deploy_oauth_client_stage:
     OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:8003/
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
-    OAUTH2_PROXY_EMAIL_DOMAINS: *
+    OAUTH2_PROXY_EMAIL_DOMAINS: \*
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
-  variables:
-    IMAGE_TAG: registry.orr.noaa.gov/it/oauth2-proxy:master
-    CONTAINER_NAME: auth_web_client
-    APP_NETWORK: adios_net
-    PORT_MAPPING: 8003:4180
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
