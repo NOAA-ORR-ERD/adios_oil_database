@@ -227,7 +227,7 @@ deploy_api_stage:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api-dbg
     CONTAINER_NAME: adios_db_web_api
     APP_NETWORK: adios_net
-    PORT_MAPPING: 8004:9898
+    PORT_MAPPING: 8084:9898
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -276,7 +276,7 @@ deploy_oauth_api_stage:
     OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
     OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
     OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
-    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:8004/
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:8084/
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
     OAUTH2_PROXY_EMAIL_DOMAINS: \*
