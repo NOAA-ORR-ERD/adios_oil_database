@@ -259,6 +259,58 @@ stop_api_stage:
     - adios-stage
     - deploy
 
+deploy_oauth_api_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_oauth_api_stage
+    OAUTH2_PROXY_PROVIDER: keycloak
+    OAUTH2_PROXY_CLIENT_ID: adios-database
+    OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
+    OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
+    OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
+    OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:8004/
+    OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
+    OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
+    OAUTH2_PROXY_EMAIL_DOMAINS: *
+    OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+  variables:
+    IMAGE_TAG: registry.orr.noaa.gov/it/oauth2-proxy:master
+    CONTAINER_NAME: auth_web_api
+    APP_NETWORK: adios_net
+    PORT_MAPPING: 8004:4180
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
+      --network $APP_NETWORK
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
+
+stop_oauth_api_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: auth_web_api
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy
+
 deploy_client_stage:
   stage: deploy
   environment:
@@ -293,6 +345,58 @@ stop_client_stage:
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - adios-stage
+    - deploy
+
+deploy_oauth_client_stage:
+  stage: deploy
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+    on_stop: stop_oauth_client_stage
+    OAUTH2_PROXY_PROVIDER: keycloak
+    OAUTH2_PROXY_CLIENT_ID: adios-database
+    OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
+    OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
+    OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
+    OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:8003/
+    OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
+    OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
+    OAUTH2_PROXY_EMAIL_DOMAINS: *
+    OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+  variables:
+    IMAGE_TAG: registry.orr.noaa.gov/it/oauth2-proxy:master
+    CONTAINER_NAME: auth_web_client
+    APP_NETWORK: adios_net
+    PORT_MAPPING: 8003:4180
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
+      --network $APP_NETWORK
+      --restart unless-stopped $IMAGE_TAG
+  tags:
+    - adios-stage
+    - deploy
+
+stop_oauth_client_stage:
+  stage: deploy
+  environment:
+    name: stage
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: auth_web_client
   when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
