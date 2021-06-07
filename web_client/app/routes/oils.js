@@ -6,6 +6,10 @@ import { action } from "@ember/object";
 export default class OilsRoute extends Route {
     model() {
         return hash({
+            configs: (async () => {
+                return this.store.findRecord('config', 'main.json');
+            })(),
+
             oils: (async () => {
                 let config = await this.store.findRecord('config', 'main.json');
                 var adapter = await this.store.adapterFor('oil');

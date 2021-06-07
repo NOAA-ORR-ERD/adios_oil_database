@@ -39,15 +39,16 @@ def main():
 
     validation = {}
 
-    with (open("validation_by_record.txt", 'w', encoding="utf-8") as outfile1,
-          open("validation_by_error.txt", 'w', encoding="utf-8") as outfile2):
+    with (open("validation_by_record.rst", 'w', encoding="utf-8") as outfile1,
+          open("validation_by_error.rst", 'w', encoding="utf-8") as outfile2):
         for of in (outfile1, outfile2):
             of.write("\n####################################\n")
             of.write("ADIOS Oil Database Validation Report\n")
             of.write("####################################\n\n")
             of.write("Validation of data in: \n\n")
             of.write(f"``{base_dir.absolute()}``\n\n")
-            of.write(f"**Generated:** {datetime.datetime.now()}\n\n")
+            of.write("**Generated:** "
+                     f"{datetime.datetime.now().strftime('%h %d, %Y -- %H00')}\n\n")
         for oil, pth in get_all_records(base_dir):
             print("\n\n******************\n")
             print(f"processing: {oil.oil_id}: {oil.metadata.name}")

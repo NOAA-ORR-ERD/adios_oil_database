@@ -13,4 +13,8 @@ export default class IndexController extends OilsController {
     get canModifyDb() {
         return this.capabilities.firstObject.can_modify_db == 'true';
     }
+    
+    get warningIgnoreList() {
+        return this.configs.ignoreWarnings;
+    }
 }

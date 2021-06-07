@@ -1,6 +1,6 @@
 {
     "oil_id": "EC02234",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "Access West Blend Winter",
         "source_id": "2234",
@@ -25,7 +25,7 @@
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
                 "sample_id": "2234.1.1 A",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -376,7 +376,7 @@
                         "fraction": {
                             "value": 5,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 35,
@@ -388,7 +388,7 @@
                         "fraction": {
                             "value": 10,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 52,
@@ -400,7 +400,7 @@
                         "fraction": {
                             "value": 15,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 70,
@@ -412,7 +412,7 @@
                         "fraction": {
                             "value": 20,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 88,
@@ -424,7 +424,7 @@
                         "fraction": {
                             "value": 25,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 106,
@@ -436,7 +436,7 @@
                         "fraction": {
                             "value": 30,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 138,
@@ -448,7 +448,7 @@
                         "fraction": {
                             "value": 35,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 207,
@@ -460,7 +460,7 @@
                         "fraction": {
                             "value": 40,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 260,
@@ -472,7 +472,7 @@
                         "fraction": {
                             "value": 45,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 294,
@@ -484,7 +484,7 @@
                         "fraction": {
                             "value": 50,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 319,
@@ -496,7 +496,7 @@
                         "fraction": {
                             "value": 55,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 343,
@@ -508,7 +508,7 @@
                         "fraction": {
                             "value": 60,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 365,
@@ -520,7 +520,7 @@
                         "fraction": {
                             "value": 65,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 385,
@@ -532,7 +532,7 @@
                         "fraction": {
                             "value": 70,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 405,
@@ -544,7 +544,7 @@
                         "fraction": {
                             "value": 75,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 424,
@@ -556,7 +556,7 @@
                         "fraction": {
                             "value": 80,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 442,
@@ -568,7 +568,7 @@
                         "fraction": {
                             "value": 85,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 459,
@@ -580,7 +580,7 @@
                         "fraction": {
                             "value": 90,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 478,
@@ -592,7 +592,7 @@
                         "fraction": {
                             "value": 95,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 499,
@@ -2006,7 +2006,7 @@
                 "name": "8.53% Evaporated",
                 "short_name": "8.53% Evaporated",
                 "sample_id": "2234.1.4.1 ",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0853,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -2349,7 +2349,7 @@
                         "fraction": {
                             "value": 5,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 56,
@@ -2361,7 +2361,7 @@
                         "fraction": {
                             "value": 10,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 84,
@@ -2373,7 +2373,7 @@
                         "fraction": {
                             "value": 15,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 104,
@@ -2385,7 +2385,7 @@
                         "fraction": {
                             "value": 20,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 135,
@@ -2397,7 +2397,7 @@
                         "fraction": {
                             "value": 25,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 193,
@@ -2409,7 +2409,7 @@
                         "fraction": {
                             "value": 30,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 245,
@@ -2421,7 +2421,7 @@
                         "fraction": {
                             "value": 35,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 278,
@@ -2433,7 +2433,7 @@
                         "fraction": {
                             "value": 40,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 304,
@@ -2445,7 +2445,7 @@
                         "fraction": {
                             "value": 45,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 325,
@@ -2457,7 +2457,7 @@
                         "fraction": {
                             "value": 50,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 346,
@@ -2469,7 +2469,7 @@
                         "fraction": {
                             "value": 55,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 365,
@@ -2481,7 +2481,7 @@
                         "fraction": {
                             "value": 60,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 383,
@@ -2493,7 +2493,7 @@
                         "fraction": {
                             "value": 65,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 401,
@@ -2505,7 +2505,7 @@
                         "fraction": {
                             "value": 70,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 419,
@@ -2517,7 +2517,7 @@
                         "fraction": {
                             "value": 75,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 435,
@@ -2529,7 +2529,7 @@
                         "fraction": {
                             "value": 80,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 451,
@@ -2541,7 +2541,7 @@
                         "fraction": {
                             "value": 85,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 467,
@@ -2553,7 +2553,7 @@
                         "fraction": {
                             "value": 90,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 485,
@@ -2565,7 +2565,7 @@
                         "fraction": {
                             "value": 95,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 503,
@@ -3978,7 +3978,7 @@
                 "name": "16.86% Evaporated",
                 "short_name": "16.86% Evaporated",
                 "sample_id": "2234.1.3.1 ",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.1686,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -4306,7 +4306,7 @@
                         "fraction": {
                             "value": 5,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 115,
@@ -4318,7 +4318,7 @@
                         "fraction": {
                             "value": 10,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 166,
@@ -4330,7 +4330,7 @@
                         "fraction": {
                             "value": 15,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 224,
@@ -4342,7 +4342,7 @@
                         "fraction": {
                             "value": 20,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 259,
@@ -4354,7 +4354,7 @@
                         "fraction": {
                             "value": 25,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 285,
@@ -4366,7 +4366,7 @@
                         "fraction": {
                             "value": 30,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 306,
@@ -4378,7 +4378,7 @@
                         "fraction": {
                             "value": 35,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 324,
@@ -4390,7 +4390,7 @@
                         "fraction": {
                             "value": 40,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 341,
@@ -4402,7 +4402,7 @@
                         "fraction": {
                             "value": 45,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 357,
@@ -4414,7 +4414,7 @@
                         "fraction": {
                             "value": 50,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 372,
@@ -4426,7 +4426,7 @@
                         "fraction": {
                             "value": 55,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 387,
@@ -4438,7 +4438,7 @@
                         "fraction": {
                             "value": 60,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 402,
@@ -4450,7 +4450,7 @@
                         "fraction": {
                             "value": 65,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 416,
@@ -4462,7 +4462,7 @@
                         "fraction": {
                             "value": 70,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 429,
@@ -4474,7 +4474,7 @@
                         "fraction": {
                             "value": 75,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 442,
@@ -4486,7 +4486,7 @@
                         "fraction": {
                             "value": 80,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 455,
@@ -4498,7 +4498,7 @@
                         "fraction": {
                             "value": 85,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 468,
@@ -4510,7 +4510,7 @@
                         "fraction": {
                             "value": 90,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 483,
@@ -4522,7 +4522,7 @@
                         "fraction": {
                             "value": 95,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 501,
@@ -5935,7 +5935,7 @@
                 "name": "25.34% Evaporated",
                 "short_name": "25.34% Evaporated",
                 "sample_id": "2234.1.2.1 ",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.2534,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -6273,7 +6273,7 @@
                         "fraction": {
                             "value": 5,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 279,
@@ -6285,7 +6285,7 @@
                         "fraction": {
                             "value": 10,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 303,
@@ -6297,7 +6297,7 @@
                         "fraction": {
                             "value": 15,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 322,
@@ -6309,7 +6309,7 @@
                         "fraction": {
                             "value": 20,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 339,
@@ -6321,7 +6321,7 @@
                         "fraction": {
                             "value": 25,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 355,
@@ -6333,7 +6333,7 @@
                         "fraction": {
                             "value": 30,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 370,
@@ -6345,7 +6345,7 @@
                         "fraction": {
                             "value": 35,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 385,
@@ -6357,7 +6357,7 @@
                         "fraction": {
                             "value": 40,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 400,
@@ -6369,7 +6369,7 @@
                         "fraction": {
                             "value": 45,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 415,
@@ -6381,7 +6381,7 @@
                         "fraction": {
                             "value": 50,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 428,
@@ -6393,7 +6393,7 @@
                         "fraction": {
                             "value": 55,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 440,
@@ -6405,7 +6405,7 @@
                         "fraction": {
                             "value": 60,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 452,
@@ -6417,7 +6417,7 @@
                         "fraction": {
                             "value": 65,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 463,
@@ -6429,7 +6429,7 @@
                         "fraction": {
                             "value": 70,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 473,
@@ -6441,7 +6441,7 @@
                         "fraction": {
                             "value": 75,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 482,
@@ -6453,7 +6453,7 @@
                         "fraction": {
                             "value": 80,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 490,
@@ -6465,7 +6465,7 @@
                         "fraction": {
                             "value": 85,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 497,
@@ -6477,7 +6477,7 @@
                         "fraction": {
                             "value": 90,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 504,
@@ -6489,7 +6489,7 @@
                         "fraction": {
                             "value": 95,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 510,
@@ -7901,7 +7901,7 @@
                 "name": "26.45% Evaporated",
                 "short_name": "26.45% Evaporated",
                 "sample_id": "2234.1.5.1 ",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.2645,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -8181,7 +8181,7 @@
                         "fraction": {
                             "value": 5,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 294,
@@ -8193,7 +8193,7 @@
                         "fraction": {
                             "value": 10,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 312,
@@ -8205,7 +8205,7 @@
                         "fraction": {
                             "value": 15,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 328,
@@ -8217,7 +8217,7 @@
                         "fraction": {
                             "value": 20,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 342,
@@ -8229,7 +8229,7 @@
                         "fraction": {
                             "value": 25,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 355,
@@ -8241,7 +8241,7 @@
                         "fraction": {
                             "value": 30,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 368,
@@ -8253,7 +8253,7 @@
                         "fraction": {
                             "value": 35,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 380,
@@ -8265,7 +8265,7 @@
                         "fraction": {
                             "value": 40,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 392,
@@ -8277,7 +8277,7 @@
                         "fraction": {
                             "value": 45,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 403,
@@ -8289,7 +8289,7 @@
                         "fraction": {
                             "value": 50,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 415,
@@ -8301,7 +8301,7 @@
                         "fraction": {
                             "value": 55,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 426,
@@ -8313,7 +8313,7 @@
                         "fraction": {
                             "value": 60,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 435,
@@ -8325,7 +8325,7 @@
                         "fraction": {
                             "value": 65,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 445,
@@ -8337,7 +8337,7 @@
                         "fraction": {
                             "value": 70,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 454,
@@ -8349,7 +8349,7 @@
                         "fraction": {
                             "value": 75,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 464,
@@ -8361,7 +8361,7 @@
                         "fraction": {
                             "value": 80,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 475,
@@ -8373,7 +8373,7 @@
                         "fraction": {
                             "value": 85,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 485,
@@ -8385,7 +8385,7 @@
                         "fraction": {
                             "value": 90,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 495,
@@ -8397,7 +8397,7 @@
                         "fraction": {
                             "value": 95,
                             "unit": "%",
-                            "unit_type": "massfraction"
+                            "unit_type": "concentration"
                         },
                         "vapor_temp": {
                             "value": 503,
