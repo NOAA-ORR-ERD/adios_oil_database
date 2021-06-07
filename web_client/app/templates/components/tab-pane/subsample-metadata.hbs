@@ -48,7 +48,11 @@
       <div class="row pl-0 mb-1">
         <form class="form-inline justify-content-center" role="form">
           <div class="form-group">
-            <strong>Fraction Evaporated:&nbsp;</strong>
+            <strong>
+              {{this.fractionEvaporatedUnitType}}
+              Fraction Evaporated:&nbsp;
+            </strong>
+
             <Common::ValueUnitInput
               @valueObject={{@oil.metadata.fraction_evaporated}}
               @valueUnit="%"

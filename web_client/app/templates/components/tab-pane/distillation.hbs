@@ -40,13 +40,21 @@
       <form class="form-inline justify-content-center" role="form">
         <div class="form-group">
           <strong>Fraction Recovered:&nbsp;</strong>
-          <Common::ValueUnitInput
-            @valueObject={{@oil.distillation_data.fraction_recovered}}
-            @valueUnit="%"
-            @valuePrecision={{2}}
-            @editable={{@editable}}
-            @submit={{action @submit @oil}}
-          />
+
+          {{#if @editable}}
+            <Common::RangeValueInput
+              @valueTitle="Fraction Recovered"
+              @valueObject={{@oil}}
+              @valueName="distillation_data.fraction_recovered"
+              @valueUnit="%"
+              @valuePrecision="2"
+              @sampleIndex={{@sampleIndex}}
+              @submit={{action @submit @oil}}
+            />
+          {{else}}
+            {{value-unit (convert-unit @oil.distillation_data.fraction_recovered "%") 2}}
+          {{/if}}
+
         </div>
       </form>
     </div>

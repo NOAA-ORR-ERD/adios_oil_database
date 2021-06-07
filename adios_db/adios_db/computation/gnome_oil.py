@@ -102,15 +102,16 @@ def make_gnome_oil(oil):
     phys_props = oil.sub_samples[0].physical_properties
 
     flash_point = phys_props.flash_point
-    if flash_point is not None:
+    if flash_point is None:
+        go['flash_point'] = None
+    else:
         fp = phys_props.flash_point.measurement.converted_to('K')
         if fp.max_value is not None:
             go['flash_point'] = fp.max_value
-        else:
+        elif fp.value is not None:
             go['flash_point'] = fp.value
-    # we really shouldn't do this!
-    # else:
-    #     go['flash_point'] = estimate_flash_point(oil)
+        else:  # shouldn't happen, but ...
+            go['flash_point'] = None
 
     pour_point = phys_props.pour_point
     if pour_point is None:

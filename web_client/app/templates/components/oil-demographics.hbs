@@ -75,7 +75,7 @@
         {{! API }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">API:</label>
-          {{#let (round-relative @oil.metadata.API 2) as |oilAPI|}}
+          {{#let (round-relative @oil.metadata.API 1) as |oilAPI|}}
             {{#if @editable}}
               <Input
                 @id="api"
@@ -86,10 +86,10 @@
                 @change={{action "updateAPI"}}
                 @size="6" />
             {{else}}
-              {{#if (is-empty @oil.metadata.API)}}
+              {{#if (is-empty oilAPI)}}
                 <span class="p-1">No Value</span>
               {{else}}
-                <span class="p-1">{{@oil.metadata.API}}</span>
+                <span class="p-1">{{oilAPI}}</span>
               {{/if}}
             {{/if}}
           {{/let}}
