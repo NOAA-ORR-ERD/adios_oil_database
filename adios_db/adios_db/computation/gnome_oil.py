@@ -121,8 +121,10 @@ def make_gnome_oil(oil):
             go['pour_point'] = pp.max_value
         elif pp.value is not None:
             go['pour_point'] = pp.value
-        else pp.min_value is not None:
+        elif pp.min_value is not None:
             go['pour_point'] = pp.min_value
+        else:
+            go['pour_point'] = None
 
     # fixme: We need to get the weathered densities, if they are there.
     densities = get_density_data(oil, units="kg/m^3", temp_units="K")
