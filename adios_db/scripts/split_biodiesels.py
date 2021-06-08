@@ -99,8 +99,17 @@ def split_biodiesels(base_path):
                 names = split_names(oil_orig.metadata.name)
                 comments = split_comments(oil_orig.metadata.comments)
 
+                # Don't know how this could have happened, but the concatenated
+                # oil name parts can be out of order from the samples
+                # in some cases.
+                ordered_names = [([n for n in names
+                                   if n.endswith(s.metadata.name)] + [None])[0]
+                                 for s in oil_orig.sub_samples]
+
+
                 for sample, name, comment in zip_longest(oil_orig.sub_samples,
-                                                         names, comments):
+                                                         ordered_names,
+                                                         comments):
                     sample_id = sample.metadata.sample_id
 
                     oil_new = copy.deepcopy(oil_orig)
