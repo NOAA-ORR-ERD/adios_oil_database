@@ -99,6 +99,10 @@ def split_biodiesels(base_path):
                 names = split_names(oil_orig.metadata.name)
                 comments = split_comments(oil_orig.metadata.comments)
 
+                if len(comments) <= 1:
+                    # we only found 1 unique comment in the field, replicate it
+                    comments = comments * len(oil_orig.sub_samples)
+
                 # Don't know how this could have happened, but the concatenated
                 # oil name parts can be out of order from the samples
                 # in some cases.
