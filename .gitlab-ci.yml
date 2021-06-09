@@ -393,6 +393,8 @@ deploy_oauth_client_stage:
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - OAUTH2_PROXY_CLIENT_SECRET=`cat /data/adios_oil_db/oauth-proxy-client-secret.txt`
+    - echo "client_secret: '$OAUTH2_PROXY_CLIENT_SECRET'"
+    - echo "auth_secret: '$AUTH_SECRET'"
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       --network $APP_NETWORK --restart unless-stopped
