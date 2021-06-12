@@ -36,6 +36,7 @@ import copy
 
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import SampleList
+from adios_db.models.oil.product_type import PRODUCT_TYPES
 
 
 here = Path(__file__).resolve().parent
@@ -88,13 +89,9 @@ def split_biodiesels(base_path):
             read_path = Path(base_path).joinpath(*p)
 
             if read_path.is_file():
-                # go ahead with modification
                 logger.info('')
                 logger.info(f'file: {Path(*p)}')
 
-                #
-                # split the file
-                #
                 oil_orig = Oil.from_file(read_path)
                 names = split_names(oil_orig.metadata.name)
                 comments = split_comments(oil_orig.metadata.comments)
@@ -110,7 +107,9 @@ def split_biodiesels(base_path):
                                    if n.endswith(s.metadata.name)] + [None])[0]
                                  for s in oil_orig.sub_samples]
 
-
+                #
+                # split the file
+                #
                 for sample, name, comment in zip_longest(oil_orig.sub_samples,
                                                          ordered_names,
                                                          comments):
@@ -128,10 +127,14 @@ def split_biodiesels(base_path):
                         if s.metadata.sample_id == sample_id
                     ])
 
+                    product_type = get_product_type(sample)
+                    if product_type is not None:
+                        oil_new.metadata.product_type = product_type
+
                     write_path = Path(base_path).joinpath(*p[:-1]) / f'{oil_new.oil_id}.json'
                     logger.info(f'\twrite path: {write_path}')
                     oil_new.to_file(write_path)
-                
+
                 read_path.unlink()
             else:
                 sys.stdout.write(f'Error: "{read_path}" is not a file.\n')
@@ -174,6 +177,35 @@ def split_comments(comments):
 def make_new_oil_id(prefix, sample_id):
     new_id = int(''.join(sample_id.split('.')))
     return f'{prefix}{new_id:05d}'
+
+
+def get_product_type(sample):
+    '''
+        determine product type from the information in the sample
+        
+        Note: Our bio-fuel product types are loaded from a .csv file that gets
+              updated from time to time.  Therefore we need to do our best to
+              retrieve the current values that we need from that set.
+              Of course there are lots of things that can go wrong with this.
+              All we can do is tailor this to the following assumptions:
+              - We are expecting two bio-fuel types to exist
+              - One is a 100% full biofuel
+              - One is a biofuel/petrol mixture
+    '''
+    bio_types = [p for p in PRODUCT_TYPES if p.lower().find('bio') >= 0]
+    if len(bio_types) != 2:
+        logger.warning(f'expected 2 biofuel product types, got {bio_types}')
+        return None
+
+    if bio_types[0].lower().find('petro'):
+        bio_types.reverse()
+
+    bio, bio_petrol = bio_types
+
+    if sample.metadata.name.endswith('100'):
+        return bio
+    else:
+        return bio_petrol
 
 
 if __name__ == "__main__":
