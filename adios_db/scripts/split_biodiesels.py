@@ -197,7 +197,7 @@ def get_product_type(sample):
         logger.warning(f'expected 2 biofuel product types, got {bio_types}')
         return None
 
-    if bio_types[0].lower().find('petro'):
+    if bio_types[0].lower().find('petro') > 0:
         bio_types.reverse()
 
     bio, bio_petrol = bio_types
