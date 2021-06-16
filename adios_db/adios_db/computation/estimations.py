@@ -1,17 +1,26 @@
 """
-Estimation code for filling out the missing properties of an
-oil record that may be needed for modeling, etc.
+Code for estimating various properties that aren't in a oil record.
+
+These can be used to generate complete oil specifications for
+modeling, etc.
+
+Note: there is code in here to make various estimations of
+    SARA fractionations -- be warned, these are of unceratain
+    use, and not very accurate
+
 """
 
 import numpy as np
 
-def api_from_density(density):
-    '''
-        Source: Adios2
-    '''
-    kg_m_3 = density
+# This is  unit conversion -- should be handled by pynucos
+# def api_from_density(density):
 
-    return (141.5 / kg_m_3 * 1000.0) - 131.5
+#     '''
+#         Source: Adios2
+#     '''
+#     kg_m_3 = density
+
+#     return (141.5 / kg_m_3 * 1000.0) - 131.5
 
 
 def pour_point_from_kvis(ref_kvis, ref_temp_k):
@@ -128,7 +137,7 @@ def aromatics_fraction(f_res, f_asph, f_sat):
 def _A_coeff(density):
     '''
         Source: Fingas empirical formulas that are based upon analysis
-                of ESTC oil properties database.
+                of ESTS oil properties database.
 
         This is an intermediate calculation for a coefficient to be
         used to generate the mass fractions of an oil.

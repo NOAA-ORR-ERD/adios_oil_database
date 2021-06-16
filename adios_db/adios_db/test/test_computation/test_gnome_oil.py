@@ -19,7 +19,11 @@ EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
 
 full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
 
-FullOil = Oil.from_file(full_oil_filename)
+# use the function if you're going to change the Oil object.
+def get_full_oil():
+    return Oil.from_file(full_oil_filename)
+
+FullOil = get_full_oil()
 
 # run it through the Oil object to make sure its up to date:
 try:
@@ -48,6 +52,17 @@ def test_physical_properties():
 
     assert isclose(data['flash_point'], 268.15)
     assert isclose(data['pour_point'], 248.15)
+
+def test_no_flash_point():
+
+    oil = get_full_oil()
+    # remove the flash point:
+
+    oil.sub_samples[0].physical_properties.flash_point = None
+
+    data = make_gnome_oil(oil)
+
+    assert data['flash_point'] is None
 
 
 def test_densities():

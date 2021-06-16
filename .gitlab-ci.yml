@@ -272,7 +272,7 @@ deploy_oauth_api_stage:
     PORT_MAPPING: 8004:4180
     OAUTH2_PROXY_PROVIDER: keycloak
     OAUTH2_PROXY_CLIENT_ID: adios-database
-    OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
+    #OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
     OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
     OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
     OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
@@ -290,8 +290,19 @@ deploy_oauth_api_stage:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      --network $APP_NETWORK
-      --restart unless-stopped $IMAGE_TAG
+      --network $APP_NETWORK --restart unless-stopped
+      --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
+      --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
+      --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
+      --env OAUTH2_PROXY_LOGIN_URL=$OAUTH2_PROXY_LOGIN_URL
+      --env OAUTH2_PROXY_REDEEM_URL=$OAUTH2_PROXY_REDEEM_URL
+      --env OAUTH2_PROXY_VALIDATE_URL=$OAUTH2_PROXY_VALIDATE_URL
+      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
+      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
+      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
+      --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
+      --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      $IMAGE_TAG
   tags:
     - adios-stage
     - deploy
@@ -365,7 +376,7 @@ deploy_oauth_client_stage:
     PORT_MAPPING: 8003:4180
     OAUTH2_PROXY_PROVIDER: keycloak
     OAUTH2_PROXY_CLIENT_ID: adios-database
-    OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
+    #OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
     OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
     OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
     OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
@@ -381,10 +392,22 @@ deploy_oauth_client_stage:
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    #- OAUTH2_PROXY_CLIENT_SECRET=`cat /data/adios_oil_db/oauth-proxy-client-secret.txt`
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      --network $APP_NETWORK
-      --restart unless-stopped $IMAGE_TAG
+      --network $APP_NETWORK --restart unless-stopped
+      --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
+      --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
+      --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
+      --env OAUTH2_PROXY_LOGIN_URL=$OAUTH2_PROXY_LOGIN_URL
+      --env OAUTH2_PROXY_REDEEM_URL=$OAUTH2_PROXY_REDEEM_URL
+      --env OAUTH2_PROXY_VALIDATE_URL=$OAUTH2_PROXY_VALIDATE_URL
+      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
+      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
+      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
+      --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
+      --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      $IMAGE_TAG
   tags:
     - adios-stage
     - deploy

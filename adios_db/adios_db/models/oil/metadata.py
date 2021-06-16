@@ -60,4 +60,3 @@ class SampleMetaData:
     description: str = None
     fraction_evaporated: MassFraction = None
     boiling_point_range: Temperature = None
-
