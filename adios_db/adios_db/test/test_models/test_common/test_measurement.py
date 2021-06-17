@@ -11,6 +11,7 @@ from adios_db.models.common.measurement import (MeasurementBase,
                                                 Concentration,
                                                 MassFraction,
                                                 VolumeFraction,
+                                                MassOrVolumeFraction,
                                                 Density,
                                                 DynamicViscosity,
                                                 KinematicViscosity,
@@ -464,6 +465,41 @@ class TestLength:
         assert model.value == 100.0
         assert model.unit == 'cm'
 
+    def test_with_unit_type(self):
+        model = Length(value=1.0, unit='m', unit_type="length")
+        model.convert_to('cm')
+
+        assert model.value == 100.0
+        assert model.unit == 'cm'
+
+    def test_with_bad_unit_type(self):
+        with pytest.raises(ValueError):
+            model = Length(value=1.0, unit='m', unit_type="mass")
+
+    def test_from_py_json(self):
+        model = Length(value=1.0,
+                       unit='m',
+                       standard_deviation=0.01,
+                       replicates=3)
+        print(model.py_json())
+
+        pyson = model.py_json()
+
+        model2 = Length.from_py_json(pyson)
+
+        assert model == model2
+
+    def test_from_py_json_bad_unit_type(self):
+        pyson = {'value': 1.0,
+                 'unit': 'm',
+                 'standard_deviation': 0.01,
+                 'replicates': 3,
+                 'unit_type': 'volume'}
+        with pytest.raises(ValueError):
+            model = Length.from_py_json(pyson)
+
+
+
 
 class TestMass:
     '''
@@ -537,6 +573,129 @@ class TestVolumeFraction:
 
         assert model.value == 1.0
         assert model.unit == 'mL/L'
+
+class TestMassOrVolumeFraction:
+    """
+    Could be Mass or Volume, depending on how it's initialized
+
+    unit_type must be passed in when created.
+    """
+    def test_init_no_unit_type(self):
+        """
+        You shouldn't be able to initialize without specifying what
+        type of fraction this is.
+        """
+        with pytest.raises(TypeError):
+            model = MassOrVolumeFraction()
+
+    def test_init_bad_unit_type(self):
+        """
+        You shouldn't be able to initialize without specifying what
+        type of fraction this is.
+        """
+        with pytest.raises(ValueError):
+            model = MassOrVolumeFraction(unit_type="mass")
+
+    def test_init_empty_mass(self):
+        model = MassOrVolumeFraction(unit_type='MassFraction')
+
+        py_json = model.py_json()
+
+        assert model.unit_type == 'massfraction'
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'massfraction'}
+
+    def test_init_empty_volume(self):
+        model = MassOrVolumeFraction(unit_type="VolumeFraction")
+
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'volumefraction'}
+
+    def test_init_full(self):
+        model = MassOrVolumeFraction(value=0.001,
+                                     standard_deviation=0.0002,
+                                     replicates=12,
+                                     unit_type="VolumeFraction")
+
+        assert model.value == 0.001
+        assert model.standard_deviation == 0.0002
+        assert model.replicates == 12
+        assert model.min_value == None
+        assert model.max_value == None
+
+
+    def test_convert_value_mass(self):
+        model = MassOrVolumeFraction(value=0.0005,
+                                     unit='fraction',
+                                     unit_type="MassFraction")
+
+        model2 = model.converted_to('ppm')
+
+        assert math.isclose(model2.value, 500)
+        assert model2.unit_type == "massfraction"
+        assert model2.unit == "ppm"
+
+    def test_convert_value_volume(self):
+        model = MassOrVolumeFraction(value=0.0005,
+                                     unit='fraction',
+                                     unit_type="volumeFraction")
+
+        model2 = model.converted_to('ppm')
+
+        assert math.isclose(model2.value, 500)
+        assert model2.unit_type == "volumefraction"
+        assert model2.unit == "ppm"
+
+    def test_convert_value_invalid(self):
+        model = MassOrVolumeFraction(value=0.0005,
+                                     unit='fraction',
+                                     unit_type="volumeFraction")
+
+        with pytest.raises(uc.InvalidUnitError):
+            model2 = model.converted_to('g/kg')
+
+
+    def test_equal(self):
+        model1 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="MassFraction")
+
+        model2 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="MassFraction")
+
+        assert model1 == model2
+
+    def test_equal_except_unit_type(self):
+        model1 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="MassFraction")
+
+        model2 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="VolumeFraction")
+
+        assert model1 != model2
+
+    def test_from_py_json_no_unit_type(self):
+        pyson = {'value': 0.002,
+                 'unit': 'ppm'}
+
+        with pytest.raises(TypeError):
+            model = MassOrVolumeFraction.from_py_json(pyson)
+
+    def test_from_py_json_volume(self):
+        pyson = {'value': 0.002,
+                 'unit': 'ppm',
+                 'unit_type': 'volumefraction'}
+
+        model = MassOrVolumeFraction.from_py_json(pyson)
+
+        assert model.py_json() == pyson
+
 
 class TestConcentration:
     '''

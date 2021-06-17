@@ -14,6 +14,7 @@ They can also accommodate a standard deviation and number of replicates.
 
 from dataclasses import dataclass, asdict
 from math import isclose
+import copy
 
 from unit_conversion import convert
 
@@ -90,6 +91,7 @@ class MeasurementDataclass:
     max_value: float = None
     standard_deviation: float = None
     replicates: int = None
+    unit_type: str = None
 
     def __post_init__(self):
         """
@@ -120,6 +122,15 @@ class MeasurementBase(MeasurementDataclass):
     # need to add these here, so they won't be overwritten by the
     # decorator
     unit_type = None
+
+    def __post_init__(self):
+        print("in post_init", self.__class__, self.unit_type, self.__class__.unit_type )
+        if self.unit_type is None:
+            self.unit_type = self.__class__.unit_type
+        else:
+            self.unit_type = self.unit_type.lower()
+            if self.unit_type != self.__class__.unit_type:
+                raise ValueError("unit_type must be: {self.__class__.unit_type}")
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field
@@ -183,7 +194,7 @@ class MeasurementBase(MeasurementDataclass):
         '''
         # fixme: why not use the copy.deepcopy() function here?
 
-        return self.__class__(**asdict(self))
+        return copy.copy(self)
 
 
 class Temperature(MeasurementBase):
@@ -232,7 +243,7 @@ class Temperature(MeasurementBase):
         The correct conversion from C to K is 273.16
 
         But a lot of data sources (notably the ADIOS2 database)
-        use 273.0.
+        used 273.0.
 
         So we end up with temps like: -0.15 C instead of 0.0 C
         This function will "correct" that.
@@ -259,7 +270,7 @@ class Temperature(MeasurementBase):
 
 class Unitless(MeasurementBase):
     '''
-        This is a type that has no unit at all.
+    This is a type for data with no unit at all.
     '''
     unit_type = "unitless"
 
@@ -269,8 +280,8 @@ class Unitless(MeasurementBase):
 
 class Dimensionless(MeasurementBase):
     '''
-        This is a type that can be converted to generic fractional amounts,
-        but does not refer to a particular measurable quantity.
+    This is a type that can be converted to generic fractional amounts,
+    but does not refer to a particular measurable quantity.
     '''
     unit_type = "dimensionless"
 
@@ -299,6 +310,55 @@ class MassFraction(MeasurementBase):
 class VolumeFraction(MeasurementBase):
     unit_type = "volumefraction"
     # add a validator: should be between 0 and 1.0
+
+@dataclass
+class MassOrVolumeFraction(MeasurementBase):
+    """
+    This could be Mass of Volume Fraction, needs to be specified
+
+    :param unit_type: the value itself
+    :param value: the value itself
+    :param unit: the value itself
+    :param min_value: the value itself
+    :param max_value: the value itself
+    :param standard_deviation: the value itself
+    :param replicates: the value itself
+
+    """
+
+    def __init__(self, unit_type=None, *args, **kwargs):
+        if unit_type is None:
+            raise TypeError("unit_type must be specified")
+        try:
+            unit_type = unit_type.lower()
+            if unit_type not in {'massfraction', 'volumefraction'}:
+                raise AttributeError
+        except AttributeError:
+            raise ValueError("unit_type must be one of: 'massfraction', 'volumefraction'")
+
+        # hack to get around the __getattr__ check.
+        self.__dict__['unit_type'] = unit_type
+        super().__init__(*args, **kwargs)
+
+    # @classmethod
+    # def from_py_json(cls, py_json, allow_none=False):
+    #     print(cls.__dataclass_fields__)
+    #     cls.__dataclass_fields__['unit_type'] = field(default=None, repr=True, init=FAlse, compare=True, metadata=None)¶)
+    #     super().from_py_json(py_json, allow_none)
+
+    def copy(self):
+        '''
+        copy an instance
+
+        This needs to be special, to preserve the unit_type attribute
+        '''
+        # fixme: this should probably be the __copy__ method
+
+        return copy.copy(self)
+
+    def __eq__(self, other):
+        return super().__eq__(other) and (self.unit_type == other.unit_type)
+
 
 
 class Density(MeasurementBase):
