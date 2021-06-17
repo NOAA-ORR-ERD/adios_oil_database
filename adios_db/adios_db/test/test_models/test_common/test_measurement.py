@@ -56,15 +56,17 @@ def test_str():
 
     NOTE: this is now in the base decorator
     """
-    mass = Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6
+    mass = Mass(value=2.3,
+                unit='kg',
+                standard_deviation=0.2,
+                replicates=6
                 )
 
     s = str(mass)
 
-    print(s)
     print(repr(mass))
 
-    assert s == "Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6)"
+    assert s == "Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6, unit_type='mass')"
 
 
 
@@ -240,23 +242,14 @@ class TestMeasurementBase:
               really want to use this class, just the subclasses.
     '''
     def test_init(self):
-        model = MeasurementBase()
-
-        assert model.value is None
-        assert model.min_value is None
-        assert model.max_value is None
-
-        assert model.unit is None
-        assert model.unit_type is None
-
-        assert model.standard_deviation is None
-        assert model.replicates is None
+        with pytest.raises(NotImplementedError):
+            model = MeasurementBase()
 
 
 class TestTemperature:
     '''
-        Fixme: We really need to enforce that *some* value is passed in
-              The model should fail if there is no value at all
+    Fixme: We really need to enforce that *some* value is passed in
+           The model should fail if there is no value at all
     '''
     def test_init_empty(self):
         model = Temperature()
@@ -694,6 +687,8 @@ class TestMassOrVolumeFraction:
 
         model = MassOrVolumeFraction.from_py_json(pyson)
 
+        print(f"{pyson=}")
+        print(f"{model.py_json()=}")
         assert model.py_json() == pyson
 
 
@@ -826,7 +821,7 @@ class TestNeedleAdhesion:
         py_json = model.py_json()
 
         # should only have a unit_type
-        assert py_json == {'unit_type': None}
+        assert py_json == {'unit_type': "non-convertable"}
 
     def test_convert_to(self):
         model = NeedleAdhesion(value=10.0, unit='g/cm^2')

@@ -124,13 +124,14 @@ class MeasurementBase(MeasurementDataclass):
     unit_type = None
 
     def __post_init__(self):
-        print("in post_init", self.__class__, self.unit_type, self.__class__.unit_type )
+        if self.__class__.unit_type is None:
+            raise NotImplementedError("Can't initialize a measurement with no unit_type")
         if self.unit_type is None:
             self.unit_type = self.__class__.unit_type
-        else:
-            self.unit_type = self.unit_type.lower()
-            if self.unit_type != self.__class__.unit_type:
-                raise ValueError("unit_type must be: {self.__class__.unit_type}")
+        self.unit_type = self.unit_type.lower()
+        if self.unit_type != self.__class__.unit_type:
+            raise ValueError("unit_type must be: {self.__class__.unit_type}")
+        super().__post_init__()
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field
@@ -202,6 +203,7 @@ class Temperature(MeasurementBase):
     fixCK = False  # you can monkey-patch this to turn it on.
 
     def __post_init__(self):
+        super().__post_init__()
         if self.fixCK:
             self.fix_C_K()
 
@@ -323,7 +325,6 @@ class MassOrVolumeFraction(MeasurementBase):
     :param max_value: the value itself
     :param standard_deviation: the value itself
     :param replicates: the value itself
-
     """
 
     def __init__(self, unit_type=None, *args, **kwargs):
@@ -335,16 +336,13 @@ class MassOrVolumeFraction(MeasurementBase):
                 raise AttributeError
         except AttributeError:
             raise ValueError("unit_type must be one of: 'massfraction', 'volumefraction'")
-
-        # hack to get around the __getattr__ check.
-        self.__dict__['unit_type'] = unit_type
+        # self.__dict__['unit_type'] = unit_type
+        kwargs['unit_type'] = unit_type
         super().__init__(*args, **kwargs)
 
-    # @classmethod
-    # def from_py_json(cls, py_json, allow_none=False):
-    #     print(cls.__dataclass_fields__)
-    #     cls.__dataclass_fields__['unit_type'] = field(default=None, repr=True, init=FAlse, compare=True, metadata=None)¶)
-    #     super().from_py_json(py_json, allow_none)
+    def __post_init__(self):
+        # We don't need the post_init in this case
+        pass
 
     def copy(self):
         '''
@@ -378,7 +376,7 @@ class Pressure(MeasurementBase):
 
 
 class NeedleAdhesion(MeasurementBase):
-    unit_type = None
+    unit_type = "non-convertable"
 
 
 class InterfacialTension(MeasurementBase):
