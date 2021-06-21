@@ -77,7 +77,7 @@ def cut_temps_from_api(api, N=5):
     return np.array([(T_0 + (T_G * i) / N) for i in range(N)])
 
 
-def fmasses_flat_dist(f_res, f_asph, N=5):
+def fmasses_flat_dist(f_res=0, f_asph=0, N=5):
     '''
         Generate a flat distribution of N distillation cut fractional masses.
     '''
