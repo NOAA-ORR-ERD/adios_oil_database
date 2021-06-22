@@ -316,7 +316,12 @@ class VolumeFraction(MeasurementBase):
 @dataclass
 class MassOrVolumeFraction(MeasurementBase):
     """
-    This could be Mass or Volume Fraction, needs to be specified
+    This could be Mass or Volume Fraction, or unspecified.
+
+    Unit_type must be one of:
+     - MassFraction
+     - VolumeFraction
+     - Concentration (could be either mass or volume -- who knows?)
 
     :param unit_type: the value itself
     :param value: the value itself
@@ -325,7 +330,7 @@ class MassOrVolumeFraction(MeasurementBase):
     :param max_value: the value itself
     :param standard_deviation: the value itself
     :param replicates: the value itself
-    :param unit_type: the type of unit -- must be "massfraction" or "volumefraction"
+    :param unit_type: the type of unit -- must be "massfraction", "volumefraction" or "concentration"
     """
 
     def __init__(self, unit_type=None, *args, **kwargs):
@@ -333,10 +338,11 @@ class MassOrVolumeFraction(MeasurementBase):
             raise TypeError("unit_type must be specified")
         try:
             unit_type = unit_type.lower()
-            if unit_type not in {'massfraction', 'volumefraction'}:
+            if unit_type not in {'massfraction', 'volumefraction', 'concentration'}:
                 raise AttributeError
         except AttributeError:
-            raise ValueError("unit_type must be one of: 'massfraction', 'volumefraction'")
+            raise ValueError("unit_type must be one of: 'massfraction', 'volumefraction', 'concentration'\n"
+                             f"args: {args}, kwargs: {kwargs}")
         # self.__dict__['unit_type'] = unit_type
         kwargs['unit_type'] = unit_type
         super().__init__(*args, **kwargs)
