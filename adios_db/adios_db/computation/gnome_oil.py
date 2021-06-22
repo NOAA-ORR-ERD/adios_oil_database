@@ -402,10 +402,8 @@ def normalized_cut_values(oil):
         if not (fevap_i[N-1] == fevap_i[0]):
             tBP = BP_i[N-1] + (1 - fevap_i[0]) * (BP_i[N-1] - BP_i[0]) / (fevap_i[N-1] - fevap_i[0])
 
-    if iBP < 266:
-        iBP = 266
-    if tBP > 1050:
-        tBP = 1050
+    iBP = max(266, iBP)
+    tBP = min(1050, tBP)
 
     set_temp = [266,310,353,483,563,650,800,950,1050]
     #set_temp = [266,310,353,423,483,523,543,563,650,800,950,1050]

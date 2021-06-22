@@ -59,6 +59,30 @@
       </form>
     </div>
 
+    {{! End Point }}
+    <div class="col-sm-12 col-md-7 col-lg-4 input-group align-items-center">
+      <form class="form-inline justify-content-center" role="form">
+        <div class="form-group">
+          <strong>Terminal Boiling Point:&nbsp;</strong>
+
+          {{#if @editable}}
+            <Common::RangeValueInput
+              @valueTitle="Terminal Boiling Point"
+              @valueObject={{@oil}}
+              @valueName="distillation_data.end_point"
+              @valueUnit="C"
+              @valuePrecision="2"
+              @sampleIndex={{@sampleIndex}}
+              @submit={{action @submit @oil}}
+            />
+          {{else}}
+            {{value-unit (convert-unit @oil.distillation_data.end_point "C") 2}}
+          {{/if}}
+
+        </div>
+      </form>
+    </div>
+
     {{! Distillation Method }}
     <div class="col-sm-12 col-md-7 col-lg-4 input-group align-items-center">
       <label class="p-0 input-group-text font-weight-bold">Method:</label>
