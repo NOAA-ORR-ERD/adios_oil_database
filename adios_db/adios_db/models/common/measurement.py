@@ -130,7 +130,7 @@ class MeasurementBase(MeasurementDataclass):
             self.unit_type = self.__class__.unit_type
         self.unit_type = self.unit_type.lower()
         if self.unit_type != self.__class__.unit_type:
-            raise ValueError("unit_type must be: {self.__class__.unit_type}")
+            raise ValueError(f"unit_type must be: {self.__class__.unit_type}, not {self.unit_type}")
         super().__post_init__()
 
     def py_json(self, sparse=True):
@@ -316,7 +316,7 @@ class VolumeFraction(MeasurementBase):
 @dataclass
 class MassOrVolumeFraction(MeasurementBase):
     """
-    This could be Mass of Volume Fraction, needs to be specified
+    This could be Mass or Volume Fraction, needs to be specified
 
     :param unit_type: the value itself
     :param value: the value itself
@@ -325,6 +325,7 @@ class MassOrVolumeFraction(MeasurementBase):
     :param max_value: the value itself
     :param standard_deviation: the value itself
     :param replicates: the value itself
+    :param unit_type: the type of unit -- must be "massfraction" or "volumefraction"
     """
 
     def __init__(self, unit_type=None, *args, **kwargs):
@@ -376,7 +377,7 @@ class Pressure(MeasurementBase):
 
 
 class NeedleAdhesion(MeasurementBase):
-    unit_type = "non-convertable"
+    unit_type = "needleadhesion"
 
 
 class InterfacialTension(MeasurementBase):

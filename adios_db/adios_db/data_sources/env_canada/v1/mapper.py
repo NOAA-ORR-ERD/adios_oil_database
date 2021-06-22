@@ -237,7 +237,7 @@ class EnvCanadaSampleMapper(MapperBase):
 
             if ref_temp is not None:
                 cuts.append({
-                    'fraction': self.measurement(frac, '%'),
+                    'fraction': self.measurement(frac, '%', unit_type='massfraction'),
                     'vapor_temp': self.measurement(ref_temp, 'C')
                 })
 

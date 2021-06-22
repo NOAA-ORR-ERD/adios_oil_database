@@ -821,7 +821,7 @@ class TestNeedleAdhesion:
         py_json = model.py_json()
 
         # should only have a unit_type
-        assert py_json == {'unit_type': "non-convertable"}
+        assert py_json == {'unit_type': "needleadhesion"}
 
     def test_convert_to(self):
         model = NeedleAdhesion(value=10.0, unit='g/cm^2')

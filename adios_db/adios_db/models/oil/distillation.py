@@ -8,6 +8,7 @@ from ..common.measurement import (Time,
                                   Temperature,
                                   MassFraction,
                                   VolumeFraction,
+                                  MassOrVolumeFraction,
                                   Concentration,
                                   Unitless,
                                   Dimensionless,
@@ -26,7 +27,7 @@ from .validation.errors import ERRORS
 @dataclass_to_json
 @dataclass
 class DistCut:
-    fraction: Concentration
+    fraction: MassOrVolumeFraction
     vapor_temp: Temperature
 
 
@@ -40,7 +41,7 @@ class Distillation:
     type: str = None
     method: str = None
     end_point: Temperature = None
-    fraction_recovered: Concentration = None
+    fraction_recovered: MassOrVolumeFraction = None
     cuts: DistCutList = field(default_factory=DistCutList)
 
     def validate(self):
