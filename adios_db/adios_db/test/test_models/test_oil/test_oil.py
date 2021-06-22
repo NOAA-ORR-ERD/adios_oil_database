@@ -391,8 +391,8 @@ def test_round_trip():
     attributes are in a different order, but should mean the same thing.
 
     """
-    filein = EXAMPLE_DATA_DIR / "EC000506.json"
-    # filein = TEST_DATA_DIR / "EC" / "EC00506.json"
+    # filein = EXAMPLE_DATA_DIR / "EC000506.json"
+    filein = TEST_DATA_DIR / "EC" / "EC00506.json"
     fileout = OUTPUT_DIR / "temp_oil.json"
 
     # read it in:

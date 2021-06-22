@@ -19,16 +19,13 @@ class TestDistCut:
 
     def test_from_json(self):
         json_obj = {'fraction': {'value': 10.0, 'unit': '%',
+                                 'unit_type': 'massfraction',
                                  'standard_deviation': 1.2, 'replicates': 3},
                     'vapor_temp': {'value': 273.15, 'unit': 'K',
+                                   'unit_type': 'temperature',
                                    'standard_deviation': 1.2, 'replicates': 3}
                     }
         model = DistCut.from_py_json(json_obj)
-
-        # the measurement classes will add unit_type, so we add it to more
-        # easily compare the output
-        json_obj['fraction']['unit_type'] = 'concentration'
-        json_obj['vapor_temp']['unit_type'] = 'temperature'
 
         assert model.py_json() == json_obj
 
@@ -45,16 +42,13 @@ class TestDistCutList:
 
     def test_from_json(self):
         json_obj = [{'fraction': {'value': 10.0, 'unit': '%',
+                                  'unit_type': 'massfraction',
                                   'standard_deviation': 1.2, 'replicates': 3},
                      'vapor_temp': {'value': 273.15, 'unit': 'K',
+                                    'unit_type': 'temperature',
                                     'standard_deviation': 1.2, 'replicates': 3}
                      }]
         model = DistCutList.from_py_json(json_obj)
-
-        # the measurement classes will add unit_type, so we add it to more
-        # easily compare the output
-        json_obj[0]['fraction']['unit_type'] = 'concentration'
-        json_obj[0]['vapor_temp']['unit_type'] = 'temperature'
 
         assert model.py_json() == json_obj
 
