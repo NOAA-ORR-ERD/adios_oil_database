@@ -8,12 +8,16 @@
     @sampleIndex={{@sampleIndex}}
   />
 
-  <Table::Sara
-    @oil={{@oil}}
-    @store={{@store}}
-    @editable={{@editable}}
-    @submit={{@submit}}
-  />
+  <div class="row">
+    <div class="col-lg-4">
+      <Table::Sara
+        @oil={{@oil}}
+        @store={{@store}}
+        @editable={{@editable}}
+        @submit={{@submit}}
+      />
+    </div>
+  </div>
 
   <Common::GroupedTables
     @oil={{@oil}}
