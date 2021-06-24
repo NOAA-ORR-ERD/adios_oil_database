@@ -174,4 +174,18 @@ class TestDistillation:
         assert len(msgs) == 1
         assert msgs[0].startswith('W009:')
 
+    def test_validation_no_fraction_recovered_no_cuts(self):
+        """
+        if there is no cut data, it's OK not to have a fraction_recovered
+        """
+        dist = Distillation(type="mass fraction",
+                            method="some arbitrary method",
+                            end_point=Temperature(value=15, unit="C"),
+                            fraction_recovered=None,
+                            # cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+                            )
+        msgs = dist.validate()
+
+        # make sure there is something there!
+        assert len(msgs) == 0
 
