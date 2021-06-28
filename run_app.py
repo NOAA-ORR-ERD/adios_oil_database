@@ -59,11 +59,11 @@ if rebuild:
     print("updating / installing all conda packages")
     run(["conda", "install", "-y",
          "--file", "web_api/conda_requirements.txt",
-         "--file", "oil_db/conda_requirements.txt",
+         "--file", "adios_db/conda_requirements.txt",
          "--file", "web_client/conda_requirements.txt",
          ])
-    run(["python", "-m", "pip", "install", "-r",
-         "web_api/pip_requirements.txt"])
+    # run(["python", "-m", "pip", "install", "-r",
+    #      "web_api/pip_requirements.txt"])
 
 # start up mongo:
 mongo = Popen(['mongod', '-f', 'mongo_config_dev.yml'])

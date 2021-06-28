@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00135",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "BELRIDGE HEAVY",
         "source_id": "AD00135",
@@ -11,6 +11,7 @@
         },
         "product_type": "Crude Oil NOS",
         "API": 13.6,
+        "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
             "Crude Oil",
             "Heavy Crude"
@@ -22,7 +23,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -182,8 +183,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 497.0,
-                            "unit": "K",
+                            "value": 223.85000000000002,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -194,8 +195,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 532.0,
-                            "unit": "K",
+                            "value": 258.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -206,8 +207,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 586.0,
-                            "unit": "K",
+                            "value": 312.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -218,8 +219,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 632.0,
-                            "unit": "K",
+                            "value": 358.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -230,8 +231,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 676.0,
-                            "unit": "K",
+                            "value": 402.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -242,8 +243,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 715.0,
-                            "unit": "K",
+                            "value": 441.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -254,8 +255,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 762.0,
-                            "unit": "K",
+                            "value": 488.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -266,8 +267,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 816.0,
-                            "unit": "K",
+                            "value": 542.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -278,8 +279,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 881.0,
-                            "unit": "K",
+                            "value": 607.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -290,8 +291,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 964.0,
-                            "unit": "K",
+                            "value": 690.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
@@ -302,8 +303,8 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 1010.0,
-                            "unit": "K",
+                            "value": 736.85,
+                            "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
@@ -330,25 +331,40 @@
         },
         {
             "metadata": {
-                "name": "2.7% Weathered",
-                "short_name": "2.7% Weathered",
-                "fraction_weathered": {
+                "name": "Weathered sample that did not form an emulsion",
+                "short_name": "Didn't Emulsify",
+                "description": "Partially weathered sample that did not form an emulsion.\n\nSee record reference for details",
+                "fraction_evaporated": {
                     "value": 0.027,
                     "unit": "fraction",
                     "unit_type": "massfraction"
                 }
+            },
+            "environmental_behavior": {
+                "emulsions": [
+                    {
+                        "water_content": {
+                            "value": 0.0,
+                            "unit": "fraction",
+                            "unit_type": "massfraction"
+                        }
+                    }
+                ]
             }
         },
         {
             "metadata": {
                 "name": "100.0% Weathered",
                 "short_name": "100.0% Weathered",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 1.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
                 }
             }
         }
+    ],
+    "status": [
+        "E032: Distillation type is \"None\", it must be one of: ['volume fraction', 'mass fraction']"
     ]
 }

@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 from numbers import Number
 
+from .importer_base import custom_slugify, ImporterBase
 
-class MapperBase:
+
+class MapperBase(ImporterBase):
     def measurement(self, value, unit, unit_type=None,
                     standard_deviation=None, replicates=None):
         mm_value = self.min_max(value)
@@ -28,7 +30,8 @@ class MapperBase:
     def compound(self, name, measurement, method=None, groups=None,
                  sparse=False):
         '''
-            Example of content:
+        Example of content::
+
                 {
                     'name': "1-Methyl-2-Isopropylbenzene",
                     'method': "ESTS 2002b",
@@ -67,3 +70,28 @@ class MapperBase:
             return [num, None]
         else:
             return [None, None]  # can't determine a range
+
+    @classmethod
+    def slugify(cls, label):
+        '''
+            Generate a string that is suitable for use as an object attribute.
+            - The strings will be snake-case, all lowercase words separated
+              by underscores.
+            - They will not start with a numeric digit.  If the original label
+              starts with a digit, the slug will be prepended with an
+              underscore ('_').
+
+            Note: Some unicode characters are not intuitive.  Specifically,
+                  In German orthography, the grapheme ß, called Eszett or
+                  scharfes S (Sharp S).  It looks sorta like a capital B to
+                  English readers, but converting it to 'ss' is not completely
+                  inappropriate.
+            Note: this function is duplicated in the mapper.  Perhaps a base
+                  class to all the importer types.
+        '''
+        if label is None:
+            return label
+
+        prefix = '_' if label[0].isdigit() else ''
+
+        return prefix + custom_slugify(label)

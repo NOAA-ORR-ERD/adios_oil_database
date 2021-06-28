@@ -3,13 +3,15 @@ import pytest
 from adios_db.models.common.measurement import Temperature, Density
 
 from adios_db.models.oil.physical_properties import (PhysicalProperties,
-                                                         DensityPoint,
-                                                         DensityList,
-                                                         InterfacialTensionList,
-                                                         DynamicViscosityPoint,
-                                                         DynamicViscosityList,
-                                                         KinematicViscosityPoint,
-                                                         KinematicViscosityList,)
+                                                     DensityPoint,
+                                                     DensityList,
+                                                     InterfacialTension,
+                                                     InterfacialTensionPoint,
+                                                     InterfacialTensionList,
+                                                     DynamicViscosityPoint,
+                                                     DynamicViscosityList,
+                                                     KinematicViscosityPoint,
+                                                     KinematicViscosityList,)
 
 
 class TestDensityPoint:
@@ -58,6 +60,84 @@ class TestDensityList:
         json_obj[0]['ref_temp']['unit_type'] = 'temperature'
 
         assert model.py_json() == json_obj
+
+    def test_validate_duplicate_values(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+        dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0.001, unit='C'),
+                           )
+
+        DL = DensityList((dp1, dp2))
+
+        msgs = DL.validate()
+
+        print(msgs)
+
+        assert len(msgs) == 1
+        assert "E050:" in msgs[0]
+
+    def test_validate_no_duplicate_values(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+        dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=15, unit='C'),
+                           )
+
+        DL = DensityList((dp1, dp2))
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 0
+
+    def test_validate_no_values(self):
+        """
+        it shouldn't crash with no data!
+        """
+        DL = DensityList()
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 0
+
+    def test_validate_one_value(self):
+        """
+        it shouldn't crash (or give an warning) with one value!
+        """
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+
+        DL = DensityList((dp1,))
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 0
+
+
+    def test_validate_bad_temp(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='K'),
+                           )
+        dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=20.0, unit='K'),
+                           )
+
+        DL = DensityList((dp1, dp2))
+
+        msgs = DL.validate()
+
+        print(msgs)
+
+        assert len(msgs) == 2
+        for msg in msgs:
+            assert "E040:" in msg
+            assert "Density" in msg
 
 
 class TestDynamicViscosityPoint:
@@ -235,3 +315,23 @@ class TestPhysicalProperties:
 
         assert type(dens) == list
         assert dens[0]['density']['value'] == 0.8751
+
+
+class Test_interfacial_tension:
+    # maybe there should be more here?
+    def test_missing_ref_temp(self):
+        # this was in the actual data -- how?
+        # note missing value for temp
+
+        itp = InterfacialTensionPoint(tension=InterfacialTension(0.03,
+                                                                 unit="N/m"),
+                                      ref_temp=Temperature(unit="K"),
+                                      )
+        itl = InterfacialTensionList((itp,))
+
+        msgs = itl.validate()
+
+        assert "E042:" in msgs[0]
+        assert "InterfacialTension" in msgs[0]
+
+

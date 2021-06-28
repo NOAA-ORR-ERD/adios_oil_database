@@ -12,8 +12,11 @@ from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.validation.validate import (validate_json,
                                                      validate)
 
+from adios_db.scripting import get_all_records
 
 HERE = Path(__file__).parent
+
+TEST_DATA_DIR = HERE.parent.parent.parent / "test_session" / "test_data" / "oil"
 
 # NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
@@ -66,7 +69,6 @@ def test_no_id():
 @pytest.mark.parametrize("name", ["  ",
                                   "X",
                                   "4",
-                                  "this"
                                   ])
 
 def test_reasonable_name(name):
@@ -174,11 +176,32 @@ def test_density_data(big_record):
     assert snippet_not_in_oil_status("W004:", oil)
 
 
-def test_no_densities(big_record):
+def test_no_densities_with_density(big_record):
     oil = big_record
     validate(oil)
 
     assert snippet_not_in_oil_status("W006:", oil)
+
+def test_no_densities(big_record):
+    oil = big_record
+    #print(oil.sub_samples[0])
+
+    pp = oil.sub_samples[0].physical_properties
+    del pp.densities[:]
+    validate(oil)
+
+    print(oil.status)
+
+    assert snippet_in_oil_status("W006: No density values provided", oil)
+
+
+def test_bad_value_in_dist_temp(big_record):
+    oil = big_record
+    oil.sub_samples[0].distillation_data.cuts[0].vapor_temp.value = -1000
+    validate(oil)
+    print(oil.status)
+
+    assert snippet_in_oil_status("E040: Value for distillation vapor temp", oil)
 
 
 # No longer checking for distillation cuts.
@@ -230,4 +253,17 @@ def test_good_year_in_reference(big_record):
 
     assert snippet_not_in_oil_status("W1111", oil)
     assert snippet_not_in_oil_status("E1111", oil)
+
+
+def test_does_not_break_test_records():
+    """
+    run validation on all the test data, just to make sure that
+    nothing breaks
+    """
+    for rec, path in get_all_records(TEST_DATA_DIR):
+        msgs = rec.validate()
+
+    assert True
+
+
 

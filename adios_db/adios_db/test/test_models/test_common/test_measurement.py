@@ -3,8 +3,6 @@ import pytest
 import math
 
 from adios_db.models.common.measurement import (ProductType,
-                                                UnittedValue,
-                                                UnittedRange,
                                                 MeasurementBase,
                                                 Temperature,
                                                 Length,
@@ -153,88 +151,89 @@ class TestUnitless:
             model.converted_to('C')
 
 
-class TestUnittedValue:
-    def test_init(self):
-        uv = UnittedValue(1.0, unit="m")
+# keeping these, as the tests for initializing any empty one should maybe be adopted for Measurement
+# class TestUnittedValue:
+#     def test_init(self):
+#         uv = UnittedValue(1.0, unit="m")
 
-        assert uv.value == 1.0
-        assert uv.unit == "m"
+#         assert uv.value == 1.0
+#         assert uv.unit == "m"
 
-    def test_init_no_value(self):
-        with pytest.raises(ValueError):
-            UnittedValue(1.0)
-        with pytest.raises(ValueError):
-            UnittedValue("m/s")
+#     def test_init_no_value(self):
+#         with pytest.raises(ValueError):
+#             UnittedValue(1.0)
+#         with pytest.raises(ValueError):
+#             UnittedValue("m/s")
 
-    def test_from_py_json(self):
-        uv = UnittedValue.from_py_json({'value': 1.0, 'unit': 'm'})
+#     def test_from_py_json(self):
+#         uv = UnittedValue.from_py_json({'value': 1.0, 'unit': 'm'})
 
-        assert uv.value == 1.0
-        assert uv.unit == "m"
+#         assert uv.value == 1.0
+#         assert uv.unit == "m"
 
-    def test_json(self):
-        uv = UnittedValue(1.0, unit="m")
-        py_json = uv.py_json()
+#     def test_json(self):
+#         uv = UnittedValue(1.0, unit="m")
+#         py_json = uv.py_json()
 
-        print(py_json)
+#         print(py_json)
 
-        assert py_json == {'value': 1.0, 'unit': 'm'}
+#         assert py_json == {'value': 1.0, 'unit': 'm'}
 
-    def test_from_py_json_missing_data(self):
-        '''
-            Not sure why we aren't raising an exception
-        '''
-        with pytest.raises(ValueError):
-            UnittedValue.from_py_json({'value': 1.0})
+#     def test_from_py_json_missing_data(self):
+#         '''
+#             Not sure why we aren't raising an exception
+#         '''
+#         with pytest.raises(ValueError):
+#             UnittedValue.from_py_json({'value': 1.0})
 
-        with pytest.raises(ValueError):
-            UnittedValue.from_py_json({'unit': 'm/s'})
+#         with pytest.raises(ValueError):
+#             UnittedValue.from_py_json({'unit': 'm/s'})
 
 
-class TestUnittedRange:
-    def test_min_max(self):
-        ur = UnittedValue(None, 1.0, 5.0, "ft")
+# class TestUnittedRange:
+#     def test_min_max(self):
+#         ur = UnittedValue(None, 1.0, 5.0, "ft")
 
-        assert ur.min_value == 1.0
-        assert ur.max_value == 5.0
-        assert ur.unit == "ft"
+#         assert ur.min_value == 1.0
+#         assert ur.max_value == 5.0
+#         assert ur.unit == "ft"
 
-    def test_json_sparse(self):
-        ur = UnittedValue(max_value=5.0, unit='m')
-        py_json = ur.py_json()
+#     def test_json_sparse(self):
+#         ur = UnittedValue(max_value=5.0, unit='m')
+#         py_json = ur.py_json()
 
-        assert py_json == {'max_value': 5.0, 'unit': 'm'}
+#         assert py_json == {'max_value': 5.0, 'unit': 'm'}
 
-    def test_json_max_only(self):
-        ur = UnittedValue(max_value=5.0, unit='m')
-        py_json = ur.py_json(sparse=False)
+#     def test_json_max_only(self):
+#         ur = UnittedValue(max_value=5.0, unit='m')
+#         py_json = ur.py_json(sparse=False)
 
-        assert py_json == {'value': None,
-                           'min_value': None,
-                           'max_value': 5.0,
-                           'unit': 'm'}
+#         assert py_json == {'value': None,
+#                            'min_value': None,
+#                            'max_value': 5.0,
+#                            'unit': 'm'}
 
-    def test_from_json_min_only(self):
-        ur = UnittedValue.from_py_json({'min_value': 5.0,
-                                        'unit': 'm/s'})
+#     def test_from_json_min_only(self):
+#         ur = UnittedValue.from_py_json({'min_value': 5.0,
+#                                         'unit': 'm/s'})
 
-        assert ur.min_value == 5.0
-        assert ur.max_value is None
-        assert ur.unit == "m/s"
+#         assert ur.min_value == 5.0
+#         assert ur.max_value is None
+#         assert ur.unit == "m/s"
 
-    def test_from_json_min_max(self):
-        ur = UnittedRange.from_py_json({'min_value': 5.0,
-                                        'max_value': 10.1,
-                                        'unit': 'm/s'})
+#     def test_from_json_min_max(self):
+#         ur = UnittedRange.from_py_json({'min_value': 5.0,
+#                                         'max_value': 10.1,
+#                                         'unit': 'm/s'})
 
-        assert ur.min_value == 5.0
-        assert ur.max_value == 10.1
-        assert ur.unit == "m/s"
+#         assert ur.min_value == 5.0
+#         assert ur.max_value == 10.1
+#         assert ur.unit == "m/s"
 
 
 class TestMeasurementBase:
     '''
-        Todo: is there any way to raise a NotImplementedError here?  We don't
+        Fixme: is there any way to raise a NotImplementedError here?  We don't
               really want to use this class, just the subclasses.
     '''
     def test_init(self):
@@ -253,7 +252,7 @@ class TestMeasurementBase:
 
 class TestTemperature:
     '''
-        Todo: We really need to enforce that *some* value is passed in
+        Fixme: We really need to enforce that *some* value is passed in
               The model should fail if there is no value at all
     '''
     def test_init_empty(self):

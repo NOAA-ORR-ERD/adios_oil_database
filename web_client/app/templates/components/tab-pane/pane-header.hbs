@@ -12,14 +12,14 @@
     </h4>
   {{/if}}
 
-  {{#if (or @oil.metadata.fraction_weathered @oil.metadata.boiling_point_range)}}
+  {{#if (or @oil.metadata.fraction_evaporated @oil.metadata.boiling_point_range)}}
     <p class="small">
-      {{#if (or @oil.metadata.fraction_weathered @editable)}}
+      {{#if (or @oil.metadata.fraction_evaporated @editable)}}
         <form class="form-inline justify-content-center" role="form">
           <div class="form-group">
-            <strong>Weathered Fraction:&nbsp;</strong>
+            <strong>Fraction Evaporated:&nbsp;</strong>
             <Common::ValueUnitInput
-              @valueObject={{@oil.metadata.fraction_weathered}}
+              @valueObject={{@oil.metadata.fraction_evaporated}}
               @valueUnit="%"
               @valuePrecision={{2}}
               @editable={{@editable}}
@@ -50,7 +50,7 @@
       {{/if}}
 
       {{!-- {{#if @oil.boiling_point_range}}
-            {{#if @oil.fraction_weathered}}
+            {{#if @oil.fraction_evaporated}}
             <br>
             {{/if}}
 

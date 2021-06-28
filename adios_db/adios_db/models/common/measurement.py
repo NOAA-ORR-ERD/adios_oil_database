@@ -1,7 +1,15 @@
 '''
-    Generic Unitted Types
-    these are structures that contain a floating point value and an associated
-    unit
+    Generic Measurement Types
+
+    These are structures that handle an individual measurment:
+
+    They have a value, a unit type and a unit.
+
+    They can be converted to other units if need be.
+
+    They can accommodate a single value, or a range of values
+
+    They can also accommodate a standard deviation and number of replicates.
 '''
 from dataclasses import dataclass, asdict
 
@@ -51,55 +59,6 @@ class ProductType(str):
 
 @dataclass_to_json
 @dataclass
-class UnittedValue:
-    """
-    Data structure to hold a value with a unit
-
-    This accommodates both a single value and a range of values
-
-    There is some complexity here, so everything is optional
-
-    But maybe it would be better to have some validation on creation
-
-    NOTES:
-       If there is a value, there should be no min_value or max_value
-       If there is only  a min or max, then it is interpreted as
-       greater than or less than
-    """
-    value: float = None
-    min_value: float = None
-    max_value: float = None
-    unit: str = None
-    # unit_type: str = None
-
-    def __post_init__(self):
-        if all((attr is None)
-               for attr in (self.value, self.min_value, self.max_value)):
-            raise ValueError(f'{self.__class__.__name__}(): '
-                             'need to supply a value')
-
-        if self.unit is None:
-            raise ValueError(f'{self.__class__.__name__}(): '
-                             'need to supply a unit')
-
-
-@dataclass_to_json
-@dataclass
-class UnittedRange:
-    """
-    Data structure to hold a range of values with a unit
-
-    This differs from UnittedValue in that it Always is a range
-    with no single value option
-
-    """
-    min_value: float = None
-    max_value: float = None
-    unit: str = None
-
-
-@dataclass_to_json
-@dataclass
 class MeasurementDataclass:
     """
     Data structure to hold a value with a unit
@@ -116,6 +75,12 @@ class MeasurementDataclass:
        greater than or less than
 
        There needs to be validation on that!
+
+       (there is a __post_init, but it's not getting used for some reason)
+
+       Also: None should not be an option for unit, either.
+
+       Fixme: maybe there could be a default unit for each unit type?
     """
     value: float = None
     unit: str = None
@@ -124,21 +89,15 @@ class MeasurementDataclass:
     standard_deviation: float = None
     replicates: int = None
 
+    # def __post_init__(self):
+    #     if all((attr is None)
+    #            for attr in (self.value, self.min_value, self.max_value)):
+    #         raise TypeError(f'{self.__class__.__name__}(): '
+    #                          'expected at least one value')
 
-class MeasurementBase(MeasurementDataclass):
-    # need to add these here, so they won't be overwritten by the
-    # decorator
-    unit_type = None
-
-    def __post_init__(self):
-        if all((attr is None)
-               for attr in (self.value, self.min_value, self.max_value)):
-            raise ValueError(f'{self.__class__.__name__}(): '
-                             'need to supply a value')
-
-        if self.unit is None:
-            raise ValueError(f'{self.__class__.__name__}(): '
-                             'need to supply a unit')
+    #     # if self.unit is None:
+    #     #     raise TypeError:(f'{self.__class__.__name__}(): '
+    #     #                      'expected a unit')
 
     # # We want a less-noisy repr
     # def __repr__(self):
@@ -147,6 +106,12 @@ class MeasurementBase(MeasurementDataclass):
     #     return f'{self.__class__.__name__}({", ".join(atts)})'
 
     # __str__ = __repr__
+
+
+class MeasurementBase(MeasurementDataclass):
+    # need to add these here, so they won't be overwritten by the
+    # decorator
+    unit_type = None
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field
@@ -208,6 +173,8 @@ class MeasurementBase(MeasurementDataclass):
             need a way to preserve the original contents of our dataclass
             before the conversion happens.
         '''
+        # fixme: why not use the copy.deepcopy() function here?
+
         return self.__class__(**asdict(self))
 
 
@@ -262,10 +229,12 @@ class Mass(MeasurementBase):
 
 class MassFraction(MeasurementBase):
     unit_type = "massfraction"
+    # add a validator: should be between 0 and 1.0
 
 
 class VolumeFraction(MeasurementBase):
     unit_type = "volumefraction"
+    # add a validator: should be between 0 and 1.0
 
 
 class Density(MeasurementBase):

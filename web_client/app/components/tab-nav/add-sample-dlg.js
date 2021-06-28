@@ -6,22 +6,22 @@ import $ from 'jquery';
 
 export default class AddSampleDlg extends Component {
     SampleTypes = {
-        weathered: 0,
+        evaporated: 0,
         distillate: 1,
         nameOnly: 2
     };
 
     @tracked sampleType = 0;
 
-    @tracked weatheredFraction = NaN;
+    @tracked evaporatedFraction = NaN;
     @tracked distillateMin = NaN;
     @tracked distillateMax = NaN;
     @tracked sampleName;
 
     get formFilledOut() {
         switch (this.sampleType) {
-        case this.SampleTypes.weathered:
-            if (!Number.isNaN(this.weatheredFraction)) {
+        case this.SampleTypes.evaporated:
+            if (!Number.isNaN(this.evaporatedFraction)) {
                 return true;
             }
             break;
@@ -64,10 +64,10 @@ export default class AddSampleDlg extends Component {
     @action
     updateFraction(event) {
         if (event.target.value === '') {
-            this.weatheredFraction = NaN;
+            this.evaporatedFraction = NaN;
         }
         else {
-            this.weatheredFraction = Number(event.target.value);
+            this.evaporatedFraction = Number(event.target.value);
         }
 
         if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
@@ -121,10 +121,10 @@ export default class AddSampleDlg extends Component {
         let unit;
 
         switch (this.sampleType) {
-        case this.SampleTypes.weathered:
-            if (this.weatheredFraction) {
-                let percent = roundRelative([this.weatheredFraction * 100, 2]);
-                name = shortName = `${percent}% Weathered`;
+        case this.SampleTypes.evaporated:
+            if (this.evaporatedFraction) {
+                let percent = roundRelative([this.evaporatedFraction * 100, 2]);
+                name = shortName = `${percent}% Evaporated`;
             }
             else {
                 name = 'Fresh Oil Sample';
@@ -135,7 +135,7 @@ export default class AddSampleDlg extends Component {
                 'metadata': {
                     'name': name,
                     'short_name': shortName,
-                    'fraction_weathered': this.weatheredFraction
+                    'fraction_evaporated': this.evaporatedFraction
                 }
             };
             break;

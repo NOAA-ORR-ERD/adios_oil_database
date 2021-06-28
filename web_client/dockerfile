@@ -6,8 +6,7 @@ FROM registry.orr.noaa.gov/erd/centos-conda
 RUN yum update -y && yum -y install node npm
 
 COPY ./web_client/ /web_client/
-
-RUN mkdir /config
+COPY ./oildb-deploy/config/web_client/ /web_client/public/configs/
 
 RUN cd /web_client && npm install -g n
 RUN cd /web_client && n stable
@@ -19,6 +18,5 @@ RUN cd /web_client && npm --version
 
 RUN cd /web_client && npm install -g ember-cli
 
-VOLUME /config
 EXPOSE 4200
 ENTRYPOINT ["/web_client/docker_start.sh"]

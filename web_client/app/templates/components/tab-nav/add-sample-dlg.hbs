@@ -17,8 +17,8 @@
 
             <div class="col-6 form-group input-group">
               <select class="form-control overflow-hidden" {{on "change" this.updateSampleType}}>
-                <option value={{this.SampleTypes.weathered}}>
-                  Weathered Fraction
+                <option value={{this.SampleTypes.evaporated}}>
+                  Evaporated Fraction
                 </option>
                 <option value={{this.SampleTypes.distillate}}>
                   Boiling Point Range
@@ -30,7 +30,7 @@
             </div>
 
 
-            {{#if (eq this.sampleType this.SampleTypes.weathered)}}
+            {{#if (eq this.sampleType this.SampleTypes.evaporated)}}
               <div class="col-6 form-group input-group">
                 <Input type="number" step="0.01" min="0" max="1"
                           @class="form-control bg-transparent border overflow-hidden"

@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00009",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "ABU SAFAH",
         "source_id": "AD00009",
@@ -22,7 +22,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -36,6 +36,21 @@
                         "unit_type": "temperature"
                     }
                 },
+                "densities": [
+                    {
+                        "density": {
+                            "value": 886.38,
+                            "unit": "kg/m^3",
+                            "unit_type": "density"
+                        },
+                        "ref_temp": {
+                            "value": 288.16,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        },
+                        "method": "Converted from API"
+                    }
+                ],
                 "kinematic_viscosities": [
                     {
                         "viscosity": {
@@ -67,5 +82,8 @@
                 "type": "mass fraction"
             }
         }
+    ],
+    "status": [
+        "W006: No density values provided"
     ]
 }

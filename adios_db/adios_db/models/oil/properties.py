@@ -16,31 +16,9 @@ from ..common.measurement import (Time,
                                   Pressure,
                                   AngularVelocity)
 
-@dataclass_to_json
-@dataclass
-class DistCut:
-    fraction: MassFraction
-    vapor_temp: Temperature
-
-
-class DistCutList(JSON_List):
-    """
-    needs some refactoring: should be method, for one
-    """
-    item_type = DistCut
-
-    def validate(self):
-        # do validation here
-        pass
-
-
-@dataclass_to_json
-@dataclass
-class Distillation:
-    type: str = None
-    method: str = None
-    end_point: Temperature = None
-    cuts: DistCutList = field(default_factory=DistCutList)
+from ..common.validators import EnumValidator
+from .validation.warnings import WARNINGS
+from .validation.errors import ERRORS
 
 
 @dataclass_to_json

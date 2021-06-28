@@ -261,7 +261,7 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
                 oil = validate_json(oil_pyjson)
                 set_completeness(oil)
 
-                oil_collection.insert_one(oil.py_json())
+                insert_oil(oil_collection, oil.py_json())
             except DuplicateKeyError as e:
                 if overwrite is True:
                     try:
@@ -297,6 +297,11 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
                       tc.change(error_count, 'bold')))
 
 
+def insert_oil(collection, py_json):
+    collection.find_one_and_replace({'oil_id': py_json['oil_id']}, py_json,
+                                    upsert=True,)
+
+
 def _add_datafiles(settings):
     '''
         The default settings include only the MongoDB connection
@@ -324,7 +329,7 @@ def _add_norway_files(settings):
 
 def _add_ec_files(settings):
     ec_files = '\n'.join([os.path.join(data_path, 'env_canada', fn)
-                          for fn in ('ests_data_03-03-2021.csv',)])
+                          for fn in ('opp_data_catalogue_en.csv',)])
 
     settings['oildb.ec_files'] = ec_files
 

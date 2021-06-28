@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 import logging
-from itertools import zip_longest
 
 from adios_db.data_sources import CsvFile
 
-import pdb
 
 logger = logging.getLogger(__name__)
+
+
+class InvalidFileException(Exception):
+    '''
+        Error trying to open a file that is non-compliant with the Env. Canada
+        .csv format.
+    '''
 
 
 class EnvCanadaCsvFile(CsvFile):
@@ -59,6 +64,10 @@ class EnvCanadaCsvFile(CsvFile):
     def __init__(self, name):
         super().__init__(name)
 
+        if len(self.field_names) != 23:
+            raise InvalidFileException('Fields are invalid for an '
+                                       'Environment Canada .csv file')
+
     def get_records(self):
         '''
             This is the API that the oil import processes expect
@@ -80,6 +89,9 @@ class EnvCanadaCsvFile(CsvFile):
 
             oil_out.append(row)
             prev_oil_id = oil_id
+
+        if len(oil_out) > 0:
+            yield [oil_out]
 
 
 

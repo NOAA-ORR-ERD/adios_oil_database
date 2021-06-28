@@ -8,7 +8,8 @@ adios-stage.orr.noaa.gov
 
 The data conforms to the NOAA ADIOS Data Model.
 
-Fundamentally, the package provides a set of Python objects that represent the data model. Each of these object can save itself to / load itself from JSON data.
+Fundamentally, the package provides a set of Python objects that represent the data model. Each of these objects can save itself to / load itself from JSON data.
+
 
 At the top level is the :py:class:`Oil` object, which represents a single oil Record.
 

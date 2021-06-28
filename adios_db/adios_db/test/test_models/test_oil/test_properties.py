@@ -1,61 +1,12 @@
 import pytest
 
-from adios_db.models.oil.properties import (DistCut,
-                                                DistCutList,
-                                                InterfacialTensionPoint,
-                                                InterfacialTensionList,
-                                                Dispersibility,
-                                                DispersibilityList,
-                                                Emulsion,
-                                                EmulsionList)
-
-
-class TestDistCut:
-    def test_init_empty(self):
-        with pytest.raises(TypeError):
-            _model = DistCut()
-
-    def test_from_json_empty(self):
-        with pytest.raises(TypeError):
-            _model = DistCut.from_py_json({})
-
-    def test_from_json(self):
-        json_obj = {'fraction': {'value': 10.0, 'unit': '%',
-                                 'standard_deviation': 1.2, 'replicates': 3},
-                    'vapor_temp': {'value': 273.15, 'unit': 'K',
-                                   'standard_deviation': 1.2, 'replicates': 3}
-                    }
-        model = DistCut.from_py_json(json_obj)
-
-        # the measurement classes will add unit_type, so we add it to more
-        # easily compare the output
-        json_obj['fraction']['unit_type'] = 'massfraction'
-        json_obj['vapor_temp']['unit_type'] = 'temperature'
-
-        assert model.py_json() == json_obj
-
-
-class TestDistCutList:
-    def test_init_empty(self):
-        assert DistCutList().py_json() == []
-
-    def test_from_json_empty(self):
-        assert DistCutList.from_py_json([]).py_json() == []
-
-    def test_from_json(self):
-        json_obj = [{'fraction': {'value': 10.0, 'unit': '%',
-                                  'standard_deviation': 1.2, 'replicates': 3},
-                     'vapor_temp': {'value': 273.15, 'unit': 'K',
-                                    'standard_deviation': 1.2, 'replicates': 3}
-                     }]
-        model = DistCutList.from_py_json(json_obj)
-
-        # the measurement classes will add unit_type, so we add it to more
-        # easily compare the output
-        json_obj[0]['fraction']['unit_type'] = 'massfraction'
-        json_obj[0]['vapor_temp']['unit_type'] = 'temperature'
-
-        assert model.py_json() == json_obj
+from adios_db.models.oil.properties import (InterfacialTensionPoint,
+                                            InterfacialTensionList,
+                                            Dispersibility,
+                                            DispersibilityList,
+                                            Emulsion,
+                                            EmulsionList)
+from adios_db.models.common.measurement import Temperature
 
 
 class TestInterfacialTensionPoint:

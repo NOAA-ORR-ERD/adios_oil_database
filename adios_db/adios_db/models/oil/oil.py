@@ -13,12 +13,14 @@ from ..common.utilities import dataclass_to_json
 
 from .metadata import MetaData
 from .sample import SampleList
-from .version import Version, VersionError
+from .version import Version
 
-from .validation.warnings import WARNINGS
-from .validation.errors import ERRORS
+ADIOS_DATA_MODEL_VERSION = Version(0, 11, 0)
 
-ADIOS_DATA_MODEL_VERSION = Version(0, 10, 0)
+from .version_update import update_json  # noqa: E402
+
+# from .validation.warnings import WARNINGS
+from .validation.errors import ERRORS  # noqa: E402
 
 
 @dataclass_to_json
@@ -29,6 +31,7 @@ class Oil:
     metadata: MetaData = field(default_factory=MetaData)
     sub_samples: SampleList = field(default_factory=SampleList)
     status: list = field(default_factory=list)
+    permanent_warnings: list = field(default_factory=list)
     extra_data: dict = field(default_factory=dict)
 
     def __post_init__(self):
@@ -53,25 +56,16 @@ class Oil:
                 f"Product Type: {self.metadata.product_type}"
                 )
 
-    # @property
-    # def adios_data_model_version():
-    #     return self._adios_data_model_version
-
-    # @adios_data_model.setter:
-    # def adios_data_model_version():
-
     @staticmethod
     def _pre_from_py_json(py_json):
-        # check the version
-        try:
-            ver = py_json['adios_data_model_version']
-            if Version.from_py_json(ver) != ADIOS_DATA_MODEL_VERSION:
-                py_json = update_json_to_current_version(py_json)
-                raise ValueError("Can't load this version of the data model")
-            py_json.pop('adios_data_model_version', None)
-        except KeyError:
-            # not versioned, assume it will work
-            pass
+        # update the JSON version
+        py_json = update_json(py_json)
+
+        # this all now done in the update_json method
+        # ver = py_json.get('adios_data_model_version')
+        # if Version.from_py_json(ver) != ADIOS_DATA_MODEL_VERSION:
+        #     raise ValueError("Can't load this version of the data model")
+        # py_json.pop('adios_data_model_version', None)
         return py_json
 
     @classmethod
@@ -116,6 +110,8 @@ class Oil:
             self._validate_id(self.oil_id)
         except ValueError:
             msgs.append(ERRORS["E001"].format(self.oil_id))
+        # always add these:
+        msgs.extend("W000: " + m for m in self.permanent_warnings)
         return msgs
 
     def reset_validation(self):
@@ -125,7 +121,7 @@ class Oil:
         msgs = self.validate()
         self.status = list(set(msgs))
 
-    def to_file(self, infile):
+    def to_file(self, outfile, sparse=True):
         """
         save an Oil object as JSON to the passed in file
 
@@ -135,33 +131,13 @@ class Oil:
               for a full record.
         """
         try:
-            json.dump(self.py_json(), infile)
+            json.dump(self.py_json(sparse=sparse), outfile)
         except AttributeError:
             # must not be an open file-like object
-            json.dump(self.py_json(), open(infile, 'w', encoding='utf-8'), indent=4)
+            with open(outfile, 'w', encoding='utf-8') as outfile:
+                json.dump(self.py_json(sparse=sparse), outfile, indent=4)
 
         return None
-
-# fixme: this should probably go in a new file at some point
-# fixme: make a Version type: maybe a namedtuple? is can save as a string
-def update_json_to_current_version(py_json):
-    """
-    updates JSON for an oil object from an older version to a newer one
-    """
-
-    cur_ver = ADIOS_DATA_MODEL_VERSION
-    ver = py_json.get('adios_data_model_version')
-
-    if ver is None:
-        # assume it's the version from before we added a version
-        ver = "0.10.0"
-    ver = Version.from_py_json(ver)
-    if ver == cur_ver:  # nothing to be done
-        return py_json
-    elif ver > cur_ver:
-        raise VersionError(f"Version: {ver} is not supported by this version of Oil object")
-    else:
-        raise VersionError(f"updator not available for version: {ver}")
 
 
 

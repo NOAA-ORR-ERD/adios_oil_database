@@ -4,9 +4,16 @@ from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.completeness import completeness
 
 
+## Fixme! We should not be using JSON for testing (except for testing JSON read/writing)
+##        It makes all the tests very sensitive to changes!
+##
+
+xfail = pytest.mark.xfail(True, reason="subamples need metadata")
+
 class TestAllCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'This should have everything.  100% score'},
           'sub_samples': [
               {
@@ -91,10 +98,10 @@ class TestAllCompleteness:
         oil = Oil.from_py_json(oil_json)
         assert completeness(oil) == expected
 
-
 class TestDistillationCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Just distillation, 2 cuts.  30% score'},
           'sub_samples': [
               {
@@ -117,6 +124,7 @@ class TestDistillationCompleteness:
           },
          30),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Just distillation, 2 cuts, '
                                   'partial fraction range.  15% score'},
           'sub_samples': [
@@ -148,6 +156,7 @@ class TestDistillationCompleteness:
 class TestViscosityCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Just one viscosity. 5% score'},
           'sub_samples': [
               {
@@ -166,6 +175,7 @@ class TestViscosityCompleteness:
           },
          5),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Second viscosity. 10% score'},
           'sub_samples': [
               {
@@ -190,6 +200,7 @@ class TestViscosityCompleteness:
           },
          10),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Second viscosity, '
                                   'partial temperature range. 7.5% score'},
           'sub_samples': [
@@ -215,6 +226,7 @@ class TestViscosityCompleteness:
           },
          8),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Just one weathered viscosity.  10% score'},
           'sub_samples': [
               {
@@ -243,6 +255,7 @@ class TestViscosityCompleteness:
 class TestDensityCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Just one density.  10% score'},
           'sub_samples': [
               {
@@ -261,6 +274,7 @@ class TestDensityCompleteness:
           },
          10),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Second density.  15% score'},
           'sub_samples': [
               {
@@ -285,6 +299,7 @@ class TestDensityCompleteness:
           },
          15),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Second density, '
                                   'partial temperature range. 12.5% score'},
           'sub_samples': [
@@ -310,6 +325,7 @@ class TestDensityCompleteness:
           },
          12.0),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Just weathered density.  10% score'},
           'sub_samples': [
               {
@@ -338,6 +354,7 @@ class TestDensityCompleteness:
 class TestEmulsionCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'Just emulsion.  25% score'},
           'sub_samples': [
               {
@@ -354,6 +371,7 @@ class TestEmulsionCompleteness:
           },
          25),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
           'metadata': {'comment': 'weathered sample emulsion.  25% score'},
           'sub_samples': [
               {

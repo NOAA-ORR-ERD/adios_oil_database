@@ -44,7 +44,7 @@ class MetaData:
 
         # Check for a reasonable name
         # right now, reasonable is more than 5 characters -- we may want to add more later
-        if len(self.name.strip()) < 5:
+        if len(self.name.strip()) < 2:
             msgs.append(WARNINGS["W001"].format(self.name))
 
         return msgs
@@ -57,5 +57,6 @@ class SampleMetaData:
     short_name: str = None
     sample_id: str = None
     description: str = None
-    fraction_weathered: MassFraction = None
+    fraction_evaporated: MassFraction = None
     boiling_point_range: Temperature = None
+

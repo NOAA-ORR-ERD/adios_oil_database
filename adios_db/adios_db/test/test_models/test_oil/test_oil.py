@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from adios_db.models.oil.oil import Oil, ADIOS_DATA_MODEL_VERSION
-from adios_db.models.oil.version import Version, VersionError
+from adios_db.models.oil.version import VersionError
 from adios_db.models.oil.metadata import MetaData
 from adios_db.models.oil.values import Reference
 
@@ -113,7 +113,7 @@ class TestOil:
         result = repr(oil)
 
         assert result.startswith("Oil(")
-        assert "oil_id='EC002234'" in result
+        assert "oil_id='EC02234'" in result
 
     def test_init_minimal(self):
         '''
@@ -159,13 +159,14 @@ class TestOil:
 
         pprint(py_json)
 
-        assert len(py_json) == 6
+        assert len(py_json) == 7
 
         for attr in ['oil_id',
                      'adios_data_model_version',
                      'metadata',
                      'sub_samples',
                      'status',
+                     'permanent_warnings',
                      'extra_data',
                      ]:
             assert attr in py_json
@@ -201,7 +202,20 @@ class TestOil:
 
         assert len(oil.sub_samples) == 5
         assert oil.sub_samples[0].metadata.name == "Fresh Oil Sample"
-        assert oil.sub_samples[3].metadata.name == "25.34% Weathered"
+        assert oil.sub_samples[3].metadata.name == "25.34% Evaporated"
+
+    def test_permanent_warnings(self):
+        oil = Oil('XXXXXX')
+
+        warn = "Something is very wrong with this record."
+        oil.permanent_warnings.append(warn)
+        print(oil)
+
+        msgs = oil.validate()
+
+        print(msgs)
+
+        assert "W000: " + warn in msgs
 
 
 class TestMetaData:
@@ -306,7 +320,7 @@ class TestFullRecordMetadata:
         oil = self.oil
         print(oil.oil_id)
 
-        assert oil.oil_id == "EC002234"
+        assert oil.oil_id == "EC02234"
 
 
     @pytest.mark.parametrize("attr, value", [("location", "Alberta, Canada"),
@@ -329,7 +343,7 @@ def test_from_file_name():
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
-    assert oil.oil_id == "EC002234"
+    assert oil.oil_id == "EC02234"
 
 
 def test_from_file():
@@ -340,7 +354,7 @@ def test_from_file():
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
-    assert oil.oil_id == "EC002234"
+    assert oil.oil_id == "EC02234"
 
 
 def test_to_file_name():
@@ -354,7 +368,7 @@ def test_to_file_name():
     with open(OUTPUT_DIR / "temp_to_file.json", encoding="utf-8") as infile:
         data = json.load(infile)
 
-    assert data["oil_id"] == 'EC002234'
+    assert data["oil_id"] == 'EC02234'
 
 def test_to_open_file():
     """
@@ -367,7 +381,7 @@ def test_to_open_file():
     with open(OUTPUT_DIR / "temp_to_file.json", encoding="utf-8") as infile:
         data = json.load(infile)
 
-    assert data["oil_id"] == 'EC002234'
+    assert data["oil_id"] == 'EC02234'
 
 
 def test_round_trip():
@@ -403,9 +417,12 @@ def test_version_none():
     '''
     If it doesn't have a version string, it should get the current one.
     '''
-    pyjs = {'oil_id': 'AD00123',
-            'metadata': {'name': 'An oil name'}
-            }
+    oil = Oil('XXXXXX')
+    oil.metadata.name = 'An oil name'
+    pyjs = oil.py_json()
+    # remove the version:
+    pyjs.pop('adios_data_model_version', None)
+
     oil = Oil.from_py_json(pyjs)
 
     assert oil.adios_data_model_version == ADIOS_DATA_MODEL_VERSION

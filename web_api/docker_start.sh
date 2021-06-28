@@ -1,5 +1,17 @@
 #!/bin/bash
 
+if $MONGODB_WRITEABLE
+then 
+    echo "MongoDB is writeable"
+else
+    echo "MongoDB is read-only"
+
+    echo "Loading the database from noaa-oil-data"
+    cd /adios-db/noaa-oil-data/
+    adios_db_restore --config /config/config_oil_db.ini 
+    cd -
+fi
+
 echo "Starting our server on host:port:"
 egrep -w "host|port" /config/config.ini
 

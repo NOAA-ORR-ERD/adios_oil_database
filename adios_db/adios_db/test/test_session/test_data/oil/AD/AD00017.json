@@ -1,6 +1,6 @@
 {
     "oil_id": "AD00017",
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "name": "ADGO",
         "source_id": "AD00017",
@@ -11,6 +11,7 @@
         },
         "product_type": "Crude Oil NOS",
         "API": 16.8,
+        "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
             "Crude Oil",
             "Heavy Crude"
@@ -22,7 +23,7 @@
             "metadata": {
                 "name": "Fresh Oil Sample",
                 "short_name": "Fresh Oil",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.0,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -141,20 +142,10 @@
             "environmental_behavior": {
                 "emulsions": [
                     {
-                        "age": {
-                            "value": 0.0,
-                            "unit": "day",
-                            "unit_type": "time"
-                        },
                         "water_content": {
                             "value": 0.71,
                             "unit": "fraction",
                             "unit_type": "massfraction"
-                        },
-                        "ref_temp": {
-                            "value": 288.15,
-                            "unit": "K",
-                            "unit_type": "temperature"
                         }
                     }
                 ]
@@ -231,7 +222,7 @@
             "metadata": {
                 "name": "3.0% Weathered",
                 "short_name": "3.0% Weathered",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.03,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -272,7 +263,7 @@
             "metadata": {
                 "name": "5.0% Weathered",
                 "short_name": "5.0% Weathered",
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "value": 0.05,
                     "unit": "fraction",
                     "unit_type": "massfraction"
@@ -295,5 +286,12 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "W000: Warning: ADIOS2 data had a value for water content, but min and max emulsification constant were blank. 0.0 has been assumed, but that may not  be correct",
+        "E032: Distillation type is \"None\", it must be one of: ['volume fraction', 'mass fraction']"
+    ],
+    "permanent_warnings": [
+        "Warning: ADIOS2 data had a value for water content, but min and max emulsification constant were blank. 0.0 has been assumed, but that may not  be correct"
     ]
 }

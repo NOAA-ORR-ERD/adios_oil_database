@@ -175,7 +175,7 @@ def check_distillation(oil):
 
 def check_weathered_density(oil):
     '''
-        One Weathered oil: Density. Score = 1
+        One Evaporated oil: Density. Score = 1
     '''
     if len(oil.sub_samples) > 1:
         ss = oil.sub_samples[1]
@@ -191,7 +191,7 @@ def check_weathered_density(oil):
 
 def check_weathered_viscosity(oil):
     '''
-        One Weathered oil: Viscosity. Score = 1
+        One Evaporated oil: Viscosity. Score = 1
     '''
     if len(oil.sub_samples) > 1:
         ss = oil.sub_samples[1]

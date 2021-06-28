@@ -1,5 +1,5 @@
 {
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "API": 35.2,
         "name": "HOOPS Blend",
@@ -1084,6 +1084,7 @@
                 {
                     "measurement": {
                         "unit": "dimensionless",
+                        "unit_type": "unitless",
                         "value": 36.2293
                     },
                     "name": "Cetane Index 1990 (D4737)"
@@ -1431,6 +1432,7 @@
                 {
                     "measurement": {
                         "unit": "dimensionless",
+                        "unit_type": "unitless",
                         "value": 45.0055
                     },
                     "name": "Cetane Index 1990 (D4737)"
@@ -1786,6 +1788,7 @@
                 {
                     "measurement": {
                         "unit": "dimensionless",
+                        "unit_type": "unitless",
                         "value": 49.9756
                     },
                     "name": "Cetane Index 1990 (D4737)"

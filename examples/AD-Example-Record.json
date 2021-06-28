@@ -1,5 +1,5 @@
 {
-    "adios_data_model_version": "0.10.0",
+    "adios_data_model_version": "0.11.0",
     "metadata": {
         "API": 37.0,
         "comments": "This oil is a EPS standard oil for dispersant testing.",
@@ -161,7 +161,7 @@
                 "type": "mass fraction"
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.0
@@ -277,13 +277,13 @@
                 ]
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.148
                 },
-                "name": "14.8% Weathered",
-                "short_name": "14.8% Weathered"
+                "name": "14.8% Evaporated",
+                "short_name": "14.8% Evaporated"
             }
         },
         {
@@ -309,13 +309,13 @@
                 ]
             },
             "metadata": {
-                "fraction_weathered": {
+                "fraction_evaporated": {
                     "unit": "fraction",
                     "unit_type": "massfraction",
                     "value": 0.255
                 },
-                "name": "25.5% Weathered",
-                "short_name": "25.5% Weathered"
+                "name": "25.5% Evaporated",
+                "short_name": "25.5% Evaporated"
             }
         }
     ]
