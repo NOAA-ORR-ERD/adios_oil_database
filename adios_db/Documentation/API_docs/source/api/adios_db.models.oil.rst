@@ -42,6 +42,14 @@ adios\_db.models.oil.compound module
    :undoc-members:
    :show-inheritance:
 
+adios\_db.models.oil.distillation module
+----------------------------------------
+
+.. automodule:: adios_db.models.oil.distillation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.models.oil.environmental\_behavior module
 ---------------------------------------------------
 
@@ -134,6 +142,22 @@ adios\_db.models.oil.version module
 -----------------------------------
 
 .. automodule:: adios_db.models.oil.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.models.oil.version\_update module
+-------------------------------------------
+
+.. automodule:: adios_db.models.oil.version_update
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.models.oil.versions module
+------------------------------------
+
+.. automodule:: adios_db.models.oil.versions
    :members:
    :undoc-members:
    :show-inheritance:

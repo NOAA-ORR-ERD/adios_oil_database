@@ -11,6 +11,8 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
 
+from ...computation.gnome_oil import make_gnome_oil
+
 from .metadata import MetaData
 from .sample import SampleList
 from .version import Version
@@ -103,6 +105,15 @@ class Oil:
 
         validation of sub-objects is automatically applied
         """
+        # see if it can be used as a GNOME oil
+        # NOTE: this is an odd one, as it puts the information in a different place
+        try:
+            # make a copy, as make_gnome_oil might change it in place.
+            make_gnome_oil(copy.deepcopy(self))
+            self.metadata.gnome_suitable = True
+        # if any other kind of Error -- it will raise.
+        except Exception: # if it barfs for any reason it's not suitable
+            self.metadata.gnome_suitable = False
         msgs = []
 
         # Validate ID
@@ -112,7 +123,7 @@ class Oil:
             msgs.append(ERRORS["E001"].format(self.oil_id))
         # always add these:
         msgs.extend("W000: " + m for m in self.permanent_warnings)
-        return msgs
+        return list(set(msgs))
 
     def reset_validation(self):
         """

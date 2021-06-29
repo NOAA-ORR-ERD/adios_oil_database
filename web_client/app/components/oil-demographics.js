@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
-import moment from 'moment';
 import { isBlank } from '@ember/utils';
+import moment from 'moment';
 
 export default class OilDemographics extends Component {
     @tracked selectedLabels;

@@ -20,10 +20,19 @@ from adios_db.computation.physical_properties import (get_density_data,
                                                       )
 
 
+HERE = Path(__file__).parent
 
-ExampleRecordFile = Path(__file__).parent.parent / "test_models" / "test_oil" / "ExampleFullRecord.json"
+# TEST_DATA_DIR = HERE.parent / "data_for_testing" / "noaa-oil-data" / "oil"
+EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
 
-FullOil = Oil.from_file(ExampleRecordFile)
+full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
+
+# run it through the Oil object to make sure its up to date:
+FullOil = Oil.from_file(full_oil_filename)
+
+# ExampleRecordFile = Path(__file__).parent.parent / "test_models" / "test_oil" / "ExampleFullRecord.json"
+
+# FullOil = Oil.from_file(ExampleRecordFile)
 
 
 def test_get_density_data_defaults():

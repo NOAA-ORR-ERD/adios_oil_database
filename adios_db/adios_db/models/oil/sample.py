@@ -17,7 +17,9 @@ from .physical_properties import PhysicalProperties
 from .environmental_behavior import EnvironmentalBehavior
 from .sara import Sara
 from .ests_fractions import ESTSFractions
-# need the namespace for ccme, as using the fieldname the same as the class breaks things.
+
+# need the namespace for ccme, as using the fieldname the same as the class
+# breaks things.
 from . import ccme
 from .compound import CompoundList
 
@@ -91,8 +93,7 @@ class SampleList(JSON_List):
             # note: would be good to be smart about the temp densities are at
             # this is here because only need to check the "fresh" sample
             if (self[0].physical_properties is None
-                or not self[0].physical_properties.densities
-                ):
+                    or not self[0].physical_properties.densities):
                 msgs.append(WARNINGS["W006"])
 
             # # check_for_distillation_cuts

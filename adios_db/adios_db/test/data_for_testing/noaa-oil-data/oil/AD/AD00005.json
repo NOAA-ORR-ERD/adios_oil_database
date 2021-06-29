@@ -1,0 +1,90 @@
+{
+    "oil_id": "AD00005",
+    "adios_data_model_version": "0.11.0",
+    "metadata": {
+        "name": "ABSORPTION OIL",
+        "source_id": "AD00005",
+        "reference": {
+            "year": 1996,
+            "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario."
+        },
+        "product_type": "Refinery Intermediate",
+        "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
+        "labels": [
+            "Refinery Intermediate",
+            "Refined Product"
+        ],
+        "model_completeness": 15,
+        "gnome_suitable": false
+    },
+    "sub_samples": [
+        {
+            "metadata": {
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil",
+                "fraction_evaporated": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
+            },
+            "physical_properties": {
+                "flash_point": {
+                    "measurement": {
+                        "value": 107,
+                        "unit": "C",
+                        "unit_type": "temperature"
+                    }
+                },
+                "densities": [
+                    {
+                        "density": {
+                            "value": 848.0,
+                            "unit": "kg/m^3",
+                            "unit_type": "density"
+                        },
+                        "ref_temp": {
+                            "value": 20,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ],
+                "dynamic_viscosities": [
+                    {
+                        "viscosity": {
+                            "value": 0.008,
+                            "unit": "kg/(m s)",
+                            "unit_type": "dynamicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 20,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ],
+                "interfacial_tension_water": [
+                    {
+                        "tension": {
+                            "value": 0.05,
+                            "unit": "N/m",
+                            "unit_type": "interfacialtension"
+                        },
+                        "ref_temp": {
+                            "value": 20,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
+            "distillation_data": {
+                "type": "mass fraction"
+            }
+        }
+    ],
+    "status": [
+        "W004: No api value provided"
+    ]
+}

@@ -29,6 +29,7 @@ class MetaData:
     labels: list = field(default_factory=list)
     model_completeness: float = None
     location_coordinates: LocationCoordinates = None
+    gnome_suitable: bool = None
 
     def validate(self):
         msgs = []
@@ -59,4 +60,3 @@ class SampleMetaData:
     description: str = None
     fraction_evaporated: MassFraction = None
     boiling_point_range: Temperature = None
-

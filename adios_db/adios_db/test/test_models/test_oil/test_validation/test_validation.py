@@ -4,9 +4,11 @@ tests of the validation code
 most need to be updated to test validating an Oil object directly
 """
 
-import pytest
+import copy
 import json
 from pathlib import Path
+
+import pytest
 
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.validation.validate import (validate_json,
@@ -16,12 +18,11 @@ from adios_db.scripting import get_all_records
 
 HERE = Path(__file__).parent
 
-TEST_DATA_DIR = HERE.parent.parent.parent / "test_session" / "test_data" / "oil"
+TEST_DATA_DIR = HERE.parent.parent.parent / "data_for_testing" / "noaa-oil-data" / "oil"
 
-# NOTE: this should be updated when the data model is updated.
 BIG_RECORD = json.load(open(
-    HERE.parent / "ExampleFullRecord.json", encoding="utf-8"
-))
+    TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
+
 
 
 @pytest.fixture
@@ -35,6 +36,14 @@ def no_type_oil():
                    'metadata': {'name': 'An oil name'}
                    }
     return Oil.from_py_json(no_type_oil)
+
+def test_validation_doesnt_change_oil(big_record):
+    orig = copy.deepcopy(big_record)
+
+    msgs = orig.validate()
+    # gnome_suitable may have been reset
+    big_record.metadata.gnome_suitable = orig.metadata.gnome_suitable
+    assert orig == big_record
 
 
 def snippet_in_oil_status(snippet, oil):

@@ -1,0 +1,147 @@
+{
+    "oil_id": "AD00084",
+    "adios_data_model_version": "0.11.0",
+    "metadata": {
+        "name": "AUTOMOTIVE GASOLINE, EXXON",
+        "source_id": "AD00084",
+        "reference": {
+            "year": 1991,
+            "reference": "Dietrich, S. 1991. EXXON Company, USA, Operations Support Department, Technical Division, Bayway Refinery, Letter to Debra Simecek-Beatty, NOAA"
+        },
+        "product_type": "Distillate Fuel Oil",
+        "API": 60.0,
+        "comments": "WARNING: Benzene content of product is only an estimate and not a measured value.",
+        "labels": [
+            "Aviation Gas",
+            "Distillate Fuel",
+            "Fuel Oil",
+            "Kerosene",
+            "Refined Product",
+            "Jet Fuel",
+            "Gasoline"
+        ],
+        "model_completeness": 42,
+        "gnome_suitable": true
+    },
+    "sub_samples": [
+        {
+            "metadata": {
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil",
+                "fraction_evaporated": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
+            },
+            "physical_properties": {
+                "pour_point": {
+                    "measurement": {
+                        "unit": "C",
+                        "max_value": -18,
+                        "unit_type": "temperature"
+                    }
+                },
+                "flash_point": {
+                    "measurement": {
+                        "value": -18,
+                        "unit": "C",
+                        "unit_type": "temperature"
+                    }
+                },
+                "densities": [
+                    {
+                        "density": {
+                            "value": 738.26,
+                            "unit": "kg/m^3",
+                            "unit_type": "density"
+                        },
+                        "ref_temp": {
+                            "value": 288.16,
+                            "unit": "K",
+                            "unit_type": "temperature"
+                        },
+                        "method": "Converted from API"
+                    }
+                ],
+                "kinematic_viscosities": [
+                    {
+                        "viscosity": {
+                            "value": 1e-06,
+                            "unit": "m^2/s",
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 38,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
+            "distillation_data": {
+                "type": "volume fraction",
+                "cuts": [
+                    {
+                        "fraction": {
+                            "value": 0.01,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 26,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.1,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 41,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.5,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 96,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.9,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 166,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
+            "compounds": [
+                {
+                    "name": "benzene",
+                    "measurement": {
+                        "value": 0.05,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -17,6 +17,11 @@ export default class OilsShowRoute extends Route {
         controller.set('labels', this.models.labels);
         controller.set('productTypes', this.models.productTypes);
         controller.set('capabilities', this.models.capabilities);
+        controller.set('distillationTypes', [
+            'mass fraction',
+            'volume fraction',
+            'unknown'
+        ]);
 
 
         // Our current sample tabs at the start of the page load would be the

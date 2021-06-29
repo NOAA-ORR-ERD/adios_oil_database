@@ -2,13 +2,16 @@
 import pytest
 import math
 
-from adios_db.models.common.measurement import (ProductType,
-                                                MeasurementBase,
+import unit_conversion as uc
+
+from adios_db.models.common.measurement import (MeasurementBase,
                                                 Temperature,
                                                 Length,
                                                 Mass,
+                                                Concentration,
                                                 MassFraction,
                                                 VolumeFraction,
+                                                MassOrVolumeFraction,
                                                 Density,
                                                 DynamicViscosity,
                                                 KinematicViscosity,
@@ -18,31 +21,31 @@ from adios_db.models.common.measurement import (ProductType,
                                                 Unitless)
 
 
-# Fixme: why is this in this test file ???
-class TestProductType:
-    @pytest.mark.parametrize("product_type", ('crude',
-                                              'refined',
-                                              'bitumen product',
-                                              'Refined',
-                                              'Bitumen Product',
-                                              'other'))
-    def test_validation(self, product_type):
-        pt = ProductType(product_type)
+# # Fixme: why is this in this test file ???
+# class TestProductType:
+#     @pytest.mark.parametrize("product_type", ('crude',
+#                                               'refined',
+#                                               'bitumen product',
+#                                               'Refined',
+#                                               'Bitumen Product',
+#                                               'other'))
+#     def test_validation(self, product_type):
+#         pt = ProductType(product_type)
 
-        assert pt.validate() == []
+#         assert pt.validate() == []
 
-    @pytest.mark.parametrize("product_type", ('crud',
-                                              'rfined',
-                                              'bitumen',
-                                              'Reefined',
-                                              'Biitumen Product',
-                                              'random'))
-    def test_validation_invalid(self, product_type):
-        pt = ProductType(product_type)
+#     @pytest.mark.parametrize("product_type", ('crud',
+#                                               'rfined',
+#                                               'bitumen',
+#                                               'Reefined',
+#                                               'Biitumen Product',
+#                                               'random'))
+#     def test_validation_invalid(self, product_type):
+#         pt = ProductType(product_type)
 
-        result = pt.validate()
-        assert len(result) == 1
-        assert result[0].startswith("W003:")
+#         result = pt.validate()
+#         assert len(result) == 1
+#         assert result[0].startswith("W003:")
 
 
 def test_str():
@@ -53,15 +56,17 @@ def test_str():
 
     NOTE: this is now in the base decorator
     """
-    mass = Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6
+    mass = Mass(value=2.3,
+                unit='kg',
+                standard_deviation=0.2,
+                replicates=6
                 )
 
     s = str(mass)
 
-    print(s)
     print(repr(mass))
 
-    assert s == "Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6)"
+    assert s == "Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6, unit_type='mass')"
 
 
 
@@ -237,23 +242,14 @@ class TestMeasurementBase:
               really want to use this class, just the subclasses.
     '''
     def test_init(self):
-        model = MeasurementBase()
-
-        assert model.value is None
-        assert model.min_value is None
-        assert model.max_value is None
-
-        assert model.unit is None
-        assert model.unit_type is None
-
-        assert model.standard_deviation is None
-        assert model.replicates is None
+        with pytest.raises(NotImplementedError):
+            model = MeasurementBase()
 
 
 class TestTemperature:
     '''
-        Fixme: We really need to enforce that *some* value is passed in
-              The model should fail if there is no value at all
+    Fixme: We really need to enforce that *some* value is passed in
+           The model should fail if there is no value at all
     '''
     def test_init_empty(self):
         model = Temperature()
@@ -360,6 +356,86 @@ class TestTemperature:
         assert new.value == 0.0
         assert new.unit == 'C'
 
+    @pytest.mark.parametrize("model", [Temperature(value=273, unit='K'),
+                                       Temperature(value=15.15, unit='C'),
+                                       Temperature(value=14.85, unit='C'),
+                                       Temperature(value=-0.15, unit='C'),
+                                       Temperature(value=-0.85, unit='C'),
+                                  ])
+    def test_validate_C_K_conversion_15(self, model):
+        #model = Temperature(value=273, unit='K')
+
+        msgs = model.validate()
+
+        print(msgs)
+
+        assert "W010:" in msgs[0]
+
+    @pytest.mark.parametrize("temp_obj, result", [(Temperature(value=273, unit='K'), 0.0),
+                                                  (Temperature(value=15.15, unit='C'), 15.0),
+                                                  (Temperature(value=14.85, unit='C'), 15.0),
+                                                  (Temperature(value=-0.15, unit='C'), 0.0),
+                                                  (Temperature(value=-0.85, unit='C'), -1.0),
+                                                  ])
+    def test_fix_C_K(self, temp_obj, result):
+        """
+        check if we can auto-fix the C-K conversion
+        """
+        temp_obj.fix_C_K()
+        assert temp_obj.unit == 'C'
+        assert temp_obj.value == result
+
+
+#                  "name": "Butane and Lighter IBP - 60F",
+# -                    "unit": "F",
+# -                    "min_value": 151.46,
+# -                    "max_value": 60.0,
+# +                    "unit": "C",
+# +                    "min_value": 66.36666666666667,
+# +                    "max_value": 15.555555555555543,
+#                      "unit_type": "temperature"
+#                  }
+#              },
+    @pytest.mark.parametrize("temp_obj", [(Temperature(value=273, unit='F')),
+                                          (Temperature(min_value=15.15, max_value=60.0, unit='F')),
+                                          (Temperature(value=60.15, unit='F')),
+                                          (Temperature(value=0.16, unit='C')),
+                                          (Temperature(value=-0.86, unit='C')),
+                                          ])
+    def test_fix_C_K_no_change(self, temp_obj):
+        """
+        if temps are not in C or K, there should be no change.
+        """
+        t1 = temp_obj.copy()
+        temp_obj.fix_C_K()
+        assert temp_obj == t1
+
+
+    @pytest.mark.parametrize("t, unit, result", [(273, 'K', 0.0),
+                                                 (15.15, 'C', 15.0),
+                                                 (14.85, 'C', 15.0),
+                                                 (-0.15, 'C', 0.0),
+                                                 (-0.85, 'C', -1.0),
+                                                 ])
+    def test_patch_fix_C_K(self, monkeypatch, t, unit, result):
+
+        temp_obj = Temperature(value=t, unit=unit)
+
+        assert temp_obj.value == t
+
+        print(f"{Temperature.fixCK=}")
+
+        # turn on fix
+        monkeypatch.setattr(Temperature, "fixCK", True)
+
+        print(f"{Temperature.fixCK=}")
+
+        temp_obj = Temperature(value = t, unit=unit)
+
+        assert temp_obj.unit == 'C'
+        assert temp_obj.value == result
+
+
 
 class TestLength:
     '''
@@ -381,6 +457,41 @@ class TestLength:
 
         assert model.value == 100.0
         assert model.unit == 'cm'
+
+    def test_with_unit_type(self):
+        model = Length(value=1.0, unit='m', unit_type="length")
+        model.convert_to('cm')
+
+        assert model.value == 100.0
+        assert model.unit == 'cm'
+
+    def test_with_bad_unit_type(self):
+        with pytest.raises(ValueError):
+            model = Length(value=1.0, unit='m', unit_type="mass")
+
+    def test_from_py_json(self):
+        model = Length(value=1.0,
+                       unit='m',
+                       standard_deviation=0.01,
+                       replicates=3)
+        print(model.py_json())
+
+        pyson = model.py_json()
+
+        model2 = Length.from_py_json(pyson)
+
+        assert model == model2
+
+    def test_from_py_json_bad_unit_type(self):
+        pyson = {'value': 1.0,
+                 'unit': 'm',
+                 'standard_deviation': 0.01,
+                 'replicates': 3,
+                 'unit_type': 'volume'}
+        with pytest.raises(ValueError):
+            model = Length.from_py_json(pyson)
+
+
 
 
 class TestMass:
@@ -446,6 +557,166 @@ class TestVolumeFraction:
         model.convert_to('%')
 
         assert model.value == 0.1
+        assert model.unit == '%'
+
+    def test_convert_to_invalid(self):
+        model = VolumeFraction(value=1.0, unit='mL/L')
+        with pytest.raises(uc.InvalidUnitError):
+            model.convert_to('g/kg')
+
+        assert model.value == 1.0
+        assert model.unit == 'mL/L'
+
+class TestMassOrVolumeFraction:
+    """
+    Could be Mass or Volume, depending on how it's initialized
+
+    unit_type must be passed in when created.
+    """
+    def test_init_no_unit_type(self):
+        """
+        You shouldn't be able to initialize without specifying what
+        type of fraction this is.
+        """
+        with pytest.raises(TypeError):
+            model = MassOrVolumeFraction()
+
+    def test_init_bad_unit_type(self):
+        """
+        You shouldn't be able to initialize without specifying what
+        type of fraction this is.
+        """
+        with pytest.raises(ValueError):
+            model = MassOrVolumeFraction(unit_type="mass")
+
+    def test_init_empty_mass(self):
+        model = MassOrVolumeFraction(unit_type='MassFraction')
+
+        py_json = model.py_json()
+
+        assert model.unit_type == 'massfraction'
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'massfraction'}
+
+    def test_init_empty_volume(self):
+        model = MassOrVolumeFraction(unit_type="VolumeFraction")
+
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'volumefraction'}
+
+    def test_init_full(self):
+        model = MassOrVolumeFraction(value=0.001,
+                                     standard_deviation=0.0002,
+                                     replicates=12,
+                                     unit_type="VolumeFraction")
+
+        assert model.value == 0.001
+        assert model.standard_deviation == 0.0002
+        assert model.replicates == 12
+        assert model.min_value == None
+        assert model.max_value == None
+
+
+    def test_convert_value_mass(self):
+        model = MassOrVolumeFraction(value=0.0005,
+                                     unit='fraction',
+                                     unit_type="MassFraction")
+
+        model2 = model.converted_to('ppm')
+
+        assert math.isclose(model2.value, 500)
+        assert model2.unit_type == "massfraction"
+        assert model2.unit == "ppm"
+
+    def test_convert_value_volume(self):
+        model = MassOrVolumeFraction(value=0.0005,
+                                     unit='fraction',
+                                     unit_type="volumeFraction")
+
+        model2 = model.converted_to('ppm')
+
+        assert math.isclose(model2.value, 500)
+        assert model2.unit_type == "volumefraction"
+        assert model2.unit == "ppm"
+
+    def test_convert_value_invalid(self):
+        model = MassOrVolumeFraction(value=0.0005,
+                                     unit='fraction',
+                                     unit_type="volumeFraction")
+
+        with pytest.raises(uc.InvalidUnitError):
+            model2 = model.converted_to('g/kg')
+
+
+    def test_equal(self):
+        model1 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="MassFraction")
+
+        model2 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="MassFraction")
+
+        assert model1 == model2
+
+    def test_equal_except_unit_type(self):
+        model1 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="MassFraction")
+
+        model2 = MassOrVolumeFraction(value=0.0005,
+                                      unit='fraction',
+                                      unit_type="VolumeFraction")
+
+        assert model1 != model2
+
+    def test_from_py_json_no_unit_type(self):
+        pyson = {'value': 0.002,
+                 'unit': 'ppm'}
+
+        with pytest.raises(TypeError):
+            model = MassOrVolumeFraction.from_py_json(pyson)
+
+    def test_from_py_json_volume(self):
+        pyson = {'value': 0.002,
+                 'unit': 'ppm',
+                 'unit_type': 'volumefraction'}
+
+        model = MassOrVolumeFraction.from_py_json(pyson)
+
+        print(f"{pyson=}")
+        print(f"{model.py_json()=}")
+        assert model.py_json() == pyson
+
+
+class TestConcentration:
+    '''
+    Unit used for unknown whether it's volume of mass or ??
+    '''
+    def test_init_empty(self):
+        model = Concentration()
+
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'concentration'}
+
+    def test_convert_to(self):
+        model = Concentration(value=1.0, unit='fraction')
+        model.convert_to('%')
+
+        assert model.value == 100.0
+        assert model.unit == '%'
+
+    def test_convert_to_invalid(self):
+        model = Concentration(value=50, unit='%')
+        with pytest.raises(uc.InvalidUnitError):
+            model.convert_to('g/kg')
+
+        assert model.value == 50
         assert model.unit == '%'
 
 
@@ -550,7 +821,7 @@ class TestNeedleAdhesion:
         py_json = model.py_json()
 
         # should only have a unit_type
-        assert py_json == {'unit_type': None}
+        assert py_json == {'unit_type': "needleadhesion"}
 
     def test_convert_to(self):
         model = NeedleAdhesion(value=10.0, unit='g/cm^2')

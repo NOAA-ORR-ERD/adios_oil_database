@@ -20,6 +20,14 @@ Subpackages
 Submodules
 ----------
 
+adios\_db.data\_sources.importer\_base module
+---------------------------------------------
+
+.. automodule:: adios_db.data_sources.importer_base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.data\_sources.mapper module
 -------------------------------------
 
@@ -32,6 +40,14 @@ adios\_db.data\_sources.parser module
 -------------------------------------
 
 .. automodule:: adios_db.data_sources.parser
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.data\_sources.reader module
+-------------------------------------
+
+.. automodule:: adios_db.data_sources.reader
    :members:
    :undoc-members:
    :show-inheritance:

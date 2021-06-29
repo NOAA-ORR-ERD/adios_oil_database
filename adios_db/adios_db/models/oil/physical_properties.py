@@ -20,7 +20,7 @@ from ..common.measurement import (Temperature,
 
 class RefTempList:
     """
-    mixin for all classes that are a list of pointts with
+    mixin for all classes that are a list of points with
     reference temperatures
     """
 
@@ -29,6 +29,8 @@ class RefTempList:
         validater for anything that has a list of reference temps
 
         e.g. density and viscosity
+
+        For viscosity it checks for shear rate as well.
         """
         points_list = self
         data_str = self.__class__.__name__
@@ -43,8 +45,16 @@ class RefTempList:
                 t = f"{pt.ref_temp.value:.2f} {pt.ref_temp.unit}"
                 msgs.append(ERRORS["E040"].format(data_str, t))
 
-        # check for duplicate temps
-        temps = sorted(p.ref_temp.converted_to('K').value for p in points_list)
+        # check for duplicate temp/shear_rate combos
+        temps = []
+        for p in points_list:
+            temp = p.ref_temp.converted_to('K').value
+            try:
+                temp = temp + p.shear_rate.value
+            except (TypeError, AttributeError):
+                pass
+            temps.append(temp)
+        temps.sort()
         diff = (abs(t2 - t1) for t1, t2 in zip(temps[1:], temps[:1]))
         for d in diff:
             if d < 1e-3:

@@ -1,0 +1,148 @@
+{
+    "oil_id": "AD01500",
+    "adios_data_model_version": "0.11.0",
+    "metadata": {
+        "name": "JET A-1,  MARITIME SAFETY AUTHORITY OF NEW ZEALAND",
+        "source_id": "AD01500",
+        "location": "NEW ZEALAND",
+        "reference": {
+            "year": 1996,
+            "reference": "Welsh,C., Maritime Safety Authority of New Zealand, Communication to Bill Lehr, NOAA, July 29, 1996."
+        },
+        "product_type": "Distillate Fuel Oil",
+        "API": 45.22,
+        "labels": [
+            "Fuel Oil",
+            "Distillate Fuel",
+            "Refined Product"
+        ],
+        "model_completeness": 42,
+        "gnome_suitable": true
+    },
+    "sub_samples": [
+        {
+            "metadata": {
+                "name": "Fresh Oil Sample",
+                "short_name": "Fresh Oil",
+                "fraction_evaporated": {
+                    "value": 0.0,
+                    "unit": "fraction",
+                    "unit_type": "massfraction"
+                }
+            },
+            "physical_properties": {
+                "flash_point": {
+                    "measurement": {
+                        "unit": "C",
+                        "min_value": 39,
+                        "max_value": 45,
+                        "unit_type": "temperature"
+                    }
+                },
+                "densities": [
+                    {
+                        "density": {
+                            "value": 800.0,
+                            "unit": "kg/m^3",
+                            "unit_type": "density"
+                        },
+                        "ref_temp": {
+                            "value": 15,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ],
+                "kinematic_viscosities": [
+                    {
+                        "viscosity": {
+                            "value": 3.52e-06,
+                            "unit": "m^2/s",
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 20,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
+            "distillation_data": {
+                "type": "volume fraction",
+                "cuts": [
+                    {
+                        "fraction": {
+                            "value": 0.01,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 148,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.1,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 168,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.2,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 174,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.5,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 190,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "fraction": {
+                            "value": 0.9,
+                            "unit": "fraction",
+                            "unit_type": "concentration"
+                        },
+                        "vapor_temp": {
+                            "value": 225,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    }
+                ]
+            },
+            "bulk_composition": [
+                {
+                    "name": "naphthenes",
+                    "measurement": {
+                        "value": 0.0004,
+                        "unit": "fraction",
+                        "unit_type": "massfraction"
+                    }
+                }
+            ]
+        }
+    ]
+}

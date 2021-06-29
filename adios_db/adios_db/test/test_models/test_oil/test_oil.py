@@ -21,14 +21,11 @@ OIL_ID = 'AD00123'
 HERE = Path(__file__).parent
 OUTPUT_DIR = HERE / "output"
 
-# NOTE: this should be updated when the data model is updated.
-BIG_RECORD = json.load(open(
-    HERE / "ExampleFullRecord.json", encoding="utf-8"
-))
+TEST_DATA_DIR = HERE.parent.parent / "data_for_testing" / "noaa-oil-data" / "oil"
+EXAMPLE_DATA_DIR = HERE.parent.parent / "data_for_testing" / "example_data"
 
-# BIG_RECORD = json.load(open(
-#     Path(__file__).parent / "AD00602.json"
-# ))
+BIG_RECORD = json.load(open(
+    TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
 
 
 class TestOil:
@@ -202,7 +199,7 @@ class TestOil:
 
         assert len(oil.sub_samples) == 5
         assert oil.sub_samples[0].metadata.name == "Fresh Oil Sample"
-        assert oil.sub_samples[3].metadata.name == "25.34% Evaporated"
+        assert oil.sub_samples[3].metadata.name == "25.3% Evaporated"
 
     def test_permanent_warnings(self):
         oil = Oil('XXXXXX')
@@ -326,7 +323,7 @@ class TestFullRecordMetadata:
     @pytest.mark.parametrize("attr, value", [("location", "Alberta, Canada"),
                                              ('name', 'Access West Blend Winter'),
                                              ('source_id', '2234'),
-                                             ('sample_date', '2013-04-08'),
+                                             ('sample_date', '2013-08-04'),
                                         ])
     def test_location(self, attr, value):
         metadata = self.oil.metadata
@@ -339,7 +336,7 @@ def test_from_file_name():
     """
     test loading a Oil object directly from a file name
     """
-    oil = Oil.from_file(HERE / "ExampleFullRecord.json")
+    oil = Oil.from_file(TEST_DATA_DIR / "EC" / "EC02234.json")
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
@@ -348,9 +345,10 @@ def test_from_file_name():
 
 def test_from_file():
     """
-    test loading a Oil object directly from a file name
+    test loading a Oil object directly from an open file
     """
-    oil = Oil.from_file(open(HERE / "ExampleFullRecord.json", encoding="utf-8"))
+    oil = Oil.from_file(open(TEST_DATA_DIR / "EC" / "EC02234.json",
+                        encoding="utf-8"))
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
@@ -393,7 +391,8 @@ def test_round_trip():
     attributes are in a different order, but should mean the same thing.
 
     """
-    filein = HERE / "EC000506.json"
+    # filein = EXAMPLE_DATA_DIR / "EC000506.json"
+    filein = TEST_DATA_DIR / "EC" / "EC00506.json"
     fileout = OUTPUT_DIR / "temp_oil.json"
 
     # read it in:

@@ -42,7 +42,8 @@ synonyms_for_product_types = {'Crude Oil',
                               'Residual Fuel',
                               'Distillate Fuel',
                               'Refined Product',
-                              'Transformer Oil',
+                              'Condensate',
+                              'Transformer Oil'                              
                               }
 # If it's an exact match, then it's definitely a synonym
 for pt, labels in types_to_labels.labels.items():
@@ -63,27 +64,32 @@ label_map = {label: no_criteria for label in synonyms_for_product_types}
 # this maps the labels according to API and kinematic viscosity (cSt at given temp in C) ranges.
 label_map.update({
     # 'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
-    'Light Crude':  {"api_min": 31.1, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Medium Crude': {"api_min": 22.3, "api_max": 31.1, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Heavy Crude': {"api_min": -inf, "api_max": 22.3, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Condensate':  {"api_min": 50, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Light Crude':  {"api_min": 35, "api_max": 50, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Medium Crude': {"api_min": 20, "api_max": 35, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
+    'Heavy Crude': {"api_min": -inf, "api_max": 20, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
     'Group V': {"api_min": -inf, "api_max": 10.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
 
     'Heavy Fuel Oil': {"api_min": -inf, "api_max": 15.0, "kvis_min": 200, "kvis_max": inf, 'kvis_temp': 50},
 
     # pretty much made this up ... non-newtonian
-    'Bitumen': {"api_min": -inf, "api_max": 10, "kvis_min": 2000, "kvis_max": inf, 'kvis_temp': 50},
+    'Bitumen': {"api_min": -inf, "api_max": 10, "kvis_min": 1000, "kvis_max": inf, 'kvis_temp': 40},
+    # I went through all the bitumen records that we have, and most of them do not have 
+    # kinematic viscosity measurements. However, they all have dynamic viscosity 
+    # measurements which were > 10^6 cP at 0C and > 10^5 cP at 15C.
+    # I propose changing the criteria to reflect these measurements.
 
-
+    #***** The following need more verification
     # Refined light products
     'No. 2 Fuel Oil': {"api_min": 30, "api_max": 39, "kvis_min": 2.5, "kvis_max": 4, 'kvis_temp': 38},
     'Kerosene': {"api_min": 47.6, "api_max": 67.8, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 38},
     'Aviation Gas': {"api_min": 47.6, "api_max": 70.8, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 38},
     'Gasoline': {"api_min": 59.7, "api_max": 76.6, "kvis_min": -inf, "kvis_max": 2.5, 'kvis_temp': 38},
 
-    # Interemdiate Fuel Oils
-    'MDO':  {"api_min": 30, "api_max": 42, "kvis_min": 8, "kvis_max": 11, 'kvis_temp': 40},
+    # Intermediate Fuel Oils
+    'MDO':  {"api_min": 30, "api_max": 42, "kvis_min": -inf, "kvis_max": 11, 'kvis_temp': 40},
     'IFO':  {"api_min": 15, "api_max": 30, "kvis_min": 4, "kvis_max": 200, 'kvis_temp': 38},
-
+    #IFO needs an additional limitation to not be tied to biodiesel
     })
 
 for label, synonyms in synonyms_for_labels.items():

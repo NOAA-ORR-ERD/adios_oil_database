@@ -340,7 +340,7 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
 
     :param oil: the oil object to get data from
 
-    :param units="fraction": units you want the density in
+    :param units="fraction": units you want the fraction in
 
     :param temp_units="K": units you want the temperature in
 
@@ -354,6 +354,7 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
         f = cut.fraction.converted_to(units).value
         t = cut.vapor_temp.converted_to(temp_units).value
         cuts_table.append((f, t))
+    cuts_table.sort(key=itemgetter(0))
     return cuts_table
 
 

@@ -1,21 +1,33 @@
 """
 Code for making a "GnomeOil" from an Oil Object
 
-NOTE: This make s JSON compatible Python structure from. which to build a GnomeOil
+See the PyGNOME code for more about GNOME's requirements
 
+NOTE: This make s JSON compatible Python structure from which to build
+a GnomeOil
 """
 
+import copy
+
 import numpy as np
+
+import unit_conversion as uc
+
 from adios_db.models.oil.validation.warnings import WARNINGS
 from adios_db.models.oil.validation.errors import ERRORS
+
 from adios_db.computation import estimations as est
 from .physical_properties import get_density_data, get_kinematic_viscosity_data, get_distillation_cuts
-from .physical_properties import bullwinkle_fraction, max_water_fraction_emulsion 
+from .physical_properties import bullwinkle_fraction, max_water_fraction_emulsion
 from .physical_properties import Density, KinematicViscosity
 from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_from_api
 
 
 def get_empty_dict():
+    """
+    This provides an empty dictionary with everything that is needed
+    to generate a GNOME Oil
+    """
     return{"name": "",
            # Physical properties
            "api": None,
@@ -40,6 +52,7 @@ def get_empty_dict():
            "flash_point": None,
            "adios_oil_id": None,
            }
+
 
 def make_gnome_oil(oil):
     """
@@ -72,13 +85,17 @@ def make_gnome_oil(oil):
               "adios_oil_id=None,
 
     """
-
     # metadata:
     go = get_empty_dict()
+    # make sure we don't change the original oil object
+    oil = copy.deepcopy(oil)
     go['name'] = oil.metadata.name
-    if oil.metadata.API is None:
-        raise ValueError(ERRORS["E030"]+" - oil not suitable for use in Gnome")
-    go['api'] = oil.metadata.API
+
+    dens = Density(oil)
+    ref_density = dens.at_temp(288.7)  # 60F in K
+    go['api'] = uc.convert('kg/m^3', 'API', ref_density)
+    # for gnome_oil we don't treat api as data, only api from density
+    oil.metadata.API = go['api']
     go['adios_oil_id'] = oil.oil_id
 
     # Physical properties
@@ -86,21 +103,29 @@ def make_gnome_oil(oil):
 
     flash_point = phys_props.flash_point
     if flash_point is None:
-        go['flash_point'] = estimate_flash_point(oil)
+        go['flash_point'] = None
     else:
-        if phys_props.flash_point.measurement.max_value is not None:
-            go['flash_point'] = phys_props.flash_point.measurement.converted_to('K').max_value
-        else:
-            go['flash_point'] = phys_props.flash_point.measurement.converted_to('K').value
+        fp = phys_props.flash_point.measurement.converted_to('K')
+        if fp.max_value is not None:
+            go['flash_point'] = fp.max_value
+        elif fp.value is not None:
+            go['flash_point'] = fp.value
+        else:  # shouldn't happen, but ...
+            go['flash_point'] = None
 
     pour_point = phys_props.pour_point
     if pour_point is None:
         go['pour_point'] = estimate_pour_point(oil)
     else:
-        if phys_props.pour_point.measurement.max_value is not None:
-            go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').max_value
+        pp = phys_props.pour_point.measurement.converted_to('K')
+        if pp.max_value is not None:
+            go['pour_point'] = pp.max_value
+        elif pp.value is not None:
+            go['pour_point'] = pp.value
+        elif pp.min_value is not None:
+            go['pour_point'] = pp.min_value
         else:
-            go['pour_point'] = phys_props.pour_point.measurement.converted_to('K').value
+            go['pour_point'] = None
 
     # fixme: We need to get the weathered densities, if they are there.
     densities = get_density_data(oil, units="kg/m^3", temp_units="K")
@@ -110,14 +135,31 @@ def make_gnome_oil(oil):
 
     viscosities = get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K")
 
-    go['kvis'], go['kvis_ref_temps'] = zip(*viscosities)
-    go['kvis_weathering'] = [0.0] * len(go['kvis'])
+    if viscosities:
+        go['kvis'], go['kvis_ref_temps'] = zip(*viscosities)
+        go['kvis_weathering'] = [0.0] * len(go['kvis'])
+    else:
+        raise ValueError("Gnome oil needs at least one viscosity value")
 
-    go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
+    bullwinkle = None
+    for sub_sample in oil.sub_samples:
+        try:
+            frac_weathered = sub_sample.metadata.fraction_weathered.converted_to('fraction').value
+            if bullwinkle is None or frac_weathered > bullwinkle:
+                bullwinkle = frac_weathered
+        except:
+            frac_weathered = None
+
+    if bullwinkle is None:
+        go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
+    else:
+        go['bullwinkle_fraction'] = bullwinkle
+
+    #go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
     go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
     go['solubility'] = 0
     go['k0y'] = 2.024e-06 #do we want this included?
-    
+
     # pseudocomponents
     cut_temps, frac_evap = normalized_cut_values(oil)
 
@@ -153,7 +195,7 @@ def estimate_pour_point(oil):
         #pour_point = pour_point_from_kvis(lowest_kvis[0], lowest_kvis[1])
         pour_point = (c_v1 * lowest_kvis[1]) / (c_v1 - lowest_kvis[1] * np.log(lowest_kvis[0]))
 
-    return pour_point 
+    return pour_point
 
 
 def estimate_flash_point(oil):
@@ -166,6 +208,9 @@ def estimate_flash_point(oil):
 
     cuts = get_distillation_cuts(oil)
 
+    # fixme: if we do need this, we should have a better way to get
+    #        boiling point -- the first cut is not necessarily the BP!
+    #        the IBP is stored in the distillation record, if it is known.
     if len(cuts) > 2:
         lowest_cut = cuts[0]
         flash_point = flash_point_from_bp(lowest_cut[1])
@@ -288,18 +333,129 @@ def _inverse_linear_curve(y, a, b, M, zeta=0.12):
     return (y_c - b) / a
 
 
-def normalized_cut_values(oil, N=10):
+# adios version
+def normalized_cut_values_adios(oil):
+    oil_api = oil.metadata.API
+    T0=457.16-3.3447*oil_api
+    TG=1356.7-247.36*np.log(oil_api)
+    cuts = get_distillation_cuts(oil)
+    if len(cuts) == 0:
+        # should be a warning if api < 50 or not a crude
+        #NumComp=5					 #number of components
+        NumComp=10					 #number of components
+        BP = np.array([(T0 + (TG *(i+.5)) / NumComp) for i in range(NumComp)])
+        fevap = np.cumsum(est.fmasses_flat_dist(N=10))
+    else:
+        NumCuts = len(cuts)
+        NumComp = NumCuts + 1
+        BP_i, fevap_i = list(zip(*[(c[1], c[0]) for c in cuts]))
+        BP = np.zeros(NumComp)
+        fevap = np.zeros(NumComp)
+        len_BP = len(BP)
+        T1 = BP_i[0]
+        T2 = BP_i[1]
+        TN = BP_i[NumCuts-1]
+        fN = fevap_i[NumCuts-1]
+        BP[0] = T1-.5*fevap_i[0]*(T2-T1)/(fevap_i[1]-fevap_i[0])
+        fevap[0] = fevap_i[0]
+        for i in range(NumCuts-1):
+            BP[i+1] = .5*(BP_i[i]+BP_i[i+1])
+            fevap[i+1] = fevap_i[i+1]
+        BPN =  TN+.5*(1-fN)*(TN-T1)/(fN-fevap_i[0])
+        fevap[NumComp-1] = 1
+        BP[NumComp-1] = TN+.5*(1-fN)*(TN-T1)/(fN-fevap_i[0])
+        if BP[NumComp-1]> 1500.:
+            BP[NumComp-1] = 1500
+        if BP[NumComp-1]< 1050:
+            BP[NumComp-1] = 1050
+
+    return np.asarray(BP), est.fmasses_from_cuts(fevap)
+
+def normalized_cut_values(oil):
+    f_res = f_asph = 0 # for now, we are including the resins and asphaltenes
+    cuts = get_distillation_cuts(oil)
+    oil_api = oil.metadata.API
+    iBP = 266
+    tBP = 1050
+
+    if len(cuts) == 0:
+        # should be a warning if api < 50 or not a crude
+        oil_api = oil.metadata.API
+        if oil.metadata.product_type != 'Crude Oil NOS':
+            print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
+        if oil_api < 0:
+            raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
+
+        # ADIOS2 method
+        BP_i = est.cut_temps_from_api(oil_api)
+        fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
+        # Robert's new method
+        #iBP = 10/9 * (519.3728 - 3.6637 * oil_api) - 1015 / 9
+        #tBP = 1015
+        #BP_i = [iBP, tBP]
+        #fevap_i = [0,1]
+    else:
+        BP_i, fevap_i = list(zip(*[(c[1], c[0]) for c in cuts]))
+        N = len(BP_i)
+        if not (fevap_i[1] == fevap_i[0]):
+            iBP = BP_i[0] - fevap_i[0] * (BP_i[1] - BP_i[0]) / (fevap_i[1] - fevap_i[0])
+        if not (fevap_i[N-1] == fevap_i[0]):
+            tBP = BP_i[N-1] + (1 - fevap_i[0]) * (BP_i[N-1] - BP_i[0]) / (fevap_i[N-1] - fevap_i[0])
+
+    iBP = max(266, iBP)
+    tBP = min(1050, tBP)
+
+    set_temp = [266,310,353,483,563,650,800,950,1050]
+    #set_temp = [266,310,353,423,483,523,543,563,650,800,950,1050]
+
+    N = len(BP_i)
+
+    new_fevap = fevap_i
+    new_BP = BP_i
+    if not fevap_i[N-1] == 1:
+        new_BP = np.append(BP_i,tBP)
+        new_fevap = np.append(fevap_i, 1.0)
+    if not fevap_i[0] == 0:
+        new_BP = np.insert(new_BP,0,iBP)
+        new_fevap = np.insert(new_fevap, 0, 0)
+    new_evap = np.interp(set_temp, new_BP, new_fevap)
+
+    if new_evap[-1] < 1:
+        new_evap[-1] = 1	# put all the extra mass in the last cut
+
+    avg_evap_i = np.asarray(new_evap[1:])
+    avg_temp_i = np.asarray([(set_temp[i]+set_temp[i+1])/2 for i in range(0, len(set_temp)-1)])
+
+    avg_temp_i = avg_temp_i[avg_evap_i!=0]
+    avg_evap_i = avg_evap_i[avg_evap_i!=0]
+
+    num_ones = 0
+    for i in range(len(avg_evap_i)):
+        if avg_evap_i[i] == 1:
+            num_ones += 1
+
+    if num_ones > 1:
+        for i in range(num_ones-1):
+            avg_temp_i = np.delete(avg_temp_i,len(avg_evap_i)-1)
+            avg_evap_i = np.delete(avg_evap_i,len(avg_evap_i)-1)
+
+    return np.asarray(avg_temp_i), est.fmasses_from_cuts(avg_evap_i)
+
+def normalized_cut_values_james(oil, N=10):
     """
     estimate cut temperatures
 
     """
     from scipy.optimize import curve_fit	#temporary
-    f_res, f_asph, _estimated_res, _estimated_asph = inert_fractions(oil)
+    #f_res, f_asph, _estimated_res, _estimated_asph = inert_fractions(oil)
+    f_res = f_asph = 0
     cuts = get_distillation_cuts(oil)
     oil_api = oil.metadata.API
     if len(cuts) == 0:
         if oil.metadata.product_type != 'Crude Oil NOS':
             print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
+        if oil_api < 0:
+            raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
         BP_i = est.cut_temps_from_api(oil_api)
         fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
     else:
@@ -321,7 +477,7 @@ def normalized_cut_values(oil, N=10):
 
     return T_i, est.fmasses_from_cuts(fevap_i)
 
-#need to replace this
+# need to replace this
 def component_mass_fractions(oil):
     """
     estimate pseudocomponent mass fractions
@@ -339,8 +495,25 @@ def component_mass_fractions(oil):
     f_res_i = np.zeros_like(f_sat_i)
     f_asph_i = np.zeros_like(f_sat_i)
 
+    if asph + res > f_arom_i.sum(): # something went wrong
+        res = 0
+        asph = 0
+
     f_res_i[len(f_res_i)-1] = res
     f_asph_i[len(f_asph_i)-1] = asph
+    f_inert = asph + res
+
+    for i in range(len(f_arom_i)-1,-1,-1):
+        if f_inert > 0:
+            if f_arom_i[i] > f_inert:
+                f_arom_i[i] = f_arom_i[i] - f_inert
+                f_inert = 0
+            else:
+                f_inert = f_inert - f_arom_i[i]
+                f_arom_i[i] = 0
+        else:
+            f_inert = f_inert * 1
+
     mf_list = list(zip(f_sat_i, f_arom_i, f_res_i, f_asph_i))	# will want to zip all 4 together
     return (np.asarray(mf_list)).flatten()
 

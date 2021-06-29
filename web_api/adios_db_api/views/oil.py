@@ -8,7 +8,8 @@ from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound,
                                     HTTPConflict,
-                                    HTTPUnsupportedMediaType)
+                                    HTTPUnsupportedMediaType,
+                                    HTTPInternalServerError)
 
 from pymongo.errors import DuplicateKeyError
 
@@ -80,10 +81,14 @@ def get_oils(request):
         search_opts = get_search_params(request)
         sort = get_sort_params(request)
 
-        return json_api_results(client.query(page=[start, stop],
-                                             sort=sort,
-                                             **search_opts),
-                                limit)
+        try:
+            return json_api_results(client.query(page=[start, stop],
+                                                 sort=sort,
+                                                 **search_opts),
+                                    limit)
+        except Exception as e:
+            logger.error(e)
+            raise HTTPInternalServerError(e)
 
 
 def json_api_results(results, page_size):
@@ -117,7 +122,8 @@ def get_search_params(request):
     xform_opts = {'q': 'text',
                   'qApi': 'api',
                   'qType': 'product_type',
-                  'qLabels': 'labels'
+                  'qLabels': 'labels',
+                  'qGnomeSuitable': 'gnome_suitable'
                   }
 
     for k, v in request.GET.items():
@@ -346,6 +352,7 @@ def get_oil_searchable_fields(oil):
                         'labels': meta.get('labels', []),
                         'model_completeness': meta.get('model_completeness',
                                                        None),
+                        'gnome_suitable': meta.get('gnome_suitable', None),
                     },
                     'status': oil.get('status', []),
                 },

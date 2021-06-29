@@ -237,7 +237,7 @@ class EnvCanadaSampleMapper(MapperBase):
 
             if ref_temp is not None:
                 cuts.append({
-                    'fraction': self.measurement(frac, '%'),
+                    'fraction': self.measurement(frac, '%', unit_type='massfraction'),
                     'vapor_temp': self.measurement(ref_temp, 'C')
                 })
 
@@ -506,24 +506,24 @@ class EnvCanadaSampleMapper(MapperBase):
         ret = []
 
         groups = [
-            ('btex_group', None, 'µg/g', 'Mass Fraction', False),
-            ('c4_c6_alkyl_benzenes', None, 'µg/g', 'Mass Fraction', False),
+            ('btex_group', None, 'µg/g', 'MassFraction', False),
+            ('c4_c6_alkyl_benzenes', None, 'µg/g', 'MassFraction', False),
             ('naphthalenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
-             'Mass Fraction', False),
+             'MassFraction', False),
             ('phenanthrenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
-             'Mass Fraction', False),
+             'MassFraction', False),
             ('dibenzothiophenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
-             'Mass Fraction', False),
+             'MassFraction', False),
             ('fluorenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
-             'Mass Fraction', False),
+             'MassFraction', False),
             ('benzonaphthothiophenes', 'alkylated_aromatic_hydrocarbons',
-             'µg/g', 'Mass Fraction', False),
+             'µg/g', 'MassFraction', False),
             ('chrysenes', 'alkylated_aromatic_hydrocarbons', 'µg/g',
-             'Mass Fraction', False),
+             'MassFraction', False),
             ('other_priority_pahs', 'alkylated_aromatic_hydrocarbons', 'µg/g',
-             'Mass Fraction', True),
-            ('n_alkanes', None, 'µg/g', 'Mass Fraction', True),
-            ('biomarkers', None, 'µg/g', 'Mass Fraction', True),
+             'MassFraction', True),
+            ('n_alkanes', None, 'µg/g', 'MassFraction', True),
+            ('biomarkers', None, 'µg/g', 'MassFraction', True),
         ]
 
         for group_args in groups:
@@ -537,7 +537,7 @@ class EnvCanadaSampleMapper(MapperBase):
     #     ret = []
     #
     #     groups = [
-    #         ('headspace_analysis', None, 'mg/g', 'Mass Fraction', False),
+    #         ('headspace_analysis', None, 'mg/g', 'MassFraction', False),
     #     ]
     #
     #     for group_args in groups:
@@ -601,7 +601,7 @@ class EnvCanadaSampleMapper(MapperBase):
         # this one isn't as simple as the rest
         groups = [
             ('hydrocarbon_content_ratio', 'hydrocarbon_content_ratio',
-             '%', 'Mass Fraction', True),
+             '%', 'MassFraction', True),
         ]
 
         for group_args in groups:
@@ -630,7 +630,7 @@ class EnvCanadaSampleMapper(MapperBase):
 
         for attr, name in groups:
             ret[attr] = list(self.compounds_in_group(name, None,
-                                                     'mg/g', 'Mass Fraction',
+                                                     'mg/g', 'MassFraction',
                                                      False))
             for item in ret[attr]:
                 item.pop('groups')

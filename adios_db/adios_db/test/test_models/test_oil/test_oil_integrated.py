@@ -77,7 +77,7 @@ def test_make_oil_from_partial():
                   "name": "Evaporated Oil Sample",
                   "short_name": "Evaporated Oil",
                   "fraction_weathered": {'value': 15, 'unit': '%',
-                                          'unit_type': 'mass_fraction'}
+                                          'unit_type': 'massfraction'}
                   },
                   'physical_properties': {
                       'densities': [

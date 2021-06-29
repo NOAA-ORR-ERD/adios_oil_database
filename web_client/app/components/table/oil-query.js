@@ -19,6 +19,7 @@ export default class NewOilQuery extends Component {
     @tracked dir = 'asc';
     @tracked meta;
     @tracked selectedType;
+    @tracked gnomeSuitable;
 
     page = 0;
     limit = 50;    
@@ -31,7 +32,7 @@ export default class NewOilQuery extends Component {
 
     columns = [{
         label: 'Status',
-        valuePath: 'status',
+        valuePath: 'filteredStatus',
         cellComponent: 'table/cell/status',
         width: '5em',
         minResizeWidth: 80,
@@ -114,6 +115,7 @@ export default class NewOilQuery extends Component {
         this.selectedApi = this.args.savedFilters['api'];
         this.selectedType = this.args.savedFilters['product_type'];
         this.selectedLabels = this.args.savedFilters['labels'];
+        this.selectedGnomeSuitable = this.args.savedFilters['gnomeSuitable'];
         this.sort = Object.keys(this.args.savedFilters['sort'])[0];
         this.dir = Object.values(this.args.savedFilters['sort'])[0];
 
@@ -172,6 +174,10 @@ export default class NewOilQuery extends Component {
             queryOptions['qApi'] = this.selectedApi.join();
         }
 
+        if (this.selectedGnomeSuitable) {
+            queryOptions['qGnomeSuitable'] = this.selectedGnomeSuitable;
+        }
+
         return queryOptions;
     }
 
@@ -180,8 +186,15 @@ export default class NewOilQuery extends Component {
             let records = yield this.store.query('oil', this.queryOptions);
 
             this.meta = records.meta;
-            this.data.pushObjects(records.toArray());
-            yield this.table.pushRows(records.toArray());
+
+            let recArray = records.toArray().map(i => {
+                i.filteredStatus = i.status.filter(s => {
+                    return !(this.args.warningIgnoreList||[]).includes(s.substring(0, 4));
+                }, this);
+                return i;
+            }, this);
+            this.data.pushObjects(recArray);
+            yield this.table.pushRows(recArray);
 
             this.page++;
             this.canLoadMore = !isEmpty(records);
@@ -193,6 +206,7 @@ export default class NewOilQuery extends Component {
         this.args.savedFilters['api'] = this.selectedApi;
         this.args.savedFilters['product_type'] = this.selectedType;
         this.args.savedFilters['labels'] = this.selectedLabels;
+        this.args.savedFilters['gnomeSuitable'] = this.selectedGnomeSuitable;
 
         this.data.clear();
         this.table.setRows([]);

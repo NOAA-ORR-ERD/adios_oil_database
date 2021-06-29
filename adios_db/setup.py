@@ -27,8 +27,13 @@ here = Path(__file__).resolve().parent
 README = (here / 'README.md').open().read()
 pkg_version = get_version(pkg_name)
 
-
-# db_name = 'adios_db'
+pkg_data = ["models/oil/product_types_and_labels.csv",
+            "test/test_models/test_oil/example_products.csv",
+            "test/test_models/test_oil/ExampleFullRecord.json",
+            "test/data_for_testing/example_data/EC000506.json",
+            # so the output dir will be there.
+            "/test/test_models/test_oil/output/empty_file",
+            ]
 
 
 def clean_files():
@@ -62,7 +67,7 @@ class cleanall(clean):
         clean.run(self)
         clean_files()
 
-# this really sholdn't be happening at package install anyway
+# this really shouldn't be happening at package install anyway
 # class init_database(Command):
 #     '''
 #         Command to construct the oil database.  We basically re-use the
@@ -102,6 +107,15 @@ class cleanall(clean):
 #         errno = os.system('py.test --pyargs adios_db')
 #         sys.exit(errno)
 
+scripts = ['adios_db_init = adios_db.scripts.db_initialize:init_db_cmd',
+           'adios_db_import = adios_db.scripts.db_import:import_db_cmd',
+           'adios_db_oil_query = adios_db.scripts.oil_query:oil_query_cmd',
+           'adios_db_backup = adios_db.scripts.db_backup:backup_db_cmd',
+           'adios_db_restore = adios_db.scripts.db_restore:restore_db_cmd',
+           'adios_db_validate = adios_db.scripts.validation_report:main',
+           'adios_db_update_test_data = adios_db.scripts.update_test_data:main',
+           'adios_db_process_json = adios_db.scripts.run_json_through_oil_object:run_through',
+           ]
 
 setup(name=pkg_name,
       version=pkg_version,
@@ -127,29 +141,7 @@ setup(name=pkg_name,
       url='',
       packages=find_packages(),
       include_package_data=True,
-      package_data={'adios_db': ["models/oil/product_types_and_labels.csv",
-                                 "test/test_models/test_oil/example_products.csv",
-                                 "test/test_models/test_oil/ExampleFullRecord.json",
-                                 "test/test_models/test_oil/EC000506.json",
-                                 # so the output dir will be there.
-                                 "/test/test_models/test_oil/output/empty_file",
-                                 ]},
-      entry_points={'console_scripts': [('adios_db_init = '
-                                         'adios_db.scripts.db_initialize'
-                                         ':init_db_cmd'),
-                                        ('adios_db_import = '
-                                         'adios_db.scripts.db_import'
-                                         ':import_db_cmd'),
-                                        ('oil_query = '
-                                         'adios_db.scripts.oil_query'
-                                         ':oil_query_cmd'),
-                                        ('adios_db_backup = '
-                                         'adios_db.scripts.db_backup'
-                                         ':backup_db_cmd'),
-                                        ('adios_db_restore = '
-                                         'adios_db.scripts.db_restore'
-                                         ':restore_db_cmd'),
-                                        ],
-                    },
+      package_data={'adios_db': pkg_data},
+      entry_points={'console_scripts': scripts},
       zip_safe=False,
       )
