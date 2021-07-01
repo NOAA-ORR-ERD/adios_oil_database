@@ -334,17 +334,17 @@ class MassOrVolumeFraction(MeasurementBase):
     :param unit_type: the type of unit -- must be "massfraction", "volumefraction" or "concentration"
     """
 
-    def __init__(self, unit_type=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        unit_type = kwargs.get("unit_type")
         if unit_type is None:
             raise TypeError("unit_type must be specified")
         try:
-            unit_type = unit_type.lower()
+            unit_type = unit_type.lower().replace(" ", "")
             if unit_type not in {'massfraction', 'volumefraction', 'concentration'}:
                 raise AttributeError
         except AttributeError:
             raise ValueError("unit_type must be one of: 'massfraction', 'volumefraction', 'concentration'\n"
                              f"args: {args}, kwargs: {kwargs}")
-        # self.__dict__['unit_type'] = unit_type
         kwargs['unit_type'] = unit_type
         super().__init__(*args, **kwargs)
 
@@ -371,14 +371,23 @@ class AnyUnit(MeasurementBase):
     This is a type for data that could be any unit_type
     '''
 
-    def __init__(self, unit_type=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        unit_type = kwargs.get("unit_type")
         if unit_type is None:
             raise TypeError("unit_type must be specified")
-        self.unit_type = unit_type.lower().replace(" ", "")
+        try:
+            self.unit_type = unit_type.lower().replace(" ", "")
+        except AttributeError:
+            raise TypeError("unit type must be a valid unit_type string")
         kwargs['unit_type'] = self.unit_type
         super().__init__(*args, **kwargs)
+
     def __post_init__(self):
-        # We don't need the post_init in this case
+        '''
+        We don't need the post_init in this case
+
+        overriding it to disable it
+        '''
         pass
 
 

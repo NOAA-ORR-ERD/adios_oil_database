@@ -12,7 +12,8 @@ The Oil object is essentially a Python class that mimics the base JSON format. I
 The Scripting Module
 --------------------
 
-Most of the things you'll need for "typical" work with the data can be found in the :py:mod`scripting` module. We recommend that you import itlke so:
+Most of the things you'll need for "typical" work with the data can be found in the
+:py:mod`adios-db.scripting` module. We recommend that you import it like so:
 
 .. code-block:: python
 

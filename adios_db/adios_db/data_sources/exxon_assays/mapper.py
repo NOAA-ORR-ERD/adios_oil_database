@@ -19,6 +19,7 @@ from ...models.common.measurement import (Length,
                                           KinematicViscosity,
                                           Pressure,
                                           Unitless,
+                                          AnyUnit,
                                           )
 
 from ...models.oil.physical_properties import (DensityPoint,
@@ -97,7 +98,8 @@ MAPPING = {
     norm('Neutralization number (TAN), MG/GM'): {
         'attr': 'Total Acid Number',
         'unit': 'mg/g',
-        'cls': MassFraction,
+        'unit_type': 'MassFraction',
+        'cls': AnyUnit,
         'element_of': 'industry_properties',
     },
     norm('Sulfur, wt%'): {
@@ -130,7 +132,8 @@ MAPPING = {
     norm('CCR, wt%'): {
         'attr': 'Conradson Carbon Residue',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'MassFraction',
+        'cls': AnyUnit,
         'element_of': 'industry_properties',
     },
     norm('N-Heptane Insolubles (C7 Asphaltenes), wt%'): {
@@ -161,7 +164,8 @@ MAPPING = {
     norm('Reid Vapor Pressure (RVP) Whole Crude, psi'): {
         'attr': 'Reid Vapor Pressure',
         'unit': 'psi',
-        'cls': Pressure,
+        'cls': AnyUnit,
+        'unit_type': 'pressure',
         'convert_from': 'psi',
         'element_of': 'industry_properties',
     },
@@ -204,15 +208,16 @@ MAPPING = {
     norm('Freeze point, F'): {
         'attr': 'Freeze Point',
         'unit': 'F',
-        'convert_from': 'F',
-        'cls': Temperature,
+        'unit_type': 'temperature',
+        'cls': AnyUnit,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },
     norm('Smoke point, mm'): {
         'attr': 'Smoke Point',
         'unit': 'mm',
-        'cls': Length,
+        'unit_type': 'length',
+        'cls': AnyUnit,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },
@@ -231,22 +236,24 @@ MAPPING = {
     norm('Cetane Index 1990 (D4737),'): {
         'attr': 'Cetane Index 1990 (D4737)',
         'unit': None,
-        'cls': Unitless,
+        'unit_type': 'unitless',
+        'cls': AnyUnit,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },
     norm('Cloud point, F'): {
         'attr': 'Cloud Point',
         'unit': 'F',
-        'cls': Temperature,
+        'unit_type': 'temperature',
+        'cls': AnyUnit,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },
     norm('Aniline pt, F'): {
         'attr': 'Aniline Point',
         'unit': 'F',
-        # 'convert_from': 'F',
-        'cls': Temperature,
+        'unit_type': 'Temperature',
+        'cls': AnyUnit,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },
@@ -410,8 +417,8 @@ def apply_map(data, cut_table, samples):
 
 
 def set_sample_property(samples, row, attr, unit, cls,
-                        convert_from=None, element_of=None,
-                        num_digits=5):
+                        unit_type=None, convert_from=None,
+                        element_of=None, num_digits=5):
     """
     reads a row from the spreadsheet, and sets the sample properties
 
@@ -420,15 +427,15 @@ def set_sample_property(samples, row, attr, unit, cls,
     - optional rounding to "num_digits" digits
 
     - optional converting to unit from convert_from
-      (if the the data aren't in the right units)
+      (if the data aren't in the right units)
 
     - These values are now kept in a list of compounds held by the
       bulk_composition attribute
 
-    - Ideally, the name & groups of each compound would have the
-      original field text from the datasheet.
-
+    - The name & groups of each compound should be match the
+      ADIOS data model controlled vocabulary
     """
+
     for sample, val in zip(samples, row):
         if val is not None and val not in ('NotAvailable',):
             if convert_from is not None:
@@ -457,9 +464,12 @@ def set_sample_property(samples, row, attr, unit, cls,
                 # add to a list attribute
                 compositions = getattr(sample, element_of)
 
+                measurement = cls(sigfigs(val, num_digits),
+                                  unit=unit,
+                                  unit_type=unit_type)
                 compositions.append(Compound(
                     name=attr,
-                    measurement=cls(sigfigs(val, num_digits), unit=unit)
+                    measurement=measurement
                 ))
 
 

@@ -4,7 +4,7 @@
 Importing New Data
 ##################
 
-The ADIOS Oil DAtabase uses JSON as its native storage / interchange format.
+The ADIOS Oil Database uses JSON as its native storage / interchange format.
 
 In order to get a new record into the database, it must be converted to JSON somehow. how best to do that depends on the how the data are currently stored, and what tools one is familiar with.
 
@@ -179,6 +179,18 @@ Distillation cuts
     Note: The initial boiling point should be listed as a 0% cut.
 
     Add extra rows as needed
+
+Compounds
+.........
+
+Compounds can be concentration measurements for zero or more individual compounds. Add as many rows as required.
+
+
+Bulk Composition
+................
+
+Bulk Composition is zero or more groupings of chemicals as opposed to individual compounds. Examples are in the Common Data section below. Like the Compounds list, each object in the list has the same structure including the following elements:
+
 
 
 
