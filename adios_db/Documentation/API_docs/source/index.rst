@@ -22,6 +22,7 @@ There are two things one might want to do with this package:
    overview
    managing
    computation
+   importing_new_data
 
 .. toctree::
    :maxdepth: 2

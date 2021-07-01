@@ -18,7 +18,9 @@ from adios_db.models.common.measurement import (MeasurementBase,
                                                 Pressure,
                                                 NeedleAdhesion,
                                                 InterfacialTension,
-                                                Unitless)
+                                                Unitless,
+                                                AnyUnit,
+                                                )
 
 
 # # Fixme: why is this in this test file ???
@@ -155,6 +157,27 @@ class TestUnitless:
         with pytest.raises(TypeError):
             model.converted_to('C')
 
+class TestAnyUnit:
+
+    def test_init_empty(self):
+        model = AnyUnit()
+
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'unitless'}
+
+        # non-sparse should have all attributes present with None values
+        py_json = model.py_json(sparse=False)
+
+        assert py_json['unit_type'] == 'unitless'
+        for attr in ('value',
+                     'unit',
+                     'min_value',
+                     'max_value',
+                     'standard_deviation',
+                     'replicates'):
+            assert py_json[attr] is None
 
 # keeping these, as the tests for initializing any empty one should maybe be adopted for Measurement
 # class TestUnittedValue:

@@ -10,7 +10,7 @@
         },
         "source_id": "HOOPS16F"
     },
-    "oil_id": "EX00068",
+    "oil_id": "EX00075",
     "status": [],
     "sub_samples": [
         {
@@ -306,9 +306,9 @@
                 },
                 {
                     "measurement": {
-                        "unit": "Pa",
+                        "unit": "psi",
                         "unit_type": "pressure",
-                        "value": 60433.0
+                        "value": 8.7651
                     },
                     "name": "Reid Vapor Pressure"
                 }
@@ -1067,9 +1067,9 @@
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": -72.8973
+                        "value": -99.2151
                     },
                     "name": "Freeze Point"
                 },
@@ -1083,7 +1083,6 @@
                 },
                 {
                     "measurement": {
-                        "unit": "dimensionless",
                         "unit_type": "unitless",
                         "value": 36.2293
                     },
@@ -1091,9 +1090,9 @@
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": -76.986
+                        "value": -106.575
                     },
                     "name": "Cloud Point"
                 }
@@ -1415,9 +1414,9 @@
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": -48.1675
+                        "value": -54.7016
                     },
                     "name": "Freeze Point"
                 },
@@ -1431,7 +1430,6 @@
                 },
                 {
                     "measurement": {
-                        "unit": "dimensionless",
                         "unit_type": "unitless",
                         "value": 45.0055
                     },
@@ -1439,17 +1437,17 @@
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": -52.4362
+                        "value": -62.3852
                     },
                     "name": "Cloud Point"
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": 60.3774
+                        "value": 140.679
                     },
                     "name": "Aniline Point"
                 }
@@ -1771,9 +1769,9 @@
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": -9.66432
+                        "value": 14.6042
                     },
                     "name": "Freeze Point"
                 },
@@ -1787,7 +1785,6 @@
                 },
                 {
                     "measurement": {
-                        "unit": "dimensionless",
                         "unit_type": "unitless",
                         "value": 49.9756
                     },
@@ -1795,17 +1792,17 @@
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": -15.5355
+                        "value": 4.03616
                     },
                     "name": "Cloud Point"
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": 68.5409
+                        "value": 155.374
                     },
                     "name": "Aniline Point"
                 }
@@ -2135,9 +2132,9 @@
                 },
                 {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "F",
                         "unit_type": "temperature",
-                        "value": 80.9411
+                        "value": 177.694
                     },
                     "name": "Aniline Point"
                 }

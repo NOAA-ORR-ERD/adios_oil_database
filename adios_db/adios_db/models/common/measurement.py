@@ -364,6 +364,17 @@ class MassOrVolumeFraction(MeasurementBase):
     def __eq__(self, other):
         return super().__eq__(other) and (self.unit_type == other.unit_type)
 
+class Unspecified(MeasurementBase):
+    '''
+    This is a type for data that could be any unit_type
+    '''
+    unit_type = None
+
+    def __init__(self, unit_type=None, *args, **kwargs):
+        if unit_type is None:
+            raise TypeError("unit_type must be specified")
+        kwargs['unit_type'] = unit_type.lower().replace(" ", "")
+        super().__init__(*args, **kwargs)
 
 
 class Density(MeasurementBase):

@@ -284,15 +284,15 @@ class TestExxonMapper():
         ('Total Acid Number', range(8), (0.90915, 8.294e-08, 4.8689e-05,
                                          0.004045, 0.20694, 1.3179,
                                          1.8496, 0.6179)),
-        ('Reid Vapor Pressure', range(8), (60433.0, None, None, None,
+        ('Reid Vapor Pressure', range(8), (8.7651, None, None, None,
                                            None, None, None, None)),
         ('Aniline Point', range(8), (None, None, None, None,
-                                     60.3774, 68.5409, 80.9411, None)),
+                                     140.679, 155.3736, 177.6938, None)),
         ('Cetane Index 1990 (D4737)', range(8), (None, None, None,
                                                  36.2293, 45.0055, 49.9756,
                                                  None, None)),
         ('Cloud Point', range(8), (None, None, None,
-                                   -76.986, -52.4362, -15.5355,
+                                   -106.574729, -62.385169, 4.0361,
                                    None, None)),
         ('Smoke Point', range(8), (None, None, None,
                                    29.8541, 22.4655, 13.7602,
@@ -300,7 +300,7 @@ class TestExxonMapper():
         ('Conradson Carbon Residue', range(8), (3.1904, None, None, None,
                                                 None, None, 0.36241, 17.695)),
         ('Freeze Point', range(8), (None, None, None,
-                                    -72.8973, -48.1675, -9.66432,
+                                    -99.2151, -54.7016, 14.6042,
                                     None, None)),
     ])
     def test_industry_properties(self, attr, indexes, values):
@@ -337,7 +337,50 @@ class TestExxonMapper():
 
                 compound = filter_list[0]
 
-                assert isclose(compound.measurement.value, values[i])
+                assert isclose(compound.measurement.value, values[i], rel_tol=1e-4)
+
+    @pytest.mark.parametrize("prop, unit, unit_type",
+                             [('Total Acid Number', 'mg/g', 'massfraction'),
+                              ('Reid Vapor Pressure', 'psi', 'pressure'),
+                              ('Aniline Point', 'F', 'temperature'),
+                              ('Cetane Index 1990 (D4737)', None, 'unitless'),
+                              ('Cloud Point', 'F', 'temperature'),
+                              ('Smoke Point', 'mm', 'length'),
+                              ('Freeze Point', 'F', 'temperature'),
+                              ])
+    def test_industry_properties_units(self, prop, unit, unit_type):
+        '''
+            Data points that are classified in industry properties:
+            - Total Acid Number (Neutralization Number)
+            - Reid Vapor Pressure
+
+            - Aniline Point
+            - Cetane Index
+            - Vanadium
+            - Cloud Point
+            - Smoke Point
+            - Conradson Carbon Residue
+            - Conradson Residuum (Vacuum Residue)
+            - Gel Point (Freeze Point)
+        '''
+        # just check the zeroth one:
+
+        print("testing:", prop)
+
+        for sample in ExxonMapper(self.record).sub_samples:
+            print(sample.industry_properties)
+            for p in sample.industry_properties:
+                print(f"\n{p.name=}")
+                print(f"{prop=}")
+                if p.name == prop:
+                    measurement = p.measurement
+                    print("checking units of:", prop)
+                    assert measurement.unit == unit
+                    assert measurement.unit_type == unit_type
+                    return
+                continue
+        assert False
+        # assert False, f"property: {p.name} is missing"
 
     @pytest.mark.parametrize("attr, indexes, values", [
         ('saturates', range(8), [None, None, None, None,

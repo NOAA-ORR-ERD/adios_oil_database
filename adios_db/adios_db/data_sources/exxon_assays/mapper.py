@@ -160,7 +160,7 @@ MAPPING = {
     },
     norm('Reid Vapor Pressure (RVP) Whole Crude, psi'): {
         'attr': 'Reid Vapor Pressure',
-        'unit': 'Pa',
+        'unit': 'psi',
         'cls': Pressure,
         'convert_from': 'psi',
         'element_of': 'industry_properties',
@@ -203,7 +203,7 @@ MAPPING = {
     #
     norm('Freeze point, F'): {
         'attr': 'Freeze Point',
-        'unit': 'C',
+        'unit': 'F',
         'convert_from': 'F',
         'cls': Temperature,
         'element_of': 'industry_properties',
@@ -230,23 +230,22 @@ MAPPING = {
     #
     norm('Cetane Index 1990 (D4737),'): {
         'attr': 'Cetane Index 1990 (D4737)',
-        'unit': 'dimensionless',
+        'unit': None,
         'cls': Unitless,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },
     norm('Cloud point, F'): {
         'attr': 'Cloud Point',
-        'unit': 'C',
-        'convert_from': 'F',
+        'unit': 'F',
         'cls': Temperature,
         'element_of': 'industry_properties',
         'num_digits': 6,
     },
     norm('Aniline pt, F'): {
         'attr': 'Aniline Point',
-        'unit': 'C',
-        'convert_from': 'F',
+        'unit': 'F',
+        # 'convert_from': 'F',
         'cls': Temperature,
         'element_of': 'industry_properties',
         'num_digits': 6,
