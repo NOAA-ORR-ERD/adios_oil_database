@@ -43,6 +43,7 @@ __all__ = ['AngularVelocity',
            'Temperature',
            'Time',
            'Unitless',
+           'AnyUnit',
            ]
 
 # fixme: why is this here?
@@ -364,17 +365,21 @@ class MassOrVolumeFraction(MeasurementBase):
     def __eq__(self, other):
         return super().__eq__(other) and (self.unit_type == other.unit_type)
 
-class Unspecified(MeasurementBase):
+@dataclass
+class AnyUnit(MeasurementBase):
     '''
     This is a type for data that could be any unit_type
     '''
-    unit_type = None
 
     def __init__(self, unit_type=None, *args, **kwargs):
         if unit_type is None:
             raise TypeError("unit_type must be specified")
-        kwargs['unit_type'] = unit_type.lower().replace(" ", "")
+        self.unit_type = unit_type.lower().replace(" ", "")
+        kwargs['unit_type'] = self.unit_type
         super().__init__(*args, **kwargs)
+    def __post_init__(self):
+        # We don't need the post_init in this case
+        pass
 
 
 class Density(MeasurementBase):

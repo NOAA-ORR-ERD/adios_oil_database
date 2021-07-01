@@ -30,6 +30,7 @@ class Compound:
     groups: list = field(default_factory=list)
     method: str = ""
     measurement: MassFraction = None
+    comment: str = ""
 
 
 class CompoundList(JSON_List):

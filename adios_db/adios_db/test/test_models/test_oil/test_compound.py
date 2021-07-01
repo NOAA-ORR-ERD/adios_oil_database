@@ -71,7 +71,8 @@ class TestCompound:
         assert py_json == {'name': '',
                            'method': '',
                            'groups': [],
-                           'measurement': None}
+                           'measurement': None,
+                           'comment': ''}
 
     def test_py_json(self):
         comp = Compound(name="n-C12 to n-C16",

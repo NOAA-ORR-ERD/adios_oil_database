@@ -22,6 +22,7 @@ from .ests_fractions import ESTSFractions
 # breaks things.
 from . import ccme
 from .compound import CompoundList
+from .industry_property import IndustryPropertyList
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
@@ -51,7 +52,7 @@ class Sample:
 
     bulk_composition: CompoundList = field(default_factory=CompoundList)
 
-    industry_properties: CompoundList = field(default_factory=CompoundList)
+    industry_properties: IndustryPropertyList = field(default_factory=IndustryPropertyList)
 
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
 

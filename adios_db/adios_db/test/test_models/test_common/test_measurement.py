@@ -160,17 +160,21 @@ class TestUnitless:
 class TestAnyUnit:
 
     def test_init_empty(self):
-        model = AnyUnit()
+        with pytest.raises(TypeError):
+            model = AnyUnit()
+
+    def test_init_just_unit_type(self):
+        model = AnyUnit(unit_type='MassFraction')
 
         py_json = model.py_json()
-
         # should only have a unit_type
-        assert py_json == {'unit_type': 'unitless'}
+        assert py_json == {'unit_type': 'massfraction'}
+        assert len(py_json) == 1
 
         # non-sparse should have all attributes present with None values
         py_json = model.py_json(sparse=False)
 
-        assert py_json['unit_type'] == 'unitless'
+        assert py_json['unit_type'] == 'massfraction'
         for attr in ('value',
                      'unit',
                      'min_value',
@@ -178,6 +182,25 @@ class TestAnyUnit:
                      'standard_deviation',
                      'replicates'):
             assert py_json[attr] is None
+
+    def test_convert_to(self):
+        model = AnyUnit(value=273.15, unit='K', unit_type='temperature')
+        model.convert_to('C')
+
+        assert model.value == 0.0
+        assert model.unit == 'C'
+
+    def test_converted_to(self):
+        model = AnyUnit(value=273.15, unit='K', unit_type='temperature')
+        new = model.converted_to('C')
+
+        assert model is not new
+
+        assert model.value == 273.15
+        assert model.unit == 'K'
+
+        assert new.value == 0.0
+        assert new.unit == 'C'
 
 # keeping these, as the tests for initializing any empty one should maybe be adopted for Measurement
 # class TestUnittedValue:
