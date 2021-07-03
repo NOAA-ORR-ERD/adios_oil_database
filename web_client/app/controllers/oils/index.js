@@ -7,7 +7,8 @@ export default class IndexController extends OilsController {
         'text': '',
         'api': [0, 100],
         'labels': [],
-        'sort': {'metadata.name': 'asc'}
+        'sort': {'metadata.name': 'asc'},
+        'gnomeSuitable': false
     };
 
     get canModifyDb() {
