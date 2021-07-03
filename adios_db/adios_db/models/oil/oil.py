@@ -5,6 +5,7 @@ This maps to the JSON used in the DB
 
 Having a Python class makes it easier to write importing, validating etc, code.
 """
+import copy
 import json
 
 from dataclasses import dataclass, field
@@ -96,8 +97,8 @@ class Oil:
             raise ValueError("oil_id must be a string")
         # arbitrary limit to catch ridiculous onesL UUID is  36 characters
         elif len(id) > 40:
-            raise ValueError("oil_id must be a string less than 40 characters in length")
-
+            raise ValueError("oil_id must be a string less than 40 characters "
+                             "in length")
 
     def validate(self):
         """
@@ -105,15 +106,16 @@ class Oil:
 
         validation of sub-objects is automatically applied
         """
-        # see if it can be used as a GNOME oil
-        # NOTE: this is an odd one, as it puts the information in a different place
+        # See if it can be used as a GNOME oil
+        # NOTE: This is an odd one, as it puts the information in a different
+        #       place
         try:
-            # make a copy, as make_gnome_oil might change it in place.
+            # Make a copy, as make_gnome_oil might change it in place.
             make_gnome_oil(copy.deepcopy(self))
             self.metadata.gnome_suitable = True
-        # if any other kind of Error -- it will raise.
-        except Exception: # if it barfs for any reason it's not suitable
+        except Exception:  # If it barfs for any reason it's not suitable
             self.metadata.gnome_suitable = False
+
         msgs = []
 
         # Validate ID
@@ -121,8 +123,10 @@ class Oil:
             self._validate_id(self.oil_id)
         except ValueError:
             msgs.append(ERRORS["E001"].format(self.oil_id))
+
         # always add these:
         msgs.extend("W000: " + m for m in self.permanent_warnings)
+
         return list(set(msgs))
 
     def reset_validation(self):

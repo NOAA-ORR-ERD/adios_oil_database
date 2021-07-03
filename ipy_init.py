@@ -2,8 +2,8 @@ import sys
 
 from pymongo import MongoClient
 
-from oil_database.util.db_connection import connect_mongodb
-from oil_database.data_sources.oil.estimations import OilEstimation
+from adios_db.util.db_connection import connect_mongodb
+from adios_db.data_sources.oil.estimations import OilEstimation
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)

@@ -29,7 +29,7 @@ class MetaData:
     labels: list = field(default_factory=list)
     model_completeness: float = None
     location_coordinates: LocationCoordinates = None
-    gnome_suitable: bool = None
+    gnome_suitable: bool = False
 
     def validate(self):
         msgs = []
