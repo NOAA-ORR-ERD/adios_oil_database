@@ -35,7 +35,11 @@
             <Input
               @type="checkbox"
               @checked={{this.selectedGnomeSuitable}}
-              {{on "input" (action "onSearchChange") value="target.value"}}
+              {{on "input" (action (pipe (toggle "selectedGnomeSuitable" this)
+                                         (action "onSearchChange")
+                                    )
+                             value="target.value")
+              }}
             />
 
           </div>
