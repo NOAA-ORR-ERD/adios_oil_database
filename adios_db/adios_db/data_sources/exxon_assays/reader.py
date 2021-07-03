@@ -78,7 +78,7 @@ class ExxonDataReader:
               new formatted information, but reading the first sheet should not
               fail.
         """
-
+        print("reading:", filename)
         wb = load_workbook(filename, data_only=True)
 
         sheetnames = wb.sheetnames

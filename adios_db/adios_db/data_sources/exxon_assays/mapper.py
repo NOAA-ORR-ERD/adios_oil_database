@@ -15,6 +15,7 @@ from ...models.common.measurement import (Length,
                                           Temperature,
                                           MassFraction,
                                           VolumeFraction,
+                                          MassOrVolumeFraction,
                                           Density,
                                           KinematicViscosity,
                                           Pressure,
@@ -77,14 +78,16 @@ MAPPING = {
     norm('Carbon, wt %'): {
         'attr': 'Carbon Mass Fraction',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'mass fraction',
+        'cls': MassOrVolumeFraction,
         'num_digits': 4,
         'element_of': 'bulk_composition',
     },
     norm('Hydrogen, wt %'): {
         'attr': 'Hydrogen Mass Fraction',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'mass fraction',
+        'cls': MassOrVolumeFraction,
         'num_digits': 4,
         'element_of': 'bulk_composition',
     },
@@ -105,7 +108,9 @@ MAPPING = {
     norm('Sulfur, wt%'): {
         'attr': 'Sulfur Mass Fraction',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'mass fraction',
+        'cls': MassOrVolumeFraction,
+        'num_digits': 5,
         'element_of': 'bulk_composition',
     },
     #
@@ -116,12 +121,11 @@ MAPPING = {
     # Viscosity at 50C/122F, cSt (not a simple map)
     #
     norm('Mercaptan sulfur, ppm'): {
-        'attr': 'Mercaptan Sulfur Mass Fraction',
-        'unit': 'ppm',
-        'cls': MassFraction,
-        'num_digits': 4,
-        'convert_from': 'ppm',
-        'element_of': 'bulk_composition',
+         'attr': 'Mercaptan Sulfur Mass Fraction',
+         'unit': 'ppm',
+         'cls': MassFraction,
+         'num_digits': 4,
+         'element_of': 'bulk_composition',
     },
     norm('Nitrogen, ppm'): {
         'attr': 'Nitrogen Mass Fraction',
@@ -467,9 +471,10 @@ def set_sample_property(samples, row, attr, unit, cls,
                 measurement = cls(sigfigs(val, num_digits),
                                   unit=unit,
                                   unit_type=unit_type)
-                compositions.append(Compound(
+                item_cls = compositions.item_type
+                compositions.append(item_cls(
                     name=attr,
-                    measurement=measurement
+                    measurement=measurement,
                 ))
 
 

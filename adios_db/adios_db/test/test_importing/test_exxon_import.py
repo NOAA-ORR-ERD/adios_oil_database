@@ -17,13 +17,14 @@ import unit_conversion as uc
 
 import adios_db
 from adios_db.util import sigfigs
+from adios_db.models.oil.oil import Oil
 from adios_db.data_sources.exxon_assays import (ExxonDataReader,
                                                 ExxonMapper,
                                                 ExxonRecordParser
                                                 )
 
 from adios_db.models.common.measurement import (Temperature,
-                                                    VolumeFraction)
+                                                VolumeFraction)
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -75,6 +76,33 @@ def test_ExxonRecordParser():
     """
     assert ExxonRecordParser("something random", None) == ("something random",
                                                            None)
+
+def test_full_round_trip():
+    """
+    This test makes sure that it can read a full record,
+    save it as JSON, and then read it back again
+    """
+    record = ExxonDataReader.read_excel_file(
+        example_dir / "Crude_Oil_HOOPS_Blend_assay_xls.xlsx"
+    )
+
+    assert record[0][0] == "ExxonMobil"
+
+    oil = ExxonMapper(('HOOPS Blend Example', record))
+
+    assert oil.metadata.name == 'HOOPS Blend Example'
+
+    print(oil.oil_id)
+
+    filename = example_dir / "ExampleOutput.json"
+    oil.to_file(filename)
+
+    oil2 = Oil.from_file(filename)
+
+    assert oil2.sub_samples[0].bulk_composition == oil.sub_samples[0].bulk_composition
+    assert oil2.sub_samples[0].industry_properties == oil.sub_samples[0].industry_properties
+    assert oil2 == oil
+
 
 
 class TestExxonMapper():
@@ -278,7 +306,7 @@ class TestExxonMapper():
 
                 compound = filter_list[0]
 
-                assert isclose(compound.measurement.value, values[i])
+                assert isclose(compound.measurement.value, values[i], rel_tol=1e-4)
 
     @pytest.mark.parametrize("attr, indexes, values", [
         ('Total Acid Number', range(8), (0.90915, 8.294e-08, 4.8689e-05,
@@ -413,7 +441,7 @@ class TestExxonMapper():
             else:
                 sara_attr = getattr(sara, attr)
 
-                assert isclose(sara_attr.value, values[i])
+                assert isclose(sara_attr.value, values[i], rel_tol=1e-4)
 
     def test_dist_cuts_units(self):
         for sample in ExxonMapper(self.record).sub_samples:
@@ -438,7 +466,7 @@ class TestExxonMapper():
 
         assert cut.fraction.value == fraction
         assert isclose(cut.vapor_temp.value,
-                       sigfigs(uc.convert("F", "C", temp_f), 5))
+                       sigfigs(uc.convert("F", "C", temp_f), 5), rel_tol=1e-4)
 
     @pytest.mark.parametrize("sample_idx, expected",
                              [(0, 1453.75),
@@ -455,7 +483,7 @@ class TestExxonMapper():
             expected_c = sigfigs(uc.convert("F", "C", expected), 5)
             end_point = samples[sample_idx].distillation_data.end_point
 
-            assert isclose(end_point.value, expected_c)
+            assert isclose(end_point.value, expected_c, rel_tol=1e-4)
             assert end_point.unit == 'C'
 
     def test_no_cuts_in_butane(self):

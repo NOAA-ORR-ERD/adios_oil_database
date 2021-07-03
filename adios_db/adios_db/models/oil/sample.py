@@ -23,6 +23,7 @@ from .ests_fractions import ESTSFractions
 from . import ccme
 from .compound import CompoundList
 from .industry_property import IndustryPropertyList
+from .bulk_composition import BulkCompositionList
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
@@ -50,7 +51,7 @@ class Sample:
 
     compounds: CompoundList = field(default_factory=CompoundList)
 
-    bulk_composition: CompoundList = field(default_factory=CompoundList)
+    bulk_composition: BulkCompositionList = field(default_factory=BulkCompositionList)
 
     industry_properties: IndustryPropertyList = field(default_factory=IndustryPropertyList)
 
