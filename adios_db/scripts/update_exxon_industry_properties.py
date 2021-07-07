@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 This script re-imports the Exxon data from the Excel spreadsheets,
 and then updates the Industry Properties with the newly imported data.
@@ -26,11 +25,13 @@ if "save" is specified the data will be saved, otherwise not.
 
 """
 
+
 def the_exxon_data():
     index_file = "../data/exxon_assays/index.txt"
     reader = ExxonDataReader(index_file)
     for rec in reader.get_records():
         yield ExxonMapper(rec)
+
 
 def load_old_exxon_data():
     print("loading the data in:", EXXON_DATA_DIR)
@@ -42,11 +43,13 @@ def load_old_exxon_data():
     #             for fname in EXXON_DATA_DIR.glob("*.json")}
     return all_recs
 
+
 def find_rec_by_name(recs, name):
     for rec in recs:
         if rec.metadata.name == name:
             return rec
     return None
+
 
 def get_next_id(all_recs):
     ids = list(all_recs.keys())
@@ -68,8 +71,20 @@ if __name__ == "__main__":
             print(f"new_name: {name}, old_name: {old_rec.metadata.name}")
             print(f"new_id: {id}, old_id: {old_rec.oil_id}")
             # putting in hew industry_properties
-            for old_ss, new_ss in zip(rec.sub_samples, old_rec.sub_samples):
+
+            # print("New Industry Properties:")
+            # for prop in rec.sub_samples[0].industry_properties:
+            #     print(prop)
+            # print("Old Industry Properties:")
+            # for prop in old_rec.sub_samples[0].industry_properties:
+            #     print(prop)
+
+            for new_ss, old_ss in zip(rec.sub_samples, old_rec.sub_samples):
                 old_ss.industry_properties = new_ss.industry_properties
+            # print("Old Industry Properties after resetting:")
+            # for prop in old_rec.sub_samples[0].industry_properties:
+            #     print(prop)
+
             if "save" in sys.argv:
                 filename = EXXON_DATA_DIR / (old_rec.oil_id + ".json")
                 print("saving:", filename)
@@ -84,15 +99,5 @@ if __name__ == "__main__":
                 filename = EXXON_DATA_DIR / (old_rec.oil_id + ".json")
                 print("saving:", filename)
                 rec.to_file(filename)
-
     print("The new data, not found in the old:")
     print(new_records)
-
-
-
-
-
-
-
-
-

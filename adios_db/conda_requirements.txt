@@ -30,11 +30,13 @@ requests>=2.22.0
 pynucos>=2.10
 
 
-# for testing
+# for testing and development
 pytest>=3.8.0
 pytest-cov>=2.6.0
 pytest-timeout>=1.2.1
 pytest-raises>=0.11
+yapf
+
 
 # for the docs
 sphinx
