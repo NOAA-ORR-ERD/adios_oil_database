@@ -132,7 +132,7 @@
                         "fraction": {
                             "value": 0.01,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 62,
@@ -144,7 +144,7 @@
                         "fraction": {
                             "value": 0.05,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 127,
@@ -156,7 +156,7 @@
                         "fraction": {
                             "value": 0.1,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 156,
@@ -168,7 +168,7 @@
                         "fraction": {
                             "value": 0.2,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 216,
@@ -180,7 +180,7 @@
                         "fraction": {
                             "value": 0.3,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 265,
@@ -192,7 +192,7 @@
                         "fraction": {
                             "value": 0.4,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 321,
