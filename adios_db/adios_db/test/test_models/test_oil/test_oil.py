@@ -389,7 +389,7 @@ def test_round_trip():
     # # check that they are not exactly the same
     # # this used to be a test for when we had equal data written in differnet order
     # # it's not longer valid
-    # oilin.to_file(fileout)
+    oilin.to_file(fileout)
 
     # file1 = open(filein, encoding="utf-8").read().strip()
     # file2 = open(fileout, encoding="utf-8").read().strip()

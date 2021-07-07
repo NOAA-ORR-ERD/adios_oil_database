@@ -186,7 +186,6 @@ def test_API_density_match(minimal_oil):
     msgs = oil.validate()
 
     print(msgs)
-    assert False
 
 
 def test_no_subsamples(no_type_oil):
