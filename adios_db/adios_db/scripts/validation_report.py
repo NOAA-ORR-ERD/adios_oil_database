@@ -66,8 +66,8 @@ def main():
                     json.dump(oil.py_json(), datafile, indent=4)
         # write out the report by Error Code:
         for code, errors in sorted(validation.items(), key=itemgetter(0)):
-
-            outfile2.write(f"\n\n{code}:\n=====\n")
+            header = f"{code}: ({len(errors)} records affected)"
+            outfile2.write(f"\n\n{header}\n{'=' * len(header)}\n")
             outfile2.writelines(errors)
 
 

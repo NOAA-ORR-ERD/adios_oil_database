@@ -192,7 +192,7 @@ def test_API_density_match(minimal_oil):
 
 def test_API_density_missmatch(minimal_oil):
     oil = minimal_oil
-    minimal_oil.metadata.API = 32.5  # too far from 32.0
+    minimal_oil.metadata.API = 32.2  # too far from 32.0
     density = DensityPoint(  # API 32.0 converted
         density=Density(value=0.86469, unit='g/cm^3'),
         ref_temp=Temperature(value=60, unit='F'),

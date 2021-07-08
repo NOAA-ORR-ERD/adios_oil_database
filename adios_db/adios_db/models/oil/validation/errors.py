@@ -13,7 +13,7 @@ ERRORS = {
     "E040": "Value for {}: {} is out of range: unit error?",
     "E041": "Value for {}: {} must be between 0 and 1",
     "E042": "Must have a value for {}",
-    "E043": "API, {} does not match density at 60F",
+    "E043": "API, {} does not match density at 60F. API should be: {:.1f}",
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",

@@ -132,8 +132,10 @@ class Oil:
             try:
                 density_at_60F = physical_properties.Density(self).at_temp(60, 'F')
                 calculatedAPI = uc.convert('kg/m^3', 'API', density_at_60F)
-                if not isclose(API, calculatedAPI, rel_tol=1e-2):
-                    msgs.append(ERRORS["E043"].format(API))
+                # if not round(API, 1) == round(calculatedAPI, 2):
+                # if not isclose(API, calculatedAPI, rel_tol=1e-2):
+                if abs(API - round(calculatedAPI, 3)) > 0.2:
+                    msgs.append(ERRORS["E043"].format(API, calculatedAPI))
             except (IndexError, ValueError):
                 pass
 
