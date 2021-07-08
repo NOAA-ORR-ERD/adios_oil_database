@@ -16,6 +16,7 @@ from ...models.common.measurement import (
     Temperature,
     MassFraction,
     VolumeFraction,
+    MassOrVolumeFraction,
     Density,
     KinematicViscosity,
     Pressure,
@@ -79,14 +80,16 @@ MAPPING = {
     norm('Carbon, wt %'): {
         'attr': 'Carbon Mass Fraction',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'mass fraction',
+        'cls': MassOrVolumeFraction,
         'num_digits': 4,
         'element_of': 'bulk_composition',
     },
     norm('Hydrogen, wt %'): {
         'attr': 'Hydrogen Mass Fraction',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'mass fraction',
+        'cls': MassOrVolumeFraction,
         'num_digits': 4,
         'element_of': 'bulk_composition',
     },
@@ -107,7 +110,9 @@ MAPPING = {
     norm('Sulfur, wt%'): {
         'attr': 'Sulfur Mass Fraction',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'mass fraction',
+        'cls': MassOrVolumeFraction,
+        'num_digits': 5,
         'element_of': 'bulk_composition',
     },
     #
@@ -120,15 +125,16 @@ MAPPING = {
     norm('Mercaptan sulfur, ppm'): {
         'attr': 'Mercaptan Sulfur Mass Fraction',
         'unit': 'ppm',
-        'cls': MassFraction,
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'num_digits': 4,
-        'convert_from': 'ppm',
         'element_of': 'bulk_composition',
     },
     norm('Nitrogen, ppm'): {
         'attr': 'Nitrogen Mass Fraction',
         'unit': 'ppm',
-        'cls': MassFraction,
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
     norm('CCR, wt%'): {
@@ -141,25 +147,29 @@ MAPPING = {
     norm('N-Heptane Insolubles (C7 Asphaltenes), wt%'): {
         'attr': 'N-Heptane Insolubles (C7 Asphaltenes)',
         'unit': '%',
-        'cls': MassFraction,
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
     norm('Nickel, ppm'): {
         'attr': 'Nickel Mass Fraction',
         'unit': 'ppm',
-        'cls': MassFraction,
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
     norm('Vanadium, ppm'): {
         'attr': 'Vanadium Mass Fraction',
         'unit': 'ppm',
-        'cls': MassFraction,
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
     norm('Calcium, ppm'): {
         'attr': 'Calcium Mass Fraction',
         'unit': 'ppm',
-        'cls': MassFraction,
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'convert_from': 'ppm',
         'element_of': 'bulk_composition',
     },
@@ -174,34 +184,39 @@ MAPPING = {
     norm('Hydrogen Sulfide (dissolved), ppm'): {
         'attr': 'Hydrogen Sulfide Concentration',
         'unit': 'ppm',
-        'cls': MassFraction,  # concentration??
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
     norm('Salt content, ptb'): {
         'attr': 'Salt Content',
         'unit': 'ppm',
-        'cls': MassFraction,
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
         'convert_from': 'ppb',  # conversion for pounds/thousand barrels??
         'element_of': 'bulk_composition',
     },
     norm('Paraffins, vol %'): {
         'attr': 'Paraffin Volume Fraction',
         'unit': '%',
-        'cls': VolumeFraction,
+        'unit_type': 'volumefraction',
+        'cls': MassOrVolumeFraction,
         'convert_from': '%',
         'element_of': 'bulk_composition',
     },
     norm('Naphthenes, vol %'): {
         'attr': 'Naphthene Volume Fraction',
         'unit': '%',
-        'cls': VolumeFraction,
+        'unit_type': 'volumefraction',
+        'cls': MassOrVolumeFraction,
         'convert_from': '%',
         'element_of': 'bulk_composition',
     },
     norm('Aromatics (FIA), vol %'): {
         'attr': 'Aromatics (FIA)',
         'unit': '%',
-        'cls': VolumeFraction,
+        'unit_type': 'volumefraction',
+        'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
     #
@@ -289,10 +304,8 @@ def ExxonMapper(record):
     oil.metadata.reference = reference
     oil.metadata.source_id = ref_id
 
-    samples = SampleList([
-        Sample(**sample_id_attrs(name)) for name in sample_names
-        if name is not None
-    ])
+    samples = SampleList(
+        [Sample(**sample_id_attrs(name)) for name in sample_names if name is not None])
 
     cut_table = read_cut_table(sample_names, data)
 
@@ -372,9 +385,7 @@ def read_cut_table(sample_names, data):
             row = next_non_empty(data)
 
             sample_attr = norm(row[0])
-            sample_data = [
-                f for f, n in zip(row[1:], sample_names) if n is not None
-            ]
+            sample_data = [f for f, n in zip(row[1:], sample_names) if n is not None]
 
             cut_table[sample_attr] = sample_data
         except StopIteration:
@@ -397,9 +408,7 @@ def set_boiling_point_range(samples, cut_table):
 
     for sample_prev, sample in zip(samples, samples[1:]):
         prev_max_temp = to_number(sample_prev.metadata.name.split()[-1])
-        min_temp, _sep, max_temp = [
-            to_number(n) for n in sample.metadata.name.split()[-3:]
-        ]
+        min_temp, _sep, max_temp = [to_number(n) for n in sample.metadata.name.split()[-3:]]
 
         if min_temp == 'IBP':
             min_temp = initial_bp
@@ -414,12 +423,6 @@ def set_boiling_point_range(samples, cut_table):
     last_bpr = samples[-1].metadata.boiling_point_range
     last_bpr.min_value = last_bpr.max_value
     last_bpr.max_value = final_bp
-
-    # Make BP range open ended for first and last cut
-    # vacuum residue
-    samples[-1].metadata.boiling_point_range.max_value = None
-    # Butane cut:
-    samples[1].metadata.boiling_point_range.min_value = None
 
 
 def apply_map(data, cut_table, samples):
@@ -476,17 +479,17 @@ def set_sample_property(samples,
 
                         sample = child_value
 
-                setattr(sample, attr[-1],
-                        cls(sigfigs(val, num_digits), unit=unit))
+                setattr(sample, attr[-1], cls(sigfigs(val, num_digits), unit=unit))
             else:
                 # add to a list attribute
                 compositions = getattr(sample, element_of)
 
-                measurement = cls(sigfigs(val, num_digits),
-                                  unit=unit,
-                                  unit_type=unit_type)
-                compositions.append(
-                    Compound(name=attr, measurement=measurement))
+                measurement = cls(sigfigs(val, num_digits), unit=unit, unit_type=unit_type)
+                item_cls = compositions.item_type
+                compositions.append(item_cls(
+                    name=attr,
+                    measurement=measurement,
+                ))
 
 
 def process_cut_table(oil, samples, cut_table):
@@ -532,8 +535,7 @@ def process_cut_table(oil, samples, cut_table):
             try:
                 sample.physical_properties.kinematic_viscosities.append(
                     KinematicViscosityPoint(
-                        viscosity=KinematicViscosity(value=sigfigs(val, 5),
-                                                     unit="cSt"),
+                        viscosity=KinematicViscosity(value=sigfigs(val, 5), unit="cSt"),
                         ref_temp=Temperature(value=temp_c, unit="C"),
                     ))
             except Exception:
@@ -564,8 +566,7 @@ def process_cut_table(oil, samples, cut_table):
                 if val is not None:
                     val = sigfigs(uc.convert("F", "C", val), 5)
 
-                    sample.distillation_data.end_point = Temperature(value=val,
-                                                                     unit="C")
+                    sample.distillation_data.end_point = Temperature(value=val, unit="C")
 
     # sort them
     for sample in samples:
@@ -595,8 +596,7 @@ def get_next_properties_row(data, exp_field):
     row = next_non_empty(data)
 
     if norm(row[0]) != norm(exp_field):
-        raise ValueError(f'Something wrong with data sheet: {row}, '
-                         'expected: {exp_field}')
+        raise ValueError(f'Something wrong with data sheet: {row}, ' 'expected: {exp_field}')
 
     return row
 

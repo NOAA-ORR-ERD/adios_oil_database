@@ -12,7 +12,6 @@ from adios_db.models.oil.version import VersionError
 from adios_db.models.oil.metadata import MetaData
 from adios_db.models.oil.values import Reference
 
-
 from pprint import pprint
 # A few handy constants for use for tests
 
@@ -24,8 +23,7 @@ OUTPUT_DIR = HERE / "output"
 TEST_DATA_DIR = HERE.parent.parent / "data_for_testing" / "noaa-oil-data" / "oil"
 EXAMPLE_DATA_DIR = HERE.parent.parent / "data_for_testing" / "example_data"
 
-BIG_RECORD = json.load(open(
-    TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
+BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
 
 
 class TestOil:
@@ -42,9 +40,7 @@ class TestOil:
 
         that should get flagged if it doesn't make sense
         """
-        whoops = {'oil_id': 'AD00123',
-                  'metadata': {'name': 'An oil name'}
-                  }
+        whoops = {'oil_id': 'AD00123', 'metadata': {'name': 'An oil name'}}
         with pytest.raises(ValueError):
             # error becasue we're passing the whole dict in
             Oil(whoops)
@@ -55,10 +51,13 @@ class TestOil:
 
         a really long string probably isn't what you meant
         """
-        whoops = {'oil_id': 'AD00123',
-                  'metadata': {'name': 'An oil name',
-                               'comments': "an arbitrary comment"},
-                  }
+        whoops = {
+            'oil_id': 'AD00123',
+            'metadata': {
+                'name': 'An oil name',
+                'comments': "an arbitrary comment"
+            },
+        }
         with pytest.raises(ValueError):
             Oil(str(whoops))
 
@@ -71,11 +70,13 @@ class TestOil:
         """
         checks that the an _id attribute of a dict will get ignored
         """
-        oil = Oil.from_py_json({'oil_id': "XX123456",
-                                '_id': 1234567,
-                                'metadata': {'name': "An oil name"},
-                                }
-                               )
+        oil = Oil.from_py_json({
+            'oil_id': "XX123456",
+            '_id': 1234567,
+            'metadata': {
+                'name': "An oil name"
+            },
+        })
 
         assert oil.oil_id == "XX123456"
 
@@ -86,7 +87,6 @@ class TestOil:
         joil = oil.py_json()
 
         assert '_id' not in joil
-
 
     def test_repr_minimal(self):
         """
@@ -158,14 +158,15 @@ class TestOil:
 
         assert len(py_json) == 7
 
-        for attr in ['oil_id',
-                     'adios_data_model_version',
-                     'metadata',
-                     'sub_samples',
-                     'status',
-                     'permanent_warnings',
-                     'extra_data',
-                     ]:
+        for attr in [
+                'oil_id',
+                'adios_data_model_version',
+                'metadata',
+                'sub_samples',
+                'status',
+                'permanent_warnings',
+                'extra_data',
+        ]:
             assert attr in py_json
 
     def test_from_py_json_nothing(self):
@@ -219,12 +220,7 @@ class TestMetaData:
     def test_init_empty(self):
         meta = MetaData()
 
-        for attr in ('location',
-                     'reference',
-                     'sample_date',
-                     'product_type',
-                     'API',
-                     'comments',
+        for attr in ('location', 'reference', 'sample_date', 'product_type', 'API', 'comments',
                      'labels'):
             assert hasattr(meta, attr)
 
@@ -245,8 +241,7 @@ class TestMetaData:
 
     @pytest.mark.parametrize("attr, value, expected", (
         ('location', 'canada', 'canada'),
-        ('reference',
-         Reference(year=1999, reference='reference text'),
+        ('reference', Reference(year=1999, reference='reference text'),
          Reference(year=1999, reference='reference text')),
         ('sample_date', '1999-01-01', '1999-01-01'),
         ('product_type', 'crude', 'crude'),
@@ -266,34 +261,31 @@ class TestMetaData:
         ('location', 'canada', {
             'default': '',
             'value': 'canada',
-         }),
+        }),
         ('reference', Reference(year=1999, reference='reference text'), {
             'default': Reference(year=None, reference=''),
             'value': Reference(year=1999, reference='reference text'),
-         }),
+        }),
         ('sample_date', '1999-01-01', {
             'default': '',
             'value': '1999-01-01',
-         }),
+        }),
         ('product_type', 'crude', {
             'default': '',
             'value': 'crude',
-         }),
+        }),
         ('API', 10.0, {
             'default': None,
             'value': 10.0,
-            }
-         ),
+        }),
         ('comments', 'some comment', {
             'default': '',
             'value': 'some comment',
-            }
-         ),
+        }),
         ('labels', ['heavy'], {
             'default': [],
             'value': ['heavy'],
-            }
-         ),
+        }),
     ))
     def test_metadata_in_oil(self, attr, value, expected):
         oil = Oil(oil_id=OIL_ID)
@@ -303,7 +295,6 @@ class TestMetaData:
 
         setattr(oil.metadata, attr, value)
         assert getattr(oil.metadata, attr) == expected['value']
-
 
 
 class TestFullRecordMetadata:
@@ -319,12 +310,12 @@ class TestFullRecordMetadata:
 
         assert oil.oil_id == "EC02234"
 
-
-    @pytest.mark.parametrize("attr, value", [("location", "Alberta, Canada"),
-                                             ('name', 'Access West Blend Winter'),
-                                             ('source_id', '2234'),
-                                             ('sample_date', '2013-08-04'),
-                                        ])
+    @pytest.mark.parametrize("attr, value", [
+        ("location", "Alberta, Canada"),
+        ('name', 'Access West Blend Winter'),
+        ('source_id', '2234'),
+        ('sample_date', '2013-08-04'),
+    ])
     def test_location(self, attr, value):
         metadata = self.oil.metadata
 
@@ -347,8 +338,7 @@ def test_from_file():
     """
     test loading a Oil object directly from an open file
     """
-    oil = Oil.from_file(open(TEST_DATA_DIR / "EC" / "EC02234.json",
-                        encoding="utf-8"))
+    oil = Oil.from_file(open(TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
@@ -367,6 +357,7 @@ def test_to_file_name():
         data = json.load(infile)
 
     assert data["oil_id"] == 'EC02234'
+
 
 def test_to_open_file():
     """
@@ -387,30 +378,30 @@ def test_round_trip():
     tests that a large Oil object loaded from JSON, then saved as JSON,
     then reloaded again, results in an equal object
 
-    Prompted by, and tested with, a record that was saved from Mongo, in which the
-    attributes are in a different order, but should mean the same thing.
-
+    Not really much a test at this point, but why not?
     """
-    # filein = EXAMPLE_DATA_DIR / "EC000506.json"
     filein = TEST_DATA_DIR / "EC" / "EC00506.json"
     fileout = OUTPUT_DIR / "temp_oil.json"
 
     # read it in:
     oilin = Oil.from_file(filein)
 
-    # check that they are not exactly the same
+    # # check that they are not exactly the same
+    # # this used to be a test for when we had equal data written in differnet order
+    # # it's not longer valid
     oilin.to_file(fileout)
 
-    file1 = open(filein, encoding="utf-8").read().strip()
-    file2 = open(fileout, encoding="utf-8").read().strip()
+    # file1 = open(filein, encoding="utf-8").read().strip()
+    # file2 = open(fileout, encoding="utf-8").read().strip()
 
-    assert not file1 == file2, "output is the same as input -- test not fully valid"
+    # assert not file1 == file2, "output is the same as input -- test not fully valid"
 
     # read the new one to an Oil object
 
     oilout = Oil.from_file(fileout)
 
     assert oilin == oilout
+
 
 def test_version_none():
     '''
@@ -431,20 +422,24 @@ def test_version_bad():
     '''
     If it doesn't have a version string, it should get the current one.
     '''
-    pyjs = {'oil_id': 'AD00123',
-            'adios_data_model_version': 1.2,
-            'metadata': {'name': 'An oil name'}
-            }
+    pyjs = {
+        'oil_id': 'AD00123',
+        'adios_data_model_version': 1.2,
+        'metadata': {
+            'name': 'An oil name'
+        }
+    }
     with pytest.raises(ValueError):
         oil = Oil.from_py_json(pyjs)
 
 
 def test_version_too_high():
-    pyjs = {'oil_id': 'AD00123',
-            'adios_data_model_version': "2.0.0",
-            'metadata': {'name': 'An oil name'}
-            }
+    pyjs = {
+        'oil_id': 'AD00123',
+        'adios_data_model_version': "2.0.0",
+        'metadata': {
+            'name': 'An oil name'
+        }
+    }
     with pytest.raises(VersionError):
         oil = Oil.from_py_json(pyjs)
-
-

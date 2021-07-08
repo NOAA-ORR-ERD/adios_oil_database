@@ -102,7 +102,7 @@
                         "fraction": {
                             "value": 0.233,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 149,
@@ -114,7 +114,7 @@
                         "fraction": {
                             "value": 0.524,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 232,
@@ -126,7 +126,7 @@
                         "fraction": {
                             "value": 0.852,
                             "unit": "fraction",
-                            "unit_type": "concentration"
+                            "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
                             "value": 342,

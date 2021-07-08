@@ -7,12 +7,17 @@ most need to be updated to test validating an Oil object directly
 import copy
 import json
 from pathlib import Path
-
+import math
 import pytest
 
+import unit_conversion as uc
+
+from adios_db.computation import physical_properties
 from adios_db.models.oil.oil import Oil
-from adios_db.models.oil.validation.validate import (validate_json,
-                                                     validate)
+from adios_db.models.oil.sample import Sample
+from adios_db.models.oil.physical_properties import DensityPoint
+from adios_db.models.common.measurement import *
+from adios_db.models.oil.validation.validate import (validate_json, validate)
 
 from adios_db.scripting import get_all_records
 
@@ -20,9 +25,7 @@ HERE = Path(__file__).parent
 
 TEST_DATA_DIR = HERE.parent.parent.parent / "data_for_testing" / "noaa-oil-data" / "oil"
 
-BIG_RECORD = json.load(open(
-    TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
-
+BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
 
 
 @pytest.fixture
@@ -32,10 +35,19 @@ def big_record():
 
 @pytest.fixture
 def no_type_oil():
-    no_type_oil = {'oil_id': 'AD00123',
-                   'metadata': {'name': 'An oil name'}
-                   }
+    no_type_oil = {'oil_id': 'AD00123', 'metadata': {'name': 'An oil name'}}
     return Oil.from_py_json(no_type_oil)
+
+
+@pytest.fixture
+def minimal_oil():
+    oil = Oil('XXXXX')
+    oil.metadata.name = "Minimal Oil for Tests"
+    fresh = Sample()
+    # print(fresh.physical_properties)
+    oil.sub_samples.append(fresh)
+    return oil
+
 
 def test_validation_doesnt_change_oil(big_record):
     orig = copy.deepcopy(big_record)
@@ -71,15 +83,14 @@ def test_no_id():
         validate_json({"this": 3})
     except ValueError as err:
         print(str(err))
-        assert ("E010: Record has no oil_id: every record must have an ID"
-                in str(err))
+        assert ("E010: Record has no oil_id: every record must have an ID" in str(err))
 
 
-@pytest.mark.parametrize("name", ["  ",
-                                  "X",
-                                  "4",
-                                  ])
-
+@pytest.mark.parametrize("name", [
+    "  ",
+    "X",
+    "4",
+])
 def test_reasonable_name(name):
     # unreasonable names should fail
     oil = Oil(oil_id='AD00123')
@@ -156,6 +167,51 @@ def test_api_outragious(no_type_oil):
     assert snippet_in_oil_status("W005:", oil)
 
 
+def test_API_density_match(minimal_oil):
+    oil = minimal_oil
+    minimal_oil.metadata.API = 32.1  # close enough to 32.0
+    density = DensityPoint(
+        density=Density(value=0.86469, unit='g/cm^3'),
+        ref_temp=Temperature(value=60, unit='F'),
+    )
+    oil.sub_samples[0].physical_properties.densities.append(density)
+
+    density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
+    API = uc.convert('kg/m^3', 'API', density_at_60F)
+    print(density_at_60F)
+    print(API)
+
+    assert math.isclose(API, oil.metadata.API, rel_tol=1e3)
+
+    validate(oil)
+
+    print(oil.status)
+
+    assert snippet_not_in_oil_status("E043", oil)
+
+
+def test_API_density_missmatch(minimal_oil):
+    oil = minimal_oil
+    minimal_oil.metadata.API = 32.2  # too far from 32.0
+    density = DensityPoint(  # API 32.0 converted
+        density=Density(value=0.86469, unit='g/cm^3'),
+        ref_temp=Temperature(value=60, unit='F'),
+    )
+    oil.sub_samples[0].physical_properties.densities.append(density)
+
+    density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
+    API = uc.convert('kg/m^3', 'API', density_at_60F)
+    print(f"{density_at_60F=}")
+    print(f"{API=}")
+    print(f"{minimal_oil.metadata.API=}")
+
+    validate(oil)
+
+    print(oil.status)
+
+    assert snippet_in_oil_status("E043", oil)
+
+
 def test_no_subsamples(no_type_oil):
     oil = no_type_oil
     validate(oil)
@@ -191,6 +247,7 @@ def test_no_densities_with_density(big_record):
 
     assert snippet_not_in_oil_status("W006:", oil)
 
+
 def test_no_densities(big_record):
     oil = big_record
     #print(oil.sub_samples[0])
@@ -220,7 +277,6 @@ def test_bad_value_in_dist_temp(big_record):
 #     validate(oil)
 
 #     assert snippet_not_in_oil_status("W007:", oil)
-
 
 # def test_no_distillation_cuts(big_record):
 #     oil = big_record
@@ -273,6 +329,3 @@ def test_does_not_break_test_records():
         msgs = rec.validate()
 
     assert True
-
-
-

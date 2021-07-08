@@ -40,8 +40,9 @@ class MetaData:
                 msgs.append(WARNINGS["W004"])
             else:
                 msgs.append(ERRORS["E030"])
-        elif not (-60.0 < api < 100):  # somewhat arbitrary limits
-            msgs.append(WARNINGS["W005"].format(api=api))
+        else:
+            if not (-60.0 < api < 100):  # somewhat arbitrary limits
+                msgs.append(WARNINGS["W005"].format(api=api))
 
         # Check for a reasonable name
         # right now, reasonable is more than 5 characters -- we may want to add more later

@@ -227,7 +227,7 @@
                     "unit": "g/m^2",
                     "standard_deviation": 1.3,
                     "replicates": 3,
-                    "unit_type": null
+                    "unit_type": "needleadhesion"
                 }
             },
             "SARA": {
@@ -1895,7 +1895,7 @@
                     "unit": "g/m^2",
                     "standard_deviation": 4.3,
                     "replicates": 3,
-                    "unit_type": null
+                    "unit_type": "needleadhesion"
                 }
             },
             "SARA": {
@@ -3558,7 +3558,7 @@
                     "unit": "g/m^2",
                     "standard_deviation": 2.5,
                     "replicates": 3,
-                    "unit_type": null
+                    "unit_type": "needleadhesion"
                 }
             },
             "SARA": {
@@ -5221,7 +5221,7 @@
                     "unit": "g/m^2",
                     "standard_deviation": 3.2,
                     "replicates": 3,
-                    "unit_type": null
+                    "unit_type": "needleadhesion"
                 }
             },
             "SARA": {

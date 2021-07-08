@@ -7,7 +7,6 @@ from operator import itemgetter
 from math import isclose
 import numpy as np
 
-
 import unit_conversion as uc
 
 
@@ -45,7 +44,6 @@ class Density:
             self.temps = []
         self.initialize()
 
-
     def initialize(self):
         """
         Initialize the expansion coefficient
@@ -76,29 +74,32 @@ class Density:
         else:
             raise ValueError("Density needs at least one density value")
 
-    def at_temp(self, temp):
+    def at_temp(self, temp, unit='K'):
         """
         density(s) at the provided temperature(s)
 
         :param temp: scalar or sequence of temp in K
 
+        :param unit='K': unit of temperature
+
         densities will be returned as kg/m^3
         """
         temp = np.asarray(temp)
         scaler = True if temp.shape == () else False
-        temp.shape = (-1,)
+        temp.shape = (-1, )
 
-        densities = np.interp(temp,
-                              self.temps,
-                              self.densities,
-                              left=-np.inf,
-                              right=np.inf)
+        if unit != 'K':
+            temp = uc.convert(unit, 'K', temp)
+
+        densities = np.interp(temp, self.temps, self.densities, left=-np.inf, right=np.inf)
 
         left = (densities == -np.inf)
-        densities[left] = self.densities[0] + (self.k_rho_default * (temp[left] - self.temps[0]))
+        densities[left] = self.densities[0] + (self.k_rho_default *
+                                               (temp[left] - self.temps[0]))
 
         right = (densities == np.inf)
-        densities[right] = self.densities[-1] + (self.k_rho_default * (temp[right] - self.temps[-1]))
+        densities[right] = self.densities[-1] + (self.k_rho_default *
+                                                 (temp[right] - self.temps[-1]))
 
         return densities if not scaler else densities[0]
 
@@ -167,7 +168,7 @@ class KinematicViscosity:
         # find viscosity measurements with zero weathering
 
         # this sets:
-        self._k_v2 = None # decay constant for viscosity curve
+        self._k_v2 = None  # decay constant for viscosity curve
         self._visc_A = None
 
         kvis = self.kviscs
@@ -214,7 +215,6 @@ def get_density_data(oil, units="kg/m^3", temp_units="K"):
 
 
 def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
-
     """
     Return a table of kinematic viscosity data:
 
@@ -252,7 +252,6 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
 
 
 def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
-
     """
     Return a table of kinematic viscosity data:
 
@@ -313,8 +312,6 @@ def convert_dvisc_to_kvisc(dvisc, density):
 
 #     return np.interp(temp, temps, dens)
 
-
-
 # def get_kinematic_viscosity_at_temp(temp,
 #                                     kvis_units='cSt',
 #                                     temp_units='C'):
@@ -373,20 +370,20 @@ def emul_water(oil):
     the emulsion. (from ADIOS2)
     """
 
-    emulsion_max_water = None	#need to drill down in database for this info
+    emulsion_max_water = None  #need to drill down in database for this info
 
-    if emulsion_max_water is None:		# max water content not in library
+    if emulsion_max_water is None:  # max water content not in library
         dens = Density(oil)
         density = dens.at_temp(288.15)
         kvis = KinematicViscosity(oil)
         viscosity = kvis.at_temp(288.15)
         dynamic_viscosity = viscosity * density
-        if(dynamic_viscosity > 0.050):
+        if (dynamic_viscosity > 0.050):
             Ymax = 0.9 - 0.0952 * np.log(dynamic_viscosity / 0.050)
         else:
             Ymax = 0.9
     else:
-        Ymax = emulsion_max_water	# stay with the value you have
+        Ymax = emulsion_max_water  # stay with the value you have
 
     #this is done is py_gnome
     #drop_min = 1.0e-6		# min oil droplet size
@@ -420,7 +417,7 @@ def bullwinkle_fraction(oil):
 
     #need to go through subsamples checking for weathered data
     #if oil.metadata.emuls_constant_max is not None:
-        #bullwinkle_fraction = emuls_constant_max
+    #bullwinkle_fraction = emuls_constant_max
 
     if oil.metadata.product_type != "Crude Oil NOS" and oil.metadata.product_type != "Bitumen Blend":
         bullwinkle_fraction = 1.0
@@ -469,6 +466,3 @@ def _adios2_new_bull_calc(bullwinkle_fraction, oil_api):
     bull_adios1 = np.clip(bull_adios1, 0.0, 0.4)
 
     return 0.5 * (bullwinkle_fraction + bull_adios1)
-
-
-
