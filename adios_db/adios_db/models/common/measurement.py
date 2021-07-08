@@ -12,7 +12,7 @@ They can accommodate a single value, or a range of values
 They can also accommodate a standard deviation and number of replicates.
 '''
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from math import isclose
 import copy
 
@@ -27,24 +27,25 @@ from ..common.validators import EnumValidator
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
-__all__ = ['AngularVelocity',
-           'Concentration',
-           'Density',
-           'Dimensionless',
-           'DynamicViscosity',
-           'InterfacialTension',
-           'KinematicViscosity',
-           'Length',
-           'Mass',
-           'MassFraction',
-           'VolumeFraction',
-           'NeedleAdhesion',
-           'Pressure',
-           'Temperature',
-           'Time',
-           'Unitless',
-           'AnyUnit',
-           ]
+__all__ = [
+    'AngularVelocity',
+    'Concentration',
+    'Density',
+    'Dimensionless',
+    'DynamicViscosity',
+    'InterfacialTension',
+    'KinematicViscosity',
+    'Length',
+    'Mass',
+    'MassFraction',
+    'VolumeFraction',
+    'NeedleAdhesion',
+    'Pressure',
+    'Temperature',
+    'Time',
+    'Unitless',
+    'AnyUnit',
+]
 
 # fixme: why is this here?
 # it should be in validation, and the list itself should probably
@@ -131,7 +132,8 @@ class MeasurementBase(MeasurementDataclass):
             self.unit_type = self.__class__.unit_type
         self.unit_type = self.unit_type.lower()
         if self.unit_type != self.__class__.unit_type:
-            raise ValueError(f"unit_type must be: {self.__class__.unit_type}, not {self.unit_type}")
+            raise ValueError(
+                f"unit_type must be: {self.__class__.unit_type}, not {self.unit_type}")
         super().__post_init__()
 
     def py_json(self, sparse=True):
@@ -156,17 +158,16 @@ class MeasurementBase(MeasurementDataclass):
         If you want a new object, use `converted_to` instead
         """
 
-        new_vals = {att: None for att in ('value', 'min_value', 'max_value',
-                                          'standard_deviation')}
+        new_vals = {
+            att: None
+            for att in ('value', 'min_value', 'max_value', 'standard_deviation')
+        }
 
         for attr in new_vals.keys():
             val = getattr(self, attr)
 
             if val is not None:
-                new_val = convert(self.unit_type,
-                                  self.unit,
-                                  new_unit,
-                                  val)
+                new_val = convert(self.unit_type, self.unit, new_unit, val)
                 new_vals[attr] = new_val
 
         # if this was all successful
@@ -214,10 +215,7 @@ class Temperature(MeasurementBase):
             # no need for anything special
             super().convert_to(new_unit)
         else:
-            new_std = convert("deltatemperature",
-                              self.unit,
-                              new_unit,
-                              self.standard_deviation)
+            new_std = convert("deltatemperature", self.unit, new_unit, self.standard_deviation)
             super().convert_to(new_unit)
             self.standard_deviation = new_std
 
@@ -235,8 +233,9 @@ class Temperature(MeasurementBase):
                 val_in_C = convert(self.unit, "C", val)
                 decimal = val_in_C % 1
                 if isclose(decimal, 0.15) or isclose(decimal, 0.85):
-                    msgs.append(WARNINGS['W010'].format(f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
-                                                        f"{round(val_in_C):.2f} C"))
+                    msgs.append(WARNINGS['W010'].format(
+                        f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
+                        f"{round(val_in_C):.2f} C"))
         return msgs
 
     def fix_C_K(self):
@@ -314,6 +313,7 @@ class VolumeFraction(MeasurementBase):
     unit_type = "volumefraction"
     # add a validator: should be between 0 and 1.0
 
+
 @dataclass
 class MassOrVolumeFraction(MeasurementBase):
     """
@@ -333,7 +333,6 @@ class MassOrVolumeFraction(MeasurementBase):
     :param replicates: the value itself
     :param unit_type: the type of unit -- must be "massfraction", "volumefraction" or "concentration"
     """
-
     def __init__(self, *args, **kwargs):
         unit_type = kwargs.get("unit_type")
         if unit_type is None:
@@ -343,8 +342,9 @@ class MassOrVolumeFraction(MeasurementBase):
             if unit_type not in {'massfraction', 'volumefraction', 'concentration'}:
                 raise AttributeError
         except AttributeError:
-            raise ValueError("unit_type must be one of: 'massfraction', 'volumefraction', 'concentration'\n"
-                             f"args: {args}, kwargs: {kwargs}")
+            raise ValueError(
+                "unit_type must be one of: 'massfraction', 'volumefraction', 'concentration'\n"
+                f"args: {args}, kwargs: {kwargs}")
         kwargs['unit_type'] = unit_type
         super().__init__(*args, **kwargs)
 
@@ -363,14 +363,17 @@ class MassOrVolumeFraction(MeasurementBase):
         return copy.copy(self)
 
     def __eq__(self, other):
-        return super().__eq__(other) and (self.unit_type == other.unit_type)
+        """
+        So as not to be pedantic with the class -- if the values all match
+        """
+        return self.__dict__ == other.__dict__
+
 
 @dataclass
 class AnyUnit(MeasurementBase):
     '''
     This is a type for data that could be any unit_type
     '''
-
     def __init__(self, *args, **kwargs):
         unit_type = kwargs.get("unit_type")
         if unit_type is None:
@@ -389,6 +392,12 @@ class AnyUnit(MeasurementBase):
         overriding it to disable it
         '''
         pass
+
+    def __eq__(self, other):
+        """
+        So as not to be pedantic with the class -- if the values all match
+        """
+        return self.__dict__ == other.__dict__
 
 
 class Density(MeasurementBase):

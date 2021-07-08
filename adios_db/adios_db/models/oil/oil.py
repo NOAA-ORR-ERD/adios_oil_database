@@ -7,12 +7,16 @@ Having a Python class makes it easier to write importing, validating etc, code.
 """
 import copy
 import json
+from math import isclose
 
 from dataclasses import dataclass, field
+
+import unit_conversion as uc
 
 from ..common.utilities import dataclass_to_json
 
 from ...computation.gnome_oil import make_gnome_oil
+from ...computation import physical_properties
 
 from .metadata import MetaData
 from .sample import SampleList
@@ -56,8 +60,7 @@ class Oil:
         """
         return (f"{self.metadata.name}\n"
                 f"ID: {self.oil_id}\n"
-                f"Product Type: {self.metadata.product_type}"
-                )
+                f"Product Type: {self.metadata.product_type}")
 
     @staticmethod
     def _pre_from_py_json(py_json):
@@ -97,8 +100,7 @@ class Oil:
             raise ValueError("oil_id must be a string")
         # arbitrary limit to catch ridiculous onesL UUID is  36 characters
         elif len(id) > 40:
-            raise ValueError("oil_id must be a string less than 40 characters "
-                             "in length")
+            raise ValueError("oil_id must be a string less than 40 characters " "in length")
 
     def validate(self):
         """
@@ -123,6 +125,17 @@ class Oil:
             self._validate_id(self.oil_id)
         except ValueError:
             msgs.append(ERRORS["E001"].format(self.oil_id))
+
+        # check if API matches density
+        API = self.metadata.API
+        if API is not None:
+            try:
+                density_at_60F = physical_properties.Density(self).at_temp(60, 'F')
+                calculatedAPI = uc.convert('kg/m^3', 'API', density_at_60F)
+                if not isclose(API, calculatedAPI, rel_tol=1e-2):
+                    msgs.append(ERRORS["E043"].format(API))
+            except (IndexError, ValueError):
+                pass
 
         # always add these:
         msgs.extend("W000: " + m for m in self.permanent_warnings)
@@ -153,8 +166,3 @@ class Oil:
                 json.dump(self.py_json(sparse=sparse), outfile, indent=4)
 
         return None
-
-
-
-
-

@@ -169,7 +169,7 @@ def test_api_outragious(no_type_oil):
 
 def test_API_density_match(minimal_oil):
     oil = minimal_oil
-    minimal_oil.metadata.API = 32.0
+    minimal_oil.metadata.API = 32.1  # close enough to 32.0
     density = DensityPoint(
         density=Density(value=0.86469, unit='g/cm^3'),
         ref_temp=Temperature(value=60, unit='F'),
@@ -183,9 +183,33 @@ def test_API_density_match(minimal_oil):
 
     assert math.isclose(API, oil.metadata.API, rel_tol=1e3)
 
-    msgs = oil.validate()
+    validate(oil)
 
-    print(msgs)
+    print(oil.status)
+
+    assert snippet_not_in_oil_status("E043", oil)
+
+
+def test_API_density_missmatch(minimal_oil):
+    oil = minimal_oil
+    minimal_oil.metadata.API = 32.5  # too far from 32.0
+    density = DensityPoint(  # API 32.0 converted
+        density=Density(value=0.86469, unit='g/cm^3'),
+        ref_temp=Temperature(value=60, unit='F'),
+    )
+    oil.sub_samples[0].physical_properties.densities.append(density)
+
+    density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
+    API = uc.convert('kg/m^3', 'API', density_at_60F)
+    print(f"{density_at_60F=}")
+    print(f"{API=}")
+    print(f"{minimal_oil.metadata.API=}")
+
+    validate(oil)
+
+    print(oil.status)
+
+    assert snippet_in_oil_status("E043", oil)
 
 
 def test_no_subsamples(no_type_oil):
