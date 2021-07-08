@@ -5,9 +5,10 @@ from pathlib import Path
 import logging
 from openpyxl import load_workbook
 
-from ..import field_name_sluggify
+from .. import field_name_sluggify
 
 from pprint import PrettyPrinter
+
 pp = PrettyPrinter(indent=2, width=120)
 
 custom_slugify = field_name_sluggify
@@ -84,8 +85,7 @@ class ExxonDataReader:
         sheetnames = wb.sheetnames
 
         if len(sheetnames) < 1:
-            raise ValueError(f'file: {filename} does not contain '
-                             'any sheets')
+            raise ValueError(f'file: {filename} does not contain ' 'any sheets')
 
         sheet = wb[sheetnames[0]]
 

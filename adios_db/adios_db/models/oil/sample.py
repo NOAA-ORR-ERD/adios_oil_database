@@ -43,7 +43,8 @@ class Sample:
 
     physical_properties: PhysicalProperties = field(default_factory=PhysicalProperties)
 
-    environmental_behavior: EnvironmentalBehavior = field(default_factory=EnvironmentalBehavior)
+    environmental_behavior: EnvironmentalBehavior = field(
+        default_factory=EnvironmentalBehavior)
 
     SARA: Sara = field(default_factory=Sara)
 
