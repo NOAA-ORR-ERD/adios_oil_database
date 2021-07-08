@@ -25,7 +25,8 @@ export default class ValueUnitInput extends Component {
         } else {
             this.valueObject = {
                 value: parseFloat(e.target.value),
-                unit: this.args.valueUnit
+                unit: this.args.valueUnit,
+                unit_type: this.valueObject.unit_type
             };
         }
 
