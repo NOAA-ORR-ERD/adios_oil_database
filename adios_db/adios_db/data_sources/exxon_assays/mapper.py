@@ -11,20 +11,22 @@ import logging
 import unit_conversion as uc
 
 from ...util import sigfigs
-from ...models.common.measurement import (Length,
-                                          Temperature,
-                                          MassFraction,
-                                          VolumeFraction,
-                                          Density,
-                                          KinematicViscosity,
-                                          Pressure,
-                                          Unitless,
-                                          AnyUnit,
-                                          )
+from ...models.common.measurement import (
+    Length,
+    Temperature,
+    MassFraction,
+    VolumeFraction,
+    Density,
+    KinematicViscosity,
+    Pressure,
+    Unitless,
+    AnyUnit,
+)
 
-from ...models.oil.physical_properties import (DensityPoint,
-                                               KinematicViscosityPoint,
-                                               )
+from ...models.oil.physical_properties import (
+    DensityPoint,
+    KinematicViscosityPoint,
+)
 from ...models.oil.distillation import DistCut
 from ...models.oil.values import Reference
 
@@ -274,8 +276,9 @@ def ExxonMapper(record):
     data = iter(data)
 
     reference = read_header(data)
-    reference.reference += ('\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
-                            '\nAccessed: Dec 9th, 2020')
+    reference.reference += (
+        '\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
+        '\nAccessed: Dec 9th, 2020')
     reference.year = 2020
 
     oil_id, ref_id, sample_names = read_identification(data)
@@ -286,9 +289,10 @@ def ExxonMapper(record):
     oil.metadata.reference = reference
     oil.metadata.source_id = ref_id
 
-    samples = SampleList([Sample(**sample_id_attrs(name))
-                          for name in sample_names
-                          if name is not None])
+    samples = SampleList([
+        Sample(**sample_id_attrs(name)) for name in sample_names
+        if name is not None
+    ])
 
     cut_table = read_cut_table(sample_names, data)
 
@@ -368,8 +372,9 @@ def read_cut_table(sample_names, data):
             row = next_non_empty(data)
 
             sample_attr = norm(row[0])
-            sample_data = [f for f, n in zip(row[1:], sample_names)
-                           if n is not None]
+            sample_data = [
+                f for f, n in zip(row[1:], sample_names) if n is not None
+            ]
 
             cut_table[sample_attr] = sample_data
         except StopIteration:
@@ -392,8 +397,9 @@ def set_boiling_point_range(samples, cut_table):
 
     for sample_prev, sample in zip(samples, samples[1:]):
         prev_max_temp = to_number(sample_prev.metadata.name.split()[-1])
-        min_temp, _sep, max_temp = [to_number(n)
-                                    for n in sample.metadata.name.split()[-3:]]
+        min_temp, _sep, max_temp = [
+            to_number(n) for n in sample.metadata.name.split()[-3:]
+        ]
 
         if min_temp == 'IBP':
             min_temp = initial_bp
@@ -409,6 +415,12 @@ def set_boiling_point_range(samples, cut_table):
     last_bpr.min_value = last_bpr.max_value
     last_bpr.max_value = final_bp
 
+    # Make BP range open ended for first and last cut
+    # vacuum residue
+    samples[-1].metadata.boiling_point_range.max_value = None
+    # Butane cut:
+    samples[1].metadata.boiling_point_range.min_value = None
+
 
 def apply_map(data, cut_table, samples):
     for name, data in MAPPING.items():
@@ -416,9 +428,15 @@ def apply_map(data, cut_table, samples):
         set_sample_property(samples, row, **data)
 
 
-def set_sample_property(samples, row, attr, unit, cls,
-                        unit_type=None, convert_from=None,
-                        element_of=None, num_digits=5):
+def set_sample_property(samples,
+                        row,
+                        attr,
+                        unit,
+                        cls,
+                        unit_type=None,
+                        convert_from=None,
+                        element_of=None,
+                        num_digits=5):
     """
     reads a row from the spreadsheet, and sets the sample properties
 
@@ -437,7 +455,7 @@ def set_sample_property(samples, row, attr, unit, cls,
     """
 
     for sample, val in zip(samples, row):
-        if val is not None and val not in ('NotAvailable',):
+        if val is not None and val not in ('NotAvailable', ):
             if convert_from is not None:
                 val = uc.convert(convert_from, unit, val)
 
@@ -467,10 +485,8 @@ def set_sample_property(samples, row, attr, unit, cls,
                 measurement = cls(sigfigs(val, num_digits),
                                   unit=unit,
                                   unit_type=unit_type)
-                compositions.append(Compound(
-                    name=attr,
-                    measurement=measurement
-                ))
+                compositions.append(
+                    Compound(name=attr, measurement=measurement))
 
 
 def process_cut_table(oil, samples, cut_table):
@@ -492,17 +508,17 @@ def process_cut_table(oil, samples, cut_table):
     for sample, val in zip(samples, row):
         try:
             rho = uc.convert("SG", "g/cm^3", val)
-            sample.physical_properties.densities.append(DensityPoint(
-                density=Density(value=sigfigs(rho, 5), unit="g/cm^3"),
-                ref_temp=Temperature(value=15.6, unit="C"),
-            ))
+            sample.physical_properties.densities.append(
+                DensityPoint(
+                    density=Density(value=sigfigs(rho, 5), unit="g/cm^3"),
+                    ref_temp=Temperature(value=15.6, unit="C"),
+                ))
 
         except Exception:
             pass
 
     # viscosity
-    for lbl in ("Viscosity at 20C/68F, cSt",
-                "Viscosity at 40C/104F, cSt",
+    for lbl in ("Viscosity at 20C/68F, cSt", "Viscosity at 40C/104F, cSt",
                 "Viscosity at 50C/122F, cSt"):
         row = cut_table[norm(lbl)]
 
@@ -519,8 +535,7 @@ def process_cut_table(oil, samples, cut_table):
                         viscosity=KinematicViscosity(value=sigfigs(val, 5),
                                                      unit="cSt"),
                         ref_temp=Temperature(value=temp_c, unit="C"),
-                    )
-                )
+                    ))
             except Exception:
                 pass
 
@@ -541,10 +556,9 @@ def process_cut_table(oil, samples, cut_table):
                 if val is not None:
                     val = sigfigs(uc.convert("F", "C", val), 5)
 
-                    sample.distillation_data.cuts.append(DistCut(
-                        fraction=MassFraction(value=percent, unit="%"),
-                        vapor_temp=Temperature(value=val, unit="C")
-                    ))
+                    sample.distillation_data.cuts.append(
+                        DistCut(fraction=MassFraction(value=percent, unit="%"),
+                                vapor_temp=Temperature(value=val, unit="C")))
         elif name == norm('EP, F'):
             for sample, val in zip(samples, row):
                 if val is not None:

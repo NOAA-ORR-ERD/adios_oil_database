@@ -467,7 +467,6 @@
             "metadata": {
                 "boiling_point_range": {
                     "max_value": 60.0,
-                    "min_value": -57.641,
                     "unit": "F",
                     "unit_type": "temperature"
                 },
@@ -2481,7 +2480,6 @@
             ],
             "metadata": {
                 "boiling_point_range": {
-                    "max_value": 1504.6,
                     "min_value": 1000.0,
                     "unit": "F",
                     "unit_type": "temperature"
