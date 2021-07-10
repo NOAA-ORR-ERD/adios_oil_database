@@ -184,6 +184,7 @@ def insert_oil(request):
         oil = validate_json(oil_obj)
         set_completeness(oil)
         oil_obj = oil.py_json()
+        oil_obj['_id'] = oil_obj['oil_id']
 
         mongo_id = (request.mdb_client.oil
                            .insert_one(oil_obj)
@@ -288,9 +289,11 @@ def new_oil_id(request):
     max_seq = 0
 
     cursor = (request.mdb_client.oil
-              .find({'_id': {'$regex': '^{}'.format(id_prefix)}}, {'_id'}))
+              .find({'oil_id': {'$regex': '^{}'.format(id_prefix)}},
+                    {'oil_id'}))
+
     for row in cursor:
-        oil_id = row['_id']
+        oil_id = row['oil_id']
 
         try:
             oil_seq = int(oil_id[len(id_prefix):])
@@ -371,7 +374,8 @@ def get_oil_all_fields(oil):
     oil.pop('_id', None)
 
     return {
-        'data': {'_id': oil.get('oil_id'),
-                 'type': 'oils',
-                 'attributes': oil},
+        'data': {
+            '_id': oil.get('oil_id'),
+            'type': 'oils',
+            'attributes': oil},
         }

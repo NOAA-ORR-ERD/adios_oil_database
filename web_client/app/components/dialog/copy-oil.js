@@ -55,6 +55,7 @@ export default class CopyOilDlg extends Component {
 
         set(oil.metadata, 'name', this.oilName);
         delete oil.id;
+        delete oil.oil_id;
 
         this.args.submit(oil);
     }
