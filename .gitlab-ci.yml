@@ -240,6 +240,7 @@ deploy_api_stage:
       -e MONGODB_WRITEABLE=false
       --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
+    - docker ps
   tags:
     - adios-stage
     - deploy
