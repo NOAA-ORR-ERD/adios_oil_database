@@ -1,6 +1,7 @@
 '''
     class that represents the demographic data (metadata) of an oil record.
 '''
+from datetime import datetime
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
@@ -49,6 +50,12 @@ class MetaData:
         if len(self.name.strip()) < 2:
             msgs.append(WARNINGS["W001"].format(self.name))
 
+        # check sample date is valid
+        if self.sample_date:
+            try:
+                datetime.fromisoformat(self.sample_date)
+            except ValueError as err:
+                msgs.append(WARNINGS["W011"].format("sample date", self.sample_date, str(err)))
         return msgs
 
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 Add the fraction recovered from a TSV file
 
@@ -13,7 +12,6 @@ import csv
 from adios_db.models.oil.product_type import PRODUCT_TYPES
 from adios_db.scripting import get_all_records
 from adios_db.scripting import Concentration
-
 
 USAGE = """
 add_fraction_recovered data_dir [dry_run]
@@ -60,7 +58,7 @@ def add_them(data):
         except KeyError:
             print(f"{ID} not in the spreadsheet")
             missing.write(",".join([ID, oil.metadata.name]))
-            name_mismatch.write("\n")
+            missing.write("\n")
             continue
         name = row[0]
         print("Processing:", ID, name)

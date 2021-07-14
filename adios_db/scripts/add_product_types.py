@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 Add the product types to all records, from a CSV file
 
@@ -80,5 +79,6 @@ def add_them(data):
 
 
 if __name__ == "__main__":
-    data = read_the_csv_file("Evaluation_Of_Oil_Type_List - temp.tsv")
+    # data = read_the_csv_file("Evaluation_Of_Oil_Type_List - temp.tsv")
+    data = read_the_csv_file("Evaluation_Of_Oil_Type_List_January2021.tsv")
     add_them(data)
