@@ -35,16 +35,10 @@ from ....computation.physical_properties import KinematicViscosity
 
 # these are the labels with no criteria for density or viscosity
 # e.g, if it's a "Crude Oil NOS", it's a 'Crude Oil'
-synonyms_for_product_types = {'Crude Oil',
-                              'Shale Oil',
-                              'Fracking Oil',
-                              'Fuel Oil',
-                              'Residual Fuel',
-                              'Distillate Fuel',
-                              'Refined Product',
-                              'Condensate',
-                              'Transformer Oil'                              
-                              }
+synonyms_for_product_types = {
+    'Crude Oil', 'Shale Oil', 'Fracking Oil', 'Fuel Oil', 'Residual Fuel', 'Distillate Fuel',
+    'Refined Product', 'Condensate', 'Transformer Oil'
+}
 # If it's an exact match, then it's definitely a synonym
 for pt, labels in types_to_labels.labels.items():
     for label in labels:
@@ -53,44 +47,128 @@ for pt, labels in types_to_labels.labels.items():
             synonyms_for_product_types.add(label)
 
 # these are labels that are synonymous to other labels
-synonyms_for_labels = {'Heavy Fuel Oil': ['HFO', 'No. 6 Fuel Oil', 'Bunker C'],
-                       'Kerosene': ['Jet Fuel'],
-                       'No. 2 Fuel Oil': ['Diesel', 'Home Heating Oil'],
-                       }
+synonyms_for_labels = {
+    'Heavy Fuel Oil': ['HFO', 'No. 6 Fuel Oil', 'Bunker C'],
+    'Kerosene': ['Jet Fuel'],
+    'No. 2 Fuel Oil': ['Diesel', 'Home Heating Oil'],
+}
 
-no_criteria = {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15}
+no_criteria = {
+    "api_min": -inf,
+    "api_max": inf,
+    "kvis_min": -inf,
+    "kvis_max": inf,
+    'kvis_temp': 15
+}
 label_map = {label: no_criteria for label in synonyms_for_product_types}
 
 # this maps the labels according to API and kinematic viscosity (cSt at given temp in C) ranges.
 label_map.update({
     # 'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
-    'Condensate':  {"api_min": 50, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Light Crude':  {"api_min": 35, "api_max": 50, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Medium Crude': {"api_min": 20, "api_max": 35, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Heavy Crude': {"api_min": -inf, "api_max": 20, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-    'Group V': {"api_min": -inf, "api_max": 10.0, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 15},
-
-    'Heavy Fuel Oil': {"api_min": -inf, "api_max": 15.0, "kvis_min": 200, "kvis_max": inf, 'kvis_temp': 50},
+    'Condensate': {
+        "api_min": 50,
+        "api_max": inf,
+        "kvis_min": -inf,
+        "kvis_max": inf,
+        'kvis_temp': 15
+    },
+    'Light Crude': {
+        "api_min": 35,
+        "api_max": 50,
+        "kvis_min": -inf,
+        "kvis_max": inf,
+        'kvis_temp': 15
+    },
+    'Medium Crude': {
+        "api_min": 20,
+        "api_max": 35,
+        "kvis_min": -inf,
+        "kvis_max": inf,
+        'kvis_temp': 15
+    },
+    'Heavy Crude': {
+        "api_min": -inf,
+        "api_max": 20,
+        "kvis_min": -inf,
+        "kvis_max": inf,
+        'kvis_temp': 15
+    },
+    'Group V': {
+        "api_min": -inf,
+        "api_max": 10.0,
+        "kvis_min": -inf,
+        "kvis_max": inf,
+        'kvis_temp': 15
+    },
+    'Heavy Fuel Oil': {
+        "api_min": -inf,
+        "api_max": 15.0,
+        "kvis_min": 200,
+        "kvis_max": inf,
+        'kvis_temp': 50
+    },
 
     # pretty much made this up ... non-newtonian
-    'Bitumen': {"api_min": -inf, "api_max": 10, "kvis_min": 1000, "kvis_max": inf, 'kvis_temp': 40},
-    # I went through all the bitumen records that we have, and most of them do not have 
-    # kinematic viscosity measurements. However, they all have dynamic viscosity 
+    'Bitumen': {
+        "api_min": -inf,
+        "api_max": 10,
+        "kvis_min": 1000,
+        "kvis_max": inf,
+        'kvis_temp': 40
+    },
+    # I went through all the bitumen records that we have, and most of them do not have
+    # kinematic viscosity measurements. However, they all have dynamic viscosity
     # measurements which were > 10^6 cP at 0C and > 10^5 cP at 15C.
     # I propose changing the criteria to reflect these measurements.
 
     #***** The following need more verification
     # Refined light products
-    'No. 2 Fuel Oil': {"api_min": 30, "api_max": 39, "kvis_min": 2.5, "kvis_max": 4, 'kvis_temp': 38},
-    'Kerosene': {"api_min": 47.6, "api_max": 67.8, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 38},
-    'Aviation Gas': {"api_min": 47.6, "api_max": 70.8, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': 38},
-    'Gasoline': {"api_min": 59.7, "api_max": 76.6, "kvis_min": -inf, "kvis_max": 2.5, 'kvis_temp': 38},
+    'No. 2 Fuel Oil': {
+        "api_min": 30,
+        "api_max": 39,
+        "kvis_min": 2.5,
+        "kvis_max": 4,
+        'kvis_temp': 38
+    },
+    'Kerosene': {
+        "api_min": 47.6,
+        "api_max": 67.8,
+        "kvis_min": -inf,
+        "kvis_max": inf,
+        'kvis_temp': 38
+    },
+    'Aviation Gas': {
+        "api_min": 47.6,
+        "api_max": 70.8,
+        "kvis_min": -inf,
+        "kvis_max": inf,
+        'kvis_temp': 38
+    },
+    'Gasoline': {
+        "api_min": 59.7,
+        "api_max": 76.6,
+        "kvis_min": -inf,
+        "kvis_max": 2.5,
+        'kvis_temp': 38
+    },
 
     # Intermediate Fuel Oils
-    'MDO':  {"api_min": 30, "api_max": 42, "kvis_min": -inf, "kvis_max": 11, 'kvis_temp': 40},
-    'IFO':  {"api_min": 15, "api_max": 30, "kvis_min": 4, "kvis_max": 200, 'kvis_temp': 38},
+    'MDO': {
+        "api_min": 30,
+        "api_max": 42,
+        "kvis_min": -inf,
+        "kvis_max": 11,
+        'kvis_temp': 40
+    },
+    'IFO': {
+        "api_min": 15,
+        "api_max": 30,
+        "kvis_min": 4,
+        "kvis_max": 200,
+        'kvis_temp': 38
+    },
     #IFO needs an additional limitation to not be tied to biodiesel
-    })
+})
 
 for label, synonyms in synonyms_for_labels.items():
     label_map.update({syn: label_map[label] for syn in synonyms})
@@ -110,7 +188,7 @@ def get_suggested_labels(oil):
     # if pt:
     #     labels.add(pt)
     if pt == "Other":  # we don't want any labels auto added for Other
-        return labels
+        return sorted(labels)
     try:
         for label in types_to_labels.left[oil.metadata.product_type]:
             if is_label(oil, label):
@@ -118,7 +196,8 @@ def get_suggested_labels(oil):
     except KeyError:
         pass
 
-    return labels
+    # sorting so they'll be in consistent order
+    return sorted(labels)
 
 
 def add_labels_to_oil(oil):
@@ -134,7 +213,7 @@ def add_labels_to_oil(oil):
     for label in types_to_labels.left['oil.metadata.product_type']:
         if is_label(oil, label):
             labels.add(label)
-    oil.metadata.labels = list(labels)
+    oil.metadata.labels = sorted(labels)
 
 
 def is_label(oil, label):
@@ -146,8 +225,7 @@ def is_label(oil, label):
     api = oil.metadata.API
 
     # check API:
-    if ((data['api_min'] != -inf)
-        or (data['api_max'] != inf)):
+    if ((data['api_min'] != -inf) or (data['api_max'] != inf)):
         if api is None:
             is_label = False
         else:
@@ -155,15 +233,14 @@ def is_label(oil, label):
     else:
         is_label = True
 
-    if is_label and ((data['kvis_min'] != -inf)
-                     or (data['kvis_max'] != inf)):  # check viscosity limits
+    if is_label and ((data['kvis_min'] != -inf) or
+                     (data['kvis_max'] != inf)):  # check viscosity limits
         try:
             KV = KinematicViscosity(oil)
-            kvis = KV.at_temp(temp=data['kvis_temp'],
-                              kvis_units='cSt',
-                              temp_units='C')
+            kvis = KV.at_temp(temp=data['kvis_temp'], kvis_units='cSt', temp_units='C')
             is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
-        except (ZeroDivisionError, ValueError): # if it can't do this, we don't apply the label
+        except (ZeroDivisionError,
+                ValueError):  # if it can't do this, we don't apply the label
             is_label = True
 
     return is_label
@@ -234,7 +311,6 @@ def is_label(oil, label):
 #     except TypeError:
 #         oil.metadata.labels = labels
 
-
 # def is_crude(oil):
 #     try:
 #         return ('product_type' in oil['metadata'] and
@@ -244,7 +320,6 @@ def is_label(oil, label):
 #         return (hasattr(oil.metadata, 'product_type') and
 #                 oil.metadata.product_type is not None and
 #                 oil.metadata.product_type.lower() == 'crude')
-
 
 # def is_refined(oil):
 #     try:
@@ -256,30 +331,24 @@ def is_label(oil, label):
 #                 oil.metadata.product_type is not None and
 #                 oil.metadata.product_type.lower() == 'refined')
 
-
 # def api_min(oil, oil_api):
 #     api = oil['metadata'].get('API', None)
 
 #     return api is not None and api > oil_api
-
 
 # def api_max(oil, oil_api):
 #     api = oil['metadata'].get('API', None)
 
 #     return api is not None and api < oil_api
 
-
 # def is_crude_light(oil):
 #     return is_crude(oil) and api_min(oil, 31.1)
-
 
 # def is_crude_medium(oil):
 #     return is_crude(oil) and api_max(oil, 31.1) and api_min(oil, 22.3)
 
-
 # def is_crude_heavy(oil):
 #     return is_crude(oil) and api_max(oil, 22.3)
-
 
 # def is_refined_light_products(oil):
 #     '''
@@ -299,7 +368,6 @@ def is_label(oil, label):
 #     '''
 #     raise NotImplementedError
 
-
 # def is_refined_fuel_oil_1(oil, sample):
 #     '''
 #        Category Name:
@@ -317,7 +385,6 @@ def is_label(oil, label):
 #     return (is_refined(oil) and
 #             api_min(oil, 35.0) and
 #             is_within_viscosity_range(sample, kvis_max=2.5))
-
 
 # def is_refined_fuel_oil_2(oil, sample):
 #     '''
@@ -337,7 +404,6 @@ def is_label(oil, label):
 #             api_max(oil, 39.0) and
 #             is_within_viscosity_range(sample, kvis_min=2.5, kvis_max=4.0))
 
-
 # def is_refined_ifo(oil, sample):
 #     '''
 #        Category Name:
@@ -356,7 +422,6 @@ def is_label(oil, label):
 #             api_max(oil, 30.0) and
 #             is_within_viscosity_range(sample, kvis_min=4.0, kvis_max=200.0))
 
-
 # def is_refined_fuel_oil_6(oil, sample):
 #     '''
 #        Category Name:
@@ -372,7 +437,6 @@ def is_label(oil, label):
 #     return (is_refined(oil) and
 #             api_max(oil, 15.0) and
 #             is_within_viscosity_range(sample, kvis_min=200.0))
-
 
 # def is_generic(oil):
 #     '''
@@ -392,7 +456,6 @@ def is_label(oil, label):
 #         return ret.startswith('*GENERIC')
 #     else:
 #         return None
-
 
 # def is_within_viscosity_range(oil_sample, kvis_min=None, kvis_max=None):
 #     category_temp = 273.15 + 38
@@ -426,5 +489,3 @@ def is_label(oil, label):
 # Lubricating oil     0.82-0.92
 # Fuel oil            0.92-0.99
 # Asphaslitc bitumen  1.00-1.10
-
-

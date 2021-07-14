@@ -58,14 +58,29 @@ def test_validation_doesnt_change_oil(big_record):
     assert orig == big_record
 
 
-def snippet_in_oil_status(snippet, oil):
+def snippet_in_oil_status(snippet, msgs):
     """
     checks if the particular snippet in one of the messages
     """
-    for msg in oil.status:
+    try:
+        msgs = msgs.status
+    except AttributeError:
+        # must not be an oil object -- assume it's a list of messages
+        pass
+    for msg in msgs:
         if snippet in msg:
             return True
     return False
+
+
+# def snippet_in_oil_status(snippet, oil):
+#     """
+#     checks if the particular snippet in one of the messages
+#     """
+#     for msg in oil.status:
+#         if snippet in msg:
+#             return True
+#     return False
 
 
 def snippet_not_in_oil_status(snippet, oil):
