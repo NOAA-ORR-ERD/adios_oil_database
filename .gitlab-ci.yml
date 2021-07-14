@@ -18,6 +18,7 @@ stages:
   - test
   - build
   - verify
+  - deploy_db
   - deploy
 
 test_develop:
@@ -176,7 +177,7 @@ scan-client:
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
 deploy_mongodb_stage:
-  stage: deploy
+  stage: deploy_db
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -203,7 +204,7 @@ deploy_mongodb_stage:
     - deploy
 
 stop_mongodb_stage:
-  stage: deploy
+  stage: deploy_db
   environment:
     name: stage
     action: stop
@@ -237,7 +238,7 @@ deploy_api_stage:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      -e MONGODB_WRITEABLE=false
+      -e MONGODB_WRITEABLE=true
       --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
     - docker ps
@@ -431,7 +432,7 @@ stop_oauth_client_stage:
 
 
 deploy_mongodb_public:
-  stage: deploy
+  stage: deploy_db
   only:
     - production
   environment:
@@ -459,7 +460,7 @@ deploy_mongodb_public:
     - prod
 
 stop_mongodb_public:
-  stage: deploy
+  stage: deploy_db
   only:
     - production
   environment:
