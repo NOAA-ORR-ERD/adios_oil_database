@@ -1,13 +1,11 @@
 #!/bin/bash
 
-if (“$REFRESH_INTERNAL_DB” -eq “true” ]
-then
+if [“$REFRESH_INTERNAL_DB” -eq “true”]; then
     echo "Refreshing the writeable Oil Database from noaa-oil-data"
     cd /adios-db/noaa-oil-data/
     adios_db_restore --config /config/config_oil_db.ini
     cd -
-elif (“$MONGODB_WRITEABLE” -eq “true” ]
-then
+elif [“$MONGODB_WRITEABLE” -eq “true”]; then
     echo "Oil Database is writeable"
 
     echo "Backing up the database to noaa-oil-data"
