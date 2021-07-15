@@ -26,6 +26,7 @@ class EnvCanadaCsvFile(CsvFile):
 
         - There are a number of reference fields, i.e. fields that associate
           a particular measurement to an oil.  They are:
+
             - oil_id: ID of an oil record.  This appears to be the camelcase
                       name of the oil joined by an underscore with the ESTS
                       oil ID.
@@ -34,6 +35,7 @@ class EnvCanadaCsvFile(CsvFile):
         - There are also a number of fields that would not normally be used to
           link a measurement to an oil, but are clearly oil general
           properties.
+
             - oil_name
             - date_sample_received
             - source
@@ -42,6 +44,7 @@ class EnvCanadaCsvFile(CsvFile):
 
         - There are a number of fields that would intuitively seem to
           be used to link a measurement to a sub-sample
+
             - ests_id: ESTS ID of an oil sample
             - weathering_fraction
             - weathering_percent
@@ -49,6 +52,7 @@ class EnvCanadaCsvFile(CsvFile):
 
         - And finally, we have a set of fields that are used uniquely for the
           measurement
+
             - value_id
             - property_id
             - property_group
