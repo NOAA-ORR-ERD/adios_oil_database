@@ -195,8 +195,14 @@ deploy_mongodb_stage:
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    # The volume permissions are important here, so we need to set a user:group
+    # when starting the container.
+    # Right now they are set to james.makela:adios-dev so developers can manage
+    # the volume external to the docker container.  We will need to change this
+    # on the public server.
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network $APP_NETWORK
+      --user 1013:1017
       -v $DB_LOCATION:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
