@@ -18,6 +18,7 @@ stages:
   - test
   - build
   - verify
+  - deploy_db
   - deploy
 
 test_develop:
@@ -176,7 +177,7 @@ scan-client:
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
 deploy_mongodb_stage:
-  stage: deploy
+  stage: deploy_db
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -194,8 +195,14 @@ deploy_mongodb_stage:
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    # The volume permissions are important here, so we need to set a user:group
+    # when starting the container.
+    # Right now they are set to james.makela:adios-dev so developers can manage
+    # the volume external to the docker container.  We will need to change this
+    # on the public server.
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network $APP_NETWORK
+      --user 1013:1017
       -v $DB_LOCATION:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
@@ -203,7 +210,7 @@ deploy_mongodb_stage:
     - deploy
 
 stop_mongodb_stage:
-  stage: deploy
+  stage: deploy_db
   environment:
     name: stage
     action: stop
@@ -216,6 +223,51 @@ stop_mongodb_stage:
   tags:
     - adios-stage
     - deploy
+
+deploy_mongodb_public:
+  stage: deploy_db
+  only:
+    - production
+  environment:
+    name: public
+    url: https://adios.orr.noaa.gov
+    on_stop: stop_mongodb_public
+  variables:
+    IMAGE_TAG: mongo:latest
+    CONTAINER_NAME: mongodb
+    APP_NETWORK: adios_net
+    PORT_MAPPING: 127.0.0.1:27017:27017
+    DB_LOCATION: /data/adios_oil_db/data/db
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
+      docker network create -d bridge $APP_NETWORK
+    - docker pull $IMAGE_TAG
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - >
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
+      -p $PORT_MAPPING
+      -v $DB_LOCATION:/data/db $IMAGE_TAG
+  tags:
+    - prod
+
+stop_mongodb_public:
+  stage: deploy_db
+  only:
+    - production
+  environment:
+    name: public
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+    CONTAINER_NAME: mongodb
+  when: manual
+  script:
+    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+  tags:
+    - prod
+
 
 deploy_api_stage:
   stage: deploy
@@ -237,7 +289,7 @@ deploy_api_stage:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      -e MONGODB_WRITEABLE=false
+      -e MONGODB_WRITEABLE=true
       --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
     - docker ps
@@ -428,51 +480,6 @@ stop_oauth_client_stage:
     - adios-stage
     - deploy
 
-
-
-deploy_mongodb_public:
-  stage: deploy
-  only:
-    - production
-  environment:
-    name: public
-    url: https://adios.orr.noaa.gov
-    on_stop: stop_mongodb_public
-  variables:
-    IMAGE_TAG: mongo:latest
-    CONTAINER_NAME: mongodb
-    APP_NETWORK: adios_net
-    PORT_MAPPING: 127.0.0.1:27017:27017
-    DB_LOCATION: /data/adios_oil_db/data/db
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
-    - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
-    - >
-      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
-      -p $PORT_MAPPING
-      -v $DB_LOCATION:/data/db $IMAGE_TAG
-  tags:
-    - prod
-
-stop_mongodb_public:
-  stage: deploy
-  only:
-    - production
-  environment:
-    name: public
-    action: stop
-  variables:
-    GIT_STRATEGY: none
-    CONTAINER_NAME: mongodb
-  when: manual
-  script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
-  tags:
-    - prod
 
 
 deploy_api_public:
