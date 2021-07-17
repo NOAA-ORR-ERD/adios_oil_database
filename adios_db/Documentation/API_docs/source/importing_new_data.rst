@@ -6,12 +6,12 @@ Importing New Data
 
 The ADIOS Oil Database uses JSON as its native storage / interchange format.
 
-In order to get a new record into the database, it must be converted to JSON somehow. how best to do that depends on the how the data are currently stored, and what tools one is familiar with.
+In order to get a new record into the database, it must be converted to JSON somehow. How best to do that depends on the how the data are currently stored, and what tools one is familiar with.
 
 Using the Python Library
 ========================
 
-If you are familiar with. Python, then using the ``adios_db`` Python package may be the easiest way to go. The library provides a set of nested Python objects that conform to our data model, and that can save themselves out to our JSON interchange format. See :ref:`managing_the_data` for details.
+If you are familiar with Python, then using the ``adios_db`` Python package may be the easiest way to go. The library provides a set of nested Python objects that conform to our data model, and that can save themselves out to our JSON interchange format. See :ref:`managing_the_data` for details.
 
 This would commonly be a way to get your data into ADIOS DB if it's already in a custom database or CSV files, or..
 
@@ -25,7 +25,7 @@ You can generate the JSON from your data directly, with whatever tools you may h
 
 http://adios.orr.noaa.gov
 
-And match that JSON. Note that the JSON is "sparse" -- there is no need to include any fields that are not relevant.
+and match that JSON. Note that the JSON is "sparse" -- there is no need to include any fields that are not relevant.
 
 
 Use a standard CSV format
@@ -52,7 +52,7 @@ In general, you don't want to touch any of the field names or descriptions, only
 Units
 .....
 
-They units used for data are critical to include, and usually are kept in a separate cell from the values. Units should conform to the units used in the ADIOS DB -- which are specified in the NOAA "NUCOS" unit conversion system. the unit list is published here: https://github.com/NOAA-ORR-ERD/PyNUCOS/blob/master/NUCOS_unit_list.rst
+The units used for data are critical to include, and usually are kept in a separate cell from the values. Units should conform to the units used in the ADIOS DB -- which are specified in the NOAA "NUCOS" unit conversion system. The unit list is published here: https://github.com/NOAA-ORR-ERD/PyNUCOS/blob/master/NUCOS_unit_list.rst
 
 However, allowable units conform to standard industry practice, and should be in pick lists in the template.
 
