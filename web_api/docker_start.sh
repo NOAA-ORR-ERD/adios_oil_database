@@ -12,6 +12,9 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     cd /adios-db/noaa-oil-data/
     adios_db_backup --config /config/config_oil_db.ini
 
+    git config --global user.email "adios-script@noaa.gov"
+    git config --global user.name "Adios Automated Script"
+
     git checkout -b under_review
     git add --all
     git commit -m "Archiving changes to under_review from pipeline"
