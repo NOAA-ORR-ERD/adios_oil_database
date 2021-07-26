@@ -73,6 +73,18 @@ build_api:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
     IMAGE_TAG_DBG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api-dbg
     IMAGE_TAG_PROD: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
+  before_script:
+    # I am hoping that this will setup ssh for our image
+    - apt-get update -y && apt-get install -yqqf openssh-client git unzip sshpass rsync --fix-missing
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+    - eval $(ssh-agent -s)
+    - echo "$OILDB_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    - ssh-keyscan $GITLAB_URL >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git
