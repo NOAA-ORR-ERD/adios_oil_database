@@ -290,6 +290,7 @@ deploy_api_stage:
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       -e MONGODB_WRITEABLE=true
+      -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
       --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
     - docker ps
