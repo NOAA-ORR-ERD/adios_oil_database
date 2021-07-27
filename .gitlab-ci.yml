@@ -78,7 +78,7 @@ build_api:
     - apt-get update -y && apt-get install -yqqf openssh-client git unzip sshpass rsync --fix-missing
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
     - eval $(ssh-agent -s)
-    - echo "$OILDB_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "$OILDB_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null <<< ""
 
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
