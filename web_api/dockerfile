@@ -9,7 +9,9 @@ RUN yum update -y
 RUN conda install -y python=3.9
 RUN conda update -y conda
 
-RUN echo "$ADIOS_STAGE_CONTAINER_KEY" > /root/.ssh/id_rsa
+RUN echo $ADIOS_STAGE_CONTAINER_KEY > /root/.ssh/id_rsa
+RUN cat /root/.ssh/id_rsa
+
 RUN echo "gitlab.orr.noaa.gov ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBKAoAhgfU2DFjjRSf6B4siXwE5LdGEeNGUf+CO0WGpNmGClPbYcbVAZoAeYiORYK4zQftTkewZeaFJ6m4BFxgSM=" > /root/.ssh/known_hosts
 RUN chmod og-rw /root/.ssh/known_hosts
 
