@@ -9,6 +9,9 @@ RUN yum update -y
 RUN conda install -y python=3.9
 RUN conda update -y conda
 
+RUN echo "$ADIOS_STAGE_CONTAINER_KEY" > /root/.ssh/id_rsa
+RUN git clone ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/noaa-oil-data.git
+
 COPY ./ /adios-db/
 WORKDIR adios-db
 
