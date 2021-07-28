@@ -73,11 +73,13 @@ build_api:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
     IMAGE_TAG_DBG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api-dbg
     IMAGE_TAG_PROD: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
+  before_script:
+    - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key
   script:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG --build-arg ADIOS_STAGE_CONTAINER_KEY="$ADIOS_STAGE_CONTAINER_KEY"
+    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG --build-arg KEY_FILE="./key"
 
     # apparently there is a timeout on the docker session, so we re-login
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -544,7 +546,7 @@ deploy_client_public:
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
-      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped 
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       $IMAGE_TAG
   tags:
     - prod

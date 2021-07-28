@@ -3,7 +3,7 @@
 
 FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3
 
-ARG ADIOS_STAGE_CONTAINER_KEY
+ARG KEY_FILE
 
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
@@ -11,10 +11,11 @@ RUN yum update -y
 RUN conda install -y python=3.9
 RUN conda update -y conda
 
-RUN echo $ADIOS_STAGE_CONTAINER_KEY > /root/.ssh/id_rsa
+COPY $KEY_FILE /root/.ssh/id_rsa
+RUN chmod og-rw /root/.ssh/id_rsa
 RUN cat /root/.ssh/id_rsa
 
-RUN echo "gitlab.orr.noaa.gov ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBKAoAhgfU2DFjjRSf6B4siXwE5LdGEeNGUf+CO0WGpNmGClPbYcbVAZoAeYiORYK4zQftTkewZeaFJ6m4BFxgSM=" > /root/.ssh/known_hosts
+RUN echo "[gitlab.orr.noaa.gov]:9933,[3.133.34.161]:9933 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMgZKGmTe4Qk+PLudgaTbu0R5OzLqqkAxFtp/O+/Aw2YupqtJQb5XDXaPvBtIg2pohmHc66Yjk7HpIoEU/R4+50=" > /root/.ssh/known_hosts
 RUN chmod og-rw /root/.ssh/known_hosts
 
 RUN git clone ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/noaa-oil-data.git
