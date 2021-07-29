@@ -72,7 +72,9 @@ class MeasurementDataclass:
 
     There is some complexity here, so everything is optional
 
-    But maybe it would be better to have some validation on creation
+    NOTE: another reason for everything to be optional is that
+    when working with the web client, empty measurements can be
+    created and saved before the values are filled in.
 
     NOTES:
        If there is a value, there should be no min_value or max_value
@@ -80,10 +82,6 @@ class MeasurementDataclass:
        greater than or less than
 
        There needs to be validation on that!
-
-       (there is a __post_init, but it's not getting used for some reason)
-
-       Also: None should not be an option for unit, either.
 
        Fixme: maybe there could be a default unit for each unit type?
     """
@@ -223,7 +221,7 @@ class Temperature(MeasurementBase):
 
     def validate(self):
         msgs = []
-        if self is None:  # how can this happen?!?!
+        if self is None:  # how can this happen?!?! -- but it does.
             return msgs
         # only do this for C or K
         if self.unit.upper() not in {'C', 'K'}:
