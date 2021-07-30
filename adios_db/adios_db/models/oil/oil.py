@@ -142,14 +142,13 @@ class Oil:
         # always add these:
         msgs.extend("W000: " + m for m in self.permanent_warnings)
 
-        return list(set(msgs))
+        return sorted(set(msgs))
 
     def reset_validation(self):
         """
         calls the validate method, and updates the status with the result
         """
-        msgs = self.validate()
-        self.status = list(set(msgs))
+        self.status = self.validate()
 
     def to_file(self, outfile, sparse=True):
         """
