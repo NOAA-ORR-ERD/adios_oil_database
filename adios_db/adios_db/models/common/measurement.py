@@ -100,14 +100,6 @@ class MeasurementDataclass:
         it appears dataclasses don't add it to __init__ unless it's here
         """
         pass
-        # if all((attr is None)
-        #        for attr in (self.value, self.min_value, self.max_value)):
-        #     raise TypeError(f'{self.__class__.__name__}(): '
-        #                      'expected at least one value')
-
-    #     # if self.unit is None:
-    #     #     raise TypeError:(f'{self.__class__.__name__}(): '
-    #     #                      'expected a unit')
 
     # # We want a less-noisy repr
     # def __repr__(self):
