@@ -127,9 +127,8 @@ def export_to_file(base_path, collection_name, record):
         filename = os.path.join(base_path, collection_name,
                                 f'{record_name}.json')
 
-    json.dump(record, open(filename, 'w', encoding="utf-8"),
-              default=json_handle_unparseable,
-              sort_keys=True, indent=4)
+    with open(filename, 'w', encoding="utf-8") as outfile:
+        json.dump(record, outfile, indent=4, default=json_handle_unparseable)
 
 
 def json_handle_unparseable(o):
