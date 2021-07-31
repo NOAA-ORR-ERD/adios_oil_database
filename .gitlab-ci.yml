@@ -188,12 +188,15 @@ deploy_mongodb_stage:
     CONTAINER_NAME: mongodb
     APP_NETWORK: adios_net
     PORT_MAPPING: 127.0.0.1:27017:27017
-    DB_LOCATION: /data/adios_oil_db/data/db
+    DB_VOLUME: dbdata
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
+    - >
+      docker volume inspect $DB_VOLUME >/dev/null 2>&1 ||
+      docker volume create $DB_VOLUME
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     # The volume permissions are important here, so we need to set a user:group
@@ -204,7 +207,7 @@ deploy_mongodb_stage:
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network $APP_NETWORK
       --user 1013:1017
-      -v $DB_LOCATION:/data/db
+      -v $DB_VOLUME:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
     - adios-stage
@@ -238,18 +241,21 @@ deploy_mongodb_public:
     CONTAINER_NAME: mongodb
     APP_NETWORK: adios_net
     PORT_MAPPING: 127.0.0.1:27017:27017
-    DB_LOCATION: /data/adios_oil_db/data/db
+    DB_VOLUME: dbdata
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
+    - >
+      docker volume inspect $DB_VOLUME >/dev/null 2>&1 ||
+      docker volume create $DB_VOLUME
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
       docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       -p $PORT_MAPPING
-      -v $DB_LOCATION:/data/db $IMAGE_TAG
+      -v $DB_VOLUME:/data/db $IMAGE_TAG
   tags:
     - prod
 
