@@ -72,7 +72,9 @@ class MeasurementDataclass:
 
     There is some complexity here, so everything is optional
 
-    But maybe it would be better to have some validation on creation
+    NOTE: another reason for everything to be optional is that
+    when working with the web client, empty measurements can be
+    created and saved before the values are filled in.
 
     NOTES:
        If there is a value, there should be no min_value or max_value
@@ -80,10 +82,6 @@ class MeasurementDataclass:
        greater than or less than
 
        There needs to be validation on that!
-
-       (there is a __post_init, but it's not getting used for some reason)
-
-       Also: None should not be an option for unit, either.
 
        Fixme: maybe there could be a default unit for each unit type?
     """
@@ -102,14 +100,6 @@ class MeasurementDataclass:
         it appears dataclasses don't add it to __init__ unless it's here
         """
         pass
-        # if all((attr is None)
-        #        for attr in (self.value, self.min_value, self.max_value)):
-        #     raise TypeError(f'{self.__class__.__name__}(): '
-        #                      'expected at least one value')
-
-    #     # if self.unit is None:
-    #     #     raise TypeError:(f'{self.__class__.__name__}(): '
-    #     #                      'expected a unit')
 
     # # We want a less-noisy repr
     # def __repr__(self):
@@ -223,7 +213,7 @@ class Temperature(MeasurementBase):
 
     def validate(self):
         msgs = []
-        if self is None:  # how can this happen?!?!
+        if self is None:  # how can this happen?!?! -- but it does.
             return msgs
         # only do this for C or K
         if self.unit.upper() not in {'C', 'K'}:

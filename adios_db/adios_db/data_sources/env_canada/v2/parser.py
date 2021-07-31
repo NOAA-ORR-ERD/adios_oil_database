@@ -773,56 +773,61 @@ property_scope_map = {p: s for p, m, t, s in mapping_list}
 
 class EnvCanadaCsvRecordParser(ParserBase):
     '''
-        A record class for the Env. Canada .csv flat data file.
-        This is intended to be used with a set of data representing a single
-        oil record from the data file.  This set is in the form of a list
-        containing dict objects, each representing a single measurement for
-        the oil we are processing.
+    A record class for the Env. Canada .csv flat data file.
+    This is intended to be used with a set of data representing a single
+    oil record from the data file.  This set is in the form of a list
+    containing dict objects, each representing a single measurement for
+    the oil we are processing.
 
-        - There are a number of reference fields, i.e. fields that associate
-          a particular measurement to an oil.  They are:
-            - oil_id: ID of an oil record.  This appears to be the camelcase
-                      name of the oil joined by an underscore with the ESTS
-                      oil ID.  There is one common value per oil, but there are
-                      redundant copies of this field in every measurement.
-            - ests: ESTS ID of an oil record with one or more sub-samples.
-                    There is one common value per oil, but there are redundant
-                    copies of this field in every measurement.
+    * There are a number of reference fields, i.e. fields that associate
+      a particular measurement to an oil.  They are:
 
-        - There are also a number of fields that would not normally be used to
-          link a measurement to an oil, but are clearly oil general
-          properties. There is usually one actual field value per oil, but
-          there are redundant copies in every measurement.  Sometimes though,
-          there are multiple names that show up in the measurements for an oil.
-          Biodiesel records are an example of this.
-            - oil_name
-            - reference
-            - date_sample_received
-            - source:
-            - comments:
+        * oil_id: ID of an oil record.  This appears to be the camelcase
+          name of the oil joined by an underscore with the ESTS
+          oil ID.  There is one common value per oil, but there are
+          redundant copies of this field in every measurement.
 
-        - There are a number of fields that would intuitively seem to
-          be used to link a measurement to a sub-sample.  There is usually
-          one common value per sub-sample, but there are redundant copies in
-          every measurement.
-            - ests_id: ESTS ID of an oil sample
-            - weathering_fraction
-            - weathering_percent
-            - weathering_method
+        * ests: ESTS ID of an oil record with one or more sub-samples.
+          There is one common value per oil, but there are redundant
+          copies of this field in every measurement.
 
-        - And finally, we have a set of fields that are used uniquely for the
-          measurement
-            - value_id
-            - property_id
-            - property_group
-            - property_name
-            - unit_of_measure
-            - temperature
-            - condition_of_analysis
-            - value
-            - standard_deviation
-            - replicates
-            - method
+    * There are also a number of fields that would not normally be used to
+      link a measurement to an oil, but are clearly oil general
+      properties. There is usually one actual field value per oil, but
+      there are redundant copies in every measurement.  Sometimes though,
+      there are multiple names that show up in the measurements for an oil.
+      Biodiesel records are an example of this.
+
+        * oil_name
+        * reference
+        * date_sample_received
+        * source:
+        * comments:
+
+    * There are a number of fields that would intuitively seem to
+      be used to link a measurement to a sub-sample.  There is usually
+      one common value per sub-sample, but there are redundant copies in
+      every measurement.
+
+        * ests_id: ESTS ID of an oil sample
+        * weathering_fraction
+        * weathering_percent
+        * weathering_method
+
+    * And finally, we have a set of fields that are used uniquely for the
+      measurement
+
+        * value_id
+        * property_id
+        * property_group
+        * property_name
+        * unit_of_measure
+        * temperature
+        * condition_of_analysis
+        * value
+        * standard_deviation
+        * replicates
+        * method
     '''
     def __init__(self, values):
         '''
@@ -858,10 +863,11 @@ class EnvCanadaCsvRecordParser(ParserBase):
 
     def set_aggregate_oil_props(self):
         '''
-            These are properties commonly associated with an oil.
-            There is a copy of this information inside every measurement,
-            so we need to reconcile them in order to come up with an
-            aggregate value with which to set the oil properties.
+        These are properties commonly associated with an oil.
+
+        There is a copy of this information inside every measurement,
+        so we need to reconcile them in order to come up with an
+        aggregate value with which to set the oil properties.
         '''
         for attr in ('oil_name', 'ests', 'source', 'date_sample_received',
                      'comments'):
@@ -889,21 +895,23 @@ class EnvCanadaCsvRecordParser(ParserBase):
 
     def set_aggregate_oil_property(self, attr):
         '''
-            Oil scoped properties are redundantly stored in each measurement
-            object in our list, so they need to be accumulated and treated in
-            some way depending on the type of data we would like to set in the
-            model.
-            - Attributes to be treated as strings will have their values
-              accumulated in a unique set to prune the redundant information,
-              and then the unique strings in the set will be concatenated into
-              a single string.
-            - Attributes to be treated as integers will also be accumulated
-              in a unique set to prune the redundant values.  But multiple
-              ints can not be stored in another int the same way a string can.
-              So we issue a warning and then use the first one in the set.
-              This isn't perfect, but there are only a handful of oil scoped
-              attributes and we can make an exception if there is an obvious
-              problem.
+        Oil scoped properties are redundantly stored in each measurement
+        object in our list, so they need to be accumulated and treated in
+        some way depending on the type of data we would like to set in the
+        model.
+
+        * Attributes to be treated as strings will have their values
+          accumulated in a unique set to prune the redundant information,
+          and then the unique strings in the set will be concatenated into
+          a single string.
+
+        * Attributes to be treated as integers will also be accumulated
+          in a unique set to prune the redundant values.  But multiple
+          ints can not be stored in another int the same way a string can.
+          So we issue a warning and then use the first one in the set.
+          This isn't perfect, but there are only a handful of oil scoped
+          attributes and we can make an exception if there is an obvious
+          problem.
         '''
         to_type = property_type_map[attr]
 
@@ -951,15 +959,19 @@ class EnvCanadaCsvRecordParser(ParserBase):
             properties of each sub-sample.
 
             Sub-sample properties:
+
             - ests_id: One common value per sub-sample.  This could be numeric,
                        so we force it to be a string.
+
             - weathering_fraction: One value per sub-sample.  These values
                                    look like some kind of code that EC uses.
                                    Probably not useful to us.
+
             - weathering_percent: One common value per sub-sample.  These
                                   values are mostly a string in the format
                                   'N.N%'.  We will convert to a structure
                                   suitable for a Measurement type.
+
             - weathering_method: One common value per sub-sample.  This is
                                  information that might be good to save, but
                                  it doesn't fit into the Adios oil model.
@@ -1043,11 +1055,13 @@ class EnvCanadaCsvRecordParser(ParserBase):
             Set a single measurement from an incoming measurement object
 
             Basically we need to decide how to apply the property to our record
+
             - oil scoped properties are applied to the oil object.
             - sample scoped properties can are applied to a particular
               sub-sample determined by the object
 
             The properties that describe the measurement are:
+
             - value_id: This is a concatenation of the ests and property_id
                         fields delimited with underscores '_'.
             - property_id: This is a concatenation of the camel cased
