@@ -17,10 +17,10 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
 
     git checkout -b under_review
     git add --all
-    git commit -m "Archiving changes to under_review from pipeline"
+    git diff-index --quiet HEAD || git commit -m "Archiving changes to under_review from pipeline"
 
     git status
-    
+
     git push origin under_review
 
     cd -
