@@ -3,11 +3,22 @@
 
 FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3
 
+ARG KEY_FILE
+
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
 RUN yum update -y
 RUN conda install -y python=3.9
 RUN conda update -y conda
+
+COPY $KEY_FILE /root/.ssh/id_rsa
+RUN chmod og-rw /root/.ssh/id_rsa
+RUN cat /root/.ssh/id_rsa
+
+RUN echo "[gitlab.orr.noaa.gov]:9933,[3.133.34.161]:9933 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMgZKGmTe4Qk+PLudgaTbu0R5OzLqqkAxFtp/O+/Aw2YupqtJQb5XDXaPvBtIg2pohmHc66Yjk7HpIoEU/R4+50=" > /root/.ssh/known_hosts
+RUN chmod og-rw /root/.ssh/known_hosts
+
+RUN git clone ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/noaa-oil-data.git
 
 COPY ./ /adios-db/
 WORKDIR adios-db

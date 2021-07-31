@@ -50,7 +50,7 @@ def get_all_records(data_dir):
 USAGE = """
 do_something.py:  data_dir [dry_run]
 
-data_dir is the dir where the data are: the script will recursively
+data_dir is a where the data are: the script will recursively
 search for JSON files
 
 If "dry_run" is on the command line, it will report what it would do,
@@ -59,6 +59,15 @@ but not save any changes
 
 
 def process_input(USAGE=USAGE):
+    """
+    process sys.argv to get the path and whether it's a dry_run or not
+
+    :param USAGE=USAGE: the usage message to return print if there's an
+                        error in the input -- default provided
+
+    :returns base_dir, dry_run: base_dir is a Path object of the dir passed in.
+                                dry_run is True if "dry_run" is on the command line.
+    """
     try:
         sys.argv.remove("dry_run")
         dry_run = True
@@ -66,7 +75,7 @@ def process_input(USAGE=USAGE):
         dry_run = False
 
     try:
-        base_dir = sys.argv[1]
+        base_dir = Path(sys.argv[1])
     except IndexError:
         print(USAGE)
         sys.exit()

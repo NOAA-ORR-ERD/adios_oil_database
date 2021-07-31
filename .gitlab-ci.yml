@@ -73,19 +73,20 @@ build_api:
     # Should be something like: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
     IMAGE_TAG_DBG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api-dbg
     IMAGE_TAG_PROD: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
+  before_script:
+    - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key
   script:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG
+    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG --build-arg KEY_FILE="./web_api/key"
 
     # apparently there is a timeout on the docker session, so we re-login
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_DBG
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build . -f web_api/dockerfile_prod -t $IMAGE_TAG_PROD
+    - docker build . -f web_api/dockerfile_prod -t $IMAGE_TAG_PROD --build-arg KEY_FILE="./web_api/key"
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_PROD
@@ -195,8 +196,14 @@ deploy_mongodb_stage:
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    # The volume permissions are important here, so we need to set a user:group
+    # when starting the container.
+    # Right now they are set to james.makela:adios-dev so developers can manage
+    # the volume external to the docker container.  We will need to change this
+    # on the public server.
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network $APP_NETWORK
+      --user 1013:1017
       -v $DB_LOCATION:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
@@ -284,6 +291,7 @@ deploy_api_stage:
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       -e MONGODB_WRITEABLE=true
+      -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
       --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
     - docker ps
@@ -538,7 +546,7 @@ deploy_client_public:
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
-      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped 
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       $IMAGE_TAG
   tags:
     - prod

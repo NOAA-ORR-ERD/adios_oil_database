@@ -18,6 +18,14 @@ Subpackages
 Submodules
 ----------
 
+adios\_db.models.oil.bulk\_composition module
+---------------------------------------------
+
+.. automodule:: adios_db.models.oil.bulk_composition
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.models.oil.ccme module
 --------------------------------
 
@@ -62,6 +70,14 @@ adios\_db.models.oil.ests\_fractions module
 -------------------------------------------
 
 .. automodule:: adios_db.models.oil.ests_fractions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.models.oil.industry\_property module
+----------------------------------------------
+
+.. automodule:: adios_db.models.oil.industry_property
    :members:
    :undoc-members:
    :show-inheritance:

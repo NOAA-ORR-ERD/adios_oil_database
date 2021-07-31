@@ -32,3 +32,11 @@ adios\_db.models.oil.cleanup.density module
    :members:
    :undoc-members:
    :show-inheritance:
+
+adios\_db.models.oil.cleanup.distillation module
+------------------------------------------------
+
+.. automodule:: adios_db.models.oil.cleanup.distillation
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -71,7 +71,7 @@ Record metadata
 ...............
 
 Each record needs some information about the record itself. In general, a single record represents a single sample.
-That sample may been been split to have different labs perform various analysis, but all the data should have come from the same sample.
+That sample may been been split to have different labs perform various analyses, but all the data should have come from the same sample.
 For example, if a sample is taken from the same well at two different times, those should be treated as separate records.
 
 Name
@@ -81,13 +81,13 @@ Source ID
    If the lab providing the data has its ID for this record, it can be provided here. It can be any short text.
 
 Alternate Names
-   Alternate names are common names that might refer this this record. For example, the record name may be "Mississippi Canyon 423", and an alternate name might be "South Louisiana Crude". There can be any number of alternate names, but they should not be about the oil type -- e.g. not "crude" or anything like that. Alternate names are used to help people find what they need in the database.
+   Alternate names are common names that might refer to this record. For example, the record name may be "Mississippi Canyon 423", and an alternate name might be "South Louisiana Crude". There can be any number of alternate names, but they should not be about the oil type -- e.g. not "crude" or anything like that. Alternate names are used to help people find what they need in the database.
 
 Location
     The general location of the source of the sample, could be a country, state, county, etc.
 
 Reference
-   If the data are published somewhere, this is the bibliographic reference. the year is stored separately.
+   If the data are published somewhere, this is the bibliographic reference. The year is stored separately.
 
 Sample Date
     Date the sample was obtained, in the ISO data format: YYYY-MM-DD, e.g. 2021-06-28 for June 6, 2021. It can be just a year as well.
@@ -109,16 +109,16 @@ Location Coordinates
     ``[(88.671327, 29.111853),(88.512073, 29.155960),(88.434388, 29.033772),`` ``(88.554800, 28.891036),(88.706286, -28.982817)]``
 
 Comments
-    The record can contain any free form text as comments: this is where to put notes about anything unusual or notable about the record that is not otherwise captured in the data model.
+    The record can contain any free form text as comments. This is where to put notes about anything unusual or notable about the record that is not otherwise captured in the data model.
 
 Subsample Metadata
 ..................
 
-Some labs will have an original sample, and then also process the oil in some way, an collect measurements about the processed data. These data are all part of the same record, but may have a completely new set of measurements associated with them. The data model is designed to handle arbitrary "subsamples", created in different ways, but the two common ones currently in the data are distillation fractions (from physical distillation) and lab-weathered samples, such as evaporated in a rotovap or "topped" to some temperature.
+Some labs will have an original sample, and then also process the oil in some way and collect measurements about the processed data. These data are all part of the same record, but may have a completely new set of measurements associated with them. The data model is designed to handle arbitrary "subsamples", created in different ways, but the two common ones currently in the data are distillation fractions (from physical distillation) and lab-weathered samples, such as evaporated in a rotovap or "topped" to some temperature.
 
 All records will have at least one subsample -- assumed to be the original (usually fresh oil)
 
-Each subsample has its own metadata describing it
+Each subsample has its own metadata describing it.
 
 Name
     A name for the subsample: e.g. "fresh oil" or "20% evaporated"
@@ -142,7 +142,7 @@ Boiling Point Range
 Physical Properties
 ...................
 
-This section covers the physical properties of the subsample
+This section covers the physical properties of the subsample.
 
 Pour Point
     The subsample pour point
@@ -159,37 +159,43 @@ Viscosity
 Distillation Data
 .................
 
-Distillation can be done in various ways, there are fields for the overall process, and then the actual distillation cuts.
+Distillation can be done in various ways. In the template there are fields to specify the overall process in addition to the fields for the actual distillation cuts.
 
 Type
     The type of distillation: "mass fraction" or "volume fraction"
 
 Method
-    The method used -- Ideally an ANSI standard or the like
+    The method used -- Ideally an ASTM standard or the like
 
 Final Boiling Point
     Highest boiling point of any compound
 
 Fraction Recovered
-    Some simulated distillation method don't account for all the oil -- perhaps only up to a certain boiling point. fraction recovered the the fraction that is included in the distillation cuts. If all the oil is accounted for, this is 100%
+    Some simulated distillation methods don't account for all the oil -- perhaps only up to a certain boiling point. Fraction recovered is the fraction that is included in the distillation cuts. If all the oil is accounted for, this is 100%.
 
 Distillation cuts
    The fraction and boiling point for each cut.
 
     Note: The initial boiling point should be listed as a 0% cut.
 
-    Add extra rows as needed
+    Add extra rows as needed.
 
 Compounds
 .........
 
-Compounds can be concentration measurements for zero or more individual compounds. Add as many rows as required.
+Compounds can be concentration measurements for zero or more individual compounds. Add as many rows as required. Each object in the list has the same structure including the following elements:
 
+    Name: Name of the measurement
+    Fraction: Numerical value of the concentration measurement
+    Fraction unit: A pick list where the unit can be specified. Options include percent, ppm, g/kg, and mg/g.
+    Unit type: A pick list where the unit type can be specified. Options include mass fraction (m/m) or volume fraction (v/v).
+    Method: Name of the method used
+    Groups: Optional labels used to group related measurements together on the ADIOS interface. Examples include “BTEX”, “n-alkanes”, “PAHs”.
 
 Bulk Composition
 ................
 
-Bulk Composition is zero or more groupings of chemicals as opposed to individual compounds. Examples are in the Common Data section below. Like the Compounds list, each object in the list has the same structure including the following elements:
+Bulk Composition includes concentration measurements for zero or more elemental analyses or groupings of compounds, such as sulfur content, wax content, or TPH. More examples are in the Common Data section below. Each object in the list has the same structure as those in the Compounds section. Add as many rows as required. 
 
 
 
