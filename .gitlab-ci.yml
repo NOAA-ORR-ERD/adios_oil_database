@@ -206,7 +206,6 @@ deploy_mongodb_stage:
     # on the public server.
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network $APP_NETWORK
-      --user 1013:1017
       -v $DB_VOLUME:/data/db
       --restart unless-stopped $IMAGE_TAG
   tags:
