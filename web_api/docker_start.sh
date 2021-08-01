@@ -20,7 +20,7 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git config --global user.name "Adios Automated Script"
 
     git checkout -b under_review
-    git pull
+    git pull origin under_review
 
     git add --all
     git diff-index --quiet HEAD || git commit -m "Archiving changes to under_review from pipeline"
