@@ -18,6 +18,7 @@ from ..common.measurement import (Temperature,
                                   AngularVelocity,
                                   InterfacialTension)
 
+
 class RefTempList:
     """
     mixin for all classes that are a list of points with
@@ -37,9 +38,15 @@ class RefTempList:
         msgs = []
         # check for odd temperatures
         for pt in points_list:
+            if pt.ref_temp is None:
+                msgs.append(ERRORS["E042"]
+                            .format(data_str + " reference temp"))
+                return msgs
+
             temp = pt.ref_temp.converted_to('C').value
             if temp is None:
-                msgs.append(ERRORS["E042"].format(data_str + " reference temp"))
+                msgs.append(ERRORS["E042"]
+                            .format(data_str + " reference temp"))
                 return msgs
             if temp < -100.0:  # arbitrary, but should catch K/C confusion
                 t = f"{pt.ref_temp.value:.2f} {pt.ref_temp.unit}"
@@ -66,8 +73,8 @@ class RefTempList:
 @dataclass_to_json
 @dataclass
 class DensityPoint:
-    density: Density
-    ref_temp: Temperature
+    density: Density = None
+    ref_temp: Temperature = None
     method: str = None
 
 
@@ -141,7 +148,3 @@ class PhysicalProperties:
     interfacial_tension_air: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)
-
-
-
-

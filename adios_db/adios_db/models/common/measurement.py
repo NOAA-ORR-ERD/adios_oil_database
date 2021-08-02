@@ -117,13 +117,14 @@ class MeasurementBase(MeasurementDataclass):
 
     def __post_init__(self):
         if self.__class__.unit_type is None:
-            raise NotImplementedError("Can't initialize a measurement with no unit_type")
+            raise NotImplementedError("Can't initialize a measurement "
+                                      "with no unit_type")
         if self.unit_type is None:
             self.unit_type = self.__class__.unit_type
         self.unit_type = self.unit_type.lower()
         if self.unit_type != self.__class__.unit_type:
-            raise ValueError(
-                f"unit_type must be: {self.__class__.unit_type}, not {self.unit_type}")
+            raise ValueError(f"unit_type must be: {self.__class__.unit_type}, "
+                             f"not {self.unit_type}")
         super().__post_init__()
 
     def py_json(self, sparse=True):
@@ -150,7 +151,8 @@ class MeasurementBase(MeasurementDataclass):
 
         new_vals = {
             att: None
-            for att in ('value', 'min_value', 'max_value', 'standard_deviation')
+            for att in ('value', 'min_value', 'max_value',
+                        'standard_deviation')
         }
 
         for attr in new_vals.keys():
@@ -205,7 +207,8 @@ class Temperature(MeasurementBase):
             # no need for anything special
             super().convert_to(new_unit)
         else:
-            new_std = convert("deltatemperature", self.unit, new_unit, self.standard_deviation)
+            new_std = convert("deltatemperature", self.unit, new_unit,
+                              self.standard_deviation)
             super().convert_to(new_unit)
             self.standard_deviation = new_std
 

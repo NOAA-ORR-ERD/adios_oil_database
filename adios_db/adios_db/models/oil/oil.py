@@ -7,7 +7,6 @@ Having a Python class makes it easier to write importing, validating etc, code.
 """
 import copy
 import json
-from math import isclose
 
 from dataclasses import dataclass, field
 
@@ -56,7 +55,8 @@ class Oil:
 
     def __str__(self):
         """
-        need a custom str here, so we don't get a huge dump of the entire tree of data
+        need a custom str here, so we don't get a huge dump of the entire tree
+        of data
         """
         return (f"{self.metadata.name}\n"
                 f"ID: {self.oil_id}\n"
@@ -100,7 +100,8 @@ class Oil:
             raise ValueError("oil_id must be a string")
         # arbitrary limit to catch ridiculous onesL UUID is  36 characters
         elif len(id) > 40:
-            raise ValueError("oil_id must be a string less than 40 characters " "in length")
+            raise ValueError("oil_id must be a string less than 40 characters "
+                             "in length")
 
     def validate(self):
         """
@@ -130,10 +131,14 @@ class Oil:
         API = self.metadata.API
         if API is not None:
             try:
-                density_at_60F = physical_properties.Density(self).at_temp(60, 'F')
+                density_at_60F = (physical_properties
+                                  .Density(self).at_temp(60, 'F'))
+
                 calculatedAPI = uc.convert('kg/m^3', 'API', density_at_60F)
+
                 # if not round(API, 1) == round(calculatedAPI, 2):
                 # if not isclose(API, calculatedAPI, rel_tol=1e-2):
+
                 if abs(API - round(calculatedAPI, 3)) > 0.2:
                     msgs.append(ERRORS["E043"].format(API, calculatedAPI))
             except (IndexError, ValueError):

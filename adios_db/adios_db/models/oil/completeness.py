@@ -88,7 +88,8 @@ def check_second_density(oil):
         densities = ss.physical_properties.densities
 
         temps = [d.ref_temp.converted_to('C').value
-                 for d in densities]
+                 for d in densities
+                 if d.ref_temp is not None]
 
         if len(temps) >= 2:
             t1, *_, t2 = sorted([t for t in temps if t is not None])

@@ -4,7 +4,6 @@ oil record
 """
 
 from operator import itemgetter
-from math import isclose
 import numpy as np
 
 import unit_conversion as uc
@@ -34,7 +33,8 @@ class Density:
         try:
             data = get_density_data(oil, units='kg/m^3', temp_units="K")
         except AttributeError:
-            # not an oil object -- assume it's a table of data in the correct form
+            # not an oil object -- assume it's a table of data in the
+            #                      correct form
             data = oil
         if data:
             data = sorted(data, key=itemgetter(1))
@@ -69,7 +69,7 @@ class Density:
             # this should exactly match if there are only two.
             b = self.densities
             A = np.c_[np.ones_like(b), np.array(self.temps)]
-            x, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
+            x, _residuals, _rank, _s = np.linalg.lstsq(A, b, rcond=None)
             self.k_rho_default = x[1]
         else:
             raise ValueError("Density needs at least one density value")
@@ -91,7 +91,8 @@ class Density:
         if unit != 'K':
             temp = uc.convert(unit, 'K', temp)
 
-        densities = np.interp(temp, self.temps, self.densities, left=-np.inf, right=np.inf)
+        densities = np.interp(temp, self.temps, self.densities,
+                              left=-np.inf, right=np.inf)
 
         left = (densities == -np.inf)
         densities[left] = self.densities[0] + (self.k_rho_default *
@@ -117,9 +118,11 @@ class KinematicViscosity:
         initialize from an oil object
         """
         try:
-            data = get_kinematic_viscosity_data(oil, units='m^2/s', temp_units="K")
+            data = get_kinematic_viscosity_data(oil, units='m^2/s',
+                                                temp_units="K")
         except AttributeError:
-            # not an oil object -- assume it's a table of data in the correct form
+            # not an oil object -- assume it's a table of data in the
+            #                      correct form
             data = oil
 
         if data:
@@ -134,8 +137,8 @@ class KinematicViscosity:
         """
         Compute the kinematic viscosity of the oil as a function of temperature
 
-        :param temp_k: temperatures to compute at: can be scalar or array of values.
-                       should be in Kelvin
+        :param temp_k: temperatures to compute at: can be scalar or array
+                       of values.  Should be in Kelvin
 
         viscosity as a function of temp is given by:
         v = A exp(k_v2 / T)
@@ -183,7 +186,7 @@ class KinematicViscosity:
             # temps = np.array(kvis_ref_temps)
             b = np.log(kvis)
             A = np.c_[np.ones_like(b), 1.0 / np.array(kvis_ref_temps)]
-            x, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
+            x, _residuals, _rank, _s = np.linalg.lstsq(A, b, rcond=None)
             self._k_v2 = x[1]
             self._visc_A = np.exp(x[0])
         return
@@ -203,7 +206,9 @@ def get_density_data(oil, units="kg/m^3", temp_units="K"):
 
     """
 
-    densities = oil.sub_samples[0].physical_properties.densities
+    densities = [d for d in oil.sub_samples[0].physical_properties.densities
+                 if d.density is not None
+                 and d.ref_temp is not None]
 
     # create normalized list of densities
     density_table = []
@@ -356,7 +361,8 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
 
 
 def max_water_fraction_emulsion(oil):
-    if oil.metadata.product_type == 'Crude Oil NOS' or oil.metadata.product_type == 'Bitumen Blend':
+    if (oil.metadata.product_type == 'Crude Oil NOS' or
+            oil.metadata.product_type == 'Bitumen Blend'):
         return 0.9
     else:
         return 0.0
@@ -370,7 +376,7 @@ def emul_water(oil):
     the emulsion. (from ADIOS2)
     """
 
-    emulsion_max_water = None  #need to drill down in database for this info
+    emulsion_max_water = None  # need to drill down in database for this info
 
     if emulsion_max_water is None:  # max water content not in library
         dens = Density(oil)
@@ -385,9 +391,9 @@ def emul_water(oil):
     else:
         Ymax = emulsion_max_water  # stay with the value you have
 
-    #this is done is py_gnome
-    #drop_min = 1.0e-6		# min oil droplet size
-    #Smax = (6.0 / drop_min) * (Ymax / (1.0 - Ymax))
+    # this is done is py_gnome
+    # drop_min = 1.0e-6		# min oil droplet size
+    # Smax = (6.0 / drop_min) * (Ymax / (1.0 - Ymax))
     return Ymax
 
 
@@ -400,26 +406,28 @@ def bullwinkle_fraction(oil):
         for element in bulk_composition:
             if element.name == "nickel":
                 Ni = element.measurement.value
-    except:
+    except Exception:
         Ni = 0.
+
     try:
         bulk_composition = oil.sub_samples[0].bulk_composition
         for element in bulk_composition:
             if element.name == "vanadium":
                 Va = element.measurement.value
-    except:
+    except Exception:
         Va = 0.
 
     try:
         f_asph = oil.sub_samples[0].SARA.asphaltenes.value
-    except:
+    except Exception:
         f_asph = 0.
 
-    #need to go through subsamples checking for weathered data
-    #if oil.metadata.emuls_constant_max is not None:
-    #bullwinkle_fraction = emuls_constant_max
+    # need to go through subsamples checking for weathered data
+    # if oil.metadata.emuls_constant_max is not None:
+    # bullwinkle_fraction = emuls_constant_max
 
-    if oil.metadata.product_type != "Crude Oil NOS" and oil.metadata.product_type != "Bitumen Blend":
+    if (oil.metadata.product_type != "Crude Oil NOS" and
+            oil.metadata.product_type != "Bitumen Blend"):
         bullwinkle_fraction = 1.0
     else:
         oil_api = oil.metadata.API
@@ -435,7 +443,8 @@ def bullwinkle_fraction(oil):
         else:
             bullwinkle_fraction = (-1.038 - 0.78935 * np.log10(1.0 / oil_api))
 
-        bullwinkle_fraction = _adios2_new_bull_calc(bullwinkle_fraction, oil_api)
+        bullwinkle_fraction = _adios2_new_bull_calc(bullwinkle_fraction,
+                                                    oil_api)
 
     return bullwinkle_fraction
 
