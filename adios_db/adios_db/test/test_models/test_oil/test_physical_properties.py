@@ -16,12 +16,18 @@ from adios_db.models.oil.physical_properties import (PhysicalProperties,
 
 class TestDensityPoint:
     def test_init_empty(self):
-        with pytest.raises(TypeError):
-            _model = DensityPoint()
+        model = DensityPoint()
+
+        assert model.density is None
+        assert model.ref_temp is None
+        assert model.method is None
 
     def test_from_json_empty(self):
-        with pytest.raises(TypeError):
-            _model = DensityPoint.from_py_json({})
+        model = DensityPoint.from_py_json({})
+
+        assert model.density is None
+        assert model.ref_temp is None
+        assert model.method is None
 
     def test_from_json(self):
         json_obj = {'density': {'value': 900.0, 'unit': 'kg/m^3',
