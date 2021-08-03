@@ -98,8 +98,8 @@ class DynamicViscosityList(JSON_List, RefTempList):
 @dataclass_to_json
 @dataclass
 class KinematicViscosityPoint:
-    viscosity: KinematicViscosity
-    ref_temp: Temperature
+    viscosity: KinematicViscosity = None
+    ref_temp: Temperature = None
     shear_rate: AngularVelocity = None
     method: str = None
 

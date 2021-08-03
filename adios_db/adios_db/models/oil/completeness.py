@@ -139,7 +139,9 @@ def check_second_viscosity(oil):
 
         temps = []
         for v_i in (kvis, dvis):
-            temps.extend([v.ref_temp.converted_to('C').value for v in v_i])
+            temps.extend([v.ref_temp.converted_to('C').value
+                          for v in v_i
+                          if v.ref_temp is not None])
 
         if len(temps) >= 2:
             t1, *_, t2 = sorted([t for t in temps if t is not None])

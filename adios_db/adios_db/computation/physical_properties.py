@@ -234,7 +234,10 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
     """
 
     try:
-        kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
+        kvisc = [k for k
+                 in oil.sub_samples[0].physical_properties.kinematic_viscosities
+                 if k.viscosity is not None
+                 and k.ref_temp is not None]
     except IndexError:  # no subsamples at all!
         return []
 
@@ -270,7 +273,10 @@ def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
 
     """
 
-    dvisc = oil.sub_samples[0].physical_properties.dynamic_viscosities
+    dvisc = [d for d
+             in oil.sub_samples[0].physical_properties.dynamic_viscosities
+             if d.viscosity is not None
+             and d.ref_temp is not None]
 
     if len(dvisc) > 0:
         visc_table = []
