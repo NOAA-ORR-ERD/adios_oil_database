@@ -85,8 +85,8 @@ class DensityList(JSON_List, RefTempList):
 @dataclass_to_json
 @dataclass
 class DynamicViscosityPoint:
-    viscosity: DynamicViscosity
-    ref_temp: Temperature
+    viscosity: DynamicViscosity = None
+    ref_temp: Temperature = None
     shear_rate: AngularVelocity = None
     method: str = None
 

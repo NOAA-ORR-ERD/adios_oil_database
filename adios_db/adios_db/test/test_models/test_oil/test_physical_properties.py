@@ -147,12 +147,20 @@ class TestDensityList:
 
 class TestDynamicViscosityPoint:
     def test_init_empty(self):
-        with pytest.raises(TypeError):
-            _model = DynamicViscosityPoint()
+        model = DynamicViscosityPoint()
+
+        assert model.viscosity is None
+        assert model.ref_temp is None
+        assert model.shear_rate is None
+        assert model.method is None
 
     def test_from_json_empty(self):
-        with pytest.raises(TypeError):
-            _model = DynamicViscosityPoint.from_py_json({})
+        model = DynamicViscosityPoint.from_py_json({})
+
+        assert model.viscosity is None
+        assert model.ref_temp is None
+        assert model.shear_rate is None
+        assert model.method is None
 
     def test_from_json(self):
         json_obj = {'viscosity': {'value': 100.0, 'unit': 'cP',
