@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
 import { valueUnitUnit } from 'adios-db/helpers/value-unit-unit';
+import { getUnitType } from 'adios-db/helpers/get-unit-type';
 
 
 export default class ValueUnitInput extends Component {
@@ -23,16 +24,13 @@ export default class ValueUnitInput extends Component {
         if (Number.isNaN(parseFloat(e.target.value))) {
             this.valueObject = null;
         } else {
+            let unitType = getUnitType(this.args.valueUnit);
             this.valueObject = {
                 value: parseFloat(e.target.value),
                 unit: this.args.valueUnit,
-                unit_type: this.valueObject.unit_type
+                unit_type: unitType
             };
         }
-
-        Object.entries(this.valueObject).forEach(([key, item]) => {
-            set(this.args.valueObject, key, item);
-        });
 
         this.args.submit(this.valueObject);
     }
