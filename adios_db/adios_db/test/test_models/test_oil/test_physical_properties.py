@@ -125,7 +125,6 @@ class TestDensityList:
         print(msgs)
         assert len(msgs) == 0
 
-
     def test_validate_bad_temp(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
                            ref_temp=Temperature(value=0, unit='K'),
@@ -196,12 +195,20 @@ class TestDynamicViscosityList:
 
 class TestKinematicViscosityPoint:
     def test_init_empty(self):
-        with pytest.raises(TypeError):
-            _model = KinematicViscosityPoint()
+        model = KinematicViscosityPoint()
+
+        assert model.viscosity is None
+        assert model.ref_temp is None
+        assert model.shear_rate is None
+        assert model.method is None
 
     def test_from_json_empty(self):
-        with pytest.raises(TypeError):
-            _model = KinematicViscosityPoint.from_py_json({})
+        model = KinematicViscosityPoint.from_py_json({})
+
+        assert model.viscosity is None
+        assert model.ref_temp is None
+        assert model.shear_rate is None
+        assert model.method is None
 
     def test_from_json(self):
         json_obj = {'viscosity': {'value': 100.0, 'unit': 'cSt',
