@@ -39,6 +39,7 @@ class Oil:
     status: list = field(default_factory=list)
     permanent_warnings: list = field(default_factory=list)
     extra_data: dict = field(default_factory=dict)
+    review_status: ReviewStatus = field(default_factory=ReviewStatus)
 
     def __post_init__(self):
         '''

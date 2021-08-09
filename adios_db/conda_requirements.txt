@@ -27,7 +27,7 @@ requests>=2.22.0
 
 # This provided the unit_conversion package
 # https://github.com/NOAA-ORR-ERD/PyNUCOS
-pynucos>=2.10
+pynucos>=2.11
 
 
 # for testing and development
