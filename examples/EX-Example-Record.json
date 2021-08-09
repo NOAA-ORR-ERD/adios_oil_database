@@ -11,6 +11,9 @@
         "source_id": "HOOPS16F"
     },
     "oil_id": "EX00076",
+    "review_status": {
+        "status": "Not Reviewed"
+    },
     "status": [],
     "sub_samples": [
         {
@@ -323,7 +326,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.84805
+                            "value": 0.84796
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -480,7 +483,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.55082
+                            "value": 0.55075
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -781,7 +784,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.64851
+                            "value": 0.64843
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -1113,7 +1116,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.74164
+                            "value": 0.74156
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -1468,7 +1471,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.80473
+                            "value": 0.80464
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -1823,7 +1826,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.86159
+                            "value": 0.86149
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -2155,7 +2158,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.92474
+                            "value": 0.92464
                         },
                         "ref_temp": {
                             "unit": "C",
@@ -2495,7 +2498,7 @@
                         "density": {
                             "unit": "g/cm^3",
                             "unit_type": "density",
-                            "value": 0.99125
+                            "value": 0.99113
                         },
                         "ref_temp": {
                             "unit": "C",

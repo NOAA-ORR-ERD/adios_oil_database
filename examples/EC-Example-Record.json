@@ -14,6 +14,9 @@
         "source_id": "2234"
     },
     "oil_id": "EC02234",
+    "review_status": {
+        "status": "Not Reviewed"
+    },
     "status": [],
     "sub_samples": [
         {

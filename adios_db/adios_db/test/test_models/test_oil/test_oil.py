@@ -148,7 +148,7 @@ class TestOil:
         assert py_json["oil_id"] == OIL_ID
         assert py_json['adios_data_model_version'] == str(ADIOS_DATA_MODEL_VERSION)
         print(py_json)
-        assert len(py_json) == 2
+        assert len(py_json) == 3
 
     def test_json_minimal_nonsparse(self):
         oil = Oil(oil_id=OIL_ID)
@@ -156,7 +156,7 @@ class TestOil:
 
         pprint(py_json)
 
-        assert len(py_json) == 7
+        assert len(py_json) == 8
 
         for attr in [
                 'oil_id',
@@ -166,6 +166,7 @@ class TestOil:
                 'status',
                 'permanent_warnings',
                 'extra_data',
+                'review_status',
         ]:
             assert attr in py_json
 

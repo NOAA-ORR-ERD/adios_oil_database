@@ -790,7 +790,7 @@ class TestDensity:
         model = Density(value=900.0, unit='kg/m^3')
         model.convert_to('API')
 
-        assert math.isclose(model.value, 25.585438, rel_tol=1e-7)
+        assert math.isclose(model.value, 25.57, rel_tol=1e-3)
         assert model.unit == 'API'
 
 class TestDynamicViscosity:

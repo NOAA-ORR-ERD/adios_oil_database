@@ -4,6 +4,7 @@ ERRORS = {
     "E011": ("Record has invalid oil_id: every record must have a valid ID. "
              "{} is not valid"),
     "E012": "Reference year: {} is not a valid year (between {} and {})",
+    "E013": "Review Status: {} is not valid, must be one of {}",
     # E03* -- physical properties related
     "E030": "Oils must have an API",
     "E031": "No Properties data at all",

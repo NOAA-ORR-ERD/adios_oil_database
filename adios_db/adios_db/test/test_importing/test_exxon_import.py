@@ -204,7 +204,7 @@ class TestExxonMapper():
         sample = samples[sample_idx]
         density = sample.physical_properties.densities[density_idx]
 
-        assert density.density.value == expected
+        assert isclose(density.density.value, expected, rel_tol=1e-3)
 
     @pytest.mark.parametrize("sample_idx, viscosity_idx, expected", [
         (0, 0, 6.739),

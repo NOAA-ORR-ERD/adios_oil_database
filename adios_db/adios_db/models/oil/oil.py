@@ -20,6 +20,7 @@ from ...computation import physical_properties
 from .metadata import MetaData
 from .sample import SampleList
 from .version import Version
+from .review_status import ReviewStatus
 
 ADIOS_DATA_MODEL_VERSION = Version(0, 11, 0)
 

@@ -2,17 +2,38 @@
 simple class to hold the review status of a record
 """
 
-from ..common.validation import EnumValidator
+from dataclasses import dataclass, field
+
+from ..common.utilities import dataclass_to_json
+
+from ..common.validators import EnumValidator
+
+from .validation.errors import ERRORS
 
 
 @dataclass_to_json
 @dataclass
 class ReviewStatus:
-    status: str = "not reviewed"
+    status: str = "Not Reviewed"
     reviewers: str = ""
     review_date: str = ""
     notes: str = ""
 
-    validate = EnumValidator(["Not Reviewed", "Under Review", "Review Complete"])
+    _status_validator = EnumValidator(["Not Reviewed",
+                                       "Under Review",
+                                       "Review Complete"],
+                                      ERRORS['E013'],
+                                      case_insensitive=True)
 
+    def validate(self):
+        msgs = []
+        if self.review_date:
+            try:
+                datetime.fromisoformat(self.sample_date)
+            except ValueError as err:
+                msgs.append(WARNINGS["W011"].format("review date", self.sample_date, str(err)))
+
+        msgs.extend(self._status_validator(self.status))
+
+        return msgs
 

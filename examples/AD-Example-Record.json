@@ -13,6 +13,9 @@
         "source_id": "AD00025"
     },
     "oil_id": "AD00025",
+    "review_status": {
+        "status": "Not Reviewed"
+    },
     "status": [],
     "sub_samples": [
         {
