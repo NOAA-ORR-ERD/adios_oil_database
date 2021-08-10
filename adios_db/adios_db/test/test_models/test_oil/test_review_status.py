@@ -62,3 +62,29 @@ def test_validation_bad():
     assert "E013" in msgs[0]
 
 
+def test_validation_date_good():
+    rs = ReviewStatus()
+
+    rs.status = "Review Complete"
+    rs.reviewers = "Peter, Paul, and Mary"
+    rs.review_date = "2021-08-09"
+    rs.notes = "This is a meaningless note."
+
+    msgs = rs.validate()
+
+    assert not msgs
+
+
+def test_validation_date_bad():
+    rs = ReviewStatus()
+
+    rs.status = "Review Complete"
+    rs.reviewers = "Peter, Paul, and Mary"
+    rs.review_date = "2021-35-09"
+    rs.notes = "This is a meaningless note."
+
+    msgs = rs.validate()
+
+    assert len(msgs) == 1
+    assert 'W011' in msgs[0]
+
