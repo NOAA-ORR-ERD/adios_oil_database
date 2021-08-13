@@ -37,19 +37,16 @@ def main():
         print(USAGE)
         sys.exit(1)
 
+    write_reports(base_dir, save)
+
+
+def write_reports(base_dir, save):
+
     validation_by_record = {}
     validation_by_error = {}
     validation_by_record_rev = {}
     validation_by_error_rev = {}
 
-    def write_header(of):
-        of.write("\n####################################\n")
-        of.write("ADIOS Oil Database Validation Report\n")
-        of.write("####################################\n\n")
-        of.write("Validation of data in: \n\n")
-        of.write(f"``{base_dir.absolute()}``\n\n")
-        of.write("**Generated:** "
-                 f"{datetime.datetime.now().strftime('%h %d, %Y -- %H00')}\n\n")
 
     # validate all the records:
     for oil, pth in get_all_records(base_dir):
@@ -60,38 +57,67 @@ def main():
         print(oil.status)
         if oil.status:
             if oil.review_status.status.lower() == "review complete":
-                validation_by_record_rev[oil.oil_id] = oil.status
+                validation_by_record_rev[oil.oil_id] = (oil.metadata.name, oil.status)
             else:
-                validation_by_record[oil.oil_id] = oil.status
+                validation_by_record[oil.oil_id] = (oil.metadata.name, oil.status)
         for msg in oil.status:
             issues = f"\n``{oil.oil_id}`` -- {oil.metadata.name}:\n\n    {msg}\n"
             if oil.review_status.status.lower() == "review complete":
-                validation_by_record_rev.setdefault(msg.split(":")[0], []).append(issues)
+                validation_by_error_rev.setdefault(msg.split(":")[0], []).append(issues)
             else:
-                validation_by_record.setdefault(msg.split(":")[0], []).append(issues)
+                validation_by_error.setdefault(msg.split(":")[0], []).append(issues)
         if save:
             with open(pth, 'w', encoding='utf-8') as datafile:
                 json.dump(oil.py_json(), datafile, indent=4)
 
-
-    with open("validation_by_record.rst", 'w', encoding="utf-8") as outfile1:
-        write_header(outfile1)
-
-        outfile1.write(f"\n``{oil.oil_id}``: {oil.metadata.name}\n")
-        for msg in oil.status:
-            validation_by_record.setdefault(msg.split(":")[0], []).append(
-                                  f"\n``{oil.oil_id}`` -- {oil.metadata.name}:\n\n    {msg}\n")
-            outfile1.write(f" |    {msg}\n")
-
+    with open("validation_by_record.rst", 'w',
+              encoding="utf-8") as outfile1:
+        write_header(outfile1, base_dir)
+        write_by_record(outfile1, validation_by_record)
+        write_header_rev(outfile1)
+        write_by_record(outfile1, validation_by_record_rev)
 
     # write out the validation by error
     with open("validation_by_error.rst", 'w', encoding="utf-8") as outfile:
-        write_header(outfile)
-        # write out the report by Error Code:
-        for code, errors in sorted(validation_by_record.items(), key=itemgetter(0)):
-            header = f"{code}: ({len(errors)} records affected)"
-            outfile.write(f"\n\n{header}\n{'=' * len(header)}\n")
-            outfile.writelines(errors)
+        write_header(outfile, base_dir)
+        write_by_error(outfile, validation_by_error)
+        write_header_rev(outfile)
+        write_by_error(outfile, validation_by_error_rev)
+
+
+def write_by_record(outfile1, validation_by_record):
+    for oil_id, info in validation_by_record.items():
+        name, status = info
+        outfile1.write(f"\n``{oil_id}``: {name}\n")
+        for msg in status:
+            # validation_by_record.setdefault(msg.split(":")[0], []).append(
+            #                       f"\n``{oil_id}`` -- {name}:\n\n    {msg}\n")
+            outfile1.write(f" |    {msg}\n")
+
+
+def write_by_error(outfile, validation_by_error):
+    for code, errors in sorted(validation_by_error.items(), key=itemgetter(0)):
+        header = f"{code}: ({len(errors)} records affected)"
+        outfile.write(f"\n\n{header}\n{'=' * len(header)}\n")
+        outfile.writelines(errors)
+
+
+def write_header(of, base_dir):
+    of.write("\n####################################\n")
+    of.write("ADIOS Oil Database Validation Report\n")
+    of.write("####################################\n\n")
+    of.write("Validation of data in: \n\n")
+    of.write(f"``{base_dir.absolute()}``\n\n")
+    of.write("**Generated:** "
+             f"{datetime.datetime.now().strftime('%h %d, %Y -- %H00')}\n\n")
+
+
+def write_header_rev(outfile):
+    outfile.write("\n\n################\n"
+                  "Reviewed Records\n"
+                  "################\n\n"
+                  "The rest of these are records that have been reviewed,\n"
+                  "but still have issues that will probably never be resolved\n")
 
 
 
