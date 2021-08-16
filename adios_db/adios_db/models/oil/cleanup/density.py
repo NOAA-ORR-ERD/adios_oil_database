@@ -10,12 +10,18 @@ from .cleanup import Cleanup
 
 from ....computation.physical_properties import Density
 
+# product types that we will arbitrarily extrapolate
+# others will only be extrapolated if their is one density value
+# close to 60F, or two values bracketing 60F
+
+CRUDE_PRODUCTS = {"Crude Oil NOS",
+                  "Tight Oil"}
+
+
 class FixAPI(Cleanup):
     """
     adds (or replaces) the API value, from the density measurements
 
-    NOTE: this could be extended to interpolate, but it that actually needed?
-          There is code in the computation.physical_properties package to help, if needed.
     """
     ID = "001"
 
@@ -35,15 +41,15 @@ class FixAPI(Cleanup):
 
         # densities = oil.sub_samples[0].physical_properties.densities
         if API is None:
-
-            density = self.find_density_near_15C()
+            density = self.find_density_at_60F()
             if density:
-                return (True, f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
+                return (True, f"Cleanup: {self.ID}: No API value provided for "
+                              f"{self.oil.oil_id}"
                                " -- can be computed from density")
             else:
-                return (False, f"Cleanup: {self.ID}: No API value provided for {self.oil.oil_id}"
+                return (False, f"Cleanup: {self.ID}: No API value provided for "
+                               f"{self.oil.oil_id}"
                                 " -- can NOT be computed from density")
-
         return None, "API is fine"
 
     def cleanup(self):
@@ -58,7 +64,7 @@ class FixAPI(Cleanup):
 
         :returns: a message of what could be done, or what was done.
         """
-        density_at_15 = self.find_density_near_15C()
+        density_at_15 = self.find_density_at_60F()
 
         if density_at_15:
             API = uc.convert("density", "kg/m^3", "API", density_at_15)
@@ -67,24 +73,43 @@ class FixAPI(Cleanup):
 
     def check_for_valid_api(self):
         """
-        check is the API value is already valid
+        Check is the API value is already valid
         """
         API = self.oil.metadata.API
 
-        density_at_15 = self.find_density_near_15C()
+        density_at_60F = self.find_density_at_60F()
 
-        if uc.convert("density", "kg/m^3", "API", density_at_15) == API:
+        computed_API = uc.convert("density", "kg/m^3", "API", density_at_60F)
+        if abs(API - computed_API) <= 0.2:
             return True
         else:
             return False
 
-    def find_density_near_15C(self):
+    def find_density_at_60F(self):
         """
         Returns the density (in kg/m3)
 
         It will interpolate and extrapolate as needed
         """
         try:
-            return Density(self.oil).at_temp(uc.convert("C", "K", 15))
-        except ValueError:
+            density = Density(self.oil)
+            have_data = False
+            if self.oil.metadata.product_type in CRUDE_PRODUCTS:
+                have_data = True
+            else:
+                temps = density.temps
+                print(f"{temps=}")
+                if len(temps) == 1:
+                    # is the value near 60F?
+                    t = temps[0]
+                    if 286 < t < 291:  # 55F, 65F
+                        have_data = True
+                else:
+                    # check if ref temps straddle 60F
+                    if (max(temps) >= 288.70
+                        and min(temps) <= 288.72):
+                        have_data = True
+            if have_data:
+                return density.at_temp(uc.convert("F", "K", 60))
+        except Exception:  # something went wrong, and we don't want it to barf
             return None

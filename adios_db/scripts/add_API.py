@@ -3,18 +3,13 @@
 """
 script to go through all the data, and add an API if one is not already there
 
-This could use a bit more polish:
-  - flag to have it report what it will do, but not do it
-  - pass in a single file or the whole dir
-
-Testing! -- not entirely sure if it breaks the records!
 """
 
 import sys
 
 
 from adios_db.models.oil.cleanup.density import FixAPI
-from adios_db.scripting import get_all_records
+from adios_db.scripting import get_all_records, process_input
 
 USAGE = """
 add_API data_dir [dry_run]
@@ -26,28 +21,20 @@ If "dry_run" is on the command line, it will report what it would do,
 but not save any changes
 """
 
+# product types that we will use this approach on
+VALID_PRODUCTS = {"Crude Oil NOS",
+                  "Tight Oil"}
+
 
 def main():
-    try:
-        sys.argv.remove("dry_run")
-        dry_run = True
-    except ValueError:
-        dry_run = False
-
-    try:
-        base_dir = sys.argv[1]
-    except IndexError:
-        print(USAGE)
-        sys.exit(1)
+    base_dir, dry_run = process_input()
 
     for rec, pth in get_all_records(base_dir):
-        # print("\n\n******************\n")
-        # print("processing:", rec.oil_id)
-        # print("API is:", rec.metadata.API)
+        print("\n\n******************\n")
+        print("processing:", rec.oil_id, rec.metadata.name)
         fixer = FixAPI(rec)
         flag, msg = fixer.check()
         if flag is True:
-            if rec.metadata.product_type == "Crude Oil NOS":
                 print(msg)
                 print("Cleaning up!")
                 fixer.cleanup()
@@ -57,8 +44,11 @@ def main():
                     rec.to_file(pth)
                 else:
                     print("Nothing saved")
-            else:
-                print("Not changing it -- it's a:", rec.metadata.product_type )
+        else:
+            print(msg)
+            if msg != "API is fine":
+               print("It's a:", rec.metadata.product_type)
+               print("Densities are:", rec.sub_samples[0].physical_properties.densities)
 
 if __name__ == "__main__":
     main()

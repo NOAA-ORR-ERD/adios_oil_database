@@ -80,6 +80,13 @@ class DensityPoint:
 
 class DensityList(JSON_List, RefTempList):
     item_type = DensityPoint
+    # def validate(self):
+    #     msgs = super().validate()
+    #     # check reasonable value:
+    #     for dp in self:
+    #         # make sure dp is reasonable, and a number!
+
+
 
 
 @dataclass_to_json
