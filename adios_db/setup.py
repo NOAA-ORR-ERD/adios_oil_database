@@ -114,7 +114,7 @@ scripts = ['adios_db_init = adios_db.scripts.db_initialize:init_db_cmd',
            'adios_db_restore = adios_db.scripts.db_restore:restore_db_cmd',
            'adios_db_validate = adios_db.scripts.validation_report:main',
            'adios_db_update_test_data = adios_db.scripts.update_test_data:main',
-           'adios_db_process_json = adios_db.scripts.run_json_through_oil_object:run_through',
+           'adios_db_process_json = adios_db.scripts.process_json:run_through',
            ]
 
 setup(name=pkg_name,
