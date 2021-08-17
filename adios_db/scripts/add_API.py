@@ -21,10 +21,6 @@ If "dry_run" is on the command line, it will report what it would do,
 but not save any changes
 """
 
-# product types that we will use this approach on
-VALID_PRODUCTS = {"Crude Oil NOS",
-                  "Tight Oil"}
-
 
 def main():
     base_dir, dry_run = process_input()
@@ -35,20 +31,22 @@ def main():
         fixer = FixAPI(rec)
         flag, msg = fixer.check()
         if flag is True:
-                print(msg)
-                print("Cleaning up!")
-                fixer.cleanup()
-                print("API is now:", rec.metadata.API)
-                if not dry_run:
-                    print("Saving out:", pth)
-                    rec.to_file(pth)
-                else:
-                    print("Nothing saved")
+            print(msg)
+            print("Cleaning up!")
+            fixer.cleanup()
+            print("API is now:", rec.metadata.API)
+            if not dry_run:
+                print("Saving out:", pth)
+                rec.to_file(pth)
+            else:
+                print("Nothing saved")
+        elif flag is False:
+            print(msg)
+            print("It's a:", rec.metadata.product_type)
+            print("Densities are:", rec.sub_samples[0].physical_properties.densities)
         else:
             print(msg)
-            if msg != "API is fine":
-               print("It's a:", rec.metadata.product_type)
-               print("Densities are:", rec.sub_samples[0].physical_properties.densities)
+
 
 if __name__ == "__main__":
     main()
