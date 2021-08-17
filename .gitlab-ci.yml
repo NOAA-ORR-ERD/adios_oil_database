@@ -189,6 +189,7 @@ deploy_mongodb_stage:
     APP_NETWORK: adios_net
     PORT_MAPPING: 127.0.0.1:27017:27017
     DB_VOLUME: dbdata
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -241,6 +242,7 @@ deploy_mongodb_public:
     APP_NETWORK: adios_net
     PORT_MAPPING: 127.0.0.1:27017:27017
     DB_VOLUME: dbdata
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -286,6 +288,7 @@ deploy_api_stage:
     CONTAINER_NAME: adios_db_web_api
     APP_NETWORK: adios_net
     PORT_MAPPING: 8084:9898
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -341,6 +344,7 @@ deploy_oauth_api_stage:
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
     OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -393,6 +397,7 @@ deploy_client_stage:
     CONTAINER_NAME: adios_db_web_client
     APP_NETWORK: adios_net
     PORT_MAPPING: 8083:4200
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -445,6 +450,7 @@ deploy_oauth_client_stage:
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
     OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -501,6 +507,7 @@ deploy_api_public:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
     CONTAINER_NAME: adios_db_web_api
     APP_NETWORK: adios_net
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -543,6 +550,7 @@ deploy_client_public:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
     CONTAINER_NAME: adios_db_web_client
     APP_NETWORK: adios_net
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
@@ -587,6 +595,7 @@ deploy_proxy_public:
     PORT_MAPPING1: 443:443
     PORT_MAPPING2: 80:80
     OILDB_PROJ_FOLDER: /data/adios_oil_db/oildb-deploy
+    GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
