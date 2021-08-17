@@ -64,10 +64,10 @@ class FixAPI(Cleanup):
 
         :returns: a message of what could be done, or what was done.
         """
-        density_at_15 = self.find_density_at_60F()
+        density_at_60 = self.find_density_at_60F()
 
-        if density_at_15:
-            API = uc.convert("density", "kg/m^3", "API", density_at_15)
+        if density_at_60:
+            API = uc.convert("density", "kg/m^3", "API", density_at_60)
             self.oil.metadata.API = round(API, 2)
             return f"Cleanup: {self.ID}: Set API for {self.oil.oil_id} to {API}."
 
@@ -98,16 +98,16 @@ class FixAPI(Cleanup):
                 have_data = True
             else:
                 temps = density.temps
-                print(f"{temps=}")
+#                print(f"{temps=}")
                 if len(temps) == 1:
                     # is the value near 60F?
                     t = temps[0]
                     if 286 < t < 291:  # 55F, 65F
                         have_data = True
                 else:
-                    # check if ref temps straddle 60F
-                    if (max(temps) >= 288.70
-                        and min(temps) <= 288.72):
+                    # check if ref temps are anywhere near 60F
+                    if (max(temps) >= 286
+                        and min(temps) <= 291):
                         have_data = True
             if have_data:
                 return density.at_temp(uc.convert("F", "K", 60))
