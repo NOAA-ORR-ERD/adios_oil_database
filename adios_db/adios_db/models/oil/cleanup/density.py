@@ -39,18 +39,27 @@ class FixAPI(Cleanup):
         """
         API = self.oil.metadata.API
 
+        is_valid = self.check_for_valid_api()
         # densities = oil.sub_samples[0].physical_properties.densities
-        if API is None:
-            density = self.find_density_at_60F()
+        density = self.find_density_at_60F()
+
+        msg = (f"API: {API} doesn't match density data for "
+               if not is_valid else
+               "No API value provided for "
+               )
+
+        if API is None or not is_valid:
             if density:
-                return (True, f"Cleanup: {self.ID}: No API value provided for "
+                return (True, f"Cleanup: {self.ID}: {msg}"
                               f"{self.oil.oil_id}"
                                " -- can be computed from density")
             else:
-                return (False, f"Cleanup: {self.ID}: No API value provided for "
+                return (False, f"Cleanup: {self.ID}: {msg}"
                                f"{self.oil.oil_id}"
                                 " -- can NOT be computed from density")
-        return None, "API is fine"
+        else:
+            return None, "API is fine"
+
 
     def cleanup(self):
         """
@@ -77,7 +86,13 @@ class FixAPI(Cleanup):
         """
         API = self.oil.metadata.API
 
+        if API is None:
+            return False
+
         density_at_60F = self.find_density_at_60F()
+
+        if density_at_60F is None:
+            return None
 
         computed_API = uc.convert("density", "kg/m^3", "API", density_at_60F)
         if abs(API - computed_API) <= 0.2:
