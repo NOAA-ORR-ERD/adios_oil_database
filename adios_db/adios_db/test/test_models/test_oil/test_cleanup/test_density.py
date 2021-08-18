@@ -79,8 +79,27 @@ def test_check_no_API():
     assert msg.startswith(f"Cleanup: {fixer.ID}:")
     assert "No API value provided" in msg
 
+def test_check_API_is_there_correct():
+    """
+    if there is an API, check() should return the empty string
+    """
 
-def test_check_API_is_there():
+    oil = no_api_with_density()
+    oil.metadata.API = 30.06
+
+    fixer = FixAPI(oil)
+
+    flag, msg = fixer.check()
+
+    print(flag)
+    print(msg)
+
+    assert flag is None
+    assert "API is fine" in msg
+
+
+
+def test_check_API_is_there_mismatch():
     """
     if there is an API, check() should return the empty string
     """
@@ -92,8 +111,11 @@ def test_check_API_is_there():
 
     flag, msg = fixer.check()
 
-    assert flag is None
-    assert msg == 'API is fine'
+    print(flag)
+    print(msg)
+
+    assert flag is True
+    assert "doesn't match density data" in msg
 
 
 def test_add_density():

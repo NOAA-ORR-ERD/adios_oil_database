@@ -230,6 +230,22 @@ class TestDensity:
 
         assert  D  ==  990 - (10 * -0.00085)
 
+    def test_density_at_temp_single_20C(self):
+        """
+        there seemed to be an error when there was a single value at
+        ref temp 20C (293.15K)
+
+        Checking at 60F (288.716): used to compute API
+        """
+        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
+        dc = Density([(990.0, 293.15),
+                      ])
+
+        D = dc.at_temp(288.716)
+
+        result = 990 + ((288.716 - 293.15) * -0.0008)
+
+        assert  D  ==  result
 
 
 class Test_KinematicViscosity:

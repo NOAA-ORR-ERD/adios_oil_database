@@ -43,9 +43,14 @@ class FixAPI(Cleanup):
         # densities = oil.sub_samples[0].physical_properties.densities
         density = self.find_density_at_60F()
 
-        msg = (f"API: {API} doesn't match density data for "
-               if not is_valid else
-               "No API value provided for "
+
+        # msg = (f"API: {API} doesn't match density data for "
+        #        if not is_valid else
+        #        "No API value provided for "
+        #        )
+        msg = ("No API value provided for "
+               if API is None else
+               f"API: {API} doesn't match density data for "
                )
 
         if API is None or not is_valid:
