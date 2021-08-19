@@ -111,8 +111,7 @@ def dataclass_to_json(cls):
             # except AttributeError as err:  # This one doesn't have a validate method.
             #     print("\nAttributeError:", err)
             #     pass
-
-        return messages
+        return sorted(set(messages))
 
     def __setattr__(self, name, val):
         try:
