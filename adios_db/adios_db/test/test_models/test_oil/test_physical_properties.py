@@ -144,6 +144,44 @@ class TestDensityList:
             assert "E040:" in msg
             assert "Density" in msg
 
+    def test_validate_non_numeric_value(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+        dp2 = DensityPoint(density=Density(value="NM", unit='kg/m^3'),
+                           ref_temp=Temperature(value=15, unit='C'),
+                           )
+
+        DL = DensityList((dp1, dp2))
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 1
+        assert "E044:" in msgs[0]
+
+    def test_validate_negative_numeric_value(self):
+        dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
+                           ref_temp=Temperature(value=0, unit='C'),
+                           )
+        dp2 = DensityPoint(density=Density(value="0.0", unit='kg/m^3'),
+                           ref_temp=Temperature(value=15, unit='C'),
+                           )
+        dp3 = DensityPoint(density=Density(value="-10.0", unit='kg/m^3'),
+                           ref_temp=Temperature(value=15, unit='C'),
+                           )
+
+        DL = DensityList((dp1, dp2, dp3))
+
+        msgs = DL.validate()
+
+        print(msgs)
+        assert len(msgs) == 2
+        assert "E044:" in msgs[0]
+        assert "0.0" in msgs[0]
+        assert "E044:" in msgs[1]
+        assert "-10.0" in msgs[1]
+
 
 class TestDynamicViscosityPoint:
     def test_init_empty(self):

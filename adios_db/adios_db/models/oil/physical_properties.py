@@ -67,6 +67,25 @@ class RefTempList:
             if d < 1e-3:
                 msgs.append(ERRORS["E050"].format("Temperatures", data_str))
 
+        # make sure values are reasonable too
+        # find the attr with the data
+        for name in {"density", "viscosity", "tension"}:
+            if hasattr(self.item_type, name):
+                data_name = name
+                break
+            else:
+                data_name = None
+
+        for pt in points_list:
+            value = getattr(pt, data_name).value
+            try:
+                value = float(value)
+            except ValueError:
+                msgs.append(ERRORS["E044"].format(value, data_name))
+            else:
+                if value <= 0.0:
+                    msgs.append(ERRORS["E044"].format(value, data_name))
+
         return msgs
 
 
@@ -132,9 +151,8 @@ class FlashPoint:
 @dataclass_to_json
 @dataclass
 class InterfacialTensionPoint:
-    tension: InterfacialTension
-    ref_temp: Temperature
-    # interface: str = None  # the interface is given in the attribute name
+    tension: InterfacialTension = None
+    ref_temp: Temperature = None
     method: str = None
 
 
