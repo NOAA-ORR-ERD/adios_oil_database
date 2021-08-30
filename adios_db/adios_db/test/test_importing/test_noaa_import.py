@@ -9,16 +9,16 @@
 import os
 from pathlib import Path
 import json
+from pprint import pprint
 
 import pytest
 
-import adios_db
 from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
                                            OilLibraryRecordParser,
                                            OilLibraryAttributeMapper,
                                            ImportFileHeaderLengthError)
+import adios_db
 
-from pprint import pprint
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
 example_index = example_dir / 'index.txt'

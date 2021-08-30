@@ -5,13 +5,13 @@ from pathlib import Path
 import logging
 from openpyxl import load_workbook
 
-from .. import field_name_sluggify
+#from .. import field_name_sluggify
 
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=2, width=120)
 
-custom_slugify = field_name_sluggify
+# custom_slugify = field_name_sluggify
 
 logger = logging.getLogger(__name__)
 

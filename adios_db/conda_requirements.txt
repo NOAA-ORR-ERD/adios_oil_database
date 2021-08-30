@@ -1,45 +1,20 @@
 # conda requirements file for the oil_database package.
+# These are the core requirements -- not much beyond
+# Python 3.8 and numpy :-)
+
+# see the conda_requirements_optional.txt file for
+#   additional packages that might be useful
 
 # These should all be in one of the following channels:
 # 1: conda-forge
-# 2: NOAA-ORR-ERD channel
-# 3: defaults
+# 2: defaults
 
-# It would be best to have these channels configured the order of precedence
-# outlined above in your conda configuration.
+python>=3.8
 
-python=3.9.*
-numpy>=1.20
-scipy  # used for gnome oil estimation -- for now
+numpy
+# scipy can probably be removed soon
+scipy
 
-# for working with mongodb
-mongodb>=4.2.0
-pymongo>=3.11.0
-
-
-awesome-slugify>=1.6.5
-
-# for downloading/importing data
-openpyxl>=3.0.0
-python-dateutil
-# lxml>=4.4.1
-requests>=2.22.0
-
-# This provided the unit_conversion package
 # https://github.com/NOAA-ORR-ERD/PyNUCOS
-pynucos>=2.11
-
-
-# for testing and development
-pytest>=3.8.0
-pytest-cov>=2.6.0
-pytest-timeout>=1.2.1
-pytest-raises>=0.11
-yapf
-
-
-# for the docs
-sphinx
-sphinx_rtd_theme
-
+pynucos>=2.12
 
