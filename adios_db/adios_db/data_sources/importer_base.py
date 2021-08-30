@@ -3,7 +3,11 @@ from functools import wraps
 from datetime import datetime
 import logging
 
-from slugify import Slugify
+try:
+    from slugify import Slugify
+except ImportError as exc:
+    raise ImportError("You must have the awesome-slugify package to use "
+                      "this importing code.") from exc
 
 from dateutil import parser
 from itertools import zip_longest
