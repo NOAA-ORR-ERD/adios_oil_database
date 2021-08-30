@@ -1,7 +1,7 @@
 This describes which labels can be associated with specific product types,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 "Created Sept.18, 2020 by Robert",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 "Some more random crap for no good reason ,,,,,,,,,,,,,
-Anyting can be in the lines before the next one, that starts with "DATA TABLE"
+Anything can be in the lines before the next one, that starts with "DATA TABLE"
 DATA TABLE:,(data table follows this row),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 TYPE: V,LABEL ->,Crude Oil,Light Crude,Medium Crude,Heavy Crude,Bitumen Blend,Condensate,Refined Product,Fuel Oil,Distillate Fuel,Residual Fuel,Bio Fuel Oil,Jet Fuel,Kerosene,Aviation Gas,MDO,Diesel,No. 2 Fuel Oil,Home Heating Oil,IFO,HFO,Heavy Fuel Oil,No. 6 Fuel Oil,Bunker C,Group V,Lube Oil,Refinery Intermediate,Natural Plant Oil,Dielectric Oil,Transformer Oil,Tight Oil,Vacuum Gas Oil
 Crude Oil NOS,,x,x,x,x,x,,,,,,,,,,,,,,,,,,,x,,,,,,x,

@@ -23,14 +23,13 @@ def get_version(pkg_name):
 
 pkg_name = 'adios_db'
 here = Path(__file__).resolve().parent
-# here = os.path.abspath(os.path.dirname(__file__))
 README = (here / 'README.md').open().read()
 pkg_version = get_version(pkg_name)
 
 pkg_data = ["models/oil/product_types_and_labels.csv",
             "test/test_models/test_oil/example_products.csv",
-            "test/test_models/test_oil/ExampleFullRecord.json",
-            "test/data_for_testing/example_data/EC000506.json",
+            "test/data_for_testing/example_data/**/*.json",
+            "test/data_for_testing/noaa-oil-data/oil/**/*.json",
             # so the output dir will be there.
             "/test/test_models/test_oil/output/empty_file",
             ]
@@ -117,6 +116,8 @@ scripts = ['adios_db_init = adios_db.scripts.db_initialize:init_db_cmd',
            'adios_db_process_json = adios_db.scripts.process_json:run_through',
            ]
 
+print("package data is:", pkg_data)
+
 setup(name=pkg_name,
       version=pkg_version,
       description=('{}: {}'.format(pkg_name,
@@ -140,7 +141,7 @@ setup(name=pkg_name,
       keywords='adios gnome oilspill weathering trajectory modeling',
       url='',
       packages=find_packages(),
-      include_package_data=True,
+      # include_package_data=True,
       package_data={'adios_db': pkg_data},
       entry_points={'console_scripts': scripts},
       zip_safe=False,
