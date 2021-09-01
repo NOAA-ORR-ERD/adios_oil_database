@@ -1,6 +1,8 @@
 """ Cornice services.
 """
+import sys
 import logging
+import traceback
 
 import ujson
 
@@ -223,7 +225,20 @@ def update_oil(request):
         try:
             oil = validate_json(oil_obj)
         except Exception as e:
-            logger.error(f'Validation Error: {obj_id}: {e}')
+            logger.error(f'Validation Exception: '
+                         f'{obj_id}: {type(e)}: {e}')
+
+            # There are lots of places where the validation could have raised
+            # an exception.  The traceback can tell us where it happened.
+            depth = 3
+            _, _, exc_traceback = sys.exc_info()
+            tb = traceback.extract_tb(exc_traceback)
+
+            if len(tb) > depth:
+                tb = tb[-depth:]
+
+            for i in tb:
+                logger.error(f'traceback: {_trace_item(*i)}')
 
         set_completeness(oil)
         oil_obj = oil.py_json()
@@ -236,6 +251,17 @@ def update_oil(request):
         raise HTTPUnsupportedMediaType()
 
     return generate_jsonapi_response_from_oil(oil_obj)
+
+
+def _trace_item(filename, lineno, function, text):
+    '''
+        Package up the trace item information into a py_json struct.
+        Mainly this keeps the traceback parsing loop cleaner.
+    '''
+    return {'file': filename,
+            'lineno': lineno,
+            'function': function,
+            'text': text}
 
 
 @oil_api.patch()
