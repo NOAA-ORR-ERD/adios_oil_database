@@ -349,6 +349,7 @@ def generate_jsonapi_response_from_oil(oil_obj):
 
     json_obj['data']['_id'] = oil_obj['oil_id']
     json_obj['data']['type'] = 'oils'
+    json_obj['data']['attributes']['status'] = oil_obj.get('status', [])
 
     return json_obj
 
