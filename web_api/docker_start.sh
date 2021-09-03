@@ -16,6 +16,8 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git config --global user.email "adios-script@noaa.gov"
     git config --global user.name "Adios Automated Script"
 
+    # make sure both of our repo branches are current 
+    git pull origin production
     git checkout -b under_review
     git pull origin under_review
 
@@ -26,10 +28,18 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     # We don't intend to do this, so we restore it to its original state
     git checkout data/noaa-oil-data-qa_qc.csv
 
+    # stage our changes
     git add --all
+
+    # perform a commit only if there are changes
     git diff-index --quiet HEAD || git commit -m "Archiving changes to under_review from pipeline"
 
     git status
+
+    # This should incorporate any changes in the production branch that have
+    # been made outside the scope of the under_review branch, so they will be
+    # seen as changes in the under_review branch history.
+    git rebase production under_review
 
     git push origin under_review
 
