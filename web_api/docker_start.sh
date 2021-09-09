@@ -16,9 +16,14 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git config --global user.email "adios-script@noaa.gov"
     git config --global user.name "Adios Automated Script"
 
-    # make sure both of our repo branches are current 
+    # make sure both of our repo branches are current
+    echo "pulling production branch"
     git pull origin production
+
+    echo "checking out under_review branch"
     git checkout -b under_review
+
+    echo "pulling under_review branch"
     git pull origin under_review
 
     echo "Backing up the database to noaa-oil-data"
@@ -39,8 +44,10 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     # This should incorporate any changes in the production branch that have
     # been made outside the scope of the under_review branch, so they will be
     # seen as changes in the under_review branch history.
+    echo "rebase production under_review"
     git rebase production under_review
 
+    echo "pushing under_review branch"
     git push origin under_review
 
     cd -
