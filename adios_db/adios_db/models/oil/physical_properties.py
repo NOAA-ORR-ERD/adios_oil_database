@@ -36,6 +36,7 @@ class RefTempList:
         points_list = self
         data_str = self.__class__.__name__
         msgs = []
+
         # check for odd temperatures
         for pt in points_list:
             if pt.ref_temp is None:
@@ -44,16 +45,19 @@ class RefTempList:
                 return msgs
 
             temp = pt.ref_temp.converted_to('C').value
+
             if temp is None:
                 msgs.append(ERRORS["E042"]
                             .format(data_str + " reference temp"))
                 return msgs
+
             if temp < -100.0:  # arbitrary, but should catch K/C confusion
                 t = f"{pt.ref_temp.value:.2f} {pt.ref_temp.unit}"
                 msgs.append(ERRORS["E040"].format(data_str, t))
 
         # check for duplicate temp/shear_rate combos
         temps = []
+
         for p in points_list:
             temp = p.ref_temp.converted_to('K').value
             try:
@@ -61,8 +65,10 @@ class RefTempList:
             except (TypeError, AttributeError):
                 pass
             temps.append(temp)
+
         temps.sort()
         diff = (abs(t2 - t1) for t1, t2 in zip(temps[1:], temps[:1]))
+
         for d in diff:
             if d < 1e-3:
                 msgs.append(ERRORS["E050"].format("Temperatures", data_str))
@@ -77,10 +83,11 @@ class RefTempList:
                 data_name = None
 
         for pt in points_list:
-            value = getattr(pt, data_name).value
+            value = getattr(getattr(pt, data_name, None), 'value', None)
+
             try:
                 value = float(value)
-            except ValueError:
+            except (ValueError, TypeError):
                 msgs.append(ERRORS["E044"].format(value, data_name))
             else:
                 if value <= 0.0:
