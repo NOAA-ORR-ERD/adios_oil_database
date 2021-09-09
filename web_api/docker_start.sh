@@ -17,14 +17,13 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git config --global user.name "Adios Automated Script"
 
     # make sure both of our repo branches are current
-    echo "pulling production branch"
-    git pull origin production
+    echo "checkout & pull production branch"
+    git checkout production
+    git pull
 
-    echo "checking out under_review branch"
+    echo "checkout & pull under_review branch"
     git checkout -b under_review
-
-    echo "pulling under_review branch"
-    git pull origin under_review
+    git pull
 
     echo "Backing up the database to noaa-oil-data"
     adios_db_backup --config /config/config_oil_db.ini
