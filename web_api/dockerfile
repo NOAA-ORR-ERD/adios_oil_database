@@ -9,7 +9,7 @@ RUN echo "ip_resolve=4" >> /etc/yum.conf
 
 RUN yum update -y
 RUN conda update -y conda \
-    && conda update python
+    && conda update python \
     && conda clean --all
 
 COPY $KEY_FILE /root/.ssh/id_rsa
@@ -35,7 +35,7 @@ RUN cd web_api && pip install -e ./
 RUN cd docs \
     && conda install --file conda_requirements.txt \
     && make html \
-    && cp build/html ../user_docs
+    && cp build/html ../user_docs \
     && make clean
 
 RUN mkdir /config
