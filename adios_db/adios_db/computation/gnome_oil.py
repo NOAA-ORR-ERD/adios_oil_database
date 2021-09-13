@@ -443,6 +443,7 @@ def normalized_cut_values(oil):
 
     return np.asarray(avg_temp_i), est.fmasses_from_cuts(avg_evap_i)
 
+<<<<<<< HEAD
 def normalized_cut_values_james(oil, N=10):
     """
     estimate cut temperatures
@@ -482,6 +483,8 @@ def normalized_cut_values_james(oil, N=10):
     return T_i, est.fmasses_from_cuts(fevap_i)
 
 # need to replace this
+=======
+>>>>>>> removed old algorithm and scipy dependency
 def component_mass_fractions(oil):
     """
     estimate pseudocomponent mass fractions

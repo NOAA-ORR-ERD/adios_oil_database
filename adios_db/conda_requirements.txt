@@ -12,8 +12,6 @@
 python>=3.8
 
 numpy
-# scipy can probably be removed soon
-scipy
 
 # https://github.com/NOAA-ORR-ERD/PyNUCOS
 pynucos>=2.12
