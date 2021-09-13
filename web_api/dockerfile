@@ -1,15 +1,16 @@
 # Oil Database Web API Docker configuration
 #
 
-FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3
+FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
 
 ARG KEY_FILE
 
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
 RUN yum update -y
-RUN conda install -y python=3.9
-RUN conda update -y conda
+RUN conda update -y conda \
+    && conda update python
+    && conda clean --all
 
 COPY $KEY_FILE /root/.ssh/id_rsa
 RUN chmod og-rw /root/.ssh/id_rsa
@@ -24,9 +25,18 @@ COPY ./ /adios-db/
 WORKDIR adios-db
 
 # install deps
-RUN conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+RUN conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt \
+    && conda clean --all
+
 RUN cd adios_db && pip install -e ./
 RUN cd web_api && pip install -e ./
+
+# build docs
+RUN cd docs \
+    && conda install --file conda_requirements.txt \
+    && make html \
+    && cp build/html ../user_docs
+    && make clean
 
 RUN mkdir /config
 RUN cp /adios-db/oildb-deploy/config/stage/web_api/* /config/
