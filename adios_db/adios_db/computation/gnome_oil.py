@@ -441,43 +441,6 @@ def normalized_cut_values(oil):
 
     return np.asarray(avg_temp_i), est.fmasses_from_cuts(avg_evap_i)
 
-def normalized_cut_values_james(oil, N=10):
-    """
-    estimate cut temperatures
-
-    """
-    from scipy.optimize import curve_fit	#temporary
-    #f_res, f_asph, _estimated_res, _estimated_asph = inert_fractions(oil)
-    f_res = f_asph = 0
-    cuts = get_distillation_cuts(oil)
-    oil_api = oil.metadata.API
-    if len(cuts) == 0:
-        if oil.metadata.product_type != 'Crude Oil NOS':
-            print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
-        if oil_api < 0:
-            raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
-        BP_i = est.cut_temps_from_api(oil_api)
-        fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
-    else:
-        BP_i, fevap_i = list(zip(*[(c[1], c[0]) for c in cuts]))
-
-    popt, _pcov = curve_fit(_linear_curve, BP_i, fevap_i)
-    f_cutoff = _linear_curve(732.0, *popt)  # center of asymptote (< 739)
-    popt = popt.tolist() + [f_cutoff]
-
-    fevap_i = np.linspace(0.0, 1.0 - f_res - f_asph, (N * 2) + 1)[1:]
-    T_i = _inverse_linear_curve(fevap_i, *popt)
-
-    fevap_i = fevap_i.reshape(-1, 2)[:, 1]
-    T_i = T_i.reshape(-1, 2)[:, 0]
-
-    above_zero = T_i > 0.0
-    T_i = T_i[above_zero]
-    fevap_i = fevap_i[above_zero]
-
-    return T_i, est.fmasses_from_cuts(fevap_i)
-
-# need to replace this
 def component_mass_fractions(oil):
     """
     estimate pseudocomponent mass fractions
