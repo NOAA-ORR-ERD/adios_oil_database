@@ -382,7 +382,9 @@ def normalized_cut_values(oil):
         # should be a warning if api < 50 or not a crude
         oil_api = oil.metadata.API
         if oil.metadata.product_type != 'Crude Oil NOS':
-            print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
+            pass
+            # Maybe this should be a log message?
+            # print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
         if oil_api < 0:
             raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
 
@@ -453,7 +455,9 @@ def normalized_cut_values_james(oil, N=10):
     oil_api = oil.metadata.API
     if len(cuts) == 0:
         if oil.metadata.product_type != 'Crude Oil NOS':
-            print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
+            pass
+            # maybe this should be a logging message?
+            # print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
         if oil_api < 0:
             raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
         BP_i = est.cut_temps_from_api(oil_api)

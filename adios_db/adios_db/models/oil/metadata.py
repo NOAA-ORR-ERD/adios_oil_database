@@ -38,7 +38,9 @@ class MetaData:
         api = self.API
         if api is None:
             if self.product_type in DOESNT_NEED_API:
-                msgs.append(WARNINGS["W004"])
+                pass
+                # disabled this -- it was annoying
+                # msgs.append(WARNINGS["W004"])
             else:
                 msgs.append(ERRORS["E030"])
         else:

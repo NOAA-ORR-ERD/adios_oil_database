@@ -169,10 +169,11 @@ def test_no_api_crude(no_type_oil):
 
 
 def test_no_api_not_crude(no_type_oil):
+    # we've turned off these warnings
     oil = no_type_oil
     oil.metadata.product_type = "Solvent"
     validate(oil)
-    assert snippet_in_oil_status("W004:", oil)
+    assert snippet_not_in_oil_status("W004:", oil)
 
 
 def test_api_outragious(no_type_oil):
