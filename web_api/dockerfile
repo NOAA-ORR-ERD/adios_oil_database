@@ -34,8 +34,8 @@ RUN cd web_api && pip install -e ./
 # build docs
 RUN cd docs \
     && conda install --file conda_requirements.txt \
-    && sphinx-build -a -E -b html source build \
-    && cp build/html ../user_docs \
+    && sphinx-build -a -E -b html source build/html \
+    && cp -r build/html ../user_docs \
     && rm -rf build
 
 RUN mkdir /config
