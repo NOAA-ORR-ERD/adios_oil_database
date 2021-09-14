@@ -443,48 +443,7 @@ def normalized_cut_values(oil):
 
     return np.asarray(avg_temp_i), est.fmasses_from_cuts(avg_evap_i)
 
-<<<<<<< HEAD
-def normalized_cut_values_james(oil, N=10):
-    """
-    estimate cut temperatures
 
-    """
-    from scipy.optimize import curve_fit	#temporary
-    #f_res, f_asph, _estimated_res, _estimated_asph = inert_fractions(oil)
-    f_res = f_asph = 0
-    cuts = get_distillation_cuts(oil)
-    oil_api = oil.metadata.API
-    if len(cuts) == 0:
-        if oil.metadata.product_type != 'Crude Oil NOS':
-            pass
-            # maybe this should be a logging message?
-            # print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
-        if oil_api < 0:
-            raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
-        BP_i = est.cut_temps_from_api(oil_api)
-        fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
-    else:
-        BP_i, fevap_i = list(zip(*[(c[1], c[0]) for c in cuts]))
-
-    popt, _pcov = curve_fit(_linear_curve, BP_i, fevap_i)
-    f_cutoff = _linear_curve(732.0, *popt)  # center of asymptote (< 739)
-    popt = popt.tolist() + [f_cutoff]
-
-    fevap_i = np.linspace(0.0, 1.0 - f_res - f_asph, (N * 2) + 1)[1:]
-    T_i = _inverse_linear_curve(fevap_i, *popt)
-
-    fevap_i = fevap_i.reshape(-1, 2)[:, 1]
-    T_i = T_i.reshape(-1, 2)[:, 0]
-
-    above_zero = T_i > 0.0
-    T_i = T_i[above_zero]
-    fevap_i = fevap_i[above_zero]
-
-    return T_i, est.fmasses_from_cuts(fevap_i)
-
-# need to replace this
-=======
->>>>>>> removed old algorithm and scipy dependency
 def component_mass_fractions(oil):
     """
     estimate pseudocomponent mass fractions
@@ -494,23 +453,23 @@ def component_mass_fractions(oil):
     measured_sat = oil.sub_samples[0].SARA.saturates
     sat, arom, res, asph = sara_totals(oil)
     if measured_sat is not None:
-        f_sat_i = est.saturate_mass_fraction(fmass_i,cut_temps,sat)	#scale by data value
+        f_sat_i = est.saturate_mass_fraction(fmass_i, cut_temps,sat)  # scale by data value
     else:
-        f_sat_i = est.saturate_mass_fraction(fmass_i,cut_temps)
+        f_sat_i = est.saturate_mass_fraction(fmass_i, cut_temps)
     f_arom_i = fmass_i - f_sat_i
 
     f_res_i = np.zeros_like(f_sat_i)
     f_asph_i = np.zeros_like(f_sat_i)
 
-    if asph + res > f_arom_i.sum(): # something went wrong
+    if asph + res > f_arom_i.sum():  # something went wrong
         res = 0
         asph = 0
 
-    f_res_i[len(f_res_i)-1] = res
-    f_asph_i[len(f_asph_i)-1] = asph
+    f_res_i[len(f_res_i) - 1] = res
+    f_asph_i[len(f_asph_i) - 1] = asph
     f_inert = asph + res
 
-    for i in range(len(f_arom_i)-1,-1,-1):
+    for i in range(len(f_arom_i) - 1, -1, -1):
         if f_inert > 0:
             if f_arom_i[i] > f_inert:
                 f_arom_i[i] = f_arom_i[i] - f_inert
@@ -520,9 +479,10 @@ def component_mass_fractions(oil):
                 f_arom_i[i] = 0
         else:
             f_inert = f_inert * 1
-
-    mf_list = list(zip(f_sat_i, f_arom_i, f_res_i, f_asph_i))	# will want to zip all 4 together
+    # will want to zip all 4 together
+    mf_list = list(zip(f_sat_i, f_arom_i, f_res_i, f_asph_i))
     return (np.asarray(mf_list)).flatten()
+
 
 def sara_totals(oil):
     """
