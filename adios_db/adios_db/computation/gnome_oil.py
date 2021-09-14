@@ -506,7 +506,9 @@ def sara_totals(oil):
     else:
         resins_total = resins.converted_to('fraction').value
     if asphaltenes is None:
-        asphaltenes_total = est.asphaltene_fraction(density, viscosity, resins_total)
+        asphaltenes_total = est.asphaltene_fraction(density,
+                                                    viscosity,
+                                                    resins_total)
     else:
         asphaltenes_total = asphaltenes.converted_to('fraction').value
     if saturates is None:
@@ -514,10 +516,12 @@ def sara_totals(oil):
     else:
         saturates_total = saturates.converted_to('fraction').value
     if aromatics is None:
-        aromatics_total = est.aromatics_fraction(resins_total,asphaltenes_total,saturates_total)
+        aromatics_total = est.aromatics_fraction(resins_total,
+                                                 asphaltenes_total,
+                                                 saturates_total)
     else:
         aromatics_total = aromatics.converted_to('fraction').value
 
-    #print("SARA totals = ", saturates_total,aromatics_total,resins_total, asphaltenes_total)
+    # print("SARA totals = ", saturates_total,aromatics_total,resins_total, asphaltenes_total)
 
     return saturates_total, aromatics_total, resins_total, asphaltenes_total
