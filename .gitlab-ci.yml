@@ -23,7 +23,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
   tags:
     - docker
 
@@ -33,7 +33,6 @@ test_develop:
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
-    - conda install -y python=3.9
     - conda update -y conda
 
   script:
@@ -57,7 +56,7 @@ test_develop:
     - pip install -e ./
     - pytest --mongo adios_db
 
-    # Install & test the oil_library_api package
+    # Install & test the adios_db_api package
     - cd ../web_api
     - pip install -e ./
     - pytest adios_db_api

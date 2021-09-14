@@ -1,6 +1,8 @@
 mongo_files/*
+
 /StandAlone/client_code/*
 
+/user_docs
 
 .DS_Store
 ~*
