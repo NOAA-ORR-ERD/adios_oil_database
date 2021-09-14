@@ -443,7 +443,6 @@ def normalized_cut_values(oil):
 
     return np.asarray(avg_temp_i), est.fmasses_from_cuts(avg_evap_i)
 
-
 def component_mass_fractions(oil):
     """
     estimate pseudocomponent mass fractions
