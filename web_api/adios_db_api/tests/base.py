@@ -10,35 +10,16 @@ from adios_db.test.test_session.test_session import restore_test_db
 
 from adios_db_api import main
 
+from .conftest import TEST_SETTINGS
 
 class FunctionalTestBase(TestCase):
-    def get_settings(self):
-
-        settings = {'cors_policy.origins': ('http://0.0.0.0:8080\n'
-                                            'http://localhost:8080'),
-                    'pyramid.default_locale_name': 'en',
-                    'pyramid.includes': ('pyramid_tm\n'
-                                         'cornice'),
-                    'pyramid.debug_notfound': 'false',
-                    'pyramid.debug_routematch': 'false',
-                    'pyramid.debug_authorization': 'false',
-                    'pyramid.reload_templates': 'true',
-                    'mongodb.host': 'localhost',
-                    'mongodb.port': '27017',
-                    'mongodb.database': 'adios_db_test',
-                    'mongodb.alias': 'oil-db-app',
-                    'caps.can_modify_db': 'true',
-                    'install_path': '.',
-                    'help_dir': './help'
-                    }
-
-        return settings
 
     def setUp(self):
         here = os.path.dirname(__file__)
         self.project_root = os.path.abspath(os.path.dirname(here))
 
-        self.settings = self.get_settings()
+        # self.settings = self.get_settings()
+        self.settings = TEST_SETTINGS
 
         restore_test_db(self.settings)
         app = main(None, **self.settings)
