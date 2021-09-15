@@ -4,6 +4,12 @@ import { capitalize } from '@ember/string';
 
 
 export default class SubsampleMetadata extends Component {
+    constructor() {
+        super(...arguments);
+
+        this.args.oil.metadata.fraction_evaporated = this.args.oil.metadata.fraction_evaporated||{};
+    }
+
     get fractionEvaporatedUnitType() {
         let unitType = ((this.args.oil.metadata||{}).fraction_evaporated||{}).unit_type || '';
 
