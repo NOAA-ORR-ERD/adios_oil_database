@@ -5,6 +5,7 @@ export default class OilModel extends Model {
     // These attributes are used in the table columns of the search as well as
     // the full records
     @attr oil_id;
+    @attr adios_data_model_version;
     @attr metadata;
     @attr status;
     @attr sub_samples;
