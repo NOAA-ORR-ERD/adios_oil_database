@@ -1,5 +1,9 @@
-""" Cornice services.
 """
+Cornice services.
+
+This is the main service for working with oil objects.
+"""
+
 import sys
 import logging
 import traceback
@@ -15,13 +19,13 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 
 from pymongo.errors import DuplicateKeyError
 
-from adios_db.util.json import fix_bson_ids
 from adios_db.models.oil.validation.validate import validate_json
 from adios_db.models.oil.completeness import set_completeness
 
 from adios_db_api.common.views import (cors_policy,
                                        obj_id_from_url,
                                        can_modify_db)
+from adios_db_api.util import fix_bson_ids
 
 
 logger = logging.getLogger(__name__)
@@ -178,6 +182,8 @@ def insert_oil(request):
         raise HTTPBadRequest("Error validating oil JSON")
 
     try:
+        # Fixme: This needs some refactoring -- most of this functionality
+        #        should be in the adios_db.session module
         logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
 
         if 'oil_id' not in oil_obj:

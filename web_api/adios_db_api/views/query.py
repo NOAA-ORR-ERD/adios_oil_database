@@ -1,3 +1,7 @@
+"""
+Fixme: Is this being used anymore at all?
+"""
+
 import logging
 import ujson
 
@@ -5,7 +9,7 @@ from cornice import Service
 
 from pyramid.httpexceptions import HTTPBadRequest
 
-from adios_db.util.json import jsonify_model_obj
+# from adios_db.util.json import jsonify_model_obj
 
 from adios_db_api.common.views import (cors_policy,
                                        cors_exception)
@@ -47,4 +51,5 @@ def query_oils(request):
 
     log.info('<< ' + log_prefix)
 
-    return [jsonify_model_obj(o) for o in list(collection.find(query))]
+    # return [jsonify_model_obj(o) for o in list(collection.find(query))]
+    return [o for o in list(collection.find(query))]

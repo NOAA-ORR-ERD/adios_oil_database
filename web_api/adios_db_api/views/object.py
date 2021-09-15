@@ -1,5 +1,8 @@
 """ Cornice services.
 """
+
+# Fixme: is this required for anything
+
 import logging
 
 from cornice import Service
@@ -7,10 +10,9 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 
 from bson.objectid import ObjectId
 
-from adios_db.util.json import fix_bson_ids
 
 from adios_db_api.common.views import cors_policy, obj_id_from_url
-
+from adios_db_api.util import fix_bson_ids
 
 logger = logging.getLogger(__name__)
 
