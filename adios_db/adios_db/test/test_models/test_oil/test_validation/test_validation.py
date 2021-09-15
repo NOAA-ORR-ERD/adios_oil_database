@@ -23,9 +23,11 @@ from adios_db.scripting import get_all_records
 
 HERE = Path(__file__).parent
 
-TEST_DATA_DIR = HERE.parent.parent.parent / "data_for_testing" / "noaa-oil-data" / "oil"
+TEST_DATA_DIR = (HERE.parent.parent.parent /
+                 "data_for_testing" / "noaa-oil-data" / "oil")
 
-BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
+BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json",
+                            encoding="utf-8"))
 
 
 @pytest.fixture
@@ -52,7 +54,7 @@ def minimal_oil():
 def test_validation_doesnt_change_oil(big_record):
     orig = copy.deepcopy(big_record)
 
-    msgs = orig.validate()
+    orig.validate()
     # gnome_suitable may have been reset
     big_record.metadata.gnome_suitable = orig.metadata.gnome_suitable
     assert orig == big_record
@@ -90,15 +92,65 @@ def snippet_not_in_oil_status(snippet, oil):
     return not snippet_in_oil_status(snippet, oil)
 
 
-def test_no_id():
-    """
-    should get a particular ValueError if you try an invalid dict
-    """
-    try:
-        validate_json({"this": 3})
-    except ValueError as err:
-        print(str(err))
-        assert ("E010: Record has no oil_id: every record must have an ID" in str(err))
+class TestFromPyJson:
+    def test_sample_metadata(self):
+        oil = Oil.from_py_json({
+            'oil_id': "XX123456",
+            'metadata': {
+                'name': "An oil name"
+            },
+            'sub_samples': [
+                {'metadata': {
+                    'fraction_evaporated': {'value': 11, 'unit': '%',
+                                            'unit_type': 'massfraction'}
+                 }
+                 }
+            ]
+        })
+
+        print(oil.sub_samples[0].metadata)
+        print(oil.sub_samples[0].metadata.fraction_evaporated)
+
+        assert len(oil.sub_samples) > 0
+        assert oil.sub_samples[0].metadata.name == 'Fresh Oil Sample'
+        assert oil.sub_samples[0].metadata.short_name == 'Fresh Oil'
+        assert oil.sub_samples[0].metadata.fraction_evaporated is not None
+
+
+class TestValidateJson:
+    def test_no_id(self):
+        """
+        should get a particular ValueError if you try an invalid dict
+        """
+        try:
+            validate_json({"this": 3})
+        except ValueError as err:
+            print(str(err))
+            assert ("E010: Record has no oil_id: every record must have an ID"
+                    in str(err))
+
+    def test_sample_metadata(self):
+        oil = validate_json({
+            'oil_id': "XX123456",
+            'metadata': {
+                'name': "An oil name"
+            },
+            'sub_samples': [
+                {'metadata': {
+                    'fraction_evaporated': {'value': 11, 'unit': '%',
+                                            'unit_type': 'massfraction'}
+                 }
+                 }
+            ]
+        })
+
+        print(oil.sub_samples[0].metadata)
+        print(oil.sub_samples[0].metadata.fraction_evaporated)
+
+        assert len(oil.sub_samples) > 0
+        assert oil.sub_samples[0].metadata.name == 'Fresh Oil Sample'
+        assert oil.sub_samples[0].metadata.short_name == 'Fresh Oil'
+        assert oil.sub_samples[0].metadata.fraction_evaporated is not None
 
 
 @pytest.mark.parametrize("name", [
@@ -217,6 +269,7 @@ def test_API_density_missmatch(minimal_oil):
 
     density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
     API = uc.convert('kg/m^3', 'API', density_at_60F)
+
     print(f"{density_at_60F=}")
     print(f"{API=}")
     print(f"{minimal_oil.metadata.API=}")
@@ -266,7 +319,6 @@ def test_no_densities_with_density(big_record):
 
 def test_no_densities(big_record):
     oil = big_record
-    #print(oil.sub_samples[0])
 
     pp = oil.sub_samples[0].physical_properties
     del pp.densities[:]
@@ -283,7 +335,8 @@ def test_bad_value_in_dist_temp(big_record):
     validate(oil)
     print(oil.status)
 
-    assert snippet_in_oil_status("E040: Value for distillation vapor temp", oil)
+    assert snippet_in_oil_status("E040: Value for distillation vapor temp",
+                                 oil)
 
 
 # No longer checking for distillation cuts.

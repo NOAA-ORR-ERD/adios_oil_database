@@ -11,6 +11,7 @@ from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DensityPoint,
                                                      DensityList,
                                                      )
+from adios_db.models.oil.validation.validate import validate_json
 
 
 class TestSample:
@@ -107,7 +108,7 @@ class TestSample:
         )
         p = PhysicalProperties()
 
-        s.metadata.fraction_evaporated = 0.23
+        s.metadata.fraction_evaporated = MassFraction(value=11, unit='%')
         s.metadata.boiling_point_range = None
 
         p.densities = DensityList([
@@ -157,6 +158,43 @@ class TestSample:
         assert type(dens) == list
         assert dens[0]['density']['value'] == 0.8751
 
+
+class TestSampleFromJson:
+    def test_metadata(self):
+        s = Sample.from_py_json({
+            'metadata': {
+                'name': 'Fresh Oil Sample',
+                'short_name': 'Fresh Oil',
+                'fraction_evaporated': {
+                    'value': 11,
+                    'unit': '%',
+                    'unit_type': 'massfraction'
+                }
+            }
+        })
+
+        for attr in ('CCME',
+                     'ESTS_hydrocarbon_fractions',
+                     'SARA',
+                     'bulk_composition',
+                     'compounds',
+                     'cut_volume',
+                     'distillation_data',
+                     'environmental_behavior',
+                     'extra_data',
+                     'headspace_analysis',
+                     'industry_properties',
+                     'metadata',
+                     'miscellaneous',
+                     'physical_properties'):
+            assert hasattr(s, attr)
+
+        assert s.metadata.name == 'Fresh Oil Sample'
+        assert s.metadata.short_name == 'Fresh Oil'
+        assert s.metadata.fraction_evaporated.value == 11
+        assert s.metadata.fraction_evaporated.unit == '%'
+
+
 def test_sample_with_ccme():
     """
     testing loading a sample with ccme data from py_json
@@ -180,7 +218,6 @@ def test_sample_with_ccme():
     sample_json = s.py_json()
 
     s2 = Sample.from_py_json(sample_json)
-
 
     assert s == s2
 
