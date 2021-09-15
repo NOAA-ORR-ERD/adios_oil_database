@@ -24,7 +24,8 @@ def validate_json(oil_json):
 
     An Oil object is returned, if it's possible to do so.
 
-    The "status" field is updated in place, with no other alterations of the record
+    The "status" field is updated in place, with no other alterations
+    of the record
     """
 
     if "oil_id" not in oil_json:

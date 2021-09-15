@@ -48,7 +48,8 @@ class MetaData:
                 msgs.append(WARNINGS["W005"].format(api=api))
 
         # Check for a reasonable name
-        # right now, reasonable is more than 5 characters -- we may want to add more later
+        # right now, reasonable is more than 5 characters -- we may want to add
+        # more later
         if len(self.name.strip()) < 2:
             msgs.append(WARNINGS["W001"].format(self.name))
 
@@ -57,7 +58,9 @@ class MetaData:
             try:
                 datetime.fromisoformat(self.sample_date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"].format("sample date", self.sample_date, str(err)))
+                msgs.append(WARNINGS["W011"].format("sample date",
+                                                    self.sample_date,
+                                                    str(err)))
         return msgs
 
 
