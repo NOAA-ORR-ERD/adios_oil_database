@@ -2,7 +2,7 @@ import sys
 from logging import (basicConfig, getLogger, NullHandler,
                      DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
-__version__ = "0.7.0"
+__version__ = "0.7.1"
 
 
 def initialize_console_log(level='debug'):
