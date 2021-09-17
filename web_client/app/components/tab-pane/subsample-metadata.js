@@ -17,6 +17,12 @@ export default class SubsampleMetadata extends Component {
     }
 
     @action
+    updateFractionEvaporated(fractionEvaporated) {
+        set(this.args.oil.metadata, 'fraction_evaporated', fractionEvaporated);
+        this.args.submit(this.args.oil);
+    }
+
+    @action
     updateDescription(event) {
         set(this.args.oil.metadata, 'description', event.target.value);
         this.args.submit(this.args.oil);
