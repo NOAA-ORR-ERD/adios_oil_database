@@ -99,9 +99,9 @@ def test_solubility():
 
     assert data['solubility'] == 0
 
+# not being used -- we can add back if needed
+# def test_k0y():
 
-def test_k0y():
+#     data = make_gnome_oil(FullOil)
 
-    data = make_gnome_oil(FullOil)
-
-    assert data['k0y'] == 2.024e-06
+#     assert data['k0y'] == 2.024e-06

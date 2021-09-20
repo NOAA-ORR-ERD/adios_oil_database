@@ -144,7 +144,8 @@ def make_gnome_oil(oil):
     #go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
     go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
     go['solubility'] = 0
-    go['k0y'] = 2.024e-06 #do we want this included?
+    # k0y is not currently used -- not sure what it is?
+    # go['k0y'] = 2.024e-06 #do we want this included?
 
     # pseudocomponents
     cut_temps, frac_evap = normalized_cut_values(oil)
