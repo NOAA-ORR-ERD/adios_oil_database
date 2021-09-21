@@ -59,7 +59,8 @@ export default class NewOilQuery extends Component {
     }, {
         label: 'Location',
         valuePath: 'metadata.location',
-        minResizeWidth: 100,
+        width: '16em',
+        minResizeWidth: '16em',
         classNames: 'text-nowrap',
         searchable: true,
         resizable: true,
