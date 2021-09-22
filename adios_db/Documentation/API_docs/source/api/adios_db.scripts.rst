@@ -57,10 +57,10 @@ adios\_db.scripts.oil\_query module
    :undoc-members:
    :show-inheritance:
 
-adios\_db.scripts.run\_json\_through\_oil\_object module
---------------------------------------------------------
+adios\_db.scripts.process\_json module
+--------------------------------------
 
-.. automodule:: adios_db.scripts.run_json_through_oil_object
+.. automodule:: adios_db.scripts.process_json
    :members:
    :undoc-members:
    :show-inheritance:
@@ -73,10 +73,10 @@ adios\_db.scripts.update\_test\_data module
    :undoc-members:
    :show-inheritance:
 
-adios\_db.scripts.validation\_report module
--------------------------------------------
+adios\_db.scripts.validate module
+---------------------------------
 
-.. automodule:: adios_db.scripts.validation_report
+.. automodule:: adios_db.scripts.validate
    :members:
    :undoc-members:
    :show-inheritance:
