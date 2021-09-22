@@ -1,4 +1,14 @@
-# The Oil Database Session object
+"""
+ADIOS DB Session object
+
+This module encapsulates a MongoDB session for use behind the WebAPI,
+or other uses that require high performance querying, etc.
+
+In theory this same Session object could be duck typed to use a
+different back-end: RDBMS, simple file store, etc.
+"""
+
+
 from numbers import Number
 import warnings
 from pymongo import MongoClient, ASCENDING, DESCENDING
@@ -10,18 +20,19 @@ from ..models.oil.completeness import set_completeness
 
 class CursorWrapper():
     '''
-        Wraps a mongodb cursor to provide an iterator that we can do some
-        filtering on, while not losing all its methods
+    Wraps a mongodb cursor to provide an iterator that we can do some
+    filtering on, while not losing all its methods
 
-        At this point, all it's doing is removing the _id key
+    At this point, all it's doing is removing the _id key
 
-        Seems like a lot of effort for that, but the alternative is to realize
-        the entire thing into a list -- which may be a bad idea.
+    Seems like a lot of effort for that, but the alternative is to realize
+    the entire thing into a list -- which may be a bad idea.
 
-        Rant: why doesn't a mongo cursor have a __len__ rather than using
-              .count() to make it more like a regular Sequence?
+    Rant-- Why doesn't a mongo cursor have a __len__ rather than using
+    .count() to make it more like a regular Sequence?
 
-              oh, and now count() is deprecated as well!
+    oh, and now ``count()`` is deprecated as well, but I haven't
+    figured out what to replace it with.
     '''
     def __init__(self, cursor):
         self.cursor = cursor
@@ -87,9 +98,9 @@ class Session():
 
     def delete_oil(self, oil_id):
         '''
-            delete an oil record from the oil collection
+        Delete an oil record from the oil collection.
 
-            :param oil_id: an Oil identifier
+        :param oil_id: an Oil identifier
         '''
         return self.oil.delete_one({'oil_id': oil_id}).deleted_count
 
@@ -124,19 +135,24 @@ class Session():
 
         return json_obj
 
-    def new_oil_id(self):
-        '''
-            Query the database for the next highest ID with a prefix of XX
-            The current implementation is to walk the oil IDs, filter for the
-            prefix, and choose the max numeric content.
+    def new_oil_id(self, id_prefix='XX'):
+        """
+        Query the database for the next highest ID with the given prefix.
 
-            Warning: We don't expect a lot of traffic POST'ing a bunch new oils
-                     to the database, it will only happen once in awhile.
-                     But this is not the most effective way to do this.
-                     A persistent incremental counter would be much faster.
-                     In fact, this is a bit brittle, and would fail if the
-                     website suffered a bunch of POST requests at once.
-        '''
+        The current implementation is to walk the oil IDs, filter for the
+        prefix, and choose the max numeric content.
+
+        :param id_prefix='XX': The ID prefix to use. Each prefix is code
+            that indicates something about the source. IDs are a two
+            letter code followed by 5 digits with leading zeros. "XX"
+            is the default for records of unknown provenance
+
+        *Warning:* We don't expect a lot of traffic POST'ing a bunch new oils to
+        the database, it will only happen once in awhile. But this is not the
+        most effective way to do this. A persistent incremental counter would
+        be much faster. In fact, this is a bit brittle, and would fail if the
+        website suffered a bunch of POST requests at once.
+        """
         id_prefix = 'XX'
         max_seq = 0
 
@@ -161,15 +177,15 @@ class Session():
 
     def update_oil(self, oil):
         '''
-            Update an oil record in the oil collection
+        Update an oil record in the oil collection
 
-            :param oil: an Oil object to update
+        :param oil: an Oil object to update
 
-            :param overwrite=False: whether to overwrite an existing
-                                    record if it already exists.
+        :param overwrite=False: whether to overwrite an existing
+                                record if it already exists.
         '''
         if not isinstance(oil, Oil):
-            # assume a json object
+            # assume a json-compatible dict
             oil = Oil.from_py_json(oil)
 
         oil.reset_validation()
@@ -194,8 +210,6 @@ class Session():
 
         :returns: an iterator of dicts (json-compatible) of the data asked for
 
-
-        Where:
 
         **Filtering**
 
@@ -224,8 +238,9 @@ class Session():
                 gnome_suitable boolean field to filter the results.  A None
                 value means do not filter.
 
-        **sort options:** A list of options consisting of ('field_name',
-                                                           'direction')
+        **sort options:**
+
+        A list of options consisting of ``('field_name', 'direction')``
 
             field_name:
                 The name of a field to be used for sorting.  Dotted
