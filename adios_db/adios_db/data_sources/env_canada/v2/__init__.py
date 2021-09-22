@@ -4,6 +4,6 @@ to import the file:
 
 ``ests_data_03-03-2021.csv``
 '''
-from .reader import EnvCanadaCsvFile, InvalidFileException
+from .reader import EnvCanadaCsvFile, InvalidFileError
 from .parser import EnvCanadaCsvRecordParser
 from .mapper import EnvCanadaCsvRecordMapper

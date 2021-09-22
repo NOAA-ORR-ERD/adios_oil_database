@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import logging
 
-from adios_db.data_sources import CsvFile
+from ...reader import CsvFile
 
 
 logger = logging.getLogger(__name__)
 
 
-class InvalidFileException(Exception):
+class InvalidFileError(Exception):
     '''
         Error trying to open a file that is non-compliant with the Env. Canada
         .csv format.
@@ -69,7 +69,7 @@ class EnvCanadaCsvFile(CsvFile):
         super().__init__(name)
 
         if len(self.field_names) != 23:
-            raise InvalidFileException('Fields are invalid for an '
+            raise InvalidFileError('Fields are invalid for an '
                                        'Environment Canada .csv file')
 
     def get_records(self):

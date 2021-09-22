@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from adios_db.data_sources import CsvFile
+from adios_db.data_sources.reader import CsvFile
 
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
