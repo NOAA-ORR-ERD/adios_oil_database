@@ -127,7 +127,7 @@ class Oil:
         try:
             self._validate_id(self.oil_id)
         except ValueError:
-            msgs.append(ERRORS["E001"].format(self.oil_id))
+            msgs.append(ERRORS["E011"].format(self.oil_id))
 
         # check if API matches density
         API = self.metadata.API

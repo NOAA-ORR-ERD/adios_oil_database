@@ -37,5 +37,5 @@ def create_indices(db):
         print('Could not connect to MongoDB!')
         raise
     except Exception:
-        print('Failed to drop Oil database!')
+        print('Failed to create indexes for Oil database!')
         raise

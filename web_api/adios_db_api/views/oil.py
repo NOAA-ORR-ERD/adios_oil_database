@@ -187,7 +187,7 @@ def insert_oil(request):
         logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
 
         if 'oil_id' not in oil_obj:
-            oil_obj['oil_id'] = new_oil_id(request)
+            oil_obj['oil_id'] = request.mdb_client.new_oil_id()
 
         oil = validate_json(oil_obj)
         set_completeness(oil)
@@ -301,43 +301,6 @@ def delete_oil(request):
         return res
     else:
         raise HTTPBadRequest()
-
-
-def new_oil_id(request):
-    # fixme: this should be in the adios_db package
-    '''
-        Query the database for the next highest ID with a prefix of XX
-        The current implementation is to walk the oil IDs, filter for the
-        prefix, and choose the max numeric content.
-
-        Warning: We don't expect a lot of traffic POST'ing a bunch new oils
-                 to the database, it will only happen once in awhile.
-                 But this is not the most effective way to do this.
-                 A persistent incremental counter would be much faster.
-                 In fact, this is a bit brittle, and would fail if the website
-                 suffered a bunch of POST requests at once.
-    '''
-    id_prefix = 'XX'
-    max_seq = 0
-
-    cursor = (request.mdb_client.oil
-              .find({'oil_id': {'$regex': '^{}'.format(id_prefix)}},
-                    {'oil_id'}))
-
-    for row in cursor:
-        oil_id = row['oil_id']
-
-        try:
-            oil_seq = int(oil_id[len(id_prefix):])
-        except ValueError:
-            print('ValuError: continuing...')
-            continue
-
-        max_seq = oil_seq if oil_seq > max_seq else max_seq
-
-    max_seq += 1  # next in the sequence
-
-    return '{}{:06d}'.format(id_prefix, max_seq)
 
 
 def get_oil_from_json_req(json_obj):

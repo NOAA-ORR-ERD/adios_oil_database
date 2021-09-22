@@ -3,7 +3,9 @@ from numbers import Number
 import warnings
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
+from ..models.oil.oil import Oil
 from ..models.oil.product_type import types_to_labels
+from ..models.oil.completeness import set_completeness
 
 
 class CursorWrapper():
@@ -57,31 +59,109 @@ class CursorWrapper():
 
 
 class Session():
-
     sort_direction = {'asc': ASCENDING,
                       'ascending': ASCENDING,
                       'desc': DESCENDING,
                       'descending': DESCENDING}
 
     def __init__(self, host, port, database):
-        """
-        Initialize a mongodb backed session
+        '''
+            Initialize a mongodb backed session
 
-        :param host: hostname of mongo server
-        :param port: port of mongo server
-        :param database: database name used for this data.
-        """
+            :param host: hostname of mongo server
+            :param port: port of mongo server
+            :param database: database name used for this data.
+        '''
         self.mongo_client = MongoClient(host=host, port=port)
 
         self.db = getattr(self.mongo_client, database)
         self.oil = self.db.oil  # the oil collection
+
+    def get_oil(self, oil_id):
+        '''
+            get an oil record from the oil collection
+
+            :param oil_id: an Oil identifier
+        '''
+        return self.oil.find_one({'oil_id': oil_id})
+
+    def delete_oil(self, oil_id):
+        '''
+            delete an oil record from the oil collection
+
+            :param oil_id: an Oil identifier
+        '''
+        return self.oil.delete_one({'oil_id': oil_id}).deleted_count
+
+    def insert_oil(self, oil):
+        """
+        add a new oil record to the oil collection
+
+        :param oil: an Oil object to add
+
+        :param overwrite=False: whether to overwrite an existing
+                                record if it already exists.
+        """
+        if isinstance(oil, Oil):
+            if oil.oil_id in ('', None):
+                oil.oil_id = self.new_oil_id()
+        else:
+            # assume a json object
+            if ('oil_id' not in oil or
+                    oil['oil_id'] in ('', None)):
+                oil['oil_id'] = self.new_oil_id()
+
+            oil = Oil.from_py_json(oil)
+
+        oil.reset_validation()
+        set_completeness(oil)
+
+        json_obj = oil.py_json()
+        json_obj['_id'] = oil.oil_id
+
+        return self.oil.insert_one(json_obj).inserted_id
+
+    def new_oil_id(self):
+        '''
+            Query the database for the next highest ID with a prefix of XX
+            The current implementation is to walk the oil IDs, filter for the
+            prefix, and choose the max numeric content.
+
+            Warning: We don't expect a lot of traffic POST'ing a bunch new oils
+                     to the database, it will only happen once in awhile.
+                     But this is not the most effective way to do this.
+                     A persistent incremental counter would be much faster.
+                     In fact, this is a bit brittle, and would fail if the
+                     website suffered a bunch of POST requests at once.
+        '''
+        id_prefix = 'XX'
+        max_seq = 0
+
+        cursor = (self.oil
+                  .find({'oil_id': {'$regex': '^{}'.format(id_prefix)}},
+                        {'oil_id'}))
+
+        for row in cursor:
+            oil_id = row['oil_id']
+
+            try:
+                oil_seq = int(oil_id[len(id_prefix):])
+            except ValueError:
+                print('ValuError: continuing...')
+                continue
+
+            max_seq = oil_seq if oil_seq > max_seq else max_seq
+
+        max_seq += 1  # next in the sequence
+
+        return '{}{:06d}'.format(id_prefix, max_seq)
 
     def query(self, oil_id=None,
               text=None, api=None, labels=None, product_type=None,
               gnome_suitable=None,
               sort=None, sort_case_sensitive=False, page=None,
               projection=None,
-              **kwargs):
+              **_kwargs):
         '''
         Query the database according to various criteria
 
@@ -150,14 +230,15 @@ class Session():
             status and labels array fields, at least not in a simple way.
 
         '''
-        filter_opts = self.filter_options(oil_id, text, api, labels,
-                                          product_type, gnome_suitable)
+        filter_opts = self._filter_options(oil_id, text, api, labels,
+                                           product_type, gnome_suitable)
 
-        sort = self.sort_options(sort)
+        sort = self._sort_options(sort)
 
         if projection is not None:
             # make sure we always get the oil_id
             projection = ['oil_id'] + list(projection)
+
         ret = self.oil.find(filter=filter_opts, projection=projection)
 
         if sort is not None:
@@ -166,76 +247,34 @@ class Session():
 
             ret = ret.sort(sort)
 
-        start, stop = self.parse_interval_arg(page)
+        start, stop = self._parse_interval_arg(page)
 
         return CursorWrapper(ret[start:stop])
 
-    def filter_options(self, oil_id, text, api, labels, product_type,
-                       gnome_suitable):
-        filter_opts = {}
-        filter_opts.update(self.id_arg(oil_id))
-        filter_opts.update(self.text_arg(text))
-        filter_opts.update(self.api_arg(api))
-        filter_opts.update(self.product_type_arg(product_type))
-        filter_opts.update(self.labels_arg(labels))
-        filter_opts.update(self.gnome_suitable_arg(gnome_suitable))
-
-        return filter_opts
-
-    def sort_options(self, sort):
+    def _sort_options(self, sort):
         if sort is None:
             return sort
         else:
             return [(opt[0], self.sort_direction.get(opt[1], ASCENDING))
                     for opt in sort]
 
-    def id_arg(self, obj_id):
+    def _filter_options(self, oil_id, text, api, labels, product_type,
+                        gnome_suitable):
+        filter_opts = {}
+        filter_opts.update(self._id_arg(oil_id))
+        filter_opts.update(self._text_arg(text))
+        filter_opts.update(self._api_arg(api))
+        filter_opts.update(self._product_type_arg(product_type))
+        filter_opts.update(self._labels_arg(labels))
+        filter_opts.update(self._gnome_suitable_arg(gnome_suitable))
+
+        return filter_opts
+
+    def _id_arg(self, obj_id):
         return {} if obj_id is None else {'oil_id': obj_id}
 
-    def id_filter_arg(self, obj_id):
-        if obj_id is None:
-            return {}
-        else:
-            return {'oil_id': {'$regex': obj_id, '$options': 'i'}}
-
-    def name_arg(self, name):
-        if name is None:
-            return {}
-        else:
-            return {'metadata.name': {'$regex': name, '$options': 'i'}}
-
-    def location_arg(self, location):
-        if location is None:
-            return {}
-        else:
-            return {'metadata.location': {'$regex': location, '$options': 'i'}}
-
-    def alternate_names_arg(self, name):
-        if name is None:
-            return {}
-        else:
-            return {'metadata.alternate_names': {'$elemMatch': {
-                '$regex': name, '$options': 'i'
-            }}}
-
-    def text_arg(self, text_to_match):
-        if text_to_match is None:
-            return {}
-        else:
-            ret = []
-
-            for w in text_to_match.split():
-                ret.append(self.make_inclusive([self.id_filter_arg(w),
-                                                self.name_arg(w),
-                                                self.location_arg(w),
-                                                self.alternate_names_arg(w)]))
-
-            ret = self.make_exclusive(ret)
-
-            return ret
-
-    def api_arg(self, apis):
-        low, high = self.parse_interval_arg(apis)
+    def _api_arg(self, apis):
+        low, high = self._parse_interval_arg(apis)
 
         if low is not None and high is not None:
             return {'metadata.API': {'$gte': low, '$lte': high}}
@@ -246,13 +285,13 @@ class Session():
         else:
             return {}
 
-    def product_type_arg(self, product_type):
+    def _product_type_arg(self, product_type):
         if product_type is None:
             return {}
         else:
             return {'metadata.product_type': product_type}
 
-    def labels_arg(self, labels):
+    def _labels_arg(self, labels):
         if labels is None:
             labels = []
         elif isinstance(labels, str):
@@ -261,12 +300,12 @@ class Session():
         if len(labels) == 1:
             return {'metadata.labels': {'$in': labels}}
         elif len(labels) > 1:
-            return self.make_inclusive([{'metadata.labels': {'$in': [l]}}
+            return self._make_inclusive([{'metadata.labels': {'$in': [l]}}
                                         for l in labels])
         else:
             return {}
 
-    def gnome_suitable_arg(self, gnome_suitable):
+    def _gnome_suitable_arg(self, gnome_suitable):
         if gnome_suitable is None:
             return {}
         else:
@@ -278,7 +317,49 @@ class Session():
             return {'metadata.gnome_suitable': {'$exists': True,
                                                 '$eq': gnome_suitable}}
 
-    def parse_interval_arg(self, interval):
+    def _text_arg(self, text_to_match):
+        if text_to_match is None:
+            return {}
+        else:
+            ret = []
+
+            for w in text_to_match.split():
+                ret.append(self._make_inclusive([self._id_filter_arg(w),
+                                                self._name_arg(w),
+                                                self._location_arg(w),
+                                                self._alternate_names_arg(w)]))
+
+            ret = self._make_exclusive(ret)
+
+            return ret
+
+    def _id_filter_arg(self, obj_id):
+        if obj_id is None:
+            return {}
+        else:
+            return {'oil_id': {'$regex': obj_id, '$options': 'i'}}
+
+    def _name_arg(self, name):
+        if name is None:
+            return {}
+        else:
+            return {'metadata.name': {'$regex': name, '$options': 'i'}}
+
+    def _location_arg(self, location):
+        if location is None:
+            return {}
+        else:
+            return {'metadata.location': {'$regex': location, '$options': 'i'}}
+
+    def _alternate_names_arg(self, name):
+        if name is None:
+            return {}
+        else:
+            return {'metadata.alternate_names': {'$elemMatch': {
+                '$regex': name, '$options': 'i'
+            }}}
+
+    def _parse_interval_arg(self, interval):
         '''
         An interval argument can be a number, string, or list
 
@@ -316,7 +397,7 @@ class Session():
 
         return low, high
 
-    def make_inclusive(self, opts):
+    def _make_inclusive(self, opts):
         '''
             Normally, the filtering options will be exclusive, i. e. if we are
             searching on name='alaska' and location='north', we would only get
@@ -329,7 +410,7 @@ class Session():
         else:
             return {'$or': opts}
 
-    def make_exclusive(self, opts):
+    def _make_exclusive(self, opts):
         '''
             Normally, the filtering options will be exclusive, i.e. if we are
             searching on name='alaska' and location='north', we would only get
@@ -376,19 +457,6 @@ class Session():
             label = [i for i in labels if i['_id'] == identifier]
 
             return label[0] if len(label) > 0 else None
-
-    def insert_oil_record(self, oil, overwrite=False):
-        """
-        add a new oil record to the oil collection
-
-        :param oil: an Oil object to add
-
-        :param overwrite=False: whether to overwrite an existing
-                                record if it already exists.
-        """
-        obj = oil.py_json()
-
-        self.oil.insert_one(obj)
 
     def __getattr__(self, name):
         # FixMe: This should be fully hiding the mongo client
