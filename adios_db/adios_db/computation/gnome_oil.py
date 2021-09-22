@@ -20,7 +20,7 @@ from adios_db.computation import estimations as est
 from .physical_properties import get_density_data, get_kinematic_viscosity_data, get_distillation_cuts
 from .physical_properties import bullwinkle_fraction, max_water_fraction_emulsion
 from .physical_properties import Density, KinematicViscosity
-from .estimations import pour_point_from_kvis, flash_point_from_bp, flash_point_from_api
+from .estimations import pour_point_from_kvis
 
 
 def get_empty_dict():
@@ -49,7 +49,6 @@ def get_empty_dict():
            "molecular_weight": [],
            "component_density": [],
            "sara_type": [],
-           "flash_point": None,
            "adios_oil_id": None,
            }
 
@@ -81,7 +80,6 @@ def make_gnome_oil(oil):
               "molecular_weight,
               "component_density,
               "sara_type,
-              "flash_point=None,
               "adios_oil_id=None,
 
     """
@@ -100,18 +98,6 @@ def make_gnome_oil(oil):
 
     # Physical properties
     phys_props = oil.sub_samples[0].physical_properties
-
-    flash_point = phys_props.flash_point
-    if flash_point is None:
-        go['flash_point'] = None
-    else:
-        fp = phys_props.flash_point.measurement.converted_to('K')
-        if fp.max_value is not None:
-            go['flash_point'] = fp.max_value
-        elif fp.value is not None:
-            go['flash_point'] = fp.value
-        else:  # shouldn't happen, but ...
-            go['flash_point'] = None
 
     pour_point = phys_props.pour_point
     if pour_point is None:
@@ -158,7 +144,8 @@ def make_gnome_oil(oil):
     #go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
     go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
     go['solubility'] = 0
-    go['k0y'] = 2.024e-06 #do we want this included?
+    # k0y is not currently used -- not sure what it is?
+    # go['k0y'] = 2.024e-06 #do we want this included?
 
     # pseudocomponents
     cut_temps, frac_evap = normalized_cut_values(oil)
@@ -198,30 +185,6 @@ def estimate_pour_point(oil):
     return pour_point
 
 
-def estimate_flash_point(oil):
-    """
-    estimate flash point from api or boiling point
-
-    """
-
-    oil_api = oil.metadata.API
-
-    cuts = get_distillation_cuts(oil)
-
-    # fixme: if we do need this, we should have a better way to get
-    #        boiling point -- the first cut is not necessarily the BP!
-    #        the IBP is stored in the distillation record, if it is known.
-    if len(cuts) > 2:
-        lowest_cut = cuts[0]
-        flash_point = flash_point_from_bp(lowest_cut[1])
-    elif oil_api is not None:
-        flash_point = flash_point_from_api(oil_api)
-    else:
-        flash_point = None
-
-    return flash_point
-
-
 def component_temps(cut_temps, N=10):
     """
     component temps from boiling point
@@ -232,6 +195,7 @@ def component_temps(cut_temps, N=10):
     new_temps = component_temps[len_ct:].copy()
 
     return np.asarray(new_temps)
+
 
 def component_types(cut_temps, N=10):
     """
@@ -251,11 +215,11 @@ def component_densities(boiling_points):
 
     """
     rho_list = list(zip(est.saturate_densities(boiling_points),
-                  est.aromatic_densities(boiling_points),
-                  est.resin_densities(boiling_points),
-                  est.asphaltene_densities(boiling_points)))
+                        est.aromatic_densities(boiling_points),
+                        est.resin_densities(boiling_points),
+                        est.asphaltene_densities(boiling_points)))
 
-    return (np.asarray(rho_list)).flatten()
+    return np.array(rho_list, dtype=np.float64).flatten()
 
 
 def component_mol_wt(boiling_points):
@@ -264,9 +228,9 @@ def component_mol_wt(boiling_points):
 
     """
     mw_list = list(zip(est.saturate_mol_wt(boiling_points),
-                  est.aromatic_mol_wt(boiling_points),
-                  est.resin_mol_wt(boiling_points),
-                  est.asphaltene_mol_wt(boiling_points)))
+                       est.aromatic_mol_wt(boiling_points),
+                       est.resin_mol_wt(boiling_points),
+                       est.asphaltene_mol_wt(boiling_points)))
 
     return (np.asarray(mw_list)).flatten()
 
@@ -382,7 +346,9 @@ def normalized_cut_values(oil):
         # should be a warning if api < 50 or not a crude
         oil_api = oil.metadata.API
         if oil.metadata.product_type != 'Crude Oil NOS':
-            print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
+            pass
+            # Maybe this should be a log message?
+            # print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
         if oil_api < 0:
             raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
 
@@ -453,7 +419,9 @@ def normalized_cut_values_james(oil, N=10):
     oil_api = oil.metadata.API
     if len(cuts) == 0:
         if oil.metadata.product_type != 'Crude Oil NOS':
-            print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
+            pass
+            # maybe this should be a logging message?
+            # print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
         if oil_api < 0:
             raise ValueError("Density is too large for estimations. Oil not suitable for use in Gnome")
         BP_i = est.cut_temps_from_api(oil_api)

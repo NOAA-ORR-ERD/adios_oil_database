@@ -42,3 +42,30 @@ def test_bad_sample_date():
     print(msgs)
 
     assert snippet_in_oil_status("W011", msgs)
+
+
+def test_missing_API_crude():
+    md = MetaData()
+    md.product_type = "Crude Oil NOS"
+
+    msgs = md.validate()
+
+    print(msgs)
+
+    assert snippet_in_oil_status("E030", msgs)
+
+
+def test_missing_API_solvent():
+    md = MetaData()
+    md.product_type = "Solvent"
+
+    msgs = md.validate()
+
+    print(msgs)
+
+    assert snippet_not_in_oil_status("E030", msgs)
+    # turned this off
+    assert snippet_not_in_oil_status("W004", msgs)
+
+
+

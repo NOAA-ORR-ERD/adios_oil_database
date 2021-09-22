@@ -42,7 +42,7 @@ class TestOil:
         """
         whoops = {'oil_id': 'AD00123', 'metadata': {'name': 'An oil name'}}
         with pytest.raises(ValueError):
-            # error becasue we're passing the whole dict in
+            # error because we're passing the whole dict in
             Oil(whoops)
 
     def test_bad_oil_id(self):

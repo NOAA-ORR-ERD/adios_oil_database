@@ -22,14 +22,30 @@ export default class ValueUnitInput extends Component {
     @action
     updateValue(e) {
         if (Number.isNaN(parseFloat(e.target.value))) {
-            this.valueObject = null;
-        } else {
-            let unitType = getUnitType(this.args.valueUnit);
+            this.valueObject = {};
+            Object.keys(this.args.valueObject).forEach((key) => {
+                delete this.args.valueObject[key];
+            });
+        }
+        else {
+            let unitType;
+
+            if (this.args.valueUnitType) {
+                unitType = this.args.valueUnitType;
+            }
+            else {
+                unitType = getUnitType(this.args.valueUnit);
+            }
+
             this.valueObject = {
                 value: parseFloat(e.target.value),
                 unit: this.args.valueUnit,
                 unit_type: unitType
             };
+
+            Object.entries(this.valueObject).forEach(([key, item]) => {
+                set(this.valueObject, key, item);
+            });
         }
 
         this.args.submit(this.valueObject);

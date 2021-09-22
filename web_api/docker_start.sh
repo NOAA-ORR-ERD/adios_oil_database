@@ -26,6 +26,12 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git branch --set-upstream-to=origin/under_review under_review
     git pull
 
+    # This should incorporate any changes in the production branch that have
+    # been made outside the scope of the under_review branch, so they will be
+    # seen as changes in the under_review branch history.
+    echo ">>> rebase production under_review"
+    git rebase production under_review
+
     echo ">>> Backing up the database to noaa-oil-data"
     adios_db_backup --config /config/config_oil_db.ini
 
@@ -40,12 +46,6 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git diff-index --quiet HEAD || git commit -m "Archiving changes to under_review from pipeline"
 
     git status
-
-    # This should incorporate any changes in the production branch that have
-    # been made outside the scope of the under_review branch, so they will be
-    # seen as changes in the under_review branch history.
-    echo ">>> rebase production under_review"
-    git rebase production under_review
 
     echo ">>> pushing under_review branch"
     git push origin under_review
