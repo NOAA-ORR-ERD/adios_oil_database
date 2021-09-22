@@ -288,7 +288,7 @@ class TestSessionGetLabels(SessionTestBase):
             session.get_labels('bogus')
 
 
-class TestSessionInserting(SessionTestBase):
+class TestSessionInsertOil(SessionTestBase):
     '''
         testing adding oil records to the DB
     '''
@@ -322,7 +322,6 @@ class TestSessionInserting(SessionTestBase):
         # create a minimal oil
         oil = Oil(ID)
 
-        # add it:
         session.insert_oil(oil)
 
         result = list(session.query(oil_id=ID))
@@ -340,7 +339,6 @@ class TestSessionInserting(SessionTestBase):
         # create a minimal oil
         oil = Oil(ID)
 
-        # add it:
         session.insert_oil(oil.py_json())
 
         result = list(session.query(oil_id=ID))
@@ -363,8 +361,7 @@ class TestSessionInserting(SessionTestBase):
         oil = Oil('bogus')
         oil.oil_id = None
 
-        # add it:
-        oil_id = session.insert_oil(oil)
+        oil_id = session.insert_oil(oil)['oil_id']
         print(f'new oil_id: {oil_id}')
 
         result = list(session.query(oil_id=oil_id))
@@ -387,8 +384,7 @@ class TestSessionInserting(SessionTestBase):
         oil = Oil('bogus')
         oil.oil_id = ''
 
-        # add it:
-        oil_id = session.insert_oil(oil)
+        oil_id = session.insert_oil(oil)['oil_id']
         print(f'new oil_id: {oil_id}')
 
         result = list(session.query(oil_id=oil_id))
@@ -406,8 +402,7 @@ class TestSessionInserting(SessionTestBase):
         json_obj = Oil('bogus').py_json()
         del json_obj['oil_id']
 
-        # add it:
-        oil_id = session.insert_oil(json_obj)
+        oil_id = session.insert_oil(json_obj)['oil_id']
         print(f'new oil_id: {oil_id}')
 
         result = list(session.query(oil_id=oil_id))
@@ -425,8 +420,7 @@ class TestSessionInserting(SessionTestBase):
         json_obj = Oil('bogus').py_json()
         json_obj['oil_id'] = None
 
-        # add it:
-        oil_id = session.insert_oil(json_obj)
+        oil_id = session.insert_oil(json_obj)['oil_id']
         print(f'new oil_id: {oil_id}')
 
         result = list(session.query(oil_id=oil_id))
@@ -444,8 +438,7 @@ class TestSessionInserting(SessionTestBase):
         json_obj = Oil('bogus').py_json()
         json_obj['oil_id'] = ''
 
-        # add it:
-        oil_id = session.insert_oil(json_obj)
+        oil_id = session.insert_oil(json_obj)['oil_id']
         print(f'new oil_id: {oil_id}')
 
         result = list(session.query(oil_id=oil_id))
@@ -457,7 +450,7 @@ class TestSessionInserting(SessionTestBase):
         assert new_oil['oil_id'] == oil_id
 
 
-class TestSessionDelete(SessionTestBase):
+class TestSessionDeleteOil(SessionTestBase):
     '''
         testing deleting oil records from the DB
     '''
@@ -468,11 +461,47 @@ class TestSessionDelete(SessionTestBase):
         oil = Oil('bogus')
         oil.oil_id = None
 
-        # add it:
-        oil_id = session.insert_oil(oil)
+        oil_id = session.insert_oil(oil)['oil_id']
         print(f'new oil_id inserted: {oil_id}')
 
         # now we delete the oil
         ret = session.delete_oil(oil_id)
 
         assert ret == 1
+
+
+class TestSessionUpdateOil(SessionTestBase):
+    '''
+        testing updating oil records in the DB
+    '''
+    def test_update_oil_obj(self):
+        session = connect_mongodb(self.settings)
+
+        # create a minimal oil
+        oil = Oil('bogus')
+        oil.oil_id = None
+
+        oil_id = session.insert_oil(oil)['oil_id']
+        print(f'new oil_id inserted: {oil_id}')
+
+        # now we update the oil
+        oil.metadata.name = 'New Name'
+        updated_oil = session.update_oil(oil)
+
+        assert updated_oil['metadata']['name'] == 'New Name'
+
+    def test_update_json_obj(self):
+        session = connect_mongodb(self.settings)
+
+        # create a minimal oil
+        oil = Oil('bogus')
+        oil.oil_id = None
+
+        oil_id = session.insert_oil(oil)['oil_id']
+        print(f'new oil_id inserted: {oil_id}')
+
+        # now we update the oil
+        oil.metadata.name = 'New Name'
+        updated_oil = session.update_oil(oil.py_json())
+
+        assert updated_oil['metadata']['name'] == 'New Name'

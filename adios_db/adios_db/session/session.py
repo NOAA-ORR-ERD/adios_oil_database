@@ -94,14 +94,14 @@ class Session():
         return self.oil.delete_one({'oil_id': oil_id}).deleted_count
 
     def insert_oil(self, oil):
-        """
-        add a new oil record to the oil collection
+        '''
+            Add a new oil record to the oil collection
 
-        :param oil: an Oil object to add
+            :param oil: an Oil object to add
 
-        :param overwrite=False: whether to overwrite an existing
-                                record if it already exists.
-        """
+            :param overwrite=False: whether to overwrite an existing
+                                    record if it already exists.
+        '''
         if isinstance(oil, Oil):
             if oil.oil_id in ('', None):
                 oil.oil_id = self.new_oil_id()
@@ -119,7 +119,10 @@ class Session():
         json_obj = oil.py_json()
         json_obj['_id'] = oil.oil_id
 
-        return self.oil.insert_one(json_obj).inserted_id
+        inserted_id = self.oil.insert_one(json_obj).inserted_id
+        assert inserted_id == oil.oil_id
+
+        return json_obj
 
     def new_oil_id(self):
         '''
@@ -155,6 +158,30 @@ class Session():
         max_seq += 1  # next in the sequence
 
         return '{}{:06d}'.format(id_prefix, max_seq)
+
+    def update_oil(self, oil):
+        '''
+            Update an oil record in the oil collection
+
+            :param oil: an Oil object to update
+
+            :param overwrite=False: whether to overwrite an existing
+                                    record if it already exists.
+        '''
+        if not isinstance(oil, Oil):
+            # assume a json object
+            oil = Oil.from_py_json(oil)
+
+        oil.reset_validation()
+        set_completeness(oil)
+
+        json_obj = oil.py_json()
+        json_obj['_id'] = oil.oil_id
+
+        res = self.oil.replace_one({'oil_id': json_obj['oil_id']}, json_obj)
+        assert res.modified_count == 1
+
+        return json_obj
 
     def query(self, oil_id=None,
               text=None, api=None, labels=None, product_type=None,

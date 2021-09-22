@@ -3,7 +3,6 @@ Cornice services.
 
 This is the main service for working with oil objects.
 """
-
 import sys
 import logging
 import traceback
@@ -19,11 +18,7 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 
 from pymongo.errors import DuplicateKeyError
 
-from adios_db.models.oil.validation.validate import validate_json
-from adios_db.models.oil.completeness import set_completeness
-
-from adios_db_api.common.views import (cors_policy,
-                                       obj_id_from_url,
+from adios_db_api.common.views import (cors_policy, obj_id_from_url,
                                        can_modify_db)
 from adios_db_api.util import fix_bson_ids
 
@@ -68,10 +63,10 @@ def get_oils(request):
 
     if obj_id is not None:
         # Fixme: why is this not using the adios_db Session?
-        res = client.oil.find_one({'oil_id': obj_id})
+        res = client.get_oil(obj_id)
 
         if res is not None:
-            return get_oil_all_fields(res)
+            return json_api_record(res)
         else:
             raise HTTPNotFound()
     else:
@@ -95,6 +90,18 @@ def get_oils(request):
         except Exception as e:
             logger.error(e)
             raise HTTPInternalServerError(e)
+
+
+def json_api_record(oil):
+    '''
+        Get the full record in JSON API compliant form.
+    '''
+    return {
+        'data': {
+            '_id': oil.get('oil_id'),
+            'type': 'oils',
+            'attributes': oil},
+        }
 
 
 def json_api_results(results, page_size):
@@ -182,23 +189,11 @@ def insert_oil(request):
         raise HTTPBadRequest("Error validating oil JSON")
 
     try:
-        # Fixme: This needs some refactoring -- most of this functionality
-        #        should be in the adios_db.session module
-        logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
+        new_oil_obj = request.mdb_client.insert_oil(oil_obj)
 
-        if 'oil_id' not in oil_obj:
-            oil_obj['oil_id'] = request.mdb_client.new_oil_id()
-
-        oil = validate_json(oil_obj)
-        set_completeness(oil)
-        oil_obj = oil.py_json()
-        oil_obj['_id'] = oil_obj['oil_id']
-
-        mongo_id = (request.mdb_client.oil
-                           .insert_one(oil_obj)
-                           .inserted_id)
-        logger.info(f'insert oil with mongo ID: {mongo_id}, '
-                    f'oil ID: {oil_obj["oil_id"]}')
+        logger.info('insert oil with '
+                    f'oil ID: {new_oil_obj["oil_id"]}, '
+                    f'oil name: {new_oil_obj["metadata"]["name"]}')
     except DuplicateKeyError as e:
         logger.error(e)
         raise HTTPConflict('Insert failed: Duplicate Key')
@@ -206,7 +201,7 @@ def insert_oil(request):
         logger.error(e)
         raise HTTPUnsupportedMediaType("Unknown Error")
 
-    return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
+    return json_api_record(fix_bson_ids(new_oil_obj))
 
 
 @oil_api.put()
@@ -229,7 +224,7 @@ def update_oil(request):
         oil_obj = get_oil_from_json_req(json_obj)
 
         try:
-            oil = validate_json(oil_obj)
+            oil_obj = request.mdb_client.update_oil(oil_obj)
         except Exception as e:
             logger.error(f'Validation Exception: '
                          f'{obj_id}: {type(e)}: {e}')
@@ -246,17 +241,12 @@ def update_oil(request):
             for i in tb:
                 logger.error(f'traceback: {_trace_item(*i)}')
 
-        set_completeness(oil)
-        oil_obj = oil.py_json()
-        (request.mdb_client.oil
-         .replace_one({'oil_id': oil_obj['oil_id']}, oil_obj))
-
         memoized_results.pop(oil_obj['oil_id'], None)
     except Exception as e:
         logger.error(e)
         raise HTTPUnsupportedMediaType()
 
-    return generate_jsonapi_response_from_oil(oil_obj)
+    return json_api_record(oil_obj)
 
 
 def _trace_item(filename, lineno, function, text):
@@ -289,16 +279,14 @@ def delete_oil(request):
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
+        deleted_count = request.mdb_client.delete_oil(obj_id)
 
-        res = (request.mdb_client.oil
-               .delete_one({'oil_id': obj_id}))
-
-        if res.deleted_count == 0:
+        if deleted_count == 0:
             raise HTTPNotFound()
 
         memoized_results.pop(obj_id, None)
 
-        return res
+        return deleted_count
     else:
         raise HTTPBadRequest()
 
@@ -311,16 +299,6 @@ def get_oil_from_json_req(json_obj):
         oil_obj['oil_id'] = json_obj['data']['oil_id']
 
     return oil_obj
-
-
-def generate_jsonapi_response_from_oil(oil_obj):
-    json_obj = {'data': {'attributes': oil_obj}}
-
-    json_obj['data']['_id'] = oil_obj['oil_id']
-    json_obj['data']['type'] = 'oils'
-    json_obj['data']['attributes']['status'] = oil_obj.get('status', [])
-
-    return json_obj
 
 
 @memoize_oil_arg
@@ -360,18 +338,3 @@ def get_oil_searchable_fields(oil):
         logger.info('oil failed searchable fields {}: {}'
                     .format(oil['oil_id'], oil['name']))
         raise
-
-
-def get_oil_all_fields(oil):
-    '''
-        Get the full record in JSON API compliant form.
-    '''
-    logger.info(f'oil object _id: {oil["_id"]}')
-    oil.pop('_id', None)
-
-    return {
-        'data': {
-            '_id': oil.get('oil_id'),
-            'type': 'oils',
-            'attributes': oil},
-        }
