@@ -33,7 +33,7 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": 2,
+                        "value": 2.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     }
@@ -53,7 +53,7 @@
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -65,7 +65,7 @@
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -79,7 +79,7 @@
                             "unit_type": "kinematicviscosity"
                         },
                         "ref_temp": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -91,7 +91,7 @@
                             "unit_type": "kinematicviscosity"
                         },
                         "ref_temp": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -105,7 +105,7 @@
                             "unit_type": "dynamicviscosity"
                         },
                         "ref_temp": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -117,7 +117,7 @@
                             "unit_type": "dynamicviscosity"
                         },
                         "ref_temp": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -131,7 +131,7 @@
                             "unit_type": "interfacialtension"
                         },
                         "ref_temp": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -145,7 +145,7 @@
                             "unit_type": "interfacialtension"
                         },
                         "ref_temp": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -184,7 +184,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 224,
+                            "value": 224.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -196,7 +196,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 259,
+                            "value": 259.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -208,7 +208,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 313,
+                            "value": 313.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -220,7 +220,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 359,
+                            "value": 359.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -232,7 +232,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 403,
+                            "value": 403.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -244,7 +244,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 442,
+                            "value": 442.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -256,7 +256,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 489,
+                            "value": 489.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -268,7 +268,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 543,
+                            "value": 543.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -280,7 +280,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 608,
+                            "value": 608.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -292,7 +292,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 691,
+                            "value": 691.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -304,7 +304,7 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 737,
+                            "value": 737.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }

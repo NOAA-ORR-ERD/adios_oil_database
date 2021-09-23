@@ -29,7 +29,7 @@
                 "pour_point": {
                     "measurement": {
                         "unit": "C",
-                        "min_value": 50,
+                        "min_value": 50.0,
                         "unit_type": "temperature"
                     }
                 },
@@ -41,7 +41,7 @@
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -53,7 +53,7 @@
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -67,7 +67,7 @@
                             "unit_type": "dynamicviscosity"
                         },
                         "ref_temp": {
-                            "value": 38,
+                            "value": 38.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
