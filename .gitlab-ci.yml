@@ -178,6 +178,8 @@ scan-client:
 
 deploy_mongodb_stage:
   stage: deploy_db
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -214,6 +216,8 @@ deploy_mongodb_stage:
 
 stop_mongodb_stage:
   stage: deploy_db
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -278,6 +282,8 @@ stop_mongodb_public:
 
 deploy_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -308,6 +314,8 @@ deploy_api_stage:
 
 stop_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -323,6 +331,8 @@ stop_api_stage:
 
 deploy_oauth_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -372,6 +382,8 @@ deploy_oauth_api_stage:
 
 stop_oauth_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -387,6 +399,8 @@ stop_oauth_api_stage:
 
 deploy_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -414,6 +428,8 @@ deploy_client_stage:
 
 stop_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -429,6 +445,8 @@ stop_client_stage:
 
 deploy_oauth_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -479,6 +497,8 @@ deploy_oauth_client_stage:
 
 stop_oauth_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop
