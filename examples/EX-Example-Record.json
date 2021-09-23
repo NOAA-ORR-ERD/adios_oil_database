@@ -134,7 +134,7 @@
             "cut_volume": {
                 "unit": "%",
                 "unit_type": "volumefraction",
-                "value": 100
+                "value": 100.0
             },
             "distillation_data": {
                 "cuts": [

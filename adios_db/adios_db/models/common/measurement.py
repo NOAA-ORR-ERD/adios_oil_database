@@ -126,7 +126,23 @@ class MeasurementBase(MeasurementDataclass):
         if self.unit_type != self.__class__.unit_type:
             raise ValueError(f"unit_type must be: {self.__class__.unit_type}, "
                              f"not {self.unit_type}")
+        # make sure all values are floats, not integers
+        self.value = self._make_float(self.value)
+        self.min_value = self._make_float(self.min_value)
+        self.max_value = self._make_float(self.max_value)
+        self.standard_deviation = self._make_float(self.standard_deviation)
         super().__post_init__()
+
+    @staticmethod
+    def _make_float(value):
+        """
+        Convert to float if possible, otherwise return the original value.
+        """
+        try:
+            value = float(value)
+        except (TypeError, ValueError):
+            pass
+        return value
 
     def py_json(self, sparse=True):
         # unit_type is added here, as it's not a settable field

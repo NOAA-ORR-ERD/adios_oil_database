@@ -33,7 +33,7 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": -20,
+                        "value": -20.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     }
@@ -61,7 +61,7 @@
                             "unit_type": "kinematicviscosity"
                         },
                         "ref_temp": {
-                            "value": 38,
+                            "value": 38.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -78,7 +78,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 11,
+                            "value": 11.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -90,7 +90,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 43,
+                            "value": 43.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -102,7 +102,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 78,
+                            "value": 78.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -114,7 +114,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 126,
+                            "value": 126.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -126,7 +126,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 176,
+                            "value": 176.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -138,7 +138,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 228,
+                            "value": 228.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -150,7 +150,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 280,
+                            "value": 280.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -162,7 +162,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 337,
+                            "value": 337.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -174,7 +174,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 395,
+                            "value": 395.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -186,7 +186,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 470,
+                            "value": 470.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -198,7 +198,7 @@
                             "unit_type": "volumefraction"
                         },
                         "vapor_temp": {
-                            "value": 579,
+                            "value": 579.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
