@@ -7,6 +7,7 @@ With validation
 Also maintains the products types and labels mapping
 """
 
+from operator import itemgetter
 from pathlib import Path
 import csv
 
@@ -28,6 +29,44 @@ class TypeLabelsMap(ManyMany):
 
     product_types = ManyMany.right
     labels = ManyMany.left
+
+    _all_labels_dict = None
+
+    @property
+    def all_labels(self):
+        return list(self.product_types.keys())
+
+    @property
+    def all_product_types(self):
+        return list(self.labels.keys())
+
+    @property
+    def all_labels_dict(self):
+        """
+        all the labels, and their property types, as a JSON service compatible dict
+
+        :returns: list of dicts for each label:
+                  [{'_id': 0,
+                    'name': 'a label name,
+                    'product_types': ['type one', 'type two', ...]},
+                   ...
+                    ]
+
+        """
+        # so we only need to built it once
+        if self._all_labels_dict is None:
+            labels = [{'name': label, 'product_types': sorted(types)}
+                      for (label, types) in self.product_types.items()]
+            labels.sort(key=itemgetter('name'))
+            # Assign integer IDs
+            # note: If we want label IDs, we should manage them properly
+            #       Do we ever need to get a label by ID?
+            for idx, obj in enumerate(labels):
+                obj['_id'] = idx
+            self._all_labels_dict = labels
+
+        return self._all_labels_dict
+
 
 
 def load_from_csv_file(filepath=None):

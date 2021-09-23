@@ -62,7 +62,6 @@ def get_oils(request):
     client = request.mdb_client
 
     if obj_id is not None:
-        # Fixme: why is this not using the adios_db Session?
         res = client.get_oil(obj_id)
 
         if res is not None:
@@ -201,6 +200,7 @@ def insert_oil(request):
         logger.error(e)
         raise HTTPUnsupportedMediaType("Unknown Error")
 
+    # return json_api_record(fix_bson_ids(new_oil_obj))
     return json_api_record(fix_bson_ids(new_oil_obj))
 
 

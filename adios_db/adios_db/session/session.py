@@ -8,9 +8,9 @@ In theory this same Session object could be duck typed to use a
 different back-end: RDBMS, simple file store, etc.
 """
 
-
 from numbers import Number
 import warnings
+from operator import itemgetter
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
 from ..models.oil.oil import Oil
@@ -59,7 +59,7 @@ class CursorWrapper():
         """
         Pass anything else on to the embedded cursor
 
-        Just in case -- we really should document whats being used.
+        Just in case -- we really should document what's being used.
         """
         warnings.warn("ideally, we should not be using mongo "
                       "cursor methods directly."
@@ -85,16 +85,20 @@ class Session():
         '''
         self.mongo_client = MongoClient(host=host, port=port)
 
-        self.db = getattr(self.mongo_client, database)
-        self.oil = self.db.oil  # the oil collection
+        self._db = getattr(self.mongo_client, database)
+        self._oil_collection = self._db.oil  # the oil collection
 
     def get_oil(self, oil_id):
-        '''
-            get an oil record from the oil collection
+        """
+        get an oil record by its ID from the oil collection
 
-            :param oil_id: an Oil identifier
-        '''
-        return self.oil.find_one({'oil_id': oil_id})
+        :param oil_id: an Oil ID
+        """
+        rec = self._oil_collection.find_one({'oil_id': oil_id})
+        # remove the mongo ID
+        if rec is not None:
+            rec.pop('_id', None)
+        return rec
 
     def delete_oil(self, oil_id):
         '''
@@ -102,7 +106,7 @@ class Session():
 
         :param oil_id: an Oil identifier
         '''
-        return self.oil.delete_one({'oil_id': oil_id}).deleted_count
+        return self._oil_collection.delete_one({'oil_id': oil_id}).deleted_count
 
     def insert_oil(self, oil):
         '''
@@ -130,7 +134,7 @@ class Session():
         json_obj = oil.py_json()
         json_obj['_id'] = oil.oil_id
 
-        inserted_id = self.oil.insert_one(json_obj).inserted_id
+        inserted_id = self._oil_collection.insert_one(json_obj).inserted_id
         assert inserted_id == oil.oil_id
 
         return json_obj
@@ -156,7 +160,7 @@ class Session():
         id_prefix = 'XX'
         max_seq = 0
 
-        cursor = (self.oil
+        cursor = (self._oil_collection
                   .find({'oil_id': {'$regex': '^{}'.format(id_prefix)}},
                         {'oil_id'}))
 
@@ -194,17 +198,23 @@ class Session():
         json_obj = oil.py_json()
         json_obj['_id'] = oil.oil_id
 
-        res = self.oil.replace_one({'oil_id': json_obj['oil_id']}, json_obj)
+        res = self._oil_collection.replace_one({'oil_id': json_obj['oil_id']}, json_obj)
         assert res.modified_count == 1
 
         return json_obj
 
-    def query(self, oil_id=None,
-              text=None, api=None, labels=None, product_type=None,
+    def query(self,
+              oil_id=None,
+              text=None,
+              api=None,
+              labels=None,
+              product_type=None,
               gnome_suitable=None,
-              sort=None, sort_case_sensitive=False, page=None,
+              sort=None,
+              sort_case_sensitive=False,
+              page=None,
               projection=None,
-              **_kwargs):
+              ):
         '''
         Query the database according to various criteria
 
@@ -281,7 +291,7 @@ class Session():
             # make sure we always get the oil_id
             projection = ['oil_id'] + list(projection)
 
-        ret = self.oil.find(filter=filter_opts, projection=projection)
+        ret = self._oil_collection.find(filter=filter_opts, projection=projection)
 
         if sort is not None:
             if sort_case_sensitive is False:
@@ -470,35 +480,30 @@ class Session():
 
     def get_labels(self, identifier=None):
         '''
-            Right now we are getting labels and associated product types
-            from the adios_db model code.  But it would be better managed
-            if we eventually migrate this to labels stored in a database
-            collection.
+        Right now we are getting labels and associated product types
+        from the adios_db model code.  But it would be better managed
+        if we eventually migrate this to labels stored in a database
+        collection.
         '''
-        # get the whole list of labels
-        labels = [{'name': label, 'product_types': sorted(types)}
-                  for (label, types) in types_to_labels.product_types.items()]
-
-        # so it's at least somewhat consistent, we sort and then enumerate
-        # our labels
-        labels.sort(key=lambda i: i['name'])
-
-        for idx, obj in enumerate(labels):
-            obj['_id'] = idx
+        labels = types_to_labels.all_labels_dict
 
         if identifier is None:
             return labels
         else:
+            msg = 'label identifiers are integer >= 0 only'
             try:
                 identifier = int(identifier)
             except ValueError as e:
-                e.args = ('label identifiers are integer only',)
-                raise
+                raise ValueError(msg) from e
+            if identifier < 0:
+                raise ValueError(msg)
 
-            # get a single label
-            label = [i for i in labels if i['_id'] == identifier]
+            # Get a single label
+            for label in labels:
+                if label['_id'] == identifier:
+                    return label
+            return None
 
-            return label[0] if len(label) > 0 else None
 
     def __getattr__(self, name):
         # FixMe: This should be fully hiding the mongo client
