@@ -33,8 +33,8 @@ class LabelTests(LabelTestBase):
             Here, we are using an ID that can be turned into an ObjectId,
             but it's very unlikely that it will be found in the database.
         '''
-        self.testapp.get('/labels/{}'.format('1000'), status=307)
-        self.testapp.get('/labels/{}/'.format('1000'), status=404)
+        self.testapp.get('/labels/{}'.format('10000'), status=307)
+        self.testapp.get('/labels/{}/'.format('10000'), status=404)
 
     def test_get_valid_id(self):
         '''
