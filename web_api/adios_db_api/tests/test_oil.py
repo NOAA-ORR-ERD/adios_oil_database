@@ -201,7 +201,7 @@ class OilTestCRUD(OilTestBase):
         oil_json_ret = self.jsonapi_to_oil(resp.json_body)
 
         assert oil_json_ret['oil_id'] == 'AD99999'
-        assert oil_json_ret['metadata']['API'] == 28.0
+        assert oil_json_ret['metadata']['API'] == 31.7
         print("The post returned the correct record.")
 
         #
@@ -213,7 +213,7 @@ class OilTestCRUD(OilTestBase):
         oil_json_ret = self.jsonapi_to_oil(resp.json_body)
 
         assert oil_json_ret['oil_id'] == oil_json['oil_id']
-        assert oil_json_ret['metadata']['API'] == 28.0
+        assert oil_json_ret['metadata']['API'] == 31.7
 
         print(f"get {oil_json['oil_id']} worked after inserting")
 
