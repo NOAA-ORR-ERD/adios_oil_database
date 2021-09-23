@@ -139,8 +139,8 @@ def main(_global_config, **settings):
     from .views.capabilities import capabilities_api
     config.add_cornice_service(capabilities_api)
 
-    from .views.query import query_api
-    config.add_cornice_service(query_api)
+    # from .views.query import query_api
+    # config.add_cornice_service(query_api)
 
     # add static file serving if we are running the standalone
     client_path = settings.get('client_path')
