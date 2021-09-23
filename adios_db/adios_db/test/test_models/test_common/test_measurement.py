@@ -1,6 +1,8 @@
 
-import pytest
 import math
+import json
+
+import pytest
 
 import unit_conversion as uc
 
@@ -70,7 +72,38 @@ def test_str():
 
     assert s == "Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6, unit_type='mass')"
 
+def test_ensure_float():
+    """
+    values should all be always float type
+    """
+    mass = Mass(min_value=10,
+                max_value=20,
+                unit='kg',
+                standard_deviation=3,
+                replicates=6
+                )
 
+    assert isinstance(mass.min_value, float)
+    assert isinstance(mass.max_value, float)
+    assert isinstance(mass.standard_deviation, float)
+
+def test_ensure_float_from_json():
+    """
+    values should all be always float type
+
+    this is testing from JSON, and also string values -- why not?
+    """
+    JSON = """{"value": 10,
+               "unit": "kg",
+               "standard_deviation": 3.1,
+               "replicates": "6",
+               "unit_type": "mass"
+               }
+            """
+    mass = Mass.from_py_json(json.loads(JSON))
+
+    assert isinstance(mass.value, float)
+    assert isinstance(mass.standard_deviation, float)
 
 
 class TestUnitless:
