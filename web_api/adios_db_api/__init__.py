@@ -139,9 +139,6 @@ def main(_global_config, **settings):
     from .views.capabilities import capabilities_api
     config.add_cornice_service(capabilities_api)
 
-    from .views.distinct import distinct_api
-    config.add_cornice_service(distinct_api)
-
     from .views.object import object_api
     config.add_cornice_service(object_api)
 
