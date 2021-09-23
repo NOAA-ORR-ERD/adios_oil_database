@@ -1,5 +1,7 @@
 """
     Sample oil records for testing.
+
+NOTE: Maybe better to get this from the adios_db test data
 """
 
 from adios_db.models.oil.oil import Oil
@@ -7,12 +9,13 @@ from adios_db.models.oil.oil import Oil
 
 basic_noaa_fm_pyjson = {
     'oil_id': 'AD99999',
+    'adios_data_model_version': '0.11.0',
     'metadata': {
         'API': 28.0,
         'labels': ['Crude Oil', 'Medium Crude'],
         'location': 'WRC',
-        'name': 'BASIC NOAA FILEMAKER TEST RECORD',
-        'product_type': 'crude',
+        'name': 'SIMPLE NOAA TEST RECORD',
+        'product_type': 'Crude Oil NOS',
         'reference': {
             'reference': 'Derived from the Abu Safah oil record',
             'year': 1993
