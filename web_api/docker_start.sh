@@ -4,7 +4,7 @@ if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
     echo "Refreshing the writeable Oil Database from noaa-oil-data"
     cd /noaa-oil-data/
 
-    git checkout -b under_review
+    git checkout under_review
     git pull origin under_review
 
     adios_db_restore --config /config/config_oil_db.ini
@@ -22,10 +22,22 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git pull
 
     echo ">>> checkout & pull under_review branch"
+
+    echo ">>> git remote set-branches origin under_review"
     git remote set-branches origin under_review
+    echo "return code: $?"$'\n'
+
+    echo ">>> git fetch origin under_review"
     git fetch origin under_review
+    echo "return code: $?"$'\n'
+
+    echo ">>> git checkout under_review"
     git checkout under_review
+    echo "return code: $?"$'\n'
+
+    echo ">>> git pull"
     git pull
+    echo "return code: $?"$'\n'
 
     echo ">>> Backing up the database to noaa-oil-data"
     adios_db_backup --config /config/config_oil_db.ini
