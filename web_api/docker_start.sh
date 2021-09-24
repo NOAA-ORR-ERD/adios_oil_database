@@ -23,12 +23,12 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
 
     echo ">>> checkout & pull under_review branch"
 
-    echo ">>> git remote set-branches origin under_review"
-    git remote set-branches origin under_review
+    echo ">>> git remote set-branches --add origin under_review"
+    git remote set-branches --add origin under_review
     echo "return code: $?"$'\n'
 
-    echo ">>> git fetch origin under_review"
-    git fetch origin under_review
+    echo ">>> git fetch"
+    git fetch
     echo "return code: $?"$'\n'
 
     echo ">>> git checkout --track origin/under_review"
