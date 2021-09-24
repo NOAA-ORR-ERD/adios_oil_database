@@ -31,8 +31,8 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     git fetch origin under_review
     echo "return code: $?"$'\n'
 
-    echo ">>> git checkout under_review"
-    git checkout under_review
+    echo ">>> git checkout --track origin/under_review"
+    git checkout --track origin/under_review
     echo "return code: $?"$'\n'
 
     echo ">>> git pull"
