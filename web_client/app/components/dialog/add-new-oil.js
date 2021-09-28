@@ -59,7 +59,8 @@ export default class AddNewOilDlg extends Component {
                         unit_type: 'massfraction',
                         value: 0
                     }
-                }
+                },
+                physical_properties: {}
             }]
         });
 

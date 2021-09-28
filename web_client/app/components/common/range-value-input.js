@@ -112,6 +112,12 @@ export default class RangeValueInput extends Component {
 
     @action
     updateValue(enteredValue) {
+        // enteredValue should be a mostly valid measurement object, but it is
+        // missing a unit_type.  Let's see if a unit type was passed in.
+        if (this.args.valueUnitType) {
+            enteredValue.unit_type = this.args.valueUnitType;
+        }
+
         if (this.enteredValuesValid(enteredValue)) {
             this.deepSet(this.valueObject, this.args.valueName, enteredValue);
             this.inputValue = enteredValue;

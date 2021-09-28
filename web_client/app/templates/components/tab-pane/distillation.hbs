@@ -47,6 +47,7 @@
               @valueObject={{@oil}}
               @valueName="distillation_data.fraction_recovered"
               @valueUnit="%"
+              @valueUnitType="massfraction"
               @valuePrecision="2"
               @sampleIndex={{@sampleIndex}}
               @submit={{action @submit @oil}}
@@ -71,6 +72,7 @@
               @valueObject={{@oil}}
               @valueName="distillation_data.end_point"
               @valueUnit="C"
+              @valueUnitType="temperature"
               @valuePrecision="2"
               @sampleIndex={{@sampleIndex}}
               @submit={{action @submit @oil}}
@@ -116,6 +118,7 @@
         @leftColumnTitle="Fraction"
         @leftColumnValueName="fraction"
         @leftColumnUnit="%"
+        @leftColumnUnitType={{this.distillationType}}
         @leftColumnPrecision={{2}}
         @rightColumnTitle="Vapor Temperature"
         @rightColumnValueName="vapor_temp"
