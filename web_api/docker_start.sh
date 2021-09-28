@@ -1,6 +1,9 @@
 #!/bin/bash
 
 REPO_NAME=noaa-oil-data-test
+git config --global user.email "adios-script@noaa.gov"
+git config --global user.name "Adios Automated Script"
+
 
 # clone the repo
 # this may be done in the docker build, but for now, for testing ...
