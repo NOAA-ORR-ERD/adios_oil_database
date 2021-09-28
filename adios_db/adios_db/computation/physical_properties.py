@@ -358,11 +358,23 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
 
     # create normalized list of densities
     cuts_table = []
+
     for cut in distillation_cuts:
-        f = cut.fraction.converted_to(units).value
-        t = cut.vapor_temp.converted_to(temp_units).value
+
+        if cut.fraction is None:
+            f = None
+        else:
+            f = cut.fraction.converted_to(units).value
+
+        if cut.vapor_temp is None:
+            t = None
+        else:
+            t = cut.vapor_temp.converted_to(temp_units).value
+
         cuts_table.append((f, t))
+
     cuts_table.sort(key=itemgetter(0))
+
     return cuts_table
 
 

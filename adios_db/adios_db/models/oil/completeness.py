@@ -166,7 +166,8 @@ def check_distillation(oil):
         ss = oil.sub_samples[0]
         cuts = ss.distillation_data.cuts
 
-        fractions = [c.fraction.converted_to('fraction').value for c in cuts]
+        fractions = [c.fraction.converted_to('fraction').value for c in cuts
+                     if c.fraction is not None]
 
         if len(fractions) >= 2:
             f1, *_, f2 = sorted([f for f in fractions if f is not None])
