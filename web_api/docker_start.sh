@@ -5,7 +5,7 @@ REPO_NAME=noaa-oil-data-test
 # clone the repo
 # this may be done in the docker build, but for now, for testing ...
 echo "Cloning the repo"
-git clone --depth 1 https://gitlab.orr.noaa.gov/gnome/oil_database/$REPO_NAME.git /$REPO_NAME/
+git clone --depth 1 ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/$REPO_NAME.git /$REPO_NAME/
 
 
 if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
