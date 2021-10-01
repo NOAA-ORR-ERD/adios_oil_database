@@ -73,6 +73,10 @@ export default class OilDemographics extends Component {
 
     @action
     updateReference(event) {
+        if (!this.args.oil.metadata.reference) {
+            set(this.args.oil.metadata, 'reference', {});
+        }
+
         set(this.args.oil.metadata.reference, 'reference', event.target.value);
         this.args.submit(this.args.oil);
     }
@@ -85,8 +89,11 @@ export default class OilDemographics extends Component {
             delete this.args.oil.metadata.reference.year;
         }
         else {
-            set(this.args.oil.metadata.reference, 'year',
-                Number(enteredYear));
+            if (!this.args.oil.metadata.reference) {
+                set(this.args.oil.metadata, 'reference', {});
+            }
+
+            set(this.args.oil.metadata.reference, 'year', Number(enteredYear));
         }
 
         this.args.submit(this.args.oil);
