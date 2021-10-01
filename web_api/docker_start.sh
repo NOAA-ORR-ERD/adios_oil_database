@@ -39,12 +39,6 @@ if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
     cd -
 
 elif [ “$MONGODB_WRITEABLE” == “true” ]; then
-
-    # clone the repo
-    # this may be done in the docker build, but for now, for testing ...
-    echo "Cloning the repo"
-    git clone --depth 1 https://gitlab.orr.noaa.gov/gnome/oil_database/$REPO_NAME.git
-
     echo "Oil Database is writeable"
 
     cd ./$REPO_NAME/
