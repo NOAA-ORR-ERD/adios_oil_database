@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-12">
+    <Common::ValueUnitTable
+      @valueArray={{@oil.distillation_data.cuts}}
+      @editable={{@editable}}
+      @submit={{this.submit}}
+      @tableTitle="Distillation Cuts"
+      @leftColumnTitle="Fraction"
+      @leftColumnValueName="fraction"
+      @leftColumnUnit="%"
+      @leftColumnUnitType={{@leftColumnUnitType}}
+      @leftColumnPrecision={{2}}
+      @rightColumnTitle="Vapor Temperature"
+      @rightColumnValueName="vapor_temp"
+      @rightColumnPrecision={{2}}
+      @rightColumnUnit="C"
+    />
+  </div>
+</div>
