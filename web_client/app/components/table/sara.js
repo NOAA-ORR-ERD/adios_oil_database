@@ -23,49 +23,19 @@ export default class Sara extends Component {
 
     @action
     updateCellValue(label) {
-        // TODO - rewrite this like getDeep/setDeep/removeDeep in range-value-input
-
-        let index;
-        if (this.saraArray) {
-            index = this.saraArray.findIndex(x => x.sara_type === label);
-        } else {
-            index = -1;
+        // we need to work with oil.SARA.{{label}} as a property
+        
+        if (!this.oil.SARA) {
+            set(this.oil, 'SARA', {});
         }
 
-        if (index !== -1) {
-            if(Number.isNaN(parseFloat(event.target.value))) {
-                // empty value entered
-                this.saraArray.splice(index, 1);
-            } else {
-                set(this.saraArray[index].fraction, "value", Number(event.target.value));
-                // TODO - cannot figure out which value we shoud take - percent or fraction
-                set(this.saraArray[index], "percent", Number(event.target.value));
-            }
-        } else {
-            // there is no object with such property type
-            if(!Number.isNaN(parseFloat(event.target.value))) {
-                let saraItem = {
-                    sara_type: label,
-                    percent: Number(event.target.value),
-                    fraction: {
-                        value: Number(event.target.value),
-                        unit: "%"
-                    }
-                };
-                if(!this.saraArray) {
-                    this.saraArray = [];
-                }
-                this.saraArray.push(saraItem);
-            }
-        }
+        let saraItem = {
+            value: Number(event.target.value),
+            unit: '%',
+            unit_type: 'massfraction'
+         };
 
-        if (this.saraArray && this.saraArray.length !== 0) {
-            set(this.oil, "sara_total_fractions", this.saraArray);
-        } else {
-            if (this.oil.sara_total_fractions) {
-                delete this.oil.sara_total_fractions;
-            }
-        }
+        set(this.oil.SARA, label.toLowerCase(), saraItem);
 
         this.args.submit(this.oil);
     }

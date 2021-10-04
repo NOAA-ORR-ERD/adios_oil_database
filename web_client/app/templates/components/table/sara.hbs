@@ -10,6 +10,7 @@
         {{#each-in this.properties as |attr value|}}
           <tr>
             <td>{{value.label}}</td>
+
             {{#if (get @oil.SARA attr)}}
               {{#with (get @oil.SARA attr) as |sara|}}
                 <td>
@@ -44,5 +45,4 @@
     </table>
 
   </div>
-
 </div>
