@@ -341,20 +341,26 @@ class MassOrVolumeFraction(MeasurementBase):
     :param max_value: the value itself
     :param standard_deviation: the value itself
     :param replicates: the value itself
-    :param unit_type: the type of unit -- must be "massfraction", "volumefraction" or "concentration"
+    :param unit_type: the type of unit -- must be "massfraction",
+                      "volumefraction" or "concentration"
     """
     def __init__(self, *args, **kwargs):
         unit_type = kwargs.get("unit_type")
+
         if unit_type is None:
             raise TypeError("unit_type must be specified")
+
         try:
             unit_type = unit_type.lower().replace(" ", "")
-            if unit_type not in {'massfraction', 'volumefraction', 'concentration'}:
+            if unit_type not in {'massfraction', 'volumefraction',
+                                 'concentration'}:
                 raise AttributeError
         except AttributeError:
             raise ValueError(
-                "unit_type must be one of: 'massfraction', 'volumefraction', 'concentration'\n"
+                "unit_type must be one of: "
+                "'massfraction', 'volumefraction', 'concentration'\n"
                 f"args: {args}, kwargs: {kwargs}")
+
         kwargs['unit_type'] = unit_type
         super().__init__(*args, **kwargs)
 

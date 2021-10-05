@@ -27,7 +27,10 @@ export default class GroupedTable extends Component {
 
         let newEntry = {
             'groups': [this.args.group],
-            'measurement': {},
+            'measurement': {
+                unit_type: 'massfraction',
+                unit: '1'
+            },
         }
 
         this.baseProperty.splice(basePropertyIdx, 0, newEntry);
