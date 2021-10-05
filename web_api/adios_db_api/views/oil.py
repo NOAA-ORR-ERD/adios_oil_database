@@ -292,7 +292,7 @@ def delete_oil(request):
 
         memoized_results.pop(obj_id, None)
 
-        return res
+        return {'deleted_count': res.deleted_count}
     else:
         raise HTTPBadRequest()
 
