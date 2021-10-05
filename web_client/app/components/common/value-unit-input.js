@@ -44,7 +44,7 @@ export default class ValueUnitInput extends Component {
             };
 
             Object.entries(this.valueObject).forEach(([key, item]) => {
-                set(this.valueObject, key, item);
+                set(this.args.valueObject, key, item);
             });
         }
 

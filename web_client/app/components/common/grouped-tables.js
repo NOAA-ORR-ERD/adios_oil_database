@@ -6,12 +6,12 @@ export default class GroupedTables extends Component {
 
     constructor() {
         super(...arguments);
-        if (this.args.oil[this.args.propertyName]) {
-            this.baseProperty = this.args.oil[this.args.propertyName];
+
+        if (!this.args.oil[this.args.propertyName]) {
+            this.args.oil[this.args.propertyName] = [];
         }
-        else {
-            this.baseProperty = [];
-        }
+
+        this.baseProperty = this.args.oil[this.args.propertyName];
     }
 
     get tableGroups() {
