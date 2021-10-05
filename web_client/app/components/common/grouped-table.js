@@ -4,11 +4,19 @@ import { action } from "@ember/object";
 
 export default class GroupedTable extends Component {
     @tracked baseProperty = [];
+    @tracked items;
 
     constructor() {
         super(...arguments);
 
         this.baseProperty = this.args.baseProperty;
+        
+        if (this.args.items) {
+            this.items = this.args.items;
+        }
+        else {
+            this.items = [];
+        }
     }
 
     @action
@@ -16,13 +24,21 @@ export default class GroupedTable extends Component {
         // index is the index on the table, not the index of the measurement
         // list.
         let basePropertyIdx;
+        
         try {
-            basePropertyIdx = this.args.items[index].index;
+            basePropertyIdx = this.items[index].index;
         }
         catch (TypeError) {
-            // items index out of range.  Most likely we are trying to add a
-            // row to the end of the list.
-            basePropertyIdx = this.args.items[index - 1].index + 1;
+            // items index out of range.
+            if (index === 0) {
+                // we are dealing with an empty table
+                basePropertyIdx = 0;
+            }
+            else {
+                // Most likely we are trying to add a row to the end
+                // of the list.
+                basePropertyIdx = this.items[index - 1].index + 1;
+            }
         }
 
         let newEntry = {
@@ -41,7 +57,7 @@ export default class GroupedTable extends Component {
 
     @action
     deleteTableRow(index) {
-        let basePropertyIdx = this.args.items[index].index;
+        let basePropertyIdx = this.items[index].index;
 
         this.baseProperty.splice(basePropertyIdx, 1);
         this.baseProperty = this.baseProperty;
