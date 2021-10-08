@@ -4,7 +4,6 @@ import { action, set } from "@ember/object";
 
 
 export default class RangeValueInput extends Component {
-
     @tracked isShowingModal = false;
     @tracked valueObject;
     @tracked inputValue;

@@ -13,7 +13,8 @@
       <th scope="col">Method</th>
 
       {{#if @editable}}
-        <td class="border-0">
+        <td class="border-0 edit-table-button-column"
+            title="Add a new measurement">
           <button type="button"
             {{on "click" (fn this.addEmptyTableRow 0)}}
             class="btn btn-outline-dark btn-sm p-0 border-0">
@@ -95,7 +96,8 @@
         </td>
 
         {{#if @editable}}
-          <td class="border-0">
+          <td class="border-0 edit-table-button-column"
+              title="Delete measurement">
             <button type="button"
               {{on "click" (fn this.deleteTableRow index)}}
               class="btn btn-outline-danger btn-sm p-0 border-0">
@@ -103,13 +105,23 @@
             </button>
           </td>
 
-          <td class="border-0">
+          <td class="border-0 edit-table-button-column"
+              title="Add a new measurement">
             <button type="button"
               {{on "click" (fn this.addEmptyTableRow (add index 1))}}
               class="btn btn-outline-dark btn-sm p-0 border-0">
               {{fa-icon "plus"}}
             </button>
           </td>
+
+          <td class="border-0 edit-table-button-column"
+              title="Associate measurement with &#xD;&#xA; different group(s)">
+            <button type="button"
+              class="btn btn-outline-dark btn-sm p-0 border-0">
+              {{fa-icon "list-ul"}}
+            </button>
+          </td>
+
         {{else}}
           <td hidden></td>
         {{/if}}
