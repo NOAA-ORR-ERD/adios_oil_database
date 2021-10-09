@@ -116,10 +116,14 @@
 
           <td class="border-0 edit-table-button-column"
               title="Associate measurement with &#xD;&#xA; different group(s)">
-            <button type="button"
-              class="btn btn-outline-dark btn-sm p-0 border-0">
-              {{fa-icon "list-ul"}}
-            </button>
+            <Button::MeasurementGroups
+              @oil={{@oil}}
+              @valueObject={{item.value}}
+              @valueIndex={{index}}
+              @valueTitle={{@group}}
+              @group={{@group}}
+              @submit={{@submit}}
+            />
           </td>
 
         {{else}}

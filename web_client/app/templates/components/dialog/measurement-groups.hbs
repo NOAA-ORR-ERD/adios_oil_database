@@ -1,0 +1,51 @@
+{{!
+  arguments:
+    valueObject -- object like: {|value: $number| or |max_value: $number, min_value: $number|, unit: $string}
+    valueTitle - dialog title
+    valueUnit - dialog title unit
+    valuePrecision - value conversion precision
+    componentId - unique element ID to tether dialog to
+    updateValue - update function
+}}
+
+
+{{!-- based on ember-modal-dialog with ember-tether --}}
+<ModalDialog
+  @onClose={{@closeModal}}
+  @translucentOverlay={{false}}
+  @targetAttachment="center left"
+  @tetherTarget={{@componentId}}
+  @attachment="center right"
+>
+  <div id="scalar-range-dialog" class="card">
+    {{!-- dialog header --}}
+    <h5 class="card-header text-center p-1">
+      {{@valueTitle}} [{{@valueIndex}}]
+    </h5>
+
+    {{!-- dialog body --}}
+    <div class="card-body p-1">
+      {{!-- range input --}}
+      <div class="row d-flex align-items-center mx-2">
+      </div>
+      {{!-- scalar input --}}
+      <div class="row d-flex align-items-center mx-2">
+      </div>
+
+      {{!-- dialog Cancel and Save buttons --}}
+      <div class="row d-flex justify-content-end mx-2">
+        <button type="button" class="btn btn-secondary btn-sm mr-2"
+                onClick={{action "closeModal"}}
+         >
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary btn-sm"
+                onClick={{action "onSave"}}
+         >
+          Save
+        </button>
+      </div>
+
+    </div>
+  </div>
+</ModalDialog>
