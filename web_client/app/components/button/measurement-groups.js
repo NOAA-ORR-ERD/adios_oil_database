@@ -32,13 +32,11 @@ export default class MeasurementGroupsButton extends BaseComponent {
 
     @action
     showModal() {
-        console.log('showing modal dialog...');
         this.isShowingModal = true;
     }
 
     @action
     closeModal() {
-        console.log('hiding modal dialog...');
         this.isShowingModal = false;
     }
 }

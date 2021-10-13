@@ -28,9 +28,12 @@ export default class GroupedTables extends Component {
             }
         })
         .reduce((acc, e) => {
-            let [k, v, i] = e[0];
-            acc[k] = (acc[k] ? acc[k]: []);
-            acc[k].push({'value': v, 'index': i});
+            e.map(items => {
+                let [k, v, i] = items;
+                acc[k] = (acc[k] ? acc[k]: []);
+                acc[k].push({'value': v, 'index': i});
+            });
+
             return acc;
         }, {})
     }
