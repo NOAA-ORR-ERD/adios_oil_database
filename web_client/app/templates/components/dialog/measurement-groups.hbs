@@ -1,11 +1,12 @@
 {{!
   arguments:
-    valueObject -- object like: {|value: $number| or |max_value: $number, min_value: $number|, unit: $string}
-    valueTitle - dialog title
-    valueUnit - dialog title unit
-    valuePrecision - value conversion precision
-    componentId - unique element ID to tether dialog to
-    updateValue - update function
+    @inputValue = A list of groups that is attached to our measurement.
+    @submit = The function that can update our record.
+    @closeModal = The function that can close our modal dialog.
+    @componentId = The Id of the component that we will tether our dialog to.
+    @valueTitle = The title: We expect this to probably be the group name of
+                  our sublist.
+    @valueIndex = The index of the item in our sublist that we are editing.
 }}
 
 
@@ -20,16 +21,61 @@
   <div id="scalar-range-dialog" class="card">
     {{!-- dialog header --}}
     <h5 class="card-header text-center p-1">
-      {{@valueTitle}} [{{@valueIndex}}]
+      Item {{@valueIndex}} of group: {{@valueTitle}}
     </h5>
 
     {{!-- dialog body --}}
     <div class="card-body p-1">
       {{!-- range input --}}
       <div class="row d-flex align-items-center mx-2">
-      </div>
-      {{!-- scalar input --}}
-      <div class="row d-flex align-items-center mx-2">
+        <table class="table table-hover table-bordered">
+          <thead aria-controls="ift-tbody" aria-expanded="false">
+          </thead>
+          <tbody>
+            {{#each this.tempList as |group index|}}
+              <tr>
+                <td>
+                  <Input @class="p-1 overflow-hidden bg-transparent border"
+                    @value={{group}}
+                    @placeholder="Enter Value"
+                    @change={{fn this.updateValue group index}}
+                  />
+                </td>
+
+                <td class="border-0 edit-table-button-column"
+                    title="Delete measurement">
+                  <button type="button"
+                    {{on "click" (fn this.deleteGroup index)}}
+                    class="btn btn-outline-danger btn-sm p-0 border-0">
+                    {{fa-icon "times"}}
+                  </button>
+                </td>
+
+                <td class="border-0 edit-table-button-column"
+                    title="Add a new group">
+                  <button type="button"
+                    {{on "click" (fn this.addNewGroup (add index 1))}}
+                    class="btn btn-outline-dark btn-sm p-0 border-0">
+                    {{fa-icon "plus"}}
+                  </button>
+                </td>
+
+              </tr>
+            {{else}}
+              <tr>
+                <td class="border-0 edit-table-button-column"
+                    title="Add a new group">
+                  <button type="button"
+                    {{on "click" (fn this.addNewGroup (add index 1))}}
+                    class="btn btn-outline-dark btn-sm p-0 border-0">
+                    {{fa-icon "plus"}}
+                  </button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
       </div>
 
       {{!-- dialog Cancel and Save buttons --}}
