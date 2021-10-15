@@ -1,14 +1,40 @@
 '''
-    Calculate the completeness of the data contained in an oil record.
+Calculate the completeness of the data contained in an oil record.
 
-    The top-level interface is a single function:
-        completeness(pyjson_of_an_oil_record)
+The top-level interface is a single function:
+    completeness(oil)
 
-    (pyjson is a python dict that is a match for the JSON)
+Where oil is an oil record
 
-    It performs calculations that were designed by RobertJ, and returns a value
-    with a scale of 0->100%.
+It performs calculations that were designed by Robert Jones,
+and returns a value with a scale of 0->100
+
+As of June 2021, these were the criteria:
+
+The scores should be normalized by total possible score.
+
+One emulsion water content in any subsample. Score = 2.5
+
+Fresh oil:
+  One density. Score = 1
+
+  Second density separated by temperature.
+    Score = deltaT/40 but not greater than 0.5
+
+  One viscosity. Score = 0.5
+
+  Second viscosity at a different temperature.
+    Score = maxDeltaT/40, but not greater than 0.5
+
+Two Distillation cuts separated by mass or volume fraction.  Score = 3*maxDeltaFraction
+  Fraction recovered =1.  Score = 2.
+  Fraction recovered <1. Score = 1.
+
+One Weathered oil:
+  Density. Score = 1
+  Viscosity. Score = 1
 '''
+
 import logging
 
 from .oil import Oil
@@ -26,10 +52,9 @@ def set_completeness(oil):
 
 def completeness(oil):
     '''
-        Calculate the completeness of the data contained in an oil record.
+    Calculate the completeness of the data contained in an oil record.
 
-        :param oil: The oil record to be validated, in json-compatible python
-                    data structure.
+    :param oil: The oil record to be validated
     '''
     res = 0
     for check_func in CHECKS:
@@ -40,7 +65,7 @@ def completeness(oil):
 
 def check_emulsion_water_content(oil):
     '''
-        One emulsion water content in any subsample. Score = 2.5
+    One emulsion water content in any subsample. Score = 2.5
     '''
     sub_samples = oil.sub_samples
 
@@ -55,22 +80,15 @@ def check_emulsion_water_content(oil):
 
 def check_density(oil):
     '''
-        Fresh oil: One density or API. Score = 1
+    Fresh oil: One density Score = 1
     '''
-
-    if oil.metadata.API is not None:
-        return 1.0
-
     if len(oil.sub_samples) > 0:
         ss = oil.sub_samples[0]
-
         densities = ss.physical_properties.densities
-
         for d in densities:
             if (is_measurement_good(d.density) and
                     is_measurement_good(d.ref_temp)):
                 return 1.0
-
     return 0.0
 
 
@@ -155,25 +173,33 @@ def check_second_viscosity(oil):
 
 def check_distillation(oil):
     '''
-    Fresh oil: Two Distillation cuts separated by mass or volume fraction.
+    Two Distillation cuts separated by mass or volume fraction.
+      Score = 3*maxDeltaFraction
 
-    Score = 3 * maxDeltaFraction
+    Fraction recovered =1.  Score = 2.
+    Fraction recovered <1. Score = 1.
 
-    maxDeltaFraction: The difference between the lowest and
-    highest measurement in the set
     '''
+    score = 0.0
     if len(oil.sub_samples) > 0:
-        ss = oil.sub_samples[0]
-        cuts = ss.distillation_data.cuts
+        dist_data = oil.sub_samples[0].distillation_data
+        cuts = dist_data.cuts
 
         fractions = [c.fraction.converted_to('fraction').value for c in cuts]
 
         if len(fractions) >= 2:
             f1, *_, f2 = sorted([f for f in fractions if f is not None])
 
-            return 3.0 * (f2 - f1)
+            score = 3.0 * (f2 - f1)
 
-    return 0.0
+        if dist_data.fraction_recovered is None:
+            pass
+        elif dist_data.fraction_recovered == 1.0:
+            score += 2.0
+        elif dist_data.fraction_recovered < 1.0:
+            score += 1.0
+
+    return score
 
 
 def check_weathered_density(oil):
