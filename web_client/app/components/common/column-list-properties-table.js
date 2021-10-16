@@ -21,10 +21,8 @@ export default class ColumnListPropertiesTable extends PropertiesTable {
 
     @action
     addEmptyTableRow(index) {
-
-        if (!this.baseProperty) {
-            this.baseProperty = [];
-        }
+        this.setAttrsIfMissing();
+        this.initBaseProperty();
 
         this.baseProperty.splice(index, 0, {});
         this.baseProperty = this.baseProperty;
