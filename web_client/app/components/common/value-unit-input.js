@@ -27,6 +27,14 @@ export default class ValueUnitInput extends Component {
                 delete this.args.valueObject[key];
             });
         }
+        else if (this.args.valueUnitType === 'unknown') {
+            alert('Updating Unitted Value: ' +
+                  `The unit type "${this.args.valueUnitType}" is invalid.`);
+            this.valueObject = {};
+            Object.keys(this.args.valueObject).forEach((key) => {
+                delete this.args.valueObject[key];
+            });
+        }
         else {
             let unitType;
 
