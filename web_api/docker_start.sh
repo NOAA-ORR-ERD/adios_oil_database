@@ -46,13 +46,10 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     # getting the branches we need in
     echo ">>> git remote set-branches --add origin under_review"
     git remote set-branches --add origin under_review
-    echo ">>> fetch origin under_review"
-    git fetch origin under_review
     echo ">>> git remote set-branches --add origin server_working_copy"
     git remote set-branches --add origin server_working_copy
-    echo ">>> git fetch origin server_working_copy"
-    git fetch origin server_working_copy
-    # echo "return code: $?"$'\n'
+    echo ">>> git fetch origin"
+    git fetch origin
 
     echo ">>> git checkout server_working_copy"
     git checkout server_working_copy # get back where we were.
