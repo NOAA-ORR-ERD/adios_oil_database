@@ -8,8 +8,7 @@ export function convertUnit([valueUnitObj,
                              newUnit,
                              unitType,
                              ...rest]) {  // eslint-disable-line no-unused-vars
-  if (!valueUnitObj ||
-      !valueUnitObj.hasOwnProperty('unit')) {
+  if (!(valueUnitObj && 'unit' in valueUnitObj)) {
     // if we don't have a value, we just return
     // if we don't have a unit, then we are likely unitless, and return
     return valueUnitObj;
