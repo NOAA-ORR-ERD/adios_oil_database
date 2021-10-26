@@ -6,6 +6,7 @@
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Measurement</th>
+      <th scope="col" class="col-1">Unit Type</th>
 
       <th scope="col" title="Standard Deviation">Std. Dev.</th>
 
@@ -53,7 +54,10 @@
             @editUnit={{true}}
             @defaultUnit="1"
           />
+        </td>
 
+        <td>
+          {{item.value.measurement.unit_type}}
         </td>
 
         <td>

@@ -127,7 +127,10 @@ export default class SelectUnitDialog extends Component {
     submitForm() {
         this.closeModal();
 
-        this.args.ok({'target': {'value': this.unit}});
+        this.args.ok({'target': {
+            'value': this.unit,
+            'unit_type': this.unitType.Name
+        }});
     }
 
 }

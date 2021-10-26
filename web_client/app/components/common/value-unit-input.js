@@ -63,6 +63,7 @@ export default class ValueUnitInput extends Component {
     updateUnit(e) {
         if (e.target.value) {
             set(this.valueObject, 'unit', e.target.value);
+            set(this.valueObject, 'unit_type', e.target.unit_type);
         }
 
         Object.entries(this.valueObject).forEach(([key, item]) => {
