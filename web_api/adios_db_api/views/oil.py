@@ -9,6 +9,7 @@ import ujson
 from cornice import Service
 from pyramid.httpexceptions import (HTTPBadRequest,
                                     HTTPNotFound,
+                                    HTTPNoContent,
                                     HTTPConflict,
                                     HTTPUnsupportedMediaType,
                                     HTTPInternalServerError)
@@ -288,13 +289,13 @@ def delete_oil(request):
                .delete_one({'oil_id': obj_id}))
 
         if res.deleted_count == 0:
-            raise HTTPNotFound()
+            raise HTTPBadRequest()  # JSONAPI expects this upon failure
 
         memoized_results.pop(obj_id, None)
 
-        return {'deleted_count': res.deleted_count}
+        raise HTTPNoContent()  # JSONAPI expects this upon success
     else:
-        raise HTTPBadRequest()
+        raise HTTPBadRequest()  # JSONAPI expects this upon failure
 
 
 def new_oil_id(request):
