@@ -280,7 +280,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 3
+                        "value": 3.0
                     },
                     "method": "ASTM D4294",
                     "name": "Sulfur Content"
@@ -303,7 +303,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 299
+                        "value": 299.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Petroleum Hydrocarbon (GC-TPH)"
@@ -315,7 +315,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 164
+                        "value": 164.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Saturate Hydrocarbon (GC-TSH)"
@@ -327,7 +327,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 135
+                        "value": 135.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Aromatic Hydrocarbon (GC-TAH)"
@@ -339,7 +339,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 55
+                        "value": 55.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
@@ -351,7 +351,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 45
+                        "value": 45.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
@@ -363,7 +363,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 9
+                        "value": 9.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
@@ -372,7 +372,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 1
+                        "value": 1.0
                     },
                     "method": "ESTS 12.11/2.0/M",
                     "name": "Waxes"
@@ -2315,7 +2315,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 317
+                        "value": 317.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Petroleum Hydrocarbon (GC-TPH)"
@@ -2327,7 +2327,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 173
+                        "value": 173.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Saturate Hydrocarbon (GC-TSH)"
@@ -2339,7 +2339,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 144
+                        "value": 144.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Aromatic Hydrocarbon (GC-TAH)"
@@ -2351,7 +2351,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 55
+                        "value": 55.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
@@ -2363,7 +2363,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 45
+                        "value": 45.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
@@ -2375,7 +2375,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 9
+                        "value": 9.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
@@ -4319,7 +4319,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 356
+                        "value": 356.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Petroleum Hydrocarbon (GC-TPH)"
@@ -4331,7 +4331,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 190
+                        "value": 190.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Saturate Hydrocarbon (GC-TSH)"
@@ -4343,7 +4343,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 167
+                        "value": 167.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Aromatic Hydrocarbon (GC-TAH)"
@@ -4355,7 +4355,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 53
+                        "value": 53.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
@@ -4367,7 +4367,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 47
+                        "value": 47.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
@@ -4379,7 +4379,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 9
+                        "value": 9.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
@@ -4388,7 +4388,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 2
+                        "value": 2.0
                     },
                     "method": "ESTS 12.11/2.0/M",
                     "name": "Waxes"
@@ -6307,7 +6307,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 313
+                        "value": 313.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Petroleum Hydrocarbon (GC-TPH)"
@@ -6319,7 +6319,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 158
+                        "value": 158.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Saturate Hydrocarbon (GC-TSH)"
@@ -6331,7 +6331,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 155
+                        "value": 155.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Aromatic Hydrocarbon (GC-TAH)"
@@ -6343,7 +6343,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 50
+                        "value": 50.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
@@ -6355,7 +6355,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 50
+                        "value": 50.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
@@ -6367,7 +6367,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 7
+                        "value": 7.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
@@ -8305,7 +8305,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 301
+                        "value": 301.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Petroleum Hydrocarbon (GC-TPH)"
@@ -8317,7 +8317,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 150
+                        "value": 150.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Saturate Hydrocarbon (GC-TSH)"
@@ -8329,7 +8329,7 @@
                     "measurement": {
                         "unit": "mg/g",
                         "unit_type": "massfraction",
-                        "value": 151
+                        "value": 151.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Gas Chromatography-Total Aromatic Hydrocarbon (GC-TAH)"
@@ -8341,7 +8341,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 50
+                        "value": 50.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TSH/GC-TPH"
@@ -8353,7 +8353,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 50
+                        "value": 50.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "GC-TAH/GC-TPH"
@@ -8365,7 +8365,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 6
+                        "value": 6.0
                     },
                     "method": "ESTS 5.03/x.x/M",
                     "name": "Resolved Peaks/TPH"
