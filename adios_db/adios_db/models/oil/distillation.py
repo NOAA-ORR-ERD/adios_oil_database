@@ -51,8 +51,9 @@ class Distillation:
                                       ERRORS["E032"],
                                       case_insensitive=True)(self.type))
 
-            if (self.fraction_recovered is None or
-                    self.fraction_recovered.value is None):
+            if (self.fraction_recovered is None
+                or (self.fraction_recovered.value is None
+                    and self.fraction_recovered.max_value is None)):
                 msgs.append(WARNINGS["W009"])
             else:
                 frac_recov = (self.fraction_recovered
