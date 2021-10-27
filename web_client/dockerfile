@@ -1,6 +1,5 @@
 # Oil Database Web Client Docker configuration
 #
-
 FROM registry.orr.noaa.gov/erd/centos-conda
 
 RUN yum update -y && yum -y install node npm
