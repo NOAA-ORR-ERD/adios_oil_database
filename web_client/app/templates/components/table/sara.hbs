@@ -12,22 +12,23 @@
             <td>{{value.label}}</td>
 
             {{#if (get @oil.SARA attr)}}
-              {{#with (get @oil.SARA attr) as |sara|}}
-                <td>
-                  <Common::ValueUnitInput
-                    @valueObject={{sara}}
-                    @valueUnit="%"
-                    @valuePrecision={{2}}
-                    @editable={{@editable}}
-                    @submit={{fn this.updateCellValue (get value "label")}}
-                  />
-                </td>
-              {{/with}}
+              <td>
+                <Common::ValueUnitInput
+                  @valueObject={{get @oil.SARA attr}}
+                  @valueUnit="%"
+                  @valuePrecision={{2}}
+                  @editable={{@editable}}
+                  @submit={{fn this.updateCellValue (get value "label")}}
+                />
+              </td>
             {{else}}
               {{#if @editable}}
                 <td>
                   <Common::ValueUnitInput
-                    @valueObject=""
+                    @valueObject={{get (set-attr-if-none 
+                      (set-attr-if-none @oil "SARA" (hash))
+                      attr (hash)) attr
+                    }}
                     @valueUnit="%"
                     @valuePrecision={{2}}
                     @editable={{@editable}}

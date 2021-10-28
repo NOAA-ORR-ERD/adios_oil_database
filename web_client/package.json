@@ -75,13 +75,13 @@
   },
   "dependencies": {
     "@ember/test-helpers": "^2.1.4",
-    "caniuse-lite": "^1.0.30001183",
     "d3": "^6.5.0",
     "ember-composable-helpers": "^4.4.1",
     "ember-ref-modifier": "^1.0.1",
     "ember-toggle": "^7.1.0",
     "eslint": "^7.19.0",
     "popper": "^1.0.1",
-    "qunit": "^2.14.0"
+    "qunit": "^2.14.0",
+    "xhr2": "^0.2.1"
   }
 }

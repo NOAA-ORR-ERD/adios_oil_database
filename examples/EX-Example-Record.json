@@ -94,7 +94,7 @@
                     "measurement": {
                         "unit": "ppm",
                         "unit_type": "massfraction",
-                        "value": 0
+                        "value": 0.0
                     },
                     "name": "Hydrogen Sulfide Concentration"
                 },
@@ -420,7 +420,7 @@
                     "measurement": {
                         "unit": "ppm",
                         "unit_type": "massfraction",
-                        "value": 0
+                        "value": 0.0
                     },
                     "name": "Nitrogen Mass Fraction"
                 },
@@ -444,7 +444,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "volumefraction",
-                        "value": 0
+                        "value": 0.0
                     },
                     "name": "Aromatics (FIA)"
                 }
@@ -570,7 +570,7 @@
                     "measurement": {
                         "unit": "ppm",
                         "unit_type": "massfraction",
-                        "value": 0
+                        "value": 0.0
                     },
                     "name": "Nitrogen Mass Fraction"
                 },
@@ -594,7 +594,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "volumefraction",
-                        "value": 0
+                        "value": 0.0
                     },
                     "name": "Aromatics (FIA)"
                 }
@@ -1928,7 +1928,7 @@
                     "measurement": {
                         "unit": "%",
                         "unit_type": "massfraction",
-                        "value": 0
+                        "value": 0.0
                     },
                     "name": "N-Heptane Insolubles (C7 Asphaltenes)"
                 },

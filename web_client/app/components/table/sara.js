@@ -11,7 +11,6 @@ export default class Sara extends Component {
 
         this.oil = this.args.oil;
         this.readPropertyTypes(this.args.store, 'sara_total_fractions.json');
-
     }
 
     readPropertyTypes(store, propertyFileName) {
@@ -24,7 +23,7 @@ export default class Sara extends Component {
     @action
     updateCellValue(label) {
         // we need to work with oil.SARA.{{label}} as a property
-        
+
         if (!this.oil.SARA) {
             set(this.oil, 'SARA', {});
         }
@@ -39,5 +38,4 @@ export default class Sara extends Component {
 
         this.args.submit(this.oil);
     }
-
 }

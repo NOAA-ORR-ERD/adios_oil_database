@@ -42,7 +42,7 @@
           <tr>
             <td>
               <Common::ValueUnitInput
-                @valueObject={{get value @leftColumnValueName}}
+                @valueObject={{get (set-attr-if-none value @leftColumnValueName (hash)) @leftColumnValueName}}
                 @valueUnit={{@leftColumnUnit}}
                 @valueUnitType={{@leftColumnUnitType}}
                 @valuePrecision={{@leftColumnPrecision}}
@@ -52,7 +52,7 @@
             </td>
             <td>
               <Common::ValueUnitInput
-                @valueObject={{get value @rightColumnValueName}}
+                @valueObject={{get (set-attr-if-none value @rightColumnValueName (hash)) @rightColumnValueName}}
                 @valueUnit={{@rightColumnUnit}}
                 @valuePrecision={{@rightColumnPrecision}}
                 @editable={{@editable}}

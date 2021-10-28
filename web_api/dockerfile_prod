@@ -43,4 +43,4 @@ RUN mkdir /config
 RUN cp /adios-db/oildb-deploy/config/public/web_api/* /config/
 
 EXPOSE 9898
-ENTRYPOINT ["/adios-db/web_api/docker_start.sh"]
+ENTRYPOINT ["/adios-db/web_api/docker_start_prod.sh"]
