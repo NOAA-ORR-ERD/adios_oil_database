@@ -8,7 +8,8 @@ git config --global user.name "Adios Automated Script"
 # clone the repo
 # this may be done in the docker build, but for now, for testing ...
 echo "Cloning the repo"
-git clone --depth 1 ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/$REPO_NAME.git /$REPO_NAME/
+# git clone --depth 1 ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/$REPO_NAME.git /$REPO_NAME/
+git clone ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/$REPO_NAME.git /$REPO_NAME/
 
 
 if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
@@ -43,13 +44,13 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
 
     cd /$REPO_NAME/
 
-    # getting the branches we need in
-    echo ">>> git remote set-branches --add origin under_review"
-    git remote set-branches --add origin under_review
-    echo ">>> git remote set-branches --add origin server_working_copy"
-    git remote set-branches --add origin server_working_copy
-    echo ">>> git fetch origin"
-    git fetch origin
+    # # getting the branches we need in
+    # echo ">>> git remote set-branches --add origin under_review"
+    # git remote set-branches --add origin under_review
+    # echo ">>> git remote set-branches --add origin server_working_copy"
+    # git remote set-branches --add origin server_working_copy
+    # echo ">>> git fetch origin"
+    # git fetch origin
 
     echo ">>> git checkout server_working_copy"
     git checkout server_working_copy # get back where we were.
@@ -75,14 +76,18 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     echo ">>> checkout production -- validation/validation_by*"
     git checkout production -- validation/validation_by*
 
-    echo ">>> git git commit -a -m"
+    echo ">>> git commit -a -m"
     git commit -a -m "pulled validation from production"
 
     # get the under_review branch in sync with production
     echo ">>> git merge production"
     git merge -m "merging changes from production into under_review" production
 
+    echo ">>> git checkout server_working_copy -- validation/validation_by*"
     git checkout server_working_copy -- validation/validation_by*
+
+    echo ">>> git commit -a -m "getting validation from server working copy""
+    git commit -a -m "getting validation from server working copy"
 
     # merge the changes from the server into under_review branch
     echo ">>> git merge server_working_copy"
