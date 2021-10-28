@@ -72,7 +72,11 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     echo ">>> git pull"
     git pull
 
+    echo ">>> checkout production -- validation/validation_by*"
     git checkout production -- validation/validation_by*
+
+    echo ">>> git git commit -a -m"
+    git commit -a -m "pulled validation from production"
 
     # get the under_review branch in sync with production
     echo ">>> git merge production"
