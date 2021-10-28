@@ -8,6 +8,8 @@ export default class OilModel extends Model {
     @attr adios_data_model_version;
     @attr metadata;
     @attr status;
+    @attr review_status;
+    @attr permanent_warnings;
     @attr sub_samples;
     @attr extra_data;
 }
