@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+echo `pwd`
 
 REPO_NAME=noaa-oil-data-test
 git config --global user.email "adios-script@noaa.gov"
@@ -64,7 +64,7 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     echo ">>> git add -A"
     git add -A
 
-    echo ">>> git commit -m "changes made in Web UI""
+    echo ">>> git commit -m \"changes made in Web UI\""
     git commit -m "changes made in Web UI"
 
 
