@@ -17,7 +17,14 @@
             "Crude Oil",
             "Heavy Crude"
         ],
-        "model_completeness": 94
+        "model_completeness": 94,
+        "change_log": [
+            {
+                "name": "Bozo the Clown",
+                "date": "2021-04-01",
+                "comment": "Any random old thing"
+            }
+        ]
     },
     "sub_samples": [
         {
