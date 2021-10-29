@@ -181,3 +181,13 @@ class JSON_List(list):
 
     def __repr__(self):
         return f"{self.__class__.__name__}({list.__repr__(self)})"
+
+    def validate(self):
+        # make sure other validate methods are called
+        msgs = []
+
+        for item in self:
+            msgs.extend(item.validate())
+        return msgs
+
+
