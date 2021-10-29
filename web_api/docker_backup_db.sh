@@ -64,9 +64,10 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     echo ">>> git add -A"
     git add -A
 
-    echo ">>> git commit -m \"changes made in Web UI\""
-    git commit -m "changes made in Web UI"
-
+    if ! git diff-index --quiet HEAD; then
+      echo ">>> git commit -m \"changes made in Web UI\""
+      git commit -m "changes made in Web UI"
+    fi
 
     # Get the latest under_review branch
     echo ">>> git checkout under_review"
@@ -78,8 +79,10 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     echo ">>> checkout production -- validation/validation_by*"
     git checkout production -- validation/validation_by*
 
-    echo ">>> git commit -a -m"
-    git commit -a -m "pulled validation from production"
+    if ! git diff-index --quiet HEAD; then
+      echo ">>> git commit -a -m"
+      git commit -a -m "pulled validation from production"
+    fi
 
     # get the under_review branch in sync with production
     echo ">>> git merge production"
@@ -88,8 +91,10 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     echo ">>> git checkout server_working_copy -- validation/validation_by*"
     git checkout server_working_copy -- validation/validation_by*
 
-    echo ">>> git commit -a -m "getting validation from server working copy""
-    git commit -a -m "getting validation from server working copy"
+    if ! git diff-index --quiet HEAD; then
+      echo ">>> git commit -a -m \"getting validation from server working copy\""
+      git commit -a -m "getting validation from server working copy"
+    fi
 
     # merge the changes from the server into under_review branch
     echo ">>> git merge server_working_copy"
