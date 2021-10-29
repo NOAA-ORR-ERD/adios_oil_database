@@ -242,7 +242,7 @@ class Temperature(MeasurementBase):
         if self is None:  # how can this happen?!?! -- but it does.
             return msgs
         # only do this for C or K
-        if self.unit.upper() not in {'C', 'K'}:
+        if (self.unit is not None) and (self.unit.upper() not in {'C', 'K'}):
             return msgs
         for val in (self.value, self.min_value, self.max_value):
             if val is not None:

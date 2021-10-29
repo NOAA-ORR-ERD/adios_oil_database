@@ -11,6 +11,7 @@ from pathlib import Path
 from operator import itemgetter
 
 from adios_db.scripting import get_all_records
+from adios_db.models.oil.validation import ERRORS_TO_IGNORE
 
 USAGE = """
 adios_validate data_dir [save]
@@ -61,11 +62,13 @@ def write_reports(base_dir, save):
             else:
                 validation_by_record[oil.oil_id] = (oil.metadata.name, oil.status)
         for msg in oil.status:
+            error_code = msg.split(":")[0].strip()
             issues = f"\n``{oil.oil_id}`` -- {oil.metadata.name}:\n\n    {msg}\n"
-            if oil.review_status.status.lower() == "review complete":
-                validation_by_error_rev.setdefault(msg.split(":")[0], []).append(issues)
+            if (oil.review_status.status.lower() == "review complete"
+                or error_code in ERRORS_TO_IGNORE):
+                validation_by_error_rev.setdefault(error_code, []).append(issues)
             else:
-                validation_by_error.setdefault(msg.split(":")[0], []).append(issues)
+                validation_by_error.setdefault(error_code, []).append(issues)
         if save:
             with open(pth, 'w', encoding='utf-8') as datafile:
                 json.dump(oil.py_json(), datafile, indent=4)
@@ -113,9 +116,9 @@ def write_header(of, base_dir):
 
 
 def write_header_rev(outfile):
-    outfile.write("\n\n################\n"
-                  "Reviewed Records\n"
-                  "################\n\n"
+    outfile.write("\n\n####################\n"
+                       "Unresolvable Issues\n"
+                       "###################\n\n"
                   "The rest of these are records that have been reviewed,\n"
                   "but still have issues that will probably never be resolved\n")
 
