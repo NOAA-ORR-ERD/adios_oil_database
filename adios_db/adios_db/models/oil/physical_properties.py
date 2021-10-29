@@ -104,7 +104,7 @@ class DensityPoint:
     method: str = None
 
 
-class DensityList(JSON_List, RefTempList):
+class DensityList(RefTempList, JSON_List):
     item_type = DensityPoint
     # def validate(self):
     #     msgs = super().validate()
@@ -161,7 +161,7 @@ class InterfacialTensionPoint:
     method: str = None
 
 
-class InterfacialTensionList(JSON_List, RefTempList):
+class InterfacialTensionList(RefTempList, JSON_List):
     item_type = InterfacialTensionPoint
 
 
