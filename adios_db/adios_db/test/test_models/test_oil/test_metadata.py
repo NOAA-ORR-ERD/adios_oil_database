@@ -4,6 +4,7 @@ tests for the metadata objects
 not much here -- for the most part they are tested as parts of the Oil
 """
 from pathlib import Path
+import json
 
 from adios_db.models.oil.metadata import MetaData, ChangeLogEntry, ChangeLog
 from adios_db.models.oil.oil import Oil
@@ -46,13 +47,13 @@ MD_JSON = """
 }
 """
 
-def metadata_from_json():
+def test_metadata_from_json():
     """
     see if we can make one from JSON
 
     fixme: there could be a lot more checks here, but ...
     """
-    md = MetaData.from_py_json(json.load(MD_JSON))
+    md = MetaData.from_py_json(json.loads(MD_JSON))
 
     assert md.sample_date == "2013-04-08"
     assert md.product_type == "Bitumen Blend"
@@ -184,6 +185,8 @@ def test_ChangeLog():
 
     assert msgs == ["W011: change log entry date format: 2021-040-01 "
                     "is invalid: Invalid isoformat string: '2021-040-01'"]
+
+    # json.dump(cl.py_json(), open("change_log.json", 'w'))
 
 
 def test_bad_log_date():
