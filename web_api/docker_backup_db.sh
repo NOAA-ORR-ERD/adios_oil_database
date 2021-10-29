@@ -67,6 +67,8 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     if ! git diff-index --quiet HEAD; then
       echo ">>> git commit -m \"changes made in Web UI\""
       git commit -m "changes made in Web UI"
+    else
+      echo "Nothing to commit."
     fi
 
     # Get the latest under_review branch
@@ -82,6 +84,8 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     if ! git diff-index --quiet HEAD; then
       echo ">>> git commit -a -m"
       git commit -a -m "pulled validation from production"
+    else
+      echo "Nothing to commit."
     fi
 
     # get the under_review branch in sync with production
@@ -94,6 +98,8 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     if ! git diff-index --quiet HEAD; then
       echo ">>> git commit -a -m \"getting validation from server working copy\""
       git commit -a -m "getting validation from server working copy"
+    else
+      echo "Nothing to commit."
     fi
 
     # merge the changes from the server into under_review branch
