@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 REPO_NAME=noaa-oil-data-test
 git config --global user.email "adios-script@noaa.gov"
 git config --global user.name "Adios Automated Script"
