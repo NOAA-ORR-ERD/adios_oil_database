@@ -11,7 +11,9 @@ from pathlib import Path
 from operator import itemgetter
 
 from adios_db.scripting import get_all_records
-from adios_db.models.oil.validation import ERRORS_TO_IGNORE
+from adios_db.models.oil.validation import (unpack_status,
+                                            is_only_ignored,
+                                            ERRORS_TO_IGNORE)
 
 USAGE = """
 adios_validate data_dir [save]
@@ -41,6 +43,9 @@ def main():
     write_reports(base_dir, save)
 
 
+
+
+
 def write_reports(base_dir, save):
 
     validation_by_record = {}
@@ -55,15 +60,20 @@ def write_reports(base_dir, save):
         print(f"processing: {oil.oil_id}: {oil.metadata.name}")
 
         oil.reset_validation()
-        print(oil.status)
-        if oil.status:
-            if oil.review_status.status.lower() == "review complete":
-                validation_by_record_rev[oil.oil_id] = (oil.metadata.name, oil.status)
+        # unpack into a dict for easier processing
+        status = unpack_status(oil.status)
+        if status: print(status)
+        if status:
+            if (oil.review_status.status.lower() == "review complete"
+                    or is_only_ignored(status)):
+                validation_by_record_rev[oil.oil_id] = (oil.metadata.name,
+                                                        oil.status)
             else:
-                validation_by_record[oil.oil_id] = (oil.metadata.name, oil.status)
-        for msg in oil.status:
-            error_code = msg.split(":")[0].strip()
-            issues = f"\n``{oil.oil_id}`` -- {oil.metadata.name}:\n\n    {msg}\n"
+                validation_by_record[oil.oil_id] = (oil.metadata.name,
+                                                    oil.status)
+        for error_code, msgs in status.items():
+            issues = "\n".join(f"\n``{oil.oil_id}`` -- {oil.metadata.name}:\n\n    {msg}\n"
+                               for msg in msgs)
             if (oil.review_status.status.lower() == "review complete"
                 or error_code in ERRORS_TO_IGNORE):
                 validation_by_error_rev.setdefault(error_code, []).append(issues)
@@ -107,20 +117,20 @@ def write_by_error(outfile, validation_by_error):
 
 def write_header(of, base_dir):
     of.write("\n####################################\n")
-    of.write("ADIOS Oil Database Validation Report\n")
-    of.write("####################################\n\n")
+    of.write(  "ADIOS Oil Database Validation Report\n")
+    of.write(  "####################################\n\n")
     of.write("Validation of data in: \n\n")
     of.write(f"``{base_dir.absolute()}``\n\n")
     of.write("**Generated:** "
-             f"{datetime.datetime.now().strftime('%h %d, %Y -- %H00')}\n\n")
+             f"{datetime.datetime.now().strftime('%h %d, %Y - %H:00')}\n\n")
 
 
 def write_header_rev(outfile):
-    outfile.write("\n\n####################\n"
-                       "Unresolvable Issues\n"
-                       "###################\n\n"
-                  "The rest of these are records that have been reviewed,\n"
-                  "but still have issues that will probably never be resolved\n")
+    outfile.write("\n\n############\n"
+                      "Known Issues\n"
+                      "############\n\n"
+                  "The rest of these are records that have been reviewed, but still \n"
+                  "have issues that are known and may never be resolved\n")
 
 
 
