@@ -27,7 +27,7 @@ class RefTempList:
 
     def validate(self):
         """
-        validater for anything that has a list of reference temps
+        validator for anything that has a list of reference temps
 
         e.g. density and viscosity
 
@@ -85,13 +85,14 @@ class RefTempList:
         for pt in points_list:
             value = getattr(getattr(pt, data_name, None), 'value', None)
 
-            try:
-                value = float(value)
-            except (ValueError, TypeError):
-                msgs.append(ERRORS["E044"].format(value, data_name))
-            else:
-                if value <= 0.0:
+            if value is not None:
+                try:
+                    value = float(value)
+                except (ValueError, TypeError):
                     msgs.append(ERRORS["E044"].format(value, data_name))
+                else:
+                    if value <= 0.0:
+                        msgs.append(ERRORS["E044"].format(value, data_name))
 
         return msgs
 
@@ -102,6 +103,8 @@ class DensityPoint:
     density: Density = None
     ref_temp: Temperature = None
     method: str = None
+    comment: str = None
+
 
 
 class DensityList(RefTempList, JSON_List):
@@ -120,6 +123,7 @@ class DynamicViscosityPoint:
     ref_temp: Temperature = None
     shear_rate: AngularVelocity = None
     method: str = None
+    comment: str = None
 
 
 class DynamicViscosityList(JSON_List, RefTempList):
@@ -133,6 +137,8 @@ class KinematicViscosityPoint:
     ref_temp: Temperature = None
     shear_rate: AngularVelocity = None
     method: str = None
+    comment: str = None
+
 
 
 class KinematicViscosityList(JSON_List, RefTempList):
@@ -144,6 +150,7 @@ class KinematicViscosityList(JSON_List, RefTempList):
 class PourPoint:
     measurement: Temperature = None
     method: str = None
+    comment: str = None
 
 
 @dataclass_to_json
@@ -151,6 +158,7 @@ class PourPoint:
 class FlashPoint:
     measurement: Temperature = None
     method: str = None
+    comment: str = None
 
 
 @dataclass_to_json
@@ -159,6 +167,7 @@ class InterfacialTensionPoint:
     tension: InterfacialTension = None
     ref_temp: Temperature = None
     method: str = None
+    comment: str = None
 
 
 class InterfacialTensionList(RefTempList, JSON_List):

@@ -393,4 +393,18 @@ class Test_interfacial_tension:
         assert "E042:" in msgs[0]
         assert "InterfacialTension" in msgs[0]
 
+    def test_comment_no_errors(self):
+        """
+        make sure we can add and save a comment to an InterfacialTensionPoint
+        """
+        itp = InterfacialTensionPoint(tension=None,
+                                      ref_temp=Temperature(value=15.0,
+                                                           unit="C"),
+                                      comment="Too Viscous",
+                                      )
+        itl = InterfacialTensionList((itp,))
+
+        msgs = itl.validate()
+
+        assert not msgs
 
