@@ -8,6 +8,22 @@ import sys
 
 from adios_db.scripting import get_all_records, process_input
 
+def move_ift_note(ift):
+    for itp in ift:
+        if itp.tension.value is not None:
+            try:
+                itp.tension.value = float(itp.tension.value)
+            except ValueError:
+                itp.comment = itp.tension.value
+                itp.tension.value = None
+        if itp.tension.standard_deviation is not None:
+            try:
+                itp.tension.standard_deviation = \
+                    float(itp.tension.standard_deviation)
+            except ValueError:
+                itp.comment = itp.tension.standard_deviation
+                itp.tension.standard_deviation = None
+
 
 def main():
     base_dir, dry_run = process_input()
@@ -18,14 +34,9 @@ def main():
         # loop through the subsamples
         for ss in rec.sub_samples:
             pp = ss.physical_properties
-            for itp in pp.interfacial_tension_water:
-                if itp.tension.value is not None:
-                    try:
-                        itp.tension.value = float(itp.tension.value)
-                    except ValueError:
-                        itp.comment = itp.tension.value
-                        itp.tension.value = None
-
+            move_ift_note(pp.interfacial_tension_water)
+            move_ift_note(pp.interfacial_tension_air)
+            move_ift_note(pp.interfacial_tension_seawater)
         if not dry_run:
             print("Saving out:", pth)
             rec.to_file(pth)
