@@ -8,7 +8,7 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-python=3.9.*
+python>=3.8.*
 numpy>=1.20
 scipy  # used for gnome oil estimation -- for now
 
