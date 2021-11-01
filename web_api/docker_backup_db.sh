@@ -24,9 +24,10 @@ if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
     # get set up to do new edits
     # delete the old working copy
     echo ">>> git branch -D server_working_copy"
-    git branch -D server_working_copy
+    git show-ref refs/heads/server_working_copy && git branch -D server_working_copy
+
     echo ">>> git push origin --delete working_copy"
-    git push origin --delete server_working_copy
+    git show-ref refs/remotes/origin/server_working_copy && git push origin --delete server_working_copy
 
     # make a new working copy of production branch to work from
     echo ">>> git checkout -b server_working_copy"
@@ -36,7 +37,7 @@ if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
     echo ">>> git push --set-upstream origin server_working_copy"
     git push --set-upstream origin server_working_copy
 
-    echo "Loading database with the production copy"
+    echo "Loading database with the production branch"
     adios_db_restore --config /config/config_oil_db.ini
 
     cd -
