@@ -8,7 +8,7 @@ export default class Distillation extends Component {
         // problems with the api server validation
         cutsValue.forEach(cut => {
             ['fraction','vapor_temp'].forEach(label => {
-                if (Object.keys(cut[label]).length === 0) {
+                if (cut.hasOwnProperty(label) && Object.keys(cut[label]).length === 0) {
                     delete cut[label]
                 }
             });
