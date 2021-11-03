@@ -26,4 +26,12 @@ export default class ShowController extends Controller {
             this.currentCategoryTab = this.currentCategoryTab;
         }
     }
+
+    @action
+    updateName(event) {
+        let newName = event.target.value;
+        this.model.metadata.name = newName;
+
+        this.model.save();
+    }
 }
