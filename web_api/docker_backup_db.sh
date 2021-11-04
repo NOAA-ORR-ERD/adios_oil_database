@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e
+set -e  # exit script if any commands fail
+set -x  # echo commands to stdout
 
 REPO_NAME=noaa-oil-data-test
 git config --global user.email "adios-script@noaa.gov"
@@ -23,21 +24,16 @@ if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
 
     # get set up to do new edits
     # delete the old working copy
-    echo ">>> git branch -D server_working_copy"
     git show-ref refs/heads/server_working_copy && git branch -D server_working_copy
 
-    echo ">>> git push origin --delete working_copy"
     git show-ref refs/remotes/origin/server_working_copy && git push origin --delete server_working_copy
 
     # make a new working copy of production branch to work from
-    echo ">>> git checkout -b server_working_copy"
     git checkout -b server_working_copy
 
     # save it on the gitlab server so we can retrieve it at the next deploy
-    echo ">>> git push --set-upstream origin server_working_copy"
     git push --set-upstream origin server_working_copy
 
-    echo "Loading database with the production branch"
     adios_db_restore --config /config/config_oil_db.ini
 
     cd -
@@ -55,81 +51,63 @@ elif [ “$MONGODB_WRITEABLE” == “true” ]; then
     # echo ">>> git fetch origin"
     # git fetch origin
 
-    echo ">>> git checkout server_working_copy"
     git checkout server_working_copy # get back where we were.
 
     echo "Saving the contents of the database to the working copy"
-    echo ">>> adios_db_backup --config /config/config_oil_db.ini"
     adios_db_backup --config /config/config_oil_db.ini
 
-    echo ">>> git add -A"
     git add -A
 
     if ! git diff-index --quiet HEAD; then
-      echo ">>> git commit -m \"changes made in Web UI\""
       git commit -m "changes made in Web UI"
     else
       echo "Nothing to commit."
     fi
 
     # Get the latest under_review branch
-    echo ">>> git checkout under_review"
     git checkout under_review
 
-    echo ">>> git pull"
     git pull
 
-    echo ">>> checkout production -- validation/validation_by*"
     git checkout production -- validation/validation_by*
 
     if ! git diff-index --quiet HEAD; then
-      echo ">>> git commit -a -m"
       git commit -a -m "pulled validation from production"
     else
       echo "Nothing to commit."
     fi
 
     # get the under_review branch in sync with production
-    echo ">>> git merge production"
     git merge -m "merging changes from production into under_review" production
 
-    echo ">>> git checkout server_working_copy -- validation/validation_by*"
     git checkout server_working_copy -- validation/validation_by*
 
     if ! git diff-index --quiet HEAD; then
-      echo ">>> git commit -a -m \"getting validation from server working copy\""
       git commit -a -m "getting validation from server working copy"
     else
       echo "Nothing to commit."
     fi
 
     # merge the changes from the server into under_review branch
-    echo ">>> git merge server_working_copy"
     git merge -m "merging changes from server into under_review" server_working_copy
 
     # push changes in under_review back to server.
-    echo ">>> git push"
     git push
 
 
     # get set up to do new edits
     # delete the old working copy -- those changes have been merged into under_review
-    echo ">>> git branch -D server_working_copy"
     git branch -D server_working_copy
-    echo ">>> git push origin --delete server_working_copy"
     git push origin --delete server_working_copy
 
     # make a new working copy of the under_review branch to work from
-    echo ">>> git checkout -b server_working_copy"
     git checkout -b server_working_copy
 
     # save it on the gitlab server so we can retrieve it at the next deploy
-    echo ">>> git push --set-upstream origin server_working_copy"
     git push --set-upstream origin server_working_copy
 
     # 3 d) reload the database including any changes merged from production, etc.
     echo "Reloading new data to the database"
-    echo ">>> adios_db_restore"
     adios_db_restore --config /config/config_oil_db.ini
 
     echo "Database is ready to be edited ..."
