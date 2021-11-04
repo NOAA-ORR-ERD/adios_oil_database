@@ -143,8 +143,9 @@ def check_second_viscosity(oil):
                           for v in v_i
                           if v.ref_temp is not None])
 
+        temps = [t for t in temps if t is not None]
         if len(temps) >= 2:
-            t1, *_, t2 = sorted([t for t in temps if t is not None])
+            t1, *_, t2 = sorted(temps)
             delta_t = t2 - t1
 
             if delta_t > 0.0:
