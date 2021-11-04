@@ -256,7 +256,7 @@
   <div class="row pl-0">
     <div class="col pl-0">
       {{#if @oil.status}}
-        <span>{{@oil.status.length}} error{{#if (eq @oil.status.length 1) }}s{{/if}} found:</span>
+        <span>{{@oil.status.length}} issue{{#if (gt @oil.status.length 1) }}s{{/if}} found:</span>
         <ul>
           {{#each @oil.status as |stat|}}
             <li><i class="status-warning">{{stat}}</i></li>
