@@ -55,11 +55,8 @@ def check_emulsion_water_content(oil):
 
 def check_density(oil):
     '''
-        Fresh oil: One density or API. Score = 1
+    Fresh oil: One density Score = 1
     '''
-
-    if oil.metadata.API is not None:
-        return 1.0
 
     if len(oil.sub_samples) > 0:
         ss = oil.sub_samples[0]
