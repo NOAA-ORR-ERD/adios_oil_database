@@ -308,7 +308,7 @@ deploy_api_stage:
       --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
     - docker ps
-    - docker log $CONTAINER_NAME
+    - docker logs $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
