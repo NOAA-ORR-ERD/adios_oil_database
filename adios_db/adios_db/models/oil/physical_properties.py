@@ -126,7 +126,7 @@ class DynamicViscosityPoint:
     comment: str = None
 
 
-class DynamicViscosityList(JSON_List, RefTempList):
+class DynamicViscosityList(RefTempList, JSON_List):
     item_type = DynamicViscosityPoint
 
 
@@ -141,7 +141,7 @@ class KinematicViscosityPoint:
 
 
 
-class KinematicViscosityList(JSON_List, RefTempList):
+class KinematicViscosityList(RefTempList, JSON_List):
     item_type = KinematicViscosityPoint
 
 
