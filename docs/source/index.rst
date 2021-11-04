@@ -11,6 +11,7 @@ ADIOS Oil Database User Manual
    :caption: Contents:
 
    overview
+   basics
    database_fields
 
 
