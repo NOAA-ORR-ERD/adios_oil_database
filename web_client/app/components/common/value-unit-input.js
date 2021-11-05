@@ -27,6 +27,14 @@ export default class ValueUnitInput extends Component {
                 delete this.args.valueObject[key];
             });
         }
+        else if (this.args.valueUnitType === 'unknown') {
+            alert('Updating Unitted Value: ' +
+                  `The unit type "${this.args.valueUnitType}" is invalid.`);
+            this.valueObject = {};
+            Object.keys(this.args.valueObject).forEach((key) => {
+                delete this.args.valueObject[key];
+            });
+        }
         else {
             let unitType;
 
@@ -44,7 +52,7 @@ export default class ValueUnitInput extends Component {
             };
 
             Object.entries(this.valueObject).forEach(([key, item]) => {
-                set(this.valueObject, key, item);
+                set(this.args.valueObject, key, item);
             });
         }
 
@@ -55,6 +63,7 @@ export default class ValueUnitInput extends Component {
     updateUnit(e) {
         if (e.target.value) {
             set(this.valueObject, 'unit', e.target.value);
+            set(this.valueObject, 'unit_type', e.target.unit_type);
         }
 
         Object.entries(this.valueObject).forEach(([key, item]) => {

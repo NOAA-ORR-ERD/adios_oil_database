@@ -13,7 +13,12 @@ from adios_db.models.oil.physical_properties import KinematicViscosityPoint
 from adios_db.models.common import measurement as meas
 
 
-def add_kin_viscosity_to_oil(oil, viscosities, temp, unit, kvis_temp=15.0, temp_unit="C"):
+def add_kin_viscosity_to_oil(oil,
+                             viscosities,
+                             temp,
+                             unit,
+                             kvis_temp=15.0,
+                             temp_unit="C"):
     try:
         sample = oil.sub_samples[0]
     except IndexError:
@@ -21,8 +26,9 @@ def add_kin_viscosity_to_oil(oil, viscosities, temp, unit, kvis_temp=15.0, temp_
         sample.metadata.name = "only viscosity"
         oil.sub_samples.append(sample)
     for kvis in viscosities:
-        kp = KinematicViscosityPoint(meas.KinematicViscosity(kvis, unit=unit),
-                                     meas.Temperature(kvis_temp, unit=temp_unit))
+        kp = KinematicViscosityPoint(
+            meas.KinematicViscosity(kvis, unit=unit),
+            meas.Temperature(kvis_temp, unit=temp_unit))
         sample.physical_properties.kinematic_viscosities.append(kp)
     return None
 
@@ -61,7 +67,7 @@ def test_add_labels_to_oil_no_labels_other():
     ('Crude Oil NOS', 35.0, {'Light Crude', 'Crude Oil'}),
     ('Crude Oil NOS', 25.0, {'Medium Crude', 'Crude Oil'}),
     ('Crude Oil NOS', 19.0, {'Heavy Crude', 'Crude Oil'}),
-    ('Crude Oil NOS', 9.9, {'Heavy Crude', 'Group V', 'Crude Oil', 'Bitumen'}),
+    ('Crude Oil NOS', 9.9, {'Heavy Crude', 'Group V', 'Crude Oil'}),
     ('Tight Oil', 32, {'Tight Oil', 'Fracking Oil', 'Shale Oil', 'Crude Oil'}),
     ('Residual Fuel Oil', 13, {
         'No. 6 Fuel Oil', 'Refined Product', 'Bunker C', 'Residual Fuel', 'Fuel Oil', 'HFO',

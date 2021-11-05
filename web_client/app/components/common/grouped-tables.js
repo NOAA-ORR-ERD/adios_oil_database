@@ -6,12 +6,12 @@ export default class GroupedTables extends Component {
 
     constructor() {
         super(...arguments);
-        if (this.args.oil[this.args.propertyName]) {
-            this.baseProperty = this.args.oil[this.args.propertyName];
+
+        if (!this.args.oil[this.args.propertyName]) {
+            this.args.oil[this.args.propertyName] = [];
         }
-        else {
-            this.baseProperty = [];
-        }
+
+        this.baseProperty = this.args.oil[this.args.propertyName];
     }
 
     get tableGroups() {
@@ -28,9 +28,12 @@ export default class GroupedTables extends Component {
             }
         })
         .reduce((acc, e) => {
-            let [k, v, i] = e[0];
-            acc[k] = (acc[k] ? acc[k]: []);
-            acc[k].push({'value': v, 'index': i});
+            e.map(items => {
+                let [k, v, i] = items;
+                acc[k] = (acc[k] ? acc[k]: []);
+                acc[k].push({'value': v, 'index': i});
+            });
+
             return acc;
         }, {})
     }

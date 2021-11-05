@@ -213,9 +213,13 @@ def get_density_data(oil, units="kg/m^3", temp_units="K"):
     # create normalized list of densities
     density_table = []
     for density_point in densities:
-        d = density_point.density.converted_to(units).value
-        t = density_point.ref_temp.converted_to(temp_units).value
-        density_table.append((d, t))
+        try:
+            d = density_point.density.converted_to(units).value
+            t = density_point.ref_temp.converted_to(temp_units).value
+            density_table.append((d, t))
+        except (TypeError, ValueError):
+            # Data not good -- moving on
+            pass
     return density_table
 
 
@@ -358,11 +362,23 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
 
     # create normalized list of densities
     cuts_table = []
+
     for cut in distillation_cuts:
-        f = cut.fraction.converted_to(units).value
-        t = cut.vapor_temp.converted_to(temp_units).value
+
+        if cut.fraction is None:
+            f = None
+        else:
+            f = cut.fraction.converted_to(units).value
+
+        if cut.vapor_temp is None:
+            t = None
+        else:
+            t = cut.vapor_temp.converted_to(temp_units).value
+
         cuts_table.append((f, t))
+
     cuts_table.sort(key=itemgetter(0))
+
     return cuts_table
 
 

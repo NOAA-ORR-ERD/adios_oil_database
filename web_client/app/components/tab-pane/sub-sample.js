@@ -5,7 +5,20 @@ import $ from 'jquery';
 
 export default class SubSample extends Component {
     get sample() {
-        return this.args.oil.sub_samples.find(s => s.metadata.short_name === this.args.sampleName);
+        let ret = this.args.oil.sub_samples.find(s => s.metadata.short_name === this.args.sampleName);
+
+        // create some intermediate parts of our oil structure.
+        // If we don't do this, our edit controls won't have anything in the
+        // record to attach to.
+        if (!ret.physical_properties) {
+            ret.physical_properties = {};
+        }
+
+        if (!ret.distillation_data) {
+            ret.distillation_data = {'cuts': []};
+        }
+
+        return ret;
     }
 
     get sampleIndex() {

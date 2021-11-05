@@ -126,12 +126,18 @@ class MeasurementBase(MeasurementDataclass):
         if self.unit_type != self.__class__.unit_type:
             raise ValueError(f"unit_type must be: {self.__class__.unit_type}, "
                              f"not {self.unit_type}")
-        # make sure all values are floats, not integers
+        self._make_all_float()
+        super().__post_init__()
+
+    def _make_all_float(self):
+        """
+        make sure all values are flat type, not integers
+        this is so the JSON is consistent
+        """
         self.value = self._make_float(self.value)
         self.min_value = self._make_float(self.min_value)
         self.max_value = self._make_float(self.max_value)
         self.standard_deviation = self._make_float(self.standard_deviation)
-        super().__post_init__()
 
     @staticmethod
     def _make_float(value):
@@ -236,7 +242,7 @@ class Temperature(MeasurementBase):
         if self is None:  # how can this happen?!?! -- but it does.
             return msgs
         # only do this for C or K
-        if self.unit.upper() not in {'C', 'K'}:
+        if (self.unit is not None) and (self.unit.upper() not in {'C', 'K'}):
             return msgs
         for val in (self.value, self.min_value, self.max_value):
             if val is not None:
@@ -341,26 +347,32 @@ class MassOrVolumeFraction(MeasurementBase):
     :param max_value: the value itself
     :param standard_deviation: the value itself
     :param replicates: the value itself
-    :param unit_type: the type of unit -- must be "massfraction", "volumefraction" or "concentration"
+    :param unit_type: the type of unit -- must be "massfraction",
+                      "volumefraction" or "concentration"
     """
     def __init__(self, *args, **kwargs):
         unit_type = kwargs.get("unit_type")
+
         if unit_type is None:
             raise TypeError("unit_type must be specified")
+
         try:
             unit_type = unit_type.lower().replace(" ", "")
-            if unit_type not in {'massfraction', 'volumefraction', 'concentration'}:
+            if unit_type not in {'massfraction', 'volumefraction',
+                                 'concentration'}:
                 raise AttributeError
         except AttributeError:
             raise ValueError(
-                "unit_type must be one of: 'massfraction', 'volumefraction', 'concentration'\n"
+                "unit_type must be one of: "
+                "'massfraction', 'volumefraction', 'concentration'\n"
                 f"args: {args}, kwargs: {kwargs}")
+
         kwargs['unit_type'] = unit_type
         super().__init__(*args, **kwargs)
 
     def __post_init__(self):
-        # We don't need the post_init in this case
-        pass
+        self._make_all_float()
+
 
     def copy(self):
         '''

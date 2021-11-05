@@ -39,7 +39,10 @@ export default class AddNewOilDlg extends Component {
     updateName(event) {
         this.name = event.target.value;
 
-        if (['change', 'focusout'].includes(event.type) && this.formFilledOut) {
+        if (['change', 'focusout'].includes(event.type)
+                && this.formFilledOut
+                && this.okButton)
+        {
             this.okButton.focus();
         }
     }
@@ -59,7 +62,8 @@ export default class AddNewOilDlg extends Component {
                         unit_type: 'massfraction',
                         value: 0
                     }
-                }
+                },
+                physical_properties: {}
             }]
         });
 

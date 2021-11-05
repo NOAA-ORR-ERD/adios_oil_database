@@ -6,6 +6,7 @@
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Measurement</th>
+      <th scope="col" class="col-1">Unit Type</th>
 
       <th scope="col" title="Standard Deviation">Std. Dev.</th>
 
@@ -13,7 +14,8 @@
       <th scope="col">Method</th>
 
       {{#if @editable}}
-        <td class="border-0">
+        <td class="border-0 edit-table-button-column"
+            title="Add a new measurement">
           <button type="button"
             {{on "click" (fn this.addEmptyTableRow 0)}}
             class="btn btn-outline-dark btn-sm p-0 border-0">
@@ -47,11 +49,15 @@
             @editable={{@editable}}
             @submit={{this.updateValue}}
             @valueUnit={{item.value.measurement.unit}}
+            @valueUnitType={{item.value.measurement.unit_type}}
             @valuePrecision={{2}}
             @editUnit={{true}}
             @defaultUnit="1"
           />
+        </td>
 
+        <td>
+          {{item.value.measurement.unit_type}}
         </td>
 
         <td>
@@ -93,9 +99,9 @@
           {{/if}}
         </td>
 
-
         {{#if @editable}}
-          <td class="border-0">
+          <td class="border-0 edit-table-button-column"
+              title="Delete measurement">
             <button type="button"
               {{on "click" (fn this.deleteTableRow index)}}
               class="btn btn-outline-danger btn-sm p-0 border-0">
@@ -103,13 +109,27 @@
             </button>
           </td>
 
-          <td class="border-0">
+          <td class="border-0 edit-table-button-column"
+              title="Add a new measurement">
             <button type="button"
               {{on "click" (fn this.addEmptyTableRow (add index 1))}}
               class="btn btn-outline-dark btn-sm p-0 border-0">
               {{fa-icon "plus"}}
             </button>
           </td>
+
+          <td class="border-0 edit-table-button-column"
+              title="Associate measurement with &#xD;&#xA; different group(s)">
+            <Button::MeasurementGroups
+              @oil={{@oil}}
+              @valueObject={{item.value}}
+              @valueIndex={{index}}
+              @valueTitle={{@group}}
+              @group={{@group}}
+              @submit={{@submit}}
+            />
+          </td>
+
         {{else}}
           <td hidden></td>
         {{/if}}

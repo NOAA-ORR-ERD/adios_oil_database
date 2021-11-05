@@ -19,6 +19,10 @@ from adios_db.models.oil.physical_properties import DensityPoint
 from adios_db.models.common.measurement import *
 from adios_db.models.oil.validation.validate import (validate_json, validate)
 
+from adios_db.models.oil.validation import (unpack_status,
+                                            is_only_ignored,
+                                            ERRORS_TO_IGNORE)
+
 from adios_db.scripting import get_all_records
 
 HERE = Path(__file__).parent
@@ -28,6 +32,36 @@ TEST_DATA_DIR = (HERE.parent.parent.parent /
 
 BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json",
                             encoding="utf-8"))
+
+# tests for the validation utilities
+def test_unpack_status():
+    status = ["W005: API value: 2256.95 seems unlikely",
+              "W009: Distillation fraction recovered is missing or invalid",
+              "W009: Another one with the same Code",
+              ]
+
+    result = unpack_status(status)
+
+    print(result)
+
+    assert result.keys() == {"W005", "W009"}
+    assert len(result["W005"]) == 1
+    assert len(result["W009"]) == 2
+    assert "Another one with the same Code" in result["W009"]
+
+
+def test_is_only_ignored_true():
+    status_dict = {code: ["random message text"] for code in ERRORS_TO_IGNORE}
+
+    assert is_only_ignored(status_dict)
+
+def test_is_only_ignored_true():
+    status_dict = {code: ["random message text"] for code in ERRORS_TO_IGNORE}
+    # add one we know won't ever be in the ignore list
+    status_dict["F32"] = ["nothing important"]
+
+    assert not is_only_ignored(status_dict)
+
 
 
 @pytest.fixture

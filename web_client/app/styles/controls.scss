@@ -54,6 +54,10 @@
 /**
  * This section is specific to the buttons inside the edit tables
  */
+.edit-table-button-column {
+    width: 1em;
+}
+
 .table > thead > tr > td > button {
     visibility: hidden;
 }

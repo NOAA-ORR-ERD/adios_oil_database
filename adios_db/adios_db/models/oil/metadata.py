@@ -4,7 +4,7 @@
 from datetime import datetime
 from dataclasses import dataclass, field
 
-from ..common.utilities import dataclass_to_json
+from ..common.utilities import dataclass_to_json, JSON_List
 from ..common.measurement import MassFraction, Temperature
 
 from .values import Reference
@@ -13,6 +13,31 @@ from .location_coordinates import LocationCoordinates
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
+
+@dataclass_to_json
+@dataclass
+class ChangeLogEntry:
+    name: str = ""
+    date: str = ""
+    comment: str = ""
+
+    def validate(self):
+        msgs = []
+
+        # check date is valid
+        if self.date:
+            try:
+                datetime.fromisoformat(self.date)
+            except ValueError as err:
+                msgs.append(WARNINGS["W011"].format("change log entry",
+                                                    self.date,
+                                                    str(err)))
+        return msgs
+
+
+class ChangeLog(JSON_List):
+    item_type = ChangeLogEntry
+
 
 
 @dataclass_to_json
@@ -31,6 +56,7 @@ class MetaData:
     model_completeness: float = None
     location_coordinates: LocationCoordinates = None
     gnome_suitable: bool = None
+    change_log: ChangeLog = field(default_factory=ChangeLog)
 
     def validate(self):
         msgs = []

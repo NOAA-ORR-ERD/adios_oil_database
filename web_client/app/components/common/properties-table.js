@@ -1,9 +1,9 @@
-import Component from '@glimmer/component';
+import BaseComponent from './base-component';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
 import slugify from 'ember-slugify';
 
-export default class PropertiesTable extends Component {
+export default class PropertiesTable extends BaseComponent {
     @tracked baseProperty;
     @tracked properties;
 
@@ -18,11 +18,46 @@ export default class PropertiesTable extends Component {
         this.initBaseProperty();
         this.initBoldTitle();
         this.initBoldHeader();
+    }
 
+    initTemplateName() {
+        if (this.args.templateName) {
+            // if we want to specify the template file name
+            this.template = `${this.args.templateName}.json`;
+        }
+        else {
+            // Otherwise use the slugified table title
+            this.template = slugify(this.args.tableTitle, { separator: '_' }) + '.json';
+        }
+    }
+
+    readPropertiesFromTemplate() {
+        this.args.store.findRecord('config', this.template, { reload: false })
+        .then(function(response) {
+            this.properties = response.template;
+        }.bind(this));
     }
 
     initBaseProperty() {
         this.baseProperty = this.deep_value(this.args.oil, this.args.propertyName, []);
+    }
+
+    initBoldTitle() {
+        if (typeof this.args.boldTitle === 'undefined') {
+            this.boldTitle = true;  // default
+        }
+        else {
+            this.boldTitle = this.args.boldTitle;
+        }
+    }
+
+    initBoldHeader() {
+        if (typeof this.args.boldHeader === 'undefined') {
+            this.boldHeader = false;  // default
+        }
+        else {
+            this.boldHeader = this.args.boldHeader;
+        }
     }
 
     syncBaseProperty() {
@@ -44,41 +79,15 @@ export default class PropertiesTable extends Component {
         set(tempProperty, names.lastObject, this.baseProperty);
     }
 
-    initBoldTitle() {
-        if (typeof this.args.boldTitle === 'undefined') {
-            this.boldTitle = true;  // default
+    // Our oil model generates sparse json records.  So there could be entire
+    // sub-branches of our record that are missing.  When this happens,
+    // our edit controls can't attach to the record, and the edits are lost.
+    // This is a convenience function that will create a branch in our record
+    // using the base oil object and a property string.
+    setAttrsIfMissing() {
+        if (!this.deepGet(this.args.oil, this.args.propertyName)) {
+            this.deepSet(this.args.oil, this.args.propertyName, []);
         }
-        else {
-            this.boldTitle = this.args.boldTitle;
-        }
-    }
-
-    initBoldHeader() {
-        if (typeof this.args.boldHeader === 'undefined') {
-            this.boldHeader = false;  // default
-        }
-        else {
-            this.boldHeader = this.args.boldHeader;
-        }
-    }
-
-    initTemplateName() {
-        if (this.args.templateName) {
-            // if we want to specify the template file name
-            this.template = `${this.args.templateName}.json`;
-        }
-        else {
-            // Otherwise use the slugified table title
-            this.template = slugify(this.args.tableTitle, { separator: '_' }) + '.json';
-        }
-
-    }
-
-    readPropertiesFromTemplate() {
-        this.args.store.findRecord('config', this.template, { reload: false })
-        .then(function(response) {
-            this.properties = response.template;
-        }.bind(this));
     }
 
     get anyDataPresent() {

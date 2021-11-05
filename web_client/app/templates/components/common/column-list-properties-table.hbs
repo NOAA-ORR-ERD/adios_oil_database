@@ -37,10 +37,11 @@
                 <td>
                   {{#if (eq value.dataType "value-unit")}}
                     <Common::ValueUnitInput
-                      @valueObject={{get row attr}}
+                      @valueObject={{get (set-attr-if-none row attr (hash)) attr}}
                       @editable={{@editable}}
                       @submit={{fn this.updateListValue index attr}}
                       @valueUnit={{value.unit}}
+                      @valueUnitType={{value.unit_type}}
                       @valuePrecision={{value.precision}}
                     />
                   {{else if (eq value.dataType "string")}}

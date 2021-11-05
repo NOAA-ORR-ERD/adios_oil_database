@@ -17,7 +17,14 @@
             "Crude Oil",
             "Heavy Crude"
         ],
-        "model_completeness": 94
+        "model_completeness": 94,
+        "change_log": [
+            {
+                "name": "Bozo the Clown",
+                "date": "2021-04-01",
+                "comment": "Any random old thing"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -374,7 +381,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -386,7 +393,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -398,7 +405,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -410,7 +417,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -422,7 +429,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -434,7 +441,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -446,7 +453,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -458,7 +465,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -470,7 +477,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -482,7 +489,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -494,7 +501,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -506,7 +513,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -518,7 +525,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -530,7 +537,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -542,7 +549,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -554,7 +561,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -566,7 +573,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -578,7 +585,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -590,7 +597,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -1679,7 +1686,7 @@
                     "name": "Wax Content",
                     "method": "ESTS: 12.11/2.0/M",
                     "measurement": {
-                        "value": 1,
+                        "value": 1.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1699,7 +1706,7 @@
                     "name": "Sulfur Content",
                     "method": "ASTM D4294",
                     "measurement": {
-                        "value": 3,
+                        "value": 3.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -2347,7 +2354,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2359,7 +2366,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2371,7 +2378,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2383,7 +2390,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2395,7 +2402,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2407,7 +2414,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2419,7 +2426,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2431,7 +2438,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2443,7 +2450,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2455,7 +2462,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2467,7 +2474,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2479,7 +2486,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2491,7 +2498,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2503,7 +2510,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2515,7 +2522,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2527,7 +2534,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2539,7 +2546,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2551,7 +2558,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -2563,7 +2570,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4304,7 +4311,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4316,7 +4323,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4328,7 +4335,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4340,7 +4347,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4352,7 +4359,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4364,7 +4371,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4376,7 +4383,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4388,7 +4395,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4400,7 +4407,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4412,7 +4419,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4424,7 +4431,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4436,7 +4443,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4448,7 +4455,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4460,7 +4467,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4472,7 +4479,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4484,7 +4491,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4496,7 +4503,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4508,7 +4515,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -4520,7 +4527,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -5609,7 +5616,7 @@
                     "name": "Wax Content",
                     "method": "ESTS: 12.11/2.0/M",
                     "measurement": {
-                        "value": 2,
+                        "value": 2.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -6271,7 +6278,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6283,7 +6290,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6295,7 +6302,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6307,7 +6314,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6319,7 +6326,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6331,7 +6338,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6343,7 +6350,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6355,7 +6362,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6367,7 +6374,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6379,7 +6386,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6391,7 +6398,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6403,7 +6410,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6415,7 +6422,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6427,7 +6434,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6439,7 +6446,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6451,7 +6458,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6463,7 +6470,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6475,7 +6482,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -6487,7 +6494,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8179,7 +8186,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8191,7 +8198,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8203,7 +8210,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8215,7 +8222,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8227,7 +8234,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8239,7 +8246,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8251,7 +8258,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8263,7 +8270,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8275,7 +8282,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8287,7 +8294,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8299,7 +8306,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8311,7 +8318,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8323,7 +8330,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8335,7 +8342,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8347,7 +8354,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8359,7 +8366,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8371,7 +8378,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8383,7 +8390,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
@@ -8395,7 +8402,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },

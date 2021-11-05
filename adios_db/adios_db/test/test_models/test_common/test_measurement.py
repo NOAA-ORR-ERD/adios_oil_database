@@ -686,6 +686,14 @@ class TestMassOrVolumeFraction:
         # should only have a unit_type
         assert py_json == {'unit_type': 'volumefraction'}
 
+    def test_init_empty_concentration(self):
+        model = MassOrVolumeFraction(unit_type="Concentration")
+
+        py_json = model.py_json()
+
+        # should only have a unit_type
+        assert py_json == {'unit_type': 'concentration'}
+
     def test_init_full(self):
         model = MassOrVolumeFraction(value=0.001,
                                      standard_deviation=0.0002,
@@ -728,6 +736,32 @@ class TestMassOrVolumeFraction:
 
         with pytest.raises(uc.InvalidUnitError):
             model2 = model.converted_to('g/kg')
+
+    def test_convert_conc_value_invalid(self):
+        model = MassOrVolumeFraction(value=0.0005,
+                                     unit='fraction',
+                                     unit_type="Concentration")
+
+        with pytest.raises(uc.InvalidUnitError):
+            model2 = model.converted_to('g/kg')
+
+
+
+    def test_integer_value(self):
+        """
+        integer values should get auto-converted to floats
+        """
+        # breakpoint()
+
+        model = MassOrVolumeFraction(value=4,
+                                     min_value=1,
+                                     standard_deviation=2,
+                                     unit='fraction',
+                                     unit_type="volumeFraction")
+
+        assert type(model.value) is float
+        assert type(model.min_value) is float
+        assert type(model.standard_deviation) is float
 
 
     def test_equal(self):

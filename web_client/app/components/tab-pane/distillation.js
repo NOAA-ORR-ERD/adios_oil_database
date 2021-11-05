@@ -27,6 +27,23 @@ export default class OilDemographics extends Component {
             set(this.args.oil.distillation_data, 'type', enteredType);
         }
 
+        this.args.oil.distillation_data.cuts.forEach(cut => {
+            // set all distillation cut fractions to the new distillation type,
+            // but only if a valid distillation type has been set, and only
+            // for cuts that already have a unit_type set.
+            if (enteredType && cut.fraction.unit_type) {
+                cut.fraction.unit_type = enteredType;
+            }
+
+            // prune any empty distillation cut attributes because they will
+            // cause problems with the api server validation
+            ['fraction','vapor_temp'].forEach(label => {
+                if (Object.keys(cut[label]).length === 0) {
+                    delete cut[label];
+                }
+            });
+        });
+
         this.args.submit(this.args.oil);
     }
 
