@@ -50,6 +50,7 @@ logger = logging.getLogger(__name__)
 # used to normalize the score
 MAX_SCORE = None
 
+
 # is this function needed???
 # answer: SRP, it's the right thing to do
 def set_completeness(oil):
@@ -74,7 +75,7 @@ class Check_emulsion_water_content:
     max_score = 2.5
 
     def __call__(self, oil):
-#       def check_emulsion_water_content(oil):
+        # def check_emulsion_water_content(oil):
         '''
         One emulsion water content in any subsample. Score = 2.5
         '''
@@ -90,6 +91,7 @@ class Check_emulsion_water_content:
 # check_emulsion_water_content = Check_emulsion_water_content()
 
 # def check_density(oil):
+
 
 class Check_density:
     '''
@@ -200,10 +202,11 @@ class CheckViscosity:
                               for v in v_i
                               if v.ref_temp is not None])
 
-            if len(temps) == 1: # only one measurement
+            temps = [t for t in temps if t is not None]
+            if len(temps) == 1:  # only one measurement
                 score += 0.5
             elif len(temps) >= 2:
-                t1, *_, t2 = sorted([t for t in temps if t is not None])
+                t1, *_, t2 = sorted(temps)
                 delta_t = t2 - t1
 
                 if delta_t > 0.0:
@@ -256,7 +259,8 @@ class CheckDistillation:
                 score += min(num_cuts, 3)
 
             if dist_data.fraction_recovered is not None:
-                frac = dist_data.fraction_recovered.converted_to('fraction').value
+                frac = (dist_data.fraction_recovered
+                        .converted_to('fraction').value)
                 if frac == 1.0:
                     score += 2.0
                 elif 0.0 < frac < 1.0:
@@ -320,4 +324,3 @@ CHECKS = [val() for name, val in vars().items() if name.startswith("Check")]
 
 # compute the max possible score:
 MAX_SCORE = sum(check.max_score for check in CHECKS)
-

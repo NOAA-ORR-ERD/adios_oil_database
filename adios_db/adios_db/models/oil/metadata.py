@@ -14,6 +14,7 @@ from .location_coordinates import LocationCoordinates
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
 
+
 @dataclass_to_json
 @dataclass
 class ChangeLogEntry:
@@ -37,7 +38,6 @@ class ChangeLogEntry:
 
 class ChangeLog(JSON_List):
     item_type = ChangeLogEntry
-
 
 
 @dataclass_to_json
