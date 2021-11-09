@@ -62,6 +62,7 @@ export default class OilsRoute extends Route {
 
     @action
     updateOil(oil) {
+        this.controllerFor('oils.show').changesMade = true;  // eslint-disable-line ember/no-controller-access-in-routes
         oil.save();
     }
 
