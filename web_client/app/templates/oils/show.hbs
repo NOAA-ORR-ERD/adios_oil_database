@@ -25,12 +25,23 @@
 
       {{!-- back to oil list control --}}
       <div class="mr-2 d-inline-block">
-        <LinkTo @route="oils">
-          <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
-            data-toggle="tooltip" title="Back to List">
-            &lt; Back to List
-          </button>
-        </LinkTo>
+        {{#if this.changesMade}}
+          <Button::BackToList
+            @oil={{this.model}}
+            @submit={{pipe
+                        (action send "updateOil")
+                        (action send "resetChangesMade")
+                    }}
+          />
+        {{else}}
+          <LinkTo @route="oils">
+            <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
+              data-toggle="tooltip" title="Back to List">
+              &lt; Back to List
+            </button>
+          </LinkTo>
+        {{/if}}
+
 
         {{!-- oil status --}}
         <strong>
