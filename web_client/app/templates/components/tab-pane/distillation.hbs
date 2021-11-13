@@ -76,6 +76,8 @@
               @valuePrecision="2"
               @sampleIndex={{@sampleIndex}}
               @submit={{action @submit @oil}}
+              @attachment="center right"
+              @targetAttachment="center right"
             />
           {{else}}
             {{value-unit (convert-unit @oil.distillation_data.end_point "C") 2}}
