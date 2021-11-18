@@ -3,6 +3,8 @@ from numbers import Number
 import warnings
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
+from ..util.json import fix_bson_ids
+from ..models.oil.oil import Oil
 from ..models.oil.product_type import types_to_labels
 
 
@@ -76,12 +78,73 @@ class Session():
         self.db = getattr(self.mongo_client, database)
         self.oil = self.db.oil  # the oil collection
 
+    def find_one(self, oil_id):
+        ret = self.oil.find_one({'oil_id': oil_id})
+
+        if ret is not None:
+            ret = fix_bson_ids(ret)
+
+        return ret
+
+    def insert_one(self, oil_obj):
+        if isinstance(oil_obj, Oil):
+            oil_obj = oil_obj.py_json()
+
+        if not hasattr(oil_obj, '_id'):
+            oil_obj['_id'] = oil_obj['oil_id']
+
+        return self.oil.insert_one(oil_obj).inserted_id
+
+    def replace_one(self, oil_obj):
+        if isinstance(oil_obj, Oil):
+            oil_obj = oil_obj.py_json()
+
+        return self.oil.replace_one({'oil_id': oil_obj['oil_id']},
+                                    oil_obj)
+
+    def delete_one(self, oil_id):
+        return self.oil.delete_one({'oil_id': oil_id})
+
+    def new_oil_id(self):
+        '''
+            Query the database for the next highest ID with a prefix of XX
+            The current implementation is to walk the oil IDs, filter for the
+            prefix, and choose the max numeric content.
+
+            Warning: We don't expect a lot of traffic POST'ing a bunch new oils
+                     to the database, it will only happen once in awhile.
+                     But this is not the most effective way to do this.
+                     A persistent incremental counter would be much faster.
+                     In fact, this is a bit brittle, and would fail if the
+                     website suffered a bunch of POST requests at once.
+        '''
+        id_prefix = 'XX'
+        max_seq = 0
+
+        cursor = (self.oil.find({'oil_id': {'$regex': f'^{id_prefix}'}},
+                                {'oil_id'}))
+
+        for row in cursor:
+            oil_id = row['oil_id']
+
+            try:
+                oil_seq = int(oil_id[len(id_prefix):])
+            except ValueError:
+                print('ValuError: continuing...')
+                continue
+
+            max_seq = oil_seq if oil_seq > max_seq else max_seq
+
+        max_seq += 1  # next in the sequence
+
+        return f'{id_prefix}{max_seq:06d}'
+
     def query(self, oil_id=None,
               text=None, api=None, labels=None, product_type=None,
               gnome_suitable=None,
               sort=None, sort_case_sensitive=False, page=None,
               projection=None,
-              **kwargs):
+              **_kwargs):
         '''
         Query the database according to various criteria
 
@@ -376,19 +439,6 @@ class Session():
             label = [i for i in labels if i['_id'] == identifier]
 
             return label[0] if len(label) > 0 else None
-
-    def insert_oil_record(self, oil, overwrite=False):
-        """
-        add a new oil record to the oil collection
-
-        :param oil: an Oil object to add
-
-        :param overwrite=False: whether to overwrite an existing
-                                record if it already exists.
-        """
-        obj = oil.py_json()
-
-        self.oil.insert_one(obj)
 
     def __getattr__(self, name):
         # FixMe: This should be fully hiding the mongo client

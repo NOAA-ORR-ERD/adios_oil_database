@@ -16,7 +16,6 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 
 from pymongo.errors import DuplicateKeyError
 
-from adios_db.util.json import fix_bson_ids
 from adios_db.models.oil.validation.validate import validate_json
 from adios_db.models.oil.completeness import set_completeness
 
@@ -64,8 +63,7 @@ def get_oils(request):
     client = request.mdb_client
 
     if obj_id is not None:
-        # Fixme: why is this not using the adios_db Session?
-        res = client.oil.find_one({'oil_id': obj_id})
+        res = client.find_one(obj_id)
 
         if res is not None:
             return get_oil_all_fields(res)
@@ -182,18 +180,15 @@ def insert_oil(request):
         logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
 
         if 'oil_id' not in oil_obj:
-            oil_obj['oil_id'] = new_oil_id(request)
+            oil_obj['oil_id'] = request.mdb_client.new_oil_id()
 
         oil = validate_json(oil_obj)
         set_completeness(oil)
-        oil_obj = oil.py_json()
-        oil_obj['_id'] = oil_obj['oil_id']
 
-        mongo_id = (request.mdb_client.oil
-                           .insert_one(oil_obj)
-                           .inserted_id)
+        mongo_id = request.mdb_client.insert_one(oil)
+
         logger.info(f'insert oil with mongo ID: {mongo_id}, '
-                    f'oil ID: {oil_obj["oil_id"]}')
+                    f'oil ID: {oil.oil_id}')
     except DuplicateKeyError as e:
         logger.error(e)
         raise HTTPConflict('Insert failed: Duplicate Key')
@@ -201,7 +196,7 @@ def insert_oil(request):
         logger.error(e)
         raise HTTPUnsupportedMediaType("Unknown Error")
 
-    return generate_jsonapi_response_from_oil(fix_bson_ids(oil_obj))
+    return generate_jsonapi_response_from_oil(oil.py_json())
 
 
 @oil_api.put()
@@ -242,16 +237,15 @@ def update_oil(request):
                 logger.error(f'traceback: {_trace_item(*i)}')
 
         set_completeness(oil)
-        oil_obj = oil.py_json()
-        (request.mdb_client.oil
-         .replace_one({'oil_id': oil_obj['oil_id']}, oil_obj))
 
-        memoized_results.pop(oil_obj['oil_id'], None)
+        request.mdb_client.replace_one(oil)
+
+        memoized_results.pop(oil.oil_id, None)
     except Exception as e:
         logger.error(e)
         raise HTTPUnsupportedMediaType()
 
-    return generate_jsonapi_response_from_oil(oil_obj)
+    return generate_jsonapi_response_from_oil(oil.py_json())
 
 
 def _trace_item(filename, lineno, function, text):
@@ -284,9 +278,7 @@ def delete_oil(request):
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
-
-        res = (request.mdb_client.oil
-               .delete_one({'oil_id': obj_id}))
+        res = request.mdb_client.delete_one(obj_id)
 
         if res.deleted_count == 0:
             raise HTTPBadRequest()  # JSONAPI expects this upon failure
@@ -296,43 +288,6 @@ def delete_oil(request):
         raise HTTPNoContent()  # JSONAPI expects this upon success
     else:
         raise HTTPBadRequest()  # JSONAPI expects this upon failure
-
-
-def new_oil_id(request):
-    # fixme: this should be in the adios_db package
-    '''
-        Query the database for the next highest ID with a prefix of XX
-        The current implementation is to walk the oil IDs, filter for the
-        prefix, and choose the max numeric content.
-
-        Warning: We don't expect a lot of traffic POST'ing a bunch new oils
-                 to the database, it will only happen once in awhile.
-                 But this is not the most effective way to do this.
-                 A persistent incremental counter would be much faster.
-                 In fact, this is a bit brittle, and would fail if the website
-                 suffered a bunch of POST requests at once.
-    '''
-    id_prefix = 'XX'
-    max_seq = 0
-
-    cursor = (request.mdb_client.oil
-              .find({'oil_id': {'$regex': '^{}'.format(id_prefix)}},
-                    {'oil_id'}))
-
-    for row in cursor:
-        oil_id = row['oil_id']
-
-        try:
-            oil_seq = int(oil_id[len(id_prefix):])
-        except ValueError:
-            print('ValuError: continuing...')
-            continue
-
-        max_seq = oil_seq if oil_seq > max_seq else max_seq
-
-    max_seq += 1  # next in the sequence
-
-    return '{}{:06d}'.format(id_prefix, max_seq)
 
 
 def get_oil_from_json_req(json_obj):

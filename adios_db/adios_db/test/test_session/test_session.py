@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import pytest
@@ -228,6 +227,98 @@ class TestSessionQuery(SessionTestBase):
         assert len(recs) == expected
 
 
+class TestSessionCRUD(SessionTestBase):
+    '''
+        Testing the CRUD operations of our session class
+    '''
+    def test_new_oil_id(self):
+        session = connect_mongodb(self.settings)
+
+        oil_id = session.new_oil_id()
+
+        assert isinstance(oil_id, str)
+        assert oil_id[:2] == 'XX'
+        assert oil_id[2:].isdigit()
+
+    def test_insert_one(self):
+        session = connect_mongodb(self.settings)
+
+        # create a minimal oil
+        ID = session.new_oil_id()
+        oil = Oil(ID)
+
+        # add it:
+        inserted_id = session.insert_one(oil)
+
+        assert inserted_id == ID
+
+    def test_find_one(self):
+        session = connect_mongodb(self.settings)
+
+        # create a minimal oil
+        ID = session.new_oil_id()
+        oil = Oil(ID)
+
+        # add it:
+        session.insert_one(oil)
+
+        new_oil = session.find_one(ID)
+
+        assert new_oil['oil_id'] == ID
+
+    def test_replace_one(self):
+        session = connect_mongodb(self.settings)
+
+        ID = session.new_oil_id()
+        orig_name = 'original name'
+        new_name = 'new name'
+
+        # create a minimal oil
+        oil = Oil(ID)
+        oil.metadata.name = orig_name
+
+        # add it:
+        session.insert_one(oil)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+        assert oil_json['metadata']['name'] == orig_name
+
+        # update it:
+        oil.metadata.name = new_name
+        res = session.replace_one(oil)
+        assert res.matched_count == 1
+        assert res.modified_count == 1
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+        assert oil_json['metadata']['name'] == new_name
+
+    def test_delete_one(self):
+        session = connect_mongodb(self.settings)
+
+        ID = session.new_oil_id()
+
+        # create a minimal oil
+        oil = Oil(ID)
+
+        # add it:
+        session.insert_one(oil)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+
+        # delete it:
+        session.delete_one(oil.oil_id)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json is None
+
+
 class TestSessionGetLabels(SessionTestBase):
     def test_init(self):
         session = connect_mongodb(self.settings)
@@ -260,23 +351,3 @@ class TestSessionGetLabels(SessionTestBase):
         # test an id that can't even be used
         with pytest.raises(ValueError):
             session.get_labels('bogus')
-
-
-class TestSessionInserting(SessionTestBase):
-    """
-    testing adding oil records to the DB
-    """
-    def test_add_one_record(self):
-        session = connect_mongodb(self.settings)
-
-        ID = "XX00000"
-        # create a minimal oil
-        oil = Oil(ID)
-
-        # add it:
-        session.insert_oil_record(oil)
-
-        result = list(session.query(oil_id=ID))
-
-        assert len(result) == 1
-        assert result[0]['oil_id'] == ID
