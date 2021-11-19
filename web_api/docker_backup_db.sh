@@ -15,7 +15,7 @@ echo "Cloning the repo"
 git clone ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/$REPO_NAME.git /$REPO_NAME/
 
 
-if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
+if [ "$REFRESH_INTERNAL_DB" == "true" ]; then
     echo "Refreshing the writeable Oil Database from noaa-oil-data"
     cd /$REPO_NAME/
 
@@ -38,7 +38,7 @@ if [ “$REFRESH_INTERNAL_DB” == “true” ]; then
 
     cd -
 
-elif [ “$MONGODB_WRITEABLE” == “true” ]; then
+elif [ "$MONGODB_WRITEABLE" == "true" ]; then
     echo "Oil Database is writeable"
 
     cd /$REPO_NAME/
