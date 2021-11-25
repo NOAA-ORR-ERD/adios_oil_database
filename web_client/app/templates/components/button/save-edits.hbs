@@ -1,12 +1,13 @@
 <button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Back to List"
+        title="Save Edits"
         data-toggle="modal"
-        data-target="#logChangesDialog" >
-  &lt; Back to List
+        data-target="#logChangesDialog2"
+        disabled={{not @changesMade}} >
+  Save Edits
 </button>
 
 <Dialog::LogChanges
-  @id="logChangesDialog"
+  @id="logChangesDialog2"
   @oil={{@oil}}
   @submit={{this.submit}}
 />

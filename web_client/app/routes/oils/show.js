@@ -33,9 +33,11 @@ export default class OilsShowRoute extends Route {
     }
 
     @action
-    willTransition() {
+    willTransition(transition) {
         // we don't want to persist the editable state when navigating from the
         // oil properties page to the query list, and then back to properties.
-        this.controllerFor('oils.show').editable = false;  // eslint-disable-line ember/no-controller-access-in-routes
+        if (transition.targetName === 'oils.index') {
+            this.controllerFor('oils.show').editable = false;  // eslint-disable-line ember/no-controller-access-in-routes
+        }
     }
 }
