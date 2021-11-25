@@ -31,6 +31,7 @@ oil_api = Service(name='oil', path='/oils/*obj_id',
 
 
 memoized_results = {}  # so it is visible to other functions
+temp_oils = {}  # we need to persist our temporary oils somewhere
 
 
 def memoize_oil_arg(func):
@@ -64,6 +65,9 @@ def get_oils(request):
 
     if obj_id is not None:
         res = client.find_one(obj_id)
+
+        if res is None:
+            res = temp_oils.get(obj_id, None)
 
         if res is not None:
             return get_oil_all_fields(res)
@@ -185,10 +189,17 @@ def insert_oil(request):
         oil = validate_json(oil_obj)
         set_completeness(oil)
 
-        mongo_id = request.mdb_client.insert_one(oil)
+        if is_temp_id(oil.oil_id):
+            logger.info(f"Temporary oil with ID: {oil.oil_id}, "
+                        "persisting in memory, not the database.")
+            oil_json = oil.py_json()
+            oil_json['_id'] = oil.oil_id
+            temp_oils[oil.oil_id] = oil_json
+        else:
+            mongo_id = request.mdb_client.insert_one(oil)
 
-        logger.info(f'insert oil with mongo ID: {mongo_id}, '
-                    f'oil ID: {oil.oil_id}')
+            logger.info(f'Insert oil with mongo ID: {mongo_id}, '
+                        f'oil ID: {oil.oil_id}')
     except DuplicateKeyError as e:
         logger.error(e)
         raise HTTPConflict('Insert failed: Duplicate Key')
@@ -238,14 +249,32 @@ def update_oil(request):
 
         set_completeness(oil)
 
-        request.mdb_client.replace_one(oil)
+        if is_temp_id(oil.oil_id):
+            logger.info(f"Temporary oil with ID: {oil.oil_id}, "
+                        "update it in memory, not the database.")
+            temp_oils[oil.oil_id] = oil.py_json()
+        else:
+            request.mdb_client.replace_one(oil)
+            memoized_results.pop(oil.oil_id, None)
 
-        memoized_results.pop(oil.oil_id, None)
+            logger.info(f'Update oil with ID: {oil.oil_id}')
     except Exception as e:
         logger.error(e)
         raise HTTPUnsupportedMediaType()
 
     return generate_jsonapi_response_from_oil(oil.py_json())
+
+
+def is_temp_id(oil_id):
+    '''
+        We will support temporary IDs, in which we will treat the JSON object
+        coming inside the request as a temporary object.  So we will treat it
+        in the same manner as any other oil object, but we will not store it
+        in the database.
+        Temporary IDs are defined as having a suffix that is unchanging and
+        well known.
+    '''
+    return oil_id.endswith('-TEMP')
 
 
 def _trace_item(filename, lineno, function, text):
@@ -278,12 +307,15 @@ def delete_oil(request):
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
-        res = request.mdb_client.delete_one(obj_id)
+        if obj_id in temp_oils:
+            del temp_oils[obj_id]
+        else:
+            res = request.mdb_client.delete_one(obj_id)
 
-        if res.deleted_count == 0:
-            raise HTTPBadRequest()  # JSONAPI expects this upon failure
+            if res.deleted_count == 0:
+                raise HTTPBadRequest()  # JSONAPI expects this upon failure
 
-        memoized_results.pop(obj_id, None)
+            memoized_results.pop(obj_id, None)
 
         raise HTTPNoContent()  # JSONAPI expects this upon success
     else:
