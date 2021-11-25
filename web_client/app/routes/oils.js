@@ -65,7 +65,7 @@ export default class OilsRoute extends Route {
     @action
     commitTemporaryEdits(oil, newRoute) {
         // reset the flag
-        let ctrl = this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
+        this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
 
         if (oil.oil_id.endsWith(this.tempSuffix)) {
             // switch back to the permanent model, keeping our changes.
