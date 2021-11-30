@@ -194,6 +194,12 @@ ul.ember-power-select-options {
     columns: 3
 }
 
+li.ember-power-select-option {
+    span {
+        white-space: nowrap;
+    }
+}
+
 .lt-sort-icon {
     float: left !important;
     margin: 3px;

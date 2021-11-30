@@ -112,6 +112,7 @@
         {{#if @editable}}
           <PowerSelectMultiple @class="bg-warning border-0"
             @placeholder="Select some labels for the oil..."
+            @matchTriggerWidth={{false}}
             @selected={{this.selectedLabels}}
             @options={{this.filteredLabels}}
             @onChange={{action "updateLabels"}}
