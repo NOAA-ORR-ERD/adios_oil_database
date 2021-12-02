@@ -37,9 +37,9 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": -51,
+                        "value": -51.0,
                         "unit": "C",
-                        "standard_deviation": 2,
+                        "standard_deviation": 2.0,
                         "replicates": 3,
                         "unit_type": "temperature"
                     },
@@ -50,7 +50,7 @@
                         "density": {
                             "value": 0.8639,
                             "unit": "g/mL",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "density"
                         },
@@ -65,7 +65,7 @@
                         "density": {
                             "value": 0.8751,
                             "unit": "g/mL",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "density"
                         },
@@ -80,9 +80,9 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "mPa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -211,9 +211,9 @@
                     {
                         "dispersant": "Corexit 9500 Dispersant",
                         "effectiveness": {
-                            "value": 46,
+                            "value": 46.0,
                             "unit": "%",
-                            "standard_deviation": 4,
+                            "standard_deviation": 4.0,
                             "replicates": 6,
                             "unit_type": "massfraction"
                         },
@@ -223,14 +223,14 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
                         "water_content": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 9,
                             "unit_type": "massfraction"
                         },
@@ -242,26 +242,26 @@
                         "complex_modulus": {
                             "value": 0.4,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
                             "value": 0.2,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
                             "value": 0.3,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
-                            "value": 2,
+                            "value": 2.0,
                             "standard_deviation": 0.5,
                             "replicates": 6,
                             "unit_type": "unitless"
@@ -269,7 +269,7 @@
                         "complex_viscosity": {
                             "value": 0.06,
                             "unit": "Pa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "dynamicviscosity"
                         },
@@ -278,7 +278,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -292,7 +292,7 @@
                     }
                 ],
                 "adhesion": {
-                    "value": 18,
+                    "value": 18.0,
                     "unit": "g/m^2",
                     "standard_deviation": 1.1,
                     "replicates": 3,
@@ -307,24 +307,24 @@
             "SARA": {
                 "method": "ESTS 12.11/3.0/M",
                 "saturates": {
-                    "value": 58,
+                    "value": 58.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 32,
+                    "value": 32.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 6,
+                    "value": 6.0,
                     "unit": "%",
                     "standard_deviation": 0.2,
                     "replicates": 3,
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 4,
+                    "value": 4.0,
                     "unit": "%",
                     "standard_deviation": 0.1,
                     "replicates": 3,
@@ -583,7 +583,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 4102,
+                        "value": 4102.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -595,7 +595,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3656,
+                        "value": 3656.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -607,7 +607,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3208,
+                        "value": 3208.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -619,7 +619,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3057,
+                        "value": 3057.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -631,7 +631,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2850,
+                        "value": 2850.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -643,7 +643,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2599,
+                        "value": 2599.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -655,7 +655,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2199,
+                        "value": 2199.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -667,7 +667,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2024,
+                        "value": 2024.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -679,7 +679,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2093,
+                        "value": 2093.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -691,7 +691,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 882,
+                        "value": 882.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -703,7 +703,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1686,
+                        "value": 1686.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -715,7 +715,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 974,
+                        "value": 974.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -727,7 +727,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1579,
+                        "value": 1579.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -739,7 +739,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1467,
+                        "value": 1467.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -751,7 +751,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1406,
+                        "value": 1406.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -763,7 +763,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1343,
+                        "value": 1343.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -775,7 +775,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1279,
+                        "value": 1279.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -787,7 +787,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1213,
+                        "value": 1213.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -799,7 +799,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1152,
+                        "value": 1152.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -811,7 +811,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1082,
+                        "value": 1082.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -823,7 +823,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 876,
+                        "value": 876.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -835,7 +835,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 691,
+                        "value": 691.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -847,7 +847,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 576,
+                        "value": 576.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -859,7 +859,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 480,
+                        "value": 480.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -871,7 +871,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 403,
+                        "value": 403.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -883,7 +883,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 307,
+                        "value": 307.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -895,7 +895,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 262,
+                        "value": 262.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -907,7 +907,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 204,
+                        "value": 204.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -919,7 +919,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 194,
+                        "value": 194.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -931,7 +931,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 151,
+                        "value": 151.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -943,7 +943,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 116,
+                        "value": 116.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -955,7 +955,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 88,
+                        "value": 88.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -967,7 +967,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 60,
+                        "value": 60.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -979,7 +979,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 43,
+                        "value": 43.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -991,7 +991,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 501,
+                        "value": 501.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1003,7 +1003,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1377,
+                        "value": 1377.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1015,7 +1015,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2071,
+                        "value": 2071.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1027,7 +1027,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1809,
+                        "value": 1809.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1039,7 +1039,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 961,
+                        "value": 961.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1051,7 +1051,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 177,
+                        "value": 177.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1063,7 +1063,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 486,
+                        "value": 486.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1075,7 +1075,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 510,
+                        "value": 510.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1087,7 +1087,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 378,
+                        "value": 378.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1099,7 +1099,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 176,
+                        "value": 176.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1111,7 +1111,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 107,
+                        "value": 107.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1123,7 +1123,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 223,
+                        "value": 223.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1135,7 +1135,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 314,
+                        "value": 314.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1147,7 +1147,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 259,
+                        "value": 259.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1159,7 +1159,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 66,
+                        "value": 66.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1171,7 +1171,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 152,
+                        "value": 152.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1183,7 +1183,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 220,
+                        "value": 220.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1195,7 +1195,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 234,
+                        "value": 234.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1207,7 +1207,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 4,
+                        "value": 4.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1219,7 +1219,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 51,
+                        "value": 51.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1231,7 +1231,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 88,
+                        "value": 88.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1243,7 +1243,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 104,
+                        "value": 104.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1255,7 +1255,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 78,
+                        "value": 78.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1267,7 +1267,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 41,
+                        "value": 41.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1279,7 +1279,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 137,
+                        "value": 137.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1291,7 +1291,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 108,
+                        "value": 108.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1303,7 +1303,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 174,
+                        "value": 174.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1315,7 +1315,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 115,
+                        "value": 115.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1327,7 +1327,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 575,
+                        "value": 575.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1339,7 +1339,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 30,
+                        "value": 30.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1351,7 +1351,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 53,
+                        "value": 53.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1363,7 +1363,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 79,
+                        "value": 79.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1555,7 +1555,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 29,
+                        "value": 29.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1567,7 +1567,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 13,
+                        "value": 13.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1579,7 +1579,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 78,
+                        "value": 78.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1591,7 +1591,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 44,
+                        "value": 44.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1603,7 +1603,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 30,
+                        "value": 30.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1615,7 +1615,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 39,
+                        "value": 39.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1627,7 +1627,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 99,
+                        "value": 99.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1639,7 +1639,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 132,
+                        "value": 132.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1651,7 +1651,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 58,
+                        "value": 58.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1663,7 +1663,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 39,
+                        "value": 39.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1675,7 +1675,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 41,
+                        "value": 41.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1687,7 +1687,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 30,
+                        "value": 30.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1699,7 +1699,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 32,
+                        "value": 32.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1711,7 +1711,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 21,
+                        "value": 21.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1723,7 +1723,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 23,
+                        "value": 23.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1735,7 +1735,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 15,
+                        "value": 15.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1747,7 +1747,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 25,
+                        "value": 25.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1759,7 +1759,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 17,
+                        "value": 17.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1874,22 +1874,22 @@
             ],
             "CCME": {
                 "F1": {
-                    "value": 52,
+                    "value": 52.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F2": {
-                    "value": 153,
+                    "value": 153.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F3": {
-                    "value": 281,
+                    "value": 281.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F4": {
-                    "value": 61,
+                    "value": 61.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
@@ -1910,9 +1910,9 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": -48,
+                        "value": -48.0,
                         "unit": "C",
-                        "standard_deviation": 2,
+                        "standard_deviation": 2.0,
                         "replicates": 3,
                         "unit_type": "temperature"
                     },
@@ -1920,7 +1920,7 @@
                 },
                 "flash_point": {
                     "measurement": {
-                        "value": 23,
+                        "value": 23.0,
                         "unit": "C",
                         "standard_deviation": 1.2,
                         "replicates": 3,
@@ -1948,7 +1948,7 @@
                         "density": {
                             "value": 0.9091,
                             "unit": "g/mL",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "density"
                         },
@@ -1963,9 +1963,9 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 37,
+                            "value": 37.0,
                             "unit": "mPa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -1978,7 +1978,7 @@
                     },
                     {
                         "viscosity": {
-                            "value": 94,
+                            "value": 94.0,
                             "unit": "mPa.s",
                             "standard_deviation": 0.5,
                             "replicates": 3,
@@ -2094,9 +2094,9 @@
                     {
                         "dispersant": "Corexit 9500 Dispersant",
                         "effectiveness": {
-                            "value": 51,
+                            "value": 51.0,
                             "unit": "%",
-                            "standard_deviation": 3,
+                            "standard_deviation": 3.0,
                             "replicates": 6,
                             "unit_type": "massfraction"
                         },
@@ -2106,14 +2106,14 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
                         "water_content": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 9,
                             "unit_type": "massfraction"
                         },
@@ -2125,26 +2125,26 @@
                         "complex_modulus": {
                             "value": 0.5,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
                             "value": 0.1,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
                             "value": 0.4,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
-                            "value": 3,
+                            "value": 3.0,
                             "standard_deviation": 0.7,
                             "replicates": 6,
                             "unit_type": "unitless"
@@ -2152,7 +2152,7 @@
                         "complex_viscosity": {
                             "value": 0.07,
                             "unit": "Pa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "dynamicviscosity"
                         },
@@ -2161,7 +2161,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -2175,7 +2175,7 @@
                     }
                 ],
                 "adhesion": {
-                    "value": 30,
+                    "value": 30.0,
                     "unit": "g/m^2",
                     "standard_deviation": 1.9,
                     "replicates": 3,
@@ -2185,24 +2185,24 @@
             "SARA": {
                 "method": "ESTS 12.11/3.0/M",
                 "saturates": {
-                    "value": 59,
+                    "value": 59.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 29,
+                    "value": 29.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 7,
+                    "value": 7.0,
                     "unit": "%",
                     "standard_deviation": 0.3,
                     "replicates": 3,
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 5,
+                    "value": 5.0,
                     "unit": "%",
                     "standard_deviation": 0.1,
                     "replicates": 3,
@@ -2461,7 +2461,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3888,
+                        "value": 3888.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2473,7 +2473,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3694,
+                        "value": 3694.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2485,7 +2485,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3322,
+                        "value": 3322.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2497,7 +2497,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3228,
+                        "value": 3228.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2509,7 +2509,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3031,
+                        "value": 3031.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2521,7 +2521,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2855,
+                        "value": 2855.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2533,7 +2533,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2392,
+                        "value": 2392.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2545,7 +2545,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2212,
+                        "value": 2212.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2557,7 +2557,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2265,
+                        "value": 2265.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2569,7 +2569,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 971,
+                        "value": 971.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2581,7 +2581,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1791,
+                        "value": 1791.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2593,7 +2593,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1169,
+                        "value": 1169.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2605,7 +2605,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1675,
+                        "value": 1675.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2617,7 +2617,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1598,
+                        "value": 1598.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2629,7 +2629,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1498,
+                        "value": 1498.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2641,7 +2641,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1466,
+                        "value": 1466.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2653,7 +2653,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1399,
+                        "value": 1399.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2665,7 +2665,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1315,
+                        "value": 1315.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2677,7 +2677,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1261,
+                        "value": 1261.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2689,7 +2689,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1188,
+                        "value": 1188.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2701,7 +2701,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 918,
+                        "value": 918.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2713,7 +2713,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 760,
+                        "value": 760.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2725,7 +2725,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 662,
+                        "value": 662.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2737,7 +2737,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 474,
+                        "value": 474.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2749,7 +2749,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 454,
+                        "value": 454.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2761,7 +2761,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 348,
+                        "value": 348.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2773,7 +2773,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 299,
+                        "value": 299.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2785,7 +2785,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 238,
+                        "value": 238.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2797,7 +2797,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 227,
+                        "value": 227.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2809,7 +2809,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 169,
+                        "value": 169.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2821,7 +2821,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 166,
+                        "value": 166.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2833,7 +2833,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 106,
+                        "value": 106.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2845,7 +2845,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 72,
+                        "value": 72.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2857,7 +2857,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 57,
+                        "value": 57.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2869,7 +2869,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 497,
+                        "value": 497.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2881,7 +2881,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1430,
+                        "value": 1430.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2893,7 +2893,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2163,
+                        "value": 2163.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2905,7 +2905,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1877,
+                        "value": 1877.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2917,7 +2917,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1034,
+                        "value": 1034.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2929,7 +2929,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 189,
+                        "value": 189.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2941,7 +2941,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 513,
+                        "value": 513.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2953,7 +2953,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 555,
+                        "value": 555.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2965,7 +2965,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 419,
+                        "value": 419.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2977,7 +2977,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 201,
+                        "value": 201.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -2989,7 +2989,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 114,
+                        "value": 114.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3001,7 +3001,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 242,
+                        "value": 242.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3013,7 +3013,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 329,
+                        "value": 329.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3025,7 +3025,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 297,
+                        "value": 297.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3037,7 +3037,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 70,
+                        "value": 70.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3049,7 +3049,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 166,
+                        "value": 166.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3061,7 +3061,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 242,
+                        "value": 242.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3073,7 +3073,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 241,
+                        "value": 241.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3085,7 +3085,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 5,
+                        "value": 5.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3097,7 +3097,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 57,
+                        "value": 57.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3109,7 +3109,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 96,
+                        "value": 96.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3121,7 +3121,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 111,
+                        "value": 111.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3133,7 +3133,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 86,
+                        "value": 86.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3145,7 +3145,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 43,
+                        "value": 43.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3157,7 +3157,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 148,
+                        "value": 148.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3169,7 +3169,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 116,
+                        "value": 116.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3181,7 +3181,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 191,
+                        "value": 191.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3193,7 +3193,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 128,
+                        "value": 128.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3205,7 +3205,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 626,
+                        "value": 626.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3217,7 +3217,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 33,
+                        "value": 33.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3229,7 +3229,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 59,
+                        "value": 59.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3241,7 +3241,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 81,
+                        "value": 81.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3325,7 +3325,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3,
+                        "value": 3.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3385,7 +3385,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 4,
+                        "value": 4.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3433,7 +3433,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 31,
+                        "value": 31.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3445,7 +3445,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 14,
+                        "value": 14.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3457,7 +3457,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 83,
+                        "value": 83.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3469,7 +3469,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 46,
+                        "value": 46.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3481,7 +3481,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 31,
+                        "value": 31.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3493,7 +3493,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 43,
+                        "value": 43.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3505,7 +3505,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 107,
+                        "value": 107.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3517,7 +3517,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 142,
+                        "value": 142.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3529,7 +3529,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 63,
+                        "value": 63.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3541,7 +3541,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 46,
+                        "value": 46.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3553,7 +3553,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 44,
+                        "value": 44.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3565,7 +3565,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 33,
+                        "value": 33.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3577,7 +3577,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 35,
+                        "value": 35.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3589,7 +3589,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 23,
+                        "value": 23.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3601,7 +3601,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 25,
+                        "value": 25.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3613,7 +3613,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 16,
+                        "value": 16.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3625,7 +3625,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 27,
+                        "value": 27.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3637,7 +3637,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 19,
+                        "value": 19.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3752,22 +3752,22 @@
             ],
             "CCME": {
                 "F1": {
-                    "value": 48,
+                    "value": 48.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F2": {
-                    "value": 161,
+                    "value": 161.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F3": {
-                    "value": 297,
+                    "value": 297.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F4": {
-                    "value": 66,
+                    "value": 66.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
@@ -3788,9 +3788,9 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": -36,
+                        "value": -36.0,
                         "unit": "C",
-                        "standard_deviation": 2,
+                        "standard_deviation": 2.0,
                         "replicates": 3,
                         "unit_type": "temperature"
                     },
@@ -3798,7 +3798,7 @@
                 },
                 "flash_point": {
                     "measurement": {
-                        "value": 83,
+                        "value": 83.0,
                         "unit": "C",
                         "standard_deviation": 0.58,
                         "replicates": 3,
@@ -3811,7 +3811,7 @@
                         "density": {
                             "value": 0.9218,
                             "unit": "g/mL",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "density"
                         },
@@ -3826,7 +3826,7 @@
                         "density": {
                             "value": 0.933,
                             "unit": "g/mL",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "density"
                         },
@@ -3841,9 +3841,9 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 171,
+                            "value": 171.0,
                             "unit": "mPa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -3856,7 +3856,7 @@
                     },
                     {
                         "viscosity": {
-                            "value": 746,
+                            "value": 746.0,
                             "unit": "mPa.s",
                             "standard_deviation": 5.3,
                             "replicates": 3,
@@ -3890,7 +3890,7 @@
                         "tension": {
                             "value": 29.3,
                             "unit": "mN/m",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 3,
                             "unit_type": "interfacialtension"
                         },
@@ -3907,7 +3907,7 @@
                         "tension": {
                             "value": 24.9,
                             "unit": "mN/m",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "interfacialtension"
                         },
@@ -3922,7 +3922,7 @@
                         "tension": {
                             "value": 29.9,
                             "unit": "mN/m",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "interfacialtension"
                         },
@@ -3939,7 +3939,7 @@
                         "tension": {
                             "value": 28.1,
                             "unit": "mN/m",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "interfacialtension"
                         },
@@ -3954,7 +3954,7 @@
                         "tension": {
                             "value": 27.2,
                             "unit": "mN/m",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "interfacialtension"
                         },
@@ -3972,9 +3972,9 @@
                     {
                         "dispersant": "Corexit 9500 Dispersant",
                         "effectiveness": {
-                            "value": 52,
+                            "value": 52.0,
                             "unit": "%",
-                            "standard_deviation": 2,
+                            "standard_deviation": 2.0,
                             "replicates": 6,
                             "unit_type": "massfraction"
                         },
@@ -3984,14 +3984,14 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
                         "water_content": {
-                            "value": 1,
+                            "value": 1.0,
                             "unit": "%",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 9,
                             "unit_type": "massfraction"
                         },
@@ -4003,34 +4003,34 @@
                         "complex_modulus": {
                             "value": 1.3,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
                             "value": 0.1,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
                             "value": 1.3,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
-                            "value": 12,
-                            "standard_deviation": 5,
+                            "value": 12.0,
+                            "standard_deviation": 5.0,
                             "replicates": 6,
                             "unit_type": "unitless"
                         },
                         "complex_viscosity": {
                             "value": 0.2,
                             "unit": "Pa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "dynamicviscosity"
                         },
@@ -4039,7 +4039,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -4053,7 +4053,7 @@
                     }
                 ],
                 "adhesion": {
-                    "value": 34,
+                    "value": 34.0,
                     "unit": "g/m^2",
                     "standard_deviation": 2.8,
                     "replicates": 3,
@@ -4063,24 +4063,24 @@
             "SARA": {
                 "method": "ESTS 12.11/3.0/M",
                 "saturates": {
-                    "value": 56,
+                    "value": 56.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 31,
+                    "value": 31.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 8,
+                    "value": 8.0,
                     "unit": "%",
                     "standard_deviation": 0.04,
                     "replicates": 3,
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 5,
+                    "value": 5.0,
                     "unit": "%",
                     "standard_deviation": 0.2,
                     "replicates": 3,
@@ -4339,7 +4339,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1222,
+                        "value": 1222.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4351,7 +4351,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2771,
+                        "value": 2771.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4363,7 +4363,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3235,
+                        "value": 3235.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4375,7 +4375,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3402,
+                        "value": 3402.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4387,7 +4387,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3234,
+                        "value": 3234.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4399,7 +4399,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3069,
+                        "value": 3069.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4411,7 +4411,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2576,
+                        "value": 2576.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4423,7 +4423,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2382,
+                        "value": 2382.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4435,7 +4435,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2436,
+                        "value": 2436.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4447,7 +4447,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 889,
+                        "value": 889.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4459,7 +4459,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1964,
+                        "value": 1964.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4471,7 +4471,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1285,
+                        "value": 1285.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4483,7 +4483,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1880,
+                        "value": 1880.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4495,7 +4495,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1730,
+                        "value": 1730.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4507,7 +4507,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1667,
+                        "value": 1667.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4519,7 +4519,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1594,
+                        "value": 1594.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4531,7 +4531,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1524,
+                        "value": 1524.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4543,7 +4543,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1386,
+                        "value": 1386.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4555,7 +4555,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1430,
+                        "value": 1430.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4567,7 +4567,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1301,
+                        "value": 1301.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4579,7 +4579,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1042,
+                        "value": 1042.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4591,7 +4591,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 874,
+                        "value": 874.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4603,7 +4603,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 722,
+                        "value": 722.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4615,7 +4615,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 646,
+                        "value": 646.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4627,7 +4627,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 524,
+                        "value": 524.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4639,7 +4639,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 403,
+                        "value": 403.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4651,7 +4651,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 348,
+                        "value": 348.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4663,7 +4663,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 275,
+                        "value": 275.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4675,7 +4675,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 266,
+                        "value": 266.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4687,7 +4687,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 209,
+                        "value": 209.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4699,7 +4699,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 190,
+                        "value": 190.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4711,7 +4711,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 137,
+                        "value": 137.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4723,7 +4723,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 89,
+                        "value": 89.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4735,7 +4735,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 65,
+                        "value": 65.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4747,7 +4747,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 562,
+                        "value": 562.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4759,7 +4759,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1645,
+                        "value": 1645.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4771,7 +4771,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2550,
+                        "value": 2550.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4783,7 +4783,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2253,
+                        "value": 2253.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4795,7 +4795,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1232,
+                        "value": 1232.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4807,7 +4807,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 223,
+                        "value": 223.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4819,7 +4819,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 610,
+                        "value": 610.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4831,7 +4831,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 651,
+                        "value": 651.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4843,7 +4843,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 481,
+                        "value": 481.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4855,7 +4855,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 235,
+                        "value": 235.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4867,7 +4867,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 136,
+                        "value": 136.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4879,7 +4879,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 285,
+                        "value": 285.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4891,7 +4891,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 400,
+                        "value": 400.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4903,7 +4903,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 354,
+                        "value": 354.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4915,7 +4915,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 84,
+                        "value": 84.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4927,7 +4927,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 189,
+                        "value": 189.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4939,7 +4939,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 301,
+                        "value": 301.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4951,7 +4951,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 289,
+                        "value": 289.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4963,7 +4963,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 6,
+                        "value": 6.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4975,7 +4975,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 60,
+                        "value": 60.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4987,7 +4987,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 107,
+                        "value": 107.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -4999,7 +4999,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 132,
+                        "value": 132.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5011,7 +5011,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 99,
+                        "value": 99.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5023,7 +5023,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 52,
+                        "value": 52.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5035,7 +5035,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 178,
+                        "value": 178.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5047,7 +5047,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 112,
+                        "value": 112.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5059,7 +5059,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 226,
+                        "value": 226.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5071,7 +5071,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 146,
+                        "value": 146.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5083,7 +5083,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 714,
+                        "value": 714.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5095,7 +5095,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 40,
+                        "value": 40.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5107,7 +5107,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 71,
+                        "value": 71.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5119,7 +5119,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 97,
+                        "value": 97.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5203,7 +5203,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 4,
+                        "value": 4.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5251,7 +5251,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2,
+                        "value": 2.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5311,7 +5311,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 32,
+                        "value": 32.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5323,7 +5323,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 15,
+                        "value": 15.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5335,7 +5335,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 86,
+                        "value": 86.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5347,7 +5347,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 48,
+                        "value": 48.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5359,7 +5359,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 33,
+                        "value": 33.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5371,7 +5371,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 43,
+                        "value": 43.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5383,7 +5383,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 117,
+                        "value": 117.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5395,7 +5395,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 148,
+                        "value": 148.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5407,7 +5407,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 65,
+                        "value": 65.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5419,7 +5419,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 49,
+                        "value": 49.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5431,7 +5431,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 47,
+                        "value": 47.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5443,7 +5443,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 35,
+                        "value": 35.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5455,7 +5455,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 36,
+                        "value": 36.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5467,7 +5467,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 24,
+                        "value": 24.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5479,7 +5479,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 26,
+                        "value": 26.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5491,7 +5491,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 17,
+                        "value": 17.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5503,7 +5503,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 28,
+                        "value": 28.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5515,7 +5515,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 19,
+                        "value": 19.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5630,22 +5630,22 @@
             ],
             "CCME": {
                 "F1": {
-                    "value": 16,
+                    "value": 16.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F2": {
-                    "value": 170,
+                    "value": 170.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F3": {
-                    "value": 353,
+                    "value": 353.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F4": {
-                    "value": 76,
+                    "value": 76.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
@@ -5666,9 +5666,9 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": -3,
+                        "value": -3.0,
                         "unit": "C",
-                        "standard_deviation": 2,
+                        "standard_deviation": 2.0,
                         "replicates": 3,
                         "unit_type": "temperature"
                     },
@@ -5676,9 +5676,9 @@
                 },
                 "flash_point": {
                     "measurement": {
-                        "value": 138,
+                        "value": 138.0,
                         "unit": "C",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "temperature"
                     },
@@ -5689,7 +5689,7 @@
                         "density": {
                             "value": 0.9444,
                             "unit": "g/mL",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "density"
                         },
@@ -5704,7 +5704,7 @@
                         "density": {
                             "value": 0.9562,
                             "unit": "g/mL",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "density"
                         },
@@ -5719,9 +5719,9 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 1400,
+                            "value": 1400.0,
                             "unit": "mPa.s",
-                            "standard_deviation": 5,
+                            "standard_deviation": 5.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -5734,9 +5734,9 @@
                     },
                     {
                         "viscosity": {
-                            "value": 8430,
+                            "value": 8430.0,
                             "unit": "mPa.s",
-                            "standard_deviation": 230,
+                            "standard_deviation": 230.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -5815,7 +5815,7 @@
                         "tension": {
                             "value": 23.7,
                             "unit": "mN/m",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 3,
                             "unit_type": "interfacialtension"
                         },
@@ -5857,14 +5857,14 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
                         "water_content": {
-                            "value": 23,
+                            "value": 23.0,
                             "unit": "%",
-                            "standard_deviation": 3,
+                            "standard_deviation": 3.0,
                             "replicates": 6,
                             "unit_type": "massfraction"
                         },
@@ -5874,36 +5874,36 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "Pa",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
                             "value": 0.9,
                             "unit": "Pa",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "Pa",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
-                            "value": 20,
-                            "standard_deviation": 9,
+                            "value": 20.0,
+                            "standard_deviation": 9.0,
                             "replicates": 6,
                             "unit_type": "unitless"
                         },
                         "complex_viscosity": {
                             "value": 2.4,
                             "unit": "Pa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "dynamicviscosity"
                         },
@@ -5912,14 +5912,14 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
                         "water_content": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 6,
                             "unit_type": "massfraction"
                         },
@@ -5929,36 +5929,36 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 12,
+                            "value": 12.0,
                             "unit": "Pa",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
-                            "value": 1,
+                            "value": 1.0,
                             "unit": "Pa",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 12,
+                            "value": 12.0,
                             "unit": "Pa",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
-                            "value": 10,
-                            "standard_deviation": 4,
+                            "value": 10.0,
+                            "standard_deviation": 4.0,
                             "replicates": 6,
                             "unit_type": "unitless"
                         },
                         "complex_viscosity": {
-                            "value": 2,
+                            "value": 2.0,
                             "unit": "Pa.s",
-                            "standard_deviation": 0,
+                            "standard_deviation": 0.0,
                             "replicates": 6,
                             "unit_type": "dynamicviscosity"
                         },
@@ -5967,7 +5967,7 @@
                     }
                 ],
                 "adhesion": {
-                    "value": 56,
+                    "value": 56.0,
                     "unit": "g/m^2",
                     "standard_deviation": 3.1,
                     "replicates": 3,
@@ -5977,24 +5977,24 @@
             "SARA": {
                 "method": "ESTS 12.11/3.0/M",
                 "saturates": {
-                    "value": 52,
+                    "value": 52.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 30,
+                    "value": 30.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 11,
+                    "value": 11.0,
                     "unit": "%",
                     "standard_deviation": 0.5,
                     "replicates": 3,
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 8,
+                    "value": 8.0,
                     "unit": "%",
                     "standard_deviation": 0.2,
                     "replicates": 3,
@@ -6253,7 +6253,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1,
+                        "value": 1.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6265,7 +6265,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6277,7 +6277,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3,
+                        "value": 3.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6289,7 +6289,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 308,
+                        "value": 308.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6301,7 +6301,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1648,
+                        "value": 1648.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6313,7 +6313,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2570,
+                        "value": 2570.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6325,7 +6325,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2574,
+                        "value": 2574.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6337,7 +6337,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2574,
+                        "value": 2574.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6349,7 +6349,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2363,
+                        "value": 2363.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6361,7 +6361,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1106,
+                        "value": 1106.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6373,7 +6373,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2235,
+                        "value": 2235.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6385,7 +6385,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1442,
+                        "value": 1442.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6397,7 +6397,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2103,
+                        "value": 2103.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6409,7 +6409,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1941,
+                        "value": 1941.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6421,7 +6421,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1901,
+                        "value": 1901.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6433,7 +6433,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1778,
+                        "value": 1778.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6445,7 +6445,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1714,
+                        "value": 1714.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6457,7 +6457,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1558,
+                        "value": 1558.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6469,7 +6469,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1583,
+                        "value": 1583.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6481,7 +6481,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1494,
+                        "value": 1494.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6493,7 +6493,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1197,
+                        "value": 1197.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6505,7 +6505,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 993,
+                        "value": 993.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6517,7 +6517,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 827,
+                        "value": 827.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6529,7 +6529,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 686,
+                        "value": 686.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6541,7 +6541,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 623,
+                        "value": 623.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6553,7 +6553,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 479,
+                        "value": 479.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6565,7 +6565,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 417,
+                        "value": 417.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6577,7 +6577,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 334,
+                        "value": 334.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6589,7 +6589,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 327,
+                        "value": 327.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6601,7 +6601,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 246,
+                        "value": 246.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6613,7 +6613,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 224,
+                        "value": 224.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6625,7 +6625,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 152,
+                        "value": 152.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6637,7 +6637,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 104,
+                        "value": 104.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6649,7 +6649,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 80,
+                        "value": 80.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6661,7 +6661,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 19,
+                        "value": 19.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6673,7 +6673,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 651,
+                        "value": 651.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6685,7 +6685,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2074,
+                        "value": 2074.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6697,7 +6697,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 2358,
+                        "value": 2358.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6709,7 +6709,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 1361,
+                        "value": 1361.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6721,7 +6721,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 259,
+                        "value": 259.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6733,7 +6733,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 698,
+                        "value": 698.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6745,7 +6745,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 773,
+                        "value": 773.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6757,7 +6757,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 591,
+                        "value": 591.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6769,7 +6769,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 274,
+                        "value": 274.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6781,7 +6781,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 155,
+                        "value": 155.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6793,7 +6793,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 325,
+                        "value": 325.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6805,7 +6805,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 466,
+                        "value": 466.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6817,7 +6817,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 416,
+                        "value": 416.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6829,7 +6829,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 88,
+                        "value": 88.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6841,7 +6841,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 223,
+                        "value": 223.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6853,7 +6853,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 334,
+                        "value": 334.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6865,7 +6865,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 341,
+                        "value": 341.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6877,7 +6877,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 7,
+                        "value": 7.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6889,7 +6889,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 78,
+                        "value": 78.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6901,7 +6901,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 136,
+                        "value": 136.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6913,7 +6913,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 151,
+                        "value": 151.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6925,7 +6925,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 116,
+                        "value": 116.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6937,7 +6937,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 62,
+                        "value": 62.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6949,7 +6949,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 211,
+                        "value": 211.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6961,7 +6961,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 128,
+                        "value": 128.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6973,7 +6973,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 262,
+                        "value": 262.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6985,7 +6985,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 171,
+                        "value": 171.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -6997,7 +6997,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 834,
+                        "value": 834.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7009,7 +7009,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 45,
+                        "value": 45.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7021,7 +7021,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 84,
+                        "value": 84.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7033,7 +7033,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 119,
+                        "value": 119.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7213,7 +7213,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 3,
+                        "value": 3.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7225,7 +7225,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 42,
+                        "value": 42.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7237,7 +7237,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 18,
+                        "value": 18.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7249,7 +7249,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 106,
+                        "value": 106.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7261,7 +7261,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 60,
+                        "value": 60.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7273,7 +7273,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 42,
+                        "value": 42.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7285,7 +7285,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 57,
+                        "value": 57.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7297,7 +7297,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 133,
+                        "value": 133.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7309,7 +7309,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 188,
+                        "value": 188.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7321,7 +7321,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 83,
+                        "value": 83.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7333,7 +7333,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 62,
+                        "value": 62.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7345,7 +7345,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 59,
+                        "value": 59.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7357,7 +7357,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 43,
+                        "value": 43.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7369,7 +7369,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 44,
+                        "value": 44.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7381,7 +7381,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 31,
+                        "value": 31.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7393,7 +7393,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 33,
+                        "value": 33.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7405,7 +7405,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 22,
+                        "value": 22.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7417,7 +7417,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 36,
+                        "value": 36.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7429,7 +7429,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 25,
+                        "value": 25.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7544,22 +7544,22 @@
             ],
             "CCME": {
                 "F1": {
-                    "value": 0,
+                    "value": 0.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F2": {
-                    "value": 76,
+                    "value": 76.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F3": {
-                    "value": 375,
+                    "value": 375.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },
                 "F4": {
-                    "value": 108,
+                    "value": 108.0,
                     "unit": "mg/g",
                     "unit_type": "massfraction"
                 },

@@ -2,7 +2,6 @@
 tests for making a GNOME Oil
 
 """
-
 from pathlib import Path
 from math import isclose
 
@@ -11,10 +10,7 @@ from adios_db.computation.gnome_oil import make_gnome_oil, sara_totals
 from adios_db.computation.physical_properties import emul_water
 
 HERE = Path(__file__).parent
-
-# TEST_DATA_DIR = HERE.parent / "data_for_testing" / "noaa-oil-data" / "oil"
 EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
-
 full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
 
 
@@ -22,12 +18,14 @@ full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
 def get_full_oil():
     return Oil.from_file(full_oil_filename)
 
+
 FullOil = get_full_oil()
+
 
 # run it through the Oil object to make sure its up to date:
 try:
     FullOil.to_file(full_oil_filename)
-except: # in case the tests are running somewhere read-only
+except Exception:  # in case the tests are running somewhere read-only
     pass
 
 
@@ -40,32 +38,18 @@ def test_metadata():
     # print(FullOil.metadata)
 
     assert data['name'] == FullOil.metadata.name
-    # the API might change
-    #assert data['api'] == FullOil.metadata.API
+    # The API might change
+    # assert data['api'] == FullOil.metadata.API
     assert data['adios_oil_id'] == "EC02234"
 
 
 def test_physical_properties():
-
     data = make_gnome_oil(FullOil)
 
-    assert isclose(data['flash_point'], 268.15)
     assert isclose(data['pour_point'], 248.15)
-
-def test_no_flash_point():
-
-    oil = get_full_oil()
-    # remove the flash point:
-
-    oil.sub_samples[0].physical_properties.flash_point = None
-
-    data = make_gnome_oil(oil)
-
-    assert data['flash_point'] is None
 
 
 def test_densities():
-
     data = make_gnome_oil(FullOil)
 
     assert list(data['densities']) == [939.88, 925.26]
@@ -74,7 +58,6 @@ def test_densities():
 
 
 def test_kvis():
-
     data = make_gnome_oil(FullOil)
 
     assert list(data['kvis']) == [0.0013831552964208198, 0.0003782720532607051]
@@ -83,36 +66,32 @@ def test_kvis():
 
 
 def test_SARA():
-
     saturates, aromatics, resins, asphaltenes = sara_totals(FullOil)
 
-    assert [saturates, aromatics, resins, asphaltenes] == [0.38, 0.31, .16, .15]
+    assert [saturates, aromatics, resins, asphaltenes] == [0.38, 0.31, .16,
+                                                           .15]
 
 
 def test_max_water_emulsion():
-
     data = make_gnome_oil(FullOil)
 
     assert data['emulsion_water_fraction_max'] == .9
 
 
 def test_emul_water():
-
     y_max = emul_water(FullOil)
 
-    print ("y_max = ", y_max)
+    print("y_max = ", y_max)
     assert y_max == .7147493538099328
 
 
 def test_solubility():
-
     data = make_gnome_oil(FullOil)
 
     assert data['solubility'] == 0
 
-
-def test_k0y():
-
-    data = make_gnome_oil(FullOil)
-
-    assert data['k0y'] == 2.024e-06
+# not being used -- we can add back if needed
+# def test_k0y():
+#     data = make_gnome_oil(FullOil)
+#
+#     assert data['k0y'] == 2.024e-06

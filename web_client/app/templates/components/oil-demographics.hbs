@@ -112,6 +112,7 @@
         {{#if @editable}}
           <PowerSelectMultiple @class="bg-warning border-0"
             @placeholder="Select some labels for the oil..."
+            @matchTriggerWidth={{false}}
             @selected={{this.selectedLabels}}
             @options={{this.filteredLabels}}
             @onChange={{action "updateLabels"}}
@@ -193,7 +194,7 @@
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilReferenceDate}}
-                @placeholder="Enter Date"
+                @placeholder="YYYY"
                 @size="7"
                 @change={{action "updateReferenceDate"}}
               />
@@ -214,7 +215,7 @@
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilSampleDate}}
-                @placeholder="Enter Date"
+                @placeholder="YYYY-MM-DD"
                 @size="12"
                 @change={{action "updateSampleReceivedDate"}}
               />
@@ -256,7 +257,7 @@
   <div class="row pl-0">
     <div class="col pl-0">
       {{#if @oil.status}}
-        <span>{{@oil.status.length}} error{{#if (eq @oil.status.length 1) }}s{{/if}} found:</span>
+        <span>{{@oil.status.length}} issue{{#if (gt @oil.status.length 1) }}s{{/if}} found:</span>
         <ul>
           {{#each @oil.status as |stat|}}
             <li><i class="status-warning">{{stat}}</i></li>

@@ -12,9 +12,9 @@
 <ModalDialog
   @onClose={{action "closeModalDialog"}}
   @translucentOverlay={{false}}
-  @targetAttachment="center left"
   @tetherTarget={{componentId}}
-  @attachment="center left"
+  @targetAttachment={{@targetAttachment}}
+  @attachment={{@attachment}}
 >
   <div id="scalar-range-dialog" class="card">
     {{!-- dialog header --}}

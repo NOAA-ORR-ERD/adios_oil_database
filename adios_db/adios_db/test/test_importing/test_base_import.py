@@ -1,17 +1,16 @@
-'''
-    tests of the Environment Canada data import modules
+"""
+tests of the Environment Canada data import modules
 
-    As complete as possible, because we want to test for correctness,
-    and we also want to document how it works.
-    Either we test it correctly, or we test it in an episodic manner on the
-    real dataset.
-'''
+As complete as possible, because we want to test for correctness,
+and we also want to document how it works.
+Either we test it correctly, or we test it in an episodic manner on the
+real dataset.
+"""
 from pathlib import Path
 
 import pytest
 
 from adios_db.data_sources.reader import CsvFile
-
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
 data_file = example_dir / 'CsvTestSet.csv'

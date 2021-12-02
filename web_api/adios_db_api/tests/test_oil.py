@@ -178,7 +178,7 @@ class OilTests(OilTestBase):
         self.testapp.put_json('/oils/', params={"bad": 'attr'}, status=415)
 
     def test_delete_bad_req(self):
-        self.testapp.delete('/oils/{}/'.format('bogus_id'), status=404)
+        self.testapp.delete('/oils/{}/'.format('bogus_id'), status=400)
 
 
 class OilTestCRUD(OilTestBase):

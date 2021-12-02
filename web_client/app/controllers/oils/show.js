@@ -7,6 +7,7 @@ export default class ShowController extends Controller {
     @tracked currentCategoryTab = {
         '#fresh-oil-sample': '#fresh-oil-sample-physical'
     };
+    @tracked changesMade = false;
 
     get canModifyDb() {
         return this.capabilities.firstObject.can_modify_db == 'true';
@@ -25,5 +26,14 @@ export default class ShowController extends Controller {
             // trigger an update
             this.currentCategoryTab = this.currentCategoryTab;
         }
+    }
+
+    @action
+    updateName(event) {
+        let newName = event.target.value;
+        this.model.metadata.name = newName;
+
+        this.changesMade = true;
+        this.model.save();
     }
 }

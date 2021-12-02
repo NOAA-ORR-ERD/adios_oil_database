@@ -24,4 +24,3 @@ def test_load():
 
     assert oil.metadata.reference.year == 2021
     assert oil.metadata.reference.reference == 'Barker, C.H. 2021. "A CSV file reader for the ADIOS Oil Database."'
-

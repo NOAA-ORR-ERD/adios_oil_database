@@ -21,18 +21,11 @@ from adios_db.computation.physical_properties import (get_density_data,
 
 
 HERE = Path(__file__).parent
-
-# TEST_DATA_DIR = HERE.parent / "data_for_testing" / "noaa-oil-data" / "oil"
 EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
-
 full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
 
 # run it through the Oil object to make sure its up to date:
 FullOil = Oil.from_file(full_oil_filename)
-
-# ExampleRecordFile = Path(__file__).parent.parent / "test_models" / "test_oil" / "ExampleFullRecord.json"
-
-# FullOil = Oil.from_file(ExampleRecordFile)
 
 
 def test_get_density_data_defaults():
@@ -97,14 +90,17 @@ class TestDensity:
     tests of the density class
     """
     def make_oil_with_densities(self, densities, temps):
-        oil = Oil(oil_id = "DENSITY_TESTER")
+        oil = Oil(oil_id="DENSITY_TESTER")
         sample = Sample()
         sample.metadata.name = "only density"
+
         oil.sub_samples.append(sample)
+
         for d, t in zip(densities, temps):
             dp = DensityPoint(meas.Density(d, unit="kg/m^3"),
                               meas.Temperature(t, unit="K"))
             sample.physical_properties.densities.append(dp)
+
         return oil
 
     def test_initilization_zero_densities(self):
@@ -114,8 +110,7 @@ class TestDensity:
         oil = self.make_oil_with_densities([], [])
 
         with pytest.raises(ValueError):
-            dc = Density(oil)
-
+            _dc = Density(oil)
 
     @pytest.mark.parametrize("density, temp, k_rho",
                              [(800, 288.16, -0.0009),
@@ -126,7 +121,6 @@ class TestDensity:
                               (990, 283.00, -0.00085),  # much lower than 15C
                               ])
     def test_initiliaze_one_density(self, density, temp, k_rho):
-
         oil = self.make_oil_with_densities([density], [temp])
         dc = Density(oil)
 
@@ -134,7 +128,6 @@ class TestDensity:
         assert dc.k_rho_default == k_rho
 
     def test_initiliaze_two_densities(self):
-
         oil = self.make_oil_with_densities([980.0, 990.0], [288.15, 268.15])
         dc = Density(oil)
 
@@ -142,9 +135,7 @@ class TestDensity:
 
         assert isclose(dc.k_rho_default, -0.5)
 
-
     def test_initiliaze_three_plus_densities(self):
-
         oil = self.make_oil_with_densities([982, 984, 991], [288, 278, 268])
         dc = Density(oil)
 
@@ -156,15 +147,14 @@ class TestDensity:
         """
         make sure the data are sorted when added
         """
-        oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
+        oil = self.make_oil_with_densities([980.0, 990.0, 985.0],
+                                           [288, 287, 289])
         dc = Density(oil)
 
         assert dc.temps == (287.0, 288.0, 289.0)
         assert dc.densities == (990.0, 980.0, 985.0)
 
     def test_density_at_temp(self):
-
-        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
         dc = Density([(980.0, 288.15),
                       (990.0, 273.15)])
 
@@ -172,63 +162,44 @@ class TestDensity:
         assert dc.at_temp(273.15) == 990.0
 
     def test_density_at_temp_vector_exact(self):
-
-        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
         dc = Density([(980.0, 288.15),
                       (990.0, 273.15),
                       (985.0, 280.0)])
-
-        # densities = [(980.0, 288.15),
-        #              (990.0, 273.15)]
 
         assert np.all(dc.at_temp((288.15, 273.15, 280.0))
                       == (980.0, 990.0, 985.0))
 
     def test_density_at_temp_vector_interp(self):
-
-        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
         dc = Density([(990.0, 270.0),
                       (984.0, 280.0),
                       (980.0, 290.0),
                       ])
 
-        # densities = [(980.0, 288.15),
-        #              (990.0, 273.15)]
-
-
         print("k_rho_default:", dc.k_rho_default)
 
         D = dc.at_temp((275, 286))
 
-        assert  984 < D[0] < 990
-        assert  980 < D[1] < 984
-
+        assert 984 < D[0] < 990
+        assert 980 < D[1] < 984
 
     def test_density_at_temp_out_of_range(self):
-
-        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
         dc = Density([(990.0, 270.0),
                       (985.0, 280.0),
                       (980.0, 290.0),
                       ])
 
-        # densities = [(980.0, 288.15),
-        #              (990.0, 273.15)]
-
         D = dc.at_temp((300, 260))
 
-        assert  D[0] < 980
-        assert  D[1] > 990
+        assert D[0] < 980
+        assert D[1] > 990
 
     def test_density_at_temp_single_out_of_range(self):
-
-        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
         dc = Density([(990.0, 270.0),
                       ])
 
         D = dc.at_temp(260)
 
-        assert  D  ==  990 - (10 * -0.00085)
+        assert D == 990 - (10 * -0.00085)
 
     def test_density_at_temp_single_20C(self):
         """
@@ -237,7 +208,6 @@ class TestDensity:
 
         Checking at 60F (288.716): used to compute API
         """
-        # oil = self.make_oil_with_densities([980.0, 990.0, 985.0], [288, 287, 289])
         dc = Density([(990.0, 293.15),
                       ])
 
@@ -245,7 +215,7 @@ class TestDensity:
 
         result = 990 + ((288.716 - 293.15) * -0.0008)
 
-        assert  D  ==  result
+        assert D == result
 
 
 class Test_KinematicViscosity:
@@ -266,7 +236,3 @@ class Test_KinematicViscosity:
         assert self.kv.kviscs
         assert isclose(self.kv.at_temp(273.15), 0.001383, rel_tol=1e-3)
         assert isclose(self.kv.at_temp(288.15), 0.0003783, rel_tol=1e-3)
-
-
-
-

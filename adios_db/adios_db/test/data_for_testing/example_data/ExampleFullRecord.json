@@ -17,7 +17,14 @@
             "Crude Oil",
             "Heavy Crude"
         ],
-        "model_completeness": 94
+        "model_completeness": 94,
+        "change_log": [
+            {
+                "name": "Bozo the Clown",
+                "date": "2021-04-01",
+                "comment": "Any random old thing"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -83,7 +90,7 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 1300,
+                            "value": 1300.0,
                             "unit": "mPa.s",
                             "standard_deviation": 24.44,
                             "replicates": 3,
@@ -98,7 +105,7 @@
                     },
                     {
                         "viscosity": {
-                            "value": 350,
+                            "value": 350.0,
                             "unit": "mPa.s",
                             "standard_deviation": 8.271,
                             "replicates": 3,
@@ -226,7 +233,7 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -243,23 +250,23 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "Pa",
-                            "standard_deviation": 7,
+                            "standard_deviation": 7.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
                             "value": 13.823,
                             "unit": "Pa",
-                            "standard_deviation": 3,
+                            "standard_deviation": 3.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 42,
+                            "value": 42.0,
                             "unit": "Pa",
-                            "standard_deviation": 6,
+                            "standard_deviation": 6.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
@@ -272,7 +279,7 @@
                         "complex_viscosity": {
                             "value": 7.0975,
                             "unit": "Pa.s",
-                            "standard_deviation": 1,
+                            "standard_deviation": 1.0,
                             "replicates": 6,
                             "unit_type": "dynamicviscosity"
                         },
@@ -281,7 +288,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -298,9 +305,9 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 31,
+                            "value": 31.0,
                             "unit": "Pa",
-                            "standard_deviation": 7,
+                            "standard_deviation": 7.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
@@ -312,15 +319,15 @@
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 31,
+                            "value": 31.0,
                             "unit": "Pa",
                             "standard_deviation": 6.9,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "tan_delta_v_e": {
-                            "value": 12,
-                            "standard_deviation": 2,
+                            "value": 12.0,
+                            "standard_deviation": 2.0,
                             "replicates": 5,
                             "unit_type": "unitless"
                         },
@@ -343,22 +350,22 @@
             "SARA": {
                 "method": "ESTS: 12.11/1.0/M",
                 "saturates": {
-                    "value": 38,
+                    "value": 38.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 31,
+                    "value": 31.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 16,
+                    "value": 16.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 15,
+                    "value": 15.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 }
@@ -367,235 +374,235 @@
                 "type": "mass fraction",
                 "method": "ASTM D7169",
                 "end_point": {
-                    "value": 522,
+                    "value": 522.0,
                     "unit": "C",
                     "unit_type": "temperature"
                 },
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 52,
+                            "value": 52.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 88,
+                            "value": 88.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 106,
+                            "value": 106.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 138,
+                            "value": 138.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 207,
+                            "value": 207.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 260,
+                            "value": 260.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 294,
+                            "value": 294.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 319,
+                            "value": 319.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 343,
+                            "value": 343.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 365,
+                            "value": 365.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 385,
+                            "value": 385.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 405,
+                            "value": 405.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 424,
+                            "value": 424.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 442,
+                            "value": 442.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 459,
+                            "value": 459.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 478,
+                            "value": 478.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 499,
+                            "value": 499.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -864,7 +871,7 @@
                     ],
                     "method": "ESTS: 5.03/x.x/M",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -1679,7 +1686,7 @@
                     "name": "Wax Content",
                     "method": "ESTS: 12.11/2.0/M",
                     "measurement": {
-                        "value": 1,
+                        "value": 1.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1699,7 +1706,7 @@
                     "name": "Sulfur Content",
                     "method": "ASTM D4294",
                     "measurement": {
-                        "value": 3,
+                        "value": 3.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1911,7 +1918,7 @@
                     {
                         "name": "n-C28 to n-C34",
                         "measurement": {
-                            "value": 33,
+                            "value": 33.0,
                             "unit": "mg/g",
                             "unit_type": "massfraction"
                         }
@@ -1993,7 +2000,7 @@
                     {
                         "name": "TOTAL TPH (GC detected TPH + undetected TPH)",
                         "measurement": {
-                            "value": 690,
+                            "value": 690.0,
                             "unit": "mg/g",
                             "unit_type": "massfraction"
                         }
@@ -2064,7 +2071,7 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 9800,
+                            "value": 9800.0,
                             "unit": "mPa.s",
                             "standard_deviation": 62.097,
                             "replicates": 3,
@@ -2079,7 +2086,7 @@
                     },
                     {
                         "viscosity": {
-                            "value": 1717,
+                            "value": 1717.0,
                             "unit": "mPa.s",
                             "standard_deviation": 1.7321,
                             "replicates": 3,
@@ -2204,7 +2211,7 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -2235,7 +2242,7 @@
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "Pa",
                             "standard_deviation": 7.8,
                             "replicates": 6,
@@ -2259,7 +2266,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -2276,9 +2283,9 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "Pa",
-                            "standard_deviation": 18,
+                            "standard_deviation": 18.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
@@ -2290,9 +2297,9 @@
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "Pa",
-                            "standard_deviation": 18,
+                            "standard_deviation": 18.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
@@ -2316,22 +2323,22 @@
             "SARA": {
                 "method": "ESTS: 12.11/1.0/M",
                 "saturates": {
-                    "value": 37,
+                    "value": 37.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 31,
+                    "value": 31.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 16,
+                    "value": 16.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 16,
+                    "value": 16.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 }
@@ -2340,235 +2347,235 @@
                 "type": "mass fraction",
                 "method": "ASTM D7169",
                 "end_point": {
-                    "value": 521,
+                    "value": 521.0,
                     "unit": "C",
                     "unit_type": "temperature"
                 },
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 56,
+                            "value": 56.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 84,
+                            "value": 84.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 104,
+                            "value": 104.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 135,
+                            "value": 135.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 193,
+                            "value": 193.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 245,
+                            "value": 245.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 278,
+                            "value": 278.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 304,
+                            "value": 304.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 325,
+                            "value": 325.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 346,
+                            "value": 346.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 365,
+                            "value": 365.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 383,
+                            "value": 383.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 401,
+                            "value": 401.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 419,
+                            "value": 419.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 435,
+                            "value": 435.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 451,
+                            "value": 451.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 467,
+                            "value": 467.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 485,
+                            "value": 485.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 503,
+                            "value": 503.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -2837,7 +2844,7 @@
                     ],
                     "method": "ESTS: 5.03/x.x/M",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -3965,7 +3972,7 @@
                     {
                         "name": "TOTAL TPH (GC detected TPH + undetected TPH)",
                         "measurement": {
-                            "value": 680,
+                            "value": 680.0,
                             "unit": "mg/g",
                             "unit_type": "massfraction"
                         }
@@ -3987,7 +3994,7 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": -6,
+                        "value": -6.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     },
@@ -3995,7 +4002,7 @@
                 },
                 "flash_point": {
                     "measurement": {
-                        "value": 29,
+                        "value": 29.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     },
@@ -4038,7 +4045,7 @@
                         "viscosity": {
                             "value": 203730.0,
                             "unit": "mPa.s",
-                            "standard_deviation": 570,
+                            "standard_deviation": 570.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -4053,7 +4060,7 @@
                         "viscosity": {
                             "value": 29657.0,
                             "unit": "mPa.s",
-                            "standard_deviation": 270,
+                            "standard_deviation": 270.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -4161,12 +4168,12 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
                         "water_content": {
-                            "value": 33,
+                            "value": 33.0,
                             "unit": "%",
                             "standard_deviation": 1.9,
                             "replicates": 9,
@@ -4178,23 +4185,23 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 470,
+                            "value": 470.0,
                             "unit": "Pa",
-                            "standard_deviation": 38,
+                            "standard_deviation": 38.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
-                            "value": 180,
+                            "value": 180.0,
                             "unit": "Pa",
-                            "standard_deviation": 23,
+                            "standard_deviation": 23.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 430,
+                            "value": 430.0,
                             "unit": "Pa",
-                            "standard_deviation": 32,
+                            "standard_deviation": 32.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
@@ -4207,7 +4214,7 @@
                         "complex_viscosity": {
                             "value": 74.4,
                             "unit": "Pa.s",
-                            "standard_deviation": 6,
+                            "standard_deviation": 6.0,
                             "replicates": 6,
                             "unit_type": "dynamicviscosity"
                         },
@@ -4216,7 +4223,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -4233,23 +4240,23 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 530,
+                            "value": 530.0,
                             "unit": "Pa",
-                            "standard_deviation": 24,
+                            "standard_deviation": 24.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
-                            "value": 200,
+                            "value": 200.0,
                             "unit": "Pa",
-                            "standard_deviation": 20,
+                            "standard_deviation": 20.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 500,
+                            "value": 500.0,
                             "unit": "Pa",
-                            "standard_deviation": 25,
+                            "standard_deviation": 25.0,
                             "replicates": 6,
                             "unit_type": "pressure"
                         },
@@ -4273,22 +4280,22 @@
             "SARA": {
                 "method": "ESTS: 12.11/1.0/M",
                 "saturates": {
-                    "value": 34,
+                    "value": 34.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 30,
+                    "value": 30.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 19,
+                    "value": 19.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 17,
+                    "value": 17.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 }
@@ -4297,235 +4304,235 @@
                 "type": "mass fraction",
                 "method": "ASTM D7169",
                 "end_point": {
-                    "value": 519,
+                    "value": 519.0,
                     "unit": "C",
                     "unit_type": "temperature"
                 },
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 115,
+                            "value": 115.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 166,
+                            "value": 166.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 224,
+                            "value": 224.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 259,
+                            "value": 259.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 285,
+                            "value": 285.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 306,
+                            "value": 306.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 324,
+                            "value": 324.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 341,
+                            "value": 341.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 357,
+                            "value": 357.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 372,
+                            "value": 372.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 387,
+                            "value": 387.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 402,
+                            "value": 402.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 416,
+                            "value": 416.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 429,
+                            "value": 429.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 442,
+                            "value": 442.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 455,
+                            "value": 455.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 468,
+                            "value": 468.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 483,
+                            "value": 483.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 501,
+                            "value": 501.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -4794,7 +4801,7 @@
                     ],
                     "method": "ESTS: 5.03/x.x/M",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -5609,7 +5616,7 @@
                     "name": "Wax Content",
                     "method": "ESTS: 12.11/2.0/M",
                     "measurement": {
-                        "value": 2,
+                        "value": 2.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -5922,7 +5929,7 @@
                     {
                         "name": "TOTAL TPH (GC detected TPH + undetected TPH)",
                         "measurement": {
-                            "value": 640,
+                            "value": 640.0,
                             "unit": "mg/g",
                             "unit_type": "massfraction"
                         }
@@ -5944,7 +5951,7 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": 24,
+                        "value": 24.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     },
@@ -5952,7 +5959,7 @@
                 },
                 "flash_point": {
                     "measurement": {
-                        "value": 159,
+                        "value": 159.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     },
@@ -5993,7 +6000,7 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 90000000,
+                            "value": 90000000.0,
                             "unit": "mPa.s",
                             "standard_deviation": 2233500.0,
                             "replicates": 3,
@@ -6013,7 +6020,7 @@
                     },
                     {
                         "viscosity": {
-                            "value": 1000000,
+                            "value": 1000000.0,
                             "unit": "mPa.s",
                             "standard_deviation": 67002.0,
                             "replicates": 3,
@@ -6128,7 +6135,7 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -6145,23 +6152,23 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 12573,
+                            "value": 12573.0,
                             "unit": "Pa",
-                            "standard_deviation": 1299,
+                            "standard_deviation": 1299.0,
                             "replicates": 3,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
-                            "value": 3114,
+                            "value": 3114.0,
                             "unit": "Pa",
-                            "standard_deviation": 501,
+                            "standard_deviation": 501.0,
                             "replicates": 3,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 12183,
+                            "value": 12183.0,
                             "unit": "Pa",
-                            "standard_deviation": 1233,
+                            "standard_deviation": 1233.0,
                             "replicates": 3,
                             "unit_type": "pressure"
                         },
@@ -6172,9 +6179,9 @@
                             "unit_type": "unitless"
                         },
                         "complex_viscosity": {
-                            "value": 2000,
+                            "value": 2000.0,
                             "unit": "Pa.s",
-                            "standard_deviation": 206,
+                            "standard_deviation": 206.0,
                             "replicates": 3,
                             "unit_type": "dynamicviscosity"
                         },
@@ -6183,7 +6190,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -6200,23 +6207,23 @@
                             "unit_type": "temperature"
                         },
                         "complex_modulus": {
-                            "value": 15200,
+                            "value": 15200.0,
                             "unit": "Pa",
-                            "standard_deviation": 474,
+                            "standard_deviation": 474.0,
                             "replicates": 2,
                             "unit_type": "pressure"
                         },
                         "storage_modulus": {
-                            "value": 3500,
+                            "value": 3500.0,
                             "unit": "Pa",
-                            "standard_deviation": 136,
+                            "standard_deviation": 136.0,
                             "replicates": 2,
                             "unit_type": "pressure"
                         },
                         "loss_modulus": {
-                            "value": 14800,
+                            "value": 14800.0,
                             "unit": "Pa",
-                            "standard_deviation": 460,
+                            "standard_deviation": 460.0,
                             "replicates": 2,
                             "unit_type": "pressure"
                         },
@@ -6227,9 +6234,9 @@
                             "unit_type": "unitless"
                         },
                         "complex_viscosity": {
-                            "value": 2420,
+                            "value": 2420.0,
                             "unit": "Pa.s",
-                            "standard_deviation": 76,
+                            "standard_deviation": 76.0,
                             "replicates": 2,
                             "unit_type": "dynamicviscosity"
                         },
@@ -6240,22 +6247,22 @@
             "SARA": {
                 "method": "ESTS: 12.11/1.0/M",
                 "saturates": {
-                    "value": 27,
+                    "value": 27.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 27,
+                    "value": 27.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 23,
+                    "value": 23.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 23,
+                    "value": 23.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 }
@@ -6264,235 +6271,235 @@
                 "type": "mass fraction",
                 "method": "ASTM D7169",
                 "end_point": {
-                    "value": 516,
+                    "value": 516.0,
                     "unit": "C",
                     "unit_type": "temperature"
                 },
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 279,
+                            "value": 279.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 303,
+                            "value": 303.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 322,
+                            "value": 322.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 339,
+                            "value": 339.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 355,
+                            "value": 355.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 370,
+                            "value": 370.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 385,
+                            "value": 385.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 400,
+                            "value": 400.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 415,
+                            "value": 415.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 428,
+                            "value": 428.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 440,
+                            "value": 440.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 452,
+                            "value": 452.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 463,
+                            "value": 463.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 473,
+                            "value": 473.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 482,
+                            "value": 482.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 490,
+                            "value": 490.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 497,
+                            "value": 497.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 504,
+                            "value": 504.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 510,
+                            "value": 510.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -6761,7 +6768,7 @@
                     ],
                     "method": "ESTS: 5.03/x.x/M",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -7888,7 +7895,7 @@
                     {
                         "name": "TOTAL TPH (GC detected TPH + undetected TPH)",
                         "measurement": {
-                            "value": 540,
+                            "value": 540.0,
                             "unit": "mg/g",
                             "unit_type": "massfraction"
                         }
@@ -7910,7 +7917,7 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": 33,
+                        "value": 33.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     },
@@ -7918,7 +7925,7 @@
                 },
                 "flash_point": {
                     "measurement": {
-                        "value": 173,
+                        "value": 173.0,
                         "unit": "C",
                         "unit_type": "temperature"
                     },
@@ -7959,7 +7966,7 @@
                 "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 7909000,
+                            "value": 7909000.0,
                             "unit": "mPa.s",
                             "standard_deviation": 119300.0,
                             "replicates": 3,
@@ -8074,7 +8081,7 @@
                 "emulsions": [
                     {
                         "age": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -8110,7 +8117,7 @@
                     },
                     {
                         "age": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "day",
                             "unit_type": "time"
                         },
@@ -8148,22 +8155,22 @@
             "SARA": {
                 "method": "ESTS: 12.11/1.0/M",
                 "saturates": {
-                    "value": 24,
+                    "value": 24.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "aromatics": {
-                    "value": 25,
+                    "value": 25.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "resins": {
-                    "value": 27,
+                    "value": 27.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 },
                 "asphaltenes": {
-                    "value": 27,
+                    "value": 27.0,
                     "unit": "%",
                     "unit_type": "massfraction"
                 }
@@ -8172,235 +8179,235 @@
                 "type": "mass fraction",
                 "method": "ASTM D7169",
                 "end_point": {
-                    "value": 511,
+                    "value": 511.0,
                     "unit": "C",
                     "unit_type": "temperature"
                 },
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 294,
+                            "value": 294.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 312,
+                            "value": 312.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 15.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 328,
+                            "value": 328.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 20.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 342,
+                            "value": 342.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 25,
+                            "value": 25.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 355,
+                            "value": 355.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 30,
+                            "value": 30.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 368,
+                            "value": 368.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 35,
+                            "value": 35.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 380,
+                            "value": 380.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 40,
+                            "value": 40.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 392,
+                            "value": 392.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 45.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 403,
+                            "value": 403.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 50,
+                            "value": 50.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 415,
+                            "value": 415.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 55,
+                            "value": 55.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 426,
+                            "value": 426.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 60,
+                            "value": 60.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 435,
+                            "value": 435.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 65,
+                            "value": 65.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 445,
+                            "value": 445.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 454,
+                            "value": 454.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 75,
+                            "value": 75.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 464,
+                            "value": 464.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 475,
+                            "value": 475.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 85,
+                            "value": 85.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 485,
+                            "value": 485.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 90,
+                            "value": 90.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 495,
+                            "value": 495.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 95,
+                            "value": 95.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 503,
+                            "value": 503.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -8669,7 +8676,7 @@
                     ],
                     "method": "ESTS: 5.03/x.x/M",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction"
                     }
@@ -9640,7 +9647,7 @@
                     {
                         "name": "n-C24 to n-C28",
                         "measurement": {
-                            "value": 23,
+                            "value": 23.0,
                             "unit": "mg/g",
                             "unit_type": "massfraction"
                         }
@@ -9796,7 +9803,7 @@
                     {
                         "name": "TOTAL TPH (GC detected TPH + undetected TPH)",
                         "measurement": {
-                            "value": 460,
+                            "value": 460.0,
                             "unit": "mg/g",
                             "unit_type": "massfraction"
                         }

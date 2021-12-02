@@ -54,7 +54,15 @@ export default class Ift extends Component {
             this.iftsArray = [];
         }
 
-        this.iftsArray.splice(index, 0, {});
+        let obj;
+        if (index === 0) {
+            obj = {'interface': 'air'}
+        }
+        else {
+            obj = {'interface': this.iftsArray[index - 1].interface}
+        }
+
+        this.iftsArray.splice(index, 0, obj);
         this.iftsArray = this.iftsArray;
 
         this.updateTable(this.iftsArray);
@@ -92,8 +100,28 @@ export default class Ift extends Component {
 
     @action
     updateTable(enteredValue) {
-        set(this.args.oil, 'ifts', enteredValue);
+        let airArray = enteredValue.filter(i => {
+            return i.interface === 'air';
+        });
+        let waterArray = enteredValue.filter(i => {
+            return i.interface === 'water';
+        });
+        let seawaterArray = enteredValue.filter(i => {
+            return i.interface === 'seawater';
+        });
+        let emptyObjectArray = enteredValue.filter(i => {
+            return !i.hasOwnProperty('interface');
+        });
+
+        seawaterArray = [...seawaterArray, ...emptyObjectArray];
+
+        set(this.args.oil.physical_properties, 'interfacial_tension_air',
+            airArray);
+        set(this.args.oil.physical_properties, 'interfacial_tension_water',
+            waterArray);
+        set(this.args.oil.physical_properties, 'interfacial_tension_seawater',
+            seawaterArray);
+
         this.args.submit(enteredValue);
     }
-
 }

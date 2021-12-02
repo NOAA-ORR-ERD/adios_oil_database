@@ -11,6 +11,16 @@
         @group={{group}}
         @items={{items}}
       />
+    {{else}}
+      <Common::GroupedTable
+        @oil={{@oil}}
+        @store={{@store}}
+        @editable={{@editable}}
+        @submit={{@submit}}
+        @baseProperty={{this.baseProperty}}
+        @group="Ungrouped"
+        @items={{ null }}
+      />
     {{/each-in}}
 
   </div>

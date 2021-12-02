@@ -8,7 +8,7 @@ oil object
 import re
 import logging
 
-import unit_conversion as uc
+import nucos as uc
 
 from ...util import sigfigs
 from ...models.common.measurement import (

@@ -10,7 +10,7 @@ different back-end: RDBMS, simple file store, etc.
 
 from numbers import Number
 import warnings
-from operator import itemgetter
+
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
 from ..models.oil.oil import Oil
@@ -157,12 +157,60 @@ class Session():
         be much faster. In fact, this is a bit brittle, and would fail if the
         website suffered a bunch of POST requests at once.
         """
-        id_prefix = 'XX'
         max_seq = 0
 
         cursor = (self._oil_collection
                   .find({'oil_id': {'$regex': '^{}'.format(id_prefix)}},
                         {'oil_id'}))
+
+        for row in cursor:
+            oil_id = row['oil_id']
+
+    def find_one(self, oil_id):
+        ret = self._oil_collection.find_one({'oil_id': oil_id})
+
+        if ret is not None:
+            ret.pop('_id', None)
+
+        return ret
+
+    def insert_one(self, oil_obj):
+        if isinstance(oil_obj, Oil):
+            oil_obj = oil_obj.py_json()
+
+        if not hasattr(oil_obj, '_id'):
+            oil_obj['_id'] = oil_obj['oil_id']
+
+        return self._oil_collection.insert_one(oil_obj).inserted_id
+
+    def replace_one(self, oil_obj):
+        if isinstance(oil_obj, Oil):
+            oil_obj = oil_obj.py_json()
+
+        return self._oil_collection.replace_one({'oil_id': oil_obj['oil_id']},
+                                    oil_obj)
+
+    def delete_one(self, oil_id):
+        return self._oil_collection.delete_one({'oil_id': oil_id})
+
+    def new_oil_id(self):
+        '''
+            Query the database for the next highest ID with a prefix of XX
+            The current implementation is to walk the oil IDs, filter for the
+            prefix, and choose the max numeric content.
+
+            Warning: We don't expect a lot of traffic POST'ing a bunch new oils
+                     to the database, it will only happen once in awhile.
+                     But this is not the most effective way to do this.
+                     A persistent incremental counter would be much faster.
+                     In fact, this is a bit brittle, and would fail if the
+                     website suffered a bunch of POST requests at once.
+        '''
+        id_prefix = 'XX'
+        max_seq = 0
+
+        cursor = (self._oil_collection.find({'oil_id': {'$regex': f'^{id_prefix}'}},
+                                {'oil_id'}))
 
         for row in cursor:
             oil_id = row['oil_id']
@@ -177,38 +225,10 @@ class Session():
 
         max_seq += 1  # next in the sequence
 
-        return '{}{:06d}'.format(id_prefix, max_seq)
+        return f'{id_prefix}{max_seq:06d}'
 
-    def update_oil(self, oil):
-        '''
-        Update an oil record in the oil collection
-
-        :param oil: an Oil object to update
-
-        :param overwrite=False: whether to overwrite an existing
-                                record if it already exists.
-        '''
-        if not isinstance(oil, Oil):
-            # assume a json-compatible dict
-            oil = Oil.from_py_json(oil)
-
-        oil.reset_validation()
-        set_completeness(oil)
-
-        json_obj = oil.py_json()
-        json_obj['_id'] = oil.oil_id
-
-        res = self._oil_collection.replace_one({'oil_id': json_obj['oil_id']}, json_obj)
-        assert res.modified_count == 1
-
-        return json_obj
-
-    def query(self,
-              oil_id=None,
-              text=None,
-              api=None,
-              labels=None,
-              product_type=None,
+    def query(self, oil_id=None,
+              text=None, api=None, labels=None, product_type=None,
               gnome_suitable=None,
               sort=None,
               sort_case_sensitive=False,
@@ -503,7 +523,6 @@ class Session():
                 if label['_id'] == identifier:
                     return label
             return None
-
 
     def __getattr__(self, name):
         # FixMe: This should be fully hiding the mongo client

@@ -3,14 +3,13 @@ tests of the validation code
 
 most need to be updated to test validating an Oil object directly
 """
-
 import copy
 import json
 from pathlib import Path
 import math
 import pytest
 
-import unit_conversion as uc
+import nucos as uc
 
 from adios_db.computation import physical_properties
 from adios_db.models.oil.oil import Oil
@@ -19,13 +18,49 @@ from adios_db.models.oil.physical_properties import DensityPoint
 from adios_db.models.common.measurement import *
 from adios_db.models.oil.validation.validate import (validate_json, validate)
 
+from adios_db.models.oil.validation import (unpack_status, is_only_ignored,
+                                            ERRORS_TO_IGNORE)
+
 from adios_db.scripting import get_all_records
 
 HERE = Path(__file__).parent
 
-TEST_DATA_DIR = HERE.parent.parent.parent / "data_for_testing" / "noaa-oil-data" / "oil"
+TEST_DATA_DIR = (HERE.parent.parent.parent /
+                 "data_for_testing" / "noaa-oil-data" / "oil")
 
-BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
+BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json",
+                            encoding="utf-8"))
+
+
+# tests for the validation utilities
+def test_unpack_status():
+    status = ["W005: API value: 2256.95 seems unlikely",
+              "W009: Distillation fraction recovered is missing or invalid",
+              "W009: Another one with the same Code",
+              ]
+
+    result = unpack_status(status)
+
+    print(result)
+
+    assert result.keys() == {"W005", "W009"}
+    assert len(result["W005"]) == 1
+    assert len(result["W009"]) == 2
+    assert "Another one with the same Code" in result["W009"]
+
+
+def test_is_only_ignored_true():
+    status_dict = {code: ["random message text"] for code in ERRORS_TO_IGNORE}
+
+    assert is_only_ignored(status_dict)
+
+
+def test_is_only_ignored_false():
+    status_dict = {code: ["random message text"] for code in ERRORS_TO_IGNORE}
+    # add one we know won't ever be in the ignore list
+    status_dict["F32"] = ["nothing important"]
+
+    assert not is_only_ignored(status_dict)
 
 
 @pytest.fixture
@@ -52,7 +87,7 @@ def minimal_oil():
 def test_validation_doesnt_change_oil(big_record):
     orig = copy.deepcopy(big_record)
 
-    msgs = orig.validate()
+    orig.validate()
     # gnome_suitable may have been reset
     big_record.metadata.gnome_suitable = orig.metadata.gnome_suitable
     assert orig == big_record
@@ -90,15 +125,65 @@ def snippet_not_in_oil_status(snippet, oil):
     return not snippet_in_oil_status(snippet, oil)
 
 
-def test_no_id():
-    """
-    should get a particular ValueError if you try an invalid dict
-    """
-    try:
-        validate_json({"this": 3})
-    except ValueError as err:
-        print(str(err))
-        assert ("E010: Record has no oil_id: every record must have an ID" in str(err))
+class TestFromPyJson:
+    def test_sample_metadata(self):
+        oil = Oil.from_py_json({
+            'oil_id': "XX123456",
+            'metadata': {
+                'name': "An oil name"
+            },
+            'sub_samples': [
+                {'metadata': {
+                    'fraction_evaporated': {'value': 11, 'unit': '%',
+                                            'unit_type': 'massfraction'}
+                 }
+                 }
+            ]
+        })
+
+        print(oil.sub_samples[0].metadata)
+        print(oil.sub_samples[0].metadata.fraction_evaporated)
+
+        assert len(oil.sub_samples) > 0
+        assert oil.sub_samples[0].metadata.name == 'Fresh Oil Sample'
+        assert oil.sub_samples[0].metadata.short_name == 'Fresh Oil'
+        assert oil.sub_samples[0].metadata.fraction_evaporated is not None
+
+
+class TestValidateJson:
+    def test_no_id(self):
+        """
+        should get a particular ValueError if you try an invalid dict
+        """
+        try:
+            validate_json({"this": 3})
+        except ValueError as err:
+            print(str(err))
+            assert ("E010: Record has no oil_id: every record must have an ID"
+                    in str(err))
+
+    def test_sample_metadata(self):
+        oil = validate_json({
+            'oil_id': "XX123456",
+            'metadata': {
+                'name': "An oil name"
+            },
+            'sub_samples': [
+                {'metadata': {
+                    'fraction_evaporated': {'value': 11, 'unit': '%',
+                                            'unit_type': 'massfraction'}
+                 }
+                 }
+            ]
+        })
+
+        print(oil.sub_samples[0].metadata)
+        print(oil.sub_samples[0].metadata.fraction_evaporated)
+
+        assert len(oil.sub_samples) > 0
+        assert oil.sub_samples[0].metadata.name == 'Fresh Oil Sample'
+        assert oil.sub_samples[0].metadata.short_name == 'Fresh Oil'
+        assert oil.sub_samples[0].metadata.fraction_evaporated is not None
 
 
 @pytest.mark.parametrize("name", [
@@ -116,7 +201,6 @@ def test_reasonable_name(name):
 
 
 def test_no_type(no_type_oil):
-
     # print("oil.metadata")
 
     # print(no_type_oil.metadata)
@@ -217,6 +301,7 @@ def test_API_density_missmatch(minimal_oil):
 
     density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
     API = uc.convert('kg/m^3', 'API', density_at_60F)
+
     print(f"{density_at_60F=}")
     print(f"{API=}")
     print(f"{minimal_oil.metadata.API=}")
@@ -266,7 +351,6 @@ def test_no_densities_with_density(big_record):
 
 def test_no_densities(big_record):
     oil = big_record
-    #print(oil.sub_samples[0])
 
     pp = oil.sub_samples[0].physical_properties
     del pp.densities[:]
@@ -283,7 +367,8 @@ def test_bad_value_in_dist_temp(big_record):
     validate(oil)
     print(oil.status)
 
-    assert snippet_in_oil_status("E040: Value for distillation vapor temp", oil)
+    assert snippet_in_oil_status("E040: Value for distillation vapor temp",
+                                 oil)
 
 
 # No longer checking for distillation cuts.
@@ -341,7 +426,7 @@ def test_does_not_break_test_records():
     run validation on all the test data, just to make sure that
     nothing breaks
     """
-    for rec, path in get_all_records(TEST_DATA_DIR):
-        msgs = rec.validate()
+    for rec, _path in get_all_records(TEST_DATA_DIR):
+        _msgs = rec.validate()
 
     assert True

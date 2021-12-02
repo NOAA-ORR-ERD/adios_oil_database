@@ -1,20 +1,26 @@
 import pytest
 
 from adios_db.models.oil.oil import Oil
-from adios_db.models.oil.completeness import completeness
+from adios_db.models.common.measurement import MassFraction
+
+from adios_db.models.oil.completeness import (completeness,
+                                              MAX_SCORE,
+                                              CheckDistillation,
+                                              CheckViscosity)
 
 
-## Fixme! We should not be using JSON for testing (except for testing JSON read/writing)
-##        It makes all the tests very sensitive to changes!
-##
+# Fixme! We should not be using JSON for testing (except for testing JSON
+#        read/writing)
+#        It makes all the tests very sensitive to changes!
+#
 
-xfail = pytest.mark.xfail(True, reason="subamples need metadata")
+# xfail = pytest.mark.xfail(True, reason="subamples need metadata")
 
 class TestAllCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'This should have everything.  100% score'},
+          'metadata': {'comments': 'This should have everything.  100% score'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -55,22 +61,43 @@ class TestAllCompleteness:
                                             'unit_type': 'massfraction'}
                       }
                   ]},
-                  'distillation_data': {'cuts': [
+                  'distillation_data': {
+                      "fraction_recovered": {"value": 1.0,
+                                             "unit": "fraction",
+                                             "unit_type": "concentration"},
+                      'cuts': [
                           {
-                            'fraction': {'value': 0, 'unit': '%',
+                            'fraction': {'value': 10, 'unit': '%',
                                          'unit_type': 'massfraction'},
-                            'vapor_temp': {'value': 56, 'unit': 'C',
+                            'vapor_temp': {'value': 100, 'unit': 'C',
                                            'unit_type': 'temperature'}
                           },
                           {
-                              'fraction': {'value': 100, 'unit': '%',
+                              'fraction': {'value': 20, 'unit': '%',
                                            'unit_type': 'massfraction'},
-                              'vapor_temp': {'value': 84, 'unit': 'C',
+                              'vapor_temp': {'value': 150, 'unit': 'C',
                                              'unit_type': 'temperature'}
                           },
-                  ]}
+                          {
+                            'fraction': {'value': 30, 'unit': '%',
+                                         'unit_type': 'massfraction'},
+                            'vapor_temp': {'value': 175, 'unit': 'C',
+                                           'unit_type': 'temperature'}
+                          },
+                          {
+                              'fraction': {'value': 40, 'unit': '%',
+                                           'unit_type': 'massfraction'},
+                              'vapor_temp': {'value': 210, 'unit': 'C',
+                                             'unit_type': 'temperature'}
+                          }]
+                      }
               },
               {
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
                   'physical_properties': {
                       'densities': [
                           {
@@ -96,13 +123,17 @@ class TestAllCompleteness:
     ])
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)
+
         assert completeness(oil) == expected
 
+
 class TestDistillationCompleteness:
+    Dcheck = CheckDistillation()
+
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Just distillation, 2 cuts.  30% score'},
+          'metadata': {'comments': 'Just distillation, 2 cuts'},
           'sub_samples': [
               {
                   'distillation_data': {'cuts': [
@@ -122,42 +153,95 @@ class TestDistillationCompleteness:
               },
           ]
           },
-         30),
+         1),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Just distillation, 2 cuts, '
-                                  'partial fraction range.  15% score'},
+          'metadata': {'comments': 'Just distillation, 3 cuts'},
           'sub_samples': [
               {
                   'distillation_data': {'cuts': [
                           {
                             'fraction': {'value': 0, 'unit': '%',
                                          'unit_type': 'massfraction'},
-                            'vapor_temp': {'value': 56, 'unit': 'C',
+                            'vapor_temp': {'value': 100, 'unit': 'C',
                                            'unit_type': 'temperature'}
                           },
                           {
-                              'fraction': {'value': 50, 'unit': '%',
+                              'fraction': {'value': 20, 'unit': '%',
                                            'unit_type': 'massfraction'},
-                              'vapor_temp': {'value': 84, 'unit': 'C',
+                              'vapor_temp': {'value': 150, 'unit': 'C',
+                                             'unit_type': 'temperature'}
+                          },
+                          {
+                              'fraction': {'value': 30, 'unit': '%',
+                                           'unit_type': 'massfraction'},
+                              'vapor_temp': {'value': 200, 'unit': 'C',
                                              'unit_type': 'temperature'}
                           },
                   ]}
               },
           ]
           },
-         15),
+         2),
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
+          'metadata': {'comments': 'Just distillation, 4 cuts'},
+          'sub_samples': [
+              {
+                  'distillation_data': {'cuts': [
+                          {
+                            'fraction': {'value': 0, 'unit': '%',
+                                         'unit_type': 'massfraction'},
+                            'vapor_temp': {'value': 100, 'unit': 'C',
+                                           'unit_type': 'temperature'}
+                          },
+                          {
+                              'fraction': {'value': 20, 'unit': '%',
+                                           'unit_type': 'massfraction'},
+                              'vapor_temp': {'value': 150, 'unit': 'C',
+                                             'unit_type': 'temperature'}
+                          },
+                          {
+                              'fraction': {'value': 30, 'unit': '%',
+                                           'unit_type': 'massfraction'},
+                              'vapor_temp': {'value': 200, 'unit': 'C',
+                                             'unit_type': 'temperature'}
+                          },
+                          {
+                              'fraction': {'value': 40, 'unit': '%',
+                                           'unit_type': 'massfraction'},
+                              'vapor_temp': {'value': 250, 'unit': 'C',
+                                             'unit_type': 'temperature'}
+                          },
+                  ]}
+              },
+          ]
+          },
+         3),
     ])
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)
-        assert completeness(oil) == expected
+        assert self.Dcheck(oil) == expected
+
+        dist_data = oil.sub_samples[0].distillation_data
+
+        # add fraction_recovered
+        # less than one adds 1 point
+        dist_data.fraction_recovered = MassFraction(0.8, unit="fraction")
+        assert self.Dcheck(oil) == expected + 1
+
+        # exactly one adds 2 points
+        dist_data.fraction_recovered = MassFraction(1.0, unit="fraction")
+        assert self.Dcheck(oil) == expected + 2
 
 
 class TestViscosityCompleteness:
+    Vcheck = CheckViscosity()
+
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Just one viscosity. 5% score'},
+          'metadata': {'comments': 'Just one viscosity'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -173,10 +257,10 @@ class TestViscosityCompleteness:
               },
           ]
           },
-         5),
+         0.5),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Second viscosity. 10% score'},
+          'metadata': {'comments': 'Second viscosity'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -198,11 +282,62 @@ class TestViscosityCompleteness:
               },
           ]
           },
-         10),
+         1),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Second viscosity, '
-                                  'partial temperature range. 7.5% score'},
+          'metadata': {'comments': 'Second viscosity, '
+                                   'partial temperature range. 8% score'},
+          'sub_samples': [
+              {
+                  'physical_properties': {
+                      'kinematic_viscosities': [
+                          {
+                              'viscosity': {'value': 1300, 'unit': 'mPa.s',
+                                            'unit_type': 'kinematicviscosity'},
+                              'ref_temp': {'value': 0.0, 'unit': 'C',
+                                           'unit_type': 'temperature'},
+                          },
+                          {
+                              'viscosity': {'value': 1500, 'unit': 'mPa.s',
+                                            'unit_type': 'kinematicviscosity'},
+                              'ref_temp': {'value': 10.0, 'unit': 'C',
+                                           'unit_type': 'temperature'},
+                          },
+                      ],
+                  },
+              },
+          ]
+          },
+         0.75),
+        ({'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
+          'metadata': {'comments': 'Just one weathered viscosity -- no fresh'},
+          'sub_samples': [
+              {
+              },
+              {
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
+                  'physical_properties': {
+                      'dynamic_viscosities': [
+                          {
+                              'viscosity': {'value': 1500, 'unit': 'mPa.s',
+                                            'unit_type': 'dynamicviscosity'},
+                              'ref_temp': {'value': 0.0, 'unit': 'C',
+                                           'unit_type': 'temperature'},
+                          },
+                      ],
+                  },
+              },
+          ]
+          },
+         0),
+        ({'oil_id': 'EC09999',
+          "adios_data_model_version": "0.11.0",
+          'metadata': {'comments': 'One weathered viscosity -- two fresh'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -216,22 +351,18 @@ class TestViscosityCompleteness:
                           {
                               'viscosity': {'value': 1500, 'unit': 'mPa.s',
                                             'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 10.0, 'unit': 'C',
+                              'ref_temp': {'value': 20.0, 'unit': 'C',
                                            'unit_type': 'temperature'},
                           },
                       ],
                   },
               },
-          ]
-          },
-         8),
-        ({'_id': 'EC09999', 'oil_id': 'EC09999',
-          "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Just one weathered viscosity.  10% score'},
-          'sub_samples': [
               {
-              },
-              {
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
                   'physical_properties': {
                       'dynamic_viscosities': [
                           {
@@ -245,18 +376,18 @@ class TestViscosityCompleteness:
               },
           ]
           },
-         10),
+         2),
     ])
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)
-        assert completeness(oil) == expected
+        assert self.Vcheck(oil) == expected
 
 
 class TestDensityCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Just one density.  10% score'},
+          'metadata': {'comments': 'Just one density.  10% score'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -275,7 +406,7 @@ class TestDensityCompleteness:
          10),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Second density.  15% score'},
+          'metadata': {'comments': 'Second density.  15% score'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -300,8 +431,8 @@ class TestDensityCompleteness:
          15),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Second density, '
-                                  'partial temperature range. 12.5% score'},
+          'metadata': {'comments': 'Second density, '
+                                   'partial temperature range. 12.5% score'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -323,14 +454,19 @@ class TestDensityCompleteness:
               },
           ]
           },
-         12.0),
+         12.5),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Just weathered density.  10% score'},
+          'metadata': {'comments': 'Just weathered density.  10% score'},
           'sub_samples': [
               {
               },
               {
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
                   'physical_properties': {
                       'densities': [
                           {
@@ -348,14 +484,14 @@ class TestDensityCompleteness:
     ])
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)
-        assert completeness(oil) == expected
+        assert completeness(oil) == round(expected / MAX_SCORE * 10)
 
 
 class TestEmulsionCompleteness:
     @pytest.mark.parametrize('oil_json, expected', [
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'Just emulsion.  25% score'},
+          'metadata': {'comments': 'Just emulsion.  25% score'},
           'sub_samples': [
               {
                   'environmental_behavior': {'emulsions': [
@@ -372,7 +508,7 @@ class TestEmulsionCompleteness:
          25),
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
-          'metadata': {'comment': 'weathered sample emulsion.  25% score'},
+          'metadata': {'comments': 'weathered sample emulsion.  25% score'},
           'sub_samples': [
               {
               },
@@ -392,5 +528,4 @@ class TestEmulsionCompleteness:
     ])
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)
-        assert completeness(oil) == expected
-
+        assert completeness(oil) == round(expected / MAX_SCORE * 10)

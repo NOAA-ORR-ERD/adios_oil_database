@@ -1,10 +1,23 @@
 <div class="container-fluid">
-  <div class="row d-flex align-items-center">
-    <div class="col-12 col-sm">
-
+  <div class="row d-flex justify-content-center">
       {{!-- oil title --}}
-      <h2 align="center" class="title">{{this.model.metadata.name}}</h2>
-    </div>
+      {{#if this.editable}}
+        {{#let (if this.model.metadata.name this.model.metadata.name "") as |oilName|}}
+          <div class="col-3">
+              <Input
+                @class="p-1 overflow-hidden bg-transparent border"
+                @value={{oilName}}
+                @placeholder="Enter Name"
+                @change={{action "updateName"}}
+                size="30"
+              />
+          </div>
+        {{/let}}
+      {{else}}
+        <div class="col-12 col-sm">
+          <h2 align="center" class="title">{{this.model.metadata.name}}</h2>
+        </div>
+      {{/if}}
   </div>
 
   <div class="row">
@@ -12,12 +25,23 @@
 
       {{!-- back to oil list control --}}
       <div class="mr-2 d-inline-block">
-        <LinkTo @route="oils">
-          <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
-            data-toggle="tooltip" title="Back to List">
-            &lt; Back to List
-          </button>
-        </LinkTo>
+        {{#if this.changesMade}}
+          <Button::BackToList
+            @oil={{this.model}}
+            @submit={{pipe
+                        (action send "updateOil")
+                        (action send "resetChangesMade")
+                    }}
+          />
+        {{else}}
+          <LinkTo @route="oils">
+            <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
+              data-toggle="tooltip" title="Back to List">
+              &lt; Back to List
+            </button>
+          </LinkTo>
+        {{/if}}
+
 
         {{!-- oil status --}}
         <strong>

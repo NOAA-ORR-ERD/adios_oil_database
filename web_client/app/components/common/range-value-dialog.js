@@ -10,7 +10,6 @@ const ESC_KEY = 27;
 
 
 export default class RangeValueDialog extends Component {
-    
     @tracked isInterval = false;
 
     @tracked dialogValue = "";
@@ -51,7 +50,7 @@ export default class RangeValueDialog extends Component {
         }
         this.isShowingModal = true;
     }
-    
+
     get argNames() {
         return Object.keys(this.args);
     }
@@ -78,7 +77,6 @@ export default class RangeValueDialog extends Component {
 
         $('body').off('keyup.modal-dialog');  // eslint-disable-line ember/no-jquery
     }
-    
 
     @action
     toggleRadio(isRange){
@@ -136,7 +134,7 @@ export default class RangeValueDialog extends Component {
 
         if (closeDialog) {
             let enteredValue = {"unit": this.args.valueUnit};
-        
+
             if (this.isInterval) {
                 if (this.dialogMinValue !== "") {
                     enteredValue["min_value"] = this.dialogMinValue;

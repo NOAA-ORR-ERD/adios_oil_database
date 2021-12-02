@@ -21,6 +21,7 @@
           "label": "Water Content",
           "dataType": "value-unit",
           "unit": "%",
+          "unit_type": "massfraction",
           "precision": 3
       },
       "complex_viscosity": {
@@ -51,6 +52,7 @@
           "label": "Tan Delta (V/E)",
           "dataType": "value-unit",
           "unit": "fraction",
+          "unit_type": "unitless",
           "precision": 2
       }
   }

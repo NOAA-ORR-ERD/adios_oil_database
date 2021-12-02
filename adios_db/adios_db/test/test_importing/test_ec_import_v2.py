@@ -1,13 +1,12 @@
-'''
-    tests of the Environment Canada data import modules
+"""
+tests of the Environment Canada data import modules
 
-    As complete as possible, because we want to test for correctness,
-    and we also want to document how it works.
-    Either we test it correctly, or we test it in an episodic manner on the
-    real dataset.
-'''
+As complete as possible, because we want to test for correctness,
+and we also want to document how it works.
+Either we test it correctly, or we test it in an episodic manner on the
+real dataset.
+"""
 import os
-from numbers import Number
 from pathlib import Path
 import json
 
@@ -20,9 +19,7 @@ from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
                                                  EnvCanadaCsvRecordMapper,
                                                  InvalidFileError)
 
-import pdb
 from pprint import pprint
-from _ast import Or
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
 example_index = example_dir / 'index.txt'
@@ -106,12 +103,12 @@ class TestEnvCanadaCsvRecordParser(object):
         ('2713', 'fresh_sample_id', 2713.1),
     ])
     def test_init_valid_data_only(self, oil_id, attr, expected):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if None values are passed in for conditions and
-            file_props, we can still construct the parser, but accessing
-            certain sample properties could raise an exception.
-        '''
+        """
+        We are being fairly light on the parameter checking in our
+        constructor.  So if None values are passed in for conditions and
+        file_props, we can still construct the parser, but accessing
+        certain sample properties could raise an exception.
+        """
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
                 if str(r[0][0]['ests']) == oil_id]
@@ -195,14 +192,14 @@ class TestEnvCanadaCsvRecordMapper(object):
                   }),
     ])
     def test_init_valid(self, oil_id, expected):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if no file props are passed in, we can still
-            construct the parser, but accessing reference_date could raise
-            a TypeError.
-            This is because the reference_date will sometimes need the
-            file props if the reference field contains no date information.
-        '''
+        """
+        We are being fairly light on the parameter checking in our
+        constructor.  So if no file props are passed in, we can still
+        construct the parser, but accessing reference_date could raise
+        a TypeError.
+        This is because the reference_date will sometimes need the
+        file props if the reference field contains no date information.
+        """
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
                 if str(r[0][0]['ests']) == oil_id]
@@ -217,10 +214,10 @@ class TestEnvCanadaCsvRecordMapper(object):
                 assert self.deep_get(py_json, k) == v
 
     def test_save_to_json(self):
-        '''
-            Save an example .json file.  This is not so much a test, but a job
-            to provide sample data that people can look at.
-        '''
+        """
+        Save an example .json file.  This is not so much a test, but a job
+        to provide sample data that people can look at.
+        """
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
                 if str(r[0][0]['ests']) == '2234']
@@ -626,9 +623,9 @@ class TestEnvCanadaCsvRecordMapper(object):
          }),
     ])
     def test_ccme(self, oil_id, index, expected):
-        '''
-            CCME object is a struct.
-        '''
+        """
+        CCME object is a struct.
+        """
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
                 if str(r[0][0]['ests']) == oil_id]
@@ -657,10 +654,10 @@ class TestEnvCanadaCsvRecordMapper(object):
          }),
     ])
     def test_ests_fractions(self, oil_id, index, expected):
-        '''
-            ESTS_hydrocarbon_fractions object is a struct consisting of
-            attributes that are compound lists.
-        '''
+        """
+        ESTS_hydrocarbon_fractions object is a struct consisting of
+        attributes that are compound lists.
+        """
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
                 if str(r[0][0]['ests']) == oil_id]

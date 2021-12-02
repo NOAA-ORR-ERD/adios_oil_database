@@ -10,7 +10,7 @@ import json
 
 from dataclasses import dataclass, field
 
-import unit_conversion as uc
+import nucos as uc
 
 from ..common.utilities import dataclass_to_json
 

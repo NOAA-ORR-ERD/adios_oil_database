@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import pytest
@@ -22,9 +21,9 @@ else:
 here = Path(__file__).resolve().parent
 
 test_data = here.parent / "data_for_testing" / "noaa-oil-data"
+
 # Pass the --mongo command line option if you want these to run.
 # they require a mongo database to be running on localhost
-
 pytestmark = pytest.mark.mongo
 
 
@@ -50,19 +49,21 @@ class SessionTestBase:
 
     @classmethod
     def setup_class(cls):
-        '''
-            Here we setup the database we will use for testing our session.
-            - Make a connection to the mongodb server
-            - Init the database
-            - Load a set of test data into the database
-        '''
+        """
+        Here we setup the database we will use for testing our session.
+        - Make a connection to the mongodb server
+        - Init the database
+        - Load a set of test data into the database
+        """
         # print('\nsetup_class()...')
 
         restore_test_db(cls.settings)
 
     @classmethod
     def teardown_class(cls):
-        'Clean up any data the model generated after running tests.'
+        """
+        Clean up any data the model generated after running tests.
+        """
         # print('\nteardown_class()...')
         init_db(cls.settings, show_prompt=False)
 
@@ -193,15 +194,15 @@ class TestSessionQuery(SessionTestBase):
         # ('status', 'asc'),
     ])
     def test_query_sort(self, field, direction):
-        '''
-            Note: MongoDB 3.6 has changed how they compare array fields in a
-                  sort.  It used to compare the arrays element-by-element,
-                  continuing until any "ties" were broken.  Now it only
-                  compares the highest/lowest valued element, apparently
-                  ignoring the rest.
-                  For this reason, a MongoDB query will not properly sort our
-                  status and labels array fields, at least not in a simple way.
-        '''
+        """
+        Note: MongoDB 3.6 has changed how they compare array fields in a
+              sort.  It used to compare the arrays element-by-element,
+              continuing until any "ties" were broken.  Now it only
+              compares the highest/lowest valued element, apparently
+              ignoring the rest.
+              For this reason, a MongoDB query will not properly sort our
+              status and labels array fields, at least not in a simple way.
+        """
         session = connect_mongodb(self.settings)
 
         *recs, = session.query(sort=[(field, direction)],
@@ -243,30 +244,96 @@ class TestSessionQuery(SessionTestBase):
         assert len(recs) == expected
 
 
-class TestSessionGetOil(SessionTestBase):
-    def test_init(self):
+class TestSessionCRUD(SessionTestBase):
+    """
+    Testing the CRUD operations of our session class
+    """
+    def test_new_oil_id(self):
         session = connect_mongodb(self.settings)
 
-        assert hasattr(session, 'get_oil')
+        oil_id = session.new_oil_id()
 
-    def test_get(self):
+        assert isinstance(oil_id, str)
+        assert oil_id[:2] == 'XX'
+        assert oil_id[2:].isdigit()
+
+    def test_insert_one(self):
         session = connect_mongodb(self.settings)
 
-        for _id in ('AD00020',):
-            rec = session.get_oil(_id)
+        # create a minimal oil
+        ID = session.new_oil_id()
+        oil = Oil(ID)
 
-            assert rec is not None
+        # add it:
+        inserted_id = session.insert_one(oil)
 
-            for attr in ('oil_id', 'adios_data_model_version',
-                         'metadata', 'status', 'review_status'):
-                assert attr in rec
+        assert inserted_id == ID
 
-    def test_get_no_record(self):
+    def test_find_one(self):
         session = connect_mongodb(self.settings)
 
-        rec = session.get_oil('bogus')
+        # create a minimal oil
+        ID = session.new_oil_id()
+        oil = Oil(ID)
 
-        assert rec is None
+        # add it:
+        session.insert_one(oil)
+
+        new_oil = session.find_one(ID)
+
+        assert new_oil['oil_id'] == ID
+
+    def test_replace_one(self):
+        session = connect_mongodb(self.settings)
+
+        ID = session.new_oil_id()
+        orig_name = 'original name'
+        new_name = 'new name'
+
+        # create a minimal oil
+        oil = Oil(ID)
+        oil.metadata.name = orig_name
+
+        # add it:
+        session.insert_one(oil)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+        assert oil_json['metadata']['name'] == orig_name
+
+        # update it:
+        oil.metadata.name = new_name
+        res = session.replace_one(oil)
+        assert res.matched_count == 1
+        assert res.modified_count == 1
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+        assert oil_json['metadata']['name'] == new_name
+
+    def test_delete_one(self):
+        session = connect_mongodb(self.settings)
+
+        ID = session.new_oil_id()
+
+        # create a minimal oil
+        oil = Oil(ID)
+
+        # add it:
+        session.insert_one(oil)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+
+        # delete it:
+        session.delete_one(oil.oil_id)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json is None
 
 
 class TestSessionGetLabels(SessionTestBase):
@@ -305,221 +372,3 @@ class TestSessionGetLabels(SessionTestBase):
         # test negative id that can't even be used
         with pytest.raises(ValueError):
             session.get_labels(-1)
-
-class TestSessionInsertOil(SessionTestBase):
-    '''
-        testing adding oil records to the DB
-    '''
-    def test_new_oil_id(self):
-        '''
-            The function new_oil_id() is related to insertion, so we put the
-            test here inside the insertion class scope
-        '''
-        session = connect_mongodb(self.settings)
-
-        oil_id = session.new_oil_id()
-        print(f'new_oil_id: {oil_id}')
-
-        assert oil_id[:2] == 'XX'
-
-        # add a new oil using the oil id we got from new_oil_id()
-        oil = Oil(oil_id)
-        session.insert_oil(oil)
-
-        # new oil ID sequence should be incremented
-        oil_seq = int(oil_id[2:])
-        new_oil_seq = int(session.new_oil_id()[2:])
-
-        assert new_oil_seq > oil_seq
-        assert new_oil_seq - oil_seq == 1
-
-    def test_insert_oil_obj(self):
-        session = connect_mongodb(self.settings)
-
-        ID = session.new_oil_id()
-        # create a minimal oil
-        oil = Oil(ID)
-
-        session.insert_oil(oil)
-
-        result = list(session.query(oil_id=ID))
-
-        assert len(result) == 1
-
-        new_oil = result[0]
-        print(f'new_oil.keys(): {new_oil.keys()}')
-        assert new_oil['oil_id'] == ID
-
-    def test_insert_json_obj(self):
-        session = connect_mongodb(self.settings)
-
-        ID = session.new_oil_id()
-        # create a minimal oil
-        oil = Oil(ID)
-
-        session.insert_oil(oil.py_json())
-
-        result = list(session.query(oil_id=ID))
-
-        assert len(result) == 1
-
-        new_oil = result[0]
-        print(f'new_oil.keys(): {new_oil.keys()}')
-        assert new_oil['oil_id'] == ID
-
-    def test_insert_oil_obj_none_id(self):
-        '''
-            This test case is a bit contrived since an oil object must be
-            instantiated with a valid ID.  Still, an insert operation should
-            be able to handle this situation without problems.
-        '''
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        oil = Oil('bogus')
-        oil.oil_id = None
-
-        oil_id = session.insert_oil(oil)['oil_id']
-        print(f'new oil_id: {oil_id}')
-
-        result = list(session.query(oil_id=oil_id))
-
-        assert len(result) == 1
-
-        new_oil = result[0]
-        print(f'new_oil.keys(): {new_oil.keys()}')
-        assert new_oil['oil_id'] == oil_id
-
-    def test_insert_oil_obj_empty_id(self):
-        '''
-            This test case is a bit contrived since an oil object must be
-            instantiated with a valid ID.  Still, an insert operation should
-            be able to handle this situation without problems.
-        '''
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        oil = Oil('bogus')
-        oil.oil_id = ''
-
-        oil_id = session.insert_oil(oil)['oil_id']
-        print(f'new oil_id: {oil_id}')
-
-        result = list(session.query(oil_id=oil_id))
-
-        assert len(result) == 1
-
-        new_oil = result[0]
-        print(f'new_oil.keys(): {new_oil.keys()}')
-        assert new_oil['oil_id'] == oil_id
-
-    def test_insert_json_obj_no_id(self):
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        json_obj = Oil('bogus').py_json()
-        del json_obj['oil_id']
-
-        oil_id = session.insert_oil(json_obj)['oil_id']
-        print(f'new oil_id: {oil_id}')
-
-        result = list(session.query(oil_id=oil_id))
-
-        assert len(result) == 1
-
-        new_oil = result[0]
-        print(f'new_oil.keys(): {new_oil.keys()}')
-        assert new_oil['oil_id'] == oil_id
-
-    def test_insert_json_obj_none_id(self):
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        json_obj = Oil('bogus').py_json()
-        json_obj['oil_id'] = None
-
-        oil_id = session.insert_oil(json_obj)['oil_id']
-        print(f'new oil_id: {oil_id}')
-
-        result = list(session.query(oil_id=oil_id))
-
-        assert len(result) == 1
-
-        new_oil = result[0]
-        print(f'new_oil.keys(): {new_oil.keys()}')
-        assert new_oil['oil_id'] == oil_id
-
-    def test_insert_json_obj_empty_id(self):
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        json_obj = Oil('bogus').py_json()
-        json_obj['oil_id'] = ''
-
-        oil_id = session.insert_oil(json_obj)['oil_id']
-        print(f'new oil_id: {oil_id}')
-
-        result = list(session.query(oil_id=oil_id))
-
-        assert len(result) == 1
-
-        new_oil = result[0]
-        print(f'new_oil.keys(): {new_oil.keys()}')
-        assert new_oil['oil_id'] == oil_id
-
-
-class TestSessionDeleteOil(SessionTestBase):
-    '''
-        testing deleting oil records from the DB
-    '''
-    def test_delete_oil(self):
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        oil = Oil('bogus')
-        oil.oil_id = None
-
-        oil_id = session.insert_oil(oil)['oil_id']
-        print(f'new oil_id inserted: {oil_id}')
-
-        # now we delete the oil
-        ret = session.delete_oil(oil_id)
-
-        assert ret == 1
-
-
-class TestSessionUpdateOil(SessionTestBase):
-    '''
-        testing updating oil records in the DB
-    '''
-    def test_update_oil_obj(self):
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        oil = Oil('bogus')
-        oil.oil_id = None
-
-        oil_id = session.insert_oil(oil)['oil_id']
-        print(f'new oil_id inserted: {oil_id}')
-
-        # now we update the oil
-        oil.metadata.name = 'New Name'
-        updated_oil = session.update_oil(oil)
-
-        assert updated_oil['metadata']['name'] == 'New Name'
-
-    def test_update_json_obj(self):
-        session = connect_mongodb(self.settings)
-
-        # create a minimal oil
-        oil = Oil('bogus')
-        oil.oil_id = None
-
-        oil_id = session.insert_oil(oil)['oil_id']
-        print(f'new oil_id inserted: {oil_id}')
-
-        # now we update the oil
-        oil.metadata.name = 'New Name'
-        updated_oil = session.update_oil(oil.py_json())
-
-        assert updated_oil['metadata']['name'] == 'New Name'

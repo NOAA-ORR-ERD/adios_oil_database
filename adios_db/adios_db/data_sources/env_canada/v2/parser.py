@@ -6,7 +6,14 @@ from dataclasses import dataclass, fields
 
 from numpy import isclose
 
-from unit_conversion import UNIT_TYPES, ConvertDataUnits, Simplify
+# fixme: you really shouldn't need to import UNIT_TYPES or ConvertDataUnits
+#        the functionality should be in nucos already.
+#        the latest version (not yet released) does have MassFraction
+#        and VolumeFraction units available for getting unit type.
+#        GetUnitNames and GetUnitAbbreviation should help
+#        If anything else is missing, we should add it there.
+
+from nucos.unit_conversion import ConvertDataUnits, Simplify, UNIT_TYPES
 
 from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase
@@ -22,6 +29,9 @@ for u_type in ('Volume Fraction', 'Mass Fraction'):
     # make our own lookup table.
     # Almost every unit in these two types is common, so we need to make a
     # preference for one or the other, and we will prefer mass fraction types.
+    #
+    # probably no longer needed with latest nucos
+    # Also: why not add to (a copy of) the UNIT_TYPES dict?
     u_dict = {u: u_type.lower().replace(' ', '')
               for u in set([i for sub in [([k] + v[1])
                                           for k, v
@@ -123,7 +133,8 @@ class ECMeasurementDataclass:
             return
         elif self.unit_of_measure == 'g/m2':
             self.unit_of_measure = 'g/m^2'
-
+            self.unit_type = None
+            return
         unit = Simplify(self.unit_of_measure)
         try:
             self.unit_type = UNIT_TYPES[unit]

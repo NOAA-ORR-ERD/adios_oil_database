@@ -1,7 +1,6 @@
 """
 cleanup classes that work with density
 """
-
 from adios_db.models.oil.cleanup import Cleanup, ALL_CLEANUPS, CLEANUP_MAPPING
 
 
@@ -15,4 +14,3 @@ def test_ALL_CLEANUPS():
 
     for ID, obj in CLEANUP_MAPPING.items():
         assert ID == obj.ID
-

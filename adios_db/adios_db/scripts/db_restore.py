@@ -109,7 +109,7 @@ def load_collection(db, base_path, collection_name):
 
 
 def get_obj_json(obj_path, collection_name):
-    obj = json.load(open(obj_path, 'r'))
+    obj = json.load(open(obj_path, 'r', encoding='utf-8'))
 
     if collection_name == 'oil':
         oil = Oil.from_py_json(obj)

@@ -1,6 +1,6 @@
-'''
+"""
 Test our Label model class
-'''
+"""
 import pytest
 
 from adios_db.models.common import Label

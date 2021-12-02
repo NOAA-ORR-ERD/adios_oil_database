@@ -23,7 +23,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
   tags:
     - docker
 
@@ -33,7 +33,6 @@ test_develop:
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
-    - conda install -y python=3.9
     - conda update -y conda
 
   script:
@@ -57,7 +56,7 @@ test_develop:
     - pip install -e ./
     - pytest --mongo adios_db
 
-    # Install & test the oil_library_api package
+    # Install & test the adios_db_api package
     - cd ../web_api
     - pip install -e ./
     - pytest adios_db_api
@@ -179,6 +178,8 @@ scan-client:
 
 deploy_mongodb_stage:
   stage: deploy_db
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -215,6 +216,8 @@ deploy_mongodb_stage:
 
 stop_mongodb_stage:
   stage: deploy_db
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -279,6 +282,8 @@ stop_mongodb_public:
 
 deploy_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -303,12 +308,15 @@ deploy_api_stage:
       --network $APP_NETWORK
       --restart unless-stopped $IMAGE_TAG
     - docker ps
+    - docker logs $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
 
 stop_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -324,6 +332,8 @@ stop_api_stage:
 
 deploy_oauth_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -373,6 +383,8 @@ deploy_oauth_api_stage:
 
 stop_oauth_api_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -388,6 +400,8 @@ stop_oauth_api_stage:
 
 deploy_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -415,6 +429,8 @@ deploy_client_stage:
 
 stop_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop
@@ -430,6 +446,8 @@ stop_client_stage:
 
 deploy_oauth_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -480,6 +498,8 @@ deploy_oauth_client_stage:
 
 stop_oauth_client_stage:
   stage: deploy
+  only:
+    - develop
   environment:
     name: stage
     action: stop

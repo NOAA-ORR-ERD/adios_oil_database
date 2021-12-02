@@ -3,8 +3,8 @@ import pytest
 from adios_db.models.common.measurement import MassFraction
 
 from adios_db.models.oil.properties import (Dispersibility,
-                                                DispersibilityList,
-                                                EmulsionList)
+                                            DispersibilityList,
+                                            EmulsionList)
 
 from adios_db.models.oil.environmental_behavior import EnvironmentalBehavior
 
@@ -13,8 +13,7 @@ class TestPhysicalProperties:
     def test_init(self):
         s = EnvironmentalBehavior()
 
-        for attr in ('dispersibilities',
-                     'emulsions'):
+        for attr in ('dispersibilities', 'emulsions'):
             assert hasattr(s, attr)
 
         assert type(s.dispersibilities) == DispersibilityList

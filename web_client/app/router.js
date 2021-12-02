@@ -13,6 +13,9 @@ Router.map(function() {
     this.route('oils', function() {
         this.route('show', { path: '/:oil_id' });
     });
+    this.route('help', function() {
+        this.route('show', { path: '/api/docs/' });
+    });
     this.route('labels');
     this.route('product-types');
     this.route('disclaimer');

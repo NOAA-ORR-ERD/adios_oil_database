@@ -1,0 +1,66 @@
+<div id="logChangesDialog" class="modal fade" role="dialog" tabindex="-1"
+     aria-labelledby="logChangesDialogLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logChangesDialogLabel">
+          Log Changes to Oil
+        </h5>
+      </div>
+
+      <div class="modal-body">
+        <div class="form">
+
+          <div class="d-flex justify-content-center">
+            <strong>
+              Please describe the changes you made to the oil.<br>
+              This information will be added to the change log of this record.
+            </strong>
+          </div>
+
+          <div class="row">
+
+            <div class="col-6">
+              <Input type="text" @class="form-control bg-transparent border"
+                     @placeholder="Enter Name"
+                     {{on "change" this.updateName}}
+                     {{on "keypress" this.updateName}}
+                     {{on "focusout" this.updateName}}
+              />
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <Input type="text" @class="form-control bg-transparent border"
+                     @placeholder="Enter a Comment"
+                     {{on "change" this.updateComment}}
+                     {{on "keypress" this.updateComment}}
+                     {{on "focusout" this.updateComment}}
+              />
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+
+        {{#if this.formFilledOut}}
+          <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  {{ref this "okButton"}}
+                  {{on "click" this.submitForm}} >
+            OK
+          </button>
+        {{else}}
+          <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  disabled>
+            OK
+          </button>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

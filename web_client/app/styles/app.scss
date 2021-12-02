@@ -98,6 +98,16 @@ td:empty::after{
   text-decoration: underline;
 }
 
+.nav-link-external {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-link-external:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
 // This seems unreasonably specific, but that's the only way
 // to override the .footer settings.
 .modal-body {
@@ -182,6 +192,12 @@ td:empty::after{
 
 ul.ember-power-select-options {
     columns: 3
+}
+
+li.ember-power-select-option {
+    span {
+        white-space: nowrap;
+    }
 }
 
 .lt-sort-icon {

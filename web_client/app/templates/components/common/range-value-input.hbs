@@ -34,5 +34,7 @@
     @componentId={{concat "#" this.componentId}}  {{!-- #! --}}
     @closeModalDialog={{this.closeModalDialog}}
     @updateValue={{this.updateValue}}
+    @attachment={{if @attachment @attachment "center left"}}
+    @targetAttachment={{if @targetAttachment @targetAttachment "center left"}}
   />
 {{/if}}
