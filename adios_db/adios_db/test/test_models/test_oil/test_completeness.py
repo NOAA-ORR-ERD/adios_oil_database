@@ -6,13 +6,13 @@ from adios_db.models.common.measurement import MassFraction
 from adios_db.models.oil.completeness import (completeness,
                                               MAX_SCORE,
                                               CheckDistillation,
-                                              CheckViscosity,
-                                              )
+                                              CheckViscosity)
 
 
-## Fixme! We should not be using JSON for testing (except for testing JSON read/writing)
-##        It makes all the tests very sensitive to changes!
-##
+# Fixme! We should not be using JSON for testing (except for testing JSON
+#        read/writing)
+#        It makes all the tests very sensitive to changes!
+#
 
 # xfail = pytest.mark.xfail(True, reason="subamples need metadata")
 
@@ -61,11 +61,10 @@ class TestAllCompleteness:
                                             'unit_type': 'massfraction'}
                       }
                   ]},
-                  'distillation_data': {"fraction_recovered": {
-                                            "value": 1.0,
-                                            "unit": "fraction",
-                                            "unit_type": "concentration"
-                },
+                  'distillation_data': {
+                      "fraction_recovered": {"value": 1.0,
+                                             "unit": "fraction",
+                                             "unit_type": "concentration"},
                       'cuts': [
                           {
                             'fraction': {'value': 10, 'unit': '%',
@@ -90,12 +89,15 @@ class TestAllCompleteness:
                                            'unit_type': 'massfraction'},
                               'vapor_temp': {'value': 210, 'unit': 'C',
                                              'unit_type': 'temperature'}
-                          },
-                  ]}
+                          }]
+                      }
               },
               {
-                  'metadata': {'fraction_evaporated': {'value': 0.15, 'unit': 'fraction',
-                                                       'unit_type': 'MassFraction'}},
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
                   'physical_properties': {
                       'densities': [
                           {
@@ -121,12 +123,11 @@ class TestAllCompleteness:
     ])
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)
-        result = completeness(oil)
+
         assert completeness(oil) == expected
 
 
 class TestDistillationCompleteness:
-
     Dcheck = CheckDistillation()
 
     @pytest.mark.parametrize('oil_json, expected', [
@@ -182,7 +183,7 @@ class TestDistillationCompleteness:
           ]
           },
          2),
-                ({'_id': 'EC09999', 'oil_id': 'EC09999',
+        ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
           'metadata': {'comments': 'Just distillation, 4 cuts'},
           'sub_samples': [
@@ -222,18 +223,19 @@ class TestDistillationCompleteness:
         oil = Oil.from_py_json(oil_json)
         assert self.Dcheck(oil) == expected
 
+        dist_data = oil.sub_samples[0].distillation_data
+
         # add fraction_recovered
         # less than one adds 1 point
-        oil.sub_samples[0].distillation_data.fraction_recovered = MassFraction(0.8, unit="fraction")
+        dist_data.fraction_recovered = MassFraction(0.8, unit="fraction")
         assert self.Dcheck(oil) == expected + 1
 
         # exactly one adds 2 points
-        oil.sub_samples[0].distillation_data.fraction_recovered = MassFraction(1.0, unit="fraction")
+        dist_data.fraction_recovered = MassFraction(1.0, unit="fraction")
         assert self.Dcheck(oil) == expected + 2
 
 
 class TestViscosityCompleteness:
-
     Vcheck = CheckViscosity()
 
     @pytest.mark.parametrize('oil_json, expected', [
@@ -314,8 +316,11 @@ class TestViscosityCompleteness:
               {
               },
               {
-                  'metadata': {'fraction_evaporated': {'value': 0.15, 'unit': 'fraction',
-                                                       'unit_type': 'MassFraction'}},
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
                   'physical_properties': {
                       'dynamic_viscosities': [
                           {
@@ -353,8 +358,11 @@ class TestViscosityCompleteness:
                   },
               },
               {
-                  'metadata': {'fraction_evaporated': {'value': 0.15, 'unit': 'fraction',
-                                                       'unit_type': 'MassFraction'}},
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
                   'physical_properties': {
                       'dynamic_viscosities': [
                           {
@@ -424,7 +432,7 @@ class TestDensityCompleteness:
         ({'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
           'metadata': {'comments': 'Second density, '
-                                  'partial temperature range. 12.5% score'},
+                                   'partial temperature range. 12.5% score'},
           'sub_samples': [
               {
                   'physical_properties': {
@@ -454,9 +462,12 @@ class TestDensityCompleteness:
               {
               },
               {
-                      'metadata': {'fraction_evaporated': {'value': 0.15, 'unit': 'fraction',
-                                                           'unit_type': 'MassFraction'}},
-                      'physical_properties': {
+                  'metadata': {
+                      'fraction_evaporated': {'value': 0.15,
+                                              'unit': 'fraction',
+                                              'unit_type': 'MassFraction'}
+                  },
+                  'physical_properties': {
                       'densities': [
                           {
                               'density': {'value': 1000, 'unit': 'kg/m^3',
@@ -518,4 +529,3 @@ class TestEmulsionCompleteness:
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)
         assert completeness(oil) == round(expected / MAX_SCORE * 10)
-

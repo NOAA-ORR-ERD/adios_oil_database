@@ -1,11 +1,13 @@
 import pytest
 
-pytestmark = pytest.mark.skipif(True,
-                                reason="skipping these -- code no longer needed")
+pytestmark = pytest.mark.skipif(
+    True,
+    reason="skipping these -- code no longer needed"
+)
+
 
 # Pass the --mongo command line option if you want these to run.
 # they require a mongo database to be running on localhost
-
 try:
     import pymongo
 except ModuleNotFoundError:

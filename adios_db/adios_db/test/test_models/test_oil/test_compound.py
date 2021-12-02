@@ -1,6 +1,3 @@
-# from math import isclose
-# import pytest
-
 from adios_db.models.common.measurement import MassFraction
 from adios_db.models.oil.compound import Compound, CompoundList
 

@@ -9,14 +9,18 @@ from adios_db.models.common.measurement import (Temperature,
 
 class TestDistCut:
     def test_init_empty(self):
-        # empty distillation cut is valid.  We need to support blur editing
+        """
+        empty distillation cut is valid.  We need to support blur editing
+        """
         model = DistCut()
 
         assert model.fraction is None
         assert model.vapor_temp is None
 
     def test_from_json_empty(self):
-        # empty distillation cut is valid.  We need to support blur editing
+        """
+        empty distillation cut is valid.  We need to support blur editing
+        """
         model = DistCut.from_py_json({})
 
         assert model.fraction is None
@@ -36,9 +40,11 @@ class TestDistCut:
 
 
 class TestDistCutList:
-    # note: this is over-testing, the "*List" objects are already tested
-    #       so if anything changes, better to remove most of these tests
-    #       than keep fixing them.
+    """
+    note: this is over-testing, the "*List" objects are already tested
+          so if anything changes, better to remove most of these tests
+          than keep fixing them.
+    """
     def test_init_empty(self):
         assert DistCutList().py_json() == []
 

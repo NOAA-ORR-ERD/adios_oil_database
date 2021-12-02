@@ -15,9 +15,9 @@ except ModuleNotFoundError:
 here = Path(__file__).resolve().parent
 
 test_data = here.parent / "data_for_testing" / "noaa-oil-data"
+
 # Pass the --mongo command line option if you want these to run.
 # they require a mongo database to be running on localhost
-
 pytestmark = pytest.mark.mongo
 
 
@@ -34,19 +34,21 @@ class SessionTestBase:
 
     @classmethod
     def setup_class(cls):
-        '''
-            Here we setup the database we will use for testing our session.
-            - Make a connection to the mongodb server
-            - Init the database
-            - Load a set of test data into the database
-        '''
+        """
+        Here we setup the database we will use for testing our session.
+        - Make a connection to the mongodb server
+        - Init the database
+        - Load a set of test data into the database
+        """
         # print('\nsetup_class()...')
 
         restore_test_db(cls.settings)
 
     @classmethod
     def teardown_class(cls):
-        'Clean up any data the model generated after running tests.'
+        """
+        Clean up any data the model generated after running tests.
+        """
         # print('\nteardown_class()...')
         init_db(cls.settings, show_prompt=False)
 
@@ -177,15 +179,15 @@ class TestSessionQuery(SessionTestBase):
         # ('status', 'asc'),
     ])
     def test_query_sort(self, field, direction):
-        '''
-            Note: MongoDB 3.6 has changed how they compare array fields in a
-                  sort.  It used to compare the arrays element-by-element,
-                  continuing until any "ties" were broken.  Now it only
-                  compares the highest/lowest valued element, apparently
-                  ignoring the rest.
-                  For this reason, a MongoDB query will not properly sort our
-                  status and labels array fields, at least not in a simple way.
-        '''
+        """
+        Note: MongoDB 3.6 has changed how they compare array fields in a
+              sort.  It used to compare the arrays element-by-element,
+              continuing until any "ties" were broken.  Now it only
+              compares the highest/lowest valued element, apparently
+              ignoring the rest.
+              For this reason, a MongoDB query will not properly sort our
+              status and labels array fields, at least not in a simple way.
+        """
         session = connect_mongodb(self.settings)
 
         *recs, = session.query(sort=[(field, direction)],
@@ -228,9 +230,9 @@ class TestSessionQuery(SessionTestBase):
 
 
 class TestSessionCRUD(SessionTestBase):
-    '''
-        Testing the CRUD operations of our session class
-    '''
+    """
+    Testing the CRUD operations of our session class
+    """
     def test_new_oil_id(self):
         session = connect_mongodb(self.settings)
 

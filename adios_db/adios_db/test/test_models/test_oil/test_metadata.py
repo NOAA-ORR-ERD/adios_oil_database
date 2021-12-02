@@ -11,8 +11,8 @@ from adios_db.models.oil.oil import Oil
 
 # this really should be somewhere more central
 from .test_validation.test_validation import (snippet_in_oil_status,
-                                              snippet_not_in_oil_status,
-                                              )
+                                              snippet_not_in_oil_status)
+
 
 EXAMPLE_DATA_DIR = (Path(__file__).parent.parent.parent
                     / "data_for_testing"
@@ -47,6 +47,7 @@ MD_JSON = """
 }
 """
 
+
 def test_metadata_from_json():
     """
     see if we can make one from JSON
@@ -57,7 +58,6 @@ def test_metadata_from_json():
 
     assert md.sample_date == "2013-04-08"
     assert md.product_type == "Bitumen Blend"
-
 
 
 def test_metadata_from_full_record():
@@ -124,6 +124,7 @@ def test_missing_API_solvent():
     assert snippet_not_in_oil_status("E030", msgs)
     # turned this off
     assert snippet_not_in_oil_status("W004", msgs)
+
 
 # ######
 # ChangeLogEntry tests

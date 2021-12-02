@@ -1,5 +1,5 @@
 """
-tests of mongo connections
+Tests of mongo connections
 
 These require a mongo db to be running.
 
@@ -22,9 +22,9 @@ except ModuleNotFoundError:
 
 @pytest.fixture
 def mongodb_settings():
-    '''
-        These should be pretty normal default MongoDB settings.
-    '''
+    """
+    These should be pretty normal default MongoDB settings.
+    """
     return {'mongodb.host': 'localhost',
             'mongodb.port': 27017,
             'mongodb.database': 'adios_db',
@@ -32,10 +32,10 @@ def mongodb_settings():
 
 
 def test_connect_mongodb(mongodb_settings):
-    '''
-        Test a successful MongoDB connection.  We need to have a running
-        MongoDB server for this to pass.
-    '''
+    """
+    Test a successful MongoDB connection.  We need to have a running
+    MongoDB server for this to pass.
+    """
     mongodb_client = connect_mongodb(mongodb_settings)
 
     assert mongodb_client.address == ('localhost', 27017)
@@ -47,4 +47,3 @@ def test_mongodb_connect_exceptions():
 
     with pytest.raises(KeyError):
         connect_mongodb({'mongodb.host': 'localhost'})  # port setting missing
-

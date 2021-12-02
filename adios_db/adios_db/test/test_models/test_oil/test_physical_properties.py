@@ -309,7 +309,6 @@ class TestKinematicViscosityList:
         assert "KinematicViscosity" in msgs[0]
 
 
-
 class TestPhysicalProperties:
     def test_init(self):
         s = PhysicalProperties()
@@ -422,4 +421,3 @@ class Test_interfacial_tension:
         msgs = itl.validate()
 
         assert not msgs
-

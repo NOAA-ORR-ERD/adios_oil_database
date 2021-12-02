@@ -1,6 +1,6 @@
-'''
-    Test our Synonym model class
-'''
+"""
+Test our Synonym model class
+"""
 import pytest
 
 from adios_db.models.common import Synonym

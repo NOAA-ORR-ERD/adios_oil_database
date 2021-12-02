@@ -1,24 +1,18 @@
 """
 tests for density related cleanup
 """
-
 from math import isclose
 
 from adios_db.models.oil.oil import Oil
-from adios_db.models.oil.physical_properties import (DensityPoint,
-                                                     DensityList,
-                                                     )
-from adios_db.models.common.measurement import (Density,
-                                                Temperature,
-                                                )
+from adios_db.models.oil.physical_properties import DensityPoint, DensityList
+from adios_db.models.common.measurement import Density, Temperature
 
-from adios_db.models.oil.sample import (Sample)
+from adios_db.models.oil.sample import Sample
 
 from adios_db.models.oil.cleanup.density import FixAPI
 
 
 def no_api_with_density():
-
     oil = Oil(oil_id='XXXXXX')
 
     oil.metadata.product_type = "Crude Oil NOS"
@@ -41,8 +35,8 @@ def no_api_with_density():
 
     return oil
 
-def no_api_with_one_density_13C():
 
+def no_api_with_one_density_13C():
     oil = Oil(oil_id='XXXXXX')
 
     oil.metadata.product_type = "Condensate"
@@ -64,8 +58,6 @@ def no_api_with_one_density_13C():
     return oil
 
 
-
-
 def test_check_no_API():
     oil = no_api_with_density()
 
@@ -79,11 +71,11 @@ def test_check_no_API():
     assert msg.startswith(f"Cleanup: {fixer.ID}:")
     assert "No API value provided" in msg
 
+
 def test_check_API_is_there_correct():
     """
     if there is an API, check() should return the empty string
     """
-
     oil = no_api_with_density()
     oil.metadata.API = 30.06
 
@@ -98,12 +90,10 @@ def test_check_API_is_there_correct():
     assert "API is fine" in msg
 
 
-
 def test_check_API_is_there_mismatch():
     """
     if there is an API, check() should return the empty string
     """
-
     oil = no_api_with_density()
     oil.metadata.API = 32.0
 
@@ -140,6 +130,7 @@ def test_find_density_at_60F():
 
     assert result == 875.1
 
+
 def test_find_density_at_60F_two_values():
     """
     these are data that failed with earlier version
@@ -147,7 +138,6 @@ def test_find_density_at_60F_two_values():
     [(995.0, -0.14999999999997726),
      (989.0, 14.850000000000023)]
     """
-
     oil = no_api_with_density()
     densities = oil.sub_samples[0].physical_properties.densities
 
@@ -158,7 +148,6 @@ def test_find_density_at_60F_two_values():
     densities[1].density.value = .989
     # densities[0].density.unit = 'kg/m^3'
     densities[1].ref_temp.value = 14.85
-
 
     fixer = FixAPI(oil)
 
@@ -218,6 +207,7 @@ def test_non_crude_two_densities_straddle_60():
 
     assert isclose(oil.metadata.API, 30.06, rel_tol=1e4)
 
+
 def test_non_crude_two_densities_not_straddle_60():
     oil = no_api_with_density()
 
@@ -234,5 +224,3 @@ def test_non_crude_two_densities_not_straddle_60():
     fixer.cleanup()
 
     assert oil.metadata.API is None
-
-

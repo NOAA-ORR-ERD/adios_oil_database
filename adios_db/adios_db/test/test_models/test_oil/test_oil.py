@@ -1,7 +1,6 @@
 """
 Tests of the data model class
 """
-
 import json
 from pathlib import Path
 
@@ -20,17 +19,19 @@ OIL_ID = 'AD00123'
 HERE = Path(__file__).parent
 OUTPUT_DIR = HERE / "output"
 
-TEST_DATA_DIR = HERE.parent.parent / "data_for_testing" / "noaa-oil-data" / "oil"
+TEST_DATA_DIR = (HERE.parent.parent
+                 / "data_for_testing" / "noaa-oil-data" / "oil")
 EXAMPLE_DATA_DIR = HERE.parent.parent / "data_for_testing" / "example_data"
 
-BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
+BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json",
+                            encoding="utf-8"))
 
 
 class TestOil:
     def test_init_empty(self):
-        '''
-            You must specify at least an oil_id
-        '''
+        """
+        You must specify at least an oil_id
+        """
         with pytest.raises(TypeError):
             Oil()
 
@@ -82,6 +83,7 @@ class TestOil:
 
         with pytest.raises(AttributeError):
             _id = oil._id
+
         assert oil.metadata.name == "An oil name"
 
         joil = oil.py_json()
@@ -113,33 +115,34 @@ class TestOil:
         assert "oil_id='EC02234'" in result
 
     def test_init_minimal(self):
-        '''
-            Even though we initialized with only an ID, all attributes
-            should be present.
-        '''
+        """
+        Even though we initialized with only an ID, all attributes
+        should be present.
+        """
         oil = Oil(oil_id=OIL_ID)
         assert oil.oil_id == OIL_ID
 
-        for attr in ('oil_id', 'metadata', 'sub_samples', 'status', 'extra_data'):
+        for attr in ('oil_id', 'metadata', 'sub_samples',
+                     'status', 'extra_data'):
             assert hasattr(oil, attr)
 
     def test_add_new_attribute(self):
-        '''
-            You should not be able to add an arbitrary new attribute
-        '''
+        """
+        You should not be able to add an arbitrary new attribute
+        """
         oil = Oil(oil_id=OIL_ID)
 
         with pytest.raises(AttributeError):
             oil.random_attr = 456
 
     def test_json_minimal(self):
-        '''
-            When we convert our dataclass into a JSON struct, empty fields
-            will be sparse.  The field will not be included in the struct.
-            So if we create an Oil with only a name, it will look like this:
+        """
+        When we convert our dataclass into a JSON struct, empty fields
+        will be sparse.  The field will not be included in the struct.
+        So if we create an Oil with only a name, it will look like this:
 
-                {'name': 'A name for an oil'}
-        '''
+            {'name': 'A name for an oil'}
+        """
         oil = Oil(oil_id=OIL_ID)
         assert oil.oil_id == OIL_ID
 
@@ -171,19 +174,19 @@ class TestOil:
             assert attr in py_json
 
     def test_from_py_json_nothing(self):
-        '''
-            You must specify at least an oil_id
-        '''
+        """
+        You must specify at least an oil_id
+        """
         py_json = {}
 
         with pytest.raises(TypeError):
             _oil = Oil.from_py_json(py_json)
 
     def test_from_py_json_minimal(self):
-        '''
-            Note: It seems we are not only checking for existence, but specific
-                  values.  Parametrize??
-        '''
+        """
+        Note: It seems we are not only checking for existence, but specific
+              values.  Parametrize??
+        """
         py_json = {"oil_id": OIL_ID}
         oil = Oil.from_py_json(py_json)
 
@@ -221,8 +224,8 @@ class TestMetaData:
     def test_init_empty(self):
         meta = MetaData()
 
-        for attr in ('location', 'reference', 'sample_date', 'product_type', 'API', 'comments',
-                     'labels'):
+        for attr in ('location', 'reference', 'sample_date', 'product_type',
+                     'API', 'comments', 'labels'):
             assert hasattr(meta, attr)
 
     @pytest.mark.parametrize("attr, expected", (
@@ -302,7 +305,6 @@ class TestFullRecordMetadata:
     """
     tests loading a full record (or pretty full) from JSON
     """
-
     oil = Oil.from_py_json(BIG_RECORD)
 
     def test_oil_id(self):
@@ -339,7 +341,8 @@ def test_from_file():
     """
     test loading a Oil object directly from an open file
     """
-    oil = Oil.from_file(open(TEST_DATA_DIR / "EC" / "EC02234.json", encoding="utf-8"))
+    oil = Oil.from_file(open(TEST_DATA_DIR / "EC" / "EC02234.json",
+                             encoding="utf-8"))
 
     # maybe it would be better to do more of a test,
     # but the full loading should be tested elsewhere
@@ -387,9 +390,9 @@ def test_round_trip():
     # read it in:
     oilin = Oil.from_file(filein)
 
-    # # check that they are not exactly the same
-    # # this used to be a test for when we had equal data written in differnet order
-    # # it's not longer valid
+    # check that they are not exactly the same
+    # this used to be a test for when we had equal data written in
+    # different order it's not longer valid
     oilin.to_file(fileout)
 
     # file1 = open(filein, encoding="utf-8").read().strip()
@@ -405,9 +408,9 @@ def test_round_trip():
 
 
 def test_version_none():
-    '''
+    """
     If it doesn't have a version string, it should get the current one.
-    '''
+    """
     oil = Oil('XXXXXX')
     oil.metadata.name = 'An oil name'
     pyjs = oil.py_json()
@@ -420,9 +423,9 @@ def test_version_none():
 
 
 def test_version_bad():
-    '''
+    """
     If it doesn't have a version string, it should get the current one.
-    '''
+    """
     pyjs = {
         'oil_id': 'AD00123',
         'adios_data_model_version': 1.2,
@@ -431,7 +434,7 @@ def test_version_bad():
         }
     }
     with pytest.raises(ValueError):
-        oil = Oil.from_py_json(pyjs)
+        _oil = Oil.from_py_json(pyjs)
 
 
 def test_version_too_high():
@@ -443,4 +446,4 @@ def test_version_too_high():
         }
     }
     with pytest.raises(VersionError):
-        oil = Oil.from_py_json(pyjs)
+        _oil = Oil.from_py_json(pyjs)

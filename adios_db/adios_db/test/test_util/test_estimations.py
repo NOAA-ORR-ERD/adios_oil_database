@@ -1,53 +1,51 @@
-'''
-    Unit tests for the primitive oil property estimation methods.
+"""
+Unit tests for the primitive oil property estimation methods.
 
-    Note: We really should have data inputs and expected outputs that have been
-          vetted by subject matter experts in this section.  But we will try
-          to be as complete as we can for now.
-'''
+Note: We really should have data inputs and expected outputs that have been
+      vetted by subject matter experts in this section.  But we will try
+      to be as complete as we can for now.
+"""
 import pytest
+
+from adios_db.util.estimations import (density_from_api,
+                                       api_from_density,
+                                       density_at_temp,
+                                       vol_expansion_coeff,
+                                       specific_gravity,
+                                       kvis_at_temp,
+                                       resin_fraction,
+                                       asphaltene_fraction,
+                                       saturates_fraction,
+                                       aromatics_fraction,
+                                       _A_coeff,
+                                       _B_coeff,
+                                       cut_temps_from_api,
+                                       fmasses_from_cuts,
+                                       fmasses_flat_dist,
+                                       saturate_mol_wt,
+                                       aromatic_mol_wt,
+                                       resin_mol_wt,
+                                       asphaltene_mol_wt,
+                                       trial_densities,
+                                       saturate_densities,
+                                       aromatic_densities,
+                                       resin_densities,
+                                       asphaltene_densities,
+                                       _hydrocarbon_characterization_param,
+                                       refractive_index,
+                                       _hydrocarbon_grouping_param,
+                                       saturate_mass_fraction,
+                                       pour_point_from_kvis,
+                                       pour_point_from_sg_mw_kvis,
+                                       flash_point_from_bp,
+                                       flash_point_from_api,
+                                       bullwinkle_fraction_from_asph,
+                                       bullwinkle_fraction_from_api)
 
 np = docutils = pytest.importorskip("numpy")
 # import pytest
 
 # import numpy as np
-
-from adios_db.util.estimations import (density_from_api,
-                                           api_from_density,
-                                           density_at_temp,
-                                           vol_expansion_coeff,
-                                           specific_gravity,
-                                           kvis_at_temp,
-                                           resin_fraction,
-                                           asphaltene_fraction,
-                                           saturates_fraction,
-                                           aromatics_fraction,
-                                           _A_coeff,
-                                           _B_coeff,
-                                           cut_temps_from_api,
-                                           fmasses_from_cuts,
-                                           fmasses_flat_dist,
-                                           saturate_mol_wt,
-                                           aromatic_mol_wt,
-                                           resin_mol_wt,
-                                           asphaltene_mol_wt,
-                                           trial_densities,
-                                           saturate_densities,
-                                           aromatic_densities,
-                                           resin_densities,
-                                           asphaltene_densities,
-                                           _hydrocarbon_characterization_param,
-                                           refractive_index,
-                                           _hydrocarbon_grouping_param,
-                                           saturate_mass_fraction,
-                                           pour_point_from_kvis,
-                                           pour_point_from_sg_mw_kvis,
-                                           flash_point_from_bp,
-                                           flash_point_from_api,
-                                           bullwinkle_fraction_from_asph,
-                                           bullwinkle_fraction_from_api
-                                           )
-
 
 
 class TestDensity(object):
@@ -85,15 +83,15 @@ class TestDensity(object):
                               ])
     def test_density_at_temp_div_error(self, ref_density, ref_temp_k, temp_k,
                                        k_rho_t):
-        '''
-            Basically, if there is a temperature difference equal to the
-            inverse of the expansion coefficient, we will get a zero division
-            error.  This is a bit unusual, as expansion coefficients tend to be
-            pretty small, much smaller than the inverse of even a very large
-            temperature delta.
-            So I am not sure if we want to prevent this or not, and if so, how.
-            So we will document it here.
-        '''
+        """
+        Basically, if there is a temperature difference equal to the
+        inverse of the expansion coefficient, we will get a zero division
+        error.  This is a bit unusual, as expansion coefficients tend to be
+        pretty small, much smaller than the inverse of even a very large
+        temperature delta.
+        So I am not sure if we want to prevent this or not, and if so, how.
+        So we will document it here.
+        """
         with pytest.raises(ZeroDivisionError):
             density_at_temp(ref_density, ref_temp_k, temp_k, k_rho_t)
 
@@ -224,11 +222,11 @@ class TestComponentMolecularWeights(object):
                                [178.124, 387.21, 878.967, 27851.2, 27851.2]),
                               ])
     def test_saturate_mol_wt(self, boiling_point, expected):
-        '''
-            FIXME: We need to verify the extremely big weights we are getting
-                   for saturates at high temperatures.  They are about 100
-                   times bigger than the lower temperatures.
-        '''
+        """
+        FIXME: We need to verify the extremely big weights we are getting
+               for saturates at high temperatures.  They are about 100
+               times bigger than the lower temperatures.
+        """
         assert np.allclose(saturate_mol_wt(boiling_point), expected,
                            rtol=0.001)
 
@@ -240,11 +238,11 @@ class TestComponentMolecularWeights(object):
                                [161.668, 370.17, 946.47, 23478.58, 23478.58]),
                               ])
     def test_aromatic_mol_wt(self, boiling_point, expected):
-        '''
-            FIXME: We need to verify the extremely big weights we are getting
-                   for aromatics at high temperatures.  They are about 100
-                   times bigger than the lower temperatures.
-        '''
+        """
+        FIXME: We need to verify the extremely big weights we are getting
+               for aromatics at high temperatures.  They are about 100
+               times bigger than the lower temperatures.
+        """
         assert np.allclose(aromatic_mol_wt(boiling_point), expected,
                            rtol=0.001)
 
@@ -335,11 +333,11 @@ class TestComponentDensities(object):
 # skipping, as we don't need it now, and it's raising warnings.
 @pytest.mark.skip
 class TestHydrocarbonCharacterization(object):
-    '''
-        Note: I have little intuition in regards to whether these numbers
-              are reasonable or not.  The inputs for mol_wt, SG, and temp_k
-              are intended to be fairly reasonable.
-    '''
+    """
+    Note: I have little intuition in regards to whether these numbers
+          are reasonable or not.  The inputs for mol_wt, SG, and temp_k
+          are intended to be fairly reasonable.
+    """
     @pytest.mark.parametrize('SG, temp_k, expected',
                              [
                               (1.0, [500.0, 600.0, 700.0, 800.0, 900.0],
@@ -407,11 +405,11 @@ class TestPourPoint(object):
                                [269.2, 269.45, 269.66]),
                               ])
     def test_pour_point_from_kvis(self, ref_kvis, ref_temp_k, expected):
-        '''
-            Fixme: I am not sure if this function is producing good results.
-                   To produce a credible pour point temperature, we need to
-                   make the KVis pretty small it seems.
-        '''
+        """
+        Fixme: I am not sure if this function is producing good results.
+               To produce a credible pour point temperature, we need to
+               make the KVis pretty small it seems.
+        """
         assert np.allclose(pour_point_from_kvis(ref_kvis, ref_temp_k),
                            expected, rtol=0.001)
 
@@ -462,9 +460,9 @@ class TestBullwinkle(object):
                               (0.15, -0.2185),
                               ])
     def test_bullwinkle_fraction_from_asph(self, f_asph, expected):
-        '''
-            Fixme: I don't think we should be getting negative fractions here.
-        '''
+        """
+        Fixme: I don't think we should be getting negative fractions here.
+        """
         assert np.allclose(bullwinkle_fraction_from_asph(f_asph), expected,
                            rtol=0.001)
 
@@ -479,8 +477,8 @@ class TestBullwinkle(object):
                                [-0.115, -0.08547, -0.0591, -0.03525, -0.01348])
                               ])
     def test_bullwinkle_fraction_from_api(self, api, expected):
-        '''
-            Fixme: I don't think we should be getting negative fractions here.
-        '''
+        """
+        Fixme: I don't think we should be getting negative fractions here.
+        """
         assert np.allclose(bullwinkle_fraction_from_api(api), expected,
                            rtol=0.001)

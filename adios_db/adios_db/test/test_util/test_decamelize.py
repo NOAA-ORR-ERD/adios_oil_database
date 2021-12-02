@@ -1,10 +1,9 @@
-
 import pytest
 
 from adios_db.util.decamelize import (separate_camelcase,
-                                          camelcase_to_sep,
-                                          camelcase_to_space,
-                                          camelcase_to_underscore)
+                                      camelcase_to_sep,
+                                      camelcase_to_space,
+                                      camelcase_to_underscore)
 
 
 class TestCamelCase(object):

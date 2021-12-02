@@ -31,8 +31,10 @@ def test_read_index():
     reader = ExxonDataReader(example_index, example_dir)
 
     assert reader.index is not None
-    assert reader.index == [('HOOPS Blend',
-                             example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx')]
+    assert reader.index == [(
+        'HOOPS Blend',
+        example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx'
+    )]
 
 
 def test_get_records():
@@ -53,8 +55,9 @@ def test_get_records():
 
 
 def test_read_excel_file():
-    record = ExxonDataReader.read_excel_file(example_dir /
-                                             "Crude_Oil_HOOPS_Blend_assay_xls.xlsx")
+    record = ExxonDataReader.read_excel_file(
+        example_dir / "Crude_Oil_HOOPS_Blend_assay_xls.xlsx"
+    )
 
     # there could be a LOT here, but just to make sure it isn't completely
     # bonkers
@@ -68,7 +71,8 @@ def test_ExxonRecordParser():
 
     It's just a pass through
     """
-    assert ExxonRecordParser("something random", None) == ("something random", None)
+    assert ExxonRecordParser("something random", None) == ("something random",
+                                                           None)
 
 
 def test_full_round_trip():
@@ -76,8 +80,9 @@ def test_full_round_trip():
     This test makes sure that it can read a full record,
     save it as JSON, and then read it back again
     """
-    record = ExxonDataReader.read_excel_file(example_dir /
-                                             "Crude_Oil_HOOPS_Blend_assay_xls.xlsx")
+    record = ExxonDataReader.read_excel_file(
+        example_dir / "Crude_Oil_HOOPS_Blend_assay_xls.xlsx"
+    )
 
     assert record[0][0] == "ExxonMobil"
 
@@ -104,7 +109,6 @@ class TestExxonMapper():
     """
     This is where the real work happens!
     """
-
     # fixme -- there should probably be a fixture to get a record
     record = next(ExxonDataReader(example_index, example_dir).get_records())
 
@@ -235,7 +239,8 @@ class TestExxonMapper():
 
     @pytest.mark.parametrize("attr, indexes, values", [
         ('Sulfur Mass Fraction', range(8),
-         (1.1494, 0.00019105, 0.0024387, 0.019791, 0.11793, 0.76024, 1.5844, 3.047)),
+         (1.1494, 0.00019105, 0.0024387, 0.019791,
+          0.11793, 0.76024, 1.5844, 3.047)),
         ('Naphthene Volume Fraction', range(8),
          (31.362, 0.0, 8.0856, 33.16, 40.822, 47.458, 35.381, 13.435)),
         ('Paraffin Volume Fraction', range(8),
@@ -252,38 +257,42 @@ class TestExxonMapper():
          (0.5962, 0.7594, 8.106, 45.26, 32.83, 20.2, 3.227, 0.07651)),
         ('Nitrogen Mass Fraction', range(8),
          (968.12, 0.0, 0.0, 0.061811, 1.7976, 47.62, 782.36, 4176.0)),
-        ('Calcium Mass Fraction', range(8), (5.9, None, None, None, None, None, None, None)),
+        ('Calcium Mass Fraction', range(8), (5.9, None, None, None,
+                                             None, None, None, None)),
         ('Hydrogen Sulfide Concentration', range(8),
          (0.0, None, None, None, None, None, None, None)),
-        ('Salt Content', range(8), (0.0026, None, None, None, None, None, None, None)),
+        ('Salt Content', range(8), (0.0026, None, None, None,
+                                    None, None, None, None)),
     ])
     def test_bulk_composition(self, attr, indexes, values):
-        '''
-            Data points that are classified in bulk composition:
-            - Sulphur
-            - Naphthenes
-            - Paraffins
-            - Nickel
-            - Vanadium
-            - Carbon
-            - Hydrogen
-            - Mercaptan Sulfur
-            - Nitrogen
-            - Calcium
-            - Hydrogen Sulfide
-            - Salt content
+        """
+        Data points that are classified in bulk composition:
+        - Sulphur
+        - Naphthenes
+        - Paraffins
+        - Nickel
+        - Vanadium
+        - Carbon
+        - Hydrogen
+        - Mercaptan Sulfur
+        - Nitrogen
+        - Calcium
+        - Hydrogen Sulfide
+        - Salt content
 
-            Notes:
-            - These values are now kept in a list of compounds held by the
-              bulk_composition attribute
-            - Ideally, the name & groups of each compound would have the
-              original field text from the datasheet.  This is not the case
-              at present.
-        '''
+        Notes:
+        - These values are now kept in a list of compounds held by the
+          bulk_composition attribute
+        - Ideally, the name & groups of each compound would have the
+          original field text from the datasheet.  This is not the case
+          at present.
+        """
         samples = ExxonMapper(self.record).sub_samples
 
         for i, val in zip(indexes, values):
-            filter_list = [c for c in samples[i].bulk_composition if c.name == attr]
+            filter_list = [c for c in samples[i].bulk_composition
+                           if c.name == attr]
+
             if val is None:
                 assert len(filter_list) == 0
             else:
@@ -291,50 +300,55 @@ class TestExxonMapper():
 
                 compound = filter_list[0]
 
-                assert isclose(compound.measurement.value, values[i], rel_tol=1e-4)
+                assert isclose(compound.measurement.value, values[i],
+                               rel_tol=1e-4)
 
     @pytest.mark.parametrize("attr, indexes, values", [
         ('Total Acid Number', range(8),
-         (0.90915, 8.294e-08, 4.8689e-05, 0.004045, 0.20694, 1.3179, 1.8496, 0.6179)),
-        ('Reid Vapor Pressure', range(8), (8.7651, None, None, None, None, None, None, None)),
+         (0.90915, 8.294e-08, 4.8689e-05, 0.004045,
+          0.20694, 1.3179, 1.8496, 0.6179)),
+        ('Reid Vapor Pressure', range(8), (8.7651, None, None, None,
+                                           None, None, None, None)),
         ('Aniline Point', range(8),
          (None, None, None, None, 140.679, 155.3736, 177.6938, None)),
         ('Cetane Index 1990 (D4737)', range(8),
          (None, None, None, 36.2293, 45.0055, 49.9756, None, None)),
         ('Cloud Point', range(8),
          (None, None, None, -106.574729, -62.385169, 4.0361, None, None)),
-        ('Smoke Point', range(8), (None, None, None, 29.8541, 22.4655, 13.7602, None, None)),
+        ('Smoke Point', range(8), (None, None, None, 29.8541,
+                                   22.4655, 13.7602, None, None)),
         ('Conradson Carbon Residue', range(8),
          (3.1904, None, None, None, None, None, 0.36241, 17.695)),
         ('Freeze Point', range(8),
          (None, None, None, -99.2151, -54.7016, 14.6042, None, None)),
     ])
     def test_industry_properties(self, attr, indexes, values):
-        '''
-            Data points that are classified in industry properties:
-            - Total Acid Number (Neutralization Number)
-            - Reid Vapor Pressure
+        """
+        Data points that are classified in industry properties:
+        - Total Acid Number (Neutralization Number)
+        - Reid Vapor Pressure
 
-            - Aniline Point
-            - Cetane Index
-            - Vanadium
-            - Cloud Point
-            - Smoke Point
-            - Conradson Carbon Residue
-            - Conradson Residuum (Vacuum Residue)
-            - Gel Point (Freeze Point)
+        - Aniline Point
+        - Cetane Index
+        - Vanadium
+        - Cloud Point
+        - Smoke Point
+        - Conradson Carbon Residue
+        - Conradson Residuum (Vacuum Residue)
+        - Gel Point (Freeze Point)
 
-            Notes:
-            - These values are kept in a list of attributes held by the
-              industry_properties attribute
-            - Ideally, the name & groups of each compound would have the
-              original field text from the datasheet.  This is not the case
-              at present.
-        '''
+        Notes:
+        - These values are kept in a list of attributes held by the
+          industry_properties attribute
+        - Ideally, the name & groups of each compound would have the
+          original field text from the datasheet.  This is not the case
+          at present.
+        """
         samples = ExxonMapper(self.record).sub_samples
 
         for i, val in zip(indexes, values):
-            filter_list = [c for c in samples[i].industry_properties if c.name == attr]
+            filter_list = [c for c in samples[i].industry_properties
+                           if c.name == attr]
             if val is None:
                 assert len(filter_list) == 0
             else:
@@ -342,7 +356,8 @@ class TestExxonMapper():
 
                 compound = filter_list[0]
 
-                assert isclose(compound.measurement.value, values[i], rel_tol=1e-4)
+                assert isclose(compound.measurement.value, values[i],
+                               rel_tol=1e-4)
 
     @pytest.mark.parametrize("prop, unit, unit_type", [
         ('Total Acid Number', 'mg/g', 'massfraction'),
@@ -354,20 +369,20 @@ class TestExxonMapper():
         ('Freeze Point', 'F', 'temperature'),
     ])
     def test_industry_properties_units(self, prop, unit, unit_type):
-        '''
-            Data points that are classified in industry properties:
-            - Total Acid Number (Neutralization Number)
-            - Reid Vapor Pressure
+        """
+        Data points that are classified in industry properties:
+        - Total Acid Number (Neutralization Number)
+        - Reid Vapor Pressure
 
-            - Aniline Point
-            - Cetane Index
-            - Vanadium
-            - Cloud Point
-            - Smoke Point
-            - Conradson Carbon Residue
-            - Conradson Residuum (Vacuum Residue)
-            - Gel Point (Freeze Point)
-        '''
+        - Aniline Point
+        - Cetane Index
+        - Vanadium
+        - Cloud Point
+        - Smoke Point
+        - Conradson Carbon Residue
+        - Conradson Residuum (Vacuum Residue)
+        - Gel Point (Freeze Point)
+        """
         # just check the zeroth one:
 
         print("testing:", prop)
@@ -388,22 +403,26 @@ class TestExxonMapper():
         # assert False, f"property: {p.name} is missing"
 
     @pytest.mark.parametrize("attr, indexes, values", [
-        ('saturates', range(8), [None, None, None, None, None, None, None, None]),
-        ('aromatics', range(8), [None, None, None, None, None, None, None, None]),
-        ('resins', range(8), [None, None, None, None, None, None, None, None]),
-        ('asphaltenes', range(8), [None, None, None, None, None, None, None, None]),
+        ('saturates', range(8), [None, None, None, None,
+                                 None, None, None, None]),
+        ('aromatics', range(8), [None, None, None, None,
+                                 None, None, None, None]),
+        ('resins', range(8), [None, None, None, None,
+                              None, None, None, None]),
+        ('asphaltenes', range(8), [None, None, None, None,
+                                   None, None, None, None]),
     ])
     def test_sara(self, attr, indexes, values):
-        '''
-            Test the sara attributes:
-            - Aromatics
-            - Asphaltenes
+        """
+        Test the sara attributes:
+        - Aromatics
+        - Asphaltenes
 
-            Note: saturates and resins are not found in the Exxon Assays
-            Note: We have decided that instead of C7 asphaltenes & aromatics
-                  going into SARA, we will put them into the bulk_composition
-                  list.
-        '''
+        Note: saturates and resins are not found in the Exxon Assays
+        Note: We have decided that instead of C7 asphaltenes & aromatics
+              going into SARA, we will put them into the bulk_composition
+              list.
+        """
         samples = ExxonMapper(self.record).sub_samples
 
         for i, val in zip(indexes, values):
@@ -461,13 +480,14 @@ class TestExxonMapper():
             assert end_point.unit == 'C'
 
     def test_no_cuts_in_butane(self):
-        assert (ExxonMapper(self.record).sub_samples[1].distillation_data.cuts == [])
+        assert (ExxonMapper(self.record)
+                .sub_samples[1].distillation_data.cuts == [])
 
     def test_save_to_json(self):
-        '''
-            Save an example .json file.  This is not so much a test, but a job
-            to provide sample data that people can look at.
-        '''
+        """
+        Save an example .json file.  This is not so much a test, but a job
+        to provide sample data that people can look at.
+        """
         mapper = ExxonMapper(self.record)
         py_json = mapper.py_json()
 
@@ -475,7 +495,8 @@ class TestExxonMapper():
 
         filename = 'EX-Example-Record.json'
         file_path = os.path.sep.join(
-            adios_db.__file__.split(os.path.sep)[:-3] + ['examples', filename])
+            adios_db.__file__.split(os.path.sep)[:-3] + ['examples', filename]
+        )
 
         print(f'saving to: {file_path}')
         with open(file_path, 'w', encoding="utf-8") as fd:

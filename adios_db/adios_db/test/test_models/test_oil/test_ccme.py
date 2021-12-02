@@ -1,7 +1,3 @@
-import json
-
-# import pytest
-
 from adios_db.models.common.measurement import MassFraction
 
 from adios_db.models.oil.ccme import CCME
@@ -18,11 +14,7 @@ class TestCCME:
     def test_init_empty(self):
         ccme = CCME()
 
-        for attr in ('F1',
-                     'F2',
-                     'F3',
-                     'F4',
-                     'method'):
+        for attr in ('F1', 'F2', 'F3', 'F4', 'method'):
             assert hasattr(ccme, attr)
 
     def test_json_empty(self):
@@ -33,17 +25,13 @@ class TestCCME:
     def test_json_empty_non_sparse(self):
         py_json = CCME().py_json(sparse=False)
 
-        assert set(py_json.keys()) == {'F1',
-                                       'F2',
-                                       'F3',
-                                       'F4',
-                                       'method'}
+        assert set(py_json.keys()) == {'F1', 'F2', 'F3', 'F4', 'method'}
 
     def test_with_ccme(self):
-        '''
-            Generally we should keep our pytests small, testing one thing at a
-            time.
-        '''
+        """
+        Generally we should keep our pytests small, testing one thing at a
+        time.
+        """
         ccme = CCME()
 
         ccme.F1 = MassFraction(unit="mg/g", value=15.58)
@@ -59,9 +47,9 @@ class TestCCME:
         assert ccme2 == ccme
 
     def test_full(self):
-        '''
-            But hey, here we go with a full-on test of everything
-        '''
+        """
+        But hey, here we go with a full-on test of everything
+        """
         ccme = CCME()
 
         ccme.F1 = MassFraction(unit="mg/g", value=15.58)
@@ -74,11 +62,10 @@ class TestCCME:
         pprint(py_json)
 
         # dump the json:
-        # json.dump(py_json, open(OUTPUT_DIR / "example_ccme.json", 'w'), indent=4)
+        # json.dump(py_json, open(OUTPUT_DIR / "example_ccme.json", 'w'),
+        #           indent=4)
 
         # test the round trip
         ccme2 = CCME.from_py_json(py_json)
 
         assert ccme2 == ccme
-
-
