@@ -8,10 +8,12 @@ from numpy import isclose
 
 # fixme: you really shouldn't need to import UNIT_TYPES or ConvertDataUnits
 #        the functionality should be in nucos already.
-#        If not, we should add it there.
+#        the latest version (not yet released) does have MassFraction
+#        and VolumeFraction units available for getting unit type.
 #        GetUnitNames and GetUnitAbbreviation should help
-from nucos import ConvertDataUnits, FindUnitTypes
-from nucos.unit_conversion import Simplify
+#        If anything else is missing, we should add it there.
+
+from nucos.unit_conversion import ConvertDataUnits, Simplify, UNIT_TYPES
 
 from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase
@@ -20,7 +22,6 @@ from adios_db.data_sources.importer_base import parse_single_datetime
 
 logger = logging.getLogger(__name__)
 
-UNIT_TYPES = FindUnitTypes()
 UNIT_TYPES_MV = {}
 
 for u_type in ('Volume Fraction', 'Mass Fraction'):
@@ -28,6 +29,9 @@ for u_type in ('Volume Fraction', 'Mass Fraction'):
     # make our own lookup table.
     # Almost every unit in these two types is common, so we need to make a
     # preference for one or the other, and we will prefer mass fraction types.
+    #
+    # probably no longer needed with latest nucos
+    # Also: why not add to (a copy of) the UNIT_TYPES dict?
     u_dict = {u: u_type.lower().replace(' ', '')
               for u in set([i for sub in [([k] + v[1])
                                           for k, v
