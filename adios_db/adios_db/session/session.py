@@ -209,8 +209,8 @@ class Session():
         id_prefix = 'XX'
         max_seq = 0
 
-        cursor = (self._oil_collection.find({'oil_id': {'$regex': f'^{id_prefix}'}},
-                                {'oil_id'}))
+        cursor = (self._oil_collection.find({'oil_id': {'$regex': f'^{id_prefix}'}  # noqa
+                                             }, {'oil_id'}))
 
         for row in cursor:
             oil_id = row['oil_id']
@@ -227,8 +227,12 @@ class Session():
 
         return f'{id_prefix}{max_seq:06d}'
 
-    def query(self, oil_id=None,
-              text=None, api=None, labels=None, product_type=None,
+    def query(self,
+              oil_id=None,
+              text=None,
+              api=None,
+              labels=None,
+              product_type=None,
               gnome_suitable=None,
               sort=None,
               sort_case_sensitive=False,
@@ -239,7 +243,6 @@ class Session():
         Query the database according to various criteria
 
         :returns: an iterator of dicts (json-compatible) of the data asked for
-
 
         **Filtering**
 
