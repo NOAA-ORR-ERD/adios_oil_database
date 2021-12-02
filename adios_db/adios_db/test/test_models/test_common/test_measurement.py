@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-import unit_conversion as uc
+import nucos as uc
 
 from adios_db.models.common.measurement import (MeasurementBase,
                                                 Temperature,

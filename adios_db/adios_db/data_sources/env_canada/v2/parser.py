@@ -6,7 +6,12 @@ from dataclasses import dataclass, fields
 
 from numpy import isclose
 
-from unit_conversion import UNIT_TYPES, ConvertDataUnits, Simplify
+# fixme: you really shouldn't need to import UNIT_TYPES or ConvertDataUnits
+#        the functionality should be in nucos already.
+#        If not, we should add it there.
+#        GetUnitNames and GetUnitAbbreviation should help
+from nucos import ConvertDataUnits, FindUnitTypes
+from nucos.unit_conversion import Simplify
 
 from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase
@@ -15,6 +20,7 @@ from adios_db.data_sources.importer_base import parse_single_datetime
 
 logger = logging.getLogger(__name__)
 
+UNIT_TYPES = FindUnitTypes()
 UNIT_TYPES_MV = {}
 
 for u_type in ('Volume Fraction', 'Mass Fraction'):
@@ -123,7 +129,8 @@ class ECMeasurementDataclass:
             return
         elif self.unit_of_measure == 'g/m2':
             self.unit_of_measure = 'g/m^2'
-
+            self.unit_type = None
+            return
         unit = Simplify(self.unit_of_measure)
         try:
             self.unit_type = UNIT_TYPES[unit]

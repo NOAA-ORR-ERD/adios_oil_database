@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from math import isclose
 import copy
 
-from unit_conversion import convert
+from nucos import convert
 
 from ..common.utilities import dataclass_to_json
 from ..common.validators import EnumValidator

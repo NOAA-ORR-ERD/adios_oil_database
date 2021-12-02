@@ -7,7 +7,7 @@ There could be more, but for now, it sets the unit_type for the cuts.
 import math
 from operator import itemgetter
 
-import unit_conversion as uc
+import nucos as uc
 
 from .cleanup import Cleanup
 

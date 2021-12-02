@@ -13,7 +13,7 @@ import json
 
 import pytest
 
-import unit_conversion as uc
+import nucos as uc
 
 import adios_db
 from adios_db.util import sigfigs

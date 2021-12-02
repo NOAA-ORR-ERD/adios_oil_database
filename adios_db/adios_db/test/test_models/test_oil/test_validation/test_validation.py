@@ -10,7 +10,7 @@ from pathlib import Path
 import math
 import pytest
 
-import unit_conversion as uc
+import nucos as uc
 
 from adios_db.computation import physical_properties
 from adios_db.models.oil.oil import Oil
