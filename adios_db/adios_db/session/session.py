@@ -154,17 +154,13 @@ class Session():
         return ret
 
     def insert_one(self, oil_obj):
-        if isinstance(oil_obj, Oil):
-            oil_obj = oil_obj.py_json()
-
-        if not hasattr(oil_obj, '_id'):
-            oil_obj['_id'] = oil_obj['oil_id']
+        oil_obj = oil_obj.py_json()
+        oil_obj['_id'] = oil_obj['oil_id']
 
         return self._oil_collection.insert_one(oil_obj).inserted_id
 
     def replace_one(self, oil_obj):
-        if isinstance(oil_obj, Oil):
-            oil_obj = oil_obj.py_json()
+        oil_obj = oil_obj.py_json()
 
         return self._oil_collection.replace_one({'oil_id': oil_obj['oil_id']},
                                     oil_obj)
@@ -172,7 +168,7 @@ class Session():
     def delete_one(self, oil_id):
         return self._oil_collection.delete_one({'oil_id': oil_id})
 
-    def new_oil_id(self):
+    def new_oil_id(self, id_prefix='XX'):
         '''
             Query the database for the next highest ID with a prefix of XX
             The current implementation is to walk the oil IDs, filter for the
@@ -185,7 +181,6 @@ class Session():
                      In fact, this is a bit brittle, and would fail if the
                      website suffered a bunch of POST requests at once.
         '''
-        id_prefix = 'XX'
         max_seq = 0
 
         cursor = (self._oil_collection.find({'oil_id': {'$regex': f'^{id_prefix}'}  # noqa
