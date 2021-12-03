@@ -88,89 +88,62 @@ class Session():
         self._db = getattr(self.mongo_client, database)
         self._oil_collection = self._db.oil  # the oil collection
 
-    def get_oil(self, oil_id):
-        """
-        get an oil record by its ID from the oil collection
+    # def get_oil(self, oil_id):
+    #     """
+    #     get an oil record by its ID from the oil collection
 
-        :param oil_id: an Oil ID
-        """
-        rec = self._oil_collection.find_one({'oil_id': oil_id})
-        # remove the mongo ID
-        if rec is not None:
-            rec.pop('_id', None)
-        return rec
+    #     :param oil_id: an Oil ID
+    #     """
+    #     rec = self._oil_collection.find_one({'oil_id': oil_id})
+    #     # remove the mongo ID
+    #     if rec is not None:
+    #         rec.pop('_id', None)
+    #     return rec
 
-    def delete_oil(self, oil_id):
-        '''
-        Delete an oil record from the oil collection.
+    # def delete_oil(self, oil_id):
+    #     '''
+    #     Delete an oil record from the oil collection.
 
-        :param oil_id: an Oil identifier
-        '''
-        return self._oil_collection.delete_one({'oil_id': oil_id}).deleted_count
+    #     :param oil_id: an Oil identifier
+    #     '''
+    #     return self._oil_collection.delete_one({'oil_id': oil_id}).deleted_count
 
-    def insert_oil(self, oil):
-        '''
-            Add a new oil record to the oil collection
+    # def insert_oil(self, oil):
+    #     '''
+    #     Add a new oil record to the oil collection
 
-            :param oil: an Oil object to add
+    #     :param oil: an Oil object to add
 
-            :param overwrite=False: whether to overwrite an existing
-                                    record if it already exists.
-        '''
-        # fixme: I think an Oil object will always have an ID
-        #        that's the one attribute that required.
-        if isinstance(oil, Oil):
-            if oil.oil_id in ('', None):
-                oil.oil_id = self.new_oil_id()
-        else:
-            # assume a json-dict
-            # fixme: this seems to be the wrong place to put this logic.
-            if ('oil_id' not in oil or
-                    oil['oil_id'] in ('', None)):
-                oil['oil_id'] = self.new_oil_id()
+    #     :param overwrite=False: whether to overwrite an existing
+    #                             record if it already exists.
+    #     '''
+    #     # fixme: I think an Oil object will always have an ID
+    #     #        that's the one attribute that required.
+    #     if isinstance(oil, Oil):
+    #         if oil.oil_id in ('', None):
+    #             oil.oil_id = self.new_oil_id()
+    #     else:
+    #         # assume a json-dict
+    #         # fixme: this seems to be the wrong place to put this logic.
+    #         if ('oil_id' not in oil or
+    #                 oil['oil_id'] in ('', None)):
+    #             oil['oil_id'] = self.new_oil_id()
 
-            oil = Oil.from_py_json(oil)
+    #         oil = Oil.from_py_json(oil)
 
-        oil.reset_validation()
-        set_completeness(oil)
+    #     oil.reset_validation()
+    #     set_completeness(oil)
 
-        json_obj = oil.py_json()
-        # fixme: shouldn't we let mongo use its own ID?
-        json_obj['_id'] = oil.oil_id
+    #     json_obj = oil.py_json()
+    #     # fixme: shouldn't we let mongo use its own ID?
+    #     json_obj['_id'] = oil.oil_id
 
-        inserted_id = self._oil_collection.insert_one(json_obj).inserted_id
-        # fixme: asserts are for testing -- is this ever going to happen
-        #        at run time? if so, it should be a regular check with an Exception to raise
-        assert inserted_id == oil.oil_id
+    #     inserted_id = self._oil_collection.insert_one(json_obj).inserted_id
+    #     # fixme: asserts are for testing -- is this ever going to happen
+    #     #        at run time? if so, it should be a regular check with an Exception to raise
+    #     assert inserted_id == oil.oil_id
 
-        return json_obj
-
-    def new_oil_id(self, id_prefix='XX'):
-        """
-        Query the database for the next highest ID with the given prefix.
-
-        The current implementation is to walk the oil IDs, filter for the
-        prefix, and choose the max numeric content.
-
-        :param id_prefix='XX': The ID prefix to use. Each prefix is code
-            that indicates something about the source. IDs are a two
-            letter code followed by 5 digits with leading zeros. "XX"
-            is the default for records of unknown provenance
-
-        *Warning:* We don't expect a lot of traffic POST'ing a bunch new oils to
-        the database, it will only happen once in awhile. But this is not the
-        most effective way to do this. A persistent incremental counter would
-        be much faster. In fact, this is a bit brittle, and would fail if the
-        website suffered a bunch of POST requests at once.
-        """
-        max_seq = 0
-
-        cursor = (self._oil_collection
-                  .find({'oil_id': {'$regex': '^{}'.format(id_prefix)}},
-                        {'oil_id'}))
-
-        for row in cursor:
-            oil_id = row['oil_id']
+    #     return json_obj
 
     def find_one(self, oil_id):
         ret = self._oil_collection.find_one({'oil_id': oil_id})

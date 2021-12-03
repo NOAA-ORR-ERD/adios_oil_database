@@ -41,7 +41,7 @@ def attach_pymongo(config, settings):
     def add_db(_request):
         return config.registry.db
 
-    config.add_request_method(add_db, 'mdb_client', reify=True)
+    config.add_request_method(add_db, 'adb_session', reify=True)
 
 
 def get_json(request):

@@ -60,7 +60,7 @@ def get_oils(request):
 
     logger.info('GET /oils: id: {}, options: {}'.format(obj_id, request.GET))
 
-    client = request.mdb_client
+    client = request.adb_session
 
     if obj_id is not None:
         res = client.find_one(obj_id)
@@ -180,12 +180,12 @@ def insert_oil(request):
         logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
 
         if 'oil_id' not in oil_obj:
-            oil_obj['oil_id'] = request.mdb_client.new_oil_id()
+            oil_obj['oil_id'] = request.adb_session.new_oil_id()
 
         oil = validate_json(oil_obj)
         set_completeness(oil)
 
-        mongo_id = request.mdb_client.insert_one(oil)
+        mongo_id = request.adb_session.insert_one(oil)
 
         logger.info(f'insert oil with mongo ID: {mongo_id}, '
                     f'oil ID: {oil.oil_id}')
@@ -238,7 +238,7 @@ def update_oil(request):
 
         set_completeness(oil)
 
-        request.mdb_client.replace_one(oil)
+        request.adb_session.replace_one(oil)
 
         memoized_results.pop(oil.oil_id, None)
     except Exception as e:
@@ -278,7 +278,7 @@ def delete_oil(request):
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:
-        res = request.mdb_client.delete_one(obj_id)
+        res = request.adb_session.delete_one(obj_id)
 
         if res.deleted_count == 0:
             raise HTTPBadRequest()  # JSONAPI expects this upon failure

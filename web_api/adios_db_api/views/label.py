@@ -22,10 +22,12 @@ def get_labels(request):
         1. Return all labels in JSON format.
         2. Return the JSON record of a particular label.
     '''
+    # fixme: do we ever need just one label??
+
     obj_id = obj_id_from_url(request)
 
     try:
-        res = request.mdb_client.get_labels(obj_id)
+        res = request.adb_session.get_labels(obj_id)
     except ValueError as e:
         logger.error(e)
         raise HTTPBadRequest("Bad object ID")
