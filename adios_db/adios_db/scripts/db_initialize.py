@@ -26,7 +26,7 @@ argp.add_argument('--config', nargs=1,
 
 
 def init_db_cmd(argv=sys.argv):
-    # Let's give a round of applause to Python 3 for making stderr buffered.
+    # Python 3 has made stderr buffered, so we have to fix it
     sys.stderr = io.TextIOWrapper(sys.stderr.detach().detach(),
                                   write_through=True)
 
@@ -48,7 +48,7 @@ def init_db_cmd(argv=sys.argv):
 
 
 def init_db(settings, show_prompt=True):
-    '''
+    """
     Here is where we create and initialize our database.  This is what
     we want to do:
 
@@ -63,7 +63,7 @@ def init_db(settings, show_prompt=True):
         - load the basic infrastructure data:
 
             - Labels
-    '''
+    """
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
 
