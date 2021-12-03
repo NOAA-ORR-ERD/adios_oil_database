@@ -60,10 +60,10 @@ def get_oils(request):
 
     logger.info('GET /oils: id: {}, options: {}'.format(obj_id, request.GET))
 
-    client = request.adb_session
+    adb_session = request.adb_session
 
     if obj_id is not None:
-        res = client.find_one(obj_id)
+        res = adb_session.find_one(obj_id)
 
         if res is not None:
             return get_oil_all_fields(res)
@@ -83,9 +83,9 @@ def get_oils(request):
         sort = get_sort_params(request)
 
         try:
-            return json_api_results(client.query(page=[start, stop],
-                                                 sort=sort,
-                                                 **search_opts),
+            return json_api_results(adb_session.query(page=[start, stop],
+                                                      sort=sort,
+                                                      **search_opts),
                                     limit)
         except Exception as e:
             logger.error(e)
@@ -93,7 +93,7 @@ def get_oils(request):
 
 
 def json_api_results(results, page_size):
-    total = results.count()
+    total = len(results)  # .count()
     pages = total / page_size if page_size > 0 else 1
 
     data = [get_oil_searchable_fields(r) for r in results]

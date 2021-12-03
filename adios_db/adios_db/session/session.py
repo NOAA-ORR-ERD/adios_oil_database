@@ -13,9 +13,9 @@ import warnings
 
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
-from ..models.oil.oil import Oil
+# from ..models.oil.oil import Oil
 from ..models.oil.product_type import types_to_labels
-from ..models.oil.completeness import set_completeness
+# from ..models.oil.completeness import set_completeness
 
 
 class CursorWrapper():
@@ -38,6 +38,7 @@ class CursorWrapper():
         self.cursor = cursor
 
     def __iter__(self):
+        # this is do-nothing, a cursor is already an iterator -- but just in case.
         self.cursor = iter(self.cursor)
         return self
 
@@ -52,22 +53,6 @@ class CursorWrapper():
     def __getitem__(self, idx):
         return self.cursor[idx]
 
-    # def count(self, *args, **kwargs):
-    #     return self.cursor.count(*args, **kwargs)
-
-    def __getattr__(self, attr):
-        """
-        Pass anything else on to the embedded cursor
-
-        Just in case -- we really should document what's being used.
-        """
-        warnings.warn("ideally, we should not be using mongo "
-                      "cursor methods directly."
-                      f": `{attr}` Should be wrapped somehow",
-                      DeprecationWarning)
-
-        return getattr(self.cursor, attr)
-
 
 class Session():
     sort_direction = {'asc': ASCENDING,
@@ -77,75 +62,21 @@ class Session():
 
     def __init__(self, host, port, database):
         '''
-            Initialize a mongodb backed session
+        Initialize a mongodb backed session
 
-            :param host: hostname of mongo server
-            :param port: port of mongo server
-            :param database: database name used for this data.
+        :param host: hostname of mongo server
+        :param port: port of mongo server
+        :param database: database name used for this data.
         '''
         self.mongo_client = MongoClient(host=host, port=port)
 
         self._db = getattr(self.mongo_client, database)
         self._oil_collection = self._db.oil  # the oil collection
 
-    # def get_oil(self, oil_id):
-    #     """
-    #     get an oil record by its ID from the oil collection
-
-    #     :param oil_id: an Oil ID
-    #     """
-    #     rec = self._oil_collection.find_one({'oil_id': oil_id})
-    #     # remove the mongo ID
-    #     if rec is not None:
-    #         rec.pop('_id', None)
-    #     return rec
-
-    # def delete_oil(self, oil_id):
-    #     '''
-    #     Delete an oil record from the oil collection.
-
-    #     :param oil_id: an Oil identifier
-    #     '''
-    #     return self._oil_collection.delete_one({'oil_id': oil_id}).deleted_count
-
-    # def insert_oil(self, oil):
-    #     '''
-    #     Add a new oil record to the oil collection
-
-    #     :param oil: an Oil object to add
-
-    #     :param overwrite=False: whether to overwrite an existing
-    #                             record if it already exists.
-    #     '''
-    #     # fixme: I think an Oil object will always have an ID
-    #     #        that's the one attribute that required.
-    #     if isinstance(oil, Oil):
-    #         if oil.oil_id in ('', None):
-    #             oil.oil_id = self.new_oil_id()
-    #     else:
-    #         # assume a json-dict
-    #         # fixme: this seems to be the wrong place to put this logic.
-    #         if ('oil_id' not in oil or
-    #                 oil['oil_id'] in ('', None)):
-    #             oil['oil_id'] = self.new_oil_id()
-
-    #         oil = Oil.from_py_json(oil)
-
-    #     oil.reset_validation()
-    #     set_completeness(oil)
-
-    #     json_obj = oil.py_json()
-    #     # fixme: shouldn't we let mongo use its own ID?
-    #     json_obj['_id'] = oil.oil_id
-
-    #     inserted_id = self._oil_collection.insert_one(json_obj).inserted_id
-    #     # fixme: asserts are for testing -- is this ever going to happen
-    #     #        at run time? if so, it should be a regular check with an Exception to raise
-    #     assert inserted_id == oil.oil_id
-
-    #     return json_obj
-
     def find_one(self, oil_id):
+        '''
+        return a single Oil object from the collection
+        '''
         ret = self._oil_collection.find_one({'oil_id': oil_id})
 
         if ret is not None:
@@ -154,32 +85,52 @@ class Session():
         return ret
 
     def insert_one(self, oil_obj):
+        """
+        add a new Oil to the collection
+        """
+        oil_id = oil_obj.oil_id
         oil_obj = oil_obj.py_json()
-        oil_obj['_id'] = oil_obj['oil_id']
 
-        return self._oil_collection.insert_one(oil_obj).inserted_id
+        # is this necessary? couldn't we let Mongo make it?
+        oil_obj['_id'] = oil_id
+
+        self._oil_collection.insert_one(oil_obj)
+
+        return oil_id
+        # we want to hide Mongo details, including _id
+        # return self._oil_collection.insert_one(oil_obj).inserted_id
 
     def replace_one(self, oil_obj):
+        """
+        replace existing Oil object with the same oil_id
+        """
         oil_obj = oil_obj.py_json()
 
         return self._oil_collection.replace_one({'oil_id': oil_obj['oil_id']},
-                                    oil_obj)
+                                                oil_obj)
 
     def delete_one(self, oil_id):
+        """
+        delete a single Oil object with the given oil_id
+        """
         return self._oil_collection.delete_one({'oil_id': oil_id})
 
     def new_oil_id(self, id_prefix='XX'):
         '''
-            Query the database for the next highest ID with a prefix of XX
-            The current implementation is to walk the oil IDs, filter for the
-            prefix, and choose the max numeric content.
+        Query the database for the next highest ID with the provided
+        prefix.
 
-            Warning: We don't expect a lot of traffic POST'ing a bunch new oils
-                     to the database, it will only happen once in awhile.
-                     But this is not the most effective way to do this.
-                     A persistent incremental counter would be much faster.
-                     In fact, this is a bit brittle, and would fail if the
-                     website suffered a bunch of POST requests at once.
+        :param id_prefix = 'XX': Prefix of new ID
+
+        The current implementation is to walk the oil IDs, filter for the
+        prefix, and choose the max numeric content.
+
+        Warning: We don't expect a lot of traffic POST'ing a bunch new oils
+                 to the database, it will only happen once in awhile.
+                 But this is not the most effective way to do this.
+                 A persistent incremental counter would be much faster.
+                 In fact, this is a bit brittle, and would fail if the
+                 website suffered a bunch of POST requests at once.
         '''
         max_seq = 0
 
@@ -288,7 +239,8 @@ class Session():
             # make sure we always get the oil_id
             projection = ['oil_id'] + list(projection)
 
-        ret = self._oil_collection.find(filter=filter_opts, projection=projection)
+        ret = self._oil_collection.find(filter=filter_opts,
+                                        projection=projection)
 
         if sort is not None:
             if sort_case_sensitive is False:
@@ -374,9 +326,9 @@ class Session():
 
             for w in text_to_match.split():
                 ret.append(self._make_inclusive([self._id_filter_arg(w),
-                                                self._name_arg(w),
-                                                self._location_arg(w),
-                                                self._alternate_names_arg(w)]))
+                                                 self._name_arg(w),
+                                                 self._location_arg(w),
+                                                 self._alternate_names_arg(w)]))
 
             ret = self._make_exclusive(ret)
 
@@ -509,4 +461,7 @@ class Session():
             class will be assumed to belong to the mongo client.  So we will
             pass them down.
         '''
+        warnings.warn("Using mongo methods directly is deprecated. "
+                      f"`{name}` functionality should be added to the Session class",
+                      DeprecationWarning)
         return getattr(self.mongo_client, name)
