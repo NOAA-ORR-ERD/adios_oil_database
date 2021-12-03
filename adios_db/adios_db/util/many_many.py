@@ -7,7 +7,8 @@ The two mappings are "left" and "right"
 
 The left one is originally populated by the initializer.
 
-After that they are equivalent -- when you add something to one the other is updated.
+After that they are equivalent -- when you add something to one the other
+is updated.
 
 Currently there is no way to remove anything
 
@@ -20,10 +21,8 @@ and
 They are copies, so that mutating them won't break the internal data.
 
 """
-
-from collections import defaultdict
-
 import copy
+
 
 class ManyMany:
 
@@ -39,8 +38,8 @@ class ManyMany:
 
         all values must be hashable
         """
-
-        self._left_dict = {key: set(values) for key, values in initial_data.items()}
+        self._left_dict = {key: set(values)
+                           for key, values in initial_data.items()}
         self._rebuild_right()
 
         self._lefthash = self._dict_hash(self._left_dict)
@@ -72,7 +71,8 @@ class ManyMany:
     @staticmethod
     def _dict_hash(d):
         """
-        Provide a hash of a dict with a sequence of hashable items as the values
+        Provide a hash of a dict with a sequence of hashable items as the
+        values
 
         This was to be used to know if an internal dict was changed,
           but it turns out that's not useful (at least not in a robust way)
@@ -87,7 +87,8 @@ class ManyMany:
         :param key: the key the value is to be added to
         :param value: the value to be added
 
-        If the key is already there, the value will be added to the corresponding set
+        If the key is already there, the value will be added to the
+        corresponding set
 
         A new key and set will be created if it is not already there.
         """
@@ -101,7 +102,8 @@ class ManyMany:
         :param key: the key the value is to be added to
         :param value: the value to be added
 
-        If the key is already there, the value will be added to the corresponding set
+        If the key is already there, the value will be added to the
+        corresponding set
 
         A new key and set will be created if it is not already there.
         """
