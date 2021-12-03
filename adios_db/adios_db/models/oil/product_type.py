@@ -1,4 +1,3 @@
-
 """
 Class that represents the product type
 
@@ -6,7 +5,6 @@ With validation
 
 Also maintains the products types and labels mapping
 """
-
 from operator import itemgetter
 from pathlib import Path
 import csv
@@ -18,7 +16,8 @@ from .validation.warnings import WARNINGS
 
 class TypeLabelsMap(ManyMany):
     """
-    class to maintain a many to many relationship between product types and labels
+    class to maintain a many to many relationship between product types
+    and labels
 
     The ``.product_types`` attribute is a mapping with the labels as keys,
     and product types as values.
@@ -26,7 +25,6 @@ class TypeLabelsMap(ManyMany):
     The ``.labels`` attribute is a mapping with the product type as keys,
     and the associated labels as values.
     """
-
     product_types = ManyMany.right
     labels = ManyMany.left
 
@@ -43,7 +41,8 @@ class TypeLabelsMap(ManyMany):
     @property
     def all_labels_dict(self):
         """
-        all the labels, and their property types, as a JSON service compatible dict
+        All the labels, and their property types, as a JSON service compatible
+        dict
 
         :returns: list of dicts for each label:
                   [{'_id': 0,
@@ -58,15 +57,16 @@ class TypeLabelsMap(ManyMany):
             labels = [{'name': label, 'product_types': sorted(types)}
                       for (label, types) in self.product_types.items()]
             labels.sort(key=itemgetter('name'))
+
             # Assign integer IDs
             # note: If we want label IDs, we should manage them properly
             #       Do we ever need to get a label by ID?
             for idx, obj in enumerate(labels):
                 obj['_id'] = idx
+
             self._all_labels_dict = labels
 
         return self._all_labels_dict
-
 
 
 def load_from_csv_file(filepath=None):
@@ -78,7 +78,6 @@ def load_from_csv_file(filepath=None):
                           "product_types_and_labels.csv" next to this module
 
     """
-
     if filepath is None:
         filepath = Path(__file__).parent / "product_types_and_labels.csv"
 
@@ -92,14 +91,17 @@ def load_from_csv_file(filepath=None):
         ptypes_labels = {}
         reader = csv.reader(csvfile, dialect='excel')
         labels = next(reader)[2:]
+
         for row in reader:
             pt = row[0]
             for i, val in enumerate(row[2:]):
                 if val.strip():
                     ptypes_labels.setdefault(pt, set()).add(labels[i])
+
             # add the pt to the labels
             # not doing this anymore.
             # ptypes_labels.setdefault(pt, set()).add(pt)
+
         return ptypes_labels
 
 
@@ -127,11 +129,5 @@ class ProductType(str):
     def validate(cls, value):
         if not value:
             return [WARNINGS["W002"]]
+
         return cls._validator(value)
-
-
-
-
-
-
-

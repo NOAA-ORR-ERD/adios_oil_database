@@ -1,6 +1,6 @@
-'''
-    Classes for storing measured values within an Oil record
-'''
+"""
+Classes for storing measured values within an Oil record
+"""
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
@@ -56,8 +56,7 @@ class Distillation:
                     and self.fraction_recovered.max_value is None)):
                 msgs.append(WARNINGS["W009"])
             else:
-                frac_recov = (self.fraction_recovered
-                              .converted_to("fraction"))
+                frac_recov = (self.fraction_recovered.converted_to("fraction"))
 
                 if frac_recov.value is not None:
                     val = frac_recov.value
