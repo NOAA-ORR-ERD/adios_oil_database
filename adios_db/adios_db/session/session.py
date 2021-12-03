@@ -117,11 +117,14 @@ class Session():
             :param overwrite=False: whether to overwrite an existing
                                     record if it already exists.
         '''
+        # fixme: I think an Oil object will always have an ID
+        #        that's the one attribute that required.
         if isinstance(oil, Oil):
             if oil.oil_id in ('', None):
                 oil.oil_id = self.new_oil_id()
         else:
-            # assume a json object
+            # assume a json-dict
+            # fixme: this seems to be the wrong place to put this logic.
             if ('oil_id' not in oil or
                     oil['oil_id'] in ('', None)):
                 oil['oil_id'] = self.new_oil_id()
@@ -132,9 +135,12 @@ class Session():
         set_completeness(oil)
 
         json_obj = oil.py_json()
+        # fixme: shouldn't we let mongo use its own ID?
         json_obj['_id'] = oil.oil_id
 
         inserted_id = self._oil_collection.insert_one(json_obj).inserted_id
+        # fixme: asserts are for testing -- is this ever going to happen
+        #        at run time? if so, it should be a regular check with an Exception to raise
         assert inserted_id == oil.oil_id
 
         return json_obj
