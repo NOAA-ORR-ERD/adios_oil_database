@@ -1,4 +1,4 @@
-'''
+"""
 Generic Measurement Types
 
 These are structures that handle an individual measurment:
@@ -10,8 +10,7 @@ They can be converted to other units if need be.
 They can accommodate a single value, or a range of values
 
 They can also accommodate a standard deviation and number of replicates.
-'''
-
+"""
 from dataclasses import dataclass
 from math import isclose
 import copy
@@ -19,11 +18,9 @@ import copy
 from nucos import convert
 
 from ..common.utilities import dataclass_to_json
-from ..common.validators import EnumValidator
 
 # why are these oil specific???
 # There should be a project-wide repository for warnings & errors
-
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
@@ -46,20 +43,6 @@ __all__ = [
     'Unitless',
     'AnyUnit',
 ]
-
-# fixme: why is this here?
-# it should be in validation, and the list itself should probably
-# be in a data file or something.
-# class ProductType(str):
-#     _valid_types = ('crude',
-#                     'refined',
-#                     'bitumen product',
-#                     'other')
-#     _validator = EnumValidator(_valid_types, WARNINGS["W003"],
-#                                case_insensitive=True)
-
-#     def validate(self):
-#         return self._validator(self)
 
 
 @dataclass_to_json
@@ -100,15 +83,6 @@ class MeasurementDataclass:
         it appears dataclasses don't add it to __init__ unless it's here
         """
         pass
-
-    # We want a less-noisy repr
-    # def __repr__(self):
-    #     atts = ((att, getattr(self, att))
-    #             for att in self.__dataclass_fields__.keys())
-    #     atts = (f'{att}={val}' for att, val in atts if val is not None)
-    #     return f'{self.__class__.__name__}({", ".join(atts)})'
-
-    # __str__ = __repr__
 
 
 class MeasurementBase(MeasurementDataclass):
@@ -151,7 +125,9 @@ class MeasurementBase(MeasurementDataclass):
         return value
 
     def py_json(self, sparse=True):
-        # unit_type is added here, as it's not a settable field
+        """
+        unit_type is added here, as it's not a settable field
+        """
         pj = super().py_json(sparse)
         pj['unit_type'] = self.unit_type
 
@@ -172,11 +148,8 @@ class MeasurementBase(MeasurementDataclass):
         If you want a new object, use `converted_to` instead
         """
 
-        new_vals = {
-            att: None
-            for att in ('value', 'min_value', 'max_value',
-                        'standard_deviation')
-        }
+        new_vals = {att: None for att in ('value', 'min_value', 'max_value',
+                                          'standard_deviation')}
 
         for attr in new_vals.keys():
             val = getattr(self, attr)
@@ -201,17 +174,16 @@ class MeasurementBase(MeasurementDataclass):
         return new
 
     def copy(self):
-        '''
-            There will be cases where we want to be non-destructive, such as
-            a function that needs to convert to different units to perform
-            calculations, but return the results in the original units.
+        """
+        There will be cases where we want to be non-destructive, such as
+        a function that needs to convert to different units to perform
+        calculations, but return the results in the original units.
 
-            And since our convert function does an in-place update, we will
-            need a way to preserve the original contents of our dataclass
-            before the conversion happens.
-        '''
+        And since our convert function does an in-place update, we will
+        need a way to preserve the original contents of our dataclass
+        before the conversion happens.
+        """
         # fixme: why not use the copy.deepcopy() function here?
-
         return copy.copy(self)
 
 
@@ -241,17 +213,21 @@ class Temperature(MeasurementBase):
         msgs = []
         if self is None:  # how can this happen?!?! -- but it does.
             return msgs
+
         # only do this for C or K
         if (self.unit is not None) and (self.unit.upper() not in {'C', 'K'}):
             return msgs
+
         for val in (self.value, self.min_value, self.max_value):
             if val is not None:
                 val_in_C = convert(self.unit, "C", val)
                 decimal = val_in_C % 1
+
                 if isclose(decimal, 0.15) or isclose(decimal, 0.85):
                     msgs.append(WARNINGS['W010'].format(
                         f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
                         f"{round(val_in_C):.2f} C"))
+
         return msgs
 
     def fix_C_K(self):
@@ -275,21 +251,24 @@ class Temperature(MeasurementBase):
         else:  # no issue found
             return
 
-        # convert to C
         self.convert_to('C')
+
         for attr in ("value", "min_value", "max_value"):
             val = getattr(self, attr)
+
             if val is not None:
                 decimal = val % 1
+
                 if isclose(decimal, 0.15) or isclose(decimal, 0.85):
                     setattr(self, attr, round(val))
+
         return
 
 
 class Unitless(MeasurementBase):
-    '''
+    """
     This is a type for data with no unit at all.
-    '''
+    """
     unit_type = "unitless"
 
     def convert_to(self, *args, **kwargs):
@@ -297,10 +276,10 @@ class Unitless(MeasurementBase):
 
 
 class Dimensionless(MeasurementBase):
-    '''
+    """
     This is a type that can be converted to generic fractional amounts,
     but does not refer to a particular measurable quantity.
-    '''
+    """
     unit_type = "dimensionless"
 
 
@@ -373,13 +352,12 @@ class MassOrVolumeFraction(MeasurementBase):
     def __post_init__(self):
         self._make_all_float()
 
-
     def copy(self):
-        '''
+        """
         copy an instance
 
         This needs to be special, to preserve the unit_type attribute
-        '''
+        """
         # fixme: this should probably be the __copy__ method
 
         return copy.copy(self)
@@ -393,9 +371,9 @@ class MassOrVolumeFraction(MeasurementBase):
 
 @dataclass
 class AnyUnit(MeasurementBase):
-    '''
+    """
     This is a type for data that could be any unit_type
-    '''
+    """
     def __init__(self, *args, **kwargs):
         unit_type = kwargs.get("unit_type")
         if unit_type is None:
@@ -408,11 +386,11 @@ class AnyUnit(MeasurementBase):
         super().__init__(*args, **kwargs)
 
     def __post_init__(self):
-        '''
+        """
         We don't need the post_init in this case
 
         overriding it to disable it
-        '''
+        """
         pass
 
     def __eq__(self, other):

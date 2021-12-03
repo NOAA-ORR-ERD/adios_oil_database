@@ -6,10 +6,10 @@ So far: making dataclasses read/writable as JSON
 
 
 def something(val):
-    '''
-        much like python's "Truthy" and Falsey", but we want some values
-        to not be false like zero, for instance
-    '''
+    """
+    much like python's "Truthy" and Falsey", but we want some values
+    to not be false like zero, for instance
+    """
     return ((val == 0) or (val is not None) and val)
 
 
@@ -20,7 +20,6 @@ def dataclass_to_json(cls):
     All fields must be either JSON-able Python types or
     have be a type with a _to_json method
     """
-
     @classmethod
     def from_py_json(cls, py_json, allow_none=False):
         """
@@ -103,14 +102,10 @@ def dataclass_to_json(cls):
 
         for fieldname, fieldobj in self.__dataclass_fields__.items():
             value = getattr(self, fieldname)
-            if hasattr(fieldobj, 'type') and hasattr(fieldobj.type, 'validate'):
+            if (hasattr(fieldobj, 'type') and
+                    hasattr(fieldobj.type, 'validate')):
                 messages.extend(fieldobj.type.validate(value))
-            # try:
-            #     # validate with the type's validate method
-            #     messages.extend(fieldobj.type.validate(value))
-            # except AttributeError as err:  # This one doesn't have a validate method.
-            #     print("\nAttributeError:", err)
-            #     pass
+
         return sorted(set(messages))
 
     def __setattr__(self, name, val):
@@ -120,19 +115,22 @@ def dataclass_to_json(cls):
             raise AttributeError(f"You can only set existing attributes: "
                                  f"{self.__class__.__name__}.{name} "
                                  "does not exist")
+
         self.__dict__[name] = val
 
     def __repr__(self):
-        atts = ((att, getattr(self, att)) for att in self.__dataclass_fields__.keys())
+        atts = ((att, getattr(self, att))
+                for att in self.__dataclass_fields__.keys())
         atts = (f'{att}={val!r}' for att, val in atts if val is not None)
+
         return f'{self.__class__.__name__}({", ".join(atts)})'
 
     cls.py_json = py_json
-
     cls.from_py_json = from_py_json
 
     if hasattr(cls, "validate"):
         cls._validate = cls.validate
+
     cls.validate = validate
 
     cls.__setattr__ = __setattr__
@@ -154,6 +152,7 @@ class JSON_List(list):
 
     def py_json(self, sparse=True):
         json_obj = []
+
         for item in self:
             try:
                 json_obj.append(item.py_json(sparse))
@@ -188,6 +187,5 @@ class JSON_List(list):
 
         for item in self:
             msgs.extend(item.validate())
+
         return msgs
-
-
