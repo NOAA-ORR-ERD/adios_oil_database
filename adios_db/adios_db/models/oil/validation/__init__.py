@@ -1,5 +1,4 @@
 
-
 # A list of ERRORS and WARNINGS that we can usually ignore
 #  these are ones that we'll probably never be able to fix
 ERRORS_TO_IGNORE = {'W000', 'W009'}
@@ -25,4 +24,3 @@ def is_only_ignored(status):
     expects a dict of teh form returned by unpack_status
     """
     return ERRORS_TO_IGNORE >= status.keys()
-
