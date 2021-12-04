@@ -3,7 +3,6 @@ Functional tests for the Model Web API
 
 FIXME: We should have tests that test the API, not everything else!
 """
-
 import copy
 
 from .base import FunctionalTestBase
@@ -13,12 +12,11 @@ from builtins import isinstance, dict
 
 
 class OilTestBase(FunctionalTestBase):
-    '''
-        This class just defines some functions for evaluating parts of the oil
-        content.  They are not pytests in and of themselves, but return a
-        valid status.
-    '''
-
+    """
+    This class just defines some functions for evaluating parts of the oil
+    content.  They are not pytests in and of themselves, but return a
+    valid status.
+    """
     def jsonapi_request(self, oil_obj):
         json_obj = {'data': {'attributes': oil_obj}}
 
@@ -51,16 +49,16 @@ class OilTests(OilTestBase):
         self.testapp.get('/oils/{}/'.format('bogus'), status=404)
 
     def test_get_valid_no_options(self):
-        '''
-            Note: The web server does not have any control over the correctness
-                  of the oil records, and so should not have any responsibility
-                  for it.  So for this test, we will just test that we did
-                  in fact get something that looks like an oil record at a
-                  high level.
+        """
+        Note: The web server does not have any control over the correctness
+              of the oil records, and so should not have any responsibility
+              for it.  So for this test, we will just test that we did
+              in fact get something that looks like an oil record at a
+              high level.
 
-            Note: We do in fact need to check that we are conforming to the
-                  JSON-API specification however.
-        '''
+        Note: We do in fact need to check that we are conforming to the
+              JSON-API specification however.
+        """
         resp = self.testapp.get('/oils/')
         res = resp.json_body
 
@@ -95,10 +93,10 @@ class OilTests(OilTestBase):
                 assert k in rec['attributes']
 
     def test_get_valid_id(self):
-        '''
-            Note: We are basing our tests on webtest(unittest), so
-                  parametrization doesn't work.
-        '''
+        """
+        Note: We are basing our tests on webtest(unittest), so
+              parametrization doesn't work.
+        """
         for oil_id in ('AD00009',
                        'AD00020',
                        'AD00025',
@@ -302,7 +300,6 @@ class TestOilSort(OilTestBase):
 
     This only tests sorting on API and name -- probably should. test them all
     """
-
     def test_sorted_by_name_desc(self):
         """
         check getting a sorted result by name -- decending order
@@ -350,7 +347,6 @@ class TestOilSort(OilTestBase):
 
         We really should build up the url from parameters, but I'm lazy now.
         """
-
         resp = self.testapp.get('/oils/?'
                                 'dir=asc&'
                                 'limit=20&'

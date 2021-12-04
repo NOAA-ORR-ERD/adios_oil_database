@@ -12,6 +12,7 @@ from adios_db_api import main
 
 from .conftest import TEST_SETTINGS
 
+
 class FunctionalTestBase(TestCase):
 
     def setUp(self):
@@ -27,5 +28,7 @@ class FunctionalTestBase(TestCase):
         self.testapp = TestApp(app)
 
     def tearDown(self):
-        'Clean up any data the model generated after running tests.'
+        """
+        Clean up any data the model generated after running tests.
+        """
         pass
