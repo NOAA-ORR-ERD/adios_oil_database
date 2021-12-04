@@ -7,7 +7,6 @@ or other uses that require high performance querying, etc.
 In theory this same Session object could be duck typed to use a
 different back-end: RDBMS, simple file store, etc.
 """
-
 from numbers import Number
 import warnings
 
@@ -19,7 +18,7 @@ from ..models.oil.product_type import types_to_labels
 
 
 class CursorWrapper():
-    '''
+    """
     Wraps a mongodb cursor to provide an iterator that we can do some
     filtering on, while not losing all its methods
 
@@ -33,12 +32,13 @@ class CursorWrapper():
 
     oh, and now ``count()`` is deprecated as well, but I haven't
     figured out what to replace it with.
-    '''
+    """
     def __init__(self, cursor):
         self.cursor = cursor
 
     def __iter__(self):
-        # this is do-nothing, a cursor is already an iterator -- but just in case.
+        # this is do-nothing, a cursor is already an iterator
+        # -- but just in case.
         self.cursor = iter(self.cursor)
         return self
 
@@ -61,22 +61,22 @@ class Session():
                       'descending': DESCENDING}
 
     def __init__(self, host, port, database):
-        '''
+        """
         Initialize a mongodb backed session
 
         :param host: hostname of mongo server
         :param port: port of mongo server
         :param database: database name used for this data.
-        '''
+        """
         self.mongo_client = MongoClient(host=host, port=port)
 
         self._db = getattr(self.mongo_client, database)
         self._oil_collection = self._db.oil  # the oil collection
 
     def find_one(self, oil_id):
-        '''
+        """
         return a single Oil object from the collection
-        '''
+        """
         ret = self._oil_collection.find_one({'oil_id': oil_id})
 
         if ret is not None:
@@ -116,7 +116,7 @@ class Session():
         return self._oil_collection.delete_one({'oil_id': oil_id})
 
     def new_oil_id(self, id_prefix='XX'):
-        '''
+        """
         Query the database for the next highest ID with the provided
         prefix.
 
@@ -131,7 +131,7 @@ class Session():
                  A persistent incremental counter would be much faster.
                  In fact, this is a bit brittle, and would fail if the
                  website suffered a bunch of POST requests at once.
-        '''
+        """
         max_seq = 0
 
         cursor = (self._oil_collection.find({'oil_id': {'$regex': f'^{id_prefix}'}  # noqa
@@ -164,7 +164,7 @@ class Session():
               page=None,
               projection=None,
               ):
-        '''
+        """
         Query the database according to various criteria
 
         :returns: an iterator of dicts (json-compatible) of the data asked for
@@ -228,8 +228,7 @@ class Session():
 
             For this reason, a MongoDB query will not properly sort our
             status and labels array fields, at least not in a simple way.
-
-        '''
+        """
         filter_opts = self._filter_options(oil_id, text, api, labels,
                                            product_type, gnome_suitable)
 
@@ -325,10 +324,12 @@ class Session():
             ret = []
 
             for w in text_to_match.split():
-                ret.append(self._make_inclusive([self._id_filter_arg(w),
-                                                 self._name_arg(w),
-                                                 self._location_arg(w),
-                                                 self._alternate_names_arg(w)]))
+                ret.append(self._make_inclusive([
+                    self._id_filter_arg(w),
+                    self._name_arg(w),
+                    self._location_arg(w),
+                    self._alternate_names_arg(w)
+                ]))
 
             ret = self._make_exclusive(ret)
 
@@ -361,19 +362,15 @@ class Session():
             }}}
 
     def _parse_interval_arg(self, interval):
-        '''
+        """
         An interval argument can be a number, string, or list
-
         - If it is a number, we will assume it is a minimum
-
         - If it is a list length 1, we will assume it is a minimum
-
         - If it is a list greater than 2, we will only use the first 2
           elements as a min/max
-
         - If it is a string, we will try to parse it as a set of comma
           separated values.
-        '''
+        """
         if interval is None:
             low, high = None, None
         elif isinstance(interval, Number):
@@ -399,41 +396,41 @@ class Session():
         return low, high
 
     def _make_inclusive(self, opts):
-        '''
-            Normally, the filtering options will be exclusive, i. e. if we are
-            searching on name='alaska' and location='north', we would only get
-            records that satisfy both criteria (criteria are AND'd together).
-            Setting the options to inclusive would yield records that satisfy
-            any of the criteria (OR'd together).
-        '''
+        """
+        Normally, the filtering options will be exclusive, i. e. if we are
+        searching on name='alaska' and location='north', we would only get
+        records that satisfy both criteria (criteria are AND'd together).
+        Setting the options to inclusive would yield records that satisfy
+        any of the criteria (OR'd together).
+        """
         if isinstance(opts, dict):
             return {'$or': [dict([i]) for i in opts.items()]}
         else:
             return {'$or': opts}
 
     def _make_exclusive(self, opts):
-        '''
-            Normally, the filtering options will be exclusive, i.e. if we are
-            searching on name='alaska' and location='north', we would only get
-            records that satisfy both criteria (criteria are AND'd together).
+        """
+        Normally, the filtering options will be exclusive, i.e. if we are
+        searching on name='alaska' and location='north', we would only get
+        records that satisfy both criteria (criteria are AND'd together).
 
-            This is fine for filtering criteria that have unique names.  But
-            sometimes we want multiple criteria for a single name, such as
-            when we want all items in a list to match another list.  In such
-            cases, we need to AND them explicitly.
-        '''
+        This is fine for filtering criteria that have unique names.  But
+        sometimes we want multiple criteria for a single name, such as
+        when we want all items in a list to match another list.  In such
+        cases, we need to AND them explicitly.
+        """
         if isinstance(opts, dict):
             return {'$and': [dict([i]) for i in opts.items()]}
         else:
             return {'$and': opts}
 
     def get_labels(self, identifier=None):
-        '''
+        """
         Right now we are getting labels and associated product types
         from the adios_db model code.  But it would be better managed
         if we eventually migrate this to labels stored in a database
         collection.
-        '''
+        """
         labels = types_to_labels.all_labels_dict
 
         if identifier is None:
@@ -454,14 +451,16 @@ class Session():
             return None
 
     def __getattr__(self, name):
-        # FixMe: This should be fully hiding the mongo client
-        #        so probably should NOT do this!
-        '''
-            Any referenced attributes that are not explicitly defined in this
-            class will be assumed to belong to the mongo client.  So we will
-            pass them down.
-        '''
+        """
+        Any referenced attributes that are not explicitly defined in this
+        class will be assumed to belong to the mongo client.  So we will
+        pass them down.
+
+        FixMe: This should be fully hiding the mongo client
+               so probably should NOT do this!
+        """
         warnings.warn("Using mongo methods directly is deprecated. "
-                      f"`{name}` functionality should be added to the Session class",
+                      f"`{name}` functionality should be added to the "
+                      "Session class",
                       DeprecationWarning)
         return getattr(self.mongo_client, name)

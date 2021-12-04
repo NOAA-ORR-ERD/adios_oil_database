@@ -1,7 +1,7 @@
-'''
-    This is where we handle the creation and initialization of the oil
-    database.
-'''
+"""
+This is where we handle the creation and initialization of the oil
+database.
+"""
 import logging
 
 from pymongo import ASCENDING
