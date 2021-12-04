@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 This is the "Quality Score" Code from the old OilLibrary
 
@@ -7,18 +6,18 @@ Not sure if we'll do that again, but it will certainly be different
 
 But maybe some of this code will be helpful
 """
-
 import numpy as np
+
 
 class ImportedRecordWithScore(object):
     def __init__(self, imported_rec):
         self.record = imported_rec
 
     def aggregate_score(self, Q_i, w_i=None):
-        '''
-            General method for aggregating a number of sub-scores.
-            We implement a weighted average for this.
-        '''
+        """
+        General method for aggregating a number of sub-scores.
+        We implement a weighted average for this.
+        """
         Q_i = np.array(Q_i)
 
         if w_i is None:
