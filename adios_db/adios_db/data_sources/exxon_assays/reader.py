@@ -1,17 +1,11 @@
 #!/usr/bin/env python
-
 import os
 from pathlib import Path
 import logging
 from openpyxl import load_workbook
 
-#from .. import field_name_sluggify
-
 from pprint import PrettyPrinter
-
 pp = PrettyPrinter(indent=2, width=120)
-
-# custom_slugify = field_name_sluggify
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +37,8 @@ class ExxonDataReader:
             header = indexfile.readline().strip()
             if header.split() != ['oil_name', 'file']:
                 raise ValueError(f"This: {data_index_file}\n"
-                                 "does not look like an Exxon Assay Index file")
+                                 "does not look like an Exxon Assay "
+                                 "Index file")
             index = []
 
             for line in indexfile:
@@ -85,7 +80,8 @@ class ExxonDataReader:
         sheetnames = wb.sheetnames
 
         if len(sheetnames) < 1:
-            raise ValueError(f'file: {filename} does not contain ' 'any sheets')
+            raise ValueError(f'file: {filename} does not contain '
+                             'any sheets')
 
         sheet = wb[sheetnames[0]]
 
