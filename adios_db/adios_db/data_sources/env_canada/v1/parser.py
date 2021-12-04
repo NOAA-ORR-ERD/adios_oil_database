@@ -70,7 +70,7 @@ label_map = {
 
 
 class EnvCanadaRecordParser(ParserBase):
-    '''
+    """
     A record class for the Environment Canada oil spreadsheet.  This is
     intended to be used with a set of data representing a single record
     from the spreadsheet.
@@ -83,17 +83,17 @@ class EnvCanadaRecordParser(ParserBase):
     - The data associated with any individual property will be a list of
       values corresponding to the weathered subsamples that exist for the
       oil record.
-    '''
+    """
     def __init__(self, values, conditions, file_props):
-        '''
-            :param values: A dictionary of property values.
-            :type values: A dictionary structure with raw property names
+        """
+        :param values: A dictionary of property values.
+        :type values: A dictionary structure with raw property names
+                      as keys, and associated values.
+        :param file_props: A dictionary of property values concerning the
+                           source xl spreadsheet.
+        :type file_props: A dictionary structure with property names
                           as keys, and associated values.
-            :param file_props: A dictionary of property values concerning the
-                               source xl spreadsheet.
-            :type file_props: A dictionary structure with property names
-                              as keys, and associated values.
-        '''
+        """
         self.values = self._slugify_keys(values)
         self.conditions = self._slugify_keys(conditions)
 
@@ -103,11 +103,11 @@ class EnvCanadaRecordParser(ParserBase):
         self.file_props = file_props
 
     def _slugify_keys(self, obj):
-        '''
-            Generate a structure like the incoming data, but with keys that
-            have been 'slugified', which is to say turned into a string that
-            is suitable for use as an object attribute.
-        '''
+        """
+        Generate a structure like the incoming data, but with keys that
+        have been 'slugified', which is to say turned into a string that
+        is suitable for use as an object attribute.
+        """
         if isinstance(obj, (tuple, list, set, frozenset)):
             return [self._slugify_keys(v)
                     for v in obj]
@@ -119,24 +119,24 @@ class EnvCanadaRecordParser(ParserBase):
             return obj
 
     def _generate_labels(self, obj):
-        '''
-            Generate a structure containing the original field label data.
-            - We will keep this separate from the actual data so not to make
-              the data structure unnecessarily complex.
-            - The hierarchy of the labels will closely match the data hierarchy
-              with the following exceptions
-              - The value at any particular node will be expanded to a dict
-                containing:
-                  {'label': <raw_label>,
-                   'value': <value>
-                   }
-              - This is only to contain label information.  If there is no
-                expandable value at a node, it will be considered a leaf node.
-                It will contain:
-                  {'label': <raw_label>,
-                   'value': None
-                   }
-        '''
+        """
+        Generate a structure containing the original field label data.
+        - We will keep this separate from the actual data so not to make
+          the data structure unnecessarily complex.
+        - The hierarchy of the labels will closely match the data hierarchy
+          with the following exceptions
+          - The value at any particular node will be expanded to a dict
+            containing:
+              {'label': <raw_label>,
+               'value': <value>
+               }
+          - This is only to contain label information.  If there is no
+            expandable value at a node, it will be considered a leaf node.
+            It will contain:
+              {'label': <raw_label>,
+               'value': None
+               }
+        """
         if isinstance(obj, (tuple, list, set, frozenset)):
             ret = [self._generate_labels(v) for v in obj]
 
@@ -213,13 +213,13 @@ class EnvCanadaRecordParser(ParserBase):
             pass
 
     def get_label(self, nav_list):
-        '''
-            For an attribute in our values hierarchy, get the original source
-            label information.
+        """
+        For an attribute in our values hierarchy, get the original source
+        label information.
 
-            Ex:
-                parser_obj.get_label(('gc_total_aromatic_hydrocarbon.tah'))
-        '''
+        Ex:
+            parser_obj.get_label(('gc_total_aromatic_hydrocarbon.tah'))
+        """
         if isinstance(nav_list, str):
             nav_list = nav_list.split('.')
 
@@ -233,10 +233,10 @@ class EnvCanadaRecordParser(ParserBase):
     @property
     @join_with(' ')
     def name(self):
-        '''
-            For now we will just concatenate all the names we see in the
-            list.  In the future, we will want to be a bit smarter.
-        '''
+        """
+        For now we will just concatenate all the names we see in the
+        list.  In the future, we will want to be a bit smarter.
+        """
         return self.values[None]['oil']
 
     @property
@@ -245,14 +245,14 @@ class EnvCanadaRecordParser(ParserBase):
 
     @property
     def source_id(self):
-        '''
-            We will use the ESTS codes in the record as the identifier.
+        """
+        We will use the ESTS codes in the record as the identifier.
 
-            ESTS codes are a series of numbers separated by a period '.'.
-            The first number in the series seems to identify the species of
-            the petroleum substance, and the rest identify a degree of
-            weathering.  So we will use just the first one.
-        '''
+        ESTS codes are a series of numbers separated by a period '.'.
+        The first number in the series seems to identify the species of
+        the petroleum substance, and the rest identify a degree of
+        weathering.  So we will use just the first one.
+        """
         primary_codes = set([str(int(str(c).split('.')[0]))
                              for c in self.ests_codes
                              if c is not None])
@@ -285,10 +285,10 @@ class EnvCanadaRecordParser(ParserBase):
 
     @property
     def reference(self):
-        '''
-            It has been decided that we will at this time use a hard-coded
-            reference for all records coming from the Env. Canada datasheet.
-        '''
+        """
+        It has been decided that we will at this time use a hard-coded
+        reference for all records coming from the Env. Canada datasheet.
+        """
         return {
             'reference': 'Personal communication from Fatemeh Mirnaghi (ESTS)'
                          ', date: April 21, 2020.',
@@ -325,15 +325,15 @@ class EnvCanadaRecordParser(ParserBase):
             return 'Crude Oil NOS'
 
     def _product_type_is_probably_refined(self):
-        '''
-            We don't have a lot of options determining what product type the
-            Env Canada records are.  The Source, Comments, and Reference fields
-            might be used, but they are pretty unreliable.
+        """
+        We don't have a lot of options determining what product type the
+        Env Canada records are.  The Source, Comments, and Reference fields
+        might be used, but they are pretty unreliable.
 
-            But we might be able to make some guesses based on the name of the
-            product.  This is definitely not a great way to do it, but we need
-            to make a determination somehow.
-        '''
+        But we might be able to make some guesses based on the name of the
+        product.  This is definitely not a great way to do it, but we need
+        to make a determination somehow.
+        """
         words = self.name.lower().split()
 
         for word in words:
@@ -352,11 +352,11 @@ class EnvCanadaRecordParser(ParserBase):
         return False
 
     def vertical_slice(self, index):
-        '''
-            All values in our self.values structure will be a list that
-            conforms to the weathering subsamples for a record
-            Recursively navigate values structure
-        '''
+        """
+        All values in our self.values structure will be a list that
+        conforms to the weathering subsamples for a record
+        Recursively navigate values structure
+        """
         return dict([(cat_key,
                       dict([(k, v[index]) for k, v in cat_val.items()]))
                      for cat_key, cat_val in self.values.items()])
@@ -409,7 +409,7 @@ class EnvCanadaRecordParser(ParserBase):
 
 
 class EnvCanadaSampleParser(ParserBase):
-    '''
+    """
     A sample class for the Environment Canada oil spreadsheet.  This is
     intended to be used with a set of data representing a single subsample
     inside an oil record.
@@ -420,7 +420,7 @@ class EnvCanadaSampleParser(ParserBase):
     - The data associated with any individual property will be a single
       scalar value corresponding to a weathered subsample that exists
       for an oil record.
-    '''
+    """
     attr_map = {
         # any attributes that are a simple mapping of the data
         'benzene': 'benzene_alkylated_benzene',
@@ -440,11 +440,11 @@ class EnvCanadaSampleParser(ParserBase):
     }
 
     def __init__(self, values, conditions, labels):
-        '''
-            :param values: A dictionary of property values.
-            :type values: A dictionary structure with raw property names
-                          as keys, and associated values.
-        '''
+        """
+        :param values: A dictionary of property values.
+        :type values: A dictionary structure with raw property names
+                      as keys, and associated values.
+        """
         self.values = values
         self.labels = labels
         self.conditions = conditions
@@ -479,11 +479,11 @@ class EnvCanadaSampleParser(ParserBase):
             return default
 
     def __getattr__(self, name):
-        '''
-            The attributes are mapped to simpler names than the original
-            slugified names in the datasheet.  Grab the value referenced by
-            the simplified name
-        '''
+        """
+        The attributes are mapped to simpler names than the original
+        slugified names in the datasheet.  Grab the value referenced by
+        the simplified name
+        """
         try:
             ret = self.values[name]
         except Exception:
@@ -492,13 +492,13 @@ class EnvCanadaSampleParser(ParserBase):
         return ret
 
     def get_label(self, nav_list):
-        '''
-            For an attribute in our values hierarchy, get the original source
-            label information.
+        """
+        For an attribute in our values hierarchy, get the original source
+        label information.
 
-            Ex:
-                parser_obj.get_label(('gc_total_aromatic_hydrocarbon.tah'))
-        '''
+        Ex:
+            parser_obj.get_label(('gc_total_aromatic_hydrocarbon.tah'))
+        """
         if isinstance(nav_list, str):
             nav_list = nav_list.split('.')
 
@@ -513,9 +513,9 @@ class EnvCanadaSampleParser(ParserBase):
         return labels['label']
 
     def get_conditions(self, name):
-        '''
-            The conditions object is indexed in the same way as the values.
-        '''
+        """
+        The conditions object is indexed in the same way as the values.
+        """
         try:
             ret = self.conditions[name]
         except Exception:
@@ -542,17 +542,17 @@ class EnvCanadaSampleParser(ParserBase):
 
     @property
     def densities(self):
-        '''
-            There is now a single category, density.
-            Attributes within the category conform to an expected sequential
-            block consisting of:
-            - Density
-            - Standard Deviation
-            - Replicates
-            - Method
+        """
+        There is now a single category, density.
+        Attributes within the category conform to an expected sequential
+        block consisting of:
+        - Density
+        - Standard Deviation
+        - Replicates
+        - Method
 
-            There will be 3 such blocks in the category
-        '''
+        There will be 3 such blocks in the category
+        """
         ret = dict(list(self.values['density'].items()))
 
         for attr in ('ref_temp', 'unit'):
@@ -563,14 +563,14 @@ class EnvCanadaSampleParser(ParserBase):
 
     @property
     def dvis(self):
-        '''
-            There is now a single viscosity category.
+        """
+        There is now a single viscosity category.
 
-            Note: Sometimes there is a greater than ('>') indication for a
-                  viscosity value.  In this case, we parse the float value
-                  as an interval with the operator indicating whether it is
-                  a min or a max.
-        '''
+        Note: Sometimes there is a greater than ('>') indication for a
+              viscosity value.  In this case, we parse the float value
+              as an interval with the operator indicating whether it is
+              a min or a max.
+        """
         ret = dict(list(self.values['viscosity'].items()))
 
         for attr in ('ref_temp', 'unit', 'condition'):
@@ -597,10 +597,10 @@ class EnvCanadaSampleParser(ParserBase):
 
     @property
     def ifts(self):
-        '''
-            Now the only tricky bit is to merge the surface/interfacial tension
-            attributes.
-        '''
+        """
+        Now the only tricky bit is to merge the surface/interfacial tension
+        attributes.
+        """
         ret = dict(list(self.values['surface_interfacial_tension'].items()))
         conditions = self.conditions['surface_interfacial_tension']
 
@@ -647,11 +647,11 @@ class EnvCanadaSampleParser(ParserBase):
 
     @property
     def emulsions(self):
-        '''
-            The emulsions struct is more complicated in that it is a mixed bag
-            of different measurements, each with their own units, temperatures,
-            and age.  So we just pass the conditions as a separate attribute.
-        '''
+        """
+        The emulsions struct is more complicated in that it is a mixed bag
+        of different measurements, each with their own units, temperatures,
+        and age.  So we just pass the conditions as a separate attribute.
+        """
         ret = dict(list(self.values['emulsion'].items()))
         ret['conditions'] = self.conditions['emulsion']
 
@@ -659,7 +659,7 @@ class EnvCanadaSampleParser(ParserBase):
 
     @property
     def chromatography(self):
-        '''
+        """
         The Evironment Canada data sheet contains data for gas
         chromatography analysis, which we will try to capture.
 
@@ -673,7 +673,7 @@ class EnvCanadaSampleParser(ParserBase):
         - Dimensional parameters are (weathering).
 
         - Values Units are split between mg/g and percent.
-        '''
+        """
         return dict(
             list(self.values['gc_tph'].items()) +
             list(self.values['gc_tsh'].items()) +

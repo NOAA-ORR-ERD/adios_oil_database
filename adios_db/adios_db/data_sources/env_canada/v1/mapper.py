@@ -14,20 +14,20 @@ logger = logging.getLogger(__name__)
 
 
 class EnvCanadaRecordMapper(MapperBase):
-    '''
-        A translation/conversion layer for the Environment Canada imported
-        record object.
-        This is intended to be used interchangeably with either an Environment
-        Canada record or record parser object.  Its purpose is to generate
-        named attributes that are suitable for creation of a NOAA Oil Database
-        record.
-    '''
+    """
+    A translation/conversion layer for the Environment Canada imported
+    record object.
+    This is intended to be used interchangeably with either an Environment
+    Canada record or record parser object.  Its purpose is to generate
+    named attributes that are suitable for creation of a NOAA Oil Database
+    record.
+    """
     def __init__(self, record):
-        '''
-            :param record: A parsed object representing a single oil or
-                           refined product.
-            :type record: A record parser object.
-        '''
+        """
+        :param record: A parsed object representing a single oil or
+                       refined product.
+        :type record: A record parser object.
+        """
         if hasattr(record, 'dict'):
             self.record = record
         else:
@@ -57,9 +57,9 @@ class EnvCanadaRecordMapper(MapperBase):
 
     @metadata.setter
     def metadata(self, value):
-        '''
-            Only allow the labels to be set
-        '''
+        """
+        Only allow the labels to be set
+        """
         if 'labels' in value:
             self.oil_labels = value['labels']
 
@@ -121,12 +121,12 @@ class EnvCanadaSampleMapper(MapperBase):
         self.generate_sample_id_attrs(sample_id, ests_code)
 
     def generate_sample_id_attrs(self, sample_id, ests_code):
-        '''
-            sample_id: The value we will use to internally identify a sample.
-                       This will be mapped to metadata.name
-            ests_code: This is the identifier that Env Canada uses for oil
-                       samples. This will be mapped to metadata.sample_id
-        '''
+        """
+        :param sample_id: The value we will use to internally identify
+                          a sample.  This will be mapped to metadata.name
+        :param ests_code: This is the identifier that Env Canada uses for oil
+                          samples. This will be mapped to metadata.sample_id
+        """
         m = {}
 
         if sample_id == 0:
@@ -167,9 +167,9 @@ class EnvCanadaSampleMapper(MapperBase):
         return rec
 
     def __getattr__(self, name):
-        '''
-            anything we don't explicitly define should fall through here
-        '''
+        """
+        anything we don't explicitly define should fall through here
+        """
         return getattr(self.parser, name)
 
     @property
@@ -237,7 +237,8 @@ class EnvCanadaSampleMapper(MapperBase):
 
             if ref_temp is not None:
                 cuts.append({
-                    'fraction': self.measurement(frac, '%', unit_type='massfraction'),
+                    'fraction': self.measurement(frac, '%',
+                                                 unit_type='massfraction'),
                     'vapor_temp': self.measurement(ref_temp, 'C')
                 })
 
@@ -455,11 +456,11 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def SARA(self):
-        '''
-            Note: Each measurement appears to be associated with a method.
-                  However the Sara class only supports a single method as a
-                  first order attribute.
-        '''
+        """
+        Note: Each measurement appears to be associated with a method.
+              However the Sara class only supports a single method as a
+              first order attribute.
+        """
         ret = {}
         sara_category = self.parser.sara_total_fractions
 
@@ -481,28 +482,28 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def compounds(self):
-        '''
-            Gather up all the groups of compounds scattered throughout the EC
-            and compile them into an organized list.
+        """
+        Gather up all the groups of compounds scattered throughout the EC
+        and compile them into an organized list.
 
-            Compounds apply to:
-            - individual chemicals
-            - mixed isomers
+        Compounds apply to:
+        - individual chemicals
+        - mixed isomers
 
-            Compounds do not apply to:
-            - waxes
-            - SARA
-            - Sulfur
-            - Carbon
+        Compounds do not apply to:
+        - waxes
+        - SARA
+        - Sulfur
+        - Carbon
 
-            Note: Although we could in theory assign multiple groups to a
-                  particular compound, we will only assign one group to the
-                  list.  This group will have a close relationship to the
-                  category of compounds where it is found in the EC datasheet.
-            Note: Most of the compound groups don't have replicates or
-                  standard deviation.  We will not add these attributes if
-                  they aren't found within the attribute group.
-        '''
+        Note: Although we could in theory assign multiple groups to a
+              particular compound, we will only assign one group to the
+              list.  This group will have a close relationship to the
+              category of compounds where it is found in the EC datasheet.
+        Note: Most of the compound groups don't have replicates or
+              standard deviation.  We will not add these attributes if
+              they aren't found within the attribute group.
+        """
         ret = []
 
         groups = [
@@ -548,19 +549,19 @@ class EnvCanadaSampleMapper(MapperBase):
 
     @property
     def bulk_composition(self):
-        '''
-            Gather up all the groups of compounds that comprise a 'bulk'
-            amount and compile them into an organized list.
+        """
+        Gather up all the groups of compounds that comprise a 'bulk'
+        amount and compile them into an organized list.
 
-            Data points that are classified in bulk composition:
-            - wax
-            - water
-            - Sulfur
-            - GC-TPH
-            - GC-TSH
-            - GC-TAH
-            - Hydrocarbon Content Ratio
-        '''
+        Data points that are classified in bulk composition:
+        - wax
+        - water
+        - Sulfur
+        - GC-TPH
+        - GC-TSH
+        - GC-TAH
+        - Hydrocarbon Content Ratio
+        """
         ret = []
 
         gc_method = self.prepend_ests(
@@ -664,7 +665,7 @@ class EnvCanadaSampleMapper(MapperBase):
 
     def compounds_in_group(self, category, group_category,
                            unit, unit_type, filter_compounds=True):
-        '''
+        """
         :param category: The category attribute containing the data
         :param group_category: The category attribute containing the
                                group label
@@ -688,7 +689,7 @@ class EnvCanadaSampleMapper(MapperBase):
                     standard_deviation: 0.1
                 }
             }
-        '''
+        """
         cat_obj = getattr(self.parser, category)
         conditions = self.parser.get_conditions(category)
 
@@ -721,11 +722,11 @@ class EnvCanadaSampleMapper(MapperBase):
                                     method=method, groups=[group_name])
 
     def transpose_dict_of_lists(self, obj):
-        '''
-            A common step with the parsed data is to convert a dict containing
-            an orthoganal set of list values into a list of dicts, each dict
-            having an indexed slice of the list values
-        '''
+        """
+        A common step with the parsed data is to convert a dict containing
+        an orthoganal set of list values into a list of dicts, each dict
+        having an indexed slice of the list values
+        """
         ret = []
 
         for k, v in obj.items():

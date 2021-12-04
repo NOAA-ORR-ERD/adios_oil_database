@@ -12,7 +12,6 @@ from numpy import isclose
 #        and VolumeFraction units available for getting unit type.
 #        GetUnitNames and GetUnitAbbreviation should help
 #        If anything else is missing, we should add it there.
-
 from nucos.unit_conversion import ConvertDataUnits, Simplify, UNIT_TYPES
 
 from adios_db.util import sigfigs
@@ -42,21 +41,21 @@ for u_type in ('Volume Fraction', 'Mass Fraction'):
 
 @dataclass
 class ECMeasurementDataclass:
-    '''
-        An incoming density will have the attributes:
-        - value
-        - unit_of_measure
-        - temperature
-        - condition_of_analysis
-        - standard_deviation
-        - replicates
-        - method
+    """
+    An incoming density will have the attributes:
+    - value
+    - unit_of_measure
+    - temperature
+    - condition_of_analysis
+    - standard_deviation
+    - replicates
+    - method
 
-        We will output an object with the attributes:
-        - measurement (Measurement type)
-        - method
-        - ref_temp (Temperature Measurement type)
-    '''
+    We will output an object with the attributes:
+    - measurement (Measurement type)
+    - method
+    - ref_temp (Temperature Measurement type)
+    """
     property_group: str = None
     property_name: str = None
     value: float = None
@@ -82,10 +81,10 @@ class ECMeasurementDataclass:
                 setattr(self, f.name, None)
 
     def parse_temperature_string(self):
-        '''
-            The temperature field can have varying content, like '15 °C'
-            or simply '15', in which case we will assume it is Celsius.
-        '''
+        """
+        The temperature field can have varying content, like '15 °C'
+        or simply '15', in which case we will assume it is Celsius.
+        """
         if isinstance(self.temperature, str) and len(self.temperature) > 0:
             self.ref_temp, self.ref_temp_unit = re.findall(r'[\d\.]*\w+',
                                                            self.temperature)
@@ -103,13 +102,13 @@ class ECMeasurementDataclass:
             self.ref_temp_unit = None
 
     def fix_unit(self):
-        '''
-            Some units are in the form 'X or Y'.  We will just choose the
-            first one.
+        """
+        Some units are in the form 'X or Y'.  We will just choose the
+        first one.
 
-            Temperature units (e.g. '°C') need to be stripped of the degree
-            character
-        '''
+        Temperature units (e.g. '°C') need to be stripped of the degree
+        character
+        """
         if self.unit_of_measure:
             unit = self.unit_of_measure.split(' or ')[0]
             unit = unit.lstrip('°').lstrip('¬∞')
@@ -145,11 +144,11 @@ class ECMeasurementDataclass:
                 self.unit_type = None
 
     def determine_min_max(self):
-        '''
-            The value field in the Env. Canada measurement row can have
-            relational annotations like '>N' or '<N'.  In these cases, we turn
-            them into an interval pair.
-        '''
+        """
+        The value field in the Env. Canada measurement row can have
+        relational annotations like '>N' or '<N'.  In these cases, we turn
+        them into an interval pair.
+        """
         if isinstance(self.value, (int, float, type(None))):
             pass
         elif self.value[0] == '<':
@@ -220,9 +219,9 @@ class ECViscosity(ECMeasurement):
     value_attr = 'viscosity'
 
     def py_json(self):
-        '''
-            What do we do when the value is 'Too Viscous'?
-        '''
+        """
+        What do we do when the value is 'Too Viscous'?
+        """
         ret = super().py_json()
 
         value, unit = self.condition_of_analysis.split()[-2:]
@@ -243,9 +242,9 @@ class ECInterfacialTension(ECMeasurement):
     value_attr = 'tension'
 
     def py_json(self):
-        '''
-            What do we do when the value is 'Too Viscous'?
-        '''
+        """
+        What do we do when the value is 'Too Viscous'?
+        """
         ret = super().py_json()
 
         if 'salt water' in self.condition_of_analysis:
@@ -444,7 +443,7 @@ mapping_list = [
      'environmental_behavior.ests_evaporation_test.+',
      ECEvaporationEq, 'sample'),
     # Todo: Pan evaporation is something new.  Need to discuss.
-    #('Pan Evaporation (% Mass Loss).0h', 'environmental_behavior.????',
+    # ('Pan Evaporation (% Mass Loss).0h', 'environmental_behavior.????',
     # ECPanEvaporation, 'sample'),
     ('Emulsion.Emulsion Visual Stability',
      'environmental_behavior.emulsions.+.visual_stability',
@@ -783,7 +782,7 @@ property_scope_map = {p: s for p, m, t, s in mapping_list}
 
 
 class EnvCanadaCsvRecordParser(ParserBase):
-    '''
+    """
     A record class for the Env. Canada .csv flat data file.
     This is intended to be used with a set of data representing a single
     oil record from the data file.  This set is in the form of a list
@@ -839,15 +838,15 @@ class EnvCanadaCsvRecordParser(ParserBase):
         * standard_deviation
         * replicates
         * method
-    '''
+    """
     def __init__(self, values):
-        '''
-            :param values: A list of dictionary objects containing property
-                           values.  Each object contains information about a
-                           single measurement.
-            :type values: A list of dictionary structures with raw property
-                          names as keys, and associated values.
-        '''
+        """
+        :param values: A list of dictionary objects containing property
+                       values.  Each object contains information about a
+                       single measurement.
+        :type values: A list of dictionary structures with raw property
+                      names as keys, and associated values.
+        """
         super().__init__(self.prune_incoming(values))
 
         self.set_aggregate_oil_props()
@@ -855,11 +854,11 @@ class EnvCanadaCsvRecordParser(ParserBase):
         self.set_measurement_props()
 
     def prune_incoming(self, values):
-        '''
-            The Incoming objects contain some unwanted garbage from the
-            spreadsheet that would be better handled before we start parsing
-            anything.
-        '''
+        """
+        The Incoming objects contain some unwanted garbage from the
+        spreadsheet that would be better handled before we start parsing
+        anything.
+        """
         if len(values) == 0:
             return  # nothing to prune
 
@@ -873,13 +872,13 @@ class EnvCanadaCsvRecordParser(ParserBase):
         return values
 
     def set_aggregate_oil_props(self):
-        '''
+        """
         These are properties commonly associated with an oil.
 
         There is a copy of this information inside every measurement,
         so we need to reconcile them in order to come up with an
         aggregate value with which to set the oil properties.
-        '''
+        """
         for attr in ('oil_name', 'ests', 'source', 'date_sample_received',
                      'comments'):
             self.set_aggregate_oil_property(attr)
@@ -905,7 +904,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
         self.oil_obj['oil_id'] = oil_id
 
     def set_aggregate_oil_property(self, attr):
-        '''
+        """
         Oil scoped properties are redundantly stored in each measurement
         object in our list, so they need to be accumulated and treated in
         some way depending on the type of data we would like to set in the
@@ -923,7 +922,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
           This isn't perfect, but there are only a handful of oil scoped
           attributes and we can make an exception if there is an obvious
           problem.
-        '''
+        """
         to_type = property_type_map[attr]
 
         if to_type is str:
@@ -963,30 +962,30 @@ class EnvCanadaCsvRecordParser(ParserBase):
                 raise
 
     def set_aggregate_subsample_props(self):
-        '''
-            These are properties commonly associated with a sub-sample.
-            There is a copy of this information inside every measurement,
-            so we need to reconcile them to determine the identifying
-            properties of each sub-sample.
+        """
+        These are properties commonly associated with a sub-sample.
+        There is a copy of this information inside every measurement,
+        so we need to reconcile them to determine the identifying
+        properties of each sub-sample.
 
-            Sub-sample properties:
+        Sub-sample properties:
 
-            - ests_id: One common value per sub-sample.  This could be numeric,
-                       so we force it to be a string.
+        - ests_id: One common value per sub-sample.  This could be numeric,
+                   so we force it to be a string.
 
-            - weathering_fraction: One value per sub-sample.  These values
-                                   look like some kind of code that EC uses.
-                                   Probably not useful to us.
+        - weathering_fraction: One value per sub-sample.  These values
+                               look like some kind of code that EC uses.
+                               Probably not useful to us.
 
-            - weathering_percent: One common value per sub-sample.  These
-                                  values are mostly a string in the format
-                                  'N.N%'.  We will convert to a structure
-                                  suitable for a Measurement type.
+        - weathering_percent: One common value per sub-sample.  These
+                              values are mostly a string in the format
+                              'N.N%'.  We will convert to a structure
+                              suitable for a Measurement type.
 
-            - weathering_method: One common value per sub-sample.  This is
-                                 information that might be good to save, but
-                                 it doesn't fit into the Adios oil model.
-        '''
+        - weathering_method: One common value per sub-sample.  This is
+                             information that might be good to save, but
+                             it doesn't fit into the Adios oil model.
+        """
         first_objs = [v for v in self.src_values
                       if v['property_id'] == 'Density_0']
 
@@ -1030,14 +1029,14 @@ class EnvCanadaCsvRecordParser(ParserBase):
 
     @property
     def API(self):
-        '''
-            API Gravity needs to be stored as an oil property, but it is
-            in fact a sub-sample scoped property.  So we need to figure out
-            the fresh sample ID and get that specific API gravity property.
+        """
+        API Gravity needs to be stored as an oil property, but it is
+        in fact a sub-sample scoped property.  So we need to figure out
+        the fresh sample ID and get that specific API gravity property.
 
-            Note: API for Biodiesels shows a weathering value of 'None',
-                  but clearly it is the "fresh sample".  We need to allow it.
-        '''
+        Note: API for Biodiesels shows a weathering value of 'None',
+              but clearly it is the "fresh sample".  We need to allow it.
+        """
         api_obj = [v for v in self.src_values
                    if v['ests_id'] == self.fresh_sample_id
                    and v['property_id'] == 'APIGravity_3']
@@ -1053,49 +1052,49 @@ class EnvCanadaCsvRecordParser(ParserBase):
         return api_obj['value']
 
     def set_measurement_props(self):
-        '''
-            All objects in the incoming list have the primary function of
-            describing a particular measurement of an oil.  Here we iterate
-            over these objects.
-        '''
+        """
+        All objects in the incoming list have the primary function of
+        describing a particular measurement of an oil.  Here we iterate
+        over these objects.
+        """
         for obj in self.src_values:
             self.set_measurement_property(obj)
 
     def set_measurement_property(self, obj_in):
-        '''
-            Set a single measurement from an incoming measurement object
+        """
+        Set a single measurement from an incoming measurement object
 
-            Basically we need to decide how to apply the property to our record
+        Basically we need to decide how to apply the property to our record
 
-            - oil scoped properties are applied to the oil object.
-            - sample scoped properties can are applied to a particular
-              sub-sample determined by the object
+        - oil scoped properties are applied to the oil object.
+        - sample scoped properties can are applied to a particular
+          sub-sample determined by the object
 
-            The properties that describe the measurement are:
+        The properties that describe the measurement are:
 
-            - value_id: This is a concatenation of the ests and property_id
-                        fields delimited with underscores '_'.
-            - property_id: This is a concatenation of the camel cased
-                           property_name and, as far as I can tell, the index
-                           value of the sequence in which the property appears.
-            - property_group: This is the name of a group or category with
-                              which a set of measurements might be associated.
-            - property_name: The prose name of the property that is measured.
-            - unit_of_measure: The units for which the measurement describes
-                               a quantity.
-            - temperature: The temperature at which the measurement was taken.
-            - condition_of_analysis: A reasonably free-form line of text that
-                                     describes some special condition of the
-                                     measurement, such as a prerequisite for
-                                     measurement, a specification on the type
-                                     of measurement, or its result.
-            - value: A number representing the quantity of the measurement
-            - standard_deviation: The amount of variation in the set of
-                                  measurements taken.
-            - replicates: A number representing the quantity of repeated
-                          experiments where measurements were taken.
-            - method: A line of text showing the name of the testing method.
-        '''
+        - value_id: This is a concatenation of the ests and property_id
+                    fields delimited with underscores '_'.
+        - property_id: This is a concatenation of the camel cased
+                       property_name and, as far as I can tell, the index
+                       value of the sequence in which the property appears.
+        - property_group: This is the name of a group or category with
+                          which a set of measurements might be associated.
+        - property_name: The prose name of the property that is measured.
+        - unit_of_measure: The units for which the measurement describes
+                           a quantity.
+        - temperature: The temperature at which the measurement was taken.
+        - condition_of_analysis: A reasonably free-form line of text that
+                                 describes some special condition of the
+                                 measurement, such as a prerequisite for
+                                 measurement, a specification on the type
+                                 of measurement, or its result.
+        - value: A number representing the quantity of the measurement
+        - standard_deviation: The amount of variation in the set of
+                              measurements taken.
+        - replicates: A number representing the quantity of repeated
+                      experiments where measurements were taken.
+        - method: A line of text showing the name of the testing method.
+        """
         always_add = ('Emulsion Visual Stability',)
 
         if (self.value_is_invalid(obj_in['value']) and
@@ -1132,11 +1131,11 @@ class EnvCanadaCsvRecordParser(ParserBase):
 
     @property
     def sample_ids(self):
-        '''
-            This function relies on dict having keys ordered by the sequence
-            of insertion into the dict.  This is true of Python 3.6, but could
-            break in the future.
-        '''
+        """
+        This function relies on dict having keys ordered by the sequence
+        of insertion into the dict.  This is true of Python 3.6, but could
+        break in the future.
+        """
         sample_ids = {v['ests_id']: None for v in self.src_values}
         return list(sample_ids.keys())
 
@@ -1157,15 +1156,15 @@ class EnvCanadaCsvRecordParser(ParserBase):
             return 'Crude Oil NOS'
 
     def _product_type_is_probably_refined(self):
-        '''
-            We don't have a lot of options determining what product type the
-            Env Canada records are.  The Source, Comments, and Reference fields
-            might be used, but they are pretty unreliable.
+        """
+        We don't have a lot of options determining what product type the
+        Env Canada records are.  The Source, Comments, and Reference fields
+        might be used, but they are pretty unreliable.
 
-            But we might be able to make some guesses based on the name of the
-            product.  This is definitely not a great way to do it, but we need
-            to make a determination somehow.
-        '''
+        But we might be able to make some guesses based on the name of the
+        product.  This is definitely not a great way to do it, but we need
+        to make a determination somehow.
+        """
         name = ' '.join({v['oil_name'] for v in self.src_values
                          if v['oil_name'] is not None
                          and v['oil_name'] != 'None'})
