@@ -1,4 +1,5 @@
-""" Cornice services.
+"""
+Cornice Oil services.
 """
 import sys
 import logging
@@ -34,9 +35,9 @@ memoized_results = {}  # so it is visible to other functions
 
 
 def memoize_oil_arg(func):
-    '''
-        Decorator function to cache function results by oil_id
-    '''
+    """
+    Decorator function to cache function results by oil_id
+    """
     def memoized_func(oil):
         key = oil['oil_id']
 
@@ -51,11 +52,11 @@ def memoize_oil_arg(func):
 
 @oil_api.get()
 def get_oils(request):
-    '''
-        We will do one of two possible things here.
-        1. Return the searchable fields for all oils in JSON format.
-        2. Return the JSON record of a particular oil.
-    '''
+    """
+    We will do one of two possible things here.
+    1. Return the searchable fields for all oils in JSON format.
+    2. Return the JSON record of a particular oil.
+    """
     obj_id = obj_id_from_url(request)
 
     logger.info('GET /oils: id: {}, options: {}'.format(obj_id, request.GET))
@@ -106,19 +107,19 @@ def json_api_results(results, page_size):
 
 
 def get_search_params(request):
-    '''
-        Process the incoming search directives and convert them into search
-        parameters compatible with Session.query().
+    """
+    Process the incoming search directives and convert them into search
+    parameters compatible with Session.query().
 
-        query options:
-        - q: A string that is matched against the oil name, location.  The
-             matching will be case insensitive.
-        - qApi: A range of numbers in which the API of the oil will be
-                filtered.
-        - qType: The type of oil to match when filtering the results.
-        - qLabels: A list of label strings that will be matched against the oil
-                   labels to filter the results.
-    '''
+    query options:
+    - q: A string that is matched against the oil name, location.  The
+         matching will be case insensitive.
+    - qApi: A range of numbers in which the API of the oil will be
+            filtered.
+    - qType: The type of oil to match when filtering the results.
+    - qLabels: A list of label strings that will be matched against the oil
+               labels to filter the results.
+    """
     query_out = {}
     xform_opts = {'q': 'text',
                   'qApi': 'api',
@@ -135,11 +136,11 @@ def get_search_params(request):
 
 
 def get_sort_params(request):
-    '''
-        Note: Most of the fields that we want to sort on are now found in the
-              metadata attribute.  So to do a MongoDB sort, we need to
-              specify the full field path in dotted notation.
-    '''
+    """
+    Note: Most of the fields that we want to sort on are now found in the
+          metadata attribute.  So to do a MongoDB sort, we need to
+          specify the full field path in dotted notation.
+    """
     sort = request.GET.get('sort')
     direction = request.GET.get('dir', 'asc')
 
@@ -249,10 +250,10 @@ def update_oil(request):
 
 
 def _trace_item(filename, lineno, function, text):
-    '''
-        Package up the trace item information into a py_json struct.
-        Mainly this keeps the traceback parsing loop cleaner.
-    '''
+    """
+    Package up the trace item information into a py_json struct.
+    Mainly this keeps the traceback parsing loop cleaner.
+    """
     return {'file': filename,
             'lineno': lineno,
             'function': function,
@@ -262,13 +263,13 @@ def _trace_item(filename, lineno, function, text):
 @oil_api.patch()
 @can_modify_db
 def patch_oil(request):
-    '''
-        This seems kinda new.
-        It is apparently used for partial record updates, and is what the
-        ember JSON-API adapters use when updating records.
+    """
+    This seems kinda new.
+    It is apparently used for partial record updates, and is what the
+    ember JSON-API adapters use when updating records.
 
-        https://tools.ietf.org/html/rfc5789#section-2
-    '''
+    https://tools.ietf.org/html/rfc5789#section-2
+    """
     return update_oil(request)
 
 
@@ -312,14 +313,14 @@ def generate_jsonapi_response_from_oil(oil_obj):
 
 @memoize_oil_arg
 def get_oil_searchable_fields(oil):
-    '''
+    """
     Since end users are updating records in an immediate (blur) fashion,
     there could be many records that are only partially filled in.
     So we need to be very tolerant of bad records here.
 
     However, searching on bad records being bad is, well, OK.
     As long as it doesn't crash
-    '''
+    """
     try:
         meta = oil['metadata']
 
@@ -350,9 +351,9 @@ def get_oil_searchable_fields(oil):
 
 
 def get_oil_all_fields(oil):
-    '''
+    """
     Get the full record in JSON API compliant form.
-    '''
+    """
     logger.info(f'oil object oil_id: {oil["oil_id"]}')
     oil.pop('_id', None)
 
