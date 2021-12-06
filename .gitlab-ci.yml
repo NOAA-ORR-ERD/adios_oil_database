@@ -15,11 +15,32 @@ variables:
   DAST_USE_AJAX_SPIDER: "true"
 
 stages:
+  - maintenance
   - test
   - build
   - verify
   - deploy_db
   - deploy
+
+sync_with_git_prod:
+  stage: maintenance
+  only: schedules
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    APP_NETWORK: adios_net
+    PORT_MAPPING: 8084:9898
+  script:
+    - ls -la
+  tags:
+    - adios-stage
+    - maintenance
+
+
+
+
 
 test_develop:
   stage: test
