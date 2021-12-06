@@ -24,8 +24,7 @@ stages:
 
 sync_with_git_prod:
   stage: maintenance
-  only:
-    - schedules
+  when: manual
   
   environment:
     name: stage
