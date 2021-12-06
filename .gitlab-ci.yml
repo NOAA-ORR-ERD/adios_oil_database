@@ -24,7 +24,9 @@ stages:
 
 sync_with_git_prod:
   stage: maintenance
-  only: schedules
+  only:
+    - schedules
+  
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
