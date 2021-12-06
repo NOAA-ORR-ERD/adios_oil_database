@@ -16,11 +16,11 @@ variables:
 
 stages:
   - maintenance
-  - test
-  - build
-  - verify
-  - deploy_db
-  - deploy
+#  - test
+#  - build
+#  - verify
+#  - deploy_db
+#  - deploy
 
 sync_with_git_prod:
   stage: maintenance
