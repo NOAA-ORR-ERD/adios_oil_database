@@ -16,9 +16,25 @@ class EnumValidator:
         :param case_insensitive=False: whether you want the test to be
                                        case-insensitive.
                                        Only works for string values, of course.
+
+        Note: It is possible to pass in a set() type for our valid items.
+              This has a non-obvious side effect on the messages we generate
+              in that the order of the items is not guaranteed from one run
+              to the next.
+              This can cause a lot of churn in the noaa-oil-data project,
+              as a new commit triggers a validation process, which can
+              potentially update the status messages for any record in the
+              repo.  And any change in a record will trigger a new commit.
+              So it has been observed that a set, even a small one with only
+              two items, will alternate its items back and forth, generating
+              a *bunch* of redundant commits.
+              So it would be best here if we ensured our valid_items has a
+              consistent order.
         """
         if case_insensitive:
-            valid_items = [item.lower() for item in valid_items]
+            valid_items = sorted([item.lower() for item in valid_items])
+        else:
+            valid_items = sorted(valid_items)
 
         self.valid_items = valid_items
         self.err_msg = err_msg
