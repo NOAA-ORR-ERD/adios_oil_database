@@ -34,7 +34,7 @@ class Test_EnumValidator():
         result = val(item)
         print(result)
         assert "item" in result[0]
-        assert "['this', 'That', 'the other']" in result[0]
+        assert "['That', 'the other', 'this']" in result[0]
 
     @pytest.mark.parametrize("item, expected", [("thi", []),
                                                 ("thats", []),
