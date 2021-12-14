@@ -11,6 +11,7 @@ def test_init_empty():
     assert rs.review_date == ""
     assert rs.notes == ""
 
+
 def test_json_empty():
     rs = ReviewStatus()
 
@@ -40,6 +41,7 @@ def test_set_everything():
         'notes': 'This is a meaningless note.'
     }
 
+
 @pytest.mark.parametrize('status', ["Not Reviewed",
                                     "Under Review",
                                     "Review Complete"])
@@ -51,6 +53,7 @@ def test_validation_good(status):
     msgs = rs.validate()
 
     assert not msgs
+
 
 def test_validation_bad():
     rs = ReviewStatus()
@@ -87,4 +90,3 @@ def test_validation_date_bad():
 
     assert len(msgs) == 1
     assert 'W011' in msgs[0]
-

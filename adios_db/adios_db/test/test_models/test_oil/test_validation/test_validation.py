@@ -3,14 +3,13 @@ tests of the validation code
 
 most need to be updated to test validating an Oil object directly
 """
-
 import copy
 import json
 from pathlib import Path
 import math
 import pytest
 
-import unit_conversion as uc
+import nucos as uc
 
 from adios_db.computation import physical_properties
 from adios_db.models.oil.oil import Oil
@@ -19,8 +18,7 @@ from adios_db.models.oil.physical_properties import DensityPoint
 from adios_db.models.common.measurement import *
 from adios_db.models.oil.validation.validate import (validate_json, validate)
 
-from adios_db.models.oil.validation import (unpack_status,
-                                            is_only_ignored,
+from adios_db.models.oil.validation import (unpack_status, is_only_ignored,
                                             ERRORS_TO_IGNORE)
 
 from adios_db.scripting import get_all_records
@@ -32,6 +30,7 @@ TEST_DATA_DIR = (HERE.parent.parent.parent /
 
 BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json",
                             encoding="utf-8"))
+
 
 # tests for the validation utilities
 def test_unpack_status():
@@ -55,13 +54,13 @@ def test_is_only_ignored_true():
 
     assert is_only_ignored(status_dict)
 
-def test_is_only_ignored_true():
+
+def test_is_only_ignored_false():
     status_dict = {code: ["random message text"] for code in ERRORS_TO_IGNORE}
     # add one we know won't ever be in the ignore list
     status_dict["F32"] = ["nothing important"]
 
     assert not is_only_ignored(status_dict)
-
 
 
 @pytest.fixture
@@ -202,7 +201,6 @@ def test_reasonable_name(name):
 
 
 def test_no_type(no_type_oil):
-
     # print("oil.metadata")
 
     # print(no_type_oil.metadata)
@@ -428,7 +426,7 @@ def test_does_not_break_test_records():
     run validation on all the test data, just to make sure that
     nothing breaks
     """
-    for rec, path in get_all_records(TEST_DATA_DIR):
-        msgs = rec.validate()
+    for rec, _path in get_all_records(TEST_DATA_DIR):
+        _msgs = rec.validate()
 
     assert True

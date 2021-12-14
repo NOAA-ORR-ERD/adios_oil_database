@@ -6,7 +6,7 @@ oil record
 from operator import itemgetter
 import numpy as np
 
-import unit_conversion as uc
+import nucos as uc
 
 
 class Density:

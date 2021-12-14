@@ -1,9 +1,11 @@
-'''
-    Test our Oil Model Estimations class
-'''
+"""
+Test our Oil Model Estimations class
+"""
 import pytest
 
-pytestmark = pytest.mark.skip(reason="Not currently being used -- and needs scipy")
+pytestmark = pytest.mark.skip(
+    reason="Not currently being used -- and needs scipy"
+)
 
 # from adios_db.util.json import ObjFromDict
 # from adios_db.data_sources.oil.estimations import (OilEstimation,
@@ -77,7 +79,8 @@ class TestOilEstimation():
         'oil, sample_id, product_type, expected',
         [
          ({'metadata': {'name': 'Oil Name'}}, None, None, None),
-         ({'metadata': {'name': 'Oil Name'}, 'samples': None}, None, None, None),
+         ({'metadata': {'name': 'Oil Name'}, 'samples': None},
+          None, None, None),
          ({'metadata': {'name': 'Oil Name'}, 'samples': {}}, None, None, None),
          ({'metadata': {'name': 'Oil Name'},
            'sub_samples': [{
@@ -2345,12 +2348,12 @@ class TestOilEstimationEmulsion():
          ]
     )
     def test_bullwinkle_fraction(self, oil, expected):
-        '''
-            TODO: We need emuls_constant_max to calculate the old Adios
-                  bullwinkle fraction, but it is not clear how to map this
-                  information to our emulsion object.
-                  So for now, we will need to leave the Adios condition out.
-        '''
+        """
+        TODO: We need emuls_constant_max to calculate the old Adios
+              bullwinkle fraction, but it is not clear how to map this
+              information to our emulsion object.
+              So for now, we will need to leave the Adios condition out.
+        """
         print('oil: ', oil)
         oil_est = OilEstimation(oil)
 
@@ -2376,9 +2379,9 @@ class TestOilEstimationMisc():
          ]
     )
     def test_solubility(self, oil, expected):
-        '''
+        """
             This function basically returns a constant, so not much to test.
-        '''
+        """
         print('oil: ', oil)
         oil_est = OilEstimation(oil)
 
@@ -2413,9 +2416,9 @@ class TestOilEstimationMisc():
          ]
     )
     def test_adhesion(self, oil, expected):
-        '''
-            This function basically returns a constant, so not much to test.
-        '''
+        """
+        This function basically returns a constant, so not much to test.
+        """
         print('oil: ', oil)
         oil_est = OilEstimation(oil)
 
@@ -2453,9 +2456,9 @@ class TestOilEstimationMisc():
          ]
     )
     def test_sulfur_fraction(self, oil, expected):
-        '''
-            This function basically returns a constant, so not much to test.
-        '''
+        """
+        This function basically returns a constant, so not much to test.
+        """
         print('oil: ', oil)
         oil_est = OilEstimation(oil)
 

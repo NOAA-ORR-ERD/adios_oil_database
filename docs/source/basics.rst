@@ -15,6 +15,7 @@ The list view presents the records that meet the current selection criteria -- t
   - **Score:** An estimate of the completeness of the record.
     Records with higher quality scores have more data and will
     result in more accurate forecasts in the model.
+  - **Suitable for GNOME** This flag indicates whether an oil record can be used with the GNOME oil weathering model. Note: This only indicates that is *can* be used. Whether it's a good record should be determined by looking at the Score.
 
 
 The list is sorted alphabetically by name but if you click on the column headers you can see it sorted by that field.

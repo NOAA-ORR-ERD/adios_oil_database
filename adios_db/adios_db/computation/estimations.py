@@ -121,7 +121,10 @@ def saturates_fraction(density, viscosity, f_other=0.0):
     A = _A_coeff(density)
     B = _B_coeff(density, viscosity)
 
-    f_sat = -2.5 + 76.6 / A + 0.00013 * np.log(B)
+    if B<=0:
+        f_sat = -2.5 + 76.6 / A
+    else:
+        f_sat = -2.5 + 76.6 / A + 0.00013 * np.log(B)
     f_sat = np.clip(f_sat, 0.0, 1.0 - f_other)
 
     return f_sat

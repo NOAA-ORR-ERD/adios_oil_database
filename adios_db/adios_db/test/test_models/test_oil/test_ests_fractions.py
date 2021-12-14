@@ -1,4 +1,3 @@
-# from math import isclose
 import json
 
 from pathlib import Path
@@ -38,10 +37,10 @@ class TestESTSFractions:
                                        'method'}
 
     def test_small(self):
-        '''
-            Generally we should keep our pytests small, testing one thing at a
-            time.
-        '''
+        """
+        Generally we should keep our pytests small, testing one thing at a
+        time.
+        """
         ccme = ESTSFractions()
 
         ccme.saturates = CompoundList([
@@ -88,9 +87,9 @@ class TestESTSFractions:
         assert ccme2 == ccme
 
     def test_full(self):
-        '''
-            But hey, here we go with a full-on test of everything
-        '''
+        """
+        But hey, here we go with a full-on test of everything
+        """
         ccme = ESTSFractions()
 
         ccme.saturates.extend([

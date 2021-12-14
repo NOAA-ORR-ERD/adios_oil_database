@@ -1,8 +1,6 @@
 """
 tests for the product type model
 """
-
-
 from pathlib import Path
 
 import pytest
@@ -10,8 +8,7 @@ import pytest
 from adios_db.models.oil.product_type import (ProductType,
                                               PRODUCT_TYPES,
                                               types_to_labels,
-                                              load_from_csv_file,
-                                              )
+                                              load_from_csv_file)
 
 product_types_lower = [pt.lower() for pt in PRODUCT_TYPES]
 
@@ -46,7 +43,8 @@ def test_load_from_csv_file():
     """
     mapping = load_from_csv_file(example_file)
 
-    assert list(mapping.keys()) == ['Crude Oil NOS', 'Condensate', 'Bitumen Blend']
+    assert list(mapping.keys()) == ['Crude Oil NOS', 'Condensate',
+                                    'Bitumen Blend']
     assert mapping['Crude Oil NOS'] == {'Light Crude',
                                         'Tight Oil',
                                         'Crude Oil',
@@ -68,8 +66,3 @@ def test_load_from_csv_file():
 
 #     for pt, labels in types_to_labels.labels.items():
 #         assert pt in labels
-
-
-
-
-

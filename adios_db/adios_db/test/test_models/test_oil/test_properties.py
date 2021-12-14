@@ -114,7 +114,7 @@ class TestDispersibilityList:
 class TestEmulsion:
     def test_init_empty(self):
         """
-        this should work, if uesless
+        this should work, if useless
         """
         model = Emulsion()
 
@@ -167,7 +167,9 @@ class TestEmulsion:
         assert model.water_content.unit_type == 'massfraction'
 
     def test_from_partial_json(self):
-        """ Should be able to load an incomplete object """
+        """
+        Should be able to load an incomplete object
+        """
         json_obj = {
             'water_content': {'value': 10.0, 'unit': '%',
                               'standard_deviation': 1.2,

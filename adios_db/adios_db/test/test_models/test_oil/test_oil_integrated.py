@@ -10,15 +10,15 @@ Add more when you find bugs
 NOTE: this is kind of pointless now.
 
 """
-
 from adios_db.models.oil.oil import Oil
 
 
 def test_make_oil_from_partial():
     # this one has stuff needed for the completeness tests, but not much else
-    PARTIAL_JSON = {'oil_id': 'EC09999',
-          'metadata': {'comments': 'A comment'},
-          'sub_samples': [
+    PARTIAL_JSON = {
+        'oil_id': 'EC09999',
+        'metadata': {'comments': 'A comment'},
+        'sub_samples': [
               {
                   "metadata": {
                       "name": "Fresh Oil Sample",
@@ -74,10 +74,10 @@ def test_make_oil_from_partial():
               },
               {
                   "metadata": {
-                  "name": "Evaporated Oil Sample",
-                  "short_name": "Evaporated Oil",
-                  "fraction_weathered": {'value': 15, 'unit': '%',
-                                          'unit_type': 'massfraction'}
+                      "name": "Evaporated Oil Sample",
+                      "short_name": "Evaporated Oil",
+                      "fraction_weathered": {'value': 15, 'unit': '%',
+                                             'unit_type': 'massfraction'}
                   },
                   'physical_properties': {
                       'densities': [

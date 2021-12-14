@@ -15,11 +15,13 @@ variables:
   DAST_USE_AJAX_SPIDER: "true"
 
 stages:
+  - maintenance
   - test
   - build
   - verify
   - deploy_db
   - deploy
+
 
 test_develop:
   stage: test
@@ -293,12 +295,16 @@ deploy_api_stage:
     CONTAINER_NAME: adios_db_web_api
     APP_NETWORK: adios_net
     PORT_MAPPING: 8084:9898
+    REPO_VOLUME: noaa_data_repo
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
+    - >
+      docker volume inspect $REPO_VOLUME >/dev/null 2>&1 ||
+      docker volume create $REPO_VOLUME
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -306,6 +312,7 @@ deploy_api_stage:
       -e MONGODB_WRITEABLE=true
       -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
       --network $APP_NETWORK
+      -v $REPO_VOLUME:/data/git_repos
       --restart unless-stopped $IMAGE_TAG
     - docker ps
     - docker logs $CONTAINER_NAME

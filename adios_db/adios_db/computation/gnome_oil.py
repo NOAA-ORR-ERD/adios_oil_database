@@ -11,7 +11,7 @@ import copy
 
 import numpy as np
 
-import unit_conversion as uc
+import nucos as uc
 
 from adios_db.models.oil.validation.warnings import WARNINGS
 from adios_db.models.oil.validation.errors import ERRORS
