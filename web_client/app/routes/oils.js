@@ -94,7 +94,27 @@ export default class OilsRoute extends Route {
                         result._internalModel.unloadRecord();
                     }.bind(this));
                 }.bind(this));
-            }.bind(this))
+            }.bind(this));
+        }
+    }
+
+    @action
+    discardTemporaryEdits(oil) {
+        // reset the flag
+        this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
+
+        if (oil.oil_id.endsWith(this.tempSuffix)) {
+            // switch back to the permanent model, discarding our changes.
+            let permID = oil.oil_id.substring(0, oil.oil_id.length - this.tempSuffix.length);
+
+            this.store.findRecord('oil', permID).then(function(permOil) {
+                this.transitionTo('oils.show', permOil.id);
+
+                oil.deleteRecord();
+                oil.save().then(function(result) {
+                    result._internalModel.unloadRecord();
+                }.bind(this));
+            }.bind(this));
         }
     }
 

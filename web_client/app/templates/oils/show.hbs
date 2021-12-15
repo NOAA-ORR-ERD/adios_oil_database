@@ -60,7 +60,7 @@
 
     </div>
 
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-4 col-lg-3">
       <div class="row align-items-center justify-content-center">
 
         <div class="col-xs-4 mt-2 text-center">
@@ -79,10 +79,16 @@
       </div>
     </div>
 
-    <div class="col-xs-6 col-sm-4 col-lg-3">
+    <div class="col-xs-6 col-sm-4 col-lg-4">
       <div class="d-flex">
 
         {{#if this.canModifyDb}}
+          <Button::DiscardEdits
+            @oil={{this.model}}
+            @submit={{action send "discardTemporaryEdits" this.model}}
+            @changesMade={{this.changesMade}}
+          />
+
           <Button::SaveEdits
             @oil={{this.model}}
             @submit={{action (pipe
