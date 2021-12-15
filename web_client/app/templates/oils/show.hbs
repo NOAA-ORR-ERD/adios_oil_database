@@ -72,7 +72,7 @@
               @onLabel="Edit"
               @offLabel="View"
               @value={{this.editable}}
-              @onToggle={{action (mut this.editable)}}
+              @onToggle={{this.setEditable}}
             />
           {{/if}}
         </div>

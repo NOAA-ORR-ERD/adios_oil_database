@@ -8,9 +8,19 @@ export default class ShowController extends Controller {
         '#fresh-oil-sample': '#fresh-oil-sample-physical'
     };
     @tracked changesMade = false;
+    @tracked editable = false;
 
     get canModifyDb() {
         return this.capabilities.firstObject.can_modify_db == 'true';
+    }
+
+    @action
+    setEditable(toggleState) {
+        // We should only be able to unset edit mode if there are no changes
+        // pending.
+        if (toggleState === true || !this.changesMade) {
+            this.editable = toggleState;
+        }
     }
 
     @action
