@@ -36,7 +36,7 @@ class CursorWrapper():
         return obj
 
     def __len__(self):
-        return self.cursor.count()
+        return self.cursor.explain()['executionStats']['nReturned']
 
     def __getitem__(self, idx):
         return self.cursor[idx]
