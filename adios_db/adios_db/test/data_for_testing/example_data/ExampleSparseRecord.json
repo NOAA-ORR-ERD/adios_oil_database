@@ -1,0 +1,114 @@
+{
+  "oil_id": "AD02390",
+  "adios_data_model_version": "0.11.0",
+  "metadata": {
+    "name": "WEST SAK (1999)",
+    "source_id": "AD02390",
+    "alternate_names": [
+      "Alaska North Slope",
+      "ANS",
+      "Kuparuk"
+    ],
+    "location": "ALASKA",
+    "reference": {
+      "year": 1999,
+      "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Fieldhouse, B., Lambert, P., Mullen, J. 1999. Properties of Crude Oils and Oil Products.  Manuscript Report EE-165, Environmental Protection Service, Environment Canada, Ottawa, Ontario."
+    },
+    "product_type": "Crude Oil NOS",
+    "API": 22.4,
+    "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
+    "labels": [
+      "Medium Crude",
+      "Crude Oil"
+    ],
+    "model_completeness": 15,
+    "gnome_suitable": true
+  },
+  "status": [],
+  "review_status": {
+    "status": "Not Reviewed"
+  },
+  "sub_samples": [
+    {
+      "metadata": {
+        "name": "Fresh Oil Sample",
+        "short_name": "Fresh Oil",
+        "fraction_evaporated": {
+          "value": 0,
+          "unit": "fraction",
+          "unit_type": "massfraction"
+        }
+      },
+      "physical_properties": {
+        "densities": [
+          {
+            "density": {
+              "value": 918.63,
+              "unit": "kg/m^3",
+              "unit_type": "density"
+            },
+            "ref_temp": {
+              "value": 288.16,
+              "unit": "K",
+              "unit_type": "temperature"
+            },
+            "method": "Converted from API"
+          }
+        ],
+        "kinematic_viscosities": [
+          {
+            "viscosity": {
+              "value": 0.000096,
+              "unit": "m^2/s",
+              "unit_type": "kinematicviscosity"
+            },
+            "ref_temp": {
+              "value": 16,
+              "unit": "C",
+              "unit_type": "temperature"
+            }
+          }
+        ]
+      },
+      "distillation_data": {
+        "type": "mass fraction"
+      },
+      "bulk_composition": [
+        {
+          "name": "sulfur",
+          "measurement": {
+            "value": 0.0182,
+            "unit": "fraction",
+            "unit_type": "massfraction"
+          }
+        },
+        {
+          "name": "nickel",
+          "measurement": {
+            "value": 22,
+            "unit": "ppm",
+            "unit_type": "massfraction"
+          }
+        },
+        {
+          "name": "vanadium",
+          "measurement": {
+            "value": 61,
+            "unit": "ppm",
+            "unit_type": "massfraction"
+          }
+        }
+      ],
+      "industry_properties": [
+        {
+          "name": "Reid Vapor Pressure",
+          "measurement": {
+            "value": 0.19,
+            "unit": "bar",
+            "unit_type": "massfraction"
+          }
+        }
+      ]
+    }
+  ]
+}

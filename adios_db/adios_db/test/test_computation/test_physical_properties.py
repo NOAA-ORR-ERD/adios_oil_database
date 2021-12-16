@@ -17,6 +17,8 @@ from adios_db.computation.physical_properties import (get_density_data,
                                                       get_dynamic_viscosity_data,
                                                       KinematicViscosity,
                                                       Density,
+                                                      max_water_fraction_emulsion,
+                                                      emul_water,
                                                       )
 
 
@@ -236,3 +238,15 @@ class Test_KinematicViscosity:
         assert self.kv.kviscs
         assert isclose(self.kv.at_temp(273.15), 0.001383, rel_tol=1e-3)
         assert isclose(self.kv.at_temp(288.15), 0.0003783, rel_tol=1e-3)
+
+
+def test_max_water_fraction_emulsion():
+    y_max = max_water_fraction_emulsion(FullOil)
+
+    assert y_max == 0.39787
+
+
+def test_emul_water():
+    y_max = emul_water(FullOil)
+
+    assert y_max == 0.39787

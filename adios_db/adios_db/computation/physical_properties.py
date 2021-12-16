@@ -385,7 +385,8 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
 def max_water_fraction_emulsion(oil):
     if (oil.metadata.product_type == 'Crude Oil NOS' or
             oil.metadata.product_type == 'Bitumen Blend'):
-        return 0.9
+        #return 0.9
+        return emul_water(oil)
     else:
         return 0.0
 
@@ -398,9 +399,19 @@ def emul_water(oil):
     the emulsion. (from ADIOS2)
     """
 
-    emulsion_max_water = None  # need to drill down in database for this info
+    max_water_content = 0
+    emulsion_max_water = None
+    for sample in oil.sub_samples:
+        try:
+            emulsions = sample.environmental_behavior.emulsions
+            for emulsion in emulsions:
+                if emulsion.water_content.converted_to("fraction").value >= max_water_content:
+                    max_water_content = emulsion.water_content.converted_to("fraction").value
+                    emulsion_max_water = max_water_content
+        except Exception:
+            pass
 
-    if emulsion_max_water is None:  # max water content not in library
+    if emulsion_max_water is None:  # max water content not in database
         dens = Density(oil)
         density = dens.at_temp(288.15)
         kvis = KinematicViscosity(oil)
