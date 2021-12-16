@@ -126,6 +126,15 @@ def test_missing_API_solvent():
     assert snippet_not_in_oil_status("W004", msgs)
 
 
+def test_API_always_float():
+    """
+    the API should get converte to a float if it's an integer in the JSON, etc.
+    """
+
+    md = MetaData(API=32)
+
+    assert type(md.API) == float
+
 # ######
 # ChangeLogEntry tests
 def test_ChangeLogEntry_init():

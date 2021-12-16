@@ -122,7 +122,7 @@ class MeasurementBase(MeasurementDataclass):
                                       "with no unit_type")
         if self.unit_type is None:
             self.unit_type = self.__class__.unit_type
-        self.unit_type = self.unit_type.lower()
+        self.unit_type = self.unit_type.lower().replace(" ", "")
         if self.unit_type != self.__class__.unit_type:
             raise ValueError(f"unit_type must be: {self.__class__.unit_type}, "
                              f"not {self.unit_type}")

@@ -130,6 +130,14 @@ adios\_db.models.oil.properties module
    :undoc-members:
    :show-inheritance:
 
+adios\_db.models.oil.review\_status module
+------------------------------------------
+
+.. automodule:: adios_db.models.oil.review_status
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.models.oil.sample module
 ----------------------------------
 

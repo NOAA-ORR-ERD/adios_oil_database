@@ -58,6 +58,14 @@ class MetaData:
     gnome_suitable: bool = None
     change_log: ChangeLog = field(default_factory=ChangeLog)
 
+    def __post_init__(self):
+        """
+        force API to be a float
+        """
+        if self.API is not None:
+            self.API = float(self.API)
+
+
     def validate(self):
         msgs = []
         # check for API
