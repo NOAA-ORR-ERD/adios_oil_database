@@ -28,10 +28,7 @@
         {{#if this.changesMade}}
           <Button::BackToList
             @oil={{this.model}}
-            @submit={{action (pipe
-                        (action send "updateOil" this.model)
-                        (action send "commitTemporaryEdits" this.model "oils.index"))
-                    }}
+            @submit={{action send "discardTemporaryEdits" this.model "oils.index"}}
           />
         {{else}}
           <LinkTo @route="oils">
@@ -85,7 +82,7 @@
         {{#if this.canModifyDb}}
           <Button::DiscardEdits
             @oil={{this.model}}
-            @submit={{action send "discardTemporaryEdits" this.model}}
+            @submit={{action send "discardTemporaryEdits" this.model ""}}
             @changesMade={{this.changesMade}}
           />
 

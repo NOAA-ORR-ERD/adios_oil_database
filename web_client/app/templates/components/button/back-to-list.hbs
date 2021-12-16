@@ -1,12 +1,12 @@
 <button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
         title="Back to List"
         data-toggle="modal"
-        data-target="#logChangesDialog" >
+        data-target="#dropChangesDialog" >
   &lt; Back to List
 </button>
 
-<Dialog::LogChanges
-  @id="logChangesDialog"
+<Dialog::DropChanges
+  @id="dropChangesDialog"
   @oil={{@oil}}
   @submit={{this.submit}}
 />

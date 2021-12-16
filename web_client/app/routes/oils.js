@@ -99,7 +99,7 @@ export default class OilsRoute extends Route {
     }
 
     @action
-    discardTemporaryEdits(oil) {
+    discardTemporaryEdits(oil, newRoute) {
         // reset the flag
         this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
 
@@ -108,7 +108,13 @@ export default class OilsRoute extends Route {
             let permID = oil.oil_id.substring(0, oil.oil_id.length - this.tempSuffix.length);
 
             this.store.findRecord('oil', permID).then(function(permOil) {
-                this.transitionTo('oils.show', permOil.id);
+                if (newRoute) {
+                    this.transitionTo(newRoute);
+                }
+                else {
+                    // keep the current route, but with the new ID
+                    this.transitionTo('oils.show', permOil.id);
+                }
 
                 oil.deleteRecord();
                 oil.save().then(function(result) {
