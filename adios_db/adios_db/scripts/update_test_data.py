@@ -1,15 +1,13 @@
 #!/usr/bin/env python
-
 """
 Script to update the test data from the "canonical" source data
-
 """
-
 import sys
 from pathlib import Path
 from shutil import copyfile
 
 HERE = Path(__file__).parent
+
 
 def main():
     try:
@@ -33,6 +31,3 @@ def main():
         print("copying:", source_file)
         print("to:", dest_file)
         copyfile(source_file, dest_file)
-
-
-

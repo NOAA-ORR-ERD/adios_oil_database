@@ -5,12 +5,18 @@ import pytest
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.product_type import types_to_labels
 
+# we don't want this to fail if these tests are
+# skipped and pymongo is not there.
 try:
+    import pymongo
+except ModuleNotFoundError:
+    print("pymongo module not there -- not importing the session modules")
+    PYMONGO = False
+else:
+    PYMONGO = True
     from adios_db.util.db_connection import connect_mongodb
     from adios_db.scripts.db_initialize import init_db
     from adios_db.scripts.db_restore import restore_db
-except ModuleNotFoundError:
-    pass  # we don't want this to fail if these tests are skipped
 
 here = Path(__file__).resolve().parent
 
@@ -19,6 +25,15 @@ test_data = here.parent / "data_for_testing" / "noaa-oil-data"
 # Pass the --mongo command line option if you want these to run.
 # they require a mongo database to be running on localhost
 pytestmark = pytest.mark.mongo
+
+
+def test_pymongo():
+    """
+    Tests to see if pymongo got imported Not really a test, but it should serve
+    to give folks a reasonable error message if they try to run the mongo tests
+    without pymongo
+    """
+    assert PYMONGO, "The pymongo package needs to be installed in order to run the mongo tests"
 
 
 def restore_test_db(settings):
@@ -325,7 +340,7 @@ class TestSessionGetLabels(SessionTestBase):
     def test_init(self):
         session = connect_mongodb(self.settings)
 
-        assert hasattr(session, 'get_labels')  # our object, not mongodb
+        assert hasattr(session, 'get_labels')
 
     def test_all_labels(self):
         session = connect_mongodb(self.settings)
@@ -347,9 +362,13 @@ class TestSessionGetLabels(SessionTestBase):
         session = connect_mongodb(self.settings)
 
         # test non-existent, but valid IDs
-        assert session.get_labels(-1) is None
-        assert session.get_labels('-1') is None
+        assert session.get_labels(20000) is None
+        assert session.get_labels('20000') is None
 
         # test an id that can't even be used
         with pytest.raises(ValueError):
             session.get_labels('bogus')
+
+        # test negative id that can't even be used
+        with pytest.raises(ValueError):
+            session.get_labels(-1)

@@ -17,15 +17,17 @@ label_api = Service(name='label', path='/labels/*obj_id',
 
 @label_api.get()
 def get_labels(request):
-    '''
-        We will do one of two possible things here.
-        1. Return all labels in JSON format.
-        2. Return the JSON record of a particular label.
-    '''
+    """
+    We will do one of two possible things here.
+    1. Return all labels in JSON format.
+    2. Return the JSON record of a particular label.
+    """
+    # fixme: do we ever need just one label??
+
     obj_id = obj_id_from_url(request)
 
     try:
-        res = request.mdb_client.get_labels(obj_id)
+        res = request.adb_session.get_labels(obj_id)
     except ValueError as e:
         logger.error(e)
         raise HTTPBadRequest("Bad object ID")

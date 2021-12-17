@@ -8,7 +8,6 @@ Having a Python class makes it easier to write importing, validating etc, code.
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
-
 from ..common.measurement import VolumeFraction
 
 from .distillation import Distillation
@@ -41,10 +40,13 @@ class Sample:
 
     cut_volume: VolumeFraction = None  # from Exxon data
 
-    physical_properties: PhysicalProperties = field(default_factory=PhysicalProperties)
+    physical_properties: PhysicalProperties = field(
+        default_factory=PhysicalProperties
+    )
 
     environmental_behavior: EnvironmentalBehavior = field(
-        default_factory=EnvironmentalBehavior)
+        default_factory=EnvironmentalBehavior
+    )
 
     SARA: Sara = field(default_factory=Sara)
 
@@ -52,9 +54,13 @@ class Sample:
 
     compounds: CompoundList = field(default_factory=CompoundList)
 
-    bulk_composition: BulkCompositionList = field(default_factory=BulkCompositionList)
+    bulk_composition: BulkCompositionList = field(
+        default_factory=BulkCompositionList
+    )
 
-    industry_properties: IndustryPropertyList = field(default_factory=IndustryPropertyList)
+    industry_properties: IndustryPropertyList = field(
+        default_factory=IndustryPropertyList
+    )
 
     headspace_analysis: CompoundList = field(default_factory=CompoundList)
 
@@ -69,6 +75,7 @@ class Sample:
 
     def __post_init__(self):
         metadata = self.metadata
+
         if metadata.name is not None:
             if metadata.name.lower() == 'whole crude':
                 metadata.name = 'Fresh Oil Sample'
@@ -88,13 +95,13 @@ class SampleList(JSON_List):
 
     def validate(self):
         msgs = []
-        # make sure there's at least one subsample
-        if len(self) == 0:
+
+        if len(self) == 0:  # at least one subsample?
             msgs.append(ERRORS["E031"])
         else:
-            # check for densities
-            # note: would be good to be smart about the temp densities are at
-            # this is here because only need to check the "fresh" sample
+            # Check for densities
+            # NOTE: would be good to be smart about the temp densities are at
+            # This is here because only need to check the "fresh" sample
             if (self[0].physical_properties is None
                     or not self[0].physical_properties.densities):
                 msgs.append(WARNINGS["W006"])

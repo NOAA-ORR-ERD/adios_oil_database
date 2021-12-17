@@ -1,28 +1,21 @@
 """
-Functional tests for the product_types API
-
+testing serving up the user docs
 """
-
 import pytest
 
 from adios_db.models.oil.product_type import PRODUCT_TYPES
 
-"""
-testing serving up the user docs
-"""
-
 # NOTE: testapp coming from conftest.py
-
-
-# NOTE: if we can figure this out, there will need to be a dumm,y test file
+# NOTE: if we can figure this out, there will need to be a dummy test file
 #       in the git repo for this test to work.
 
-pytestmark = pytest.mark.skipif(True,
-                                reason="skipping 'cause can't get tests to work")
+pytestmark = pytest.mark.skipif(
+    True,
+    reason="skipping because we can't get tests to work"
+)
 
 
 def test_get_user_docs(testapp):
-
     testapp.get("/docs/user_docs/index.html", status=307)
     resp = testapp.get("/docs/user_docs/index.html")
 
@@ -42,4 +35,3 @@ def test_get_user_docs(testapp):
 
     assert resp.status_code == 200
     # maybe check something else??
-

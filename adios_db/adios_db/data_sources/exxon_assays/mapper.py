@@ -44,9 +44,9 @@ logger = logging.getLogger(__name__)
 
 
 def next_id():
-    '''
-        Generate the next oil record identifier
-    '''
+    """
+    Generate the next oil record identifier
+    """
     if not hasattr(next_id, 'count'):
         next_id.count = 0
     next_id.count += 1
@@ -304,8 +304,9 @@ def ExxonMapper(record):
     oil.metadata.reference = reference
     oil.metadata.source_id = ref_id
 
-    samples = SampleList(
-        [Sample(**sample_id_attrs(name)) for name in sample_names if name is not None])
+    samples = SampleList([Sample(**sample_id_attrs(name))
+                          for name in sample_names
+                          if name is not None])
 
     cut_table = read_cut_table(sample_names, data)
 
@@ -321,12 +322,12 @@ def ExxonMapper(record):
 
 
 def read_header(data):
-    '''
-        fixme: this should probably be more flexible
-        but we can wait 'till we get data that doesn't match
-        it could / should read the whole dist cut table, then map it
-        to the samples Exxon info in the header
-    '''
+    """
+    fixme: this should probably be more flexible
+    but we can wait 'till we get data that doesn't match
+    it could / should read the whole dist cut table, then map it
+    to the samples Exxon info in the header
+    """
     ref_text = "\n".join([next(data)[0] for _ in range(3)])
     years = [int(n) for n in re.compile(r'\b\d{4}\b').findall(ref_text)]
 
@@ -355,9 +356,9 @@ def sample_id_attrs(name):
 
 
 def create_middle_tier_objs(samples):
-    '''
-        These are the dataclasses that comprise the attributes of the Sample
-    '''
+    """
+    These are the dataclasses that comprise the attributes of the Sample
+    """
     for sample in samples:
         sample.physical_properties = PhysicalProperties()
         sample.environmental_behavior = EnvironmentalBehavior()
@@ -365,7 +366,7 @@ def create_middle_tier_objs(samples):
 
 
 def read_cut_table(sample_names, data):
-    '''
+    """
     Read the rest of the rows and save them in a dictionary.
 
     - key: first field of the row
@@ -377,7 +378,7 @@ def read_cut_table(sample_names, data):
            the sample data and the properties column.  So we need to make
            sure there actually exists a sample name field before adding
            it to our cut table data.
-    '''
+    """
     cut_table = {}
 
     while True:
@@ -385,7 +386,8 @@ def read_cut_table(sample_names, data):
             row = next_non_empty(data)
 
             sample_attr = norm(row[0])
-            sample_data = [f for f, n in zip(row[1:], sample_names) if n is not None]
+            sample_data = [f for f, n in zip(row[1:], sample_names)
+                           if n is not None]
 
             cut_table[sample_attr] = sample_data
         except StopIteration:
@@ -395,20 +397,21 @@ def read_cut_table(sample_names, data):
 
 
 def set_boiling_point_range(samples, cut_table):
-    '''
-        Parse the names to determine the boiling point ranges
-        Requires the sample names to be initialized
+    """
+    Parse the names to determine the boiling point ranges
+    Requires the sample names to be initialized
 
-        Need to know:
-        - Initial boiling point (IBF)
-        - End boiling point (EP)
-    '''
+    Need to know:
+    - Initial boiling point (IBF)
+    - End boiling point (EP)
+    """
     initial_bp = sigfigs(cut_table['ibp, f'][0], 5)
     final_bp = sigfigs(cut_table['ep, f'][-1], 5)
 
     for sample_prev, sample in zip(samples, samples[1:]):
         prev_max_temp = to_number(sample_prev.metadata.name.split()[-1])
-        min_temp, _sep, max_temp = [to_number(n) for n in sample.metadata.name.split()[-3:]]
+        min_temp, _sep, max_temp = [to_number(n)
+                                    for n in sample.metadata.name.split()[-3:]]
 
         if min_temp == 'IBP':
             min_temp = initial_bp
@@ -456,7 +459,6 @@ def set_sample_property(samples,
     - The name & groups of each compound should be match the
       ADIOS data model controlled vocabulary
     """
-
     for sample, val in zip(samples, row):
         if val is not None and val not in ('NotAvailable', ):
             if convert_from is not None:
@@ -479,12 +481,14 @@ def set_sample_property(samples,
 
                         sample = child_value
 
-                setattr(sample, attr[-1], cls(sigfigs(val, num_digits), unit=unit))
+                setattr(sample, attr[-1], cls(sigfigs(val, num_digits),
+                                              unit=unit))
             else:
                 # add to a list attribute
                 compositions = getattr(sample, element_of)
 
-                measurement = cls(sigfigs(val, num_digits), unit=unit, unit_type=unit_type)
+                measurement = cls(sigfigs(val, num_digits), unit=unit,
+                                  unit_type=unit_type)
                 item_cls = compositions.item_type
                 compositions.append(item_cls(
                     name=attr,
@@ -535,7 +539,8 @@ def process_cut_table(oil, samples, cut_table):
             try:
                 sample.physical_properties.kinematic_viscosities.append(
                     KinematicViscosityPoint(
-                        viscosity=KinematicViscosity(value=sigfigs(val, 5), unit="cSt"),
+                        viscosity=KinematicViscosity(value=sigfigs(val, 5),
+                                                     unit="cSt"),
                         ref_temp=Temperature(value=temp_c, unit="C"),
                     ))
             except Exception:
@@ -566,7 +571,8 @@ def process_cut_table(oil, samples, cut_table):
                 if val is not None:
                     val = sigfigs(uc.convert("F", "C", val), 5)
 
-                    sample.distillation_data.end_point = Temperature(value=val, unit="C")
+                    sample.distillation_data.end_point = Temperature(value=val,
+                                                                     unit="C")
 
     # sort them
     for sample in samples:
@@ -596,21 +602,22 @@ def get_next_properties_row(data, exp_field):
     row = next_non_empty(data)
 
     if norm(row[0]) != norm(exp_field):
-        raise ValueError(f'Something wrong with data sheet: {row}, ' 'expected: {exp_field}')
+        raise ValueError(f'Something wrong with data sheet: {row}, '
+                         f'expected: {exp_field}')
 
     return row
 
 
 def to_number(field):
-    '''
-        Try to extract a number from a text field.  Within this scope, we
-        don't care to try extract any unit information, just the number.
-        Some variations on numeric data fields in the Exxon Assays:
-        - '1000F+'
-        - '1000F'
-        - '650'
-        - 'C5' is not numeric
-    '''
+    """
+    Try to extract a number from a text field.  Within this scope, we
+    don't care to try extract any unit information, just the number.
+    Some variations on numeric data fields in the Exxon Assays:
+    - '1000F+'
+    - '1000F'
+    - '650'
+    - 'C5' is not numeric
+    """
     try:
         return float(field)
     except Exception:

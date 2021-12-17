@@ -19,9 +19,9 @@ product_types_api = Service(name='product-types',
 
 @product_types_api.get()
 def get_product_types(request):
-    '''
+    """
     returns all the product types
-    '''
+    """
     obj_id = obj_id_from_url(request)
 
     if obj_id is not None:

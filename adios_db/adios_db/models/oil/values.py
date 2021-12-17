@@ -1,10 +1,6 @@
-
 """
-
 Classes for individual classes -not much here!
-
 """
-
 from ..common.utilities import dataclass_to_json
 from ..common.validators import YearValidator
 
@@ -22,15 +18,13 @@ class ReferenceBase:
 
 
 class Reference(ReferenceBase):
-    _validator = YearValidator(1600,
-                               2050,
-                               ERRORS["E012"],
-                               )
+    _validator = YearValidator(1600, 2050, ERRORS["E012"])
 
     @classmethod
     def validate(cls, value):
         year = value.year
+
         if not year:
             return [WARNINGS["W008"]]
-        return cls._validator(year)
 
+        return cls._validator(year)

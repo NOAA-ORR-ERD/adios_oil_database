@@ -1,14 +1,11 @@
 """
 Configuration setup for pytest tests.
 """
-
 import pytest
 from webtest import TestApp
-from webtest.app import AppError
 
 from adios_db.test.test_session.test_session import restore_test_db
 from adios_db_api import main
-
 
 
 TEST_SETTINGS = {
@@ -31,6 +28,7 @@ TEST_SETTINGS = {
     'user_docs_dir': '../docs',
 }
 
+
 # pytest fixture for testing
 # alternative to the test baseclass defined in base.py
 @pytest.fixture
@@ -41,5 +39,3 @@ def testapp():
     restore_test_db(TEST_SETTINGS)
     app = main(None, **TEST_SETTINGS)
     return TestApp(app)
-
-

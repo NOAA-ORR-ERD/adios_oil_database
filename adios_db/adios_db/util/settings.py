@@ -1,5 +1,7 @@
-# some common methods for getting some application settings
-# for the oil database
+"""
+some common methods for getting some application settings
+for the oil database
+"""
 from configparser import ConfigParser
 
 
@@ -19,11 +21,11 @@ def file_settings(config_file, section='app:adios_db'):
 
 
 def convert_str_to_type_value(str_in):
-    '''
-        I really don't see why the config parser can't just do this, at least
-        as an option.
-        It would obviate the need for a utility module like this.
-    '''
+    """
+    I really don't see why the config parser can't just do this, at least
+    as an option.
+    It would obviate the need for a utility module like this.
+    """
     if str_in in ('True', 'true'):
         return True
     elif str_in in ('False', 'false'):

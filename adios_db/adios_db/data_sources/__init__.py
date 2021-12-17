@@ -1,7 +1,5 @@
 """
 Collection of file readers
-
-Some common constants, etc. here
 """
 try:
     from slugify import Slugify
@@ -11,5 +9,3 @@ except ImportError:
     field_name_sluggify = None
 
 from .reader import CsvFile
-
-

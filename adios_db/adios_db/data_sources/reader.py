@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-'''
-    Base classes for various different readers that we may want to use.
-'''
+"""
+Base classes for various different readers that we may want to use.
+"""
 import logging
 import csv
 from builtins import isinstance
@@ -10,20 +10,21 @@ logger = logging.getLogger(__name__)
 
 
 class CsvFile:
-    ''' A generalized file reader for comma separated variables (.csv)
-        flat datafiles.
-        In spite of its name, this type of file can have various different
-        separating characters besides commas for its rows and fields.
-    '''
+    """
+    A generalized file reader for comma separated variables (.csv)
+    flat datafiles.
+    In spite of its name, this type of file can have various different
+    separating characters besides commas for its rows and fields.
+    """
     def __init__(self, name, field_delim=',', encoding='mac_roman'):
-        '''
-            :param name: The name of the oil library import file
-            :type name: A path as a string or unicode
+        """
+        :param name: The name of the oil library import file
+        :type name: A path as a string or unicode
 
-            :param field_delim=',': The character to be used as a tabular
-                                    field delimiter.
-            :type field_delim: A string or unicode
-        '''
+        :param field_delim=',': The character to be used as a tabular
+                                field delimiter.
+        :type field_delim: A string or unicode
+        """
         self.name = name
 
         self.fileobj = open(name, 'r', encoding=encoding)
@@ -52,9 +53,9 @@ class CsvFile:
             return [self.convert_field(f) for f in row]
 
     def convert_field(self, field):
-        '''
-            Convert data fields to numeric if possible
-        '''
+        """
+        Convert data fields to numeric if possible
+        """
         try:
             return int(field)
         except Exception:

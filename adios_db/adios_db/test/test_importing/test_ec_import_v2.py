@@ -27,7 +27,7 @@ import adios_db
 from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
                                                  EnvCanadaCsvRecordParser,
                                                  EnvCanadaCsvRecordMapper,
-                                                 InvalidFileException)
+                                                 InvalidFileError)
 
 from pprint import pprint
 
@@ -46,7 +46,7 @@ class TestEnvCanadaCsvFile(object):
             _reader = EnvCanadaCsvFile('bogus.file')
 
     def test_init_invalid_file(self):
-        with pytest.raises(InvalidFileException):
+        with pytest.raises(InvalidFileError):
             _reader = EnvCanadaCsvFile(example_index)
 
     def test_init_with_valid_file(self):

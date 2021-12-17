@@ -11,7 +11,8 @@ class VersionError(ValueError):
     pass
 
 
-# Note: not using @dataclass_to_json -- defining py_json and from_pyjson instead
+# Note: Not using @dataclass_to_json.
+#       Defining py_json and from_pyjson instead
 @functools.total_ordering
 # @dataclass
 class Version:
@@ -19,10 +20,6 @@ class Version:
     class to represent a version with major, minor, and patch components
     """
     def __init__(self, major, minor=0, patch=0):
-        """
-        initialize and instance object
-
-        """
         if isinstance(major, str) and minor == 0 and patch == 0:
             self.__init__(*self._parts_from_string(major))
         else:
@@ -37,14 +34,13 @@ class Version:
         return f"{self.major}.{self.minor}.{self.patch}"
 
     def py_json(self, sparse=True):
-        # return f"{self.major}.{self.minor}.{self.patch}"
         return str(self)
 
     @staticmethod
     def _parts_from_string(string):
         try:
             return tuple(int(part) for part in string.split("."))
-        except Exception:  # anything goes wrong, we'll raise a new error
+        except Exception:
             raise ValueError(f"{string} not a valid value for Version string")
 
     @classmethod

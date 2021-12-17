@@ -1,6 +1,6 @@
-'''
-    Classes for storing measured values within an Oil record
-'''
+"""
+Classes for storing measured values within an Oil record
+"""
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
@@ -15,10 +15,6 @@ from ..common.measurement import (Time,
                                   InterfacialTension,
                                   Pressure,
                                   AngularVelocity)
-
-# from ..common.validators import EnumValidator
-# from .validation.warnings import WARNINGS
-# from .validation.errors import ERRORS
 
 
 @dataclass_to_json

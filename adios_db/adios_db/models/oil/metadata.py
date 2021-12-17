@@ -1,6 +1,6 @@
-'''
-    class that represents the demographic data (metadata) of an oil record.
-'''
+"""
+Class that represents the demographic data (metadata) of an oil record.
+"""
 from datetime import datetime
 from dataclasses import dataclass, field
 
@@ -30,9 +30,9 @@ class ChangeLogEntry:
             try:
                 datetime.fromisoformat(self.date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"].format("change log entry",
-                                                    self.date,
-                                                    str(err)))
+                msgs.append(WARNINGS["W011"]
+                            .format("change log entry", self.date, str(err)))
+
         return msgs
 
 
@@ -68,6 +68,7 @@ class MetaData:
 
     def validate(self):
         msgs = []
+
         # check for API
         api = self.API
         if api is None:
@@ -92,9 +93,9 @@ class MetaData:
             try:
                 datetime.fromisoformat(self.sample_date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"].format("sample date",
-                                                    self.sample_date,
-                                                    str(err)))
+                msgs.append(WARNINGS["W011"]
+                            .format("sample date", self.sample_date, str(err)))
+
         return msgs
 
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 This simply runs all the JSON records through the Oil object
 
@@ -35,6 +34,7 @@ def run_through():
     pth = None
     for pth in sorted(base_dir.rglob("*.json")):
         print("processing:", pth)
+
         try:
             oil = Oil.from_file(pth)
         except Exception as ex:
@@ -47,12 +47,10 @@ def run_through():
             oil.to_file(pth)
         else:
             print("Dry Run: Nothing saved")
+
     if pth is None:
         print("No files were found in:", base_dir)
 
 
 if __name__ == "__main__":
     run_through()
-
-
-

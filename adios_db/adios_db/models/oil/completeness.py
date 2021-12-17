@@ -1,4 +1,4 @@
-'''
+"""
 Calculate the completeness of the data contained in an oil record.
 
 The top-level interface is a single function:
@@ -33,8 +33,7 @@ Two Distillation cuts separated by mass or volume fraction.  Score = 3*maxDeltaF
 One Weathered oil:
   Density. Score = 1
   Viscosity. Score = 1
-'''
-
+"""
 # FixMe: These classes could be merged to make them a bit less redundant.
 
 import logging
@@ -58,11 +57,11 @@ def set_completeness(oil):
 
 
 def completeness(oil):
-    '''
+    """
     Calculate the completeness of the data contained in an oil record.
 
     :param oil: The oil record to be validated
-    '''
+    """
     score = 0
     for check_func in CHECKS:
         score += check_func(oil)
@@ -76,9 +75,9 @@ class Check_emulsion_water_content:
 
     def __call__(self, oil):
         # def check_emulsion_water_content(oil):
-        '''
+        """
         One emulsion water content in any subsample. Score = 2.5
-        '''
+        """
         sub_samples = oil.sub_samples
 
         for sample in sub_samples:
@@ -88,44 +87,42 @@ class Check_emulsion_water_content:
                     return 2.5  # only need one valid emulsion water content
 
         return 0.0
-# check_emulsion_water_content = Check_emulsion_water_content()
-
-# def check_density(oil):
 
 
 class Check_density:
-    '''
+    """
     Fresh oil: One density Score = 1
-    '''
+    """
     max_score = 1.0
 
     def __call__(self, oil):
-
         if len(oil.sub_samples) > 0:
             ss = oil.sub_samples[0]
             densities = ss.physical_properties.densities
+
             for d in densities:
                 if (is_measurement_good(d.density) and
                         is_measurement_good(d.ref_temp)):
                     return 1.0
+
         return 0.0
 
 
 class Check_second_density:
-    '''
+    """
     Fresh oil: One density Score = 0.5
-    '''
+    """
     max_score = 0.5
 
     def __call__(self, oil):
-        '''
+        """
         Fresh oil: Second density separated by temperature.
 
         Score = deltaT/40 but not greater than 0.5
 
         maxDeltaT: The difference between the lowest and highest
         measurement in the set.
-        '''
+        """
         if len(oil.sub_samples) > 0:
             ss = oil.sub_samples[0]
             densities = ss.physical_properties.densities
@@ -143,38 +140,11 @@ class Check_second_density:
         return 0.0
 
 
-# class CheckViscosity:
-
-#     max_score = 0.5
-
-#     def __call__(self, oil):
-#         '''
-#         Fresh oil: One viscosity. Score = 0.5
-#         '''
-#         if len(oil.sub_samples) > 0:
-#             ss = oil.sub_samples[0]
-#             kvis = ss.physical_properties.kinematic_viscosities
-#             dvis = ss.physical_properties.dynamic_viscosities
-
-#             for v in kvis:
-#                 if (is_measurement_good(v.viscosity)
-#                         and is_measurement_good(v.ref_temp)):
-#                     return 0.5
-
-#             for v in dvis:
-#                 if (is_measurement_good(v.viscosity)
-#                         and is_measurement_good(v.ref_temp)):
-#                     return 0.5
-
-#         return 0.0
-
-
 class CheckViscosity:
-
     max_score = 2.0
 
     def __call__(self, oil):
-        '''
+        """
         Fresh oil:
 
           One viscosity. Score = 0.5
@@ -189,8 +159,9 @@ class CheckViscosity:
         One or more Evaporated oil Viscosity.
 
           Score = 1
-        '''
+        """
         score = 0.0
+
         if len(oil.sub_samples) > 0:
             ss = oil.sub_samples[0]
             kvis = ss.physical_properties.kinematic_viscosities
@@ -203,6 +174,7 @@ class CheckViscosity:
                               if v.ref_temp is not None])
 
             temps = [t for t in temps if t is not None]
+
             if len(temps) == 1:  # only one measurement
                 score += 0.5
             elif len(temps) >= 2:
@@ -233,11 +205,10 @@ class CheckViscosity:
 
 
 class CheckDistillation:
-
     max_score = 5
 
     def __call__(self, oil):
-        '''
+        """
         At least two distillation cuts: 1 point
 
         Three cuts: 2 points
@@ -249,8 +220,9 @@ class CheckDistillation:
         Fraction recovered < 1.0 : 2 points
 
         Total possible score: 5 points
-        '''
+        """
         score = 0.0
+
         if len(oil.sub_samples) > 0:
             dist_data = oil.sub_samples[0].distillation_data
 
@@ -261,21 +233,22 @@ class CheckDistillation:
             if dist_data.fraction_recovered is not None:
                 frac = (dist_data.fraction_recovered
                         .converted_to('fraction').value)
+
                 if frac == 1.0:
                     score += 2.0
                 elif 0.0 < frac < 1.0:
                     score += 1.0
+
         return score
 
 
 class Check_weathered_density:
-
     max_score = 1
 
     def __call__(self, oil):
-        '''
+        """
         One Evaporated oil: Density. Score = 1
-        '''
+        """
         ss = get_evaporated_subsample(oil)
         if ss is not None:
             densities = ss.physical_properties.densities
@@ -286,32 +259,6 @@ class Check_weathered_density:
                 return 1.0
 
         return 0.0
-
-
-# class CheckWeatheredViscosity:
-
-#     max_score = 1
-
-#     def __call__(self, oil):
-#         '''
-#         One Evaporated oil: Viscosity. Score = 1
-#         '''
-#         ss = get_evaporated_subsample(oil)
-#         if ss is not None:
-#             kvis = ss.physical_properties.kinematic_viscosities
-#             dvis = ss.physical_properties.dynamic_viscosities
-
-#             if (len(kvis) > 0
-#                     and is_measurement_good(kvis[0].viscosity)
-#                     and is_measurement_good(kvis[0].ref_temp)):
-#                 return 1.0
-
-#             if (len(dvis) > 0
-#                     and is_measurement_good(dvis[0].viscosity)
-#                     and is_measurement_good(dvis[0].ref_temp)):
-#                 return 1.0
-
-#         return 0.0
 
 
 def is_measurement_good(measurement):

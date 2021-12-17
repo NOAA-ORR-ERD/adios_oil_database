@@ -39,7 +39,7 @@ test_develop:
 
   script:
     # install all the requirements
-    - conda install -y --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+    - conda install -y --file adios_db/conda_requirements.txt --file adios_db/conda_requirements_optional.txt --file web_api/conda_requirements.txt
 
     # configure and start mongodb
 

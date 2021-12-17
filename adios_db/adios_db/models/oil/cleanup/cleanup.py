@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-
 """
 classes for options to clean up Records
 """
 
-class Cleanup:
 
+class Cleanup:
     # the ID is so that we can know which cleanup method this is
     # subclasses should define this!
     ID = None
@@ -25,9 +24,9 @@ class Cleanup:
 
         :param oil: an Oil object to act on
 
-        :param do_it=False: flag to tell the cleanup to do its thing. If False,
-                            the method returns a message. If True, the action is
-                            taken, and the Oil object is altered.
+        :param do_it=False: flag to tell the cleanup to do its thing.
+                            If False, the method returns a message. If True,
+                            the action is taken, and the Oil object is altered.
 
         :returns: a message of what could be done, or what was done.
         """

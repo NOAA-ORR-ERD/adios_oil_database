@@ -1,7 +1,7 @@
-#
-#  Here is where we will keep a few things that will make printing stuff out
-#  on a terminal a bit nicer.
-#
+"""
+Here is where we will keep a few things that will make printing stuff out
+on a terminal a bit nicer.
+"""
 
 
 class TermColor(object):
@@ -18,9 +18,9 @@ class TermColor(object):
 
     @classmethod
     def change(cls, str_in, color):
-        '''
-            Surround our string with terminal codes that will change its
-            color and then change it back
-        '''
+        """
+        Surround our string with terminal codes that will change its
+        color and then change it back
+        """
         return '{}{}{}'.format(cls.color_codes[color.lower()], str_in,
                                cls.color_codes['end'])

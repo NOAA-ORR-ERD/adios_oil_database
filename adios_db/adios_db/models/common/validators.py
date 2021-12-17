@@ -45,7 +45,7 @@ class EnumValidator:
             try:
                 item = item.lower()
             except AttributeError:
-                pass  # so non-strings will then fail the in test, but not crash.
+                pass  # so non-strings will fail the in test, but not crash.
 
         if item not in self.valid_items:
             return [self.err_msg.format(item, self.valid_items)]
@@ -89,6 +89,7 @@ class FloatRangeValidator:
         else:
             return []
 
+
 class YearValidator:
     """
     Validator for float values that can only be a given range
@@ -110,7 +111,8 @@ class YearValidator:
         self.max = max_year
 
         if err_msg is None:
-            self.err_msg = "ValidationError: {} is not a year between {} and {}"
+            self.err_msg = ("ValidationError: {} is not a year "
+                            "between {} and {}")
         else:
             self.err_msg = err_msg
 
@@ -124,7 +126,3 @@ class YearValidator:
             return [self.err_msg.format(value, self.min, self.max)]
         else:
             return []
-
-
-
-

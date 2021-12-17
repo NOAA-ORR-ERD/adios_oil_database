@@ -15,7 +15,6 @@ Subpackages
    adios_db.data_sources.env_canada
    adios_db.data_sources.exxon_assays
    adios_db.data_sources.noaa_fm
-   adios_db.data_sources.oil
 
 Submodules
 ----------

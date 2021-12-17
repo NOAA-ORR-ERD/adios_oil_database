@@ -52,7 +52,7 @@ def backup_db_cmd(argv=sys.argv):
 
 
 def backup_db(settings, base_path):
-    '''
+    """
     Here is where we backup our database.  This is what we want to do:
 
     - If the database does not exist, we flag an error and exit:
@@ -63,7 +63,7 @@ def backup_db(settings, base_path):
             - Create a subfolder under our path using the collection name
             - Iterate the objects in the collection
             - Save the objects as <basepath>/<collection>/<object>
-    '''
+    """
     logger.info('connect_mongodb()...')
     client = connect_mongodb(settings)
 
@@ -83,7 +83,6 @@ def backup_db(settings, base_path):
 
         for rec in collection.find({}):
             export_to_file(base_path, collection_name, rec)
-            pass
 
     print('\nDatabase backup done!\n')
 
@@ -132,10 +131,10 @@ def export_to_file(base_path, collection_name, record):
 
 
 def json_handle_unparseable(o):
-    '''
-        This is only necessary if we are using the builtin json module
-        ujson and orjson have no problems with datetime content.
-    '''
+    """
+    This is only necessary if we are using the builtin json module
+    ujson and orjson have no problems with datetime content.
+    """
     if isinstance(o, ObjectId):
         return str(o)
     elif isinstance(o, datetime.datetime):
