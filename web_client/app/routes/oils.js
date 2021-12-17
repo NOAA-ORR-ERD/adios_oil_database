@@ -4,6 +4,8 @@ import { action } from "@ember/object";
 
 
 export default class OilsRoute extends Route {
+    tempSuffix = '-TEMP';
+
     model() {
         return hash({
             configs: (async () => {
@@ -61,20 +63,96 @@ export default class OilsRoute extends Route {
     }
 
     @action
-    resetChangesMade() {
+    commitTemporaryEdits(oil, newRoute) {
+        // reset the flag
         this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
+
+        if (oil.oil_id.endsWith(this.tempSuffix)) {
+            // switch back to the permanent model, keeping our changes.
+            let permID = oil.oil_id.substring(0, oil.oil_id.length - this.tempSuffix.length);
+            this.store.findRecord('oil', permID).then(function(permOil) {
+                // Update our permanent oil from the temp oil's properties
+                oil.constructor.eachAttribute(function(key) {
+                    if (key !== 'oil_id') {
+                        permOil[key] = oil[key];
+                    }
+                }, this);
+
+                permOil.save()
+                .then(function(result) {
+                    if (newRoute) {
+                        this.transitionTo(newRoute);
+                    }
+                    else {
+                        // keep the current route, but with the new ID
+                        this.transitionTo('oils.show', result.id);
+                    }
+                }.bind(this))
+                .then(function() {
+                    oil.deleteRecord();
+                    oil.save().then(function(result) {
+                        result._internalModel.unloadRecord();
+                    }.bind(this));
+                }.bind(this));
+            }.bind(this));
+        }
+    }
+
+    @action
+    discardTemporaryEdits(oil, newRoute) {
+        // reset the flag
+        this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
+
+        if (oil.oil_id.endsWith(this.tempSuffix)) {
+            // switch back to the permanent model, discarding our changes.
+            let permID = oil.oil_id.substring(0, oil.oil_id.length - this.tempSuffix.length);
+
+            this.store.findRecord('oil', permID).then(function(permOil) {
+                if (newRoute) {
+                    this.transitionTo(newRoute);
+                }
+                else {
+                    // keep the current route, but with the new ID
+                    this.transitionTo('oils.show', permOil.id);
+                }
+
+                oil.deleteRecord();
+                oil.save().then(function(result) {
+                    result._internalModel.unloadRecord();
+                }.bind(this));
+            }.bind(this));
+        }
     }
 
     @action
     updateOil(oil) {
-        this.controllerFor('oils.show').changesMade = true;  // eslint-disable-line ember/no-controller-access-in-routes
-        oil.save();
+        let changesMade = this.controllerFor('oils.show').changesMade;  // eslint-disable-line ember/no-controller-access-in-routes
+
+        if (changesMade) {
+            // we are already in the editing context
+            oil.save();
+        }
+        else {
+            // we need to transition to the editing context
+            this.controllerFor('oils.show').changesMade = true;  // eslint-disable-line ember/no-controller-access-in-routes
+
+            // create a temporary oil object
+            let oilAttrs = oil.serialize().data.attributes;
+            oilAttrs.oil_id = oilAttrs.oil_id.concat(this.tempSuffix);
+
+            let tempOil = this.store.createRecord('oil', oilAttrs);
+
+            // transition to the temp object
+            tempOil.save().then(function(result) {
+                this.transitionTo('oils.show', result.id);
+            }.bind(this));
+        }
     }
 
     @action
     createOil(oil) {
         let newOil = this.store.createRecord('oil', oil);
-        
+
         newOil.save().then(function(result) {
             this.transitionTo('oils.show', result.id);
         }.bind(this));

@@ -28,10 +28,7 @@
         {{#if this.changesMade}}
           <Button::BackToList
             @oil={{this.model}}
-            @submit={{pipe
-                        (action send "updateOil")
-                        (action send "resetChangesMade")
-                    }}
+            @submit={{action send "discardTemporaryEdits" this.model "oils.index"}}
           />
         {{else}}
           <LinkTo @route="oils">
@@ -60,7 +57,7 @@
 
     </div>
 
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-4 col-lg-3">
       <div class="row align-items-center justify-content-center">
 
         <div class="col-xs-4 mt-2 text-center">
@@ -72,21 +69,43 @@
               @onLabel="Edit"
               @offLabel="View"
               @value={{this.editable}}
-              @onToggle={{action (mut this.editable)}}
+              @onToggle={{this.setEditable}}
             />
           {{/if}}
         </div>
       </div>
     </div>
 
-    <div class="col-xs-6 col-sm-4 col-lg-3">
+    <div class="col-xs-6 col-sm-4 col-lg-4">
       <div class="d-flex">
-        <Button::Download @oil={{this.model}} />
+
+        {{#if this.canModifyDb}}
+          <Button::DiscardEdits
+            @oil={{this.model}}
+            @submit={{action send "discardTemporaryEdits" this.model ""}}
+            @changesMade={{this.changesMade}}
+          />
+
+          <Button::SaveEdits
+            @oil={{this.model}}
+            @submit={{action (pipe
+                        (action send "updateOil" this.model)
+                        (action send "commitTemporaryEdits" this.model))
+                    }}
+            @changesMade={{this.changesMade}}
+          />
+        {{/if}}
+ 
+        <Button::Download
+          @oil={{this.model}}
+          @changesMade={{this.changesMade}}
+        />
 
         {{#if this.canModifyDb}}
           <Button::CopyOil
             @oil={{this.model}}
             @submit={{action send "createOil"}}
+            @changesMade={{this.changesMade}}
           />
         {{/if}}
 
@@ -94,6 +113,7 @@
           <Button::DeleteOil
             @oil={{this.model}}
             @submit={{action send "deleteOil"}}
+            @changesMade={{this.changesMade}}
           />
         {{/if}}
 
