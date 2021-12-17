@@ -6,12 +6,22 @@ and we also want to document how it works.
 Either we test it correctly, or we test it in an episodic manner on the
 real dataset.
 """
+
+import pytest
+
+try:
+    from slugify import Slugify
+except ImportError:
+    pytestmark = pytest.mark.skipif(
+        True,
+        reason="You need the awesome-slugify package to run these tests"
+    )
+
 import os
 from numbers import Number
 from pathlib import Path
 import json
 
-import pytest
 import numpy as np
 
 from openpyxl.utils.exceptions import InvalidFileException

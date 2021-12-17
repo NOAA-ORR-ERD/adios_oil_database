@@ -3,9 +3,13 @@ Collection of file readers
 
 Some common constants, etc. here
 """
-from slugify import Slugify
+try:
+    from slugify import Slugify
+    field_name_sluggify = Slugify(to_lower=True, separator='_')
+except ImportError:
+    print("You need the awesome-slugify pacakge to run the importing code")
+    field_name_sluggify = None
 
 from .reader import CsvFile
 
 
-field_name_sluggify = Slugify(to_lower=True, separator='_')
