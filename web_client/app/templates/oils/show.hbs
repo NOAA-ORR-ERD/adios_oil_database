@@ -96,12 +96,16 @@
           />
         {{/if}}
  
-        <Button::Download @oil={{this.model}} />
+        <Button::Download
+          @oil={{this.model}}
+          @changesMade={{this.changesMade}}
+        />
 
         {{#if this.canModifyDb}}
           <Button::CopyOil
             @oil={{this.model}}
             @submit={{action send "createOil"}}
+            @changesMade={{this.changesMade}}
           />
         {{/if}}
 
@@ -109,6 +113,7 @@
           <Button::DeleteOil
             @oil={{this.model}}
             @submit={{action send "deleteOil"}}
+            @changesMade={{this.changesMade}}
           />
         {{/if}}
 
