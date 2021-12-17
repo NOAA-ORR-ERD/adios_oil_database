@@ -3,12 +3,15 @@ from math import isclose
 from numbers import Number
 import logging
 
-from slugify import Slugify
+try:
+    from slugify import Slugify
+    custom_slugify = Slugify(to_lower=True, separator='_')
+except ImportError:
+    print("You need the awesome-slugify pacakge to run the importing code")
 
 from adios_db.models.oil.oil import Oil
 from adios_db.data_sources.mapper import MapperBase
 
-custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 

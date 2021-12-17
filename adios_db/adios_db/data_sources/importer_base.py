@@ -3,13 +3,18 @@ from functools import wraps
 from datetime import datetime
 import logging
 
-from slugify import Slugify
+
+try:
+    from slugify import Slugify
+    custom_slugify = Slugify(to_lower=True, separator='_')
+except ImportError:
+    print("You need the awesome-slugify pacakge to run the importing code")
+    custom_slugify = None
 
 from dateutil import parser
 from itertools import zip_longest
 from builtins import isinstance
 
-custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 

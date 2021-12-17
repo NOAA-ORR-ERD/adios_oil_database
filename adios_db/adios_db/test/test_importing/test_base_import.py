@@ -6,9 +6,18 @@ and we also want to document how it works.
 Either we test it correctly, or we test it in an episodic manner on the
 real dataset.
 """
-from pathlib import Path
-
 import pytest
+
+try:
+    from slugify import Slugify
+except ImportError:
+    pytestmark = pytest.mark.skipif(
+        True,
+        reason="You need the awesome-slugify package to run these tests"
+    )
+
+
+from pathlib import Path
 
 from adios_db.data_sources import CsvFile
 

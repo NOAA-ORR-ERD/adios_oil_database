@@ -17,7 +17,8 @@ mongodb>=4.2.0
 pymongo<4
 
 
-awesome-slugify>=1.6.5
+# this is only needed for some of the importing code.
+# awesome-slugify>=1.6.5
 
 # for downloading/importing data
 openpyxl>=3.0.0
