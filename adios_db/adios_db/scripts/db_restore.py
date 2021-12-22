@@ -73,7 +73,7 @@ def restore_db(settings, base_path):
 
     drop_db(client, settings['mongodb.database'])
 
-    db = getattr(client, settings['mongodb.database'])
+    db = client.get_database(settings['mongodb.database'])
 
     create_indices(db)
 

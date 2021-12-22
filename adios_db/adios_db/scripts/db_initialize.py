@@ -77,7 +77,7 @@ def init_db(settings, show_prompt=True):
 
     drop_db(client, settings['mongodb.database'])
 
-    db = getattr(client, settings['mongodb.database'])
+    db = client.get_database(settings['mongodb.database'])
 
     print()
     load_labels(db)

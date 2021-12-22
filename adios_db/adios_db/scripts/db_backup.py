@@ -71,7 +71,7 @@ def backup_db(settings, base_path):
         print(f'The {settings["mongodb.database"]} database does not exist!')
         return
 
-    db = getattr(client, settings['mongodb.database'])
+    db = client.get_database(settings['mongodb.database'])
     collections = db.collection_names()
 
     cleanup_folder(base_path)

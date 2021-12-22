@@ -452,6 +452,19 @@ class Session():
                     return label
             return None
 
+    def list_database_names(self):
+        return self.mongo_client.list_database_names()
+
+    def drop_database(self, db_name):
+        return self.mongo_client.drop_database(db_name)
+
+    def get_database(self, db_name):
+        return getattr(self.mongo_client, db_name)
+
+    @property
+    def address(self):
+        return self.mongo_client.address
+
     def __getattr__(self, name):
         """
         Any referenced attributes that are not explicitly defined in this
