@@ -70,6 +70,7 @@ class Session():
         :param database: database name used for this data.
         """
         self.mongo_client = MongoClient(host=host, port=port)
+        self.server_info = self.mongo_client.server_info()
 
         self._db = getattr(self.mongo_client, database)
         self._oil_collection = self._db.oil  # the oil collection

@@ -8,7 +8,6 @@ They will only run if the --mongo command line option is passed to pytest.
 NOTE: These should really use a fixture to start up mongo, and/or
       mocking of the DB.
 """
-
 import pytest
 
 # Pass the --mongo command line option if you want these to run.
