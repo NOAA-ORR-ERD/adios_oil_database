@@ -14,7 +14,8 @@ jobs:
       - name: Test the env that github actions has available
         run: |
           pwd
-          ls -l
+          ls -la
+          ls -la ..
       - name: Use the sphinx-pages package
         uses: seanzhengw/sphinx-pages@master
         with:
