@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     name: Build and Push Sphinx Pages
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Test the env that github actions has available
