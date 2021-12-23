@@ -9,12 +9,18 @@ on:
 jobs:
   build:
     name: Build and Push Sphinx Pages
+    needs: test
     runs-on: ubuntu-latest
     steps:
-    - uses: seanzhengw/sphinx-pages@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        create_readme: false
-        source_dir: ../adios_db/Documentation/API_docs/source
-        install_extensions: true
+      - name: Test the env that github actions has available
+        run: |
+          pwd
+          ls -l
+      - name: Use the sphinx-pages package
+        uses: seanzhengw/sphinx-pages@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create_readme: false
+          source_dir: ../adios_db/Documentation/API_docs/source
+          install_extensions: true
 
