@@ -46,7 +46,7 @@ export default class OilsShowRoute extends Route {
             // is not allowed.
 
             if (!transition.to.params.oil_id.endsWith('-TEMP') &&
-                    this.controllerFor('oils.show').changesMade)
+                    this.controllerFor('oils.show').changesMade)  // eslint-disable-line ember/no-controller-access-in-routes
             {
                 // We are making a transition to a permanent ID,
                 // but changes are still in progress.  Not allowed
@@ -55,7 +55,7 @@ export default class OilsShowRoute extends Route {
                                  transition.from.attributes);
             }
             else if (transition.to.params.oil_id.endsWith('-TEMP') &&
-                     !this.controllerFor('oils.show').changesMade)
+                     !this.controllerFor('oils.show').changesMade)  // eslint-disable-line ember/no-controller-access-in-routes
             {
                 // We are making a transition to a temporary ID,
                 // but no changes have been made.  Not allowed.
