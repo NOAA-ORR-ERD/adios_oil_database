@@ -7,7 +7,7 @@
       },
       "effectiveness": {
           "label": "Effectiveness",
-          "dataType": "value-unit",
+          "dataType": "range-value-unit",
           "unit": "%",
           "unit_type": "massfraction",
           "precision": 3
