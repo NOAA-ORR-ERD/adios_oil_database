@@ -171,7 +171,10 @@ export default class OilsRoute extends Route {
 
     @action
     error(error) {
-        if (error.errors && error.errors[0] && error.errors[0].status === '404') {
+        if (error.errors &&
+                error.errors[0] &&
+                parseInt(error.errors[0].status) >= parseInt('100'))
+        {
             return true;
         }
         else {
