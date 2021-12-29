@@ -168,4 +168,14 @@ export default class OilsRoute extends Route {
             this.transitionTo('oils.index');
         }.bind(this));
     }
+
+    @action
+    error(error) {
+        if (error.errors && error.errors[0] && error.errors[0].status === '404') {
+            return true;
+        }
+        else {
+            this.replaceWith('no-connection');
+        }
+    }
 }

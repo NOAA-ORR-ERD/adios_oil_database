@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <div class="row d-flex justify-content-center">
+      <div class="col-12 col-sm">
+        <h2 align="center" class="title">Record Not Found</h2>
+
+        <p align="center">
+          {{get (object-at 0 @model.errors) "title"}}
+          ( {{get (object-at 0 @model.errors) "status"}} ).
+        </p>
+      </div>
+  </div>
+
+  <div class="row d-flex justify-content-center">
+      <div class="col-12 col-sm">
+        <LinkTo @route="oils">
+          <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
+            data-toggle="tooltip" title="Back to List">
+            &lt; Back to List
+          </button>
+        </LinkTo>
+      </div>
+  </div>
+
+</div>
