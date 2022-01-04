@@ -1,6 +1,9 @@
 #!/bin/bash
 
 echo `pwd`
+ls -la
+
+cp ./oildb-deploy/config/stage/keycloak/* /data/kc_config/
 
 ./web_api/docker_backup_db.sh
 
