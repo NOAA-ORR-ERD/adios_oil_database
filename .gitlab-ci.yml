@@ -296,6 +296,7 @@ deploy_api_stage:
     APP_NETWORK: adios_net
     PORT_MAPPING: 8084:9898
     REPO_VOLUME: noaa_data_repo
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -305,6 +306,9 @@ deploy_api_stage:
     - >
       docker volume inspect $REPO_VOLUME >/dev/null 2>&1 ||
       docker volume create $REPO_VOLUME
+    - >
+      docker volume inspect $KC_CONFIG_VOLUME >/dev/null 2>&1 ||
+      docker volume create $KC_CONFIG_VOLUME
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -313,6 +317,7 @@ deploy_api_stage:
       -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
       --network $APP_NETWORK
       -v $REPO_VOLUME:/data/git_repos
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       --restart unless-stopped $IMAGE_TAG
     - docker ps
     - docker logs $CONTAINER_NAME
@@ -361,6 +366,7 @@ deploy_oauth_api_stage:
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
     OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -383,6 +389,8 @@ deploy_oauth_api_stage:
       --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage

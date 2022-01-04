@@ -42,5 +42,7 @@ RUN cd documents \
 RUN mkdir /config
 RUN cp /adios-db/oildb-deploy/config/stage/web_api/* /config/
 
+RUN cp /adios-db/oildb-deploy/config/stage/keycloak/* /data/kc_config/
+
 EXPOSE 9898
 ENTRYPOINT ["/adios-db/web_api/docker_start.sh"]
