@@ -4,6 +4,7 @@ echo `pwd`
 ls -la
 
 cp ./oildb-deploy/config/stage/keycloak/* /data/kc_config/
+chmod +r /data/kc_config/*.html
 
 ./web_api/docker_backup_db.sh
 
