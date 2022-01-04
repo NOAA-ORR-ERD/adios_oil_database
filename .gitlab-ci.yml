@@ -483,6 +483,7 @@ deploy_oauth_client_stage:
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
     OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -506,6 +507,8 @@ deploy_oauth_client_stage:
       --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage
