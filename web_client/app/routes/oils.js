@@ -138,7 +138,9 @@ export default class OilsRoute extends Route {
 
             // create a temporary oil object
             let oilAttrs = oil.serialize().data.attributes;
-            oilAttrs.oil_id = oilAttrs.oil_id.concat(this.tempSuffix);
+            if (!oilAttrs.oil_id.endsWith(this.tempSuffix)) {
+                oilAttrs.oil_id = oilAttrs.oil_id.concat(this.tempSuffix);
+            }
 
             let tempOil = this.store.createRecord('oil', oilAttrs);
 
@@ -165,5 +167,17 @@ export default class OilsRoute extends Route {
             result._internalModel.unloadRecord();
             this.transitionTo('oils.index');
         }.bind(this));
+    }
+
+    @action
+    error(error) {
+        if (error.errors && error.errors[0] &&
+                parseInt(error.errors[0].status) >= 100)
+        {
+            return true;
+        }
+        else {
+            this.replaceWith('no-connection');
+        }
     }
 }

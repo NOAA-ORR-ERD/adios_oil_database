@@ -72,7 +72,7 @@ def backup_db(settings, base_path):
         return
 
     db = client.get_database(settings['mongodb.database'])
-    collections = db.collection_names()
+    collections = db.list_collection_names()
 
     cleanup_folder(base_path)
 
