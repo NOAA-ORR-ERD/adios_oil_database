@@ -6,6 +6,9 @@ ls -la
 cp ./oildb-deploy/config/stage/keycloak/* /data/kc_config/
 chmod +r /data/kc_config/*.html
 
+cp ./web_client/public/assets/images/NOAA_logo.svg /data/kc_config/
+chmod +r /data/kc_config/*.svg
+
 ./web_api/docker_backup_db.sh
 
 echo "Starting our server on host:port:"
