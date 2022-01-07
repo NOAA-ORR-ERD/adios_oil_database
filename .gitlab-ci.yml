@@ -365,10 +365,6 @@ deploy_oauth_api_stage:
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
     #OAUTH2_PROXY_ALLOWED_ROLES: <OPTIONAL>
-    #
-    #OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
-    #OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
-    #OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
     KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
@@ -479,14 +475,10 @@ deploy_oauth_client_stage:
     OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth.orr.noaa.gov/auth/realms/ORR
     OAUTH2_PROXY_EMAIL_DOMAINS: noaa.gov
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
-    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:9898
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:4200
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
     #OAUTH2_PROXY_ALLOWED_ROLES: <OPTIONAL>
-    #
-    #OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
-    #OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
-    #OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
     KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
