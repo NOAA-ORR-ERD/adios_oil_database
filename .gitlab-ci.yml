@@ -388,6 +388,9 @@ deploy_oauth_api_stage:
       --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
       --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage
@@ -503,6 +506,9 @@ deploy_oauth_client_stage:
       --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
       --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage
