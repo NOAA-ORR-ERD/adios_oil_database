@@ -180,9 +180,9 @@ The GNOME Compatible flag is an indicator of whether the record can be used in t
 Sub-samples
 ===========
 
-Often when oil an is analyzed in a lab, the original sample will be processed in some way, and the processed sample will be analysis separately. POssilbe processing includes artificial weathering in a lab and distillation.
+Often when oil an is analyzed in a lab, the original sample will be processed in some way, and the processed sample will be analysis separately. Possible processing includes artificial weathering in a lab and distillation.
 
-Each record will have at least one sub sample, usually called "fresh oil"
+Each record will have at least one sub-sample, usually called "fresh oil"
 
 If a record contains data about additional sub-samples the sub-samples may have specific (optional) data that describes it.
 
@@ -191,14 +191,6 @@ Name
 
 The name given to this sub-sample
 
-Example: Fraction left after Rotovap to 25% mass loss.
-
-Short Name
-----------
-
-An abbreviated form of the name that can be displayed easily
-
-Example: 25% evaporated
 
 Description
 -----------
@@ -208,12 +200,14 @@ Text that describes the sub sample.
 Sample ID
 ---------
 
-An ID for the sub sample: each lab might have its own system for identifying their sub-samples
+An ID for the sub sample: each lab might have its own system for identifying their sub-samples.
+
 
 Evaporated Fraction
 -------------------
 
-Some oil samples are evaporated artificially and this is the mass from loss in that process, if applicable
+Some oil samples are evaporated artificially and this is the mass from loss in that process, if applicable.
+
 
 Boiling Point Range
 -------------------
@@ -224,20 +218,27 @@ Some oil samples are fractions collected through fractional distillation and are
 Physical Properties
 ===================
 
+
+
 Distillation Data
 =================
+
 
 SARA
 =====
 
+
 Environmental Behavior
 ======================
+
 
 Compounds
 =========
 
+
 Bulk Composition
 ================
+
 
 Industry Properties
 ===================
