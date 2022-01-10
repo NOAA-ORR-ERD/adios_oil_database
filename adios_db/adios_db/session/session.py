@@ -251,7 +251,9 @@ class Session():
 
         start, stop = self._parse_interval_arg(page)
 
-        return CursorWrapper(ret[start:stop])
+        total_results = ret.explain()['executionStats']['nReturned']
+
+        return (CursorWrapper(ret[start:stop]), total_results)
 
     def _sort_options(self, sort):
         if sort is None:
