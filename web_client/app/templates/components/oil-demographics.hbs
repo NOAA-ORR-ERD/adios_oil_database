@@ -226,13 +226,24 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-sm-12 col-md-5 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold"
+                 for="gnome-compatible">
+            GNOME Compatible:
+          </label>
+
+          {{if @oil.metadata.gnome_suitable "Yes" "No"}}
+        </div>
+      </div>
+
     </div>
 
   </div>
 
   {{! Comments }}
   {{#if (or @oil.metadata.comments @editable) }}
-    <div class="row p-0 mb-3">
+    <div class="row p-0 mb-1">
       <div class="col-12 p-0 input-group">
         <label class="pl-1 font-weight-bold">Comments:</label>
         &nbsp;
