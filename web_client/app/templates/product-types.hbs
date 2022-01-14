@@ -2,7 +2,6 @@
 
 <ul>
   {{#each this.model as |ptypes|}}
-    {{log ptypes}}
     {{#each ptypes.product_types as |ptype|}}
       <li>{{ptype}}</li>
     {{/each}}

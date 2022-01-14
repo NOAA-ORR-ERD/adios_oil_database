@@ -87,17 +87,16 @@ def get_oils(request):
         sort = get_sort_params(request)
 
         try:
-            return json_api_results(adb_session.query(page=[start, stop],
-                                                      sort=sort,
-                                                      **search_opts),
-                                    limit)
+            return json_api_results(*adb_session.query(page=[start, stop],
+                                                       sort=sort,
+                                                       **search_opts))
         except Exception as e:
             logger.error(e)
             raise HTTPInternalServerError(e)
 
 
-def json_api_results(results, page_size):
-    total = len(results)  # .count()
+def json_api_results(results, total):
+    page_size = len(results)  # .count()
     pages = total / page_size if page_size > 0 else 1
 
     data = [get_oil_searchable_fields(r) for r in results]

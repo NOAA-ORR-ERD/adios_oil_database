@@ -16,7 +16,7 @@ export default class ProductTypesRoute extends Route {
     }
 
     @action
-    error(error) {
+    error() {
         this.replaceWith('no-connection');
     }
 
