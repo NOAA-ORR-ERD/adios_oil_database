@@ -235,11 +235,7 @@ class TestDistillationCompleteness:
         assert self.Dcheck(oil) == expected + 2
 
 
-class TestViscosityCompleteness:
-    Vcheck = CheckViscosity()
-
-    @pytest.mark.parametrize('oil_json, expected', [
-        ({'_id': 'EC09999', 'oil_id': 'EC09999',
+just_one_viscosity = {'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
           'metadata': {'comments': 'Just one viscosity'},
           'sub_samples': [
@@ -256,9 +252,9 @@ class TestViscosityCompleteness:
                   },
               },
           ]
-          },
-         0.5),
-        ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          }
+
+two_fresh_viscosities = {'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
           'metadata': {'comments': 'Second viscosity'},
           'sub_samples': [
@@ -274,16 +270,16 @@ class TestViscosityCompleteness:
                           {
                               'viscosity': {'value': 1500, 'unit': 'mPa.s',
                                             'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 20.0, 'unit': 'C',
+                              'ref_temp': {'value': 15.0, 'unit': 'C',
                                            'unit_type': 'temperature'},
                           },
                       ],
                   },
               },
           ]
-          },
-         1),
-        ({'_id': 'EC09999', 'oil_id': 'EC09999',
+          }
+
+two_viscosities_partial_temp_range = {'_id': 'EC09999', 'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
           'metadata': {'comments': 'Second viscosity, '
                                    'partial temperature range. 8% score'},
@@ -307,9 +303,9 @@ class TestViscosityCompleteness:
                   },
               },
           ]
-          },
-         0.75),
-        ({'oil_id': 'EC09999',
+          }
+
+one_weathered_viscosity_no_fresh = {'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
           'metadata': {'comments': 'Just one weathered viscosity -- no fresh'},
           'sub_samples': [
@@ -333,9 +329,9 @@ class TestViscosityCompleteness:
                   },
               },
           ]
-          },
-         0),
-        ({'oil_id': 'EC09999',
+          }
+
+one_weathered_viscosity_two_fresh = {'oil_id': 'EC09999',
           "adios_data_model_version": "0.11.0",
           'metadata': {'comments': 'One weathered viscosity -- two fresh'},
           'sub_samples': [
@@ -375,8 +371,18 @@ class TestViscosityCompleteness:
                   },
               },
           ]
-          },
-         2),
+        }
+
+
+class TestViscosityCompleteness:
+    Vcheck = CheckViscosity()
+
+    @pytest.mark.parametrize('oil_json, expected', [
+        (just_one_viscosity, 1.0),
+        (two_fresh_viscosities, 1.5),
+        (two_viscosities_partial_temp_range, (1 + 10.0 / 30.0)),
+        (one_weathered_viscosity_no_fresh, 0),
+        (one_weathered_viscosity_two_fresh, 2.5),
     ])
     def test_completeness_score(self, oil_json, expected):
         oil = Oil.from_py_json(oil_json)

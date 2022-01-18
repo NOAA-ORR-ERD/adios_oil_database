@@ -2,6 +2,8 @@
 tests for making a GNOME Oil
 
 """
+import pytest
+
 from pathlib import Path
 from math import isclose
 
@@ -85,13 +87,21 @@ def test_max_water_emulsion_estimated():
     assert isclose(data['emulsion_water_fraction_max'], 0.843579, rel_tol=1e-4)
 
 
-def test_max_water_emulsion_no_estimation():
+def test_no_cuts_exception():
     sparse_oil = get_sparse_oil()
 
     sparse_oil.metadata.product_type = "Condensate"
-    data = make_gnome_oil(sparse_oil)
+    with pytest.raises(ValueError):
+        data = make_gnome_oil(sparse_oil)
 
-    assert data['emulsion_water_fraction_max'] == 0.
+
+def test_frac_recovered_exception():
+    full_oil = get_full_oil()
+
+    full_oil.metadata.product_type = "Condensate"
+    full_oil.sub_samples[0].distillation_data.fraction_recovered.value = 5
+    with pytest.raises(ValueError):
+        data = make_gnome_oil(full_oil)
 
 
 def test_estimate_pour_point():

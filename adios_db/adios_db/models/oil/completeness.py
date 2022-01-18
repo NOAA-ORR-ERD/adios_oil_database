@@ -141,24 +141,28 @@ class Check_second_density:
 
 
 class CheckViscosity:
-    max_score = 2.0
+    max_score = 2.5
 
     def __call__(self, oil):
         """
         Fresh oil:
 
-          One viscosity. Score = 0.5
+          One viscosity. Score = 1.0
 
           Second viscosity at a different temperature:
 
-          Score = maxDeltaT/40, but not greater than 0.5
+          Score = 0.5 * (maxDeltaT/15), but not greater than 0.5
 
             maxDeltaT: The difference between the lowest and highest
             measurement in the set.
 
-        One or more Evaporated oil Viscosity.
+            15 because Env CA uses 0C and 15C as their standard method.
+            Seems like we should give full credit for that
 
-          Score = 1
+        One or more Evaporated oil Viscosity (if there is fresh oil viscosity)
+
+          Score = 1.0
+
         """
         score = 0.0
 
@@ -176,13 +180,13 @@ class CheckViscosity:
             temps = [t for t in temps if t is not None]
 
             if len(temps) == 1:  # only one measurement
-                score += 0.5
+                score += 1.0
             elif len(temps) >= 2:
                 t1, *_, t2 = sorted(temps)
                 delta_t = t2 - t1
 
                 if delta_t > 0.0:
-                    score += min(delta_t / 40.0, 0.5) + 0.5
+                    score += min(delta_t / 30.0, 0.5) + 1.0
 
         # only if there's fresh oil data:
         if score > 0.0:
