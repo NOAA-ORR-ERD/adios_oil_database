@@ -5,8 +5,8 @@ FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
 RUN yum -y update
-RUN yum -y install epel-release
-RUN yum -y install nodejs npm
+RUN yum -y install nodejs
+RUN yum -y install npm
 
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/stage/web_client/ /web_client/public/configs/
