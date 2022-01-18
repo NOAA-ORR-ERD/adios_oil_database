@@ -4,7 +4,7 @@ FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
 
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
-RUN yum update -y && yum -y install node npm
+RUN yum update -y && yum -y install nodejs npm
 
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/stage/web_client/ /web_client/public/configs/
