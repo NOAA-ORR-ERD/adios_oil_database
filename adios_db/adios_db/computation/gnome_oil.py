@@ -18,7 +18,8 @@ from adios_db.models.oil.validation.errors import ERRORS
 from adios_db.computation import estimations as est
 from .physical_properties import (get_density_data,
                                   get_kinematic_viscosity_data,
-                                  get_distillation_cuts)
+                                  get_distillation_cuts,
+                                  get_frac_recovered)
 from .physical_properties import (bullwinkle_fraction,
                                   max_water_fraction_emulsion)
 from .physical_properties import Density, KinematicViscosity
@@ -354,21 +355,33 @@ def normalized_cut_values(oil):
     iBP = 266
     tBP = 1050
 
+    if oil.metadata.product_type != 'Crude Oil NOS':
+        fraction_recovered, frac_in_db = get_frac_recovered(oil)
+        if frac_in_db and fraction_recovered != 1:
+            raise ValueError("Fraction recovered less than 1 for {}. "
+                             "Oil not suitable for use in Gnome".format(oil.metadata.product_type))
+
     if len(cuts) == 0:
         # should be a warning if api < 50 or not a crude
         oil_api = oil.metadata.API
 
         if oil.metadata.product_type != 'Crude Oil NOS':
-            pass
+            #pass
             # Maybe this should be a log message?
             # print(WARNINGS['W007'] + "  - oil not recommended for use in Gnome")
-
+            raise ValueError("Distillation data required for {}. "
+                             "Oil not suitable for use in Gnome".format(oil.metadata.product_type))
         if oil_api < 0:
             raise ValueError("Density is too large for estimations. "
                              "Oil not suitable for use in Gnome")
 
         BP_i = est.cut_temps_from_api(oil_api)
         fevap_i = np.cumsum(est.fmasses_flat_dist(f_res, f_asph))
+        # Robert's new method
+        #iBP = 10/9 * (519.3728 - 3.6637 * oil_api) - 1015 / 9
+        #tBP = 1015
+        #BP_i = [iBP, tBP]
+        #fevap_i = [0,1]
     else:
         BP_i, fevap_i = list(zip(*[(c[1], c[0]) for c in cuts]))
         N = len(BP_i)

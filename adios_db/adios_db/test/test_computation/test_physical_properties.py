@@ -17,6 +17,7 @@ from adios_db.computation.physical_properties import (get_density_data,
                                                       get_dynamic_viscosity_data,
                                                       KinematicViscosity,
                                                       Density,
+                                                      get_frac_recovered,
                                                       max_water_fraction_emulsion,
                                                       emul_water,
                                                       )
@@ -25,9 +26,23 @@ from adios_db.computation.physical_properties import (get_density_data,
 HERE = Path(__file__).parent
 EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
 full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
+sparse_oil_filename = EXAMPLE_DATA_DIR / "ExampleSparseRecord.json"
+
+# use the function if you're going to change the Oil object.
+def get_full_oil():
+    return Oil.from_file(full_oil_filename)
+
+def get_sparse_oil():
+    return Oil.from_file(sparse_oil_filename)
+
+FullOil = get_full_oil()
+SparseOil = get_sparse_oil()
 
 # run it through the Oil object to make sure its up to date:
-FullOil = Oil.from_file(full_oil_filename)
+try:
+    FullOil.to_file(full_oil_filename)
+except Exception:  # in case the tests are running somewhere read-only
+    pass
 
 
 def test_get_density_data_defaults():
@@ -240,10 +255,28 @@ class Test_KinematicViscosity:
         assert isclose(self.kv.at_temp(288.15), 0.0003783, rel_tol=1e-3)
 
 
+def test_get_frac_recovered():
+    frac_recovered = get_frac_recovered(FullOil)
+
+    assert frac_recovered[0] == 1.0
+
+    frac_recovered = get_frac_recovered(SparseOil)
+
+    assert frac_recovered[0] ==  None
+
 def test_max_water_fraction_emulsion():
     y_max = max_water_fraction_emulsion(FullOil)
 
     assert y_max == 0.39787
+
+
+def test_max_water_emulsion_no_estimation():
+    sparse_oil = get_sparse_oil()
+
+    sparse_oil.metadata.product_type = "Condensate"
+    y_max = max_water_fraction_emulsion(sparse_oil)
+
+    assert y_max == 0
 
 
 def test_emul_water():
