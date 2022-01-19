@@ -26,7 +26,10 @@ COPY ./ /adios-db/
 WORKDIR adios-db
 
 # install deps
-RUN conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt \
+RUN conda install -y \
+    --file adios_db/conda_requirements.txt \
+    --file web_api/conda_requirements.txt \
+    --file documents/conda_requirements.txt \
     && conda clean --all
 
 RUN cd adios_db && pip install -e ./
@@ -34,13 +37,13 @@ RUN cd web_api && pip install -e ./
 
 # build docs
 RUN cd documents \
-    && conda install --file conda_requirements.txt \
     && sphinx-build -a -E -b html source build/html \
-    && cp -r build/html/* ../user_docs \
-    && rm -rf build
+    && /usr/bin/cp -rf build/html/* ../user_docs \
+    && /usr/bin/rm -rf build
+
 
 RUN mkdir /config
-RUN cp /adios-db/oildb-deploy/config/public/web_api/* /config/
+RUN /usr/bin/cp /adios-db/oildb-deploy/config/public/web_api/* /config/
 
 EXPOSE 9898
 ENTRYPOINT ["/adios-db/web_api/docker_start_prod.sh"]
