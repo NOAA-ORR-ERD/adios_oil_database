@@ -1,8 +1,13 @@
 # Oil Database Web Client production Docker configuration
 #
-FROM registry.orr.noaa.gov/erd/centos-conda
+FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
 
-RUN yum update -y && yum -y install node npm nginx
+RUN echo "ip_resolve=4" >> /etc/yum.conf
+
+RUN yum -y update
+RUN yum -y install node
+RUN yum -y install npm
+RUN yum -y install nginx
 
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/public/web_client/ /config/
