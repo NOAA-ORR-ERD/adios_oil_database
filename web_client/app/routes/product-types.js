@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from "@ember/object";
 
 export default class ProductTypesRoute extends Route {
     model() {
@@ -13,4 +14,10 @@ export default class ProductTypesRoute extends Route {
             return this.store.findAll('product-type');
         })();
     }
+
+    @action
+    error() {
+        this.replaceWith('no-connection');
+    }
+
 }

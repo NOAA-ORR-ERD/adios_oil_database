@@ -2,6 +2,7 @@
 // variable overrides (needs to come before the bootstrap include
 $dark: #17a2b8;  // cyan
 $body-bg: #eee;
+$line-height-base: 1.2;
 $badge-font-weight: 500;
 $button-font-weight: 500;
 $border-color: #adb5bd;
@@ -137,8 +138,8 @@ td:empty::after{
         li{
             a{
                 @include transition(all .2s);
-                color: #aeaeae;
-                font-size: 11px;
+                color: #dddddd;
+                font-size: 0.8rem;
                 padding: 5px 10px;
 
                 &.help{

@@ -296,6 +296,7 @@ deploy_api_stage:
     APP_NETWORK: adios_net
     PORT_MAPPING: 8084:9898
     REPO_VOLUME: noaa_data_repo
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -305,6 +306,9 @@ deploy_api_stage:
     - >
       docker volume inspect $REPO_VOLUME >/dev/null 2>&1 ||
       docker volume create $REPO_VOLUME
+    - >
+      docker volume inspect $KC_CONFIG_VOLUME >/dev/null 2>&1 ||
+      docker volume create $KC_CONFIG_VOLUME
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -313,6 +317,7 @@ deploy_api_stage:
       -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
       --network $APP_NETWORK
       -v $REPO_VOLUME:/data/git_repos
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       --restart unless-stopped $IMAGE_TAG
     - docker ps
     - docker logs $CONTAINER_NAME
@@ -350,17 +355,17 @@ deploy_oauth_api_stage:
     CONTAINER_NAME: auth_web_api
     APP_NETWORK: adios_net
     PORT_MAPPING: 8004:4180
-    OAUTH2_PROXY_PROVIDER: keycloak
+    OAUTH2_PROXY_PROVIDER: keycloak-oidc
     OAUTH2_PROXY_CLIENT_ID: adios-database
-    #OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
-    OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
-    OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
-    OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
-    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:9898
+    OAUTH2_PROXY_REDIRECT_URL: https://adios-stage.orr.noaa.gov/oauth2/callback
+    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth.orr.noaa.gov/auth/realms/ORR
+    OAUTH2_PROXY_EMAIL_DOMAINS: noaa.gov
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:9898
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
-    OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    #OAUTH2_PROXY_ALLOWED_ROLES: <OPTIONAL>
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -375,14 +380,17 @@ deploy_oauth_api_stage:
       --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
       --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
       --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
-      --env OAUTH2_PROXY_LOGIN_URL=$OAUTH2_PROXY_LOGIN_URL
-      --env OAUTH2_PROXY_REDEEM_URL=$OAUTH2_PROXY_REDEEM_URL
-      --env OAUTH2_PROXY_VALIDATE_URL=$OAUTH2_PROXY_VALIDATE_URL
-      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
-      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
-      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
+      --env OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL
+      --env OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL
       --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
+      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
+      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
+      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage
@@ -464,17 +472,17 @@ deploy_oauth_client_stage:
     CONTAINER_NAME: auth_web_client
     APP_NETWORK: adios_net
     PORT_MAPPING: 8003:4180
-    OAUTH2_PROXY_PROVIDER: keycloak
+    OAUTH2_PROXY_PROVIDER: keycloak-oidc
     OAUTH2_PROXY_CLIENT_ID: adios-database
-    #OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
-    OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
-    OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
-    OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
-    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:4200
+    OAUTH2_PROXY_REDIRECT_URL: https://adios-stage.orr.noaa.gov/oauth2/callback
+    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth.orr.noaa.gov/auth/realms/ORR
+    OAUTH2_PROXY_EMAIL_DOMAINS: noaa.gov
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:4200
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
-    OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    #OAUTH2_PROXY_ALLOWED_ROLES: <OPTIONAL>
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -490,14 +498,17 @@ deploy_oauth_client_stage:
       --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
       --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
       --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
-      --env OAUTH2_PROXY_LOGIN_URL=$OAUTH2_PROXY_LOGIN_URL
-      --env OAUTH2_PROXY_REDEEM_URL=$OAUTH2_PROXY_REDEEM_URL
-      --env OAUTH2_PROXY_VALIDATE_URL=$OAUTH2_PROXY_VALIDATE_URL
-      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
-      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
-      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
+      --env OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL
+      --env OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL
       --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
+      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
+      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
+      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage

@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from "@ember/object";
 
 
 export default class LabelsRoute extends Route {
@@ -13,5 +14,10 @@ export default class LabelsRoute extends Route {
             
             return this.store.findAll('label');
         })();
+    }
+
+    @action
+    error() {
+        this.replaceWith('no-connection');
     }
 }

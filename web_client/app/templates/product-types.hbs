@@ -1,8 +1,10 @@
 <strong>Product Types:</strong>
 
 <ul>
-  {{#each this.model as |ptype|}}
-    <li>{{ptype.name}}</li>
+  {{#each this.model as |ptypes|}}
+    {{#each ptypes.product_types as |ptype|}}
+      <li>{{ptype}}</li>
+    {{/each}}
   {{/each}}
 </ul>
 

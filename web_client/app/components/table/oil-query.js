@@ -95,17 +95,18 @@ export default class NewOilQuery extends Component {
         minResizeWidth: 60,
         classNames: 'text-nowrap',
         resizable: true,
-    }, {
-        label: 'Gnome Suitable',
-        valuePath: 'metadata.gnome_suitable',
-        cellComponent: 'table/cell/gnome-suitable',
-        width: '10em',
-        minResizeWidth: 60,
-        classNames: 'text-nowrap',
-        resizable: true,
     }];
-    // We will keep this around in comment form for debugging
+    // We will keep these around in comment form for debugging
     // should the need arise
+    //{
+    //    label: 'Gnome Suitable',
+    //    valuePath: 'metadata.gnome_suitable',
+    //    cellComponent: 'table/cell/gnome-suitable',
+    //    width: '10em',
+    //    minResizeWidth: 60,
+    //    classNames: 'text-nowrap',
+    //    resizable: true,
+    //}
     //{
     //    label: 'Labels',
     //    valuePath: 'metadata.labels',

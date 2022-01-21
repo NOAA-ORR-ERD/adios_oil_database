@@ -353,6 +353,26 @@ def get_pour_point(oil):
     return pour_point
 
 
+def get_frac_recovered(oil, units="fraction"):
+    """
+    Return fraction recovered or None
+    and whether fraction recovered is in the database T or F
+
+    :param oil: the oil object to get data from
+
+    :param units="fraction": units you want the fraction in
+    """
+
+    fraction_recovered = oil.sub_samples[0].distillation_data.fraction_recovered
+
+    if fraction_recovered is None:
+        return None, False
+    else:
+        frac_recovered = fraction_recovered.converted_to(units).value
+        return frac_recovered, True
+
+
+
 def get_distillation_cuts(oil, units="fraction", temp_units="K"):
     """
     Return a table of distillation data:

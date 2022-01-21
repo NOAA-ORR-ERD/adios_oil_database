@@ -22,6 +22,7 @@ Router.map(function() {
     this.route('privacy');
     this.route('capabilities');
     this.route('qa-status');
+    this.route('no-connection');
 });
 
 export default Router;

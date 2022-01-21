@@ -1,0 +1,26 @@
+{
+  "id": "kinematic_viscosity.json",
+  "template": {
+      "viscosity": {
+          "label": "Viscosity",
+          "dataType": "value-unit",
+          "unit": "cSt",
+          "unit_type": "kinematicviscosity",
+          "precision": 3
+      },
+      "ref_temp": {
+          "label": "Temperature",
+          "dataType": "value-unit",
+          "unit": "C",
+          "unit_type": "temperature",
+          "precision": 3
+      },
+      "shear_rate": {
+          "label": "Shear Rate",
+          "dataType": "value-unit",
+          "unit": "1/s",
+          "unit_type": "angularvelocity",
+          "precision": 3
+      }
+  }
+}

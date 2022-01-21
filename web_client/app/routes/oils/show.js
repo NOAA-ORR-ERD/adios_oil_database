@@ -28,8 +28,10 @@ export default class OilsShowRoute extends Route {
         // physical tab of the first sample.
         let currentSampleTab = '#' + slugify(model.sub_samples[0].metadata.short_name);
 
-        controller.currentSampleTab = currentSampleTab;
-        controller.currentCategoryTab = {[currentSampleTab]: currentSampleTab + '-physical'};
+        if (controller.currentSampleTab === '') {
+            controller.currentSampleTab = currentSampleTab;
+            controller.currentCategoryTab = {[currentSampleTab]: currentSampleTab + '-physical'};
+        }
     }
 
     @action

@@ -152,7 +152,7 @@ class Session():
 
         max_seq += 1  # next in the sequence
 
-        return f'{id_prefix}{max_seq:06d}'
+        return f'{id_prefix}{max_seq:05d}'
 
     def query(self,
               oil_id=None,
@@ -251,7 +251,9 @@ class Session():
 
         start, stop = self._parse_interval_arg(page)
 
-        return CursorWrapper(ret[start:stop])
+        total_results = ret.explain()['executionStats']['nReturned']
+
+        return (CursorWrapper(ret[start:stop]), total_results)
 
     def _sort_options(self, sort):
         if sort is None:
