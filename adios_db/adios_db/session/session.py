@@ -152,7 +152,7 @@ class Session():
 
         max_seq += 1  # next in the sequence
 
-        return f'{id_prefix}{max_seq:06d}'
+        return f'{id_prefix}{max_seq:05d}'
 
     def query(self,
               oil_id=None,

@@ -1,8 +1,23 @@
 # Oil Database Web Client Docker configuration
 #
-FROM registry.orr.noaa.gov/erd/centos-conda
+FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
 
-RUN yum update -y && yum -y install node npm
+RUN echo "ip_resolve=4" >> /etc/yum.conf
+
+RUN yum -y update
+
+# 01/19/2022: So apparently the way Node gets installed on CentOS has changed
+#             Pretty dramatically.
+#             This is just so we can even see any node distribution at all,
+#             and we can't simply refer to latest, we need to choose a version.
+RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash -
+RUN yum -y install gcc-c++ make
+
+RUN yum -y install nodejs
+
+# node + npm are both installed at latest version for the distro, so we don't
+# need to explicitly install npm.
+#RUN yum -y install npm
 
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/stage/web_client/ /web_client/public/configs/

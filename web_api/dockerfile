@@ -9,8 +9,8 @@ RUN echo "ip_resolve=4" >> /etc/yum.conf
 
 RUN yum update -y
 RUN conda update -y conda \
-    && conda update python \
-    && conda clean --all
+    && conda update -y python \
+    && conda clean -y --all
 
 COPY $KEY_FILE /root/.ssh/id_rsa
 RUN chmod og-rw /root/.ssh/id_rsa
@@ -26,7 +26,10 @@ COPY ./ /adios-db/
 WORKDIR adios-db
 
 # install deps
-RUN conda install --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt --file documents/conda_requirements.txt \
+RUN conda install -y \
+    --file adios_db/conda_requirements.txt \
+    --file web_api/conda_requirements.txt \
+    --file documents/conda_requirements.txt \
     && conda clean --all
 
 RUN cd adios_db && pip install -e ./
@@ -35,11 +38,12 @@ RUN cd web_api && pip install -e ./
 # build docs
 RUN cd documents \
     && sphinx-build -a -E -b html source build/html \
-    && cp -r build/html/* ../user_docs \
-    && rm -rf build
+    && /usr/bin/cp -rf build/html/* ../user_docs \
+    && /usr/bin/rm -rf build
+
 
 RUN mkdir /config
-RUN cp /adios-db/oildb-deploy/config/stage/web_api/* /config/
+RUN /usr/bin/cp /adios-db/oildb-deploy/config/stage/web_api/* /config/
 
 EXPOSE 9898
 ENTRYPOINT ["/adios-db/web_api/docker_start.sh"]
