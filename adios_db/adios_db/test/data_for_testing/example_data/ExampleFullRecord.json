@@ -8126,9 +8126,6 @@
                             "unit": "Pa",
                             "unit_type": "pressure"
                         },
-                        "tan_delta_v_e": {
-                            "unit_type": "unitless"
-                        },
                         "complex_viscosity": {
                             "unit": "Pa.s",
                             "unit_type": "dynamicviscosity"
@@ -8161,9 +8158,6 @@
                         "loss_modulus": {
                             "unit": "Pa",
                             "unit_type": "pressure"
-                        },
-                        "tan_delta_v_e": {
-                            "unit_type": "unitless"
                         },
                         "complex_viscosity": {
                             "unit": "Pa.s",
