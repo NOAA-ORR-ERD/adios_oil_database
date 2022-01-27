@@ -235,12 +235,15 @@ class CheckDistillation:
                 score += min(num_cuts, 3)
 
             if dist_data.fraction_recovered is not None:
-                frac = (dist_data.fraction_recovered
-                        .converted_to('fraction').value)
+                frac = dist_data.fraction_recovered.converted_to('fraction')
 
-                if frac == 1.0:
+                if frac.value == 1.0:
                     score += 2.0
-                elif 0.0 < frac < 1.0:
+                elif frac.value is not None and 0.0 < frac.value < 1.0:
+                    score += 1.0
+                elif frac.min_value is not None or frac.max_value is not None:
+                    # interval value: For right now we assume the ranged value
+                    # is < 1.0, but should we range-check this?
                     score += 1.0
 
         return score

@@ -186,8 +186,12 @@ def insert_oil(request):
         if 'oil_id' not in oil_obj:
             oil_obj['oil_id'] = request.adb_session.new_oil_id()
 
-        oil = validate_json(oil_obj)
-        set_completeness(oil)
+        try:
+            oil = validate_json(oil_obj)
+            set_completeness(oil)
+        except Exception as e:
+            log_traceback(e, oil_obj)
+            raise
 
         if is_temp_id(oil.oil_id):
             logger.info(f"Temporary oil with ID: {oil.oil_id}, "
@@ -196,6 +200,7 @@ def insert_oil(request):
             oil_json['_id'] = oil.oil_id
             temp_oils[oil.oil_id] = oil_json
         else:
+            logger.info('permanent ID...')
             mongo_id = request.adb_session.insert_one(oil)
 
             logger.info(f'Insert oil with mongo ID: {mongo_id}, '
@@ -231,23 +236,10 @@ def update_oil(request):
 
         try:
             oil = validate_json(oil_obj)
+            set_completeness(oil)
         except Exception as e:
-            logger.error(f'Validation Exception: '
-                         f'{obj_id}: {type(e)}: {e}')
-
-            # There are lots of places where the validation could have raised
-            # an exception.  The traceback can tell us where it happened.
-            depth = 3
-            _, _, exc_traceback = sys.exc_info()
-            tb = traceback.extract_tb(exc_traceback)
-
-            if len(tb) > depth:
-                tb = tb[-depth:]
-
-            for i in tb:
-                logger.error(f'traceback: {_trace_item(*i)}')
-
-        set_completeness(oil)
+            log_traceback(e, oil_obj)
+            raise
 
         if is_temp_id(oil.oil_id):
             logger.info(f"Temporary oil with ID: {oil.oil_id}, "
@@ -263,6 +255,23 @@ def update_oil(request):
         raise HTTPUnsupportedMediaType()
 
     return generate_jsonapi_response_from_oil(oil.py_json())
+
+
+def log_traceback(e, oil_obj):
+    logger.error(f'Validation Exception: '
+                 f'{oil_obj["oil_id"]}: {type(e)}: {e}')
+
+    # There are lots of places where the validation could have raised
+    # an exception.  The traceback can tell us where it happened.
+    depth = 3
+    _, _, exc_traceback = sys.exc_info()
+    tb = traceback.extract_tb(exc_traceback)
+
+    if len(tb) > depth:
+        tb = tb[-depth:]
+
+    for i in tb:
+        logger.error(f'traceback: {_trace_item(*i)}')
 
 
 def is_temp_id(oil_id):

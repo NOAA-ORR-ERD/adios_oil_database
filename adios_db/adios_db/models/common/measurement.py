@@ -131,6 +131,9 @@ class MeasurementBase(MeasurementDataclass):
         pj = super().py_json(sparse)
         pj['unit_type'] = self.unit_type
 
+        if len(pj) == 1:  # only unit_type -- i.e. empty
+            return {}
+
         return pj
 
     def convert_to(self, new_unit):
