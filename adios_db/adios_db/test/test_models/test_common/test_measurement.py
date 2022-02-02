@@ -1,10 +1,13 @@
 
 import math
 import json
+from dataclasses import dataclass
 
 import pytest
 
 import nucos as uc
+
+from adios_db.models.common.utilities import dataclass_to_json
 
 from adios_db.models.common.measurement import (MeasurementBase,
                                                 Temperature,
@@ -23,33 +26,6 @@ from adios_db.models.common.measurement import (MeasurementBase,
                                                 Unitless,
                                                 AnyUnit,
                                                 )
-
-
-# # Fixme: why is this in this test file ???
-# class TestProductType:
-#     @pytest.mark.parametrize("product_type", ('crude',
-#                                               'refined',
-#                                               'bitumen product',
-#                                               'Refined',
-#                                               'Bitumen Product',
-#                                               'other'))
-#     def test_validation(self, product_type):
-#         pt = ProductType(product_type)
-
-#         assert pt.validate() == []
-
-#     @pytest.mark.parametrize("product_type", ('crud',
-#                                               'rfined',
-#                                               'bitumen',
-#                                               'Reefined',
-#                                               'Biitumen Product',
-#                                               'random'))
-#     def test_validation_invalid(self, product_type):
-#         pt = ProductType(product_type)
-
-#         result = pt.validate()
-#         assert len(result) == 1
-#         assert result[0].startswith("W003:")
 
 
 def test_str():
@@ -71,6 +47,40 @@ def test_str():
 
     assert s == ("Mass(value=2.3, unit='kg', standard_deviation=0.2, "
                  "replicates=6, unit_type='mass')")
+
+def test_empty_py_json():
+    """
+    test that a measurement with no values has an empty dict as py_json
+    """
+
+    # arbitrary example
+    length = Length()
+
+    assert length.value is None
+    assert length.min_value is None
+
+    pj = length.py_json(sparse=True)
+
+    assert pj == {}
+
+
+def test_empty_measurement_not_saved_in_json():
+    @dataclass_to_json
+    @dataclass
+    class JustMeasurement:
+        length: Length = None
+
+    jm = JustMeasurement(length=Length())
+
+    print(jm)
+
+    pj = jm.py_json(sparse=False)
+    print(pj)
+    assert pj['length']
+
+    pj = jm.py_json(sparse=True)
+    print(pj)
+    assert pj == {}
 
 
 def test_ensure_float():
@@ -114,7 +124,7 @@ class TestUnitless:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty
         assert py_json == {}
 
         # non-sparse should have all attributes present with None values
@@ -202,9 +212,8 @@ class TestAnyUnit:
         model = AnyUnit(unit_type='MassFraction')
 
         py_json = model.py_json()
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
-        assert len(py_json) == 0
 
         # non-sparse should have all attributes present with None values
         py_json = model.py_json(sparse=False)
@@ -338,7 +347,7 @@ class TestTemperature:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
         # non-sparse should have all attributes present with None values
@@ -533,7 +542,7 @@ class TestLength:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -588,7 +597,7 @@ class TestMass:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -610,7 +619,7 @@ class TestMassFraction:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -632,7 +641,7 @@ class TestVolumeFraction:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -680,7 +689,7 @@ class TestMassOrVolumeFraction:
 
         assert model.unit_type == 'massfraction'
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_init_empty_volume(self):
@@ -688,7 +697,7 @@ class TestMassOrVolumeFraction:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_init_empty_concentration(self):
@@ -696,7 +705,7 @@ class TestMassOrVolumeFraction:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_init_full(self):
@@ -815,7 +824,7 @@ class TestConcentration:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -844,7 +853,7 @@ class TestDensity:
         model = Density()
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -872,7 +881,7 @@ class TestDynamicViscosity:
         model = DynamicViscosity()
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -893,7 +902,7 @@ class TestKinematicViscosity:
         model = KinematicViscosity()
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -914,7 +923,7 @@ class TestPressure:
         model = Pressure()
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -935,7 +944,7 @@ class TestNeedleAdhesion:
         model = NeedleAdhesion()
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
@@ -955,7 +964,7 @@ class TestInterfacialTension:
         model = InterfacialTension()
         py_json = model.py_json()
 
-        # should only have a unit_type
+        # should be empty dict
         assert py_json == {}
 
     def test_convert_to(self):
