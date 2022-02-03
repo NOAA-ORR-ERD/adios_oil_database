@@ -4,7 +4,7 @@
 
     <div class="col-6">
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
 
         {{! Oil ID }}
         <div class="col-sm-12 col-md-5 pl-0 input-group d-flex align-items-center">
@@ -35,7 +35,7 @@
 
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
 
         {{! Source Identifier (not editable) }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
@@ -70,7 +70,7 @@
         </div>
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
 
         {{! API }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
@@ -103,7 +103,18 @@
 
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
+        <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold"
+                 for="gnome-compatible">
+            GNOME Compatible:
+          </label>
+
+          {{if @oil.metadata.gnome_suitable "Yes" "No"}}
+        </div>
+      </div>
+
+      <div class="row pl-0 mb-0">
         {{! Labels }}
         <div class="input-group-prepend">
           <label class="p-1 input-group-text font-weight-bold">Labels:</label>
@@ -130,7 +141,7 @@
         {{/if}}
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
         {{! Alternate Names }}
         {{#if @editable}}
           <div class="col-6 d-flex pl-0">
@@ -223,17 +234,6 @@
               <span class="p-1 ">{{oilSampleDate}}</span>
             {{/if}}
           {{/let}}
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-12 col-md-5 input-group align-items-center">
-          <label class="p-1 input-group-text font-weight-bold"
-                 for="gnome-compatible">
-            GNOME Compatible:
-          </label>
-
-          {{if @oil.metadata.gnome_suitable "Yes" "No"}}
         </div>
       </div>
 

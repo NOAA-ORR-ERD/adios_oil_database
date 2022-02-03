@@ -129,7 +129,13 @@ class MeasurementBase(MeasurementDataclass):
         unit_type is added here, as it's not a settable field
         """
         pj = super().py_json(sparse)
+        print(f"in py_json {pj}")
         pj['unit_type'] = self.unit_type
+        if len(pj) == 1:  # only unit_type -- i.e. empty
+            return {}
+
+        if len(pj) == 1:  # only unit_type -- i.e. empty
+            return {}
 
         return pj
 

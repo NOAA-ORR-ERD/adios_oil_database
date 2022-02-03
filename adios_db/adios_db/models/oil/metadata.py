@@ -65,7 +65,6 @@ class MetaData:
         if self.API is not None:
             self.API = float(self.API)
 
-
     def validate(self):
         msgs = []
 
