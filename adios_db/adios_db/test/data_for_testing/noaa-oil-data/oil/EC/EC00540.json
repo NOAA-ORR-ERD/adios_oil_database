@@ -11,11 +11,12 @@
         },
         "sample_date": "1994-08-15",
         "product_type": "Residual Fuel Oil",
-        "API": 12,
+        "API": 12.07,
         "labels": [
             "Refined Product",
-            "Residual Fuel",
-            "Fuel Oil"
+            "Transformer Oil",
+            "Fuel Oil",
+            "Residual Fuel"
         ],
         "model_completeness": 90,
         "gnome_suitable": true
@@ -135,7 +136,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -150,7 +150,6 @@
                 "interfacial_tension_water": [
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -163,7 +162,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -178,7 +176,6 @@
                 "interfacial_tension_seawater": [
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -191,7 +188,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -1700,7 +1696,7 @@
                     "measurement": {
                         "value": 0.1,
                         "unit": "%",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "massfraction"
                     }
@@ -1712,7 +1708,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 328,
+                        "value": 328.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1724,7 +1720,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 146,
+                        "value": 146.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1736,7 +1732,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 182,
+                        "value": 182.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1748,7 +1744,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 45,
+                        "value": 45.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1760,7 +1756,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 55,
+                        "value": 55.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1772,7 +1768,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 38,
+                        "value": 38.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1781,7 +1777,7 @@
                     "name": "Waxes",
                     "method": "ESTS 12.11/2.0/M",
                     "measurement": {
-                        "value": 8,
+                        "value": 8.0,
                         "unit": "%",
                         "standard_deviation": 0.5,
                         "replicates": 3,
@@ -1912,7 +1908,6 @@
                 "interfacial_tension_air": [
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -1925,7 +1920,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -1940,7 +1934,6 @@
                 "interfacial_tension_water": [
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -1953,7 +1946,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -1968,7 +1960,6 @@
                 "interfacial_tension_seawater": [
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -1981,7 +1972,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -3339,7 +3329,7 @@
                     "measurement": {
                         "value": 1.9,
                         "unit": "%",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "massfraction"
                     }
@@ -3362,7 +3352,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 398,
+                        "value": 398.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3374,7 +3364,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 216,
+                        "value": 216.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3386,7 +3376,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 182,
+                        "value": 182.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3398,7 +3388,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 54,
+                        "value": 54.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -3410,7 +3400,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 46,
+                        "value": 46.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -3422,7 +3412,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 30,
+                        "value": 30.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -3431,7 +3421,7 @@
                     "name": "Waxes",
                     "method": "ESTS 12.11/2.0/M",
                     "measurement": {
-                        "value": 10,
+                        "value": 10.0,
                         "unit": "%",
                         "standard_deviation": 0.2,
                         "replicates": 3,

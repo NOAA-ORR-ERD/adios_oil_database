@@ -11,9 +11,10 @@
         },
         "product_type": "Crude Oil NOS",
         "API": 47.5,
+        "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
-            "Crude Oil",
-            "Light Crude"
+            "Light Crude",
+            "Crude Oil"
         ],
         "model_completeness": 42,
         "gnome_suitable": true
@@ -118,7 +119,7 @@
                 {
                     "name": "nickel",
                     "measurement": {
-                        "value": 1,
+                        "value": 1.0,
                         "unit": "ppm",
                         "unit_type": "massfraction"
                     }
@@ -126,7 +127,7 @@
                 {
                     "name": "vanadium",
                     "measurement": {
-                        "value": 2,
+                        "value": 2.0,
                         "unit": "ppm",
                         "unit_type": "massfraction"
                     }

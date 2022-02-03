@@ -4,9 +4,6 @@
     "metadata": {
         "name": "Alaska North Slope [2015]",
         "source_id": "2713",
-        "alternate_names": [
-            "ANS"
-        ],
         "location": "Alaska, USA",
         "reference": {
             "year": 2021,
@@ -14,9 +11,9 @@
         },
         "sample_date": "2015-03-22",
         "product_type": "Crude Oil NOS",
-        "API": 31.3,
+        "API": 32.21,
         "labels": [
-            "Light Crude",
+            "Medium Crude",
             "Crude Oil"
         ],
         "model_completeness": 94,
@@ -1772,7 +1769,7 @@
                     "measurement": {
                         "value": 0.9,
                         "unit": "%",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "massfraction"
                     }
@@ -1795,7 +1792,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 547,
+                        "value": 547.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1807,7 +1804,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 353,
+                        "value": 353.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1819,7 +1816,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 194,
+                        "value": 194.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1831,7 +1828,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 64,
+                        "value": 64.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1843,7 +1840,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 36,
+                        "value": 36.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1855,7 +1852,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 25,
+                        "value": 25.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1864,7 +1861,7 @@
                     "name": "Waxes",
                     "method": "ESTS 12.11/2.0/M",
                     "measurement": {
-                        "value": 4,
+                        "value": 4.0,
                         "unit": "%",
                         "standard_deviation": 0.1,
                         "replicates": 3,
@@ -3650,7 +3647,7 @@
                     "measurement": {
                         "value": 1.1,
                         "unit": "%",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "massfraction"
                     }
@@ -3661,7 +3658,7 @@
                     "measurement": {
                         "value": 0.1,
                         "unit": "%",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "massfraction"
                     }
@@ -3673,7 +3670,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 572,
+                        "value": 572.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3685,7 +3682,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 382,
+                        "value": 382.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3697,7 +3694,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 190,
+                        "value": 190.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3709,7 +3706,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 67,
+                        "value": 67.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -3721,7 +3718,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 33,
+                        "value": 33.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -3733,7 +3730,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 27,
+                        "value": 27.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -5539,7 +5536,7 @@
                     "measurement": {
                         "value": 0.1,
                         "unit": "%",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "massfraction"
                     }
@@ -5551,7 +5548,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 614,
+                        "value": 614.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -5563,7 +5560,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 396,
+                        "value": 396.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -5575,7 +5572,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 218,
+                        "value": 218.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -5587,7 +5584,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 64,
+                        "value": 64.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -5599,7 +5596,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 36,
+                        "value": 36.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -5611,7 +5608,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 22,
+                        "value": 22.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -5798,7 +5795,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -5828,7 +5824,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "unit_type": "interfacialtension"
                         },
@@ -5963,7 +5958,7 @@
                             "unit_type": "dynamicviscosity"
                         },
                         "method": "ESTS 13.02/x.x/M",
-                        "visual_stability": "Meso-stable"
+                        "visual_stability": "Mesostable"
                     }
                 ],
                 "adhesion": {
@@ -7453,7 +7448,7 @@
                     "measurement": {
                         "value": 0.1,
                         "unit": "%",
-                        "standard_deviation": 0,
+                        "standard_deviation": 0.0,
                         "replicates": 3,
                         "unit_type": "massfraction"
                     }
@@ -7465,7 +7460,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 558,
+                        "value": 558.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -7477,7 +7472,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 353,
+                        "value": 353.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -7489,7 +7484,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 206,
+                        "value": 206.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -7501,7 +7496,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 63,
+                        "value": 63.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -7513,7 +7508,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 37,
+                        "value": 37.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -7525,7 +7520,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 16,
+                        "value": 16.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -7534,7 +7529,7 @@
                     "name": "Waxes",
                     "method": "ESTS 12.11/2.0/M",
                     "measurement": {
-                        "value": 6,
+                        "value": 6.0,
                         "unit": "%",
                         "standard_deviation": 0.4,
                         "replicates": 3,

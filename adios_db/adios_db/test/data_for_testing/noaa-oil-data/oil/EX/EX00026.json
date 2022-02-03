@@ -14,8 +14,8 @@
         "product_type": "Crude Oil NOS",
         "API": 35.2,
         "labels": [
-            "Crude Oil",
-            "Light Crude"
+            "Light Crude",
+            "Crude Oil"
         ],
         "model_completeness": 68,
         "gnome_suitable": true
@@ -327,7 +327,7 @@
                 {
                     "name": "Hydrogen Sulfide Concentration",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "ppm",
                         "unit_type": "massfraction"
                     }
@@ -398,7 +398,6 @@
                 "short_name": "Butane and L...",
                 "boiling_point_range": {
                     "unit": "F",
-                    "min_value": -57.641,
                     "max_value": 60.0,
                     "unit_type": "temperature"
                 }
@@ -506,7 +505,7 @@
                 {
                     "name": "Nitrogen Mass Fraction",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "ppm",
                         "unit_type": "massfraction"
                     }
@@ -530,7 +529,7 @@
                 {
                     "name": "Aromatics (FIA)",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -812,7 +811,7 @@
                 {
                     "name": "Nitrogen Mass Fraction",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "ppm",
                         "unit_type": "massfraction"
                     }
@@ -836,7 +835,7 @@
                 {
                     "name": "Aromatics (FIA)",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -2197,7 +2196,7 @@
                 {
                     "name": "N-Heptane Insolubles (C7 Asphaltenes)",
                     "measurement": {
-                        "value": 0,
+                        "value": 0.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -2261,7 +2260,6 @@
                 "boiling_point_range": {
                     "unit": "F",
                     "min_value": 1000.0,
-                    "max_value": 1504.6,
                     "unit_type": "temperature"
                 }
             },

@@ -13,11 +13,11 @@
             "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario."
         },
         "product_type": "Crude Oil NOS",
-        "API": 26.8,
+        "API": 24.87,
         "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
-            "Crude Oil",
-            "Medium Crude"
+            "Medium Crude",
+            "Crude Oil"
         ],
         "model_completeness": 55,
         "gnome_suitable": true
@@ -100,7 +100,7 @@
                 "interfacial_tension_seawater": [
                     {
                         "tension": {
-                            "value": 0.0,
+                            "value": 0.0238,
                             "unit": "N/m",
                             "unit_type": "interfacialtension"
                         },
@@ -240,12 +240,6 @@
                 ]
             }
         }
-    ],
-    "status": [
-        "W000: Warning: Dynamic and Kinematic Viscosity may be out of sync"
-    ],
-    "permanent_warnings": [
-        "Warning: Dynamic and Kinematic Viscosity may be out of sync"
     ],
     "review_status": {
         "status": "Not Reviewed"

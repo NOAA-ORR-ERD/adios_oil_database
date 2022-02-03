@@ -13,8 +13,9 @@
         "API": 34.1,
         "comments": "The benzene concentration is 0.12% by volume.",
         "labels": [
-            "Crude Oil",
-            "Light Crude"
+            "Light Crude",
+            "Medium Crude",
+            "Crude Oil"
         ],
         "model_completeness": 42,
         "gnome_suitable": true
@@ -206,6 +207,9 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"
