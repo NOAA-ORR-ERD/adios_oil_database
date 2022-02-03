@@ -23,7 +23,8 @@ data_dir is the dir where the data are: the script will recursively
 search for JSON files
 
 If "dry_run" is on the command line, it will report what it would do,
-but not save any changes.
+but not save any changes. So that's a good way to check that the JSON
+is valid without changing anything.
 """
 
 
