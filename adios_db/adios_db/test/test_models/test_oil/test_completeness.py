@@ -228,7 +228,7 @@ class TestDistillationCompleteness:
         # add fraction_recovered
         # less than one adds 1 point
         dist_data.fraction_recovered = MassFraction(0.8, unit="fraction")
-        assert self.Dcheck(oil) == expected + 1
+        assert self.Dcheck(oil) == expected + 2
 
         # exactly one adds 2 points
         dist_data.fraction_recovered = MassFraction(1.0, unit="fraction")

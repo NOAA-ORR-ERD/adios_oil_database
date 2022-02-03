@@ -219,9 +219,9 @@ class CheckDistillation:
 
         Four or more cuts: 3 points
 
-        Fraction recovered = 1.0 : 2 points
+        Fraction recovered is exact : 2 points
 
-        Fraction recovered < 1.0 : 2 points
+        Fraction recovered is open ended range with a maximum value: 1 points
 
         Total possible score: 5 points
         """
@@ -237,13 +237,9 @@ class CheckDistillation:
             if dist_data.fraction_recovered is not None:
                 frac = dist_data.fraction_recovered.converted_to('fraction')
 
-                if frac.value == 1.0:
+                if frac.value is not None:
                     score += 2.0
-                elif frac.value is not None and 0.0 < frac.value < 1.0:
-                    score += 1.0
-                elif frac.min_value is not None or frac.max_value is not None:
-                    # interval value: For right now we assume the ranged value
-                    # is < 1.0, but should we range-check this?
+                elif (frac.max_value is not None and frac.min_value is None):
                     score += 1.0
 
         return score
