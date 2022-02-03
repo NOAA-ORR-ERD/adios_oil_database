@@ -11,7 +11,7 @@
         },
         "sample_date": "2002-06-26",
         "product_type": "Crude Oil NOS",
-        "API": 30,
+        "API": 30.87,
         "comments": "Via Exxon -Mobil",
         "labels": [
             "Medium Crude",
@@ -294,7 +294,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 2,
+                            "value": 2.3,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -306,7 +306,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 3,
+                            "value": 3.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -318,7 +318,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -330,7 +330,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 7,
+                            "value": 7.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -342,7 +342,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 9,
+                            "value": 9.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -354,7 +354,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 11,
+                            "value": 11.2,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -366,7 +366,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 14,
+                            "value": 13.8,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -378,7 +378,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 17,
+                            "value": 16.5,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -390,7 +390,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 19,
+                            "value": 18.9,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -402,7 +402,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 26,
+                            "value": 25.6,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -414,7 +414,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 33,
+                            "value": 33.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -426,7 +426,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 41,
+                            "value": 41.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -438,7 +438,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 49,
+                            "value": 48.9,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -450,7 +450,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 57,
+                            "value": 57.2,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -462,7 +462,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 64,
+                            "value": 64.3,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -474,7 +474,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 70,
+                            "value": 70.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -486,7 +486,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 76,
+                            "value": 75.5,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -498,7 +498,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 80.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -1693,7 +1693,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 645,
+                        "value": 645.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1705,7 +1705,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 553,
+                        "value": 553.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1717,7 +1717,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 92,
+                        "value": 92.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -1729,7 +1729,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 86,
+                        "value": 86.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -1741,7 +1741,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 14,
+                        "value": 14.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -2026,7 +2026,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2038,7 +2038,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2050,7 +2050,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 1,
+                            "value": 0.8,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2062,7 +2062,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 2,
+                            "value": 1.7,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2074,7 +2074,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 3,
+                            "value": 3.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2086,7 +2086,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 5,
+                            "value": 5.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2098,7 +2098,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 7,
+                            "value": 7.5,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2110,7 +2110,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 10,
+                            "value": 10.2,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2122,7 +2122,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 13,
+                            "value": 12.7,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2134,7 +2134,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 20,
+                            "value": 19.9,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2146,7 +2146,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 28,
+                            "value": 27.9,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2158,7 +2158,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 36,
+                            "value": 36.3,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2170,7 +2170,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 45,
+                            "value": 44.6,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2182,7 +2182,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 53,
+                            "value": 53.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2194,7 +2194,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 61,
+                            "value": 61.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2206,7 +2206,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 68,
+                            "value": 67.9,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2218,7 +2218,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 74,
+                            "value": 73.6,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -2230,7 +2230,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 79,
+                            "value": 78.6,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3425,7 +3425,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 704,
+                        "value": 704.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3437,7 +3437,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 602,
+                        "value": 602.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3449,7 +3449,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 102,
+                        "value": 102.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -3461,7 +3461,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 86,
+                        "value": 86.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -3473,7 +3473,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 14,
+                        "value": 14.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -3757,7 +3757,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3769,7 +3769,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3781,7 +3781,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3793,7 +3793,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3805,7 +3805,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.2,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3817,7 +3817,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 1,
+                            "value": 0.7,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3829,7 +3829,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 2,
+                            "value": 2.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3841,7 +3841,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 4,
+                            "value": 4.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3853,7 +3853,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 7,
+                            "value": 7.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3865,7 +3865,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 15,
+                            "value": 14.8,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3877,7 +3877,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 24,
+                            "value": 23.7,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3889,7 +3889,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 33,
+                            "value": 33.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3901,7 +3901,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 42,
+                            "value": 42.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3913,7 +3913,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 52,
+                            "value": 52.3,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3925,7 +3925,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 61,
+                            "value": 60.9,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3937,7 +3937,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 68,
+                            "value": 68.3,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3949,7 +3949,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 74,
+                            "value": 74.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -3961,7 +3961,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 80,
+                            "value": 79.7,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5156,7 +5156,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 749,
+                        "value": 749.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -5168,7 +5168,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 638,
+                        "value": 638.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -5180,7 +5180,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 111,
+                        "value": 111.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -5192,7 +5192,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 85,
+                        "value": 85.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -5204,7 +5204,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 15,
+                        "value": 15.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -5365,7 +5365,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "replicates": 3,
                             "unit_type": "interfacialtension"
@@ -5396,7 +5395,6 @@
                     },
                     {
                         "tension": {
-                            "value": "Too Viscous",
                             "unit": "mN/m",
                             "replicates": 3,
                             "unit_type": "interfacialtension"
@@ -5486,7 +5484,7 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5498,7 +5496,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5510,7 +5508,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5522,7 +5520,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5534,7 +5532,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5546,7 +5544,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5558,7 +5556,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.0,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5570,7 +5568,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 0,
+                            "value": 0.1,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5582,7 +5580,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 1,
+                            "value": 0.7,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5594,7 +5592,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 7,
+                            "value": 6.8,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5606,7 +5604,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 16,
+                            "value": 16.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5618,7 +5616,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 27,
+                            "value": 26.9,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5630,7 +5628,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 37,
+                            "value": 37.3,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5642,7 +5640,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 48,
+                            "value": 48.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5654,7 +5652,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 58,
+                            "value": 58.2,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5666,7 +5664,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 67,
+                            "value": 66.5,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5678,7 +5676,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 73,
+                            "value": 73.4,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -5690,7 +5688,7 @@
                     },
                     {
                         "fraction": {
-                            "value": 79,
+                            "value": 79.3,
                             "unit": "%",
                             "unit_type": "massfraction"
                         },
@@ -6885,7 +6883,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 734,
+                        "value": 734.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -6897,7 +6895,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 621,
+                        "value": 621.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -6909,7 +6907,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 113,
+                        "value": 113.0,
                         "unit": "mg/g",
                         "unit_type": "massfraction"
                     }
@@ -6921,7 +6919,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 85,
+                        "value": 85.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
@@ -6933,7 +6931,7 @@
                     ],
                     "method": "ESTS 5.03/x.x/M",
                     "measurement": {
-                        "value": 15,
+                        "value": 15.0,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }

@@ -13,8 +13,8 @@
         "API": 23.4,
         "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
-            "Crude Oil",
-            "Medium Crude"
+            "Medium Crude",
+            "Crude Oil"
         ],
         "model_completeness": 60,
         "gnome_suitable": true
@@ -336,7 +336,7 @@
                 {
                     "name": "vanadium",
                     "measurement": {
-                        "value": 248,
+                        "value": 248.0,
                         "unit": "ppm",
                         "unit_type": "massfraction"
                     }
@@ -399,6 +399,9 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

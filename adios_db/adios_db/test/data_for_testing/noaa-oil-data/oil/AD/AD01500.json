@@ -12,8 +12,8 @@
         "product_type": "Distillate Fuel Oil",
         "API": 45.22,
         "labels": [
-            "Fuel Oil",
             "Distillate Fuel",
+            "Fuel Oil",
             "Refined Product"
         ],
         "model_completeness": 42,
@@ -144,6 +144,9 @@
                 }
             ]
         }
+    ],
+    "status": [
+        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"
