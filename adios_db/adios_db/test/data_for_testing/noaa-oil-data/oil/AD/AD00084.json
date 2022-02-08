@@ -12,13 +12,13 @@
         "API": 60.0,
         "comments": "WARNING: Benzene content of product is only an estimate and not a measured value.",
         "labels": [
-            "Aviation Gas",
-            "Distillate Fuel",
             "Fuel Oil",
             "Kerosene",
+            "Distillate Fuel",
+            "Gasoline",
+            "Aviation Gas",
             "Refined Product",
-            "Jet Fuel",
-            "Gasoline"
+            "Jet Fuel"
         ],
         "model_completeness": 42,
         "gnome_suitable": true
@@ -143,6 +143,9 @@
                 }
             ]
         }
+    ],
+    "status": [
+        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

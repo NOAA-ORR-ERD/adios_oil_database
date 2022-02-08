@@ -13,8 +13,9 @@
         "API": 32.5,
         "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
-            "Crude Oil",
-            "Light Crude"
+            "Light Crude",
+            "Medium Crude",
+            "Crude Oil"
         ],
         "model_completeness": 41,
         "gnome_suitable": true
@@ -283,7 +284,7 @@
                 {
                     "name": "nickel",
                     "measurement": {
-                        "value": 14,
+                        "value": 14.0,
                         "unit": "ppm",
                         "unit_type": "massfraction"
                     }
@@ -298,6 +299,9 @@
                 }
             ]
         }
+    ],
+    "status": [
+        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

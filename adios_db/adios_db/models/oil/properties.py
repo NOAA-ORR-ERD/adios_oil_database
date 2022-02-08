@@ -17,6 +17,9 @@ from ..common.measurement import (Time,
                                   AngularVelocity)
 
 
+from ..common.validators import EnumValidator
+from .validation.errors import ERRORS
+
 @dataclass_to_json
 @dataclass
 class InterfacialTensionPoint:
@@ -71,6 +74,15 @@ class Emulsion:
     method: str = None
     visual_stability: str = None
 
+    def validate(self):
+        msgs = []
+        if self.visual_stability is not None:
+            msgs.extend(EnumValidator({"Stable", "Mesostable", "Unstable", "Entrained", "Did not form"},
+                                      ERRORS["E033"],
+                                      case_insensitive=True)(self.visual_stability))
+
+
+        return msgs
 
 class EmulsionList(JSON_List):
     item_type = Emulsion
