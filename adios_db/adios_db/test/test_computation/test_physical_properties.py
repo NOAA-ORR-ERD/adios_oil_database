@@ -276,10 +276,10 @@ def test_max_water_emulsion_no_estimation():
     sparse_oil.metadata.product_type = "Condensate"
     y_max = max_water_fraction_emulsion(sparse_oil)
 
-    assert y_max == 0
+    assert y_max == None
 
 
-def test_emul_water():
+def test_max_water_estimation():
     y_max = emul_water(FullOil)
 
-    assert y_max == 0.39787
+    assert isclose(y_max, 0.714749, rel_tol=1e-4)

@@ -85,6 +85,7 @@ def make_gnome_oil(oil):
               "adios_oil_id=None,
     """
     # make sure we don't change the original oil object
+    print("making gnome oil\n")
     oil = copy.deepcopy(oil)
 
     # metadata:
@@ -133,20 +134,42 @@ def make_gnome_oil(oil):
     bullwinkle = None
     for sub_sample in oil.sub_samples:
         try:
-            frac_weathered = (sub_sample.metadata.fraction_weathered
+            frac_evaporated = (sub_sample.metadata.fraction_evaporated
                               .converted_to('fraction').value)
 
-            if bullwinkle is None or frac_weathered > bullwinkle:
-                bullwinkle = frac_weathered
+            # use first fraction_evaporated of a stable, mesostable, or entrained emulsion
+            if bullwinkle is None or frac_evaporated < bullwinkle:
+                # check for visual_stability
+                emulsions = sub_sample.environmental_behavior.emulsions
+                for emulsion in emulsions:
+                    vs = emulsion.visual_stability
+                    if vs == "Stable" or vs == "Mesostable" or vs == "Entrained":
+                        bullwinkle = frac_evaporated
+                        break	# this fraction_evaporated has a stable emulsion
         except Exception:
-            frac_weathered = None
+            frac_evaporated = None
 
     if bullwinkle is None:
         go['bullwinkle_fraction'] = bullwinkle_fraction(oil)
     else:
         go['bullwinkle_fraction'] = bullwinkle
 
-    go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
+    emulsion_max_water = max_water_fraction_emulsion(oil)
+    if emulsion_max_water is None:  # max water content not in database
+        if (oil.metadata.product_type == 'Crude Oil NOS' or
+                oil.metadata.product_type == 'Bitumen Blend'):
+            #return 0.9
+            dens = Density(oil)
+            density = dens.at_temp(288.15)
+            kvis = KinematicViscosity(oil)
+            viscosity = kvis.at_temp(288.15)
+            go['emulsion_water_fraction_max'] = est.emul_water(density,viscosity)	# estimate the value
+        else:
+            go['emulsion_water_fraction_max'] = 0.0
+    else:  # use database value
+        go['emulsion_water_fraction_max'] = emulsion_max_water
+
+    #go['emulsion_water_fraction_max'] = max_water_fraction_emulsion(oil)
     go['solubility'] = 0
 
     # k0y is not currently used -- not sure what it is?

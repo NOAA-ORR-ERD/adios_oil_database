@@ -251,3 +251,22 @@ def saturate_mass_fraction(fmass_i, temp_k, total_sat=None):
         f_sat_i = fmass_i * sat_pct_i / 100.
 
     return np.clip(f_sat_i, 0.0, fmass_i)
+
+
+def emul_water(density, viscosity):
+    """
+    This function computes two terms used in emulsification.
+    Ymax is the maximum water fraction of a stable emulsion.
+    Smax is the maximum surface area of the water droplets inside
+    the emulsion. (from ADIOS2)
+    """
+    dynamic_viscosity = viscosity * density
+    if (dynamic_viscosity > 0.050):
+        Ymax = 0.9 - 0.0952 * np.log(dynamic_viscosity / 0.050)
+    else:
+        Ymax = 0.9
+
+    # this is done in py_gnome
+    # drop_min = 1.0e-6		# min oil droplet size
+    # Smax = (6.0 / drop_min) * (Ymax / (1.0 - Ymax))
+    return Ymax
