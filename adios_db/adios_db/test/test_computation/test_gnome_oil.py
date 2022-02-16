@@ -87,6 +87,18 @@ def test_max_water_emulsion_estimated():
     assert isclose(data['emulsion_water_fraction_max'], 0.843579, rel_tol=1e-4)
 
 
+def test_bullwinkle():
+    data = make_gnome_oil(FullOil)
+
+    assert data['bullwinkle_fraction'] == 0.0
+
+
+def test_bullwinkle_estimated():
+    data = make_gnome_oil(SparseOil)
+
+    assert isclose(data['bullwinkle_fraction'], 0.017067, rel_tol=1e-4)
+
+
 def test_no_cuts_exception():
     sparse_oil = get_sparse_oil()
 

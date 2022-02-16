@@ -480,7 +480,7 @@ def bullwinkle_fraction(oil):
         Va = 0.
 
     try:
-        f_asph = oil.sub_samples[0].SARA.asphaltenes.value
+        f_asph = oil.sub_samples[0].SARA.asphaltenes.converted_to('fraction').value
     except Exception:
         f_asph = 0.
 

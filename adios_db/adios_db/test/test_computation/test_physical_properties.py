@@ -10,6 +10,7 @@ import pytest
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
 from adios_db.models.oil.physical_properties import DensityPoint
+from adios_db.computation.physical_properties import bullwinkle_fraction
 from adios_db.models.common import measurement as meas
 
 from adios_db.computation.physical_properties import (get_density_data,
@@ -283,3 +284,33 @@ def test_max_water_estimation():
     y_max = emul_water(FullOil)
 
     assert isclose(y_max, 0.714749, rel_tol=1e-4)
+
+
+def test_bullwinkle_estimated_non_crude():
+    sparse_oil = get_sparse_oil()
+    sparse_oil.metadata.product_type = "Condensate"
+    bullwinkle = bullwinkle_fraction(sparse_oil)
+
+    assert bullwinkle == 1.0
+
+
+def test_bullwinkle_estimated_ni_va():
+    sparse_oil = get_sparse_oil()
+    bullwinkle = bullwinkle_fraction(SparseOil)
+
+    assert isclose(bullwinkle, 0.0171199, rel_tol=1e-4)
+
+
+def test_bullwinkle_estimated_asph():
+    full_oil = get_full_oil()
+    bullwinkle = bullwinkle_fraction(full_oil)
+
+    assert isclose(bullwinkle, 0.164338, rel_tol=1e-4)
+
+
+def test_bullwinkle_estimated_api():
+    full_oil = get_full_oil()
+    full_oil.sub_samples[0].SARA.asphaltenes.value = 0
+    bullwinkle = bullwinkle_fraction(full_oil)
+
+    assert isclose(bullwinkle,  0.052838, rel_tol=1e-4)
