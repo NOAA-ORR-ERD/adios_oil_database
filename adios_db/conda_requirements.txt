@@ -20,8 +20,6 @@ scipy  # used for gnome oil estimation -- for now
 mongodb>=4.2.0
 pymongo<4
 
-python>=3.8
-
 # this is only needed for some of the importing code.
 # awesome-slugify>=1.6.5
 
