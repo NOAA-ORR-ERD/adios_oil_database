@@ -184,6 +184,7 @@
               @class="p-1 reference-textarea overflow-auto bg-transparent border"
               @value={{oilReference}}
               @placeholder="Enter reference"
+              title="Reference"
               @change={{action "updateReference"}}
               rows="4"
               disabled={{not @editable}}
@@ -255,6 +256,7 @@
             @value={{oilComments}}
             @rows="2"
             @placeholder="Enter comments"
+            title="Comments"
             @change={{action "updateComments"}}
             disabled={{not @editable}}
           />

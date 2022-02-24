@@ -39,6 +39,7 @@
               <Input @class="form-control bg-transparent border"
                  @value={{this.subject}}
                  @placeholder="Enter Subject Line"
+                 title="Enter Subject Line"
                  {{on "change" this.updateSubject}}
                  {{on "keypress" this.updateSubject}}
                  {{on "focusout" this.updateSubject}}
@@ -56,6 +57,7 @@
                 @class="p-1 reference-textarea overflow-auto bg-transparent border"
                 @value={{this.body}}
                 @placeholder="Enter a message"
+                title="Enter a message"
                 rows="6"
                 {{on "change" this.updateBody}}
                 {{on "keypress" this.updateBody}}
