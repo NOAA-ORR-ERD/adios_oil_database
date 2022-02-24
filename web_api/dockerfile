@@ -19,9 +19,6 @@ RUN cat /root/.ssh/id_rsa
 RUN echo "[gitlab.orr.noaa.gov]:9933,[3.133.34.161]:9933 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMgZKGmTe4Qk+PLudgaTbu0R5OzLqqkAxFtp/O+/Aw2YupqtJQb5XDXaPvBtIg2pohmHc66Yjk7HpIoEU/R4+50=" > /root/.ssh/known_hosts
 RUN chmod og-rw /root/.ssh/known_hosts
 
-# cloning in docker_start instead
-# RUN git clone --depth 1 ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/noaa-oil-data.git
-
 COPY ./ /adios-db/
 WORKDIR adios-db
 
