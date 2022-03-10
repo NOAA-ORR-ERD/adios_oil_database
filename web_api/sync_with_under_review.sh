@@ -8,6 +8,9 @@ set -x  # echo commands to stdout
 
 cd /data/git_repos/noaa-oil-data/
 
+git config user.email "adios-script@noaa.gov"
+git config user.name "Adios Automated Script"
+
 git status
 
 # backup the data in the database

@@ -21,6 +21,9 @@ function branch_exists_remotely() {
 
 cd /data/git_repos/noaa-oil-data/
 
+git config user.email "adios-script@noaa.gov"
+git config user.name "Adios Automated Script"
+
 git status
 
 # backup the data in the database
