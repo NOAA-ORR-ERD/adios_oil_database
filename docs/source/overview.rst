@@ -4,7 +4,7 @@ Overview
 
 The ADIOS Oil Database is a collection of properties of petroleum products.
 
-The purpose of the database is to provide information about crude oils, fuels, refined products, and related materials to support the response to oil spills in the environment.
+The purpose of the database is to provide information about crude oils, fuels, and other related materials to support the response to oil spills in the environment.
 
 It is developed and supported by:
 
