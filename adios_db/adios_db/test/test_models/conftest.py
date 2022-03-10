@@ -2,7 +2,7 @@ import os
 
 from configparser import ConfigParser
 
-#from adios_db.util.db_connection import connect_mongodb
+# from adios_db.util.db_connection import connect_mongodb
 
 
 def db_setup():

@@ -1,21 +1,25 @@
 """
 tests for the product type model
 """
-
-
 from pathlib import Path
 
 import pytest
 
 from adios_db.models.oil.product_type import (ProductType,
+                                              TypeLabelsMap,
                                               PRODUCT_TYPES,
                                               types_to_labels,
-                                              load_from_csv_file,
-                                              )
+                                              load_from_csv_file)
 
 product_types_lower = [pt.lower() for pt in PRODUCT_TYPES]
 
 example_file = Path(__file__).parent / "example_products.csv"
+
+
+@pytest.fixture
+def example_data():
+    return TypeLabelsMap(load_from_csv_file(example_file))
+
 
 
 @pytest.mark.parametrize("product_type",
@@ -46,7 +50,8 @@ def test_load_from_csv_file():
     """
     mapping = load_from_csv_file(example_file)
 
-    assert list(mapping.keys()) == ['Crude Oil NOS', 'Condensate', 'Bitumen Blend']
+    assert list(mapping.keys()) == ['Crude Oil NOS', 'Condensate',
+                                    'Bitumen Blend']
     assert mapping['Crude Oil NOS'] == {'Light Crude',
                                         'Tight Oil',
                                         'Crude Oil',
@@ -54,6 +59,23 @@ def test_load_from_csv_file():
                                         'Group V',
                                         'Heavy Crude',
                                         'Bitumen Blend'}
+
+
+def test_all_labels(example_data):
+    labels = example_data.all_labels
+
+    print(labels)
+    assert sorted(labels) == sorted([
+        'Heavy Crude', 'Crude Oil', 'Tight Oil', 'Light Crude', 'Medium Crude',
+        'Group V', 'Bitumen Blend', 'Condensate', 'Refined Product',
+        'Refinery Intermediate'
+    ])
+
+
+def test_all_product_types(example_data):
+    products = example_data.all_product_types
+
+    assert sorted(products) == sorted(['Crude Oil NOS', 'Condensate', 'Bitumen Blend'])
 
 
 # we are no longer adding all the product types to the labels
@@ -68,8 +90,3 @@ def test_load_from_csv_file():
 
 #     for pt, labels in types_to_labels.labels.items():
 #         assert pt in labels
-
-
-
-
-

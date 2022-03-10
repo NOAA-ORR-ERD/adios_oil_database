@@ -1,6 +1,6 @@
-'''
-    class that represents the demographic data (metadata) of an oil record.
-'''
+"""
+Class that represents the demographic data (metadata) of an oil record.
+"""
 from datetime import datetime
 from dataclasses import dataclass, field
 
@@ -13,6 +13,7 @@ from .location_coordinates import LocationCoordinates
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
+
 
 @dataclass_to_json
 @dataclass
@@ -29,15 +30,14 @@ class ChangeLogEntry:
             try:
                 datetime.fromisoformat(self.date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"].format("change log entry",
-                                                    self.date,
-                                                    str(err)))
+                msgs.append(WARNINGS["W011"]
+                            .format("change log entry", self.date, str(err)))
+
         return msgs
 
 
 class ChangeLog(JSON_List):
     item_type = ChangeLogEntry
-
 
 
 @dataclass_to_json
@@ -58,8 +58,16 @@ class MetaData:
     gnome_suitable: bool = None
     change_log: ChangeLog = field(default_factory=ChangeLog)
 
+    def __post_init__(self):
+        """
+        force API to be a float
+        """
+        if self.API is not None:
+            self.API = float(self.API)
+
     def validate(self):
         msgs = []
+
         # check for API
         api = self.API
         if api is None:
@@ -84,9 +92,9 @@ class MetaData:
             try:
                 datetime.fromisoformat(self.sample_date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"].format("sample date",
-                                                    self.sample_date,
-                                                    str(err)))
+                msgs.append(WARNINGS["W011"]
+                            .format("sample date", self.sample_date, str(err)))
+
         return msgs
 
 

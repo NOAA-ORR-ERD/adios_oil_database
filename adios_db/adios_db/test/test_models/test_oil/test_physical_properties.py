@@ -10,6 +10,7 @@ from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      InterfacialTensionList,
                                                      DynamicViscosityPoint,
                                                      DynamicViscosityList,
+                                                     KinematicViscosity,
                                                      KinematicViscosityPoint,
                                                      KinematicViscosityList,)
 
@@ -294,6 +295,19 @@ class TestKinematicViscosityList:
 
         assert model.py_json() == json_obj
 
+    def test_missing_ref_temp(self):
+        # this occurs a lot when editing the code in the GUI
+
+        kvp = KinematicViscosityPoint(viscosity=KinematicViscosity(1000,
+                                                                   unit="Cst"),
+                                      )
+        kvl = KinematicViscosityList((kvp,))
+
+        msgs = kvl.validate()
+
+        assert "E042:" in msgs[0]
+        assert "KinematicViscosity" in msgs[0]
+
 
 class TestPhysicalProperties:
     def test_init(self):
@@ -407,4 +421,3 @@ class Test_interfacial_tension:
         msgs = itl.validate()
 
         assert not msgs
-

@@ -1,13 +1,13 @@
 """
 tests for the version object
 """
-
 from dataclasses import dataclass, field
 from adios_db.models.common.utilities import dataclass_to_json
 
 from adios_db.models.oil.version import Version
 
 import pytest
+
 
 def test_init():
     v = Version(1, 2, 3)
@@ -18,30 +18,24 @@ def test_init():
 
 
 def test_string_init():
-    v = Version(1, 2, 10) == Version("1.2.10")
+    assert Version(1, 2, 10) == Version("1.2.10")
 
 
 def test_too_many_parts():
     with pytest.raises(TypeError):
-        v = Version(1, 2, 3, 4)
+        _v = Version(1, 2, 3, 4)
 
 
 def test_str():
-    v = Version(1, 2, 3)
-
-    assert str(v) == "1.2.3"
+    assert str(Version(1, 2, 3)) == "1.2.3"
 
 
-def test_repr_():
+def test_repr():
     assert repr(Version(8, 9)) == "Version(8, 9, 0)"
 
 
 def test_py_json():
-    v = Version(1, 12, 0)
-
-    pyjs = v.py_json()
-
-    assert pyjs == "1.12.0"
+    assert Version(1, 12, 0).py_json() == "1.12.0"
 
 
 def test_from_py_json():
@@ -50,9 +44,10 @@ def test_from_py_json():
     assert v.minor == 4
     assert v.patch == 2
 
+
 def test_from_py_json_wrong_type():
     with pytest.raises(ValueError):
-        v = Version.from_py_json(1.2)
+        _v = Version.from_py_json(1.2)
 
 
 def test_round_trip():
@@ -63,8 +58,8 @@ def test_round_trip():
 
 
 def test_equal():
-    v1 = Version(1,2,3)
-    v2 = Version(1,2,3)
+    v1 = Version(1, 2, 3)
+    v2 = Version(1, 2, 3)
 
     assert v1 == v2
     assert v1 <= v2
@@ -72,25 +67,27 @@ def test_equal():
 
 
 def test_greater_than():
-    v1 = Version(1,2,3)
-    v2 = Version(1,2,2)
+    v1 = Version(1, 2, 3)
+    v2 = Version(1, 2, 2)
 
     assert v1 > v2
     assert v1 >= v2
 
 
 def test_less_than():
-    v1 = Version(1,2,3)
-    v2 = Version(1,2,2)
+    v1 = Version(1, 2, 3)
+    v2 = Version(1, 2, 2)
 
     assert v2 < v1
     assert v2 <= v1
 
 
-# a really simple test of putting it in a json_dataclass
 @dataclass_to_json
 @dataclass
 class Simple:
+    """
+    a really simple test of putting it in a json_dataclass
+    """
     x: int
     version: Version
     name: str = ""
@@ -124,7 +121,7 @@ def test_inside_a_dataclass_from_py_json():
     assert s == Simple(5, name="fred", version=Version(3, 4, 5))
 
 
-def test_round_trip():
+def test_simple_class_round_trip():
     s = Simple(5, name="fred", version=Version(5, 6, 0))
 
     pyjs = s.py_json()
@@ -132,8 +129,3 @@ def test_round_trip():
     s2 = Simple.from_py_json(pyjs)
 
     assert s == s2
-
-
-
-
-

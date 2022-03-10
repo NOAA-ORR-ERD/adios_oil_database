@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 class ParserBase(ImporterBase):
-    '''
-        Only things that are common to all parsers
-    '''
+    """
+    Only things that are common to all parsers
+    """
     def __init__(self, values):
         self.src_values = values
         self.oil_obj = {}

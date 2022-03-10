@@ -1,10 +1,9 @@
-'''
-    Test our SARA model classes
-'''
+"""
+Test our SARA model classes
+"""
 import pytest
 
-from adios_db.models.common import (SARAFraction, SARADensity,
-                                        MolecularWeight)
+from adios_db.models.common import SARAFraction, SARADensity, MolecularWeight
 
 
 class TestSaraFraction():

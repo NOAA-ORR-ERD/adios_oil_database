@@ -17,30 +17,6 @@ adios\_db.util.db\_connection module
    :undoc-members:
    :show-inheritance:
 
-adios\_db.util.decamelize module
---------------------------------
-
-.. automodule:: adios_db.util.decamelize
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-adios\_db.util.estimations module
----------------------------------
-
-.. automodule:: adios_db.util.estimations
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-adios\_db.util.json module
---------------------------
-
-.. automodule:: adios_db.util.json
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 adios\_db.util.many\_many module
 --------------------------------
 

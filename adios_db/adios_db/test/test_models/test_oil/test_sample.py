@@ -9,8 +9,7 @@ from adios_db.models.oil.metadata import SampleMetaData
 from adios_db.models.oil.ccme import CCME
 from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DensityPoint,
-                                                     DensityList,
-                                                     )
+                                                     DensityList)
 from adios_db.models.oil.validation.validate import validate_json
 
 
@@ -84,7 +83,8 @@ class TestSample:
                                       'physical_properties'])
     def test_default_empty_attributes(self, attr):
         """
-        test that various attributes get a default empty object, rather than None
+        test that various attributes get a default empty object,
+        rather than None
         """
         s = Sample()
         assert getattr(s, attr) is not None

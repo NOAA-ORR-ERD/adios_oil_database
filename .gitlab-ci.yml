@@ -20,6 +20,8 @@ stages:
   - verify
   - deploy_db
   - deploy
+  - maintenance
+
 
 test_develop:
   stage: test
@@ -37,7 +39,11 @@ test_develop:
 
   script:
     # install all the requirements
-    - conda install -y --file adios_db/conda_requirements.txt --file web_api/conda_requirements.txt
+    - >
+      conda install -y
+      --file adios_db/conda_requirements.txt
+      --file adios_db/conda_requirements_optional.txt
+      --file web_api/conda_requirements.txt
 
     # configure and start mongodb
 
@@ -119,6 +125,8 @@ build_client:
 scan-api:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
+  allow_failure: true
+
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
@@ -130,7 +138,6 @@ scan-api:
     # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
     # for details
     GIT_STRATEGY: none
-  allow_failure: true
   services:
     - name: $CLAIR_DB_IMAGE
       alias: clair-vulnerabilities-db
@@ -143,12 +150,16 @@ scan-api:
   rules:
     - if: $CONTAINER_SCANNING_DISABLED
       when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH &&
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
 scan-client:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
+  allow_failure: true
+
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
@@ -160,7 +171,6 @@ scan-client:
     # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
     # for details
     GIT_STRATEGY: none
-  allow_failure: true
   services:
     - name: $CLAIR_DB_IMAGE
       alias: clair-vulnerabilities-db
@@ -173,6 +183,8 @@ scan-client:
   rules:
     - if: $CONTAINER_SCANNING_DISABLED
       when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH &&
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
@@ -180,6 +192,8 @@ deploy_mongodb_stage:
   stage: deploy_db
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -216,6 +230,7 @@ deploy_mongodb_stage:
 
 stop_mongodb_stage:
   stage: deploy_db
+  when: manual
   only:
     - develop
   environment:
@@ -224,7 +239,6 @@ stop_mongodb_stage:
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -267,13 +281,13 @@ stop_mongodb_public:
   stage: deploy_db
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -284,6 +298,8 @@ deploy_api_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -293,12 +309,20 @@ deploy_api_stage:
     CONTAINER_NAME: adios_db_web_api
     APP_NETWORK: adios_net
     PORT_MAPPING: 8084:9898
+    REPO_VOLUME: noaa_data_repo
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
+    - >
+      docker volume inspect $REPO_VOLUME >/dev/null 2>&1 ||
+      docker volume create $REPO_VOLUME
+    - >
+      docker volume inspect $KC_CONFIG_VOLUME >/dev/null 2>&1 ||
+      docker volume create $KC_CONFIG_VOLUME
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -306,8 +330,11 @@ deploy_api_stage:
       -e MONGODB_WRITEABLE=true
       -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
       --network $APP_NETWORK
+      -v $REPO_VOLUME:/data/git_repos
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       --restart unless-stopped $IMAGE_TAG
     - docker ps
+    - docker logs $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
@@ -316,13 +343,13 @@ stop_api_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -333,6 +360,8 @@ deploy_oauth_api_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -342,17 +371,17 @@ deploy_oauth_api_stage:
     CONTAINER_NAME: auth_web_api
     APP_NETWORK: adios_net
     PORT_MAPPING: 8004:4180
-    OAUTH2_PROXY_PROVIDER: keycloak
+    OAUTH2_PROXY_PROVIDER: keycloak-oidc
     OAUTH2_PROXY_CLIENT_ID: adios-database
-    #OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
-    OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
-    OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
-    OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
-    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:9898
+    OAUTH2_PROXY_REDIRECT_URL: https://adios-stage.orr.noaa.gov/oauth2/callback
+    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth.orr.noaa.gov/auth/realms/ORR
+    OAUTH2_PROXY_EMAIL_DOMAINS: noaa.gov
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:9898
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
-    OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    #OAUTH2_PROXY_ALLOWED_ROLES: <OPTIONAL>
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -367,14 +396,17 @@ deploy_oauth_api_stage:
       --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
       --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
       --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
-      --env OAUTH2_PROXY_LOGIN_URL=$OAUTH2_PROXY_LOGIN_URL
-      --env OAUTH2_PROXY_REDEEM_URL=$OAUTH2_PROXY_REDEEM_URL
-      --env OAUTH2_PROXY_VALIDATE_URL=$OAUTH2_PROXY_VALIDATE_URL
-      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
-      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
-      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
+      --env OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL
+      --env OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL
       --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
+      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
+      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
+      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage
@@ -384,13 +416,13 @@ stop_oauth_api_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_api
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -401,6 +433,8 @@ deploy_client_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -430,13 +464,13 @@ stop_client_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -447,6 +481,8 @@ deploy_oauth_client_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -456,17 +492,17 @@ deploy_oauth_client_stage:
     CONTAINER_NAME: auth_web_client
     APP_NETWORK: adios_net
     PORT_MAPPING: 8003:4180
-    OAUTH2_PROXY_PROVIDER: keycloak
+    OAUTH2_PROXY_PROVIDER: keycloak-oidc
     OAUTH2_PROXY_CLIENT_ID: adios-database
-    #OAUTH2_PROXY_CLIENT_SECRET: ????????-????-????-????-????????????
-    OAUTH2_PROXY_LOGIN_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/auth
-    OAUTH2_PROXY_REDEEM_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/token
-    OAUTH2_PROXY_VALIDATE_URL: https://auth.orr.noaa.gov/auth/realms/ORR/protocol/openid-connect/userinfo
-    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:4200
+    OAUTH2_PROXY_REDIRECT_URL: https://adios-stage.orr.noaa.gov/oauth2/callback
+    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth.orr.noaa.gov/auth/realms/ORR
+    OAUTH2_PROXY_EMAIL_DOMAINS: noaa.gov
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
+    OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:4200
     OAUTH2_PROXY_COOKIE_DOMAIN: https://adios-stage.orr.noaa.gov
-    OAUTH2_PROXY_EMAIL_DOMAINS: "*"
     OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+    #OAUTH2_PROXY_ALLOWED_ROLES: <OPTIONAL>
+    KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -482,14 +518,17 @@ deploy_oauth_client_stage:
       --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
       --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
       --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
-      --env OAUTH2_PROXY_LOGIN_URL=$OAUTH2_PROXY_LOGIN_URL
-      --env OAUTH2_PROXY_REDEEM_URL=$OAUTH2_PROXY_REDEEM_URL
-      --env OAUTH2_PROXY_VALIDATE_URL=$OAUTH2_PROXY_VALIDATE_URL
-      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
-      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
-      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
+      --env OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL
+      --env OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL
       --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
+      --env OAUTH2_PROXY_COOKIE_SECRET=$OAUTH2_PROXY_COOKIE_SECRET
+      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
+      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
       --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
+      --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
+      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
+      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
+      -v $KC_CONFIG_VOLUME:/data/kc_config
       $IMAGE_TAG
   tags:
     - adios-stage
@@ -499,13 +538,13 @@ stop_oauth_client_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_client
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -544,13 +583,13 @@ stop_api_public:
   stage: deploy
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -587,13 +626,13 @@ stop_client_public:
   stage: deploy
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -648,14 +687,69 @@ stop_proxy_public:
   stage: deploy
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_proxy
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
     - prod
+
+init_git_repo_on_stage:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  when: manual
+  
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    SCRIPT_NAME: init_noaa_data.sh
+  script:
+    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
+
+  tags:
+    - adios-stage
+
+sync_with_git_review:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    SCRIPT_NAME: sync_with_under_review.sh
+  script:
+    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
+
+  tags:
+    - adios-stage
+
+sync_with_git_prod:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  when: manual
+  
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    SCRIPT_NAME: sync_with_production.sh
+  script:
+    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
+
+  tags:
+    - adios-stage

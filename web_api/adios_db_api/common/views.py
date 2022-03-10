@@ -1,5 +1,5 @@
 """
-Common Gnome object request handlers.
+Common Oil DB object request handlers.
 """
 import sys
 import traceback
@@ -15,13 +15,13 @@ logger = logging.getLogger(__name__)
 
 
 def obj_id_from_url(request):
-    '''
-        Get an object ID from the request URL
-        - The ID could be contained in link (/object/<id>)
-          The pyramid URL parser returns a tuple of 0 or more matching items,
-          at least when using the * wild card
-        - The ID could also be contained in GET param (/object?id=<id>)
-    '''
+    """
+    Get an object ID from the request URL
+    - The ID could be contained in link (/object/<id>)
+      The pyramid URL parser returns a tuple of 0 or more matching items,
+      at least when using the * wild card
+    - The ID could also be contained in GET param (/object?id=<id>)
+    """
     obj_id = request.matchdict.get('obj_id')
     obj_id = obj_id[0] if len(obj_id) > 0 else None
 
@@ -72,9 +72,9 @@ def cors_response(request, response):
 
 
 def can_modify_db(func):
-    '''
-        Decorator function to test if database modification is allowed.
-    '''
+    """
+    Decorator function to test if database modification is allowed.
+    """
     def wrapper_func(request):
         if request.registry.settings['caps.can_modify_db'].lower() == 'true':
             return func(request)

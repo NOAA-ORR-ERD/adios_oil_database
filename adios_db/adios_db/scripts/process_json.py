@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 This simply runs all the JSON records through the Oil object
 
@@ -24,7 +23,8 @@ data_dir is the dir where the data are: the script will recursively
 search for JSON files
 
 If "dry_run" is on the command line, it will report what it would do,
-but not save any changes.
+but not save any changes. So that's a good way to check that the JSON
+is valid without changing anything.
 """
 
 
@@ -35,6 +35,7 @@ def run_through():
     pth = None
     for pth in sorted(base_dir.rglob("*.json")):
         print("processing:", pth)
+
         try:
             oil = Oil.from_file(pth)
         except Exception as ex:
@@ -47,12 +48,10 @@ def run_through():
             oil.to_file(pth)
         else:
             print("Dry Run: Nothing saved")
+
     if pth is None:
         print("No files were found in:", base_dir)
 
 
 if __name__ == "__main__":
     run_through()
-
-
-

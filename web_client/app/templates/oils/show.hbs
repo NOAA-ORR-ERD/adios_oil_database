@@ -21,16 +21,24 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
 
       {{!-- back to oil list control --}}
       <div class="mr-2 d-inline-block">
-        <LinkTo @route="oils">
-          <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
-            data-toggle="tooltip" title="Back to List">
-            &lt; Back to List
-          </button>
-        </LinkTo>
+        {{#if this.changesMade}}
+          <Button::BackToList
+            @oil={{this.model}}
+            @submit={{action send "discardTemporaryEdits" this.model "oils.index"}}
+          />
+        {{else}}
+          <LinkTo @route="oils">
+            <button type="button" class="btn btn-dark btn-sm m-1 text-nowrap"
+              data-toggle="tooltip" title="Back to List">
+              &lt; Back to List
+            </button>
+          </LinkTo>
+        {{/if}}
+
 
         {{!-- oil status --}}
         <strong>
@@ -49,7 +57,7 @@
 
     </div>
 
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-6 col-lg-3">
       <div class="row align-items-center justify-content-center">
 
         <div class="col-xs-4 mt-2 text-center">
@@ -61,21 +69,43 @@
               @onLabel="Edit"
               @offLabel="View"
               @value={{this.editable}}
-              @onToggle={{action (mut this.editable)}}
+              @onToggle={{this.setEditable}}
             />
           {{/if}}
         </div>
       </div>
     </div>
 
-    <div class="col-xs-6 col-sm-4 col-lg-3">
+    <div class="col-xs-12 col-sm-12 col-lg-12 col-xl-6">
       <div class="d-flex">
-        <Button::Download @oil={{this.model}} />
+
+        {{#if this.canModifyDb}}
+          <Button::DiscardEdits
+            @oil={{this.model}}
+            @submit={{action send "discardTemporaryEdits" this.model ""}}
+            @changesMade={{this.changesMade}}
+          />
+
+          <Button::SaveEdits
+            @oil={{this.model}}
+            @submit={{action (pipe
+                        (action send "updateOil" this.model)
+                        (action send "commitTemporaryEdits" this.model))
+                    }}
+            @changesMade={{this.changesMade}}
+          />
+        {{/if}}
+ 
+        <Button::Download
+          @oil={{this.model}}
+          @changesMade={{this.changesMade}}
+        />
 
         {{#if this.canModifyDb}}
           <Button::CopyOil
             @oil={{this.model}}
             @submit={{action send "createOil"}}
+            @changesMade={{this.changesMade}}
           />
         {{/if}}
 
@@ -83,6 +113,7 @@
           <Button::DeleteOil
             @oil={{this.model}}
             @submit={{action send "deleteOil"}}
+            @changesMade={{this.changesMade}}
           />
         {{/if}}
 

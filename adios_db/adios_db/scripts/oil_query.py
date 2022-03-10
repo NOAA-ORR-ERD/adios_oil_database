@@ -1,6 +1,6 @@
-'''
-    Utility to query the oil database
-'''
+"""
+Utility to query the oil database
+"""
 import sys
 import os
 import logging
@@ -23,7 +23,7 @@ argp.add_argument('--config', nargs=1,
 
 
 def oil_query_cmd(argv=sys.argv):
-    '''
+    """
     command-line parsing our oil_query.
 
     Examples of how we want to use this on the command-line:
@@ -45,8 +45,7 @@ def oil_query_cmd(argv=sys.argv):
     has the format:
 
     "option=filter"
-
-    '''
+    """
 
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())

@@ -13,8 +13,8 @@
         "API": 28.4,
         "comments": "Crude sample represents 1989 winter production.  Product considered an Arabian medium crude.",
         "labels": [
-            "Crude Oil",
-            "Medium Crude"
+            "Medium Crude",
+            "Crude Oil"
         ],
         "model_completeness": 24,
         "gnome_suitable": true
@@ -182,6 +182,9 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

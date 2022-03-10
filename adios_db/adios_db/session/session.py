@@ -1,30 +1,41 @@
-# The Oil Database Session object
+"""
+ADIOS DB Session object
+
+This module encapsulates a MongoDB session for use behind the WebAPI,
+or other uses that require high performance querying, etc.
+
+In theory this same Session object could be duck typed to use a
+different back-end: RDBMS, simple file store, etc.
+"""
 from numbers import Number
 import warnings
+
 from pymongo import MongoClient, ASCENDING, DESCENDING
 
 from ..models.oil.product_type import types_to_labels
 
 
 class CursorWrapper():
-    '''
-        Wraps a mongodb cursor to provide an iterator that we can do some
-        filtering on, while not losing all its methods
+    """
+    Wraps a mongodb cursor to provide an iterator that we can do some
+    filtering on, while not losing all its methods
 
-        At this point, all it's doing is removing the _id key
+    At this point, all it's doing is removing the _id key
 
-        Seems like a lot of effort for that, but the alternative is to realize
-        the entire thing into a list -- which may be a bad idea.
+    Seems like a lot of effort for that, but the alternative is to realize
+    the entire thing into a list -- which may be a bad idea.
 
-        Rant: why doesn't a mongo cursor have a __len__ rather than using
-              .count() to make it more like a regular Sequence?
+    Rant-- Why doesn't a mongo cursor have a __len__ rather than using
+    .count() to make it more like a regular Sequence?
 
-              oh, and now count() is deprecated as well!
-    '''
+    oh, and now ``count()`` is deprecated as well.
+    """
     def __init__(self, cursor):
         self.cursor = cursor
 
     def __iter__(self):
+        # this is do-nothing, a cursor is already an iterator
+        # -- but just in case.
         self.cursor = iter(self.cursor)
         return self
 
@@ -34,30 +45,17 @@ class CursorWrapper():
         return obj
 
     def __len__(self):
-        return self.cursor.count()
+        try:
+            return self.cursor.explain()['executionStats']['nReturned']
+        except StopIteration:
+            # explain() does this when the cursor has zero items
+            return 0
 
     def __getitem__(self, idx):
         return self.cursor[idx]
 
-    # def count(self, *args, **kwargs):
-    #     return self.cursor.count(*args, **kwargs)
-
-    def __getattr__(self, attr):
-        """
-        Pass anything else on to the embedded cursor
-
-        Just in case -- we really should document whats being used.
-        """
-        warnings.warn("ideally, we should not be using mongo "
-                      "cursor methods directly."
-                      f": `{attr}` Should be wrapped somehow",
-                      DeprecationWarning)
-
-        return getattr(self.cursor, attr)
-
 
 class Session():
-
     sort_direction = {'asc': ASCENDING,
                       'ascending': ASCENDING,
                       'desc': DESCENDING,
@@ -72,23 +70,106 @@ class Session():
         :param database: database name used for this data.
         """
         self.mongo_client = MongoClient(host=host, port=port)
+        self.server_info = self.mongo_client.server_info()
 
-        self.db = getattr(self.mongo_client, database)
-        self.oil = self.db.oil  # the oil collection
+        self._db = getattr(self.mongo_client, database)
+        self._oil_collection = self._db.oil  # the oil collection
 
-    def query(self, oil_id=None,
-              text=None, api=None, labels=None, product_type=None,
+    def find_one(self, oil_id):
+        """
+        return a single Oil object from the collection
+        """
+        ret = self._oil_collection.find_one({'oil_id': oil_id})
+
+        if ret is not None:
+            ret.pop('_id', None)
+
+        return ret
+
+    def insert_one(self, oil_obj):
+        """
+        add a new Oil to the collection
+        """
+        oil_id = oil_obj.oil_id
+        oil_obj = oil_obj.py_json()
+
+        # is this necessary? couldn't we let Mongo make it?
+        oil_obj['_id'] = oil_id
+
+        self._oil_collection.insert_one(oil_obj)
+
+        return oil_id
+        # we want to hide Mongo details, including _id
+        # return self._oil_collection.insert_one(oil_obj).inserted_id
+
+    def replace_one(self, oil_obj):
+        """
+        replace existing Oil object with the same oil_id
+        """
+        oil_obj = oil_obj.py_json()
+
+        return self._oil_collection.replace_one({'oil_id': oil_obj['oil_id']},
+                                                oil_obj)
+
+    def delete_one(self, oil_id):
+        """
+        delete a single Oil object with the given oil_id
+        """
+        return self._oil_collection.delete_one({'oil_id': oil_id})
+
+    def new_oil_id(self, id_prefix='XX'):
+        """
+        Query the database for the next highest ID with the provided
+        prefix.
+
+        :param id_prefix = 'XX': Prefix of new ID
+
+        The current implementation is to walk the oil IDs, filter for the
+        prefix, and choose the max numeric content.
+
+        Warning: We don't expect a lot of traffic POST'ing a bunch new oils
+                 to the database, it will only happen once in awhile.
+                 But this is not the most effective way to do this.
+                 A persistent incremental counter would be much faster.
+                 In fact, this is a bit brittle, and would fail if the
+                 website suffered a bunch of POST requests at once.
+        """
+        max_seq = 0
+
+        cursor = (self._oil_collection.find({'oil_id': {'$regex': f'^{id_prefix}'}  # noqa
+                                             }, {'oil_id'}))
+
+        for row in cursor:
+            oil_id = row['oil_id']
+
+            try:
+                oil_seq = int(oil_id[len(id_prefix):])
+            except ValueError:
+                print('ValuError: continuing...')
+                continue
+
+            max_seq = oil_seq if oil_seq > max_seq else max_seq
+
+        max_seq += 1  # next in the sequence
+
+        return f'{id_prefix}{max_seq:05d}'
+
+    def query(self,
+              oil_id=None,
+              text=None,
+              api=None,
+              labels=None,
+              product_type=None,
               gnome_suitable=None,
-              sort=None, sort_case_sensitive=False, page=None,
+              sort=None,
+              sort_case_sensitive=False,
+              page=None,
               projection=None,
-              **kwargs):
-        '''
+              ):
+        """
         Query the database according to various criteria
 
         :returns: an iterator of dicts (json-compatible) of the data asked for
-
-
-        Where:
 
         **Filtering**
 
@@ -117,8 +198,9 @@ class Session():
                 gnome_suitable boolean field to filter the results.  A None
                 value means do not filter.
 
-        **sort options:** A list of options consisting of ('field_name',
-                                                           'direction')
+        **sort options:**
+
+        A list of options consisting of ``('field_name', 'direction')``
 
             field_name:
                 The name of a field to be used for sorting.  Dotted
@@ -148,17 +230,18 @@ class Session():
 
             For this reason, a MongoDB query will not properly sort our
             status and labels array fields, at least not in a simple way.
+        """
+        filter_opts = self._filter_options(oil_id, text, api, labels,
+                                           product_type, gnome_suitable)
 
-        '''
-        filter_opts = self.filter_options(oil_id, text, api, labels,
-                                          product_type, gnome_suitable)
-
-        sort = self.sort_options(sort)
+        sort = self._sort_options(sort)
 
         if projection is not None:
             # make sure we always get the oil_id
             projection = ['oil_id'] + list(projection)
-        ret = self.oil.find(filter=filter_opts, projection=projection)
+
+        ret = self._oil_collection.find(filter=filter_opts,
+                                        projection=projection)
 
         if sort is not None:
             if sort_case_sensitive is False:
@@ -166,76 +249,36 @@ class Session():
 
             ret = ret.sort(sort)
 
-        start, stop = self.parse_interval_arg(page)
+        start, stop = self._parse_interval_arg(page)
 
-        return CursorWrapper(ret[start:stop])
+        total_results = ret.explain()['executionStats']['nReturned']
 
-    def filter_options(self, oil_id, text, api, labels, product_type,
-                       gnome_suitable):
-        filter_opts = {}
-        filter_opts.update(self.id_arg(oil_id))
-        filter_opts.update(self.text_arg(text))
-        filter_opts.update(self.api_arg(api))
-        filter_opts.update(self.product_type_arg(product_type))
-        filter_opts.update(self.labels_arg(labels))
-        filter_opts.update(self.gnome_suitable_arg(gnome_suitable))
+        return (CursorWrapper(ret[start:stop]), total_results)
 
-        return filter_opts
-
-    def sort_options(self, sort):
+    def _sort_options(self, sort):
         if sort is None:
             return sort
         else:
             return [(opt[0], self.sort_direction.get(opt[1], ASCENDING))
                     for opt in sort]
 
-    def id_arg(self, obj_id):
+    def _filter_options(self, oil_id, text, api, labels, product_type,
+                        gnome_suitable):
+        filter_opts = {}
+        filter_opts.update(self._id_arg(oil_id))
+        filter_opts.update(self._text_arg(text))
+        filter_opts.update(self._api_arg(api))
+        filter_opts.update(self._product_type_arg(product_type))
+        filter_opts.update(self._labels_arg(labels))
+        filter_opts.update(self._gnome_suitable_arg(gnome_suitable))
+
+        return filter_opts
+
+    def _id_arg(self, obj_id):
         return {} if obj_id is None else {'oil_id': obj_id}
 
-    def id_filter_arg(self, obj_id):
-        if obj_id is None:
-            return {}
-        else:
-            return {'oil_id': {'$regex': obj_id, '$options': 'i'}}
-
-    def name_arg(self, name):
-        if name is None:
-            return {}
-        else:
-            return {'metadata.name': {'$regex': name, '$options': 'i'}}
-
-    def location_arg(self, location):
-        if location is None:
-            return {}
-        else:
-            return {'metadata.location': {'$regex': location, '$options': 'i'}}
-
-    def alternate_names_arg(self, name):
-        if name is None:
-            return {}
-        else:
-            return {'metadata.alternate_names': {'$elemMatch': {
-                '$regex': name, '$options': 'i'
-            }}}
-
-    def text_arg(self, text_to_match):
-        if text_to_match is None:
-            return {}
-        else:
-            ret = []
-
-            for w in text_to_match.split():
-                ret.append(self.make_inclusive([self.id_filter_arg(w),
-                                                self.name_arg(w),
-                                                self.location_arg(w),
-                                                self.alternate_names_arg(w)]))
-
-            ret = self.make_exclusive(ret)
-
-            return ret
-
-    def api_arg(self, apis):
-        low, high = self.parse_interval_arg(apis)
+    def _api_arg(self, apis):
+        low, high = self._parse_interval_arg(apis)
 
         if low is not None and high is not None:
             return {'metadata.API': {'$gte': low, '$lte': high}}
@@ -246,13 +289,13 @@ class Session():
         else:
             return {}
 
-    def product_type_arg(self, product_type):
+    def _product_type_arg(self, product_type):
         if product_type is None:
             return {}
         else:
             return {'metadata.product_type': product_type}
 
-    def labels_arg(self, labels):
+    def _labels_arg(self, labels):
         if labels is None:
             labels = []
         elif isinstance(labels, str):
@@ -261,12 +304,12 @@ class Session():
         if len(labels) == 1:
             return {'metadata.labels': {'$in': labels}}
         elif len(labels) > 1:
-            return self.make_inclusive([{'metadata.labels': {'$in': [l]}}
+            return self._make_inclusive([{'metadata.labels': {'$in': [l]}}
                                         for l in labels])
         else:
             return {}
 
-    def gnome_suitable_arg(self, gnome_suitable):
+    def _gnome_suitable_arg(self, gnome_suitable):
         if gnome_suitable is None:
             return {}
         else:
@@ -278,20 +321,60 @@ class Session():
             return {'metadata.gnome_suitable': {'$exists': True,
                                                 '$eq': gnome_suitable}}
 
-    def parse_interval_arg(self, interval):
-        '''
+    def _text_arg(self, text_to_match):
+        if text_to_match is None:
+            return {}
+        else:
+            ret = []
+
+            for w in text_to_match.split():
+                ret.append(self._make_inclusive([
+                    self._id_filter_arg(w),
+                    self._name_arg(w),
+                    self._location_arg(w),
+                    self._alternate_names_arg(w)
+                ]))
+
+            ret = self._make_exclusive(ret)
+
+            return ret
+
+    def _id_filter_arg(self, obj_id):
+        if obj_id is None:
+            return {}
+        else:
+            return {'oil_id': {'$regex': obj_id, '$options': 'i'}}
+
+    def _name_arg(self, name):
+        if name is None:
+            return {}
+        else:
+            return {'metadata.name': {'$regex': name, '$options': 'i'}}
+
+    def _location_arg(self, location):
+        if location is None:
+            return {}
+        else:
+            return {'metadata.location': {'$regex': location, '$options': 'i'}}
+
+    def _alternate_names_arg(self, name):
+        if name is None:
+            return {}
+        else:
+            return {'metadata.alternate_names': {'$elemMatch': {
+                '$regex': name, '$options': 'i'
+            }}}
+
+    def _parse_interval_arg(self, interval):
+        """
         An interval argument can be a number, string, or list
-
         - If it is a number, we will assume it is a minimum
-
         - If it is a list length 1, we will assume it is a minimum
-
         - If it is a list greater than 2, we will only use the first 2
           elements as a min/max
-
         - If it is a string, we will try to parse it as a set of comma
           separated values.
-        '''
+        """
         if interval is None:
             low, high = None, None
         elif isinstance(interval, Number):
@@ -316,86 +399,85 @@ class Session():
 
         return low, high
 
-    def make_inclusive(self, opts):
-        '''
-            Normally, the filtering options will be exclusive, i. e. if we are
-            searching on name='alaska' and location='north', we would only get
-            records that satisfy both criteria (criteria are AND'd together).
-            Setting the options to inclusive would yield records that satisfy
-            any of the criteria (OR'd together).
-        '''
+    def _make_inclusive(self, opts):
+        """
+        Normally, the filtering options will be exclusive, i. e. if we are
+        searching on name='alaska' and location='north', we would only get
+        records that satisfy both criteria (criteria are AND'd together).
+        Setting the options to inclusive would yield records that satisfy
+        any of the criteria (OR'd together).
+        """
         if isinstance(opts, dict):
             return {'$or': [dict([i]) for i in opts.items()]}
         else:
             return {'$or': opts}
 
-    def make_exclusive(self, opts):
-        '''
-            Normally, the filtering options will be exclusive, i.e. if we are
-            searching on name='alaska' and location='north', we would only get
-            records that satisfy both criteria (criteria are AND'd together).
+    def _make_exclusive(self, opts):
+        """
+        Normally, the filtering options will be exclusive, i.e. if we are
+        searching on name='alaska' and location='north', we would only get
+        records that satisfy both criteria (criteria are AND'd together).
 
-            This is fine for filtering criteria that have unique names.  But
-            sometimes we want multiple criteria for a single name, such as
-            when we want all items in a list to match another list.  In such
-            cases, we need to AND them explicitly.
-        '''
+        This is fine for filtering criteria that have unique names.  But
+        sometimes we want multiple criteria for a single name, such as
+        when we want all items in a list to match another list.  In such
+        cases, we need to AND them explicitly.
+        """
         if isinstance(opts, dict):
             return {'$and': [dict([i]) for i in opts.items()]}
         else:
             return {'$and': opts}
 
     def get_labels(self, identifier=None):
-        '''
-            Right now we are getting labels and associated product types
-            from the adios_db model code.  But it would be better managed
-            if we eventually migrate this to labels stored in a database
-            collection.
-        '''
-        # get the whole list of labels
-        labels = [{'name': label, 'product_types': sorted(types)}
-                  for (label, types) in types_to_labels.product_types.items()]
-
-        # so it's at least somewhat consistent, we sort and then enumerate
-        # our labels
-        labels.sort(key=lambda i: i['name'])
-
-        for idx, obj in enumerate(labels):
-            obj['_id'] = idx
+        """
+        Right now we are getting labels and associated product types
+        from the adios_db model code.  But it would be better managed
+        if we eventually migrate this to labels stored in a database
+        collection.
+        """
+        labels = types_to_labels.all_labels_dict
 
         if identifier is None:
             return labels
         else:
+            msg = 'label identifiers are integer >= 0 only'
             try:
                 identifier = int(identifier)
             except ValueError as e:
-                e.args = ('label identifiers are integer only',)
-                raise
+                raise ValueError(msg) from e
+            if identifier < 0:
+                raise ValueError(msg)
 
-            # get a single label
-            label = [i for i in labels if i['_id'] == identifier]
+            # Get a single label
+            for label in labels:
+                if label['_id'] == identifier:
+                    return label
+            return None
 
-            return label[0] if len(label) > 0 else None
+    def list_database_names(self):
+        return self.mongo_client.list_database_names()
 
-    def insert_oil_record(self, oil, overwrite=False):
-        """
-        add a new oil record to the oil collection
+    def drop_database(self, db_name):
+        return self.mongo_client.drop_database(db_name)
 
-        :param oil: an Oil object to add
+    def get_database(self, db_name):
+        return getattr(self.mongo_client, db_name)
 
-        :param overwrite=False: whether to overwrite an existing
-                                record if it already exists.
-        """
-        obj = oil.py_json()
-
-        self.oil.insert_one(obj)
+    @property
+    def address(self):
+        return self.mongo_client.address
 
     def __getattr__(self, name):
-        # FixMe: This should be fully hiding the mongo client
-        #        so probably should NOT do this!
-        '''
-            Any referenced attributes that are not explicitly defined in this
-            class will be assumed to belong to the mongo client.  So we will
-            pass them down.
-        '''
+        """
+        Any referenced attributes that are not explicitly defined in this
+        class will be assumed to belong to the mongo client.  So we will
+        pass them down.
+
+        FixMe: This should be fully hiding the mongo client
+               so probably should NOT do this!
+        """
+        warnings.warn("Using mongo methods directly is deprecated. "
+                      f"`{name}` functionality should be added to the "
+                      "Session class",
+                      DeprecationWarning)
         return getattr(self.mongo_client, name)

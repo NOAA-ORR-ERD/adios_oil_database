@@ -3,21 +3,26 @@ from functools import wraps
 from datetime import datetime
 import logging
 
-from slugify import Slugify
+
+try:
+    from slugify import Slugify
+    custom_slugify = Slugify(to_lower=True, separator='_')
+except ImportError:
+    print("You need the awesome-slugify pacakge to run the importing code")
+    custom_slugify = None
 
 from dateutil import parser
 from itertools import zip_longest
 from builtins import isinstance
 
-custom_slugify = Slugify(to_lower=True, separator='_')
 
 logger = logging.getLogger(__name__)
 
 
 def join_with(separator):
-    '''
-        Class method decorator to join a list of labels with a separator
-    '''
+    """
+    Class method decorator to join a list of labels with a separator
+    """
     def wrapper(func):
         @wraps(func)
         def wrapped(self, *args, **kwargs):
@@ -31,22 +36,22 @@ def join_with(separator):
 
 
 def parse_time(func):
-    '''
-        Class method decorator to parse an attribute return value as a datetime
+    """
+    Class method decorator to parse an attribute return value as a datetime
 
-        Note: Apparently there are a few records that just don't have
-              a sample date.  So we can't really enforce the presence
-              of a date here.
+    Note: Apparently there are a few records that just don't have
+          a sample date.  So we can't really enforce the presence
+          of a date here.
 
-        Note: The April 2020 Env Canada datasheet has much more consistent
-              date formats, but there are still some variations.
-              Some formats that I have seen:
-              - YYYY-MM-DD          # most common
-              - YYYY                # 2 records
-              - YYYY-MM             # 5 records
+    Note: The April 2020 Env Canada datasheet has much more consistent
+          date formats, but there are still some variations.
+          Some formats that I have seen:
+          - YYYY-MM-DD          # most common
+          - YYYY                # 2 records
+          - YYYY-MM             # 5 records
 
-              Fortunately, dateutil will handle these without problems
-    '''
+          Fortunately, dateutil will handle these without problems
+    """
     def wrapper(*args, **kwargs):
         ret = func(*args, **kwargs)
         if isinstance(ret, (tuple, list, set, frozenset)):
@@ -84,17 +89,16 @@ def date_only(func):
 
 
 class ImporterBase(object):
-    '''
-        Only things that are common to all importer modules
-    '''
+    """
+    Only things that are common to all importer modules
+    """
     def slugify(self, label):
-        '''
+        """
         Generate a string that is suitable for use as an object attribute.
 
-        * The strings will be snake-case, all lowercase words separated
+        - The strings will be snake-case, all lowercase words separated
           by underscores.
-
-        * They will not start with a numeric digit.  If the original label
+        - They will not start with a numeric digit.  If the original label
           starts with a digit, the slug will be prepended with an
           underscore ('_').
 
@@ -103,7 +107,7 @@ class ImporterBase(object):
         scharfes S (Sharp S).  It looks sorta like a capital B to
         English readers, but converting it to 'ss' is not completely
         inappropriate.
-        '''
+        """
         if label is None:
             return label
 
@@ -131,7 +135,7 @@ class ImporterBase(object):
             return default
 
     def deep_set(self, obj, attr_path, value):
-        '''
+        """
         Navigate a period ('.') delimited path of attribute values into the
         oil data structure and set a value at that location in the
         structure.
@@ -147,7 +151,7 @@ class ImporterBase(object):
         ``physical_properties.densities.+``   (appends an item to the
         densities list and goes to that part.  the index value
         is assumed to be -1 in this case)
-        '''
+        """
         if isinstance(attr_path, str):
             attr_path = attr_path.split('.')
 

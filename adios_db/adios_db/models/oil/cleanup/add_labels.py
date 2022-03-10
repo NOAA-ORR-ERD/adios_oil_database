@@ -1,44 +1,26 @@
-'''
+"""
 Add labels to a record -- for those that we can use some automatic criteria for
 
 For a given product type:
     some labels can be determined from API and/or Viscosity ranges.
 
 The criteria follows the ASTM (and others) standards, where we can
-'''
+"""
 from math import inf
 
 from ..product_type import types_to_labels
 from ....computation.physical_properties import KinematicViscosity
 
-# # Here are all the Product Types:
-# ('Crude Oil NOS',
-#  'Tight Oil',
-#  'Condensate',
-#  'Bitumen Blend',
-#  'Refined Product NOS',
-#  'Fuel Oil NOS',
-#  'Distillate Fuel Oil',
-#  'Residual Fuel Oil',
-#  'Refinery Intermediate',
-#  'Solvent',
-#  'Bio-fuel Oil',
-#  'Bio-Petro Fuel Oil',
-#  'Natural Plant Oil',
-#  'Lube Oil',
-#  'Dielectric Oil',
-#  'Other')
-
 # # These are the current labels that aren't mapped yet:
-
 # 'MDO', 'Vacuum Gas Oil'
 
 # these are the labels with no criteria for density or viscosity
 # e.g, if it's a "Crude Oil NOS", it's a 'Crude Oil'
 synonyms_for_product_types = {
-    'Crude Oil', 'Shale Oil', 'Fracking Oil', 'Fuel Oil', 'Residual Fuel', 'Distillate Fuel',
-    'Refined Product', 'Condensate', 'Transformer Oil'
+    'Crude Oil', 'Shale Oil', 'Fracking Oil', 'Fuel Oil', 'Residual Fuel',
+    'Distillate Fuel', 'Refined Product', 'Condensate', 'Transformer Oil'
 }
+
 # If it's an exact match, then it's definitely a synonym
 for pt, labels in types_to_labels.labels.items():
     for label in labels:
@@ -53,18 +35,17 @@ synonyms_for_labels = {
     'No. 2 Fuel Oil': ['Diesel', 'Home Heating Oil'],
 }
 
-no_criteria = {
-    "api_min": -inf,
-    "api_max": inf,
-    "kvis_min": -inf,
-    "kvis_max": inf,
-    'kvis_temp': 15
-}
+# this maps the labels according to API and kinematic viscosity
+# (cSt at given temp in C) ranges.
+no_criteria = {"api_min": -inf, "api_max": inf,
+               "kvis_min": -inf, "kvis_max": inf,
+               "kvis_temp": 15}
 label_map = {label: no_criteria for label in synonyms_for_product_types}
 
-# this maps the labels according to API and kinematic viscosity (cSt at given temp in C) ranges.
 label_map.update({
-    # 'example_label': {"api_min": -inf, "api_max": inf, "kvis_min": -inf, "kvis_max": inf, 'kvis_temp': None},
+    # 'example_label': {"api_min": -inf, "api_max": inf,
+    #                   "kvis_min": -inf, "kvis_max": inf,
+    #                   "kvis_temp": None},
     'Condensate': {
         "api_min": 50,
         "api_max": inf,
@@ -116,12 +97,13 @@ label_map.update({
         "kvis_max": inf,
         'kvis_temp': 40
     },
-    # I went through all the bitumen records that we have, and most of them do not have
-    # kinematic viscosity measurements. However, they all have dynamic viscosity
-    # measurements which were > 10^6 cP at 0C and > 10^5 cP at 15C.
+    # I went through all the bitumen records that we have, and most of them
+    # do not have kinematic viscosity measurements. However, they all have
+    # dynamic viscosity measurements which were > 10^6 cP at 0C and > 10^5 cP
+    # at 15C.
     # I propose changing the criteria to reflect these measurements.
 
-    #***** The following need more verification
+    # ***** The following need more verification
     # Refined light products
     'No. 2 Fuel Oil': {
         "api_min": 30,
@@ -167,7 +149,7 @@ label_map.update({
         "kvis_max": 200,
         'kvis_temp': 38
     },
-    #IFO needs an additional limitation to not be tied to biodiesel
+    # IFO needs an additional limitation to not be tied to biodiesel
 })
 
 for label, synonyms in synonyms_for_labels.items():
@@ -189,6 +171,7 @@ def get_suggested_labels(oil):
     #     labels.add(pt)
     if pt == "Other":  # we don't want any labels auto added for Other
         return sorted(labels)
+
     try:
         for label in types_to_labels.left[oil.metadata.product_type]:
             if is_label(oil, label):
@@ -210,9 +193,11 @@ def add_labels_to_oil(oil):
     :type oil: Oil object
     """
     labels = set(oil.metadata.labels)
+
     for label in types_to_labels.left['oil.metadata.product_type']:
         if is_label(oil, label):
             labels.add(label)
+
     oil.metadata.labels = sorted(labels)
 
 
@@ -237,7 +222,8 @@ def is_label(oil, label):
                      (data['kvis_max'] != inf)):  # check viscosity limits
         try:
             KV = KinematicViscosity(oil)
-            kvis = KV.at_temp(temp=data['kvis_temp'], kvis_units='cSt', temp_units='C')
+            kvis = KV.at_temp(temp=data['kvis_temp'], kvis_units='cSt',
+                              temp_units='C')
             is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
         except (ZeroDivisionError,
                 ValueError):  # if it can't do this, we don't apply the label
@@ -247,10 +233,10 @@ def is_label(oil, label):
 
 
 # def link_oil_to_labels(oil):
-#     '''
-#         Here, we have a single oil and we would like to link it to one or more
-#         labels based on its properties.
-#     '''
+#     """
+#     Here, we have a single oil and we would like to link it to one or more
+#     labels based on its properties.
+#     """
 #     try:
 #         labels = oil['metadata']['labels']
 #     except TypeError:

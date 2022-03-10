@@ -1,10 +1,7 @@
 """
-version_update.py
-
-code for dealing with different versions of the data model
+version_update.py: Code for dealing with different versions of the data model
 
 NOTE: this may need some refactoring when it gets more complicated
-
 """
 from .version import Version, VersionError
 

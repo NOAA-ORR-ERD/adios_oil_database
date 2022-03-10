@@ -32,3 +32,11 @@ adios\_db.computation.physical\_properties module
    :members:
    :undoc-members:
    :show-inheritance:
+
+adios\_db.computation.utilities module
+--------------------------------------
+
+.. automodule:: adios_db.computation.utilities
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -3,13 +3,22 @@ import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 
 export default class ShowController extends Controller {
-    @tracked currentSampleTab = '#fresh-oil-sample';
-    @tracked currentCategoryTab = {
-        '#fresh-oil-sample': '#fresh-oil-sample-physical'
-    };
+    @tracked currentSampleTab = '';
+    @tracked currentCategoryTab = {};
+    @tracked changesMade = false;
+    @tracked editable = false;
 
     get canModifyDb() {
         return this.capabilities.firstObject.can_modify_db == 'true';
+    }
+
+    @action
+    setEditable(toggleState) {
+        // We should only be able to unset edit mode if there are no changes
+        // pending.
+        if (toggleState === true || !this.changesMade) {
+            this.editable = toggleState;
+        }
     }
 
     @action
@@ -32,6 +41,7 @@ export default class ShowController extends Controller {
         let newName = event.target.value;
         this.model.metadata.name = newName;
 
+        this.changesMade = true;
         this.model.save();
     }
 }

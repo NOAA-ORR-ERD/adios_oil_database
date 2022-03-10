@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class OilLibraryAttributeMapper(MapperBase):
-    '''
+    """
     A translation/conversion layer for the NOAA FileMaker imported
     record object.
 
@@ -20,7 +20,7 @@ class OilLibraryAttributeMapper(MapperBase):
     Filemaker record or record parser object.  Its purpose is to generate
     named attributes that are suitable for creation of a NOAA Oil Database
     record.
-    '''
+    """
     oil_props = ('oil_id',
                  'metadata',
                  'status',
@@ -34,21 +34,21 @@ class OilLibraryAttributeMapper(MapperBase):
                               'environmental_behavior')
 
     def __init__(self, record):
-        '''
-            :param property_indexes: A lookup dictionary of property index
-                                     values.
-            :type property_indexes: A dictionary with property names as keys,
-                                    and associated index values into the data.
-        '''
+        """
+        :param property_indexes: A lookup dictionary of property index
+                                 values.
+        :type property_indexes: A dictionary with property names as keys,
+                                and associated index values into the data.
+        """
         self.record = record
         self.status = None
         self.labels = []
 
     def __getattr__(self, name):
-        '''
+        """
             Handle any attributes not defined as properties in this class
             by trying them on the parser.
-        '''
+        """
         try:
             ret = getattr(self.record, name)
         except Exception:
@@ -69,19 +69,19 @@ class OilLibraryAttributeMapper(MapperBase):
 
     @property
     def adhesion(self):
-        '''
-            The parser has an adhesion attribute with a simple float, and we
-            would like to reform it as a value/unit.  But we don't want to
-            change its name.  So we redefined it in the mapper.
+        """
+        The parser has an adhesion attribute with a simple float, and we
+        would like to reform it as a value/unit.  But we don't want to
+        change its name.  So we redefined it in the mapper.
 
-            Note: We don't really know what the adhesion units are for the
-                  NOAA Filemaker records.
+        Note: We don't really know what the adhesion units are for the
+              NOAA Filemaker records.
 
-                  Need to ask JeffL
+              Need to ask JeffL
 
-                  Based on the range of numbers I am seeing, it kinda looks
-                  like we are dealing with Pascals (N/m^2)
-        '''
+              Based on the range of numbers I am seeing, it kinda looks
+              like we are dealing with Pascals (N/m^2)
+        """
         adhesion = self.record.adhesion
 
         if adhesion is not None:
@@ -181,14 +181,14 @@ class OilLibraryAttributeMapper(MapperBase):
         return ret
 
     def environmental_behavior(self, weathering):
-        '''
+        """
         Notes:
 
         - there is a dispersability_temp_k, but it does not fit with the
           oil model.  sample.environmental_behavior.dispersibilites is
           for chemical dispersibility with a dispersant, and makes no
           reference to a temperature.
-        '''
+        """
         ret = {}
 
         # weathered attributes
@@ -202,12 +202,12 @@ class OilLibraryAttributeMapper(MapperBase):
 
     @property
     def compounds(self):
-        '''
+        """
         Tentative Compound items:
 
         - benzene (units=???, typical value=0.05 for gasoline,
           just a fractional value maybe?)
-        '''
+        """
         ret = []
         for attr, unit in (('benzene', 'fraction'),):
             value = getattr(self, attr, None)
@@ -223,26 +223,19 @@ class OilLibraryAttributeMapper(MapperBase):
 
     @property
     def bulk_composition(self):
-        '''
+        """
         Tentative Bulk Composition items:
 
         - Water Content Emulsion
-
         - Wax Content
-
         - Sulfur  (unit=1 possibly, 0.0104 for Alaska North Slope)
-
         - Naphthenes (units=???, typical value=0.0004 for Jet A-1)
-
         - Paraffins  (unit=???, 0.783 for Alberta 1992
                       0.019 for Salmon Oil & Gas)
-
         - Nickel  (unit=ppm most likely)
-
         - Vanadium  (unit=ppm most likely)
-
         - Polars  (unit=1 possibly, 0.0284 for Alberta 1992)
-        '''
+        """
         ret = []
         for attr, map_to, unit in (('water_content_emulsion', 'water_content',
                                     'fraction'),
@@ -269,17 +262,15 @@ class OilLibraryAttributeMapper(MapperBase):
 
     @property
     def industry_properties(self):
-        '''
+        """
         Industry Property items:
 
         - Reid Vapor Pressure (min/max/avg = 0/0.81/0.295, probably bars)
-
         - Conradson Crude (min/max/avg = 0.0054/0.12/0.035, probably just
           a fractional value)
-
         - Conradson Residuum (one value, 0.0019, probably just a fractional
           value)
-        '''
+        """
         ret = []
         for attr, map_to, unit in (('reid_vapor_pressure',
                                     'Reid Vapor Pressure', 'bar'),

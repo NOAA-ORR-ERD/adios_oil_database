@@ -4,7 +4,7 @@
 
     <div class="col-6">
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
 
         {{! Oil ID }}
         <div class="col-sm-12 col-md-5 pl-0 input-group d-flex align-items-center">
@@ -35,7 +35,7 @@
 
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
 
         {{! Source Identifier (not editable) }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
@@ -70,7 +70,7 @@
         </div>
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
 
         {{! API }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
@@ -103,7 +103,18 @@
 
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
+        <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
+          <label class="p-1 input-group-text font-weight-bold"
+                 for="gnome-compatible">
+            GNOME Compatible:
+          </label>
+
+          {{if @oil.metadata.gnome_suitable "Yes" "No"}}
+        </div>
+      </div>
+
+      <div class="row pl-0 mb-0">
         {{! Labels }}
         <div class="input-group-prepend">
           <label class="p-1 input-group-text font-weight-bold">Labels:</label>
@@ -112,6 +123,7 @@
         {{#if @editable}}
           <PowerSelectMultiple @class="bg-warning border-0"
             @placeholder="Select some labels for the oil..."
+            @matchTriggerWidth={{false}}
             @selected={{this.selectedLabels}}
             @options={{this.filteredLabels}}
             @onChange={{action "updateLabels"}}
@@ -129,7 +141,7 @@
         {{/if}}
       </div>
 
-      <div class="row pl-0 mb-1">
+      <div class="row pl-0 mb-0">
         {{! Alternate Names }}
         {{#if @editable}}
           <div class="col-6 d-flex pl-0">
@@ -172,6 +184,7 @@
               @class="p-1 reference-textarea overflow-auto bg-transparent border"
               @value={{oilReference}}
               @placeholder="Enter reference"
+              title="Reference"
               @change={{action "updateReference"}}
               rows="4"
               disabled={{not @editable}}
@@ -231,7 +244,7 @@
 
   {{! Comments }}
   {{#if (or @oil.metadata.comments @editable) }}
-    <div class="row p-0 mb-3">
+    <div class="row p-0 mb-1">
       <div class="col-12 p-0 input-group">
         <label class="pl-1 font-weight-bold">Comments:</label>
         &nbsp;
@@ -243,6 +256,7 @@
             @value={{oilComments}}
             @rows="2"
             @placeholder="Enter comments"
+            title="Comments"
             @change={{action "updateComments"}}
             disabled={{not @editable}}
           />
@@ -256,7 +270,7 @@
   <div class="row pl-0">
     <div class="col pl-0">
       {{#if @oil.status}}
-        <span>{{@oil.status.length}} error{{#if (eq @oil.status.length 1) }}s{{/if}} found:</span>
+        <span>{{@oil.status.length}} issue{{#if (gt @oil.status.length 1) }}s{{/if}} found:</span>
         <ul>
           {{#each @oil.status as |stat|}}
             <li><i class="status-warning">{{stat}}</i></li>

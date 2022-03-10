@@ -1,17 +1,27 @@
-'''
-    tests of the Environment Canada data import modules
+"""
+tests of the Environment Canada data import modules
 
-    As complete as possible, because we want to test for correctness,
-    and we also want to document how it works.
-    Either we test it correctly, or we test it in an episodic manner on the
-    real dataset.
-'''
+As complete as possible, because we want to test for correctness,
+and we also want to document how it works.
+Either we test it correctly, or we test it in an episodic manner on the
+real dataset.
+"""
+
+import pytest
+
+try:
+    from slugify import Slugify
+except ImportError:
+    pytestmark = pytest.mark.skipif(
+        True,
+        reason="You need the awesome-slugify package to run these tests"
+    )
+
 import os
 from numbers import Number
 from pathlib import Path
 import json
 
-import pytest
 import numpy as np
 
 from openpyxl.utils.exceptions import InvalidFileException
@@ -142,12 +152,12 @@ class TestEnvCanadaRecordParser(object):
         ('2713', 2020),
     ])
     def test_init_valid_data_only(self, oil_id, expected):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if None values are passed in for conditions and
-            file_props, we can still construct the parser, but accessing
-            certain sample properties could raise an exception.
-        '''
+        """
+        We are being fairly light on the parameter checking in our
+        constructor.  So if None values are passed in for conditions and
+        file_props, we can still construct the parser, but accessing
+        certain sample properties could raise an exception.
+        """
         data, _conditions, _file_props = self.reader.get_record(oil_id)
 
         # should construct fine
@@ -160,11 +170,11 @@ class TestEnvCanadaRecordParser(object):
         ('2234', 2020),
     ])
     def test_init_valid_data_and_file_props(self, oil_id, expected):
-        '''
-            The reference_date will sometimes need the file props if the
-            reference field contains no date information.  check that the
-            file props are correctly parsed.
-        '''
+        """
+        The reference_date will sometimes need the file props if the
+        reference field contains no date information.  check that the
+        file props are correctly parsed.
+        """
         data, _conditions, file_props = self.reader.get_record(oil_id)
         parser = EnvCanadaRecordParser(data, None, file_props)
 
@@ -291,9 +301,9 @@ class TestEnvCanadaSampleParser(object):
         assert np.allclose(samples[index].api, expected)
 
     def compare_expected(self, value, expected):
-        '''
-            compare a value to an expected value
-        '''
+        """
+        compare a value to an expected value
+        """
         if not type(value) == type(expected):
             return False
 
@@ -1237,10 +1247,10 @@ class TestEnvCanadaSampleParser(object):
         ('561', 3, {None: None}),
     ])
     def test_benzene(self, rec, index, expected):
-        '''
-            Note: The category header for the benzene groups no longer contains
-                  any data.  It's all in the other groups.
-        '''
+        """
+        Note: The category header for the benzene groups no longer contains
+              any data.  It's all in the other groups.
+        """
         data, conditions, file_props = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
@@ -1326,10 +1336,10 @@ class TestEnvCanadaSampleParser(object):
                     'n_c8': 0}),
     ])
     def test_headspace_analysis(self, rec, index, expected):
-        '''
-            Note: The April 2020 datasheet has no headspace information.
-                  We will skip this test for now.
-        '''
+        """
+        Note: The April 2020 datasheet has no headspace information.
+              We will skip this test for now.
+        """
         data, conditions, file_props = self.reader.get_record(rec)
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
@@ -1780,9 +1790,9 @@ class TestEnvCanadaSampleParser(object):
 
 
 class TestEnvCanadaRecordMapper(object):
-    '''
-        Note: still building up the new version of the mapper
-    '''
+    """
+    Note: still building up the new version of the mapper
+    """
     reader = EnvCanadaOilExcelFile(data_file)
 
     def deep_get(self, json_obj, attr_path):
@@ -1819,14 +1829,14 @@ class TestEnvCanadaRecordMapper(object):
                   }),
     ])
     def test_init_valid(self, oil_id, expected):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if no file props are passed in, we can still
-            construct the parser, but accessing reference_date could raise
-            a TypeError.
-            This is because the reference_date will sometimes need the
-            file props if the reference field contains no date information.
-        '''
+        """
+        We are being fairly light on the parameter checking in our
+        constructor.  So if no file props are passed in, we can still
+        construct the parser, but accessing reference_date could raise
+        a TypeError.
+        This is because the reference_date will sometimes need the
+        file props if the reference field contains no date information.
+        """
         parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         mapper = EnvCanadaRecordMapper(parser)
         py_json = mapper.py_json()
@@ -1836,10 +1846,10 @@ class TestEnvCanadaRecordMapper(object):
                 assert self.deep_get(py_json, k) == v
 
     def test_save_to_json(self):
-        '''
-            Save an example .json file.  This is not so much a test, but a job
-            to provide sample data that people can look at.
-        '''
+        """
+        Save an example .json file.  This is not so much a test, but a job
+        to provide sample data that people can look at.
+        """
         parser = EnvCanadaRecordParser(*self.reader.get_record('2234'))
         mapper = EnvCanadaRecordMapper(parser)
         py_json = mapper.py_json()
@@ -1848,8 +1858,7 @@ class TestEnvCanadaRecordMapper(object):
 
         filename = 'EC-Example-Record.json'
         file_path = os.path.sep.join(
-            adios_db.__file__.split(os.path.sep)[:-3] + ['examples',
-                                                             filename]
+            adios_db.__file__.split(os.path.sep)[:-3] + ['examples', filename]
         )
 
         print(f'saving to: {file_path}')
@@ -1858,9 +1867,9 @@ class TestEnvCanadaRecordMapper(object):
 
 
 class TestEnvCanadaSampleMapper(object):
-    '''
-        Note: still building up the new version of the mapper
-    '''
+    """
+    Note: still building up the new version of the mapper
+    """
     reader = EnvCanadaOilExcelFile(data_file)
 
     def test_init_invalid(self):
@@ -1883,14 +1892,14 @@ class TestEnvCanadaSampleMapper(object):
         '561',
     ])
     def test_init_valid(self, oil_id):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if no file props are passed in, we can still
-            construct the parser, but accessing reference_date could raise
-            a TypeError.
-            This is because the reference_date will sometimes need the
-            file props if the reference field contains no date information.
-        '''
+        """
+        We are being fairly light on the parameter checking in our
+        constructor.  So if no file props are passed in, we can still
+        construct the parser, but accessing reference_date could raise
+        a TypeError.
+        This is because the reference_date will sometimes need the
+        file props if the reference field contains no date information.
+        """
         parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         mapper = EnvCanadaRecordMapper(parser)
         sub_mapper = mapper.sub_samples[0]
@@ -2181,9 +2190,9 @@ class TestEnvCanadaSampleMapper(object):
          }),
     ])
     def test_ccme(self, oil_id, index, expected):
-        '''
-            CCME object is a struct.
-        '''
+        """
+        CCME object is a struct.
+        """
         parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
@@ -2209,10 +2218,10 @@ class TestEnvCanadaSampleMapper(object):
          }),
     ])
     def test_ests_fractions(self, oil_id, index, expected):
-        '''
-            ESTS_hydrocarbon_fractions object is a struct consisting of
-            attributes that are compound lists.
-        '''
+        """
+        ESTS_hydrocarbon_fractions object is a struct consisting of
+        attributes that are compound lists.
+        """
         parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
@@ -2230,10 +2239,10 @@ class TestEnvCanadaSampleMapper(object):
         ('561', 0),
     ])
     def test_physical_properties(self, oil_id, index):
-        '''
-            CCME object is a hybrid of struct attributes with a few
-            compound lists thrown in.
-        '''
+        """
+        CCME object is a hybrid of struct attributes with a few
+        compound lists thrown in.
+        """
         parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
@@ -2258,10 +2267,10 @@ class TestEnvCanadaSampleMapper(object):
                     'ests_evaporation_test')),
     ])
     def test_environmental_behavior(self, oil_id, index, attrs):
-        '''
-            CCME object is a hybrid of struct attributes with a few
-            compound lists thrown in.
-        '''
+        """
+        CCME object is a hybrid of struct attributes with a few
+        compound lists thrown in.
+        """
         parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 

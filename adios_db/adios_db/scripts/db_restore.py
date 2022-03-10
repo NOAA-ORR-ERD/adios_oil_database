@@ -5,13 +5,10 @@ import json
 import logging
 from argparse import ArgumentParser
 
-from bson import ObjectId
-
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings, default_settings
 from adios_db.db_init.database import drop_db, create_indices
 from adios_db.models.oil.oil import Oil
-from bson.errors import InvalidId
 
 
 logger = logging.getLogger(__name__)
@@ -29,7 +26,7 @@ argp.add_argument('--path', nargs=1,
 
 
 def restore_db_cmd(argv=sys.argv):
-    # make stderr unbuffered
+    # Python 3 has made stderr buffered, so we have to fix it.
     sys.stderr = io.TextIOWrapper(sys.stderr.detach().detach(),
                                   write_through=True)
 
@@ -53,27 +50,20 @@ def restore_db_cmd(argv=sys.argv):
 
 
 def restore_db(settings, base_path):
-    '''
+    """
     Here is where we restore our database.  This is what we want to do:
 
     If the restore path does not exist, we flag an error and exit.
 
     Otherwise:
-
     - If the database does not exist, create it
-
     - If the database is already there, initialize it
-
     - Gather the collection names by directory name
-
     - For each collection name:
-
         - create the collection
-
         - for each object in the collection directory
-
             - Save the objects
-    '''
+    """
     if not os.path.exists(base_path):
         print(f'No path named {base_path}!')
         return
@@ -83,7 +73,7 @@ def restore_db(settings, base_path):
 
     drop_db(client, settings['mongodb.database'])
 
-    db = getattr(client, settings['mongodb.database'])
+    db = client.get_database(settings['mongodb.database'])
 
     create_indices(db)
 

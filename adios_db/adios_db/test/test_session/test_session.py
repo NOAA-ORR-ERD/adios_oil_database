@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import pytest
@@ -6,20 +5,35 @@ import pytest
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.product_type import types_to_labels
 
+# we don't want this to fail if these tests are
+# skipped and pymongo is not there.
 try:
+    import pymongo
+except ModuleNotFoundError:
+    print("pymongo module not there -- not importing the session modules")
+    PYMONGO = False
+else:
+    PYMONGO = True
     from adios_db.util.db_connection import connect_mongodb
     from adios_db.scripts.db_initialize import init_db
     from adios_db.scripts.db_restore import restore_db
-except ModuleNotFoundError:
-    pass  # we don't want this to fail if these tests are skipped
 
 here = Path(__file__).resolve().parent
 
 test_data = here.parent / "data_for_testing" / "noaa-oil-data"
+
 # Pass the --mongo command line option if you want these to run.
 # they require a mongo database to be running on localhost
-
 pytestmark = pytest.mark.mongo
+
+
+def test_pymongo():
+    """
+    Tests to see if pymongo got imported Not really a test, but it should serve
+    to give folks a reasonable error message if they try to run the mongo tests
+    without pymongo
+    """
+    assert PYMONGO, "The pymongo package needs to be installed in order to run the mongo tests"
 
 
 def restore_test_db(settings):
@@ -35,19 +49,21 @@ class SessionTestBase:
 
     @classmethod
     def setup_class(cls):
-        '''
-            Here we setup the database we will use for testing our session.
-            - Make a connection to the mongodb server
-            - Init the database
-            - Load a set of test data into the database
-        '''
+        """
+        Here we setup the database we will use for testing our session.
+        - Make a connection to the mongodb server
+        - Init the database
+        - Load a set of test data into the database
+        """
         # print('\nsetup_class()...')
 
         restore_test_db(cls.settings)
 
     @classmethod
     def teardown_class(cls):
-        'Clean up any data the model generated after running tests.'
+        """
+        Clean up any data the model generated after running tests.
+        """
         # print('\nteardown_class()...')
         init_db(cls.settings, show_prompt=False)
 
@@ -75,14 +91,15 @@ class TestSessionQuery(SessionTestBase):
     def test_query(self):
         session = connect_mongodb(self.settings)
 
-        recs = session.query()
+        recs, total = session.query()
 
         assert len(recs) == 26  # our test set size
+        assert total == 26
 
     def test_query_with_projection(self):
         session = connect_mongodb(self.settings)
 
-        recs = session.query(projection=['metadata.name'])
+        recs, _total = session.query(projection=['metadata.name'])
 
         assert len(recs) == 26  # our test set size
 
@@ -99,7 +116,7 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_id(self):
         session = connect_mongodb(self.settings)
 
-        recs = session.query(oil_id='AD00020')
+        recs, _total = session.query(oil_id='AD00020')
 
         assert len(recs) == 1
         assert recs[0]['oil_id'] == 'AD00020'
@@ -108,7 +125,7 @@ class TestSessionQuery(SessionTestBase):
         session = connect_mongodb(self.settings)
 
         q_text = 'Alaska North Slope'
-        recs = list(session.query(text=q_text))
+        recs, _total = session.query(text=q_text)
 
         assert len(recs) == 3
 
@@ -116,7 +133,7 @@ class TestSessionQuery(SessionTestBase):
             assert q_text.lower() in rec['metadata']['name'].lower()
 
         q_text = 'Saudi Arabia'
-        *recs, = session.query(text=q_text)
+        recs, _total = session.query(text=q_text)
 
         assert len(recs) == 4
 
@@ -131,7 +148,7 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_labels(self, labels, expected):
         session = connect_mongodb(self.settings)
 
-        recs = session.query(labels=labels)
+        recs, _total = session.query(labels=labels)
 
         for rec in recs:
             print(rec['metadata']['labels'])
@@ -153,7 +170,7 @@ class TestSessionQuery(SessionTestBase):
     def test_query_by_api(self, api, len_results, expected):
         session = connect_mongodb(self.settings)
 
-        *recs, = session.query(api=api)
+        recs, _total = session.query(api=api)
 
         assert len(recs) == len_results
 
@@ -178,19 +195,19 @@ class TestSessionQuery(SessionTestBase):
         # ('status', 'asc'),
     ])
     def test_query_sort(self, field, direction):
-        '''
-            Note: MongoDB 3.6 has changed how they compare array fields in a
-                  sort.  It used to compare the arrays element-by-element,
-                  continuing until any "ties" were broken.  Now it only
-                  compares the highest/lowest valued element, apparently
-                  ignoring the rest.
-                  For this reason, a MongoDB query will not properly sort our
-                  status and labels array fields, at least not in a simple way.
-        '''
+        """
+        Note: MongoDB 3.6 has changed how they compare array fields in a
+              sort.  It used to compare the arrays element-by-element,
+              continuing until any "ties" were broken.  Now it only
+              compares the highest/lowest valued element, apparently
+              ignoring the rest.
+              For this reason, a MongoDB query will not properly sort our
+              status and labels array fields, at least not in a simple way.
+        """
         session = connect_mongodb(self.settings)
 
-        *recs, = session.query(sort=[(field, direction)],
-                               projection=['metadata.labels'])
+        recs, _total = session.query(sort=[(field, direction)],
+                                     projection=['metadata.labels'])
 
         assert len(recs) == 26
 
@@ -223,16 +240,108 @@ class TestSessionQuery(SessionTestBase):
     def test_query_with_paging(self, page, expected):
         session = connect_mongodb(self.settings)
 
-        *recs, = session.query(page=page)
+        recs, _total = session.query(page=page)
 
         assert len(recs) == expected
+
+
+class TestSessionCRUD(SessionTestBase):
+    """
+    Testing the CRUD operations of our session class
+    """
+    def test_new_oil_id(self):
+        session = connect_mongodb(self.settings)
+
+        oil_id = session.new_oil_id()
+
+        assert isinstance(oil_id, str)
+        assert oil_id[:2] == 'XX'
+        assert oil_id[2:].isdigit()
+
+    def test_insert_one(self):
+        session = connect_mongodb(self.settings)
+
+        # create a minimal oil
+        ID = session.new_oil_id()
+        oil = Oil(ID)
+
+        # add it:
+        inserted_id = session.insert_one(oil)
+
+        assert inserted_id == ID
+
+    def test_find_one(self):
+        session = connect_mongodb(self.settings)
+
+        # create a minimal oil
+        ID = session.new_oil_id()
+        oil = Oil(ID)
+
+        # add it:
+        session.insert_one(oil)
+
+        new_oil = session.find_one(ID)
+
+        assert new_oil['oil_id'] == ID
+
+    def test_replace_one(self):
+        session = connect_mongodb(self.settings)
+
+        ID = session.new_oil_id()
+        orig_name = 'original name'
+        new_name = 'new name'
+
+        # create a minimal oil
+        oil = Oil(ID)
+        oil.metadata.name = orig_name
+
+        # add it:
+        session.insert_one(oil)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+        assert oil_json['metadata']['name'] == orig_name
+
+        # update it:
+        oil.metadata.name = new_name
+        res = session.replace_one(oil)
+        assert res.matched_count == 1
+        assert res.modified_count == 1
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+        assert oil_json['metadata']['name'] == new_name
+
+    def test_delete_one(self):
+        session = connect_mongodb(self.settings)
+
+        ID = session.new_oil_id()
+
+        # create a minimal oil
+        oil = Oil(ID)
+
+        # add it:
+        session.insert_one(oil)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json['oil_id'] == ID
+
+        # delete it:
+        session.delete_one(oil.oil_id)
+
+        oil_json = session.find_one(ID)
+
+        assert oil_json is None
 
 
 class TestSessionGetLabels(SessionTestBase):
     def test_init(self):
         session = connect_mongodb(self.settings)
 
-        assert hasattr(session, 'get_labels')  # our object, not mongodb
+        assert hasattr(session, 'get_labels')
 
     def test_all_labels(self):
         session = connect_mongodb(self.settings)
@@ -254,29 +363,13 @@ class TestSessionGetLabels(SessionTestBase):
         session = connect_mongodb(self.settings)
 
         # test non-existent, but valid IDs
-        assert session.get_labels(-1) is None
-        assert session.get_labels('-1') is None
+        assert session.get_labels(20000) is None
+        assert session.get_labels('20000') is None
 
         # test an id that can't even be used
         with pytest.raises(ValueError):
             session.get_labels('bogus')
 
-
-class TestSessionInserting(SessionTestBase):
-    """
-    testing adding oil records to the DB
-    """
-    def test_add_one_record(self):
-        session = connect_mongodb(self.settings)
-
-        ID = "XX00000"
-        # create a minimal oil
-        oil = Oil(ID)
-
-        # add it:
-        session.insert_oil_record(oil)
-
-        result = list(session.query(oil_id=ID))
-
-        assert len(result) == 1
-        assert result[0]['oil_id'] == ID
+        # test negative id that can't even be used
+        with pytest.raises(ValueError):
+            session.get_labels(-1)

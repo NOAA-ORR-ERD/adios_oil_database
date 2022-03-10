@@ -5,6 +5,7 @@
         <div class="row h-100 ml-1 align-items-center">
           <input class="form-control"
             value={{q}}
+            title="Search ID, Name, or Location"
             placeholder="Search ID, Name, or Location"
             oninput={{action (pipe (action (mut q)) (action "onSearchChange")) value="target.value"}}
           >
@@ -29,11 +30,12 @@
 
         <div class="row h-75 align-items-center">
           <div class="col-12 p-0 text-right">
-            <strong>Suitable for GNOME</strong>
+            <strong>GNOME Compatible</strong>
             &nbsp;&nbsp;
 
             <Input
               @type="checkbox"
+              title="GNOME Compatible"
               @checked={{this.selectedGnomeSuitable}}
               {{on "input" (action (pipe (toggle "selectedGnomeSuitable" this)
                                          (action "onSearchChange")
@@ -55,6 +57,7 @@
           </div>
           <div class="col-10 ml-0">
             <select class="p-1 mt-1 overflow-hidden bg-transparent border"
+                title="Oil Type"
                 onChange={{action (pipe (action "onTypeSelected")
                                         (action "onSearchChange") )}}
             >

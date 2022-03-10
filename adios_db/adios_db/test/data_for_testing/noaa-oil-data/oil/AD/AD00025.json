@@ -11,10 +11,10 @@
         },
         "product_type": "Crude Oil NOS",
         "API": 37.0,
-        "comments": "This oil is a EPS standard oil for dispersant testing.",
+        "comments": "This oil is a EPS standard oil for dispersant testing.\n\nThe data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
-            "Crude Oil",
-            "Light Crude"
+            "Light Crude",
+            "Crude Oil"
         ],
         "model_completeness": 54,
         "gnome_suitable": true
@@ -305,6 +305,9 @@
                 ]
             }
         }
+    ],
+    "status": [
+        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

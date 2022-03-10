@@ -1,16 +1,25 @@
-'''
-    tests of the Environment Canada data import modules
+"""
+tests of the Environment Canada data import modules
 
-    As complete as possible, because we want to test for correctness,
-    and we also want to document how it works.
-    Either we test it correctly, or we test it in an episodic manner on the
-    real dataset.
-'''
+As complete as possible, because we want to test for correctness,
+and we also want to document how it works.
+Either we test it correctly, or we test it in an episodic manner on the
+real dataset.
+"""
+
+import pytest
+
+try:
+    from slugify import Slugify
+except ImportError:
+    pytestmark = pytest.mark.skipif(
+        True,
+        reason="You need the awesome-slugify package to run these tests"
+    )
+
 import os
 from pathlib import Path
 import json
-
-import pytest
 
 import adios_db
 from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
@@ -75,12 +84,12 @@ class TestOilLibraryCsvFile:
                      marks=pytest.mark.raises(exception=KeyError)),
     ])
     def test_get_record(self, oil_id, field, expected):
-        '''
-            There are over a hundred fields here, so let's just check
-            some of the individual fields/values.
+        """
+        There are over a hundred fields here, so let's just check
+        some of the individual fields/values.
 
-            Note: Should we allow non-existing oil_id's in get_record
-        '''
+        Note: Should we allow non-existing oil_id's in get_record
+        """
         reader = OilLibraryCsvFile(data_file)
 
         rec, file_props = reader.get_record(oil_id)
@@ -109,14 +118,14 @@ class TestOilLibraryRecordParser:
                      marks=pytest.mark.raises(exception=TypeError)),
     ])
     def test_init_valid_data(self, oil_id, expected):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if no file props are passed in, we can still
-            construct the parser, but accessing reference_date could raise
-            a TypeError.
-            This is because the reference_date will sometimes need the
-            file props if the reference field contains no date information.
-        '''
+        """
+        We are being fairly light on the parameter checking in our
+        constructor.  So if no file props are passed in, we can still
+        construct the parser, but accessing reference_date could raise
+        a TypeError.
+        This is because the reference_date will sometimes need the
+        file props if the reference field contains no date information.
+        """
         rec = self.reader.get_record(oil_id)
         parser = OilLibraryRecordParser(rec[0], None)  # should construct fine
 
@@ -127,11 +136,11 @@ class TestOilLibraryRecordParser:
         ('AD00269', 2017),
     ])
     def test_init_valid_data_and_file_props(self, oil_id, expected):
-        '''
-            The reference_date will sometimes need the file props if the
-            reference field contains no date information.  check that the
-            file props are correctly parsed.
-        '''
+        """
+        The reference_date will sometimes need the file props if the
+        reference field contains no date information.  check that the
+        file props are correctly parsed.
+        """
         rec = self.reader.get_record(oil_id)
         parser = OilLibraryRecordParser(*rec)
 
@@ -417,24 +426,24 @@ class TestOilLibraryAttributeMapper:
             _mapper = OilLibraryAttributeMapper()
 
     def test_init_invalid(self):
-        '''
-            This should construct just fine.  Of course nothing will really
-            work if you pass in a None value.
-        '''
+        """
+        This should construct just fine.  Of course nothing will really
+        work if you pass in a None value.
+        """
         _mapper = OilLibraryAttributeMapper(None)
 
     @pytest.mark.parametrize('oil_id, expected', [
         ('AD00009', 1993),
     ])
     def test_init_valid_data(self, oil_id, expected):
-        '''
-            We are being fairly light on the parameter checking in our
-            constructor.  So if no file props are passed in, we can still
-            construct the parser, but accessing reference_date could raise
-            a TypeError.
-            This is because the reference_date will sometimes need the
-            file props if the reference field contains no date information.
-        '''
+        """
+        We are being fairly light on the parameter checking in our
+        constructor.  So if no file props are passed in, we can still
+        construct the parser, but accessing reference_date could raise
+        a TypeError.
+        This is because the reference_date will sometimes need the
+        file props if the reference field contains no date information.
+        """
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
 
@@ -799,10 +808,10 @@ class TestOilLibraryAttributeMapper:
          }),
     ])
     def test_compounds(self, oil_id, index, expected):
-        '''
-            Data points that are classified as compounds:
-            - benzene
-        '''
+        """
+        Data points that are classified as compounds:
+        - benzene
+        """
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         compounds = mapper.sub_samples[index]['compounds']
@@ -828,17 +837,17 @@ class TestOilLibraryAttributeMapper:
          }),
     ])
     def test_bulk_composition(self, oil_id, index, expected):
-        '''
-            Data points that are classified in bulk composition:
-            - Water Content Emulsion
-            - Wax Content
-            - Sulphur
-            - Naphthenes
-            - Paraffins
-            - Nickel
-            - Vanadium
-            - Polars
-        '''
+        """
+        Data points that are classified in bulk composition:
+        - Water Content Emulsion
+        - Wax Content
+        - Sulphur
+        - Naphthenes
+        - Paraffins
+        - Nickel
+        - Vanadium
+        - Polars
+        """
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         composition = mapper.sub_samples[index]['bulk_composition']
@@ -860,12 +869,12 @@ class TestOilLibraryAttributeMapper:
          }),
     ])
     def test_industry_properties(self, oil_id, index, expected):
-        '''
-            Data points that are classified in industry properties:
-            - Reid Vapor Pressure
-            - Conradson Crude
-            - Conradson Residuum
-        '''
+        """
+        Data points that are classified in industry properties:
+        - Reid Vapor Pressure
+        - Conradson Crude
+        - Conradson Residuum
+        """
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         composition = mapper.sub_samples[index]['industry_properties']
@@ -893,10 +902,10 @@ class TestOilLibraryAttributeMapper:
         assert sample['metadata'][attr] == expected
 
     def test_save_to_json(self):
-        '''
-            Save an example .json file.  This is not so much a test, but a job
-            to provide sample data that people can look at.
-        '''
+        """
+        Save an example .json file.  This is not so much a test, but a job
+        to provide sample data that people can look at.
+        """
         parser = OilLibraryRecordParser(*self.reader.get_record('AD00025'))
         mapper = OilLibraryAttributeMapper(parser)
         py_json = mapper.py_json()
@@ -905,8 +914,7 @@ class TestOilLibraryAttributeMapper:
 
         filename = 'AD-Example-Record.json'
         file_path = os.path.sep.join(
-            adios_db.__file__.split(os.path.sep)[:-3] + ['examples',
-                                                             filename]
+            adios_db.__file__.split(os.path.sep)[:-3] + ['examples', filename]
         )
 
         print(f'saving to: {file_path}')

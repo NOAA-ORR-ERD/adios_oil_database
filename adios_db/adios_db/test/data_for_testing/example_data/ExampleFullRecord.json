@@ -378,6 +378,11 @@
                     "unit": "C",
                     "unit_type": "temperature"
                 },
+                "fraction_recovered": {
+                    "value": 1.0,
+                    "unit": "fraction",
+                    "unit_type": "concentration"
+                },
                 "cuts": [
                     {
                         "fraction": {
@@ -2351,6 +2356,11 @@
                     "unit": "C",
                     "unit_type": "temperature"
                 },
+                "fraction_recovered": {
+                    "value": 1.0,
+                    "unit": "fraction",
+                    "unit_type": "concentration"
+                },
                 "cuts": [
                     {
                         "fraction": {
@@ -4307,6 +4317,11 @@
                     "value": 519.0,
                     "unit": "C",
                     "unit_type": "temperature"
+                },
+                "fraction_recovered": {
+                    "value": 1.0,
+                    "unit": "fraction",
+                    "unit_type": "concentration"
                 },
                 "cuts": [
                     {
@@ -6275,6 +6290,11 @@
                     "unit": "C",
                     "unit_type": "temperature"
                 },
+                "fraction_recovered": {
+                    "value": 1.0,
+                    "unit": "fraction",
+                    "unit_type": "concentration"
+                },
                 "cuts": [
                     {
                         "fraction": {
@@ -8106,9 +8126,6 @@
                             "unit": "Pa",
                             "unit_type": "pressure"
                         },
-                        "tan_delta_v_e": {
-                            "unit_type": "unitless"
-                        },
                         "complex_viscosity": {
                             "unit": "Pa.s",
                             "unit_type": "dynamicviscosity"
@@ -8141,9 +8158,6 @@
                         "loss_modulus": {
                             "unit": "Pa",
                             "unit_type": "pressure"
-                        },
-                        "tan_delta_v_e": {
-                            "unit_type": "unitless"
                         },
                         "complex_viscosity": {
                             "unit": "Pa.s",
@@ -8182,6 +8196,11 @@
                     "value": 511.0,
                     "unit": "C",
                     "unit_type": "temperature"
+                },
+                "fraction_recovered": {
+                    "value": 1.0,
+                    "unit": "fraction",
+                    "unit_type": "concentration"
                 },
                 "cuts": [
                     {

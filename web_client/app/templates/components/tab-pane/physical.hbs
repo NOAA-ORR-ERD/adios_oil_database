@@ -42,19 +42,25 @@
     </div>
 
     <div class="col-md-6 col-lg-4">
-      <Table::KinematicViscosity
+      <Common::ListPropertiesTable
         @oil={{@oil}}
+        @store={{@store}}
         @editable={{@editable}}
         @submit={{@submit}}
-        class="row"/>
+        @tableTitle="Kinematic Viscosity"
+        @propertyName="physical_properties.kinematic_viscosities"
+      />
     </div>
 
     <div class="col-md-6 col-lg-4">
-      <Table::DynamicViscosity
+      <Common::ListPropertiesTable
         @oil={{@oil}}
+        @store={{@store}}
         @editable={{@editable}}
         @submit={{@submit}}
-        class="row"/>
+        @tableTitle="Dynamic Viscosity"
+        @propertyName="physical_properties.dynamic_viscosities"
+      />
     </div>
 
     <div class="col-lg-8">

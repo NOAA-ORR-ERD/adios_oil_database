@@ -39,10 +39,10 @@ def not_implemented(_settings):
 
 
 def add_all(settings):
-    '''
-        Import all valid, available datasets from our menu
-        a dataset is valid if it has the full complement of handler classes.
-    '''
+    """
+    Import all valid, available datasets from our menu
+    a dataset is valid if it has the full complement of handler classes.
+    """
     for item in menu_items:
         if len(item) == 6:
             (label, config,
@@ -92,7 +92,7 @@ argp.add_argument('--config', nargs=1,
 
 
 def import_db_cmd(argv=sys.argv):
-    # Let's give a round of applause to Python 3 for making stderr buffered.
+    # Python 3 has made stderr buffered, so we have to fix it
     sys.stderr = io.TextIOWrapper(sys.stderr.detach().detach(),
                                   write_through=True)
 
@@ -133,20 +133,20 @@ def import_db_cmd(argv=sys.argv):
 
 
 def import_db(settings):
-    '''
-      Here is where we perform an import of records into our database from
-      one or more predefined datasets.
+    """
+    Here is where we perform an import of records into our database from
+    one or more predefined datasets.
 
-      This is what we want to do:
+    This is what we want to do:
 
-      - pull up a console menu so the user can choose the dataset to import
-      - prompt for a numbered item in the menu or quit response
-      - if numbered item:
-          - import the chosen item
-      - else if quit:
-          - exit the program
-      - repeat from the beginning
-    '''
+    - pull up a console menu so the user can choose the dataset to import
+    - prompt for a numbered item in the menu or quit response
+    - if numbered item:
+        - import the chosen item
+    - else if quit:
+        - exit the program
+    - repeat from the beginning
+    """
     quit_app = False
 
     while quit_app is False:
@@ -183,10 +183,10 @@ def import_db(settings):
 
 
 def init_menu_item_collections(client, settings):
-    '''
-        We will be loading everything into the same collection, so we set
-        all items to the same place.
-    '''
+    """
+    We will be loading everything into the same collection, so we set
+    all items to the same place.
+    """
     oil_collection = getattr(client, settings['mongodb.database']).oil
     [i.__setitem__(2, oil_collection)
      for i in menu_items
@@ -220,30 +220,30 @@ def get_chosen_menu_item(choice):
 
 def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
                    overwrite=False):
-    '''
-        Add the records from a data source.
-        the config value should be a file list.
+    """
+    Add the records from a data source.
+    the config value should be a file list.
 
-        This is meant to be a generic way of reading the source, parsing the
-        records, and then mapping them to our Oil object.
+    This is meant to be a generic way of reading the source, parsing the
+    records, and then mapping them to our Oil object.
 
-        :param config: A string representing a list of files separated by
-                       newline characters.  These are understood as a list
-                       of files containing the data to import.
-        :type config: string or unicode
+    :param config: A string representing a list of files separated by
+                   newline characters.  These are understood as a list
+                   of files containing the data to import.
+    :type config: string or unicode
 
-        :param oil_collection: A database oil collection (table)
+    :param oil_collection: A database oil collection (table)
 
-        :param reader_cls: A file reader class capable of iterating the records
-                           in a data file of a specified type.
+    :param reader_cls: A file reader class capable of iterating the records
+                       in a data file of a specified type.
 
-        :param parser_cls: A class that is capable of parsing the data in a
-                           data record of a specified type.
+    :param parser_cls: A class that is capable of parsing the data in a
+                       data record of a specified type.
 
-        :param mapper_cls: A class that can map the data in a particular
-                           parser class or storage class into Oil record
-                           attributes.
-    '''
+    :param mapper_cls: A class that can map the data in a particular
+                       parser class or storage class into Oil record
+                       attributes.
+    """
     for fn in config.split('\n'):
         logger.info('opening file: {0} ...'.format(fn))
         fd = reader_cls(fn)
@@ -303,10 +303,10 @@ def insert_oil(collection, py_json):
 
 
 def _add_datafiles(settings):
-    '''
-        The default settings include only the MongoDB connection
-        so we need to add any oil import data files to the settings structure
-    '''
+    """
+    The default settings include only the MongoDB connection
+    so we need to add any oil import data files to the settings structure
+    """
     _add_oillib_files(settings)
     _add_norway_files(settings)
     _add_ec_files(settings)
@@ -335,18 +335,18 @@ def _add_ec_files(settings):
 
 
 def _add_exxon_files(settings):
-    '''
-        The exxon files are a bit more tricky than the filemaker and Env
-        Canada datafiles.  Rather they are tricky in their own unique way.
+    """
+    The exxon files are a bit more tricky than the filemaker and Env
+    Canada datafiles.  Rather they are tricky in their own unique way.
 
-        Basically they are scraped from the Exxon website and are basically
-        one oil, one file.  But the oil name is not contained inside the file,
-        but a listing on the web page.  So we need to create an index of names
-        and associated files.  Then we traverse the index.
+    Basically they are scraped from the Exxon website and are basically
+    one oil, one file.  But the oil name is not contained inside the file,
+    but a listing on the web page.  So we need to create an index of names
+    and associated files.  Then we traverse the index.
 
-        So exactly what should be contained in the settings?  I think it should
-        be the index file.
-    '''
+    So exactly what should be contained in the settings?  I think it should
+    be the index file.
+    """
     exxon_files = '\n'.join([os.path.join(data_path, 'exxon_assays', fn)
                              for fn in ('index.txt',)])
 

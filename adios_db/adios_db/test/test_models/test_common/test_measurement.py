@@ -1,10 +1,13 @@
 
 import math
 import json
+from dataclasses import dataclass
 
 import pytest
 
-import unit_conversion as uc
+import nucos as uc
+
+from adios_db.models.common.utilities import dataclass_to_json
 
 from adios_db.models.common.measurement import (MeasurementBase,
                                                 Temperature,
@@ -25,33 +28,6 @@ from adios_db.models.common.measurement import (MeasurementBase,
                                                 )
 
 
-# # Fixme: why is this in this test file ???
-# class TestProductType:
-#     @pytest.mark.parametrize("product_type", ('crude',
-#                                               'refined',
-#                                               'bitumen product',
-#                                               'Refined',
-#                                               'Bitumen Product',
-#                                               'other'))
-#     def test_validation(self, product_type):
-#         pt = ProductType(product_type)
-
-#         assert pt.validate() == []
-
-#     @pytest.mark.parametrize("product_type", ('crud',
-#                                               'rfined',
-#                                               'bitumen',
-#                                               'Reefined',
-#                                               'Biitumen Product',
-#                                               'random'))
-#     def test_validation_invalid(self, product_type):
-#         pt = ProductType(product_type)
-
-#         result = pt.validate()
-#         assert len(result) == 1
-#         assert result[0].startswith("W003:")
-
-
 def test_str():
     """
     testing the str() -- only one example, but it's something
@@ -63,14 +39,49 @@ def test_str():
     mass = Mass(value=2.3,
                 unit='kg',
                 standard_deviation=0.2,
-                replicates=6
-                )
+                replicates=6)
 
     s = str(mass)
 
     print(repr(mass))
 
-    assert s == "Mass(value=2.3, unit='kg', standard_deviation=0.2, replicates=6, unit_type='mass')"
+    assert s == ("Mass(value=2.3, unit='kg', standard_deviation=0.2, "
+                 "replicates=6, unit_type='mass')")
+
+def test_empty_py_json():
+    """
+    test that a measurement with no values has an empty dict as py_json
+    """
+
+    # arbitrary example
+    length = Length()
+
+    assert length.value is None
+    assert length.min_value is None
+
+    pj = length.py_json(sparse=True)
+
+    assert pj == {}
+
+
+def test_empty_measurement_not_saved_in_json():
+    @dataclass_to_json
+    @dataclass
+    class JustMeasurement:
+        length: Length = None
+
+    jm = JustMeasurement(length=Length())
+
+    print(jm)
+
+    pj = jm.py_json(sparse=False)
+    print(pj)
+    assert pj['length']
+
+    pj = jm.py_json(sparse=True)
+    print(pj)
+    assert pj == {}
+
 
 def test_ensure_float():
     """
@@ -86,6 +97,7 @@ def test_ensure_float():
     assert isinstance(mass.min_value, float)
     assert isinstance(mass.max_value, float)
     assert isinstance(mass.standard_deviation, float)
+
 
 def test_ensure_float_from_json():
     """
@@ -112,8 +124,8 @@ class TestUnitless:
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'unitless'}
+        # should be empty
+        assert py_json == {}
 
         # non-sparse should have all attributes present with None values
         py_json = model.py_json(sparse=False)
@@ -190,19 +202,18 @@ class TestUnitless:
         with pytest.raises(TypeError):
             model.converted_to('C')
 
-class TestAnyUnit:
 
+class TestAnyUnit:
     def test_init_empty(self):
         with pytest.raises(TypeError):
-            model = AnyUnit()
+            _model = AnyUnit()
 
     def test_init_just_unit_type(self):
         model = AnyUnit(unit_type='MassFraction')
 
         py_json = model.py_json()
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'massfraction'}
-        assert len(py_json) == 1
+        # should be empty dict
+        assert py_json == {}
 
         # non-sparse should have all attributes present with None values
         py_json = model.py_json(sparse=False)
@@ -235,7 +246,8 @@ class TestAnyUnit:
         assert new.value == 0.0
         assert new.unit == 'C'
 
-# keeping these, as the tests for initializing any empty one should maybe be adopted for Measurement
+# Keeping these, as the tests for initializing any empty one should maybe be
+# adopted for Measurement
 # class TestUnittedValue:
 #     def test_init(self):
 #         uv = UnittedValue(1.0, unit="m")
@@ -316,27 +328,27 @@ class TestAnyUnit:
 
 
 class TestMeasurementBase:
-    '''
-        Fixme: is there any way to raise a NotImplementedError here?  We don't
-              really want to use this class, just the subclasses.
-    '''
+    """
+    Fixme: is there any way to raise a NotImplementedError here?  We don't
+          really want to use this class, just the subclasses.
+    """
     def test_init(self):
         with pytest.raises(NotImplementedError):
-            model = MeasurementBase()
+            _model = MeasurementBase()
 
 
 class TestTemperature:
-    '''
+    """
     Fixme: We really need to enforce that *some* value is passed in
            The model should fail if there is no value at all
-    '''
+    """
     def test_init_empty(self):
         model = Temperature()
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'temperature'}
+        # should be empty dict
+        assert py_json == {}
 
         # non-sparse should have all attributes present with None values
         py_json = model.py_json(sparse=False)
@@ -351,10 +363,12 @@ class TestTemperature:
             assert py_json[attr] is None
 
     def test_std_dev_replicates(self):
-        # Note on validation: If there is a standard deviation, there should be
-        #                     more than 1 replicate and if there is more than
-        #                     one replicate, there should probably be a
-        #                     non-zero standard deviation
+        """
+        Note on validation: If there is a standard deviation, there should be
+                            more than 1 replicate and if there is more than
+                            one replicate, there should probably be a
+                            non-zero standard deviation
+        """
         model = Temperature(standard_deviation=1.2, replicates=3)
 
         assert model.value is None
@@ -435,14 +449,15 @@ class TestTemperature:
         assert new.value == 0.0
         assert new.unit == 'C'
 
-    @pytest.mark.parametrize("model", [Temperature(value=273, unit='K'),
-                                       Temperature(value=15.15, unit='C'),
-                                       Temperature(value=14.85, unit='C'),
-                                       Temperature(value=-0.15, unit='C'),
-                                       Temperature(value=-0.85, unit='C'),
-                                  ])
+    @pytest.mark.parametrize("model", [
+        Temperature(value=273, unit='K'),
+        Temperature(value=15.15, unit='C'),
+        Temperature(value=14.85, unit='C'),
+        Temperature(value=-0.15, unit='C'),
+        Temperature(value=-0.85, unit='C'),
+    ])
     def test_validate_C_K_conversion_15(self, model):
-        #model = Temperature(value=273, unit='K')
+        # model = Temperature(value=273, unit='K')
 
         msgs = model.validate()
 
@@ -450,12 +465,13 @@ class TestTemperature:
 
         assert "W010:" in msgs[0]
 
-    @pytest.mark.parametrize("temp_obj, result", [(Temperature(value=273, unit='K'), 0.0),
-                                                  (Temperature(value=15.15, unit='C'), 15.0),
-                                                  (Temperature(value=14.85, unit='C'), 15.0),
-                                                  (Temperature(value=-0.15, unit='C'), 0.0),
-                                                  (Temperature(value=-0.85, unit='C'), -1.0),
-                                                  ])
+    @pytest.mark.parametrize("temp_obj, result", [
+        (Temperature(value=273, unit='K'), 0.0),
+        (Temperature(value=15.15, unit='C'), 15.0),
+        (Temperature(value=14.85, unit='C'), 15.0),
+        (Temperature(value=-0.15, unit='C'), 0.0),
+        (Temperature(value=-0.85, unit='C'), -1.0),
+    ])
     def test_fix_C_K(self, temp_obj, result):
         """
         check if we can auto-fix the C-K conversion
@@ -475,12 +491,13 @@ class TestTemperature:
 #                      "unit_type": "temperature"
 #                  }
 #              },
-    @pytest.mark.parametrize("temp_obj", [(Temperature(value=273, unit='F')),
-                                          (Temperature(min_value=15.15, max_value=60.0, unit='F')),
-                                          (Temperature(value=60.15, unit='F')),
-                                          (Temperature(value=0.16, unit='C')),
-                                          (Temperature(value=-0.86, unit='C')),
-                                          ])
+    @pytest.mark.parametrize("temp_obj", [
+        (Temperature(value=273, unit='F')),
+        (Temperature(min_value=15.15, max_value=60.0, unit='F')),
+        (Temperature(value=60.15, unit='F')),
+        (Temperature(value=0.16, unit='C')),
+        (Temperature(value=-0.86, unit='C')),
+    ])
     def test_fix_C_K_no_change(self, temp_obj):
         """
         if temps are not in C or K, there should be no change.
@@ -488,7 +505,6 @@ class TestTemperature:
         t1 = temp_obj.copy()
         temp_obj.fix_C_K()
         assert temp_obj == t1
-
 
     @pytest.mark.parametrize("t, unit, result", [(273, 'K', 0.0),
                                                  (15.15, 'C', 15.0),
@@ -509,26 +525,25 @@ class TestTemperature:
 
         print(f"{Temperature.fixCK=}")
 
-        temp_obj = Temperature(value = t, unit=unit)
+        temp_obj = Temperature(value=t, unit=unit)
 
         assert temp_obj.unit == 'C'
         assert temp_obj.value == result
 
 
-
 class TestLength:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = Length()
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'length'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = Length(value=1.0, unit='m')
@@ -546,7 +561,7 @@ class TestLength:
 
     def test_with_bad_unit_type(self):
         with pytest.raises(ValueError):
-            model = Length(value=1.0, unit='m', unit_type="mass")
+            _model = Length(value=1.0, unit='m', unit_type="mass")
 
     def test_from_py_json(self):
         model = Length(value=1.0,
@@ -568,24 +583,22 @@ class TestLength:
                  'replicates': 3,
                  'unit_type': 'volume'}
         with pytest.raises(ValueError):
-            model = Length.from_py_json(pyson)
-
-
+            _model = Length.from_py_json(pyson)
 
 
 class TestMass:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = Mass()
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'mass'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = Mass(value=1.0, unit='kg')
@@ -596,18 +609,18 @@ class TestMass:
 
 
 class TestMassFraction:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = MassFraction()
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'massfraction'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = MassFraction(value=1.0, unit='g/kg')
@@ -618,18 +631,18 @@ class TestMassFraction:
 
 
 class TestVolumeFraction:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = VolumeFraction()
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'volumefraction'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = VolumeFraction(value=1.0, unit='mL/L')
@@ -646,6 +659,7 @@ class TestVolumeFraction:
         assert model.value == 1.0
         assert model.unit == 'mL/L'
 
+
 class TestMassOrVolumeFraction:
     """
     Could be Mass or Volume, depending on how it's initialized
@@ -658,7 +672,7 @@ class TestMassOrVolumeFraction:
         type of fraction this is.
         """
         with pytest.raises(TypeError):
-            model = MassOrVolumeFraction()
+            _model = MassOrVolumeFraction()
 
     def test_init_bad_unit_type(self):
         """
@@ -666,7 +680,7 @@ class TestMassOrVolumeFraction:
         type of fraction this is.
         """
         with pytest.raises(ValueError):
-            model = MassOrVolumeFraction(unit_type="mass")
+            _model = MassOrVolumeFraction(unit_type="mass")
 
     def test_init_empty_mass(self):
         model = MassOrVolumeFraction(unit_type='MassFraction')
@@ -675,24 +689,24 @@ class TestMassOrVolumeFraction:
 
         assert model.unit_type == 'massfraction'
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'massfraction'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_init_empty_volume(self):
         model = MassOrVolumeFraction(unit_type="VolumeFraction")
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'volumefraction'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_init_empty_concentration(self):
         model = MassOrVolumeFraction(unit_type="Concentration")
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'concentration'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_init_full(self):
         model = MassOrVolumeFraction(value=0.001,
@@ -703,9 +717,8 @@ class TestMassOrVolumeFraction:
         assert model.value == 0.001
         assert model.standard_deviation == 0.0002
         assert model.replicates == 12
-        assert model.min_value == None
-        assert model.max_value == None
-
+        assert model.min_value is None
+        assert model.max_value is None
 
     def test_convert_value_mass(self):
         model = MassOrVolumeFraction(value=0.0005,
@@ -735,7 +748,7 @@ class TestMassOrVolumeFraction:
                                      unit_type="volumeFraction")
 
         with pytest.raises(uc.InvalidUnitError):
-            model2 = model.converted_to('g/kg')
+            _model2 = model.converted_to('g/kg')
 
     def test_convert_conc_value_invalid(self):
         model = MassOrVolumeFraction(value=0.0005,
@@ -743,9 +756,7 @@ class TestMassOrVolumeFraction:
                                      unit_type="Concentration")
 
         with pytest.raises(uc.InvalidUnitError):
-            model2 = model.converted_to('g/kg')
-
-
+            _model2 = model.converted_to('g/kg')
 
     def test_integer_value(self):
         """
@@ -762,7 +773,6 @@ class TestMassOrVolumeFraction:
         assert type(model.value) is float
         assert type(model.min_value) is float
         assert type(model.standard_deviation) is float
-
 
     def test_equal(self):
         model1 = MassOrVolumeFraction(value=0.0005,
@@ -791,7 +801,7 @@ class TestMassOrVolumeFraction:
                  'unit': 'ppm'}
 
         with pytest.raises(TypeError):
-            model = MassOrVolumeFraction.from_py_json(pyson)
+            _model = MassOrVolumeFraction.from_py_json(pyson)
 
     def test_from_py_json_volume(self):
         pyson = {'value': 0.002,
@@ -806,16 +816,16 @@ class TestMassOrVolumeFraction:
 
 
 class TestConcentration:
-    '''
+    """
     Unit used for unknown whether it's volume of mass or ??
-    '''
+    """
     def test_init_empty(self):
         model = Concentration()
 
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'concentration'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = Concentration(value=1.0, unit='fraction')
@@ -834,17 +844,17 @@ class TestConcentration:
 
 
 class TestDensity:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = Density()
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'density'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = Density(value=1000.0, unit='kg/m^3')
@@ -860,18 +870,19 @@ class TestDensity:
         assert math.isclose(model.value, 25.57, rel_tol=1e-3)
         assert model.unit == 'API'
 
+
 class TestDynamicViscosity:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = DynamicViscosity()
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'dynamicviscosity'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = DynamicViscosity(value=100.0, unit='cP')
@@ -882,17 +893,17 @@ class TestDynamicViscosity:
 
 
 class TestKinematicViscosity:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = KinematicViscosity()
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'kinematicviscosity'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = KinematicViscosity(value=100.0, unit='cSt')
@@ -903,17 +914,17 @@ class TestKinematicViscosity:
 
 
 class TestPressure:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = Pressure()
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'pressure'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = Pressure(value=10.0, unit='Pa')
@@ -924,17 +935,17 @@ class TestPressure:
 
 
 class TestNeedleAdhesion:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = NeedleAdhesion()
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': "needleadhesion"}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = NeedleAdhesion(value=10.0, unit='g/cm^2')
@@ -944,22 +955,22 @@ class TestNeedleAdhesion:
 
 
 class TestInterfacialTension:
-    '''
-        All of our common Measurement subclasses share a common codebase.
-        We will only test the things that are different, which haven't been
-        tested yet.
-    '''
+    """
+    All of our common Measurement subclasses share a common codebase.
+    We will only test the things that are different, which haven't been
+    tested yet.
+    """
     def test_init_empty(self):
         model = InterfacialTension()
         py_json = model.py_json()
 
-        # should only have a unit_type
-        assert py_json == {'unit_type': 'interfacialtension'}
+        # should be empty dict
+        assert py_json == {}
 
     def test_convert_to(self):
         model = InterfacialTension(value=1000.0, unit='dyne/cm')
         model.convert_to('N/m')
 
-        #assert math.isclose(model.value, 10.0, rel_tol=1e-05)
+        # assert math.isclose(model.value, 10.0, rel_tol=1e-05)
         assert model.value == 1.0
         assert model.unit == 'N/m'

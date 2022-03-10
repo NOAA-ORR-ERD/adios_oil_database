@@ -5,7 +5,6 @@ The actual validation is done in the Oil object (and sub-objects)
 
 This just provides some  convenient wrappers around the validate call
 """
-
 from ..oil import Oil
 
 import logging
@@ -27,9 +26,9 @@ def validate_json(oil_json):
     The "status" field is updated in place, with no other alterations
     of the record
     """
-
     if "oil_id" not in oil_json:
         raise ValueError(ERRORS["E010"])
+
     try:
         oil = Oil.from_py_json(oil_json)
     except TypeError as err:

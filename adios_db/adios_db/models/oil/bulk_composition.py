@@ -11,9 +11,9 @@ from ..common.measurement import MassOrVolumeFraction
 @dataclass_to_json
 @dataclass
 class BulkComposition:
-    '''
+    """
     object to hold bulk composition -- could be mass or volume fraction
-    '''
+    """
     name: str = ""
     groups: list = field(default_factory=list)
     method: str = ""

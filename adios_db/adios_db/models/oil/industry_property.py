@@ -13,7 +13,7 @@ from ..common.measurement import AnyUnit
 @dataclass_to_json
 @dataclass
 class IndustryProperty:
-    '''
+    """
     This handles the various odd industry properties.
 
     For example:
@@ -25,11 +25,12 @@ class IndustryProperty:
     * Cloud Point
     * Smoke Point
     * Freeze Point
-    '''
+    """
     name: str = ""
     method: str = ""
     measurement: AnyUnit = None
-    comment: str=""
+    comment: str = ""
+
 
 class IndustryPropertyList(JSON_List):
     item_type = IndustryProperty

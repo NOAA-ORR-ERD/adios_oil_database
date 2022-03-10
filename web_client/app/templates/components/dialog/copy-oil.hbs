@@ -28,6 +28,7 @@
             <div class="col-12">
               <Input type="text" @class="form-control bg-transparent border"
                      value={{this.oilName}}
+                     title="Oil Name"
                      {{on "change" this.updateName}}
                      {{on "keypress" this.updateName}}
                      {{on "focusout" this.updateName}}

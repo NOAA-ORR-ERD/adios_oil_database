@@ -24,7 +24,6 @@ class RefTempList:
     mixin for all classes that are a list of points with
     reference temperatures
     """
-
     def validate(self):
         """
         validator for anything that has a list of reference temps
@@ -60,10 +59,12 @@ class RefTempList:
 
         for p in points_list:
             temp = p.ref_temp.converted_to('K').value
+
             try:
                 temp = temp + p.shear_rate.value
             except (TypeError, AttributeError):
                 pass
+
             temps.append(temp)
 
         temps.sort()
@@ -106,14 +107,8 @@ class DensityPoint:
     comment: str = None
 
 
-
 class DensityList(RefTempList, JSON_List):
     item_type = DensityPoint
-    # def validate(self):
-    #     msgs = super().validate()
-    #     # check reasonable value:
-    #     for dp in self:
-    #         # make sure dp is reasonable, and a number!
 
 
 @dataclass_to_json
@@ -126,7 +121,7 @@ class DynamicViscosityPoint:
     comment: str = None
 
 
-class DynamicViscosityList(JSON_List, RefTempList):
+class DynamicViscosityList(RefTempList, JSON_List):
     item_type = DynamicViscosityPoint
 
 
@@ -140,8 +135,7 @@ class KinematicViscosityPoint:
     comment: str = None
 
 
-
-class KinematicViscosityList(JSON_List, RefTempList):
+class KinematicViscosityList(RefTempList, JSON_List):
     item_type = KinematicViscosityPoint
 
 

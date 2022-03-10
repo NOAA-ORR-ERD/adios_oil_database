@@ -1,8 +1,8 @@
-#
-# Model class definitions for embedded content in our oil records
-#
-# Note: These are deprecated a bit.  An updated SARAFraction is sitting in
-#       models.oil
+"""
+Model class definitions for embedded content in our oil records
+Note: These are deprecated a bit.  An updated SARAFraction is sitting in
+      models.oil
+"""
 
 from enum import Enum
 

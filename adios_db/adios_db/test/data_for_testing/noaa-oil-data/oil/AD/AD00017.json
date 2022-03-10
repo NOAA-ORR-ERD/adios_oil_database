@@ -13,8 +13,8 @@
         "API": 16.8,
         "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
-            "Crude Oil",
-            "Heavy Crude"
+            "Heavy Crude",
+            "Crude Oil"
         ],
         "model_completeness": 64,
         "gnome_suitable": true
@@ -54,6 +54,18 @@
                         },
                         "ref_temp": {
                             "value": 0.0,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        }
+                    },
+                    {
+                        "density": {
+                            "value": 953.0,
+                            "unit": "kg/m^3",
+                            "unit_type": "density"
+                        },
+                        "ref_temp": {
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }

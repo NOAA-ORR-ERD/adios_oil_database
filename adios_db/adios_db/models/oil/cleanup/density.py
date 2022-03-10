@@ -1,10 +1,7 @@
 """
 cleanups that work with density
 """
-import math
-from operator import itemgetter
-
-import unit_conversion as uc
+import nucos as uc
 
 from .cleanup import Cleanup
 
@@ -21,7 +18,6 @@ CRUDE_PRODUCTS = {"Crude Oil NOS",
 class FixAPI(Cleanup):
     """
     adds (or replaces) the API value, from the density measurements
-
     """
     ID = "001"
 
@@ -38,16 +34,9 @@ class FixAPI(Cleanup):
         fixme: -- maybe cleanup and validation should be better integrated?
         """
         API = self.oil.metadata.API
-
         is_valid = self.check_for_valid_api()
-        # densities = oil.sub_samples[0].physical_properties.densities
         density = self.find_density_at_60F()
 
-
-        # msg = (f"API: {API} doesn't match density data for "
-        #        if not is_valid else
-        #        "No API value provided for "
-        #        )
         msg = ("No API value provided for "
                if API is None else
                f"API: {API} doesn't match density data for "
@@ -57,14 +46,13 @@ class FixAPI(Cleanup):
             if density:
                 return (True, f"Cleanup: {self.ID}: {msg}"
                               f"{self.oil.oil_id}"
-                               " -- can be computed from density")
+                              " -- can be computed from density")
             else:
                 return (False, f"Cleanup: {self.ID}: {msg}"
                                f"{self.oil.oil_id}"
-                                " -- can NOT be computed from density")
+                               " -- can NOT be computed from density")
         else:
             return None, "API is fine"
-
 
     def cleanup(self):
         """
@@ -72,9 +60,9 @@ class FixAPI(Cleanup):
 
         :param oil: an Oil object to act on
 
-        :param do_it=False: flag to tell the cleanup to do its thing. If False,
-                            the method returns a message. If True, the action is
-                            taken, and the Oil object is altered.
+        :param do_it=False: flag to tell the cleanup to do its thing.
+                            If False, the method returns a message. If True,
+                            the action is taken, and the Oil object is altered.
 
         :returns: a message of what could be done, or what was done.
         """
@@ -83,7 +71,9 @@ class FixAPI(Cleanup):
         if density_at_60:
             API = uc.convert("density", "kg/m^3", "API", density_at_60)
             self.oil.metadata.API = round(API, 2)
-            return f"Cleanup: {self.ID}: Set API for {self.oil.oil_id} to {API}."
+
+            return (f"Cleanup: {self.ID}: "
+                    f"Set API for {self.oil.oil_id} to {API}.")
 
     def check_for_valid_api(self):
         """
@@ -100,6 +90,7 @@ class FixAPI(Cleanup):
             return None
 
         computed_API = uc.convert("density", "kg/m^3", "API", density_at_60F)
+
         if abs(API - computed_API) <= 0.2:
             return True
         else:
@@ -117,18 +108,17 @@ class FixAPI(Cleanup):
             if self.oil.metadata.product_type in CRUDE_PRODUCTS:
                 have_data = True
             else:
-                temps = density.temps
-#                print(f"{temps=}")
+                temps = density.temps\
+
                 if len(temps) == 1:
-                    # is the value near 60F?
                     t = temps[0]
-                    if 286 < t < 291:  # 55F, 65F
+                    if 286 < t < 291:  # 55F, 65F (is the value near 60F?)
                         have_data = True
                 else:
                     # check if ref temps are anywhere near 60F
-                    if (max(temps) >= 286
-                        and min(temps) <= 291):
+                    if (max(temps) >= 286 and min(temps) <= 291):
                         have_data = True
+
             if have_data:
                 return density.at_temp(uc.convert("F", "K", 60))
         except Exception:  # something went wrong, and we don't want it to barf

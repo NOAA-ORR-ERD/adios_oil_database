@@ -1,5 +1,4 @@
 python=3.*
+importlib-metadata
 sphinx
 sphinx_rtd_theme
-
-

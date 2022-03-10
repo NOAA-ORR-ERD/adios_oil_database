@@ -2,33 +2,34 @@
 tests for making a GNOME Oil
 
 """
+import pytest
 
 from pathlib import Path
 from math import isclose
-import pytest
-#pytest.importorskip("scipy.optimize")
 
 from adios_db.models.oil.oil import Oil
-from adios_db.computation.gnome_oil import make_gnome_oil, sara_totals
-from adios_db.computation.physical_properties import emul_water
+from adios_db.computation.gnome_oil import make_gnome_oil, sara_totals, estimate_pour_point
 
 HERE = Path(__file__).parent
-
 EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
-
 full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
+sparse_oil_filename = EXAMPLE_DATA_DIR / "ExampleSparseRecord.json"
 
 
 # use the function if you're going to change the Oil object.
 def get_full_oil():
     return Oil.from_file(full_oil_filename)
 
+def get_sparse_oil():
+    return Oil.from_file(sparse_oil_filename)
+
 FullOil = get_full_oil()
+SparseOil = get_sparse_oil()
 
 # run it through the Oil object to make sure its up to date:
 try:
     FullOil.to_file(full_oil_filename)
-except: # in case the tests are running somewhere read-only
+except Exception:  # in case the tests are running somewhere read-only
     pass
 
 
@@ -41,20 +42,18 @@ def test_metadata():
     # print(FullOil.metadata)
 
     assert data['name'] == FullOil.metadata.name
-    # the API might change
-    #assert data['api'] == FullOil.metadata.API
+    # The API might change
+    # assert data['api'] == FullOil.metadata.API
     assert data['adios_oil_id'] == "EC02234"
 
 
 def test_physical_properties():
-
     data = make_gnome_oil(FullOil)
 
     assert isclose(data['pour_point'], 248.15)
 
 
 def test_densities():
-
     data = make_gnome_oil(FullOil)
 
     assert list(data['densities']) == [939.88, 925.26]
@@ -63,7 +62,6 @@ def test_densities():
 
 
 def test_kvis():
-
     data = make_gnome_oil(FullOil)
 
     assert list(data['kvis']) == [0.0013831552964208198, 0.0003782720532607051]
@@ -72,36 +70,67 @@ def test_kvis():
 
 
 def test_SARA():
-
     saturates, aromatics, resins, asphaltenes = sara_totals(FullOil)
 
-    assert [saturates, aromatics, resins, asphaltenes] == [0.38, 0.31, .16, .15]
-
+    assert [saturates, aromatics, resins, asphaltenes] == [0.38, 0.31, .16,
+                                                           .15]
 
 def test_max_water_emulsion():
-
     data = make_gnome_oil(FullOil)
 
-    assert data['emulsion_water_fraction_max'] == .9
+    assert data['emulsion_water_fraction_max'] == 0.39787
 
 
-def test_emul_water():
+def test_max_water_emulsion_estimated():
+    data = make_gnome_oil(SparseOil)
 
-    y_max = emul_water(FullOil)
+    assert isclose(data['emulsion_water_fraction_max'], 0.843579, rel_tol=1e-4)
 
-    print ("y_max = ", y_max)
-    assert y_max == .7147493538099328
+
+def test_bullwinkle():
+    data = make_gnome_oil(FullOil)
+
+    assert data['bullwinkle_fraction'] == 0.0
+
+
+def test_bullwinkle_estimated():
+    data = make_gnome_oil(SparseOil)
+
+    assert isclose(data['bullwinkle_fraction'], 0.017067, rel_tol=1e-4)
+
+
+def test_no_cuts_exception():
+    sparse_oil = get_sparse_oil()
+
+    sparse_oil.metadata.product_type = "Condensate"
+    with pytest.raises(ValueError):
+        data = make_gnome_oil(sparse_oil)
+
+
+def test_frac_recovered_exception():
+    full_oil = get_full_oil()
+
+    full_oil.metadata.product_type = "Condensate"
+    full_oil.sub_samples[0].distillation_data.fraction_recovered.value = 5
+    with pytest.raises(ValueError):
+        data = make_gnome_oil(full_oil)
+
+
+def test_estimate_pour_point():
+    sparse_oil = get_sparse_oil()
+
+    pour_point = estimate_pour_point(sparse_oil)
+
+    assert isclose(pour_point, 188.372, rel_tol=1e-4)
 
 
 def test_solubility():
-
     data = make_gnome_oil(FullOil)
 
     assert data['solubility'] == 0
 
 # not being used -- we can add back if needed
 # def test_k0y():
-
 #     data = make_gnome_oil(FullOil)
-
+#
 #     assert data['k0y'] == 2.024e-06

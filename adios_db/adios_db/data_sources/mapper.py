@@ -29,9 +29,8 @@ class MapperBase(ImporterBase):
 
     def compound(self, name, measurement, method=None, groups=None,
                  sparse=False):
-        '''
+        """
         Example of content::
-
                 {
                     'name': "1-Methyl-2-Isopropylbenzene",
                     'method': "ESTS 2002b",
@@ -44,7 +43,7 @@ class MapperBase(ImporterBase):
                         standard_deviation: 0.1
                     }
                 }
-        '''
+        """
         ret = {'name': name, 'measurement': measurement}
 
         if method is not None or sparse is False:
@@ -73,13 +72,13 @@ class MapperBase(ImporterBase):
 
     @classmethod
     def slugify(cls, label):
-        '''
+        """
         Generate a string that is suitable for use as an object attribute.
 
-        * The strings will be snake-case, all lowercase words separated
+        - The strings will be snake-case, all lowercase words separated
           by underscores.
 
-        * They will not start with a numeric digit.  If the original label
+        - They will not start with a numeric digit.  If the original label
           starts with a digit, the slug will be prepended with an
           underscore ('_').
 
@@ -91,7 +90,7 @@ class MapperBase(ImporterBase):
 
         **Note:** this function is duplicated in the mapper.  Perhaps a base
         class to all the importer types.
-        '''
+        """
         if label is None:
             return label
 

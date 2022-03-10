@@ -17,7 +17,10 @@ from adios_db.models.oil.location_coordinates import LocationCoordinates
 # this brings in all the measurement types
 from adios_db.models.common.measurement import *
 
-TEST_DATA_DIR = Path(__file__).parent.parent / "test" / "data_for_testing" / "noaa-oil-data"
+TEST_DATA_DIR = (Path(__file__)
+                 .parent
+                 .parent / "test" / "data_for_testing" / "noaa-oil-data")
+
 
 def get_all_records(data_dir):
     """
@@ -33,19 +36,19 @@ def get_all_records(data_dir):
     Use as such::
        for oil, path in get_all_records(data_dir):
             work_with_the_record
-
     """
-    dir = Path(data_dir)
-    for fname in sorted(dir.rglob("*.json")):
+    for fname in sorted(Path(data_dir).rglob("*.json")):
         with open(fname, encoding='utf-8') as jfile:
             try:
                 pyjson = json.load(jfile)
             except Exception:
                 print("Something went wrong loading:", fname)
                 raise
+
         rec = Oil.from_py_json(pyjson)
 
         yield rec, fname
+
 
 USAGE = """
 do_something.py:  data_dir [dry_run]
@@ -66,7 +69,8 @@ def process_input(USAGE=USAGE):
                         error in the input -- default provided
 
     :returns base_dir, dry_run: base_dir is a Path object of the dir passed in.
-                                dry_run is True if "dry_run" is on the command line.
+                                dry_run is True if "dry_run" is on the
+                                command line.
     """
     try:
         sys.argv.remove("dry_run")

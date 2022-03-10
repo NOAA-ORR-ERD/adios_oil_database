@@ -41,7 +41,7 @@ def attach_pymongo(config, settings):
     def add_db(_request):
         return config.registry.db
 
-    config.add_request_method(add_db, 'mdb_client', reify=True)
+    config.add_request_method(add_db, 'adb_session', reify=True)
 
 
 def get_json(request):
@@ -139,14 +139,8 @@ def main(_global_config, **settings):
     from .views.capabilities import capabilities_api
     config.add_cornice_service(capabilities_api)
 
-    from .views.distinct import distinct_api
-    config.add_cornice_service(distinct_api)
-
-    from .views.object import object_api
-    config.add_cornice_service(object_api)
-
-    from .views.query import query_api
-    config.add_cornice_service(query_api)
+    # from .views.query import query_api
+    # config.add_cornice_service(query_api)
 
     user_docs_dir = settings.get('user_docs_dir')
 

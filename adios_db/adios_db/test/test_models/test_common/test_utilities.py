@@ -1,7 +1,6 @@
 """
 NOTE: this really should be more extensivly tested!
 """
-
 from dataclasses import dataclass, field
 
 from adios_db.models.common.utilities import (JSON_List,
@@ -62,9 +61,7 @@ def test_simple_py_json():
 
 
 def test_simple_from_py_json():
-    rs = ReallySimple.from_py_json({'x': 5,
-                                    'thing': "fred"}
-                                   )
+    rs = ReallySimple.from_py_json({'x': 5, 'thing': "fred"})
 
     assert type(rs) is ReallySimple
 
@@ -73,9 +70,7 @@ def test_simple_from_py_json():
 
 
 def test_add_extra_attribute():
-        rs = ReallySimple.from_py_json({'x': 5,
-                                    'thing': "fred"}
-                                   )
+        rs = ReallySimple.from_py_json({'x': 5, 'thing': "fred"})
 
         with pytest.raises(AttributeError):
             rs.something_random = 42
@@ -118,8 +113,7 @@ def test_json_list_pyjson_nested():
 
     assert pyjson == [{'x': 5, 'thing': 'fred'},
                       {'x': 2, 'thing': 'bob'},
-                      {'x': 1, 'thing': 'jane'},
-                      ]
+                      {'x': 1, 'thing': 'jane'}]
 
 
 def test_nested_list_empty():
@@ -161,8 +155,7 @@ def test_nested_list_none_type():
               {'x': 1, 'thing': 'jane'}]
 
     with pytest.raises(TypeError):
-        jl = JSON_List.from_py_json(pyjson)
-
+        _jl = JSON_List.from_py_json(pyjson)
 
 
 def test_nested_list_from_json():
@@ -211,7 +204,9 @@ def test_SimpleWithValidated():
     result = obj.validate()
     print("result:", result)
     assert len(result) == 1
-    assert result[0] == 'Invalid value: "this", should be: "this particular string"'
+    assert result[0] == ('Invalid value: "this", '
+                         'should be: "this particular string"')
+
 
 def test_pre_from_py_json():
 
@@ -232,7 +227,6 @@ def test_pre_from_py_json():
             'name': "fred",
             'x': 1.0}
 
-
     sc = SimpleClass.from_py_json(pyjs)
 
     assert sc.name == "a new name"
@@ -240,7 +234,3 @@ def test_pre_from_py_json():
     scjs = sc.py_json()
 
     assert scjs == pyjs
-
-
-
-

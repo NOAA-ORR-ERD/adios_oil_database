@@ -1,4 +1,3 @@
-
 import copy
 
 from adios_db.util.many_many import ManyMany
@@ -89,7 +88,6 @@ def test_add_to_right_new():
     assert right['newthing'] == {'those'}
 
 
-
 def test_dict_hash():
     """
     make sure you can hash it!
@@ -107,7 +105,3 @@ def test_dict_hash():
     h2 = ManyMany._dict_hash(d)
 
     assert h1 != h2
-
-
-
-
