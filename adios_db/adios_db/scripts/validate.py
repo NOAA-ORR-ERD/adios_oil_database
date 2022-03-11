@@ -18,7 +18,7 @@ adios_validate data_dir [save]
 
 Validation reports for the JSON files in data_dir
 
-These reports are in RST format.
+These reports are in Markdown format.
 
 If "save" is on the command line, the. status will be updated
 with the latest validation.
@@ -66,8 +66,8 @@ def write_reports(base_dir, save):
                 validation_by_record[oil.oil_id] = (oil.metadata.name,
                                                     oil.status)
         for error_code, msgs in status.items():
-            issues = "\n".join(f"\n``{oil.oil_id}`` "
-                               f"-- {oil.metadata.name}:\n\n    {msg}\n"
+            issues = "\n".join(f"\n#### `{oil.oil_id}` "
+                               f"-- {oil.metadata.name}:\n\n{msg}\n"
                                for msg in msgs)
 
             if (oil.review_status.status.lower() == "review complete"
@@ -79,7 +79,7 @@ def write_reports(base_dir, save):
             with open(pth, 'w', encoding='utf-8') as datafile:
                 json.dump(oil.py_json(), datafile, indent=4)
 
-    with open("validation_by_record.rst", 'w',
+    with open("validation_by_record.md", 'w',
               encoding="utf-8") as outfile1:
         write_header(outfile1, base_dir)
         write_by_record(outfile1, validation_by_record)
@@ -87,7 +87,7 @@ def write_reports(base_dir, save):
         write_by_record(outfile1, validation_by_record_rev)
 
     # write out the validation by error
-    with open("validation_by_error.rst", 'w', encoding="utf-8") as outfile:
+    with open("validation_by_error.md", 'w', encoding="utf-8") as outfile:
         write_header(outfile, base_dir)
         write_by_error(outfile, validation_by_error)
         write_header_rev(outfile)
@@ -98,34 +98,28 @@ def write_by_record(outfile1, validation_by_record):
     for oil_id, info in validation_by_record.items():
         name, status = info
 
-        outfile1.write(f"\n``{oil_id}``: {name}\n")
+        outfile1.write(f"\n#### `{oil_id}`: {name}\n\n")
 
         for msg in status:
-            outfile1.write(f" |    {msg}\n")
+            outfile1.write(f"{msg}\n\n")
 
 
 def write_by_error(outfile, validation_by_error):
     for code, errors in sorted(validation_by_error.items(), key=itemgetter(0)):
-        header = f"{code}: ({len(errors)} records affected)"
-
-        outfile.write(f"\n\n{header}\n{'=' * len(header)}\n")
+        outfile.write(f"\n\n## {code}: ({len(errors)} records affected)\n")
         outfile.writelines(errors)
 
 
 def write_header(of, base_dir):
-    of.write("\n####################################\n")
-    of.write("ADIOS Oil Database Validation Report\n")
-    of.write("####################################\n\n")
+    of.write("# ADIOS Oil Database Validation Report\n\n")
     of.write("Validation of data in: \n\n")
-    of.write(f"``{base_dir.absolute()}``\n\n")
+    of.write(f"`{base_dir.absolute()}`\n\n")
     of.write("**Generated:** "
              f"{datetime.datetime.now().strftime('%h %d, %Y - %H:00')}\n\n")
 
 
 def write_header_rev(outfile):
-    outfile.write("\n\n############\n"
-                  "Known Issues\n"
-                  "############\n\n"
+    outfile.write("# Known Issues\n"
                   "The rest of these are records that have been reviewed, \n"
                   "but still have issues that are known and may never "
                   "be resolved\n")
