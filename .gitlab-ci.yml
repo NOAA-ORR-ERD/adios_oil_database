@@ -15,12 +15,12 @@ variables:
   DAST_USE_AJAX_SPIDER: "true"
 
 stages:
-  - maintenance
   - test
   - build
   - verify
   - deploy_db
   - deploy
+  - maintenance
 
 
 test_develop:
@@ -39,7 +39,11 @@ test_develop:
 
   script:
     # install all the requirements
-    - conda install -y --file adios_db/conda_requirements.txt --file adios_db/conda_requirements_optional.txt --file web_api/conda_requirements.txt
+    - >
+      conda install -y
+      --file adios_db/conda_requirements.txt
+      --file adios_db/conda_requirements_optional.txt
+      --file web_api/conda_requirements.txt
 
     # configure and start mongodb
 
@@ -121,6 +125,8 @@ build_client:
 scan-api:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
+  allow_failure: true
+
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
@@ -132,7 +138,6 @@ scan-api:
     # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
     # for details
     GIT_STRATEGY: none
-  allow_failure: true
   services:
     - name: $CLAIR_DB_IMAGE
       alias: clair-vulnerabilities-db
@@ -145,12 +150,16 @@ scan-api:
   rules:
     - if: $CONTAINER_SCANNING_DISABLED
       when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH &&
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
 scan-client:
   stage: verify
   image: "$CS_ANALYZER_IMAGE"
+  allow_failure: true
+
   variables:
     CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
@@ -162,7 +171,6 @@ scan-client:
     # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
     # for details
     GIT_STRATEGY: none
-  allow_failure: true
   services:
     - name: $CLAIR_DB_IMAGE
       alias: clair-vulnerabilities-db
@@ -175,6 +183,8 @@ scan-client:
   rules:
     - if: $CONTAINER_SCANNING_DISABLED
       when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH &&
         $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
 
@@ -182,6 +192,8 @@ deploy_mongodb_stage:
   stage: deploy_db
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -218,6 +230,7 @@ deploy_mongodb_stage:
 
 stop_mongodb_stage:
   stage: deploy_db
+  when: manual
   only:
     - develop
   environment:
@@ -226,7 +239,6 @@ stop_mongodb_stage:
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -269,13 +281,13 @@ stop_mongodb_public:
   stage: deploy_db
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -286,6 +298,8 @@ deploy_api_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -329,13 +343,13 @@ stop_api_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -346,6 +360,8 @@ deploy_oauth_api_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -400,13 +416,13 @@ stop_oauth_api_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_api
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -417,6 +433,8 @@ deploy_client_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -446,13 +464,13 @@ stop_client_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -463,6 +481,8 @@ deploy_oauth_client_stage:
   stage: deploy
   only:
     - develop
+  except:
+    - schedules
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -518,13 +538,13 @@ stop_oauth_client_stage:
   stage: deploy
   only:
     - develop
+  when: manual
   environment:
     name: stage
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_client
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -563,13 +583,13 @@ stop_api_public:
   stage: deploy
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -606,13 +626,13 @@ stop_client_public:
   stage: deploy
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
@@ -667,14 +687,69 @@ stop_proxy_public:
   stage: deploy
   only:
     - production
+  when: manual
   environment:
     name: public
     action: stop
   variables:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_proxy
-  when: manual
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
     - prod
+
+init_git_repo_on_stage:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  when: manual
+  
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    SCRIPT_NAME: init_noaa_data.sh
+  script:
+    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
+
+  tags:
+    - adios-stage
+
+sync_with_git_review:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    SCRIPT_NAME: sync_with_under_review.sh
+  script:
+    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
+
+  tags:
+    - adios-stage
+
+sync_with_git_prod:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  when: manual
+  
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    SCRIPT_NAME: sync_with_production.sh
+  script:
+    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
+
+  tags:
+    - adios-stage

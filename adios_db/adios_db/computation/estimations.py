@@ -270,3 +270,6 @@ def emul_water(density, viscosity):
     # drop_min = 1.0e-6		# min oil droplet size
     # Smax = (6.0 / drop_min) * (Ymax / (1.0 - Ymax))
     return Ymax
+
+def oil_water_surface_tension_from_api(api):
+    return 0.001 * (39.0 - 0.2571 * api)

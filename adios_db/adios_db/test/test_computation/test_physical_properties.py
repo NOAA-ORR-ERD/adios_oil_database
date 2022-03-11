@@ -21,6 +21,8 @@ from adios_db.computation.physical_properties import (get_density_data,
                                                       get_frac_recovered,
                                                       max_water_fraction_emulsion,
                                                       emul_water,
+                                                      get_interfacial_tension_water,
+                                                      get_interfacial_tension_seawater,
                                                       )
 
 
@@ -314,3 +316,17 @@ def test_bullwinkle_estimated_api():
     bullwinkle = bullwinkle_fraction(full_oil)
 
     assert isclose(bullwinkle,  0.052838, rel_tol=1e-4)
+
+
+def test_interfacial_tension_water():
+    full_oil = get_full_oil()
+    interfacial_tension = get_interfacial_tension_water(full_oil)
+
+    assert isclose(interfacial_tension[0][0],  .024237, rel_tol=1e-4)
+
+
+def test_interfacial_tension_seawater():
+    full_oil = get_full_oil()
+    interfacial_tension = get_interfacial_tension_seawater(full_oil)
+
+    assert interfacial_tension[0][0] == .023827

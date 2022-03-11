@@ -342,6 +342,66 @@ def convert_dvisc_to_kvisc(dvisc, density):
 #     raise NotImplementedError
 
 
+def get_interfacial_tension_seawater(oil, units="N/m", temp_units="K"):
+    """
+    Return a table of interfacial tension data:
+
+    list of (interfacial tension, temp) pairs
+
+    :param oil: the oil object to get data from
+
+    :param units="N/m": units you want the interfacial tension in
+
+    :param temp_units="K": units you want the reference temperature in
+    """
+    interfacial_tensions = [t for t in oil.sub_samples[0].physical_properties.interfacial_tension_seawater
+                 if t.tension is not None
+                 and t.ref_temp is not None]
+
+    # create normalized list of interfacial tensions
+    interfacial_tension_table = []
+    for interfacial_tension_point in interfacial_tensions:
+        try:
+            i = interfacial_tension_point.tension.converted_to(units).value
+            t = interfacial_tension_point.ref_temp.converted_to(temp_units).value
+            interfacial_tension_table.append((i, t))
+        except (TypeError, ValueError):
+            # Data not good -- moving on
+            pass
+
+    return interfacial_tension_table
+
+
+def get_interfacial_tension_water(oil, units="N/m", temp_units="K"):
+    """
+    Return a table of interfacial tension data:
+
+    list of (interfacial tension, temp) pairs
+
+    :param oil: the oil object to get data from
+
+    :param units="N/m": units you want the interfacial tension in
+
+    :param temp_units="K": units you want the reference temperature in
+    """
+    interfacial_tensions = [t for t in oil.sub_samples[0].physical_properties.interfacial_tension_water
+                 if t.tension is not None
+                 and t.ref_temp is not None]
+
+    # create normalized list of interfacial tensions
+    interfacial_tension_table = []
+    for interfacial_tension_point in interfacial_tensions:
+        try:
+            i = interfacial_tension_point.tension.converted_to(units).value
+            t = interfacial_tension_point.ref_temp.converted_to(temp_units).value
+            interfacial_tension_table.append((i, t))
+        except (TypeError, ValueError):
+            # Data not good -- moving on
+            pass
+
+    return interfacial_tension_table
+
+
 def get_pour_point(oil):
     """
     Return oil's pour point or None
