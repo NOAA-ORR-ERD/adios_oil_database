@@ -56,7 +56,7 @@ then
 fi
 
 echo "Cloning the repo"
-git clone ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/$REPO_NAME-test.git $REPO_NAME
+git clone ssh://git@gitlab.orr.noaa.gov:9933/gnome/oil_database/$REPO_NAME.git $REPO_NAME
 
 cd $REPO_NAME
 
