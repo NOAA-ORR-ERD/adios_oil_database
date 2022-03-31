@@ -24,7 +24,7 @@ jobs:
 
       - name: Build the docs
         run: |
-          cd adios_db/cd Documentation/API_docs/
+          cd adios_db/Documentation/API_docs/
           ./build_api_docs.sh
           make html
           rm -rf ../../../docs/*
