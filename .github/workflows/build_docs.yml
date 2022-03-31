@@ -31,14 +31,18 @@ jobs:
           cp -R build/html/ ../../../docs/
 
           pushd ../../../docs
+
+          git config --global user.email "gihub_actions@nothing.com"
+          git config --global user.name "GitHub Actions"
+
           git add -A
           git commit -m "update published docs"
           popd
 
       - name: Deploy Files
         run: |
-          git config user.name ${{ secrets.GH_USER }}
-          git config user.email "${{ secrets.GH_MAIL }}"
+          # git config user.name ${{ secrets.GH_USER }}
+          # git config user.email "${{ secrets.GH_MAIL }}"
           git remote add gh-token "https://${{ secrets.GH_TOKEN}}@github.com/:user/:repo.git"
           git push
 # #          git fetch gh-token && git fetch gh-token gh-pages:gh-pages
