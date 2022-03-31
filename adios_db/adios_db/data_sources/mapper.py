@@ -31,6 +31,7 @@ class MapperBase(ImporterBase):
                  sparse=False):
         """
         Example of content::
+
                 {
                     'name': "1-Methyl-2-Isopropylbenzene",
                     'method': "ESTS 2002b",

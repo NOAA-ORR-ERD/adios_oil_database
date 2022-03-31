@@ -45,11 +45,14 @@ class TypeLabelsMap(ManyMany):
         dict
 
         :returns: list of dicts for each label:
-                  [{'_id': 0,
-                    'name': 'a label name,
-                    'product_types': ['type one', 'type two', ...]},
-                   ...
-                    ]
+
+        ::
+
+            [{'_id': 0,
+            'name': 'a label name,
+            'product_types': ['type one', 'type two', ...]},
+            ...
+            ]
 
         """
         # so we only need to built it once
