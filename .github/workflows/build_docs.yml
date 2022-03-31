@@ -1,16 +1,16 @@
 on:
   # Trigger the workflow on push request,
-  # but only for the master & develop branch
+  # but only for the production branch
   push:
     branches:
-      - develop
-      - master
       - production
 
 jobs:
   build:
-    name: Build and Push Sphinx Pages
+    name: Build Sphinx Pages
     runs-on: ubuntu-latest
+    steps:
+  - name: Modify/add files
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,10 +19,20 @@ jobs:
           pwd
           ls -la
           ls -la ..
-      - name: Use the sphinx-pages package
-        uses: seanzhengw/sphinx-pages@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          create_readme: false
-          source_dir: ../adios_db/Documentation/API_docs/source
-          install_extensions: true
+      - name: Build the docs
+        run: |
+          cd adios_db/cd Documentation/API_docs/
+          ./build_api_docs.sh
+          make html
+          rm -rf ../../../docs/*
+          cp -R build/html/ ../../../docs/
+
+          pushd ../../../docs
+          git add -A
+          git commit -m "update published docs"
+          popd
+
+      - name: Push the docs
+        run: |
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git push
