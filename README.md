@@ -83,6 +83,22 @@ Python package for managing the data. It provides code for:
  * Some computation on the data (interpolation, etc.)
  * Code to build an oil definition as required by the NOAA GNOME model.
 
+Docs at: https://noaa-orr-erd.github.io/adios_oil_database/
+
+<<<<<<< HEAD
+Python package for managing the data. It provides code for:
+
+ * Importing data
+ * Reading and writing the JSON format
+ * A data validation framework (there is a small amount of validation included, it is fairly starightformward to add more.
+ * Serving the data via MongoDB
+ * Extracting specific data.
+ * Managing physical units, including unit conversion.
+ * Some computation on the data (interpolation, etc.)
+ * Code to build an oil definition as required by the NOAA GNOME model.
+=======
+>>>>>>> production
+
 ### `adios_db_api`:
 
 Python (Pyramid) web server for interaction between the database and the Web client.
