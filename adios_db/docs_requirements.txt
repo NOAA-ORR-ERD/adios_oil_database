@@ -2,12 +2,12 @@
 # these should all be pip-installable
 
 numpy
-
-# for downloading/importing data
-#python-dateutil
-
 # https://github.com/NOAA-ORR-ERD/PyNUCOS
 pynucos
+
+# for downloading/importing data
+python-dateutil
+openpyxl 
 
 sphinx
 sphinx_rtd_theme
