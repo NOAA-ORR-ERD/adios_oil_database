@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>adios_db.session package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="adios_db.util package" href="adios_db.util.html" />
+    <link rel="prev" title="adios_db.scripts package" href="adios_db.scripts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../managing.html">Managing the Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computation with the ADIOS data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../importing_new_data.html">Importing New Data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="adios_db.html">adios_db package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="adios_db.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.html">adios_db.data_sources package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.html">adios_db.models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripting.html">adios_db.scripting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html">adios_db.scripts package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">adios_db.session package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.session.session">adios_db.session.session module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.util.html">adios_db.util package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ADIOS Oil Database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="adios_db.html">adios_db package</a> &raquo;</li>
+      <li>adios_db.session package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/adios_db.session.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-adios_db.session">
+<span id="adios-db-session-package"></span><h1>adios_db.session package<a class="headerlink" href="#module-adios_db.session" title="Permalink to this headline"></a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="module-adios_db.session.session">
+<span id="adios-db-session-session-module"></span><h2>adios_db.session.session module<a class="headerlink" href="#module-adios_db.session.session" title="Permalink to this headline"></a></h2>
+<p>ADIOS DB Session object</p>
+<p>This module encapsulates a MongoDB session for use behind the WebAPI,
+or other uses that require high performance querying, etc.</p>
+<p>In theory this same Session object could be duck typed to use a
+different back-end: RDBMS, simple file store, etc.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="adios_db.session.session.CursorWrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.session.session.</span></span><span class="sig-name descname"><span class="pre">CursorWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.CursorWrapper" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wraps a mongodb cursor to provide an iterator that we can do some
+filtering on, while not losing all its methods</p>
+<p>At this point, all it’s doing is removing the _id key</p>
+<p>Seems like a lot of effort for that, but the alternative is to realize
+the entire thing into a list – which may be a bad idea.</p>
+<p>Rant– Why doesn’t a mongo cursor have a __len__ rather than using
+.count() to make it more like a regular Sequence?</p>
+<p>oh, and now <code class="docutils literal notranslate"><span class="pre">count()</span></code> is deprecated as well.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="adios_db.session.session.Session">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.session.session.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.address">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">address</span></span><a class="headerlink" href="#adios_db.session.session.Session.address" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.delete_one">
+<span class="sig-name descname"><span class="pre">delete_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.delete_one" title="Permalink to this definition"></a></dt>
+<dd><p>delete a single Oil object with the given oil_id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.drop_database">
+<span class="sig-name descname"><span class="pre">drop_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.drop_database" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.find_one">
+<span class="sig-name descname"><span class="pre">find_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.find_one" title="Permalink to this definition"></a></dt>
+<dd><p>return a single Oil object from the collection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.get_database">
+<span class="sig-name descname"><span class="pre">get_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.get_database" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.get_labels">
+<span class="sig-name descname"><span class="pre">get_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.get_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Right now we are getting labels and associated product types
+from the adios_db model code.  But it would be better managed
+if we eventually migrate this to labels stored in a database
+collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.insert_one">
+<span class="sig-name descname"><span class="pre">insert_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.insert_one" title="Permalink to this definition"></a></dt>
+<dd><p>add a new Oil to the collection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.list_database_names">
+<span class="sig-name descname"><span class="pre">list_database_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.list_database_names" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.new_oil_id">
+<span class="sig-name descname"><span class="pre">new_oil_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'XX'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.new_oil_id" title="Permalink to this definition"></a></dt>
+<dd><p>Query the database for the next highest ID with the provided
+prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>'XX'</strong> (<em>id_prefix =</em>) – Prefix of new ID</p>
+</dd>
+</dl>
+<p>The current implementation is to walk the oil IDs, filter for the
+prefix, and choose the max numeric content.</p>
+<dl class="simple">
+<dt>Warning: We don’t expect a lot of traffic POST’ing a bunch new oils</dt><dd><p>to the database, it will only happen once in awhile.
+But this is not the most effective way to do this.
+A persistent incremental counter would be much faster.
+In fact, this is a bit brittle, and would fail if the
+website suffered a bunch of POST requests at once.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gnome_suitable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.query" title="Permalink to this definition"></a></dt>
+<dd><p>Query the database according to various criteria</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an iterator of dicts (json-compatible) of the data asked for</p>
+</dd>
+</dl>
+<p><strong>Filtering</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>projection:</dt><dd><p>The field names to be returned</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>query options:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>oil_id:</dt><dd><p>The identifier of a specific record</p>
+</dd>
+<dt>text:</dt><dd><p>A string that is matched against the oil name, location.
+The matching will be case insensitive.</p>
+</dd>
+<dt>api:</dt><dd><p>A range of numbers in which the API of the oil will be
+filtered.</p>
+</dd>
+<dt>labels:</dt><dd><p>A list of label strings that will be matched against the
+oil labels to filter the results.</p>
+</dd>
+<dt>gnome_suitable:</dt><dd><p>A Flag (True|False) that will be matched against the oil’s
+gnome_suitable boolean field to filter the results.  A None
+value means do not filter.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>sort options:</strong></p>
+<p>A list of options consisting of <code class="docutils literal notranslate"><span class="pre">('field_name',</span> <span class="pre">'direction')</span></code></p>
+<blockquote>
+<div><dl>
+<dt>field_name:</dt><dd><p>The name of a field to be used for sorting.  Dotted
+notation can be used to specify fields within fields.</p>
+</dd>
+<dt>direction:</dt><dd><p>Specifies whether to sort in ascending or descending
+order. Can be any of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;asc&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;ascending&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;desc&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;descending&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+<p>The Mongodb find() function has a bunch of parameters, but we are
+mainly interested in <code class="docutils literal notranslate"><span class="pre">find(filter=None,</span> <span class="pre">orderby,</span> <span class="pre">projection=None)</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>MongoDB 3.6 has changed how they compare array fields in a
+sort. It used to compare the arrays element-by-element,
+continuing until any “ties” were broken.  Now it only
+compares the highest/lowest valued element, apparently
+ignoring the rest.</p>
+<p>Reference: <a class="reference external" href="https://docs.mongodb.com/manual/release-notes/3.6-compatibility/#array-sort-behavior">https://docs.mongodb.com/manual/release-notes/3.6-compatibility/#array-sort-behavior</a></p>
+<p>For this reason, a MongoDB query will not properly sort our
+status and labels array fields, at least not in a simple way.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.replace_one">
+<span class="sig-name descname"><span class="pre">replace_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.session.session.Session.replace_one" title="Permalink to this definition"></a></dt>
+<dd><p>replace existing Oil object with the same oil_id</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="adios_db.session.session.Session.sort_direction">
+<span class="sig-name descname"><span class="pre">sort_direction</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'asc':</span> <span class="pre">1,</span> <span class="pre">'ascending':</span> <span class="pre">1,</span> <span class="pre">'desc':</span> <span class="pre">-1,</span> <span class="pre">'descending':</span> <span class="pre">-1}</span></em><a class="headerlink" href="#adios_db.session.session.Session.sort_direction" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adios_db.scripts.html" class="btn btn-neutral float-left" title="adios_db.scripts package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="adios_db.util.html" class="btn btn-neutral float-right" title="adios_db.util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, NOAA Emergency Response Division.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

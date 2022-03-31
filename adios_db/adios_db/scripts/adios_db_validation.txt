@@ -1,0 +1,171 @@
+Validation of data in: 
+/Users/chris.barker/Hazmat/GitLab/noaa-oil-data/data/oil
+2021-01-08 18:55:39.790579
+
+AD02185: IPAR 3
+    W002: Record has no product type
+AD00198: BRIGHT STOCK 145, STAR ENTERPRISE
+    W002: Record has no product type
+AD00474: GASOLINE: POLYMER
+    W002: Record has no product type
+AD00376: FAO, CITGO
+    W002: Record has no product type
+AD02473: TEMPA ROSSA, OIL & GAS JOURNAL
+    E004: Reference year: 9764 is not a valid year (between 1600 and 2050)
+AD02472: PIERCE, OIL & GAS JOURNAL
+    E004: Reference year: 9764 is not a valid year (between 1600 and 2050)
+AD00199: BRIGHT STOCK 150, STAR ENTERPRISE
+    W002: Record has no product type
+AD02350: SPRAY OIL
+    W002: Record has no product type
+AD01012: SNO 200, STAR ENTERPRISE
+    W002: Record has no product type
+AD01799: MINERAL TURPS, SHELL REFINING PTY 
+    W002: Record has no product type
+AD02438: STAR 5, EQUILON
+    W002: Record has no product type
+AD02439: STAR 12, EQUILON
+    W002: Record has no product type
+AD02474: ZUATA SWEET, OIL & GAS JOURNAL
+    E004: Reference year: 9764 is not a valid year (between 1600 and 2050)
+AD00915: PRIMER ASPHALT
+    W002: Record has no product type
+AD02303: PROPYLENE TETRAMER
+    W002: Record has no product type
+AD02437: STAR 4, EQUILON
+    W002: Record has no product type
+AD01036: SPRAY OIL
+    W002: Record has no product type
+AD00769: MINERAL SEAL OIL
+    W002: Record has no product type
+AD02471: JOTUN, OIL & GAS JOURNAL
+    E004: Reference year: 9764 is not a valid year (between 1600 and 2050)
+AD01712: PROPYLENE TETRAMER
+    W002: Record has no product type
+NO00107: WISTING 2015
+    E004: Reference year: 7428 is not a valid year (between 1600 and 2050)
+NO00025: FOSSEKALL 2013
+    E004: Reference year: 5273 is not a valid year (between 1600 and 2050)
+NO00027: FROY 1996
+    E004: Reference year: 5135 is not a valid year (between 1600 and 2050)
+NO00092: TORDIS 2002
+    E004: Reference year: 5134 is not a valid year (between 1600 and 2050)
+NO00057: LILLEFRIGG KONDENSAT 1996
+    E004: Reference year: 5135 is not a valid year (between 1600 and 2050)
+NO00041: GULLFAKS SOR 1996
+    E004: Reference year: 5154 is not a valid year (between 1600 and 2050)
+EX00025: Gullfaks Blend
+    W008: No reference year provided
+EX00033: Kutubu
+    W008: No reference year provided
+EX00048: Terra Nova
+    W008: No reference year provided
+EX00009: Brent Blend
+    W008: No reference year provided
+EX00029: Hungo Blend
+    W008: No reference year provided
+EX00044: Sokol
+    W008: No reference year provided
+EX00013: Dalia
+    W008: No reference year provided
+EX00005: Banyu Urip
+    W008: No reference year provided
+EX00052: Upper Zakum
+    W008: No reference year provided
+EX00053: Usan
+    W008: No reference year provided
+EX00004: Balder Blend
+    W008: No reference year provided
+EX00012: Curlew
+    W008: No reference year provided
+EX00045: Statfjord Blend
+    W008: No reference year provided
+EX00028: Hibernia Blend
+    W008: No reference year provided
+EX00008: Bonga
+    W008: No reference year provided
+EX00049: Thunder Horse
+    W008: No reference year provided
+EX00032: Kissanje Blend
+    W008: No reference year provided
+EX00024: Gudrun Blend
+    W008: No reference year provided
+EX00039: Oso Condensate
+    W008: No reference year provided
+EX00042: Sable Island
+    W008: No reference year provided
+EX00015: Ebok
+    W008: No reference year provided
+EX00003: Azeri Light
+    W008: No reference year provided
+EX00054: Volve
+    W008: No reference year provided
+    W002: Record has no product type
+EX00023: Grane
+    W008: No reference year provided
+EX00035: Mondo
+    W008: No reference year provided
+EX00019: Gindungo
+    W008: No reference year provided
+EX00018: Forties Blend
+    W008: No reference year provided
+EX00034: Marib Light
+    W008: No reference year provided
+EX00022: Gorgon
+    W008: No reference year provided
+EX00055: Woollybutt
+    W008: No reference year provided
+EX00002: Alaska North Slope
+    W008: No reference year provided
+EX00014: Doba Blend
+    W008: No reference year provided
+EX00043: Saxi Batuque
+    W008: No reference year provided
+EX00038: Oseberg Blend
+    W008: No reference year provided
+EX00056: Yoho
+    W008: No reference year provided
+EX00001: Aasgard Blend
+    W008: No reference year provided
+EX00017: Erha
+    W008: No reference year provided
+EX00040: Pazflor
+    W008: No reference year provided
+EX00037: Ormen Lange
+    W008: No reference year provided
+EX00021: Girassol
+    W008: No reference year provided
+EX00020: Gippsland Blend
+    W008: No reference year provided
+EX00036: Mostarda
+    W008: No reference year provided
+EX00041: Qua Iboe
+    W008: No reference year provided
+EX00016: Ekofisk
+    W008: No reference year provided
+EX00057: Zafiro Blend
+    W008: No reference year provided
+EX00031: Kearl
+    W008: No reference year provided
+EX00027: Hebron
+    W008: No reference year provided
+EX00050: Triton Blend
+    W008: No reference year provided
+EX00007: Basrah Heavy
+    W008: No reference year provided
+EX00011: Cold Lake Blend
+    W008: No reference year provided
+EX00046: Tapis
+    W008: No reference year provided
+EX00047: Terengganu Condensate
+    W008: No reference year provided
+EX00010: CLOV
+    W008: No reference year provided
+EX00006: Basrah
+    W008: No reference year provided
+EX00051: Troll Blend
+    W008: No reference year provided
+EX00026: HOOPS Blend
+    W008: No reference year provided
+EX00030: Jotun Blend
+    W008: No reference year provided

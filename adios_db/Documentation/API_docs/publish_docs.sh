@@ -10,7 +10,7 @@ rm -rf ../../../docs/*
 cp -R build/html/ ../../../docs/
 
 pushd ../../../docs
-git add -n -A
+git add -A
 git commit -m "update published docs"
 popd
 
