@@ -1,24 +1,27 @@
+name: Deploy API Docs
+
 on:
   # Trigger the workflow on push request,
   # but only for the production branch
   push:
     branches:
-      - production
+    - production
 
 jobs:
   build:
     name: Build Sphinx Pages
     runs-on: ubuntu-latest
     steps:
-  - name: Modify/add files
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Test the env that github actions has available
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+      - name: Install dependencies
         run: |
-          pwd
-          ls -la
-          ls -la ..
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -r adios_db/docs_requirements.txt
+
       - name: Build the docs
         run: |
           cd adios_db/cd Documentation/API_docs/
@@ -32,7 +35,16 @@ jobs:
           git commit -m "update published docs"
           popd
 
-      - name: Push the docs
+      - name: Deploy Files
         run: |
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git config user.name ${{ secrets.GH_USER }}
+          git config user.email "${{ secrets.GH_MAIL }}"
+          git remote add gh-token "https://${{ secrets.GH_TOKEN}}@github.com/:user/:repo.git"
+#          git fetch gh-token && git fetch gh-token gh-pages:gh-pages
+#          python -m mkdocs gh-deploy -v --clean --remote-name gh-token
+#          git push gh-token gh-pages
           git push
+#       - name: Push the docs
+#         run: |
+# #          github_token: ${{ secrets.GITHUB_TOKEN }}
+#           git push

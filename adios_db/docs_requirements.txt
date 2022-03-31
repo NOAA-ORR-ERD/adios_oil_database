@@ -1,0 +1,11 @@
+# minimum requirements needed to build the docs
+# these should all be pip-installable
+
+numpy
+
+# for downloading/importing data
+#python-dateutil
+
+# https://github.com/NOAA-ORR-ERD/PyNUCOS
+pynucos
+
