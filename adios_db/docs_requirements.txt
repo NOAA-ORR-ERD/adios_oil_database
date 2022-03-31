@@ -9,3 +9,5 @@ numpy
 # https://github.com/NOAA-ORR-ERD/PyNUCOS
 pynucos
 
+sphinx
+sphinx_rtd_theme
