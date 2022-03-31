@@ -88,18 +88,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="adios-db-package">
-<h1>adios_db package<a class="headerlink" href="#adios-db-package" title="Permalink to this headline"></a></h1>
+  <section id="module-adios_db">
+<span id="adios-db-package"></span><h1>adios_db package<a class="headerlink" href="#module-adios_db" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.initialize_console_log">
+<span class="sig-prename descclassname"><span class="pre">adios_db.</span></span><span class="sig-name descname"><span class="pre">initialize_console_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'debug'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.initialize_console_log" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the logger to simply log everything to the console (stdout)
+Likely what you want for scripting use</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>level='debug'</strong> – the level you want your log to show. options are,
+in order of importance: “debug”, “info”, “warning”,
+“error”, “critical”</p>
+</dd>
+</dl>
+<p>You will only get the logging messages at or above the level you set.</p>
+</dd></dl>
+
 <section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#adios-db-computation-estimations-module">adios_db.computation.estimations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#adios-db-computation-gnome-oil-module">adios_db.computation.gnome_oil module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#adios-db-computation-physical-properties-module">adios_db.computation.physical_properties module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#adios-db-computation-utilities-module">adios_db.computation.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#module-adios_db.computation.estimations">adios_db.computation.estimations module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#module-adios_db.computation.gnome_oil">adios_db.computation.gnome_oil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#module-adios_db.computation.physical_properties">adios_db.computation.physical_properties module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.computation.html#module-adios_db.computation.utilities">adios_db.computation.utilities module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.data_sources.html">adios_db.data_sources package</a><ul>
@@ -129,52 +144,52 @@
 <li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.html#adios-db-data-sources-importer-base-module">adios_db.data_sources.importer_base module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.html#adios-db-data-sources-mapper-module">adios_db.data_sources.mapper module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.html#adios-db-data-sources-parser-module">adios_db.data_sources.parser module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.html#adios-db-data-sources-reader-module">adios_db.data_sources.reader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.html#module-adios_db.data_sources.reader">adios_db.data_sources.reader module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.db_init.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.db_init.html#adios-db-db-init-database-module">adios_db.db_init.database module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.db_init.html#adios-db-db-init-labels-module">adios_db.db_init.labels module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.db_init.html#module-adios_db.db_init.labels">adios_db.db_init.labels module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.models.html">adios_db.models package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.models.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.common.html">adios_db.models.common package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#adios-db-models-common-enum-types-module">adios_db.models.common.enum_types module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#adios-db-models-common-label-module">adios_db.models.common.label module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#adios-db-models-common-measurement-module">adios_db.models.common.measurement module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#adios-db-models-common-sara-module">adios_db.models.common.sara module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#adios-db-models-common-synonym-module">adios_db.models.common.synonym module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#adios-db-models-common-utilities-module">adios_db.models.common.utilities module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#adios-db-models-common-validators-module">adios_db.models.common.validators module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.enum_types">adios_db.models.common.enum_types module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.label">adios_db.models.common.label module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.measurement">adios_db.models.common.measurement module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.sara">adios_db.models.common.sara module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.synonym">adios_db.models.common.synonym module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.utilities">adios_db.models.common.utilities module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.validators">adios_db.models.common.validators module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html">adios_db.models.oil package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#subpackages">Subpackages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-bulk-composition-module">adios_db.models.oil.bulk_composition module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-ccme-module">adios_db.models.oil.ccme module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-completeness-module">adios_db.models.oil.completeness module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-compound-module">adios_db.models.oil.compound module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-distillation-module">adios_db.models.oil.distillation module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-environmental-behavior-module">adios_db.models.oil.environmental_behavior module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-ests-fractions-module">adios_db.models.oil.ests_fractions module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-industry-property-module">adios_db.models.oil.industry_property module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-location-coordinates-module">adios_db.models.oil.location_coordinates module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-metadata-module">adios_db.models.oil.metadata module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-oil-module">adios_db.models.oil.oil module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-physical-properties-module">adios_db.models.oil.physical_properties module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-product-type-module">adios_db.models.oil.product_type module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-properties-module">adios_db.models.oil.properties module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-review-status-module">adios_db.models.oil.review_status module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-sample-module">adios_db.models.oil.sample module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-sara-module">adios_db.models.oil.sara module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-values-module">adios_db.models.oil.values module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-version-module">adios_db.models.oil.version module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-version-update-module">adios_db.models.oil.version_update module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios-db-models-oil-versions-module">adios_db.models.oil.versions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.bulk_composition">adios_db.models.oil.bulk_composition module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.ccme">adios_db.models.oil.ccme module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.completeness">adios_db.models.oil.completeness module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.compound">adios_db.models.oil.compound module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.distillation">adios_db.models.oil.distillation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.environmental_behavior">adios_db.models.oil.environmental_behavior module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.ests_fractions">adios_db.models.oil.ests_fractions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.industry_property">adios_db.models.oil.industry_property module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.location_coordinates">adios_db.models.oil.location_coordinates module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.metadata">adios_db.models.oil.metadata module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.oil">adios_db.models.oil.oil module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.physical_properties">adios_db.models.oil.physical_properties module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.product_type">adios_db.models.oil.product_type module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.properties">adios_db.models.oil.properties module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.review_status">adios_db.models.oil.review_status module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.sample">adios_db.models.oil.sample module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.sara">adios_db.models.oil.sara module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.values">adios_db.models.oil.values module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.version">adios_db.models.oil.version module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.version_update">adios_db.models.oil.version_update module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.versions">adios_db.models.oil.versions module</a></li>
 </ul>
 </li>
 </ul>
@@ -189,9 +204,9 @@
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-initialize-module">adios_db.scripts.db_initialize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-restore-module">adios_db.scripts.db_restore module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-oil-query-module">adios_db.scripts.oil_query module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-process-json-module">adios_db.scripts.process_json module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-update-test-data-module">adios_db.scripts.update_test_data module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-validate-module">adios_db.scripts.validate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.process_json">adios_db.scripts.process_json module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.update_test_data">adios_db.scripts.update_test_data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.validate">adios_db.scripts.validate module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.session.html">adios_db.session package</a><ul>
@@ -202,9 +217,9 @@
 <li class="toctree-l1"><a class="reference internal" href="adios_db.util.html">adios_db.util package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios-db-util-db-connection-module">adios_db.util.db_connection module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios-db-util-many-many-module">adios_db.util.many_many module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios-db-util-settings-module">adios_db.util.settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios-db-util-term-module">adios_db.util.term module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#module-adios_db.util.many_many">adios_db.util.many_many module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#module-adios_db.util.settings">adios_db.util.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#module-adios_db.util.term">adios_db.util.term module</a></li>
 </ul>
 </li>
 </ul>
