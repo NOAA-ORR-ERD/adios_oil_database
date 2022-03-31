@@ -30,7 +30,7 @@ jobs:
           ./build_api_docs.sh
           make html
           rm -rf ../../../docs/*
-          cp -R build/html/ ../../../docs/
+          cp -R build/html/* ../../../docs
 
           pushd ../../../docs
 
