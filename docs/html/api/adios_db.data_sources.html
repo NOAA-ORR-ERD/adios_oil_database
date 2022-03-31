@@ -57,7 +57,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-data-sources-importer-base-module">adios_db.data_sources.importer_base module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-data-sources-mapper-module">adios_db.data_sources.mapper module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-data-sources-parser-module">adios_db.data_sources.parser module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#adios-db-data-sources-reader-module">adios_db.data_sources.reader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.data_sources.reader">adios_db.data_sources.reader module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a></li>
@@ -97,8 +97,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="adios-db-data-sources-package">
-<h1>adios_db.data_sources package<a class="headerlink" href="#adios-db-data-sources-package" title="Permalink to this headline"></a></h1>
+  <section id="module-adios_db.data_sources">
+<span id="adios-db-data-sources-package"></span><h1>adios_db.data_sources package<a class="headerlink" href="#module-adios_db.data_sources" title="Permalink to this headline"></a></h1>
+<p>Collection of file readers</p>
 <section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
@@ -116,7 +117,7 @@
 <li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#adios-db-data-sources-env-canada-v2-mapper-module">adios_db.data_sources.env_canada.v2.mapper module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#adios-db-data-sources-env-canada-v2-parser-module">adios_db.data_sources.env_canada.v2.parser module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#adios-db-data-sources-env-canada-v2-reader-module">adios_db.data_sources.env_canada.v2.reader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#module-adios_db.data_sources.env_canada.v2.reader">adios_db.data_sources.env_canada.v2.reader module</a></li>
 </ul>
 </li>
 </ul>
@@ -153,8 +154,55 @@
 <section id="adios-db-data-sources-parser-module">
 <h2>adios_db.data_sources.parser module<a class="headerlink" href="#adios-db-data-sources-parser-module" title="Permalink to this headline"></a></h2>
 </section>
-<section id="adios-db-data-sources-reader-module">
-<h2>adios_db.data_sources.reader module<a class="headerlink" href="#adios-db-data-sources-reader-module" title="Permalink to this headline"></a></h2>
+<section id="module-adios_db.data_sources.reader">
+<span id="adios-db-data-sources-reader-module"></span><h2>adios_db.data_sources.reader module<a class="headerlink" href="#module-adios_db.data_sources.reader" title="Permalink to this headline"></a></h2>
+<p>Base classes for various different readers that we may want to use.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.reader.</span></span><span class="sig-name descname"><span class="pre">CsvFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_delim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mac_roman'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A generalized file reader for comma separated variables (.csv)
+flat datafiles.
+In spite of its name, this type of file can have various different
+separating characters besides commas for its rows and fields.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.convert_field">
+<span class="sig-name descname"><span class="pre">convert_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.convert_field" title="Permalink to this definition"></a></dt>
+<dd><p>Convert data fields to numeric if possible</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.convert_fields">
+<span class="sig-name descname"><span class="pre">convert_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.convert_fields" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.export" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.init_field_names">
+<span class="sig-name descname"><span class="pre">init_field_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.init_field_names" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.readline">
+<span class="sig-name descname"><span class="pre">readline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.readline" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.readlines">
+<span class="sig-name descname"><span class="pre">readlines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.readlines" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.rewind">
+<span class="sig-name descname"><span class="pre">rewind</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.rewind" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 

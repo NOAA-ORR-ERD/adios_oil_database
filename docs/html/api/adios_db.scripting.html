@@ -89,8 +89,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="adios-db-scripting-package">
-<h1>adios_db.scripting package<a class="headerlink" href="#adios-db-scripting-package" title="Permalink to this headline"></a></h1>
+  <section id="module-adios_db.scripting">
+<span id="adios-db-scripting-package"></span><h1>adios_db.scripting package<a class="headerlink" href="#module-adios_db.scripting" title="Permalink to this headline"></a></h1>
+<p>Assorted utilities to help with writing scripts that use the oil database</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripting.get_all_records">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">get_all_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.get_all_records" title="Permalink to this definition"></a></dt>
+<dd><p>gets all the records from the JSON data stored in gitLab</p>
+<p>This is a generator that gets all the records, returning them one by one
+as record, path pairs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data_dir</strong> – the directory that holds the data</p>
+</dd>
+</dl>
+<p>The record returned is an Oil object</p>
+<dl class="simple">
+<dt>Use as such::</dt><dd><dl class="simple">
+<dt>for oil, path in get_all_records(data_dir):</dt><dd><p>work_with_the_record</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripting.process_input">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">process_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USAGE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\ndo_something.py:</span>&#160; <span class="pre">data_dir</span> <span class="pre">[dry_run]\n\ndata_dir</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">are:</span> <span class="pre">the</span> <span class="pre">script</span> <span class="pre">will</span> <span class="pre">recursively\nsearch</span> <span class="pre">for</span> <span class="pre">JSON</span> <span class="pre">files\n\nIf</span> <span class="pre">&quot;dry_run&quot;</span> <span class="pre">is</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">command</span> <span class="pre">line,</span> <span class="pre">it</span> <span class="pre">will</span> <span class="pre">report</span> <span class="pre">what</span> <span class="pre">it</span> <span class="pre">would</span> <span class="pre">do,\nbut</span> <span class="pre">not</span> <span class="pre">save</span> <span class="pre">any</span> <span class="pre">changes\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.process_input" title="Permalink to this definition"></a></dt>
+<dd><p>process sys.argv to get the path and whether it’s a dry_run or not</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>USAGE=USAGE</strong> – the usage message to return print if there’s an
+error in the input – default provided</p>
+</dd>
+<dt class="field-even">Returns base_dir, dry_run</dt>
+<dd class="field-even"><p>base_dir is a Path object of the dir passed in.
+dry_run is True if “dry_run” is on the
+command line.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
