@@ -21,11 +21,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools
           python -m pip install -r adios_db/docs_requirements.txt
-          python -m pip install ./
 
       - name: Build the docs
         run: |
-          cd adios_db/Documentation/API_docs/
+          cd adios_db
+          python -m pip install ./
+          cd Documentation/API_docs/
           ./build_api_docs.sh
           make html
           rm -rf ../../../docs/*
