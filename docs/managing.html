@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Managing the Data &mdash; ADIOS Oil Database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Computation with the ADIOS data" href="computation.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Managing the Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-scripting-module">The Scripting Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-json">Working with JSON</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#json-compatible-python">JSON-compatible-Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-an-oil-object">Creating an <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#saving-an-oil-object">Saving an <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-an-oil-from-scratch">Creating an Oil from scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-scripts">Example Scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation with the ADIOS data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing_new_data.html">Importing New Data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/adios_db.html">adios_db package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ADIOS Oil Database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Managing the Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/managing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="managing-the-data">
+<span id="id1"></span><h1>Managing the Data<a class="headerlink" href="#managing-the-data" title="Permalink to this headline"></a></h1>
+<p>In order to manage the data, you’ll want to work with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Oil</span></code> object.</p>
+<p>The Oil object is essentially a Python class that mimics the base JSON format. It then provides attributes that let you “drill down” to find the data you want.</p>
+<section id="the-scripting-module">
+<h2>The Scripting Module<a class="headerlink" href="#the-scripting-module" title="Permalink to this headline"></a></h2>
+<p>Most of the things you’ll need for “typical” work with the data can be found in the
+:py:mod`adios-db.scripting` module. We recommend that you import it like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">adios_db.scripting</span> <span class="k">as</span> <span class="nn">ads</span>
+</pre></div>
+</div>
+<p>Then you can access all the needed functions an objects from the <code class="docutils literal notranslate"><span class="pre">ads</span></code> name.</p>
+</section>
+<section id="working-with-json">
+<h2>Working with JSON<a class="headerlink" href="#working-with-json" title="Permalink to this headline"></a></h2>
+<p>For the most part, the data are stored as JSON: either in MongoDB, or as JSON files on disk.</p>
+<section id="json-compatible-python">
+<h3>JSON-compatible-Python<a class="headerlink" href="#json-compatible-python" title="Permalink to this headline"></a></h3>
+<p>A subset of JSON can be mapped directly to Python builtin objects.
+We call this “JSON-compatible-Python”, or <code class="docutils literal notranslate"><span class="pre">py_json</span></code> for short.
+Essentially, it is Python that can be saved-to and loaded-from JSON losslessly:
+arbitrarily nested lists, dicts, strings, numbers, and booleans.</p>
+</section>
+<section id="creating-an-oil-object">
+<h3>Creating an <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object<a class="headerlink" href="#creating-an-oil-object" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object (and all the sub-objects) can be created from py_json with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">oil</span> <span class="o">=</span> <span class="n">ads</span><span class="o">.</span><span class="n">Oil</span><span class="o">.</span><span class="n">from_py_json</span><span class="p">(</span><span class="n">a_json_compatible_object</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or directly from a json file with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ads</span><span class="o">.</span><span class="n">Oil</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">a_file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The file path can be a string or <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object (you can also pass in an open file object).</p>
+</section>
+<section id="saving-an-oil-object">
+<h3>Saving an <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object<a class="headerlink" href="#saving-an-oil-object" title="Permalink to this headline"></a></h3>
+<p>An <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object (and all the sub-objects) can be saved to py_json with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python_object</span> <span class="o">=</span> <span class="n">oil</span><span class="o">.</span><span class="n">py_json</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or directly to a json file with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">an_oil</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">a_file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The file path can be a string or <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object</p>
+<p>(you can also pass in an open file object)</p>
+</section>
+</section>
+<section id="creating-an-oil-from-scratch">
+<h2>Creating an Oil from scratch<a class="headerlink" href="#creating-an-oil-from-scratch" title="Permalink to this headline"></a></h2>
+<p>You can create an empty Oil object from scratch – this is likely to be useful for creating data from other data sources: CSV files, databases, etc. It does require a fairly in-depth knowledge of the nested structure, however.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">oil</span> <span class="o">=</span> <span class="n">ads</span><span class="o">.</span><span class="n">Oil</span><span class="p">(</span><span class="s1">&#39;XXXXX&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The only required argument is an oil_id: it can be any moderate-length string. Your ID scheme should match the database you are working with.</p>
+<p>For other arguments, see: <code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.scripting.Oil</span></code></p>
+</section>
+<section id="example-scripts">
+<h2>Example Scripts<a class="headerlink" href="#example-scripts" title="Permalink to this headline"></a></h2>
+<p>There are a number of example scripts in the top-level scripts directory in the source code.</p>
+<p><code class="docutils literal notranslate"><span class="pre">adios_db/scripts</span></code></p>
+<p>These are various scripts used to do one-off cleanup or manipulation of the data. It is unlikely that you will want to run any of these directly, but they can be used as examples to follow.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="computation.html" class="btn btn-neutral float-right" title="Computation with the ADIOS data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, NOAA Emergency Response Division.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

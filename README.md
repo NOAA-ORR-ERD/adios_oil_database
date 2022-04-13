@@ -1,6 +1,9 @@
 # ADIOS Oil Database
 
-ADIOS Oil Database project: system for managing oil properties data for use in Oil Spill Response
+ADIOS Oil Database project: system for managing oil properties data for use in Oil Spill Response. It is the code behind the Web Application at:
+
+http://adios.orr.noaa.gov
+
 
 This repository contains three packages:
 
@@ -10,39 +13,52 @@ This repository contains three packages:
 
 ``ADIOS web_client``: Ember-JS based Web browser client for searching, viewing, and modifying the data.
 
+## Oil Data
+
+This package includes a small set of data in JSON format used for testing. The full dataset managed by NOAA can be found in the noaa-oil-data project here:
+
+https://github.com/NOAA-ORR-ERD/noaa-oil-data
+
+
 ## Dev Process:
 
-As of Feb, 2021, the project is still under active development.
-So we are working in the develop branch in an internal NOAA git repository. When its gets more stable, we will start pushing to master, but for now -- reach out to NOAA (gitHub issues are good for questions)if you want the latests and greatest.
+As of March, 2022, the project is still under active development, though nearly at a stable state.
+
+It is developed in an internal NOAA git repository. We try to keep the gitHub version up to date, but it may be a bit behind.
+If you find issues in or have questions about the code, reach out to NOAA (gitHub issues are good for questions) and we will work to push the latest version and address your questions.
+
+The "production" branch is the stable branch, and is the code behind the live web application.
+
+We are doing active development in the develop branch, which we try to keep up to date as well.
 
 
-# Overview
+## Web Application Overview
 
-The ADIOS OIl Database is a "Single page/rich client/AJAX") Web Application with the following components:
+The ADIOS Oil Database is a "Single page/rich client/AJAX" Web Application with the following components:
 
-The Client is built with the Ember Javascript Framework, which provides a whole pile of javascript, in browser templating, etc. You read more about it on the Web, but for now: it's a bunch of javascript, at run-time, entirely in the Browser.
+The Client is built with the Ember Javascript Framework, which provides a whole pile of javascript, in browser templating, etc. You can read more about it on the Web, but in short: it's a bunch of javascript, at run-time, entirely in the Browser.
 
-The Client relies on a JSON REST service, which is provided by a Pyramid App, using Cornice to help with the REST stuff. WE are calling this the "web_api", and the python package is called "oil_database_api".
+The Client relies on a JSON REST service, which is provided by a Python/Pyramid Application, using Cornice to help with the REST stuff. This is the "web_api", and the python package is called "adios_db_api".
 
-The web_api uses mongodb to manage the data itself. mongodb (https://www.mongodb.com/) is a "NoSQL Document Database", which runs as a separate server process.
+The adios_db_api uses mongodb to manage the data itself. mongodb (https://www.mongodb.com/) is a "NoSQL Document Database", which runs as a separate server process.
 
 So: to run the app, you need to:
 
 * Serve up the pile of javascript/CSS/static resources etc to the browser to run the client.
-* Run the oil_database_api Pyramid App
+* Run the adios_db_api Pyramid App
 * Run the mongodb daemon (mongod) to serve the data.
 
-On our staging server, we have these running as three separate services (separate docker containers? not sure, but they could be)
+On NOAA's production server, these are running as three separate services (separate docker containers)
 
-A bit more about Ember:
+### A bit more about Ember:
 
-Ember is a javascript framework -- you use it to write your in-the-browser code. However, it also comes with a set of utilities (ember-cli) that can be used to help manage your code: package it up, manage dependencies, etc. ONe of these is "ember serve" which provides (using node) a way to serve up all the files for development, including reloading when they change, etc.
+Ember is a javascript framework -- you use it to write your in-the-browser code. However, it also comes with a set of utilities (ember-cli) that can be used to help manage your code: package it up, manage dependencies, etc. One of these is "ember serve" which provides (using node) a way to serve up all the files for development, including reloading when they change, etc.
 
-It also provides "ember build", which builds the app, creating a pile of static files that are needed to run the app -- these static files can be served up by any web server (SimpleHTTPServer seems to work fine, for example) In a production server, we might use Ngnx or Node, or ????
+It also provides "ember build", which builds the app, creating a pile of static files that are needed to run the app -- these static files can be served up by any web server (Ngnx, Apache, etc.)
 
 ### Electron:
 
-In addition to a server app hosted by NOAA, we want to provide a stand-alone version, so that others (BSEE in particular) can manage their own data, on their own systems, without needing to deploy a server application. Much like CammeoChemical and Tier2Submit.
+In addition to a server app hosted by NOAA, we have developed a prototype of a stand-alone version, so that others can manage their own data, on their own systems, without needing to deploy a server application.
 
 Electron is a framework for bundling up web apps as a desktop app:
 
@@ -50,18 +66,38 @@ Electron is a framework for bundling up web apps as a desktop app:
 
 (https://electronjs.org/)
 
-Much like what we did for CameoChemicals with wxPython and WebKit (and what Micael has done for MarPlot with CEF and his own C++ code, but someone else doing the hard work :-)
-
-For our case, we need not only a Browser, but also the oil_database_api and mongodb servers running to use the app. In CameoChemicals, the host app and the server were written in Python, so we could start up the server in a separate thread, and have it all in one process. I think for Tier2Submit, they are doing a similar thing, but all in C++ (not sure about the threading, but...).
-
-As Electron embeds node, we need to start up the Pyramid app and mongod from javascript, as subprocesses, and hence the need to figure out how to manage them.
-
+There is prototype code that worked for providing a desktop app, but it has not been tested recently. Please contact us if you are interested in this functionality.
 
 ## Components
 
 ### `adios_db`:
 
-Python package for managing the data -- using a MongoDB back end.
+Python package for managing the data. It provides code for:
+
+ * Importing data
+ * Reading and writing the JSON format
+ * A data validation framework (there is a small amount of validation included, it is fairly starightformward to add more.
+ * Serving the data via MongoDB
+ * Extracting specific data.
+ * Managing physical units, including unit conversion.
+ * Some computation on the data (interpolation, etc.)
+ * Code to build an oil definition as required by the NOAA GNOME model.
+
+Docs at: https://noaa-orr-erd.github.io/adios_oil_database/
+
+<<<<<<< HEAD
+Python package for managing the data. It provides code for:
+
+ * Importing data
+ * Reading and writing the JSON format
+ * A data validation framework (there is a small amount of validation included, it is fairly starightformward to add more.
+ * Serving the data via MongoDB
+ * Extracting specific data.
+ * Managing physical units, including unit conversion.
+ * Some computation on the data (interpolation, etc.)
+ * Code to build an oil definition as required by the NOAA GNOME model.
+=======
+>>>>>>> production
 
 ### `adios_db_api`:
 
@@ -133,6 +169,13 @@ $ cd adios_db/test
 $ pytest
 ```
 
+If you want to test the MongoDB serving capability, you need to have mongod running, and then pass the --mongo flag to pytest:
+
+```
+$ mongod -f mongo_config_dev.yaml
+$ pytest --mongo
+```
+
 Testing the installed version, run pytest from anywhere:
 
 ```
@@ -171,7 +214,7 @@ conda install --file oil_db/conda_requirements.txt --file web_api/conda_requirem
 
 ## MongoDB
 
-The oil_db code needs a mongodb instance running to support the web_api. It can be used without mongo form most scripting activities.
+The oil_db code needs a mongodb instance running to support the web_api. It can be used without mongo for most scripting activities.
 
 MongoDB can be installed in various ways, and which is best depends on platform and deployment environment. But the easiest way on Windows and Mac for development is to use conda to install it:
 

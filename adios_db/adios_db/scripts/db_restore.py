@@ -56,12 +56,19 @@ def restore_db(settings, base_path):
     If the restore path does not exist, we flag an error and exit.
 
     Otherwise:
+
     - If the database does not exist, create it
+
     - If the database is already there, initialize it
+
     - Gather the collection names by directory name
+
     - For each collection name:
+
         - create the collection
+
         - for each object in the collection directory
+
             - Save the objects
     """
     if not os.path.exists(base_path):
