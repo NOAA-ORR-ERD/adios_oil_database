@@ -144,7 +144,9 @@ def main(_global_config, **settings):
 
     user_docs_dir = settings.get('user_docs_dir')
 
-    config.add_static_view(name='/docs', path=user_docs_dir, cache_max_age=12*3600)
+    config.add_static_view(name='/docs',
+                           path=user_docs_dir,
+                           cache_max_age=12 * 3600)
 
     # add static file serving if we are running the standalone
     client_path = settings.get('client_path')

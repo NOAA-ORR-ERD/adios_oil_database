@@ -8,7 +8,7 @@ try:
     from slugify import Slugify
     custom_slugify = Slugify(to_lower=True, separator='_')
 except ImportError:
-    print("You need the awesome-slugify pacakge to run the importing code")
+    print("You need the awesome-slugify package to run the importing code")
     custom_slugify = None
 
 from dateutil import parser
