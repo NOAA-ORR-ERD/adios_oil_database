@@ -11,15 +11,41 @@ from math import inf
 from ..product_type import types_to_labels
 from ....computation.physical_properties import KinematicViscosity
 
+# # Here are all the Product Types:
+# ('Crude Oil NOS',
+#  'Tight Oil',
+#  'Condensate',
+#  'Bitumen Blend',
+#  'Bitumen',
+#  'Refined Product NOS',
+#  'Fuel Oil NOS',
+#  'Distillate Fuel Oil',
+#  'Residual Fuel Oil',
+#  'Refinery Intermediate',
+#  'Solvent',
+#  'Bio-fuel Oil',
+#  'Bio-Petro Fuel Oil',
+#  'Natural Plant Oil',
+#  'Lube Oil',
+#  'Dielectric Oil',
+#  'Other')
+
 # # These are the current labels that aren't mapped yet:
 # 'MDO', 'Vacuum Gas Oil'
 
 # these are the labels with no criteria for density or viscosity
 # e.g, if it's a "Crude Oil NOS", it's a 'Crude Oil'
-synonyms_for_product_types = {
-    'Crude Oil', 'Shale Oil', 'Fracking Oil', 'Fuel Oil', 'Residual Fuel',
-    'Distillate Fuel', 'Refined Product', 'Condensate', 'Transformer Oil'
-}
+
+synonyms_for_product_types = {'Crude Oil',
+                              'Shale Oil',
+                              'Fracking Oil',
+                              'Fuel Oil',
+                              'Residual Fuel',
+                              'Distillate Fuel',
+                              'Refined Product',
+                              'Condensate',
+                              'Transformer Oil'
+                              }
 
 # If it's an exact match, then it's definitely a synonym
 for pt, labels in types_to_labels.labels.items():
@@ -83,73 +109,74 @@ label_map.update({
     },
     'Heavy Fuel Oil': {
         "api_min": -inf,
-        "api_max": 15.0,
-        "kvis_min": 200,
+        "api_max": 13.4, #changed to eliminate overlap with IFOs
+        "kvis_min": 381, #changed from 200 to eliminate overlap with new IFO label criteria
         "kvis_max": inf,
         'kvis_temp': 50
     },
 
-    # pretty much made this up ... non-newtonian
-    'Bitumen': {
-        "api_min": -inf,
-        "api_max": 10,
-        "kvis_min": 1000,
-        "kvis_max": inf,
-        'kvis_temp': 40
-    },
-    # I went through all the bitumen records that we have, and most of them
-    # do not have kinematic viscosity measurements. However, they all have
-    # dynamic viscosity measurements which were > 10^6 cP at 0C and > 10^5 cP
-    # at 15C.
-    # I propose changing the criteria to reflect these measurements.
+    # # Bitumen is now a product type, so no need for the critera at all.
+    # # pretty much made this up ... non-newtonian
+    # #'Bitumen': {"api_min": -inf, "api_max": 10, "kvis_min": 1000, "kvis_max": inf, 'kvis_temp': 40},
+    # # I went through all the bitumen records that we have, and most of them do not have
+    # # kinematic viscosity measurements. However, they all have dynamic viscosity
+    # 'Bitumen': {
+    #     "api_min": -inf,
+    #     "api_max": 10,
+    #     "kvis_min": 1000,
+    #     "kvis_max": inf,
+    #     'kvis_temp': 40
+    # },
+    # # I went through all the bitumen records that we have, and most of them do not have
+    # # kinematic viscosity measurements. However, they all have dynamic viscosity
+    # # measurements which were > 10^6 cP at 0C and > 10^5 cP at 15C.
+    # # I propose changing the criteria to reflect these measurements.
 
     # ***** The following need more verification
     # Refined light products
     'No. 2 Fuel Oil': {
         "api_min": 30,
         "api_max": 39,
-        "kvis_min": 2.5,
+        "kvis_min": 2, #changed from 2.5 because it didn't accommodate all the existing records
         "kvis_max": 4,
         'kvis_temp': 38
     },
     'Kerosene': {
-        "api_min": 47.6,
-        "api_max": 67.8,
+        "api_min": 43, #changed from 47.6 because it didn't accommodate all the existing records
+        "api_max": 54.4,#changed from 67.8 to avoid overlap with gasoline
         "kvis_min": -inf,
         "kvis_max": inf,
         'kvis_temp': 38
     },
     'Aviation Gas': {
         "api_min": 47.6,
-        "api_max": 70.8,
+        "api_max": 73, #changed from 70.8 because it didn't accommodate all the existing records
         "kvis_min": -inf,
         "kvis_max": inf,
         'kvis_temp': 38
     },
     'Gasoline': {
-        "api_min": 59.7,
+        "api_min": 54.5, #changed from 59.9 because it didn't accommodate all the existing records
         "api_max": 76.6,
         "kvis_min": -inf,
         "kvis_max": 2.5,
         'kvis_temp': 38
     },
-
     # Intermediate Fuel Oils
     'MDO': {
-        "api_min": 30,
+        "api_min": 27, #changed from 30 to accommodate ISO 8217 specs
         "api_max": 42,
         "kvis_min": -inf,
         "kvis_max": 11,
         'kvis_temp': 40
     },
     'IFO': {
-        "api_min": 15,
+        "api_min": 13.4, #changed from 15 to accommodate existing IFO180 records
         "api_max": 30,
         "kvis_min": 4,
-        "kvis_max": 200,
-        'kvis_temp': 38
-    },
-    # IFO needs an additional limitation to not be tied to biodiesel
+        "kvis_max": 380, #changed from 200 at 38C to capture oils that are more viscous than IFO180
+        'kvis_temp': 50 
+    },   
 })
 
 for label, synonyms in synonyms_for_labels.items():

@@ -2,9 +2,11 @@ import sys
 import os
 import io
 import logging
+import pathlib
 from datetime import datetime
 from argparse import ArgumentParser
 
+import json
 from pymongo.errors import DuplicateKeyError
 
 from adios_db.util.term import TermColor as tc
@@ -32,6 +34,47 @@ logger = logging.getLogger(__name__)
 
 # All oil library data files are assumed to be in a common data folder
 data_path = os.path.sep.join(__file__.split(os.path.sep)[:-3] + ['data'])
+
+
+class FolderCollection:
+    '''
+    Ducktyped class that acts like a MongoDB oil collection, but acts upon a
+    file folder instead.
+    The file folder is assumed to be a base folder, and we will assume the
+    filesystem structure is that of the noaa-oil-data project.
+    As such, the oil records are saved in a path like:
+        f'{folder}/oil/{oil_id_prefix}/{oil_id}.json'.
+    '''
+    def __init__(self, folder):
+        folder = pathlib.Path(folder)
+
+        if folder.is_dir():
+            self.folder = folder
+        else:
+            raise ValueError("Path is not a directory")
+
+    def _get_path_and_filename(self, oil_obj):
+        oil_id = oil_obj['oil_id']
+        oil_id_prefix = oil_id[:2]
+
+        if oil_id_prefix:
+            path = self.folder.joinpath('oil', oil_id_prefix)
+        else:
+            path = self.folder
+
+        return path, f'{oil_id}.json'
+
+    def _file_exists(self, folder, filename):
+        return filename in [o.name for o in folder.iterdir()]
+
+    def find_one_and_replace(self, filter, replacement, upsert=True):
+        folder, filename = self._get_path_and_filename(replacement)
+
+        folder.joinpath(filename).write_text(json.dumps(replacement,
+                                                        indent=4))
+
+    def replace_one(self, filter, replacement, upsert=True):
+        raise NotImplemented
 
 
 def not_implemented(_settings):
@@ -89,6 +132,10 @@ argp.add_argument('--config', nargs=1,
                   help=('Specify a *.ini file to supply application settings. '
                         'If not specified, the default is to use a local '
                         'MongoDB server.'))
+argp.add_argument('--path', nargs=1,
+                  help=('Specify a path to the test data (filesystem). '
+                        'If not specified, the default is to use "./data"'
+                        'This option overrides --config.'))
 
 
 def import_db_cmd(argv=sys.argv):
@@ -98,38 +145,46 @@ def import_db_cmd(argv=sys.argv):
 
     logging.basicConfig(level=logging.INFO)
 
+    settings = get_settings(argv)
+
+    if 'path' in settings:
+        logger.info(f'Using file path: {settings["path"]}')
+        data_source = settings['path']
+    else:
+        logger.info('connect_mongodb()...')
+        data_source = connect_mongodb(settings)
+
+    init_menu_item_collections(data_source, settings)
+
+    try:
+        if settings['all'] is True:
+            add_all(settings)
+        else:
+            import_db(settings)
+    except Exception:
+        print("{0}() FAILED\n".format(add_all.__name__))
+        raise
+
+    exit(0)
+
+
+def get_settings(argv):
     args = argp.parse_args(argv[1:])
 
-    if args.config is not None:
+    if args.path is not None:
+        settings = {'path': args.path[0]}
+    elif args.config is not None:
         settings = file_settings(args.config)
     else:
         print('Using default settings')
         settings = default_settings()
-        _add_datafiles(settings)
 
-    if args.overwrite:
-        settings['overwrite'] = True
-    else:
-        settings['overwrite'] = False
+    _add_datafiles(settings)
 
-    logger.info('connect_mongodb()...')
-    client = connect_mongodb(settings)
+    settings['overwrite'] = args.overwrite
+    settings['all'] = args.all
 
-    init_menu_item_collections(client, settings)
-
-    if args.all:
-        try:
-            add_all(settings)
-        except Exception:
-            print("{0}() FAILED\n".format(add_all.__name__))
-            raise
-        exit(0)
-
-    try:
-        import_db(settings)
-    except Exception:
-        print("{0}() FAILED\n".format(import_db.__name__))
-        raise
+    return settings
 
 
 def import_db(settings):
@@ -187,7 +242,12 @@ def init_menu_item_collections(client, settings):
     We will be loading everything into the same collection, so we set
     all items to the same place.
     """
-    oil_collection = getattr(client, settings['mongodb.database']).oil
+    if 'path' in settings:
+        # our collection will be a filesystem folder
+        oil_collection = FolderCollection(settings['path'])
+    else:
+        oil_collection = getattr(client, settings['mongodb.database']).oil
+
     [i.__setitem__(2, oil_collection)
      for i in menu_items
      if len(i) >= 3]

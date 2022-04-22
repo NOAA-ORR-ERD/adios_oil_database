@@ -38,8 +38,6 @@ One Weathered oil:
 
 import logging
 
-from .oil import Oil
-
 from adios_db.computation.utilities import get_evaporated_subsample
 
 logger = logging.getLogger(__name__)

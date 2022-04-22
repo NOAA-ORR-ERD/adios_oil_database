@@ -8,7 +8,8 @@ def get_evaporated_subsample(oil):
     return the first evaporated sub_sample if there is one:
     """
     for ss in oil.sub_samples:
-        if ss.metadata.fraction_evaporated is None:
+        if (ss.metadata.fraction_evaporated is None or
+                ss.metadata.fraction_evaporated.value is None):
             continue
 
         fe = ss.metadata.fraction_evaporated.converted_to('fraction').value
