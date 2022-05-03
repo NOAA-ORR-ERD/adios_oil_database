@@ -18,9 +18,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 main_host = 'https://corporate.exxonmobil.com'
-main_url = ''.join([main_host, '/en/',
-                    'Crude-oils/Crude-trading/Assays-available-for-download'])
-
+main_url = '/'.join([main_host, 'Crude-oils', 'Crude-trading',
+                     'Assays-available-for-download'])
 
 def main(destination):
     downloaded = {}
