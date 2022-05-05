@@ -60,10 +60,14 @@ class MetaData:
 
     def __post_init__(self):
         """
-        force API to be a float
+        Assorted cleanup
         """
+        # force API to be a float
         if self.API is not None:
             self.API = float(self.API)
+        # make sure lists are sorted
+        self.labels = sorted(self.labels)
+        self.alternate_names = sorted(self.alternate_names)
 
     def validate(self):
         msgs = []
