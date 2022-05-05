@@ -12,7 +12,7 @@
         "API": 15.8,
         "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "model_completeness": 19,
-        "gnome_suitable": true
+        "gnome_suitable": false
     },
     "sub_samples": [
         {

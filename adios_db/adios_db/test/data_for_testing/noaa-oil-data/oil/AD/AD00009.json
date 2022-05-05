@@ -12,8 +12,8 @@
         "product_type": "Crude Oil NOS",
         "API": 28.0,
         "labels": [
-            "Medium Crude",
-            "Crude Oil"
+            "Crude Oil",
+            "Medium Crude"
         ],
         "model_completeness": 19,
         "gnome_suitable": true

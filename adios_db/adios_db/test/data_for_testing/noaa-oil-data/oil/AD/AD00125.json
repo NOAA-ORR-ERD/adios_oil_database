@@ -13,8 +13,8 @@
         "API": 23.4,
         "comments": "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition.",
         "labels": [
-            "Medium Crude",
-            "Crude Oil"
+            "Crude Oil",
+            "Medium Crude"
         ],
         "model_completeness": 60,
         "gnome_suitable": true
