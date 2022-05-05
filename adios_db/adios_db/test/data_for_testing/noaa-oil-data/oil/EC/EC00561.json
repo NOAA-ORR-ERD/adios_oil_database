@@ -14,8 +14,8 @@
         "API": 34.09,
         "comments": "Via Cook Inlet Regional Advisory Council",
         "labels": [
-            "Medium Crude",
-            "Crude Oil"
+            "Crude Oil",
+            "Medium Crude"
         ],
         "model_completeness": 42,
         "gnome_suitable": true
