@@ -14,8 +14,8 @@
         "API": 30.87,
         "comments": "Via Exxon -Mobil",
         "labels": [
-            "Medium Crude",
-            "Crude Oil"
+            "Crude Oil",
+            "Medium Crude"
         ],
         "model_completeness": 66,
         "gnome_suitable": true

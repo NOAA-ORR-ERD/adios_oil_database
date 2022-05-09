@@ -45,22 +45,28 @@ def add_the_labels():
             pt = oil.metadata.product_type
 
             print("\nFor Oil:", id, name)
+            print("product type:", pt)
             try:
+                prev_labels = oil.metadata.labels
                 labels = get_suggested_labels(oil)
-                print(labels)
+                print("Previous: ", prev_labels)
+                print("suggested:", labels)
 
                 if not replace:
-                    labels.update(oil.metadata.labels)
+                    labels = sorted(set(labels + prev_labels))
 
+                print("new:      ", labels)
                 outfile.write(f"{id}, {name}, {pt}, {str(labels).strip('{}')}\n")
+
                 if not dry_run:
                     print("Saving out:", pth)
-                    oil.metadata.labels = list(labels)
+                    oil.metadata.labels = sorted(labels)
                     oil.to_file(pth)
                 else:
                     print("Nothing saved")
-            except:  # if anything goes wrong, we won't add an labels
+            except Exception as exp:  # if anything goes wrong, we won't add an labels
                 print("Something went wrong -- no labels")
+                print(exp)
 
     print("output written to: labels.txt")
 

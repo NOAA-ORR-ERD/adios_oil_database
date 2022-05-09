@@ -14,8 +14,9 @@
         "API": 21.36,
         "comments": "Via CanmetEnergy, Natural Resources Canada",
         "labels": [
-            "Medium Crude",
-            "Crude Oil"
+            "Bitumen",
+            "Crude Oil",
+            "Medium Crude"
         ],
         "model_completeness": 94,
         "gnome_suitable": true

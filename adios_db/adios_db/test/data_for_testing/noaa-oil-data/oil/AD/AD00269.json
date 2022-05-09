@@ -13,9 +13,8 @@
         "API": 34.1,
         "comments": "The benzene concentration is 0.12% by volume.",
         "labels": [
-            "Light Crude",
-            "Medium Crude",
-            "Crude Oil"
+            "Crude Oil",
+            "Medium Crude"
         ],
         "model_completeness": 42,
         "gnome_suitable": true

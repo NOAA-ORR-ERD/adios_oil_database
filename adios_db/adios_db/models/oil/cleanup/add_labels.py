@@ -31,7 +31,7 @@ from ....computation.physical_properties import KinematicViscosity
 #  'Other')
 
 # # These are the current labels that aren't mapped yet:
-# 'MDO', 'Vacuum Gas Oil'
+# 'Vacuum Gas Oil'
 
 # these are the labels with no criteria for density or viscosity
 # e.g, if it's a "Crude Oil NOS", it's a 'Crude Oil'
@@ -44,7 +44,8 @@ synonyms_for_product_types = {'Crude Oil',
                               'Distillate Fuel',
                               'Refined Product',
                               'Condensate',
-                              'Transformer Oil'
+                              'Transformer Oil',
+                              'Bio-Fuel',
                               }
 
 # If it's an exact match, then it's definitely a synonym
@@ -77,7 +78,7 @@ label_map.update({
         "api_max": inf,
         "kvis_min": -inf,
         "kvis_max": inf,
-        'kvis_temp': 15
+        "kvis_temp": 15
     },
     'Light Crude': {
         "api_min": 35,
@@ -175,8 +176,8 @@ label_map.update({
         "api_max": 30,
         "kvis_min": 4,
         "kvis_max": 380, #changed from 200 at 38C to capture oils that are more viscous than IFO180
-        'kvis_temp': 50 
-    },   
+        'kvis_temp': 50
+    },
 })
 
 for label, synonyms in synonyms_for_labels.items():
