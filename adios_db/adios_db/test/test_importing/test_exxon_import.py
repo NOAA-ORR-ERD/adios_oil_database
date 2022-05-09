@@ -43,6 +43,7 @@ def test_get_records():
     records = reader.get_records()
 
     name, data = next(records)
+    data = data[0]
 
     assert name == "HOOPS Blend"
     # some checking of the record
@@ -61,8 +62,10 @@ def test_read_excel_file():
 
     # there could be a LOT here, but just to make sure it isn't completely
     # bonkers
-    assert record[0][0] == "ExxonMobil"
     assert record
+
+    # [sheet][row][col]
+    assert record[0][0][0] == "ExxonMobil"
 
 
 def test_ExxonRecordParser():
@@ -84,7 +87,7 @@ def test_full_round_trip():
         example_dir / "Crude_Oil_HOOPS_Blend_assay_xls.xlsx"
     )
 
-    assert record[0][0] == "ExxonMobil"
+    assert record[0][0][0] == "ExxonMobil"
 
     oil = ExxonMapper(('HOOPS Blend Example', record))
 

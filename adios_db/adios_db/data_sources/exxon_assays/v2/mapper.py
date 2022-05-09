@@ -41,7 +41,7 @@ from adios_db.models.oil.physical_properties import PhysicalProperties
 from adios_db.models.oil.environmental_behavior import EnvironmentalBehavior
 from adios_db.models.oil.sara import Sara
 
-from ..common import next_id, norm, next_non_empty, to_number
+from ..common import next_id, norm, to_number
 
 import pdb
 from pprint import pprint
@@ -49,16 +49,13 @@ from pprint import pprint
 logger = logging.getLogger(__name__)
 
 
-MAPPING = {
-    norm('Cut volume, %'): {
+SUBSAMPLE_MAPPING = {
+    norm('Yield (% vol)'): {
         'attr': 'cut_volume',
         'unit': '%',
         'cls': VolumeFraction,
         'num_digits': 6,
     },
-    #
-    # API gravity,  # not a simple map
-    #
     #
     # Specific Gravity (60/60F),
     #
@@ -70,35 +67,54 @@ MAPPING = {
         'num_digits': 4,
         'element_of': 'bulk_composition',
     },
-    norm('Hydrogen, wt %'): {
-        'attr': 'Hydrogen Mass Fraction',
-        'unit': '%',
-        'unit_type': 'mass fraction',
-        'cls': MassOrVolumeFraction,
-        'num_digits': 4,
-        'element_of': 'bulk_composition',
-    },
-    norm('Pour point, F'): {
-        'attr': 'physical_properties.pour_point.measurement',
-        'unit': 'C',
-        'cls': Temperature,
-        'num_digits': 8,
-        'convert_from': 'F',
-    },
-    norm('Neutralization number (TAN), MG/GM'): {
-        'attr': 'Total Acid Number',
-        'unit': 'mg/g',
-        'unit_type': 'MassFraction',
-        'cls': AnyUnit,
-        'element_of': 'industry_properties',
-    },
-    norm('Sulfur, wt%'): {
+    # Cumulative Yield (% wt)
+    #
+    # Volume Average B.P. (\N{DEGREE SIGN}F) - industry properties maybe???
+    #
+    # Densiy @ 59\N{DEGREE SIGN}F (g/cc) - same as API
+    #
+    # API gravity,  # not a simple map
+    #
+    # UOPK - The K factor or characterization factor is a systematic way of
+    #        classifying a crude oil according to its paraffinic, naphthenic,
+    #        intermediate or aromatic nature. 12.5 or higher indicate a
+    #        crude oil of predominantly paraffinic constituents, while 10 or
+    #        lower indicate a crude of more aromatic nature.
+    #        The K factor is also referred to as the UOP K factor or just UOPK.
+    #        So where do we put it?  Industry properties??
+    #
+    # Molecular Weight (g/mol) - looks like we had this in the model once,
+    #                            but not anymore. Physical properties maybe??
+    #
+    norm('Total Sulphur (% wt)'): {
         'attr': 'Sulfur Mass Fraction',
         'unit': '%',
         'unit_type': 'mass fraction',
         'cls': MassOrVolumeFraction,
         'num_digits': 5,
         'element_of': 'bulk_composition',
+    },
+    norm('Mercaptan Sulphur (ppm)'): {
+        'attr': 'Mercaptan Sulfur Mass Fraction',
+        'unit': 'ppm',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'num_digits': 4,
+        'element_of': 'bulk_composition',
+    },
+    norm('Total Nitrogen (ppm)'): {
+        'attr': 'Nitrogen Mass Fraction',
+        'unit': 'ppm',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'bulk_composition',
+    },
+    norm('Total Acid Number (mgKOH/g)'): {
+        'attr': 'Total Acid Number',
+        'unit': 'mg/g',
+        'unit_type': 'MassFraction',
+        'cls': AnyUnit,
+        'element_of': 'industry_properties',
     },
     #
     # Viscosity at 20C/68F, cSt (not a simple map)
@@ -107,21 +123,112 @@ MAPPING = {
     #
     # Viscosity at 50C/122F, cSt (not a simple map)
     #
-    norm('Mercaptan sulfur, ppm'): {
-        'attr': 'Mercaptan Sulfur Mass Fraction',
-        'unit': 'ppm',
+    # Viscosity at 100C/212F, cSt (not a simple map)
+    #
+    # Viscosity at 150C/302F, cSt (not a simple map)
+    #
+    # RON (Clear) - ???
+    #
+    # MON (Clear) - ???
+    #
+    norm('Paraffins (% wt)'): {
+        'attr': 'Paraffin Mass Fraction',
+        'unit': '%',
         'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'convert_from': '%',
+        'element_of': 'bulk_composition',
+    },
+    norm('Naphthenes (% wt)'): {
+        'attr': 'Naphthene Mass Fraction',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'convert_from': '%',
+        'element_of': 'bulk_composition',
+    },
+    norm('Aromatics (% wt)'): {
+        'attr': 'Aromatics',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'bulk_composition',
+    },
+    norm('Pour Point (\N{DEGREE SIGN}F)'): {
+        'attr': 'physical_properties.pour_point.measurement',
+        'unit': 'C',
+        'cls': Temperature,
+        'num_digits': 8,
+        'convert_from': 'F',
+    },
+    norm('Cloud Point (\N{DEGREE SIGN}F)'): {
+        'attr': 'Cloud Point',
+        'unit': 'F',
+        'unit_type': 'temperature',
+        'cls': AnyUnit,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Freeze Point (\N{DEGREE SIGN}F)'): {
+        'attr': 'Freeze Point',
+        'unit': 'F',
+        'unit_type': 'temperature',
+        'cls': AnyUnit,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Smoke Point (mm)'): {
+        'attr': 'Smoke Point',
+        'unit': 'mm',
+        'unit_type': 'length',
+        'cls': AnyUnit,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Cetane Index'): {
+        'attr': 'Cetane Index',
+        'unit': None,
+        'unit_type': 'unitless',
+        'cls': AnyUnit,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Naphthalenes (% vol)'): {
+        'attr': 'Naphthalene Volume Fraction',
+        'unit': '%',
+        'cls': VolumeFraction,
+        'convert_from': '%',
+        'element_of': 'bulk_composition',
+    },
+    norm('Aniline Point (\N{DEGREE SIGN}F)'): {
+        'attr': 'Aniline Point',
+        'unit': 'F',
+        'unit_type': 'Temperature',
+        'cls': AnyUnit,
+        'element_of': 'industry_properties',
+        'num_digits': 6,
+    },
+    norm('Hydrogen (% wt)'): {
+        'attr': 'Hydrogen Mass Fraction',
+        'unit': '%',
+        'unit_type': 'mass fraction',
         'cls': MassOrVolumeFraction,
         'num_digits': 4,
         'element_of': 'bulk_composition',
     },
-    norm('Nitrogen, ppm'): {
-        'attr': 'Nitrogen Mass Fraction',
-        'unit': 'ppm',
+    #
+    # Wax (% wt) - ???
+    #
+    norm('C7 Asphaltenes (% wt)'): {
+        'attr': 'C7 Asphaltenes)',
+        'unit': '%',
         'unit_type': 'massfraction',
         'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
+    #
+    # Micro Carbon Residue (% wt) - is this the same as CCR???
+    #
     norm('CCR, wt%'): {
         'attr': 'Conradson Carbon Residue',
         'unit': '%',
@@ -129,50 +236,30 @@ MAPPING = {
         'cls': AnyUnit,
         'element_of': 'industry_properties',
     },
-    norm('N-Heptane Insolubles (C7 Asphaltenes), wt%'): {
-        'attr': 'N-Heptane Insolubles (C7 Asphaltenes)',
-        'unit': '%',
-        'unit_type': 'massfraction',
-        'cls': MassOrVolumeFraction,
-        'element_of': 'bulk_composition',
-    },
-    norm('Nickel, ppm'): {
-        'attr': 'Nickel Mass Fraction',
-        'unit': 'ppm',
-        'unit_type': 'massfraction',
-        'cls': MassOrVolumeFraction,
-        'element_of': 'bulk_composition',
-    },
-    norm('Vanadium, ppm'): {
+    norm('Vanadium (ppm)'): {
         'attr': 'Vanadium Mass Fraction',
         'unit': 'ppm',
         'unit_type': 'massfraction',
         'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
-    norm('Calcium, ppm'): {
-        'attr': 'Calcium Mass Fraction',
-        'unit': 'ppm',
-        'unit_type': 'massfraction',
-        'cls': MassOrVolumeFraction,
-        'convert_from': 'ppm',
-        'element_of': 'bulk_composition',
-    },
-    norm('Reid Vapor Pressure (RVP) Whole Crude, psi'): {
-        'attr': 'Reid Vapor Pressure',
-        'unit': 'psi',
-        'cls': AnyUnit,
-        'unit_type': 'pressure',
-        'convert_from': 'psi',
-        'element_of': 'industry_properties',
-    },
-    norm('Hydrogen Sulfide (dissolved), ppm'): {
-        'attr': 'Hydrogen Sulfide Concentration',
+    norm('Nickel (ppm)'): {
+        'attr': 'Nickel Mass Fraction',
         'unit': 'ppm',
         'unit_type': 'massfraction',
         'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
+    norm('Iron (ppm)'): {
+        'attr': 'Iron Mass Fraction',
+        'unit': 'ppm',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'bulk_composition',
+    },
+    #
+    #  All props below here are found in the Whole Crude Properties only.
+    #
     norm('Salt content, ptb'): {
         'attr': 'Salt Content',
         'unit': 'ppm',
@@ -181,85 +268,27 @@ MAPPING = {
         'convert_from': 'ppb',  # conversion for pounds/thousand barrels??
         'element_of': 'bulk_composition',
     },
-    norm('Paraffins, vol %'): {
-        'attr': 'Paraffin Volume Fraction',
-        'unit': '%',
-        'unit_type': 'volumefraction',
-        'cls': MassOrVolumeFraction,
-        'convert_from': '%',
-        'element_of': 'bulk_composition',
-    },
-    norm('Naphthenes, vol %'): {
-        'attr': 'Naphthene Volume Fraction',
-        'unit': '%',
-        'unit_type': 'volumefraction',
-        'cls': MassOrVolumeFraction,
-        'convert_from': '%',
-        'element_of': 'bulk_composition',
-    },
-    norm('Aromatics (FIA), vol %'): {
-        'attr': 'Aromatics (FIA)',
-        'unit': '%',
-        'unit_type': 'volumefraction',
+    norm('Hydrogen Sulphide (ppm)'): {
+        'attr': 'Hydrogen Sulfide Concentration',
+        'unit': 'ppm',
+        'unit_type': 'massfraction',
         'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
-    #
-    # Bunch of distillation props (not a simple map)
-    #
-    norm('Freeze point, F'): {
-        'attr': 'Freeze Point',
-        'unit': 'F',
-        'unit_type': 'temperature',
+    norm('Reid Vapour Pressure (psi)'): {
+        'attr': 'Reid Vapor Pressure',
+        'unit': 'psi',
         'cls': AnyUnit,
+        'unit_type': 'pressure',
+        'convert_from': 'psi',
         'element_of': 'industry_properties',
-        'num_digits': 6,
-    },
-    norm('Smoke point, mm'): {
-        'attr': 'Smoke Point',
-        'unit': 'mm',
-        'unit_type': 'length',
-        'cls': AnyUnit,
-        'element_of': 'industry_properties',
-        'num_digits': 6,
-    },
-    norm('Naphthalenes (D1840), vol%'): {
-        'attr': 'Naphthalene Volume Fraction',
-        'unit': '%',
-        'cls': VolumeFraction,
-        'convert_from': '%',
-        'element_of': 'bulk_composition',
-    },
-    #
-    # Viscosity at 100C/212F, cSt (not a simple map)
-    #
-    # Viscosity at 150C/302F, cSt (not a simple map)
-    #
-    norm('Cetane Index 1990 (D4737),'): {
-        'attr': 'Cetane Index 1990 (D4737)',
-        'unit': None,
-        'unit_type': 'unitless',
-        'cls': AnyUnit,
-        'element_of': 'industry_properties',
-        'num_digits': 6,
-    },
-    norm('Cloud point, F'): {
-        'attr': 'Cloud Point',
-        'unit': 'F',
-        'unit_type': 'temperature',
-        'cls': AnyUnit,
-        'element_of': 'industry_properties',
-        'num_digits': 6,
-    },
-    norm('Aniline pt, F'): {
-        'attr': 'Aniline Point',
-        'unit': 'F',
-        'unit_type': 'Temperature',
-        'cls': AnyUnit,
-        'element_of': 'industry_properties',
-        'num_digits': 6,
     },
 }
+
+# include any misspellings here
+SUBSAMPLE_MAPPING[norm('Naphthenes (%wt)')] = SUBSAMPLE_MAPPING[
+    norm('Naphthenes (% wt)')
+]
 
 
 def ExxonMapperV2(record):
@@ -273,6 +302,7 @@ def ExxonMapperV2(record):
     returns an Oil Object
     """
     name, data = record
+    data, graph_data, *_ = data
 
     reference = read_header(iter(data))
     reference.reference += (
@@ -298,13 +328,15 @@ def ExxonMapperV2(record):
                           for name in sample_names
                           if name is not None])
 
-    cut_table = read_cut_table(sample_names, data)
-
     create_middle_tier_objs(samples)
+
+    cut_table = read_cut_table(sample_names, data)
 
     set_boiling_point_range(samples, cut_table)
 
-    apply_map(data, cut_table, samples)
+    set_all_sample_properties(cut_table, samples)
+
+    #apply_map(cut_table, samples)
 
     process_cut_table(oil, samples, cut_table)
 
@@ -380,22 +412,22 @@ def read_sample_names(data):
                                                       fillvalue=None)]
 
     samples.update(dict(
-        get_cut_item(sample_ranges, 1, 1, '')
+        get_cut_item(sample_ranges, 1, 2, '')
     ))
 
     samples.update(dict(
-        get_cut_item(sample_ranges, 2, 10, 'Atmospheric Cuts:')
+        get_cut_item(sample_ranges, 2, 11, 'Atmospheric Cuts:')
     ))
 
     samples.update(dict(
-        get_cut_item(sample_ranges, 11, 14, 'Vacuum Cuts:')
+        get_cut_item(sample_ranges, 11, 15, 'Vacuum Cuts:')
     ))
 
     return samples
 
 
 def get_cut_item(sample_ranges, first, last, label):
-    for i in range(first, last + 1):
+    for i in range(first, last):
         start, end = sample_ranges[i]
 
         try:
@@ -438,29 +470,18 @@ def read_cut_table(sample_names, data):
     """
     Read the rest of the rows and save them in a dictionary.
 
-    - key: first field of the row
+    - key: sample name
 
-    - value: the rest of the fields as a list.  The index position in the
-             list will be correlated to the sample names that were captured.
-
-    :note: Some datasheets (curlew) have some empty columns in between
-           the sample data and the properties column.  So we need to make
-           sure there actually exists a sample name field before adding
-           it to our cut table data.
+    - value: the rest of the fields as a dict.
     """
     cut_table = {}
+    section = slice_record(data, [1, 38], [15, 49])
+    keys = flatten_2d(slice_record(section, [0, 0], [1, 49]))
 
-    while True:
-        try:
-            row = next_non_empty(data)
+    for k, i in sample_names.items():
+        values = flatten_2d(slice_record(section, [i, 0], [1, 49]))
 
-            sample_attr = norm(row[0])
-            sample_data = [f for f, n in zip(row[1:], sample_names)
-                           if n is not None]
-
-            cut_table[sample_attr] = sample_data
-        except StopIteration:
-            break
+        cut_table[k] = dict(zip(keys, values))
 
     return cut_table
 
@@ -472,97 +493,98 @@ def set_boiling_point_range(samples, cut_table):
 
     Need to know:
     - Initial boiling point (IBF)
-    - End boiling point (EP)
-    """
-    initial_bp = sigfigs(cut_table['ibp, f'][0], 5)
-    final_bp = sigfigs(cut_table['ep, f'][-1], 5)
+    - End boiling point (FBP)
 
-    for sample_prev, sample in zip(samples, samples[1:]):
-        prev_max_temp = to_number(sample_prev.metadata.name.split()[-1])
+    Note: The new format assay doesn't appear to have definite number fields
+          for IBP and FBP.
+    """
+    for sample in samples:
         min_temp, _sep, max_temp = [to_number(n)
                                     for n in sample.metadata.name.split()[-3:]]
 
-        if min_temp == 'IBP':
-            min_temp = initial_bp
-        elif not isinstance(min_temp, float):
-            min_temp = prev_max_temp
+        min_temp = None if min_temp in ('IBP', 'C5') else min_temp
+        max_temp = None if max_temp == 'FBP' else max_temp
 
         sample.metadata.boiling_point_range = Temperature(min_value=min_temp,
                                                           max_value=max_temp,
                                                           unit='F')
 
-    # fix the last sample
-    last_bpr = samples[-1].metadata.boiling_point_range
-    last_bpr.min_value = last_bpr.max_value
-    last_bpr.max_value = final_bp
+
+def set_all_sample_properties(cut_table, samples):
+    for name, data in cut_table.items():
+        sample = find_sample(samples, name)
+
+        if sample is not None:
+            set_sample_properties(sample, data)
 
 
-def apply_map(data, cut_table, samples):
-    for name, data in MAPPING.items():
-        row = cut_table[name]
-        set_sample_property(samples, row, **data)
+def find_sample(samples, name):
+    ret = [s for s in samples if s.metadata.name == name]
+    return ret[0] if len(ret) > 0 else None
 
 
-def set_sample_property(samples,
-                        row,
-                        attr,
-                        unit,
-                        cls,
-                        unit_type=None,
-                        convert_from=None,
-                        element_of=None,
-                        num_digits=5):
+def set_sample_properties(sample, sample_properties):
+    for name, value in sample_properties.items():
+        set_sample_property(sample, name, value)
+
+    print()
+
+
+def set_sample_property(sample, name, value):
     """
-    reads a row from the spreadsheet, and sets the sample properties
-
-    Notes:
-
-    - optional rounding to "num_digits" digits
-
-    - optional converting to unit from convert_from
-      (if the data aren't in the right units)
-
-    - These values are now kept in a list of compounds held by the
-      bulk_composition attribute
-
-    - The name & groups of each compound should be match the
-      ADIOS data model controlled vocabulary
+    Set a single property of a sample object.  The mapping table will control
+    how the property get set.
     """
-    for sample, val in zip(samples, row):
-        if val is not None and val not in ('NotAvailable', ):
-            if convert_from is not None:
-                val = uc.convert(convert_from, unit, val)
+    if name is not None and norm(name) in SUBSAMPLE_MAPPING:
+        print(f'We got a mapping for "{name}"')
+        mapping = SUBSAMPLE_MAPPING[norm(name)]
+        apply_mapping(sample, value, **mapping)
+    else:
+        print(f'No mapping for "{name}"')
 
-            if element_of is None:
-                # assign to an attribute
-                if isinstance(attr, str):
-                    attr = attr.split('.')
 
-                if len(attr) > 1:
-                    for a in attr[:-1]:
-                        child_value = getattr(sample, a)
+def apply_mapping(sample, value,
+                  attr,
+                  unit,
+                  cls,
+                  unit_type=None,
+                  convert_from=None,
+                  element_of=None,
+                  num_digits=5):
+    if value is not None and value not in ('NotAvailable', ):
+        if convert_from is not None:
+            value = uc.convert(convert_from, unit, value)
 
-                        if child_value is None:
-                            # get a default value from the parent dataclass
-                            # annotation
-                            child_value = sample.__dataclass_fields__[a].type()
-                            setattr(sample, a, child_value)
+        if element_of is None:
+            # assign to an attribute
+            if isinstance(attr, str):
+                attr = attr.split('.')
 
-                        sample = child_value
+            if len(attr) > 1:
+                for a in attr[:-1]:
+                    child_value = getattr(sample, a)
 
-                setattr(sample, attr[-1], cls(sigfigs(val, num_digits),
-                                              unit=unit))
-            else:
-                # add to a list attribute
-                compositions = getattr(sample, element_of)
+                    if child_value is None:
+                        # get a default value from the parent dataclass
+                        # annotation
+                        child_value = sample.__dataclass_fields__[a].type()
+                        setattr(sample, a, child_value)
 
-                measurement = cls(sigfigs(val, num_digits), unit=unit,
-                                  unit_type=unit_type)
-                item_cls = compositions.item_type
-                compositions.append(item_cls(
-                    name=attr,
-                    measurement=measurement,
-                ))
+                    sample = child_value
+
+            setattr(sample, attr[-1], cls(sigfigs(value, num_digits),
+                                          unit=unit))
+        else:
+            # add to a list attribute
+            compositions = getattr(sample, element_of)
+
+            measurement = cls(sigfigs(value, num_digits), unit=unit,
+                              unit_type=unit_type)
+            item_cls = compositions.item_type
+            compositions.append(item_cls(
+                name=attr,
+                measurement=measurement,
+            ))
 
 
 def process_cut_table(oil, samples, cut_table):

@@ -272,7 +272,7 @@ def ExxonMapperV1(record):
     returns an Oil Object
     """
     name, data = record
-    data = iter(data)
+    data = iter(data[0])
 
     reference = read_header(data)
     reference.reference += (
