@@ -42,9 +42,6 @@ from adios_db.models.oil.sara import Sara
 
 from ..common import next_id, norm, next_non_empty, to_number
 
-import pdb
-from pprint import pprint
-
 logger = logging.getLogger(__name__)
 
 
@@ -271,8 +268,8 @@ def ExxonMapperV1(record):
 
     returns an Oil Object
     """
-    name, data = record
-    data = iter(data[0])
+    name, [data, *_] = record
+    data = iter(data)
 
     reference = read_header(data)
     reference.reference += (

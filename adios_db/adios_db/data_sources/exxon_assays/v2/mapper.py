@@ -50,6 +50,9 @@ logger = logging.getLogger(__name__)
 
 
 SUBSAMPLE_MAPPING = {
+    #
+    # Yield (% wt) - no place to map this.
+    #
     norm('Yield (% vol)'): {
         'attr': 'cut_volume',
         'unit': '%',
@@ -57,21 +60,12 @@ SUBSAMPLE_MAPPING = {
         'num_digits': 6,
     },
     #
-    # Specific Gravity (60/60F),
-    #
-    norm('Carbon, wt %'): {
-        'attr': 'Carbon Mass Fraction',
-        'unit': '%',
-        'unit_type': 'mass fraction',
-        'cls': MassOrVolumeFraction,
-        'num_digits': 4,
-        'element_of': 'bulk_composition',
-    },
-    # Cumulative Yield (% wt)
+    # Cumulative Yield (% wt) - Alternate representation of Yield (% wt).
+    #                           Nearly the same data.
     #
     # Volume Average B.P. (\N{DEGREE SIGN}F) - industry properties maybe???
     #
-    # Densiy @ 59\N{DEGREE SIGN}F (g/cc) - same as API
+    # Density @ 59\N{DEGREE SIGN}F (g/cc) - same as API
     #
     # API gravity,  # not a simple map
     #
@@ -117,15 +111,17 @@ SUBSAMPLE_MAPPING = {
         'element_of': 'industry_properties',
     },
     #
-    # Viscosity at 20C/68F, cSt (not a simple map)
+    # Viscosity @ 68 F (cSt) - (not a simple map)
     #
-    # Viscosity at 40C/104F, cSt (not a simple map)
+    # Viscosity @ 104 F (cSt) - (not a simple map)
     #
-    # Viscosity at 50C/122F, cSt (not a simple map)
+    # Viscosity @ 122 F (cSt) - (not a simple map)
     #
-    # Viscosity at 100C/212F, cSt (not a simple map)
+    # Viscosity @ 140 F (cSt) - (not a simple map)
     #
-    # Viscosity at 150C/302F, cSt (not a simple map)
+    # Viscosity @ 212 F (cSt) - (not a simple map)
+    #
+    # Viscosity @ 266 F (cSt) - (not a simple map)
     #
     # RON (Clear) - ???
     #
@@ -216,9 +212,13 @@ SUBSAMPLE_MAPPING = {
         'num_digits': 4,
         'element_of': 'bulk_composition',
     },
-    #
-    # Wax (% wt) - ???
-    #
+    norm('Wax (% wt)'): {
+        'attr': 'Wax Content (% wt)',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'bulk_composition',
+    },
     norm('C7 Asphaltenes (% wt)'): {
         'attr': 'C7 Asphaltenes)',
         'unit': '%',
@@ -257,8 +257,17 @@ SUBSAMPLE_MAPPING = {
         'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
+}
+
+
+WHOLE_CRUDE_MAPPING = {
     #
-    #  All props below here are found in the Whole Crude Properties only.
+    # The section 'Whole Crude Properties' contains properties that are
+    # mostly redundant, and can be found in the 'IBP - FBP' cut data.
+    # So I think we can be fairly sure that this cut is the 'Fresh Oil'
+    # sub-sample.
+    # All props below here are unique to the Whole Crude Properties section.
+    # I think we can map these properties to the 'IBP - FBP' sub-sample.
     #
     norm('Salt content, ptb'): {
         'attr': 'Salt Content',
@@ -285,6 +294,7 @@ SUBSAMPLE_MAPPING = {
     },
 }
 
+
 # include any misspellings here
 SUBSAMPLE_MAPPING[norm('Naphthenes (%wt)')] = SUBSAMPLE_MAPPING[
     norm('Naphthenes (% wt)')
@@ -301,34 +311,18 @@ def ExxonMapperV2(record):
 
     returns an Oil Object
     """
-    name, data = record
-    data, graph_data, *_ = data
+    name, [data, graph_data, *_] = record
 
-    reference = read_header(iter(data))
-    reference.reference += (
-        '\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
-        '\nAccessed: Dec 9th, 2020')
-    reference.year = 2020
-
+    reference = get_reference(iter(data))
     general_info = read_general_info(data)
     molecules = read_molecules(data)
     whole_crude_properties = read_whole_crude_properties(data)
 
-    oil_id = f'EX{next_id():05}'
-    ref_id = general_info['reference']
-    sample_names = read_sample_names(data)
+    oil = Oil(oil_id=f'EX{next_id():05}')
 
-    oil = Oil(oil_id=oil_id)
-    oil.metadata.name = name
-    oil.metadata.product_type = 'Crude Oil NOS'
-    oil.metadata.reference = reference
-    oil.metadata.source_id = ref_id
+    load_metadata(oil, name, reference, general_info, whole_crude_properties)
 
-    samples = SampleList([Sample(**sample_id_attrs(name))
-                          for name in sample_names
-                          if name is not None])
-
-    create_middle_tier_objs(samples)
+    sample_names, samples = generate_samples(data)
 
     cut_table = read_cut_table(sample_names, data)
 
@@ -336,19 +330,20 @@ def ExxonMapperV2(record):
 
     set_all_sample_properties(cut_table, samples)
 
-    #apply_map(cut_table, samples)
+    # now we perform all the non simple mapping
+
+    load_densities(samples, cut_table)
+
+    load_viscosities(samples, cut_table)
 
     process_cut_table(oil, samples, cut_table)
 
     return oil
 
 
-def read_header(data):
+def get_reference(data):
     """
-    fixme: this should probably be more flexible
-    but we can wait 'till we get data that doesn't match
-    it could / should read the whole dist cut table, then map it
-    to the samples Exxon info in the header
+    Get the reference information
     """
     ref_text = [next(data)[0] for _ in range(2)]
     ref_text = "\n".join([i for i in ref_text if i is not None])
@@ -359,7 +354,13 @@ def read_header(data):
     else:
         ref_year = max(years)
 
-    return Reference(reference=ref_text, year=ref_year)
+    ref = Reference(reference=ref_text, year=ref_year)
+    ref.reference += (
+        '\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
+        '\nAccessed: Dec 9th, 2020')
+    ref.year = 2020
+
+    return ref
 
 
 def read_general_info(data):
@@ -405,25 +406,56 @@ def flatten_2d(list_in):
     return [i for sub in list_in for i in sub]
 
 
-def read_sample_names(data):
-    samples = {}
+def load_metadata(oil, name, reference, general_info, whole_crude_properties):
+    """
+    Here we will load all the oil metadata from the source data
+    """
+    oil.metadata.name = name
+    oil.metadata.source_id = general_info['reference']
+    oil.metadata.location = general_info['origin']
+    oil.metadata.reference = reference
+    oil.metadata.sample_date = general_info['sample date']
+    oil.metadata.product_type = 'Crude Oil NOS'
+
+    try:
+        # stored as full precision double
+        oil.metadata.API = round(float(whole_crude_properties['API Gravity']),
+                                 1)
+    except Exception:
+        oil.metadata.API = None
+
+    oil.metadata.comments = general_info['comments']
+
+
+def generate_samples(data):
+    """
+    Generate a list of sample names with column indexes, and an associated
+    list of not-yet-populated sample objects.
+    """
+    sample_names = {}
     section = slice_record(data, [1, 34], [15, 2])
     sample_ranges = [i for i in itertools.zip_longest(*section,
                                                       fillvalue=None)]
 
-    samples.update(dict(
+    sample_names.update(dict(
         get_cut_item(sample_ranges, 1, 2, '')
     ))
 
-    samples.update(dict(
+    sample_names.update(dict(
         get_cut_item(sample_ranges, 2, 11, 'Atmospheric Cuts:')
     ))
 
-    samples.update(dict(
+    sample_names.update(dict(
         get_cut_item(sample_ranges, 11, 15, 'Vacuum Cuts:')
     ))
 
-    return samples
+    samples = SampleList([Sample(**sample_id_attrs(name))
+                          for name in sample_names
+                          if name is not None])
+
+    create_middle_tier_objs(samples)
+
+    return sample_names, samples
 
 
 def get_cut_item(sample_ranges, first, last, label):
@@ -440,14 +472,18 @@ def get_cut_item(sample_ranges, first, last, label):
         except AttributeError:
             pass
 
-        if label:
-            yield (f'{label} {start} - {end}', i)
-        else:
-            yield (f'{start} - {end}', i)
+        cut_name = f'{start} - {end}'
+
+        if cut_name == 'IBP - FBP':
+            cut_name = 'Fresh Oil Sample'
+        elif label:
+            cut_name = f'{label} {cut_name}'
+
+        yield (cut_name, i)
 
 
 def sample_id_attrs(name):
-    if name == 'Whole crude':
+    if name == 'IBP - FBP':
         name = 'Fresh Oil Sample'
         short_name = 'Fresh Oil'
     else:
@@ -501,6 +537,9 @@ def set_boiling_point_range(samples, cut_table):
     for sample in samples:
         min_temp, _sep, max_temp = [to_number(n)
                                     for n in sample.metadata.name.split()[-3:]]
+
+        if (min_temp, max_temp) == ('Fresh', 'Sample'):
+            continue
 
         min_temp = None if min_temp in ('IBP', 'C5') else min_temp
         max_temp = None if max_temp == 'FBP' else max_temp
@@ -587,56 +626,59 @@ def apply_mapping(sample, value,
             ))
 
 
+def load_densities(samples, cut_table):
+    """
+    There is only one density per sample, but it is not a simple mapping.
+    """
+    for sample in samples:
+        cut = cut_table[sample.metadata.name]
+
+        for lbl in ('Density @ 59\N{DEGREE SIGN}F (g/cc)',):
+            ref_temp, ref_temp_unit = lbl.split()[2].split('\N{DEGREE SIGN}')
+            rho = cut[lbl]
+
+            if rho is not None:
+                ref_temp = uc.convert(ref_temp_unit, 'C', sigfigs(ref_temp, 5))
+
+                sample.physical_properties.densities.append(DensityPoint(
+                    density=Density(value=sigfigs(rho, 5), unit="g/cm^3"),
+                    ref_temp=Temperature(value=sigfigs(ref_temp, 5), unit='C'),
+                ))
+
+
+def load_viscosities(samples, cut_table):
+    for sample in samples:
+        cut = cut_table[sample.metadata.name]
+
+        for lbl in ('Viscosity @ 68 F (cSt)',
+                    'Viscosity @ 104 F (cSt)',
+                    'Viscosity @ 122 F (cSt)',
+                    'Viscosity @ 140 F (cSt)',
+                    'Viscosity @ 212 F (cSt)',
+                    'Viscosity @ 266 F (cSt)'):
+            ref_temp, ref_temp_unit = lbl.split()[2:4]
+            mu_unit = lbl.split()[-1].strip('()')
+            mu = cut[lbl]
+
+            if mu is not None:
+                ref_temp = uc.convert(ref_temp_unit, 'C', sigfigs(ref_temp, 5))
+
+                sample.physical_properties.kinematic_viscosities.append(
+                    KinematicViscosityPoint(
+                        viscosity=KinematicViscosity(value=sigfigs(mu, 5),
+                                                     unit=mu_unit),
+                        ref_temp=Temperature(value=ref_temp, unit='C'),
+                    ))
+
+
+def load_distillation_data(samples, cut_table):
+    pass
+
+
 def process_cut_table(oil, samples, cut_table):
     """
     process the parts that aren't a simple map
     """
-    # API -- odd because we only need one!
-    row = cut_table[norm("API Gravity,")]
-
-    # pull API from first value
-    try:
-        # stored as full precision double
-        oil.metadata.API = round(float(row[0]), 1)
-    except Exception:
-        oil.metadata.API = None
-
-    # use specific gravity to get density
-    row = cut_table[norm("Specific Gravity (60/60F)")]
-    for sample, val in zip(samples, row):
-        try:
-            rho = uc.convert("SG", "g/cm^3", val)
-            sample.physical_properties.densities.append(
-                DensityPoint(
-                    density=Density(value=sigfigs(rho, 5), unit="g/cm^3"),
-                    ref_temp=Temperature(value=15.6, unit="C"),
-                ))
-
-        except Exception:
-            pass
-
-    # viscosity
-    for lbl in ("Viscosity at 20C/68F, cSt", "Viscosity at 40C/104F, cSt",
-                "Viscosity at 50C/122F, cSt"):
-        row = cut_table[norm(lbl)]
-
-        temps = re.compile(r'\d+C').findall(lbl)
-        if len(temps) > 0:
-            temp_c = float(temps[0][:-1])
-        else:
-            temp_c = None
-
-        for sample, val in zip(samples, row):
-            try:
-                sample.physical_properties.kinematic_viscosities.append(
-                    KinematicViscosityPoint(
-                        viscosity=KinematicViscosity(value=sigfigs(val, 5),
-                                                     unit="cSt"),
-                        ref_temp=Temperature(value=temp_c, unit="C"),
-                    ))
-            except Exception:
-                pass
-
     # distillation data
     if norm("Distillation type, TBP") not in cut_table:
         raise ValueError("I don't recognise this distillation data. \n"
