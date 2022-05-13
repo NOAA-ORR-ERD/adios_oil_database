@@ -311,7 +311,12 @@ def ExxonMapperV2(record):
 
     returns an Oil Object
     """
-    name, [data, graph_data, *_] = record
+    try:
+        name, [data, graph_data, *_] = record
+    except ValueError:
+        # not all of the new records have graph data
+        name, [data, *_] = record
+        graph_data = None
 
     reference = get_reference(iter(data))
     general_info = read_general_info(data)
@@ -330,13 +335,15 @@ def ExxonMapperV2(record):
 
     set_all_sample_properties(cut_table, samples)
 
-    # now we perform all the non simple mapping
+    # now we perform all the not-so-simple mapping
 
     load_densities(samples, cut_table)
 
     load_viscosities(samples, cut_table)
 
-    process_cut_table(oil, samples, cut_table)
+    load_distillation_data(samples, graph_data)
+
+    oil.sub_samples = samples
 
     return oil
 
@@ -414,8 +421,12 @@ def load_metadata(oil, name, reference, general_info, whole_crude_properties):
     oil.metadata.source_id = general_info['reference']
     oil.metadata.location = general_info['origin']
     oil.metadata.reference = reference
-    oil.metadata.sample_date = general_info['sample date']
     oil.metadata.product_type = 'Crude Oil NOS'
+
+    try:
+        oil.metadata.sample_date = general_info['sample date'].isoformat()
+    except AttributeError:
+        oil.metadata.sample_date = general_info['assay date'].isoformat()
 
     try:
         # stored as full precision double
@@ -442,11 +453,11 @@ def generate_samples(data):
     ))
 
     sample_names.update(dict(
-        get_cut_item(sample_ranges, 2, 11, 'Atmospheric Cuts:')
+        get_cut_item(sample_ranges, 2, 11, '(Atmospheric Cut)')
     ))
 
     sample_names.update(dict(
-        get_cut_item(sample_ranges, 11, 15, 'Vacuum Cuts:')
+        get_cut_item(sample_ranges, 11, 15, '(Vacuum Cut)')
     ))
 
     samples = SampleList([Sample(**sample_id_attrs(name))
@@ -477,7 +488,7 @@ def get_cut_item(sample_ranges, first, last, label):
         if cut_name == 'IBP - FBP':
             cut_name = 'Fresh Oil Sample'
         elif label:
-            cut_name = f'{label} {cut_name}'
+            cut_name = f'{cut_name} {label}'
 
         yield (cut_name, i)
 
@@ -566,8 +577,6 @@ def set_sample_properties(sample, sample_properties):
     for name, value in sample_properties.items():
         set_sample_property(sample, name, value)
 
-    print()
-
 
 def set_sample_property(sample, name, value):
     """
@@ -575,11 +584,11 @@ def set_sample_property(sample, name, value):
     how the property get set.
     """
     if name is not None and norm(name) in SUBSAMPLE_MAPPING:
-        print(f'We got a mapping for "{name}"')
+        # print(f'We got a mapping for "{name}"')
         mapping = SUBSAMPLE_MAPPING[norm(name)]
         apply_mapping(sample, value, **mapping)
-    else:
-        print(f'No mapping for "{name}"')
+    # else:
+    #     print(f'No mapping for "{name}"')
 
 
 def apply_mapping(sample, value,
@@ -671,51 +680,34 @@ def load_viscosities(samples, cut_table):
                     ))
 
 
-def load_distillation_data(samples, cut_table):
-    pass
-
-
-def process_cut_table(oil, samples, cut_table):
+def load_distillation_data(samples, graph_data):
     """
-    process the parts that aren't a simple map
+    We will load the distillation graph data on the first sample only
     """
-    # distillation data
-    if norm("Distillation type, TBP") not in cut_table:
-        raise ValueError("I don't recognise this distillation data. \n"
-                         'Expected: "Distillation type, TBP"')
+    if graph_data is None:
+        return
 
-    for s in samples:
-        s.distillation_data.type = 'volume fraction'
-        s.distillation_data.fraction_recovered = VolumeFraction(
-            value=1.0,
-            unit='fraction'
-        )
+    section = slice_record(graph_data, [1, 59], [3, 100])
+    col_keys = section[0]
 
-    for name, row in cut_table.items():
-        if norm("vol%, F") in name or name == norm("IBP, F"):
-            # looks like a distillation cut.
-            percent = 0.0 if "ibp" in name else float(name.split("vol")[0])
+    data_points = [dict([(k, sigfigs(v, 5)) for k, v in zip(col_keys, r)])
+                   for r in section[1:]
+                   if not all([d is None for d in r])]
 
-            for sample, val in zip(samples, row):
-                if val is not None:
-                    val = sigfigs(uc.convert("F", "C", val), 5)
+    s = samples[0]
 
-                    sample.distillation_data.cuts.append(DistCut(
-                        fraction=VolumeFraction(value=percent, unit="%"),
-                        vapor_temp=Temperature(value=val, unit="C")
-                    ))
-        elif name == norm('EP, F'):
-            for sample, val in zip(samples, row):
-                if val is not None:
-                    val = sigfigs(uc.convert("F", "C", val), 5)
+    s.distillation_data.type = 'volume fraction'
+    s.distillation_data.fraction_recovered = VolumeFraction(
+        value=1.0,
+        unit='fraction'
+    )
 
-                    sample.distillation_data.end_point = Temperature(value=val,
-                                                                     unit="C")
+    # generate the cuts (Wgt % only)
+    for dp in data_points:
+        ref_temp = uc.convert('F', 'C', dp['Boiling Point'])
+        fraction = dp['Wgt']
 
-    # sort them
-    for sample in samples:
-        sample.distillation_data.cuts.sort(key=lambda c: c.fraction.value)
-
-    oil.sub_samples = samples
-
-    return oil
+        s.distillation_data.cuts.append(DistCut(
+            fraction=MassFraction(value=fraction, unit="%"),
+            vapor_temp=Temperature(value=ref_temp, unit="C")
+        ))
