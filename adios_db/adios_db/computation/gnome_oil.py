@@ -85,7 +85,6 @@ def make_gnome_oil(oil):
               "adios_oil_id=None,
     """
     # make sure we don't change the original oil object
-    print("making gnome oil\n")
     oil = copy.deepcopy(oil)
 
     # metadata:

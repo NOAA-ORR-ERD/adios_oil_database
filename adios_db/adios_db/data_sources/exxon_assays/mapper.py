@@ -22,8 +22,10 @@ def ExxonMapper(record):
 
     returns an Oil Object
     """
-    if (isinstance(record[1][8][1], str) and
-            record[1][8][1].lower() == 'crude summary report'):
+    first_page = record[1][0]
+
+    if (isinstance(first_page[8][1], str) and
+            first_page[8][1].lower() == 'crude summary report'):
         logger.info('This is a new version Exxon document.')
         return ExxonMapperV2(record)
     else:
