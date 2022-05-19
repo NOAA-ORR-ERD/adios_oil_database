@@ -13,6 +13,7 @@ RUN conda update -y conda \
     && conda update -y python \
     && conda clean -y --all
 
+RUN echo "KEY FILE: $KEY_FILE"
 COPY $KEY_FILE /root/.ssh/id_rsa
 RUN chmod og-rw /root/.ssh/id_rsa
 RUN cat /root/.ssh/id_rsa
