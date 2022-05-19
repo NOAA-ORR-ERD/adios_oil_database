@@ -1,3 +1,6 @@
+variables:
+  PYTHON_VER: "3.9"
+
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
   - template: License-Scanning.gitlab-ci.yml
@@ -25,7 +28,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   tags:
     - docker
 
@@ -41,8 +44,10 @@ test_develop:
     # install all the requirements
     - >
       conda install -y
+      python=$PYTHON_VER
       --file adios_db/conda_requirements.txt
       --file adios_db/conda_requirements_optional.txt
+      --file adios_db/conda_requirements_test.txt
       --file web_api/conda_requirements.txt
 
     # configure and start mongodb
@@ -701,7 +706,7 @@ stop_proxy_public:
 
 init_git_repo_on_stage:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   when: manual
   
   environment:
@@ -719,7 +724,7 @@ init_git_repo_on_stage:
 
 sync_with_git_review:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   
@@ -738,7 +743,7 @@ sync_with_git_review:
 
 sync_with_git_prod:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   when: manual
   
   environment:
