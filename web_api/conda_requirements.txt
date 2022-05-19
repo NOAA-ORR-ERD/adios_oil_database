@@ -8,7 +8,7 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-python=3.9.*
+python>=3.9,<3.11
 
 pyramid>=1.10.1,<2
 pyramid_tm
@@ -16,6 +16,7 @@ pyramid_debugtoolbar
 cornice>=3.4.4  # Use the NOAA fork with pip for PyInstaller
 paste
 pastedeploy>=2.0.1
+pymongo
 waitress
 ujson
 docutils>=0.15.2
