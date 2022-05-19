@@ -13,13 +13,10 @@ import nucos as uc
 from adios_db.util import sigfigs
 from adios_db.models.common.measurement import (
     Temperature,
-    MassFraction,
     VolumeFraction,
     MassOrVolumeFraction,
     Density,
     KinematicViscosity,
-    Pressure,
-    Unitless,
     AnyUnit,
 )
 
@@ -35,7 +32,6 @@ from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample, SampleList
 
 from adios_db.models.oil.metadata import SampleMetaData
-from adios_db.models.oil.compound import Compound
 from adios_db.models.oil.physical_properties import PhysicalProperties
 from adios_db.models.oil.environmental_behavior import EnvironmentalBehavior
 from adios_db.models.oil.sara import Sara
@@ -273,7 +269,8 @@ def ExxonMapperV1(record):
 
     reference = read_header(data)
     reference.reference += (
-        '\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
+        '\nSource: https://corporate.exxonmobil.com/'
+        'Crude-oils/Crude-trading/Assays-available-for-download'
         '\nAccessed: Dec 9th, 2020')
     reference.year = 2020
 

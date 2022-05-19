@@ -218,14 +218,14 @@ SUBSAMPLE_MAPPING = {
         'element_of': 'bulk_composition',
     },
     norm('Wax (% wt)'): {
-        'attr': 'Wax Content (% wt)',
+        'attr': 'Wax Mass Fraction',
         'unit': '%',
         'unit_type': 'massfraction',
         'cls': MassOrVolumeFraction,
         'element_of': 'bulk_composition',
     },
     norm('C7 Asphaltenes (% wt)'): {
-        'attr': 'C7 Asphaltenes)',
+        'attr': 'C7 Asphaltene Mass Fraction',
         'unit': '%',
         'unit_type': 'massfraction',
         'cls': MassOrVolumeFraction,
@@ -234,7 +234,7 @@ SUBSAMPLE_MAPPING = {
     #
     # Micro Carbon Residue (% wt) - is this the same as CCR???
     #
-    norm('CCR, wt%'): {
+    norm('Micro Carbon Residue (% wt)'): {
         'attr': 'Conradson Carbon Residue',
         'unit': '%',
         'unit_type': 'MassFraction',
@@ -424,6 +424,9 @@ SUBSAMPLE_MAPPING.update(MOLECULES_MAPPING)
 SUBSAMPLE_MAPPING[norm('Naphthenes (%wt)')] = SUBSAMPLE_MAPPING[
     norm('Naphthenes (% wt)')
 ]
+SUBSAMPLE_MAPPING[norm('Reid Vapor Pressure (psi)')] = SUBSAMPLE_MAPPING[
+    norm('Reid Vapour Pressure (psi)')
+]
 
 
 def ExxonMapperV2(record):
@@ -454,6 +457,8 @@ def ExxonMapperV2(record):
 
     sample_names, samples = generate_samples(data)
 
+    load_distillation_data(samples, graph_data)
+
     cut_table = read_cut_table(sample_names, data)
 
     set_boiling_point_range(samples, cut_table)
@@ -467,7 +472,7 @@ def ExxonMapperV2(record):
 
     load_viscosities(samples, cut_table)
 
-    load_distillation_data(samples, graph_data)
+    normalize_samples(samples)
 
     oil.sub_samples = samples
 
@@ -621,8 +626,8 @@ def get_cut_item(sample_ranges, first, last, label):
 
 
 def sample_id_attrs(name):
-    if name == 'IBP - FBP':
-        name = 'Fresh Oil Sample'
+
+    if name == 'Fresh Oil Sample':
         short_name = 'Fresh Oil'
     else:
         short_name = f'{name[:12]}...'
@@ -674,13 +679,26 @@ def set_boiling_point_range(samples, cut_table):
     """
     for sample in samples:
         min_temp, _sep, max_temp = [to_number(n)
-                                    for n in sample.metadata.name.split()[-3:]]
+                                    for n in sample.metadata.name.split()[:3]]
 
         if (min_temp, max_temp) == ('Fresh', 'Sample'):
             continue
 
-        min_temp = None if min_temp in ('IBP', 'C5') else min_temp
-        max_temp = None if max_temp == 'FBP' else max_temp
+        if min_temp in ('IBP', 'C5'):
+            # From Dalina: C5 is pentane, but there are different isomers
+            #              of pentane, and they have different Boiling Points.
+            #              The one with the lowest BP isomer that we found is
+            #              2,2-dimethylpropane -- 9.5 C (49F) so let's use that
+            #              as the initial boiling point for the distillation.
+            min_temp = 49.0
+
+        if max_temp == 'FBP':
+            if len(samples[0].distillation_data.cuts) > 0:
+                # use the last temperature in the cuts
+                max_temp = (samples[0].distillation_data.cuts[-1]
+                            .vapor_temp.value)
+            else:
+                max_temp = None
 
         sample.metadata.boiling_point_range = Temperature(min_value=min_temp,
                                                           max_value=max_temp,
@@ -839,18 +857,32 @@ def load_distillation_data(samples, graph_data):
 
     s = samples[0]
 
-    s.distillation_data.type = 'volume fraction'
-    s.distillation_data.fraction_recovered = VolumeFraction(
+    s.distillation_data.type = 'mass fraction'
+    s.distillation_data.fraction_recovered = MassFraction(
         value=1.0,
         unit='fraction'
     )
 
     # generate the cuts (Wgt % only)
     for dp in data_points:
-        ref_temp = uc.convert('F', 'C', dp['Boiling Point'])
+        # ref_temp = uc.convert('F', 'C', dp['Boiling Point'])
+        ref_temp = dp['Boiling Point']
         fraction = dp['Wgt']
 
         s.distillation_data.cuts.append(DistCut(
             fraction=MassFraction(value=fraction, unit="%"),
-            vapor_temp=Temperature(value=ref_temp, unit="C")
+            vapor_temp=Temperature(value=ref_temp, unit="F")
         ))
+
+    end_point = data_points[-1]['Boiling Point']
+    s.distillation_data.end_point = Temperature(value=end_point, unit="F")
+
+
+def normalize_samples(samples):
+    """
+    Not sure what to call this function.  Basically, we will fix any data
+    issues that couldn't be handled in the mapping stages.
+    """
+    if samples[0].metadata.name == 'Fresh Oil Sample':
+        # set the cut volume to 100%
+        samples[0].cut_volume = VolumeFraction(100.0, unit="%")
