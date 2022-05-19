@@ -50,6 +50,11 @@ logger = logging.getLogger(__name__)
 
 
 SUBSAMPLE_MAPPING = {
+    ######
+    # This is mapping of the fields in the main cut data table section.
+    # It tells us what to do with the values and where to put them
+    # relative to a sample.
+    ######
     #
     # Yield (% wt) - no place to map this.
     #
@@ -261,6 +266,10 @@ SUBSAMPLE_MAPPING = {
 
 
 WHOLE_CRUDE_MAPPING = {
+    ######
+    # This is mapping of the fields in the 'Whole Crude Properties' table
+    # section.  It tells us what to do with the values and where to put them
+    # relative to a sample.
     #
     # The section 'Whole Crude Properties' contains properties that are
     # mostly redundant, and can be found in the 'IBP - FBP' cut data.
@@ -268,7 +277,7 @@ WHOLE_CRUDE_MAPPING = {
     # sub-sample.
     # All props below here are unique to the Whole Crude Properties section.
     # I think we can map these properties to the 'IBP - FBP' sub-sample.
-    #
+    ######
     norm('Salt content, ptb'): {
         'attr': 'Salt Content',
         'unit': 'ppm',
@@ -294,6 +303,122 @@ WHOLE_CRUDE_MAPPING = {
     },
 }
 
+
+MOLECULES_MAPPING = {
+    ######
+    # This is mapping of the fields in the 'Molecules' table section.
+    # It tells us what to do with the values and where to put them
+    # relative to a sample.
+    ######
+    norm('methane + ethane'): {
+        'attr': 'Methane + Ethane',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('propane'): {
+        'attr': 'Propane',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('isobutane'): {
+        'attr': 'Isobutane',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('n-butane'): {
+        'attr': 'N-Butane',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('isopentane'): {
+        'attr': 'Isopentane',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('n-pentane'): {
+        'attr': 'N-Pentane',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('cyclopentane'): {
+        'attr': 'Cyclopentane',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('c6 paraffins'): {
+        'attr': 'C6 Paraffins',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('c6 naphthenes'): {
+        'attr': 'C6 Naphthenes',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('benzene'): {
+        'attr': 'Benzene',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['BTEX Group'],
+    },
+    norm('c7 paraffins'): {
+        'attr': 'C7 Paraffins',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('c7 naphthenes'): {
+        'attr': 'C7 Naphthenes',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['Molecules'],
+    },
+    norm('toluene'): {
+        'attr': 'Toluene',
+        'unit': '%',
+        'unit_type': 'massfraction',
+        'cls': MassOrVolumeFraction,
+        'element_of': 'compounds',
+        'groups': ['BTEX Group'],
+    },
+}
+
+# concatenate our mappings
+SUBSAMPLE_MAPPING.update(WHOLE_CRUDE_MAPPING)
+SUBSAMPLE_MAPPING.update(MOLECULES_MAPPING)
 
 # include any misspellings here
 SUBSAMPLE_MAPPING[norm('Naphthenes (%wt)')] = SUBSAMPLE_MAPPING[
@@ -333,7 +458,8 @@ def ExxonMapperV2(record):
 
     set_boiling_point_range(samples, cut_table)
 
-    set_all_sample_properties(cut_table, samples)
+    set_all_sample_properties(samples, cut_table, molecules,
+                              whole_crude_properties)
 
     # now we perform all the not-so-simple mapping
 
@@ -363,7 +489,8 @@ def get_reference(data):
 
     ref = Reference(reference=ref_text, year=ref_year)
     ref.reference += (
-        '\nSource: https://corporate.exxonmobil.com/Crude-oils/Crude-trading/Assays-available-for-download'
+        '\nSource: https://corporate.exxonmobil.com/'
+        'Crude-oils/Crude-trading/Assays-available-for-download'
         '\nAccessed: Dec 9th, 2020')
     ref.year = 2020
 
@@ -560,12 +687,16 @@ def set_boiling_point_range(samples, cut_table):
                                                           unit='F')
 
 
-def set_all_sample_properties(cut_table, samples):
+def set_all_sample_properties(samples, cut_table, molecules,
+                              whole_crude_properties):
     for name, data in cut_table.items():
         sample = find_sample(samples, name)
 
         if sample is not None:
             set_sample_properties(sample, data)
+
+    set_sample_properties(samples[0], molecules)
+    set_sample_properties(samples[0], whole_crude_properties)
 
 
 def find_sample(samples, name):
@@ -598,8 +729,9 @@ def apply_mapping(sample, value,
                   unit_type=None,
                   convert_from=None,
                   element_of=None,
-                  num_digits=5):
-    if value is not None and value not in ('NotAvailable', ):
+                  num_digits=5,
+                  groups=None):
+    if value is not None and value not in ('NotAvailable', '-'):
         if convert_from is not None:
             value = uc.convert(convert_from, unit, value)
 
@@ -625,14 +757,25 @@ def apply_mapping(sample, value,
         else:
             # add to a list attribute
             compositions = getattr(sample, element_of)
+            item_cls = compositions.item_type
+
+            if attr in [c.name for c in compositions]:
+                # list item is already there, don't duplicate it.
+                return
 
             measurement = cls(sigfigs(value, num_digits), unit=unit,
                               unit_type=unit_type)
-            item_cls = compositions.item_type
-            compositions.append(item_cls(
-                name=attr,
-                measurement=measurement,
-            ))
+
+            kwargs = {
+                'name': attr,
+                'measurement': measurement,
+            }
+
+            if ('groups' in item_cls.__dataclass_fields__ and
+                    groups is not None):
+                kwargs['groups'] = groups
+
+            compositions.append(item_cls(**kwargs))
 
 
 def load_densities(samples, cut_table):
