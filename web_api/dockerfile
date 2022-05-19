@@ -7,8 +7,8 @@ FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
 ARG KEY_FILE
 ARG PYTHON_VER
 
-RUN echo "KEY FILE: $KEY_FILE"
-RUN echo "PYTHON VER: $PYTHON_VER"
+#RUN echo "KEY FILE: $KEY_FILE"
+#RUN echo "PYTHON VER: $PYTHON_VER"
 
 RUN echo "ip_resolve=4" >> /etc/yum.conf
 
