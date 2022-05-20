@@ -1,2 +1,4 @@
 oil_name	file
 HOOPS Blend	Crude_Oil_HOOPS_Blend_assay_xls.xlsx
+Liza	crude-oil_Liza_assay_jun2020_xls.xlsx
+

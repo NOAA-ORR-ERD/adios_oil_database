@@ -12,23 +12,10 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-python>=3.8.*,<3.11
+python>=3.8.*,<3.10
 numpy>=1.20
-# scipy  # used for gnome oil estimation -- for now
-
-# for working with mongodb
-mongodb>=4.2.0
-pymongo>=4
-
-# this is only needed for some of the importing code.
-# awesome-slugify>=1.6.5
-
-# for downloading/importing data
-openpyxl>=3.0.0
-python-dateutil
-# lxml>=4.4.1
-requests>=2.22.0
-
-# https://github.com/NOAA-ORR-ERD/PyNUCOS
 pynucos>=2.12
+
+# scipy  # no longer used
+
 

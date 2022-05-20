@@ -1,3 +1,4 @@
+
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
   - template: License-Scanning.gitlab-ci.yml
@@ -5,6 +6,7 @@ include:
   #- template: DAST.gitlab-ci.yml
 
 variables:
+  PYTHON_VER: "3.9"
   SECURE_ANALYZERS_PREFIX: "registry.gitlab.com/gitlab-org/security-products/analyzers"
   CS_MAJOR_VERSION: 3
   CLAIR_OUTPUT: High
@@ -25,7 +27,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   tags:
     - docker
 
@@ -41,8 +43,10 @@ test_develop:
     # install all the requirements
     - >
       conda install -y
+      python=$PYTHON_VER
       --file adios_db/conda_requirements.txt
       --file adios_db/conda_requirements_optional.txt
+      --file adios_db/conda_requirements_test.txt
       --file web_api/conda_requirements.txt
 
     # configure and start mongodb
@@ -84,14 +88,14 @@ build_api:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG --build-arg KEY_FILE="./web_api/key"
+    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG --build-arg KEY_FILE="./web_api/key" --build-arg PYTHON_VER=$PYTHON_VER
 
     # apparently there is a timeout on the docker session, so we re-login
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_DBG
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build . -f web_api/dockerfile_prod -t $IMAGE_TAG_PROD --build-arg KEY_FILE="./web_api/key"
+    - docker build . -f web_api/dockerfile_prod -t $IMAGE_TAG_PROD --build-arg KEY_FILE="./web_api/key" --build-arg PYTHON_VER=$PYTHON_VER
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_PROD
@@ -701,7 +705,7 @@ stop_proxy_public:
 
 init_git_repo_on_stage:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   when: manual
   
   environment:
@@ -719,7 +723,7 @@ init_git_repo_on_stage:
 
 sync_with_git_review:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   
@@ -738,7 +742,7 @@ sync_with_git_review:
 
 sync_with_git_prod:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   when: manual
   
   environment:

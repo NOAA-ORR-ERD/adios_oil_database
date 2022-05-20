@@ -1,0 +1,8 @@
+# Requirements file for testing the adios_db package
+
+# for testing and development
+pytest>=3.8.0
+pytest-cov>=2.6.0
+pytest-timeout>=1.2.1
+pytest-raises>=0.11
+

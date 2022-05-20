@@ -83,6 +83,9 @@ class ExxonDataReader:
             raise ValueError(f'file: {filename} does not contain '
                              'any sheets')
 
-        sheet = wb[sheetnames[0]]
+        sheets = [[[c.value for c in r]
+                   for r in s.rows]
+                  for s in [wb[n] for n in sheetnames]
+                  ]
 
-        return [[c.value for c in row] for row in sheet.rows]
+        return sheets

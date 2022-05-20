@@ -31,10 +31,10 @@ def test_read_index():
     reader = ExxonDataReader(example_index, example_dir)
 
     assert reader.index is not None
-    assert reader.index == [(
-        'HOOPS Blend',
-        example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx'
-    )]
+    assert reader.index == [
+        ('HOOPS Blend', example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx'),
+        ('Liza', example_dir / 'crude-oil_Liza_assay_jun2020_xls.xlsx'),
+    ]
 
 
 def test_get_records():
@@ -42,15 +42,16 @@ def test_get_records():
 
     records = reader.get_records()
 
-    name, data = next(records)
+    name, [data, *_] = next(records)
 
     assert name == "HOOPS Blend"
     # some checking of the record
     assert data[5][0] == "HOOPS16F"
     # if more checks are needed: see next test
 
-    # there should be only one
+    # there should be only two
     with pytest.raises(StopIteration):
+        next(records)
         next(records)
 
 
@@ -61,8 +62,10 @@ def test_read_excel_file():
 
     # there could be a LOT here, but just to make sure it isn't completely
     # bonkers
-    assert record[0][0] == "ExxonMobil"
     assert record
+
+    # [sheet][row][col]
+    assert record[0][0][0] == "ExxonMobil"
 
 
 def test_ExxonRecordParser():
@@ -84,7 +87,7 @@ def test_full_round_trip():
         example_dir / "Crude_Oil_HOOPS_Blend_assay_xls.xlsx"
     )
 
-    assert record[0][0] == "ExxonMobil"
+    assert record[0][0][0] == "ExxonMobil"
 
     oil = ExxonMapper(('HOOPS Blend Example', record))
 
