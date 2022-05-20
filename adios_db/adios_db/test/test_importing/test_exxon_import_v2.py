@@ -318,7 +318,7 @@ class TestExxonMapper():
         ('Aniline Point', range(14),
          (None, None, None, 126.67, 131.76, 141.27, 156.87,
           171.39, 176.25, None, 190.16, 206.74, 208.71, None)),
-        ('Conradson Carbon Residue', range(14),
+        ('Micro Carbon Residue', range(14),
          (3.3672, None, None, None, None, None, None,
           None, None, 7.0616, None, 0.060065, 1.1285, 17.789)),
         ('Reid Vapor Pressure', range(14),

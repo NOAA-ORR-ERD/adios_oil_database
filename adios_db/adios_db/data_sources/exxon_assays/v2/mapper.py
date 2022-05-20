@@ -235,7 +235,7 @@ SUBSAMPLE_MAPPING = {
     # Micro Carbon Residue (% wt) - is this the same as CCR???
     #
     norm('Micro Carbon Residue (% wt)'): {
-        'attr': 'Conradson Carbon Residue',
+        'attr': 'Micro Carbon Residue',
         'unit': '%',
         'unit_type': 'MassFraction',
         'cls': AnyUnit,
