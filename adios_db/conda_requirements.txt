@@ -1,6 +1,6 @@
 # conda requirements file for the oil_database package.
 # These are the core requirements -- not much beyond
-# Python 3.8 and numpy :-)
+# Python and numpy :-)
 
 # see the conda_requirements_optional.txt file for
 #   additional packages that might be useful
@@ -12,9 +12,9 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-python>=3.8.*,<3.10
+python>=3.8.*,<3.11
 numpy>=1.20
-scipy  # used for gnome oil estimation -- for now
+# scipy  # used for gnome oil estimation -- for now
 
 # for working with mongodb
 mongodb>=4.2.0
