@@ -4,9 +4,6 @@ from pathlib import Path
 import logging
 from openpyxl import load_workbook
 
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=2, width=120)
-
 logger = logging.getLogger(__name__)
 
 
@@ -52,14 +49,17 @@ class ExxonDataReader:
                     raise ValueError(f"There is something wrong with this line"
                                      "in the index file:\n"
                                      "{line}")
-                index.append((oil_name, self.data_dir / filename))
+                index.append({
+                    'name': oil_name,
+                    'path': self.data_dir / filename
+                })
 
             return index
 
     def get_records(self):
         # an empty list for now -- just so we can test it :-)
-        for oilname, filename in self.index:
-            yield (oilname, self.read_excel_file(filename))
+        for i in self.index:
+            yield (i['name'], self.read_excel_file(i['path']))
 
     @staticmethod  # make it easier to test on its own
     def read_excel_file(filename):
