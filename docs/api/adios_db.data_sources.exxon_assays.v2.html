@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>adios_db.data_sources.exxon_assays.v2 package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="adios_db.data_sources.noaa_fm package" href="adios_db.data_sources.noaa_fm.html" />
+    <link rel="prev" title="adios_db.data_sources.exxon_assays.v1 package" href="adios_db.data_sources.exxon_assays.v1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../managing.html">Managing the Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computation with the ADIOS data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../importing_new_data.html">Importing New Data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="adios_db.html">adios_db package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="adios_db.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="adios_db.data_sources.html">adios_db.data_sources package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="adios_db.data_sources.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.html#module-adios_db.data_sources.importer_base">adios_db.data_sources.importer_base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.html#module-adios_db.data_sources.mapper">adios_db.data_sources.mapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.html#module-adios_db.data_sources.parser">adios_db.data_sources.parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.html#module-adios_db.data_sources.reader">adios_db.data_sources.reader module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.html">adios_db.models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripting.html">adios_db.scripting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html">adios_db.scripts package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.session.html">adios_db.session package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.util.html">adios_db.util package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ADIOS Oil Database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="adios_db.html">adios_db package</a> &raquo;</li>
+          <li><a href="adios_db.data_sources.html">adios_db.data_sources package</a> &raquo;</li>
+          <li><a href="adios_db.data_sources.exxon_assays.html">adios_db.data_sources.exxon_assays package</a> &raquo;</li>
+      <li>adios_db.data_sources.exxon_assays.v2 package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/adios_db.data_sources.exxon_assays.v2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-adios_db.data_sources.exxon_assays.v2">
+<span id="adios-db-data-sources-exxon-assays-v2-package"></span><h1>adios_db.data_sources.exxon_assays.v2 package<a class="headerlink" href="#module-adios_db.data_sources.exxon_assays.v2" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-adios_db.data_sources.exxon_assays.v2.mapper">
+<span id="adios-db-data-sources-exxon-assays-v2-mapper-module"></span><h2>adios_db.data_sources.exxon_assays.v2.mapper module<a class="headerlink" href="#module-adios_db.data_sources.exxon_assays.v2.mapper" title="Permalink to this heading"></a></h2>
+<p>Exxon Mapper Version 1</p>
+<p>Not really a class – it’s really a function that build up an
+oil object</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.ExxonMapperV2">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">ExxonMapperV2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.ExxonMapperV2" title="Permalink to this definition"></a></dt>
+<dd><p>Accepts and Exxon record:</p>
+<dl class="simple">
+<dt>tuple of:</dt><dd><ul class="simple">
+<li><p>oil name</p></li>
+<li><p>list of lists of the spreadsheet contents</p></li>
+</ul>
+</dd>
+</dl>
+<p>returns an Oil Object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.apply_mapping">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">apply_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_of</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.apply_mapping" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.create_middle_tier_objs">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">create_middle_tier_objs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.create_middle_tier_objs" title="Permalink to this definition"></a></dt>
+<dd><p>These are the dataclasses that comprise the attributes of the Sample</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.find_sample">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">find_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.find_sample" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.flatten_2d">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">flatten_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.flatten_2d" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.generate_samples">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">generate_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.generate_samples" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a list of sample names with column indexes, and an associated
+list of not-yet-populated sample objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.get_cut_item">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">get_cut_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.get_cut_item" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.get_reference">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">get_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.get_reference" title="Permalink to this definition"></a></dt>
+<dd><p>Get the reference information</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.load_densities">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">load_densities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_table</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.load_densities" title="Permalink to this definition"></a></dt>
+<dd><p>There is only one density per sample, but it is not a simple mapping.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.load_distillation_data">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">load_distillation_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.load_distillation_data" title="Permalink to this definition"></a></dt>
+<dd><p>We will load the distillation graph data on the first sample only</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.load_metadata">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">general_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whole_crude_properties</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.load_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Here we will load all the oil metadata from the source data</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.load_viscosities">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">load_viscosities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_table</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.load_viscosities" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.normalize_samples">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">normalize_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.normalize_samples" title="Permalink to this definition"></a></dt>
+<dd><p>Not sure what to call this function.  Basically, we will fix any data
+issues that couldn’t be handled in the mapping stages.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.read_cut_table">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">read_cut_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.read_cut_table" title="Permalink to this definition"></a></dt>
+<dd><p>Read the rest of the rows and save them in a dictionary.</p>
+<ul class="simple">
+<li><p>key: sample name</p></li>
+<li><p>value: the rest of the fields as a dict.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.read_general_info">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">read_general_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.read_general_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.read_molecules">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">read_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.read_molecules" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.read_whole_crude_properties">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">read_whole_crude_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.read_whole_crude_properties" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.sample_id_attrs">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">sample_id_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.sample_id_attrs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.set_all_sample_properties">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">set_all_sample_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whole_crude_properties</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.set_all_sample_properties" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.set_boiling_point_range">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">set_boiling_point_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_table</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.set_boiling_point_range" title="Permalink to this definition"></a></dt>
+<dd><p>Parse the names to determine the boiling point ranges
+Requires the sample names to be initialized</p>
+<p>Need to know:
+- Initial boiling point (IBF)
+- End boiling point (FBP)</p>
+<dl class="simple">
+<dt>Note: The new format assay doesn’t appear to have definite number fields</dt><dd><p>for IBP and FBP.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.set_sample_properties">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">set_sample_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_properties</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.set_sample_properties" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.set_sample_property">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">set_sample_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.set_sample_property" title="Permalink to this definition"></a></dt>
+<dd><p>Set a single property of a sample object.  The mapping table will control
+how the property get set.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.data_sources.exxon_assays.v2.mapper.slice_record">
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.exxon_assays.v2.mapper.</span></span><span class="sig-name descname"><span class="pre">slice_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.exxon_assays.v2.mapper.slice_record" title="Permalink to this definition"></a></dt>
+<dd><p>Slice a 2d portion of our record, which is a 2d list of lists.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adios_db.data_sources.exxon_assays.v1.html" class="btn btn-neutral float-left" title="adios_db.data_sources.exxon_assays.v1 package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="adios_db.data_sources.noaa_fm.html" class="btn btn-neutral float-right" title="adios_db.data_sources.noaa_fm package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, NOAA Emergency Response Division.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
