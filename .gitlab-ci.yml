@@ -63,12 +63,12 @@ test_develop:
 
     # Install & test the adios_db package
     - cd adios_db
-    - pip install -e ./
+    - pip install ./
     - pytest --mongo adios_db
 
     # Install & test the adios_db_api package
     - cd ../web_api
-    - pip install -e ./
+    - pip install ./
     - pytest adios_db_api
 
 build_api:

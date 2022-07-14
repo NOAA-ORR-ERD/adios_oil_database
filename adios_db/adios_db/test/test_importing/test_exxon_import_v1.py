@@ -32,8 +32,14 @@ def test_read_index():
 
     assert reader.index is not None
     assert reader.index == [
-        ('HOOPS Blend', example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx'),
-        ('Liza', example_dir / 'crude-oil_Liza_assay_jun2020_xls.xlsx'),
+        {
+            'name': 'HOOPS Blend',
+            'path': example_dir / 'Crude_Oil_HOOPS_Blend_assay_xls.xlsx',
+        },
+        {
+            'name': 'Liza',
+            'path': example_dir / 'crude-oil_Liza_assay_jun2020_xls.xlsx',
+        },
     ]
 
 
