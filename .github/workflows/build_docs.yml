@@ -29,6 +29,7 @@ jobs:
           cd Documentation/API_docs/
           ./build_api_docs.sh
           make html
+          ls ../../../docs || mkdir ../../../docs
           rm -rf ../../../docs/*
           cp -R build/html/* ../../../docs
 

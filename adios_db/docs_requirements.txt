@@ -7,7 +7,7 @@ pynucos
 
 # for downloading/importing data
 python-dateutil
-openpyxl 
+openpyxl
 
 sphinx
 sphinx_rtd_theme
