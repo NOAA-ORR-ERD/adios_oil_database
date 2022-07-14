@@ -279,7 +279,8 @@ deploy_mongodb_public:
       -p $PORT_MAPPING
       -v $DB_VOLUME:/data/db $IMAGE_TAG
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 stop_mongodb_public:
   stage: deploy_db
@@ -295,7 +296,8 @@ stop_mongodb_public:
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 
 deploy_api_stage:
@@ -581,7 +583,8 @@ deploy_api_public:
       docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       -e MONGODB_WRITEABLE=false $IMAGE_TAG
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 stop_api_public:
   stage: deploy
@@ -597,7 +600,8 @@ stop_api_public:
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 
 deploy_client_public:
@@ -624,7 +628,8 @@ deploy_client_public:
       docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       $IMAGE_TAG
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 stop_client_public:
   stage: deploy
@@ -640,7 +645,8 @@ stop_client_public:
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 deploy_proxy_public:
   stage: deploy
@@ -685,7 +691,8 @@ deploy_proxy_public:
       -v $OILDB_PROJ_FOLDER/config/public/proxy:/etc/nginx/
       -v /etc/ssl/certs:/etc/ssl/certs $IMAGE_TAG
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 stop_proxy_public:
   stage: deploy
@@ -701,7 +708,8 @@ stop_proxy_public:
   script:
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
   tags:
-    - prod
+    - adios-prod
+    - deploy
 
 init_git_repo_on_stage:
   stage: maintenance
