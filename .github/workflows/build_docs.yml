@@ -31,7 +31,8 @@ jobs:
           make html
           ls ../../../docs || mkdir ../../../docs
           rm -rf ../../../docs/*
-          cp -a build/html/ ../../../docs
+          cp -R build/html/* ../../../docs
+          cp build/html/.nojekyll ../../../docs
 
           pushd ../../../docs
 
