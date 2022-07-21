@@ -4,10 +4,10 @@ ADIOS Oil Database project: system for managing oil properties data for use in O
 
 http://adios.orr.noaa.gov
 
-
 This repository contains three packages:
 
 ``adios_db``: Python Package for managing the data.
+( Docs [here](https://noaa-orr-erd.github.io/adios_oil_database/) )
 
 ``adios_db_api``: A Python / Pyramid web application that provides a JSON-API for accessing the data.
 
@@ -85,7 +85,6 @@ Python package for managing the data. It provides code for:
 
 Docs at: https://noaa-orr-erd.github.io/adios_oil_database/
 
-<<<<<<< HEAD
 Python package for managing the data. It provides code for:
 
  * Importing data
@@ -96,8 +95,6 @@ Python package for managing the data. It provides code for:
  * Managing physical units, including unit conversion.
  * Some computation on the data (interpolation, etc.)
  * Code to build an oil definition as required by the NOAA GNOME model.
-=======
->>>>>>> production
 
 ### `adios_db_api`:
 
