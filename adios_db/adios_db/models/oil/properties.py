@@ -15,7 +15,7 @@ from ..common.measurement import (Time,
                                   InterfacialTension,
                                   Pressure,
                                   AngularVelocity)
-
+from .physical_properties import DynamicViscosityList, KinematicViscosityList
 
 from ..common.validators import EnumValidator
 from .validation.errors import ERRORS
@@ -70,6 +70,9 @@ class Emulsion:
     tan_delta_v_e: Unitless = None
 
     complex_viscosity: DynamicViscosity = None
+
+    kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)
+    dynamic_viscosities: DynamicViscosityList = field(default_factory=DynamicViscosityList)
 
     method: str = None
     visual_stability: str = None
