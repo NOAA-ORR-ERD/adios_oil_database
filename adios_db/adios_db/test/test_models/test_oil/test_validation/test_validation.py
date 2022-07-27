@@ -427,6 +427,32 @@ def test_does_not_break_test_records():
     nothing breaks
     """
     for rec, _path in get_all_records(TEST_DATA_DIR):
+        print("Validating:", _path)
         _msgs = rec.validate()
 
     assert True
+
+
+def test_bad_unit():
+    """
+    Making sure a bad unit trickles up through the validation
+    """
+    record_file = (HERE.parent.parent.parent / "data_for_testing" / "example_data" /
+                   "RecordWithUnitErrors.json")
+
+    oil = Oil.from_file(record_file)
+
+    msgs = oil.validate()
+
+    expected_errors = ["E045: Unit: 'g/oz' is not a valid unit for unit type: 'density'",
+                       "E045: Unit: 'Celcius' is not a valid unit for unit type: 'temperature'",
+                       ]
+
+    for err in expected_errors:
+        for msg in msgs:
+            if err in msg:
+                break
+        else:
+            assert False, f'"{err}" not in validation messages'
+
+

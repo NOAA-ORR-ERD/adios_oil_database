@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import pytest
 
-import nucos as uc
+import nucos
 
 from adios_db.models.common.utilities import dataclass_to_json
 
@@ -653,7 +653,7 @@ class TestVolumeFraction:
 
     def test_convert_to_invalid(self):
         model = VolumeFraction(value=1.0, unit='mL/L')
-        with pytest.raises(uc.InvalidUnitError):
+        with pytest.raises(nucos.InvalidUnitError):
             model.convert_to('g/kg')
 
         assert model.value == 1.0
@@ -747,7 +747,7 @@ class TestMassOrVolumeFraction:
                                      unit='fraction',
                                      unit_type="volumeFraction")
 
-        with pytest.raises(uc.InvalidUnitError):
+        with pytest.raises(nucos.InvalidUnitError):
             _model2 = model.converted_to('g/kg')
 
     def test_convert_conc_value_invalid(self):
@@ -755,7 +755,7 @@ class TestMassOrVolumeFraction:
                                      unit='fraction',
                                      unit_type="Concentration")
 
-        with pytest.raises(uc.InvalidUnitError):
+        with pytest.raises(nucos.InvalidUnitError):
             _model2 = model.converted_to('g/kg')
 
     def test_integer_value(self):
@@ -836,7 +836,7 @@ class TestConcentration:
 
     def test_convert_to_invalid(self):
         model = Concentration(value=50, unit='%')
-        with pytest.raises(uc.InvalidUnitError):
+        with pytest.raises(nucos.InvalidUnitError):
             model.convert_to('g/kg')
 
         assert model.value == 50
@@ -974,3 +974,57 @@ class TestInterfacialTension:
         # assert math.isclose(model.value, 10.0, rel_tol=1e-05)
         assert model.value == 1.0
         assert model.unit == 'N/m'
+
+
+@pytest.mark.skipif(not hasattr(nucos, 'is_supported_unit'), reason='nucos too old for unit checking')
+class TestUnitValidation:
+    """
+    Tests for the validation of units matching the unit_type
+    """
+    def test_good_unit(self):
+        """
+        a good unit shouldn't create any warnings or errors
+        """
+        len = Length(4, 'm')
+        msgs = len.validate()
+
+        assert not msgs
+
+    def test_bad_unit(self):
+        """
+        an arbitrary bad unit
+        """
+        len = Length(4, 'sploit')
+        msgs = len.validate()
+
+        print(msgs)
+        assert msgs
+        assert "E045: Unit: 'sploit' is not a valid unit for unit type: 'length'" in msgs[0]
+
+    def test_bad_unit_temp(self):
+        """
+        Temperature has another validator -- make sure it hasn't overridden this one
+        """
+        temp = Temperature(value=98.6, unit='Fred')
+
+        msgs = temp.validate()
+
+        print(msgs)
+        assert msgs
+
+    def test_unitless_good(self):
+        meas = Unitless(value=1.2)
+
+        msgs = meas.validate()
+
+        assert not msgs
+
+    def test_unitless_bad(self):
+        meas = Unitless(value=1.2, unit='nothing')
+
+        msgs = meas.validate()
+
+        assert msgs[0] == "E045: Unitless measurements should have no unit. 'nothing' is not valid"
+
+
+
