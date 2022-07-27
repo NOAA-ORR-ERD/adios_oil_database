@@ -14,6 +14,7 @@ They can also accommodate a standard deviation and number of replicates.
 from dataclasses import dataclass
 from math import isclose
 import copy
+import warnings
 
 import nucos
 from nucos import convert
@@ -137,7 +138,7 @@ class MeasurementBase(MeasurementDataclass):
                 valid_units = nucos.get_supported_names(self.unit_type)
                 msgs.append(ERRORS["E045"].format(self.unit, self.unit_type, valid_units))
         else:
-            warning.warn("nucos version >= 3.1.0 required for unit validation")
+            warnings.warn("nucos version >= 3.1.0 required for unit validation")
 
         return msgs
 

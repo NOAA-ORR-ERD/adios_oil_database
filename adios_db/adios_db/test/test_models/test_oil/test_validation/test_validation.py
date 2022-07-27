@@ -9,7 +9,7 @@ from pathlib import Path
 import math
 import pytest
 
-import nucos as uc
+import nucos
 
 from adios_db.computation import physical_properties
 from adios_db.models.oil.oil import Oil
@@ -277,7 +277,7 @@ def test_API_density_match(minimal_oil):
     oil.sub_samples[0].physical_properties.densities.append(density)
 
     density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
-    API = uc.convert('kg/m^3', 'API', density_at_60F)
+    API = nucos.convert('kg/m^3', 'API', density_at_60F)
     print(density_at_60F)
     print(API)
 
@@ -300,7 +300,7 @@ def test_API_density_missmatch(minimal_oil):
     oil.sub_samples[0].physical_properties.densities.append(density)
 
     density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
-    API = uc.convert('kg/m^3', 'API', density_at_60F)
+    API = nucos.convert('kg/m^3', 'API', density_at_60F)
 
     print(f"{density_at_60F=}")
     print(f"{API=}")
@@ -433,6 +433,7 @@ def test_does_not_break_test_records():
     assert True
 
 
+@pytest.mark.skipif(not hasattr(nucos, 'is_supported_unit'), reason='nucos too old for unit checking')
 def test_bad_unit():
     """
     Making sure a bad unit trickles up through the validation
