@@ -41,7 +41,7 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "unit": "C",
+                        "unit": "Celcius",
                         "max_value": -25.0,
                         "unit_type": "temperature"
                     },
@@ -59,7 +59,7 @@
                     {
                         "density": {
                             "value": 0.93988,
-                            "unit": "g/mL",
+                            "unit": "g/oz",
                             "standard_deviation": 0.0003377,
                             "replicates": 3,
                             "unit_type": "density"

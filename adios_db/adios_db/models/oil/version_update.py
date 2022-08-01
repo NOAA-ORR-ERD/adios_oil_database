@@ -20,14 +20,16 @@ class Updater:
         elif this_ver != self.ver_from:  # can't update this
             return py_json
         else:  # we can do the update
-            return self.update(py_json)
-
-
-class update_0_10_0_to_0_10_0(Updater):
-    ver_from = Version(0, 10, 0)
-    ver_to = Version(0, 11, 0)
+            self._version_check(py_json)
+            py_json = self.update(py_json)
+            py_json['adios_data_model_version'] = str(self.ver_to)
+            return py_json
 
     def update(self, py_json):
+        # do-nothing updater for only additions.
+        return py_json
+
+    def _version_check(self, py_json):
         # just in case
         this_ver = Version(py_json.get('adios_data_model_version'))
 
@@ -36,6 +38,13 @@ class update_0_10_0_to_0_10_0(Updater):
                              f"JSON version: {this_ver}, this updater "
                              f"can update: {self.ver_from}")
 
+
+class update_0_10_0_to_0_11_0(Updater):
+    ver_from = Version(0, 10, 0)
+    ver_to = Version(0, 11, 0)
+
+    def update(self, py_json):
+#        self._version_check(py_json)
         # change the name of the fraction_weathered attribute
         if 'sub_samples' in py_json:  # very sparse records may not
             for ss in py_json['sub_samples']:
@@ -46,15 +55,23 @@ class update_0_10_0_to_0_10_0(Updater):
                     md['fraction_evaporated'] = md.get('fraction_weathered')
                     md.pop('fraction_weathered', None)
 
-        py_json['adios_data_model_version'] = str(self.ver_to)
-
+        # py_json['adios_data_model_version'] = str(self.ver_to)
         return py_json
+
+class update_0_11_0_to_0_12_0(Updater):
+    """
+    an updater for only additions
+    -- nothing to be done other than update the version
+    """
+    ver_from = Version(0, 11, 0)
+    ver_to = Version(0, 12, 0)
 
 
 # NOTE: updaters need to be in order
-#       not hard when there is only one :-)
-UPDATERS = [update_0_10_0_to_0_10_0()]
-
+#       this could be automated it if gets unwieldy
+UPDATERS = [update_0_10_0_to_0_11_0(),
+            update_0_11_0_to_0_12_0(),
+            ]
 
 def update_json(py_json):
     """

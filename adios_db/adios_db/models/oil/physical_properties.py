@@ -34,7 +34,8 @@ class RefTempList:
         """
         points_list = self
         data_str = self.__class__.__name__
-        msgs = []
+        msgs = super().validate()
+
 
         # check for odd temperatures
         for pt in points_list:

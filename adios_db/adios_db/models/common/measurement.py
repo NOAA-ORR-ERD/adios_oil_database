@@ -14,7 +14,9 @@ They can also accommodate a standard deviation and number of replicates.
 from dataclasses import dataclass
 from math import isclose
 import copy
+import warnings
 
+import nucos
 from nucos import convert
 
 from ..common.utilities import dataclass_to_json
@@ -124,6 +126,22 @@ class MeasurementBase(MeasurementDataclass):
             pass
         return value
 
+    def validate(self):
+
+        if self is None:  # how can this happen?!?! -- but it does.
+            return []
+
+        msgs = []
+
+        if hasattr(nucos, 'is_supported_unit'):
+            if not nucos.is_supported_unit(self.unit_type, self.unit):
+                valid_units = nucos.get_supported_names(self.unit_type)
+                msgs.append(ERRORS["E045"].format(self.unit, self.unit_type, valid_units))
+        else:
+            warnings.warn("nucos version >= 3.1.0 required for unit validation")
+
+        return msgs
+
     def py_json(self, sparse=True):
         """
         unit_type is added here, as it's not a settable field
@@ -215,9 +233,10 @@ class Temperature(MeasurementBase):
         return self
 
     def validate(self):
-        msgs = []
         if self is None:  # how can this happen?!?! -- but it does.
-            return msgs
+            return []
+
+        msgs = super().validate()
 
         # only do this for C or K
         if (self.unit is not None) and (self.unit.upper() not in {'C', 'K'}):
@@ -278,6 +297,11 @@ class Unitless(MeasurementBase):
 
     def convert_to(self, *args, **kwargs):
         raise TypeError("You can not convert a Unitless measurement")
+
+    def validate(self):
+        if (self is not None) and (self.unit is not None):
+            return [f"E045: Unitless measurements should have no unit. '{self.unit}' is not valid"]
+        return []
 
 
 class Dimensionless(MeasurementBase):
@@ -405,6 +429,18 @@ class AnyUnit(MeasurementBase):
         return self.__dict__ == other.__dict__
 
 
+    def validate(self):
+        """
+        a kludge -- this should probably create the correct Measurement
+        when created instead
+        """
+        if self is None:
+            return []
+        if self.unit_type == "unitless":
+            return Unitless.validate(self)
+        return super().validate()
+
+
 class Density(MeasurementBase):
     unit_type = "density"
 
@@ -424,6 +460,10 @@ class Pressure(MeasurementBase):
 class NeedleAdhesion(MeasurementBase):
     unit_type = "needleadhesion"
 
+    def validate(self):
+        if (self is not None) and (self.unit.strip().lower() != "g/m^2"):
+            return [f'E045: Needle Adhesion can only have units of: "g/m^2". "{self.unit}" is not valid']
+        return []
 
 class InterfacialTension(MeasurementBase):
     unit_type = "interfacialtension"
@@ -431,3 +471,26 @@ class InterfacialTension(MeasurementBase):
 
 class AngularVelocity(MeasurementBase):
     unit_type = 'angularvelocity'
+
+
+# def set_valid_units(cls):
+#     """
+#     sets the valid units for a Measurement class
+
+#     done by querying nucos
+#     """
+#     print("setting units on:", cls)
+
+#     cls.valid_units = nucos.get_all_valid_unit_names(cls.unit_type)
+
+#     print("valid units are:", cls.valid_units)
+
+
+# for name, obj in dict(vars()).items():
+#     try:
+#         if issubclass(obj, MeasurementBase):
+#             print(name, "is a Measurement, with unit type:", obj.unit_type)
+#         set_valid_units(obj)
+#     except TypeError:
+#         pass
+

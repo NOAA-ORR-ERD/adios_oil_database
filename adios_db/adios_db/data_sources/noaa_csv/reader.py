@@ -34,7 +34,7 @@ class Reader():
                                  "ADIOS CSV file?\n"
                                  f"First line of file: {header}")
 
-            if data_model_version != ADIOS_DATA_MODEL_VERSION:
+            if data_model_version > ADIOS_DATA_MODEL_VERSION:
                 raise ValueError("Version mismatch -- this file is: "
                                  f"{data_model_version}\n"
                                  "The code version is: "

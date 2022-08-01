@@ -138,12 +138,15 @@ class TestDensityList:
 
         msgs = DL.validate()
 
-        print(msgs)
-
-        assert len(msgs) == 2
         for msg in msgs:
-            assert "E040:" in msg
-            assert "Density" in msg
+            print(msg)
+
+        assert len(msgs) == 4
+        for msg in msgs:
+            assert ("E040:" in msg and "DensityList" in msg
+                    or
+                    "W010:" in msg and  "Temperature" in msg
+                    )
 
     def test_validate_non_numeric_value(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),

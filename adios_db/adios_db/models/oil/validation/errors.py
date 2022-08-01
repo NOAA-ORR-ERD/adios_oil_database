@@ -16,8 +16,8 @@ ERRORS = {
     "E041": "Value for {}: {} must be between 0 and 1",
     "E042": "Must have a value for {}",
     "E043": "API, {} does not match density at 60F. API should be: {:.1f}",
-    "E044": "Value: {} for {} is not valid",
-
+    "E044": "Value: '{}' for '{}' is not valid",
+    "E045": "Unit: '{}' is not a valid unit for unit type: '{}'. Options are: {}",
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",

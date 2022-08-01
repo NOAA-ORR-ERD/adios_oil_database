@@ -22,7 +22,7 @@ from .sample import SampleList
 from .version import Version
 from .review_status import ReviewStatus
 
-ADIOS_DATA_MODEL_VERSION = Version(0, 11, 0)
+ADIOS_DATA_MODEL_VERSION = Version(0, 12, 0)
 
 from .version_update import update_json  # noqa: E402
 

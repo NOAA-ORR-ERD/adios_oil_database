@@ -5,8 +5,18 @@ from adios_db.models.oil.properties import (InterfacialTensionPoint,
                                             Dispersibility,
                                             DispersibilityList,
                                             Emulsion,
-                                            EmulsionList)
-from adios_db.models.common.measurement import Temperature
+                                            EmulsionList,
+                                            )
+
+from adios_db.models.oil.physical_properties import(DynamicViscosityPoint,
+                                                    KinematicViscosityPoint,
+                                                    )
+from adios_db.models.common.measurement import (Temperature,
+                                                AngularVelocity,
+                                                MassFraction,
+                                                DynamicViscosity,
+                                                KinematicViscosity,
+                                                )
 
 
 class TestInterfacialTensionPoint:
@@ -185,6 +195,47 @@ class TestEmulsion:
         # this works, because py_json is sparse by default
         assert model.py_json() == json_obj
 
+    def test_from_partial_with_dynamic_viscosity(self):
+        """
+        Should be able to load an incomplete object
+        """
+        model = Emulsion()
+        model.dynamic_viscosities.append(
+            DynamicViscosityPoint(viscosity=DynamicViscosity(value=660000, unit='cP'),
+                                  ref_temp=Temperature(value=15, unit='C'),
+                                  shear_rate=AngularVelocity(1, '1/s'),
+                                  ))
+        model.water_content = MassFraction(value=80.0, unit='%')
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj = model.py_json()
+        print(json_obj)
+
+        # completely arbitrary single value to check
+        assert json_obj['dynamic_viscosities'][0]['ref_temp']['value'] == 15
+        assert Emulsion.from_py_json(json_obj) == model
+
+    def test_from_partial_with_kinematic_viscosity(self):
+        """
+        Should be able to load an incomplete object
+        """
+        model = Emulsion()
+        model.kinematic_viscosities.append(
+            KinematicViscosityPoint(viscosity=KinematicViscosity(value=660000, unit='cSt'),
+                                    ref_temp=Temperature(value=15, unit='C'),
+                                    shear_rate=AngularVelocity(1, '1/s'),
+                                    ))
+        model.water_content = MassFraction(value=80.0, unit='%')
+
+        # the measurement classes will add unit_type, so we add it to more
+        # easily compare the output
+        json_obj = model.py_json()
+        print(json_obj)
+
+        # completely arbitrary single value to check
+        assert json_obj['kinematic_viscosities'][0]['ref_temp']['value'] == 15
+        assert Emulsion.from_py_json(json_obj) == model
 
 class TestEmulsionList:
     # NOTE: this is redundant testing from above!
