@@ -87,6 +87,8 @@ class Oil:
         except AttributeError:
             py_json = json.load(open(infile, encoding='utf-8'))
 
+        # py_json = update_json(py_json)
+
         return cls.from_py_json(py_json)
 
     @staticmethod
