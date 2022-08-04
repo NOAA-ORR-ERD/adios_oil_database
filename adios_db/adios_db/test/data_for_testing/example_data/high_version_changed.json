@@ -1,0 +1,22 @@
+{
+    "oil_id": "EC00561",
+    "adios_data_model_version": "1000.1200.1300",
+    "random_new_attribute": "Anything will Do here",
+    "metadata": {
+        "name": "Cook Inlet [2003]",
+        "source_id": "561",
+        "location": "Alaska, USA",
+        "reference": {
+            "year": 2021,
+            "reference": "Environment and Climate Change Canada, Environment Canada Crude Oil and Petroleum Product Database, Environment and Climate Change Canada, 2021.\n\nurl: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5"
+        },
+        "sample_date": "2003-11-21",
+        "product_type": "Crude Oil NOS",
+        "API": 34.09,
+        "comments": "Via Cook Inlet Regional Advisory Council",
+        "labels": 123,
+        "model_completeness": 42,
+        "gnome_suitable": true
+    }
+}
+

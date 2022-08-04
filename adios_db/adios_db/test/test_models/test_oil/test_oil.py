@@ -424,7 +424,7 @@ def test_version_none():
 
 def test_version_bad():
     """
-    If it doesn't have a version string, it should get the current one.
+    If it doesn't have a valid version string, it should raise an error.
     """
     pyjs = {
         'oil_id': 'AD00123',
@@ -437,6 +437,7 @@ def test_version_bad():
         _oil = Oil.from_py_json(pyjs)
 
 
+@pytest.mark.xfail
 def test_version_too_high():
     pyjs = {
         'oil_id': 'AD00123',

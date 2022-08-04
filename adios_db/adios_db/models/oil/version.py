@@ -19,10 +19,14 @@ class Version:
     """
     class to represent a version with major, minor, and patch components
     """
+
     def __init__(self, major, minor=0, patch=0):
         if isinstance(major, str) and minor == 0 and patch == 0:
             self.__init__(*self._parts_from_string(major))
         else:
+            # make sure major is an integer
+            if float(major) != int(major):
+                raise ValueError("version major must be an integer")
             self.major = int(major)
             self.minor = int(minor)
             self.patch = int(patch)

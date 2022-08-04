@@ -50,6 +50,11 @@ def test_from_py_json_wrong_type():
         _v = Version.from_py_json(1.2)
 
 
+def test_major_wrong_type():
+    with pytest.raises(ValueError):
+        ver = Version(1.2)
+
+
 def test_round_trip():
     v = Version(1, 2, 3)
     v2 = Version.from_py_json(v.py_json())

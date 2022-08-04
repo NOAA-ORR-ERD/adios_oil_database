@@ -5,7 +5,8 @@ NOTE: this may need some refactoring when it gets more complicated
 """
 from .version import Version, VersionError
 
-from .oil import ADIOS_DATA_MODEL_VERSION
+from . import oil
+#from .oil import ADIOS_DATA_MODEL_VERSION
 
 
 class Updater:
@@ -73,11 +74,12 @@ UPDATERS = [update_0_10_0_to_0_11_0(),
             update_0_11_0_to_0_12_0(),
             ]
 
+
 def update_json(py_json):
     """
     updates JSON for an oil object from an older version to a newer one
     """
-    cur_ver = ADIOS_DATA_MODEL_VERSION
+    cur_ver = oil.ADIOS_DATA_MODEL_VERSION
 
     try:
         ver = Version(py_json['adios_data_model_version'])
@@ -98,8 +100,22 @@ def update_json(py_json):
 
     if ver == cur_ver:
         return py_json
+
     elif ver > cur_ver:
-        raise VersionError(f"Version: {ver} is not supported by this version "
-                           "of Oil object")
+        # try to see if it will load anyway -- auto-update.
+        try:
+            # update the version number and try to load it:
+            py_json["adios_data_model_version"] = str(oil.ADIOS_DATA_MODEL_VERSION)
+            this_oil = oil.Oil.from_py_json(py_json)
+            # update (downgrade) the version number
+            #   this may not be valid for the new version, as
+            #   attributes may have been lost.
+
+#            this_oil.adios_data_model_version = oil.ADIOS_DATA_MODEL_VERSION
+            return this_oil.py_json()
+        except Exception:  # if anything goes wrong ....
+            raise VersionError(f"Version: {ver} is not supported by this version "
+                               "of the adios_db Oil object")
     else:
         raise VersionError(f"updater not available for version: {ver}")
+
