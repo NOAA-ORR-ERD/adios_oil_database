@@ -296,6 +296,13 @@ validation messages.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.common.measurement.</span></span><span class="sig-name descname"><span class="pre">AnyUnit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.common.measurement.AnyUnit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementBase</span></code></p>
 <p>This is a type for data that could be any unit_type</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.common.measurement.AnyUnit.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.common.measurement.AnyUnit.validate" title="Permalink to this definition"></a></dt>
+<dd><p>a kludge – this should probably create the correct Measurement
+when created instead</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -408,6 +415,15 @@ but does not refer to a particular measurable quantity.</p>
 <span class="sig-name descname"><span class="pre">unit_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'needleadhesion'</span></em><a class="headerlink" href="#adios_db.models.common.measurement.NeedleAdhesion.unit_type" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.common.measurement.NeedleAdhesion.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.common.measurement.NeedleAdhesion.validate" title="Permalink to this definition"></a></dt>
+<dd><p>Function to validate a dataclass with fields that have validate
+methods.  The validate methods are expected to return a list of
+validation messages.</p>
+<p>The top-level validator extends the existing list</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -502,6 +518,15 @@ deprecated feature – do not use it!</p>
 <dt class="sig sig-object py" id="adios_db.models.common.measurement.Unitless.unit_type">
 <span class="sig-name descname"><span class="pre">unit_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'unitless'</span></em><a class="headerlink" href="#adios_db.models.common.measurement.Unitless.unit_type" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.common.measurement.Unitless.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.common.measurement.Unitless.validate" title="Permalink to this definition"></a></dt>
+<dd><p>Function to validate a dataclass with fields that have validate
+methods.  The validate methods are expected to return a list of
+validation messages.</p>
+<p>The top-level validator extends the existing list</p>
+</dd></dl>
 
 </dd></dl>
 
