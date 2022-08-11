@@ -21,6 +21,10 @@ ERRORS = {
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",
+    
+    # E06* -- dataset error
+    "E060": "Oil fraction in distillation cuts is not accumulative",
+    "E061": "Boiling points in distillation cuts are not strictly increasing" 
 }
 
 ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}

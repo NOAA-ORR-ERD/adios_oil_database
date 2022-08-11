@@ -93,4 +93,20 @@ class Distillation:
                         msgs.append(ERRORS["E040"]
                                     .format("distillation vapor temp", t))
 
+# check if oil fraction is accumulative
+            frac = []
+            temp = []
+            for cut in self.cuts: 
+                frac.append(cut.fraction.converted_to('fraction').value)
+                temp.append(cut.vapor_temp.converted_to('C').value)                
+            #print(frac)    
+            if len(frac) > 1:
+                if(any(i>j for i, j in zip(frac, frac[1:]))):
+                    msgs.append(ERRORS["E060"])
+
+            if len(temp) > 1:
+                if(any(i>j for i, j in zip(temp, temp[1:]))):
+                    msgs.append(ERRORS["E061"])                    
+# check if oil fraction is accumulative
+
         return msgs
