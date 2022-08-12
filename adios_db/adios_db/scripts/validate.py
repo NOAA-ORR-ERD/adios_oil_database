@@ -119,10 +119,10 @@ def write_header(of, base_dir):
 
 
 def write_header_rev(outfile):
-    outfile.write("# Known Issues\n"
+    outfile.write("\n\n# Known Issues\n"
                   "The rest of these are records that have been reviewed, \n"
                   "but still have issues that are known and may never "
-                  "be resolved\n")
+                  "be resolved\n\n")
 
 
 if __name__ == "__main__":

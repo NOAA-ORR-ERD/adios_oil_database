@@ -209,3 +209,37 @@ class TestDistillation:
 
         # make sure there is something there!
         assert len(msgs) == 0
+        
+    def test_distillation_accumulative_fraction(self):
+        dist = Distillation(type="mass fraction",
+                            method="some arbitrary method",
+                            end_point=Temperature(value=15, unit="C"),
+                            fraction_recovered=Concentration(value=0.8,
+                                                             unit="fraction"),
+                            cuts=self.make_dist_cut_list(self.data,
+                                                         temp_unit='C')
+                            )
+                            
+        dist.cuts[5].fraction.value = 0.2
+        
+        msgs = dist.validate()                    
+        assert len(msgs) == 1
+        assert msgs[0].startswith('E060:') 
+        
+    def test_distillation_boilingpoints_strictlyincreasing(self):
+        dist = Distillation(type="mass fraction",
+                            method="some arbitrary method",
+                            end_point=Temperature(value=15, unit="C"),
+                            fraction_recovered=Concentration(value=0.8,
+                                                             unit="fraction"),
+                            cuts=self.make_dist_cut_list(self.data,
+                                                         temp_unit='C')
+                            )
+                            
+        dist.cuts[5].vapor_temp.value = 400.
+        
+        msgs = dist.validate()                    
+        assert len(msgs) == 1
+        assert msgs[0].startswith('E061:')         
+    
+    
