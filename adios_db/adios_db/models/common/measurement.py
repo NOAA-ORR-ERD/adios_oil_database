@@ -133,9 +133,11 @@ class MeasurementBase(MeasurementDataclass):
 
         msgs = []
 
-        if hasattr(nucos, 'is_supported_unit'):
-            if not nucos.is_supported_unit(self.unit_type, self.unit):
-                valid_units = nucos.get_supported_names(self.unit_type)
+        if self.unit is None:
+            msgs.append(ERRORS["E046"].format(self.unit_type))
+        elif hasattr(nucos, 'is_supported_unit'):
+            valid_units = nucos.get_supported_names(self.unit_type)
+            if not isinstance(self.unit, str) or not nucos.is_supported_unit(self.unit_type, self.unit):
                 msgs.append(ERRORS["E045"].format(self.unit, self.unit_type, valid_units))
         else:
             warnings.warn("nucos version >= 3.1.0 required for unit validation")

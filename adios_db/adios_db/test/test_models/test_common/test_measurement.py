@@ -1026,5 +1026,33 @@ class TestUnitValidation:
 
         assert msgs[0] == "E045: Unitless measurements should have no unit. 'nothing' is not valid"
 
+    def test_none_unit(self):
+        """
+        it's obviously an error if a unit is None, but it shouldn't crash
+        """
+        m = Length(value=3.0)
+
+        # just to make sure
+        assert m.unit is None
+
+        msgs = m.validate()
+
+        assert "E046: A unit must be specified for unit type: 'length'" in msgs
+
+    def test_garbage_unit(self):
+        """
+        an unit can't be any non-string type
+        """
+        m = Length(value=3.0)
+
+        # just to make sure
+        m.unit = 1.0
+
+        msgs = m.validate()
+
+        print(msgs)
+
+        assert "E045: Unit: '1.0' is not a valid unit for unit type: 'length'" in msgs[0]
+
 
 
