@@ -176,8 +176,8 @@ def insert_oil(request):
         if not isinstance(oil_jsonapi, dict):
             raise ValueError('JSON dict is the only acceptable payload')
     except Exception as e:
-        logger.error(f'Error in JSON-API oil data: {e}')
-        raise HTTPBadRequest("Error in JSON-API oil data")
+        logger.error(f'Error: JSON-API data could not be deserialized: {e}')
+        raise HTTPBadRequest("Error: JSON-API data could not be deserialized")
 
     try:
         oil_pyjson = jsonapi_to_oil_pyjson(oil_jsonapi)
@@ -271,34 +271,6 @@ def is_temp_id(oil_id):
     return oil_id.endswith('-TEMP')
 
 
-def log_traceback(e, oil_obj):
-    logger.error(f'Validation Exception: '
-                 f'{oil_obj["oil_id"]}: {type(e)}: {e}')
-
-    # There are lots of places where the validation could have raised
-    # an exception.  The traceback can tell us where it happened.
-    depth = 10
-    _, _, exc_traceback = sys.exc_info()
-    tb = traceback.extract_tb(exc_traceback)
-
-    if len(tb) > depth:
-        tb = tb[-depth:]
-
-    for i in tb:
-        logger.error(f'traceback: {_trace_item(*i)}')
-
-
-def _trace_item(filename, lineno, function, text):
-    """
-    Package up the trace item information into a py_json struct.
-    Mainly this keeps the traceback parsing loop cleaner.
-    """
-    return {'file': filename,
-            'lineno': lineno,
-            'function': function,
-            'text': text}
-
-
 @oil_api.patch()
 @can_modify_db
 def patch_oil(request):
@@ -373,6 +345,34 @@ def oil_pyjson_to_oil_obj(oil_pyjson):
     return oil
 
 
+def log_traceback(e, oil_obj):
+    logger.error(f'Validation Exception: '
+                 f'{oil_obj["oil_id"]}: {type(e)}: {e}')
+
+    # There are lots of places where the validation could have raised
+    # an exception.  The traceback can tell us where it happened.
+    depth = 10
+    _, _, exc_traceback = sys.exc_info()
+    tb = traceback.extract_tb(exc_traceback)
+
+    if len(tb) > depth:
+        tb = tb[-depth:]
+
+    for i in tb:
+        logger.error(f'traceback: {_trace_item(*i)}')
+
+
+def _trace_item(filename, lineno, function, text):
+    """
+    Package up the trace item information into a py_json struct.
+    Mainly this keeps the traceback parsing loop cleaner.
+    """
+    return {'file': filename,
+            'lineno': lineno,
+            'function': function,
+            'text': text}
+
+
 def generate_jsonapi_response_from_oil(oil_obj):
     json_obj = {'data': {'attributes': oil_obj}}
 
@@ -403,15 +403,14 @@ def get_oil_searchable_fields(oil):
                 'type': 'oils',
                 'attributes': {
                     'metadata': {
-                        'name': meta.get('name', None),
-                        'location': meta.get('location', None),
-                        'product_type': meta.get('product_type', None),
+                        'name': meta.get('name'),
+                        'location': meta.get('location'),
+                        'product_type': meta.get('product_type'),
                         'API': meta.get('API'),
                         'sample_date': meta.get('sample_date', ''),
                         'labels': meta.get('labels', []),
-                        'model_completeness': meta.get('model_completeness',
-                                                       None),
-                        'gnome_suitable': meta.get('gnome_suitable', None),
+                        'model_completeness': meta.get('model_completeness'),
+                        'gnome_suitable': meta.get('gnome_suitable'),
                     },
                     'status': oil.get('status', []),
                 },

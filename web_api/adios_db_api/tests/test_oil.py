@@ -8,8 +8,6 @@ import copy
 from .base import FunctionalTestBase
 from .sample_oils import basic_noaa_fm
 
-from builtins import isinstance, dict
-
 
 class OilTestBase(FunctionalTestBase):
     """
@@ -188,9 +186,46 @@ class OilTests(OilTestBase):
     def test_delete_bad_req(self):
         self.testapp.delete('/oils/{}/'.format('bogus_id'), status=400)
 
+        self.testapp.delete('/oils/', status=400)
+
+    def test_post_new_id(self):
+        new_oil_payload = copy.deepcopy(basic_noaa_fm)
+        del new_oil_payload['oil_id']
+
+        resp = self.testapp.post_json(
+            '/oils/',
+            params=self.jsonapi_request(new_oil_payload)
+        )
+        oil = resp.json_body
+
+        assert isinstance(oil, dict)
+
+        for k in ('data',):
+            assert k in oil
+
+        print('oil: ', oil['data']['_id'])
+        assert oil['data']['_id'] == 'XX00001'
+
+    def test_post_new_temp_id(self):
+        new_oil_payload = copy.deepcopy(basic_noaa_fm)
+        new_oil_payload['oil_id'] = 'XX00002-TEMP'
+
+        resp = self.testapp.post_json(
+            '/oils/',
+            params=self.jsonapi_request(new_oil_payload)
+        )
+        oil = resp.json_body
+
+        assert isinstance(oil, dict)
+
+        for k in ('data',):
+            assert k in oil
+
+        print('oil: ', oil['data']['_id'])
+        assert oil['data']['_id'] == 'XX00002-TEMP'
+
 
 class OilTestCRUD(OilTestBase):
-
     def test_insert(self):
         oil_json = copy.deepcopy(basic_noaa_fm)
 
@@ -225,6 +260,48 @@ class OilTestCRUD(OilTestBase):
 
         print(f"get {oil_json['oil_id']} worked after inserting")
 
+    def test_insert_twice(self):
+        oil_json = copy.deepcopy(basic_noaa_fm)
+
+        #
+        # Make sure it's not already there
+        #
+        self.testapp.get('/oils/{}/'.format(oil_json['oil_id']), status=404)
+        print(f'test_crud: {oil_json["oil_id"]} is not already there ...')
+
+        #
+        # insert
+        #
+        print(f'inserting {oil_json["oil_id"]}')
+        resp = self.testapp.post_json('/oils/',
+                                      params=self.jsonapi_request(oil_json))
+        oil_json_ret = self.jsonapi_to_oil(resp.json_body)
+
+        assert oil_json_ret['oil_id'] == 'AD99999'
+        assert oil_json_ret['metadata']['API'] == 31.7
+        print("The post returned the correct record.")
+
+        #
+        # test inserted
+        #
+        print("trying to get:", oil_json['oil_id'])
+
+        resp = self.testapp.get('/oils/{0}'.format(oil_json['oil_id']))
+        oil_json_ret = self.jsonapi_to_oil(resp.json_body)
+
+        assert oil_json_ret['oil_id'] == oil_json['oil_id']
+        assert oil_json_ret['metadata']['API'] == 31.7
+
+        print(f"get {oil_json['oil_id']} worked after inserting")
+
+        #
+        # insert a second time.  This should fail
+        #
+        print(f'inserting {oil_json["oil_id"]}')
+        resp = self.testapp.post_json('/oils/',
+                                      params=self.jsonapi_request(oil_json),
+                                      status=409)
+
     def test_update(self):
 
         oil_json = copy.deepcopy(basic_noaa_fm)
@@ -249,6 +326,37 @@ class OilTestCRUD(OilTestBase):
         resp = self.testapp.get('/oils/{0}'.format(oil_json['oil_id']))
         oil_json_ret = self.jsonapi_to_oil(resp.json_body)
 
+        assert oil_json_ret['metadata']['API'] == 33.0
+
+        print(f"get {oil_json['oil_id']} worked after updating")
+
+    def test_update_temp_id(self):
+
+        oil_json = copy.deepcopy(basic_noaa_fm)
+        oil_json['oil_id'] = f'{oil_json["oil_id"]}-TEMP'
+
+        print(f'inserting {oil_json["oil_id"]}')
+        self.testapp.post_json('/oils/',
+                               params=self.jsonapi_request(oil_json))
+
+        print('testing update...')
+        oil_json['metadata']['API'] = 33.0
+
+        resp = self.testapp.put_json('/oils/',
+                                     params=self.jsonapi_request(oil_json))
+        oil_json_ret = self.jsonapi_to_oil(resp.json_body)
+
+        assert oil_json_ret['oil_id'].endswith('-TEMP')
+        assert oil_json_ret['metadata']['API'] == 33.0
+
+        #
+        # test updated
+        #
+        print('testing update...')
+        resp = self.testapp.get('/oils/{0}'.format(oil_json['oil_id']))
+        oil_json_ret = self.jsonapi_to_oil(resp.json_body)
+
+        assert oil_json_ret['oil_id'].endswith('-TEMP')
         assert oil_json_ret['metadata']['API'] == 33.0
 
         print(f"get {oil_json['oil_id']} worked after updating")
@@ -303,13 +411,75 @@ class OilTestCRUD(OilTestBase):
 
         print("get failed after delete -- and that's good :-)")
 
+    def test_delete_temp_id(self):
+        oil_json = copy.deepcopy(basic_noaa_fm)
+        oil_json['oil_id'] = f'{oil_json["oil_id"]}-TEMP'
+
+        print(f'inserting {oil_json["oil_id"]}')
+        self.testapp.post_json('/oils/',
+                               params=self.jsonapi_request(oil_json))
+
+        # delete
+        #
+        print('testing delete...')
+        self.testapp.delete('/oils/{}'.format(oil_json['oil_id']))
+
+        # test deleted
+        #
+        print('test deleted...')
+        self.testapp.get('/oils/{}/'.format(oil_json['oil_id']), status=404)
+
+        print("get failed after delete -- and that's good :-)")
+
 
 class TestOilSort(OilTestBase):
     """
     testing calls to the API asking for sorted results
 
-    This only tests sorting on API and name -- probably should. test them all
+    This only tests sorting on API and name -- probably should test them all
     """
+    def test_sorted_by_id(self):
+        """
+        check getting a sorted result by name -- decending order
+        """
+        resp = self.testapp.get('/oils/?'
+                                'limit=5&'
+                                'page=0&'
+                                'q=&'
+                                'qApi=&'
+                                'qLabels=&'
+                                'dir=desc&'
+                                'sort=id')
+
+        result = resp.json_body['data']
+        print(f'result: {result}')
+        oil_ids = [rec['_id'] for rec in result]
+
+        # we are sorting case insensitive
+        assert oil_ids == sorted(oil_ids, reverse=True,
+                                 key=lambda x: x.lower())
+
+    def test_sorted_by_oil_id(self):
+        """
+        check getting a sorted result by name -- decending order
+        """
+        resp = self.testapp.get('/oils/?'
+                                'limit=5&'
+                                'page=0&'
+                                'q=&'
+                                'qApi=&'
+                                'qLabels=&'
+                                'dir=desc&'
+                                'sort=oil_id')
+
+        result = resp.json_body['data']
+        print(f'result: {result}')
+        oil_ids = [rec['_id'] for rec in result]
+
+        # we are sorting case insensitive
+        assert oil_ids == sorted(oil_ids, reverse=True,
+                                 key=lambda x: x.lower())
+
     def test_sorted_by_name_desc(self):
         """
         check getting a sorted result by name -- decending order
