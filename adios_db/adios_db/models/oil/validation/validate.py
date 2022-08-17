@@ -25,6 +25,9 @@ def validate_json(oil_json):
 
     The "status" field is updated in place, with no other alterations
     of the record
+
+    Comment: the E010 error is redundant.  We could easily get by with just
+             the validate() function.
     """
     if "oil_id" not in oil_json:
         raise ValueError(ERRORS["E010"])

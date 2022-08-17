@@ -92,6 +92,16 @@ class OilTests(OilTestBase):
                 # we are only expecting searchable fields
                 assert k in rec['attributes']
 
+    def test_get_valid_with_invalid_paging(self):
+        params = {'limit': -1, 'page': -1}
+        self.testapp.get('/oils/', params=params, status=400)
+
+        params = {'limit': 1, 'page': -1}
+        self.testapp.get('/oils/', params=params, status=400)
+
+        params = {'limit': -1, 'page': 1}
+        self.testapp.get('/oils/', params=params, status=400)
+
     def test_get_valid_id(self):
         """
         Note: We are basing our tests on webtest(unittest), so
@@ -173,7 +183,7 @@ class OilTests(OilTestBase):
                              headers={'Content-Type': 'application/json'},
                              status=400)
 
-        self.testapp.put_json('/oils/', params={"bad": 'attr'}, status=415)
+        self.testapp.put_json('/oils/', params={"bad": 'attr'}, status=400)
 
     def test_delete_bad_req(self):
         self.testapp.delete('/oils/{}/'.format('bogus_id'), status=400)
@@ -220,8 +230,8 @@ class OilTestCRUD(OilTestBase):
         oil_json = copy.deepcopy(basic_noaa_fm)
 
         print(f'inserting {oil_json["oil_id"]}')
-        resp = self.testapp.post_json('/oils/',
-                                      params=self.jsonapi_request(oil_json))
+        self.testapp.post_json('/oils/',
+                               params=self.jsonapi_request(oil_json))
 
         print('testing update...')
         oil_json['metadata']['API'] = 33.0
@@ -248,8 +258,8 @@ class OilTestCRUD(OilTestBase):
         oil_json = copy.deepcopy(basic_noaa_fm)
 
         print(f'inserting {oil_json["oil_id"]}')
-        resp = self.testapp.post_json('/oils/',
-                                      params=self.jsonapi_request(oil_json))
+        self.testapp.post_json('/oils/',
+                               params=self.jsonapi_request(oil_json))
 
         #
         # patch
@@ -278,8 +288,8 @@ class OilTestCRUD(OilTestBase):
         oil_json = copy.deepcopy(basic_noaa_fm)
 
         print(f'inserting {oil_json["oil_id"]}')
-        resp = self.testapp.post_json('/oils/',
-                                      params=self.jsonapi_request(oil_json))
+        self.testapp.post_json('/oils/',
+                               params=self.jsonapi_request(oil_json))
 
         # delete
         #

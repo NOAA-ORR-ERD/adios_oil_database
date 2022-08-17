@@ -25,7 +25,11 @@ ERRORS = {
 
     # E06* -- dataset error
     "E060": "Oil fraction in distillation cuts is not accumulative",
-    "E061": "Boiling points in distillation cuts are not strictly increasing"
+    "E061": "Boiling points in distillation cuts are not strictly increasing",
+
+    # E09* -- system errors
+    "E098": "Exception Raised while computing completeness",
+    "E099": "Exception Raised while validating"
 }
 
 ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}
