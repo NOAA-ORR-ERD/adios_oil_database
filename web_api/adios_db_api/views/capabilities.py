@@ -34,7 +34,7 @@ def get_capabilities(request):
     if obj_id is not None:
         try:
             obj_id = int(obj_id)
-        except TypeError as e:
+        except (TypeError, ValueError) as e:
             logger.error(e)
             raise HTTPBadRequest()
 
