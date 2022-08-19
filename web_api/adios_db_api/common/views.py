@@ -31,28 +31,6 @@ def obj_id_from_url(request):
     return obj_id
 
 
-def obj_id_from_req_payload(json_request):
-    return json_request.get('id')
-
-
-def cors_exception(request, exception_class, with_stacktrace=False):
-    depth = 2
-    http_exc = exception_class()
-
-    hdr_val = request.headers.get('Origin')
-    if hdr_val is not None:
-        http_exc.headers.add('Access-Control-Allow-Origin', hdr_val)
-        http_exc.headers.add('Access-Control-Allow-Credentials', 'true')
-
-    if with_stacktrace:
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        fmt = traceback.format_exception(exc_type, exc_value, exc_traceback)
-
-        http_exc.json_body = ujson.dumps([l.strip() for l in fmt][-depth:])
-
-    return http_exc
-
-
 def cors_response(request, response):
     hdr_val = request.headers.get('Origin')
     if hdr_val is not None:

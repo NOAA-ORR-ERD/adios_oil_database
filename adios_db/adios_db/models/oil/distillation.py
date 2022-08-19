@@ -4,20 +4,8 @@ Classes for storing measured values within an Oil record
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
-from ..common.measurement import (Time,
-                                  Temperature,
-                                  MassFraction,
-                                  VolumeFraction,
-                                  MassOrVolumeFraction,
-                                  Concentration,
-                                  Unitless,
-                                  Dimensionless,
-                                  Density,
-                                  DynamicViscosity,
-                                  KinematicViscosity,
-                                  InterfacialTension,
-                                  Pressure,
-                                  AngularVelocity)
+from ..common.measurement import (Temperature,
+                                  MassOrVolumeFraction)
 
 from ..common.validators import EnumValidator
 from .validation.warnings import WARNINGS
@@ -96,17 +84,17 @@ class Distillation:
 # check if oil fraction is accumulative
             frac = []
             temp = []
-            for cut in self.cuts: 
+            for cut in self.cuts:
                 frac.append(cut.fraction.converted_to('fraction').value)
-                temp.append(cut.vapor_temp.converted_to('C').value)                
-            #print(frac)    
+                temp.append(cut.vapor_temp.converted_to('C').value)
+            # print(frac)
             if len(frac) > 1:
-                if(any(i>j for i, j in zip(frac, frac[1:]))):
+                if(any(i > j for i, j in zip(frac, frac[1:]))):
                     msgs.append(ERRORS["E060"])
 
             if len(temp) > 1:
-                if(any(i>j for i, j in zip(temp, temp[1:]))):
-                    msgs.append(ERRORS["E061"])                    
+                if(any(i > j for i, j in zip(temp, temp[1:]))):
+                    msgs.append(ERRORS["E061"])
 # check if oil fraction is accumulative
 
         return msgs

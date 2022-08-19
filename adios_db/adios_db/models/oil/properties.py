@@ -8,17 +8,14 @@ from ..common.measurement import (Time,
                                   Temperature,
                                   MassFraction,
                                   Unitless,
-                                  Dimensionless,
-                                  Density,
                                   DynamicViscosity,
-                                  KinematicViscosity,
                                   InterfacialTension,
-                                  Pressure,
-                                  AngularVelocity)
+                                  Pressure)
 from .physical_properties import DynamicViscosityList, KinematicViscosityList
 
 from ..common.validators import EnumValidator
 from .validation.errors import ERRORS
+
 
 @dataclass_to_json
 @dataclass
@@ -80,12 +77,13 @@ class Emulsion:
     def validate(self):
         msgs = []
         if self.visual_stability is not None:
-            msgs.extend(EnumValidator({"Stable", "Mesostable", "Unstable", "Entrained", "Did not form"},
+            msgs.extend(EnumValidator({"Stable", "Mesostable", "Unstable",
+                                       "Entrained", "Did not form"},
                                       ERRORS["E033"],
                                       case_insensitive=False)(self.visual_stability))
 
-
         return msgs
+
 
 class EmulsionList(JSON_List):
     item_type = Emulsion
