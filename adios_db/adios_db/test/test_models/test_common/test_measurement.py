@@ -1024,7 +1024,7 @@ class TestUnitValidation:
 
         msgs = meas.validate()
 
-        assert msgs[0] == "E045: Unitless measurements should have no unit. 'nothing' is not valid"
+        assert msgs[0] == 'E045: Unitless measurements should have no unit. "nothing" is not valid'
 
     def test_none_unit(self):
         """
