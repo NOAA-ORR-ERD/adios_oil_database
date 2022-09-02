@@ -26,6 +26,7 @@ from ..common.utilities import dataclass_to_json
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
+
 __all__ = [
     'AngularVelocity',
     'Concentration',
@@ -133,16 +134,29 @@ class MeasurementBase(MeasurementDataclass):
 
         msgs = []
 
-        if self.unit is None:
+        if self.is_empty():
+            # an empty dataclass is not necessarily an error, as it will likely
+            # get pruned when converted back to py_json
+            pass
+        elif self.unit is None:
             msgs.append(ERRORS["E046"].format(self.unit_type))
         elif hasattr(nucos, 'is_supported_unit'):
             valid_units = nucos.get_supported_names(self.unit_type)
-            if not isinstance(self.unit, str) or not nucos.is_supported_unit(self.unit_type, self.unit):
-                msgs.append(ERRORS["E045"].format(self.unit, self.unit_type, valid_units))
+            if (not isinstance(self.unit, str) or
+                    not nucos.is_supported_unit(self.unit_type, self.unit)):
+                msgs.append(ERRORS["E045"].format(self.unit, self.unit_type,
+                                                  valid_units))
         else:
-            warnings.warn("nucos version >= 3.1.0 required for unit validation")
+            warnings.warn("nucos version >= 3.1.0 required "
+                          "for unit validation")
 
         return msgs
+
+    def is_empty(self):
+        attr_data = [getattr(self, k)
+                     for k in self.__dataclass_fields__.keys()
+                     if k != 'unit_type' and getattr(self, k) is not None]
+        return attr_data == []
 
     def py_json(self, sparse=True):
         """
@@ -150,8 +164,6 @@ class MeasurementBase(MeasurementDataclass):
         """
         pj = super().py_json(sparse)
         pj['unit_type'] = self.unit_type
-        if len(pj) == 1:  # only unit_type -- i.e. empty
-            return {}
 
         if len(pj) == 1:  # only unit_type -- i.e. empty
             return {}
@@ -302,7 +314,8 @@ class Unitless(MeasurementBase):
 
     def validate(self):
         if (self is not None) and (self.unit is not None):
-            return [f"E045: Unitless measurements should have no unit. '{self.unit}' is not valid"]
+            return ['E045: Unitless measurements should have no unit. '
+                    f'"{self.unit}" is not valid']
         return []
 
 
@@ -430,7 +443,6 @@ class AnyUnit(MeasurementBase):
         """
         return self.__dict__ == other.__dict__
 
-
     def validate(self):
         """
         a kludge -- this should probably create the correct Measurement
@@ -464,8 +476,10 @@ class NeedleAdhesion(MeasurementBase):
 
     def validate(self):
         if (self is not None) and (self.unit.strip().lower() != "g/m^2"):
-            return [f'E045: Needle Adhesion can only have units of: "g/m^2". "{self.unit}" is not valid']
+            return ['E045: Needle Adhesion can only have units of: "g/m^2". '
+                    f'"{self.unit}" is not valid']
         return []
+
 
 class InterfacialTension(MeasurementBase):
     unit_type = "interfacialtension"
@@ -495,4 +509,3 @@ class AngularVelocity(MeasurementBase):
 #         set_valid_units(obj)
 #     except TypeError:
 #         pass
-
