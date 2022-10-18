@@ -17,8 +17,10 @@ from pyramid.httpexceptions import (HTTPBadRequest,
 
 from pymongo.errors import DuplicateKeyError
 
-from adios_db.models.oil.validation.validate import validate_json
+from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.completeness import set_completeness
+from adios_db.models.oil.validation.validate import validate
+from adios_db.models.oil.validation.errors import ERRORS
 
 from adios_db_api.common.views import (cors_policy,
                                        obj_id_from_url,
@@ -77,6 +79,9 @@ def get_oils(request):
         try:
             limit, page = [int(o) for o in (request.GET.get('limit', '0'),
                                             request.GET.get('page', '0'))]
+            if limit < 0 or page < 0:
+                raise ValueError('Invalid paging range: '
+                                 f'{{"limit": {limit}, "page": {page})}}')
             start, stop = [limit * i for i in (page, page + 1)]
             logger.info('start, stop = {}, {}'.format(start, stop))
         except Exception as e:
@@ -166,32 +171,27 @@ def insert_oil(request):
     logger.info('POST /oils')
 
     try:
-        json_obj = ujson.loads(request.body)
+        oil_jsonapi = ujson.loads(request.body)
 
-        if not isinstance(json_obj, dict):
+        if not isinstance(oil_jsonapi, dict):
             raise ValueError('JSON dict is the only acceptable payload')
     except Exception as e:
-        logger.error(e)
-        raise HTTPBadRequest("Error parsing oil JSON")
+        logger.error(f'Error: JSON-API data could not be deserialized: {e}')
+        raise HTTPBadRequest("Error: JSON-API data could not be deserialized")
 
     try:
-        oil_obj = get_oil_from_json_req(json_obj)
+        oil_pyjson = jsonapi_to_oil_pyjson(oil_jsonapi)
     except Exception as e:
-        logger.error(f'Validation Error: {e}')
-        raise HTTPBadRequest("Error validating oil JSON")
+        logger.error(f'Error in JSON-API oil data: {e}')
+        raise HTTPBadRequest("Error in JSON-API oil data")
 
     try:
-        logger.info('oil.name: {}'.format(oil_obj['metadata']['name']))
+        logger.info('oil.name: {}'.format(oil_pyjson['metadata']['name']))
 
-        if 'oil_id' not in oil_obj:
-            oil_obj['oil_id'] = request.adb_session.new_oil_id()
+        if 'oil_id' not in oil_pyjson:
+            oil_pyjson['oil_id'] = request.adb_session.new_oil_id()
 
-        try:
-            oil = validate_json(oil_obj)
-            set_completeness(oil)
-        except Exception as e:
-            log_traceback(e, oil_obj)
-            raise
+        oil = oil_pyjson_to_oil_obj(oil_pyjson)
 
         if is_temp_id(oil.oil_id):
             logger.info(f"Temporary oil with ID: {oil.oil_id}, "
@@ -224,22 +224,24 @@ def update_oil(request):
     logger.info('PUT /oils: id: {}'.format(obj_id))
 
     try:
-        json_obj = ujson.loads(request.body)
+        oil_jsonapi = ujson.loads(request.body)
 
-        if not isinstance(json_obj, dict):
+        if not isinstance(oil_jsonapi, dict):
             raise ValueError('JSON dict is the only acceptable payload')
-    except Exception:
-        raise HTTPBadRequest('Could not parse oil JSON')
+    except Exception as e:
+        logger.error(f'Error in JSON-API oil data: {e}')
+        raise HTTPBadRequest('Error in JSON-API oil data')
 
     try:
-        oil_obj = get_oil_from_json_req(json_obj)
+        oil_pyjson = jsonapi_to_oil_pyjson(oil_jsonapi)
+    except Exception as e:
+        logger.error(f'Error in JSON-API oil data: {e}')
+        raise HTTPBadRequest("Error in JSON-API oil data")
 
-        try:
-            oil = validate_json(oil_obj)
-            set_completeness(oil)
-        except Exception as e:
-            log_traceback(e, oil_obj)
-            raise
+    try:
+        logger.info('oil.name: {}'.format(oil_pyjson['metadata']['name']))
+
+        oil = oil_pyjson_to_oil_obj(oil_pyjson)
 
         if is_temp_id(oil.oil_id):
             logger.info(f"Temporary oil with ID: {oil.oil_id}, "
@@ -257,23 +259,6 @@ def update_oil(request):
     return generate_jsonapi_response_from_oil(oil.py_json())
 
 
-def log_traceback(e, oil_obj):
-    logger.error(f'Validation Exception: '
-                 f'{oil_obj["oil_id"]}: {type(e)}: {e}')
-
-    # There are lots of places where the validation could have raised
-    # an exception.  The traceback can tell us where it happened.
-    depth = 3
-    _, _, exc_traceback = sys.exc_info()
-    tb = traceback.extract_tb(exc_traceback)
-
-    if len(tb) > depth:
-        tb = tb[-depth:]
-
-    for i in tb:
-        logger.error(f'traceback: {_trace_item(*i)}')
-
-
 def is_temp_id(oil_id):
     '''
         We will support temporary IDs, in which we will treat the JSON object
@@ -284,17 +269,6 @@ def is_temp_id(oil_id):
         well known.
     '''
     return oil_id.endswith('-TEMP')
-
-
-def _trace_item(filename, lineno, function, text):
-    """
-    Package up the trace item information into a py_json struct.
-    Mainly this keeps the traceback parsing loop cleaner.
-    """
-    return {'file': filename,
-            'lineno': lineno,
-            'function': function,
-            'text': text}
 
 
 @oil_api.patch()
@@ -331,14 +305,72 @@ def delete_oil(request):
         raise HTTPBadRequest()  # JSONAPI expects this upon failure
 
 
-def get_oil_from_json_req(json_obj):
-    oil_obj = json_obj['data']['attributes']
+def jsonapi_to_oil_pyjson(oil_jsonapi):
+    """
+    Here we take a JSON-API body payload and return an oil pyjson
+    data structure.
+    """
+    oil_obj = oil_jsonapi['data']['attributes'].copy()
 
-    if 'oil_id' in json_obj['data']:
+    if 'oil_id' in oil_jsonapi['data']:
         # won't have an id if we are inserting
-        oil_obj['oil_id'] = json_obj['data']['oil_id']
+        oil_obj['oil_id'] = oil_jsonapi['data']['oil_id']
 
     return oil_obj
+
+
+def oil_pyjson_to_oil_obj(oil_pyjson):
+    """
+    Here, we take pyjson oil data and turn it into a usable oil object.
+    """
+    try:
+        oil = Oil.from_py_json(oil_pyjson)  # creates oil object from json
+    except Exception as e:
+        log_traceback(e, oil_pyjson)
+        raise
+
+    try:
+        validate(oil)
+    except Exception as e:
+        log_traceback(e, oil_pyjson)
+        oil.status = [ERRORS['E099']]
+
+    try:
+        set_completeness(oil)
+    except Exception as e:
+        log_traceback(e, oil_pyjson)
+        oil.completeness = None
+        oil.status.append(ERRORS['E098'])
+
+    return oil
+
+
+def log_traceback(e, oil_obj):
+    logger.error(f'Validation Exception: '
+                 f'{oil_obj["oil_id"]}: {type(e)}: {e}')
+
+    # There are lots of places where the validation could have raised
+    # an exception.  The traceback can tell us where it happened.
+    depth = 10
+    _, _, exc_traceback = sys.exc_info()
+    tb = traceback.extract_tb(exc_traceback)
+
+    if len(tb) > depth:
+        tb = tb[-depth:]
+
+    for i in tb:
+        logger.error(f'traceback: {_trace_item(*i)}')
+
+
+def _trace_item(filename, lineno, function, text):
+    """
+    Package up the trace item information into a py_json struct.
+    Mainly this keeps the traceback parsing loop cleaner.
+    """
+    return {'file': filename,
+            'lineno': lineno,
+            'function': function,
+            'text': text}
 
 
 def generate_jsonapi_response_from_oil(oil_obj):
@@ -371,15 +403,14 @@ def get_oil_searchable_fields(oil):
                 'type': 'oils',
                 'attributes': {
                     'metadata': {
-                        'name': meta.get('name', None),
-                        'location': meta.get('location', None),
-                        'product_type': meta.get('product_type', None),
+                        'name': meta.get('name'),
+                        'location': meta.get('location'),
+                        'product_type': meta.get('product_type'),
                         'API': meta.get('API'),
                         'sample_date': meta.get('sample_date', ''),
                         'labels': meta.get('labels', []),
-                        'model_completeness': meta.get('model_completeness',
-                                                       None),
-                        'gnome_suitable': meta.get('gnome_suitable', None),
+                        'model_completeness': meta.get('model_completeness'),
+                        'gnome_suitable': meta.get('gnome_suitable'),
                     },
                     'status': oil.get('status', []),
                 },

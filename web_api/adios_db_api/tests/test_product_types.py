@@ -8,6 +8,7 @@ from adios_db.models.oil.product_type import PRODUCT_TYPES
 
 def test_get_product_types(testapp):
     testapp.get("/product-types", status=307)
+
     resp = testapp.get("/product-types/")
 
     result = resp.json_body
@@ -16,6 +17,27 @@ def test_get_product_types(testapp):
     print(type(product_types))
     print(product_types)
     assert product_types == list(PRODUCT_TYPES)
+
+
+def test_get_product_types_valid_id(testapp):
+    # the only ID that is valid is 0
+    resp = testapp.get("/product-types/0/")
+
+    result = resp.json_body
+    product_types = result['product_types']
+
+    print(type(product_types))
+    print(product_types)
+    assert product_types == list(PRODUCT_TYPES)
+
+
+def test_get_product_types_invalid_id(testapp):
+    # the only ID that is valid is 0
+    testapp.get("/product-types/1/", status=404)
+
+    testapp.get("/product-types/bogus/", status=400)
+
+    testapp.get("/product-types/1.1/", status=400)
 
 
 def test_post(testapp):

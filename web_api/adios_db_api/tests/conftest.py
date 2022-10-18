@@ -25,7 +25,7 @@ TEST_SETTINGS = {
     'caps.can_modify_db': 'true',
     'install_path': '.',
     'help_dir': './help',
-    'user_docs_dir': '../docs',
+    'user_docs_dir': '../user_docs',
 }
 
 
