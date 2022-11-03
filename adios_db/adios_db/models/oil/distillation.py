@@ -5,7 +5,8 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
 from ..common.measurement import (Temperature,
-                                  MassOrVolumeFraction)
+                                  MassOrVolumeFraction,
+                                  )
 
 from ..common.validators import EnumValidator
 from .validation.warnings import WARNINGS
@@ -21,6 +22,28 @@ class DistCut:
 
 class DistCutList(JSON_List):
     item_type = DistCut
+
+    @classmethod
+    def from_data_arrays(cls, fractions, temps, frac_unit, temp_unit, unit_type="MassFraction"):
+        """
+        Create a DistCutList from arrays of dist cut data
+
+        :param fractions: sequence of cut fractions
+        :param temps: sequence of cut vapor temperatures
+        :param frac_unit: unit of fractions: e.g."%", "fraction"
+        :param temp_unit: temperature unit: e.g. "C", "F", "K"
+        :param unit_type="MassFraction": "MassFraction" or "VolumeFraction"
+        """
+        if len(fractions) != len(temps):
+            raise ValueError("fractions and temps must be the same length")
+
+        dcl = cls(DistCut(fraction=MassOrVolumeFraction(value=f, unit=frac_unit, unit_type=unit_type),
+                          vapor_temp=Temperature(value=t, unit=temp_unit))
+                  for f, t in zip(fractions, temps))
+
+        return dcl
+
+
 
 
 @dataclass_to_json
