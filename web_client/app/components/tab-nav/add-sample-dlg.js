@@ -123,7 +123,7 @@ export default class AddSampleDlg extends Component {
         switch (this.sampleType) {
         case this.SampleTypes.evaporated:
             if (this.evaporatedFraction) {
-                let percent = roundRelative([this.evaporatedFraction * 100, 2]);
+                let percent = roundRelative([this.evaporatedFraction, 2]);
                 name = shortName = `${percent}% Evaporated`;
             }
             else {
@@ -135,7 +135,10 @@ export default class AddSampleDlg extends Component {
                 'metadata': {
                     'name': name,
                     'short_name': shortName,
-                    'fraction_evaporated': this.evaporatedFraction
+                    'fraction_evaporated': {
+                        value: this.evaporatedFraction,
+                        unit: "%",
+                        unit_type: "massfraction"}
                 }
             };
             break;
