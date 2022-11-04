@@ -17,6 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,6 +51,7 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="adios_db.html">adios_db package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adios_db.html#adios_db.initialize_console_log"><code class="docutils literal notranslate"><span class="pre">initialize_console_log()</span></code></a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="adios_db.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">adios_db.data_sources package</a><ul>
@@ -86,9 +88,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="adios_db.html">adios_db package</a> &raquo;</li>
-      <li>adios_db.data_sources package</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="adios_db.html">adios_db package</a></li>
+      <li class="breadcrumb-item active">adios_db.data_sources package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/adios_db.data_sources.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -140,18 +142,130 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.common">adios_db.data_sources.exxon_assays.common module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.mapper">adios_db.data_sources.exxon_assays.mapper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.parser">adios_db.data_sources.exxon_assays.parser module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.reader">adios_db.data_sources.exxon_assays.reader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.common">adios_db.data_sources.exxon_assays.common module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.common.get_next_properties_row"><code class="docutils literal notranslate"><span class="pre">get_next_properties_row()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.common.is_empty"><code class="docutils literal notranslate"><span class="pre">is_empty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.common.next_id"><code class="docutils literal notranslate"><span class="pre">next_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.common.next_non_empty"><code class="docutils literal notranslate"><span class="pre">next_non_empty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.common.norm"><code class="docutils literal notranslate"><span class="pre">norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.common.to_number"><code class="docutils literal notranslate"><span class="pre">to_number()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.mapper">adios_db.data_sources.exxon_assays.mapper module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.mapper.ExxonMapper"><code class="docutils literal notranslate"><span class="pre">ExxonMapper()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.parser">adios_db.data_sources.exxon_assays.parser module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.parser.ExxonRecordParser"><code class="docutils literal notranslate"><span class="pre">ExxonRecordParser()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#module-adios_db.data_sources.exxon_assays.reader">adios_db.data_sources.exxon_assays.reader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.reader.ExxonDataReader"><code class="docutils literal notranslate"><span class="pre">ExxonDataReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.reader.ExxonDataReader.get_records"><code class="docutils literal notranslate"><span class="pre">ExxonDataReader.get_records()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.exxon_assays.html#adios_db.data_sources.exxon_assays.reader.ExxonDataReader.read_excel_file"><code class="docutils literal notranslate"><span class="pre">ExxonDataReader.read_excel_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html">adios_db.data_sources.noaa_fm package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.mapper">adios_db.data_sources.noaa_fm.mapper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.parser">adios_db.data_sources.noaa_fm.parser module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.reader">adios_db.data_sources.noaa_fm.reader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.scoring">adios_db.data_sources.noaa_fm.scoring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.mapper">adios_db.data_sources.noaa_fm.mapper module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.adhesion"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.adhesion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.bulk_composition"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.bulk_composition</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.compounds"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.compounds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.distillation_data"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.distillation_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.environmental_behavior"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.environmental_behavior()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.filter_weathered_attr"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.filter_weathered_attr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.fresh_sample_props"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.fresh_sample_props</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.generate_sample_id_attrs"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.generate_sample_id_attrs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.industry_properties"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.industry_properties</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.metadata"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.oil_props"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.oil_props</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.physical_properties"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.physical_properties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.py_json"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.py_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.sample"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.sub_samples"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.sub_samples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.mapper.OilLibraryAttributeMapper.weathered_sample_props"><code class="docutils literal notranslate"><span class="pre">OilLibraryAttributeMapper.weathered_sample_props</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.parser">adios_db.data_sources.noaa_fm.parser module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.API"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.API</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.SARA"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.SARA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.conradson"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.conradson</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.cut_units"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.cut_units</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.cuts"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.cuts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.densities"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.densities</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.dynamic_viscosities"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.dynamic_viscosities</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.emulsions"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.emulsions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.flash_point"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.flash_point</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.flash_point_max_k"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.flash_point_max_k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.flash_point_min_k"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.flash_point_min_k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.get_property_sets"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.get_property_sets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.interfacial_tension_air"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.interfacial_tension_air</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.interfacial_tension_seawater"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.interfacial_tension_seawater</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.interfacial_tension_water"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.interfacial_tension_water</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.interfacial_tensions"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.interfacial_tensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.kinematic_viscosities"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.kinematic_viscosities</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.name"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.oil_class"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.oil_class</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.oil_id"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.oil_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.pour_point"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.pour_point</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.pour_point_max_k"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.pour_point_max_k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.pour_point_min_k"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.pour_point_min_k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.preferred_oils"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.preferred_oils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.product_type"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.product_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.reference"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.reference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.source_id"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.source_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.sulfur"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.sulfur</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.synonyms"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.synonyms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.toxicities"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.toxicities</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.parser.OilLibraryRecordParser.weathering"><code class="docutils literal notranslate"><span class="pre">OilLibraryRecordParser.weathering</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.reader">adios_db.data_sources.noaa_fm.reader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.ImportFileHeaderContentError"><code class="docutils literal notranslate"><span class="pre">ImportFileHeaderContentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.ImportFileHeaderLengthError"><code class="docutils literal notranslate"><span class="pre">ImportFileHeaderLengthError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.convert_field"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.convert_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.convert_fields"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.convert_fields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.export"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.export()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.file_props"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.file_props</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.get_record"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.get_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.get_records"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.get_records()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.readline"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.readline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.readlines"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.readlines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.reader.OilLibraryCsvFile.rewind"><code class="docutils literal notranslate"><span class="pre">OilLibraryCsvFile.rewind()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#module-adios_db.data_sources.noaa_fm.scoring">adios_db.data_sources.noaa_fm.scoring module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.aggregate_score"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.aggregate_score()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_api"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_api()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_cuts"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_cuts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_demographics"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_demographics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_densities"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_densities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_emulsion_constants"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_emulsion_constants()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_flash_point"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_flash_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_interfacial_tensions"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_interfacial_tensions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_pour_point"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_pour_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_sara_fractions"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_sara_fractions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_toxicities"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_toxicities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.noaa_fm.html#adios_db.data_sources.noaa_fm.scoring.ImportedRecordWithScore.score_viscosities"><code class="docutils literal notranslate"><span class="pre">ImportedRecordWithScore.score_viscosities()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
