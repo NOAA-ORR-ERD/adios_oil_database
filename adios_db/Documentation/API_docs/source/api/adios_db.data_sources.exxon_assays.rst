@@ -6,8 +6,25 @@ adios\_db.data\_sources.exxon\_assays package
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   adios_db.data_sources.exxon_assays.v1
+   adios_db.data_sources.exxon_assays.v2
+
 Submodules
 ----------
+
+adios\_db.data\_sources.exxon\_assays.common module
+---------------------------------------------------
+
+.. automodule:: adios_db.data_sources.exxon_assays.common
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 adios\_db.data\_sources.exxon\_assays.mapper module
 ---------------------------------------------------

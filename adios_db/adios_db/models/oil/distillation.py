@@ -49,7 +49,7 @@ class DistCutList(JSON_List):
 @dataclass_to_json
 @dataclass
 class Distillation:
-    type: str = None
+    type: str = None  # "mass fraction" or "volume fraction"
     method: str = None
     end_point: Temperature = None
     fraction_recovered: MassOrVolumeFraction = None

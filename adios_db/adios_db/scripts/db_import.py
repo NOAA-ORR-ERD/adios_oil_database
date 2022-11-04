@@ -38,10 +38,12 @@ class FolderCollection:
     """
     Ducktyped class that acts like a MongoDB oil collection, but acts upon a
     file folder instead.
+
     The file folder is assumed to be a base folder, and we will assume the
     filesystem structure is that of the noaa-oil-data project.
     As such, the oil records are saved in a path like:
-        f'{folder}/oil/{oil_id_prefix}/{oil_id}.json'.
+
+    `f'{folder}/oil/{oil_id_prefix}/{oil_id}.json'`
     """
     def __init__(self, folder):
         folder = pathlib.Path(folder)
