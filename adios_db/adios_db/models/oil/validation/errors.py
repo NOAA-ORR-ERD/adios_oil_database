@@ -18,13 +18,18 @@ ERRORS = {
     "E043": "API, {} does not match density at 60F. API should be: {:.1f}",
     "E044": "Value: '{}' for '{}' is not valid",
     "E045": "Unit: '{}' is not a valid unit for unit type: '{}'. Options are: {}",
+    "E046": "A unit must be specified for unit type: '{}'",
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",
-    
+
     # E06* -- dataset error
     "E060": "Oil fraction in distillation cuts is not accumulative",
-    "E061": "Boiling points in distillation cuts are not strictly increasing" 
+    "E061": "Boiling points in distillation cuts are not strictly increasing",
+
+    # E09* -- system errors
+    "E098": "Exception Raised while computing completeness",
+    "E099": "Exception Raised while validating"
 }
 
 ERRORS = {code: (code + ": " + msg) for code, msg in ERRORS.items()}

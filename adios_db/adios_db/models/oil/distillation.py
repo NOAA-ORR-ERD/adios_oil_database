@@ -4,20 +4,9 @@ Classes for storing measured values within an Oil record
 from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
-from ..common.measurement import (Time,
-                                  Temperature,
-                                  MassFraction,
-                                  VolumeFraction,
+from ..common.measurement import (Temperature,
                                   MassOrVolumeFraction,
-                                  Concentration,
-                                  Unitless,
-                                  Dimensionless,
-                                  Density,
-                                  DynamicViscosity,
-                                  KinematicViscosity,
-                                  InterfacialTension,
-                                  Pressure,
-                                  AngularVelocity)
+                                  )
 
 from ..common.validators import EnumValidator
 from .validation.warnings import WARNINGS
@@ -34,11 +23,33 @@ class DistCut:
 class DistCutList(JSON_List):
     item_type = DistCut
 
+    @classmethod
+    def from_data_arrays(cls, fractions, temps, frac_unit, temp_unit, unit_type="MassFraction"):
+        """
+        Create a DistCutList from arrays of dist cut data
+
+        :param fractions: sequence of cut fractions
+        :param temps: sequence of cut vapor temperatures
+        :param frac_unit: unit of fractions: e.g."%", "fraction"
+        :param temp_unit: temperature unit: e.g. "C", "F", "K"
+        :param unit_type="MassFraction": "MassFraction" or "VolumeFraction"
+        """
+        if len(fractions) != len(temps):
+            raise ValueError("fractions and temps must be the same length")
+
+        dcl = cls(DistCut(fraction=MassOrVolumeFraction(value=f, unit=frac_unit, unit_type=unit_type),
+                          vapor_temp=Temperature(value=t, unit=temp_unit))
+                  for f, t in zip(fractions, temps))
+
+        return dcl
+
+
+
 
 @dataclass_to_json
 @dataclass
 class Distillation:
-    type: str = None
+    type: str = None  # "mass fraction" or "volume fraction"
     method: str = None
     end_point: Temperature = None
     fraction_recovered: MassOrVolumeFraction = None
@@ -96,17 +107,17 @@ class Distillation:
 # check if oil fraction is accumulative
             frac = []
             temp = []
-            for cut in self.cuts: 
+            for cut in self.cuts:
                 frac.append(cut.fraction.converted_to('fraction').value)
-                temp.append(cut.vapor_temp.converted_to('C').value)                
-            #print(frac)    
+                temp.append(cut.vapor_temp.converted_to('C').value)
+            # print(frac)
             if len(frac) > 1:
-                if(any(i>j for i, j in zip(frac, frac[1:]))):
+                if(any(i > j for i, j in zip(frac, frac[1:]))):
                     msgs.append(ERRORS["E060"])
 
             if len(temp) > 1:
-                if(any(i>j for i, j in zip(temp, temp[1:]))):
-                    msgs.append(ERRORS["E061"])                    
+                if(any(i > j for i, j in zip(temp, temp[1:]))):
+                    msgs.append(ERRORS["E061"])
 # check if oil fraction is accumulative
 
         return msgs

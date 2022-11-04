@@ -58,6 +58,26 @@ module.exports = function(environment) {
       'media-src': "'self'"
   };
 
+  ENV['metricsAdapters'] = [
+      {
+        name: 'GoogleAnalytics',
+        environments: ['development', 'production'],
+        config: {
+          id: 'G-4M4CJVKWYN',
+          // Use `analytics_debug.js` in development
+          debug: environment === 'development',
+          // Use verbose tracing of GA events
+          trace: environment === 'development',
+          // Ensure development env hits aren't sent to GA
+          sendHitTask: environment !== 'development',
+          // Specify Google Analytics plugins
+          //     Note: why would we need this?
+          require: ['ecommerce'],
+        },
+      },
+  ];
+
+
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;

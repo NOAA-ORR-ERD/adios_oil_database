@@ -30,6 +30,7 @@ test_develop:
   image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   tags:
     - docker
+    - linux
 
   except:
     - schedules

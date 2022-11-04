@@ -115,7 +115,8 @@ def update_json(py_json):
             return this_oil.py_json()
         except Exception:  # if anything goes wrong ....
             raise VersionError(f"Version: {ver} is not supported by this version "
-                               "of the adios_db Oil object")
+                               "of the adios_db Oil object -- you may need to "
+                               "update the adios_db package.")
     else:
         raise VersionError(f"updater not available for version: {ver}")
 
