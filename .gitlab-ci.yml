@@ -204,7 +204,7 @@ deploy_mongodb_stage:
     url: https://adios-stage.orr.noaa.gov
     on_stop: stop_mongodb_stage
   variables:
-    IMAGE_TAG: mongo:latest
+    IMAGE_TAG: mongo:4.4.6
     CONTAINER_NAME: mongodb
     APP_NETWORK: adios_net
     PORT_MAPPING: 127.0.0.1:27017:27017
@@ -259,7 +259,7 @@ deploy_mongodb_public:
     url: https://adios.orr.noaa.gov
     on_stop: stop_mongodb_public
   variables:
-    IMAGE_TAG: mongo:latest
+    IMAGE_TAG: mongo:4.4.6
     CONTAINER_NAME: mongodb
     APP_NETWORK: adios_net
     PORT_MAPPING: 127.0.0.1:27017:27017
