@@ -1,7 +1,7 @@
-import Route from '@ember/routing/route';
+import ApplicationRoute from '../application';
 
 
-export default class OilsIndexRoute extends Route {
+export default class OilsIndexRoute extends ApplicationRoute {
     model() {
         this.models = this.modelFor('oils');
         
