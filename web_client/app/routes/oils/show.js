@@ -1,9 +1,9 @@
-import Route from '@ember/routing/route';
+import ApplicationRoute from '../application';
 import { action } from "@ember/object";
 import slugify from 'ember-slugify';
 
 
-export default class OilsShowRoute extends Route {
+export default class OilsShowRoute extends ApplicationRoute {
     model(params) {
         this.models = this.modelFor('oils');
 

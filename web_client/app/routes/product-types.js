@@ -1,7 +1,8 @@
-import Route from '@ember/routing/route';
+import ApplicationRoute from './application';
 import { action } from "@ember/object";
 
-export default class ProductTypesRoute extends Route {
+
+export default class ProductTypesRoute extends ApplicationRoute {
     model() {
         return (async () => {
             let config = await this.store.findRecord('config', 'main.json');
