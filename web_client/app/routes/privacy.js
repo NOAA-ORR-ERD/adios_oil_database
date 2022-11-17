@@ -1,4 +1,5 @@
-import Route from '@ember/routing/route';
+import ApplicationRoute from './application';
 
-export default class PrivacyRoute extends Route {
+
+export default class PrivacyRoute extends ApplicationRoute {
 }

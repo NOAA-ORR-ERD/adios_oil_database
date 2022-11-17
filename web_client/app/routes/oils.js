@@ -1,9 +1,9 @@
-import Route from '@ember/routing/route';
+import ApplicationRoute from './application';
 import { hash } from 'rsvp';
 import { action } from "@ember/object";
 
 
-export default class OilsRoute extends Route {
+export default class OilsRoute extends ApplicationRoute {
     tempSuffix = '-TEMP';
 
     model() {
