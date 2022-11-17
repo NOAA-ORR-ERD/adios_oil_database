@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>adios_db.models.oil.validation package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="adios_db.scripting package" href="adios_db.scripting.html" />
+    <link rel="prev" title="adios_db.models.oil.cleanup package" href="adios_db.models.oil.cleanup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../managing.html">Managing the Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../computation.html">Computation with the ADIOS data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../importing_new_data.html">Importing New Data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="adios_db.html">adios_db package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="adios_db.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.html">adios_db.data_sources package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="adios_db.models.html">adios_db.models package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="adios_db.models.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripting.html">adios_db.scripting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html">adios_db.scripts package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.session.html">adios_db.session package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.util.html">adios_db.util package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ADIOS Oil Database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="adios_db.html">adios_db package</a> &raquo;</li>
+          <li><a href="adios_db.models.html">adios_db.models package</a> &raquo;</li>
+          <li><a href="adios_db.models.oil.html">adios_db.models.oil package</a> &raquo;</li>
+      <li>adios_db.models.oil.validation package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/adios_db.models.oil.validation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-adios_db.models.oil.validation">
+<span id="adios-db-models-oil-validation-package"></span><h1>adios_db.models.oil.validation package<a class="headerlink" href="#module-adios_db.models.oil.validation" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.models.oil.validation.is_only_ignored">
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.</span></span><span class="sig-name descname"><span class="pre">is_only_ignored</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.is_only_ignored" title="Permalink to this definition"></a></dt>
+<dd><p>Check if all the status codes are ones that are on the ignored list</p>
+<p>expects a dict of teh form returned by unpack_status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.models.oil.validation.unpack_status">
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.</span></span><span class="sig-name descname"><span class="pre">unpack_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.unpack_status" title="Permalink to this definition"></a></dt>
+<dd><p>unpacks the status messages into list of tuples</p>
+<p>(error_code, message</p>
+</dd></dl>
+
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-adios_db.models.oil.validation.errors">
+<span id="adios-db-models-oil-validation-errors-module"></span><h2>adios_db.models.oil.validation.errors module<a class="headerlink" href="#module-adios_db.models.oil.validation.errors" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-adios_db.models.oil.validation.validate">
+<span id="adios-db-models-oil-validation-validate-module"></span><h2>adios_db.models.oil.validation.validate module<a class="headerlink" href="#module-adios_db.models.oil.validation.validate" title="Permalink to this heading"></a></h2>
+<p>Validation of a single oil record</p>
+<p>The actual validation is done in the Oil object (and sub-objects)</p>
+<p>This just provides some  convenient wrappers around the validate call</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.models.oil.validation.validate.validate">
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.validate.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.validate.validate" title="Permalink to this definition"></a></dt>
+<dd><p>validate an Oil object</p>
+<p>oil.status is updated in place – this is simply a wrapper around
+Oil.reset_validation() – probably no longer needed</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.models.oil.validation.validate.validate_json">
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.validate.</span></span><span class="sig-name descname"><span class="pre">validate_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.validate.validate_json" title="Permalink to this definition"></a></dt>
+<dd><p>validate a json-compatible-python record</p>
+<p>An Oil object is returned, if it’s possible to do so.</p>
+<p>The “status” field is updated in place, with no other alterations
+of the record</p>
+</dd></dl>
+
+</section>
+<section id="module-adios_db.models.oil.validation.warnings">
+<span id="adios-db-models-oil-validation-warnings-module"></span><h2>adios_db.models.oil.validation.warnings module<a class="headerlink" href="#module-adios_db.models.oil.validation.warnings" title="Permalink to this heading"></a></h2>
+<p>warnings.py</p>
+<p>All the warnings</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adios_db.models.oil.cleanup.html" class="btn btn-neutral float-left" title="adios_db.models.oil.cleanup package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="adios_db.scripting.html" class="btn btn-neutral float-right" title="adios_db.scripting package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, NOAA Emergency Response Division.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

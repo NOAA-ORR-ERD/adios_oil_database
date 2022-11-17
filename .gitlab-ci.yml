@@ -735,10 +735,11 @@ sync_with_git_review:
   image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
-  
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
+  tags:
+    - adios-stage
   variables:
     CONTAINER_NAME: adios_db_web_api
     SCRIPT_NAME: sync_with_under_review.sh
@@ -746,17 +747,15 @@ sync_with_git_review:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
-  tags:
-    - adios-stage
-
 sync_with_git_prod:
   stage: maintenance
   image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
   when: manual
-  
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
+  tags:
+    - adios-stage
   variables:
     CONTAINER_NAME: adios_db_web_api
     SCRIPT_NAME: sync_with_production.sh
@@ -764,5 +763,16 @@ sync_with_git_prod:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
+drop_db_volume_public:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  when: manual
+  environment:
+    name: public
+    url: https://adios.orr.noaa.gov
   tags:
-    - adios-stage
+    - adios-prod
+  variables:
+    DB_VOLUME: dbdata
+  script:
+    - docker volume rm $DB_VOLUME
