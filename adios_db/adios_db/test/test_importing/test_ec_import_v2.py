@@ -11,11 +11,11 @@ import pytest
 
 try:
     from slugify import Slugify
+    import dateutil
 except ImportError:
-    pytestmark = pytest.mark.skipif(
-        True,
-        reason="You need the awesome-slugify package to run these tests"
-    )
+    import pytest
+    pytest.skip("You need the awesome slugify and dateutil packages to run these tests",
+                allow_module_level=True)
 
 import os
 from pathlib import Path

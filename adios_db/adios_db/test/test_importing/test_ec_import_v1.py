@@ -11,20 +11,20 @@ import pytest
 
 try:
     from slugify import Slugify
+    from openpyxl.utils.exceptions import InvalidFileException
+    HAVE_OPTIONAL=True
 except ImportError:
-    pytestmark = pytest.mark.skipif(
-        True,
-        reason="You need the awesome-slugify package to run these tests"
-    )
+    HAVE_OPTIONAL=False
+    pytest.skip("You need the awesome-slugify and openpyxl packages "
+               "to run these tests", allow_module_level=True)
 
 import os
 from numbers import Number
 from pathlib import Path
 import json
+from pprint import pprint
 
 import numpy as np
-
-from openpyxl.utils.exceptions import InvalidFileException
 
 import adios_db
 from adios_db.data_sources.env_canada.v1 import (EnvCanadaOilExcelFile,
@@ -32,7 +32,6 @@ from adios_db.data_sources.env_canada.v1 import (EnvCanadaOilExcelFile,
                                                  EnvCanadaRecordMapper,
                                                  EnvCanadaSampleMapper)
 
-from pprint import pprint
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
 example_index = example_dir / 'index.txt'
