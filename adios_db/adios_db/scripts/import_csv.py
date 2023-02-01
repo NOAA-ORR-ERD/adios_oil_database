@@ -56,8 +56,6 @@ def read_record_metadata(reader):
     """
 
     # reference: Reference = field(default_factory=Reference)
-    # labels: list = field(default_factory=list)
-    # alternate_names: list = field(default_factory=list)
     # location_coordinates: LocationCoordinates = None
 
     metadata_map = {
@@ -88,6 +86,10 @@ def read_record_metadata(reader):
             except KeyError:
                 if check_field_name(row[0], "Reference"):
                     md.reference = Reference(int(row[1]), row[2])
+                if check_field_name(row[0], "Alternate Names"):
+                    md.alternate_names = [n.strip() for n in row[1:] if n.strip()]
+                if check_field_name(row[0], "Labels"):
+                    md.labels = [n.strip() for n in row[1:] if n.strip()]
 
     return md
 

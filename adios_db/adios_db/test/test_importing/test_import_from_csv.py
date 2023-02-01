@@ -30,7 +30,7 @@ def test_metadata():
         ("name", "Alaska North Slope"),
         ("source_id", ""),
         ("location", ""),
-        ("sample_date", "2011"),
+        ("sample_date", "2009"),
         ("comments", "The data in this record may have been compiled from multiple sources and reflect samples of varying age and composition"),
         ("product_type", "Crude Oil NOS")
     ]
@@ -40,6 +40,8 @@ def test_metadata():
 
     assert md.reference.year == 2011
     assert md.reference.reference == "Martin, J. (2011). Comparative toxicity and bioavailability of heavy fuel oils to fish using different exposure scenarios(Doctoral dissertation)."
+    assert set(md.alternate_names) == set(['ANS'])
+    assert set(md.labels) == set(['Medium Crude', 'Crude Oil'])
 
 
 
