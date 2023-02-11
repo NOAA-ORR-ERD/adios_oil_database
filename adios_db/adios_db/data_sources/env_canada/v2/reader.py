@@ -65,10 +65,15 @@ class EnvCanadaCsvFile(CsvFile):
         - replicates
         - method
     """
+    number_of_columns = 23
+    oil_id_field_name = 'ests'
+
     def __init__(self, name):
         super().__init__(name)
 
-        if len(self.field_names) != 23:
+        print(f'num fields should be {self.number_of_columns}')
+        print(f'num fields are {self.field_names}')
+        if len(self.field_names) != self.number_of_columns:
             raise InvalidFileError('Fields are invalid for an '
                                    'Environment Canada .csv file')
 
@@ -83,7 +88,7 @@ class EnvCanadaCsvFile(CsvFile):
         oil_out = []
 
         for row in self.readlines():
-            oil_id = row['ests']
+            oil_id = row[self.oil_id_field_name]
 
             if prev_oil_id is not None and prev_oil_id != oil_id:
                 # we have moved on to the next oil
