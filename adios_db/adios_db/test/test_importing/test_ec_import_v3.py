@@ -107,10 +107,11 @@ class TestEnvCanadaCsvRecordParser(object):
             _parser = EnvCanadaCsvRecordParser1999(None, None)
 
     @pytest.mark.parametrize('oil_id, attr, expected', [
-        ('ODB00-6', 'API', 31.3),
+        ('ODB00-6', 'API', 26.8),
         ('ODB00-6', 'product_type', 'Crude Oil NOS'),
-        ('ODB00-6', 'sample_ids', [2713.1, '2713.2.3', '2713.2.2', '2713.2.1']),
-        ('ODB00-6', 'fresh_sample_id', 2713.1),
+        ('ODB00-6', 'sample_ids', ['ODB00-6.0', 'ODB00-6.1', 'ODB00-6.2',
+                                   'ODB00-6.3']),
+        ('ODB00-6', 'fresh_sample_id', 'ODB00-6.0'),
     ])
     def test_init_valid_data_only(self, oil_id, attr, expected):
         """

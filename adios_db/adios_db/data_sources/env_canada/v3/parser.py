@@ -89,8 +89,9 @@ class ECMeasurementDataclass:
         or simply '15', in which case we will assume it is Celsius.
         """
         if isinstance(self.temperature, str) and len(self.temperature) > 0:
-            self.ref_temp, self.ref_temp_unit = re.findall(r'[\d\.]*\w+',
-                                                           self.temperature)
+            self.ref_temp, *_, self.ref_temp_unit = re.findall(
+                r'[\d\.]*\w+', self.temperature
+            )
 
             try:
                 self.ref_temp = float(self.ref_temp)
