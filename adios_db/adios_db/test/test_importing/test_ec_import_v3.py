@@ -140,7 +140,7 @@ class TestEnvCanadaCsvRecordParser(object):
     def test_slugify(self, label, expected):
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
-                if str(r[0][0]['oil_index']) == '2234']
+                if str(r[0][0]['oil_index']) == 'ODB00-6']
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
@@ -148,10 +148,10 @@ class TestEnvCanadaCsvRecordParser(object):
         assert parser.slugify(label) == expected
 
     @pytest.mark.parametrize('rec, attr, default, expected', [
-        ('2234', 'metadata.API', None, 20.9),
-        ('2234', 'sub_samples.0.compounds.-1.measurement.value', None, 240),
-        ('2234', 'sub_samples.4.compounds.-1.measurement.value', None, 305),
-        ('2234', 'bogus.bogus', 0, 0),
+        ('ODB00-6', 'metadata.API', None, 20.9),
+        ('ODB00-6', 'sub_samples.0.compounds.-1.measurement.value', None, 240),
+        ('ODB00-6', 'sub_samples.3.compounds.-1.measurement.value', None, 305),
+        ('ODB00-6', 'bogus.bogus', 0, 0),
     ])
     def test_deep_get(self, rec, attr, default, expected):
         self.reader.rewind()
@@ -160,10 +160,11 @@ class TestEnvCanadaCsvRecordParser(object):
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
+        value = parser.deep_get(parser.oil_obj, attr, default=default)
 
-        assert np.isclose(parser.deep_get(parser.oil_obj, attr,
-                                          default=default),
-                          expected)
+        pprint(parser.oil_obj)
+        assert value != default
+        assert np.isclose(value, expected)
 
 
 class TestEnvCanadaCsvRecordMapper(object):

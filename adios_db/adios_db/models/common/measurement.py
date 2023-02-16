@@ -467,6 +467,10 @@ class KinematicViscosity(MeasurementBase):
     unit_type = "kinematicviscosity"
 
 
+class SayboltViscosity(MeasurementBase):
+    unit_type = "sayboltviscosity"
+
+
 class Pressure(MeasurementBase):
     unit_type = "pressure"
 
