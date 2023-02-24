@@ -189,6 +189,7 @@ class InterfacialTensionList(RefTempList, JSON_List):
 class PhysicalProperties:
     pour_point: PourPoint = None
     flash_point: FlashPoint = None
+    color: str = ''
 
     densities: DensityList = field(default_factory=DensityList)
     kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)

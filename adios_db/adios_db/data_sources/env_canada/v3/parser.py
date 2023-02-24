@@ -367,12 +367,21 @@ mapping_list = [
      'physical_properties.kinematic_viscosities.+', ECViscosity, 'sample'),
     ('Saybolt Viscosity.Saybolt Viscosity',
      'physical_properties.saybolt_viscosities.+', ECViscosity, 'sample'),
+
     ('Surface Tension/ Interfacial tension.Surface Tension',
      'physical_properties.interfacial_tension_air.+', ECInterfacialTension,
      'sample'),
     ('Surface Tension/ Interfacial tension.Interfacial Tension',
      'physical_properties.interfacial_tension.+', ECInterfacialTension,
      'sample'),
+
+    ('Colour.Colour', 'physical_properties.color', ECValueOnly, 'sample'),
+
+    ('Flammability Limits in Air.Flammability Limits in Air',
+     'industry_properties.???', ECValueOnly, 'sample'),
+    ('Ignition Temperature.Ignition Temperature',
+     'industry_properties.???', ECValueOnly, 'sample'),
+
     ('Flash Point.Flash Point', 'physical_properties.flash_point',
      ECValueOnly, 'sample'),
     ('Pour Point.Pour Point', 'physical_properties.pour_point',
@@ -481,10 +490,51 @@ mapping_list = [
      ECDispersibility, 'sample'),
     ('Sulfur Content.Sulfur Content', 'bulk_composition.+',
      ECCompoundUngrouped, 'sample'),
+    ('Sulphur Content.Sulphur Content', 'bulk_composition.+',
+     ECCompoundUngrouped, 'sample'),
     ('Water Content.Water Content', 'bulk_composition.+',
      ECCompoundUngrouped, 'sample'),
     ('Wax Content.Waxes', 'bulk_composition.+',
      ECCompoundUngrouped, 'sample'),
+
+    ('Metals.Aluminum', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Arsenic', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Barium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Cadmium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Calcium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Chromium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Cobalt', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Copper', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Iron', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Lead', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Magnesium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Manganese', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Mercury', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Molybdenum', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Nickel', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Potassium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Selenium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Silicon', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Sodium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Strontium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Tin', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Titanium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Vanadium', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+    ('Metals.Zinc', 'bulk_composition.+', ECCompoundUngrouped, 'sample'),
+
+    ('Other Elements.Carbon', 'bulk_composition.+', ECCompoundUngrouped,
+     'sample'),
+    ('Other Elements.Chlorine', 'bulk_composition.+', ECCompoundUngrouped,
+     'sample'),
+    ('Other Elements.Hydrogen', 'bulk_composition.+', ECCompoundUngrouped,
+     'sample'),
+    ('Other Elements.Nitrogen', 'bulk_composition.+', ECCompoundUngrouped,
+     'sample'),
+    ('Other Elements.Oxygen', 'bulk_composition.+', ECCompoundUngrouped,
+     'sample'),
+    ('Other Elements.Phosphorous', 'bulk_composition.+', ECCompoundUngrouped,
+     'sample'),
+
     ('BTEX group.Benzene', 'compounds.+', ECCompound, 'sample'),
     ('BTEX group.Toluene', 'compounds.+', ECCompound, 'sample'),
     ('BTEX group.Ethylbenzene', 'compounds.+', ECCompound, 'sample'),
@@ -1168,7 +1218,8 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
         of insertion into the dict.  This is true of Python 3.6, but could
         break in the future.
         """
-        sample_ids = {v[self.sample_id_field_name]: None for v in self.src_values}
+        sample_ids = {v[self.sample_id_field_name]: None
+                      for v in self.src_values}
         return list(sample_ids.keys())
 
     def get_subsample(self, sample_id):
