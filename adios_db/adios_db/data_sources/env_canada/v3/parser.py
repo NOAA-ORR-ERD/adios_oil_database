@@ -115,7 +115,7 @@ class ECMeasurementDataclass:
         """
         if self.unit_of_measure:
             unit = self.unit_of_measure.split(' or ')[0]
-            unit = unit.lstrip('°').lstrip('¬∞')
+            unit = unit.lstrip('°').lstrip('¬∞').lstrip('‚Å∞')
 
             self.unit_of_measure = unit
 
@@ -251,9 +251,9 @@ class ECInterfacialTension(ECMeasurement):
         """
         ret = super().py_json()
 
-        if 'salt water' in self.condition_of_analysis:
+        if 'oil/salt water' in self.condition_of_analysis.lower():
             ret['interface'] = 'seawater'
-        elif 'air' in self.condition_of_analysis:
+        elif 'oil/ air' in self.condition_of_analysis.lower():
             ret['interface'] = 'air'
         else:
             ret['interface'] = 'water'
@@ -309,11 +309,14 @@ class ECEmulsion(ECMeasurement):
     def py_json(self):
         ret = super().py_json()
 
-        if self.condition_of_analysis.lower() == 'one week after formation':
-            ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 7}
-        elif self.condition_of_analysis.lower() == 'on the day of formation':
-            ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
-        else:
+        try:
+            if self.condition_of_analysis.lower() == 'one week after formation':
+                ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 7}
+            elif self.condition_of_analysis.lower() == 'on the day of formation':
+                ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
+            else:
+                logger.warning('Can not determine emulsion age')
+        except AttributeError:
             logger.warning('Can not determine emulsion age')
 
         return ret
@@ -464,28 +467,19 @@ mapping_list = [
     # Todo: Pan evaporation is something new.  Need to discuss.
     # ('Pan Evaporation (% Mass Loss).0h', 'environmental_behavior.????',
     # ECPanEvaporation, 'sample'),
-    ('Emulsion.Emulsion Visual Stability',
+    ('Emulsion.Emulsion formation/Visual Stability',
      'environmental_behavior.emulsions.+.visual_stability',
      ECEmulsion, 'sample'),
-    ('Emulsion.Emulsion Complex Modulus',
-     'environmental_behavior.emulsions.-1.complex_modulus',
-     ECEmulsion, 'sample'),
-    ('Emulsion.Emulsion Storage Modulus',
-     'environmental_behavior.emulsions.-1.storage_modulus',
-     ECEmulsion, 'sample'),
-    ('Emulsion.Emulsion Loss Modulus',
-     'environmental_behavior.emulsions.-1.loss_modulus',
-     ECEmulsion, 'sample'),
-    ('Emulsion.Emulsion Tan Delta (V/E)',
-     'environmental_behavior.emulsions.-1.tan_delta_v_e',
-     ECEmulsion, 'sample'),
-    ('Emulsion.Emulsion Complex Dynamic Viscosity',
+    ('Emulsion.Viscosity',
      'environmental_behavior.emulsions.-1.complex_viscosity',
      ECEmulsion, 'sample'),
-    ('Emulsion.Emulsion Water Content',
+    ('Emulsion.Complex Modulus',
+     'environmental_behavior.emulsions.-1.complex_modulus',
+     ECEmulsion, 'sample'),
+    ('Emulsion.Water Content',
      'environmental_behavior.emulsions.-1.water_content',
      ECEmulsion, 'sample'),
-    ('Chemical Dispersibility  (Swirling Flask Test).Dispersant Effectiveness',
+    ('Chemical Dispersibility.Dispersant Effectiveness',
      'environmental_behavior.dispersibilities.+',
      ECDispersibility, 'sample'),
     ('Sulfur Content.Sulfur Content', 'bulk_composition.+',
@@ -646,13 +640,13 @@ mapping_list = [
     ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
      '.TOTAL TPH (GC Detected TPH + Undetected TPH)',
      'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Hydrocarbon Group Content.Saturates',
+    ('Hydrocarbon Groups Content.Saturates',
      'SARA.saturates', ECValueOnly, 'sample'),
-    ('Hydrocarbon Group Content.Aromatics',
+    ('Hydrocarbon Groups Content.Aromatics',
      'SARA.aromatics', ECValueOnly, 'sample'),
-    ('Hydrocarbon Group Content.Resin',
+    ('Hydrocarbon Groups Content.Resins',
      'SARA.resins', ECValueOnly, 'sample'),
-    ('Hydrocarbon Group Content.Asphaltene',
+    ('Hydrocarbon Groups Content.Asphaltenes',
      'SARA.asphaltenes', ECValueOnly, 'sample'),
     ('n-Alkanes.n-C8', 'compounds.+', ECCompound, 'sample'),
     ('n-Alkanes.n-C9', 'compounds.+', ECCompound, 'sample'),

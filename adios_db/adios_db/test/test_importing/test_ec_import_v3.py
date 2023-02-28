@@ -25,9 +25,9 @@ import numpy as np
 
 import adios_db
 from adios_db.data_sources.env_canada.v3 import (EnvCanadaCsvFile1999,
-                                                 EnvCanadaCsvRecordParser1999)
-from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvRecordMapper,
-                                                 InvalidFileError)
+                                                 EnvCanadaCsvRecordParser1999,
+                                                 EnvCanadaCsvRecordMapper1999)
+from adios_db.data_sources.env_canada.v2 import InvalidFileError
 
 from pprint import pprint
 
@@ -187,27 +187,26 @@ class TestEnvCanadaCsvRecordMapper(object):
 
     def test_init(self):
         with pytest.raises(TypeError):
-            _mapper = EnvCanadaCsvRecordMapper()
+            _mapper = EnvCanadaCsvRecordMapper1999()
 
     def test_init_invalid(self):
         with pytest.raises(ValueError):
-            _mapper = EnvCanadaCsvRecordMapper(None)
+            _mapper = EnvCanadaCsvRecordMapper1999(None)
 
     @pytest.mark.parametrize('oil_id, expected', [
-        ('2713', {'oil_id': 'EC02713',
-                  'metadata.name': 'Alaska North Slope [2015]',
-                  'metadata.source_id': '2713',
-                  'metadata.location': 'Alaska, USA',
-                  'metadata.reference': {'reference': "Environment and Climate Change Canada, "
-                                                      "Environment Canada Crude Oil and Petroleum Product Database, "
-                                                      "Environment and Climate Change Canada, 2021.\n\n"
-                                                      "url: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5",
-                                         'year': 2021},
-                  'metadata.sample_date': '2015-03-22',
-                  'metadata.product_type': 'Crude Oil NOS',
-                  'metadata.API': 31.3,
-                  'metadata.comments': None,
-                  }),
+        ('ODB00-6', {'oil_id': 'ECODB00-6',
+                     'metadata.name': 'Alaska North Slope (1989)',
+                     'metadata.source_id': 'ODB00-6',
+                     'metadata.location': 'Alaska, USA',
+                     'metadata.reference': {'reference': "Environment and Climate Change Canada, "
+                                                         "Environment Canada Crude Oil and Petroleum Product Database, "
+                                                         "Environment and Climate Change Canada, 2021.\n\n"
+                                                         "url: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5",
+                                            'year': 2021},
+                     'metadata.product_type': 'Crude Oil NOS',
+                     'metadata.API': 26.8,
+                     'metadata.comments': None,
+                     }),
     ])
     def test_init_valid(self, oil_id, expected):
         """
@@ -220,11 +219,11 @@ class TestEnvCanadaCsvRecordMapper(object):
         """
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == oil_id]
+                if str(r[0][0]['oil_index']) == oil_id]
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
         py_json = mapper.py_json()
 
         for k, v in expected.items():
@@ -238,11 +237,11 @@ class TestEnvCanadaCsvRecordMapper(object):
         """
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == '2234']
+                if str(r[0][0]['oil_index']) == 'ODB00-5']
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
         py_json = mapper.py_json()
 
         py_json['status'] = []
@@ -257,315 +256,250 @@ class TestEnvCanadaCsvRecordMapper(object):
             json.dump(py_json, fd, indent=4, sort_keys=True)
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
-        ('2713', 0, 'metadata', {'fraction_weathered': {'unit': '%',
-                                                        'value': 0.0},
-                                 'name': 'Fresh Oil Sample',
-                                 'short_name': 'Fresh Oil',
-                                 'sample_id': '2713.1'}),
-        ('2713', -1, 'metadata', {'fraction_weathered': {'unit': '%',
-                                                         'value': 36.8},
-                                  'name': '36.8% Evaporated',
-                                  'short_name': '36.8% Evaporated',
-                                  'sample_id': '2713.2.1'}),
-        ('2713', 0, 'physical_properties.densities', [
-            {'density': {'value': 0.8639, 'unit': 'g/mL',
-                         'unit_type': 'density',
-                         'standard_deviation': 0, 'replicates': 3},
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'method': 'ASTM D5002'},
-            {'density': {'value': 0.8751, 'unit': 'g/mL',
-                         'unit_type': 'density',
-                         'standard_deviation': 0, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'method': 'ASTM D5002'},
+        ('ODB00-5', 0, 'metadata', {'fraction_weathered': {'unit': '%',
+                                                           'value': 0.0},
+                                    'name': 'Fresh Oil Sample',
+                                    'short_name': 'Fresh Oil',
+                                    'sample_id': '2713.1'}),
+        ('ODB00-5', -1, 'metadata', {'fraction_weathered': {'unit': '%',
+                                                            'value': 36.8},
+                                     'name': '36.8% Evaporated',
+                                     'short_name': '36.8% Evaporated',
+                                     'sample_id': '2713.2.1'}),
+        ('ODB00-5', 0, 'physical_properties.densities', [
+              {'density': {'value': 0.8639, 'unit': 'g/mL',
+                           'unit_type': 'density',
+                           'standard_deviation': 0, 'replicates': 3},
+               'ref_temp': {'value': 15.0, 'unit': 'C',
+                            'unit_type': 'temperature'},
+               'method': 'ASTM D5002'},
+              {'density': {'value': 0.8751, 'unit': 'g/mL',
+                           'unit_type': 'density',
+                           'standard_deviation': 0, 'replicates': 3},
+               'ref_temp': {'value': 0.0, 'unit': 'C',
+                            'unit_type': 'temperature'},
+               'method': 'ASTM D5002'},
          ]),
-        ('2713', 0, 'physical_properties.dynamic_viscosities', [
-            {'method': 'ASTM D7042',
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'viscosity': {'value': 10, 'unit': 'mPa.s',
-                           'unit_type': 'dynamicviscosity',
-                           'standard_deviation': 0, 'replicates': 3}},
-            {'method': 'ASTM D7042',
-             'ref_temp': {'value': 0.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'viscosity': {'value': 17.9, 'unit': 'mPa.s',
-                           'unit_type': 'dynamicviscosity',
-                           'standard_deviation': 0.001, 'replicates': 3}},
+        ('ODB00-5', 0, 'physical_properties.dynamic_viscosities', [
+              {'method': 'ASTM D7042',
+               'ref_temp': {'value': 15.0, 'unit': 'C',
+                            'unit_type': 'temperature'},
+               'viscosity': {'value': 10, 'unit': 'mPa.s',
+                             'unit_type': 'dynamicviscosity',
+                             'standard_deviation': 0, 'replicates': 3}},
+              {'method': 'ASTM D7042',
+               'ref_temp': {'value': 0.0, 'unit': 'C',
+                            'unit_type': 'temperature'},
+               'viscosity': {'value': 17.9, 'unit': 'mPa.s',
+                             'unit_type': 'dynamicviscosity',
+                             'standard_deviation': 0.001, 'replicates': 3}},
          ]),
-        ('2234', 3, 'physical_properties.dynamic_viscosities', [
-            {'method': 'ESTS 12.06/x.x/M',
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'shear_rate': {'value': 10.0, 'unit': '1/s',
-                            'unit_type': 'angularvelocity'},
-             'viscosity': {'value': 1000000.0, 'unit': 'mPa.s',
-                           'unit_type': 'dynamicviscosity',
-                           'standard_deviation': 67000.0, 'replicates': 3}},
-            {'method': 'ESTS 12.06/x.x/M',
-             'ref_temp': {'value': 0.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'shear_rate': {'value': 0.1, 'unit': '1/s',
-                            'unit_type': 'angularvelocity'},
-             'viscosity': {'value': 90000000.0, 'unit': 'mPa.s',
-                           'unit_type': 'dynamicviscosity',
-                           'standard_deviation': 2233480, 'replicates': 3}},
+        ('ODB00-5', 3, 'physical_properties.dynamic_viscosities', [
+              {'method': 'ESTS 12.06/x.x/M',
+               'ref_temp': {'value': 15.0, 'unit': 'C',
+                            'unit_type': 'temperature'},
+               'shear_rate': {'value': 10.0, 'unit': '1/s',
+                              'unit_type': 'angularvelocity'},
+               'viscosity': {'value': 1000000.0, 'unit': 'mPa.s',
+                             'unit_type': 'dynamicviscosity',
+                             'standard_deviation': 67000.0, 'replicates': 3}},
+              {'method': 'ESTS 12.06/x.x/M',
+               'ref_temp': {'value': 0.0, 'unit': 'C',
+                            'unit_type': 'temperature'},
+               'shear_rate': {'value': 0.1, 'unit': '1/s',
+                              'unit_type': 'angularvelocity'},
+               'viscosity': {'value': 90000000.0, 'unit': 'mPa.s',
+                             'unit_type': 'dynamicviscosity',
+                             'standard_deviation': 2233480, 'replicates': 3}},
          ]),
-        ('2713', 0, 'distillation_data', {
-            'type': 'mass fraction',
-            'method': 'Merged ASTM D7169 & ASTM D6730 mod.',
-            'end_point': {'min_value': 720.0, 'max_value': None,
-                          'unit': 'C', 'unit_type': 'temperature'},
-            'cuts': [
-                {'fraction': {'value': 0.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': -12, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 5.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 60, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 10.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 92, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 15.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 119, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 20.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 148, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 25.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 181, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 30.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 216, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 35.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 248, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 40.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 278, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 45.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 308, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 50.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 339, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 55.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 371, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 60.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 404, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 65.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 436, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 70.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 473, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 75.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 516, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 80.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 568, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 85.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 623, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-                {'fraction': {'value': 90.0, 'unit': '%',
-                              'unit_type': 'massfraction'},
-                 'vapor_temp': {'value': 680, 'unit': 'C',
-                                'unit_type': 'temperature'}
-                 },
-            ]
+        ('ODB00-5', 0, 'distillation_data', {
+              'type': 'mass fraction',
+              'method': 'Merged ASTM D7169 & ASTM D6730 mod.',
+              'end_point': {'min_value': 720.0, 'max_value': None,
+                            'unit': 'C', 'unit_type': 'temperature'},
+              'cuts': [
+                   {'fraction': {'value': 0.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': -12, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 5.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 60, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 10.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 92, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 15.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 119, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 20.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 148, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 25.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 181, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 30.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 216, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 35.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 248, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 40.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 278, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 45.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 308, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 50.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 339, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 55.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 371, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 60.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 404, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 65.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 436, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 70.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 473, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 75.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 516, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 80.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 568, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 85.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 623, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+                   {'fraction': {'value': 90.0, 'unit': '%',
+                                 'unit_type': 'massfraction'},
+                    'vapor_temp': {'value': 680, 'unit': 'C',
+                                   'unit_type': 'temperature'}
+                    },
+              ]
          }),
-        ('561', 0, 'physical_properties.pour_point', None),
-        ('2713', 0, 'physical_properties.pour_point', {
-            'method': 'ASTM D97',
-            'measurement': {'value': -51, 'unit': 'C',
-                            'unit_type': 'temperature',
-                            'standard_deviation': 2,
-                            'replicates': 3}}
-         ),
-        ('2713', 0, 'physical_properties.flash_point', None),
-        ('2713', 1, 'physical_properties.flash_point', {
-            'method': 'ASTM D7094',
-            'measurement': {'value': 23, 'unit': 'C',
-                            'unit_type': 'temperature',
-                            'standard_deviation': 1.2,
-                            'replicates': 3}}
-         ),
-        ('2713', 0, 'physical_properties.interfacial_tension_air', [
-            {'interface': 'air',
-             'method': 'ESTS 12.12/x.x/M',
-             'tension': {'value': 27.1, 'unit': 'mN/m',
-                         'unit_type': 'interfacialtension',
-                         'standard_deviation': 0.2, 'replicates': 3},
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'}
-             },
-            {'interface': 'air',
-             'method': 'ESTS 12.12/x.x/M',
-             'tension': {'value': 27.7, 'unit': 'mN/m',
-                         'unit_type': 'interfacialtension',
-                         'standard_deviation': 0.8, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C',
-                          'unit_type': 'temperature'}
-             },
+        ('ODB00-5', 0, 'physical_properties.pour_point', None),
+        ('ODB00-6', 0, 'physical_properties.pour_point', {
+              'measurement': {'value': -8, 'unit': 'C',
+                              'unit_type': 'temperature'}
+         }),
+        ('ODB00-5', 0, 'physical_properties.flash_point', None),
+        ('ODB00-7', 0, 'physical_properties.flash_point', {
+              'measurement': {'value': -23, 'unit': 'C',
+                              'unit_type': 'temperature'}
+         }),
+        ('ODB00-6', 0, 'physical_properties.interfacial_tension_air', [
+              {'interface': 'air',
+               'tension': {'value': 28.1, 'unit': 'mN/m',
+                           'unit_type': 'interfacialtension'},
+               'ref_temp': {'value': 15.0, 'unit': 'C',
+                            'unit_type': 'temperature'}
+               },
          ]),
-        ('2713', 0, 'physical_properties.interfacial_tension_water', [
-            {'interface': 'water',
-             'method': 'ESTS 12.12/x.x/M',
-             'tension': {'value': 21.3, 'unit': 'mN/m',
-                         'unit_type': 'interfacialtension',
-                         'standard_deviation': 0.3, 'replicates': 3},
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'}
-             },
-            {'interface': 'water',
-             'method': 'ESTS 12.12/x.x/M',
-             'tension': {'value': 24.1, 'unit': 'mN/m',
-                         'unit_type': 'interfacialtension',
-                         'standard_deviation': 0.2, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C',
-                          'unit_type': 'temperature'}
-             },
+        ('ODB00-6', 0, 'physical_properties.interfacial_tension_water', [
+              {'interface': 'water',
+               'tension': {'value': 26.1, 'unit': 'mN/m',
+                           'unit_type': 'interfacialtension'},
+               'ref_temp': {'value': 0.0, 'unit': 'C',
+                            'unit_type': 'temperature'}
+               },
+              {'interface': 'water',
+               'tension': {'value': 29.4, 'unit': 'mN/m',
+                           'unit_type': 'interfacialtension'},
+               'ref_temp': {'value': 15.0, 'unit': 'C',
+                            'unit_type': 'temperature'}
+               },
          ]),
-        ('2713', 0, 'physical_properties.interfacial_tension_seawater', [
-            {'interface': 'seawater',
-             'method': 'ESTS 12.12/x.x/M',
-             'tension': {'value': 19.8, 'unit': 'mN/m',
-                         'unit_type': 'interfacialtension',
-                         'standard_deviation': 0.4, 'replicates': 3},
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'}
-             },
-            {'interface': 'seawater',
-             'method': 'ESTS 12.12/x.x/M',
-             'tension': {'value': 22.8, 'unit': 'mN/m',
-                         'unit_type': 'interfacialtension',
-                         'standard_deviation': 0.2, 'replicates': 3},
-             'ref_temp': {'value': 0.0, 'unit': 'C',
-                          'unit_type': 'temperature'}
-             },
+        ('ODB00-6', 0, 'physical_properties.interfacial_tension_seawater', [
+              {'interface': 'seawater',
+               'tension': {'value': 23.8, 'unit': 'mN/m',
+                           'unit_type': 'interfacialtension'},
+               'ref_temp': {'value': 0.0, 'unit': 'C',
+                            'unit_type': 'temperature'}
+               },
+              {'interface': 'seawater',
+               'tension': {'value': 27.4, 'unit': 'mN/m',
+                           'unit_type': 'interfacialtension'},
+               'ref_temp': {'value': 15.0, 'unit': 'C',
+                            'unit_type': 'temperature'}
+               },
          ]),
-        ('2713', 0, 'environmental_behavior.dispersibilities', [
-            {'dispersant': 'Corexit 9500 Dispersant',
-             'method': 'ASTM F2059',
-             'effectiveness': {'value': 46, 'unit': '%',
-                               'unit_type': 'massfraction',
-                               'standard_deviation': 4,
-                               'replicates': 6}}
+        ('ODB00-7', 0, 'environmental_behavior.dispersibilities', [
+              {'dispersant': 'Corexit 9500 dispersant',
+               'effectiveness': {'value': 46, 'unit': '%',
+                                 'unit_type': 'massfraction'}}
          ]),
-        ('2234', 0, 'environmental_behavior.emulsions', [
-            {'age': {'value': 0, 'unit': 'day', 'unit_type': 'time'},
-             'method': 'ESTS 13.02/x.x/M',
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'visual_stability': 'Entrained',
-             'complex_modulus': {'value': 45, 'unit': 'Pa',
-                                 'unit_type': 'pressure',
-                                 'standard_deviation': 7, 'replicates': 6},
-             'complex_viscosity': {'value': 7, 'unit': 'Pa.s',
-                                   'unit_type': 'dynamicviscosity',
-                                   'standard_deviation': 1, 'replicates': 6},
-             'loss_modulus': {'value': 42, 'unit': 'Pa',
-                              'unit_type': 'pressure',
-                              'standard_deviation': 6, 'replicates': 6},
-             'storage_modulus': {'value': 14, 'unit': 'Pa',
-                                 'unit_type': 'pressure',
-                                 'standard_deviation': 3, 'replicates': 6},
-             'tan_delta_v_e': {'value': 3, 'unit': None,
-                               'unit_type': 'unitless',
-                               'standard_deviation': 0.4, 'replicates': 6},
-             'water_content': {'value': 40, 'unit': '%',
-                               'unit_type': 'massfraction',
-                               'standard_deviation': 2, 'replicates': 9}},
-            {'age': {'value': 7, 'unit': 'day', 'unit_type': 'time'},
-             'method': 'ESTS 13.02/x.x/M',
-             'ref_temp': {'value': 15.0, 'unit': 'C',
-                          'unit_type': 'temperature'},
-             'complex_modulus': {'value': 31, 'unit': 'Pa',
-                                 'unit_type': 'pressure',
-                                 'standard_deviation': 7, 'replicates': 6},
-             'complex_viscosity': {'value': 5, 'unit': 'Pa.s',
-                                   'unit_type': 'dynamicviscosity',
-                                   'standard_deviation': 1, 'replicates': 6},
-             'loss_modulus': {'value': 31, 'unit': 'Pa',
-                              'unit_type': 'pressure',
-                              'standard_deviation': 7, 'replicates': 6},
-             'storage_modulus': {'value': 2, 'unit': 'Pa',
-                                 'unit_type': 'pressure',
-                                 'standard_deviation': 1, 'replicates': 6},
-             'tan_delta_v_e': {'value': 12, 'unit': None,
-                               'unit_type': 'unitless',
-                               'standard_deviation': 2, 'replicates': 5},
-             'water_content': {'value': 16, 'unit': '%',
-                               'unit_type': 'massfraction',
-                               'standard_deviation': 2, 'replicates': 9}}
+        ('ODB00-7', 1, 'environmental_behavior.emulsions', [
+              {'method': '',
+               'ref_temp': {'value': 15.0, 'unit': 'C',
+                            'unit_type': 'temperature'},
+               'visual_stability': 'Meso-stable',
+               'complex_modulus': {'value': 120000, 'unit': 'mPa',
+                                   'unit_type': 'pressure'},
+               'complex_viscosity': {'value': 2600, 'unit': 'mPas',
+                                     'unit_type': 'dynamicviscosity'},
+               'water_content': {'value': 62, 'unit': '%',
+                                 'unit_type': 'massfraction'}},
          ]),
-        ('2713', 0, 'SARA', {
-            'method': 'ESTS 12.11/3.0/M',
-            'aromatics': {'value': 32, 'unit': '%',
-                          'unit_type': 'massfraction'},
-            'asphaltenes': {'value': 4, 'unit': '%',
-                            'unit_type': 'massfraction',
-                            'standard_deviation': 0.1,
-                            'replicates': 3},
-            'resins': {'value': 6, 'unit': '%',
-                       'unit_type': 'massfraction',
-                       'standard_deviation': 0.2,
-                       'replicates': 3},
-            'saturates': {'value': 58, 'unit': '%',
-                          'unit_type': 'massfraction'}
+        ('ODB00-7', 0, 'SARA', {
+              'method': '',
+              'aromatics': {'value': 35, 'unit': '%',
+                            'unit_type': 'massfraction'},
+              'asphaltenes': {'value': 5, 'unit': '%',
+                              'unit_type': 'massfraction'},
+              'resins': {'value': 9, 'unit': '%',
+                         'unit_type': 'massfraction'},
+              'saturates': {'value': 52, 'unit': '%',
+                            'unit_type': 'massfraction'}
          }),
     ])
     def test_attribute(self, oil_id, index, attr, expected):
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == oil_id]
+                if str(r[0][0]['oil_index']) == oil_id]
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
 
+        print(f'getting {oil_id}: sub_samples.{index}.{attr}')
         res = mapper.deep_get(mapper.record, f'sub_samples.{index}.{attr}')
 
         assert res == expected
@@ -606,7 +540,7 @@ class TestEnvCanadaCsvRecordMapper(object):
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
 
         compounds = mapper.deep_get(mapper.record,
                                     f'sub_samples.{index}.{attr}')
@@ -650,7 +584,7 @@ class TestEnvCanadaCsvRecordMapper(object):
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
 
         ccme = mapper.deep_get(mapper.record,
                                f'sub_samples.{index}.CCME')
@@ -682,7 +616,7 @@ class TestEnvCanadaCsvRecordMapper(object):
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
 
         ests_fractions = mapper.deep_get(mapper.record,
                                          f'sub_samples.{index}'
@@ -713,7 +647,7 @@ class TestEnvCanadaCsvRecordMapper(object):
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
 
         phys = mapper.deep_get(mapper.record,
                                f'sub_samples.{index}.physical_properties')
@@ -738,7 +672,7 @@ class TestEnvCanadaCsvRecordMapper(object):
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper(parser)
+        mapper = EnvCanadaCsvRecordMapper1999(parser)
 
         env = mapper.deep_get(mapper.record,
                               f'sub_samples.{index}.environmental_behavior')
