@@ -115,7 +115,7 @@ class ECMeasurementDataclass:
         """
         if self.unit_of_measure:
             unit = self.unit_of_measure.split(' or ')[0]
-            unit = unit.lstrip('°').lstrip('¬∞').lstrip('‚Å∞')
+            unit = unit.lstrip('°').lstrip('¬∞').lstrip('‚Å∞').strip('Ãä')
 
             self.unit_of_measure = unit
 
@@ -268,25 +268,32 @@ class ECAdhesion(ECValueOnly):
 class BPTemperatureDistribution(ECMeasurement):
     value_attr = 'fraction'
     ref_temp_attr = 'vapor_temp'
+    final_bp = False
 
     def __post_init__(self):
         super().__post_init__()
 
         # for this type, we need to swap value into temperature
-        self.ref_temp = self.value
+        self.ref_temp = float(self.value)
         self.ref_temp_unit = self.unit_of_measure
 
         # for this type, we need to take the property name as the fraction
-        if self.property_name.lower() == 'initial boiling point':
+        if self.condition_of_analysis.lower() == 'initial boiling point':
             self.value = 0.0
+        elif self.condition_of_analysis.lower() == 'final boiling point':
+            self.value = 100.0
+            self.final_bp = True
         else:
-            self.value = float(self.property_name.rstrip('%'))
+            self.value = float(self.condition_of_analysis.split('%')[0].strip())
 
         self.unit_type = 'massfraction'
         self.unit_of_measure = '%'
 
     def py_json(self):
         ret = super().py_json()
+
+        if self.final_bp:
+            ret['final_bp'] = self.final_bp
 
         return ret
 
@@ -390,53 +397,12 @@ mapping_list = [
     ('Pour Point.Pour Point', 'physical_properties.pour_point',
      ECValueOnly, 'sample'),
     # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
-    ('Boiling Point Distribution, Temperature.Initial Boiling Point',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.5%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.10%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.15%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.20%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.25%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.30%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.35%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.40%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.45%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.50%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.55%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.60%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.65%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.70%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.75%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.80%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.85%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.90%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.95%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.100%',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
-    ('Boiling Point Distribution, Temperature.Final Boiling Point',
-     'distillation_data.end_point', ECValueOnly, 'sample'),
-    ('Boiling Point Cumulative Weight Fraction'
-     '.Boiling Point Cumulative Weight Fraction',
+
+    ('Boiling Point Cumulative Weight Fraction.Boiling Point Cumulative Weight Fraction',
      'distillation_data.cuts.+', BPCumulativeWeightFraction, 'sample'),
+    ('Boiling Point Temperature Cut Off.Boiling Point Temperature Cut Off',
+     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+
     ('Adhesion.Adhesion', 'environmental_behavior.adhesion',
      ECAdhesion, 'sample'),
     # Note: ESTS Evaporation is better handled as a list if we choose to do it

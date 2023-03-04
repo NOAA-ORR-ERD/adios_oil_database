@@ -63,3 +63,16 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
                     emulsions[idx] = new_emul
 
                 eb['emulsions'] = [em for em in emulsions if em]
+
+    def remap_final_bp(self):
+        for sample in self.record['sub_samples']:
+            dist = sample.get('distillation_data', {})
+
+        final_cut = None
+        for i, c in enumerate(dist.get('cuts', [])):
+            if 'final_bp' in c:
+                final_cut = dist['cuts'].pop(i)
+                break  # we will assume there is only one final cut
+
+        if final_cut is not None:
+            dist['end_point'] = final_cut['vapor_temp']
