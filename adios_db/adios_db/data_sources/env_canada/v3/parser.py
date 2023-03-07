@@ -112,10 +112,14 @@ class ECMeasurementDataclass:
 
         Temperature units (e.g. '°C') need to be stripped of the degree
         character
+
+        Illegible unicode for '^2' needs to be corrected.
         """
         if self.unit_of_measure:
             unit = self.unit_of_measure.split(' or ')[0]
             unit = unit.lstrip('°').lstrip('¬∞').lstrip('‚Å∞').strip('Ãä')
+
+            unit = unit.replace('¬≤', '^2')
 
             self.unit_of_measure = unit
 
@@ -138,7 +142,14 @@ class ECMeasurementDataclass:
             self.unit_of_measure = 'g/m^2'
             self.unit_type = None
             return
+
+        # handle saybolt viscosity unit string
+        if ('saybolt' in self.unit_of_measure.lower() or
+                'sus' in self.unit_of_measure.lower()):
+            self.unit_of_measure = 'sus'
+
         unit = Simplify(self.unit_of_measure)
+
         try:
             self.unit_type = UNIT_TYPES[unit]
         except KeyError:
@@ -181,12 +192,7 @@ class ECMeasurement(ECMeasurementDataclass):
             },
         }
 
-        if self.min_value is not None or self.max_value is not None:
-            ret[self.value_attr]['min_value'] = self.min_value
-            ret[self.value_attr]['max_value'] = self.max_value
-        else:
-            ret[self.value_attr]['value'] = self.value
-
+        # only set these values if they are not None
         if self.standard_deviation is not None:
             ret[self.value_attr]['standard_deviation'] = self.standard_deviation
 
@@ -195,6 +201,12 @@ class ECMeasurement(ECMeasurementDataclass):
 
         if self.method is not None:
             ret['method'] = self.method
+
+        if self.min_value is not None or self.max_value is not None:
+            ret[self.value_attr]['min_value'] = self.min_value
+            ret[self.value_attr]['max_value'] = self.max_value
+        else:
+            ret[self.value_attr]['value'] = self.value
 
         if self.ref_temp is not None:
             ret[self.ref_temp_attr] = {
@@ -228,7 +240,10 @@ class ECViscosity(ECMeasurement):
         """
         ret = super().py_json()
 
-        value, unit = self.condition_of_analysis.split()[-2:]
+        try:
+            value, unit = self.condition_of_analysis.split()[-2:]
+        except AttributeError:
+            value, unit = None, None
 
         if unit == '1/s':
             try:
@@ -539,73 +554,7 @@ mapping_list = [
      'bulk_composition.+', ECCompound, 'sample'),
     ('GC-Detected Petroleum Hydrocarbon Content.Resolved Peaks/TPH',
      'bulk_composition.+', ECCompound, 'sample'),
-    ('Petroleum Hydrocarbon Fractions-CCME.CCME F1',
-     'CCME.+', ECCompound, 'sample'),
-    ('Petroleum Hydrocarbon Fractions-CCME.CCME F2',
-     'CCME.+', ECCompound, 'sample'),
-    ('Petroleum Hydrocarbon Fractions-CCME.CCME F3',
-     'CCME.+', ECCompound, 'sample'),
-    ('Petroleum Hydrocarbon Fractions-CCME.CCME F4',
-     'CCME.+', ECCompound, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C8 To n-C10',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C10 To n-C12',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C12 To n-C16',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C16 To n-C20',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C20 To n-C24',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C24 To n-C28',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C28 To n-C34',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Saturates Fraction.n-C34+',
-     'ESTS_hydrocarbon_fractions.saturates.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C8 To n-C10',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C10 To n-C12',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C12 To n-C16',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C16 To n-C20',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C20 To n-C24',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C24 To n-C28',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C28 To n-C34',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon Aromatics Fraction.n-C34+',
-     'ESTS_hydrocarbon_fractions.aromatics.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C8 To n-C10',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C10 To n-C12',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C12 To n-C16',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C16 To n-C20',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C20 To n-C24',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C24 To n-C28',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C28 To n-C34',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.n-C34+',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
-    ('Petroleum Hydrocarbon GC-TPH (Saturates + Aromatics) Fractions'
-     '.TOTAL TPH (GC Detected TPH + Undetected TPH)',
-     'ESTS_hydrocarbon_fractions.GC_TPH.+', ECCompoundUngrouped, 'sample'),
+
     ('Hydrocarbon Groups Content.Saturates',
      'SARA.saturates', ECValueOnly, 'sample'),
     ('Hydrocarbon Groups Content.Aromatics',

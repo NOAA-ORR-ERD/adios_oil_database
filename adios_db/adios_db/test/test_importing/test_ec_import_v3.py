@@ -59,8 +59,8 @@ class TestEnvCanadaCsvFile(object):
 
         recs = list(reader.get_records())
 
-        # five records in our test file
-        assert len(recs) == 7
+        # nine records in our test file
+        assert len(recs) == 9
 
         for r in recs:
             # each item coming from get_records() is a list containing
@@ -81,8 +81,8 @@ class TestEnvCanadaCsvFile(object):
 
         recs = list(reader.get_records())
 
-        # five records in our test file
-        assert len(recs) == 7
+        # nine records in our test file
+        assert len(recs) == 9
 
         recs = list(reader.get_records())
 
@@ -92,7 +92,7 @@ class TestEnvCanadaCsvFile(object):
         reader.rewind()
         recs = list(reader.get_records())
 
-        assert len(recs) == 7
+        assert len(recs) == 9
 
 
 class TestEnvCanadaCsvRecordParser(object):
@@ -256,61 +256,44 @@ class TestEnvCanadaCsvRecordMapper(object):
             json.dump(py_json, fd, indent=4, sort_keys=True)
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
-        ('ODB00-5', 0, 'metadata', {'fraction_weathered': {'unit': '%',
-                                                           'value': 0.0},
+        ('ODB00-6', 0, 'metadata', {'fraction_weathered': {'unit': '%',
+                                                           'value': 0},
                                     'name': 'Fresh Oil Sample',
                                     'short_name': 'Fresh Oil',
-                                    'sample_id': '2713.1'}),
-        ('ODB00-5', -1, 'metadata', {'fraction_weathered': {'unit': '%',
-                                                            'value': 36.8},
-                                     'name': '36.8% Evaporated',
-                                     'short_name': '36.8% Evaporated',
-                                     'sample_id': '2713.2.1'}),
+                                    'sample_id': 'ODB00-6.0'}),
+        ('ODB00-6', -1, 'metadata', {'fraction_weathered': {'unit': '%',
+                                                            'value': 20},
+                                     'name': '20% Evaporated',
+                                     'short_name': '20% Evaporated',
+                                     'sample_id': 'ODB00-6.3'}),
         ('ODB00-5', 0, 'physical_properties.densities', [
-              {'density': {'value': 0.8639, 'unit': 'g/mL',
-                           'unit_type': 'density',
-                           'standard_deviation': 0, 'replicates': 3},
-               'ref_temp': {'value': 15.0, 'unit': 'C',
+              {'density': {'value': 0.893, 'unit': 'g/mL',
+                           'unit_type': 'density'},
+               'ref_temp': {'value': 16.0, 'unit': 'C',
                             'unit_type': 'temperature'},
-               'method': 'ASTM D5002'},
-              {'density': {'value': 0.8751, 'unit': 'g/mL',
-                           'unit_type': 'density',
-                           'standard_deviation': 0, 'replicates': 3},
-               'ref_temp': {'value': 0.0, 'unit': 'C',
-                            'unit_type': 'temperature'},
-               'method': 'ASTM D5002'},
+               },
          ]),
-        ('ODB00-5', 0, 'physical_properties.dynamic_viscosities', [
-              {'method': 'ASTM D7042',
-               'ref_temp': {'value': 15.0, 'unit': 'C',
+        ('ODB00-7', 0, 'physical_properties.dynamic_viscosities', [
+              {'ref_temp': {'value': 0.0, 'unit': 'C',
                             'unit_type': 'temperature'},
-               'viscosity': {'value': 10, 'unit': 'mPa.s',
-                             'unit_type': 'dynamicviscosity',
-                             'standard_deviation': 0, 'replicates': 3}},
-              {'method': 'ASTM D7042',
-               'ref_temp': {'value': 0.0, 'unit': 'C',
+               'viscosity': {'value': 34, 'unit': 'mPas',
+                             'unit_type': 'dynamicviscosity'}},
+              {'ref_temp': {'value': 15.0, 'unit': 'C',
                             'unit_type': 'temperature'},
-               'viscosity': {'value': 17.9, 'unit': 'mPa.s',
-                             'unit_type': 'dynamicviscosity',
-                             'standard_deviation': 0.001, 'replicates': 3}},
+               'viscosity': {'value': 16, 'unit': 'mPas',
+                             'unit_type': 'dynamicviscosity'}},
          ]),
-        ('ODB00-5', 3, 'physical_properties.dynamic_viscosities', [
-              {'method': 'ESTS 12.06/x.x/M',
-               'ref_temp': {'value': 15.0, 'unit': 'C',
+        ('ODB00-10', 0, 'physical_properties.kinematic_viscosities', [
+              {'ref_temp': {'value': 16.0, 'unit': 'C',
                             'unit_type': 'temperature'},
-               'shear_rate': {'value': 10.0, 'unit': '1/s',
-                              'unit_type': 'angularvelocity'},
-               'viscosity': {'value': 1000000.0, 'unit': 'mPa.s',
-                             'unit_type': 'dynamicviscosity',
-                             'standard_deviation': 67000.0, 'replicates': 3}},
-              {'method': 'ESTS 12.06/x.x/M',
-               'ref_temp': {'value': 0.0, 'unit': 'C',
+               'viscosity': {'value': 32, 'unit': 'mm^2/s',
+                             'unit_type': 'kinematicviscosity'}},
+         ]),
+        ('ODB00-66', 0, 'physical_properties.saybolt_viscosities', [
+              {'ref_temp': {'value': 38.0, 'unit': 'C',
                             'unit_type': 'temperature'},
-               'shear_rate': {'value': 0.1, 'unit': '1/s',
-                              'unit_type': 'angularvelocity'},
-               'viscosity': {'value': 90000000.0, 'unit': 'mPa.s',
-                             'unit_type': 'dynamicviscosity',
-                             'standard_deviation': 2233480, 'replicates': 3}},
+               'viscosity': {'value': 1362, 'unit': 'sus',
+                             'unit_type': 'kinematicviscosity'}},
          ]),
         ('ODB00-19', 0, 'distillation_data', {
               'type': 'mass fraction',
@@ -595,7 +578,7 @@ class TestEnvCanadaCsvRecordMapper(object):
         assert res == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
-        ('2234', 0, 'compounds', {
+        ('ODB00-6', 0, 'compounds', {
             'list_size': 91,
             'compound_attrs': ('name', 'method', 'groups', 'measurement'),
             'total_groups': {
@@ -605,7 +588,7 @@ class TestEnvCanadaCsvRecordMapper(object):
                 'n-Alkanes',
             }
          }),
-        ('561', 0, 'compounds', {
+        ('ODB00-6', 0, 'compounds', {
             'list_size': 114,
             'compound_attrs': ('name', 'method', 'groups', 'measurement'),
             'total_groups': {
@@ -617,7 +600,7 @@ class TestEnvCanadaCsvRecordMapper(object):
                 'n-Alkanes',
             }
          }),
-        ('2234', 0, 'bulk_composition', {
+        ('ODB00-6', 0, 'bulk_composition', {
             'list_size': 9,
             'compound_attrs': ('name', 'method', 'measurement'),
             'total_groups': None
@@ -626,7 +609,7 @@ class TestEnvCanadaCsvRecordMapper(object):
     def test_compound_list(self, oil_id, index, attr, expected):
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == oil_id]
+                if str(r[0][0]['oil_index']) == oil_id]
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
@@ -656,84 +639,22 @@ class TestEnvCanadaCsvRecordMapper(object):
             total_groups = set([sub for c in compounds for sub in c['groups']])
             assert total_groups == expected['total_groups']
 
-    @pytest.mark.parametrize('oil_id, index, expected', [
-        ('2234', 0, {
-            'fractions': (16.0, 50.0, 193.0, 40.0),
-         }),
-        ('561', 0, {
-            'fractions': (68.0, 171.0, 302.0, 60.0),
-         }),
-    ])
-    def test_ccme(self, oil_id, index, expected):
-        """
-        CCME object is a struct.
-        """
-        self.reader.rewind()
-        data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == oil_id]
-        assert len(data) == 1
-
-        parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper1999(parser)
-
-        ccme = mapper.deep_get(mapper.record,
-                               f'sub_samples.{index}.CCME')
-
-        assert type(ccme) == dict
-
-        for attr, fraction in zip(('F1', 'F2', 'F3', 'F4'),
-                                  expected['fractions']):
-            assert attr in ccme
-
-            for measurement_attr in ('value', 'unit', 'unit_type'):
-                assert measurement_attr in ccme[attr]
-
-            assert ccme[attr]['value'] == fraction
-
-    @pytest.mark.parametrize('oil_id, index, expected', [
-        ('2234', 0, {
-            'list_sizes': [8, 8, 9],
-         }),
-    ])
-    def test_ests_fractions(self, oil_id, index, expected):
-        """
-        ESTS_hydrocarbon_fractions object is a struct consisting of
-        attributes that are compound lists.
-        """
-        self.reader.rewind()
-        data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == oil_id]
-        assert len(data) == 1
-
-        parser = EnvCanadaCsvRecordParser1999(*data[0])
-        mapper = EnvCanadaCsvRecordMapper1999(parser)
-
-        ests_fractions = mapper.deep_get(mapper.record,
-                                         f'sub_samples.{index}'
-                                         '.ESTS_hydrocarbon_fractions')
-
-        assert type(ests_fractions) == dict
-
-        assert expected['list_sizes'] == [len(ests_fractions[attr]) for attr in
-                                          ('saturates',
-                                           'aromatics',
-                                           'GC_TPH')]
-
     @pytest.mark.parametrize('oil_id, index, attrs', [
-        ('2234', 0, ('pour_point', 'flash_point',
-                     'densities', 'dynamic_viscosities',
-                     'interfacial_tension_air',
-                     'interfacial_tension_water',
-                     'interfacial_tension_seawater')),
-        ('561', 0, ('densities', 'dynamic_viscosities',
-                    'interfacial_tension_air',
-                    'interfacial_tension_water',
-                    'interfacial_tension_seawater')),
+        ('ODB00-6', 0, ('densities', 'dynamic_viscosities',
+                        'interfacial_tension_air',
+                        'interfacial_tension_water',
+                        'interfacial_tension_seawater',
+                        'pour_point')),
+        ('ODB00-7', 0, ('densities', 'dynamic_viscosities',
+                        'interfacial_tension_air',
+                        'interfacial_tension_water',
+                        'interfacial_tension_seawater',
+                        'pour_point', 'flash_point')),
     ])
     def test_physical_properties(self, oil_id, index, attrs):
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == oil_id]
+                if str(r[0][0]['oil_index']) == oil_id]
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
@@ -742,6 +663,8 @@ class TestEnvCanadaCsvRecordMapper(object):
         phys = mapper.deep_get(mapper.record,
                                f'sub_samples.{index}.physical_properties')
 
+        pprint(phys)
+
         assert type(phys) == dict
 
         # env canada has no kinematic viscosities
@@ -749,16 +672,14 @@ class TestEnvCanadaCsvRecordMapper(object):
             assert attr in phys
 
     @pytest.mark.parametrize('oil_id, index, attrs', [
-        ('2234', 0, ('dispersibilities', 'emulsions',
-                     'ests_evaporation_test')),
-        ('506', 0, ('adhesion', 'dispersibilities', 'emulsions',
-                    'ests_evaporation_test')),
-        ('561', 0, ('adhesion',)),
+        ('ODB00-6', 0, ('dispersibilities', 'emulsions')),
+        ('ODB00-7', 0, ('adhesion', 'dispersibilities', 'emulsions',
+                        'ests_evaporation_test')),
     ])
     def test_environmental_behavior(self, oil_id, index, attrs):
         self.reader.rewind()
         data = [r for r in self.reader.get_records()
-                if str(r[0][0]['ests']) == oil_id]
+                if str(r[0][0]['oil_index']) == oil_id]
         assert len(data) == 1
 
         parser = EnvCanadaCsvRecordParser1999(*data[0])
@@ -767,10 +688,7 @@ class TestEnvCanadaCsvRecordMapper(object):
         env = mapper.deep_get(mapper.record,
                               f'sub_samples.{index}.environmental_behavior')
 
-        pprint(env)
-
         assert type(env) == dict
 
-        # env canada has no kinematic viscosities
         for attr in attrs:
             assert attr in env
