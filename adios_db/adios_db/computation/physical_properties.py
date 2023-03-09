@@ -447,7 +447,6 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
     """
     distillation_cuts = oil.sub_samples[0].distillation_data.cuts
 
-    # create normalized list of densities
     cuts_table = []
 
     for cut in distillation_cuts:
