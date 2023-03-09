@@ -30,6 +30,9 @@
                     "name": "Sulphur Content"
                 },
                 {
+                    "groups": [
+                        "Metals"
+                    ],
                     "measurement": {
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction",
@@ -38,6 +41,9 @@
                     "name": "Nickel"
                 },
                 {
+                    "groups": [
+                        "Metals"
+                    ],
                     "measurement": {
                         "unit": "\u00b5g/g",
                         "unit_type": "massfraction",

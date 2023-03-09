@@ -29,6 +29,7 @@ from adios_db.data_sources.env_canada.v3 import (EnvCanadaCsvFile1999,
                                                  EnvCanadaCsvRecordMapper1999)
 from adios_db.data_sources.env_canada.v2 import InvalidFileError
 
+import pdb
 from pprint import pprint
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
@@ -578,32 +579,17 @@ class TestEnvCanadaCsvRecordMapper(object):
         assert res == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
-        ('ODB00-6', 0, 'compounds', {
-            'list_size': 91,
-            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
-            'total_groups': {
-                'Alkylated Polycyclic Aromatic Hydrocarbons (PAHs)',
-                'Biomarkers',
-                'Other Priority PAHs',
-                'n-Alkanes',
-            }
-         }),
-        ('ODB00-6', 0, 'compounds', {
-            'list_size': 114,
-            'compound_attrs': ('name', 'method', 'groups', 'measurement'),
-            'total_groups': {
-                'Alkylated Polycyclic Aromatic Hydrocarbons (PAHs)',
-                'C3-C6 Alkyl Benzenes',
-                'Biomarkers',
-                'BTEX group',
-                'Other Priority PAHs',
-                'n-Alkanes',
-            }
-         }),
         ('ODB00-6', 0, 'bulk_composition', {
-            'list_size': 9,
-            'compound_attrs': ('name', 'method', 'measurement'),
+            'list_size': 22,
+            'compound_attrs': ('name', 'measurement'),
             'total_groups': None
+         }),
+        ('ODB00-7', 0, 'compounds', {
+            'list_size': 6,
+            'compound_attrs': ('name', 'groups', 'measurement'),
+            'total_groups': {
+                'Volatile Organic Compounds (VOCs)',
+            }
          }),
     ])
     def test_compound_list(self, oil_id, index, attr, expected):
@@ -617,6 +603,8 @@ class TestEnvCanadaCsvRecordMapper(object):
 
         compounds = mapper.deep_get(mapper.record,
                                     f'sub_samples.{index}.{attr}')
+
+        pprint(compounds)
 
         # We won't be checking every single compound since there are typically
         # over one hundred to check.  We will verify general properties of our

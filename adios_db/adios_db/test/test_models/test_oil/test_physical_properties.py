@@ -145,7 +145,7 @@ class TestDensityList:
         for msg in msgs:
             assert ("E040:" in msg and "DensityList" in msg
                     or
-                    "W010:" in msg and  "Temperature" in msg
+                    "W010:" in msg and "Temperature" in msg
                     )
 
     def test_validate_non_numeric_value(self):
@@ -345,9 +345,11 @@ class TestPhysicalProperties:
 
         assert set(py_json.keys()) == {'pour_point',
                                        'flash_point',
+                                       'color',
                                        'densities',
                                        'kinematic_viscosities',
                                        'dynamic_viscosities',
+                                       'saybolt_viscosities',
                                        'interfacial_tension_air',
                                        'interfacial_tension_water',
                                        'interfacial_tension_seawater'}
