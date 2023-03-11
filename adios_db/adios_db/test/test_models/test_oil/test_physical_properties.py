@@ -345,11 +345,10 @@ class TestPhysicalProperties:
 
         assert set(py_json.keys()) == {'pour_point',
                                        'flash_point',
-                                       'color',
+                                       'appearance',
                                        'densities',
                                        'kinematic_viscosities',
                                        'dynamic_viscosities',
-                                       'saybolt_viscosities',
                                        'interfacial_tension_air',
                                        'interfacial_tension_water',
                                        'interfacial_tension_seawater'}

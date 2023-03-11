@@ -18,9 +18,6 @@ from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase
 from adios_db.data_sources.importer_base import parse_single_datetime
 
-import pdb
-from pprint import pprint
-
 
 logger = logging.getLogger(__name__)
 
@@ -299,7 +296,8 @@ class BPTemperatureDistribution(ECMeasurement):
             self.value = 100.0
             self.final_bp = True
         else:
-            self.value = float(self.condition_of_analysis.split('%')[0].strip())
+            self.value = float(self.condition_of_analysis
+                               .split('%')[0].strip())
 
         self.unit_type = 'massfraction'
         self.unit_of_measure = '%'
@@ -332,9 +330,10 @@ class ECEmulsion(ECMeasurement):
         ret = super().py_json()
 
         try:
-            if self.condition_of_analysis.lower() == 'one week after formation':
+            condition = self.condition_of_analysis.lower()
+            if condition == 'one week after formation':
                 ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 7}
-            elif self.condition_of_analysis.lower() == 'on the day of formation':
+            elif condition == 'on the day of formation':
                 ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
             else:
                 logger.warning('Can not determine emulsion age')
@@ -391,7 +390,7 @@ mapping_list = [
     ('Kinematic Viscosity.Kinematic Viscosity',
      'physical_properties.kinematic_viscosities.+', ECViscosity, 'sample'),
     ('Saybolt Viscosity.Saybolt Viscosity',
-     'physical_properties.saybolt_viscosities.+', ECViscosity, 'sample'),
+     'physical_properties.kinematic_viscosities.+', ECViscosity, 'sample'),
 
     ('Surface Tension/ Interfacial tension.Surface Tension',
      'physical_properties.interfacial_tension_air.+', ECInterfacialTension,
@@ -400,7 +399,7 @@ mapping_list = [
      'physical_properties.interfacial_tension.+', ECInterfacialTension,
      'sample'),
 
-    ('Colour.Colour', 'physical_properties.color', ECValueOnly, 'sample'),
+    ('Colour.Colour', 'physical_properties.appearance', ECValueOnly, 'sample'),
 
     ('Flammability Limits in Air.Flammability Limits in Air',
      'industry_properties.???', ECValueOnly, 'sample'),

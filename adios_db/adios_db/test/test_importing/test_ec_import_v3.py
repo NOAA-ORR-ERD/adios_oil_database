@@ -13,9 +13,11 @@ try:
     from slugify import Slugify
     import dateutil
 except ImportError:
-    import pytest
-    pytest.skip("You need the awesome slugify and dateutil packages to run these tests",
-                allow_module_level=True)
+    pytest.skip(
+        'You need the awesome slugify and dateutil packages '
+        'to run these tests',
+        allow_module_level=True
+    )
 
 import os
 from pathlib import Path
@@ -28,9 +30,6 @@ from adios_db.data_sources.env_canada.v3 import (EnvCanadaCsvFile1999,
                                                  EnvCanadaCsvRecordParser1999,
                                                  EnvCanadaCsvRecordMapper1999)
 from adios_db.data_sources.env_canada.v2 import InvalidFileError
-
-import pdb
-from pprint import pprint
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
 example_index = example_dir / 'index.txt'
@@ -169,8 +168,6 @@ class TestEnvCanadaCsvRecordParser(object):
         parser = EnvCanadaCsvRecordParser1999(*data[0])
         value = parser.deep_get(parser.oil_obj, attr, default=default)
 
-        pprint(parser.oil_obj)
-
         assert np.isclose(value, expected)
 
 
@@ -290,7 +287,7 @@ class TestEnvCanadaCsvRecordMapper(object):
                'viscosity': {'value': 32, 'unit': 'mm^2/s',
                              'unit_type': 'kinematicviscosity'}},
          ]),
-        ('ODB00-66', 0, 'physical_properties.saybolt_viscosities', [
+        ('ODB00-66', 0, 'physical_properties.kinematic_viscosities', [
               {'ref_temp': {'value': 38.0, 'unit': 'C',
                             'unit_type': 'temperature'},
                'viscosity': {'value': 1362, 'unit': 'sus',
@@ -604,8 +601,6 @@ class TestEnvCanadaCsvRecordMapper(object):
         compounds = mapper.deep_get(mapper.record,
                                     f'sub_samples.{index}.{attr}')
 
-        pprint(compounds)
-
         # We won't be checking every single compound since there are typically
         # over one hundred to check.  We will verify general properties of our
         # compound list though
@@ -650,8 +645,6 @@ class TestEnvCanadaCsvRecordMapper(object):
 
         phys = mapper.deep_get(mapper.record,
                                f'sub_samples.{index}.physical_properties')
-
-        pprint(phys)
 
         assert type(phys) == dict
 
