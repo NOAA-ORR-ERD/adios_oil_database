@@ -17,6 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,6 +51,7 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="adios_db.html">adios_db package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adios_db.html#adios_db.initialize_console_log"><code class="docutils literal notranslate"><span class="pre">initialize_console_log()</span></code></a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="adios_db.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.html">adios_db.data_sources package</a></li>
@@ -81,10 +83,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="adios_db.html">adios_db package</a> &raquo;</li>
-          <li><a href="adios_db.models.html">adios_db.models package</a> &raquo;</li>
-      <li>adios_db.models.oil package</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="adios_db.html">adios_db package</a></li>
+          <li class="breadcrumb-item"><a href="adios_db.models.html">adios_db.models package</a></li>
+      <li class="breadcrumb-item active">adios_db.models.oil package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/adios_db.models.oil.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -102,16 +104,53 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.models.oil.cleanup.html">adios_db.models.oil.cleanup package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.add_labels">adios_db.models.oil.cleanup.add_labels module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.cleanup">adios_db.models.oil.cleanup.cleanup module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.density">adios_db.models.oil.cleanup.density module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.distillation">adios_db.models.oil.cleanup.distillation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.add_labels">adios_db.models.oil.cleanup.add_labels module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.add_labels.add_labels_to_oil"><code class="docutils literal notranslate"><span class="pre">add_labels_to_oil()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.add_labels.get_suggested_labels"><code class="docutils literal notranslate"><span class="pre">get_suggested_labels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.add_labels.is_label"><code class="docutils literal notranslate"><span class="pre">is_label()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.cleanup">adios_db.models.oil.cleanup.cleanup module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.cleanup.Cleanup"><code class="docutils literal notranslate"><span class="pre">Cleanup</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.cleanup.Cleanup.ID"><code class="docutils literal notranslate"><span class="pre">Cleanup.ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.cleanup.Cleanup.cleanup"><code class="docutils literal notranslate"><span class="pre">Cleanup.cleanup()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.density">adios_db.models.oil.cleanup.density module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.density.FixAPI"><code class="docutils literal notranslate"><span class="pre">FixAPI</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.density.FixAPI.ID"><code class="docutils literal notranslate"><span class="pre">FixAPI.ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.density.FixAPI.check"><code class="docutils literal notranslate"><span class="pre">FixAPI.check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.density.FixAPI.check_for_valid_api"><code class="docutils literal notranslate"><span class="pre">FixAPI.check_for_valid_api()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.density.FixAPI.cleanup"><code class="docutils literal notranslate"><span class="pre">FixAPI.cleanup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.density.FixAPI.find_density_at_60F"><code class="docutils literal notranslate"><span class="pre">FixAPI.find_density_at_60F()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.cleanup.html#module-adios_db.models.oil.cleanup.distillation">adios_db.models.oil.cleanup.distillation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.distillation.FixCutUnitType"><code class="docutils literal notranslate"><span class="pre">FixCutUnitType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.distillation.FixCutUnitType.ID"><code class="docutils literal notranslate"><span class="pre">FixCutUnitType.ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.distillation.FixCutUnitType.check"><code class="docutils literal notranslate"><span class="pre">FixCutUnitType.check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.distillation.FixCutUnitType.cleanup"><code class="docutils literal notranslate"><span class="pre">FixCutUnitType.cleanup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.cleanup.html#adios_db.models.oil.cleanup.distillation.FixCutUnitType.mapping"><code class="docutils literal notranslate"><span class="pre">FixCutUnitType.mapping</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.models.oil.validation.html">adios_db.models.oil.validation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.validation.html#adios_db.models.oil.validation.is_only_ignored"><code class="docutils literal notranslate"><span class="pre">is_only_ignored()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.validation.html#adios_db.models.oil.validation.unpack_status"><code class="docutils literal notranslate"><span class="pre">unpack_status()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.validation.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.validation.html#module-adios_db.models.oil.validation.errors">adios_db.models.oil.validation.errors module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.validation.html#module-adios_db.models.oil.validation.validate">adios_db.models.oil.validation.validate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.validation.html#module-adios_db.models.oil.validation.validate">adios_db.models.oil.validation.validate module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.validation.html#adios_db.models.oil.validation.validate.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.validation.html#adios_db.models.oil.validation.validate.validate_json"><code class="docutils literal notranslate"><span class="pre">validate_json()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.validation.html#module-adios_db.models.oil.validation.warnings">adios_db.models.oil.validation.warnings module</a></li>
 </ul>
 </li>
@@ -528,6 +567,23 @@ validation messages.</p>
 <dt class="sig sig-object py" id="adios_db.models.oil.distillation.DistCutList">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.distillation.</span></span><span class="sig-name descname"><span class="pre">DistCutList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.distillation.DistCutList" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.utilities.JSON_List" title="adios_db.models.common.utilities.JSON_List"><code class="xref py py-class docutils literal notranslate"><span class="pre">JSON_List</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.oil.distillation.DistCutList.from_data_arrays">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_data_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frac_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MassFraction'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.distillation.DistCutList.from_data_arrays" title="Permalink to this definition"></a></dt>
+<dd><p>Create a DistCutList from arrays of dist cut data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fractions</strong> – sequence of cut fractions</p></li>
+<li><p><strong>temps</strong> – sequence of cut vapor temperatures</p></li>
+<li><p><strong>frac_unit</strong> – unit of fractions: e.g.”%”, “fraction”</p></li>
+<li><p><strong>temp_unit</strong> – temperature unit: e.g. “C”, “F”, “K”</p></li>
+<li><p><strong>unit_type=&quot;MassFraction&quot;</strong> – “MassFraction” or “VolumeFraction”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="adios_db.models.oil.distillation.DistCutList.item_type">
 <span class="sig-name descname"><span class="pre">item_type</span></span><a class="headerlink" href="#adios_db.models.oil.distillation.DistCutList.item_type" title="Permalink to this definition"></a></dt>
@@ -2282,11 +2338,7 @@ validation messages.</p>
 </section>
 <section id="module-adios_db.models.oil.sara">
 <span id="adios-db-models-oil-sara-module"></span><h2>adios_db.models.oil.sara module<a class="headerlink" href="#module-adios_db.models.oil.sara" title="Permalink to this heading"></a></h2>
-<p>Model class definitions for embedded content in our oil records</p>
-<dl class="simple">
-<dt>Note: These are deprecated a bit.  An updated SARAFraction is sitting in</dt><dd><p>models.oil</p>
-</dd>
-</dl>
+<p>Model class definitions for SARA fractions</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.sara.Sara">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.sara.</span></span><span class="sig-name descname"><span class="pre">Sara</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">adios_db.models.common.measurement.MassFraction</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aromatics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">adios_db.models.common.measurement.MassFraction</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">adios_db.models.common.measurement.MassFraction</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asphaltenes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">adios_db.models.common.measurement.MassFraction</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.sara.Sara" title="Permalink to this definition"></a></dt>
@@ -2507,17 +2559,6 @@ validation messages.</p>
 <dt class="sig sig-object py" id="adios_db.models.oil.version_update.update_json">
 <span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.version_update.</span></span><span class="sig-name descname"><span class="pre">update_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">py_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.version_update.update_json" title="Permalink to this definition"></a></dt>
 <dd><p>updates JSON for an oil object from an older version to a newer one</p>
-</dd></dl>
-
-</section>
-<section id="module-adios_db.models.oil.versions">
-<span id="adios-db-models-oil-versions-module"></span><h2>adios_db.models.oil.versions module<a class="headerlink" href="#module-adios_db.models.oil.versions" title="Permalink to this heading"></a></h2>
-<p>versions.py</p>
-<p>Code for dealing with different versions of the data model</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.models.oil.versions.update_json">
-<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.versions.</span></span><span class="sig-name descname"><span class="pre">update_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">py_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.versions.update_json" title="Permalink to this definition"></a></dt>
-<dd><p>Updates JSON for an oil object from an older version to a newer one</p>
 </dd></dl>
 
 </section>

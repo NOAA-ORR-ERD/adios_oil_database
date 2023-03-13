@@ -22,6 +22,7 @@ outfile.write('Name, ID, Dynamic Viscosity, unit, reference temp, unit\n')
 
 
 # Loop through all the JSON files in the given directory:
+print("Extracting from data:", base_dir)
 for oil, path in adb.get_all_records(base_dir):
 
     print("\n**** ", oil.metadata.name)

@@ -17,6 +17,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -51,7 +52,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#saving-an-oil-object">Saving an <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-an-oil-from-scratch">Creating an Oil from scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-an-oil-from-scratch">Creating an Oil from scratch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-oil-attributes">The <code class="docutils literal notranslate"><span class="pre">Oil</span></code> attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sample"><code class="docutils literal notranslate"><span class="pre">Sample</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distillation"><code class="docutils literal notranslate"><span class="pre">Distillation</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#example-scripts">Example Scripts</a></li>
 </ul>
 </li>
@@ -76,8 +82,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Managing the Data</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Managing the Data</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/managing.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -144,6 +150,61 @@ arbitrarily nested lists, dicts, strings, numbers, and booleans.</p>
 </div>
 <p>The only required argument is an oil_id: it can be any moderate-length string. Your ID scheme should match the database you are working with.</p>
 <p>For other arguments, see: <code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.scripting.Oil</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Hopefully we will someday write complete documentation for how to create a full oil record from scratch. Below are a few pieces. In the meantime, you can look at the tests and at the included import scripts to see how the pieces are created and put together.</p>
+</div>
+<section id="the-oil-attributes">
+<h3>The <code class="docutils literal notranslate"><span class="pre">Oil</span></code> attributes<a class="headerlink" href="#the-oil-attributes" title="Permalink to this heading"></a></h3>
+<p>See <a class="reference internal" href="api/adios_db.models.oil.html#adios_db.models.oil.oil.Oil" title="adios_db.models.oil.oil.Oil"><code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.models.oil.oil.Oil</span></code></a> for the full details. but in short, a basic <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object has:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">oil_id</span></code>: the ID for the record</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>: where the metadata goes – name, product types, etc: <code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.models.oil.metadata.Metadata</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">subsamples</span></code>: A list of data about the samples.
+This is where the actual data goes. Every record should have at least one subsample – the zeroth one should be the “fresh oil” as it arrived at a lab.
+Other subsamples will have been processes on some way.</p></li>
+</ul>
+</section>
+<section id="sample">
+<h3><code class="docutils literal notranslate"><span class="pre">Sample</span></code><a class="headerlink" href="#sample" title="Permalink to this heading"></a></h3>
+<p>The <a class="reference internal" href="api/adios_db.models.oil.html#adios_db.models.oil.sample.Sample" title="adios_db.models.oil.sample.Sample"><code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.models.oil.sample.Sample</span></code></a> class holds all the measurements recorded in the record.</p>
+<p>It is broken down into different categories of data – see the API docs for details</p>
+</section>
+<section id="distillation">
+<h3><code class="docutils literal notranslate"><span class="pre">Distillation</span></code><a class="headerlink" href="#distillation" title="Permalink to this heading"></a></h3>
+<p>The <a class="reference internal" href="api/adios_db.models.oil.html#adios_db.models.oil.distillation.Distillation" title="adios_db.models.oil.distillation.Distillation"><code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.models.oil.distillation.Distillation</span></code></a> holds distillation cut data.
+It contains information about the distillation process, and the cut data itself.
+The distillation cuts are stored in a distillation cut list, with a set of fraction: temperature pairs. The is a utility constructor to generate the cut list from arrays of data. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">adios_db.models.oil.distillation</span> <span class="kn">import</span> <span class="n">Distillation</span><span class="p">,</span> <span class="n">DistCutList</span>
+<span class="kn">from</span> <span class="nn">adios_db.models.common.measurement</span> <span class="kn">import</span> <span class="n">Temperature</span><span class="p">,</span> <span class="n">Concentration</span>
+
+<span class="n">fractions</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">,</span> <span class="mf">12.4</span><span class="p">,</span> <span class="mf">23.5</span><span class="p">,</span> <span class="mf">44.3</span><span class="p">,</span> <span class="mf">63.9</span><span class="p">,</span> <span class="mf">82.7</span><span class="p">,</span> <span class="mf">91.7</span><span class="p">,</span> <span class="mf">96.2</span><span class="p">,</span> <span class="mf">98.8</span><span class="p">)</span>
+<span class="n">temps</span> <span class="o">=</span> <span class="p">(</span><span class="mf">36.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">,</span> <span class="mf">119.0</span><span class="p">,</span> <span class="mf">173.0</span><span class="p">,</span> <span class="mf">283.0</span><span class="p">,</span> <span class="mf">391.0</span><span class="p">,</span> <span class="mf">513.0</span><span class="p">,</span> <span class="mf">604.0</span><span class="p">,</span> <span class="mf">672.0</span><span class="p">,</span> <span class="mf">729.0</span><span class="p">)</span>
+
+<span class="n">dct</span> <span class="o">=</span> <span class="n">DistCutList</span><span class="o">.</span><span class="n">from_data_arrays</span><span class="p">(</span><span class="n">fractions</span><span class="o">=</span><span class="n">fractions</span><span class="p">,</span>
+                                   <span class="n">temps</span><span class="o">=</span><span class="n">temps</span><span class="p">,</span>
+                                   <span class="n">frac_unit</span><span class="o">=</span><span class="s1">&#39;percent&#39;</span><span class="p">,</span>
+                                   <span class="n">temp_unit</span><span class="o">=</span><span class="s1">&#39;C&#39;</span>
+                                   <span class="p">)</span>
+
+<span class="c1"># and now a Distillation object can be created</span>
+
+<span class="n">dist_data</span> <span class="o">=</span> <span class="n">Distillation</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mass fraction&quot;</span><span class="p">,</span>
+                         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;some arbitrary method&quot;</span><span class="p">,</span>
+                         <span class="n">end_point</span><span class="o">=</span><span class="n">Temperature</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">),</span>
+                         <span class="n">fraction_recovered</span><span class="o">=</span><span class="n">Concentration</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                                                          <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;fraction&quot;</span><span class="p">),</span>
+                         <span class="n">cuts</span><span class="o">=</span><span class="n">dct</span>
+                        <span class="p">)</span>
+
+<span class="c1"># this can be added to the Sample:</span>
+<span class="n">sample</span><span class="o">.</span><span class="n">distillation_data</span> <span class="o">=</span> <span class="n">dist_data</span>
+
+<span class="c1"># which could be in an Oil object:</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">oil</span><span class="o">.</span><span class="n">sub_samples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">distillation_data</span> <span class="o">=</span> <span class="n">dist_data</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="example-scripts">
 <h2>Example Scripts<a class="headerlink" href="#example-scripts" title="Permalink to this heading"></a></h2>

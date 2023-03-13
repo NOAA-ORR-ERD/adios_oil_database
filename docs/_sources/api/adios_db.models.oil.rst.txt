@@ -177,11 +177,3 @@ adios\_db.models.oil.version\_update module
    :members:
    :undoc-members:
    :show-inheritance:
-
-adios\_db.models.oil.versions module
-------------------------------------
-
-.. automodule:: adios_db.models.oil.versions
-   :members:
-   :undoc-members:
-   :show-inheritance:
