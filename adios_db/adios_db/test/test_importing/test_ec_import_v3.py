@@ -36,6 +36,13 @@ example_index = example_dir / 'index.txt'
 data_file = example_dir / 'ECCC_AlaskaNorthSlope.csv'
 
 
+class TestEnvCanadaReferenceCodes(object):
+    def test_init(self):
+        from adios_db.data_sources.env_canada.v3.reference_codes import reference_codes
+
+        print(f'reference_codes: {reference_codes}')
+
+
 class TestEnvCanadaCsvFile(object):
     def test_init(self):
         with pytest.raises(TypeError):
