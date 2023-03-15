@@ -6,7 +6,6 @@ and we also want to document how it works.
 Either we test it correctly, or we test it in an episodic manner on the
 real dataset.
 """
-
 import pytest
 
 try:
@@ -28,7 +27,9 @@ import numpy as np
 import adios_db
 from adios_db.data_sources.env_canada.v3 import (EnvCanadaCsvFile1999,
                                                  EnvCanadaCsvRecordParser1999,
-                                                 EnvCanadaCsvRecordMapper1999)
+                                                 EnvCanadaCsvRecordMapper1999,
+                                                 reference_codes)
+
 from adios_db.data_sources.env_canada.v2 import InvalidFileError
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
@@ -38,9 +39,13 @@ data_file = example_dir / 'ECCC_AlaskaNorthSlope.csv'
 
 class TestEnvCanadaReferenceCodes(object):
     def test_init(self):
-        from adios_db.data_sources.env_canada.v3.reference_codes import reference_codes
+        print(f'reference_codes: {type(reference_codes)}')
 
-        print(f'reference_codes: {reference_codes}')
+        assert isinstance(reference_codes, dict)
+
+        # (first, middle, last) codes in the document
+        assert [k in reference_codes
+                for k in ('ACGIH 96', 'Neff 76', 'Walton 93')]
 
 
 class TestEnvCanadaCsvFile(object):

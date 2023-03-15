@@ -7,3 +7,4 @@ to import the file:
 from .reader import EnvCanadaCsvFile1999
 from .parser import EnvCanadaCsvRecordParser1999
 from .mapper import EnvCanadaCsvRecordMapper1999
+from .refcode_lu import reference_codes
