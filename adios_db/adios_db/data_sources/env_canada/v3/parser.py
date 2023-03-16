@@ -371,6 +371,15 @@ class ECCompound(ECCompoundUngrouped):
         return ret
 
 
+class SeparatorString(str):
+    """
+    This is simply a way to specify a custom separator into our mapping list
+    items that are of type str.
+    """
+    sep = '|'
+    pass
+
+
 mapping_list = [
     # ('property', 'mapped_property', 'to_type', 'scope'),
     ('oil_name', 'metadata.name', str, 'oil'),
@@ -379,7 +388,7 @@ mapping_list = [
     ('origin', 'metadata.location', str, 'oil'),
     ('date_sample_received', 'metadata.sample_date', datetime, 'oil'),
     ('comments', 'metadata.comments', str, 'oil'),
-    ('reference', 'metadata.reference', str, 'oil'),
+    ('referenceID', 'metadata.reference', SeparatorString, 'oil'),
     #
     # The following mappings deal with a measurement row packaged into an obj
     #
@@ -827,7 +836,7 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
 
     """
     oil_common_props = ('oil_name', 'oil_index', 'synonyms', 'origin',
-                        'reference', 'comments')
+                        'referenceID', 'comments')
     sample_id_field_name = 'index_id'
 
     def __init__(self, values):
@@ -873,16 +882,6 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
         for attr in self.oil_common_props:
             self.set_aggregate_oil_property(attr)
 
-        # reference needs special treatment
-        self.deep_set(self.oil_obj, 'metadata.reference', {
-            'reference': 'Environment and Climate Change Canada, Environment '
-                         'Canada Crude Oil and Petroleum Product Database, '
-                         'Environment and Climate Change Canada, 2021.\n\n'
-                         'url: https://open.canada.ca/data/en/dataset/'
-                         '53c38f91-35c8-49a6-a437-b311703db8c5',
-            'year': 2021
-        })
-
         # product_type needs special treatment
         self.deep_set(self.oil_obj, 'metadata.product_type', self.product_type)
 
@@ -913,9 +912,15 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
           attributes and we can make an exception if there is an obvious
           problem.
         """
-        to_type = property_type_map[attr]
+        to_type = property_type_map.get(attr, None)
 
-        if to_type is str:
+        if to_type is SeparatorString:
+            value = to_type.sep.join({str(v[attr]) for v in self.src_values
+                                      if v[attr] is not None
+                                      and v[attr] != 'None'})
+
+            value = None if len(value) == 0 else value
+        elif to_type is str:
             value = ' '.join({str(v[attr]) for v in self.src_values
                              if v[attr] is not None and v[attr] != 'None'})
 

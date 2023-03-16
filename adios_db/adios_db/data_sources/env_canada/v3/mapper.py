@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import logging
+import re
 
 from adios_db.models.oil.oil import Oil
 from ..v2 import EnvCanadaCsvRecordMapper
+from .refcode_lu import reference_codes
 
 import pdb
 from pprint import pprint
@@ -76,3 +78,47 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
 
         if final_cut is not None:
             dist['end_point'] = final_cut['vapor_temp']
+
+    def get_ref_year(self, name, reference):
+        """
+        Search the name and reference text looking for a year
+        """
+        years = [int(n) for n in re.compile(r'\b\d{4}\b').findall(name)]
+
+        if len(years) > 0:
+            # we would prefer if the year was contained in the name
+            return max(years)
+
+        # but if not, we continue our search in the reference text
+        years.extend(
+            [int(n) for n in re.compile(r'\b\d{4}\b').findall(reference)]
+        )
+
+        if len(years) > 0:
+            return max(years)
+        else:
+            return None
+
+    def remap_reference_codes(self):
+        """
+        The content of the reference will be either a single code or a
+        pipe '|' delimited sequence of codes that reference the full title(s)
+        of the reference document.  We will convert the sequence of codes
+        into a sequence of full titles separated by a newline '\n'.
+        """
+        ref = self.record['metadata']['reference']
+        oil_name = self.record['metadata']['name']
+        newref = ''
+
+        if '|' in ref:
+            for refcode in ref.split('|'):
+                newref += reference_codes.get(refcode, refcode)
+                newref += '\n'
+        else:
+            newref = reference_codes.get(ref, ref)
+
+        # reference needs special treatment
+        self.deep_set(self.record, 'metadata.reference', {
+            'reference': newref,
+            'year': self.get_ref_year(oil_name, newref)
+        })

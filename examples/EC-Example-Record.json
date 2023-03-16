@@ -8,8 +8,8 @@
         "name": "Alaska North Slope (1989)",
         "product_type": "Crude Oil NOS",
         "reference": {
-            "reference": "Environment and Climate Change Canada, Environment Canada Crude Oil and Petroleum Product Database, Environment and Climate Change Canada, 2021.\n\nurl: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5",
-            "year": 2021
+            "reference": "American Petroleum Institute, API-EPA Sample Analysis of Standard Reference Oils, Ref. #71271, Washington, D.C., 1981",
+            "year": 1989
         },
         "source_id": "ODB00-5"
     },

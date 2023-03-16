@@ -43,9 +43,17 @@ class TestEnvCanadaReferenceCodes(object):
 
         assert isinstance(reference_codes, dict)
 
-        # (first, middle, last) codes in the document
+        # Check that we parsed the first and last reference codes in each page
+        # of the document
         assert [k in reference_codes
-                for k in ('ACGIH 96', 'Neff 76', 'Walton 93')]
+                for k in ('ACGIH 96', 'ASTM D4814',
+                          'Bobra 83', 'Dukek 78',
+                          'ESD', 'Mackay 82b',
+                          'MacLean 89', 'OGJ 83g',
+                          'OGJ 83h', 'OGJ 91d',
+                          'OGJ 91e', 'OGJ 94f',
+                          'OGJ 95a', 'Ross 99b',
+                          'Rossi 76 ', 'Walton 93')]
 
 
 class TestEnvCanadaCsvFile(object):
@@ -208,11 +216,13 @@ class TestEnvCanadaCsvRecordMapper(object):
                      'metadata.name': 'Alaska North Slope (1989)',
                      'metadata.source_id': 'ODB00-6',
                      'metadata.location': 'Alaska, USA',
-                     'metadata.reference': {'reference': "Environment and Climate Change Canada, "
-                                                         "Environment Canada Crude Oil and Petroleum Product Database, "
-                                                         "Environment and Climate Change Canada, 2021.\n\n"
-                                                         "url: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5",
-                                            'year': 2021},
+                     'metadata.reference': {'reference': 'Environmental Emergencies Technology Division, experimental '
+                                                         'data, Environment Canada, Ottawa, Ontario, 1983-1989; and '
+                                                         'Emergencies Science Division, experimental data, Environment '
+                                                         'Canada, Ottawa, Ontario, 1990- 1996. Presently referred to as '
+                                                         'the Emergencies Science and Technology Section (ESTS) of '
+                                                         'Environment and Climate Change Canada (ECCC)',
+                                            'year': 1989},
                      'metadata.product_type': 'Crude Oil NOS',
                      'metadata.API': 26.8,
                      'metadata.comments': None,
