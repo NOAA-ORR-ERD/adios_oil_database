@@ -3,10 +3,12 @@ import os
 import io
 import logging
 import pathlib
+import traceback
+import json
+
 from datetime import datetime
 from argparse import ArgumentParser
 
-import json
 from pymongo.errors import DuplicateKeyError
 
 from adios_db.util.term import TermColor as tc
@@ -21,6 +23,10 @@ from adios_db.data_sources.env_canada.v2 import EnvCanadaCsvRecordMapper
 from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
                                                  EnvCanadaCsvRecordParser)
 
+from adios_db.data_sources.env_canada.v3 import (EnvCanadaCsvFile1999,
+                                                 EnvCanadaCsvRecordParser1999,
+                                                 EnvCanadaCsvRecordMapper1999)
+
 from adios_db.data_sources.exxon_assays import (ExxonDataReader,
                                                 ExxonRecordParser,
                                                 ExxonMapper)
@@ -32,6 +38,13 @@ logger = logging.getLogger(__name__)
 
 # All oil library data files are assumed to be in a common data folder
 data_path = os.path.sep.join(__file__.split(os.path.sep)[:-3] + ['data'])
+
+
+def _trace_item(filename, lineno, function, text):
+    return {'file': filename,
+            'lineno': lineno,
+            'function': function,
+            'text': text}
 
 
 class FolderCollection:
@@ -179,7 +192,12 @@ menu_items = (['NOAA Filemaker', 'oildb.fm_files',
                EnvCanadaCsvFile,
                EnvCanadaCsvRecordParser,
                EnvCanadaCsvRecordMapper],
-              # ('Exxon Assays', add_exxon_records)
+              ['Environment & Climate Change Canada (1999)',
+               'oildb.eccc_files',
+               None,
+               EnvCanadaCsvFile1999,
+               EnvCanadaCsvRecordParser1999,
+               EnvCanadaCsvRecordMapper1999],
               ['Exxon Assays', 'oildb.exxon_files',
                None,
                ExxonDataReader,
@@ -382,8 +400,11 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
             total_count += 1
 
             try:
+                print(f'\n\n')
                 oil_mapper = mapper_cls(parser_cls(*record_data))
+                print('parsed...')
                 oil_pyjson = oil_mapper.py_json()
+                print('mapped...')
 
                 oil = validate_json(oil_pyjson)
                 set_completeness(oil)
@@ -408,6 +429,17 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
                 print('{} for {}: {}'
                       .format(e.__class__.__name__,
                               tc.change(oil_mapper.oil_id, 'red'), e))
+
+                depth = 3
+                _, exc_value, exc_traceback = sys.exc_info()
+                if exc_value is not None:
+                    tb = traceback.extract_tb(exc_traceback)
+
+                    if len(tb) > depth:
+                        print([_trace_item(*i) for i in tb[-depth:]])
+                    else:
+                        print([_trace_item(*i) for i in tb])
+
                 error_count += 1
             else:
                 success_count += 1
@@ -459,6 +491,13 @@ def _add_ec_files(settings):
                           for fn in ('opp_data_catalogue_en.csv',)])
 
     settings['oildb.ec_files'] = ec_files
+
+    eccc_files = '\n'.join([os.path.join(data_path, 'env_canada', fn)
+                            for fn in ('Catalogue_of_Crude_Oil_and_'
+                                       'Oil_Product_Properties_(1999)'
+                                       '-Revised_2022_En.csv',)])
+
+    settings['oildb.eccc_files'] = eccc_files
 
 
 def _add_exxon_files(settings):

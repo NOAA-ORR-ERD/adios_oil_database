@@ -70,6 +70,7 @@ class ECMeasurementDataclass:
 
     def __post_init__(self):
         self.treat_any_bad_initial_values()
+        self.fix_value_if_min_max()
         self.parse_temperature_string()
         self.fix_unit()
         self.determine_unit_type()
@@ -80,12 +81,43 @@ class ECMeasurementDataclass:
             if getattr(self, f.name) in ('N/A', ''):
                 setattr(self, f.name, None)
 
+    def fix_value_if_min_max(self):
+        """
+        There are cases where our self.value contains a string of 'N-N',
+        which implies that it is an interval representing a min-max.
+        If this is the case, fix it.
+        - This probably won't come up, but don't clobber any existing
+          self.min_value or self.max_value
+        - If there is only a single number in the form '-N', then it is a
+          single negative number, don't do anything.
+        - If there are more than two items e.g. 'N-N-N', we take the first two
+          items.
+        """
+        if (isinstance(self.value, str)
+                and '-' in self.value
+                and self.min_value is None
+                and self.max_value is None):
+            min_value, max_value, *_ = self.value.split('-')
+
+            try:
+                min_value, max_value = float(min_value), float(max_value)
+                self.min_value, self.max_value = min_value, max_value
+            except ValueError:
+                # if either values fail to convert to float, we do nothing
+                return
+
+            self.value = None
+
     def parse_temperature_string(self):
         """
         The temperature field can have varying content, like '15 °C'
         or simply '15', in which case we will assume it is Celsius.
         """
-        if isinstance(self.temperature, str) and len(self.temperature) > 0:
+        if (isinstance(self.temperature, str)
+                and self.temperature.lower() == 'unknown'):
+            self.ref_temp = None
+            self.ref_temp_unit = None
+        elif isinstance(self.temperature, str) and len(self.temperature) > 0:
             self.ref_temp, *_, self.ref_temp_unit = re.findall(
                 r'[\d\.]*\w+', self.temperature
             )
@@ -336,9 +368,9 @@ class ECEmulsion(ECMeasurement):
             elif condition == 'on the day of formation':
                 ret['age'] = {'unit': 'day', 'unit_type': 'time', 'value': 0}
             else:
-                logger.warning('Can not determine emulsion age')
+                logger.warning('ECEmulsion: Can not determine emulsion age')
         except AttributeError:
-            logger.warning('Can not determine emulsion age')
+            logger.warning('ECEmulsion: Condition of Analysis not set')
 
         return ret
 
@@ -354,6 +386,30 @@ class ECDispersibility(ECValueOnly):
 
 
 class ECCompoundUngrouped(ECMeasurement):
+    def determine_unit_type(self):
+        # check if it is a mass/volume fraction.
+        # - until PyNUCOS accepts a unit of measure like '% w/w' or '% v/v',
+        #   we need to change it to '%' and set the unit type explicitly
+        # - If it is None, we will default to massfraction
+        if self.unit_of_measure in ('% w/w', '%w/w', None):
+            self.unit_of_measure = '%'
+            self.unit_type = 'massfraction'
+            return
+        elif self.unit_of_measure in ('% v/v', '%v/v'):
+            self.unit_of_measure = '%'
+            self.unit_type = 'volumefraction'
+            return
+
+        unit = Simplify(self.unit_of_measure)
+
+        try:
+            self.unit_type = UNIT_TYPES[unit]
+        except KeyError:
+            try:
+                self.unit_type = UNIT_TYPES_MV[unit]
+            except KeyError:
+                self.unit_type = None
+
     def py_json(self):
         ret = super().py_json()
 

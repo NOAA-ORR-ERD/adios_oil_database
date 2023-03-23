@@ -45,9 +45,10 @@
                         "Metals"
                     ],
                     "measurement": {
+                        "max_value": 9.7,
+                        "min_value": 9.4,
                         "unit": "\u00b5g/g",
-                        "unit_type": "massfraction",
-                        "value": "9.4-9.7"
+                        "unit_type": "massfraction"
                     },
                     "name": "Vanadium"
                 },
