@@ -192,6 +192,8 @@ class ECMeasurementDataclass:
         The value field in the Env. Canada measurement row can have
         relational annotations like '>N' or '<N'.  In these cases, we turn
         them into an interval pair.
+        - There are also a few cases of 'N to N', which can be interpreted as
+          an interval
         """
         if isinstance(self.value, (int, float, type(None))):
             pass
@@ -201,6 +203,10 @@ class ECMeasurementDataclass:
             self.value = None
         elif self.value[0] == '>':
             self.min_value = float(self.value[1:])
+            self.value = None
+        elif ' to ' in self.value:
+            min_val, max_val = [float(n) for n in self.value.split(' to ')]
+            self.min_value, self.max_value = min_val, max_val
             self.value = None
 
 
@@ -258,6 +264,14 @@ class ECValueOnly(ECMeasurement):
 
 class ECDensity(ECMeasurement):
     value_attr = 'density'
+
+    def __post_init__(self):
+        if self.unit_of_measure == 'N/A':
+            # For ECCC, I think we can default to g/mL on the few cases where
+            # we don't have a good unit of measure for density.
+            self.unit_of_measure = 'g/mL'
+
+        super().__post_init__()
 
 
 class ECViscosity(ECMeasurement):
@@ -1094,19 +1108,25 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
         """
         api_obj = [v for v in self.src_values
                    if v[self.sample_id_field_name] == self.fresh_sample_id
-                   and v['property_id'] == 'APIGravity_18']
+                   and v['property_group'] == 'API Gravity'
+                   and v['property_name'] == 'API Gravity']
         api_obj = api_obj[0] if len(api_obj) > 0 else {}
 
         weathering = api_obj.get('weathering_fraction', None)
 
         try:
             weathering = float(weathering.rstrip('%'))
-        except AttributeError:
+        except (AttributeError, ValueError):
             pass
 
-        if not (weathering == 'None' or weathering == 0.0):
+        if weathering not in ('None', 0.0):
             # first sample is not fresh, we need to get API from the
             # fresh sample
+            return None
+
+        if weathering == 'Environmental Sample':
+            # All we can know about this type of sample is that the weathering
+            # is >0, so it is not a fresh sample.
             return None
 
         return api_obj['value']
