@@ -193,7 +193,8 @@ class ECMeasurementDataclass:
         relational annotations like '>N' or '<N'.  In these cases, we turn
         them into an interval pair.
         - There are also a few cases of 'N to N', which can be interpreted as
-          an interval
+          an interval.  We still need to deal with non-numeric 'to' strings
+          like 'Colourless to pale brown"
         """
         if isinstance(self.value, (int, float, type(None))):
             pass
@@ -205,9 +206,13 @@ class ECMeasurementDataclass:
             self.min_value = float(self.value[1:])
             self.value = None
         elif ' to ' in self.value:
-            min_val, max_val = [float(n) for n in self.value.split(' to ')]
-            self.min_value, self.max_value = min_val, max_val
-            self.value = None
+            try:
+                min_val, max_val = [float(n) for n in self.value.split(' to ')]
+                self.min_value, self.max_value = min_val, max_val
+                self.value = None
+            except ValueError:
+                # just keep the original value if we fail
+                pass
 
 
 class ECMeasurement(ECMeasurementDataclass):
@@ -332,6 +337,7 @@ class BPTemperatureDistribution(ECMeasurement):
         super().__post_init__()
 
         # for this type, we need to swap value into temperature
+        print(f'BPTemperatureDistribution(): self.value: {self.value}')
         self.ref_temp = float(self.value)
         self.ref_temp_unit = self.unit_of_measure
 
