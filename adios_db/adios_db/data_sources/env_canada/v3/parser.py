@@ -1059,23 +1059,32 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
             raise ValueError(f'duplicate sample_ids: {first_sample_ids}')
 
         for idx, o in enumerate(first_objs):
+            name = None
             sample_id = str(o[self.sample_id_field_name])
             weathering_percent = o['weathering_fraction']
 
-            try:
-                weathering_percent.rstrip('%')
-            except AttributeError:
-                pass
-
-            if weathering_percent is None or weathering_percent == 'None':
+            if weathering_percent in (None, 'None'):
                 weathering_percent = None
-            else:
+            elif weathering_percent == 'Environmental Sample':
+                name = 'Environmental Sample'
+                short_name = 'Env. Sample'
                 weathering_percent = {
-                    'value': sigfigs(weathering_percent, sig=5),
-                    'unit': '%'
+                    'min_value': 0.0, 'max_value': None, 'unit': '%'
+                }
+            else:
+                try:
+                    weathering_percent = weathering_percent.rstrip('%')
+                except AttributeError:
+                    pass
+
+                weathering_percent = {
+                    'value': sigfigs(weathering_percent, sig=5), 'unit': '%'
                 }
 
-            if (weathering_percent is not None and
+            if name is not None:
+                pass
+            elif (weathering_percent is not None and
+                    'value' in weathering_percent and
                     isclose(weathering_percent['value'], 0.0)):
                 name = 'Fresh Oil Sample'
                 short_name = 'Fresh Oil'
