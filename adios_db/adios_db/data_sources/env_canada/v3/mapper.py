@@ -6,8 +6,6 @@ from adios_db.models.oil.oil import Oil
 from ..v2 import EnvCanadaCsvRecordMapper
 from .refcode_lu import reference_codes
 
-import pdb
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +74,7 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
                 final_cut = dist['cuts'].pop(i)
                 break  # we will assume there is only one final cut
 
-        if final_cut is not None:
+        if final_cut is not None and 'vapor_temp' in final_cut:
             dist['end_point'] = final_cut['vapor_temp']
 
     def get_ref_year(self, name, reference):

@@ -336,9 +336,16 @@ class BPTemperatureDistribution(ECMeasurement):
     def __post_init__(self):
         super().__post_init__()
 
-        # for this type, we need to swap value into temperature
-        print(f'BPTemperatureDistribution(): self.value: {self.value}')
-        self.ref_temp = float(self.value)
+        # For this type, we need to swap value into temperature
+        # Convert it to float if we can, otherwise just use whatever is there
+        # - There are some records that have min-max values which get converted
+        #   to self.min_value & self.max_value, but for this type of
+        #   measurement, we really need just a single temperature.
+        try:
+            self.ref_temp = float(self.value)
+        except TypeError:
+            self.ref_temp = self.value
+
         self.ref_temp_unit = self.unit_of_measure
 
         # for this type, we need to take the property name as the fraction
@@ -351,6 +358,7 @@ class BPTemperatureDistribution(ECMeasurement):
             self.value = float(self.condition_of_analysis
                                .split('%')[0].strip())
 
+        self.min_value = self.max_value = None
         self.unit_type = 'massfraction'
         self.unit_of_measure = '%'
 
