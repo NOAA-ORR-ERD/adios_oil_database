@@ -68,8 +68,8 @@ class EnvCanadaCsvFile(CsvFile):
     number_of_columns = 23
     oil_id_field_name = 'ests'
 
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, **kwargs):
+        super().__init__(name, **kwargs)
 
         print(f'num fields should be {self.number_of_columns}')
         print(f'num fields are {self.field_names}')

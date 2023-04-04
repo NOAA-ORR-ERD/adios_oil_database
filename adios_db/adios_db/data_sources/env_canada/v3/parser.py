@@ -18,6 +18,9 @@ from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase
 from adios_db.data_sources.importer_base import parse_single_datetime
 
+import pdb
+from pprint import pprint
+
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +77,10 @@ class ECMeasurementDataclass:
         self.parse_temperature_string()
         self.fix_unit()
         self.determine_unit_type()
-        self.determine_min_max()
+
+        print(f'{self.property_group}.{self.property_name}:\t'
+              f'(self.value: {self.value}, '
+              f'self.unit: {self.unit_of_measure})')
 
     def treat_any_bad_initial_values(self):
         for f in fields(self.__class__):
@@ -83,30 +89,155 @@ class ECMeasurementDataclass:
 
     def fix_value_if_min_max(self):
         """
-        There are cases where our self.value contains a string of 'N-N',
-        which implies that it is an interval representing a min-max.
-        If this is the case, fix it.
-        - This probably won't come up, but don't clobber any existing
-          self.min_value or self.max_value
-        - If there is only a single number in the form '-N', then it is a
-          single negative number, don't do anything.
-        - If there are more than two items e.g. 'N-N-N', we take the first two
-          items.
-        """
-        if (isinstance(self.value, str)
-                and '-' in self.value
-                and self.min_value is None
-                and self.max_value is None):
-            min_value, max_value, *_ = self.value.split('-')
+        There are cases where our self.value contains a string indicating an
+        interval representing a min-max.  If this is the case, fix it by
+        splitting it into the self.min_value & self.max_values.
 
-            try:
-                min_value, max_value = float(min_value), float(max_value)
-                self.min_value, self.max_value = min_value, max_value
-            except ValueError:
-                # if either values fail to convert to float, we do nothing
+        There are a lot of various ways the interval data is represented in the
+        datasheet, so here are the cases I have found:
+
+        - Case 'N-N': Split on the '-'.  This makes it ambiguous whether the
+                      second number is negative or not, but we accept
+                      the data as it comes in from the data sheet.
+        - Case 'N-N-N': Split on the '-'.  Take the first two items.
+        - Case 'N - N': Split on the '-'. Ignore the spaces.
+        - Case 'N to N': Split on the 'to'.  Ignore the spaces.
+        - Case 'N, N': Split on the ','.  Ignore the spaces.
+
+        - Case '-N': Single negative number, don't do anything.
+        - Case '>N': min_value = N, max_value = None
+        - Case '<N': min_value = None, max_value = N
+        - Case 'N (min.)': min_value = N
+        - Case 'N (max.)': max_value = N
+        - Case 'N1 (min.), N2 (max.)': Split on the ','.
+                                       min_value = N, max_value = N
+        """
+        if isinstance(self.value, (int, float, type(None))):
+            return  # nothing to do, it's already a number
+
+        # take care of the easy cases first
+        for separator in (' to ', ', ', ' - '):
+            items = self.value.split(separator)
+            if len(items) > 1:
+                # we have a couple of numbers to make a range with.
+                self.set_ranged_values(*items)
                 return
 
-            self.value = None
+        # take care of the case of dashes without spaces
+        items = self.split_value_on_nospace_dashes()
+        if len(items) > 1:
+            # we have a couple of numbers to make a range with.
+            self.set_ranged_values(*items)
+            return
+
+        if self.value[0] in ('>', '≥'):
+            # set min value
+            self.set_ranged_values(self.value[1:], None)
+            return
+
+        if self.value[0] in ('<', '≤'):
+            # set max value
+            self.set_ranged_values(None, self.value[1:])
+            return
+
+        self.set_value(self.value)
+
+    def set_value(self, value):
+        if isinstance(value, (int, float, type(None))):
+            self.value = value
+        elif any([b in value for b in ('(min', '(max')]):
+            # The value has a min or max annotation.
+            match_obj = re.search(r'([-\.\d]+) \((min|max).\)', value)
+            if match_obj is not None:
+                num_val, min_max = (match_obj.groups())
+
+                if min_max == 'min':
+                    self.min_value = float(num_val)
+                else:
+                    self.max_value = float(num_val)
+        else:
+            try:
+                self.value = float(value)
+            except ValueError:
+                logger.warning(f'{self.property_group}.{self.property_name}:\t'
+                               f'Could not set value ({value}) to float.')
+                self.value = value
+
+    def set_ranged_values(self, min_value, max_value):
+        """
+        - each value passed in is part of a min/max interval.
+        - There are also a few cases where the min/max quality of the value
+          is annotated with a ' (min.)' or a ' (max.)' suffix.
+        """
+        self.value = self.min_value = self.max_value = None
+
+        # process our min_value
+        if isinstance(min_value, (int, float, type(None))):
+            self.min_value = min_value
+        elif any([b in min_value for b in ('(min', '(max')]):
+            # Yeah, the min_value could have a min or max annotation.
+            match_obj = re.search(r'([-\.\d]+) \((min|max).\)', min_value)
+            if match_obj is not None:
+                num_val, min_max = (match_obj.groups())
+
+                if min_max == 'min':
+                    self.min_value = float(num_val)
+                else:
+                    self.max_value = float(num_val)
+        else:
+            self.min_value = float(min_value)
+
+        # process our max_value
+        if isinstance(max_value, (int, float, type(None))):
+            self.max_value = max_value
+        elif any([b in max_value for b in ('(min', '(max')]):
+            # Yeah, the max_value could have a min or max annotation.
+            match_obj = re.search(r'([-\.\d]+) \((min|max).\)', max_value)
+            if match_obj is not None:
+                num_val, min_max = (match_obj.groups())
+
+                if min_max == 'min':
+                    self.min_value = float(num_val)
+                else:
+                    self.max_value = float(num_val)
+        else:
+            self.max_value = float(max_value)
+
+    def split_value_on_nospace_dashes(self):
+        """
+        cases like 'N-N' and 'N-N-N' are problematic when parsed by regex
+        because the '-' character is also used as a sign indicator for
+        the numbers.
+
+        A possible algorithm is to split the string on all dashes, and the
+        empty items in our resulting list will indicate a dash was used
+        as a sign character.
+
+        Ex. '5-4'   -> ['5', '4']
+
+        Ex. '-5--4' -> ['', '5', '', '4']
+                         ^        ^
+                        sign     sign
+        Note: We will not try to turn these items into float values here
+        """
+        ret = []
+        separated = self.value.split('-')
+        separated.reverse()
+
+        if separated[0] == '':
+            raise ValueError(f'Badly formed value"{self.value}"')
+        else:
+            for i in separated:
+                if i == '':
+                    if ret[-1][0] == '-':
+                        ret[-1] = ret[-1][1:]
+                    else:
+                        ret[-1] = '-' + ret[-1]
+                else:
+                    ret.append(i.strip())
+
+        ret.reverse()
+        return ret[:2]
 
     def parse_temperature_string(self):
         """
@@ -118,13 +249,14 @@ class ECMeasurementDataclass:
             self.ref_temp = None
             self.ref_temp_unit = None
         elif isinstance(self.temperature, str) and len(self.temperature) > 0:
-            self.ref_temp, *_, self.ref_temp_unit = re.findall(
-                r'[\d\.]*\w+', self.temperature
-            )
 
-            try:
+            match_obj = re.search(r'(\d+)[^a-zA-Z]+([a-zA-Z]+)',
+                                  self.temperature)
+
+            if match_obj is not None:
+                self.ref_temp, *_, self.ref_temp_unit = match_obj.groups()
                 self.ref_temp = float(self.ref_temp)
-            except Exception:
+            else:
                 self.ref_temp = None
                 self.ref_temp_unit = None
         elif isinstance(self.temperature, (int, float)):
@@ -146,7 +278,9 @@ class ECMeasurementDataclass:
         """
         if self.unit_of_measure:
             unit = self.unit_of_measure.split(' or ')[0]
-            unit = unit.lstrip('°').lstrip('¬∞').lstrip('‚Å∞').strip('Ãä')
+            unit = (unit.lstrip('°').lstrip('⁰').lstrip(' ̊')
+                    .lstrip('¬∞').lstrip('‚Å∞').lstrip('Ãä')
+                    .lstrip('â•'))
 
             unit = unit.replace('¬≤', '^2')
 
@@ -186,33 +320,6 @@ class ECMeasurementDataclass:
                 self.unit_type = UNIT_TYPES_MV[unit]
             except KeyError:
                 self.unit_type = None
-
-    def determine_min_max(self):
-        """
-        The value field in the Env. Canada measurement row can have
-        relational annotations like '>N' or '<N'.  In these cases, we turn
-        them into an interval pair.
-        - There are also a few cases of 'N to N', which can be interpreted as
-          an interval.  We still need to deal with non-numeric 'to' strings
-          like 'Colourless to pale brown"
-        """
-        if isinstance(self.value, (int, float, type(None))):
-            pass
-        elif self.value[0] == '<':
-            # set max value
-            self.max_value = float(self.value[1:])
-            self.value = None
-        elif self.value[0] == '>':
-            self.min_value = float(self.value[1:])
-            self.value = None
-        elif ' to ' in self.value:
-            try:
-                min_val, max_val = [float(n) for n in self.value.split(' to ')]
-                self.min_value, self.max_value = min_val, max_val
-                self.value = None
-            except ValueError:
-                # just keep the original value if we fail
-                pass
 
 
 class ECMeasurement(ECMeasurementDataclass):

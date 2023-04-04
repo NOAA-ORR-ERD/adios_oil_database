@@ -68,3 +68,6 @@ class EnvCanadaCsvFile1999(EnvCanadaCsvFile):
     """
     number_of_columns = 22
     oil_id_field_name = 'oil_index'
+
+    def __init__(self, name, encoding='utf-8', **kwargs):
+        super().__init__(name, encoding=encoding, **kwargs)

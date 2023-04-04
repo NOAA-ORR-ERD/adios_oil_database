@@ -26,6 +26,9 @@ from ..common.utilities import dataclass_to_json
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
+import pdb
+from pprint import pprint
+
 
 __all__ = [
     'AngularVelocity',
@@ -286,7 +289,13 @@ class Temperature(MeasurementBase):
 
         for val in (self.value, self.min_value, self.max_value):
             if val is not None:
-                val_in_C = convert(self.unit, "C", val)
+
+                try:
+                    val_in_C = convert(self.unit, "C", val)
+                except Exception:
+                    pdb.set_trace()
+                    raise
+
                 decimal = val_in_C % 1
 
                 if isclose(decimal, 0.15) or isclose(decimal, 0.85):

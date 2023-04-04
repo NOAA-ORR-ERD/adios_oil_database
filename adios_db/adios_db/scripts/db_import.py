@@ -400,11 +400,8 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
             total_count += 1
 
             try:
-                print(f'\n\n')
                 oil_mapper = mapper_cls(parser_cls(*record_data))
-                print('parsed...')
                 oil_pyjson = oil_mapper.py_json()
-                print('mapped...')
 
                 oil = validate_json(oil_pyjson)
                 set_completeness(oil)
