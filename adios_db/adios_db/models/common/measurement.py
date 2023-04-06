@@ -223,7 +223,14 @@ class MeasurementBase(MeasurementDataclass):
             val = getattr(self, attr)
 
             if val is not None:
-                new_val = convert(self.unit_type, self.unit, new_unit, val)
+                try:
+                    new_val = convert(self.unit_type, self.unit, new_unit, val)
+                except (TypeError, ValueError):
+                    print(f'Exception: convert({self.unit_type}, {self.unit}, '
+                          f'{new_unit}, {val}), '
+                          f'obj: {self}')
+                    raise
+
                 new_vals[attr] = new_val
 
         # if this was all successful
@@ -289,19 +296,17 @@ class Temperature(MeasurementBase):
 
         for val in (self.value, self.min_value, self.max_value):
             if val is not None:
-
                 try:
                     val_in_C = convert(self.unit, "C", val)
+
+                    decimal = val_in_C % 1
+
+                    if isclose(decimal, 0.15) or isclose(decimal, 0.85):
+                        msgs.append(WARNINGS['W010'].format(
+                            f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
+                            f"{round(val_in_C):.2f} C"))
                 except Exception:
-                    pdb.set_trace()
-                    raise
-
-                decimal = val_in_C % 1
-
-                if isclose(decimal, 0.15) or isclose(decimal, 0.85):
-                    msgs.append(WARNINGS['W010'].format(
-                        f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
-                        f"{round(val_in_C):.2f} C"))
+                    msgs.append(ERRORS['E044'].format(f"{val}", f"{self}"))
 
         return msgs
 

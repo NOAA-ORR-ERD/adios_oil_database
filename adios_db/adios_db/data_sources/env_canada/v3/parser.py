@@ -78,9 +78,9 @@ class ECMeasurementDataclass:
         self.fix_unit()
         self.determine_unit_type()
 
-        print(f'{self.property_group}.{self.property_name}:\t'
-              f'(self.value: {self.value}, '
-              f'self.unit: {self.unit_of_measure})')
+        #print(f'{self.property_group}.{self.property_name}:\t'
+        #      f'(self.value: {self.value}, '
+        #      f'self.unit: {self.unit_of_measure})')
 
     def treat_any_bad_initial_values(self):
         for f in fields(self.__class__):
@@ -119,16 +119,13 @@ class ECMeasurementDataclass:
         for separator in (' to ', ', ', ' - '):
             items = self.value.split(separator)
             if len(items) > 1:
-                # we have a couple of numbers to make a range with.
-                self.set_ranged_values(*items)
-                return
+                # we have a couple of possible numbers to make a range with.
+                try:
+                    self.set_ranged_values(*items)
+                except ValueError:
+                    pass
 
-        # take care of the case of dashes without spaces
-        items = self.split_value_on_nospace_dashes()
-        if len(items) > 1:
-            # we have a couple of numbers to make a range with.
-            self.set_ranged_values(*items)
-            return
+                return
 
         if self.value[0] in ('>', '≥'):
             # set min value
@@ -138,6 +135,13 @@ class ECMeasurementDataclass:
         if self.value[0] in ('<', '≤'):
             # set max value
             self.set_ranged_values(None, self.value[1:])
+            return
+
+        # take care of the case of dashes without spaces
+        items = self.split_value_on_nospace_dashes()
+        if items is not None and len(items) > 1:
+            # we have a couple of numbers to make a range with.
+            self.set_ranged_values(*items)
             return
 
         self.set_value(self.value)
@@ -159,21 +163,21 @@ class ECMeasurementDataclass:
             try:
                 self.value = float(value)
             except ValueError:
-                logger.warning(f'{self.property_group}.{self.property_name}:\t'
-                               f'Could not set value ({value}) to float.')
+                # logger.warning(f'{self.property_group}.{self.property_name}:'
+                #                f'\tCould not set value ({value}) to float.')
                 self.value = value
 
-    def set_ranged_values(self, min_value, max_value):
+    def set_ranged_values(self, min_value, max_value, *args):
         """
         - each value passed in is part of a min/max interval.
         - There are also a few cases where the min/max quality of the value
           is annotated with a ' (min.)' or a ' (max.)' suffix.
         """
-        self.value = self.min_value = self.max_value = None
 
         # process our min_value
         if isinstance(min_value, (int, float, type(None))):
             self.min_value = min_value
+            self.value = self.max_value = None
         elif any([b in min_value for b in ('(min', '(max')]):
             # Yeah, the min_value could have a min or max annotation.
             match_obj = re.search(r'([-\.\d]+) \((min|max).\)', min_value)
@@ -184,12 +188,16 @@ class ECMeasurementDataclass:
                     self.min_value = float(num_val)
                 else:
                     self.max_value = float(num_val)
+
+                self.value = self.max_value = None
         else:
             self.min_value = float(min_value)
+            self.value = self.max_value = None
 
         # process our max_value
         if isinstance(max_value, (int, float, type(None))):
             self.max_value = max_value
+            self.value = self.min_value = None
         elif any([b in max_value for b in ('(min', '(max')]):
             # Yeah, the max_value could have a min or max annotation.
             match_obj = re.search(r'([-\.\d]+) \((min|max).\)', max_value)
@@ -200,8 +208,11 @@ class ECMeasurementDataclass:
                     self.min_value = float(num_val)
                 else:
                     self.max_value = float(num_val)
+
+                self.value = self.min_value = None
         else:
             self.max_value = float(max_value)
+            self.value = self.min_value = None
 
     def split_value_on_nospace_dashes(self):
         """
@@ -218,14 +229,23 @@ class ECMeasurementDataclass:
         Ex. '-5--4' -> ['', '5', '', '4']
                          ^        ^
                         sign     sign
-        Note: We will not try to turn these items into float values here
+        Note: We will not try to turn these items into float values here, but
+              we would like them to be numeric.  Otherwise, we don't have an
+              interval.
         """
         ret = []
         separated = self.value.split('-')
         separated.reverse()
 
+        try:
+            [float(i) for i in separated if i != '']
+        except ValueError:
+            # logger.warning(f'Non-numeric sub-values found: "{self.value}"')
+            return None
+
         if separated[0] == '':
-            raise ValueError(f'Badly formed value"{self.value}"')
+            logger.warning(f'Badly formed value: "{self.value}"')
+            return None
         else:
             for i in separated:
                 if i == '':
@@ -282,7 +302,7 @@ class ECMeasurementDataclass:
                     .lstrip('¬∞').lstrip('‚Å∞').lstrip('Ãä')
                     .lstrip('â•'))
 
-            unit = unit.replace('¬≤', '^2')
+            unit = unit.replace('¬≤', '^2').replace('²','^2')
 
             self.unit_of_measure = unit
 
@@ -449,9 +469,21 @@ class BPTemperatureDistribution(ECMeasurement):
         #   to self.min_value & self.max_value, but for this type of
         #   measurement, we really need just a single temperature.
         try:
-            self.ref_temp = float(self.value)
-        except TypeError:
-            self.ref_temp = self.value
+            self.ref_temp = None if self.value is None else float(self.value)
+        except (TypeError, ValueError):
+            # Sometimes there is a 'N (max.)' or 'N (min.)' value.
+            # in this the case, for distillation, we will just take the value
+            match_obj = re.search(r'([-\.\d]+) \((min\.|max\.|estimated)\)',
+                                  self.value)
+            if match_obj is not None:
+                num_val, min_max = (match_obj.groups())
+
+                if min_max == 'min':
+                    self.min_value = float(num_val)
+                else:
+                    self.max_value = float(num_val)
+            else:
+                self.ref_temp = self.value
 
         self.ref_temp_unit = self.unit_of_measure
 
@@ -1198,20 +1230,29 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
                 except AttributeError:
                     pass
 
-                weathering_percent = {
-                    'value': sigfigs(weathering_percent, sig=5), 'unit': '%'
-                }
+                # sigfigs doesn't fail out, but returns the original value
+                # so we need to explicitly check that it's a number before
+                # modifying it into a measurement
+                try:
+                    float(weathering_percent)  # just to test it
+                    weathering_percent = {
+                        'value': sigfigs(weathering_percent, sig=5),
+                        'unit': '%'
+                    }
+                except ValueError:
+                    pass
 
             if name is not None:
                 pass
             elif (weathering_percent is not None and
                     'value' in weathering_percent and
-                    isclose(weathering_percent['value'], 0.0)):
-                name = 'Fresh Oil Sample'
-                short_name = 'Fresh Oil'
-            elif weathering_percent is not None:
-                name = f'{weathering_percent["value"]}% Evaporated'
-                short_name = f'{weathering_percent["value"]}% Evaporated'
+                    isinstance(weathering_percent['value'], (int, float))):
+                if isclose(weathering_percent['value'], 0.0):
+                    name = 'Fresh Oil Sample'
+                    short_name = 'Fresh Oil'
+                else:
+                    name = f'{weathering_percent["value"]}% Evaporated'
+                    short_name = f'{weathering_percent["value"]}% Evaporated'
             else:
                 name = f'{o["weathering_fraction"]}'
                 short_name = f'{o["weathering_fraction"]}'[:12]
