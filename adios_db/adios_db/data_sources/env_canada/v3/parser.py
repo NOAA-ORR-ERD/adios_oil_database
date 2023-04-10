@@ -537,7 +537,10 @@ class ECEmulsion(ECMeasurement):
             else:
                 logger.warning('ECEmulsion: Can not determine emulsion age')
         except AttributeError:
-            logger.warning('ECEmulsion: Condition of Analysis not set')
+            # We already have a validation method for emulsion.  If we want to
+            # check for age, we can do it there.
+            # logger.warning('ECEmulsion: Condition of Analysis not set')
+            pass
 
         return ret
 

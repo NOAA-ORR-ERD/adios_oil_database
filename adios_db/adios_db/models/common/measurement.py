@@ -226,9 +226,7 @@ class MeasurementBase(MeasurementDataclass):
                 try:
                     new_val = convert(self.unit_type, self.unit, new_unit, val)
                 except (TypeError, ValueError):
-                    print(f'Exception: convert({self.unit_type}, {self.unit}, '
-                          f'{new_unit}, {val}), '
-                          f'obj: {self}')
+                    print(f'Error in convert(), obj: {self}')
                     raise
 
                 new_vals[attr] = new_val

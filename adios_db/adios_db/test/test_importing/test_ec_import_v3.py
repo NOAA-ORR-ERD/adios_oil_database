@@ -266,7 +266,7 @@ class TestEnvCanadaCsvRecordMapper(object):
 
         py_json['status'] = []
 
-        filename = 'EC-Example-Record.json'
+        filename = 'EC-1999-Example-Record.json'
         file_path = os.path.sep.join(
             adios_db.__file__.split(os.path.sep)[:-3] + ['examples', filename]
         )
