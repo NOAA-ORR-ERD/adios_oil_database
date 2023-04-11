@@ -41,7 +41,8 @@ def read_csv_file(infilename):
     for row in reader:
         if check_field_name(row[0], "ADIOS Data Model Version"):
             if Version(row[1]) != oil.adios_data_model_version:
-                warnings.warn("Data model version mismatch -- possible errors on import")
+                warnings.warn('Data model version mismatch -- '
+                              'possible errors on import')
             break
     # look for main metadata:
     for row in reader:
@@ -55,6 +56,7 @@ def read_csv_file(infilename):
         break
 
     return oil
+
 
 def read_record_metadata(reader):
     """
@@ -82,8 +84,8 @@ def read_record_metadata(reader):
         if check_field_name(row[0], "Subsample Metadata"):
             break
         else:
-            # this could be more efficient with a dict lookup, rather than a loop
-            # but would require normalization
+            # This could be more efficient with a dict lookup rather than
+            # a loop, but would require normalization
             try:
                 if row[1]:
                     attr, func = metadata_map[normalize(row[0])]
@@ -92,17 +94,20 @@ def read_record_metadata(reader):
                 if check_field_name(row[0], "Reference"):
                     md.reference = Reference(int(row[1]), row[2])
                 if check_field_name(row[0], "Alternate Names"):
-                    md.alternate_names = [n.strip() for n in row[1:] if n.strip()]
+                    md.alternate_names = [n.strip()
+                                          for n in row[1:] if n.strip()]
                 if check_field_name(row[0], "Labels"):
                     md.labels = [n.strip() for n in row[1:] if n.strip()]
 
     return md
+
 
 def read_subsample(reader):
     ss = Sample(metadata=read_subsample_metadata(reader))
     ss.physical_properties = read_physical_properties(reader)
 
     return ss
+
 
 def read_subsample_metadata(reader):
     """
@@ -129,6 +134,7 @@ def read_subsample_metadata(reader):
         normalize("Description"): ("description", strstrip),
     }
     md = SampleMetaData()
+
     # look for Physical Properties data, then stop
     for row in reader:
         print("Processing:", row)
@@ -136,20 +142,28 @@ def read_subsample_metadata(reader):
             # print("found Physical Properties: breaking out")
             break
         else:
-            # this could be more efficient with a dict lookup, rather than a loop
-            # but would require normalization
+            # This could be more efficient with a dict lookup rather than
+            # a loop, but would require normalization
             try:
                 if row[1]:
                     attr, func = metadata_map[normalize(row[0])]
                     setattr(md, attr, func(row[1]))
             except KeyError:
                 if check_field_name(row[0], "Fraction evaporated"):
-                    md.fraction_evaporated = MassFraction(value=float(row[2]), unit=strstrip(row[3]))
+                    md.fraction_evaporated = MassFraction(
+                        value=float(row[2]),
+                        unit=strstrip(row[3])
+                    )
+
                 if check_field_name(row[0], "Boiling Point Range"):
-                    md.boiling_point_range = Temperature(min_value=float(row[1]),
-                                                         max_value=float(row[2]),
-                                                         unit=strstrip(row[3]))
+                    md.boiling_point_range = Temperature(
+                        min_value=float(row[1]),
+                        max_value=float(row[2]),
+                        unit=strstrip(row[3])
+                    )
+
     return md
+
 
 def read_physical_properties(reader):
     """
@@ -172,12 +186,6 @@ def read_physical_properties(reader):
     """
     pp = PhysicalProperties()
 
-    # pp_map = {
-    #     normalize("Name"): ("name", strstrip),
-    #     normalize("Short name"): ("short_name", strstrip),
-    #     normalize("Sample ID"): ("sample_id", strstrip),
-    #     normalize("Description"): ("description", strstrip),
-    # }
     # look for "Distillation Data" data, then stop
     for row in reader:
         print("Processing:", row)
@@ -186,8 +194,8 @@ def read_physical_properties(reader):
             break
         else:
             pass
-            # # this could be more efficient with a dict lookup, rather than a loop
-            # # but would require normalization
+            # This could be more efficient with a dict lookup rather than
+            # a loop, but would require normalization
             # try:
             #     if row[1]:
             #         attr, func = metadata_map[normalize(row[0])]
@@ -201,6 +209,7 @@ def read_physical_properties(reader):
 
     return pp
 
+
 def read_measurement(items):
     """
     reads a sequence, and returns a dict of measurement values:
@@ -211,11 +220,14 @@ def read_measurement(items):
     unit
     """
     vals = {}
-    for key, val in zip(('min_value', 'value', 'max_value' ), items[:3]):
-       vals[key] = float(val) if val.strip() else None
+
+    for key, val in zip(('min_value', 'value', 'max_value'), items[:3]):
+        vals[key] = float(val) if val.strip() else None
+
     vals['unit'] = strstrip(items[3])
 
     return vals
+
 
 def normalize(name):
     """
@@ -251,11 +263,10 @@ def main():
     print(f"Saving: {outfilename} as JSON")
     oil.to_file(outfilename)
 
+
 def strstrip(obj):
     return str(obj).strip()
 
+
 if __name__ == "__main__":
     main()
-
-
-
