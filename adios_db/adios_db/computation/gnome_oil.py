@@ -390,7 +390,7 @@ def normalized_cut_values(oil):
         if oil.metadata.product_type != 'Crude Oil NOS':
             # Maybe this should be a log message?
             raise ValueError(f"Distillation data required for {oil.metadata.product_type}. "
-                             "Oil not suitable for use in Gnome")
+                              "Oil not suitable for use in Gnome")
 
         if oil_api < 0:
             raise ValueError("Density is too large for estimations. "

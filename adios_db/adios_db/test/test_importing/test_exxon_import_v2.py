@@ -6,6 +6,15 @@ lot of it (Or writing it all by hand)
 
 but still handy to have some tests to run the code while under development
 """
+
+try:
+    import openpyxl
+except ImportError:
+    import pytest
+    pytest.skip("You need the openpyxl package to run these tests",
+                allow_module_level=True)
+
+
 import os
 from pathlib import Path
 from math import isclose

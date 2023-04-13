@@ -83,6 +83,23 @@ def test_get_kinematic_viscosity_data_defaults():
     assert isclose(kv[1][1], 288.15, rel_tol=1e-6)  # temp
 
 
+def test_get_kinematic_viscosity_data_no_data():
+    """
+    Issue: https://gitlab.orr.noaa.gov/gnome/oil_database/oil_database/-/issues/544
+
+    Seemed to be getting 1.0 instead of nothing!
+
+    Error observed with record: EC00622
+
+    Hmm -- turns out it works -- it was an error in the Generic Oil code that was using this.
+
+    But keeping the test anyway -- why risk a regression?
+    """
+    oil = Oil.from_file(EXAMPLE_DATA_DIR / 'EC00622-no-visc.json')
+    kv = get_kinematic_viscosity_data(oil)
+
+    assert kv == []
+
 def test_get_dynamic_viscosity_data_defaults():
     dv = get_dynamic_viscosity_data(FullOil)
 
@@ -238,7 +255,7 @@ class TestDensity:
         assert D == result
 
 
-class Test_KinematicViscosity:
+class TestKinematicViscosity:
 
     kv = KinematicViscosity(FullOil)
 
@@ -256,6 +273,16 @@ class Test_KinematicViscosity:
         assert self.kv.kviscs
         assert isclose(self.kv.at_temp(273.15), 0.001383, rel_tol=1e-3)
         assert isclose(self.kv.at_temp(288.15), 0.0003783, rel_tol=1e-3)
+
+    def test_no_data(self):
+        """
+        this record has no viscosity data -- should raise
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'EC00622-no-visc.json')
+
+        with pytest.raises(ValueError):
+            _ = KinematicViscosity(oil)
+
 
 
 def test_get_frac_recovered():
