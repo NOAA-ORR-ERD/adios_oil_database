@@ -3,7 +3,7 @@ dataclass to store the industry properties
 
 These are tricky, as they can be any weird unit
 """
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from ..common.utilities import dataclass_to_json, JSON_List
 

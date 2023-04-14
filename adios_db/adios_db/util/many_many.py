@@ -25,7 +25,6 @@ import copy
 
 
 class ManyMany:
-
     def __init__(self, initial_data=None):
         """
         initialize a ManyMany structure
@@ -63,9 +62,11 @@ class ManyMany:
         builds a "reversed" dict from a source dict
         """
         new = {}
+
         for key, values in source.items():
             for val in values:
                 new.setdefault(val, set()).add(key)
+
         return new
 
     @staticmethod
@@ -78,6 +79,7 @@ class ManyMany:
           but it turns out that's not useful (at least not in a robust way)
         """
         hashable = frozenset({k: frozenset(v) for k, v in d.items()}.items())
+
         return hash(hashable)
 
     def add_to_left(self, key, value):

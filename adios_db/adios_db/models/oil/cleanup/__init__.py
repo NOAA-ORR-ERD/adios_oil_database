@@ -13,11 +13,10 @@ possible things to cleanup:
 * putting distillation cuts in order
 
 """
-
 # you need to import a cleanup class here to get it registered
 from .cleanup import Cleanup
-
 from .density import FixAPI
+
 
 ALL_CLEANUPS = []
 CLEANUP_MAPPING = {}  # mapping to get cleanup object from its ID
