@@ -6,22 +6,12 @@ and we also want to document how it works.
 Either we test it correctly, or we test it in an episodic manner on the
 real dataset.
 """
-
-import pytest
-
-try:
-    from slugify import Slugify
-    import dateutil
-except ImportError:
-    import pytest
-    pytest.skip("You need the awesome slugify and dateutil packages to run these tests",
-                allow_module_level=True)
-
 import os
 from pathlib import Path
 import json
 
 import numpy as np
+import pytest
 
 import adios_db
 from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
@@ -56,7 +46,6 @@ class TestEnvCanadaCsvFile(object):
 
     def test_get_records(self):
         reader = EnvCanadaCsvFile(data_file)
-
         recs = list(reader.get_records())
 
         # five records in our test file
@@ -78,7 +67,6 @@ class TestEnvCanadaCsvFile(object):
 
     def test_rewind(self):
         reader = EnvCanadaCsvFile(data_file)
-
         recs = list(reader.get_records())
 
         # five records in our test file
@@ -190,11 +178,15 @@ class TestEnvCanadaCsvRecordMapper(object):
                   'metadata.name': 'Alaska North Slope [2015]',
                   'metadata.source_id': '2713',
                   'metadata.location': 'Alaska, USA',
-                  'metadata.reference': {'reference': "Environment and Climate Change Canada, "
-                                                      "Environment Canada Crude Oil and Petroleum Product Database, "
-                                                      "Environment and Climate Change Canada, 2021.\n\n"
-                                                      "url: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5",
-                                         'year': 2021},
+                  'metadata.reference': {
+                      'reference': "Environment and Climate Change Canada, "
+                                   "Environment Canada Crude Oil and "
+                                   "Petroleum Product Database, "
+                                   "Environment and Climate Change Canada, "
+                                   "2021.\n\n"
+                                   "url: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5",
+                      'year': 2021
+                  },
                   'metadata.sample_date': '2015-03-22',
                   'metadata.product_type': 'Crude Oil NOS',
                   'metadata.API': 31.3,

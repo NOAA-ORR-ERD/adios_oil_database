@@ -12,7 +12,7 @@ from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DynamicViscosityList,
                                                      KinematicViscosity,
                                                      KinematicViscosityPoint,
-                                                     KinematicViscosityList,)
+                                                     KinematicViscosityList)
 
 
 class TestDensityPoint:
@@ -70,14 +70,11 @@ class TestDensityList:
 
     def test_validate_duplicate_values(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=0, unit='C'),
-                           )
+                           ref_temp=Temperature(value=0, unit='C'))
         dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=0.001, unit='C'),
-                           )
+                           ref_temp=Temperature(value=0.001, unit='C'))
 
         DL = DensityList((dp1, dp2))
-
         msgs = DL.validate()
 
         print(msgs)
@@ -87,14 +84,11 @@ class TestDensityList:
 
     def test_validate_no_duplicate_values(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=0, unit='C'),
-                           )
+                           ref_temp=Temperature(value=0, unit='C'))
         dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=15, unit='C'),
-                           )
+                           ref_temp=Temperature(value=15, unit='C'))
 
         DL = DensityList((dp1, dp2))
-
         msgs = DL.validate()
 
         print(msgs)
@@ -105,7 +99,6 @@ class TestDensityList:
         it shouldn't crash with no data!
         """
         DL = DensityList()
-
         msgs = DL.validate()
 
         print(msgs)
@@ -116,11 +109,9 @@ class TestDensityList:
         it shouldn't crash (or give an warning) with one value!
         """
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=0, unit='C'),
-                           )
+                           ref_temp=Temperature(value=0, unit='C'))
 
         DL = DensityList((dp1,))
-
         msgs = DL.validate()
 
         print(msgs)
@@ -128,14 +119,11 @@ class TestDensityList:
 
     def test_validate_bad_temp(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=0, unit='K'),
-                           )
+                           ref_temp=Temperature(value=0, unit='K'))
         dp2 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=20.0, unit='K'),
-                           )
+                           ref_temp=Temperature(value=20.0, unit='K'))
 
         DL = DensityList((dp1, dp2))
-
         msgs = DL.validate()
 
         for msg in msgs:
@@ -145,19 +133,16 @@ class TestDensityList:
         for msg in msgs:
             assert ("E040:" in msg and "DensityList" in msg
                     or
-                    "W010:" in msg and  "Temperature" in msg
+                    "W010:" in msg and "Temperature" in msg
                     )
 
     def test_validate_non_numeric_value(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=0, unit='C'),
-                           )
+                           ref_temp=Temperature(value=0, unit='C'))
         dp2 = DensityPoint(density=Density(value="NM", unit='kg/m^3'),
-                           ref_temp=Temperature(value=15, unit='C'),
-                           )
+                           ref_temp=Temperature(value=15, unit='C'))
 
         DL = DensityList((dp1, dp2))
-
         msgs = DL.validate()
 
         print(msgs)
@@ -166,17 +151,13 @@ class TestDensityList:
 
     def test_validate_negative_numeric_value(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
-                           ref_temp=Temperature(value=0, unit='C'),
-                           )
+                           ref_temp=Temperature(value=0, unit='C'))
         dp2 = DensityPoint(density=Density(value="0.0", unit='kg/m^3'),
-                           ref_temp=Temperature(value=15, unit='C'),
-                           )
+                           ref_temp=Temperature(value=15, unit='C'))
         dp3 = DensityPoint(density=Density(value="-10.0", unit='kg/m^3'),
-                           ref_temp=Temperature(value=15, unit='C'),
-                           )
+                           ref_temp=Temperature(value=15, unit='C'))
 
         DL = DensityList((dp1, dp2, dp3))
-
         msgs = DL.validate()
 
         print(msgs)
@@ -300,12 +281,11 @@ class TestKinematicViscosityList:
 
     def test_missing_ref_temp(self):
         # this occurs a lot when editing the code in the GUI
+        kvp = KinematicViscosityPoint(
+            viscosity=KinematicViscosity(1000, unit="Cst")
+        )
 
-        kvp = KinematicViscosityPoint(viscosity=KinematicViscosity(1000,
-                                                                   unit="Cst"),
-                                      )
         kvl = KinematicViscosityList((kvp,))
-
         msgs = kvl.validate()
 
         assert "E042:" in msgs[0]
@@ -398,13 +378,11 @@ class Test_interfacial_tension:
     def test_missing_ref_temp(self):
         # this was in the actual data -- how?
         # note missing value for temp
-
-        itp = InterfacialTensionPoint(tension=InterfacialTension(0.03,
-                                                                 unit="N/m"),
-                                      ref_temp=Temperature(unit="K"),
-                                      )
+        itp = InterfacialTensionPoint(
+            tension=InterfacialTension(0.03, unit="N/m"),
+            ref_temp=Temperature(unit="K")
+        )
         itl = InterfacialTensionList((itp,))
-
         msgs = itl.validate()
 
         assert "E042:" in msgs[0]
@@ -414,13 +392,12 @@ class Test_interfacial_tension:
         """
         make sure we can add and save a comment to an InterfacialTensionPoint
         """
-        itp = InterfacialTensionPoint(tension=None,
-                                      ref_temp=Temperature(value=15.0,
-                                                           unit="C"),
-                                      comment="Too Viscous",
-                                      )
+        itp = InterfacialTensionPoint(
+            tension=None,
+            ref_temp=Temperature(value=15.0, unit="C"),
+            comment="Too Viscous"
+        )
         itl = InterfacialTensionList((itp,))
-
         msgs = itl.validate()
 
         assert not msgs

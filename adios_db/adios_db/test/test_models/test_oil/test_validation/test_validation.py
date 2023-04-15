@@ -3,31 +3,31 @@ tests of the validation code
 
 most need to be updated to test validating an Oil object directly
 """
-import copy
-import json
 from pathlib import Path
 import math
+import copy
+import json
+
 import pytest
 
 import nucos
 
 from adios_db.computation import physical_properties
+from adios_db.models.common.measurement import Density, Temperature
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
 from adios_db.models.oil.physical_properties import DensityPoint
-from adios_db.models.common.measurement import *
-from adios_db.models.oil.validation.validate import (validate_json, validate)
-
+from adios_db.models.oil.validation.validate import validate_json, validate
 from adios_db.models.oil.validation import (unpack_status, is_only_ignored,
                                             ERRORS_TO_IGNORE)
 
 from adios_db.scripting import get_all_records
 
+
 HERE = Path(__file__).parent
 
 TEST_DATA_DIR = (HERE.parent.parent.parent /
                  "data_for_testing" / "noaa-oil-data" / "oil")
-
 BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json",
                             encoding="utf-8"))
 
@@ -36,9 +36,7 @@ BIG_RECORD = json.load(open(TEST_DATA_DIR / "EC" / "EC02234.json",
 def test_unpack_status():
     status = ["W005: API value: 2256.95 seems unlikely",
               "W009: Distillation fraction recovered is missing or invalid",
-              "W009: Another one with the same Code",
-              ]
-
+              "W009: Another one with the same Code"]
     result = unpack_status(status)
 
     print(result)
@@ -71,6 +69,7 @@ def big_record():
 @pytest.fixture
 def no_type_oil():
     no_type_oil = {'oil_id': 'AD00123', 'metadata': {'name': 'An oil name'}}
+
     return Oil.from_py_json(no_type_oil)
 
 
@@ -78,16 +77,17 @@ def no_type_oil():
 def minimal_oil():
     oil = Oil('XXXXX')
     oil.metadata.name = "Minimal Oil for Tests"
+
     fresh = Sample()
-    # print(fresh.physical_properties)
     oil.sub_samples.append(fresh)
+
     return oil
 
 
 def test_validation_doesnt_change_oil(big_record):
     orig = copy.deepcopy(big_record)
-
     orig.validate()
+
     # gnome_suitable may have been reset
     big_record.metadata.gnome_suitable = orig.metadata.gnome_suitable
     assert orig == big_record
@@ -102,20 +102,12 @@ def snippet_in_oil_status(snippet, msgs):
     except AttributeError:
         # must not be an oil object -- assume it's a list of messages
         pass
+
     for msg in msgs:
         if snippet in msg:
             return True
+
     return False
-
-
-# def snippet_in_oil_status(snippet, oil):
-#     """
-#     checks if the particular snippet in one of the messages
-#     """
-#     for msg in oil.status:
-#         if snippet in msg:
-#             return True
-#     return False
 
 
 def snippet_not_in_oil_status(snippet, oil):
@@ -133,10 +125,11 @@ class TestFromPyJson:
                 'name': "An oil name"
             },
             'sub_samples': [
-                {'metadata': {
-                    'fraction_evaporated': {'value': 11, 'unit': '%',
-                                            'unit_type': 'massfraction'}
-                 }
+                {
+                    'metadata': {
+                        'fraction_evaporated': {'value': 11, 'unit': '%',
+                                                'unit_type': 'massfraction'}
+                    }
                  }
             ]
         })
@@ -169,11 +162,12 @@ class TestValidateJson:
                 'name': "An oil name"
             },
             'sub_samples': [
-                {'metadata': {
-                    'fraction_evaporated': {'value': 11, 'unit': '%',
-                                            'unit_type': 'massfraction'}
-                 }
-                 }
+                {
+                    'metadata': {
+                        'fraction_evaporated': {'value': 11, 'unit': '%',
+                                                'unit_type': 'massfraction'}
+                    }
+                }
             ]
         })
 
@@ -201,14 +195,8 @@ def test_reasonable_name(name):
 
 
 def test_no_type(no_type_oil):
-    # print("oil.metadata")
-
-    # print(no_type_oil.metadata)
     validate(no_type_oil)
 
-    # print("status after validating")
-    # for s in no_type_oil.status:
-    #     print(s)
     assert snippet_in_oil_status("W002:", no_type_oil)
 
 
@@ -216,8 +204,6 @@ def test_bad_type(no_type_oil):
     no_type_oil.metadata.product_type = "Fred"
     validate(no_type_oil)
 
-    for s in no_type_oil.status:
-        print(s)
     assert snippet_in_oil_status("W003:", no_type_oil)
 
 
@@ -225,7 +211,6 @@ def test_correct_type(no_type_oil):
     no_type_oil.metadata.product_type = "Crude"
     validate(no_type_oil)
 
-    print(no_type_oil.status)
     for msg in no_type_oil.status:
         assert not msg.startswith("W001")
         assert not msg.startswith("W002")
@@ -240,15 +225,15 @@ def test_big_record_no_type(big_record):
 
     validate(oil)
 
-    print(oil.status)
-
     assert snippet_in_oil_status("W002", oil)
 
 
 def test_no_api_crude(no_type_oil):
     oil = no_type_oil
     oil.metadata.product_type = "Crude Oil NOS"
+
     validate(oil)
+
     assert snippet_in_oil_status("E030:", oil)
 
 
@@ -256,20 +241,25 @@ def test_no_api_not_crude(no_type_oil):
     # we've turned off these warnings
     oil = no_type_oil
     oil.metadata.product_type = "Solvent"
+
     validate(oil)
+
     assert snippet_not_in_oil_status("W004:", oil)
 
 
 def test_api_outragious(no_type_oil):
     oil = no_type_oil
     oil.metadata.API = -200
+
     validate(oil)
+
     assert snippet_in_oil_status("W005:", oil)
 
 
 def test_API_density_match(minimal_oil):
     oil = minimal_oil
     minimal_oil.metadata.API = 32.1  # close enough to 32.0
+
     density = DensityPoint(
         density=Density(value=0.86469, unit='g/cm^3'),
         ref_temp=Temperature(value=60, unit='F'),
@@ -278,14 +268,10 @@ def test_API_density_match(minimal_oil):
 
     density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
     API = nucos.convert('kg/m^3', 'API', density_at_60F)
-    print(density_at_60F)
-    print(API)
 
     assert math.isclose(API, oil.metadata.API, rel_tol=1e3)
 
     validate(oil)
-
-    print(oil.status)
 
     assert snippet_not_in_oil_status("E043", oil)
 
@@ -293,6 +279,7 @@ def test_API_density_match(minimal_oil):
 def test_API_density_missmatch(minimal_oil):
     oil = minimal_oil
     minimal_oil.metadata.API = 32.2  # too far from 32.0
+
     density = DensityPoint(  # API 32.0 converted
         density=Density(value=0.86469, unit='g/cm^3'),
         ref_temp=Temperature(value=60, unit='F'),
@@ -300,9 +287,9 @@ def test_API_density_missmatch(minimal_oil):
     oil.sub_samples[0].physical_properties.densities.append(density)
 
     density_at_60F = physical_properties.Density(oil).at_temp(60, 'F')
-    API = nucos.convert('kg/m^3', 'API', density_at_60F)
-
     print(f"{density_at_60F=}")
+
+    API = nucos.convert('kg/m^3', 'API', density_at_60F)
     print(f"{API=}")
     print(f"{minimal_oil.metadata.API=}")
 
@@ -316,6 +303,7 @@ def test_API_density_missmatch(minimal_oil):
 def test_no_subsamples(no_type_oil):
     oil = no_type_oil
     validate(oil)
+
     assert snippet_in_oil_status("E031", oil)
 
 
@@ -336,7 +324,6 @@ def test_api_real_record(big_record):
 
 def test_density_data(big_record):
     oil = big_record
-
     validate(oil)
 
     assert snippet_not_in_oil_status("W004:", oil)
@@ -354,9 +341,8 @@ def test_no_densities(big_record):
 
     pp = oil.sub_samples[0].physical_properties
     del pp.densities[:]
-    validate(oil)
 
-    print(oil.status)
+    validate(oil)
 
     assert snippet_in_oil_status("W006: No density values provided", oil)
 
@@ -364,35 +350,15 @@ def test_no_densities(big_record):
 def test_bad_value_in_dist_temp(big_record):
     oil = big_record
     oil.sub_samples[0].distillation_data.cuts[0].vapor_temp.value = -1000
+
     validate(oil)
-    print(oil.status)
 
     assert snippet_in_oil_status("E040: Value for distillation vapor temp",
                                  oil)
 
 
-# No longer checking for distillation cuts.
-# def test_distillation_cuts(big_record):
-#     oil = big_record
-
-#     validate(oil)
-
-#     assert snippet_not_in_oil_status("W007:", oil)
-
-# def test_no_distillation_cuts(big_record):
-#     oil = big_record
-
-#     # remove the cut data
-#     oil.sub_samples[0].distillation_data = []
-#     validate(oil)
-#     print(oil.status)
-
-#     assert snippet_in_oil_status("W007:", oil)
-
-
 def test_none_year_in_reference(big_record):
     oil = big_record
-
     oil.metadata.reference.year = None
 
     validate(oil)
@@ -402,7 +368,6 @@ def test_none_year_in_reference(big_record):
 
 def test_bad_year_in_reference(big_record):
     oil = big_record
-
     oil.metadata.reference.year = -2000
 
     validate(oil)
@@ -412,7 +377,6 @@ def test_bad_year_in_reference(big_record):
 
 def test_good_year_in_reference(big_record):
     oil = big_record
-
     oil.metadata.reference.year = 2020
 
     validate(oil)
@@ -433,21 +397,24 @@ def test_does_not_break_test_records():
     assert True
 
 
-@pytest.mark.skipif(not hasattr(nucos, 'is_supported_unit'), reason='nucos too old for unit checking')
+@pytest.mark.skipif(not hasattr(nucos, 'is_supported_unit'),
+                    reason='nucos too old for unit checking')
 def test_bad_unit():
     """
     Making sure a bad unit trickles up through the validation
     """
-    record_file = (HERE.parent.parent.parent / "data_for_testing" / "example_data" /
-                   "RecordWithUnitErrors.json")
+    record_file = (HERE.parent.parent.parent
+                   / "data_for_testing" / "example_data"
+                   / "RecordWithUnitErrors.json")
 
     oil = Oil.from_file(record_file)
-
     msgs = oil.validate()
 
-    expected_errors = ["E045: Unit: 'g/oz' is not a valid unit for unit type: 'density'",
-                       "E045: Unit: 'Celcius' is not a valid unit for unit type: 'temperature'",
-                       ]
+    expected_errors = [
+        "E045: Unit: 'g/oz' is not a valid unit for unit type: 'density'",
+        "E045: Unit: 'Celcius' is not a valid unit for unit type: "
+        "'temperature'",
+    ]
 
     for err in expected_errors:
         for msg in msgs:
@@ -455,5 +422,3 @@ def test_bad_unit():
                 break
         else:
             assert False, f'"{err}" not in validation messages'
-
-

@@ -1,10 +1,8 @@
-from adios_db.models.common.measurement import MassFraction
+from pathlib import Path
 
+from adios_db.models.common.measurement import MassFraction
 from adios_db.models.oil.ccme import CCME
 
-from pprint import pprint
-
-from pathlib import Path
 
 HERE = Path(__file__).parent
 OUTPUT_DIR = HERE / "output"
@@ -59,7 +57,6 @@ class TestCCME:
         ccme.method = "a method name"
 
         py_json = ccme.py_json()
-        pprint(py_json)
 
         # dump the json:
         # json.dump(py_json, open(OUTPUT_DIR / "example_ccme.json", 'w'),

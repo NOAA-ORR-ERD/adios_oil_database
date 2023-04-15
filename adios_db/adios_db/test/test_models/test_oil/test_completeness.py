@@ -235,143 +235,142 @@ class TestDistillationCompleteness:
         assert self.Dcheck(oil) == expected + 2
 
 
-just_one_viscosity = {'_id': 'EC09999', 'oil_id': 'EC09999',
-          "adios_data_model_version": "0.11.0",
-          'metadata': {'comments': 'Just one viscosity'},
-          'sub_samples': [
-              {
-                  'physical_properties': {
-                      'dynamic_viscosities': [
-                          {
-                              'viscosity': {'value': 1300, 'unit': 'mPa.s',
-                                            'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 0.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                      ],
-                  },
-              },
-          ]
-          }
+just_one_viscosity = {
+    '_id': 'EC09999',
+    'oil_id': 'EC09999',
+    "adios_data_model_version": "0.11.0",
+    'metadata': {'comments': 'Just one viscosity'},
+    'sub_samples': [{
+        'physical_properties': {
+            'dynamic_viscosities': [{
+                'viscosity': {'value': 1300, 'unit': 'mPa.s',
+                              'unit_type': 'dynamicviscosity'},
+                'ref_temp': {'value': 0.0, 'unit': 'C',
+                             'unit_type': 'temperature'},
+            }]
+        },
+    }]
+}
 
-two_fresh_viscosities = {'_id': 'EC09999', 'oil_id': 'EC09999',
-          "adios_data_model_version": "0.11.0",
-          'metadata': {'comments': 'Second viscosity'},
-          'sub_samples': [
-              {
-                  'physical_properties': {
-                      'dynamic_viscosities': [
-                          {
-                              'viscosity': {'value': 1300, 'unit': 'mPa.s',
-                                            'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 0.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                          {
-                              'viscosity': {'value': 1500, 'unit': 'mPa.s',
-                                            'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 15.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                      ],
-                  },
-              },
-          ]
-          }
+two_fresh_viscosities = {
+    '_id': 'EC09999',
+    'oil_id': 'EC09999',
+    "adios_data_model_version": "0.11.0",
+    'metadata': {'comments': 'Second viscosity'},
+    'sub_samples': [{
+        'physical_properties': {
+            'dynamic_viscosities': [
+                {
+                    'viscosity': {'value': 1300, 'unit': 'mPa.s',
+                                  'unit_type': 'dynamicviscosity'},
+                    'ref_temp': {'value': 0.0, 'unit': 'C',
+                                 'unit_type': 'temperature'},
+                },
+                {
+                    'viscosity': {'value': 1500, 'unit': 'mPa.s',
+                                  'unit_type': 'dynamicviscosity'},
+                    'ref_temp': {'value': 15.0, 'unit': 'C',
+                                 'unit_type': 'temperature'},
+                },
+            ],
+        },
+    }]
+}
 
-two_viscosities_partial_temp_range = {'_id': 'EC09999', 'oil_id': 'EC09999',
-          "adios_data_model_version": "0.11.0",
-          'metadata': {'comments': 'Second viscosity, '
-                                   'partial temperature range. 8% score'},
-          'sub_samples': [
-              {
-                  'physical_properties': {
-                      'kinematic_viscosities': [
-                          {
-                              'viscosity': {'value': 1300, 'unit': 'mPa.s',
-                                            'unit_type': 'kinematicviscosity'},
-                              'ref_temp': {'value': 0.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                          {
-                              'viscosity': {'value': 1500, 'unit': 'mPa.s',
-                                            'unit_type': 'kinematicviscosity'},
-                              'ref_temp': {'value': 10.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                      ],
-                  },
-              },
-          ]
-          }
+two_viscosities_partial_temp_range = {
+    '_id': 'EC09999',
+    'oil_id': 'EC09999',
+    "adios_data_model_version": "0.11.0",
+    'metadata': {
+        'comments': 'Second viscosity, partial temperature range. 8% score'
+    },
+    'sub_samples': [{
+        'physical_properties': {
+            'kinematic_viscosities': [
+                {
+                    'viscosity': {'value': 1300, 'unit': 'mPa.s',
+                                  'unit_type': 'kinematicviscosity'},
+                    'ref_temp': {'value': 0.0, 'unit': 'C',
+                                 'unit_type': 'temperature'},
+                },
+                {
+                    'viscosity': {'value': 1500, 'unit': 'mPa.s',
+                                  'unit_type': 'kinematicviscosity'},
+                    'ref_temp': {'value': 10.0, 'unit': 'C',
+                                 'unit_type': 'temperature'},
+                },
+            ],
+        },
+    }]
+}
 
-one_weathered_viscosity_no_fresh = {'oil_id': 'EC09999',
-          "adios_data_model_version": "0.11.0",
-          'metadata': {'comments': 'Just one weathered viscosity -- no fresh'},
-          'sub_samples': [
-              {
-              },
-              {
-                  'metadata': {
-                      'fraction_evaporated': {'value': 0.15,
-                                              'unit': 'fraction',
-                                              'unit_type': 'MassFraction'}
-                  },
-                  'physical_properties': {
-                      'dynamic_viscosities': [
-                          {
-                              'viscosity': {'value': 1500, 'unit': 'mPa.s',
-                                            'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 0.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                      ],
-                  },
-              },
-          ]
-          }
+one_weathered_viscosity_no_fresh = {
+    'oil_id': 'EC09999',
+    "adios_data_model_version": "0.11.0",
+    'metadata': {'comments': 'Just one weathered viscosity -- no fresh'},
+    'sub_samples': [
+        {},
+        {
+            'metadata': {
+                'fraction_evaporated': {'value': 0.15, 'unit': 'fraction',
+                                        'unit_type': 'MassFraction'}
+            },
+            'physical_properties': {
+                'dynamic_viscosities': [
+                    {
+                        'viscosity': {'value': 1500, 'unit': 'mPa.s',
+                                      'unit_type': 'dynamicviscosity'},
+                        'ref_temp': {'value': 0.0, 'unit': 'C',
+                                     'unit_type': 'temperature'},
+                    },
+                ],
+            },
+        },
+    ]
+}
 
-one_weathered_viscosity_two_fresh = {'oil_id': 'EC09999',
-          "adios_data_model_version": "0.11.0",
-          'metadata': {'comments': 'One weathered viscosity -- two fresh'},
-          'sub_samples': [
-              {
-                  'physical_properties': {
-                      'dynamic_viscosities': [
-                          {
-                              'viscosity': {'value': 1300, 'unit': 'mPa.s',
-                                            'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 0.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                          {
-                              'viscosity': {'value': 1500, 'unit': 'mPa.s',
-                                            'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 20.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                      ],
-                  },
-              },
-              {
-                  'metadata': {
-                      'fraction_evaporated': {'value': 0.15,
-                                              'unit': 'fraction',
-                                              'unit_type': 'MassFraction'}
-                  },
-                  'physical_properties': {
-                      'dynamic_viscosities': [
-                          {
-                              'viscosity': {'value': 1500, 'unit': 'mPa.s',
-                                            'unit_type': 'dynamicviscosity'},
-                              'ref_temp': {'value': 0.0, 'unit': 'C',
-                                           'unit_type': 'temperature'},
-                          },
-                      ],
-                  },
-              },
-          ]
-        }
+one_weathered_viscosity_two_fresh = {
+    'oil_id': 'EC09999',
+    "adios_data_model_version": "0.11.0",
+    'metadata': {'comments': 'One weathered viscosity -- two fresh'},
+    'sub_samples': [
+        {
+            'physical_properties': {
+                'dynamic_viscosities': [
+                    {
+                        'viscosity': {'value': 1300, 'unit': 'mPa.s',
+                                      'unit_type': 'dynamicviscosity'},
+                        'ref_temp': {'value': 0.0, 'unit': 'C',
+                                     'unit_type': 'temperature'},
+                    },
+                    {
+                        'viscosity': {'value': 1500, 'unit': 'mPa.s',
+                                      'unit_type': 'dynamicviscosity'},
+                        'ref_temp': {'value': 20.0, 'unit': 'C',
+                                     'unit_type': 'temperature'},
+                    },
+                ],
+            },
+        },
+        {
+            'metadata': {
+                'fraction_evaporated': {'value': 0.15,
+                                        'unit': 'fraction',
+                                        'unit_type': 'MassFraction'}
+            },
+            'physical_properties': {
+                'dynamic_viscosities': [
+                    {
+                        'viscosity': {'value': 1500, 'unit': 'mPa.s',
+                                      'unit_type': 'dynamicviscosity'},
+                        'ref_temp': {'value': 0.0, 'unit': 'C',
+                                     'unit_type': 'temperature'},
+                    },
+                ],
+            },
+        },
+    ]
+}
 
 
 class TestViscosityCompleteness:

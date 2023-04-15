@@ -1,26 +1,14 @@
-
-
-import pytest
-
-try:
-    from slugify import Slugify
-    import dateutil
-except ImportError:
-    import pytest
-    pytest.skip("You need the awesome slugify and dateutil packages to run these tests",
-                allow_module_level=True)
-
 import os
 from pathlib import Path
 import json
+
+import pytest
 
 import adios_db
 from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
                                            OilLibraryRecordParser,
                                            OilLibraryAttributeMapper,
                                            ImportFileHeaderLengthError)
-
-from pprint import pprint
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
 example_index = example_dir / 'index.txt'
@@ -56,7 +44,6 @@ class TestOilLibraryCsvFile:
 
     def test_get_records(self):
         reader = OilLibraryCsvFile(data_file)
-
         recs = list(reader.get_records())
 
         # records in our test file
@@ -84,7 +71,6 @@ class TestOilLibraryCsvFile:
         Note: Should we allow non-existing oil_id's in get_record
         """
         reader = OilLibraryCsvFile(data_file)
-
         rec, file_props = reader.get_record(oil_id)
 
         assert type(file_props) == dict
@@ -407,7 +393,6 @@ class TestOilLibraryRecordParser:
         rec = self.reader.get_record(oil_id)
         parser = OilLibraryRecordParser(*rec)
 
-        pprint(getattr(parser, attr))
         assert getattr(parser, attr) == expected
 
 
@@ -581,7 +566,6 @@ class TestOilLibraryAttributeMapper:
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
 
-        pprint(getattr(mapper, attr))
         assert getattr(mapper, attr) == expected
 
     @pytest.mark.parametrize('oil_id, attr, expected', [
@@ -604,7 +588,6 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         meta = mapper.metadata
 
-        pprint(meta[attr])
         assert meta[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
@@ -612,8 +595,10 @@ class TestOilLibraryAttributeMapper:
         ('AD02068', -1, 'name', '26.0% Evaporated'),
         ('AD02068', 0, 'short_name', 'Fresh Oil'),
         ('AD02068', -1, 'short_name', '26.0% Evaporated'),
-        ('AD02068', 0, 'fraction_weathered', {'unit': 'fraction', 'value': 0.0}),
-        ('AD02068', -1, 'fraction_weathered', {'unit': 'fraction', 'value': 0.26}),
+        ('AD02068', 0, 'fraction_weathered', {'unit': 'fraction',
+                                              'value': 0.0}),
+        ('AD02068', -1, 'fraction_weathered', {'unit': 'fraction',
+                                               'value': 0.26}),
         ('AD02068', 0, 'boiling_point_range', None),
         ('AD02068', -1, 'boiling_point_range', None),
         ('AD02068', -1, 'boiling_point_range', None),
@@ -623,7 +608,6 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         sample = mapper.sub_samples[index]['metadata']
 
-        pprint(sample[attr])
         assert sample[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
@@ -686,8 +670,6 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         phys = mapper.sub_samples[index]['physical_properties']
 
-        pprint(phys)
-        pprint(phys[attr])
         assert phys[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
@@ -726,8 +708,6 @@ class TestOilLibraryAttributeMapper:
         if expected is None:
             assert attr not in environ
         else:
-            pprint(environ)
-            pprint(environ[attr])
             assert environ[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
@@ -741,8 +721,6 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         environ = mapper.sub_samples[index]['SARA']
 
-        pprint(environ)
-        pprint(environ[attr])
         assert environ[attr] == expected
 
     @pytest.mark.parametrize('oil_id, index, expected', [
@@ -789,7 +767,6 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         dist = mapper.sub_samples[index]['distillation_data']
 
-        pprint(dist)
         assert dist == expected
 
     @pytest.mark.parametrize('oil_id, index, expected', [
@@ -808,8 +785,6 @@ class TestOilLibraryAttributeMapper:
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         compounds = mapper.sub_samples[index]['compounds']
-
-        pprint(compounds)
 
         for c in compounds:
             assert 'name' in c
@@ -845,8 +820,6 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         composition = mapper.sub_samples[index]['bulk_composition']
 
-        pprint(composition)
-
         for c in composition:
             assert 'name' in c
             assert 'measurement' in c
@@ -872,8 +845,6 @@ class TestOilLibraryAttributeMapper:
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         composition = mapper.sub_samples[index]['industry_properties']
 
-        pprint(composition)
-
         for c in composition:
             assert 'name' in c
             assert 'measurement' in c
@@ -888,10 +859,8 @@ class TestOilLibraryAttributeMapper:
         rec = self.reader.get_record(oil_id)
         mapper = OilLibraryAttributeMapper(OilLibraryRecordParser(*rec))
         oil = mapper.py_json()
-        # pprint(oil)
         sample = oil['sub_samples'][index]
 
-        pprint(sample['metadata'][attr])
         assert sample['metadata'][attr] == expected
 
     def test_save_to_json(self):
