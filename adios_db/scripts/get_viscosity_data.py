@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-
 """
 script to see what viscosity data are available
 """
-
 import sys
 
 import adios_db.scripting as dbs
+
 
 data_dir = sys.argv[1]
 
@@ -32,8 +31,10 @@ for oil, path in dbs.get_all_records(data_dir):
     outfile.write(f'"{oil.metadata.name}", {oil.oil_id}, {len(kvis)}, {len(dvis)}\n')
 
 
-    if len(fresh.distillation_data.cuts) >= 3 and max(len(kvis), len(dvis)) == 1:
+    if (len(fresh.distillation_data.cuts) >= 3 and
+            max(len(kvis), len(dvis)) == 1):
         records_with_dist_cuts.append(oil.metadata.name)
+
 
 print("Available viscosity Data:")
 print("num_values   Kinematic   Dynamic")
@@ -47,8 +48,5 @@ print("records with dist cuts but only one viscosity:")
 # for n in records_with_dist_cuts:
 #     print(n)
 
-print(f"A total of {len(records_with_dist_cuts)} records that could be used with the Abu-Eishah:1999 appraoch for viscosity with temp")
-
-
-
-
+print(f"A total of {len(records_with_dist_cuts)} records that could be used "
+      "with the Abu-Eishah:1999 appraoch for viscosity with temp")

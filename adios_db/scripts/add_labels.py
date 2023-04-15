@@ -1,10 +1,7 @@
 #!/usr/bin/env python
-
 """
 Add the suggested labels to all records, from the add_labels code.
-
 """
-
 import sys
 import csv
 
@@ -39,13 +36,13 @@ def add_the_labels():
         outfile.write("ID, Name, Product Type, Labels\n")
 
         for oil, pth in get_all_records(base_dir):
-
             id = oil.oil_id
             name = oil.metadata.name
             pt = oil.metadata.product_type
 
             print("\nFor Oil:", id, name)
             print("product type:", pt)
+
             try:
                 prev_labels = oil.metadata.labels
                 labels = get_suggested_labels(oil)

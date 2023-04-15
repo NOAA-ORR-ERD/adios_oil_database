@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-
 """
 Add the alternate names to all records, from a CSV file
 
 NOTE: this is really only designed to be run once, but
       I'm keeping it here as an example for future, similar work
 """
-
 import sys
 import csv
 
 from adios_db.scripting import get_all_records, process_input
+
 
 USAGE = """
 add_alternate_names data_dir [dry_run]
@@ -25,10 +24,13 @@ but not save any changes
 
 def read_the_csv_file(csv_name):
     print("Reading product types from:", csv_name)
+
     with open(csv_name, encoding="utf-8") as csvfile:
         data = {(row[0][:2] + row[0][-5:]): row[1:]
                 for row in csv.reader(csvfile, delimiter="\t")}
+
     print(f"loaded {len(data) - 1} records")
+
     return data
 
 
@@ -40,6 +42,7 @@ def add_them(data):
 
     for oil, pth in get_all_records(base_dir):
         ID = oil.oil_id
+
         try:
             row = data[ID]
         except KeyError:
@@ -47,6 +50,7 @@ def add_them(data):
             missing.write(",".join([ID, oil.metadata.name]))
             name_mismatch.write("\n")
             continue
+
         name = row[0]
 
         print("Processing:", ID)
@@ -55,9 +59,11 @@ def add_them(data):
             anames = [name.strip() for name in row[10].strip().split(",")]
             # clean out the duplicates
             anames = [n for n in anames if n.lower() not in name.lower()]
+
             if anames:
                 oil.metadata.alternate_names = anames
                 print("Adding:", oil.oil_id, oil.metadata.name, oil.metadata.alternate_names)
+
                 if not dry_run:
                     print("Saving out:", pth)
                     oil.to_file(pth)

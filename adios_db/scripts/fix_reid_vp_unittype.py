@@ -1,10 +1,7 @@
 #!/usr/bin/env python
-
 """
 Fixes the unit type of Reid Vapor Pressure -- it was set to mass fraction accidentally
-
 """
-
 import sys
 
 from adios_db.scripting import get_all_records, process_input
@@ -21,6 +18,8 @@ but not save any changes
 """
 
 base_dir, dry_run = process_input()
+
+
 for rec, fname in get_all_records(base_dir):
     for ss in rec.sub_samples:
         for prop in ss.industry_properties:
@@ -28,11 +27,9 @@ for rec, fname in get_all_records(base_dir):
                 print(prop.measurement)
                 prop.measurement.unit_type = "pressure"
                 print(prop.measurement)
+
     if dry_run:
         print("not writing anything")
     else:
         print("writing record")
         rec.to_file(fname)
-
-
-

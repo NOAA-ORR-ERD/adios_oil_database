@@ -1,8 +1,9 @@
 # mockup of what we would like in order to separate
 # the mongodb API from our code
+from pprint import pprint
+
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings
-from pprint import pprint
 
 
 # The session will be an instance of our oil_db session object, not mongodb
@@ -10,16 +11,10 @@ from pprint import pprint
 # We will be able to construct multiple session objects, each one connected to
 # a mongodb database
 settings = file_settings('settings_default.ini')
-
 session = connect_mongodb(settings)
-#session2 = connect_mongodb(settings2)
 
 
 # The general purpose query function (this will be very verbose)
-#print('Open query...')
-#for rec in session.query():
-#    pprint(rec)
-
 print('Query by id...')
 print('Return only the name & location fields...')
 for rec in session.query(oil_id='AD00020',

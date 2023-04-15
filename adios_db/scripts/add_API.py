@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-
 """
 script to go through all the data, and add an API if one is not already there
-
 """
-
 import sys
-
 
 from adios_db.models.oil.cleanup.density import FixAPI
 from adios_db.scripting import get_all_records, process_input
+
 
 USAGE = """
 add_API data_dir [dry_run]
@@ -30,11 +27,13 @@ def main():
         print("processing:", rec.oil_id, rec.metadata.name)
         fixer = FixAPI(rec)
         flag, msg = fixer.check()
+
         if flag is True:
             print(msg)
             print("Cleaning up!")
             fixer.cleanup()
             print("API is now:", rec.metadata.API)
+
             if not dry_run:
                 print("Saving out:", pth)
                 rec.to_file(pth)
@@ -50,10 +49,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-

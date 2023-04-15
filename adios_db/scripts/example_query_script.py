@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 Example script for how to query the database and
 export a subset of the data to a CSV file
@@ -14,9 +13,9 @@ import adios_db.scripting as adb
 
 base_dir, dry_run = adb.process_input()
 
-
 # create a new text file for output
 outfile = open("example_data.csv", 'w', encoding="utf-8")
+
 # write the header row:
 outfile.write('Name, ID, Dynamic Viscosity, unit, reference temp, unit\n')
 
@@ -24,7 +23,6 @@ outfile.write('Name, ID, Dynamic Viscosity, unit, reference temp, unit\n')
 # Loop through all the JSON files in the given directory:
 print("Extracting from data:", base_dir)
 for oil, path in adb.get_all_records(base_dir):
-
     print("\n**** ", oil.metadata.name)
 
     # select the desired product types:
@@ -46,6 +44,7 @@ for oil, path in adb.get_all_records(base_dir):
         # Make sure output is all in the same units.
         viscosity = dvis.viscosity.converted_to("mPa.s")
         ref_temp = dvis.ref_temp.converted_to("C")
+
         # write a row in the csv file
         outfile.write(f'"{oil.metadata.name}", {oil.oil_id}'
                       f', {viscosity.value}'
