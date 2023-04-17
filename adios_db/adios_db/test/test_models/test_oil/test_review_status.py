@@ -14,7 +14,6 @@ def test_init_empty():
 
 def test_json_empty():
     rs = ReviewStatus()
-
     js = rs.py_json()
 
     print(js)

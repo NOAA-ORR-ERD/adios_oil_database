@@ -5,13 +5,13 @@ Add the fraction recovered from a TSV file
 NOTE: this is really only designed to be run once, but
       I'm keeping it here as an example for future, similar work
 """
-
 import sys
 import csv
 
 from adios_db.models.oil.product_type import PRODUCT_TYPES
 from adios_db.scripting import get_all_records
 from adios_db.scripting import Concentration
+
 
 USAGE = """
 add_fraction_recovered data_dir [dry_run]
@@ -26,15 +26,19 @@ but not save any changes
 
 def read_the_csv_file(csv_name):
     print("Reading product types from:", csv_name)
+
     with open(csv_name, encoding="utf-8") as csvfile:
         data = {(row[0][:2] + row[0][-5:]): row[1:]
                 for row in csv.reader(csvfile, delimiter="\t")}
+
     print(f"loaded {len(data) - 1} records")
+
     return data
 
 
 def add_them(data):
     missing = open("missing_records.csv", 'w', encoding="utf-8")
+
     try:
         sys.argv.remove("dry_run")
         dry_run = True
@@ -51,8 +55,10 @@ def add_them(data):
     num_one = 0
     num_less_than_one = 0
     num_fraction = 0
+
     for oil, pth in get_all_records(base_dir):
         ID = oil.oil_id
+
         try:
             row = data[ID]
         except KeyError:
@@ -60,13 +66,16 @@ def add_them(data):
             missing.write(",".join([ID, oil.metadata.name]))
             missing.write("\n")
             continue
+
         name = row[0]
         print("Processing:", ID, name)
 
         fraction_recovered = row[3].strip()
+
         if not fraction_recovered:
             print("no data for this one")
             continue
+
         print(f"{fraction_recovered=}")
 
         for ss in oil.sub_samples:
@@ -83,11 +92,11 @@ def add_them(data):
                 try:
                     val = float(fraction_recovered)
                     dist_data.fraction_recovered = Concentration(value=val, unit="fraction")
+
                     if val == 1.0:
                         num_one += 1
                     else:
                         num_fraction += 1
-
                 except ValueError:
                     raise
 
@@ -101,6 +110,7 @@ def add_them(data):
             oil.to_file(pth)
         else:
             print("Nothing saved")
+
     print(f"{num_none=}")
     print(f"{num_one=}")
     print(f"{num_less_than_one=}")

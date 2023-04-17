@@ -30,8 +30,9 @@ class ChangeLogEntry:
             try:
                 datetime.fromisoformat(self.date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"]
-                            .format("change log entry", self.date, str(err)))
+                msgs.append(WARNINGS["W011"].format(
+                    "change log entry", self.date, str(err)
+                ))
 
         return msgs
 
@@ -100,8 +101,9 @@ class MetaData:
             try:
                 datetime.fromisoformat(self.sample_date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"]
-                            .format("sample date", self.sample_date, str(err)))
+                msgs.append(WARNINGS["W011"].format(
+                    "sample date", self.sample_date, str(err)
+                ))
 
         return msgs
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import sys
 import subprocess
 
@@ -27,17 +26,22 @@ if __name__ == "__main__":
     except IndexError:
         print(USAGE)
         sys.exit(1)
+
     argv = sys.argv[2:]
     reqs = ["conda_requirements.txt"]
+
     if "test" in argv or "all" in argv:
         reqs.append("conda_requirements_test.txt")
+
     if "all" in argv:
         reqs.append("conda_requirements_optional.txt")
         reqs.append("docs_requirements.txt")
 
     cmd = ["conda", "create", "-n", env_name, "python=3.9"]
+
     for req in reqs:
         cmd.extend(["--file", req])
+
     print("running\n", cmd)
     subprocess.run(cmd)
 

@@ -6,7 +6,6 @@ NOTE: this may need some refactoring when it gets more complicated
 from .version import Version, VersionError
 
 from . import oil
-#from .oil import ADIOS_DATA_MODEL_VERSION
 
 
 class Updater:
@@ -22,8 +21,10 @@ class Updater:
             return py_json
         else:  # we can do the update
             self._version_check(py_json)
+
             py_json = self.update(py_json)
             py_json['adios_data_model_version'] = str(self.ver_to)
+
             return py_json
 
     def update(self, py_json):
@@ -45,7 +46,6 @@ class update_0_10_0_to_0_11_0(Updater):
     ver_to = Version(0, 11, 0)
 
     def update(self, py_json):
-#        self._version_check(py_json)
         # change the name of the fraction_weathered attribute
         if 'sub_samples' in py_json:  # very sparse records may not
             for ss in py_json['sub_samples']:
@@ -58,6 +58,7 @@ class update_0_10_0_to_0_11_0(Updater):
 
         # py_json['adios_data_model_version'] = str(self.ver_to)
         return py_json
+
 
 class update_0_11_0_to_0_12_0(Updater):
     """
@@ -105,18 +106,21 @@ def update_json(py_json):
         # try to see if it will load anyway -- auto-update.
         try:
             # update the version number and try to load it:
-            py_json["adios_data_model_version"] = str(oil.ADIOS_DATA_MODEL_VERSION)
+            py_json["adios_data_model_version"] = str(
+                oil.ADIOS_DATA_MODEL_VERSION
+            )
+
             this_oil = oil.Oil.from_py_json(py_json)
+
             # update (downgrade) the version number
             #   this may not be valid for the new version, as
             #   attributes may have been lost.
 
-#            this_oil.adios_data_model_version = oil.ADIOS_DATA_MODEL_VERSION
             return this_oil.py_json()
         except Exception:  # if anything goes wrong ....
-            raise VersionError(f"Version: {ver} is not supported by this version "
-                               "of the adios_db Oil object -- you may need to "
-                               "update the adios_db package.")
+            raise VersionError(f"Version: {ver} is not supported by "
+                               "this version of the adios_db Oil object "
+                               "-- you may need to update the adios_db "
+                               "package.")
     else:
         raise VersionError(f"updater not available for version: {ver}")
-

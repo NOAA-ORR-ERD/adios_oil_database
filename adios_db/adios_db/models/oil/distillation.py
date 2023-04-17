@@ -129,6 +129,4 @@ class Distillation:
                 if(any(i > j for i, j in zip(temp, temp[1:]))):
                     msgs.append(ERRORS["E061"])
 
-            # check if oil fraction is accumulative
-
         return msgs

@@ -72,7 +72,10 @@ def write_reports(base_dir, save):
 
             if (oil.review_status.status.lower() == "review complete"
                     or error_code in ERRORS_TO_IGNORE):
-                validation_by_error_rev.setdefault(error_code, []).append(issues)
+                validation_by_error_rev.setdefault(
+                    error_code,
+                    []
+                ).append(issues)
             else:
                 validation_by_error.setdefault(error_code, []).append(issues)
         if save:

@@ -1,14 +1,10 @@
 #!/usr/bin/env python
-
 """
 script to dump the distillation cut fraction recovered data
 
 well, the distillation data, so we can add the fraction recovered
 """
-
 import adios_db.scripting as ads
-
-
 
 
 USAGE = """
@@ -23,13 +19,13 @@ but not save any changes
 
 
 def main():
-
     base_dir, dry_run = ads.process_input(USAGE)
 
     print("writing: adios_distillation_data.csv")
     outfile = open("adios_distillation_data.csv", 'w')
 
     outfile.write(f"Oil ID\tName\tReference\tdistillation_method\tfraction_recovered\n")
+
     for rec, pth in ads.get_all_records(base_dir):
         ID = rec.oil_id
         name = rec.metadata.name

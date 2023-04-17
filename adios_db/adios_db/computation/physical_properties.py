@@ -16,6 +16,7 @@ class Density:
     temperature in Kelvin
     density in kg/m^3
     """
+
     def __init__(self, oil):
         """
         Initialize a density calculator
@@ -51,13 +52,15 @@ class Density:
 
         For outside the measured range
         """
-        # if there is only one density, use a default
-        # Note: no idea where these values came from
 
         if not np.all(np.diff(self.temps) > 0):
             raise ValueError("temperatures must be discreet")
 
-        if len(self.densities) == 1:
+        if len(self.densities) == 0:
+            raise ValueError("Cannot initialize a Density object with no data")
+        elif len(self.densities) == 1:
+            # if there is only one density, use a default
+            # Note: no idea where these values came from
             d = self.densities[0]
             t = self.temps[0]
 
@@ -72,7 +75,6 @@ class Density:
             b = self.densities
             A = np.c_[np.ones_like(b), np.array(self.temps)]
             x, _residuals, _rank, _s = np.linalg.lstsq(A, b, rcond=None)
-
             self.k_rho_default = x[1]
         else:
             raise ValueError("Density needs at least one density value")
@@ -99,14 +101,14 @@ class Density:
 
         left = (densities == -np.inf)
         densities[left] = (
-            self.densities[0] +
-            (self.k_rho_default * (temp[left] - self.temps[0]))
+            self.densities[0]
+            + (self.k_rho_default * (temp[left] - self.temps[0]))
         )
 
         right = (densities == np.inf)
         densities[right] = (
-            self.densities[-1] +
-            (self.k_rho_default * (temp[right] - self.temps[-1]))
+            self.densities[-1]
+            + (self.k_rho_default * (temp[right] - self.temps[-1]))
         )
 
         return densities if not scaler else densities[0]
@@ -120,6 +122,7 @@ class KinematicViscosity:
     temperature in Kelvin
     viscosity in m^2/s
     """
+
     def __init__(self, oil):
         """
         initialize from an oil object
@@ -138,6 +141,7 @@ class KinematicViscosity:
         else:
             self.kviscs = []
             self.temps = []
+
         self.initialize()
 
     def at_temp(self, temp, kvis_units='m^2/s', temp_units="K"):
@@ -184,7 +188,9 @@ class KinematicViscosity:
         kvis = self.kviscs
         kvis_ref_temps = self.temps
 
-        if len(kvis) == 1:  # use default k_v2
+        if len(kvis) == 0:
+            raise ValueError("Cannot initilaize a KinematicViscosity object with no data")
+        elif len(kvis) == 1:  # use default k_v2
             self._k_v2 = 2100.0
             self._visc_A = kvis[0] * np.exp(-self._k_v2 / kvis_ref_temps[0])
         else:
@@ -195,7 +201,6 @@ class KinematicViscosity:
 
             self._k_v2 = x[1]
             self._visc_A = np.exp(x[0])
-
         return
 
 
@@ -237,9 +242,9 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
 
     :param oil: the oil object to get data from
 
-    :param units="cSt": units you want the viscosity in
+    :param units="m^2/s": units you want the viscosity in
 
-    :param temp_units="K": units you want the viscosity in
+    :param temp_units="K": units you want the temperature in
     """
     try:
         kvisc = [k for k in (oil.sub_samples[0]
@@ -249,7 +254,7 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
     except IndexError:  # no subsamples at all!
         return []
 
-    if len(kvisc) > 0:
+    if len(kvisc) > 0:  # use provided kinematic viscosity of it exists
         visc_table = []
 
         for visc_point in kvisc:
@@ -257,31 +262,29 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
             t = visc_point.ref_temp.converted_to(temp_units).value
             visc_table.append((d, t))
 
-        return visc_table
+    else:  # no kinematic data, try to use dynamic viscosity data
+        dvisc = oil.sub_samples[0].physical_properties.dynamic_viscosities
+        if len(dvisc) > 0:
+            dvisc = get_dynamic_viscosity_data(oil, units="Pa s", temp_units="K")
+            density = Density(oil)
+            visc_table = convert_dvisc_to_kvisc(dvisc, density)
+        else:
+            visc_table = []
 
-    dvisc = oil.sub_samples[0].physical_properties.dynamic_viscosities
-
-    if len(dvisc) > 0:
-        dvisc = get_dynamic_viscosity_data(oil, units="Pa s", temp_units="K")
-        density = Density(oil)
-        visc_table = convert_dvisc_to_kvisc(dvisc, density)
-
-        return visc_table
-    else:
-        return []
+    return visc_table
 
 
 def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
     """
-    Return a table of kinematic viscosity data:
+    Return a table of dynamic viscosity data:
 
     list of (viscosity, temp) pairs
 
     :param oil: the oil object to get data from
 
-    :param units="cSt": units you want the viscosity in
+    :param units="Pas": units you want the viscosity in
 
-    :param temp_units="K": units you want the viscosity in
+    :param temp_units="K": units you want the temperature in
     """
     dvisc = [d for d in (oil.sub_samples[0]
                          .physical_properties.dynamic_viscosities)
@@ -296,14 +299,15 @@ def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
             t = visc_point.ref_temp.converted_to(temp_units).value
             visc_table.append((v, t))
 
-        return visc_table
-
-    kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
-    if len(kvisc) > 0:
-        raise NotImplementedError("can't compute dynamic from kinematic yet")
-        kvisc = get_kinematic_viscosity_data(oil)
     else:
-        return []
+        kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
+        if len(kvisc) > 0:
+            raise NotImplementedError("can't compute dynamic from kinematic yet")
+            # kvisc = get_kinematic_viscosity_data(oil)
+        else:
+            visc_table = []
+
+    return visc_table
 
 
 def convert_dvisc_to_kvisc(dvisc, density):

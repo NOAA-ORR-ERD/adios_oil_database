@@ -1,16 +1,13 @@
 """
 tests for adding suggested labels to oil
 """
-
 import pytest
 
+from adios_db.models.common import measurement as meas
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
-
-from adios_db.models.oil.cleanup.add_labels import get_suggested_labels
-
 from adios_db.models.oil.physical_properties import KinematicViscosityPoint
-from adios_db.models.common import measurement as meas
+from adios_db.models.oil.cleanup.add_labels import get_suggested_labels
 
 
 def add_kin_viscosity_to_oil(oil,
@@ -62,16 +59,22 @@ def test_add_labels_to_oil_no_labels_other():
 
     assert get_suggested_labels(oil) == []
 
-@pytest.mark.parametrize('pt, api, labels', [('Crude Oil NOS', 35.0, {'Light Crude', 'Crude Oil'}),
-                                             ('Crude Oil NOS', 25.0, {'Medium Crude', 'Crude Oil'}),
-                                             ('Crude Oil NOS', 19.0, {'Heavy Crude', 'Crude Oil'}),
-                                             ('Crude Oil NOS', 9.9, {'Heavy Crude', 'Group V', 'Crude Oil'}),
-                                             ('Tight Oil', 32, {'Tight Oil', 'Fracking Oil', 'Shale Oil', 'Crude Oil'}),
-                                             ('Residual Fuel Oil', 13, {'No. 6 Fuel Oil', 'Refined Product', 'Bunker C', 'Residual Fuel', 'Fuel Oil', 'HFO', 'Heavy Fuel Oil'}),
-                                             ('Residual Fuel Oil', 16, {'Refined Product', 'Residual Fuel', 'Fuel Oil'}),
-                                             ('Distillate Fuel Oil', 32, {'Distillate Fuel','Refined Product', 'Fuel Oil', }),
-                                             ]
-                         )
+
+@pytest.mark.parametrize('pt, api, labels', [
+    ('Crude Oil NOS', 35.0, {'Light Crude', 'Crude Oil'}),
+    ('Crude Oil NOS', 25.0, {'Medium Crude', 'Crude Oil'}),
+    ('Crude Oil NOS', 19.0, {'Heavy Crude', 'Crude Oil'}),
+    ('Crude Oil NOS', 9.9, {'Heavy Crude', 'Group V', 'Crude Oil'}),
+    ('Tight Oil', 32, {'Tight Oil', 'Fracking Oil', 'Shale Oil', 'Crude Oil'}),
+    ('Residual Fuel Oil', 13, {'No. 6 Fuel Oil', 'Refined Product', 'Bunker C',
+                               'Residual Fuel', 'Fuel Oil', 'HFO',
+                               'Heavy Fuel Oil'}),
+    ('Residual Fuel Oil', 16, {'Fuel Oil', 'IFO', 'Refined Product',
+                               'Residual Fuel'}),
+    ('Distillate Fuel Oil', 32, {'Diesel', 'Distillate Fuel', 'Fuel Oil',
+                                 'Home Heating Oil', 'MDO', 'No. 2 Fuel Oil',
+                                 'Refined Product'}),
+])
 def test_add_labels_to_oil_api(pt, api, labels):
     """
     we should never get a label for 'Other'
@@ -80,32 +83,30 @@ def test_add_labels_to_oil_api(pt, api, labels):
     oil.metadata.API = api
     oil.metadata.product_type = pt
 
-    print("Product type:", pt)
-    print("API:", api)
-    print("labels:", get_suggested_labels(oil))
     assert get_suggested_labels(oil) == sorted(labels)
 
 
-@pytest.mark.parametrize(
-    'pt, api, kvis, kvis_temp, labels',
-    [
-        ('Distillate Fuel Oil', 32.0, 3, 38, {
-            'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'No. 2 Fuel Oil',
-            'Diesel', 'Home Heating Oil', 'MDO'
-        }),
-        ('Distillate Fuel Oil', 32.0, 6, 38,
-         {'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'MDO'}),
-        ('Distillate Fuel Oil', 32.0, 1, 38,
-         {'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'MDO'}),
-        # HFOs
-        ('Residual Fuel Oil', 13.0, 390, 50, {
-            'No. 6 Fuel Oil', 'Refined Product', 'Bunker C', 'Residual Fuel',
-            'Fuel Oil', 'Heavy Fuel Oil', 'HFO'
-        }),
-        # IFOs
-        ('Residual Fuel Oil', 29.0, 10, 38,
-         {'Refined Product', 'Residual Fuel', 'Fuel Oil', 'IFO'}),
-    ])
+@pytest.mark.parametrize('pt, api, kvis, kvis_temp, labels', [
+    ('Distillate Fuel Oil', 32.0, 3, 38, {
+        'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'No. 2 Fuel Oil',
+        'Diesel', 'Home Heating Oil', 'MDO'
+    }),
+    ('Distillate Fuel Oil', 32.0, 6, 38, {
+        'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'MDO'
+    }),
+    ('Distillate Fuel Oil', 32.0, 1, 38, {
+        'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'MDO'
+    }),
+    # HFOs
+    ('Residual Fuel Oil', 13.0, 390, 50, {
+        'No. 6 Fuel Oil', 'Refined Product', 'Bunker C', 'Residual Fuel',
+        'Fuel Oil', 'Heavy Fuel Oil', 'HFO'
+    }),
+    # IFOs
+    ('Residual Fuel Oil', 29.0, 10, 38, {
+        'Refined Product', 'Residual Fuel', 'Fuel Oil', 'IFO'
+    }),
+])
 def test_add_labels_to_oil_api_and_visc(pt, api, kvis, kvis_temp, labels):
     """
     refined products with density and viscosity limits
@@ -115,8 +116,4 @@ def test_add_labels_to_oil_api_and_visc(pt, api, kvis, kvis_temp, labels):
     oil.metadata.product_type = pt
     add_kin_viscosity_to_oil(oil, (kvis, ), 15, 'cSt', kvis_temp, 'C')
 
-    print("Product type:", pt)
-    print("API:", api)
-    print("expected labels:", labels)
-    print("labels:", get_suggested_labels(oil))
     assert get_suggested_labels(oil) == sorted(labels)

@@ -29,11 +29,8 @@ def read_csv_file(infilename):
 
     Return an Oil object
     """
-
     infile = open(infilename, encoding="utf-8-sig")
-
     reader = csv.reader(infile, dialect='excel')
-
     oil = Oil('XXXXXX')
 
     # look for the Data model version
@@ -41,15 +38,18 @@ def read_csv_file(infilename):
     for row in reader:
         if check_field_name(row[0], "ADIOS Data Model Version"):
             if Version(row[1]) != oil.adios_data_model_version:
-                warnings.warn('Data model version mismatch -- '
-                              'possible errors on import')
+                warnings.warn('Data model version mismatch '
+                              '-- possible errors on import')
             break
+
     # look for main metadata:
     for row in reader:
         if check_field_name(row[0], "Record Metadata"):
             break
+
     # read the metadata:
     oil.metadata = read_record_metadata(reader)
+
     # load the subsamples:
     while True:
         oil.sub_samples.append(read_subsample(reader))
@@ -64,10 +64,10 @@ def read_record_metadata(reader):
 
     returns a Metadata object
     """
-
     # reference: Reference = field(default_factory=Reference)
     # location_coordinates: LocationCoordinates = None
 
+    md = MetaData()
     metadata_map = {
         normalize("Name"): ("name", strstrip),
         normalize("Source ID"): ("source_id", strstrip),
@@ -78,14 +78,14 @@ def read_record_metadata(reader):
         normalize("Product Type"): ("product_type", ProductType),
         # normalize("Product Type"): ("reference", Reference),
     }
-    md = MetaData()
+
     # look for subsample data, then stop
     for row in reader:
         if check_field_name(row[0], "Subsample Metadata"):
             break
         else:
-            # This could be more efficient with a dict lookup rather than
-            # a loop, but would require normalization
+            # This could be more efficient with a dict lookup rather than a
+            # loop, but would require normalization
             try:
                 if row[1]:
                     attr, func = metadata_map[normalize(row[0])]
@@ -93,9 +93,12 @@ def read_record_metadata(reader):
             except KeyError:
                 if check_field_name(row[0], "Reference"):
                     md.reference = Reference(int(row[1]), row[2])
+
                 if check_field_name(row[0], "Alternate Names"):
                     md.alternate_names = [n.strip()
-                                          for n in row[1:] if n.strip()]
+                                          for n in row[1:]
+                                          if n.strip()]
+
                 if check_field_name(row[0], "Labels"):
                     md.labels = [n.strip() for n in row[1:] if n.strip()]
 
@@ -123,17 +126,16 @@ def read_subsample_metadata(reader):
     fraction_evaporated: MassFraction = None
     boiling_point_range: Temperature = None
     """
-
     # reference: Reference = field(default_factory=Reference)
     # location_coordinates: LocationCoordinates = None
 
+    md = SampleMetaData()
     metadata_map = {
         normalize("Name"): ("name", strstrip),
         normalize("Short name"): ("short_name", strstrip),
         normalize("Sample ID"): ("sample_id", strstrip),
         normalize("Description"): ("description", strstrip),
     }
-    md = SampleMetaData()
 
     # look for Physical Properties data, then stop
     for row in reader:
@@ -142,8 +144,8 @@ def read_subsample_metadata(reader):
             # print("found Physical Properties: breaking out")
             break
         else:
-            # This could be more efficient with a dict lookup rather than
-            # a loop, but would require normalization
+            # this could be more efficient with a dict lookup rather than a
+            # loop, but would require normalization
             try:
                 if row[1]:
                     attr, func = metadata_map[normalize(row[0])]
@@ -172,17 +174,6 @@ def read_physical_properties(reader):
     Stops when "Distillation Data" is reached
 
     class PhysicalProperties:
-
-    pour_point: PourPoint = None
-    flash_point: FlashPoint = None
-
-    densities: DensityList = field(default_factory=DensityList)
-    kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)
-    dynamic_viscosities: DynamicViscosityList = field(default_factory=DynamicViscosityList)
-
-    interfacial_tension_air: InterfacialTensionList = field(default_factory=InterfacialTensionList)
-    interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
-    interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     """
     pp = PhysicalProperties()
 
@@ -194,8 +185,8 @@ def read_physical_properties(reader):
             break
         else:
             pass
-            # This could be more efficient with a dict lookup rather than
-            # a loop, but would require normalization
+            # # this could be more efficient with a dict lookup rather than a
+            # # loop, but would require normalization
             # try:
             #     if row[1]:
             #         attr, func = metadata_map[normalize(row[0])]
@@ -204,6 +195,7 @@ def read_physical_properties(reader):
 
             if check_field_name(row[0], "Pour Point"):
                 pp.pour_point = Temperature(**read_measurement(row[1:]))
+
             if check_field_name(row[0], "Flash Point"):
                 pp.flash_point = Temperature(**read_measurement(row[1:]))
 
@@ -253,6 +245,7 @@ def main():
     except IndexError:
         print("You must provide the filename on the command line")
         sys.exit()
+
     try:
         outfilename = Path(sys.argv[2])
     except IndexError:

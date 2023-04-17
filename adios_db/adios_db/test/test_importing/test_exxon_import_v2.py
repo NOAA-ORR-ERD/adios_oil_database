@@ -6,15 +6,6 @@ lot of it (Or writing it all by hand)
 
 but still handy to have some tests to run the code while under development
 """
-
-try:
-    import openpyxl
-except ImportError:
-    import pytest
-    pytest.skip("You need the openpyxl package to run these tests",
-                allow_module_level=True)
-
-
 import os
 from pathlib import Path
 from math import isclose
@@ -27,12 +18,13 @@ from adios_db.data_sources.exxon_assays import ExxonDataReader, ExxonMapper
 
 from adios_db.models.common.measurement import (Temperature, VolumeFraction)
 
+
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
 
 
-# No need to test the reader or the parser. They have not changed from V1
-# We will only need to test the mapper.
+# Note: No need to test the reader or the parser. They have not changed from V1
+#       We will only need to test the mapper.
 
 
 class TestExxonMapper():

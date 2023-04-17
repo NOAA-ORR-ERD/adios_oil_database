@@ -1,8 +1,5 @@
-import json
-
 from pathlib import Path
-
-from pprint import pprint
+import json
 
 from adios_db.models.common.measurement import MassFraction
 from adios_db.models.oil.compound import Compound, CompoundList
@@ -18,9 +15,7 @@ class TestESTSFractions:
     def test_init_empty(self):
         ccme = ESTSFractions()
 
-        for attr in ('saturates',
-                     'aromatics',
-                     'GC_TPH'):
+        for attr in ('saturates', 'aromatics', 'GC_TPH'):
             assert hasattr(ccme, attr)
 
     def test_json_empty(self):
@@ -72,8 +67,6 @@ class TestESTSFractions:
         assert ccme.GC_TPH[1].measurement.value == 14.0
 
         py_json = ccme.py_json()
-        print("the pyjson form:")
-        pprint(py_json)
 
         # dump the json:
         json.dump(py_json,

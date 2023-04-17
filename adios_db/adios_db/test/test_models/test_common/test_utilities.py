@@ -70,22 +70,21 @@ def test_simple_from_py_json():
 
 
 def test_add_extra_attribute():
-        rs = ReallySimple.from_py_json({'x': 5, 'thing': "fred"})
+    rs = ReallySimple.from_py_json({'x': 5, 'thing': "fred"})
 
-        with pytest.raises(AttributeError):
-            rs.something_random = 42
+    with pytest.raises(AttributeError):
+        rs.something_random = 42
 
 
 def test_json_list():
     # at least make sure it acts like a list
     assert JSON_List() == []
-
     assert JSON_List([1, 2, 3, 4]) == [1, 2, 3, 4]
-
     assert JSON_List((1, 2, 3, 4)) == [1, 2, 3, 4]
 
     jl = JSON_List((1, 2, 3, 4))
     jl.append(5)
+
     assert jl == [1, 2, 3, 4, 5]
 
 
@@ -102,13 +101,13 @@ def test_json_list_pyjson_simple():
 
 
 def test_json_list_pyjson_nested():
-    jl = ListOfRS([ReallySimple(x=5, thing="fred"),
-                   ReallySimple(x=2, thing="bob"),
-                   ReallySimple(x=1, thing="jane"),
-                   ])
+    jl = ListOfRS([
+        ReallySimple(x=5, thing="fred"),
+        ReallySimple(x=2, thing="bob"),
+        ReallySimple(x=1, thing="jane"),
+    ])
 
     pyjson = jl.py_json()
-
     print(pyjson)
 
     assert pyjson == [{'x': 5, 'thing': 'fred'},
@@ -119,9 +118,6 @@ def test_json_list_pyjson_nested():
 def test_nested_list_empty():
     nl = NestedList(these=ListOfRS([3, 4, 5]))
 
-    print(nl)
-    print(nl.these)
-
     assert nl.these == [3, 4, 5]
     assert nl.those == []
 
@@ -130,16 +126,16 @@ def test_nested_list_empty():
 
 
 def test_nested_list():
-    nl = NestedList(these=ListOfRS([ReallySimple(x=2, thing="bob"),
-                                    ReallySimple(x=1, thing="jane"),
-                                    ]))
+    nl = NestedList(these=ListOfRS([
+        ReallySimple(x=2, thing="bob"),
+        ReallySimple(x=1, thing="jane"),
+    ]))
 
-    nl.those.extend([ReallySimple(x=5, thing="fred"),
-                     ReallySimple(x=2, thing="bob"),
-                     ReallySimple(x=1, thing="jane"),
-                     ])
-
-    print(nl)
+    nl.those.extend([
+        ReallySimple(x=5, thing="fred"),
+        ReallySimple(x=2, thing="bob"),
+        ReallySimple(x=1, thing="jane"),
+    ])
 
     pyjson = nl.py_json()
 
@@ -159,13 +155,13 @@ def test_nested_list_none_type():
 
 
 def test_nested_list_from_json():
-    nl = NestedList.from_py_json({'these': [{'x': 2, 'thing': 'bob'},
-                                            {'x': 1, 'thing': 'jane'}],
-                                  'those': [{'x': 5, 'thing': 'fred'},
-                                            {'x': 2, 'thing': 'bob'},
-                                            {'x': 1, 'thing': 'jane'}]})
-
-    print(nl)
+    nl = NestedList.from_py_json({
+        'these': [{'x': 2, 'thing': 'bob'},
+                  {'x': 1, 'thing': 'jane'}],
+        'those': [{'x': 5, 'thing': 'fred'},
+                  {'x': 2, 'thing': 'bob'},
+                  {'x': 1, 'thing': 'jane'}]
+    })
 
     assert nl.these[0].x == 2
     assert nl.these[1].thing == 'jane'
@@ -178,16 +174,16 @@ def test_validate():
     """
     make sure that all validators are being called
     """
-    nl = NestedList(these=ListOfRS([ReallySimple(x=2, thing="bob"),
-                                    ReallySimple(x=1, thing="jane"),
-                                    ]))
+    nl = NestedList(these=ListOfRS([
+        ReallySimple(x=2, thing="bob"),
+        ReallySimple(x=1, thing="jane"),
+    ]))
 
-    nl.those.extend([ReallySimple(x=5, thing="fred"),
-                     ReallySimple(x=2, thing="bob"),
-                     ReallySimple(x=1, thing="jane"),
-                     ])
-
-    print(nl)
+    nl.those.extend([
+        ReallySimple(x=5, thing="fred"),
+        ReallySimple(x=2, thing="bob"),
+        ReallySimple(x=1, thing="jane"),
+    ])
 
     pyjson = nl.py_json()
 
@@ -200,8 +196,8 @@ def test_validate():
 
 def test_SimpleWithValidated():
     obj = SimpleWithValidated()
-
     result = obj.validate()
+
     print("result:", result)
     assert len(result) == 1
     assert result[0] == ('Invalid value: "this", '
@@ -209,7 +205,6 @@ def test_SimpleWithValidated():
 
 
 def test_pre_from_py_json():
-
     @dataclass_to_json
     @dataclass
     class SimpleClass:
@@ -228,9 +223,7 @@ def test_pre_from_py_json():
             'x': 1.0}
 
     sc = SimpleClass.from_py_json(pyjs)
-
     assert sc.name == "a new name"
 
     scjs = sc.py_json()
-
     assert scjs == pyjs

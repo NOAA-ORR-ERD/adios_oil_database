@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 find data in old ADIOS DB with emulsifiation constant
 
@@ -17,14 +16,12 @@ json_data_dir = Path("../../../noaa-oil-data/data/oil/AD/")
 def process(adios_data, json_data_dir):
     # Read the data
     with open(adios_data, encoding='latin-1') as infile:
-
         infile.readline()
         header = infile.readline().split("\t")
         header_map = {name.strip(): idx for idx, name in enumerate(header)}
 
-        num_weight = 0
-        num_vol = 0
-        num_unknown = 0
+        num_weight = num_vol = num_unknown = 0
+
         for rec in infile:
             rec = rec.split("\t")
             ID = rec[header_map['ADIOS_Oil_ID']].strip()
@@ -35,8 +32,10 @@ def process(adios_data, json_data_dir):
             path = json_data_dir / (ID + ".json")
             oil = ads.Oil.from_file(path)
             dist = oil.sub_samples[0].distillation_data
+
             if dist.cuts: # there is some data there
                 print(ID, name, "D type:", dist_type)
+
                 if dist_type == "volume":
                     dist.type = "Volume Fraction"
                     num_vol += 1
@@ -49,6 +48,7 @@ def process(adios_data, json_data_dir):
                     print("***** One with NONE")
                 else:
                     raise ValueError("unknown data in record")
+
         if dry_run:
             print("Nothing saved")
         else:
@@ -65,4 +65,5 @@ if __name__ == "__main__":
         dry_run = True
     else:
         dry_run = False
+
     process(adios_data, json_data_dir)
