@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.models.oil package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,12 +29,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html">
-            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,7 +86,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="adios_db.html">adios_db package</a></li>
           <li class="breadcrumb-item"><a href="adios_db.models.html">adios_db.models package</a></li>
       <li class="breadcrumb-item active">adios_db.models.oil package</li>
@@ -165,7 +168,7 @@
 <p>dataclass to store the compounds</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.bulk_composition.BulkComposition">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.bulk_composition.</span></span><span class="sig-name descname"><span class="pre">BulkComposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.MassOrVolumeFraction]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.bulk_composition.BulkComposition" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.bulk_composition.</span></span><span class="sig-name descname"><span class="pre">BulkComposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement:</span> <span class="pre">~adios_db.models.common.measurement.MassOrVolumeFraction</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.bulk_composition.BulkComposition" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>object to hold bulk composition – could be mass or volume fraction</p>
 <dl class="py attribute">
@@ -205,7 +208,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.bulk_composition.BulkComposition.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -243,7 +246,7 @@ validation messages.</p>
 <p>CCME is kind of a special case, so this nails it down</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.ccme.CCME">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.ccme.</span></span><span class="sig-name descname"><span class="pre">CCME</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F4</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.ccme.CCME" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.ccme.</span></span><span class="sig-name descname"><span class="pre">CCME</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F4</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.MassFraction" title="adios_db.models.common.measurement.MassFraction"><span class="pre">MassFraction</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.ccme.CCME" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>hold the CCME data from env CA</p>
 <p>(<a class="reference external" href="https://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html">https://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html</a>)</p>
@@ -284,7 +287,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.ccme.CCME.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -409,7 +412,7 @@ Viscosity. Score = 1</p>
 <span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.completeness.</span></span><span class="sig-name descname"><span class="pre">completeness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.completeness.completeness" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the completeness of the data contained in an oil record.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>oil</strong> – The oil record to be validated</p>
 </dd>
 </dl>
@@ -431,7 +434,7 @@ Viscosity. Score = 1</p>
 <p>dataclass to store the compounds</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.compound.Compound">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.compound.</span></span><span class="sig-name descname"><span class="pre">Compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.MassFraction]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.compound.Compound" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.compound.</span></span><span class="sig-name descname"><span class="pre">Compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement:</span> <span class="pre">~adios_db.models.common.measurement.MassFraction</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.compound.Compound" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Some compounds that will be handled by this dataclass:
 - sulfur_mass_fraction: MassFraction = None
@@ -483,7 +486,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.compound.Compound.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -539,7 +542,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.distillation.DistCut.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -572,7 +575,7 @@ validation messages.</p>
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_data_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frac_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MassFraction'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.distillation.DistCutList.from_data_arrays" title="Permalink to this definition"></a></dt>
 <dd><p>Create a DistCutList from arrays of dist cut data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fractions</strong> – sequence of cut fractions</p></li>
 <li><p><strong>temps</strong> – sequence of cut vapor temperatures</p></li>
@@ -628,7 +631,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.distillation.Distillation.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -660,7 +663,7 @@ validation messages.</p>
 <p>Having a Python class makes it easier to write importing, validating etc, code.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.environmental_behavior.EnvironmentalBehavior">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.environmental_behavior.</span></span><span class="sig-name descname"><span class="pre">EnvironmentalBehavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dispersibilities:</span> <span class="pre">~adios_db.models.oil.properties.DispersibilityList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emulsions:</span> <span class="pre">~adios_db.models.oil.properties.EmulsionList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adhesion:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.NeedleAdhesion]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ests_evaporation_test:</span> <span class="pre">~adios_db.models.oil.properties.ESTSEvaporationTest</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.environmental_behavior.EnvironmentalBehavior" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.environmental_behavior.</span></span><span class="sig-name descname"><span class="pre">EnvironmentalBehavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dispersibilities:</span> <span class="pre">~adios_db.models.oil.properties.DispersibilityList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emulsions:</span> <span class="pre">~adios_db.models.oil.properties.EmulsionList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adhesion:</span> <span class="pre">~adios_db.models.common.measurement.NeedleAdhesion</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ests_evaporation_test:</span> <span class="pre">~adios_db.models.oil.properties.ESTSEvaporationTest</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.environmental_behavior.EnvironmentalBehavior" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>class to hold data about environmental behavior –</p>
 <p>dispersabilty, emulsion formation, adhesion, …</p>
@@ -696,7 +699,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.environmental_behavior.EnvironmentalBehavior.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -722,7 +725,7 @@ validation messages.</p>
 <p>This is kind of a special case, so this nails it down</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.ests_fractions.ESTSFractions">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.ests_fractions.</span></span><span class="sig-name descname"><span class="pre">ESTSFractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturates:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aromatics:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GC_TPH:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.ests_fractions.ESTSFractions" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.ests_fractions.</span></span><span class="sig-name descname"><span class="pre">ESTSFractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturates:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aromatics:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GC_TPH:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.ests_fractions.ESTSFractions" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>hold the ESTS Hydrocarbon Fractions from env CA</p>
 <p>(<a class="reference external" href="https://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html">https://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html</a>)</p>
@@ -753,7 +756,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.ests_fractions.ESTSFractions.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -784,7 +787,7 @@ validation messages.</p>
 <p>These are tricky, as they can be any weird unit</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.industry_property.IndustryProperty">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.industry_property.</span></span><span class="sig-name descname"><span class="pre">IndustryProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.AnyUnit" title="adios_db.models.common.measurement.AnyUnit"><span class="pre">AnyUnit</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.industry_property.IndustryProperty" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.industry_property.</span></span><span class="sig-name descname"><span class="pre">IndustryProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.measurement.AnyUnit" title="adios_db.models.common.measurement.AnyUnit"><span class="pre">AnyUnit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.industry_property.IndustryProperty" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This handles the various odd industry properties.</p>
 <p>For example:</p>
@@ -829,7 +832,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.industry_property.IndustryProperty.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -901,7 +904,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.location_coordinates.LocationCoordinates.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -972,7 +975,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.metadata.ChangeLogEntry.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1062,7 +1065,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.metadata.MetaData.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1132,7 +1135,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.metadata.SampleMetaData.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1219,7 +1222,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.oil.Oil.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1319,7 +1322,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.physical_properties.DensityPoint.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1381,7 +1384,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.physical_properties.DynamicViscosityPoint.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1446,7 +1449,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.physical_properties.FlashPoint.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1503,7 +1506,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.physical_properties.InterfacialTensionPoint.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1570,7 +1573,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.physical_properties.KinematicViscosityPoint.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1660,7 +1663,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.physical_properties.PhysicalProperties.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1710,7 +1713,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.physical_properties.PourPoint.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1783,7 +1786,7 @@ and the associated labels as values.</p>
 <dd><p>All the labels, and their property types, as a JSON service compatible
 dict</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of dicts for each label:</p>
 </dd>
 </dl>
@@ -1822,7 +1825,7 @@ dict</p>
 <span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.product_type.</span></span><span class="sig-name descname"><span class="pre">load_from_csv_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.product_type.load_from_csv_file" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the product types and labels mapping from a CSV file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filepath=None</strong> – The name of the file to load from. If not
 provided, it will look for:
 “product_types_and_labels.csv” next to this module</p>
@@ -1865,7 +1868,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.Dispersibility.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1952,7 +1955,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.ESTSEvaporationTest.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -1973,7 +1976,7 @@ validation messages.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.properties.Emulsion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.properties.</span></span><span class="sig-name descname"><span class="pre">Emulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.Time]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water_content:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.MassFraction]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_temp:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.Temperature]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex_modulus:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.Pressure]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_modulus:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.Pressure]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_modulus:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.Pressure]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tan_delta_v_e:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.Unitless]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex_viscosity:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.DynamicViscosity]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinematic_viscosities:</span> <span class="pre">~adios_db.models.oil.physical_properties.KinematicViscosityList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamic_viscosities:</span> <span class="pre">~adios_db.models.oil.physical_properties.DynamicViscosityList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visual_stability:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.Emulsion" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.properties.</span></span><span class="sig-name descname"><span class="pre">Emulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age:</span> <span class="pre">~adios_db.models.common.measurement.Time</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water_content:</span> <span class="pre">~adios_db.models.common.measurement.MassFraction</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_temp:</span> <span class="pre">~adios_db.models.common.measurement.Temperature</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex_modulus:</span> <span class="pre">~adios_db.models.common.measurement.Pressure</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_modulus:</span> <span class="pre">~adios_db.models.common.measurement.Pressure</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_modulus:</span> <span class="pre">~adios_db.models.common.measurement.Pressure</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tan_delta_v_e:</span> <span class="pre">~adios_db.models.common.measurement.Unitless</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex_viscosity:</span> <span class="pre">~adios_db.models.common.measurement.DynamicViscosity</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinematic_viscosities:</span> <span class="pre">~adios_db.models.oil.physical_properties.KinematicViscosityList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamic_viscosities:</span> <span class="pre">~adios_db.models.oil.physical_properties.DynamicViscosityList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visual_stability:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.Emulsion" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>There is no use for an empty Emulsion object</p>
 <p>But there is a use for one that has an arbitrary subset of fields,</p>
@@ -2025,7 +2028,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.Emulsion.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -2119,7 +2122,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.properties.InterfacialTensionPoint.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -2173,7 +2176,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.review_status.ReviewStatus.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -2215,7 +2218,7 @@ validation messages.</p>
 <p>Having a Python class makes it easier to write importing, validating etc, code.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.sample.Sample">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.sample.</span></span><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata:</span> <span class="pre">~adios_db.models.oil.metadata.SampleMetaData</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_volume:</span> <span class="pre">~typing.Optional[~adios_db.models.common.measurement.VolumeFraction]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_properties:</span> <span class="pre">~adios_db.models.oil.physical_properties.PhysicalProperties</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environmental_behavior:</span> <span class="pre">~adios_db.models.oil.environmental_behavior.EnvironmentalBehavior</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SARA:</span> <span class="pre">~adios_db.models.oil.sara.Sara</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distillation_data:</span> <span class="pre">~adios_db.models.oil.distillation.Distillation</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compounds:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bulk_composition:</span> <span class="pre">~adios_db.models.oil.bulk_composition.BulkCompositionList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">industry_properties:</span> <span class="pre">~adios_db.models.oil.industry_property.IndustryPropertyList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headspace_analysis:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCME:</span> <span class="pre">~adios_db.models.oil.ccme.CCME</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ESTS_hydrocarbon_fractions:</span> <span class="pre">~typing.Optional[~adios_db.models.oil.ests_fractions.ESTSFractions]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">miscellaneous:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_data:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.sample.Sample" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.sample.</span></span><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata:</span> <span class="pre">~adios_db.models.oil.metadata.SampleMetaData</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_volume:</span> <span class="pre">~adios_db.models.common.measurement.VolumeFraction</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_properties:</span> <span class="pre">~adios_db.models.oil.physical_properties.PhysicalProperties</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environmental_behavior:</span> <span class="pre">~adios_db.models.oil.environmental_behavior.EnvironmentalBehavior</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SARA:</span> <span class="pre">~adios_db.models.oil.sara.Sara</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distillation_data:</span> <span class="pre">~adios_db.models.oil.distillation.Distillation</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compounds:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bulk_composition:</span> <span class="pre">~adios_db.models.oil.bulk_composition.BulkCompositionList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">industry_properties:</span> <span class="pre">~adios_db.models.oil.industry_property.IndustryPropertyList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headspace_analysis:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCME:</span> <span class="pre">~adios_db.models.oil.ccme.CCME</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ESTS_hydrocarbon_fractions:</span> <span class="pre">~adios_db.models.oil.ests_fractions.ESTSFractions</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">miscellaneous:</span> <span class="pre">~adios_db.models.oil.compound.CompoundList</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_data:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.sample.Sample" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>represents the physical and chemical properties of particular sub sample.</p>
 <p>could be fresh oil, or weathered samples, or distillation cuts, or …</p>
@@ -2301,7 +2304,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.sample.Sample.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -2372,7 +2375,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.sara.Sara.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>
@@ -2407,7 +2410,7 @@ validation messages.</p>
 <p>Classes for individual classes -not much here!</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.values.Reference">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.values.</span></span><span class="sig-name descname"><span class="pre">Reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.values.Reference" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.values.</span></span><span class="sig-name descname"><span class="pre">Reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.values.Reference" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#adios_db.models.oil.values.ReferenceBase" title="adios_db.models.oil.values.ReferenceBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReferenceBase</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.models.oil.values.Reference.validate">
@@ -2436,7 +2439,7 @@ structure.</p>
 <span class="sig-name descname"><span class="pre">py_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.values.ReferenceBase.py_json" title="Permalink to this definition"></a></dt>
 <dd><p>function to convert a dataclass to json compatible python</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sparse=True</strong> – If sparse is True, only non-empty fields will be
 written. If False, then all fields will be
 included.</p>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.computation package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,12 +29,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html">
-            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -87,7 +90,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="adios_db.html">adios_db package</a></li>
       <li class="breadcrumb-item active">adios_db.computation package</li>
       <li class="wy-breadcrumbs-aside">
@@ -419,7 +422,7 @@ density in kg/m^3</p>
 <span class="sig-name descname"><span class="pre">at_temp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.Density.at_temp" title="Permalink to this definition"></a></dt>
 <dd><p>density(s) at the provided temperature(s)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>temp</strong> – scalar or sequence of temp in K</p></li>
 <li><p><strong>unit='K'</strong> – unit of temperature</p></li>
@@ -451,7 +454,7 @@ viscosity in m^2/s</p>
 <span class="sig-name descname"><span class="pre">at_temp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kvis_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'m^2/s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity.at_temp" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the kinematic viscosity of the oil as a function of temperature</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>temp_k</strong> – temperatures to compute at: can be scalar or array
 of values.  Should be in Kelvin</p>
 </dd>
@@ -487,7 +490,7 @@ v = A exp(k_v2 / T)</p>
 <span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">convert_dvisc_to_kvisc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dvisc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.convert_dvisc_to_kvisc" title="Permalink to this definition"></a></dt>
 <dd><p>convert dynamic viscosity to kinematic viscosity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>density</strong> – an initialized Density object</p>
 </dd>
 </dl>
@@ -519,7 +522,7 @@ the emulsion. (from ADIOS2)</p>
 <dd><p>Return a table of density data:</p>
 <p>list of (density, temp) pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
 <li><p><strong>units=&quot;kg/m^3&quot;</strong> – units you want the density in</p></li>
@@ -535,7 +538,7 @@ the emulsion. (from ADIOS2)</p>
 <dd><p>Return a table of distillation data:</p>
 <p>list of (cut fraction, temp) pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
 <li><p><strong>units=&quot;fraction&quot;</strong> – units you want the fraction in</p></li>
@@ -548,14 +551,14 @@ the emulsion. (from ADIOS2)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.get_dynamic_viscosity_data">
 <span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">get_dynamic_viscosity_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Pas'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.get_dynamic_viscosity_data" title="Permalink to this definition"></a></dt>
-<dd><p>Return a table of kinematic viscosity data:</p>
+<dd><p>Return a table of dynamic viscosity data:</p>
 <p>list of (viscosity, temp) pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
-<li><p><strong>units=&quot;cSt&quot;</strong> – units you want the viscosity in</p></li>
-<li><p><strong>temp_units=&quot;K&quot;</strong> – units you want the viscosity in</p></li>
+<li><p><strong>units=&quot;Pas&quot;</strong> – units you want the viscosity in</p></li>
+<li><p><strong>temp_units=&quot;K&quot;</strong> – units you want the temperature in</p></li>
 </ul>
 </dd>
 </dl>
@@ -567,7 +570,7 @@ the emulsion. (from ADIOS2)</p>
 <dd><p>Return fraction recovered or None
 and whether fraction recovered is in the database T or F</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
 <li><p><strong>units=&quot;fraction&quot;</strong> – units you want the fraction in</p></li>
@@ -582,7 +585,7 @@ and whether fraction recovered is in the database T or F</p>
 <dd><p>Return a table of interfacial tension data:</p>
 <p>list of (interfacial tension, temp) pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
 <li><p><strong>units=&quot;N/m&quot;</strong> – units you want the interfacial tension in</p></li>
@@ -598,7 +601,7 @@ and whether fraction recovered is in the database T or F</p>
 <dd><p>Return a table of interfacial tension data:</p>
 <p>list of (interfacial tension, temp) pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
 <li><p><strong>units=&quot;N/m&quot;</strong> – units you want the interfacial tension in</p></li>
@@ -614,11 +617,11 @@ and whether fraction recovered is in the database T or F</p>
 <dd><p>Return a table of kinematic viscosity data:</p>
 <p>list of (viscosity, temp) pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
-<li><p><strong>units=&quot;cSt&quot;</strong> – units you want the viscosity in</p></li>
-<li><p><strong>temp_units=&quot;K&quot;</strong> – units you want the viscosity in</p></li>
+<li><p><strong>units=&quot;m^2/s&quot;</strong> – units you want the viscosity in</p></li>
+<li><p><strong>temp_units=&quot;K&quot;</strong> – units you want the temperature in</p></li>
 </ul>
 </dd>
 </dl>

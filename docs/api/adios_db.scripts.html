@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.scripts package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,12 +29,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html">
-            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -64,6 +67,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-db-import-module">adios_db.scripts.db_import module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-db-initialize-module">adios_db.scripts.db_initialize module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-db-restore-module">adios_db.scripts.db_restore module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.import_csv">adios_db.scripts.import_csv module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-oil-query-module">adios_db.scripts.oil_query module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.process_json">adios_db.scripts.process_json module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.update_test_data">adios_db.scripts.update_test_data module</a></li>
@@ -91,7 +95,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="adios_db.html">adios_db package</a></li>
       <li class="breadcrumb-item active">adios_db.scripts package</li>
       <li class="wy-breadcrumbs-aside">
@@ -119,6 +123,99 @@
 </section>
 <section id="adios-db-scripts-db-restore-module">
 <h2>adios_db.scripts.db_restore module<a class="headerlink" href="#adios-db-scripts-db-restore-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-adios_db.scripts.import_csv">
+<span id="adios-db-scripts-import-csv-module"></span><h2>adios_db.scripts.import_csv module<a class="headerlink" href="#module-adios_db.scripts.import_csv" title="Permalink to this heading"></a></h2>
+<p>Script to import data from a CSV file exported from the
+NOAA “standard” Excel template.</p>
+<p>That template should be in this repo in the “data” folder</p>
+<p>Note that the CSV should be exported as “CSV utf-8 Comma Delimited”</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.check_field_name">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">check_field_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.check_field_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.main">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.main" title="Permalink to this definition"></a></dt>
+<dd><p>Read the data the CSV file provided on the command line</p>
+<p>export it as a JSON file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.normalize">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.normalize" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>normalizes a name:</dt><dd><p>removes whitespace
+lower cases it</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_csv_file">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_csv_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infilename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_csv_file" title="Permalink to this definition"></a></dt>
+<dd><p>Read the CSV file infilename</p>
+<p>Return an Oil object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_measurement">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_measurement" title="Permalink to this definition"></a></dt>
+<dd><p>reads a sequence, and returns a dict of measurement values:</p>
+<p>min_value=float(row[1]),
+value=float(row[2]),
+max_value=float(row[3]),
+unit</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_physical_properties">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_physical_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_physical_properties" title="Permalink to this definition"></a></dt>
+<dd><p>read the physical properties data</p>
+<p>Stops when “Distillation Data” is reached</p>
+<p>class PhysicalProperties:</p>
+<p>pour_point: PourPoint = None
+flash_point: FlashPoint = None</p>
+<p>densities: DensityList = field(default_factory=DensityList)
+kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)
+dynamic_viscosities: DynamicViscosityList = field(default_factory=DynamicViscosityList)</p>
+<p>interfacial_tension_air: InterfacialTensionList = field(default_factory=InterfacialTensionList)
+interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
+interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_record_metadata">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_record_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_record_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>read the record metadata – stops when “Subsample Metadata” is reached.</p>
+<p>returns a Metadata object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_subsample">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_subsample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_subsample" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_subsample_metadata">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_subsample_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_subsample_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Read the record metadata – stops when “Physical Properties” is reached.</p>
+<p>returns a SubsampleMetadata object</p>
+<p>class SampleMetaData:
+name: str = “Fresh Oil Sample”
+short_name: str = None
+sample_id: str = None
+description: str = None
+fraction_evaporated: MassFraction = None
+boiling_point_range: Temperature = None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.import_csv.strstrip">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">strstrip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.strstrip" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="adios-db-scripts-oil-query-module">
 <h2>adios_db.scripts.oil_query module<a class="headerlink" href="#adios-db-scripts-oil-query-module" title="Permalink to this heading"></a></h2>

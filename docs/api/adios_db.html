@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,12 +29,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html">
-            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -80,7 +83,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">adios_db package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/adios_db.rst.txt" rel="nofollow"> View page source</a>
@@ -99,7 +102,7 @@
 <dd><p>Initializes the logger to simply log everything to the console (stdout)
 Likely what you want for scripting use</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>level='debug'</strong> – the level you want your log to show. options are,
 in order of importance: “debug”, “info”, “warning”,
 “error”, “critical”</p>
@@ -314,6 +317,19 @@ in order of importance: “debug”, “info”, “warning”,
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-import-module">adios_db.scripts.db_import module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-initialize-module">adios_db.scripts.db_initialize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-restore-module">adios_db.scripts.db_restore module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.import_csv">adios_db.scripts.import_csv module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.check_field_name"><code class="docutils literal notranslate"><span class="pre">check_field_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_csv_file"><code class="docutils literal notranslate"><span class="pre">read_csv_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_measurement"><code class="docutils literal notranslate"><span class="pre">read_measurement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_physical_properties"><code class="docutils literal notranslate"><span class="pre">read_physical_properties()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_record_metadata"><code class="docutils literal notranslate"><span class="pre">read_record_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_subsample"><code class="docutils literal notranslate"><span class="pre">read_subsample()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_subsample_metadata"><code class="docutils literal notranslate"><span class="pre">read_subsample_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.strstrip"><code class="docutils literal notranslate"><span class="pre">strstrip()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-oil-query-module">adios_db.scripts.oil_query module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.process_json">adios_db.scripts.process_json module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.process_json.run_through"><code class="docutils literal notranslate"><span class="pre">run_through()</span></code></a></li>

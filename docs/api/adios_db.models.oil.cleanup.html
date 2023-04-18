@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.models.oil.cleanup package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,12 +29,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html">
-            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,7 +86,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="adios_db.html">adios_db package</a></li>
           <li class="breadcrumb-item"><a href="adios_db.models.html">adios_db.models package</a></li>
           <li class="breadcrumb-item"><a href="adios_db.models.oil.html">adios_db.models.oil package</a></li>
@@ -129,7 +132,7 @@
 <dd><p>add labels to the passed in oil.</p>
 <p>this adds labels, but does not remove any existing ones</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>oil</strong> (<em>Oil object</em>) – the oil object to add labels to</p>
 </dd>
 </dl>
@@ -140,7 +143,7 @@
 <span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.add_labels.</span></span><span class="sig-name descname"><span class="pre">get_suggested_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.add_labels.get_suggested_labels" title="Permalink to this definition"></a></dt>
 <dd><p>get the labels suggested for this oil</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>oil</strong> (<em>Oil object</em>) – the oil object to get the labels for</p>
 </dd>
 </dl>
@@ -169,7 +172,7 @@
 <span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_it</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.cleanup.Cleanup.cleanup" title="Permalink to this definition"></a></dt>
 <dd><p>run this particular cleanup option</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – an Oil object to act on</p></li>
 <li><p><strong>do_it=False</strong> – flag to tell the cleanup to do its thing.
@@ -177,7 +180,7 @@ If False, the method returns a message. If True,
 the action is taken, and the Oil object is altered.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a message of what could be done, or what was done.</p>
 </dd>
 </dl>
@@ -221,7 +224,7 @@ if something is wrong, but can not be cleaned up, flag is False</p>
 <span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.density.FixAPI.cleanup" title="Permalink to this definition"></a></dt>
 <dd><p>run this particular cleanup option</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>oil</strong> – an Oil object to act on</p></li>
 <li><p><strong>do_it=False</strong> – flag to tell the cleanup to do its thing.
@@ -229,7 +232,7 @@ If False, the method returns a message. If True,
 the action is taken, and the Oil object is altered.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a message of what could be done, or what was done.</p>
 </dd>
 </dl>

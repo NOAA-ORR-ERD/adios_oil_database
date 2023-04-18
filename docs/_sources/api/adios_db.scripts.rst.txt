@@ -41,6 +41,14 @@ adios\_db.scripts.db\_restore module
    :undoc-members:
    :show-inheritance:
 
+adios\_db.scripts.import\_csv module
+------------------------------------
+
+.. automodule:: adios_db.scripts.import_csv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.scripts.oil\_query module
 -----------------------------------
 

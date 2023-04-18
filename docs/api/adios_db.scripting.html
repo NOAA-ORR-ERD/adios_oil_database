@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.scripting package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,12 +29,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html">
-            <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -84,7 +87,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="adios_db.html">adios_db package</a></li>
       <li class="breadcrumb-item active">adios_db.scripting package</li>
       <li class="wy-breadcrumbs-aside">
@@ -106,7 +109,7 @@
 <p>This is a generator that gets all the records, returning them one by one
 as record, path pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data_dir</strong> – the directory that holds the data</p>
 </dd>
 </dl>
@@ -125,11 +128,11 @@ as record, path pairs</p>
 <span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">process_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USAGE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\ndo_something.py:</span>&#160; <span class="pre">data_dir</span> <span class="pre">[dry_run]\n\ndata_dir</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">are:</span> <span class="pre">the</span> <span class="pre">script</span> <span class="pre">will</span> <span class="pre">recursively\nsearch</span> <span class="pre">for</span> <span class="pre">JSON</span> <span class="pre">files\n\nIf</span> <span class="pre">&quot;dry_run&quot;</span> <span class="pre">is</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">command</span> <span class="pre">line,</span> <span class="pre">it</span> <span class="pre">will</span> <span class="pre">report</span> <span class="pre">what</span> <span class="pre">it</span> <span class="pre">would</span> <span class="pre">do,\nbut</span> <span class="pre">not</span> <span class="pre">save</span> <span class="pre">any</span> <span class="pre">changes\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.process_input" title="Permalink to this definition"></a></dt>
 <dd><p>process sys.argv to get the path and whether it’s a dry_run or not</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>USAGE=USAGE</strong> – the usage message to return print if there’s an
 error in the input – default provided</p>
 </dd>
-<dt class="field-even">Returns base_dir, dry_run</dt>
+<dt class="field-even">Returns base_dir, dry_run<span class="colon">:</span></dt>
 <dd class="field-even"><p>base_dir is a Path object of the dir passed in.
 dry_run is True if “dry_run” is on the
 command line.</p>
