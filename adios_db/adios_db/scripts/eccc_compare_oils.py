@@ -1,3 +1,22 @@
+"""
+Environment & Climate Change Canada (ECCC) has now published the old oil
+catalog book data from 1999 in electronic form.  The .csv flat file for this
+is currently found at:
+
+    ('https://data-donnees.ec.gc.ca/data/substances/scientificknowledge/'
+     'a-catalogue-of-crude-oil-and-oil-product-properties-1999-revised-2022/'
+     'Flat_CSV-Catalogue_of_Crude_Oil_and_Oil_Product_Properties_(1999)-'
+     'Revised_2022_En.csv')
+
+One of the priorities with this new data set is to determine if any of these
+records are redundant Adios records.  For this, we wrote this script to
+iterate through the ECCC records and build an association list of Adios records
+that have a similar name.
+
+The idea is to have some corresponding data points from the eccc and Adios
+oil records organized in a way to make side-by-side comparison easy,
+or at least possible.
+"""
 import sys
 import os
 import io
