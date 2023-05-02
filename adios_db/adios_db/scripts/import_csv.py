@@ -6,11 +6,10 @@ NOAA "standard" Excel template.
 
 That template should be in this repo in the "data" folder
 
-Note that the CSV should be exported as "CSV utf-8 Comma Delimited"
 """
-import csv
 from pathlib import Path
 import sys
+<<<<<<< Updated upstream
 import warnings
 
 from adios_db.models.oil.oil import Oil
@@ -238,6 +237,9 @@ def normalize(name):
 def check_field_name(field, name):
     return normalize(field) == normalize(name)
 
+=======
+from adios_db.data_sources.noaa_csv.reader import read_csv
+>>>>>>> Stashed changes
 
 def main():
     """
@@ -257,14 +259,22 @@ def main():
         outfilename = infilename.with_suffix(".json")
 
     print("Reading:", infilename)
-    oil = read_csv_file(infilename)
+    oil = read_csv(infilename)
+
+    print("Validation Report")
+    for msg in oil.validate():
+        print(msg)
+
     print(f"Saving: {outfilename} as JSON")
     oil.to_file(outfilename)
 
+<<<<<<< Updated upstream
 
 def strstrip(obj):
     return str(obj).strip()
 
 
+=======
+>>>>>>> Stashed changes
 if __name__ == "__main__":
     main()

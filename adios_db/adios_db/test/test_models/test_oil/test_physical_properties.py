@@ -68,6 +68,27 @@ class TestDensityList:
 
         assert model.py_json() == json_obj
 
+    def test_from_data(self):
+        """
+        simple creation from a data table
+        """
+        data = [(0.8663, "g/cm³", 15, "C"),
+                (0.9012, "g/cm³", 0.0, "C"),
+                ]
+        dl = DensityList.from_data(data)
+
+        pjs = dl.py_json()
+
+        assert pjs == [{'density': {'value': 0.9012, 'unit': 'g/cm³', 'unit_type': 'density'},
+                        'ref_temp': {'value': 0.0, 'unit': 'C', 'unit_type': 'temperature'}},
+                       {'density': {'value': 0.8663, 'unit': 'g/cm³', 'unit_type': 'density'},
+                        'ref_temp': {'value': 15.0, 'unit': 'C', 'unit_type': 'temperature'}},
+                       ]
+
+
+
+
+
     def test_validate_duplicate_values(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
                            ref_temp=Temperature(value=0, unit='C'))

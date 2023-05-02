@@ -15,7 +15,12 @@ from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
 from adios_db.scripts.import_csv import read_csv_file, read_measurement
 
 
-test_file = Path(__file__).parent / "example_data" / "LSU_AlaskaNorthSlope.csv"
+HERE = Path(__file__).parent
+
+test_file = HERE / "example_data" / "LSU_AlaskaNorthSlope.csv"
+test_file2 = HERE / "example_data" / "example_noaa_csv.csv"
+
+
 
 
 # make module level?
@@ -95,5 +100,32 @@ def test_subsample_physical_properties(attr, value, test_record):
 def test_read_measurement():
     vals = read_measurement(('1.2', '', ' ', 'unit '))
 
+<<<<<<< Updated upstream:adios_db/adios_db/test/test_importing/test_import_from_csv.py
     assert vals == {'min_value': 1.2, 'value': None, 'max_value': None,
                     'unit': 'unit'}
+=======
+    assert vals == {'min_value': 1.2, 'value': None, 'max_value': None, 'unit': 'unit'}
+
+
+
+
+# def test_load():
+#     """
+#     Just to have more than one -- very basic test
+
+#     test whether the whole thing loads
+
+#     This isn't really unit testing, but I'm lazy right now :-(
+#     """
+#     oil = read_csv_file(test_file2)
+
+#     assert oil.metadata.name == "DMA, Chevron -- 2021"
+#     assert oil.metadata.API == 36.5
+#     assert oil.metadata.source_id == "xx-123"
+#     assert oil.metadata.alternate_names == ["Fred", "Bob"]
+#     assert oil.metadata.location == "California"
+
+#     assert oil.metadata.reference.year == 2021
+#     assert oil.metadata.reference.reference == 'Barker, C.H. 2021. "A CSV file reader for the ADIOS Oil Database."'
+
+>>>>>>> Stashed changes:adios_db/adios_db/test/test_importing/test_import_noaa_csv.py

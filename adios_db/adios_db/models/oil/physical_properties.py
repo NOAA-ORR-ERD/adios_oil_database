@@ -110,6 +110,32 @@ class DensityPoint:
 class DensityList(RefTempList, JSON_List):
     item_type = DensityPoint
 
+    @classmethod
+    def from_data(cls, data_table):
+        """
+        Create a DensityList from data of the format:
+
+        ```
+        [(density, density_unit, temp, temp_unit),
+         (density, density_unit, temp, temp_unit),
+         ...
+         ]
+        ```
+        example:
+
+        ```
+        [(0.8663, "g/cm³", 15, "C"),
+         (0.9012, "g/cm³", 0.0, "C"),
+         ]
+        """
+        dl = cls()
+        for row in data_table:
+            dl.append(DensityPoint(density=Density(row[0], unit=row[1]),
+                                   ref_temp=Temperature(row[2], unit=row[3]),
+                                   ))
+        # sort by temp -- assume the same units
+        dl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+        return dl
 
 @dataclass_to_json
 @dataclass
