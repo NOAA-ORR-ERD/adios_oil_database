@@ -244,6 +244,27 @@ class TestDynamicViscosityList:
 
         assert model.py_json() == json_obj
 
+    def test_from_data(self):
+        """
+        simple creation from a data table
+        """
+        data = [(100, "cP", 273.15, "K"),
+                (1234.3, "cP", 15.0, "C"),
+                ]
+        dl = DynamicViscosityList.from_data(data)
+
+        pjs = dl.py_json()
+
+        for p in pjs:
+            print(p)
+
+        assert pjs == [{'viscosity': {'value': 100.0, 'unit': 'cP', 'unit_type': 'dynamicviscosity'},
+                        'ref_temp': {'value': 273.15, 'unit': 'K', 'unit_type': 'temperature'}},
+                       {'viscosity': {'value': 1234.3, 'unit': 'cP', 'unit_type': 'dynamicviscosity'},
+                        'ref_temp': {'value': 15.0, 'unit': 'C', 'unit_type': 'temperature'}},
+                       ]
+
+
 
 class TestKinematicViscosityPoint:
     def test_init_empty(self):
@@ -299,6 +320,26 @@ class TestKinematicViscosityList:
         json_obj[0]['ref_temp']['unit_type'] = 'temperature'
 
         assert model.py_json() == json_obj
+
+    def test_from_data(self):
+        """
+        simple creation from a data table
+        """
+        data = [(100, "cSt", 273.15, "K"),
+                (1234.3, "cSt", 15.0, "C"),
+                ]
+        dl = KinematicViscosityList.from_data(data)
+
+        pjs = dl.py_json()
+
+        for p in pjs:
+            print(p)
+
+        assert pjs == [{'viscosity': {'value': 100.0, 'unit': 'cSt', 'unit_type': 'kinematicviscosity'},
+                        'ref_temp': {'value': 273.15, 'unit': 'K', 'unit_type': 'temperature'}},
+                       {'viscosity': {'value': 1234.3, 'unit': 'cSt', 'unit_type': 'kinematicviscosity'},
+                        'ref_temp': {'value': 15.0, 'unit': 'C', 'unit_type': 'temperature'}},
+                       ]
 
     def test_missing_ref_temp(self):
         # this occurs a lot when editing the code in the GUI

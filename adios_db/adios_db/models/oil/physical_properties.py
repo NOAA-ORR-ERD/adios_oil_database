@@ -150,6 +150,34 @@ class DynamicViscosityPoint:
 class DynamicViscosityList(RefTempList, JSON_List):
     item_type = DynamicViscosityPoint
 
+    @classmethod
+    def from_data(cls, data_table):
+        """
+        Create a DensityList from data of the format:
+
+        ```
+        [(viscosity, viscosity_unit, temp, temp_unit),
+         (viscosity, viscosity, temp, temp_unit),
+         ...
+         ]
+        ```
+        example:
+
+        ```
+        [(100, "cSt", 273.15, "K"),
+         (1234.3, "cSt", 15.0, "C"),
+         ]
+        """
+        kvl = cls()
+        for row in data_table:
+            kvl.append(DynamicViscosityPoint(viscosity=DynamicViscosity(row[0], unit=row[1]),
+                                             ref_temp=Temperature(row[2], unit=row[3]),
+                      ))
+        # sort by temp -- assume the same units
+        kvl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+        return kvl
+
+
 
 @dataclass_to_json
 @dataclass
@@ -163,6 +191,34 @@ class KinematicViscosityPoint:
 
 class KinematicViscosityList(RefTempList, JSON_List):
     item_type = KinematicViscosityPoint
+
+    @classmethod
+    def from_data(cls, data_table):
+        """
+        Create a DensityList from data of the format:
+
+        ```
+        [(viscosity, viscosity_unit, temp, temp_unit),
+         (viscosity, viscosity, temp, temp_unit),
+         ...
+         ]
+        ```
+        example:
+
+        ```
+        [(100, "cSt", 273.15, "K"),
+         (1234.3, "cSt", 15.0, "C"),
+         ]
+        """
+        kvl = cls()
+        for row in data_table:
+            kvl.append(KinematicViscosityPoint(viscosity=KinematicViscosity(row[0], unit=row[1]),
+                                              ref_temp=Temperature(row[2], unit=row[3]),
+                      ))
+        # sort by temp -- assume the same units
+        kvl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+        return kvl
+
 
 
 @dataclass_to_json
