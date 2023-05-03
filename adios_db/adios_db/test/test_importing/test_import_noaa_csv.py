@@ -12,7 +12,7 @@ import pytest
 from adios_db.models.common.measurement import MassFraction, Temperature
 from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
 
-from adios_db.scripts.import_csv import read_csv_file, read_measurement
+from adios_db.data_sources.noaa_csv.reader import read_csv, read_measurement
 
 
 HERE = Path(__file__).parent
@@ -29,7 +29,7 @@ def test_record():
     """
     read the example record and return the resulting oil record
     """
-    oil = read_csv_file(test_file)
+    oil = read_csv(test_file)
 
     return oil
 
@@ -100,12 +100,8 @@ def test_subsample_physical_properties(attr, value, test_record):
 def test_read_measurement():
     vals = read_measurement(('1.2', '', ' ', 'unit '))
 
-<<<<<<< Updated upstream:adios_db/adios_db/test/test_importing/test_import_from_csv.py
     assert vals == {'min_value': 1.2, 'value': None, 'max_value': None,
                     'unit': 'unit'}
-=======
-    assert vals == {'min_value': 1.2, 'value': None, 'max_value': None, 'unit': 'unit'}
-
 
 
 
@@ -117,7 +113,7 @@ def test_read_measurement():
 
 #     This isn't really unit testing, but I'm lazy right now :-(
 #     """
-#     oil = read_csv_file(test_file2)
+#     oil = read_csv(test_file2)
 
 #     assert oil.metadata.name == "DMA, Chevron -- 2021"
 #     assert oil.metadata.API == 36.5
@@ -127,5 +123,3 @@ def test_read_measurement():
 
 #     assert oil.metadata.reference.year == 2021
 #     assert oil.metadata.reference.reference == 'Barker, C.H. 2021. "A CSV file reader for the ADIOS Oil Database."'
-
->>>>>>> Stashed changes:adios_db/adios_db/test/test_importing/test_import_noaa_csv.py
