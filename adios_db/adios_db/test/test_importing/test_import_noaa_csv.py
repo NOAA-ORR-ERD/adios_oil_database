@@ -11,6 +11,11 @@ import pytest
 
 from adios_db.models.common.measurement import MassFraction, Temperature
 from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
+from adios_db.models.oil.physical_properties import (Density,
+                                                     DensityPoint,
+                                                     DynamicViscosity,
+                                                     DynamicViscosityPoint
+                                                     )
 
 from adios_db.data_sources.noaa_csv.reader import read_csv, read_measurement
 
@@ -104,6 +109,60 @@ def test_read_measurement():
                     'unit': 'unit'}
 
 
+def test_read_densities(test_record):
+    """
+    test the code that reads the density data
+
+    tested within the whole  reader, so that it will stay in sync
+    with any changes
+    """
+    densities = test_record.sub_samples[0].physical_properties.densities
+
+    for dp in densities:
+        print(dp)
+    assert densities[0] == DensityPoint(density=Density(value=0.9123, unit='g/cm³', unit_type='density'),
+                                        ref_temp=Temperature(value=32.0, unit='F', unit_type='temperature'))
+    assert densities[1] == DensityPoint(density=Density(value=0.8663, unit='g/cm³', unit_type='density'),
+                                        ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
+
+
+def test_read_kvis(test_record):
+    """
+    test the code that reads the kinematic viscosity
+
+    NOTE: test_record has none
+
+    tested within the whole  reader, so that it will stay in sync
+    with any changes
+    """
+    kvis = test_record.sub_samples[0].physical_properties.kinematic_viscosities
+
+    assert len(kvis) == 0
+    # for dp in densities:
+    #     print(dp)
+    # assert densities[0] == DensityPoint(density=Density(value=0.9123, unit='g/cm³', unit_type='density'),
+    #                                     ref_temp=Temperature(value=32.0, unit='F', unit_type='temperature'))
+    # assert densities[1] == DensityPoint(density=Density(value=0.8663, unit='g/cm³', unit_type='density'),
+    #                                     ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
+
+def test_read_dvis(test_record):
+    """
+    test the code that reads the kinematic viscosity
+
+    NOTE: test_record has none
+
+    tested within the whole  reader, so that it will stay in sync
+    with any changes
+    """
+    dvis = test_record.sub_samples[0].physical_properties.dynamic_viscosities
+
+    assert len(dvis) == 2
+    for dvp in dvis:
+        print(dvp)
+    assert dvis[0] == DynamicViscosityPoint(viscosity=DynamicViscosity(value=23.2, unit='cP', unit_type='dynamicviscosity'),
+                                            ref_temp=Temperature(value=0.0, unit='C', unit_type='temperature'))
+    assert dvis[1] == DynamicViscosityPoint(viscosity=DynamicViscosity(value=11.5, unit='cP', unit_type='dynamicviscosity'),
+                                            ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
 
 # def test_load():
 #     """

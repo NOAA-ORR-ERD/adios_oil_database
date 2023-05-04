@@ -98,6 +98,8 @@ Multiple values
 
 In general, you don't want to touch any of the field names or descriptions, only the data entry cells. However, there are a number of places where ADIOS DB will accept "one or more" data points for a given property (e.g. density at different temperatures), so you are free to insert new rows to accommodate all your data.
 
+Do make sure to insert an empty row in between "tables" of the same data type.
+
 Units
 .....
 

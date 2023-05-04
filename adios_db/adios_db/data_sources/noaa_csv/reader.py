@@ -23,6 +23,8 @@ from adios_db.models.oil.product_type import ProductType
 from adios_db.models.oil.values import Reference
 from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DensityList,
+                                                     KinematicViscosityList,
+                                                     DynamicViscosityList,
                                                      )
 from adios_db.models.common.measurement import MassFraction, Temperature
 
@@ -220,14 +222,67 @@ def read_physical_properties(reader):
                 pp.flash_point = Temperature(**read_measurement(row[1:]))
             if check_field_name(row[0], "Density"):
                 pp.densities = read_densities(reader)
+            if check_field_name(row[0], "Kinematic Viscosity"):
+                pp.kinematic_viscosities = read_kvis(reader)
+            if check_field_name(row[0], "Dynamic Viscosity"):
+                pp.dynamic_viscosities = read_dvis(reader)
 
     return pp
 
 def read_densities(reader):
-    densities = DensityList
+    data = []
     for row in reader:
-        if check_field_name(row[0], "Pour Point"):
-            pass
+        print(row)
+        if (  check_field_name(row[0], "Density at temp")
+              and "".join(row[1:]).strip()):
+            data.append(read_val_at_temp_row(row[1:]))
+        else:
+            break
+
+    return DensityList.from_data(data)
+
+def read_kvis(reader):
+    data = []
+    for row in reader:
+        if (  check_field_name(row[0], "Viscosity at temp")
+              and "".join(row[1:]).strip()):
+            data.append(read_val_at_temp_row(row[1:]))
+        else:
+            print("done: breaking out")
+            break
+    print("data:", data)
+
+    return KinematicViscosityList.from_data(data)
+
+
+def read_dvis(reader):
+    data = []
+    for row in reader:
+        print("processing:", row)
+        if (  check_field_name(row[0], "Viscosity at temp")
+              and "".join(row[1:]).strip()):
+            data.append(read_val_at_temp_row(row[1:]))
+        else:
+            print("done: breaking out")
+            break
+    print("data:", data)
+
+    return DynamicViscosityList.from_data(data)
+
+
+def read_val_at_temp_row(row):
+    """
+    reads a sequence, and returns a dict of measurement values:
+
+    (used for density, viscosity, etc)
+
+    returns: a sequence in proper types
+
+    [value, value_unit, temp, temp_unit]
+
+    """
+    print("processing:", row)
+    return [float(row[0]), row[1].strip(), float(row[2]), row[3].strip()]
 
 
 def read_measurement(items):
