@@ -10,13 +10,17 @@ from pathlib import Path
 import pytest
 
 from adios_db.computation.physical_properties import get_distillation_cuts
-from adios_db.models.common.measurement import MassFraction, Temperature
+from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction
 from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
 from adios_db.models.oil.physical_properties import (Density,
                                                      DensityPoint,
                                                      DynamicViscosity,
                                                      DynamicViscosityPoint
                                                      )
+
+from adios_db.models.oil.sara import Sara
+from adios_db.models.oil.compound import Compound
+from adios_db.models.oil.bulk_composition import BulkComposition
 
 from adios_db.data_sources.noaa_csv.reader import (read_csv,
                                                    read_measurement,
@@ -241,6 +245,70 @@ def test_distillation_cuts():
                     (0.777, 483.0),
                     (0.822, 498.0),
                     (0.873, 512.0)]
+
+def test_sara():
+    """
+    make sure the sara are read correctly
+
+    In the context of a real file
+    """
+    oil = read_csv(test_file3)
+
+    sara = oil.sub_samples[0].SARA
+
+    print(sara)
+    assert sara == Sara(saturates={'value': 54.5, 'unit': '%'},
+                        aromatics={'value': 23.1, 'unit': '%'},
+                        resins={'value': 16.7, 'unit': '%'},
+                        asphaltenes={'value': 5.7, 'unit': '%'})
+
+
+def test_compounds():
+    """
+    The "example_noaa_csv.csv" has two compound:
+    """
+    oil = read_csv(test_file2)
+
+    compounds = oil.sub_samples[0].compounds
+
+    assert len(compounds) == 2
+    assert compounds[0] == Compound(name='Biphenyl (Bph)',
+                                    groups=[],
+                                    method="",
+                                    measurement=MassFraction(value=120.2,
+                                                             unit='µg/g',
+                                                             ))
+    assert compounds[1] == Compound(name='Pyrene (Py)',
+                                    groups=['Other Priority PAHs'],
+                                    method="ESTS 5.03/x.x/M",
+                                    comment='Just an example',
+                                    measurement=MassFraction(value=28.6,
+                                                             unit='µg/g',
+                                                             ))
+
+def test_bulk_composition():
+    """
+    The "example_noaa_csv.csv" has one bulk composition
+    """
+    oil = read_csv(test_file2)
+
+    bulk_comp = oil.sub_samples[0].bulk_composition
+
+    assert len(bulk_comp) == 1
+    assert bulk_comp[0] == BulkComposition(name='Sulfur',
+                                           measurement=MassOrVolumeFraction(value=0.0207,
+                                                                            unit="%",
+                                                                            unit_type="Mass Fraction"))
+
+    # """
+    # object to hold bulk composition -- could be mass or volume fraction
+    # """
+    # name: str = ""
+    # groups: list = field(default_factory=list)
+    # method: str = ""
+    # measurement: MassOrVolumeFraction = None
+    # comment:
+
 
 # def test_load():
 #     """

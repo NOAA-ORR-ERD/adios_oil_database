@@ -27,6 +27,10 @@ from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DynamicViscosityList,
                                                      )
 from adios_db.models.oil.distillation import Distillation, DistCutList
+from adios_db.models.oil.sara import Sara
+from adios_db.models.oil.compound import Compound, CompoundList
+from adios_db.models.oil.bulk_composition import BulkComposition, BulkCompositionList
+
 from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction
 
 
@@ -125,6 +129,9 @@ def read_subsample(reader):
     ss = Sample(metadata=read_subsample_metadata(reader))
     ss.physical_properties = read_physical_properties(reader)
     ss.distillation_data = read_distillation_data(reader)
+    ss.SARA = read_sara(reader)
+    ss.compounds = read_compounds(reader)
+    ss.bulk_composition = read_bulk_composition(reader)
 
     return ss
 
@@ -156,7 +163,6 @@ def read_subsample_metadata(reader):
     md = SampleMetaData()
     # look for Physical Properties data, then stop
     for row in reader:
-        print("Processing:", row)
         if check_field_name(row[0], "Physical Properties"):
             # print("found Physical Properties: breaking out")
             break
@@ -212,7 +218,6 @@ def read_physical_properties(reader):
     # }
     # look for "Distillation Data" data, then stop
     for row in reader:
-        print("Processing:", row)
         if check_field_name(row[0], "Distillation Data"):
             print('found "Distillation Data": breaking out')
             break
@@ -242,7 +247,6 @@ def read_physical_properties(reader):
 def read_densities(reader):
     data = []
     for row in reader:
-        print(row)
         if (  check_field_name(row[0], "Density at temp")
               and "".join(row[1:]).strip()):
             data.append(read_val_at_temp_row(row[1:]))
@@ -258,32 +262,121 @@ def read_kvis(reader):
               and "".join(row[1:]).strip()):
             data.append(read_val_at_temp_row(row[1:]))
         else:
-            print("done: breaking out")
             break
-    print("data:", data)
-
     return KinematicViscosityList.from_data(data)
 
 
 def read_dvis(reader):
     data = []
     for row in reader:
-        print("processing:", row)
         if (  check_field_name(row[0], "Viscosity at temp")
               and "".join(row[1:]).strip()):
             data.append(read_val_at_temp_row(row[1:]))
         else:
-            print("done: breaking out")
             break
-    print("data:", data)
-
     return DynamicViscosityList.from_data(data)
+
+
+def read_sara(reader):
+    sara = Sara()
+    sara_names = {"saturates", "aromatics", "resins", "asphaltenes"}
+    for row in reader:
+        if check_field_name(row[0], "Compounds"):
+            print('found "Compounds": breaking out')
+            break
+        else:
+            name = row[0].strip().lower()
+            if name in sara_names:
+                setattr(sara, name, read_val_and_unit(row[1:]))
+            elif name == "method":
+                m = row[1].strip()
+                sara.method = m if m else None
+    return sara
+
+
+def read_compound(row):
+    """
+    reads  the compound data
+    name, fraction, frac_unit, method, comment, groups = read_compound(row)
+    """
+    name = row[0].strip()
+    if not name:
+        return None
+    fraction = float_or_placeholder(row[1])
+    frac_unit = row[2].strip()
+    method = row[3].strip()
+    comment = row[4].strip()
+    groups = [group for group in row[5:] if group.strip()]
+    return Compound(name=name,
+                    measurement=MassFraction(fraction, unit=frac_unit),
+                    method=method,
+                    comment=comment,
+                    groups=groups
+                    )
+
+
+def read_compounds(reader):
+    compounds = CompoundList()
+    for row in reader:
+        if check_field_name(row[0], "Bulk Composition"):
+            print('found "Bulk Composition": breaking out')
+            break
+        else:
+            first = row[0].strip().lower()
+            if not first.startswith('compound'):
+                # done with compounds -- or blank line?
+                continue
+            compound = read_compound(row[1:])
+            if compound is not None:
+                compounds.append(compound)
+
+    return compounds
+
+
+def read_bulk_composition_row(row):
+    """
+    reads  the compound data
+    Name,  fraction,  Fraction Unit, unit type, method,  comment, groups
+    """
+    name = row[0].strip()
+    if not name:
+        "no name, returning"
+        return None
+    fraction = float_or_placeholder(row[1])
+    frac_unit = row[2].strip()
+    unit_type = row[3].strip()
+    method = row[4].strip()
+    comment = row[5].strip()
+    groups = [group for group in row[6:] if group.strip()]
+    return BulkComposition(name=name,
+                    measurement=MassOrVolumeFraction(fraction, unit=frac_unit, unit_type=unit_type),
+                    method=method,
+                    comment=comment,
+                    groups=groups
+                    )
+
+def read_bulk_composition(reader):
+    bulk_comps = BulkCompositionList()
+    for row in reader:
+        print("Processing:", row)
+        if check_field_name(row[0], "Industry Properties"):
+            print('found "Industry Properties": breaking out')
+            break
+        else:
+            first = row[0].strip().lower()
+            if not first.startswith('composition'):
+                # done with compounds -- or blank line?
+                continue
+            bulk_comp = read_bulk_composition_row(row[1:])
+            if bulk_comp is not None:
+                bulk_comps.append(bulk_comp)
+
+    return bulk_comps
 
 
 def read_distillation_data(reader):
     dist_data = Distillation()
     for row in reader:
-        print("Processing:", row)
         if check_field_name(row[0], "SARA Analysis"):
             print('found "SARA Analysis": breaking out')
             break
@@ -315,7 +408,6 @@ def read_dist_cut_table(reader, unit_type):
     temp_unit = None
     for row in reader:
         if not row[0].strip().lower().startswith('cut'):
-            print("done with cuts: breaking out")
             break
         frac, frac_u, temp, temp_u = read_val_at_temp_row(row[1:])
         if frac is None or temp is None:
@@ -327,7 +419,7 @@ def read_dist_cut_table(reader, unit_type):
         if temp_unit is None:
             temp_unit = temp_u
         elif temp_u != temp_unit:
-            raise ValueError("fraction unit in distillation cuts should all be the same")
+            raise ValueError("temperature unit in distillation cuts should all be the same")
         fractions.append(frac)
         temps.append(temp)
 
@@ -377,7 +469,6 @@ def read_val_and_unit(row):
         return vals
     else:
         return None
-
 
 
 def read_val_at_temp_row(row):
