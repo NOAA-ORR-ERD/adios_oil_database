@@ -17,15 +17,17 @@ from adios_db.models.oil.physical_properties import (Density,
                                                      DynamicViscosityPoint
                                                      )
 
-from adios_db.data_sources.noaa_csv.reader import read_csv, read_measurement
+from adios_db.data_sources.noaa_csv.reader import (read_csv,
+                                                   read_measurement,
+                                                   float_or_placeholder,
+                                                   )
 
 
 HERE = Path(__file__).parent
 
-test_file = HERE / "example_data" / "LSU_AlaskaNorthSlope.csv"
+test_file1 = HERE / "example_data" / "LSU_AlaskaNorthSlope.csv"
 test_file2 = HERE / "example_data" / "example_noaa_csv.csv"
-
-
+test_file3 = HERE / "example_data" / "Average-VLSFO-AMSA-2022.csv"
 
 
 # make module level?
@@ -34,7 +36,7 @@ def test_record():
     """
     read the example record and return the resulting oil record
     """
-    oil = read_csv(test_file)
+    oil = read_csv(test_file1)
 
     return oil
 
@@ -46,6 +48,32 @@ def test_read_csv(test_record):
     oil = test_record
 
     assert oil.adios_data_model_version == ADIOS_DATA_MODEL_VERSION
+
+
+@pytest.mark.parametrize(('val', 'expected'), [("3.3", 3.3),
+                                               ("  3.3 ", 3.3),
+                                               ("  3", 3.0),
+                                               ("min_value", None),
+                                               ("  ", None),
+                                               ("", None),
+                                               ])
+def test_float_or_placeholder(val, expected):
+    """
+    make sure it returns None for empty and placeholder values
+    """
+    assert float_or_placeholder(val) == expected
+
+
+def test_float_or_placeholder_bad():
+    """
+    make sure it returns None for empty and placeholder values
+    """
+    with pytest.raises(ValueError):
+        float_or_placeholder("random non number")
+
+    with pytest.raises(ValueError):
+        float_or_placeholder("1.2.3")
+
 
 
 def test_metadata(test_record):
@@ -163,6 +191,22 @@ def test_read_dvis(test_record):
                                             ref_temp=Temperature(value=0.0, unit='C', unit_type='temperature'))
     assert dvis[1] == DynamicViscosityPoint(viscosity=DynamicViscosity(value=11.5, unit='cP', unit_type='dynamicviscosity'),
                                             ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
+
+def test_distillation():
+    """
+    make sure the distillation cuts are read correctly
+
+    In the context of a real file
+    """
+    oil = read_csv(test_file3)
+
+    dist = oil.sub_samples[0].distillation_data
+
+    print(dist)
+
+    assert False
+
+
 
 # def test_load():
 #     """

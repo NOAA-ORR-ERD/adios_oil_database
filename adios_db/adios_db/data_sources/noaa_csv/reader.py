@@ -59,7 +59,10 @@ class Reader():
         for row in reader:
             if check_field_name(row[0], "ADIOS Data Model Version"):
                 if Version(row[1]) != oil.adios_data_model_version:
-                    warnings.warn("Data model version mismatch -- possible errors on import")
+                    warnings.warn("Data model version mismatch -- possible errors on import\n"
+                                  f"Version in file: {row[1]}\n"
+                                  f"Version in code: {oil.adios_data_model_version}\n"
+                                  )
                 break
         # look for main metadata:
         for row in reader:
@@ -168,10 +171,16 @@ def read_subsample_metadata(reader):
                     md.fraction_evaporated = MassFraction(value=float(row[2]),
                                                           unit=strstrip(row[3]))
                 if check_field_name(row[0], "Boiling Point Range"):
-                    md.boiling_point_range = Temperature(min_value=float(row[1]),
-                                                         max_value=float(row[2]),
-                                                         unit=strstrip(row[3]))
+                    try:
+                        md.boiling_point_range = Temperature(min_value=float(row[1]),
+                                                             max_value=float(row[2]),
+                                                             unit=strstrip(row[3]))
+                    except ValueError:
+                        # to catch "min_value"
+                        # this could mask other errors, but for now
+                        pass
     return md
+
 
 def read_physical_properties(reader):
     """
@@ -285,6 +294,23 @@ def read_val_at_temp_row(row):
     return [float(row[0]), row[1].strip(), float(row[2]), row[3].strip()]
 
 
+def float_or_placeholder(val):
+    """
+    convert a string to a float
+
+    return None if empty, or a placeholder value: e.g. min_value
+
+    raise an exception is not a known placeholder, and not a float
+    """
+    if not val.strip() or 'value' in val:
+        return None
+    else:
+        try:
+            return float(val)
+        except ValueError:
+            raise ValueError(f"{val} is not a valid number")
+
+
 def read_measurement(items):
     """
     reads a sequence, and returns a dict of measurement values:
@@ -296,10 +322,34 @@ def read_measurement(items):
     """
     vals = {}
     for key, val in zip(('min_value', 'value', 'max_value' ), items[:3]):
-       vals[key] = float(val) if val.strip() else None
+       vals[key] = float_or_placeholder(val)
     vals['unit'] = strstrip(items[3])
 
     return vals
+
+
+def read_min_max_unit(row):
+    """
+    read a minimum, maximum unit row
+
+    assumes the field name is first item -- so ignores
+    """
+    data = {}
+    try:
+        data['min_value'] = float(row[1])
+    except ValuError:
+        if not "value" in row[1]:
+            raise
+    try:
+        data['max_value'] = float(row[2])
+    except ValuError:
+        if not "value" in row[2]:
+            raise
+    data['unit'] = row[2].strip()
+
+    return data
+
+
 
 def normalize(name):
     """
