@@ -26,8 +26,8 @@ from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      KinematicViscosityList,
                                                      DynamicViscosityList,
                                                      )
-from adios_db.models.common.measurement import MassFraction, Temperature
-
+from adios_db.models.oil.distillation import Distillation, DistCutList
+from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction
 
 
 def read_csv(filename, oil_id="PlaceHolder"):
@@ -124,6 +124,7 @@ def read_record_metadata(reader):
 def read_subsample(reader):
     ss = Sample(metadata=read_subsample_metadata(reader))
     ss.physical_properties = read_physical_properties(reader)
+    ss.distillation_data = read_distillation_data(reader)
 
     return ss
 
@@ -279,6 +280,106 @@ def read_dvis(reader):
     return DynamicViscosityList.from_data(data)
 
 
+def read_distillation_data(reader):
+    dist_data = Distillation()
+    for row in reader:
+        print("Processing:", row)
+        if check_field_name(row[0], "SARA Analysis"):
+            print('found "SARA Analysis": breaking out')
+            break
+        else:
+            if row[0].strip().lower().startswith("type"):
+                dist_data.type = row[1].strip()
+            elif check_field_name(row[0], "Method"):
+                dist_data.method = row[1].strip()
+            elif check_field_name(row[0], "Final Boiling Point"):
+                data = read_val_and_unit(row[0])
+                dist_data.end_point = Temperature(**data) if data is not None else None
+            elif check_field_name(row[0], "Fraction Recovered"):
+                data = read_val_and_unit(row[1:])
+                if data is not None:
+                    data['unit_type'] = dist_data.type
+                    dist_data.fraction_recovered = MassOrVolumeFraction(**data) if data is not None else None
+            elif check_field_name(row[0], "Distillation cuts"):
+                cuts = read_dist_cut_table(reader, unit_type=dist_data.type)
+                if cuts:
+                    dist_data.cuts = cuts
+
+    return dist_data
+
+
+def read_dist_cut_table(reader, unit_type):
+    fractions = []
+    temps = []
+    frac_unit = None
+    temp_unit = None
+    for row in reader:
+        if not row[0].strip().lower().startswith('cut'):
+            print("done with cuts: breaking out")
+            break
+        frac, frac_u, temp, temp_u = read_val_at_temp_row(row[1:])
+        if frac is None or temp is None:
+            continue
+        if frac_unit is None:
+            frac_unit = frac_u
+        elif frac_u != frac_unit:
+            raise ValueError("fraction unit in distillation cuts should all be the same")
+        if temp_unit is None:
+            temp_unit = temp_u
+        elif temp_u != temp_unit:
+            raise ValueError("fraction unit in distillation cuts should all be the same")
+        fractions.append(frac)
+        temps.append(temp)
+
+    return DistCutList.from_data_arrays(fractions,
+                                        temps,
+                                        frac_unit,
+                                        temp_unit,
+                                        unit_type=unit_type)
+
+
+def float_or_placeholder(val):
+    """
+    convert a string to a float
+
+    return None if empty, or a placeholder value: e.g. min_value
+
+    raise an exception is not a known placeholder, and not a float
+    """
+    placeholders = ['value', 'fraction']
+    if not val.strip():
+        return None
+    for placeholder in placeholders:
+        if placeholder in val:
+            return None
+    else:
+        try:
+            return float(val)
+        except ValueError:
+            raise ValueError(f"{val} is not a valid number")
+
+
+def read_val_and_unit(row):
+    """
+    reads a sequence, and returns a dict of measurement values:
+
+    (used for density, viscosity, etc)
+
+    returns: a sequence in proper types
+
+    [value, value_unit, temp, temp_unit]
+
+    """
+    val = float_or_placeholder(row[0])
+    if val is not None:
+        vals = {'value': val,
+                'unit': strstrip(row[1])}
+        return vals
+    else:
+        return None
+
+
+
 def read_val_at_temp_row(row):
     """
     reads a sequence, and returns a dict of measurement values:
@@ -290,25 +391,7 @@ def read_val_at_temp_row(row):
     [value, value_unit, temp, temp_unit]
 
     """
-    print("processing:", row)
-    return [float(row[0]), row[1].strip(), float(row[2]), row[3].strip()]
-
-
-def float_or_placeholder(val):
-    """
-    convert a string to a float
-
-    return None if empty, or a placeholder value: e.g. min_value
-
-    raise an exception is not a known placeholder, and not a float
-    """
-    if not val.strip() or 'value' in val:
-        return None
-    else:
-        try:
-            return float(val)
-        except ValueError:
-            raise ValueError(f"{val} is not a valid number")
+    return [float_or_placeholder(row[0]), row[1].strip(), float_or_placeholder(row[2]), row[3].strip()]
 
 
 def read_measurement(items):
@@ -350,7 +433,6 @@ def read_min_max_unit(row):
     return data
 
 
-
 def normalize(name):
     """
     normalizes a name:
@@ -361,6 +443,8 @@ def normalize(name):
 
 
 def check_field_name(field, name):
+    # this somehow broke a few things
+    # return normalize(name).startswith(normalize(field))
     return normalize(field) == normalize(name)
 
 

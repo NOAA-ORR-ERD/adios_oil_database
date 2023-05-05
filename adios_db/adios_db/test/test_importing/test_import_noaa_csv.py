@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 
+from adios_db.computation.physical_properties import get_distillation_cuts
 from adios_db.models.common.measurement import MassFraction, Temperature
 from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
 from adios_db.models.oil.physical_properties import (Density,
@@ -54,6 +55,7 @@ def test_read_csv(test_record):
                                                ("  3.3 ", 3.3),
                                                ("  3", 3.0),
                                                ("min_value", None),
+                                               ("  fraction ", None),
                                                ("  ", None),
                                                ("", None),
                                                ])
@@ -192,7 +194,7 @@ def test_read_dvis(test_record):
     assert dvis[1] == DynamicViscosityPoint(viscosity=DynamicViscosity(value=11.5, unit='cP', unit_type='dynamicviscosity'),
                                             ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
 
-def test_distillation():
+def test_distillation_header():
     """
     make sure the distillation cuts are read correctly
 
@@ -202,11 +204,43 @@ def test_distillation():
 
     dist = oil.sub_samples[0].distillation_data
 
-    print(dist)
+    assert dist.type.lower() == "mass fraction"
+    assert dist.method == ""
+    assert dist.end_point is None
+    assert dist.fraction_recovered.value == 100
+    assert dist.fraction_recovered.unit == '%'
 
-    assert False
 
+def test_distillation_cuts():
+    """
+    make sure the distillation cuts are read correctly
 
+    In the context of a real file
+    """
+    oil = read_csv(test_file3)
+
+    # cuts = oil.sub_samples[0].distillation_data.cuts
+
+    # to make it easier to read and test
+    cuts = get_distillation_cuts(oil, temp_units='C')
+
+    print(cuts)
+
+    assert cuts == [(0.015, 196.0),
+                    (0.051, 216.0),
+                    (0.095, 236.0),
+                    (0.14, 263.0),
+                    (0.223, 287.0),
+                    (0.265, 302.0),
+                    (0.347, 331.0),
+                    (0.423, 357.0),
+                    (0.492, 380.0),
+                    (0.555, 402.0),
+                    (0.631, 432.0),
+                    (0.708, 459.0),
+                    (0.777, 483.0),
+                    (0.822, 498.0),
+                    (0.873, 512.0)]
 
 # def test_load():
 #     """

@@ -7,6 +7,8 @@ import numpy as np
 
 import nucos as uc
 
+from adios_db.util import sigfigs
+
 
 class Density:
     """
@@ -458,12 +460,12 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
         if cut.fraction is None:
             f = None
         else:
-            f = cut.fraction.converted_to(units).value
+            f = sigfigs(cut.fraction.converted_to(units).value, sig=15)
 
         if cut.vapor_temp is None:
             t = None
         else:
-            t = cut.vapor_temp.converted_to(temp_units).value
+            t = sigfigs(cut.vapor_temp.converted_to(temp_units).value, sig=15)
 
         cuts_table.append((f, t))
 
