@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from adios_db.computation.physical_properties import get_distillation_cuts
-from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction
+from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction, AnyUnit
 from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
 from adios_db.models.oil.physical_properties import (Density,
                                                      DensityPoint,
@@ -21,6 +21,7 @@ from adios_db.models.oil.physical_properties import (Density,
 from adios_db.models.oil.sara import Sara
 from adios_db.models.oil.compound import Compound
 from adios_db.models.oil.bulk_composition import BulkComposition
+from adios_db.models.oil.industry_property import IndustryProperty
 
 from adios_db.data_sources.noaa_csv.reader import (read_csv,
                                                    read_measurement,
@@ -299,32 +300,37 @@ def test_bulk_composition():
                                            measurement=MassOrVolumeFraction(value=0.0207,
                                                                             unit="%",
                                                                             unit_type="Mass Fraction"))
+def test_industry_properties():
+    """
+    The "example_noaa_csv.csv" has one bulk composition
+    """
+    oil = read_csv(test_file2)
 
-    # """
-    # object to hold bulk composition -- could be mass or volume fraction
-    # """
-    # name: str = ""
-    # groups: list = field(default_factory=list)
-    # method: str = ""
-    # measurement: MassOrVolumeFraction = None
-    # comment:
+    ind_prop = oil.sub_samples[0].industry_properties
+
+    assert len(ind_prop) == 1
+
+    expected = IndustryProperty(name='Reid Vapor Pressure',
+                               method='a method',
+                               measurement=AnyUnit(value=0.7,
+                                                   unit="PSI",
+                                                   unit_type="pressure"))
+
+    assert ind_prop[0] == expected
+
+def test_full_record():
+    """
+    tests a modestly complete record
+    """
+
+    oil = read_csv(test_file3)
+
+    msgs = oil.validate()
+    assert not msgs
+
+    oil.to_file(HERE / "example_data" / "Average-VLSFO-AMSA-2022.json")
 
 
-# def test_load():
-#     """
-#     Just to have more than one -- very basic test
 
-#     test whether the whole thing loads
 
-#     This isn't really unit testing, but I'm lazy right now :-(
-#     """
-#     oil = read_csv(test_file2)
 
-#     assert oil.metadata.name == "DMA, Chevron -- 2021"
-#     assert oil.metadata.API == 36.5
-#     assert oil.metadata.source_id == "xx-123"
-#     assert oil.metadata.alternate_names == ["Fred", "Bob"]
-#     assert oil.metadata.location == "California"
-
-#     assert oil.metadata.reference.year == 2021
-#     assert oil.metadata.reference.reference == 'Barker, C.H. 2021. "A CSV file reader for the ADIOS Oil Database."'

@@ -30,8 +30,10 @@ from adios_db.models.oil.distillation import Distillation, DistCutList
 from adios_db.models.oil.sara import Sara
 from adios_db.models.oil.compound import Compound, CompoundList
 from adios_db.models.oil.bulk_composition import BulkComposition, BulkCompositionList
+from adios_db.models.oil.industry_property import IndustryProperty, IndustryPropertyList
 
-from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction
+
+from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction, AnyUnit
 
 
 def read_csv(filename, oil_id="PlaceHolder"):
@@ -132,6 +134,7 @@ def read_subsample(reader):
     ss.SARA = read_sara(reader)
     ss.compounds = read_compounds(reader)
     ss.bulk_composition = read_bulk_composition(reader)
+    ss.industry_properties = read_industry_properties(reader)
 
     return ss
 
@@ -164,7 +167,7 @@ def read_subsample_metadata(reader):
     # look for Physical Properties data, then stop
     for row in reader:
         if check_field_name(row[0], "Physical Properties"):
-            # print("found Physical Properties: breaking out")
+            print("found Physical Properties: breaking out")
             break
         else:
             # this could be more efficient with a dict lookup, rather than a loop
@@ -349,16 +352,15 @@ def read_bulk_composition_row(row):
     comment = row[5].strip()
     groups = [group for group in row[6:] if group.strip()]
     return BulkComposition(name=name,
-                    measurement=MassOrVolumeFraction(fraction, unit=frac_unit, unit_type=unit_type),
-                    method=method,
-                    comment=comment,
-                    groups=groups
-                    )
+                           measurement=MassOrVolumeFraction(fraction, unit=frac_unit, unit_type=unit_type),
+                           method=method,
+                           comment=comment,
+                           groups=groups
+                           )
 
 def read_bulk_composition(reader):
     bulk_comps = BulkCompositionList()
     for row in reader:
-        print("Processing:", row)
         if check_field_name(row[0], "Industry Properties"):
             print('found "Industry Properties": breaking out')
             break
@@ -372,6 +374,46 @@ def read_bulk_composition(reader):
                 bulk_comps.append(bulk_comp)
 
     return bulk_comps
+
+
+def read_industry_properties_row(row):
+    """
+    reads  the compound data
+    Name,  fraction,  Fraction Unit, unit type, method,  comment, groups
+    """
+    name = row[0].strip()
+    if not name:
+        "no name, returning"
+        return None
+    value = float_or_placeholder(row[1])
+    if value is None:
+        # not value, returning
+        return None
+    unit = row[2].strip()
+    unit_type = row[3].strip()
+    method = row[4].strip()
+    return IndustryProperty(name=name,
+                            measurement=AnyUnit(value=value, unit=unit, unit_type=unit_type),
+                            method=method,
+                            )
+
+def read_industry_properties(reader):
+    ind_props = IndustryPropertyList()
+    for row in reader:
+        print("Processing:", row)
+        if check_field_name(row[0], "Subsample Metadata"):
+            print('found "Subsample Metadata": breaking out')
+            break
+        else:
+            first = row[0].strip().lower()
+            if not first.startswith('property'):
+                # done with compounds -- or blank line?
+                continue
+            ind_prop = read_industry_properties_row(row[1:])
+            if ind_prop is not None:
+                ind_props.append(ind_prop)
+
+    return ind_props
 
 
 def read_distillation_data(reader):
