@@ -25,6 +25,8 @@ import traceback
 import csv
 from argparse import ArgumentParser
 
+from numpy import isclose
+
 from adios_db.util.term import TermColor as tc
 from adios_db.util.db_connection import connect_mongodb
 from adios_db.util.settings import file_settings, default_settings
@@ -151,7 +153,8 @@ def compare_eccc_oils(settings, source_file, output_file):
     db = client.get_database(settings['mongodb.database'])
     oil_collection = db.oil
 
-    with EnvCanadaCsvFile1999(source_file) as reader, open(output_file, 'w', newline='') as out_fd:
+    with EnvCanadaCsvFile1999(source_file) as reader, \
+            open(output_file, 'w', newline='') as out_fd:
         writer = csv.writer(out_fd, delimiter=',', quotechar='"',
                             quoting=csv.QUOTE_MINIMAL)
         write_header(writer)
@@ -173,7 +176,8 @@ def compare_eccc_oils(settings, source_file, output_file):
             for r in find_matching_oils(oil_collection, oil.metadata.name):
                 adios_oil = validate_json(r)
 
-                write_data_row(writer, oil, adios_oil)
+                if oils_match(oil, adios_oil):
+                    write_data_row(writer, oil, adios_oil)
 
     print('\nFinished comparing the ECCC records!\n')
 
@@ -186,12 +190,34 @@ def find_matching_oils(collection, query_string):
     })
 
 
+def oils_match(oil, adios_oil):
+    """
+    This is the main function for determining if a pair of oils are a
+    close enough match to write them out to the spreadsheet.
+    Individual criteria are matched with sub-functions.
+    """
+    return oils_match_api(oil, adios_oil)
+
+
+def oils_match_api(oil, adios_oil):
+    # isclose() can't handle None values, so we handle them here.
+    if (oil.metadata.API is None and adios_oil.metadata.API is None):
+        return True
+    elif (oil.metadata.API is None or adios_oil.metadata.API is None):
+        return False
+
+    return isclose(oil.metadata.API, adios_oil.metadata.API,
+                   atol=0.1)
+
+
 def write_header(writer):
     writer.writerow([
         'ECCC Oil ID',
         'ECCC Oil Name',
         'Adios Oil ID',
         'Adios Oil Name',
+        'ECCC API',
+        'Adios API',
         'Adios Reference Year',
         'Adios Reference'
     ])
@@ -203,6 +229,8 @@ def write_data_row(writer, eccc_oil, adios_oil):
         eccc_oil.metadata.name,
         adios_oil.oil_id,
         adios_oil.metadata.name,
+        eccc_oil.metadata.API,
+        adios_oil.metadata.API,
         adios_oil.metadata.reference.year,
         adios_oil.metadata.reference.reference,
     ])
