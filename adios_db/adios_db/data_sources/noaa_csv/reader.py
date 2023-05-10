@@ -282,18 +282,33 @@ def read_dvis(reader):
 
 def read_sara(reader):
     sara = Sara()
-    sara_names = {"saturates", "aromatics", "resins", "asphaltenes"}
+    sara_names = {n:i for n, i in zip(("saturates", "aromatics", "resins", "asphaltenes"), range(4))}
+    sara_data = [None] * 4
+    unit = None
+    method = None
     for row in reader:
         if check_field_name(row[0], "Compounds"):
             print('found "Compounds": breaking out')
             break
         else:
             name = row[0].strip().lower()
-            if name in sara_names:
-                setattr(sara, name, read_val_and_unit(row[1:]))
-            elif name == "method":
+            if name == "method":
                 m = row[1].strip()
-                sara.method = m if m else None
+                method = m if m else None
+            elif name in sara_names:
+                data = read_val_and_unit(row[1:])
+                if data is not None:
+                    if unit is not None:
+                        if unit != data["unit"]:
+
+                            raise ValueError("units must be consistent in SARA data:"
+                                             f"{unit} and {data.unit()}")
+                    else:
+                        unit = data['unit']
+                    sara_data[sara_names[name]] = data['value']
+    sara = Sara.from_data(sara_data, unit)
+    sara.method = method
+
     return sara
 
 
@@ -397,10 +412,10 @@ def read_industry_properties_row(row):
                             method=method,
                             )
 
+
 def read_industry_properties(reader):
     ind_props = IndustryPropertyList()
     for row in reader:
-        print("Processing:", row)
         if check_field_name(row[0], "Subsample Metadata"):
             print('found "Subsample Metadata": breaking out')
             break

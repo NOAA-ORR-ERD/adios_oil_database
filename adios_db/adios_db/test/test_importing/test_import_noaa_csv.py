@@ -34,6 +34,7 @@ HERE = Path(__file__).parent
 test_file1 = HERE / "example_data" / "LSU_AlaskaNorthSlope.csv"
 test_file2 = HERE / "example_data" / "example_noaa_csv.csv"
 test_file3 = HERE / "example_data" / "Average-VLSFO-AMSA-2022.csv"
+test_file4 = HERE / "example_data" / "Generic_Diesel_1052023.csv"
 
 
 # make module level?
@@ -258,10 +259,10 @@ def test_sara():
     sara = oil.sub_samples[0].SARA
 
     print(sara)
-    assert sara == Sara(saturates={'value': 54.5, 'unit': '%'},
-                        aromatics={'value': 23.1, 'unit': '%'},
-                        resins={'value': 16.7, 'unit': '%'},
-                        asphaltenes={'value': 5.7, 'unit': '%'})
+    assert sara == Sara(saturates=MassFraction(value=54.5, unit='%'),
+                        aromatics=MassFraction(value=23.1, unit='%'),
+                        resins=MassFraction(value=16.7, unit='%'),
+                        asphaltenes=MassFraction(value=5.7, unit='%'))
 
 
 def test_compounds():
@@ -311,24 +312,30 @@ def test_industry_properties():
     assert len(ind_prop) == 1
 
     expected = IndustryProperty(name='Reid Vapor Pressure',
-                               method='a method',
-                               measurement=AnyUnit(value=0.7,
-                                                   unit="PSI",
-                                                   unit_type="pressure"))
+                                method='a method',
+                                measurement=AnyUnit(value=0.7,
+                                                    unit="PSI",
+                                                    unit_type="pressure"))
 
     assert ind_prop[0] == expected
 
-def test_full_record():
+
+@pytest.mark.parametrize('filename', [test_file3])
+def test_full_record(filename):
     """
     tests a modestly complete record
     """
 
-    oil = read_csv(test_file3)
+    oil = read_csv(filename)
+    outfilename = filename.with_suffix(".json")
+    print("writing:", outfilename)
+
+    oil.to_file(outfilename)
 
     msgs = oil.validate()
-    assert not msgs
 
-    oil.to_file(HERE / "example_data" / "Average-VLSFO-AMSA-2022.json")
+    assert len(msgs) == 0
+
 
 
 

@@ -134,6 +134,8 @@ class MeasurementBase(MeasurementDataclass):
 
         msgs = []
 
+        if not hasattr(self, "is_empty"):
+            raise TypeError(f"{self} is not a valid field type for a measurement")
         if self.is_empty():
             # an empty dataclass is not necessarily an error, as it will likely
             # get pruned when converted back to py_json

@@ -24,8 +24,12 @@ class DistCutList(JSON_List):
     item_type = DistCut
 
     @classmethod
-    def from_data_arrays(cls, fractions, temps,
-                         frac_unit, temp_unit, unit_type="MassFraction"):
+    def from_data_arrays(cls,
+                         fractions,
+                         temps,
+                         frac_unit,
+                         temp_unit,
+                         unit_type="MassFraction"):
         """
         Create a DistCutList from arrays of dist cut data
 
