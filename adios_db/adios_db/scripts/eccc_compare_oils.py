@@ -37,6 +37,7 @@ from adios_db.data_sources.env_canada.v3 import (EnvCanadaCsvFile1999,
                                                  EnvCanadaCsvRecordParser1999,
                                                  EnvCanadaCsvRecordMapper1999)
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -71,7 +72,7 @@ argp.add_argument('--config', nargs=1,
 argp.add_argument('--source', nargs=1,
                   help=('Specify the path to the ECCC source data file.  '
                         'This must be a .csv file.'))
-argp.add_argument('--output', nargs=1,
+argp.add_argument('--output-prefix', nargs=1,
                   help=('Specify the path of a file that we will '
                         'write our results to.'))
 
@@ -93,14 +94,16 @@ def compare_eccc_oils_cmd(argv=sys.argv):
 
     try:
         source_file = normalize_file(args.source[0], 'Source file')
-        output_file = normalize_file(args.output[0], 'Output file')
+        compare_file, unmatched_file = generate_output_fileset(
+            args.output_prefix[0]
+        )
     except Exception as e:
         print(e)
         argp.print_help()
         exit(1)
 
     try:
-        compare_eccc_oils(settings, source_file, output_file)
+        compare_eccc_oils(settings, source_file, compare_file, unmatched_file)
     except Exception:
         print('{0}() FAILED!!!\n'.format(compare_eccc_oils.__name__))
         raise
@@ -117,7 +120,6 @@ def normalize_file(source_file, file_description='File'):
     if source_file is None:
         raise ValueError(f'{file_description} not specified!')
 
-    print(f'splitting filename: {source_file}')
     base, name = os.path.split(source_file)
 
     if len(name) < 1:
@@ -131,7 +133,20 @@ def normalize_file(source_file, file_description='File'):
     return os.path.join(base, name)
 
 
-def compare_eccc_oils(settings, source_file, output_file):
+def generate_output_fileset(prefix):
+    """
+    We will expect a filename prefix with which we generate two filenames.
+    - An output file to write our table of possible matches.  It will have
+      a filename like '{prefix}.possible_matches.csv'.
+    - an output file to write our table of records that have no matches.
+      It will have a filename like '{prefix}.unmatched.csv'
+    """
+    prefix = prefix[:-4] if prefix.endswith('.csv') else prefix
+
+    return f'{prefix}.possible_matches.csv', f'{prefix}.unmatched.csv'
+
+
+def compare_eccc_oils(settings, source_file, compare_file, unmatched_file):
     """
     Here is where we read our source data file, which should be the ECCC
     .csv data file.
@@ -154,12 +169,19 @@ def compare_eccc_oils(settings, source_file, output_file):
     oil_collection = db.oil
 
     with EnvCanadaCsvFile1999(source_file) as reader, \
-            open(output_file, 'w', newline='') as out_fd:
-        writer = csv.writer(out_fd, delimiter=',', quotechar='"',
-                            quoting=csv.QUOTE_MINIMAL)
-        write_header(writer)
+            open(compare_file, 'w', newline='') as compare_fd, \
+            open(unmatched_file, 'w', newline='') as unmatched_fd:
+        total_read = total_matched = total_unmatched = 0
+        compare_writer = csv.writer(compare_fd, delimiter=',', quotechar='"',
+                                    quoting=csv.QUOTE_MINIMAL)
+        write_compare_file_header(compare_writer)
+
+        unmatched_writer = csv.writer(unmatched_fd, delimiter=',',
+                                      quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        write_unmatched_file_header(unmatched_writer)
 
         for record_data in reader.get_records():
+            total_read += 1
             try:
                 oil_mapper = EnvCanadaCsvRecordMapper1999(
                     EnvCanadaCsvRecordParser1999(*record_data)
@@ -173,13 +195,23 @@ def compare_eccc_oils(settings, source_file, output_file):
 
             print(f'oil_id: {oil.oil_id}, oil_name: {oil.metadata.name}')
 
+            match_found = False
+
             for r in find_matching_oils(oil_collection, oil.metadata.name):
                 adios_oil = validate_json(r)
 
                 if oils_match(oil, adios_oil):
-                    write_data_row(writer, oil, adios_oil)
+                    match_found = True
+                    total_matched += 1
+                    write_compare_file_data_row(compare_writer, oil, adios_oil)
 
-    print('\nFinished comparing the ECCC records!\n')
+            if not match_found:
+                total_unmatched += 1
+                write_unmatched_file_data_row(unmatched_writer, oil)
+
+    print('\nFinished comparing the ECCC records!\n'
+          f'{total_read} read, '
+          f'{total_matched} matches, {total_unmatched} unmatched\n')
 
 
 def find_matching_oils(collection, query_string):
@@ -210,7 +242,7 @@ def oils_match_api(oil, adios_oil):
                    atol=0.1)
 
 
-def write_header(writer):
+def write_compare_file_header(writer):
     writer.writerow([
         'ECCC Oil ID',
         'ECCC Oil Name',
@@ -223,7 +255,7 @@ def write_header(writer):
     ])
 
 
-def write_data_row(writer, eccc_oil, adios_oil):
+def write_compare_file_data_row(writer, eccc_oil, adios_oil):
     writer.writerow([
         eccc_oil.oil_id,
         eccc_oil.metadata.name,
@@ -233,4 +265,20 @@ def write_data_row(writer, eccc_oil, adios_oil):
         adios_oil.metadata.API,
         adios_oil.metadata.reference.year,
         adios_oil.metadata.reference.reference,
+    ])
+
+
+def write_unmatched_file_header(writer):
+    writer.writerow([
+        'ECCC Oil ID',
+        'ECCC Oil Name',
+        'ECCC API',
+    ])
+
+
+def write_unmatched_file_data_row(writer, eccc_oil):
+    writer.writerow([
+        eccc_oil.oil_id,
+        eccc_oil.metadata.name,
+        eccc_oil.metadata.API,
     ])
