@@ -13,6 +13,7 @@ from .location_coordinates import LocationCoordinates
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
+from .validation import is_not_iso_or_year
 
 
 @dataclass_to_json
@@ -93,13 +94,11 @@ class MetaData:
             msgs.append(WARNINGS["W001"].format(self.name))
 
         # check sample date is valid
-        if self.sample_date:
-            try:
-                datetime.fromisoformat(self.sample_date)
-            except ValueError as err:
-                msgs.append(WARNINGS["W011"].format(
-                    "sample date", self.sample_date, str(err)
-                ))
+        sd = self.sample_date
+        if sd:
+            err = is_not_iso_or_year(sd)
+            if err:
+                msgs.append(WARNINGS["W011"].format("sample date", self.sample_date, str(err)))
 
         return msgs
 

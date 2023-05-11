@@ -18,8 +18,11 @@ from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
 from adios_db.models.oil.physical_properties import DensityPoint
 from adios_db.models.oil.validation.validate import validate_json, validate
-from adios_db.models.oil.validation import (unpack_status, is_only_ignored,
-                                            ERRORS_TO_IGNORE)
+from adios_db.models.oil.validation import (unpack_status,
+                                            is_only_ignored,
+                                            ERRORS_TO_IGNORE,
+                                            is_not_iso_or_year,
+                                            )
 
 from adios_db.scripting import get_all_records
 
@@ -59,6 +62,23 @@ def test_is_only_ignored_false():
     status_dict["F32"] = ["nothing important"]
 
     assert not is_only_ignored(status_dict)
+
+
+def test_is_not_iso_or_year_good():
+    assert is_not_iso_or_year("2021-12-03") is False
+
+
+def test_is_not_iso_or_year_bad():
+    assert is_not_iso_or_year("2x021-12-03") == 'must be a year or iso datestring'
+
+
+def test_is_not_iso_or_year_year():
+    assert is_not_iso_or_year("2021") is False
+
+
+def test_is_not_iso_or_year_bad_year():
+    assert is_not_iso_or_year("123") == 'must be a valid year or iso datestring'
+
 
 
 @pytest.fixture

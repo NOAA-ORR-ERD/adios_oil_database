@@ -320,7 +320,9 @@ def test_industry_properties():
     assert ind_prop[0] == expected
 
 
-@pytest.mark.parametrize('filename', [test_file3])
+@pytest.mark.parametrize('filename', [test_file3,
+                                      test_file1,
+                                      ])
 def test_full_record(filename):
     """
     tests a modestly complete record
