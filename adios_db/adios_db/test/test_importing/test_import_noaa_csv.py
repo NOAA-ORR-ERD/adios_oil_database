@@ -323,7 +323,7 @@ def test_industry_properties():
 @pytest.mark.parametrize('filename', [test_file1,
                                       test_file2,
                                       test_file3,
-                                      test_file4,
+#                                      test_file4,  # need valid generic diesel record first
                                       ])
 def test_full_record(filename):
     """
