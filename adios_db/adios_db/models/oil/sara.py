@@ -31,7 +31,6 @@ class Sara:
         :param unit: unit -- must be mass fraction, e.g. 'fraction', "%"
 
         """
-        print("in sara.from_data", data, unit)
         sara = cls()
         for field, value in zip(("saturates", "aromatics", "resins", "asphaltenes"), data):
             if value is not None:

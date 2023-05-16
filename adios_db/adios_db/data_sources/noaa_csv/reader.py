@@ -15,6 +15,8 @@ from pathlib import Path
 import sys
 import warnings
 
+import nucos
+
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.version import Version
 from adios_db.models.oil.metadata import MetaData, SampleMetaData
@@ -31,9 +33,26 @@ from adios_db.models.oil.sara import Sara
 from adios_db.models.oil.compound import Compound, CompoundList
 from adios_db.models.oil.bulk_composition import BulkComposition, BulkCompositionList
 from adios_db.models.oil.industry_property import IndustryProperty, IndustryPropertyList
-
+from adios_db.models.oil.cleanup import FixAPI
 
 from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction, AnyUnit
+
+import logging
+
+logging.debug('A debug log message')
+
+def padded_csv_reader(file_path, num_fields=6):
+    """
+    a csv reader that pads the rows to always include the specified number of blank fields
+    """
+    with open(file_path, encoding="utf-8-sig") as infile:
+        reader = csv.reader(infile, dialect='excel')
+        for row in reader:
+            row += [""] * (num_fields - len(row))
+            # this broke a lot -- which is odd, but ???
+            # row = [f.strip() for f in row]
+            print("processing:", row)
+            yield row
 
 
 def read_csv(filename, oil_id="PlaceHolder"):
@@ -53,10 +72,7 @@ class Reader():
 
         Return an Oil object
         """
-
-        infile = open(infilename, encoding="utf-8-sig")
-
-        reader = csv.reader(infile, dialect='excel')
+        reader = padded_csv_reader(infilename)
 
         oil = Oil('XXXXXX')
 
@@ -78,11 +94,16 @@ class Reader():
         oil.metadata = read_record_metadata(reader)
         # load the subsamples:
         while True:
-            print("about the read the sub_samples")
+            # print("about the read the sub_samples")
             oil.sub_samples.append(read_subsample(reader))
             break
 
+        # add in API if it's not there:
+        if not oil.metadata.API:
+            FixAPI(oil).cleanup()
+
         self.oil = oil
+
 
 def read_record_metadata(reader):
     """
@@ -106,8 +127,11 @@ def read_record_metadata(reader):
     }
     md = MetaData()
     # look for subsample data, then stop
+    print("reading record metadata")
     for row in reader:
+        print("row", row)
         if check_field_name(row[0], "Subsample Metadata"):
+            print("found Subsample metadata, breaking out")
             break
         else:
             # this could be more efficient with a dict lookup, rather than a loop
@@ -118,7 +142,7 @@ def read_record_metadata(reader):
                     setattr(md, attr, func(row[1]))
             except KeyError:
                 if check_field_name(row[0], "Reference"):
-                    md.reference = Reference(int(row[1]), row[2])
+                    md.reference = Reference(int(row[1]), row[2].strip())
                 if check_field_name(row[0], "Alternate Names"):
                     md.alternate_names = [n.strip() for n in row[1:] if n.strip()]
                 if check_field_name(row[0], "Labels"):
@@ -128,6 +152,7 @@ def read_record_metadata(reader):
 
 
 def read_subsample(reader):
+    print("reading subsample")
     ss = Sample(metadata=read_subsample_metadata(reader))
     ss.physical_properties = read_physical_properties(reader)
     ss.distillation_data = read_distillation_data(reader)
@@ -211,6 +236,7 @@ def read_physical_properties(reader):
     interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     """
+    print("reading physical Properties")
     pp = PhysicalProperties()
 
     # pp_map = {
@@ -221,19 +247,12 @@ def read_physical_properties(reader):
     # }
     # look for "Distillation Data" data, then stop
     for row in reader:
+        print(row)
         if check_field_name(row[0], "Distillation Data"):
             print('found "Distillation Data": breaking out')
             break
         else:
             pass
-            # # this could be more efficient with a dict lookup, rather than a loop
-            # # but would require normalization
-            # try:
-            #     if row[1]:
-            #         attr, func = metadata_map[normalize(row[0])]
-            #         setattr(md, attr, func(row[1]))
-            # except KeyError:
-
             if check_field_name(row[0], "Pour Point"):
                 pp.pour_point = Temperature(**read_measurement(row[1:]))
             if check_field_name(row[0], "Flash Point"):
@@ -432,59 +451,81 @@ def read_industry_properties(reader):
 
 
 def read_distillation_data(reader):
-    dist_data = Distillation()
-    for row in reader:
-        if check_field_name(row[0], "SARA Analysis"):
-            print('found "SARA Analysis": breaking out')
-            break
-        else:
-            if row[0].strip().lower().startswith("type"):
-                dist_data.type = row[1].strip()
-            elif check_field_name(row[0], "Method"):
-                dist_data.method = row[1].strip()
-            elif check_field_name(row[0], "Final Boiling Point"):
-                data = read_val_and_unit(row[0])
-                dist_data.end_point = Temperature(**data) if data is not None else None
-            elif check_field_name(row[0], "Fraction Recovered"):
-                data = read_val_and_unit(row[1:])
-                if data is not None:
-                    data['unit_type'] = dist_data.type
-                    dist_data.fraction_recovered = MassOrVolumeFraction(**data) if data is not None else None
-            elif check_field_name(row[0], "Distillation cuts"):
-                cuts = read_dist_cut_table(reader, unit_type=dist_data.type)
-                if cuts:
-                    dist_data.cuts = cuts
+    try:
+        dist_data = Distillation()
+        for row in reader:
+            if check_field_name(row[0], "SARA Analysis"):
+                print('found "SARA Analysis": breaking out')
+                break
+            else:
+                if row[0].strip().lower().startswith("type"):
+                    dist_data.type = row[1].strip()
+                elif check_field_name(row[0], "Method"):
+                    dist_data.method = row[1].strip()
+                elif check_field_name(row[0], "Final Boiling Point"):
+                    data = read_val_and_unit(row[1:])
+                    dist_data.end_point = Temperature(**data) if data is not None else None
+                elif check_field_name(row[0], "Fraction Recovered"):
+                    data = read_val_and_unit(row[1:])
+                    if data is not None:
+                        data['unit_type'] = dist_data.type
+                        dist_data.fraction_recovered = MassOrVolumeFraction(**data) if data is not None else None
+                elif check_field_name(row[0], "Distillation cuts"):
+                    cuts = read_dist_cut_table(reader, unit_type=dist_data.type)
+                    print("dist cuts:", cuts)
+                    if cuts:
+                        dist_data.cuts = cuts
+    except: # bare except because it's going to re-raise
+        print("*** Error reading Distillation data. Last row read:")
+        print(row)
+        raise
 
     return dist_data
 
 
 def read_dist_cut_table(reader, unit_type):
+    print("reading distillation cuts")
+
     fractions = []
     temps = []
     frac_unit = None
     temp_unit = None
-    for row in reader:
-        if not row[0].strip().lower().startswith('cut'):
-            break
-        frac, frac_u, temp, temp_u = read_val_at_temp_row(row[1:])
-        if frac is None or temp is None:
-            continue
-        if frac_unit is None:
-            frac_unit = frac_u
-        elif frac_u != frac_unit:
-            raise ValueError("fraction unit in distillation cuts should all be the same")
-        if temp_unit is None:
-            temp_unit = temp_u
-        elif temp_u != temp_unit:
-            raise ValueError("temperature unit in distillation cuts should all be the same")
-        fractions.append(frac)
-        temps.append(temp)
+    try:
+        for row in reader:
+            print("in cut table:", row)
+            if not row[0].strip().lower().startswith('cut'):
+                print("not a cut, breaking out")
+                break
+            frac, frac_u, temp, temp_u = read_val_at_temp_row(row[1:])
+            if frac is None or temp is None:
+                continue
+            if frac_unit is None:
+                frac_unit = frac_u
+            elif frac_u != frac_unit:
+                raise ValueError("fraction unit in distillation cuts should all be the same")
+            if temp_unit is None:
+                temp_unit = temp_u
+            elif temp_u != temp_unit:
+                raise ValueError("temperature unit in distillation cuts should all be the same")
+            fractions.append(frac)
+            temps.append(temp)
+            print(fractions)
+            print(temps)
+    except:
+        print("*** Error reading distillation cuts: last row read:")
+        print(row)
+        raise
 
-    return DistCutList.from_data_arrays(fractions,
-                                        temps,
-                                        frac_unit,
-                                        temp_unit,
-                                        unit_type=unit_type)
+    try:
+        DCL = DistCutList.from_data_arrays(fractions,
+                                           temps,
+                                           frac_unit,
+                                           temp_unit,
+                                           unit_type=unit_type)
+    except nucos.InvalidUnitTypeError:
+        print('Distillation type must be "Mass Fraction" or "Volume Fraction"')
+        raise
+    return DCL
 
 
 def float_or_placeholder(val):
@@ -495,7 +536,7 @@ def float_or_placeholder(val):
 
     raise an exception is not a known placeholder, and not a float
     """
-    placeholders = ['value', 'fraction']
+    placeholders = ['value', 'fraction', 'temp']
     if not val.strip():
         return None
     for placeholder in placeholders:
@@ -587,7 +628,7 @@ def normalize(name):
       removes whitespace
       lower cases it
     """
-    return "".join(name.split()).lower()
+    return "".join(name.split()).lower().rstrip(':')
 
 
 def check_field_name(field, name):

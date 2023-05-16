@@ -48,6 +48,7 @@ __all__ = [
 ]
 
 
+
 @dataclass_to_json
 @dataclass
 class MeasurementDataclass:
@@ -387,7 +388,7 @@ class MassOrVolumeFraction(MeasurementBase):
                                  'concentration'}:
                 raise AttributeError
         except AttributeError:
-            raise ValueError(
+            raise nucos.InvalidUnitTypeError(
                 "unit_type must be one of: "
                 "'massfraction', 'volumefraction', 'concentration'\n"
                 f"args: {args}, kwargs: {kwargs}")
