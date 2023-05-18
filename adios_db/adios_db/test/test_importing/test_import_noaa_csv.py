@@ -16,7 +16,9 @@ from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
 from adios_db.models.oil.physical_properties import (Density,
                                                      DensityPoint,
                                                      DynamicViscosity,
-                                                     DynamicViscosityPoint
+                                                     DynamicViscosityPoint,
+                                                     PourPoint,
+                                                     FlashPoint,
                                                      )
 
 from adios_db.models.oil.sara import Sara
@@ -28,10 +30,14 @@ from adios_db.data_sources.noaa_csv.reader import (read_csv,
                                                    read_measurement,
                                                    float_or_placeholder,
                                                    padded_csv_reader,
+                                                   empty_measurement,
                                                    )
 
+from adios_db.computation.gnome_oil import make_gnome_oil
 
-adios_db.initialize_console_log(level='debug')
+
+# uncomment if you want to see all the debugging output on failure.
+# adios_db.initialize_console_log(level='debug')
 
 
 HERE = Path(__file__).parent
@@ -114,6 +120,21 @@ def test_float_or_placeholder_bad():
         float_or_placeholder("1.2.3")
 
 
+@pytest.mark.parametrize('vals', [{'value':0.0, 'min_value':None, 'max_value':None, 'unit':'C'},
+                                  {'value':None, 'min_value':1.0, 'max_value':None, 'unit':'C'},
+                                  {'value':None, 'min_value':'', 'max_value':2.0, 'unit':'C'},
+                                  ])
+def test_empty_measurement_not_empty(vals):
+    m = Temperature(**vals)
+    assert not empty_measurement(m)
+
+
+def test_empty_measurement():
+    vals = {'value':None, 'min_value':None, 'max_value':None, 'unit':'C'}
+    m = Temperature(**vals)
+    assert empty_measurement(m)
+
+
 
 def test_metadata(test_record):
     """
@@ -161,11 +182,12 @@ def test_subsample_metadata_0(attr, value, test_record):
 
 
 @pytest.mark.parametrize("attr, value",
-                         [('pour_point', Temperature(32, unit='C')),
-                          ('flash_point', Temperature(max_value=-8, unit='C')),
+                         [('pour_point', PourPoint(Temperature(32, unit='C'))),
+                          ('flash_point', FlashPoint(Temperature(max_value=-8, unit='C'))),
                           ])
 def test_subsample_physical_properties(attr, value, test_record):
     pp = test_record.sub_samples[0].physical_properties
+    print(attr, getattr(pp, attr))
     assert getattr(pp, attr) == value
 
 
@@ -372,6 +394,7 @@ def test_generic_csv():
     pp = ss.physical_properties
 
     assert len(pp.densities) == 3
+    assert len(pp.kinematic_viscosities) == 3
 
     dist = ss.distillation_data
 
@@ -379,11 +402,24 @@ def test_generic_csv():
 
     assert md.API == 34.2
 
+    msgs = oil.validate()
+
+    # This should change once we get a new generic diesel csv
+    assert len(msgs) == 3
+    for msg in msgs:
+        assert msg.startswith("W010")  # the warnings about C-K conversion issue
+
+    # make sure it's GNOME Suitable
+    go = make_gnome_oil(oil)
+
+
+
+
 
 @pytest.mark.parametrize('filename', [test_file1,
                                       test_file2,
                                       test_file3,
-                                      test_file4,  # need valid generic diesel record first
+#                                      test_file4,  # need valid generic diesel record first
                                       ])
 def test_full_record(filename):
     """
@@ -400,7 +436,8 @@ def test_full_record(filename):
 
     assert len(msgs) == 0
 
-
+    # make sure it's GNOME Suitable
+    go = make_gnome_oil(oil)
 
 
 

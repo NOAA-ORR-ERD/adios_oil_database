@@ -14,6 +14,7 @@ import csv
 from pathlib import Path
 import sys
 import warnings
+import logging
 
 import nucos
 
@@ -27,6 +28,8 @@ from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DensityList,
                                                      KinematicViscosityList,
                                                      DynamicViscosityList,
+                                                     PourPoint,
+                                                     FlashPoint,
                                                      )
 from adios_db.models.oil.distillation import Distillation, DistCutList
 from adios_db.models.oil.sara import Sara
@@ -39,19 +42,17 @@ from adios_db.models.common.measurement import MassFraction, Temperature, MassOr
 
 import logging
 
-logging.debug('A debug log message')
-
 def padded_csv_reader(file_path, num_fields=6):
     """
     a csv reader that pads the rows to always include the specified number of blank fields
     """
     with open(file_path, encoding="utf-8-sig") as infile:
         reader = csv.reader(infile, dialect='excel')
-        for row in reader:
+        for i, row in enumerate(reader):
             row += [""] * (num_fields - len(row))
             # this broke a lot -- which is odd, but ???
             # row = [f.strip() for f in row]
-            print("processing:", row)
+            logging.debug(f"Processing row: {i}: , {row}")
             yield row
 
 
@@ -94,7 +95,6 @@ class Reader():
         oil.metadata = read_record_metadata(reader)
         # load the subsamples:
         while True:
-            # print("about the read the sub_samples")
             oil.sub_samples.append(read_subsample(reader))
             break
 
@@ -127,11 +127,10 @@ def read_record_metadata(reader):
     }
     md = MetaData()
     # look for subsample data, then stop
-    print("reading record metadata")
+    logging.debug("reading record metadata")
     for row in reader:
-        print("row", row)
         if check_field_name(row[0], "Subsample Metadata"):
-            print("found Subsample metadata, breaking out")
+            logging.debug("found Subsample metadata, breaking out")
             break
         else:
             # this could be more efficient with a dict lookup, rather than a loop
@@ -152,7 +151,7 @@ def read_record_metadata(reader):
 
 
 def read_subsample(reader):
-    print("reading subsample")
+    logging.debug("reading subsample")
     ss = Sample(metadata=read_subsample_metadata(reader))
     ss.physical_properties = read_physical_properties(reader)
     ss.distillation_data = read_distillation_data(reader)
@@ -192,7 +191,7 @@ def read_subsample_metadata(reader):
     # look for Physical Properties data, then stop
     for row in reader:
         if check_field_name(row[0], "Physical Properties"):
-            print("found Physical Properties: breaking out")
+            logging.debug("found Physical Properties: breaking out")
             break
         else:
             # this could be more efficient with a dict lookup, rather than a loop
@@ -222,41 +221,21 @@ def read_physical_properties(reader):
     read the physical properties data
 
     Stops when "Distillation Data" is reached
-
-    class PhysicalProperties:
-
-    pour_point: PourPoint = None
-    flash_point: FlashPoint = None
-
-    densities: DensityList = field(default_factory=DensityList)
-    kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)
-    dynamic_viscosities: DynamicViscosityList = field(default_factory=DynamicViscosityList)
-
-    interfacial_tension_air: InterfacialTensionList = field(default_factory=InterfacialTensionList)
-    interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
-    interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)
     """
-    print("reading physical Properties")
+    logging.debug("reading physical Properties")
     pp = PhysicalProperties()
 
-    # pp_map = {
-    #     normalize("Name"): ("name", strstrip),
-    #     normalize("Short name"): ("short_name", strstrip),
-    #     normalize("Sample ID"): ("sample_id", strstrip),
-    #     normalize("Description"): ("description", strstrip),
-    # }
-    # look for "Distillation Data" data, then stop
     for row in reader:
-        print(row)
         if check_field_name(row[0], "Distillation Data"):
-            print('found "Distillation Data": breaking out')
+            logging.debug('found "Distillation Data": breaking out')
             break
         else:
-            pass
             if check_field_name(row[0], "Pour Point"):
-                pp.pour_point = Temperature(**read_measurement(row[1:]))
+                m = Temperature(**read_measurement(row[1:]))
+                pp.pour_point = None if empty_measurement(m) else PourPoint(measurement=m)
             if check_field_name(row[0], "Flash Point"):
-                pp.flash_point = Temperature(**read_measurement(row[1:]))
+                m = Temperature(**read_measurement(row[1:]))
+                pp.flash_point = None if empty_measurement(m) else  FlashPoint(measurement=m)
             if check_field_name(row[0], "Density"):
                 pp.densities = read_densities(reader)
             if check_field_name(row[0], "Kinematic Viscosity"):
@@ -265,6 +244,7 @@ def read_physical_properties(reader):
                 pp.dynamic_viscosities = read_dvis(reader)
 
     return pp
+
 
 def read_densities(reader):
     data = []
@@ -277,14 +257,17 @@ def read_densities(reader):
 
     return DensityList.from_data(data)
 
+
 def read_kvis(reader):
+    logging.debug("reading kinematic viscosities")
     data = []
     for row in reader:
-        if (  check_field_name(row[0], "Viscosity at temp")
+        if (check_field_name(row[0], "Viscosity at temp")
               and "".join(row[1:]).strip()):
             data.append(read_val_at_temp_row(row[1:]))
         else:
             break
+        logging.debug(f"kvis data: {data}")
     return KinematicViscosityList.from_data(data)
 
 
@@ -307,7 +290,7 @@ def read_sara(reader):
     method = None
     for row in reader:
         if check_field_name(row[0], "Compounds"):
-            print('found "Compounds": breaking out')
+            logging.debug('found "Compounds": breaking out')
             break
         else:
             name = row[0].strip().lower()
@@ -356,7 +339,7 @@ def read_compounds(reader):
     compounds = CompoundList()
     for row in reader:
         if check_field_name(row[0], "Bulk Composition"):
-            print('found "Bulk Composition": breaking out')
+            logging.debug('found "Bulk Composition": breaking out')
             break
         else:
             first = row[0].strip().lower()
@@ -396,7 +379,7 @@ def read_bulk_composition(reader):
     bulk_comps = BulkCompositionList()
     for row in reader:
         if check_field_name(row[0], "Industry Properties"):
-            print('found "Industry Properties": breaking out')
+            logging.debug('found "Industry Properties": breaking out')
             break
         else:
             first = row[0].strip().lower()
@@ -436,7 +419,7 @@ def read_industry_properties(reader):
     ind_props = IndustryPropertyList()
     for row in reader:
         if check_field_name(row[0], "Subsample Metadata"):
-            print('found "Subsample Metadata": breaking out')
+            logging.debug('found "Subsample Metadata": breaking out')
             break
         else:
             first = row[0].strip().lower()
@@ -455,7 +438,7 @@ def read_distillation_data(reader):
         dist_data = Distillation()
         for row in reader:
             if check_field_name(row[0], "SARA Analysis"):
-                print('found "SARA Analysis": breaking out')
+                logging.debug('found "SARA Analysis": breaking out')
                 break
             else:
                 if row[0].strip().lower().startswith("type"):
@@ -472,7 +455,6 @@ def read_distillation_data(reader):
                         dist_data.fraction_recovered = MassOrVolumeFraction(**data) if data is not None else None
                 elif check_field_name(row[0], "Distillation cuts"):
                     cuts = read_dist_cut_table(reader, unit_type=dist_data.type)
-                    print("dist cuts:", cuts)
                     if cuts:
                         dist_data.cuts = cuts
     except: # bare except because it's going to re-raise
@@ -484,7 +466,7 @@ def read_distillation_data(reader):
 
 
 def read_dist_cut_table(reader, unit_type):
-    print("reading distillation cuts")
+    logging.debug("reading distillation cuts")
 
     fractions = []
     temps = []
@@ -492,9 +474,7 @@ def read_dist_cut_table(reader, unit_type):
     temp_unit = None
     try:
         for row in reader:
-            print("in cut table:", row)
             if not row[0].strip().lower().startswith('cut'):
-                print("not a cut, breaking out")
                 break
             frac, frac_u, temp, temp_u = read_val_at_temp_row(row[1:])
             if frac is None or temp is None:
@@ -509,12 +489,11 @@ def read_dist_cut_table(reader, unit_type):
                 raise ValueError("temperature unit in distillation cuts should all be the same")
             fractions.append(frac)
             temps.append(temp)
-            print(fractions)
-            print(temps)
-    except:
+    except:  # bare except, because it re-raises
         print("*** Error reading distillation cuts: last row read:")
         print(row)
         raise
+    logging.debug(f"Distillation Data: {[(frac, temp) for frac, temp in zip(fractions, temps)]}")
 
     try:
         DCL = DistCutList.from_data_arrays(fractions,
@@ -523,7 +502,7 @@ def read_dist_cut_table(reader, unit_type):
                                            temp_unit,
                                            unit_type=unit_type)
     except nucos.InvalidUnitTypeError:
-        print('Distillation type must be "Mass Fraction" or "Volume Fraction"')
+        print('*** Error: Distillation type must be "Mass Fraction" or "Volume Fraction"')
         raise
     return DCL
 
@@ -581,6 +560,16 @@ def read_val_at_temp_row(row):
 
     """
     return [float_or_placeholder(row[0]), row[1].strip(), float_or_placeholder(row[2]), row[3].strip()]
+
+
+def empty_measurement(meas):
+    """
+    is a measurement empty?
+    """
+    for v in (meas.min_value, meas.value, meas.max_value):
+        if v is not None:
+            return False
+    return True
 
 
 def read_measurement(items):
@@ -641,86 +630,3 @@ def check_field_name(field, name):
 def strstrip(obj):
     return str(obj).strip()
 
-########
-##
-## Old code 0 accidentally duplicated it :-(
-##
-## Delete if it's not useful in the end
-########
-#     def load_from_csv(self, infile):
-#         with open(infile, newline='') as csvfile:
-#             self.reader = reader = csv.reader(csvfile, delimiter=',')
-
-#             header = next(reader)
-#             if header[0].lower() == "ADIOS Data Model Version".lower():
-#                 data_model_version = Version(header[1])
-#             else:
-#                 raise ValueError("First line doesn't match "
-#                                  "-- are you sure this is a standard "
-#                                  "ADIOS CSV file?\n"
-#                                  f"First line of file: {header}")
-
-#             if data_model_version > ADIOS_DATA_MODEL_VERSION:
-#                 raise ValueError("Version mismatch -- this file is: "
-#                                  f"{data_model_version}\n"
-#                                  "The code version is: "
-#                                  f"{ADIOS_DATA_MODEL_VERSION}")
-
-#             self.oil = Oil("Placeholder")
-
-#             # metadata
-#             line = next_non_empty(reader)
-#             if line[0].lower() != "Record Metadata".lower():
-#                 raise ValueError("Next section should be Record Metadata")
-
-#             for line in reader:
-#                 if line[0].lower().strip() == "subsample metadata":
-#                     print("reached subsample, breaking")
-#                     break
-#                 else:
-#                     self.read_record_metadata(line)
-
-#     def read_record_metadata(self, line):
-#         line = [f.strip() for f in line]
-#         field = line[0].lower().strip()
-#         value = line[1].strip()
-
-#         print("reading metadata line")
-#         print(line)
-#         print(f"{field=}, {value=}")
-
-#         if field == "name":
-#             self.oil.metadata.name = value
-#         elif field == "api gravity":
-#             self.oil.metadata.API = round(float(value), 2)
-#         elif field == 'source id':
-#             self.oil.metadata.source_id = value
-#         elif field == 'alternate names':
-#             for name in line[1:]:
-#                 if name:
-#                     self.oil.metadata.alternate_names.append(name)
-#         elif field == 'location':
-#             self.oil.metadata.location = value
-#         elif field == 'reference':
-#             try:
-#                 year = int(value)
-#                 print(year)
-
-#                 if not(1900 < year < 2100):
-#                     raise ValueError("year not in bounds")
-#                 self.oil.metadata.reference.year = int(value)
-#             except ValueError:
-#                 raise
-
-#             if line[2]:
-#                 self.oil.metadata.reference.reference = line[2].strip()
-
-
-# def next_non_empty(reader):
-#     """
-#     returns the next line that has nothing in the first field
-#     """
-#     while True:
-#         line = next(reader)
-#         if line[0]:
-#             return line

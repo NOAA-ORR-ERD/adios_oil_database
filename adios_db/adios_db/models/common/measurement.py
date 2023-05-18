@@ -109,7 +109,7 @@ class MeasurementBase(MeasurementDataclass):
 
     def _make_all_float(self):
         """
-        make sure all values are flat type, not integers
+        make sure all values are float type, not integers
         this is so the JSON is consistent
         """
         self.value = self._make_float(self.value)
@@ -121,10 +121,14 @@ class MeasurementBase(MeasurementDataclass):
     def _make_float(value):
         """
         Convert to float if possible, otherwise return the original value.
+
+        Convert empty string to None
         """
         try:
             value = float(value)
         except (TypeError, ValueError):
+            if value == '':
+                return None
             pass
         return value
 

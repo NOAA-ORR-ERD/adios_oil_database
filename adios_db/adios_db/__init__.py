@@ -26,7 +26,7 @@ def initialize_console_log(level='debug'):
     level = levels[level.lower()]
     format_str = '%(levelname)s - %(module)8s - line:%(lineno)d - %(message)s'
 
-    basicConfig(stream=sys.stdout, level=level, format=format_str)
+    basicConfig(stream=sys.stdout, level=level, format=format_str, force=True)
 
 
 getLogger(__name__).addHandler(NullHandler())
