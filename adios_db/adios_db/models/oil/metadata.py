@@ -63,9 +63,13 @@ class MetaData:
         """
         Assorted cleanup
         """
-        # force API to be a float
+        # force API to be a float if possible, otherwise set it to None.
         if self.API is not None:
-            self.API = float(self.API)
+            try:
+                self.API = float(self.API)
+            except ValueError:
+                self.API = None
+
         # make sure lists are sorted
         self.labels = sorted(self.labels)
         self.alternate_names = sorted(self.alternate_names)

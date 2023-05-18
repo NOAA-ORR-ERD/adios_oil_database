@@ -26,6 +26,9 @@ from ..common.utilities import dataclass_to_json
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
+import pdb
+from pprint import pprint
+
 
 __all__ = [
     'AngularVelocity',
@@ -104,6 +107,7 @@ class MeasurementBase(MeasurementDataclass):
             raise ValueError(f"unit_type must be: {self.__class__.unit_type}, "
                              f"not {self.unit_type}")
         self._make_all_float()
+        self._fix_value_if_min_max()
         super().__post_init__()
 
     def _make_all_float(self):
@@ -126,6 +130,33 @@ class MeasurementBase(MeasurementDataclass):
         except (TypeError, ValueError):
             pass
         return value
+
+    def _fix_value_if_min_max(self):
+        """
+        There are cases where our self.value contains a string of 'N-N',
+        which implies that it is an interval representing a min-max.
+        If this is the case, fix it.
+        - This probably won't come up, but don't clobber any existing
+          self.min_value or self.max_value
+        - If there is only a single number in the form '-N', then it is a
+          single negative number, don't do anything.
+        - If there are more than two items e.g. 'N-N-N', we take the first two
+          items.
+        """
+        if (isinstance(self.value, str)
+                and '-' in self.value
+                and self.min_value is None
+                and self.max_value is None):
+            min_value, max_value, *_ = self.value.split('-')
+
+            try:
+                min_value, max_value = float(min_value), float(max_value)
+                self.min_value, self.max_value = min_value, max_value
+            except ValueError:
+                # if either values fail to convert to float, we do nothing
+                return
+
+            self.value = None
 
     def validate(self):
 
@@ -192,7 +223,12 @@ class MeasurementBase(MeasurementDataclass):
             val = getattr(self, attr)
 
             if val is not None:
-                new_val = convert(self.unit_type, self.unit, new_unit, val)
+                try:
+                    new_val = convert(self.unit_type, self.unit, new_unit, val)
+                except (TypeError, ValueError):
+                    print(f'Error in convert(), obj: {self}')
+                    raise
+
                 new_vals[attr] = new_val
 
         # if this was all successful
@@ -258,13 +294,17 @@ class Temperature(MeasurementBase):
 
         for val in (self.value, self.min_value, self.max_value):
             if val is not None:
-                val_in_C = convert(self.unit, "C", val)
-                decimal = val_in_C % 1
+                try:
+                    val_in_C = convert(self.unit, "C", val)
 
-                if isclose(decimal, 0.15) or isclose(decimal, 0.85):
-                    msgs.append(WARNINGS['W010'].format(
-                        f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
-                        f"{round(val_in_C):.2f} C"))
+                    decimal = val_in_C % 1
+
+                    if isclose(decimal, 0.15) or isclose(decimal, 0.85):
+                        msgs.append(WARNINGS['W010'].format(
+                            f"{val:.2f} {self.unit} ({val_in_C:.2f} C)",
+                            f"{round(val_in_C):.2f} C"))
+                except Exception:
+                    msgs.append(ERRORS['E044'].format(f"{val}", f"{self}"))
 
         return msgs
 
@@ -465,6 +505,10 @@ class DynamicViscosity(MeasurementBase):
 
 class KinematicViscosity(MeasurementBase):
     unit_type = "kinematicviscosity"
+
+
+class SayboltViscosity(MeasurementBase):
+    unit_type = "sayboltviscosity"
 
 
 class Pressure(MeasurementBase):

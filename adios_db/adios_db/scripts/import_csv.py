@@ -176,12 +176,6 @@ def read_physical_properties(reader):
     class PhysicalProperties:
     """
     pp = PhysicalProperties()
-    # pp_map = {
-    #     normalize("Name"): ("name", strstrip),
-    #     normalize("Short name"): ("short_name", strstrip),
-    #     normalize("Sample ID"): ("sample_id", strstrip),
-    #     normalize("Description"): ("description", strstrip),
-    # }
 
     # look for "Distillation Data" data, then stop
     for row in reader:
@@ -218,6 +212,7 @@ def read_measurement(items):
     unit
     """
     vals = {}
+
     for key, val in zip(('min_value', 'value', 'max_value'), items[:3]):
         vals[key] = float(val) if val.strip() else None
 

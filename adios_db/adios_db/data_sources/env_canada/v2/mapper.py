@@ -27,14 +27,12 @@ class EnvCanadaCsvRecordMapper(MapperBase):
             raise ValueError(f'{self.__class__.__name__}(): '
                              'invalid parser passed in')
 
-        self.remap_SARA()
-        self.remap_ESTS_evaporation()
-        self.remap_adhesion()
-        self.remap_emulsions()
-        self.remap_interfacial_tension()
-        self.remap_cuts()
-        self.remap_ESTS_hydrocarbon_fractions()
-        self.remap_CCME()
+        method_list = [attr for attr in dir(self)
+                       if callable(getattr(self, attr))
+                       and attr.startswith('remap_') is True]
+
+        for method in method_list:
+            getattr(self, method)()
 
     def remap_SARA(self):
         for sample in self.record['sub_samples']:

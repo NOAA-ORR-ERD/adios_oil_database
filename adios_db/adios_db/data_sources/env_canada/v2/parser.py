@@ -839,6 +839,10 @@ class EnvCanadaCsvRecordParser(ParserBase):
         * replicates
         * method
     """
+    oil_common_props = ('oil_name', 'ests', 'source', 'date_sample_received',
+                        'comments')
+    sample_id_field_name = 'ests_id'
+
     def __init__(self, values):
         """
         :param values: A list of dictionary objects containing property
@@ -879,8 +883,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
         so we need to reconcile them in order to come up with an
         aggregate value with which to set the oil properties.
         """
-        for attr in ('oil_name', 'ests', 'source', 'date_sample_received',
-                     'comments'):
+        for attr in self.oil_common_props:
             self.set_aggregate_oil_property(attr)
 
         # reference needs special treatment
@@ -989,12 +992,12 @@ class EnvCanadaCsvRecordParser(ParserBase):
         first_objs = [v for v in self.src_values
                       if v['property_id'] == 'Density_0']
 
-        first_sample_ids = [o['ests_id'] for o in first_objs]
+        first_sample_ids = [o[self.sample_id_field_name] for o in first_objs]
         if not self.sample_ids == first_sample_ids:
             raise ValueError(f'duplicate sample_ids: {first_sample_ids}')
 
         for idx, o in enumerate(first_objs):
-            sample_id = str(o['ests_id'])
+            sample_id = str(o[self.sample_id_field_name])
             weathering_percent = o['weathering_percent']
 
             if weathering_percent is None or weathering_percent == 'None':
@@ -1038,7 +1041,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
               but clearly it is the "fresh sample".  We need to allow it.
         """
         api_obj = [v for v in self.src_values
-                   if v['ests_id'] == self.fresh_sample_id
+                   if v[self.sample_id_field_name] == self.fresh_sample_id
                    and v['property_id'] == 'APIGravity_3']
         api_obj = api_obj[0] if len(api_obj) > 0 else {}
 
@@ -1113,7 +1116,7 @@ class EnvCanadaCsvRecordParser(ParserBase):
         if scope == 'oil':
             obj = self.oil_obj
         elif scope == 'sample':
-            obj = self.get_subsample(obj_in['ests_id'])
+            obj = self.get_subsample(obj_in[self.sample_id_field_name])
         else:
             logger.error(f'measurement record has unknown scope: {scope}')
 
@@ -1136,7 +1139,8 @@ class EnvCanadaCsvRecordParser(ParserBase):
         of insertion into the dict.  This is true of Python 3.6, but could
         break in the future.
         """
-        sample_ids = {v['ests_id']: None for v in self.src_values}
+        sample_ids = {v[self.sample_id_field_name]: None
+                      for v in self.src_values}
         return list(sample_ids.keys())
 
     def get_subsample(self, sample_id):
