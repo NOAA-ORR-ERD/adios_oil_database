@@ -3,8 +3,8 @@ tests for utilities
 
 these test the ones in the __init__.py
 """
-
 import pytest
+
 from adios_db import util
 
 

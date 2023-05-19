@@ -15,11 +15,9 @@ def test_Reference_json():
                      'of Nonsense.Seattle, WA. Vol. 13 No. 3 pp. 123-125')
 
     py_json = ref.py_json()
-
     assert py_json['year'] == 2013
 
     ref2 = Reference.from_py_json(py_json)
-
     assert ref2.year == 2013
     assert "Barker, C.H." in ref2.reference
 

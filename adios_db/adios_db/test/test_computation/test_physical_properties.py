@@ -1,29 +1,31 @@
 """
 tests for the Physical Properties computation code
 """
-
 from math import isclose
 from pathlib import Path
+
 import numpy as np
 import pytest
+
+from adios_db.models.common import measurement as meas
 
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
 from adios_db.models.oil.physical_properties import DensityPoint
-from adios_db.computation.physical_properties import bullwinkle_fraction
-from adios_db.models.common import measurement as meas
 
-from adios_db.computation.physical_properties import (get_density_data,
-                                                      get_kinematic_viscosity_data,
-                                                      get_dynamic_viscosity_data,
-                                                      KinematicViscosity,
-                                                      Density,
-                                                      get_frac_recovered,
-                                                      max_water_fraction_emulsion,
-                                                      emul_water,
-                                                      get_interfacial_tension_water,
-                                                      get_interfacial_tension_seawater,
-                                                      )
+from adios_db.computation.physical_properties import bullwinkle_fraction
+from adios_db.computation.physical_properties import (
+    get_density_data,
+    get_kinematic_viscosity_data,
+    get_dynamic_viscosity_data,
+    KinematicViscosity,
+    Density,
+    get_frac_recovered,
+    max_water_fraction_emulsion,
+    emul_water,
+    get_interfacial_tension_water,
+    get_interfacial_tension_seawater,
+)
 
 
 HERE = Path(__file__).parent
@@ -31,12 +33,15 @@ EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
 full_oil_filename = EXAMPLE_DATA_DIR / "ExampleFullRecord.json"
 sparse_oil_filename = EXAMPLE_DATA_DIR / "ExampleSparseRecord.json"
 
+
 # use the function if you're going to change the Oil object.
 def get_full_oil():
     return Oil.from_file(full_oil_filename)
 
+
 def get_sparse_oil():
     return Oil.from_file(sparse_oil_filename)
+
 
 FullOil = get_full_oil()
 SparseOil = get_sparse_oil()
@@ -51,10 +56,7 @@ except Exception:  # in case the tests are running somewhere read-only
 def test_get_density_data_defaults():
     dd = get_density_data(FullOil)
 
-    print(dd)
-
     assert len(dd) == 2
-
     assert dd[0] == (939.88, 273.15)
     assert dd[1] == (925.26, 288.15)
 
@@ -62,18 +64,13 @@ def test_get_density_data_defaults():
 def test_get_density_data_units():
     dd = get_density_data(FullOil, units='g/cm^3', temp_units='C')
 
-    print(dd)
-
     assert len(dd) == 2
-
     assert dd[0] == (.93988, 0.0)
     assert dd[1] == (.92526, 15.0)
 
 
 def test_get_kinematic_viscosity_data_defaults():
     kv = get_kinematic_viscosity_data(FullOil)
-
-    print(kv)
 
     assert len(kv) == 2
 
@@ -85,13 +82,14 @@ def test_get_kinematic_viscosity_data_defaults():
 
 def test_get_kinematic_viscosity_data_no_data():
     """
-    Issue: https://gitlab.orr.noaa.gov/gnome/oil_database/oil_database/-/issues/544
+    Issue:
+      https://gitlab.orr.noaa.gov/gnome/oil_database/oil_database/-/issues/544
 
-    Seemed to be getting 1.0 instead of nothing!
+    - Seemed to be getting 1.0 instead of nothing!
+    - Error observed with record: EC00622
 
-    Error observed with record: EC00622
-
-    Hmm -- turns out it works -- it was an error in the Generic Oil code that was using this.
+    - Hmm, turns out it works.  It was an error in the Generic Oil code
+      that was using this.
 
     But keeping the test anyway -- why risk a regression?
     """
@@ -100,12 +98,12 @@ def test_get_kinematic_viscosity_data_no_data():
 
     assert kv == []
 
+
 def test_get_dynamic_viscosity_data_defaults():
     dv = get_dynamic_viscosity_data(FullOil)
 
-    print(dv)
-
     assert len(dv) == 2
+
     assert isclose(dv[0][0], 1.3)
     assert isclose(dv[0][1], 273.15)
     assert isclose(dv[1][0], .35)
@@ -115,9 +113,8 @@ def test_get_dynamic_viscosity_data_defaults():
 def test_get_dynamic_viscosity_data_units():
     dv = get_dynamic_viscosity_data(FullOil, units="poise", temp_units="C")
 
-    print(dv)
-
     assert len(dv) == 2
+
     assert dv[0] == (13.0, 0.0)
     assert dv[1] == (3.50, 15.0)
 
@@ -161,22 +158,17 @@ class TestDensity:
         oil = self.make_oil_with_densities([density], [temp])
         dc = Density(oil)
 
-        print(dc.k_rho_default)
         assert dc.k_rho_default == k_rho
 
     def test_initiliaze_two_densities(self):
         oil = self.make_oil_with_densities([980.0, 990.0], [288.15, 268.15])
         dc = Density(oil)
 
-        print(dc.k_rho_default)
-
         assert isclose(dc.k_rho_default, -0.5)
 
     def test_initiliaze_three_plus_densities(self):
         oil = self.make_oil_with_densities([982, 984, 991], [288, 278, 268])
         dc = Density(oil)
-
-        print(dc.k_rho_default)
 
         assert isclose(dc.k_rho_default, -0.45)
 
@@ -211,8 +203,6 @@ class TestDensity:
                       (984.0, 280.0),
                       (980.0, 290.0),
                       ])
-
-        print("k_rho_default:", dc.k_rho_default)
 
         D = dc.at_temp((275, 286))
 
@@ -256,20 +246,13 @@ class TestDensity:
 
 
 class TestKinematicViscosity:
-
     kv = KinematicViscosity(FullOil)
 
     def test_initilization(self):
-        print(self.kv.kviscs)
-        print(self.kv.temps)
-
         assert len(self.kv.kviscs) == 2
         assert len(self.kv.temps) == 2
 
     def test_values_at_known_temps(self):
-        print(self.kv.kviscs)
-        print(self.kv.temps)
-
         assert self.kv.kviscs
         assert isclose(self.kv.at_temp(273.15), 0.001383, rel_tol=1e-3)
         assert isclose(self.kv.at_temp(288.15), 0.0003783, rel_tol=1e-3)
@@ -284,7 +267,6 @@ class TestKinematicViscosity:
             _ = KinematicViscosity(oil)
 
 
-
 def test_get_frac_recovered():
     frac_recovered = get_frac_recovered(FullOil)
 
@@ -292,7 +274,8 @@ def test_get_frac_recovered():
 
     frac_recovered = get_frac_recovered(SparseOil)
 
-    assert frac_recovered[0] ==  None
+    assert frac_recovered[0] is None
+
 
 def test_max_water_fraction_emulsion():
     y_max = max_water_fraction_emulsion(FullOil)
@@ -306,7 +289,7 @@ def test_max_water_emulsion_no_estimation():
     sparse_oil.metadata.product_type = "Condensate"
     y_max = max_water_fraction_emulsion(sparse_oil)
 
-    assert y_max == None
+    assert y_max is None
 
 
 def test_max_water_estimation():
@@ -324,7 +307,6 @@ def test_bullwinkle_estimated_non_crude():
 
 
 def test_bullwinkle_estimated_ni_va():
-    sparse_oil = get_sparse_oil()
     bullwinkle = bullwinkle_fraction(SparseOil)
 
     assert isclose(bullwinkle, 0.0171199, rel_tol=1e-4)

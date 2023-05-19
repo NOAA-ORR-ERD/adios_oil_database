@@ -1,14 +1,16 @@
 """
 tests for making a GNOME Oil
-
 """
-import pytest
-
 from pathlib import Path
 from math import isclose
 
+import pytest
+
 from adios_db.models.oil.oil import Oil
-from adios_db.computation.gnome_oil import make_gnome_oil, sara_totals, estimate_pour_point
+from adios_db.computation.gnome_oil import (make_gnome_oil,
+                                            sara_totals,
+                                            estimate_pour_point)
+
 
 HERE = Path(__file__).parent
 EXAMPLE_DATA_DIR = HERE.parent / "data_for_testing" / "example_data"
@@ -20,8 +22,10 @@ sparse_oil_filename = EXAMPLE_DATA_DIR / "ExampleSparseRecord.json"
 def get_full_oil():
     return Oil.from_file(full_oil_filename)
 
+
 def get_sparse_oil():
     return Oil.from_file(sparse_oil_filename)
+
 
 FullOil = get_full_oil()
 SparseOil = get_sparse_oil()
@@ -39,12 +43,11 @@ def test_metadata():
     """
     data = make_gnome_oil(FullOil)
 
-    # print(FullOil.metadata)
-
     assert data['name'] == FullOil.metadata.name
+    assert data['adios_oil_id'] == "EC02234"
+
     # The API might change
     # assert data['api'] == FullOil.metadata.API
-    assert data['adios_oil_id'] == "EC02234"
 
 
 def test_physical_properties():
@@ -72,8 +75,9 @@ def test_kvis():
 def test_SARA():
     saturates, aromatics, resins, asphaltenes = sara_totals(FullOil)
 
-    assert [saturates, aromatics, resins, asphaltenes] == [0.38, 0.31, .16,
-                                                           .15]
+    assert [saturates, aromatics, resins, asphaltenes] == [0.38, 0.31,
+                                                           0.16, 0.15]
+
 
 def test_max_water_emulsion():
     data = make_gnome_oil(FullOil)
@@ -101,10 +105,10 @@ def test_bullwinkle_estimated():
 
 def test_no_cuts_exception():
     sparse_oil = get_sparse_oil()
-
     sparse_oil.metadata.product_type = "Condensate"
+
     with pytest.raises(ValueError):
-        data = make_gnome_oil(sparse_oil)
+        _gnome_oil = make_gnome_oil(sparse_oil)
 
 
 def test_frac_recovered_exception():
@@ -112,8 +116,9 @@ def test_frac_recovered_exception():
 
     full_oil.metadata.product_type = "Condensate"
     full_oil.sub_samples[0].distillation_data.fraction_recovered.value = 5
+
     with pytest.raises(ValueError):
-        data = make_gnome_oil(full_oil)
+        _gnome_oil = make_gnome_oil(full_oil)
 
 
 def test_estimate_pour_point():
@@ -128,9 +133,3 @@ def test_solubility():
     data = make_gnome_oil(FullOil)
 
     assert data['solubility'] == 0
-
-# not being used -- we can add back if needed
-# def test_k0y():
-#     data = make_gnome_oil(FullOil)
-#
-#     assert data['k0y'] == 2.024e-06

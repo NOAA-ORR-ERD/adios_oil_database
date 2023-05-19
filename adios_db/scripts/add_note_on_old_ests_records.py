@@ -8,7 +8,6 @@ The comment says:
 thus may reflect samples of varying age and composition.
 "
 """
-
 import adios_db.scripting as ads
 
 # OLD_COMMENT = ("The data in this record may have been compiled from "
@@ -32,10 +31,9 @@ but not save any changes
 
 
 def main():
-
     base_dir, dry_run = ads.process_input(USAGE)
-
     count = 0
+
     for rec, pth in ads.get_all_records(base_dir):
         # print("\n\n******************\n")
         # print("processing:", rec.oil_id)
@@ -44,14 +42,20 @@ def main():
 
         if (reference.year in {1990, 1996, 1990, 1999, 1992}
                 and "Jokuty" in reference.reference):
-            #             rec.metadata.comments = "\n".join((rec.metadata.comments, ADDED_COMMENT)).strip()
+            # rec.metadata.comments = "\n".join((rec.metadata.comments,
+            #                                    ADDED_COMMENT)).strip()
+
             if NEW_COMMENT not in rec.metadata.comments:
                 count += 1
+
                 if rec.metadata.comments:
-                    rec.metadata.comments = "\n\n".join(
-                        (rec.metadata.comments, NEW_COMMENT))
+                    rec.metadata.comments = "\n\n".join((
+                        rec.metadata.comments,
+                        NEW_COMMENT
+                    ))
                 else:
                     rec.metadata.comments = NEW_COMMENT
+
                 print("Adding note to:", rec.oil_id)
                 print(reference.reference)
 

@@ -16,8 +16,7 @@ def file_settings(config_file, section='app:adios_db'):
     config = ConfigParser()
     config.read(config_file)
 
-    return dict([(k, convert_str_to_type_value(v))
-                 for k, v in config.items(section)])
+    return {k: convert_str_to_type_value(v) for k, v in config.items(section)}
 
 
 def convert_str_to_type_value(str_in):

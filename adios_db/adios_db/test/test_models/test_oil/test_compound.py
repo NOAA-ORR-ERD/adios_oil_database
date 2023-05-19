@@ -18,9 +18,7 @@ Comp1 = Compound(name="1-Methyl-2-Isopropylbenzene",
                  measurement=MassFraction(value=3.4,
                                           unit="ppm",
                                           replicates=3,
-                                          standard_deviation=0.1
-                                          )
-                 )
+                                          standard_deviation=0.1))
 
 Comp2 = Compound(name="4-Ethyl Death-benzene",
                  groups=["C6-C64 Alkyl Benzenes", "Saturated"],
@@ -28,9 +26,7 @@ Comp2 = Compound(name="4-Ethyl Death-benzene",
                  measurement=MassFraction(value=2.1,
                                           unit="g/kg",
                                           replicates=5,
-                                          standard_deviation=0.2
-                                          )
-                 )
+                                          standard_deviation=0.2))
 
 
 class TestCompound:
@@ -49,8 +45,7 @@ class TestCompound:
                         measurement=MassFraction(value=3.4,
                                                  unit="ppm",
                                                  replicates=3,
-                                                 standard_deviation=0.1)
-                        )
+                                                 standard_deviation=0.1))
 
         assert comp.name == "1-Methyl-2-Isopropylbenzene"
         assert len(comp.groups) == 2
@@ -113,4 +108,4 @@ class TestCompoundList:
 
         c_list2 = CompoundList.from_py_json(py_json)
 
-        assert c_list2 == c_list
+        assert c_list == c_list2

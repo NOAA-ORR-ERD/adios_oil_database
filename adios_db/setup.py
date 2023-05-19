@@ -36,4 +36,3 @@ class cleanall(clean):
         clean_files()
 
 setup()
-

@@ -3,12 +3,10 @@ tests for density related cleanup
 """
 from math import isclose
 
+from adios_db.models.common.measurement import Density, Temperature
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.physical_properties import DensityPoint, DensityList
-from adios_db.models.common.measurement import Density, Temperature
-
 from adios_db.models.oil.sample import Sample
-
 from adios_db.models.oil.cleanup.density import FixAPI
 
 
@@ -22,7 +20,6 @@ def no_api_with_density():
     s = Sample()
 
     # add some densities
-    # p = PhysicalProperties()
     p = s.physical_properties
     p.densities = DensityList([
         DensityPoint(density=Density(value=0.8751, unit="g/cm^3"),
@@ -46,7 +43,6 @@ def no_api_with_one_density_13C():
     s = Sample()
 
     # add some densities
-    # p = PhysicalProperties()
     p = s.physical_properties
     p.densities = DensityList([
         DensityPoint(density=Density(value=0.8751, unit="g/cm^3"),
@@ -83,9 +79,6 @@ def test_check_API_is_there_correct():
 
     flag, msg = fixer.check()
 
-    print(flag)
-    print(msg)
-
     assert flag is None
     assert "API is fine" in msg
 
@@ -100,9 +93,6 @@ def test_check_API_is_there_mismatch():
     fixer = FixAPI(oil)
 
     flag, msg = fixer.check()
-
-    print(flag)
-    print(msg)
 
     assert flag is True
     assert "doesn't match density data" in msg
@@ -123,9 +113,7 @@ def test_add_density():
 
 def test_find_density_at_60F():
     oil = no_api_with_density()
-
     fixer = FixAPI(oil)
-
     result = fixer.find_density_at_60F()
 
     assert result == 875.1
@@ -174,7 +162,6 @@ def test_non_crude_one_density_close():
     oil = no_api_with_one_density_13C()
 
     fixer = FixAPI(oil)
-
     fixer.cleanup()
 
     assert isclose(oil.metadata.API, 30.06, rel_tol=1e4)
@@ -184,9 +171,10 @@ def test_non_crude_one_density_far():
     # density at too far a temp to compute API
     oil = no_api_with_one_density_13C()
     oil.sub_samples[0].physical_properties.densities[0].ref_temp.value = 0.0
-    fixer = FixAPI(oil)
 
+    fixer = FixAPI(oil)
     fixer.cleanup()
+
     assert oil.metadata.API is None
 
 
@@ -202,7 +190,6 @@ def test_non_crude_two_densities_straddle_60():
     oil.sub_samples[0].physical_properties.densities[1].ref_temp.unit = 'C'
 
     fixer = FixAPI(oil)
-
     fixer.cleanup()
 
     assert isclose(oil.metadata.API, 30.06, rel_tol=1e4)
@@ -220,7 +207,6 @@ def test_non_crude_two_densities_not_straddle_60():
     oil.sub_samples[0].physical_properties.densities[1].ref_temp.unit = 'C'
 
     fixer = FixAPI(oil)
-
     fixer.cleanup()
 
     assert oil.metadata.API is None

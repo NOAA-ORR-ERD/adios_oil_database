@@ -6,25 +6,22 @@ and we also want to document how it works.
 Either we test it correctly, or we test it in an episodic manner on the
 real dataset.
 """
-
-import pytest
-
-try:
-    from slugify import Slugify
-    from openpyxl.utils.exceptions import InvalidFileException
-    HAVE_OPTIONAL=True
-except ImportError:
-    HAVE_OPTIONAL=False
-    pytest.skip("You need the awesome-slugify and openpyxl packages "
-               "to run these tests", allow_module_level=True)
-
 import os
 from numbers import Number
 from pathlib import Path
 import json
-from pprint import pprint
 
+import pytest
 import numpy as np
+
+try:
+    from slugify import Slugify
+    from openpyxl.utils.exceptions import InvalidFileException
+    HAVE_OPTIONAL = True
+except ImportError:
+    HAVE_OPTIONAL = False
+    pytest.skip("You need the awesome-slugify and openpyxl packages "
+                "to run these tests", allow_module_level=True)
 
 import adios_db
 from adios_db.data_sources.env_canada.v1 import (EnvCanadaOilExcelFile,
@@ -70,13 +67,10 @@ class TestEnvCanadaOilExcelFile(object):
 
         # There are literally hundreds of fields here, so let's just check
         # some of the individual category/field combinations
-        pprint(list(reader.field_indexes.keys()))
-
         assert reader.field_indexes[None]['Oil'] == [0]
         assert reader.field_indexes[None]['Weathered %:'] == [5]
 
         # the last row in our spreadsheet
-        pprint(reader.field_indexes['Biomarkers'])
         assert (reader.field_indexes
                 ['Biomarkers']
                 ['14ß(H),17ß(H)-20-Ethylcholestane (C29αßß)']) == [446]
@@ -349,8 +343,6 @@ class TestEnvCanadaSampleParser(object):
 
         samples = list(parser.sub_samples)
 
-        pprint(samples[index].densities)
-
         assert self.compare_expected(samples[index].densities, expected)
 
     @pytest.mark.parametrize('rec, index, expected', [
@@ -494,7 +486,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].dvis)
 
         assert self.compare_expected(samples[index].dvis, expected)
 
@@ -595,7 +586,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ifts)
 
         assert self.compare_expected(samples[index].ifts, expected)
 
@@ -614,7 +604,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].flash_point)
 
         assert self.compare_expected(samples[index].flash_point, expected)
 
@@ -633,7 +622,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].pour_point)
 
         assert self.compare_expected(samples[index].pour_point, expected)
 
@@ -690,7 +678,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].boiling_point_distribution)
 
         assert self.compare_expected(samples[index].boiling_point_distribution,
                                      expected)
@@ -744,7 +731,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].boiling_point_cumulative_fraction)
 
         assert self.compare_expected(samples[index]
                                      .boiling_point_cumulative_fraction,
@@ -767,7 +753,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].adhesion)
 
         assert self.compare_expected(samples[index].adhesion, expected)
 
@@ -794,7 +779,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ests_evaporation_test)
 
         assert self.compare_expected(samples[index].ests_evaporation_test,
                                      expected)
@@ -1134,7 +1118,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].emulsions)
 
         assert self.compare_expected(samples[index].emulsions, expected)
 
@@ -1153,7 +1136,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].chemical_dispersibility)
 
         assert self.compare_expected(samples[index].chemical_dispersibility,
                                      expected)
@@ -1173,7 +1155,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].sulfur_content)
 
         assert self.compare_expected(samples[index].sulfur_content, expected)
 
@@ -1192,7 +1173,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].water_content)
 
         assert self.compare_expected(samples[index].water_content, expected)
 
@@ -1211,7 +1191,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].wax_content)
 
         assert self.compare_expected(samples[index].wax_content, expected)
 
@@ -1236,7 +1215,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].sara_total_fractions)
 
         assert self.compare_expected(samples[index].sara_total_fractions,
                                      expected)
@@ -1254,7 +1232,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].benzene)
 
         assert self.compare_expected(samples[index].benzene, expected)
 
@@ -1275,7 +1252,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].btex_group)
 
         assert self.compare_expected(samples[index].btex_group, expected)
 
@@ -1312,7 +1288,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].c4_c6_alkyl_benzenes)
 
         assert self.compare_expected(samples[index].c4_c6_alkyl_benzenes,
                                      expected)
@@ -1343,7 +1318,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].headspace_analysis)
 
         assert self.compare_expected(samples[index].headspace_analysis,
                                      expected)
@@ -1369,7 +1343,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].chromatography)
 
         assert self.compare_expected(samples[index].chromatography, expected)
 
@@ -1388,7 +1361,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ccme)
 
         assert self.compare_expected(samples[index].ccme, expected)
 
@@ -1415,7 +1387,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ests_saturates)
 
         assert self.compare_expected(samples[index].ests_saturates, expected)
 
@@ -1442,7 +1413,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ests_aromatics)
 
         assert self.compare_expected(samples[index].ests_aromatics, expected)
 
@@ -1471,7 +1441,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].ests_tph)
 
         assert self.compare_expected(samples[index].ests_tph, expected)
 
@@ -1492,7 +1461,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].naphthalenes)
 
         assert self.compare_expected(samples[index].naphthalenes, expected)
 
@@ -1513,7 +1481,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].phenanthrenes)
 
         assert self.compare_expected(samples[index].phenanthrenes, expected)
 
@@ -1532,7 +1499,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].dibenzothiophenes)
 
         assert self.compare_expected(samples[index].dibenzothiophenes,
                                      expected)
@@ -1552,7 +1518,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].fluorenes)
 
         assert self.compare_expected(samples[index].fluorenes, expected)
 
@@ -1573,7 +1538,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].benzonaphthothiophenes)
 
         assert self.compare_expected(samples[index].benzonaphthothiophenes,
                                      expected)
@@ -1593,7 +1557,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].chrysenes)
 
         assert self.compare_expected(samples[index].chrysenes, expected)
 
@@ -1636,7 +1599,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].other_priority_pahs)
 
         assert self.compare_expected(samples[index].other_priority_pahs,
                                      expected)
@@ -1728,7 +1690,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].n_alkanes)
 
         assert self.compare_expected(samples[index].n_alkanes, expected)
 
@@ -1783,7 +1744,6 @@ class TestEnvCanadaSampleParser(object):
         parser = EnvCanadaRecordParser(data, conditions, file_props)
 
         samples = list(parser.sub_samples)
-        pprint(samples[index].biomarkers)
 
         assert self.compare_expected(samples[index].biomarkers, expected)
 
@@ -2114,7 +2074,6 @@ class TestEnvCanadaSampleMapper(object):
         parser = EnvCanadaRecordParser(*self.reader.get_record(oil_id))
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
-        pprint(getattr(sub_mapper, attr))
         assert getattr(sub_mapper, attr) == expected
 
     @pytest.mark.parametrize('oil_id, index, attr, expected', [
@@ -2274,7 +2233,6 @@ class TestEnvCanadaSampleMapper(object):
         sub_mapper = EnvCanadaRecordMapper(parser).sub_samples[index]
 
         env = sub_mapper.environmental_behavior
-        pprint(env)
 
         assert type(env) == dict
 

@@ -2,7 +2,7 @@ import sys
 from logging import (basicConfig, getLogger, NullHandler,
                      DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
-__version__ = "1.0.4"
+__version__ = "1.0.6"
 
 
 def initialize_console_log(level='debug'):
@@ -26,7 +26,7 @@ def initialize_console_log(level='debug'):
     level = levels[level.lower()]
     format_str = '%(levelname)s - %(module)8s - line:%(lineno)d - %(message)s'
 
-    basicConfig(stream=sys.stdout, level=level, format=format_str)
+    basicConfig(stream=sys.stdout, level=level, format=format_str, force=True)
 
 
 getLogger(__name__).addHandler(NullHandler())

@@ -12,13 +12,13 @@ from adios_db.models.oil.metadata import MetaData
 from adios_db.models.oil.values import Reference
 
 from pprint import pprint
-# A few handy constants for use for tests
 
+
+# A few handy constants for use for tests
 OIL_ID = 'AD00123'
 
 HERE = Path(__file__).parent
 OUTPUT_DIR = HERE / "output"
-
 TEST_DATA_DIR = (HERE.parent.parent
                  / "data_for_testing" / "noaa-oil-data" / "oil")
 EXAMPLE_DATA_DIR = HERE.parent.parent / "data_for_testing" / "example_data"
@@ -156,7 +156,6 @@ class TestOil:
     def test_json_minimal_nonsparse(self):
         oil = Oil(oil_id=OIL_ID)
         py_json = oil.py_json(sparse=False)
-
         pprint(py_json)
 
         assert len(py_json) == 8
@@ -309,8 +308,8 @@ class TestFullRecordMetadata:
 
     def test_oil_id(self):
         oil = self.oil
-        print(oil.oil_id)
 
+        print(oil.oil_id)
         assert oil.oil_id == "EC02234"
 
     @pytest.mark.parametrize("attr, value", [
@@ -395,13 +394,7 @@ def test_round_trip():
     # different order it's not longer valid
     oilin.to_file(fileout)
 
-    # file1 = open(filein, encoding="utf-8").read().strip()
-    # file2 = open(fileout, encoding="utf-8").read().strip()
-
-    # assert not file1 == file2, "output is the same as input -- test not fully valid"
-
     # read the new one to an Oil object
-
     oilout = Oil.from_file(fileout)
 
     assert oilin == oilout
@@ -414,6 +407,7 @@ def test_version_none():
     oil = Oil('XXXXXX')
     oil.metadata.name = 'An oil name'
     pyjs = oil.py_json()
+
     # remove the version:
     pyjs.pop('adios_data_model_version', None)
 

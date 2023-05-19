@@ -18,8 +18,8 @@ else:
     from adios_db.scripts.db_initialize import init_db
     from adios_db.scripts.db_restore import restore_db
 
-here = Path(__file__).resolve().parent
 
+here = Path(__file__).resolve().parent
 test_data = here.parent / "data_for_testing" / "noaa-oil-data"
 
 # Pass the --mongo command line option if you want these to run.

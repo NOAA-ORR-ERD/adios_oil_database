@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-
 """
 script to move the "Too Viscous" note to comment in EC data
 """
-
 import sys
 
 from adios_db.scripting import get_all_records, process_input
+
 
 def move_ift_note(ift):
     for itp in ift:
@@ -16,6 +15,7 @@ def move_ift_note(ift):
             except ValueError:
                 itp.comment = itp.tension.value
                 itp.tension.value = None
+
         if itp.tension.standard_deviation is not None:
             try:
                 itp.tension.standard_deviation = \
@@ -31,12 +31,14 @@ def main():
     for rec, pth in get_all_records(base_dir):
         print("\n\n******************\n")
         print("processing:", rec.oil_id, rec.metadata.name)
+
         # loop through the subsamples
         for ss in rec.sub_samples:
             pp = ss.physical_properties
             move_ift_note(pp.interfacial_tension_water)
             move_ift_note(pp.interfacial_tension_air)
             move_ift_note(pp.interfacial_tension_seawater)
+
         if not dry_run:
             print("Saving out:", pth)
             rec.to_file(pth)
@@ -46,10 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
