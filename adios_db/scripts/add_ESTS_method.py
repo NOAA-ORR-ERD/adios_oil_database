@@ -1,18 +1,16 @@
 #!/usr/bin/env python
-
 """
 Add the method to ESTS Hydrocarbon fractions data
 
 It should be: "ESTS 5.03/x.x/M"
 
 it also removed the field if it's empty.
-
 """
-
 import sys
 
 from adios_db.scripting import get_all_records
 from adios_db.models.oil import ccme
+
 
 USAGE = """
 add_ESTS_method data_dir [dry_run]
@@ -39,7 +37,6 @@ def add_the_method():
         sys.exit()
 
     for oil, pth in get_all_records(base_dir):
-
         id = oil.oil_id
         name = oil.metadata.name
         pt = oil.metadata.product_type
@@ -50,14 +47,15 @@ def add_the_method():
         print("ESTS_HydroCarbonFractions:", fractions)
         print()
 
-        if (not fractions.aromatics
-            and not fractions.GC_TPH
-            and not fractions.saturates):
+        if (not fractions.aromatics and
+                not fractions.GC_TPH and
+                not fractions.saturates):
             print("ESTS_hydrocarbon_fractions empty: removing")
             oil.sub_samples[0].ESTS_hydrocarbon_fractions = None
         else:
             print("adding the method")
             fractions.method = "ESTS 5.03/x.x/M"
+
         if not dry_run:
             print("Saving out:", pth)
             oil.to_file(pth)
@@ -65,7 +63,5 @@ def add_the_method():
             print("Dry Run: Nothing saved")
 
 
-
 if __name__ == "__main__":
     add_the_method()
-

@@ -1,17 +1,15 @@
 import sys
 
-
 from adios_db.util.db_connection import connect_mongodb
 
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=2, width=120)
 
+
 client = connect_mongodb({'mongodb.host': 'localhost',
                           'mongodb.port': 27017,
                           'mongodb.database': 'adios_db',
                           'mongodb.alias': 'oil-db-app'})
-
-
 db = client.adios_db
 records = db.imported_record
 oils = db.oil
@@ -44,12 +42,16 @@ def to_field(value):
         return value
 
 
-for attr in ('ID', 'Name', 'Reference', 'Sample Date', 'Location', 'Product Type', 'Labels', 'API'):
-    sys.stdout.write(f'{attr}\t');
-sys.stdout.write('\n');
+for attr in ('ID', 'Name', 'Reference', 'Sample Date', 'Location',
+             'Product Type', 'Labels', 'API'):
+    sys.stdout.write(f'{attr}\t')
+
+sys.stdout.write('\n')
+
 
 for o in oils.find():
     sys.stdout.write(f'{o["_id"]}\t')
+
     for attr in ('name', 'reference.reference', 'sample_date', 'location',
                  'product_type', 'labels', 'API'):
         v = deep_get(o['metadata'], attr)

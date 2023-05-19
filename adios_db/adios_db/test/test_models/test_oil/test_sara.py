@@ -1,7 +1,6 @@
 import pytest
 
 from adios_db.models.common.measurement import MassFraction
-
 from adios_db.models.oil.sara import Sara
 
 

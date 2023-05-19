@@ -1,17 +1,12 @@
 #!/usr/bin/env python
-
 """
 Adds location coordinates from a data file
-
 """
-
-
 import sys
 from ast import literal_eval
 from pathlib import Path
 
 from adios_db.scripting import Oil, LocationCoordinates, process_input
-
 
 
 USAGE = """
@@ -32,6 +27,7 @@ def run_through():
     with open("ADIOS_Locations.csv") as infile:
         infile.readline()
         data = {}
+
         for line in infile:
             if line.strip():
                 line = line.strip().split("|")
@@ -48,6 +44,7 @@ def run_through():
 
         print("\nProcessing:", id, name)
         print("adding:", coord_info)
+
         if not dry_run:
             print("Saving out:", pth)
             oil.to_file(pth)
@@ -57,6 +54,3 @@ def run_through():
 
 if __name__ == "__main__":
     run_through()
-
-
-

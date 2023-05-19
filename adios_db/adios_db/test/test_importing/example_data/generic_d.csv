@@ -1,0 +1,57 @@
+ADIOS Data Model Version,0.12.0
+Record Metadata
+Name:,Generic Diesel
+Source ID:,2023-05-18d
+Location:,
+Reference:,2023,NOAA Technical Report on Generic Oils
+Sample Date:,2023-05-18
+Product Type:,Distillate Fuel Oil
+API Gravity:,
+Labels:,Distillate Fuel Oil,Diesel,Generic Oil
+Location Coordinates:,,
+Comments:,This is a generic oil record generated from data in the ADIOS database. See the NOAA Technical Report on Generic Oils for methodology.
+
+Subsample Metadata:
+Name:,Fresh Oil
+Short Name:,Fresh Oil
+Physical Properties,Min Value,Value,Max Value
+Pour Point,,,,C
+Flash Point
+
+Density,Density,Unit,Temp,Unit
+Density at Temp,856.0698420240385,kg/m^3,0,C
+Density at Temp,852.9208973125,kg/m^3,15,C
+Density at Temp,849.0968412227564,kg/m^3,25,C
+
+Kinematic Viscosity,Viscosity,Unit,Temp,Unit
+Viscosity at Temp,7.757769005450133e-06,m^2/s,0,C
+Viscosity at Temp,5.146609191475085e-06,m^2/s,15,C
+Viscosity at Temp,4.0138877609782835e-06,m^2/s,25,C
+
+Distillation Data
+Type (Mass Fraction or Volume Fraction), Mass Fraction
+Method
+Final Boiling Point,,C
+Fraction Recovered,100,%
+Distillation Cuts,Fraction,Fraction,Temp,Temp Unit
+Cut 1,0.0,Fraction,153.71212121212122,C
+Cut 2,0.05,Fraction,189.28787878787878,C
+Cut 3,0.1,Fraction,215.38755980861242,C
+Cut 4,0.15000000000000002,Fraction,225.50418660287085,C
+Cut 5,0.2,Fraction,235.438995215311,C
+Cut 6,0.25,Fraction,243.14653110047848,C
+Cut 7,0.30000000000000004,Fraction,250.43506493506493,C
+Cut 8,0.35000000000000003,Fraction,257.0503246753247,C
+Cut 9,0.4,Fraction,263.7564935064935,C
+Cut 10,0.45,Fraction,270.0081168831169,C
+Cut 11,0.5,Fraction,276.35064935064935,C
+Cut 12,0.55,Fraction,282.4431818181818,C
+Cut 13,0.6000000000000001,Fraction,288.5357142857143,C
+Cut 14,0.65,Fraction,294.86201298701303,C
+Cut 15,0.7000000000000001,Fraction,301.7987012987013,C
+Cut 16,0.75,Fraction,308.78084415584414,C
+Cut 17,0.8,Fraction,316.6720779220779,C
+Cut 18,0.8500000000000001,Fraction,324.6542207792208,C
+Cut 19,0.9,Fraction,333.27272727272725,C
+Cut 20,0.9500000000000001,Fraction,347.35479797979804,C
+Cut 21,1.0,Fraction,371.8686868686869,C

@@ -168,8 +168,8 @@ class CheckViscosity:
             ss = oil.sub_samples[0]
             kvis = ss.physical_properties.kinematic_viscosities
             dvis = ss.physical_properties.dynamic_viscosities
-
             temps = []
+
             for v_i in (kvis, dvis):
                 temps.extend([v.ref_temp.converted_to('C').value
                               for v in v_i

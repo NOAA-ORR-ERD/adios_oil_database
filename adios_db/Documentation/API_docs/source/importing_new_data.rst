@@ -17,6 +17,40 @@ This would commonly be a way to get your data into ADIOS DB if it's already in a
 
 You can see some examples of import scripts in the :py:mod:`data_sources` package.
 
+Utility functions to make importing easier
+------------------------------------------
+
+The full object hierarchy is fairly deeply nested, in order to provide full flexibility and make sure units are consistent, etc. To make it easier to build the data structures needed, a number of the "collections" have alternate constructors to build them from typical data. For example, to create a collection of density measurements:
+
+
+.. code-block:: python
+
+    data = [(0.8663, "g/cm³", 15, "C"),
+            (0.9012, "g/cm³", 0.0, "C"),
+            ]
+    sample.physical_properties.density = DensityList.from_data(data)
+
+creates a Density List structure (when exported to JSON) that looks like::
+
+    [{'density': {'value': 0.9012, 'unit': 'g/cm³', 'unit_type': 'density'},
+                  'ref_temp': {'value': 0.0, 'unit': 'C', 'unit_type': 'temperature'}},
+     {'density': {'value': 0.8663, 'unit': 'g/cm³', 'unit_type': 'density'},
+                  'ref_temp': {'value': 15.0, 'unit': 'C', 'unit_type': 'temperature'}},
+    ]
+
+Other handy constructors are:
+
+.. code-block::
+
+    DensityList.from_data()
+
+    KinematicViscosityList.from_data()
+
+    DynamicViscosityList.from_data()
+
+    DistCutList.from_data_arrays()
+
+
 
 Generate JSON Directly
 ======================
@@ -28,26 +62,43 @@ http://adios.orr.noaa.gov
 and match that JSON. Note that the JSON is "sparse" -- there is no need to include any fields that are not relevant.
 
 
-Use a standard CSV format
+Edit JSON by Hand
+=================
+
+JSON is a human-readable format, and to some extend human-writable, but writing full JSON by hand can be pretty challenging. However, editing JSON by hand is quite manageable, so if you start with a similar record, from:
+
+http://adios.orr.noaa.gov
+
+or
+
+https://github.com/NOAA-ORR-ERD/noaa-oil-data
+
+You can then hand edit the file to replace the data with value you want. We recommend you take the time to update the meta-data in the file. And almost everything in the format is optional, so you can simply remove fields that are not relevant to your problem.
+
+
+Use a Standard CSV Format
 =========================
 
 In addition to our standard JSON, the package has an importer for a "standard" CSV file. These do not include every feature of the data model, but are easy to work with for a typical lab analysis with Excel. We provide an Excel template that can be filled out.
 
 The template can be downloaded here: :download:`ADIOS data template <../../../data/ADIOS_data_template.xlsx>`
 
+
 Using the Excel template
 ------------------------
 
 It may help to be familiar with the ADIOS data model, but the goal is to have the template be straightforward and easy to fill out.
 
-Use one spreadsheet for each record. If/when you save it out as a CSV file, be sure to save it in UTF8 encoding: "CSV-UTF8".
+Use one worksheet for each record. If/when you save it out as a CSV file, be sure to save it in UTF8 encoding: "CSV-UTF8".
 
-Note that it's OK to simply leave fields blank if there is not data -- the ADIOS DB is very forgiving of sparse data.
+Note that it's OK to simply leave fields blank if there is no data -- the ADIOS DB is very forgiving of sparse data.
 
 Multiple values
 ...............
 
 In general, you don't want to touch any of the field names or descriptions, only the data entry cells. However, there are a number of places where ADIOS DB will accept "one or more" data points for a given property (e.g. density at different temperatures), so you are free to insert new rows to accommodate all your data.
+
+Do make sure to insert an empty row in between "tables" of the same data type.
 
 Units
 .....

@@ -1,10 +1,5 @@
-from adios_db.models.oil.distillation import (DistCut,
-                                              DistCutList,
-                                              Distillation,
-                                              )
-from adios_db.models.common.measurement import (Temperature,
-                                                Concentration,
-                                                )
+from adios_db.models.oil.distillation import DistCut, DistCutList, Distillation
+from adios_db.models.common.measurement import Temperature, Concentration
 
 
 class TestDistCut:
@@ -65,10 +60,10 @@ class TestDistCutList:
 
 
 def make_dist_cut_list(data, temp_unit='K'):
-
     cuts = [DistCut(fraction=Concentration(value=f, unit="fraction"),
                     vapor_temp=Temperature(value=t, unit=temp_unit))
             for f, t in data]
+
     return DistCutList(cuts)
 
 
@@ -77,16 +72,18 @@ def test_from_data_arrays():
     see if the constructor from arrays works
     """
     fractions = (1.5, 2.8, 12.4, 23.5, 44.3, 63.9, 82.7, 91.7, 96.2, 98.8)
-    temps = (36.0, 69.0, 119.0, 173.0, 283.0, 391.0, 513.0, 604.0, 672.0, 729.0)
     frac_unit = 'percent'
-    temp_unit = 'C'
-    dct = DistCutList.from_data_arrays(fractions=fractions,
-                                       temps=temps,
-                                       frac_unit=frac_unit,
-                                       temp_unit=temp_unit
-                                       )
 
+    temps = (36.0, 69.0, 119.0, 173.0, 283.0, 391.0, 513.0, 604.0,
+             672.0, 729.0)
+    temp_unit = 'C'
+
+    dct = DistCutList.from_data_arrays(fractions=fractions,
+                                       frac_unit=frac_unit,
+                                       temps=temps,
+                                       temp_unit=temp_unit)
     assert len(dct) == len(fractions)
+
     msgs = dct.validate()
     assert not msgs
 
@@ -122,17 +119,17 @@ class TestDistillation:
         but keeping this, as the API is different
         """
         fracs, temps = zip(*data)
-        return DistCutList.from_data_arrays(fracs, temps, "fraction", temp_unit)
+        return DistCutList.from_data_arrays(fracs, temps,
+                                            "fraction", temp_unit)
 
     def test_distillation(self):
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=Concentration(value=0.8,
-                                                             unit="fraction"),
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='C')
-                            )
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=Concentration(value=0.8, unit="fraction"),
+            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+        )
 
         # few random things
         assert len(dist.cuts) == 11
@@ -145,32 +142,30 @@ class TestDistillation:
         assert msgs == []
 
     def test_validation_bad_temps(self):
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=Concentration(value=0.8,
-                                                             unit="fraction"),
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='K')
-                            )
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=Concentration(value=0.8, unit="fraction"),
+            cuts=self.make_dist_cut_list(self.data, temp_unit='K')
+        )
         msgs = dist.validate()
 
-        print(msgs)
         # make sure there is something there!
+        print(msgs)
         assert msgs
 
         errs = sum(1 for e in msgs if 'E040:' in e)
         assert errs == 7
 
     def test_validation_bad_fraction(self):
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=Concentration(value=0.8,
-                                                             unit="fraction"),
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='C')
-                            )
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=Concentration(value=0.8, unit="fraction"),
+            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+        )
         dist.cuts[2].fraction.value = 1.1
         dist.cuts[4].fraction.value = -0.9
 
@@ -180,14 +175,13 @@ class TestDistillation:
         assert errs == 2
 
     def test_validation_bad_type(self):
-        dist = Distillation(type="mass fractions",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=Concentration(value=0.8,
-                                                             unit="fraction"),
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='C')
-                            )
+        dist = Distillation(
+            type="mass fractions",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=Concentration(value=0.8, unit="fraction"),
+            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+        )
         msgs = dist.validate()
 
         # make sure there is something there!
@@ -195,14 +189,13 @@ class TestDistillation:
         assert "E032:" in msgs[0]
 
     def test_validation_bad_fraction_recovered(self):
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=Concentration(value=1.1,
-                                                             unit="fraction"),
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='C')
-                            )
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=Concentration(value=1.1, unit="fraction"),
+            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+        )
         msgs = dist.validate()
 
         # make sure there is something there!
@@ -210,13 +203,13 @@ class TestDistillation:
         assert "E041: Value for distillation fraction recovered: 1.1" in msgs[0]
 
     def test_validation_no_fraction_recovered(self):
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=None,
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='C')
-                            )
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=None,
+            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+        )
         msgs = dist.validate()
 
         # make sure there is something there!
@@ -227,26 +220,25 @@ class TestDistillation:
         """
         if there is no cut data, it's OK not to have a fraction_recovered
         """
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=None,
-                            )
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=None,
+        )
         msgs = dist.validate()
 
         # make sure there is something there!
         assert len(msgs) == 0
 
     def test_distillation_accumulative_fraction(self):
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=Concentration(value=0.8,
-                                                             unit="fraction"),
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='C')
-                            )
-
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=Concentration(value=0.8, unit="fraction"),
+            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+        )
         dist.cuts[5].fraction.value = 0.2
 
         msgs = dist.validate()
@@ -254,19 +246,15 @@ class TestDistillation:
         assert msgs[0].startswith('E060:')
 
     def test_distillation_boilingpoints_strictlyincreasing(self):
-        dist = Distillation(type="mass fraction",
-                            method="some arbitrary method",
-                            end_point=Temperature(value=15, unit="C"),
-                            fraction_recovered=Concentration(value=0.8,
-                                                             unit="fraction"),
-                            cuts=self.make_dist_cut_list(self.data,
-                                                         temp_unit='C')
-                            )
-
+        dist = Distillation(
+            type="mass fraction",
+            method="some arbitrary method",
+            end_point=Temperature(value=15, unit="C"),
+            fraction_recovered=Concentration(value=0.8, unit="fraction"),
+            cuts=self.make_dist_cut_list(self.data, temp_unit='C')
+        )
         dist.cuts[5].vapor_temp.value = 400.
 
         msgs = dist.validate()
         assert len(msgs) == 1
         assert msgs[0].startswith('E061:')
-
-

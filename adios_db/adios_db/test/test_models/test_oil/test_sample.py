@@ -2,15 +2,13 @@ import pytest
 
 from adios_db.models.common.measurement import (Temperature,
                                                 Density,
-                                                MassFraction,
-                                                )
+                                                MassFraction)
 from adios_db.models.oil.sample import Sample, SampleList
 from adios_db.models.oil.metadata import SampleMetaData
 from adios_db.models.oil.ccme import CCME
 from adios_db.models.oil.physical_properties import (PhysicalProperties,
                                                      DensityPoint,
                                                      DensityList)
-from adios_db.models.oil.validation.validate import validate_json
 
 
 class TestSample:
@@ -69,7 +67,6 @@ class TestSample:
         assert py_json['metadata']['short_name'] == "Fresh Oil"
 
     @pytest.mark.parametrize("attr", ['CCME',
-                                      # 'ESTS_hydrocarbon_fractions',
                                       'SARA',
                                       'bulk_composition',
                                       'compounds',
@@ -104,8 +101,8 @@ class TestSample:
         """
         s = Sample(metadata=SampleMetaData(
             short_name="short",
-            name="a longer name that is more descriptive")
-        )
+            name="a longer name that is more descriptive"
+        ))
         p = PhysicalProperties()
 
         s.metadata.fraction_evaporated = MassFraction(value=11, unit='%')
@@ -208,9 +205,10 @@ def test_sample_with_ccme():
     ccme.method = "a method name"
 
     s = Sample(metadata=SampleMetaData(
-               short_name="short",
-               name="a longer name that is more descriptive")
-               )
+        short_name="short",
+        name="a longer name that is more descriptive"
+    ))
+
     s.metadata.fraction_evaporated = MassFraction(value=16, unit="%")
     s.metadata.boiling_point_range = None
     s.CCME = ccme

@@ -2,6 +2,7 @@ import copy
 
 from adios_db.util.many_many import ManyMany
 
+
 # some data to use for tests:
 data = {'this': ('the', 'other', 'thing'),
         'that': ('the', 'and', 'some', 'more', 'thing'),
@@ -26,7 +27,6 @@ def test_right():
 
 
 def test_rebuild_orig():
-
     mm = ManyMany(data)
 
     old_left = copy.deepcopy(mm.left)
@@ -46,8 +46,7 @@ def test_add_to_left_new():
     left = mm.left
     right = mm.right
 
-    print(left)
-    print(right)
+    print(f'left: {left}, right: {right}')
 
     assert 'those' in left
     assert left['those'] == {'newthing'}
@@ -63,8 +62,7 @@ def test_add_to_left_existing():
     left = mm.left
     right = mm.right
 
-    print(left)
-    print(right)
+    print(f'left: {left}, right: {right}')
 
     assert 'newthing' in left['this']
     assert 'newthing' in right
@@ -79,8 +77,7 @@ def test_add_to_right_new():
     left = mm.left
     right = mm.right
 
-    print(left)
-    print(right)
+    print(f'left: {left}, right: {right}')
 
     assert 'those' in left
     assert left['those'] == {'newthing'}

@@ -3,7 +3,6 @@ Assorted utilities
 
 A few right here:
 """
-
 from math import log10, floor
 
 

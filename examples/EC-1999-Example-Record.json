@@ -1,0 +1,91 @@
+{
+    "adios_data_model_version": "0.12.0",
+    "metadata": {
+        "alternate_names": [
+            "ANS, North Slope"
+        ],
+        "location": "Alaska, USA",
+        "name": "Alaska North Slope (1989)",
+        "product_type": "Crude Oil NOS",
+        "reference": {
+            "reference": "American Petroleum Institute, API-EPA Sample Analysis of Standard Reference Oils, Ref. #71271, Washington, D.C., 1981",
+            "year": 1989
+        },
+        "source_id": "ODB00-5"
+    },
+    "oil_id": "ECODB00-5",
+    "review_status": {
+        "status": "Not Reviewed"
+    },
+    "status": [],
+    "sub_samples": [
+        {
+            "bulk_composition": [
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 1.04
+                    },
+                    "name": "Sulphur Content"
+                },
+                {
+                    "groups": [
+                        "Metals"
+                    ],
+                    "measurement": {
+                        "unit": "\u00b5g/g",
+                        "unit_type": "massfraction",
+                        "value": 21.0
+                    },
+                    "name": "Nickel"
+                },
+                {
+                    "groups": [
+                        "Metals"
+                    ],
+                    "measurement": {
+                        "max_value": 9.7,
+                        "unit": "\u00b5g/g",
+                        "unit_type": "massfraction"
+                    },
+                    "name": "Vanadium"
+                },
+                {
+                    "measurement": {
+                        "unit": "%",
+                        "unit_type": "massfraction",
+                        "value": 0.2
+                    },
+                    "name": "Nitrogen"
+                }
+            ],
+            "metadata": {
+                "fraction_evaporated": {
+                    "unit": "%",
+                    "unit_type": "massfraction",
+                    "value": 0.0
+                },
+                "name": "Fresh Oil Sample",
+                "sample_id": "ODB00-5",
+                "short_name": "Fresh Oil"
+            },
+            "physical_properties": {
+                "densities": [
+                    {
+                        "density": {
+                            "unit": "g/mL",
+                            "unit_type": "density",
+                            "value": 0.893
+                        },
+                        "ref_temp": {
+                            "unit": "C",
+                            "unit_type": "temperature",
+                            "value": 16.0
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

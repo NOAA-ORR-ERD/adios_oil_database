@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 The correct conversion from C to K is 273.16
 
@@ -9,7 +8,6 @@ use 273.0.
 So we end up with temps like: -0.15 C instead of 0.0 C
 This script will "correct" that.
 """
-
 from adios_db.scripts import run_json_through_oil_object
 from adios_db.models.common.measurement import Temperature
 
@@ -18,4 +16,3 @@ Temperature.fixCK = True
 
 # then run it all through
 run_json_through_oil_object.run_through()
-
