@@ -5,8 +5,7 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json, JSON_List
 from ..common.measurement import (Temperature,
-                                  MassOrVolumeFraction,
-                                  )
+                                  MassOrVolumeFraction)
 
 from ..common.validators import EnumValidator
 from .validation.warnings import WARNINGS
@@ -114,8 +113,17 @@ class Distillation:
             temp = []
 
             for cut in self.cuts:
-                frac.append(cut.fraction.converted_to('fraction').value)
-                temp.append(cut.vapor_temp.converted_to('C').value)
+                if hasattr(cut.fraction, 'converted_to'):
+                    frac.append(cut.fraction.converted_to('fraction').value)
+                else:
+                    # Missing fractions in our cuts count as a discontinuity
+                    frac.append(0.0)
+
+                if hasattr(cut.vapor_temp, 'converted_to'):
+                    temp.append(cut.vapor_temp.converted_to('C').value)
+                else:
+                    # Missing vapor_temps in our cuts count as a discontinuity
+                    temp.append(0.0)
 
             if len(frac) > 1:
                 if(any(i > j for i, j in zip(frac, frac[1:]))):

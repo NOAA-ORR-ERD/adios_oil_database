@@ -15,6 +15,7 @@ from ..common.measurement import (Temperature,
                                   Density,
                                   DynamicViscosity,
                                   KinematicViscosity,
+                                  SayboltViscosity,
                                   AngularVelocity,
                                   InterfacialTension)
 
@@ -223,6 +224,20 @@ class KinematicViscosityList(RefTempList, JSON_List):
 
 @dataclass_to_json
 @dataclass
+class SayboltViscosityPoint:
+    viscosity: SayboltViscosity = None
+    ref_temp: Temperature = None
+    shear_rate: AngularVelocity = None
+    method: str = None
+    comment: str = None
+
+
+class SayboltViscosityList(RefTempList, JSON_List):
+    item_type = SayboltViscosityPoint
+
+
+@dataclass_to_json
+@dataclass
 class PourPoint:
     measurement: Temperature = None
     method: str = None
@@ -255,6 +270,7 @@ class InterfacialTensionList(RefTempList, JSON_List):
 class PhysicalProperties:
     pour_point: PourPoint = None
     flash_point: FlashPoint = None
+    appearance: str = ''
 
     densities: DensityList = field(default_factory=DensityList)
     kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)

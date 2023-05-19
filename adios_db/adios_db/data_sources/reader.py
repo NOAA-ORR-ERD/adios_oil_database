@@ -32,6 +32,12 @@ class CsvFile:
 
         self.init_field_names()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.fileobj.close()
+
     def init_field_names(self):
         next(self.reader)
         self.field_names = self.reader.fieldnames

@@ -18,4 +18,4 @@ pynucos>=2.12
 
 # scipy  # no longer used
 
-
+pypdf>=3.5.2
