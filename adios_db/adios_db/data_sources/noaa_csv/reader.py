@@ -222,7 +222,7 @@ def read_physical_properties(reader):
 
     Stops when "Distillation Data" is reached
     """
-    logging.debug("reading physical Properties")
+    logging.debug("Reading physical Properties")
     pp = PhysicalProperties()
 
     for row in reader:
@@ -237,6 +237,7 @@ def read_physical_properties(reader):
                 m = Temperature(**read_measurement(row[1:]))
                 pp.flash_point = None if empty_measurement(m) else  FlashPoint(measurement=m)
             if check_field_name(row[0], "Density"):
+                print("******Found density")
                 pp.densities = read_densities(reader)
             if check_field_name(row[0], "Kinematic Viscosity"):
                 pp.kinematic_viscosities = read_kvis(reader)
@@ -247,6 +248,7 @@ def read_physical_properties(reader):
 
 
 def read_densities(reader):
+    logging.debug("reading densities")
     data = []
     for row in reader:
         if (  check_field_name(row[0], "Density at temp")
@@ -254,7 +256,7 @@ def read_densities(reader):
             data.append(read_val_at_temp_row(row[1:]))
         else:
             break
-
+    logging.debug(f"density data: {data}")
     return DensityList.from_data(data)
 
 

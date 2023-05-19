@@ -37,7 +37,7 @@ from adios_db.computation.gnome_oil import make_gnome_oil
 
 
 # uncomment if you want to see all the debugging output on failure.
-# adios_db.initialize_console_log(level='debug')
+adios_db.initialize_console_log(level='debug')
 
 
 HERE = Path(__file__).parent
@@ -45,7 +45,7 @@ HERE = Path(__file__).parent
 test_file1 = HERE / "example_data" / "LSU_AlaskaNorthSlope.csv"
 test_file2 = HERE / "example_data" / "example_noaa_csv.csv"
 test_file3 = HERE / "example_data" / "Average-VLSFO-AMSA-2022.csv"
-test_file4 = HERE / "example_data" / "generic_d_2023-05-11.csv"
+test_file4 = HERE / "example_data" / "generic_d.csv"
 
 
 # make module level?
@@ -380,8 +380,9 @@ def test_generic_csv():
     oil = read_csv(test_file4)
 
     md = oil.metadata
-    oil.to_file("junk.json")
-    assert md.source_id == '2023-05-11d'
+    oil.to_file(test_file4.with_suffix(".json"))
+
+    assert md.source_id[:5] == '2023-'
     assert md.reference.year == 2023
     assert md.reference.reference == "NOAA Technical Report on Generic Oils"
     assert md.product_type == 'Distillate Fuel Oil'
@@ -400,20 +401,14 @@ def test_generic_csv():
 
     assert len(dist.cuts) == 21
 
-    assert md.API == 34.2
+    assert md.API == 34.28
 
     msgs = oil.validate()
 
-    # This should change once we get a new generic diesel csv
-    assert len(msgs) == 3
-    for msg in msgs:
-        assert msg.startswith("W010")  # the warnings about C-K conversion issue
+    assert len(msgs) == 0
 
     # make sure it's GNOME Suitable
     go = make_gnome_oil(oil)
-
-
-
 
 
 @pytest.mark.parametrize('filename', [test_file1,

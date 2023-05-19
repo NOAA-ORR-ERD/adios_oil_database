@@ -1,12 +1,12 @@
 ADIOS Data Model Version,0.12.0
 Record Metadata
 Name:,Generic Diesel
-Source ID:,2023-05-11d
+Source ID:,2023-05-18d
 Location:,
-Reference:,2023, NOAA Technical Report on Generic Oils
-Sample Date:,2023-05-11
+Reference:,2023,NOAA Technical Report on Generic Oils
+Sample Date:,2023-05-18
 Product Type:,Distillate Fuel Oil
-API Gravity:, 34.2
+API Gravity:,
 Labels:,Distillate Fuel Oil,Diesel,Generic Oil
 Location Coordinates:,,
 Comments:,This is a generic oil record generated from data in the ADIOS database. See the NOAA Technical Report on Generic Oils for methodology.
@@ -14,26 +14,26 @@ Comments:,This is a generic oil record generated from data in the ADIOS database
 Subsample Metadata:
 Name:,Fresh Oil
 Short Name:,Fresh Oil
-
-Physical Properties,Min Value,Value,Max Value, Unit
+Physical Properties,Min Value,Value,Max Value
 Pour Point,,,,C
 Flash Point
+
 Density,Density,Unit,Temp,Unit
-Density at Temp,856.0698420240385,kg/m^3,273,K
-Density at Temp,852.9208973125,kg/m^3,288,K
-Density at Temp,849.0968412227564,kg/m^3,298,K
+Density at Temp,856.0698420240385,kg/m^3,0,C
+Density at Temp,852.9208973125,kg/m^3,15,C
+Density at Temp,849.0968412227564,kg/m^3,25,C
 
 Kinematic Viscosity,Viscosity,Unit,Temp,Unit
-Viscosity at Temp,8.023605322592916e-06,m^2/s,273,K
-Viscosity at Temp,5.146609191475085e-06,m^2/s,288,K
-Viscosity at Temp,4.0138877609782835e-06,m^2/s,298,K
+Viscosity at Temp,7.757769005450133e-06,m^2/s,0,C
+Viscosity at Temp,5.146609191475085e-06,m^2/s,15,C
+Viscosity at Temp,4.0138877609782835e-06,m^2/s,25,C
 
 Distillation Data
-Type (Mass Fraction or Volume Fraction), Mass Fraction,
+Type (Mass Fraction or Volume Fraction), Mass Fraction
 Method
 Final Boiling Point,,C
-Fraction Recovered, 100, %
-Distillation Cuts, Fraction, Fraction Unit, Temp, Temp Unit
+Fraction Recovered,100,%
+Distillation Cuts,Fraction,Fraction,Temp,Temp Unit
 Cut 1,0.0,Fraction,153.71212121212122,C
 Cut 2,0.05,Fraction,189.28787878787878,C
 Cut 3,0.1,Fraction,215.38755980861242,C
