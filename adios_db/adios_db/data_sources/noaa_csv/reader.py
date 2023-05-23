@@ -18,6 +18,7 @@ import logging
 
 import nucos
 
+from adios_db.util import BufferedIterator
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.version import Version
 from adios_db.models.oil.metadata import MetaData, SampleMetaData
@@ -41,6 +42,8 @@ from adios_db.models.oil.cleanup import FixAPI
 from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction, AnyUnit
 
 import logging
+
+
 
 def padded_csv_reader(file_path, num_fields=6):
     """
@@ -73,7 +76,7 @@ class Reader():
 
         Return an Oil object
         """
-        reader = padded_csv_reader(infilename)
+        reader = BufferedIterator(padded_csv_reader(infilename))
 
         oil = Oil('XXXXXX')
 
@@ -93,12 +96,18 @@ class Reader():
                 break
         # read the metadata:
         oil.metadata = read_record_metadata(reader)
-        # load the subsamples:
-        while True:
-            oil.sub_samples.append(read_subsample(reader))
-            break
+        # oil.sub_samples.append(read_subsample(reader))
+
+        # breakpoint()
+        # Read the Samples
+        for row in reader:
+            if check_field_name(row[0], 'Subsample Metadata'):
+                ss = read_subsample(reader)
+                oil.sub_samples.append(ss)
+
 
         # add in API if it's not there:
+        # note: maybe add a cleanup options?
         if not oil.metadata.API:
             FixAPI(oil).cleanup()
 
@@ -130,6 +139,7 @@ def read_record_metadata(reader):
     logging.debug("reading record metadata")
     for row in reader:
         if check_field_name(row[0], "Subsample Metadata"):
+            reader.push(row)
             logging.debug("found Subsample metadata, breaking out")
             break
         else:
@@ -159,7 +169,6 @@ def read_subsample(reader):
     ss.compounds = read_compounds(reader)
     ss.bulk_composition = read_bulk_composition(reader)
     ss.industry_properties = read_industry_properties(reader)
-
     return ss
 
 
@@ -237,7 +246,6 @@ def read_physical_properties(reader):
                 m = Temperature(**read_measurement(row[1:]))
                 pp.flash_point = None if empty_measurement(m) else  FlashPoint(measurement=m)
             if check_field_name(row[0], "Density"):
-                print("******Found density")
                 pp.densities = read_densities(reader)
             if check_field_name(row[0], "Kinematic Viscosity"):
                 pp.kinematic_viscosities = read_kvis(reader)
@@ -421,6 +429,7 @@ def read_industry_properties(reader):
     ind_props = IndustryPropertyList()
     for row in reader:
         if check_field_name(row[0], "Subsample Metadata"):
+            reader.push(row)
             logging.debug('found "Subsample Metadata": breaking out')
             break
         else:
