@@ -1,0 +1,406 @@
+ACGIH 96
+American Conference of Governmental Industrial Hygienists, 1996 Threshold Limit Values for Chemical
+Substances and Physical Agents; Biological Exposure Indices, ACGIH, Cincinnati, Ohio, 1996.
+Anderson 74
+Anderson, J.W., J.M. Neff, B.A. Cox, H.E. Tatem, and G.M. Hightower, "Characteristics of Dispersions and Water-
+soluble Extracts of Crude Oil and Refined Oils and their Toxicity to Estuarine Crustaceans and Fish", Marine Biology,
+vol. 27, pp. 75-88, 1974.
+API 81
+American Petroleum Institute, API-EPA Sample Analysis of Standard Reference Oils, Ref. #71271, Washington,
+D.C., 1981.
+ARC 87
+Alberta Research Council, Information Sheets, Oil Sands Bank, ARC, Edmonton, Alberta, 1987.
+ASTM D396
+American Society for Testing and Materials, "Standard Specification for Fuel Oils", Annual Book of AVM Standards -
+Section 5 Petroleum Products, Lubricants, and Fossil Fuels, West Conshohocken, Pennsylvania, 1996.
+ASTM D910
+American Society for Testing and Materials, "Standard Specification for Aviation Gasolines", Annual Book of ASTM
+Standards - Section 5 Petroleum Products, Lubricants, and Fossil Fuels, West Conshohocken, Pennsylvania, 1996.
+ASTM D975
+American Society for Testing and Materials, "Standard Specification for Diesel Fuel Oils", Annual Book of AVM
+Standards - Section 5 Petroleum Products, Lubricants, and Fossil Fuels, American Society for Testing and
+Materials, West Conshohocken, Pennsylvania, 1996.
+ASTM D1655
+American Society for Testing and Materials, "Standard Specification for Aviation Turbine Fuels", Annual Book of ASTM
+Standards - Section 5 Petroleum Products, Lubricants, and Fossil Fuels, American Society for Testing and Materials, West
+Conshohocken, Pennsylvania, 1996.
+ASTM D2880
+American Society for Testing and Materials, "Standard Specification for Gas Turbine Fuels", Annual Book of ASTM
+Standards - Section 5 Petroleum Products, Lubricants, and Fossil Fuels, American Society for Testing and Materials, West
+Conshohocken, Pennsylvania, 1996.
+ASTM D4814
+American Society for Testing and Materials, "Standard Specification for Automotive Spark-Ignition Engine Fuel", Annual
+Book of ASTM Standards - Section 5 Petroleum Products, Lubricants, and Fossil Fuels, West Conshohocken, Pennsylvania,
+1996.
+
+Bobra 83
+Bobra, A.M., W.Y. Shiu, and D. Mackay, "Toxicity of Hydrocarbons and Crude Oils", Proceedings of the 6th
+Arctic and Marine Oil Spill Program Technical Seminar, Environment Canada, Ottawa, Ontario, pp. 52-58,
+1983.
+
+Brown 94
+Brown, C.E., Z. Wang, M. Fruhwirth, and M.F. Fingas, "May 1993 Oil Spill Sensor Test Program: Correlation of
+Laser Fluorosensor Data with Chemical Analysis", Proceedings of the 17th Arctic and Marine Oil Spill Program
+Technical Seminar, Environment Canada, Ottawa, Ontario, pp. 1239-1261, 1994.
+
+Buist 89
+Buist, I., S. Potter, D. Mackay, and M. Charles, "Laboratory studies on the behaviour and cleanup of waxy crude oil
+spills", in Proceedings of the 1989 Oil Spill Conference, American Petroleum Institute, Washington, D.C., 1989, pp.
+105-113.
+
+Burnett 85
+Burnett, M.W., R.M. Giannini, W.C. Kuby, H.J. Modetz, R. Strucko, and A.F. Talbot, "Worldwide
+Characterization of Marine Fuels", Marine Fuels, ASTM STP 878, Cletus H. Jones, Ed., American Society for
+Testing and Materials, Philadelphia, Pennsylvania, 1985.
+
+Caltex 92
+Caltex Petroleum Corporation, personal communication to Emergencies Science Division, Environment Canada,
+Ottawa, Ontario, 1992.
+
+Cao 92
+Cao, J.R., Microwave Digestion of Crude Oils and Oil Products for the Determination of Trace Metals and Sulphur
+by Inductively-Coupled Plasma Atomic Emission Spectroscopy, Environment Canada Manuscript Report Number
+EE-140, Ottawa, Ontario, 82 pp., 1992.
+
+CHRIS 91
+Chemical Hazards Response Information System (CHRIS), United States Coast Guard, Department of
+Transportation, Washington, D.C., 1991.
+
+Clark 88
+Clark, G.H., Industrial and Marine Fuels Reference Book, Butterworth and Co. (Publishers) Ltd., London,
+England, 1988.
+
+Daling 91
+Daling, P.S. and P.J. Brandvik, Characterization and Prediction of the Weathering Properties of Oils at Sea A
+Manual for the Oils Investigated in the DIWO Project, DIWO 16, IKU Sintef Group (Continental Shelf and
+Petroleum Technology Research Institute), Trondheim, Norway, 1991.
+
+Dillon 78
+Dillon, T.M., J.M. Neff, and J.S. Warner, "Toxicity and Sublethal Effects of No.2 Fuel Oil on the Supralittoral
+Isopod, Lygia Exotica", Bull. Environ. Contam. Toxica, volume 20, pp. 320-327, 1978.
+
+Dome 84
+Dome Petroleum, personal communication to Emergencies Science Division, Environment Canada, Ottawa,
+Ontario, 1984.
+
+Dukek 78
+Dukek, W.G., "Aviation and Other Gas Turbine Fuels", Kirk-Othmer Encyclopaedia of Chemical Technology-
+Volume 3, John Wiley and Sons, New York, New York, pp.328-351, 1978.
+
+
+
+ESD
+Environmental Emergencies Technology Division, experimental data, Environment Canada, Ottawa, Ontario,
+1983-1989; and Emergencies Science Division, experimental data, Environment Canada, Ottawa, Ontario, 1990-
+1996. Presently referred to as the Emergencies Science and Technology Section (ESTS) of Environment and
+Climate Change Canada (ECCC).
+
+Esso 84
+Esso Petroleum Canada, Product Health and Safety Data Sheets on Voltesso 35, 1984.
+
+Esso 90a
+Esso Petroleum Canada, Material Safety Data Sheet, CCINFO Disc, Chemical Information Series, 1990.
+
+Esso 90b
+Esso Petroleum Canada, Product Information - Lubricants and Specialties (7th edition), 1990.
+
+Gulf 83a
+Gulf Canada Resources Inc., East Tarsiut Crude Oil Analysis, File No. 187-80-29, 1983.
+
+Harris 94
+Harris, G., The Comparative Toxicity of Crude and Refined Oils to Daphnia Magna, Environment Canada
+Manuscript Report Number EE-152, Ottawa, Ontario, 29 pp., 1992.
+
+Hedtke 80
+Hedtke, S.F. and F.A. Puglisi, "Effects of Waste Oil on the Survival and Reproduction of the American Flagfish,
+Jordanella Floridae", Canadian Journal of Fisheries and Aquatic Sciences, vol. 37, pp. 757-764, 1980.
+
+Hedtke 82
+Hedtke, S.F. and F.A. Puglisi, "Short-term Toxicity of Five Oils to Four Freshwater Species", Arch. Environm.
+Contam. Toxicol, vol. 11, pp. 425-430, 1982.
+
+Hutcheson 83
+Hutcheson, M.S., P.O. Keizer, and R. Odense, Chemistry and Toxicity of the Venture Field Condensates, Mobil
+Oil Canada Ltd., 1983.
+
+Lockhart 87
+Lockhart, W.L., R.W. Danell, and D.A.J. Murray, "Acute Toxicity Bioassays with Petroleum Products: Influence of
+Exposure Conditions", Odin Freshwater: Chemistry, Biology and Countermeasures: Proceedings of the
+Symposium on Oil Pollution in Freshwater, Pergamon Press, New York, New York, 1987.
+
+Lynch 81
+Lynch, B.W.J., The Fate of Controlled Oil Spills at Sea, Report No. LR 390(01"), Warren Spring Laboratory,
+Stevenage, England, 1981.
+
+Mackay 80
+Mackay, D., K. Hossain, and W.Y Shiu, Analysis of Beaufort Sea and Prudhoe Bay Crude Oils, Department of
+Chemical Engineering and Applied Chemistry, University of Toronto, Toronto, Ontario, 1980.
+
+Mackay 82a
+Mackay, D. and W. Zagorski, Studies of Water-in-Oil Emulsions, Environment Canada Manuscript Report
+Number EE-34, Ottawa, Ontario, 100 pp., 1982.
+
+Mackay 82b
+Mackay, D., W.Y. Shiu, K. Hossain, W. Stiver, D. McCurdy, S. Paterson, and P.A. Tebeau, Development and
+Calibration of an Oil Spill Behaviour Model, Report No. CG-D-27-83, United States Coast Guard, Department of
+Transportation, Washington, D.C., 85 pp., 1982.
+
+MacLean 89
+MacLean, M.M. and K.G. Doe, The Comparative Toxicity of Crude and Refined Oils to Daphnia Magna and
+Artemia, Environment Canada Manuscript Report Number EE-111, Ottawa, Ontario, 72 pp., 1989.
+
+Maijanen 84
+Maijanen, A., A. Ng, W.Y. Shiu, and D. Mackay, The Preparation and Composition of Aqueous Solutions of Crude
+Oils and Petroleum Products, Petroleum Association for the Conservation of the Canadian Environment, 1984.
+
+McAuliffe 77
+McAuliffe, C.D., "Evaporation and Solution of C2 to C10 Hydrocarbons from Crude Oils on the Sea Surface",
+Proceedings of the Symposium on Fate and Effects of Petroleum Hydrocarbons in Marine Ecosystems and
+Organisms, Pergamon Press, New York, New York, pp. 363-372, 1977.
+
+Moles 79
+Moles, A., S.D. Rice, and S. Korn, "Sensitivity of Alaskan Freshwater and Anadromous Fishes to Prudhoe Bay
+Crude Oil and Benzene", Trans. Am. Fish. Soc., volume 108, pp. 408-414, 1979.
+
+Murray 84
+Murray, D.A.J., W.L. Lockhart, and G.R.B. Webster, "Analysis of the Water-soluble Fractions of Crude Oils
+and Petroleum Products by Gas Chromatography", Oil and Petrochemical. Pollution, vol. 2, 1984.
+
+Neff 76
+Neff, J.M, J.W. Anderson, B.A. Cox, R.B. Laughlin, S.S Rossi, "Effects of Petroleum on Survival, Respiration and
+Growth of Marine Animals", Proceedings of the Symposium on Sources, Effects and Sinks of Hydrocarbons in the
+Aquatic Environment, The American Institute of Biological Sciences, pp. 516-532, 1976.
+
+OGJ 83a
+Aalund, L.R., "Guide to Export Crudes for the '80s - 1: Assay series begins with Mideast crudes", Oil& Gas
+Journal, April 11, pp. 71-77, 1983.
+
+OGJ 83b
+Aalund, L.R., "Guide to Export Crudes for the '80s - 2: Assays cover additional 19 Middle East crudes", Oil&
+Gas Journal, May 2, pp. 204-215, 1983.
+
+OGJ 83c
+Aalund, L.R., "Guide to Export Crudes for the '80s - 3: North Sea now offers 14 export crudes", Oil & Gas
+Journal, May 23, pp. 69-76, 1983.
+
+OGJ 83d
+Aalund, L.R., "Guide to Export Crudes for the '80s - 4: North Sea crudes: Flotta to Thistle", Oil& Gas Journal,
+June 6, pp. 75-79, 1983.
+
+OGJ 83e
+Aalund, L.R., "Guide to Export Crudes for the '80s - 5: West African crude production diversifies", Oil& Gas
+Journal, June 20, pp. 92-95, 1983.
+
+OGJ 83f
+Aalund, L.R., "Guide to Export Crudes for the '80s - 6: Ten additional West African assays", Oil& Gas Journal,
+July 4, pp. 96-99, 1983.
+
+OGJ 83g
+Aalund, L.R., "Guide to Export Crudes for the '80s - 7: North African crudes important to assay series", Oil&
+Gas Journal, July 25, pp. 146-150, 1983.
+
+
+
+OGJ 83h
+Aalund, L.R., "Guide to Export Crudes for the '80s - 8: Quality crudes hallmark of Asian production", Oil&
+Gas Journal, August 22, pp. 124-133, 1983.
+
+OGJ 83i
+Aalund, L.R., "Guide to Export Crudes for the '80s - 9: Minas crude, plus Soviet and Chinese streams", Oil&
+Gas Journal, September 5, pp. 144-149, 1983.
+
+OGJ 83j
+Aalund, L.R., "Guide to Export Crudes for the '80s - 10: Latin America offers diverse crudes for use in
+refineries", Oil& Gas Journal, October 24, pp. 88-90, 1983.
+
+OGJ 83k
+Aalund, L.R., "Guide to Export Crudes for the '80s - 11: Eight additional Latin American crudes assayed",
+Oil&  Gas Journal, November 7, pp. 105-109, 1983.
+
+OGJ 83l
+Aalund, L.R., "Guide to Export Crudes for the '80s: New assay, Bombay High", Oil& Gas Journal, November
+21, p. 78, 1983.
+
+OGJ 83m
+Aalund, L.R., "Guide to Export Crudes for the '80s - 12: Important North American crudes", Oil& Gas Journal,
+December 12, pp. 120-125, 1983.
+
+OGJ 83n
+Aalund, L.R., "Guide to Export Crudes for the '80s - 13: Assay Series Concludes with Index, U.S. Streams", Oil
+& Gas Journal, December 19, pp. 71-74, 1983.
+
+OGJ 85
+Corbett, R.A., "Guide to Export Crudes for the '80s: Two high-quality onshore crude oils, Sharjah Condensate
+and Margham Light, are assayed", Oil& Gas Journal, July 8, pp. 54-55, 1985.
+
+OGJ 86
+Corbett, R.A., "Guide to Export Crudes for the '80s: Columbia's Cano Limon crude ready for export", Oil&
+Gas Journal, May 12, p. 59, 1986.
+
+OGJ 89
+Corbett, R.A., "Guide to Export Crudes: Oseberg premium crude in production", Oil& Gas Journal, July 24, pp.
+56-57, 1989.
+
+OGJ 90a
+Corbett, R.A., "Important Norwegian crude assays updated", Oil& Gas Journal, March 12, pp. 37-40, 1990.
+
+OGJ 90b
+Du, P.Q., "Detailed assays conducted on Vietnamese crude oils", Oil & Gas Journal, July 16, pp. 58-60, 1990.
+
+OGJ 91a
+Manriquez, L., A. Moreno, and C.G. Anaya, "Export Crudes for the '90s: Assays for important Mexican crudes
+updated", Oil & Gas Journal, March 4, pp. 45-48, 1991.
+
+OGJ 91b
+"Export Crudes for the '90s: Alba is first heavy North Sea crude", Oil & Gas Journal, May 27, p. 94, 1991.
+
+OGJ 91d
+Rhodes, A.K., "Export Crudes for the '90s: Emerald crude oil assayed", Oil& Gas Journal, September 16, pp.
+84-85, 1991.
+OGJ 91e
+Rhodes, A.K., "Export Crudes for the '90s: Kittiwake crude assayed", Oil& Gas Journal, October 28, p. 55,
+1991.
+
+OGJ 91f
+Rhodes, A.K., "Export Crudes for the '90s: Two important Saudi crude assays updated", Oil& Gas Journal,
+December 2, p. 64, 1991.
+
+OGJ 92a
+Rhodes, A.K., "Export Crudes for the '90s: East Zeit Mix and Dulang crudes assayed", Oil& Gas Journal, March
+2, p. 46, 1992.
+
+OGJ 92b
+Rhodes, A.K., "Four California OCS crudes assayed", Oil& Gas Journal, March 30, pp. 67-68, 1992.
+
+OGJ 92c
+Rhodes, A.K., "Export Crudes for the '90s: Malaysian, Canadian, Saudi crudes assayed", Oil& Gas Journal, April
+27, p. 44, 1992.
+
+OGJ 93a
+Rhodes, A.K., "Export Crudes for the '90s: Papua New Guinea's first commercial crude assayed", Oil& Gas
+Journal, February 15, pp. 73-74, 1993.
+
+OGJ 93b
+EI-Emarn, N.A., A.W.A. Bayoumi, I.M. EI-Gamal, and A. Abu-Zied, "Choosing how to boost waxy crude line
+flow depends on oil's qualities", Oil& Gas Journal, April 26, pp. 70-72, 1993.
+
+OGJ 93c
+Rhodes, A.K., "Guide to World Crudes: Two light, sweet CIS crudes assayed", Oil& Gas Journal, September 6,
+pp. 82-84, 1993.
+
+OGJ 93d
+Rhodes, A.K., "Northwest Australia's Saladin crude assayed", Oil& Gas Journal, October 18, pp. 50-51, 1993.
+
+OGJ 94a
+Rhodes, A.K., "Guide to Export Crudes: Two offshore Australian crudes assayed", Oil& Gas Journal, May 9,
+pp.76-79, 1994.
+
+OGJ 94b
+Rhodes, A.K., "Guide to World Crudes: Yemen's light, sweet Alif crude assayed", Oil& Gas Journal, May 23,
+pp. 78-80, 1994.
+
+OGJ 94c
+Rhodes, A.K., "Benchmark West Texas Intermediate crude assayed", Oil & Gas Journal, August 15, p. 88, 1994.
+
+OGJ 94d
+Rhodes, A.K., "Danish North Sea crude assayed", Oil& Gas Journal, September 12, pp. 91-92, 1994.
+
+OGJ 94e
+Rhodes, A.K., "Guide to World Crudes: Two light, sweet Indonesian crudes assayed", Oil& Gas Journal,
+October 31, pp. 46-48, 1994.
+
+OGJ 94f
+Rhodes, A.K., "Australia's Cooper Basin and Griffin crudes assayed", Oil& Gas Journal, December 12, pp. 51-
+53, 1994.
+
+OGJ 95a
+Rhodes, A.K., "U.K. North Sea's Forties Blend crude assayed", Oil& Gas Journal, January 23, pp. 48-50, 1995.
+
+OGJ 95b
+Rhodes, A.K., "Brent blend, U.K. North Sea marker crude, assayed", Oil& Gas Journal, February 6, pp. 63-64,
+1995.
+
+OGJ 95c
+Aalund, L.R, "Guide to Export Crudes: Four Argentine crudes in world market", Oil& Gas Journal, April 17,
+pp.58-62, 1995.
+
+OGJ 95d
+Rhodes, A.K., "Guide to World Crudes: Columbia's new light, sweet Cusiana crude assayed", Oil& Gas Journal,
+December 11, pp. 71-73, 1995.
+
+OGJ 96
+Rhodes, A.K., "Guide to World Crudes: Preliminary assay reveals quality of Mars blend", Oil& Gas Journal,
+June 10, pp. 67-68, 1996.
+
+OGJ 99
+Oil & Gas Journal Databook, Tulsa, OK, PennWell, 1999.
+
+PetroCan 90
+Petro-Canada, Material Safety Data Sheet, CCINFO Disc, Chemical Information Series, 1990.
+
+PetroCan 97
+Lubricants Handbook, Mississauga, ON, Petro-Canada, 1997.
+
+PetroCan 98
+Material Safety Data Sheet, Petro-Canada, Calgary, AB, 1998.
+
+Rice 79
+Rice, S.D., A. Moles, T.L. Taylor, and J.F. Karinen, "Sensitivity of 39 Alaskan Marine Species to Cook Inlet
+Crude Oil and No. 2 Fuel Oil", Proceedings of the 1979 Oil Spill Conference, American Petroleum Institute,
+Washington, D.C., pp. 549-554, 1979.
+
+Ross 82
+Ross, S.L., The Behaviour and Fate of Gas and Condensate Spills, S.L. Ross Environmental Research Ltd.,
+Ottawa, Ontario, 1982.
+
+Ross 93
+Ross, S. and S. Maharaj, "Potentially Beneficial Spill-Related Effects of Chemicals Routinely Added to Crude
+Oils", Proceedings of the 16th Arctic and Marine Oil Spill Program Technical Seminar, Environment Canada,
+Ottawa, Ontario, pp. 123-137, 1993.
+
+Ross 99a
+Reexamination of the properties, behaviour and dispersibility of Hibernia oil spills, SL Ross Environmental
+Research Ltd., Ottawa, ON, 1999.
+
+Ross 99b
+Properties, behaviour and dispersibility of Hebron D-94 oil spills, SL Ross Environmental Research Ltd., Ottawa, ON,
+1999.
+
+
+
+
+Rossi 76
+Rossi, S.S., J.W. Anderson, and G.S. Ward, "Toxicity of Water-Soluble Fractions of Four Oils for the
+Polychaetous Annelids, Neanthes Arenaceondentata and Capitella Capitata", Environmental Pollution, volume 10,
+pp. 9-18, 1976.
+
+Shell 93
+Shell Canada Limited, Shell Canada Lubricants Handbook 1993-94 Edition, 1993.
+
+Shell 99a
+Material Safety Data Sheet, Shell Canada Ltd., Calgary, AB, 1999.
+
+Shell 99b
+Shell Lubricants Handbook, Shell Canada Ltd., Calgary, AB, 1999.
+
+Smith 81
+Smith, J.H. and J.C. Harper, "Behavior of Hydrocarbon Fuels in Aquatic Systems", Proceedings of the 12th Conference
+on Environmental Toxicology, AFAMRL-TR-81-149, Air Force Aerospace Medical Research Laboratory, pp. 336-343,
+1981.
+
+Statoil 97
+Crude oil assay, Ref. No. 204-022, Statoil, Stavanger, Norway, 1997.
+
+Suntio 86
+Suntio, I., W.Y. Shiu, and D. Mackay, Analyses of Water Soluble Fractions of Crude Oils and Refined Products:
+A Study of Solubility of Selected Oils in Water, Environment Canada, Ottawa, Ontario, 1986.
+
+Twardus 80
+Twardus, E.M., A Study to Evaluate the Combustibility and Other Physical and Chemical Properties of Aged Oils
+and Emulsions, Environment Canada Manuscript Report Number EE-5, Environment Canada, Ottawa, Ontario, 1980.
+
+Walton 93
+Walton, W.D., D.D. Evans, K.B. McGrattan, H.R. Baum, W.H. Twilley, D.Madrzykowski, A.D. Putorti, R.G.
+Rehm, H. Koseki, and E.J. Tennyson, "In Situ Burning of Oil Spills: Mesoscale Experiments and Analysis",
+Proceedings of the 16th Arctic and Marine Oil Spill Program Technical Seminar, Environment Canada, Ottawa,
+Ontario, pp. 679-734, 1993.
