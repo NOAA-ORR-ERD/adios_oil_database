@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 from pathlib import Path
 
-import pypdf
-
-import pdb
-from pprint import pprint
-
 # This is the file that contains the associations of the reference document
 # codes and the full title of the reference document.  It can be downloaded at
 # the following URL:
@@ -13,23 +8,18 @@ from pprint import pprint
 # https://data-donnees.ec.gc.ca/data/substances/scientificknowledge/
 #       a-catalogue-of-crude-oil-and-oil-product-properties-1999-revised-2022/
 #       References-Catalogue_of_Crude_Oil_and_Oil_Product_Properties_(1999)-Revised_2022_En_and_Fr.pdf
+#
+# We extract the text content in the file and name it as follows:
 filename = (Path(__file__).resolve().parent.parent.parent.parent.parent
             / 'data' / 'env_canada' /
             'References-Catalogue_of_Crude_Oil_and_Oil_Product_Properties_'
-            '(1999)-Revised_2022_En_and_Fr.pdf')
+            '(1999)-Revised_2022_En_and_Fr.txt')
 
 
-def get_pdf_content_lines(filename):
-    with open(filename, 'rb') as pdf_file:
-        reader = pypdf.PdfReader(pdf_file)
-
-        for i, pg in enumerate(reader.pages):
-            # remove the page header
-            top_line = 5 if i == 0 else 3
-            content = [l.strip() for l in pg.extract_text().split('\n')]
-
-            for l in content[top_line:]:
-                yield l
+def get_text_content_lines(filename):
+    with open(filename, 'r') as text_file:
+        for line in text_file.readlines():
+            yield line.rstrip()
 
 
 def parse_ref_entries(bufflines):
@@ -61,5 +51,5 @@ def parse_ref_entries(bufflines):
 
 reference_codes = {}
 
-for [code, title] in parse_ref_entries(list(get_pdf_content_lines(filename))):
+for [code, title] in parse_ref_entries(get_text_content_lines(filename)):
     reference_codes[code] = title
