@@ -60,19 +60,14 @@ module.exports = function(environment) {
 
   ENV['metricsAdapters'] = [
       {
-        name: 'GoogleAnalytics',
+        name: 'GoogleAnalyticsFour',
         environments: ['development', 'production'],
         config: {
           id: 'G-4M4CJVKWYN',
-          // Use `analytics_debug.js` in development
-          debug: environment === 'development',
-          // Use verbose tracing of GA events
-          trace: environment === 'development',
-          // Ensure development env hits aren't sent to GA
-          sendHitTask: environment !== 'development',
-          // Specify Google Analytics plugins
-          //     Note: why would we need this?
-          require: ['ecommerce'],
+          options: {
+            anonymize_ip: true,
+            debug_mode: environment === 'development',
+          },
         },
       },
   ];
