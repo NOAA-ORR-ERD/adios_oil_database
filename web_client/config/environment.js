@@ -58,20 +58,36 @@ module.exports = function(environment) {
       'media-src': "'self'"
   };
 
-  ENV['metricsAdapters'] = [
-      {
-        name: 'GoogleAnalyticsFour',
-        environments: ['development', 'production'],
-        config: {
-          id: 'G-4M4CJVKWYN',
-          options: {
-            anonymize_ip: true,
-            debug_mode: environment === 'development',
+  if (environment === 'development') {
+    ENV['metricsAdapters'] = [
+        {
+          name: 'GoogleAnalyticsFour',
+          environments: ['development'],
+          config: {
+            id: 'G-FFPE4N76NB',
+            options: {
+              anonymize_ip: true,
+              debug_mode: true,
+            },
           },
         },
-      },
-  ];
-
+    ];
+  }
+  else if (environment === 'production') {
+    ENV['metricsAdapters'] = [
+        {
+          name: 'GoogleAnalyticsFour',
+          environments: ['production'],
+          config: {
+            id: 'G-4M4CJVKWYN',
+            options: {
+              anonymize_ip: true,
+              debug_mode: false,
+            },
+          },
+        },
+    ];
+  }
 
   if (environment === 'test') {
     // Testem prefers this...
