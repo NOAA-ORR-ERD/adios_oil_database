@@ -50,9 +50,9 @@ module.exports = function(environment) {
 
   ENV['contentSecurityPolicy'] = {
       'default-src': "'none'",
-      'script-src': "'self'",
+      'script-src': "'self' www.google-analytics.com",
       'font-src': "'self'",
-      'connect-src': "'self' http://localhost:9898",
+      'connect-src': "'self' http://localhost:9898 www.google-analytics.com",
       'img-src': "'self'",
       'style-src': "'self'",
       'media-src': "'self'"
@@ -73,14 +73,6 @@ module.exports = function(environment) {
   ];
 
 
-  if (environment === 'development') {
-    // ENV.APP.LOG_RESOLVER = true;
-    // ENV.APP.LOG_ACTIVE_GENERATION = true;
-    // ENV.APP.LOG_TRANSITIONS = true;
-    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    // ENV.APP.LOG_VIEW_LOOKUPS = true;
-  }
-
   if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
@@ -91,10 +83,6 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
-  }
-
-  if (environment === 'production') {
-    // here you can enable a production-specific feature
   }
 
   return ENV;
