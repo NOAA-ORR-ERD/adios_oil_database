@@ -61,31 +61,31 @@ module.exports = function(environment) {
   if (environment === 'development') {
     ENV['metricsAdapters'] = [
         {
-          name: 'GoogleAnalyticsFour',
-          environments: ['development'],
+          name: 'GoogleTagManager',
+          environments: ['development', 'production'],
           config: {
             id: 'G-FFPE4N76NB',
-            options: {
-              anonymize_ip: true,
-              debug_mode: true,
-            },
-          },
-        },
+            dataLayer: [{
+              'pageCategory': 'signup',
+              'visitorType': 'high-value'
+            }]
+          }
+        }
     ];
   }
   else if (environment === 'production') {
     ENV['metricsAdapters'] = [
         {
-          name: 'GoogleAnalyticsFour',
-          environments: ['production'],
+          name: 'GoogleTagManager',
+          environments: ['development', 'production'],
           config: {
             id: 'G-4M4CJVKWYN',
-            options: {
-              anonymize_ip: true,
-              debug_mode: false,
-            },
-          },
-        },
+            dataLayer: [{
+              'pageCategory': 'signup',
+              'visitorType': 'high-value'
+            }]
+          }
+        }
     ];
   }
 
