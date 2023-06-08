@@ -65,10 +65,6 @@ module.exports = function(environment) {
           environments: ['development', 'production'],
           config: {
             id: 'G-FFPE4N76NB',
-            dataLayer: [{
-              'pageCategory': 'signup',
-              'visitorType': 'high-value'
-            }]
           }
         }
     ];
@@ -80,10 +76,6 @@ module.exports = function(environment) {
           environments: ['development', 'production'],
           config: {
             id: 'G-4M4CJVKWYN',
-            dataLayer: [{
-              'pageCategory': 'signup',
-              'visitorType': 'high-value'
-            }]
           }
         }
     ];
