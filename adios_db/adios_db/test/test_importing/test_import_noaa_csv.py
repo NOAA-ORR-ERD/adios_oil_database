@@ -9,18 +9,19 @@ from pathlib import Path
 
 import pytest
 
-import adios_db
 from adios_db.util import BufferedIterator
 from adios_db.computation.physical_properties import get_distillation_cuts
-from adios_db.models.common.measurement import MassFraction, Temperature, MassOrVolumeFraction, AnyUnit
+from adios_db.models.common.measurement import (MassFraction,
+                                                Temperature,
+                                                MassOrVolumeFraction,
+                                                AnyUnit)
 from adios_db.models.oil.oil import ADIOS_DATA_MODEL_VERSION
 from adios_db.models.oil.physical_properties import (Density,
                                                      DensityPoint,
                                                      DynamicViscosity,
                                                      DynamicViscosityPoint,
                                                      PourPoint,
-                                                     FlashPoint,
-                                                     )
+                                                     FlashPoint)
 
 from adios_db.models.oil.sara import Sara
 from adios_db.models.oil.compound import Compound
@@ -31,8 +32,7 @@ from adios_db.data_sources.noaa_csv.reader import (read_csv,
                                                    read_measurement,
                                                    float_or_placeholder,
                                                    padded_csv_reader,
-                                                   empty_measurement,
-                                                   )
+                                                   empty_measurement)
 
 from adios_db.computation.gnome_oil import make_gnome_oil
 
@@ -55,20 +55,20 @@ def test_record():
     """
     read the example record and return the resulting oil record
     """
-    oil = read_csv(test_file1)
-
-    return oil
+    return read_csv(test_file1)
 
 
 @pytest.fixture
 def csv_to_test_padding():
     fname = HERE / "example_data" / "csv_for_testing_padding.csv"
+
     with open(fname, 'w', encoding='utf-8') as outfile:
         outfile.write("this, that, the,,,\n"
                       "1,,3\n"
                       "3\n"
                       "6,,,,,,,,,\n"
                       )
+
     yield fname
     fname.unlink()
 
@@ -91,7 +91,6 @@ def test_buffered_csv_reader(csv_to_test_padding):
     we need to put rows back on the stack after reading them
     """
     reader = BufferedIterator(padded_csv_reader(csv_to_test_padding, 6))
-
 
     row = next(reader)
     assert row == ['this', ' that', ' the', '', '', '']
@@ -147,20 +146,20 @@ def test_float_or_placeholder_bad():
         float_or_placeholder("1.2.3")
 
 
-@pytest.mark.parametrize('vals', [{'value':0.0, 'min_value':None, 'max_value':None, 'unit':'C'},
-                                  {'value':None, 'min_value':1.0, 'max_value':None, 'unit':'C'},
-                                  {'value':None, 'min_value':'', 'max_value':2.0, 'unit':'C'},
-                                  ])
+@pytest.mark.parametrize('vals', [
+    {'value': 0.0, 'min_value': None, 'max_value': None, 'unit': 'C'},
+    {'value': None, 'min_value': 1.0, 'max_value': None, 'unit': 'C'},
+    {'value': None, 'min_value': '', 'max_value': 2.0, 'unit': 'C'},
+])
 def test_empty_measurement_not_empty(vals):
     m = Temperature(**vals)
     assert not empty_measurement(m)
 
 
 def test_empty_measurement():
-    vals = {'value':None, 'min_value':None, 'max_value':None, 'unit':'C'}
+    vals = {'value': None, 'min_value': None, 'max_value': None, 'unit': 'C'}
     m = Temperature(**vals)
     assert empty_measurement(m)
-
 
 
 def test_metadata(test_record):
@@ -208,10 +207,10 @@ def test_subsample_metadata_0(attr, value, test_record):
     assert getattr(md, attr) == value
 
 
-@pytest.mark.parametrize("attr, value",
-                         [('pour_point', PourPoint(Temperature(32, unit='C'))),
-                          ('flash_point', FlashPoint(Temperature(max_value=-8, unit='C'))),
-                          ])
+@pytest.mark.parametrize("attr, value", [
+    ('pour_point', PourPoint(Temperature(32, unit='C'))),
+    ('flash_point', FlashPoint(Temperature(max_value=-8, unit='C'))),
+])
 def test_subsample_physical_properties(attr, value, test_record):
     pp = test_record.sub_samples[0].physical_properties
     print(attr, getattr(pp, attr))
@@ -236,10 +235,14 @@ def test_read_densities(test_record):
 
     for dp in densities:
         print(dp)
-    assert densities[0] == DensityPoint(density=Density(value=0.9123, unit='g/cm³', unit_type='density'),
-                                        ref_temp=Temperature(value=32.0, unit='F', unit_type='temperature'))
-    assert densities[1] == DensityPoint(density=Density(value=0.8663, unit='g/cm³', unit_type='density'),
-                                        ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
+    assert densities[0] == DensityPoint(
+        density=Density(value=0.9123, unit='g/cm³', unit_type='density'),
+        ref_temp=Temperature(value=32.0, unit='F', unit_type='temperature')
+    )
+    assert densities[1] == DensityPoint(
+        density=Density(value=0.8663, unit='g/cm³', unit_type='density'),
+        ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature')
+    )
 
 
 def test_read_kvis(test_record):
@@ -254,12 +257,7 @@ def test_read_kvis(test_record):
     kvis = test_record.sub_samples[0].physical_properties.kinematic_viscosities
 
     assert len(kvis) == 0
-    # for dp in densities:
-    #     print(dp)
-    # assert densities[0] == DensityPoint(density=Density(value=0.9123, unit='g/cm³', unit_type='density'),
-    #                                     ref_temp=Temperature(value=32.0, unit='F', unit_type='temperature'))
-    # assert densities[1] == DensityPoint(density=Density(value=0.8663, unit='g/cm³', unit_type='density'),
-    #                                     ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
+
 
 def test_read_dvis(test_record):
     """
@@ -275,10 +273,17 @@ def test_read_dvis(test_record):
     assert len(dvis) == 2
     for dvp in dvis:
         print(dvp)
-    assert dvis[0] == DynamicViscosityPoint(viscosity=DynamicViscosity(value=23.2, unit='cP', unit_type='dynamicviscosity'),
-                                            ref_temp=Temperature(value=0.0, unit='C', unit_type='temperature'))
-    assert dvis[1] == DynamicViscosityPoint(viscosity=DynamicViscosity(value=11.5, unit='cP', unit_type='dynamicviscosity'),
-                                            ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature'))
+    assert dvis[0] == DynamicViscosityPoint(
+        viscosity=DynamicViscosity(value=23.2, unit='cP',
+                                   unit_type='dynamicviscosity'),
+        ref_temp=Temperature(value=0.0, unit='C', unit_type='temperature')
+    )
+    assert dvis[1] == DynamicViscosityPoint(
+        viscosity=DynamicViscosity(value=11.5, unit='cP',
+                                   unit_type='dynamicviscosity'),
+        ref_temp=Temperature(value=15.0, unit='C', unit_type='temperature')
+    )
+
 
 def test_distillation_header():
     """
@@ -305,11 +310,8 @@ def test_distillation_cuts():
     """
     oil = read_csv(test_file3)
 
-    # cuts = oil.sub_samples[0].distillation_data.cuts
-
     # to make it easier to read and test
     cuts = get_distillation_cuts(oil, temp_units='C')
-
     print(cuts)
 
     assert cuts == [(0.015, 196.0),
@@ -328,6 +330,7 @@ def test_distillation_cuts():
                     (0.822, 498.0),
                     (0.873, 512.0)]
 
+
 def test_sara():
     """
     make sure the sara are read correctly
@@ -337,8 +340,8 @@ def test_sara():
     oil = read_csv(test_file3)
 
     sara = oil.sub_samples[0].SARA
-
     print(sara)
+
     assert sara == Sara(saturates=MassFraction(value=54.5, unit='%'),
                         aromatics=MassFraction(value=23.1, unit='%'),
                         resins=MassFraction(value=16.7, unit='%'),
@@ -354,19 +357,20 @@ def test_compounds():
     compounds = oil.sub_samples[0].compounds
 
     assert len(compounds) == 2
-    assert compounds[0] == Compound(name='Biphenyl (Bph)',
-                                    groups=[],
-                                    method="",
-                                    measurement=MassFraction(value=120.2,
-                                                             unit='µg/g',
-                                                             ))
-    assert compounds[1] == Compound(name='Pyrene (Py)',
-                                    groups=['Other Priority PAHs'],
-                                    method="ESTS 5.03/x.x/M",
-                                    comment='Just an example',
-                                    measurement=MassFraction(value=28.6,
-                                                             unit='µg/g',
-                                                             ))
+    assert compounds[0] == Compound(
+        name='Biphenyl (Bph)',
+        groups=[],
+        method="",
+        measurement=MassFraction(value=120.2, unit='µg/g')
+    )
+    assert compounds[1] == Compound(
+        name='Pyrene (Py)',
+        groups=['Other Priority PAHs'],
+        method="ESTS 5.03/x.x/M",
+        comment='Just an example',
+        measurement=MassFraction(value=28.6, unit='µg/g')
+    )
+
 
 def test_bulk_composition():
     """
@@ -377,10 +381,13 @@ def test_bulk_composition():
     bulk_comp = oil.sub_samples[0].bulk_composition
 
     assert len(bulk_comp) == 1
-    assert bulk_comp[0] == BulkComposition(name='Sulfur',
-                                           measurement=MassOrVolumeFraction(value=0.0207,
-                                                                            unit="%",
-                                                                            unit_type="Mass Fraction"))
+    assert bulk_comp[0] == BulkComposition(
+        name='Sulfur',
+        measurement=MassOrVolumeFraction(value=0.0207,
+                                         unit="%", unit_type="Mass Fraction")
+    )
+
+
 def test_industry_properties():
     """
     The "example_noaa_csv.csv" has one bulk composition
@@ -391,39 +398,43 @@ def test_industry_properties():
 
     assert len(ind_prop) == 1
 
-    expected = IndustryProperty(name='Reid Vapor Pressure',
-                                method='a method',
-                                measurement=AnyUnit(value=0.7,
-                                                    unit="PSI",
-                                                    unit_type="pressure"))
+    expected = IndustryProperty(
+        name='Reid Vapor Pressure',
+        method='a method',
+        measurement=AnyUnit(value=0.7, unit="PSI", unit_type="pressure")
+    )
 
     assert ind_prop[0] == expected
 
 
 def test_multiple_subsamples():
     """
-    not well tested, but some of the records from the CAFE project have something
+    not well tested, but some of the records from the CAFE project
+    have something
     """
     oil = read_csv(test_file1)
-
+    ss = oil.sub_samples[1]
     assert len(oil.sub_samples) == 2
 
-    ss = oil.sub_samples[1]
     md = ss.metadata
     assert md.name == "30.5% Evaporated (lab weathered)"
-    assert ss.physical_properties.densities[0].density.value == 0.934
-    assert ss.physical_properties.densities[0].density.unit == 'g/cm³'
 
-    assert ss.physical_properties.dynamic_viscosities[0].viscosity.value == 4230
-    assert ss.physical_properties.dynamic_viscosities[0].viscosity.unit == 'cP'
+    densities = ss.physical_properties.densities
+    assert densities[0].density.value == 0.934
+    assert densities[0].density.unit == 'g/cm³'
 
-    assert ss.physical_properties.dynamic_viscosities[1].viscosity.value == 625
-    assert ss.physical_properties.dynamic_viscosities[1].viscosity.unit == 'cP'
+    dynamic_viscosities = ss.physical_properties.dynamic_viscosities
+    assert dynamic_viscosities[0].viscosity.value == 4230
+    assert dynamic_viscosities[0].viscosity.unit == 'cP'
 
-    sulfur = BulkComposition(name='Sulfur Content',
-                             measurement=MassOrVolumeFraction(value=1.5,
-                                                              unit="%",
-                                                              unit_type="Mass Fraction"))
+    assert dynamic_viscosities[1].viscosity.value == 625
+    assert dynamic_viscosities[1].viscosity.unit == 'cP'
+
+    sulfur = BulkComposition(
+        name='Sulfur Content',
+        measurement=MassOrVolumeFraction(value=1.5, unit="%",
+                                         unit_type="Mass Fraction")
+    )
 
     assert ss.bulk_composition[0] == sulfur
 
@@ -466,16 +477,16 @@ def test_generic_csv():
     go = make_gnome_oil(oil)
 
 
-@pytest.mark.parametrize('filename', [test_file1,
-                                      test_file2,
-                                      test_file3,
-                                      test_file4,  # need valid generic diesel record first
-                                      ])
+@pytest.mark.parametrize('filename', [
+    test_file1,
+    test_file2,
+    test_file3,
+    test_file4,  # need valid generic diesel record first
+])
 def test_full_record(filename):
     """
     tests a modestly complete record
     """
-
     oil = read_csv(filename)
     outfilename = filename.with_suffix(".json")
     print("writing:", outfilename)
@@ -483,12 +494,7 @@ def test_full_record(filename):
     oil.to_file(outfilename)
 
     msgs = oil.validate()
-
     assert len(msgs) == 0
 
     # make sure it's GNOME Suitable
     go = make_gnome_oil(oil)
-
-
-
-
