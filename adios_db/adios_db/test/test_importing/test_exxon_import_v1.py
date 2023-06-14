@@ -6,14 +6,6 @@ lot of it (Or writing it all by hand)
 
 but still handy to have some tests to run the code while under development
 """
-
-try:
-    import openpyxl
-except ImportError:
-    import pytest
-    pytest.skip("You need the openpyxl package to run these tests",
-                allow_module_level=True)
-
 import os
 from pathlib import Path
 from math import isclose
@@ -26,10 +18,9 @@ import nucos as uc
 import adios_db
 from adios_db.util import sigfigs
 from adios_db.models.oil.oil import Oil
+from adios_db.models.common.measurement import Temperature, VolumeFraction
 from adios_db.data_sources.exxon_assays import (ExxonDataReader, ExxonMapper,
                                                 ExxonRecordParser)
-
-from adios_db.models.common.measurement import (Temperature, VolumeFraction)
 
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
@@ -53,14 +44,14 @@ def test_read_index():
 
 def test_get_records():
     reader = ExxonDataReader(example_index, example_dir)
-
     records = reader.get_records()
-
     name, [data, *_] = next(records)
 
     assert name == "HOOPS Blend"
+
     # some checking of the record
     assert data[5][0] == "HOOPS16F"
+
     # if more checks are needed: see next test
 
     # there should be only two
@@ -117,6 +108,7 @@ def test_full_round_trip():
     for bc2, bc in zip(oil2.sub_samples[0].bulk_composition,
                        oil.sub_samples[0].bulk_composition):
         assert bc2 == bc
+
     assert oil2.sub_samples[0].bulk_composition == oil.sub_samples[0].bulk_composition
     assert oil2.sub_samples[0].industry_properties == oil.sub_samples[0].industry_properties
     assert oil2 == oil
@@ -405,17 +397,15 @@ class TestExxonMapper():
         print("testing:", prop)
 
         for sample in ExxonMapper(self.record).sub_samples:
-            print(sample.industry_properties)
             for p in sample.industry_properties:
-                print(f"\n{p.name=}")
-                print(f"{prop=}")
                 if p.name == prop:
-                    measurement = p.measurement
-                    print("checking units of:", prop)
-                    assert measurement.unit == unit
-                    assert measurement.unit_type == unit_type
+                    assert p.measurement.unit == unit
+                    assert p.measurement.unit_type == unit_type
+
                     return
+
                 continue
+
         assert False
         # assert False, f"property: {p.name} is missing"
 

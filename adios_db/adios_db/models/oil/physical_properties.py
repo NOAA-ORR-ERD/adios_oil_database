@@ -15,6 +15,7 @@ from ..common.measurement import (Temperature,
                                   Density,
                                   DynamicViscosity,
                                   KinematicViscosity,
+                                  SayboltViscosity,
                                   AngularVelocity,
                                   InterfacialTension)
 
@@ -35,7 +36,6 @@ class RefTempList:
         points_list = self
         data_str = self.__class__.__name__
         msgs = super().validate()
-
 
         # check for odd temperatures
         for pt in points_list:
@@ -111,6 +111,32 @@ class DensityPoint:
 class DensityList(RefTempList, JSON_List):
     item_type = DensityPoint
 
+    @classmethod
+    def from_data(cls, data_table):
+        """
+        Create a DensityList from data of the format:
+
+        ```
+        [(density, density_unit, temp, temp_unit),
+         (density, density_unit, temp, temp_unit),
+         ...
+         ]
+        ```
+        example:
+
+        ```
+        [(0.8663, "g/cm³", 15, "C"),
+         (0.9012, "g/cm³", 0.0, "C"),
+         ]
+        """
+        dl = cls()
+        for row in data_table:
+            dl.append(DensityPoint(density=Density(row[0], unit=row[1]),
+                                   ref_temp=Temperature(row[2], unit=row[3]),
+                                   ))
+        # sort by temp -- assume the same units
+        dl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+        return dl
 
 @dataclass_to_json
 @dataclass
@@ -125,6 +151,34 @@ class DynamicViscosityPoint:
 class DynamicViscosityList(RefTempList, JSON_List):
     item_type = DynamicViscosityPoint
 
+    @classmethod
+    def from_data(cls, data_table):
+        """
+        Create a DensityList from data of the format:
+
+        ```
+        [(viscosity, viscosity_unit, temp, temp_unit),
+         (viscosity, viscosity, temp, temp_unit),
+         ...
+         ]
+        ```
+        example:
+
+        ```
+        [(100, "cSt", 273.15, "K"),
+         (1234.3, "cSt", 15.0, "C"),
+         ]
+        """
+        kvl = cls()
+        for row in data_table:
+            kvl.append(DynamicViscosityPoint(viscosity=DynamicViscosity(row[0], unit=row[1]),
+                                             ref_temp=Temperature(row[2], unit=row[3]),
+                      ))
+        # sort by temp -- assume the same units
+        kvl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+        return kvl
+
+
 
 @dataclass_to_json
 @dataclass
@@ -138,6 +192,48 @@ class KinematicViscosityPoint:
 
 class KinematicViscosityList(RefTempList, JSON_List):
     item_type = KinematicViscosityPoint
+
+    @classmethod
+    def from_data(cls, data_table):
+        """
+        Create a DensityList from data of the format:
+
+        ```
+        [(viscosity, viscosity_unit, temp, temp_unit),
+         (viscosity, viscosity, temp, temp_unit),
+         ...
+         ]
+        ```
+        example:
+
+        ```
+        [(100, "cSt", 273.15, "K"),
+         (1234.3, "cSt", 15.0, "C"),
+         ]
+        """
+        kvl = cls()
+        for row in data_table:
+            kvl.append(KinematicViscosityPoint(viscosity=KinematicViscosity(row[0], unit=row[1]),
+                                              ref_temp=Temperature(row[2], unit=row[3]),
+                      ))
+        # sort by temp -- assume the same units
+        kvl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+        return kvl
+
+
+
+@dataclass_to_json
+@dataclass
+class SayboltViscosityPoint:
+    viscosity: SayboltViscosity = None
+    ref_temp: Temperature = None
+    shear_rate: AngularVelocity = None
+    method: str = None
+    comment: str = None
+
+
+class SayboltViscosityList(RefTempList, JSON_List):
+    item_type = SayboltViscosityPoint
 
 
 @dataclass_to_json
@@ -174,6 +270,7 @@ class InterfacialTensionList(RefTempList, JSON_List):
 class PhysicalProperties:
     pour_point: PourPoint = None
     flash_point: FlashPoint = None
+    appearance: str = ''
 
     densities: DensityList = field(default_factory=DensityList)
     kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)

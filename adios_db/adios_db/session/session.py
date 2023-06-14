@@ -136,8 +136,10 @@ class Session():
         """
         max_seq = 0
 
-        cursor = (self._oil_collection.find({'oil_id': {'$regex': f'^{id_prefix}'}  # noqa
-                                             }, {'oil_id'}))
+        cursor = self._oil_collection.find(
+            {'oil_id': {'$regex': f'^{id_prefix}'}},
+            {'oil_id'}
+        )
 
         for row in cursor:
             oil_id = row['oil_id']

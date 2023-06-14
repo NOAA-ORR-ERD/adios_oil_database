@@ -3,8 +3,8 @@ tests for utilities
 
 these test the ones in the __init__.py
 """
-
 import pytest
+
 from adios_db import util
 
 
@@ -19,3 +19,37 @@ from adios_db import util
                           ])
 def test_round_sigfigs(val, num_figs, expected):
     assert util.sigfigs(val, num_figs) == expected
+
+
+def test_BufferedIterator():
+    """
+    test that the iterator with the put+back method works
+    """
+
+    bi = util.BufferedIterator(range(5))
+
+    assert next(bi) == 0
+    assert next(bi) == 1
+    bi.push(1)
+    assert next(bi) == 1
+    assert next(bi) == 2
+    bi.push(1)
+    bi.push(4)
+    assert next(bi) == 4
+    assert next(bi) == 1
+
+    assert next(bi) == 3
+    assert next(bi) == 4
+
+    # it should be done now
+    with pytest.raises(StopIteration):
+        assert next(bi) == 5
+
+
+
+
+
+
+
+
+

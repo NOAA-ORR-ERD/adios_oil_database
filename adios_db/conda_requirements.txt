@@ -17,5 +17,3 @@ numpy>=1.20
 pynucos>=2.12
 
 # scipy  # no longer used
-
-

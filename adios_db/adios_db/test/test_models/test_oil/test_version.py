@@ -1,7 +1,7 @@
 """
 tests for the version object
 """
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from adios_db.models.common.utilities import dataclass_to_json
 
 from adios_db.models.oil.version import Version
@@ -52,7 +52,7 @@ def test_from_py_json_wrong_type():
 
 def test_major_wrong_type():
     with pytest.raises(ValueError):
-        ver = Version(1.2)
+        _v = Version(1.2)
 
 
 def test_round_trip():
@@ -100,7 +100,6 @@ class Simple:
 
 def test_inside_a_dataclass():
     s = Simple(5, name="fred", version=Version("4.7.2"))
-
     print(s)
 
     assert s.x == 5
@@ -109,12 +108,11 @@ def test_inside_a_dataclass():
 
 def test_inside_a_dataclass_py_json():
     s = Simple(5, version=Version(7, 8, 9), name="fred")
-
     print(s)
 
     pyjs = s.py_json()
-
     print(pyjs)
+
     assert pyjs['x'] == 5
     assert pyjs['name'] == 'fred'
     assert pyjs['version'] == '7.8.9'

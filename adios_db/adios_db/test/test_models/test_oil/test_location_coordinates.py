@@ -8,8 +8,7 @@ from adios_db.models.oil.location_coordinates import LocationCoordinates
 
 def test_point_good():
     P = LocationCoordinates(type="Point",
-                            coordinates=(1.2, -3.2)
-                            )
+                            coordinates=(1.2, -3.2))
 
     assert P.type == "Point"
     assert tuple(P.coordinates) == (1.2, -3.2)
@@ -62,7 +61,6 @@ def test_poly_to_json():
     pyjs = P.py_json()
 
     print(pyjs)
-
     assert pyjs['type'] == "Polygon"
     assert pyjs['coordinates'] == coords
 
@@ -72,7 +70,6 @@ def test_poly_json_round_trip():
     P = LocationCoordinates(type="Polygon", coordinates=coords)
 
     pyjs = P.py_json()
-
     print(pyjs)
 
     P2 = LocationCoordinates.from_py_json(pyjs)
@@ -85,7 +82,6 @@ def test_point_json_round_trip():
     P = LocationCoordinates(type="Point", coordinates=coords)
 
     pyjs = P.py_json()
-
     print(pyjs)
 
     P2 = LocationCoordinates.from_py_json(pyjs)

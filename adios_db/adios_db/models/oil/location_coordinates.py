@@ -20,7 +20,7 @@ or::
       }
 
 """
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from ..common.utilities import dataclass_to_json
 

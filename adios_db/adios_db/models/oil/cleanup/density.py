@@ -60,9 +60,9 @@ class FixAPI(Cleanup):
 
         :param oil: an Oil object to act on
 
-        :param do_it=False: flag to tell the cleanup to do its thing.
-                            If False, the method returns a message. If True,
-                            the action is taken, and the Oil object is altered.
+        # :param do_it=False: flag to tell the cleanup to do its thing.
+        #                     If False, the method returns a message. If True,
+        #                     the action is taken, and the Oil object is altered.
 
         :returns: a message of what could be done, or what was done.
         """

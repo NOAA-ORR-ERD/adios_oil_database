@@ -13,6 +13,7 @@ from .location_coordinates import LocationCoordinates
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
+from .validation import is_not_iso_or_year
 
 
 @dataclass_to_json
@@ -30,8 +31,9 @@ class ChangeLogEntry:
             try:
                 datetime.fromisoformat(self.date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"]
-                            .format("change log entry", self.date, str(err)))
+                msgs.append(WARNINGS["W011"].format(
+                    "change log entry", self.date, str(err)
+                ))
 
         return msgs
 
@@ -62,9 +64,13 @@ class MetaData:
         """
         Assorted cleanup
         """
-        # force API to be a float
+        # force API to be a float if possible, otherwise set it to None.
         if self.API is not None:
-            self.API = float(self.API)
+            try:
+                self.API = float(self.API)
+            except ValueError:
+                self.API = None
+
         # make sure lists are sorted
         self.labels = sorted(self.labels)
         self.alternate_names = sorted(self.alternate_names)
@@ -92,12 +98,11 @@ class MetaData:
             msgs.append(WARNINGS["W001"].format(self.name))
 
         # check sample date is valid
-        if self.sample_date:
-            try:
-                datetime.fromisoformat(self.sample_date)
-            except ValueError as err:
-                msgs.append(WARNINGS["W011"]
-                            .format("sample date", self.sample_date, str(err)))
+        sd = self.sample_date
+        if sd:
+            err = is_not_iso_or_year(sd)
+            if err:
+                msgs.append(WARNINGS["W011"].format("sample date", self.sample_date, str(err)))
 
         return msgs
 

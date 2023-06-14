@@ -33,8 +33,9 @@ class ReviewStatus:
             try:
                 datetime.fromisoformat(self.review_date)
             except ValueError as err:
-                msgs.append(WARNINGS["W011"]
-                            .format("review date", self.review_date, str(err)))
+                msgs.append(WARNINGS["W011"].format(
+                    "review date", self.review_date, str(err)
+                ))
 
         msgs.extend(self._status_validator(self.status))
 

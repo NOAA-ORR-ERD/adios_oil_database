@@ -315,7 +315,7 @@ deploy_api_stage:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api-dbg
     CONTAINER_NAME: adios_db_web_api
     APP_NETWORK: adios_net
-    PORT_MAPPING: 8084:9898
+    PORT_MAPPING: 127.0.0.1:8084:9898
     REPO_VOLUME: noaa_data_repo
     KC_CONFIG_VOLUME: adiosdb_kc_config
     GIT_STRATEGY: none
@@ -450,7 +450,7 @@ deploy_client_stage:
     IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client-dbg
     CONTAINER_NAME: adios_db_web_client
     APP_NETWORK: adios_net
-    PORT_MAPPING: 8083:4200
+    PORT_MAPPING: 127.0.0.1:8083:4200
     GIT_STRATEGY: none
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY

@@ -50,40 +50,35 @@ module.exports = function(environment) {
 
   ENV['contentSecurityPolicy'] = {
       'default-src': "'none'",
-      'script-src': "'self'",
+      'script-src': "'self' www.google-analytics.com www.googletagmanager.com",
       'font-src': "'self'",
-      'connect-src': "'self' http://localhost:9898",
+      'connect-src': "'self' http://localhost:9898 www.google-analytics.com www.googletagmanager.com",
       'img-src': "'self'",
       'style-src': "'self'",
       'media-src': "'self'"
   };
 
-  ENV['metricsAdapters'] = [
-      {
-        name: 'GoogleAnalytics',
-        environments: ['development', 'production'],
-        config: {
-          id: 'G-4M4CJVKWYN',
-          // Use `analytics_debug.js` in development
-          debug: environment === 'development',
-          // Use verbose tracing of GA events
-          trace: environment === 'development',
-          // Ensure development env hits aren't sent to GA
-          sendHitTask: environment !== 'development',
-          // Specify Google Analytics plugins
-          //     Note: why would we need this?
-          require: ['ecommerce'],
-        },
-      },
-  ];
-
-
   if (environment === 'development') {
-    // ENV.APP.LOG_RESOLVER = true;
-    // ENV.APP.LOG_ACTIVE_GENERATION = true;
-    // ENV.APP.LOG_TRANSITIONS = true;
-    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV['metricsAdapters'] = [
+        {
+          name: 'GoogleTagManager',
+          environments: ['development', 'production'],
+          config: {
+            id: 'G-FFPE4N76NB',
+          }
+        }
+    ];
+  }
+  else if (environment === 'production') {
+    ENV['metricsAdapters'] = [
+        {
+          name: 'GoogleTagManager',
+          environments: ['development', 'production'],
+          config: {
+            id: 'G-4M4CJVKWYN',
+          }
+        }
+    ];
   }
 
   if (environment === 'test') {
@@ -96,10 +91,6 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
-  }
-
-  if (environment === 'production') {
-    // here you can enable a production-specific feature
   }
 
   return ENV;
