@@ -3,8 +3,7 @@ from pathlib import Path
 import csv
 
 # This is the file that contains the allowed vocabulary for the names of
-# compounds and industry properties.  We extract the .csv content in the file
-# and name it as follows:
+# compounds and industry properties.
 filename = (Path(__file__).resolve().parent.parent.parent.parent
             / 'data' / 'compounds_and_industry_properties.csv')
 
@@ -15,7 +14,7 @@ industry_properties = set()
 def read_file_content(filename):
     with open(filename, newline='', encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile, dialect='excel')
-        _labels = next(reader)[:2]  # first row is the column name
+        _labels = next(reader)[:2]  # first row contains the column names
 
         for row in reader:
             compound, prop = row[:2]
