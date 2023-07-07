@@ -43,6 +43,12 @@ export default class OilDemographics extends Component {
     }
 
     @action
+    updateSourceID(event) {
+        set(this.args.oil.metadata, 'source_id', event.target.value);
+        this.args.submit(this.args.oil);
+    }
+
+    @action
     updateLocation(event) {
         set(this.args.oil.metadata, 'location', event.target.value);
         this.args.submit(this.args.oil);

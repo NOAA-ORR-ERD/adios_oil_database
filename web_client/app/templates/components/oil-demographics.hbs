@@ -37,10 +37,24 @@
 
       <div class="row pl-0 mb-0">
 
-        {{! Source Identifier (not editable) }}
+        {{! Source Identifier (editable) }}
         <div class="col-sm-12 col-md-5 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Source ID:</label>
-          <span class="p-1">{{@oil.metadata.source_id}}</span>
+          {{#if @editable}}
+            {{#let (if @oil.metadata.source_id @oil.metadata.source_id "") as |sourceID|}}
+              <Input
+                @class="p-0 overflow-hidden bg-transparent border"
+                @size="14"
+                @value={{sourceID}}
+                @placeholder="Enter Source ID"
+                @change={{action "updateSourceID"}}
+              />
+            {{/let}}
+          {{else}}
+            {{#let (if @oil.metadata.source_id @oil.metadata.source_id "None") as |sourceIDstatic|}}
+              <span class="p-1">{{sourceIDstatic}}</span>
+            {{/let}}
+          {{/if}}
         </div>
 
         {{! Type }}
