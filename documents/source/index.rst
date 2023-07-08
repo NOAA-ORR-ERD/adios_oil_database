@@ -13,6 +13,7 @@ ADIOS Oil Database User Manual
    overview
    basics
    database_fields
+   deleted_records
 
 
 Indices and tables
