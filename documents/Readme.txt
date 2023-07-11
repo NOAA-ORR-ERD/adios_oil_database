@@ -1,4 +1,4 @@
-Documentation for the database -- mostly the Web Version.
+Documentation for the Web Site user Docs.
 
 These are built with the Sphinx documentation system.
 
