@@ -139,6 +139,9 @@ def main(_global_config, **settings):
     from .views.capabilities import capabilities_api
     config.add_cornice_service(capabilities_api)
 
+    from .views.vocabulary import vocabulary_api
+    config.add_cornice_service(vocabulary_api)
+
     # from .views.query import query_api
     # config.add_cornice_service(query_api)
 
