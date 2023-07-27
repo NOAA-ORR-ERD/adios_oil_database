@@ -22,6 +22,17 @@ class VocabularyTests(FunctionalTestBase):
         for w in ('Benzene',):
             assert w in words
 
+    def test_get_bad_partial_word(self):
+        resp = self.testapp.get('/vocabulary/compounds/?wf=bogus')
+        words = resp.json_body
+
+        assert len(words) == 0
+
+        resp = self.testapp.get('/vocabulary/industry_properties/?wf=bogus')
+        words = resp.json_body
+
+        assert len(words) == 0
+
     def test_get_good_partial_word(self):
         """
         This test is dependent on the words that are in the vocabulary lists.
@@ -40,18 +51,3 @@ class VocabularyTests(FunctionalTestBase):
         assert len(words) == 3
         for w in words:
             assert 'conrad' in w.lower()
-
-    def test_get_bad_partial_word(self):
-        """
-        This test is dependent on the words that are in the vocabulary lists.
-        And so a good test result might change if the data set changes.
-        """
-        resp = self.testapp.get('/vocabulary/compounds/?wf=bogus')
-        words = resp.json_body
-
-        assert len(words) == 0
-
-        resp = self.testapp.get('/vocabulary/industry_properties/?wf=bogus')
-        words = resp.json_body
-
-        assert len(words) == 0
