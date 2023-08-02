@@ -24,11 +24,7 @@ export default class SelectUnitDialog extends Component {
             this.unit = this.args.defaultUnit;
         }
 
-        this.compatibleConverters = Object.values(Nucos.Converters).filter(c => {
-            return c.Synonyms.hasOwnProperty((this.unit || '')
-                    .toLowerCase()
-                    .replace(/[\s.]/g, ''));
-        });
+        this.generateCompatibleConverters();
 
         if (this.unitType) {
             let compatList = this.compatibleConverters.filter(c => {
@@ -58,13 +54,26 @@ export default class SelectUnitDialog extends Component {
         //       https://github.com/yapplabs/ember-modal-dialog#keyboard-shortcuts
         $('body').on('keyup.modal-dialog', closeOnEscapeKey);  // eslint-disable-line ember/no-jquery
     }
+    
+    generateCompatibleConverters() {
+        if (this.unit) {
+            this.compatibleConverters = Object.values(Nucos.Converters).filter(c => {
+                return c.Synonyms.hasOwnProperty(
+                    (this.unit || '').toLowerCase().replace(/[\s.]/g, '')
+                );
+            });
+        }
+        else {
+            this.compatibleConverters = Object.values(Nucos.Converters);
+        }
+    }
 
     get unitTypeNames() {
         let ret = this.compatibleConverters.map((i) => {
             return [i.Name, i.Name === this.unitType.Name]
         });
 
-        if (!ret.reduce((a, b) => a || b[1], 0)) {
+        if (ret.length > 0 && !ret.reduce((a, b) => a || b[1], 0)) {
             // No matches with current unit type.  Set the first item
             ret[0][1] = true;
         }
@@ -74,9 +83,24 @@ export default class SelectUnitDialog extends Component {
 
     get primaryUnitNames() {
         if (this.unitType) {
-            let selected = Object.keys(this.unitType.PrimaryUnitNames).map(i => i === this.unitType.Synonyms[this.unit]);
+            let selected = Object.keys(this.unitType.PrimaryUnitNames).map(i => {
+                return i === this.unitType.Synonyms[this.unit]
+            });
 
-            return Object.values(this.unitType.PrimaryUnitNames).map((v, i) => {
+            let unitNames = Object.values(this.unitType.PrimaryUnitNames);
+            unitNames.insertAt(0, "");
+            
+            if (selected.reduce((a, b) => a || b, false)) {
+                // There was something selected.  Prepend an unselected
+                // empty option
+                selected.insertAt(0, false);
+            }
+            else {
+                // Nothing selected.  Prepend a selected empty option.
+                selected.insertAt(0, true);
+            }
+
+            return unitNames.map((v, i) => {
                 return [v, selected[i]];
             });
         }
@@ -102,7 +126,6 @@ export default class SelectUnitDialog extends Component {
         else {
             this.unitType = null;
         }
-
     }
 
     @action
@@ -112,10 +135,15 @@ export default class SelectUnitDialog extends Component {
         });
 
         let value = Object.entries(this.unitType.Synonyms).filter( ([k, v]) => {
-            return (v === primaryName && k !== primaryName);})
-            .map( ([k,]) => {return k})[0];
+            return (v === primaryName && k !== primaryName);
+        }).map(([k,]) => {
+            return k
+        })[0];
 
         this.unit = value;
+
+        // invoke a new unit type list
+        this.generateCompatibleConverters();
     }
 
     @action

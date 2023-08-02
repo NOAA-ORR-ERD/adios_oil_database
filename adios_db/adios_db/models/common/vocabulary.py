@@ -4,8 +4,8 @@ import csv
 
 # This is the file that contains the allowed vocabulary for the names of
 # compounds and industry properties.
-filename = (Path(__file__).resolve().parent.parent.parent.parent
-            / 'data' / 'compounds_and_industry_properties.csv')
+filename = (Path(__file__).resolve().parent
+            / 'compounds_and_industry_properties.csv')
 
 compounds = set()
 industry_properties = set()
