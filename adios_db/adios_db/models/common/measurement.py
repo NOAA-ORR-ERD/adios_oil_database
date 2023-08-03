@@ -245,6 +245,19 @@ class MeasurementBase(MeasurementDataclass):
 
         return None
 
+    def get_minimum_value(self):
+        """
+        returns the minimum value if it exists, or the value if not
+        """
+        return self.value if self.min_value is None else self.min_value
+
+    def get_maximum_value(self):
+        """
+        returns the maximum value if it exists, or the value if not
+        """
+        return self.value if self.max_value is None else self.min_value
+
+
     def converted_to(self, new_unit):
         """
         returns a new Measurement object, converted to the units specified

@@ -1,13 +1,16 @@
 """
 tests for adding suggested labels to oil
 """
+from pathlib import Path
 import pytest
 
 from adios_db.models.common import measurement as meas
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
 from adios_db.models.oil.physical_properties import KinematicViscosityPoint
-from adios_db.models.oil.cleanup.add_labels import get_suggested_labels
+from adios_db.models.oil.cleanup.add_labels import get_suggested_labels, get_sulfur_labels
+
+DATA_DIR = TEST_DATA_DIR = Path(__file__).parent.parent.parent.parent / "data_for_testing" / "example_data/"
 
 
 def add_kin_viscosity_to_oil(oil,
@@ -16,6 +19,9 @@ def add_kin_viscosity_to_oil(oil,
                              unit,
                              kvis_temp=15.0,
                              temp_unit="C"):
+    """
+    utility for making test oils with given viscosities.
+    """
     try:
         sample = oil.sub_samples[0]
     except IndexError:
@@ -117,3 +123,80 @@ def test_add_labels_to_oil_api_and_visc(pt, api, kvis, kvis_temp, labels):
     add_kin_viscosity_to_oil(oil, (kvis, ), 15, 'cSt', kvis_temp, 'C')
 
     assert get_suggested_labels(oil) == sorted(labels)
+
+
+def test_get_sulfur_labels_ulfo():
+    oil = Oil.from_file(DATA_DIR / "SimpleULSFO.json")
+
+    labels = get_sulfur_labels(oil)
+
+    assert labels == {'LSFO', 'ULSFO', 'VLSFO'}
+
+
+def test_get_sulfur_labels_vlfo():
+    oil = Oil.from_file(DATA_DIR / "SimpleULSFO.json")
+
+    labels = get_sulfur_labels(oil)
+
+    assert labels == {'LSFO', 'ULSFO', 'VLSFO'}
+
+
+def test_get_sulfur_labels_vlfo():
+    oil = Oil.from_file(DATA_DIR / "SimpleULSFO.json")
+
+    for compound in oil.sub_samples[0].bulk_composition:
+        if 'sulfur' in compound.name.lower():
+            sulfur = compound.measurement.value = 0.4
+    labels = get_sulfur_labels(oil)
+
+
+    assert labels == {'LSFO', 'VLSFO'}
+
+
+def test_get_sulfur_labels_lfo():
+    oil = Oil.from_file(DATA_DIR / "SimpleULSFO.json")
+
+    for compound in oil.sub_samples[0].bulk_composition:
+        if 'sulfur' in compound.name.lower():
+            sulfur = compound.measurement.value = 0.6
+    labels = get_sulfur_labels(oil)
+
+
+    assert labels == {'LSFO'}
+
+
+def test_get_sulfur_labels_not_low():
+    oil = Oil.from_file(DATA_DIR / "SimpleULSFO.json")
+
+    for compound in oil.sub_samples[0].bulk_composition:
+        if 'sulfur' in compound.name.lower():
+            sulfur = compound.measurement.value = 2.0
+    labels = get_sulfur_labels(oil)
+
+
+    assert labels == set()
+
+
+def test_get_sulfur_labels_not_data():
+    oil = Oil.from_file(DATA_DIR / "SimpleULSFO.json")
+
+    for compound in oil.sub_samples[0].bulk_composition:
+        if 'sulfur' in compound.name.lower():
+            compound.name = "something else"
+    labels = get_sulfur_labels(oil)
+
+    assert labels == set()
+
+
+def test_full_record_all_labels():
+    oil = Oil.from_file(DATA_DIR / "SimpleULSFO.json")
+
+    labels = get_suggested_labels(oil)
+
+    assert labels ==  ['Diesel',
+                       'Distillate Fuel',
+                       'Fuel Oil',
+                       'Home Heating Oil',
+                       'MDO',
+                       'No. 2 Fuel Oil',
+                       'Refined Product']

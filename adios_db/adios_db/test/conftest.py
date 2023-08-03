@@ -1,5 +1,9 @@
+
+from pathlib import Path
 import pytest
 
+
+TEST_DATA_DIR = Path(__file__).parent / "data_for_testing"
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -25,3 +29,5 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         if "mongo" in item.keywords:
             item.add_marker(skip_mongo)
+
+

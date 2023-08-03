@@ -135,7 +135,6 @@ label_map.update({
     # # at 15C.
     # # I propose changing the criteria to reflect these measurements.
 
-    # ***** The following need more verification
     # Refined light products
     'No. 2 Fuel Oil': {
         "api_min": 30,
@@ -186,6 +185,29 @@ for label, synonyms in synonyms_for_labels.items():
     label_map.update({syn: label_map[label] for syn in synonyms})
 
 
+def get_sulfur_labels(oil):
+    """
+    the low sulfur labels are their own thing
+    """
+    # Sulfur limits in percent
+    L_limit = 1.5  # fixme -- this may not be right!
+    V_limit = 0.5
+    U_limit = 0.1
+    labels = set()
+    if oil.sub_samples:  # probably only comes up in tests, but ...
+        for compound in oil.sub_samples[0].bulk_composition:
+            if 'sulfur' in compound.name.lower():
+                sulfur = compound.measurement.converted_to('%').get_maximum_value()
+                if sulfur <= U_limit:
+                    labels.add('ULSFO')
+                if sulfur <= V_limit:
+                    labels.add('VLSFO')
+                if sulfur <= L_limit:
+                    labels.add('LSFO')
+
+    return labels
+
+
 def get_suggested_labels(oil):
     """
     get the labels suggested for this oil
@@ -207,6 +229,8 @@ def get_suggested_labels(oil):
                 labels.add(label)
     except KeyError:
         pass
+
+    labels.union(get_sulfur_labels(oil))
 
     # sorting so they'll be in consistent order
     return sorted(labels)
