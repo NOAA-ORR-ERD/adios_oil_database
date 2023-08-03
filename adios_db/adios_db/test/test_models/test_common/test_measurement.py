@@ -893,3 +893,47 @@ class TestUnitValidation:
         msgs = m.validate()
 
         assert "E045: Unit: '1.0' is not a valid unit for unit type: 'length'" in msgs[0]
+
+
+def test_get_minimum_maximum_value():
+    """
+    with single value, you should get it as both minimum and maximum
+    """
+    m = Length(value=2.3, unit='meter')
+
+    assert m.value == 2.3
+    assert m.minimum == 2.3
+    assert m.maximum == 2.3
+
+def test_get_minimum_maximum_min_only():
+    """
+    with single value, you should get it as both minimum and maximum
+    """
+    m = Length(min_value=2.3, unit='meter')
+
+    assert m.value is None
+    assert m.minimum == 2.3
+    assert m.maximum is None
+
+
+def test_get_minimum_maximum_max_only():
+    """
+    with max value, you should only max
+    """
+    m = Length(max_value=2.3, unit='meter')
+
+    assert m.value is None
+    assert m.minimum is None
+    assert m.maximum == 2.3
+
+
+def test_get_minimum_maximum_range():
+    """
+    with min value, you should get only minimum
+    """
+    m = Length(max_value=2.3, min_value=1.0, unit='meter')
+
+    assert m.value is None
+    assert m.minimum == 1.0
+    assert m.maximum == 2.3
+
