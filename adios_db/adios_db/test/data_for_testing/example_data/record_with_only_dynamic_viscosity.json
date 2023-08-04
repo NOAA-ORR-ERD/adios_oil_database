@@ -1,24 +1,67 @@
 {
-    "oil_id": "LS00009",
+    "oil_id": "XX00028",
     "adios_data_model_version": "0.12.0",
     "metadata": {
-        "name": "DMA (ULSFO)",
+        "name": "ULSFO Rotterdam Diesel (SINTEF)",
+        "source_id": "2016-0232",
+        "location": "Shell, the Netherlands",
         "reference": {
-            "year": 2021,
-            "reference": "LSU analysis as part of MPRI project, 2021"
+            "year": 2014,
+            "reference": "Hellstr\u00f8m, K. C. \"Weathering Properties and Toxicity of Marine Fuel Oil\", SINTEF  (2017)."
         },
-        "sample_date": "2021",
+        "sample_date": "2016-04-12",
         "product_type": "Distillate Fuel Oil",
-        "API": 36.5,
-        "comments": "LSU-23, RPI-8",
+        "API": 28.2,
         "labels": [
             "Diesel",
             "Distillate Fuel",
-            "Fuel Oil",
             "LSFO",
-            "Refined Product",
             "ULSFO",
             "VLSFO"
+        ],
+        "model_completeness": 60,
+        "gnome_suitable": true,
+        "change_log": [
+            {
+                "name": "RM",
+                "date": "2023-07-25T10:54:42.354-07:00",
+                "comment": "Gas Oil Added"
+            },
+            {
+                "name": "RM",
+                "date": "2023-07-25T11:35:08.363-07:00",
+                "comment": "Gas Oil 10 ppm S added"
+            },
+            {
+                "name": "RM",
+                "date": "2023-07-25T11:41:36.375-07:00",
+                "comment": "Marine Gas Oil 500 ppm added"
+            },
+            {
+                "name": "RM",
+                "date": "2023-07-25T11:47:56.865-07:00",
+                "comment": "Rotterdam Diesel"
+            },
+            {
+                "name": "RM",
+                "date": "2023-07-25T11:52:01.863-07:00",
+                "comment": "Rotterdam edits"
+            },
+            {
+                "name": "RM",
+                "date": "2023-07-25T12:03:34.627-07:00",
+                "comment": "Rotterdam edit"
+            },
+            {
+                "name": "RM",
+                "date": "2023-07-25T12:20:47.236-07:00",
+                "comment": "rotterdam title change"
+            },
+            {
+                "name": "RM",
+                "date": "2023-08-02T13:49:48.282-07:00",
+                "comment": "name change"
+            }
         ]
     },
     "sub_samples": [
@@ -35,14 +78,14 @@
             "physical_properties": {
                 "pour_point": {
                     "measurement": {
-                        "value": -39.44,
                         "unit": "C",
+                        "max_value": -36.5,
                         "unit_type": "temperature"
                     }
                 },
                 "flash_point": {
                     "measurement": {
-                        "value": 61.11,
+                        "value": 62.5,
                         "unit": "C",
                         "unit_type": "temperature"
                     }
@@ -50,44 +93,82 @@
                 "densities": [
                     {
                         "density": {
-                            "value": 0.841,
+                            "value": 0.885,
                             "unit": "g/cm^3",
                             "unit_type": "density"
                         },
                         "ref_temp": {
-                            "value": 15.6,
+                            "value": 15.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     }
                 ],
-                "kinematic_viscosities": [
+                "dynamic_viscosities": [
                     {
                         "viscosity": {
-                            "value": 2.35,
-                            "unit": "cSt",
-                            "unit_type": "kinematicviscosity"
+                            "value": 43.0,
+                            "unit": "cP",
+                            "unit_type": "dynamicviscosity"
                         },
                         "ref_temp": {
-                            "value": 37.78,
+                            "value": 2.0,
                             "unit": "C",
                             "unit_type": "temperature"
+                        },
+                        "shear_rate": {
+                            "value": 10.0,
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity"
+                        }
+                    },
+                    {
+                        "viscosity": {
+                            "value": 12.0,
+                            "unit": "cP",
+                            "unit_type": "dynamicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 13.0,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        },
+                        "shear_rate": {
+                            "value": 10.0,
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity"
+                        }
+                    },
+                    {
+                        "viscosity": {
+                            "value": 5.4,
+                            "unit": "cP",
+                            "unit_type": "dynamicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 50.0,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        },
+                        "shear_rate": {
+                            "value": 10.0,
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity"
                         }
                     }
                 ]
             },
             "SARA": {
                 "asphaltenes": {
-                    "value": 0.01,
+                    "value": 0.02,
                     "unit": "%",
                     "unit_type": "massfraction"
                 }
             },
             "distillation_data": {
-                "type": "mass fraction",
-                "method": "ASTM D86",
+                "type": "volume fraction",
                 "end_point": {
-                    "value": 348.89,
+                    "value": 450.0,
                     "unit": "C",
                     "unit_type": "temperature"
                 },
@@ -99,24 +180,12 @@
                 "cuts": [
                     {
                         "fraction": {
-                            "value": 5.0,
-                            "unit": "%",
-                            "unit_type": "concentration"
-                        },
-                        "vapor_temp": {
-                            "value": 182.22000000000003,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
                             "value": 10.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 193.33000000000004,
+                            "value": 245.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -128,7 +197,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 204.44,
+                            "value": 275.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -140,7 +209,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 216.66999999999996,
+                            "value": 300.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -152,7 +221,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 230.0,
+                            "value": 315.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -164,7 +233,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 243.33000000000004,
+                            "value": 340.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -176,7 +245,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 257.78,
+                            "value": 350.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -188,7 +257,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 274.43999999999994,
+                            "value": 360.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -200,7 +269,7 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 295.56000000000006,
+                            "value": 375.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -212,19 +281,19 @@
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 331.11,
+                            "value": 400.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
                     },
                     {
                         "fraction": {
-                            "value": 95.0,
+                            "value": 100.0,
                             "unit": "%",
                             "unit_type": "concentration"
                         },
                         "vapor_temp": {
-                            "value": 348.89,
+                            "value": 450.0,
                             "unit": "C",
                             "unit_type": "temperature"
                         }
@@ -237,20 +306,20 @@
                     "groups": [
                         "Ungrouped"
                     ],
-                    "method": "ASTM D4294",
                     "measurement": {
-                        "value": 0.0207,
+                        "value": 0.089,
                         "unit": "%",
                         "unit_type": "massfraction"
                     }
-                }
-            ],
-            "industry_properties": [
+                },
                 {
-                    "name": "Reid Vapor Pressure",
+                    "name": "Wax",
+                    "groups": [
+                        "Ungrouped"
+                    ],
                     "measurement": {
-                        "value": 0.7,
-                        "unit": "1",
+                        "value": 3.1,
+                        "unit": "%",
                         "unit_type": "massfraction"
                     }
                 }

@@ -13,7 +13,7 @@ records_with_kvis_data = {}
 records_with_dvis_data = {}
 
 outfile = open("viscosity_data.csv", 'w', encoding="utf-8")
-outfile.write('Name, ID, "Kin. Values", "Dyn. Values"\n')
+outfile.write('Name, "Product Type", ID, "Kin. Values", "Dyn. Values"\n')
 
 records_with_dist_cuts = []
 
@@ -28,7 +28,7 @@ for oil, path in dbs.get_all_records(data_dir):
     records_with_kvis_data.setdefault(len(kvis), set()).add(oil.metadata.name)
     records_with_dvis_data.setdefault(len(dvis), set()).add(oil.metadata.name)
 
-    outfile.write(f'"{oil.metadata.name}", {oil.oil_id}, {len(kvis)}, {len(dvis)}\n')
+    outfile.write(f'"{oil.metadata.name}", "{oil.metadata.product_type}", {oil.oil_id}, {len(kvis)}, {len(dvis)}\n')
 
 
     if (len(fresh.distillation_data.cuts) >= 3 and
@@ -49,4 +49,7 @@ print("records with dist cuts but only one viscosity:")
 #     print(n)
 
 print(f"A total of {len(records_with_dist_cuts)} records that could be used "
-      "with the Abu-Eishah:1999 appraoch for viscosity with temp")
+      "with the Abu-Eishah:1999 approach for viscosity with temp")
+
+print("Report Written to: viscosity_data.csv")
+

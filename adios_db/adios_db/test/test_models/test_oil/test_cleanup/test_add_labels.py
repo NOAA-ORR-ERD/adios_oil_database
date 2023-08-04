@@ -79,7 +79,7 @@ def test_add_labels_to_oil_no_labels_other():
                                'Residual Fuel'}),
     ('Distillate Fuel Oil', 32, {'Diesel', 'Distillate Fuel', 'Fuel Oil',
                                  'Home Heating Oil', 'MDO', 'No. 2 Fuel Oil',
-                                 'Refined Product'}),
+                                 'Refined Product', 'Gas Oil'}),
 ])
 def test_add_labels_to_oil_api(pt, api, labels):
     """
@@ -95,7 +95,7 @@ def test_add_labels_to_oil_api(pt, api, labels):
 @pytest.mark.parametrize('pt, api, kvis, kvis_temp, labels', [
     ('Distillate Fuel Oil', 32.0, 3, 38, {
         'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'No. 2 Fuel Oil',
-        'Diesel', 'Home Heating Oil', 'MDO'
+        'Gas Oil', 'Diesel', 'Home Heating Oil', 'MDO'
     }),
     ('Distillate Fuel Oil', 32.0, 6, 38, {
         'Distillate Fuel', 'Refined Product', 'Fuel Oil', 'MDO'
@@ -193,10 +193,16 @@ def test_full_record_all_labels():
 
     labels = get_suggested_labels(oil)
 
-    assert labels ==  ['Diesel',
-                       'Distillate Fuel',
-                       'Fuel Oil',
-                       'Home Heating Oil',
-                       'MDO',
-                       'No. 2 Fuel Oil',
-                       'Refined Product']
+    assert set(labels) == set([
+        'Diesel',
+        'Distillate Fuel',
+        'Fuel Oil',
+        'Gas Oil',
+        'Home Heating Oil',
+        'MDO',
+        'No. 2 Fuel Oil',
+        'Refined Product',
+        'ULSFO',
+        'VLSFO',
+        'LSFO',
+    ])

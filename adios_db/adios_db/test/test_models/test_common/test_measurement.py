@@ -907,7 +907,7 @@ def test_get_minimum_maximum_value():
 
 def test_get_minimum_maximum_min_only():
     """
-    with single value, you should get it as both minimum and maximum
+    with just a minimum, you should get only min
     """
     m = Length(min_value=2.3, unit='meter')
 
@@ -918,7 +918,7 @@ def test_get_minimum_maximum_min_only():
 
 def test_get_minimum_maximum_max_only():
     """
-    with max value, you should only max
+    With max value, you should only max
     """
     m = Length(max_value=2.3, unit='meter')
 
@@ -929,11 +929,10 @@ def test_get_minimum_maximum_max_only():
 
 def test_get_minimum_maximum_range():
     """
-    with min value, you should get only minimum
+    With a range, you should get the min and max, but no value
     """
     m = Length(max_value=2.3, min_value=1.0, unit='meter')
 
     assert m.value is None
     assert m.minimum == 1.0
     assert m.maximum == 2.3
-

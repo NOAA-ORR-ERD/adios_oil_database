@@ -4,7 +4,9 @@ Add labels to a record -- for those that we can use some automatic criteria for
 For a given product type:
     some labels can be determined from API and/or Viscosity ranges.
 
-The criteria follows the ASTM (and others) standards, where we can
+The criteria follows the ASTM (and others) standards, where we can find them.
+
+
 """
 from math import inf
 
@@ -58,7 +60,7 @@ for pt, labels in types_to_labels.labels.items():
 synonyms_for_labels = {
     'Heavy Fuel Oil': ['HFO', 'No. 6 Fuel Oil', 'Bunker C'],
     'Kerosene': ['Jet Fuel'],
-    'No. 2 Fuel Oil': ['Diesel', 'Home Heating Oil'],
+    'No. 2 Fuel Oil': ['Diesel', 'Home Heating Oil', 'Gas Oil'],
 }
 
 # this maps the labels according to API and kinematic viscosity
@@ -197,7 +199,7 @@ def get_sulfur_labels(oil):
     if oil.sub_samples:  # probably only comes up in tests, but ...
         for compound in oil.sub_samples[0].bulk_composition:
             if 'sulfur' in compound.name.lower():
-                sulfur = compound.measurement.converted_to('%').get_maximum_value()
+                sulfur = compound.measurement.converted_to('%').maximum
                 if sulfur <= U_limit:
                     labels.add('ULSFO')
                 if sulfur <= V_limit:
@@ -214,6 +216,8 @@ def get_suggested_labels(oil):
 
     :param oil: the oil object to get the labels for
     :type oil: Oil object
+
+    :returns: sorted list of all labels that match the criteria
     """
     labels = set()
     pt = oil.metadata.product_type
@@ -221,8 +225,7 @@ def get_suggested_labels(oil):
     # everything gets its product type as a label as well
     # unless it has no product type
     if pt == "Other":  # we don't want any labels auto added for Other
-        return sorted(labels)
-
+        return []
     try:
         for label in types_to_labels.left[oil.metadata.product_type]:
             if is_label(oil, label):
@@ -230,7 +233,8 @@ def get_suggested_labels(oil):
     except KeyError:
         pass
 
-    labels.union(get_sulfur_labels(oil))
+    # Add the sulfur labels
+    labels |= get_sulfur_labels(oil)
 
     # sorting so they'll be in consistent order
     return sorted(labels)

@@ -7,6 +7,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+import nucos
+
 from adios_db.models.common import measurement as meas
 
 from adios_db.models.oil.oil import Oil
@@ -25,6 +27,7 @@ from adios_db.computation.physical_properties import (
     emul_water,
     get_interfacial_tension_water,
     get_interfacial_tension_seawater,
+    convert_dvisc_to_kvisc,
 )
 
 
@@ -97,6 +100,99 @@ def test_get_kinematic_viscosity_data_no_data():
     kv = get_kinematic_viscosity_data(oil)
 
     assert kv == []
+
+
+# def test_get_kinematic_viscosity_data_from_dynamic():
+#     """
+#     There seemed to be an error with computing the kinematic
+#     from the dynamic viscosity
+
+#     """
+#     oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
+#     kv = get_kinematic_viscosity_data(oil)
+
+#     print(kv)
+
+#     assert kv == []
+
+def test_convert_dvisc_to_kvisc():
+    """
+    make sure the conversion is correct
+
+    """
+    oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
+
+    dvis = get_dynamic_viscosity_data(oil)
+
+    dvis = [(0.043000000000000003, 275.15),  # 2C
+            (0.012, 288.15),  # 15C
+            (0.0054, 323.15)]  # 50C
+    print(dvis)
+
+    print(get_density_data(oil, units='kg/m^3', temp_units="K"))
+    density = Density(oil)
+    density = Density([(885.0, 288.15)]) # 15C
+
+
+#    [(980.0, 288.15), (990.0, 273.15)])
+
+    # 0.885, "unit": "g/cm^3",
+    print(density.at_temp(15, 'C'))
+
+    kvis = convert_dvisc_to_kvisc(dvis, density)
+
+    print(kvis)
+
+    # why would temp have changed?
+    for kv, dv in zip(kvis, dvis):
+        assert kv[1] == dv[1]
+        kv2 = dv[0] / density.at_temp(dv[1], 'K')
+        assert kv[0] == kv2
+
+@pytest.mark.xfail
+def test_convert_dvisc_to_kvisc_from_record():
+    """
+    This is bit of an integration test
+
+    For a record with only dynamic viscosity data, do we get the right kinematic viscosity?
+
+    from the record::
+
+        "viscosity": {
+            "value": 59.0,
+            "unit": "cP",
+            "unit_type": "dynamicviscosity"
+        },
+        "ref_temp": {
+            "value": 13.0,
+            "unit": "C",
+            "unit_type": "temperature"
+                            },
+
+
+    """
+    oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
+
+    raw_dvis = get_dynamic_viscosity_data(oil, units="cP")
+
+    density = Density(oil)
+
+    kvis_data = get_kinematic_viscosity_data(oil)
+    print(kvis_data)
+
+    kv = KinematicViscosity(oil)
+
+    print(kv.at_temp(13, kvis_units='cSt', temp_units='C'))
+
+    for dv in raw_dvis[1:]:
+        kv2 = kv.at_temp(dv[1], kvis_units='cSt', temp_units='K')
+        d = density.at_temp(dv[1], unit='K') / 1000
+        dv2 = dv[0] / d
+        print("temp is:", nucos.convert('K', 'C', dv[1]))
+        print(d)
+        assert isclose(kv2, dv2)
+
+    assert False
 
 
 def test_get_dynamic_viscosity_data_defaults():
@@ -265,6 +361,21 @@ class TestKinematicViscosity:
 
         with pytest.raises(ValueError):
             _ = KinematicViscosity(oil)
+
+    @pytest.mark.xfail
+    def test_from_raw_data(self):
+        """
+        This record has no viscosity data -- should raise
+        """
+        # these were dynamic
+        data = [(0.043, 275.15),  # 2C
+                (0.012, 288.15),  # 15C
+                (0.0054, 323.15)]  # 50C
+
+        kv = KinematicViscosity(data)
+
+        k = kv.at_temp(2, kvis_units='m^2/s', temp_units="C")
+        assert isclose(k, 0.043, rel_tol=1e-4)
 
 
 def test_get_frac_recovered():

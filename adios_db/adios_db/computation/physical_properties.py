@@ -181,17 +181,17 @@ class KinematicViscosity:
 
         If three or more, the constants are computed by a least squares fit.
         '''
-        # find viscosity measurements with zero weathering
 
-        # this sets:
-        self._k_v2 = None  # decay constant for viscosity curve
-        self._visc_A = None
+        # # this sets:
+        # self._k_v2 = None  # decay constant for viscosity curve
+        # self._visc_A = None
+        self.residuals = None # residuals if curve is fit
 
         kvis = self.kviscs
         kvis_ref_temps = self.temps
 
         if len(kvis) == 0:
-            raise ValueError("Cannot initilaize a KinematicViscosity object with no data")
+            raise ValueError("Cannot initialize a KinematicViscosity object with no data")
         elif len(kvis) == 1:  # use default k_v2
             self._k_v2 = 2100.0
             self._visc_A = kvis[0] * np.exp(-self._k_v2 / kvis_ref_temps[0])
@@ -199,7 +199,9 @@ class KinematicViscosity:
             # do a least squares fit to the data
             b = np.log(kvis)
             A = np.c_[np.ones_like(b), 1.0 / np.array(kvis_ref_temps)]
-            x, _residuals, _rank, _s = np.linalg.lstsq(A, b, rcond=None)
+            x, residuals, _rank, _s = np.linalg.lstsq(A, b, rcond=None)
+
+            self.residuals = residuals
 
             self._k_v2 = x[1]
             self._visc_A = np.exp(x[0])
@@ -318,18 +320,19 @@ def convert_dvisc_to_kvisc(dvisc, density):
 
     :param density: an initialized Density object
 
-    dvisc and densities are tables as returned from:
+    dvisc is a table as returned from:
 
      - ``get_dynamic_viscosity_data``
-     - ``get_density_data``
 
-    units: viscosity: Pas or kg/(m s)
+    e.g. ``[(0.043, 275.15), (0.012, 286.15), (0.0054, 323.15)]``
+
+    units: viscosity: Pa s or kg/(m s) (same thing)
            density: kg/m^3
     """
     kvisc_table = []
 
     for (dv, temp) in dvisc:
-        kv = dv / density.at_temp(temp)
+        kv = dv / density.at_temp(temp, unit='K')
         kvisc_table.append((kv, temp))
 
     return kvisc_table
