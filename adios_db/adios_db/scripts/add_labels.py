@@ -9,7 +9,7 @@ from adios_db.models.oil.cleanup.add_labels import get_suggested_labels
 from adios_db.scripting import get_all_records, process_input
 
 USAGE = """
-add_labels data_dir [dry_run]
+adios_db_add_labels data_dir [dry_run]
 
 data_dir is the dir where the data are: the script will recursively
 search for JSON files
