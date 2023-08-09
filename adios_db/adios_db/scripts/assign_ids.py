@@ -3,13 +3,12 @@
 Assign Oil IDs to records
 """
 import sys
-import csv
+from pathlib import Path
 
-from adios_db.models.oil.cleanup.add_labels import get_suggested_labels
-from adios_db.scripting import get_all_records, process_input
+from adios_db.scripting import get_all_records, Oil
 
 USAGE = """
-adios_db_assign_ids PREFIX [dry_run] file1, file2, file3, ...
+adios_db_assign_ids PREFIX [dry_run] data_dir, file1, file2, file3, ...
 
 PREFIX is the prefix you want to use: e.g. AD, EC, etc.
 
@@ -21,43 +20,62 @@ or
 
 XX*.json
 
+Example:
+
+adios_db_assign_ids AD [dry_run] ../noaa-oil-data/data/oil XX/*.json
+
 If "dry_run" is on the command line, it will report what it would do,
 but not save any changes
 """
 
 
 def main():
-    base_dir, dry_run = process_input(USAGE)
 
+    try:
+        sys.argv.remove("dry_run")
+        dry_run = True
+    except ValueError:
+        dry_run = False
+
+    try:
+        prefix = sys.argv[1]
+        base_dir = Path(sys.argv[2])
+    except IndexError:
+        print(USAGE)
+        sys.exit()
+
+    infiles = sys.argv[3:]
+
+    print(f"{base_dir=}")
+    print(f"{dry_run=}")
+    print(f"{prefix=}")
+    print(f"{infiles=}")
+
+
+    # Find the max ID in use:
+    max_id = 0
     for oil, pth in get_all_records(base_dir):
         id = oil.oil_id
+        if id.startswith(prefix):
+            max_id = max(max_id, int(id[len(prefix):]))
+
+    # assign the ids:
+    max_id += 1
+    for fname in infiles:
+        file_dir = Path(fname).parent
+        max_id += 1
+        oil = Oil.from_file(fname)
+        id = oil.oil_id
         name = oil.metadata.name
-        pt = oil.metadata.product_type
-
-        print("\nFor Oil:", id, name)
-        print("product type:", pt)
-
-        try:
-            prev_labels = oil.metadata.labels
-            labels = get_suggested_labels(oil)
-            print("Previous: ", prev_labels)
-            print("suggested:", labels)
-
-            if not replace:
-                labels = sorted(set(labels + prev_labels))
-
-            print("new:      ", labels)
-            outfile.write(f"{id}, {name}, {pt}, {str(labels).strip('{}')}\n")
-
-            if not dry_run:
-                print("Saving out:", pth)
-                oil.metadata.labels = sorted(labels)
-                oil.to_file(pth)
-            else:
-                print("Nothing saved")
-        except Exception as exp:  # if anything goes wrong, we won't add an labels
-            print("Something went wrong -- no labels")
-            print(exp)
+        new_id = f"{prefix}{max_id:05}"
+        print(f"assigning: {new_id} to: {name}")
+        oil.oil_id = new_id
+        new_fname = file_dir / f"{new_id}.json"
+        if not dry_run:
+            print("Saving to:", new_fname)
+            oil.to_file(new_fname)
+        else:
+            print("Nothing saved")
 
 if __name__ == "__main__":
     main()
