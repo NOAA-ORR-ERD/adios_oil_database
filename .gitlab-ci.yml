@@ -39,11 +39,12 @@ test_develop:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
     - conda update -y conda
+    - conda update -y mamba
 
   script:
     # install all the requirements
     - >
-      conda install -y
+      mamba install -y
       python=$PYTHON_VER
       --file adios_db/conda_requirements.txt
       --file adios_db/conda_requirements_optional.txt
