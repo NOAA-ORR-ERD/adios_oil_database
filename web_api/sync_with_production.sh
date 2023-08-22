@@ -3,7 +3,7 @@
 # Script to backup oil database and set it to production branch
 echo "In sync_with_production.sh script"
 
-#set -e  # exit script if any commands fail
+set -e  # exit script if any commands fail
 set -x  # echo commands to stdout
 
 function branch_exists_remotely() {
