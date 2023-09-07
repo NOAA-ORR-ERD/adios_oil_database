@@ -39,7 +39,8 @@ git remote update origin --prune
 git checkout production
 git pull
 
-git branch -D under_review
+# remove the local under_review branch
+git branch -D under_review || echo "local under_review not found. This is ok."
 
 if [[ $(branch_exists_remotely under_review) -eq "0" ]]
 then
