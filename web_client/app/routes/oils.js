@@ -177,7 +177,7 @@ export default class OilsRoute extends ApplicationRoute {
             return true;
         }
         else {
-            this.replaceWith('no-connection');
+            this.router.replaceWith('no-connection');
         }
     }
 }

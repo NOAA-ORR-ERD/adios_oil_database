@@ -11,20 +11,16 @@
     {{#if (or @valueObject.value (eq @valueObject.value 0))}}
       <Input
         @type="text"
-        @class="bg-transparent border form-control"
+        class="bg-transparent border form-control"
         @value={{value-unit (convert-unit @valueObject @valueUnit)
-                 @valuePrecision true}}
-        @change={{action "updateValue"}}
-        size="10"
+                 @valuePrecision true}} size="10" {{on "change" (action "updateValue")}}
       />
     {{else}}
       <Input
         @type="text"
-        @class="bg-transparent border form-control"
+        class="bg-transparent border form-control"
         @value=""
-        @placeholder="Enter a number value"
-        @change={{action "updateValue"}}
-        size="10"
+        placeholder="Enter a number value" size="10" {{on "change" (action "updateValue")}}
       />
     {{/if}}
 

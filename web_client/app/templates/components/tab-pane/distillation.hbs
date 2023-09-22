@@ -37,7 +37,7 @@
 
     {{! Fraction Recovered }}
     <div class="col-sm-12 col-md-7 col-lg-4 input-group align-items-center">
-      <form class="form-inline justify-content-center" role="form">
+      <form class="form-inline justify-content-center">
         <div class="form-group">
           <strong>Fraction Recovered:&nbsp;</strong>
 
@@ -62,7 +62,7 @@
 
     {{! End Point }}
     <div class="col-sm-12 col-md-7 col-lg-4 input-group align-items-center">
-      <form class="form-inline justify-content-center" role="form">
+      <form class="form-inline justify-content-center">
         <div class="form-group">
           <strong>Terminal Boiling Point:&nbsp;</strong>
 
@@ -93,11 +93,9 @@
       {{#if @editable}}
         {{#let (if @oil.distillation_data.method @oil.distillation_data.method "") as |distillationMethod|}}
           <Input
-            @class="p-1 overflow-hidden bg-transparent border"
+            class="p-1 overflow-hidden bg-transparent border"
             @value={{distillationMethod}}
-            @placeholder="Enter Distillation Method"
-            @change={{action "updateDistillationMethod"}}
-            disabled={{not @editable}}
+            placeholder="Enter Distillation Method" disabled={{not @editable}} {{on "change" (action "updateDistillationMethod")}}
           />
         {{/let}}
       {{else}}

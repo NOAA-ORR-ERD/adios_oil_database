@@ -2,7 +2,7 @@
 
 
 <table class="table table-hover table-bordered">
-  <thead aria-controls="ift-tbody" aria-expanded="false">
+  <thead aria-controls="ift-tbody">
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Measurement</th>
@@ -32,11 +32,9 @@
       <tr>
         <td>
           {{#if @editable}}
-            <Input @class="p-1 overflow-hidden bg-transparent border"
+            <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.name}}
-              @placeholder="Enter Value"
-              @change={{fn this.updateValue item}}
-              size={{24}}
+              placeholder="Enter Value" size={{24}} {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.name}}
@@ -62,11 +60,9 @@
 
         <td>
           {{#if @editable}}
-            <Input @class="p-1 overflow-hidden bg-transparent border"
+            <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.measurement.standard_deviation}}
-              @placeholder="Enter Value"
-              @change={{fn this.updateValue item}}
-              size={{10}}
+              placeholder="Enter Value" size={{10}} {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.measurement.standard_deviation}}
@@ -75,11 +71,9 @@
 
         <td>
           {{#if @editable}}
-            <Input @class="p-1 overflow-hidden bg-transparent border"
+            <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.measurement.replicates}}
-              @placeholder="Enter Value"
-              @change={{fn this.updateValue item}}
-              size={{10}}
+              placeholder="Enter Value" size={{10}} {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.measurement.replicates}}
@@ -88,11 +82,9 @@
 
         <td>
           {{#if @editable}}
-            <Input @class="p-1 overflow-hidden bg-transparent border"
+            <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.method}}
-              @placeholder="Enter Value"
-              @change={{fn this.updateValue item}}
-              size={{10}}
+              placeholder="Enter Value" size={{10}} {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.method}}

@@ -36,9 +36,9 @@
               </div>
             </div>
             <div class="col-6 px-1">
-              <Input @class="form-control bg-transparent border"
+              <Input class="form-control bg-transparent border"
                  @value={{this.subject}}
-                 @placeholder="Enter Subject Line"
+                 placeholder="Enter Subject Line"
                  title="Enter Subject Line"
                  {{on "change" this.updateSubject}}
                  {{on "keypress" this.updateSubject}}
@@ -54,9 +54,9 @@
             <div class="col-10 px-1">
 
               <Textarea
-                @class="p-1 reference-textarea overflow-auto bg-transparent border"
+                class="p-1 reference-textarea overflow-auto bg-transparent border"
                 @value={{this.body}}
-                @placeholder="Enter a message"
+                placeholder="Enter a message"
                 title="Enter a message"
                 rows="6"
                 {{on "change" this.updateBody}}

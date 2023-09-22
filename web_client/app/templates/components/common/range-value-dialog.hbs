@@ -28,60 +28,50 @@
       <div class="row d-flex align-items-center mx-2">
         <Input
           @type="radio"
-          @name="interval-number"
-          @value="true"
-          @focus-in={{action "toggleRadio" true}}
-          id="range-radio-btn"
-          checked={{this.isInterval}}
+          name="interval-number"
+          @value="true" id="range-radio-btn"
+          checked={{this.isInterval}} {{on "focusin" (action "toggleRadio" true)}}
         />
         <label for="range-radio-btn" class="m-2 pb-1">
           Range
         </label>
         <Input
           @type="number"
-          @step={{this.numberStep}}
-          @name="min-value"
-          @size="5"
+          step={{this.numberStep}}
+          name="min-value"
+          size="5"
           placeholder="-∞"
-          value={{this.dialogMinValue}}
-          @focus-in={{action "toggleRadio" true}}
-          {{on "change" this.changeMin}}
-          class="m-2" 
+          value={{this.dialogMinValue}} {{on "change" this.changeMin}}
+          class="m-2" {{on "focusin" (action "toggleRadio" true)}} 
         />
         <Input
           @type="number"
-          @step={{this.numberStep}}
-          @name="max-value"
-          @size="5"
+          step={{this.numberStep}}
+          name="max-value"
+          size="5"
           placeholder="+∞"
-          value={{this.dialogMaxValue}}
-          @focus-in={{action "toggleRadio" true}}
-          {{on "change" this.changeMax}}
-          class="m-2"
+          value={{this.dialogMaxValue}} {{on "change" this.changeMax}}
+          class="m-2" {{on "focusin" (action "toggleRadio" true)}}
         />
       </div>
       {{!-- scalar input --}}
       <div class="row d-flex align-items-center mx-2">
         <Input
           @type="radio"
-          @name="interval-number"
-          @value="number"
-          @focus-in={{action "toggleRadio" false}}
-          id="value-radio-btn"
-          checked={{not this.isInterval}}
+          name="interval-number"
+          @value="number" id="value-radio-btn"
+          checked={{not this.isInterval}} {{on "focusin" (action "toggleRadio" false)}}
         />
         <label for="value-radio-btn" class="m-2 pb-1 pr-3">
           Value
         </label>
         <Input
           @type="number"
-          @step={{this.numberStep}}
-          @name="scalar"
-          @size="5"
+          step={{this.numberStep}}
+          name="scalar"
+          size="5"
           placeholder=""
-          value={{this.dialogValue}}
-          @focus-in={{action "toggleRadio" false}}
-          {{on "change" this.changeValue}}
+          value={{this.dialogValue}} {{on "change" this.changeValue}} {{on "focusin" (action "toggleRadio" false)}}
         />
       </div>
 

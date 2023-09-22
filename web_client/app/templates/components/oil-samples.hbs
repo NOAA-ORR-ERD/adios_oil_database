@@ -13,9 +13,8 @@
 
         {{#if @editable}}
           <Input
-            @class="p-1 overflow-hidden bg-transparent border"
-            @value={{props.short_name}}
-            @change={{action "updateShortSampleName" idx}}
+            class="p-1 overflow-hidden bg-transparent border"
+            @value={{props.short_name}} {{on "change" (action "updateShortSampleName" idx)}}
           />
         {{else}}
           {{props.short_name}}

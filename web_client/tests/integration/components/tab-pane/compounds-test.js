@@ -16,9 +16,9 @@ module('Integration | Component | tab-pane/compounds', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#tab-pane/compounds}}
+      <TabPane::Compounds>
         template block text
-      {{/tab-pane/compounds}}
+      </TabPane::Compounds>
     `);
 
     assert.dom(this.element).hasText('template block text');

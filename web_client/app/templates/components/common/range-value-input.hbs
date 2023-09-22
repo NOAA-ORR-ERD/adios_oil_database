@@ -9,19 +9,15 @@
  }}
 {{#if this.valueObject}}
   <Input
-    @class="p-1 bg-transparent border"
+    class="p-1 bg-transparent border"
     @type="text"
-    @value={{value-unit (convert-unit this.inputValue @valueUnit) @valuePrecision}}
-    @focus-in={{action "openModalDialog"}}
-    id={{this.componentId}}
+    @value={{value-unit (convert-unit this.inputValue @valueUnit) @valuePrecision}} id={{this.componentId}} {{on "focusin" (action "openModalDialog")}}
   />
 {{else}}
   <Input
-    @class="p-1 bg-transparent border"
+    class="p-1 bg-transparent border"
     @type="text"
-    @value="No Data"
-    @focus-in={{action "openModalDialog"}}
-    id={{this.componentId}}
+    @value="No Data" id={{this.componentId}} {{on "focusin" (action "openModalDialog")}}
   />
 {{/if}}
 

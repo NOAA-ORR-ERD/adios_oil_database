@@ -16,9 +16,9 @@ module('Integration | Component | graph/dvis', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#graph/dvis}}
+      <Graph::Dvis>
         template block text
-      {{/graph/dvis}}
+      </Graph::Dvis>
     `);
 
     assert.dom(this.element).hasText('template block text');

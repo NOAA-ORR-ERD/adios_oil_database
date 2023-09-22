@@ -16,9 +16,9 @@ module('Integration | Component | graph/density', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#graph/density}}
+      <Graph::Density>
         template block text
-      {{/graph/density}}
+      </Graph::Density>
     `);
 
     assert.dom(this.element).hasText('template block text');

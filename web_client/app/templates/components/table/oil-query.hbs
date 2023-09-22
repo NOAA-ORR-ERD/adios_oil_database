@@ -63,7 +63,7 @@
             >
               <option class="bg-light" value="">unspecified</option>
 
-              {{#each @productTypes.firstObject.product_types as |oilType|}}
+              {{#each (get @productTypes "0.product_types") as |oilType|}}
                 {{#if (eq oilType this.selectedType)}}
                   <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
@@ -115,18 +115,18 @@
     @autoHideScrollbar={{false}} as |body|
   >
     {{#if isLoading}}
-      {{#body.loader}}
+      <body.loader>
         <Table::Loader />
-      {{/body.loader}}
+      </body.loader>
     {{else if table.isEmpty}}
-      {{#body.no-data}}
+      <body.no-data>
         <p class="text-center">
           <strong>Sorry, your filter produced no results</strong>
         </p>
         <p class="text-center">
           To widen your search, change or remove filters above
         </p>
-      {{/body.no-data}}
+      </body.no-data>
     {{/if}}
   </t.body>
 

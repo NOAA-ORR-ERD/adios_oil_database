@@ -35,22 +35,18 @@
                   />
                 {{else if (eq value.dataType "string")}}
                   {{#if @editable}}
-                    <Input @class="p-1 overflow-hidden bg-transparent border"
+                    <Input class="p-1 overflow-hidden bg-transparent border"
                       @value={{get this.baseProperty attr}}
-                      @placeholder="Enter Value"
-                      @change={{fn this.updateAttrString attr}}
-                      size={{if value.size value.size "10"}}
+                      placeholder="Enter Value" size={{if value.size value.size "10"}} {{on "change" (fn this.updateAttrString attr)}}
                     />
                   {{else}}
                     <span class="p-1">{{get this.baseProperty attr}}</span>
                   {{/if}}
                 {{else if (eq value.dataType "number")}}
                   {{#if @editable}}
-                    <Input @class="p-1 overflow-hidden bg-transparent border"
+                    <Input class="p-1 overflow-hidden bg-transparent border"
                       @value={{get this.baseProperty attr}}
-                      @placeholder="Enter Value"
-                      @change={{fn this.updateAttrString attr}}
-                      size={{if value.size value.size "10"}}
+                      placeholder="Enter Value" size={{if value.size value.size "10"}} {{on "change" (fn this.updateAttrString attr)}}
                     />
                   {{else}}
                     <span class="p-1">{{get this.baseProperty attr}}</span>

@@ -16,9 +16,9 @@ module('Integration | Component | table/conradson', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#table/conradson}}
+      <Table::Conradson>
         template block text
-      {{/table/conradson}}
+      </Table::Conradson>
     `);
 
     assert.dom(this.element).hasText('template block text');

@@ -5,11 +5,9 @@
         {{#let (if this.model.metadata.name this.model.metadata.name "") as |oilName|}}
           <div class="col-3">
               <Input
-                @class="p-1 overflow-hidden bg-transparent border"
+                class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilName}}
-                @placeholder="Enter Name"
-                @change={{action "updateName"}}
-                size="30"
+                placeholder="Enter Name" size="30" {{on "change" (action "updateName")}}
               />
           </div>
         {{/let}}

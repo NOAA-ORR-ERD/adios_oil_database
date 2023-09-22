@@ -16,9 +16,9 @@ module('Integration | Component | tab-pane/distillation', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#tab-pane/distillation}}
+      <TabPane::Distillation>
         template block text
-      {{/tab-pane/distillation}}
+      </TabPane::Distillation>
     `);
 
     assert.dom(this.element).hasText('template block text');

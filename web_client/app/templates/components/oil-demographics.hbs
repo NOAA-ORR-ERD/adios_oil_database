@@ -20,10 +20,9 @@
           {{#if @editable}}
             {{#let (if @oil.metadata.location @oil.metadata.location "") as |oilLocation|}}
               <Input
-                @class="p-1 overflow-hidden bg-transparent border"
+                class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilLocation}}
-                @placeholder="Enter Location"
-                @change={{action "updateLocation"}}
+                placeholder="Enter Location" {{on "change" (action "updateLocation")}}
               />
             {{/let}}
           {{else}}
@@ -43,11 +42,10 @@
           {{#if @editable}}
             {{#let (if @oil.metadata.source_id @oil.metadata.source_id "") as |sourceID|}}
               <Input
-                @class="p-0 overflow-hidden bg-transparent border"
-                @size="14"
+                class="p-0 overflow-hidden bg-transparent border"
+                size="14"
                 @value={{sourceID}}
-                @placeholder="Enter Source ID"
-                @change={{action "updateSourceID"}}
+                placeholder="Enter Source ID" {{on "change" (action "updateSourceID")}}
               />
             {{/let}}
           {{else}}
@@ -65,12 +63,12 @@
                 onchange={{action "updateType"}}
             >
               {{#if (includes @oil.metadata.product_type
-                              @productTypes.firstObject.product_types)}}
+                              (get @productTypes "0.product_types"))}}
               {{else}}
                 <option class="bg-light" selected>{{@oil.metadata.product_type}}</option>
               {{/if}}
 
-              {{#each @productTypes.firstObject.product_types as |oilType|}}
+              {{#each (get @productTypes "0.product_types") as |oilType|}}
                 {{#if (eq @oil.metadata.product_type oilType)}}
                   <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
@@ -92,13 +90,11 @@
           {{#let (round-relative @oil.metadata.API 1) as |oilAPI|}}
             {{#if @editable}}
               <Input
-                @id="api"
+                id="api"
                 @type="text"
-                @class="p-1 overflow-hidden bg-transparent border"
-                @placeholder="API value"
-                @value={{oilAPI}}
-                @change={{action "updateAPI"}}
-                @size="6" />
+                class="p-1 overflow-hidden bg-transparent border"
+                placeholder="API value"
+                @value={{oilAPI}} size="6" {{on "change" (action "updateAPI")}} />
             {{else}}
               {{#if (is-empty oilAPI)}}
                 <span class="p-1">No Value</span>
@@ -195,9 +191,9 @@
                   @oil.metadata.reference.reference
                   (if @editable "" "None")) as |oilReference|}}
             <Textarea
-              @class="p-1 reference-textarea overflow-auto bg-transparent border"
+              class="p-1 reference-textarea overflow-auto bg-transparent border"
               @value={{oilReference}}
-              @placeholder="Enter reference"
+              placeholder="Enter reference"
               title="Reference"
               @change={{action "updateReference"}}
               rows="4"
@@ -218,11 +214,10 @@
                   (if @editable "" "None")) as |oilReferenceDate|}}
             {{#if @editable}}
               <Input
-                @class="p-1 overflow-hidden bg-transparent border"
+                class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilReferenceDate}}
-                @placeholder="YYYY"
-                @size="7"
-                @change={{action "updateReferenceDate"}}
+                placeholder="YYYY"
+                size="7" {{on "change" (action "updateReferenceDate")}}
               />
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
@@ -239,11 +234,10 @@
                   (if @editable "" "None")) as |oilSampleDate|}}
             {{#if @editable}}
               <Input
-                @class="p-1 overflow-hidden bg-transparent border"
+                class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilSampleDate}}
-                @placeholder="YYYY-MM-DD"
-                @size="12"
-                @change={{action "updateSampleReceivedDate"}}
+                placeholder="YYYY-MM-DD"
+                size="12" {{on "change" (action "updateSampleReceivedDate")}}
               />
             {{else}}
               <span class="p-1 ">{{oilSampleDate}}</span>
@@ -266,10 +260,10 @@
                 @oil.metadata.comments
                 (if @editable "" "None")) as |oilComments|}}
           <Textarea
-            @class="p-1 flex-fill overflow-auto bg-transparent border"
+            class="p-1 flex-fill overflow-auto bg-transparent border"
             @value={{oilComments}}
-            @rows="2"
-            @placeholder="Enter comments"
+            rows="2"
+            placeholder="Enter comments"
             title="Comments"
             @change={{action "updateComments"}}
             disabled={{not @editable}}
