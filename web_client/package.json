@@ -60,6 +60,7 @@
     "ember-qunit": "^7.0.0",
     "ember-ref-bucket": "^5.0.4",
     "ember-resolver": "^11.0.1",
+    "ember-slugify": "^5.0.0",
     "ember-source": "~5.2.0",
     "ember-template-lint": "^5.11.2",
     "ember-welcome-page": "^7.0.2",
