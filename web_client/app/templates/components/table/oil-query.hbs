@@ -1,13 +1,13 @@
-{{#light-table table height="65vh" class="w-100" as |t|}}
+{{#light-table this.table height="65vh" class="w-100" as |t|}}
   <div class="container-fluid mb-2">
     <div class="row">
       <div class="col-3">
         <div class="row h-100 ml-1 align-items-center">
           <input class="form-control"
-            value={{q}}
+            value={{this.q}}
             title="Search ID, Name, or Location"
             placeholder="Search ID, Name, or Location"
-            oninput={{action (pipe (action (mut q)) (action "onSearchChange")) value="target.value"}}
+            oninput={{action (pipe (action (mut this.q)) (action "onSearchChange")) value="target.value"}}
           >
         </div>
 
@@ -114,11 +114,11 @@
     @enableScaffolding={{true}}
     @autoHideScrollbar={{false}} as |body|
   >
-    {{#if isLoading}}
+    {{#if this.isLoading}}
       <body.loader>
         <Table::Loader />
       </body.loader>
-    {{else if table.isEmpty}}
+    {{else if this.table.isEmpty}}
       <body.no-data>
         <p class="text-center">
           <strong>Sorry, your filter produced no results</strong>

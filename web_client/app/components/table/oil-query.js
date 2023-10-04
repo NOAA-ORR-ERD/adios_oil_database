@@ -21,6 +21,7 @@ export default class NewOilQuery extends Component {
     @tracked selectedType;
     @tracked gnomeSuitable;
 
+    @tracked table;
     page = 0;
     limit = 50;    
     canLoadMore = true;
