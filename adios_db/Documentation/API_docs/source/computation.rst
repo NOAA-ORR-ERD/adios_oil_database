@@ -27,27 +27,27 @@ Features of a `Measurement` Object.
 
 Available Measurement classes:
 
-`AngularVelocity`,
-`AnyUnit`,
-`Concentration`,
-`Density`,
-`Dimensionless`,
-`DynamicViscosity`,
-`InterfacialTension`,
-`KinematicViscosity`,
-`Length`,
-`Mass`,
-`MassFraction`,
-`MassOrVolumeFraction`,
-`MeasurementBase`,
-`MeasurementDataclass`,
-`NeedleAdhesion`,
-`Pressure`,
-`SayboltViscosity`,
-`Temperature`,
-`Time`,
-`Unitless`,
-`VolumeFraction`
+``AngularVelocity``,
+``AnyUnit``,
+``Concentration``,
+``Density``,
+``Dimensionless``,
+``DynamicViscosity``,
+``InterfacialTension``,
+``KinematicViscosity``,
+``Length``,
+``Mass``,
+``MassFraction``,
+``MassOrVolumeFraction``,
+``MeasurementBase``,
+``MeasurementDataclass``,
+``NeedleAdhesion``,
+``Pressure``,
+``SayboltViscosity``,
+``Temperature``,
+``Time``,
+``Unitless``,
+``VolumeFraction``
 
 Examples
 --------
@@ -55,7 +55,7 @@ Examples
 Single Value:
 .............
 
-..code-block:: ipython
+.. code-block:: ipython
 
     # All the Measurment objects should be in the scripting namespace
     import adios_db.scripting as ads
@@ -98,7 +98,7 @@ Range of Values:
 
 You can specify a range of values for a measurement:
 
-..code-block:: ipython
+.. code-block:: ipython
 
     In [16]: pour_point
     Out[16]: Temperature(unit='C', min_value=15.0, max_value=20.0, unit_type='temperature')
@@ -127,7 +127,7 @@ Greater than or less than values:
 
 You can specify only a minimum or maximum, to represent :greater than, or les than, for example a measurment below a detection limit might be less than a given value:
 
-..code-block:: ipython
+.. code-block:: ipython
 
     In [22]: benzene_concentation = ads.MassFraction(max_value=1, unit='ppb')
 
