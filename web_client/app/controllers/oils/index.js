@@ -23,9 +23,10 @@ export default class IndexController extends OilsController {
     @action
     createOil(oil) {
         let newOil = this.store.createRecord('oil', oil);
+        let current_route = this.get('target');
 
         newOil.save().then(function(result) {
-            this.transitionTo('oils.show', result.id);
+            current_route.transitionTo('oils.show', result.id);
         }.bind(this));
     }
 

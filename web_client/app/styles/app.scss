@@ -10,7 +10,7 @@ $nav-tabs-border-color: #adb5bd;
 $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 
 // main bootstrap import
-@import "ember-cli-bootstrap-4/bootstrap";
+@import "ember-bootstrap/bootstrap";
 @import "controls";
 @import "spinner";
 @import "ember-toggle-ios";
