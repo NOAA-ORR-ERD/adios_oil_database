@@ -26,7 +26,7 @@
         {{#if this.changesMade}}
           <Button::BackToList
             @oil={{this.model}}
-            @submit={{action send "discardTemporaryEdits" this.model "oils.index"}}
+            @submit={{action "discardTemporaryEdits" this.model "oils.index"}}
           />
         {{else}}
           <LinkTo @route="oils">
@@ -80,15 +80,15 @@
         {{#if this.canModifyDb}}
           <Button::DiscardEdits
             @oil={{this.model}}
-            @submit={{action send "discardTemporaryEdits" this.model ""}}
+            @submit={{action "discardTemporaryEdits" this.model ""}}
             @changesMade={{this.changesMade}}
           />
 
           <Button::SaveEdits
             @oil={{this.model}}
             @submit={{action (pipe
-                        (action send "updateOil" this.model)
-                        (action send "commitTemporaryEdits" this.model))
+                        (action "updateOil" this.model)
+                        (action "commitTemporaryEdits" this.model))
                     }}
             @changesMade={{this.changesMade}}
           />
@@ -102,7 +102,7 @@
         {{#if this.canModifyDb}}
           <Button::CopyOil
             @oil={{this.model}}
-            @submit={{action send "createOil"}}
+            @submit={{action "createOil"}}
             @changesMade={{this.changesMade}}
           />
         {{/if}}
@@ -110,7 +110,7 @@
         {{#if this.canModifyDb}}
           <Button::DeleteOil
             @oil={{this.model}}
-            @submit={{action send "deleteOil"}}
+            @submit={{action "deleteOil"}}
             @changesMade={{this.changesMade}}
           />
         {{/if}}
@@ -128,7 +128,7 @@
       @labels={{this.labels}}
       @productTypes={{this.productTypes}}
       @editable={{this.editable}}
-      @submit={{action send "updateOil"}}
+      @submit={{action "updateOil"}}
       @oilTypes={{array
           "crude"
           "refined"
@@ -147,7 +147,7 @@
     @sampleTab={{this.currentSampleTab}}
     @updateSampleTab={{action this.updateSampleTab}}
     @distillationTypes={{this.distillationTypes}}
-    @submit={{action send "updateOil"}}
+    @submit={{action "updateOil"}}
   />
 
 </div>

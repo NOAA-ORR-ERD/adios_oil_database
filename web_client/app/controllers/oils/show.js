@@ -1,16 +1,13 @@
-import Controller from '@ember/controller';
+import OilsController from '../oils';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
+import { service } from '@ember/service';
 
-export default class ShowController extends Controller {
+export default class ShowController extends OilsController {
     @tracked currentSampleTab = '';
     @tracked currentCategoryTab = {};
     @tracked changesMade = false;
     @tracked editable = false;
-
-    get canModifyDb() {
-        return this.capabilities.firstObject.can_modify_db == 'true';
-    }
 
     @action
     setEditable(toggleState) {
