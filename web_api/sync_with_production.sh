@@ -3,7 +3,7 @@
 # Script to backup oil database and set it to production branch
 echo "In sync_with_production.sh script"
 
-#set -e  # exit script if any commands fail
+set -e  # exit script if any commands fail
 set -x  # echo commands to stdout
 
 function branch_exists_remotely() {
@@ -39,7 +39,8 @@ git remote update origin --prune
 git checkout production
 git pull
 
-git branch -D under_review
+# remove the local under_review branch
+git branch -D under_review || echo "local under_review not found. This is ok."
 
 if [[ $(branch_exists_remotely under_review) -eq "0" ]]
 then

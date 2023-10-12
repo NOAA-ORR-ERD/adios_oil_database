@@ -21,12 +21,12 @@ COPY ./ /adios-db/
 WORKDIR adios-db
 
 # install deps
-RUN conda install -y \
+RUN mamba install -y \
     python=$PYTHON_VER \
     --file adios_db/conda_requirements.txt \
     --file web_api/conda_requirements.txt \
     --file documents/conda_requirements.txt \
-    && conda clean --all
+    && mamba clean --all
 
 RUN cd adios_db && pip install -e ./
 RUN cd web_api && pip install -e ./

@@ -24,6 +24,10 @@ from .review_status import ReviewStatus
 
 ADIOS_DATA_MODEL_VERSION = Version(0, 12, 0)
 
+def get_current_version():
+    return ADIOS_DATA_MODEL_VERSION
+
+
 from .version_update import update_json  # noqa: E402
 
 # from .validation.warnings import WARNINGS
@@ -35,6 +39,7 @@ from .validation.errors import ERRORS  # noqa: E402
 class Oil:
     oil_id: str  # required
     adios_data_model_version: Version = ADIOS_DATA_MODEL_VERSION
+    # adios_data_model_version: Version = field(default_factory=get_current_version)
     metadata: MetaData = field(default_factory=MetaData)
     sub_samples: SampleList = field(default_factory=SampleList)
     status: list = field(default_factory=list)

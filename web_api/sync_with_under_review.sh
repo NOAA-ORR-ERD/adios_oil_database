@@ -3,7 +3,7 @@
 # Script to sync active server with under_review branch
 echo "In: sync_with_under_review.sh script"
 
-#set -e  # exit script if any commands fail
+set -e  # exit script if any commands fail
 set -x  # echo commands to stdout
 
 cd /data/git_repos/noaa-oil-data/
