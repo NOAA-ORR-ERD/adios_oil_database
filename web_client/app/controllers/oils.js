@@ -97,8 +97,14 @@ export default class OilsController extends Controller {
         let current_route = this.get('target');
 
         newOil.save().then(function(result) {
+            // Success callback
             current_route.transitionTo('oils.show', result.id);
-        }.bind(this));
+        }, function(errResult) {
+            // Error callback
+            let message = `Failed to save oil!!, ${errResult.error}`;
+            console.error(message);
+            window.alert(message);
+        });
     }
 
     @action

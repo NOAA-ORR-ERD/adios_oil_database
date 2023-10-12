@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
-import $ from 'jquery';
 
 
 export default class AddNewOilButton extends Component {
@@ -16,10 +15,9 @@ export default class AddNewOilButton extends Component {
     close_dialog(event) {
         this.dialogVisible = false;
     }
-    
+
     @action
     submit(oil) {
         this.args.submit(oil);
     }
-
 }

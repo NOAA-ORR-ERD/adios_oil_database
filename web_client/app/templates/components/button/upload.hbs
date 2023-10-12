@@ -1,10 +1,12 @@
-<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Upload"
-        data-toggle="modal"
-        data-target="#uploadDialog" >
+<BsButton @type="dark" @onClick={{this.show_dialog}}
+          class="m-1 btn-sm text-nowrap" >
   Upload
-</button>
+</BsButton>
 
-<Dialog::Upload
-  @submit={{@submit}}
-/>
+
+{{#if this.dialogVisible}}
+  <Dialog::Upload
+    @submit={{@submit}}
+    @close={{this.close_dialog}}
+  />
+{{/if}}

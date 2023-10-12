@@ -1,3 +1,23 @@
-import templateOnly from '@ember/component/template-only';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from "@ember/object";
 
-export default templateOnly();
+
+export default class UploadOilButton extends Component {
+    @tracked dialogVisible;
+
+    @action
+    show_dialog(event) {
+        this.dialogVisible = true;
+    }
+
+    @action
+    close_dialog(event) {
+        this.dialogVisible = false;
+    }
+
+    @action
+    submit(oil) {
+        this.args.submit(oil);
+    }
+}
