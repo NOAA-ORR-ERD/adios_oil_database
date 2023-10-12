@@ -12,11 +12,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -48,7 +48,18 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="managing.html">Managing the Data</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Computation with the ADIOS data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Computation with the ADIOS data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-measurement-objects">The Measurement Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#single-value">Single Value:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#range-of-values">Range of Values:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#greater-than-or-less-than-values">Greater than or less than values:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="importing_new_data.html">Importing New Data</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
@@ -81,10 +92,134 @@
            <div itemprop="articleBody">
              
   <section id="computation-with-the-adios-data">
-<span id="computation"></span><h1>Computation with the ADIOS data<a class="headerlink" href="#computation-with-the-adios-data" title="Permalink to this heading"></a></h1>
+<span id="computation"></span><h1>Computation with the ADIOS data<a class="headerlink" href="#computation-with-the-adios-data" title="Link to this heading"></a></h1>
 <p>The core <code class="docutils literal notranslate"><span class="pre">Oil</span></code> object system was designed to managing the data – lots of detail about exactly what data is there, the ability to anything to be missing, and units clearly defined with each value.</p>
 <p>However, this makes it a bit awkward to work with if you want to do computation.</p>
 <p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">computation</span></code> sub-package provides a number of utilities that make it easier to do computation with the data.</p>
+<section id="the-measurement-objects">
+<h2>The Measurement Objects<a class="headerlink" href="#the-measurement-objects" title="Link to this heading"></a></h2>
+<p>At the base of the entire set of data structures are py:class:<cite>Measurement</cite> objects. A <cite>Measurment</cite> object is used to store the actual data, along with its units, and a few utilties for unit conversion etc.</p>
+<p>Features of a <cite>Measurement</cite> Object.</p>
+<ul class="simple">
+<li><p>Unique object type for each physical unit type, e.g. Mass, Length, etc.</p></li>
+<li><p>Stores the unit of the data</p></li>
+<li><p>Can store single value, as well as a range of values, or greater than or less than.</p></li>
+<li><p>Supplies unit convertion to other compatible units.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Measurement objects use the <cite>pynucos</cite> pacakge for all unit defintions and conversions. See: <a class="reference external" href="https://github.com/NOAA-ORR-ERD/PyNUCOS">PyNUCOS on GitHub</a> for unit types, names, etc.</p>
+</div>
+<p>Available Measurement classes:</p>
+<p><code class="docutils literal notranslate"><span class="pre">AngularVelocity</span></code>,
+<code class="docutils literal notranslate"><span class="pre">AnyUnit</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Concentration</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Density</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Dimensionless</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DynamicViscosity</span></code>,
+<code class="docutils literal notranslate"><span class="pre">InterfacialTension</span></code>,
+<code class="docutils literal notranslate"><span class="pre">KinematicViscosity</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Length</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Mass</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MassFraction</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MassOrVolumeFraction</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MeasurementBase</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MeasurementDataclass</span></code>,
+<code class="docutils literal notranslate"><span class="pre">NeedleAdhesion</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Pressure</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SayboltViscosity</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Temperature</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Time</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Unitless</span></code>,
+<code class="docutils literal notranslate"><span class="pre">VolumeFraction</span></code></p>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
+<section id="single-value">
+<h4>Single Value:<a class="headerlink" href="#single-value" title="Link to this heading"></a></h4>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span># All the Measurment objects should be in the scripting namespace
+import adios_db.scripting as ads
+
+In [4]: mass_recovered = ads.Mass(54, &#39;kg&#39;)
+
+In [5]: mass_recovered
+Out[5]: Mass(value=54.0, unit=&#39;kg&#39;, unit_type=&#39;mass&#39;)
+
+# create a new Object with different units
+In [6]: mass_recovered.converted_to(&#39;g&#39;)
+Out[6]: Mass(value=54000.0, unit=&#39;g&#39;, unit_type=&#39;mass&#39;)
+
+# change units in place:
+In [7]: mass_recovered.convert_to(&#39;g&#39;)
+
+In [8]: mass_recovered
+Out[8]: Mass(value=54000.0, unit=&#39;g&#39;, unit_type=&#39;mass&#39;)
+
+# get the value
+In [9]: mass_recovered.value
+Out[9]: 54000.0
+
+# and the unit
+In [10]: mass_recovered.unit
+Out[10]: &#39;g&#39;
+
+# it will not let you conver to an invalid unit:
+
+In [11]: mass_recovered.convert_to(&#39;meter&#39;)
+
+...
+
+InvalidUnitError: The unit: meter is not in the list for Unit Type: Mass
+
+In [12]: mass_recovered.convert_to(&#39;meter&#39;)
+</pre></div>
+</div>
+</section>
+<section id="range-of-values">
+<h4>Range of Values:<a class="headerlink" href="#range-of-values" title="Link to this heading"></a></h4>
+<p>You can specify a range of values for a measurement:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span>In [16]: pour_point
+Out[16]: Temperature(unit=&#39;C&#39;, min_value=15.0, max_value=20.0, unit_type=&#39;temperature&#39;)
+
+# The value is None:
+In [17]: pour_point.value
+
+The min and max are directly available:
+
+In [20]: pour_point.min_value
+Out[20]: 15.0
+
+In [21]: pour_point.max_value
+Out[21]: 20.0
+
+# or you can find the minimum or maximum
+# if there is a single value, it will be returned
+In [18]: pour_point.minimum
+Out[18]: 15.0
+
+In [19]: pour_point.maximum
+Out[19]: 20.0
+</pre></div>
+</div>
+</section>
+<section id="greater-than-or-less-than-values">
+<h4>Greater than or less than values:<a class="headerlink" href="#greater-than-or-less-than-values" title="Link to this heading"></a></h4>
+<p>You can specify only a minimum or maximum, to represent :greater than, or les than, for example a measurment below a detection limit might be less than a given value:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span>In [22]: benzene_concentation = ads.MassFraction(max_value=1, unit=&#39;ppb&#39;)
+
+In [23]: benzene_concentation
+Out[23]: MassFraction(unit=&#39;ppb&#39;, max_value=1.0, unit_type=&#39;massfraction&#39;)
+
+In [24]: benzene_concentation.maximum
+Out[24]: 1.0
+
+In [25]: benzene_concentation.converted_to(&#39;ppm&#39;).maximum
+Out[25]: 0.001
+</pre></div>
+</div>
+<p>Similarly for greater than.</p>
+</section>
+</section>
+</section>
 </section>
 
 

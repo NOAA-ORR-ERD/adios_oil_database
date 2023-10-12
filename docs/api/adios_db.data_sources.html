@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -104,10 +104,10 @@
            <div itemprop="articleBody">
              
   <section id="module-adios_db.data_sources">
-<span id="adios-db-data-sources-package"></span><h1>adios_db.data_sources package<a class="headerlink" href="#module-adios_db.data_sources" title="Permalink to this heading"></a></h1>
+<span id="adios-db-data-sources-package"></span><h1>adios_db.data_sources package<a class="headerlink" href="#module-adios_db.data_sources" title="Link to this heading"></a></h1>
 <p>Collection of file readers</p>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.data_sources.env_canada.html">adios_db.data_sources.env_canada package</a><ul>
@@ -124,6 +124,14 @@
 <li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#module-adios_db.data_sources.env_canada.v2.mapper">adios_db.data_sources.env_canada.v2.mapper module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#module-adios_db.data_sources.env_canada.v2.parser">adios_db.data_sources.env_canada.v2.parser module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v2.html#module-adios_db.data_sources.env_canada.v2.reader">adios_db.data_sources.env_canada.v2.reader module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.data_sources.env_canada.v3.html">adios_db.data_sources.env_canada.v3 package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v3.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v3.html#adios-db-data-sources-env-canada-v3-mapper-module">adios_db.data_sources.env_canada.v3.mapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v3.html#module-adios_db.data_sources.env_canada.v3.parser">adios_db.data_sources.env_canada.v3.parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v3.html#module-adios_db.data_sources.env_canada.v3.reader">adios_db.data_sources.env_canada.v3.reader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.data_sources.env_canada.v3.html#adios-db-data-sources-env-canada-v3-refcode-lu-module">adios_db.data_sources.env_canada.v3.refcode_lu module</a></li>
 </ul>
 </li>
 </ul>
@@ -275,23 +283,23 @@
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
 <section id="module-adios_db.data_sources.importer_base">
-<span id="adios-db-data-sources-importer-base-module"></span><h2>adios_db.data_sources.importer_base module<a class="headerlink" href="#module-adios_db.data_sources.importer_base" title="Permalink to this heading"></a></h2>
+<span id="adios-db-data-sources-importer-base-module"></span><h2>adios_db.data_sources.importer_base module<a class="headerlink" href="#module-adios_db.data_sources.importer_base" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.ImporterBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">ImporterBase</span></span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">ImporterBase</span></span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Only things that are common to all importer modules</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.ImporterBase.deep_get">
-<span class="sig-name descname"><span class="pre">deep_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.deep_get" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">deep_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.deep_get" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.ImporterBase.deep_set">
-<span class="sig-name descname"><span class="pre">deep_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.deep_set" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">deep_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.deep_set" title="Link to this definition"></a></dt>
 <dd><p>Navigate a period (‘.’) delimited path of attribute values into the
 oil data structure and set a value at that location in the
 structure.</p>
@@ -307,12 +315,12 @@ is assumed to be -1 in this case)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.ImporterBase.is_int">
-<span class="sig-name descname"><span class="pre">is_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.is_int" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">is_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.is_int" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.ImporterBase.slugify">
-<span class="sig-name descname"><span class="pre">slugify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.slugify" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">slugify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase.slugify" title="Link to this definition"></a></dt>
 <dd><p>Generate a string that is suitable for use as an object attribute.</p>
 <ul class="simple">
 <li><p>The strings will be snake-case, all lowercase words separated
@@ -332,23 +340,23 @@ inappropriate.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.date_only">
-<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">date_only</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.date_only" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">date_only</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.date_only" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.join_with">
-<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">join_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">separator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.join_with" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">join_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">separator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.join_with" title="Link to this definition"></a></dt>
 <dd><p>Class method decorator to join a list of labels with a separator</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.parse_single_datetime">
-<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">parse_single_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.parse_single_datetime" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">parse_single_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.parse_single_datetime" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.parse_time">
-<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">parse_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.parse_time" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">parse_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.importer_base.parse_time" title="Link to this definition"></a></dt>
 <dd><p>Class method decorator to parse an attribute return value as a datetime</p>
 <dl>
 <dt>Note: Apparently there are a few records that just don’t have</dt><dd><p>a sample date.  So we can’t really enforce the presence
@@ -366,14 +374,14 @@ Some formats that I have seen:
 
 </section>
 <section id="module-adios_db.data_sources.mapper">
-<span id="adios-db-data-sources-mapper-module"></span><h2>adios_db.data_sources.mapper module<a class="headerlink" href="#module-adios_db.data_sources.mapper" title="Permalink to this heading"></a></h2>
+<span id="adios-db-data-sources-mapper-module"></span><h2>adios_db.data_sources.mapper module<a class="headerlink" href="#module-adios_db.data_sources.mapper" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.mapper.</span></span><span class="sig-name descname"><span class="pre">MapperBase</span></span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.mapper.</span></span><span class="sig-name descname"><span class="pre">MapperBase</span></span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#adios_db.data_sources.importer_base.ImporterBase" title="adios_db.data_sources.importer_base.ImporterBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImporterBase</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase.compound">
-<span class="sig-name descname"><span class="pre">compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.compound" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.compound" title="Link to this definition"></a></dt>
 <dd><p>Example of content:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;1-Methyl-2-Isopropylbenzene&quot;</span><span class="p">,</span>
@@ -393,17 +401,17 @@ Some formats that I have seen:
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase.measurement">
-<span class="sig-name descname"><span class="pre">measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.measurement" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.measurement" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase.min_max">
-<span class="sig-name descname"><span class="pre">min_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.min_max" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">min_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.min_max" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase.slugify">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">slugify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.slugify" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">slugify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.slugify" title="Link to this definition"></a></dt>
 <dd><p>Generate a string that is suitable for use as an object attribute.</p>
 <ul class="simple">
 <li><p>The strings will be snake-case, all lowercase words separated
@@ -425,21 +433,21 @@ class to all the importer types.</p>
 
 </section>
 <section id="module-adios_db.data_sources.parser">
-<span id="adios-db-data-sources-parser-module"></span><h2>adios_db.data_sources.parser module<a class="headerlink" href="#module-adios_db.data_sources.parser" title="Permalink to this heading"></a></h2>
+<span id="adios-db-data-sources-parser-module"></span><h2>adios_db.data_sources.parser module<a class="headerlink" href="#module-adios_db.data_sources.parser" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.parser.ParserBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.parser.</span></span><span class="sig-name descname"><span class="pre">ParserBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.parser.ParserBase" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.parser.</span></span><span class="sig-name descname"><span class="pre">ParserBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.parser.ParserBase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#adios_db.data_sources.importer_base.ImporterBase" title="adios_db.data_sources.importer_base.ImporterBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImporterBase</span></code></a></p>
 <p>Only things that are common to all parsers</p>
 </dd></dl>
 
 </section>
 <section id="module-adios_db.data_sources.reader">
-<span id="adios-db-data-sources-reader-module"></span><h2>adios_db.data_sources.reader module<a class="headerlink" href="#module-adios_db.data_sources.reader" title="Permalink to this heading"></a></h2>
+<span id="adios-db-data-sources-reader-module"></span><h2>adios_db.data_sources.reader module<a class="headerlink" href="#module-adios_db.data_sources.reader" title="Link to this heading"></a></h2>
 <p>Base classes for various different readers that we may want to use.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.reader.</span></span><span class="sig-name descname"><span class="pre">CsvFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_delim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mac_roman'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.reader.</span></span><span class="sig-name descname"><span class="pre">CsvFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_delim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mac_roman'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A generalized file reader for comma separated variables (.csv)
 flat datafiles.
@@ -447,38 +455,38 @@ In spite of its name, this type of file can have various different
 separating characters besides commas for its rows and fields.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.convert_field">
-<span class="sig-name descname"><span class="pre">convert_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.convert_field" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">convert_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.convert_field" title="Link to this definition"></a></dt>
 <dd><p>Convert data fields to numeric if possible</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.convert_fields">
-<span class="sig-name descname"><span class="pre">convert_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.convert_fields" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">convert_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.convert_fields" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.export">
-<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.export" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.export" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.init_field_names">
-<span class="sig-name descname"><span class="pre">init_field_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.init_field_names" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">init_field_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.init_field_names" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.readline">
-<span class="sig-name descname"><span class="pre">readline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.readline" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">readline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.readline" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.readlines">
-<span class="sig-name descname"><span class="pre">readlines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.readlines" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">readlines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.readlines" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile.rewind">
-<span class="sig-name descname"><span class="pre">rewind</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.rewind" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rewind</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile.rewind" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -99,9 +99,9 @@
            <div itemprop="articleBody">
              
   <section id="module-adios_db.models">
-<span id="adios-db-models-package"></span><h1>adios_db.models package<a class="headerlink" href="#module-adios_db.models" title="Permalink to this heading"></a></h1>
+<span id="adios-db-models-package"></span><h1>adios_db.models package<a class="headerlink" href="#module-adios_db.models" title="Link to this heading"></a></h1>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.models.common.html">adios_db.models.common package</a><ul>
@@ -202,6 +202,10 @@
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.validators.YearValidator"><code class="docutils literal notranslate"><span class="pre">YearValidator</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.vocabulary">adios_db.models.common.vocabulary module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.common.html#adios_db.models.common.vocabulary.read_file_content"><code class="docutils literal notranslate"><span class="pre">read_file_content()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.models.oil.html">adios_db.models.oil package</a><ul>
@@ -215,6 +219,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.validation.html">adios_db.models.oil.validation package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.validation.html#adios_db.models.oil.validation.is_not_iso_or_year"><code class="docutils literal notranslate"><span class="pre">is_not_iso_or_year()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.validation.html#adios_db.models.oil.validation.is_only_ignored"><code class="docutils literal notranslate"><span class="pre">is_only_ignored()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.validation.html#adios_db.models.oil.validation.unpack_status"><code class="docutils literal notranslate"><span class="pre">unpack_status()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.validation.html#submodules">Submodules</a></li>
@@ -453,10 +458,12 @@
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.oil.Oil.validate"><code class="docutils literal notranslate"><span class="pre">Oil.validate()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.oil.get_current_version"><code class="docutils literal notranslate"><span class="pre">get_current_version()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.models.oil.html#module-adios_db.models.oil.physical_properties">adios_db.models.oil.physical_properties module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.DensityList"><code class="docutils literal notranslate"><span class="pre">DensityList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.DensityList.from_data"><code class="docutils literal notranslate"><span class="pre">DensityList.from_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.DensityList.item_type"><code class="docutils literal notranslate"><span class="pre">DensityList.item_type</span></code></a></li>
 </ul>
 </li>
@@ -471,6 +478,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.DynamicViscosityList"><code class="docutils literal notranslate"><span class="pre">DynamicViscosityList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.DynamicViscosityList.from_data"><code class="docutils literal notranslate"><span class="pre">DynamicViscosityList.from_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.DynamicViscosityList.item_type"><code class="docutils literal notranslate"><span class="pre">DynamicViscosityList.item_type</span></code></a></li>
 </ul>
 </li>
@@ -509,6 +517,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.KinematicViscosityList"><code class="docutils literal notranslate"><span class="pre">KinematicViscosityList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.KinematicViscosityList.from_data"><code class="docutils literal notranslate"><span class="pre">KinematicViscosityList.from_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.KinematicViscosityList.item_type"><code class="docutils literal notranslate"><span class="pre">KinematicViscosityList.item_type</span></code></a></li>
 </ul>
 </li>
@@ -524,6 +533,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.PhysicalProperties"><code class="docutils literal notranslate"><span class="pre">PhysicalProperties</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.PhysicalProperties.appearance"><code class="docutils literal notranslate"><span class="pre">PhysicalProperties.appearance</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.PhysicalProperties.densities"><code class="docutils literal notranslate"><span class="pre">PhysicalProperties.densities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.PhysicalProperties.dynamic_viscosities"><code class="docutils literal notranslate"><span class="pre">PhysicalProperties.dynamic_viscosities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.PhysicalProperties.flash_point"><code class="docutils literal notranslate"><span class="pre">PhysicalProperties.flash_point</span></code></a></li>
@@ -548,6 +558,21 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.RefTempList"><code class="docutils literal notranslate"><span class="pre">RefTempList</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.RefTempList.validate"><code class="docutils literal notranslate"><span class="pre">RefTempList.validate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityList"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityList.item_type"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityList.item_type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.comment"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.comment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.from_py_json"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.from_py_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.method"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.py_json"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.py_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.ref_temp"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.ref_temp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.shear_rate"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.shear_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.validate"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.validate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.physical_properties.SayboltViscosityPoint.viscosity"><code class="docutils literal notranslate"><span class="pre">SayboltViscosityPoint.viscosity</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -679,6 +704,7 @@
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.sara.Sara"><code class="docutils literal notranslate"><span class="pre">Sara</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.sara.Sara.aromatics"><code class="docutils literal notranslate"><span class="pre">Sara.aromatics</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.sara.Sara.asphaltenes"><code class="docutils literal notranslate"><span class="pre">Sara.asphaltenes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.sara.Sara.from_data"><code class="docutils literal notranslate"><span class="pre">Sara.from_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.sara.Sara.from_py_json"><code class="docutils literal notranslate"><span class="pre">Sara.from_py_json()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.sara.Sara.method"><code class="docutils literal notranslate"><span class="pre">Sara.method</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.oil.html#adios_db.models.oil.sara.Sara.py_json"><code class="docutils literal notranslate"><span class="pre">Sara.py_json()</span></code></a></li>

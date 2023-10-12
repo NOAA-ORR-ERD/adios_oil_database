@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -95,10 +95,10 @@
            <div itemprop="articleBody">
              
   <section id="module-adios_db">
-<span id="adios-db-package"></span><h1>adios_db package<a class="headerlink" href="#module-adios_db" title="Permalink to this heading"></a></h1>
+<span id="adios-db-package"></span><h1>adios_db package<a class="headerlink" href="#module-adios_db" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.initialize_console_log">
-<span class="sig-prename descclassname"><span class="pre">adios_db.</span></span><span class="sig-name descname"><span class="pre">initialize_console_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'debug'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.initialize_console_log" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.</span></span><span class="sig-name descname"><span class="pre">initialize_console_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'debug'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.initialize_console_log" title="Link to this definition"></a></dt>
 <dd><p>Initializes the logger to simply log everything to the console (stdout)
 Likely what you want for scripting use</p>
 <dl class="field-list simple">
@@ -112,7 +112,7 @@ in order of importance: “debug”, “info”, “warning”,
 </dd></dl>
 
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.computation.html">adios_db.computation package</a><ul>
@@ -175,6 +175,7 @@ in order of importance: “debug”, “info”, “warning”,
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html#adios_db.computation.physical_properties.get_density_data"><code class="docutils literal notranslate"><span class="pre">get_density_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html#adios_db.computation.physical_properties.get_distillation_cuts"><code class="docutils literal notranslate"><span class="pre">get_distillation_cuts()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html#adios_db.computation.physical_properties.get_dynamic_viscosity_data"><code class="docutils literal notranslate"><span class="pre">get_dynamic_viscosity_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html#adios_db.computation.physical_properties.get_flash_point"><code class="docutils literal notranslate"><span class="pre">get_flash_point()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html#adios_db.computation.physical_properties.get_frac_recovered"><code class="docutils literal notranslate"><span class="pre">get_frac_recovered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html#adios_db.computation.physical_properties.get_interfacial_tension_seawater"><code class="docutils literal notranslate"><span class="pre">get_interfacial_tension_seawater()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.computation.html#adios_db.computation.physical_properties.get_interfacial_tension_water"><code class="docutils literal notranslate"><span class="pre">get_interfacial_tension_water()</span></code></a></li>
@@ -275,6 +276,7 @@ in order of importance: “debug”, “info”, “warning”,
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.measurement">adios_db.models.common.measurement module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.utilities">adios_db.models.common.utilities module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.validators">adios_db.models.common.validators module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.models.common.html#module-adios_db.models.common.vocabulary">adios_db.models.common.vocabulary module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.oil.html">adios_db.models.oil package</a><ul>
@@ -313,28 +315,29 @@ in order of importance: “debug”, “info”, “warning”,
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.scripts.html">adios_db.scripts package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.add_labels">adios_db.scripts.add_labels module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.add_labels.add_the_labels"><code class="docutils literal notranslate"><span class="pre">add_the_labels()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.add_to_reference">adios_db.scripts.add_to_reference module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.add_to_reference.run_through"><code class="docutils literal notranslate"><span class="pre">run_through()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.assign_ids">adios_db.scripts.assign_ids module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.assign_ids.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-backup-module">adios_db.scripts.db_backup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-import-module">adios_db.scripts.db_import module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-initialize-module">adios_db.scripts.db_initialize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-db-restore-module">adios_db.scripts.db_restore module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.import_csv">adios_db.scripts.import_csv module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.check_field_name"><code class="docutils literal notranslate"><span class="pre">check_field_name()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_csv_file"><code class="docutils literal notranslate"><span class="pre">read_csv_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_measurement"><code class="docutils literal notranslate"><span class="pre">read_measurement()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_physical_properties"><code class="docutils literal notranslate"><span class="pre">read_physical_properties()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_record_metadata"><code class="docutils literal notranslate"><span class="pre">read_record_metadata()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_subsample"><code class="docutils literal notranslate"><span class="pre">read_subsample()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.read_subsample_metadata"><code class="docutils literal notranslate"><span class="pre">read_subsample_metadata()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.import_csv.strstrip"><code class="docutils literal notranslate"><span class="pre">strstrip()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-eccc-compare-oils-module">adios_db.scripts.eccc_compare_oils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-oil-query-module">adios_db.scripts.oil_query module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.process_json">adios_db.scripts.process_json module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.process_json.run_through"><code class="docutils literal notranslate"><span class="pre">run_through()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#adios-db-scripts-read-noaa-csv-module">adios_db.scripts.read_noaa_csv module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.scripts.html#module-adios_db.scripts.update_test_data">adios_db.scripts.update_test_data module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.scripts.html#adios_db.scripts.update_test_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
@@ -356,10 +359,22 @@ in order of importance: “debug”, “info”, “warning”,
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adios_db.util.html">adios_db.util package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios_db.util.BufferedIterator"><code class="docutils literal notranslate"><span class="pre">BufferedIterator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.util.html#adios_db.util.BufferedIterator.push"><code class="docutils literal notranslate"><span class="pre">BufferedIterator.push()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios_db.util.sigfigs"><code class="docutils literal notranslate"><span class="pre">sigfigs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios_db.util.strip"><code class="docutils literal notranslate"><span class="pre">strip()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#adios-db-util-db-connection-module">adios_db.util.db_connection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#module-adios_db.util.folder_collection">adios_db.util.folder_collection module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="adios_db.util.html#adios_db.util.folder_collection.FolderCollection"><code class="docutils literal notranslate"><span class="pre">FolderCollection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.util.html#adios_db.util.folder_collection.FolderCollection.find_one_and_replace"><code class="docutils literal notranslate"><span class="pre">FolderCollection.find_one_and_replace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="adios_db.util.html#adios_db.util.folder_collection.FolderCollection.replace_one"><code class="docutils literal notranslate"><span class="pre">FolderCollection.replace_one()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="adios_db.util.html#module-adios_db.util.many_many">adios_db.util.many_many module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.util.html#adios_db.util.many_many.ManyMany"><code class="docutils literal notranslate"><span class="pre">ManyMany</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="adios_db.util.html#adios_db.util.many_many.ManyMany.add_to_left"><code class="docutils literal notranslate"><span class="pre">ManyMany.add_to_left()</span></code></a></li>

@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -101,35 +101,40 @@
            <div itemprop="articleBody">
              
   <section id="module-adios_db.models.oil.validation">
-<span id="adios-db-models-oil-validation-package"></span><h1>adios_db.models.oil.validation package<a class="headerlink" href="#module-adios_db.models.oil.validation" title="Permalink to this heading"></a></h1>
+<span id="adios-db-models-oil-validation-package"></span><h1>adios_db.models.oil.validation package<a class="headerlink" href="#module-adios_db.models.oil.validation" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.models.oil.validation.is_not_iso_or_year">
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.</span></span><span class="sig-name descname"><span class="pre">is_not_iso_or_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datestr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.is_not_iso_or_year" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.models.oil.validation.is_only_ignored">
-<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.</span></span><span class="sig-name descname"><span class="pre">is_only_ignored</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.is_only_ignored" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.</span></span><span class="sig-name descname"><span class="pre">is_only_ignored</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.is_only_ignored" title="Link to this definition"></a></dt>
 <dd><p>Check if all the status codes are ones that are on the ignored list</p>
 <p>expects a dict of teh form returned by unpack_status</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.models.oil.validation.unpack_status">
-<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.</span></span><span class="sig-name descname"><span class="pre">unpack_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.unpack_status" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.</span></span><span class="sig-name descname"><span class="pre">unpack_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.unpack_status" title="Link to this definition"></a></dt>
 <dd><p>unpacks the status messages into list of tuples</p>
 <p>(error_code, message</p>
 </dd></dl>
 
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
 <section id="module-adios_db.models.oil.validation.errors">
-<span id="adios-db-models-oil-validation-errors-module"></span><h2>adios_db.models.oil.validation.errors module<a class="headerlink" href="#module-adios_db.models.oil.validation.errors" title="Permalink to this heading"></a></h2>
+<span id="adios-db-models-oil-validation-errors-module"></span><h2>adios_db.models.oil.validation.errors module<a class="headerlink" href="#module-adios_db.models.oil.validation.errors" title="Link to this heading"></a></h2>
 </section>
 <section id="module-adios_db.models.oil.validation.validate">
-<span id="adios-db-models-oil-validation-validate-module"></span><h2>adios_db.models.oil.validation.validate module<a class="headerlink" href="#module-adios_db.models.oil.validation.validate" title="Permalink to this heading"></a></h2>
+<span id="adios-db-models-oil-validation-validate-module"></span><h2>adios_db.models.oil.validation.validate module<a class="headerlink" href="#module-adios_db.models.oil.validation.validate" title="Link to this heading"></a></h2>
 <p>Validation of a single oil record</p>
 <p>The actual validation is done in the Oil object (and sub-objects)</p>
 <p>This just provides some  convenient wrappers around the validate call</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.models.oil.validation.validate.validate">
-<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.validate.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.validate.validate" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.validate.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.validate.validate" title="Link to this definition"></a></dt>
 <dd><p>validate an Oil object</p>
 <p>oil.status is updated in place – this is simply a wrapper around
 Oil.reset_validation() – probably no longer needed</p>
@@ -137,7 +142,7 @@ Oil.reset_validation() – probably no longer needed</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.models.oil.validation.validate.validate_json">
-<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.validate.</span></span><span class="sig-name descname"><span class="pre">validate_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.validate.validate_json" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.validation.validate.</span></span><span class="sig-name descname"><span class="pre">validate_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.validation.validate.validate_json" title="Link to this definition"></a></dt>
 <dd><p>validate a json-compatible-python record</p>
 <p>An Oil object is returned, if it’s possible to do so.</p>
 <p>The “status” field is updated in place, with no other alterations
@@ -150,7 +155,7 @@ of the record</p>
 
 </section>
 <section id="module-adios_db.models.oil.validation.warnings">
-<span id="adios-db-models-oil-validation-warnings-module"></span><h2>adios_db.models.oil.validation.warnings module<a class="headerlink" href="#module-adios_db.models.oil.validation.warnings" title="Permalink to this heading"></a></h2>
+<span id="adios-db-models-oil-validation-warnings-module"></span><h2>adios_db.models.oil.validation.warnings module<a class="headerlink" href="#module-adios_db.models.oil.validation.warnings" title="Link to this heading"></a></h2>
 <p>warnings.py</p>
 <p>All the warnings</p>
 </section>

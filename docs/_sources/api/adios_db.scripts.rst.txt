@@ -9,6 +9,30 @@ adios\_db.scripts package
 Submodules
 ----------
 
+adios\_db.scripts.add\_labels module
+------------------------------------
+
+.. automodule:: adios_db.scripts.add_labels
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.add\_to\_reference module
+-------------------------------------------
+
+.. automodule:: adios_db.scripts.add_to_reference
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.assign\_ids module
+------------------------------------
+
+.. automodule:: adios_db.scripts.assign_ids
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 adios\_db.scripts.db\_backup module
 -----------------------------------
 
@@ -41,10 +65,10 @@ adios\_db.scripts.db\_restore module
    :undoc-members:
    :show-inheritance:
 
-adios\_db.scripts.import\_csv module
-------------------------------------
+adios\_db.scripts.eccc\_compare\_oils module
+--------------------------------------------
 
-.. automodule:: adios_db.scripts.import_csv
+.. automodule:: adios_db.scripts.eccc_compare_oils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -61,6 +85,14 @@ adios\_db.scripts.process\_json module
 --------------------------------------
 
 .. automodule:: adios_db.scripts.process_json
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.read\_noaa\_csv module
+----------------------------------------
+
+.. automodule:: adios_db.scripts.read_noaa_csv
    :members:
    :undoc-members:
    :show-inheritance:

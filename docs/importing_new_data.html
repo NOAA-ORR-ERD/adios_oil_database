@@ -12,11 +12,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -50,9 +50,13 @@
 <li class="toctree-l1"><a class="reference internal" href="managing.html">Managing the Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="computation.html">Computation with the ADIOS data</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Importing New Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#using-the-python-library">Using the Python Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-python-library">Using the Python Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#utility-functions-to-make-importing-easier">Utility functions to make importing easier</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#generate-json-directly">Generate JSON Directly</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#use-a-standard-csv-format">Use a standard CSV format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#edit-json-by-hand">Edit JSON by Hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-a-standard-csv-format">Use a Standard CSV Format</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#using-the-excel-template">Using the Excel template</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#multiple-values">Multiple values</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#units">Units</a></li>
@@ -101,52 +105,89 @@
            <div itemprop="articleBody">
              
   <section id="importing-new-data">
-<span id="id1"></span><h1>Importing New Data<a class="headerlink" href="#importing-new-data" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>Importing New Data<a class="headerlink" href="#importing-new-data" title="Link to this heading"></a></h1>
 <p>The ADIOS Oil Database uses JSON as its native storage / interchange format.</p>
 <p>In order to get a new record into the database, it must be converted to JSON somehow. How best to do that depends on the how the data are currently stored, and what tools one is familiar with.</p>
 <section id="using-the-python-library">
-<h2>Using the Python Library<a class="headerlink" href="#using-the-python-library" title="Permalink to this heading"></a></h2>
+<h2>Using the Python Library<a class="headerlink" href="#using-the-python-library" title="Link to this heading"></a></h2>
 <p>If you are familiar with Python, then using the <code class="docutils literal notranslate"><span class="pre">adios_db</span></code> Python package may be the easiest way to go. The library provides a set of nested Python objects that conform to our data model, and that can save themselves out to our JSON interchange format. See <a class="reference internal" href="managing.html#managing-the-data"><span class="std std-ref">Managing the Data</span></a> for details.</p>
 <p>This would commonly be a way to get your data into ADIOS DB if it’s already in a custom database or CSV files, or..</p>
 <p>You can see some examples of import scripts in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">data_sources</span></code> package.</p>
+<section id="utility-functions-to-make-importing-easier">
+<h3>Utility functions to make importing easier<a class="headerlink" href="#utility-functions-to-make-importing-easier" title="Link to this heading"></a></h3>
+<p>The full object hierarchy is fairly deeply nested, in order to provide full flexibility and make sure units are consistent, etc. To make it easier to build the data structures needed, a number of the “collections” have alternate constructors to build them from typical data. For example, to create a collection of density measurements:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.8663</span><span class="p">,</span> <span class="s2">&quot;g/cm³&quot;</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.9012</span><span class="p">,</span> <span class="s2">&quot;g/cm³&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+<span class="n">sample</span><span class="o">.</span><span class="n">physical_properties</span><span class="o">.</span><span class="n">density</span> <span class="o">=</span> <span class="n">DensityList</span><span class="o">.</span><span class="n">from_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>creates a Density List structure (when exported to JSON) that looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s1">&#39;density&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">0.9012</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="s1">&#39;g/cm³&#39;</span><span class="p">,</span> <span class="s1">&#39;unit_type&#39;</span><span class="p">:</span> <span class="s1">&#39;density&#39;</span><span class="p">},</span>
+              <span class="s1">&#39;ref_temp&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;unit_type&#39;</span><span class="p">:</span> <span class="s1">&#39;temperature&#39;</span><span class="p">}},</span>
+ <span class="p">{</span><span class="s1">&#39;density&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">0.8663</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="s1">&#39;g/cm³&#39;</span><span class="p">,</span> <span class="s1">&#39;unit_type&#39;</span><span class="p">:</span> <span class="s1">&#39;density&#39;</span><span class="p">},</span>
+              <span class="s1">&#39;ref_temp&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">15.0</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;unit_type&#39;</span><span class="p">:</span> <span class="s1">&#39;temperature&#39;</span><span class="p">}},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Other handy constructors are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DensityList</span><span class="o">.</span><span class="n">from_data</span><span class="p">()</span>
+
+<span class="n">KinematicViscosityList</span><span class="o">.</span><span class="n">from_data</span><span class="p">()</span>
+
+<span class="n">DynamicViscosityList</span><span class="o">.</span><span class="n">from_data</span><span class="p">()</span>
+
+<span class="n">DistCutList</span><span class="o">.</span><span class="n">from_data_arrays</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="generate-json-directly">
-<h2>Generate JSON Directly<a class="headerlink" href="#generate-json-directly" title="Permalink to this heading"></a></h2>
+<h2>Generate JSON Directly<a class="headerlink" href="#generate-json-directly" title="Link to this heading"></a></h2>
 <p>You can generate the JSON from your data directly, with whatever tools you may have on hand. The JSON format is documented, but the easiest way it probably to download a similar record from the database at:</p>
 <p><a class="reference external" href="http://adios.orr.noaa.gov">http://adios.orr.noaa.gov</a></p>
 <p>and match that JSON. Note that the JSON is “sparse” – there is no need to include any fields that are not relevant.</p>
 </section>
+<section id="edit-json-by-hand">
+<h2>Edit JSON by Hand<a class="headerlink" href="#edit-json-by-hand" title="Link to this heading"></a></h2>
+<p>JSON is a human-readable format, and to some extend human-writable, but writing full JSON by hand can be pretty challenging. However, editing JSON by hand is quite manageable, so if you start with a similar record, from:</p>
+<p><a class="reference external" href="http://adios.orr.noaa.gov">http://adios.orr.noaa.gov</a></p>
+<p>or</p>
+<p><a class="reference external" href="https://github.com/NOAA-ORR-ERD/noaa-oil-data">https://github.com/NOAA-ORR-ERD/noaa-oil-data</a></p>
+<p>You can then hand edit the file to replace the data with value you want. We recommend you take the time to update the meta-data in the file. And almost everything in the format is optional, so you can simply remove fields that are not relevant to your problem.</p>
+</section>
 <section id="use-a-standard-csv-format">
-<h2>Use a standard CSV format<a class="headerlink" href="#use-a-standard-csv-format" title="Permalink to this heading"></a></h2>
+<h2>Use a Standard CSV Format<a class="headerlink" href="#use-a-standard-csv-format" title="Link to this heading"></a></h2>
 <p>In addition to our standard JSON, the package has an importer for a “standard” CSV file. These do not include every feature of the data model, but are easy to work with for a typical lab analysis with Excel. We provide an Excel template that can be filled out.</p>
 <p>The template can be downloaded here: <a class="reference download internal" download="" href="_downloads/063da19ee272757d99b8f328b5058b8c/ADIOS_data_template.xlsx"><code class="xref download docutils literal notranslate"><span class="pre">ADIOS</span> <span class="pre">data</span> <span class="pre">template</span></code></a></p>
 <section id="using-the-excel-template">
-<h3>Using the Excel template<a class="headerlink" href="#using-the-excel-template" title="Permalink to this heading"></a></h3>
+<h3>Using the Excel template<a class="headerlink" href="#using-the-excel-template" title="Link to this heading"></a></h3>
 <p>It may help to be familiar with the ADIOS data model, but the goal is to have the template be straightforward and easy to fill out.</p>
-<p>Use one spreadsheet for each record. If/when you save it out as a CSV file, be sure to save it in UTF8 encoding: “CSV-UTF8”.</p>
-<p>Note that it’s OK to simply leave fields blank if there is not data – the ADIOS DB is very forgiving of sparse data.</p>
+<p>Use one worksheet for each record. If/when you save it out as a CSV file, be sure to save it in UTF8 encoding: “CSV-UTF8”.</p>
+<p>Note that it’s OK to simply leave fields blank if there is no data – the ADIOS DB is very forgiving of sparse data.</p>
 <section id="multiple-values">
-<h4>Multiple values<a class="headerlink" href="#multiple-values" title="Permalink to this heading"></a></h4>
+<h4>Multiple values<a class="headerlink" href="#multiple-values" title="Link to this heading"></a></h4>
 <p>In general, you don’t want to touch any of the field names or descriptions, only the data entry cells. However, there are a number of places where ADIOS DB will accept “one or more” data points for a given property (e.g. density at different temperatures), so you are free to insert new rows to accommodate all your data.</p>
+<p>Do make sure to insert an empty row in between “tables” of the same data type.</p>
 </section>
 <section id="units">
-<h4>Units<a class="headerlink" href="#units" title="Permalink to this heading"></a></h4>
+<h4>Units<a class="headerlink" href="#units" title="Link to this heading"></a></h4>
 <p>The units used for data are critical to include, and usually are kept in a separate cell from the values. Units should conform to the units used in the ADIOS DB – which are specified in the NOAA “NUCOS” unit conversion system. The unit list is published here: <a class="reference external" href="https://github.com/NOAA-ORR-ERD/PyNUCOS/blob/master/NUCOS_unit_list.rst">https://github.com/NOAA-ORR-ERD/PyNUCOS/blob/master/NUCOS_unit_list.rst</a></p>
 <p>However, allowable units conform to standard industry practice, and should be in pick lists in the template.</p>
 </section>
 <section id="the-fields">
-<h4>The fields<a class="headerlink" href="#the-fields" title="Permalink to this heading"></a></h4>
+<h4>The fields<a class="headerlink" href="#the-fields" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>ADIOS Data Model Version</dt><dd><p>Do not change this field – it specifies which version of the data model this template can be used with. Do make sure to get the latest version of the template when you start new work.</p>
 </dd>
 </dl>
 </section>
 <section id="sections">
-<h4>Sections<a class="headerlink" href="#sections" title="Permalink to this heading"></a></h4>
+<h4>Sections<a class="headerlink" href="#sections" title="Link to this heading"></a></h4>
 <p>The template is broken down into sections that correspond to the structure of the ADIOS Oil Database. The sections are indicated with bold text in the template.</p>
 </section>
 <section id="record-metadata">
-<h4>Record metadata<a class="headerlink" href="#record-metadata" title="Permalink to this heading"></a></h4>
+<h4>Record metadata<a class="headerlink" href="#record-metadata" title="Link to this heading"></a></h4>
 <p>Each record needs some information about the record itself. In general, a single record represents a single sample.
 That sample may been been split to have different labs perform various analyses, but all the data should have come from the same sample.
 For example, if a sample is taken from the same well at two different times, those should be treated as separate records.</p>
@@ -179,7 +220,7 @@ Both the labels and the mapping of labels to product types can be found in this 
 </dl>
 </section>
 <section id="subsample-metadata">
-<h4>Subsample Metadata<a class="headerlink" href="#subsample-metadata" title="Permalink to this heading"></a></h4>
+<h4>Subsample Metadata<a class="headerlink" href="#subsample-metadata" title="Link to this heading"></a></h4>
 <p>Some labs will have an original sample, and then also process the oil in some way and collect measurements about the processed data. These data are all part of the same record, but may have a completely new set of measurements associated with them. The data model is designed to handle arbitrary “subsamples”, created in different ways, but the two common ones currently in the data are distillation fractions (from physical distillation) and lab-weathered samples, such as evaporated in a rotovap or “topped” to some temperature.</p>
 <p>All records will have at least one subsample – assumed to be the original (usually fresh oil)</p>
 <p>Each subsample has its own metadata describing it.</p>
@@ -199,7 +240,7 @@ Both the labels and the mapping of labels to product types can be found in this 
 </dl>
 </section>
 <section id="physical-properties">
-<h4>Physical Properties<a class="headerlink" href="#physical-properties" title="Permalink to this heading"></a></h4>
+<h4>Physical Properties<a class="headerlink" href="#physical-properties" title="Link to this heading"></a></h4>
 <p>This section covers the physical properties of the subsample.</p>
 <dl class="simple">
 <dt>Pour Point</dt><dd><p>The subsample pour point</p>
@@ -213,7 +254,7 @@ Both the labels and the mapping of labels to product types can be found in this 
 </dl>
 </section>
 <section id="distillation-data">
-<h4>Distillation Data<a class="headerlink" href="#distillation-data" title="Permalink to this heading"></a></h4>
+<h4>Distillation Data<a class="headerlink" href="#distillation-data" title="Link to this heading"></a></h4>
 <p>Distillation can be done in various ways. In the template there are fields to specify the overall process in addition to the fields for the actual distillation cuts.</p>
 <dl>
 <dt>Type</dt><dd><p>The type of distillation: “mass fraction” or “volume fraction”</p>
@@ -233,7 +274,7 @@ Both the labels and the mapping of labels to product types can be found in this 
 </dl>
 </section>
 <section id="compounds">
-<h4>Compounds<a class="headerlink" href="#compounds" title="Permalink to this heading"></a></h4>
+<h4>Compounds<a class="headerlink" href="#compounds" title="Link to this heading"></a></h4>
 <p>Compounds can be concentration measurements for zero or more individual compounds. Add as many rows as required. Each object in the list has the same structure including the following elements:</p>
 <blockquote>
 <div><p>Name: Name of the measurement
@@ -245,7 +286,7 @@ Groups: Optional labels used to group related measurements together on the ADIOS
 </div></blockquote>
 </section>
 <section id="bulk-composition">
-<h4>Bulk Composition<a class="headerlink" href="#bulk-composition" title="Permalink to this heading"></a></h4>
+<h4>Bulk Composition<a class="headerlink" href="#bulk-composition" title="Link to this heading"></a></h4>
 <p>Bulk Composition includes concentration measurements for zero or more elemental analyses or groupings of compounds, such as sulfur content, wax content, or TPH. More examples are in the Common Data section below. Each object in the list has the same structure as those in the Compounds section. Add as many rows as required.</p>
 </section>
 </section>

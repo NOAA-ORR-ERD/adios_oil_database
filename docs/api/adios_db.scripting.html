@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -100,11 +100,11 @@
            <div itemprop="articleBody">
              
   <section id="module-adios_db.scripting">
-<span id="adios-db-scripting-package"></span><h1>adios_db.scripting package<a class="headerlink" href="#module-adios_db.scripting" title="Permalink to this heading"></a></h1>
+<span id="adios-db-scripting-package"></span><h1>adios_db.scripting package<a class="headerlink" href="#module-adios_db.scripting" title="Link to this heading"></a></h1>
 <p>Assorted utilities to help with writing scripts that use the oil database</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripting.get_all_records">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">get_all_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.get_all_records" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">get_all_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.get_all_records" title="Link to this definition"></a></dt>
 <dd><p>gets all the records from the JSON data stored in gitLab</p>
 <p>This is a generator that gets all the records, returning them one by one
 as record, path pairs</p>
@@ -125,7 +125,7 @@ as record, path pairs</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripting.process_input">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">process_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USAGE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\ndo_something.py:</span>&#160; <span class="pre">data_dir</span> <span class="pre">[dry_run]\n\ndata_dir</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">are:</span> <span class="pre">the</span> <span class="pre">script</span> <span class="pre">will</span> <span class="pre">recursively\nsearch</span> <span class="pre">for</span> <span class="pre">JSON</span> <span class="pre">files\n\nIf</span> <span class="pre">&quot;dry_run&quot;</span> <span class="pre">is</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">command</span> <span class="pre">line,</span> <span class="pre">it</span> <span class="pre">will</span> <span class="pre">report</span> <span class="pre">what</span> <span class="pre">it</span> <span class="pre">would</span> <span class="pre">do,\nbut</span> <span class="pre">not</span> <span class="pre">save</span> <span class="pre">any</span> <span class="pre">changes\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.process_input" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">process_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USAGE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\ndo_something.py:</span>&#160; <span class="pre">data_dir</span> <span class="pre">[dry_run]\n\ndata_dir</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">are:</span> <span class="pre">the</span> <span class="pre">script</span> <span class="pre">will</span> <span class="pre">recursively\nsearch</span> <span class="pre">for</span> <span class="pre">JSON</span> <span class="pre">files\n\nIf</span> <span class="pre">&quot;dry_run&quot;</span> <span class="pre">is</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">command</span> <span class="pre">line,</span> <span class="pre">it</span> <span class="pre">will</span> <span class="pre">report</span> <span class="pre">what</span> <span class="pre">it</span> <span class="pre">would</span> <span class="pre">do,\nbut</span> <span class="pre">not</span> <span class="pre">save</span> <span class="pre">any</span> <span class="pre">changes\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.process_input" title="Link to this definition"></a></dt>
 <dd><p>process sys.argv to get the path and whether it’s a dry_run or not</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -63,13 +63,17 @@
 <li class="toctree-l3"><a class="reference internal" href="adios_db.scripting.html">adios_db.scripting package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">adios_db.scripts package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.add_labels">adios_db.scripts.add_labels module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.add_to_reference">adios_db.scripts.add_to_reference module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.assign_ids">adios_db.scripts.assign_ids module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-db-backup-module">adios_db.scripts.db_backup module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-db-import-module">adios_db.scripts.db_import module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-db-initialize-module">adios_db.scripts.db_initialize module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-db-restore-module">adios_db.scripts.db_restore module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.import_csv">adios_db.scripts.import_csv module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-eccc-compare-oils-module">adios_db.scripts.eccc_compare_oils module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-oil-query-module">adios_db.scripts.oil_query module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.process_json">adios_db.scripts.process_json module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adios-db-scripts-read-noaa-csv-module">adios_db.scripts.read_noaa_csv module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.update_test_data">adios_db.scripts.update_test_data module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-adios_db.scripts.validate">adios_db.scripts.validate module</a></li>
 </ul>
@@ -108,170 +112,113 @@
            <div itemprop="articleBody">
              
   <section id="module-adios_db.scripts">
-<span id="adios-db-scripts-package"></span><h1>adios_db.scripts package<a class="headerlink" href="#module-adios_db.scripts" title="Permalink to this heading"></a></h1>
+<span id="adios-db-scripts-package"></span><h1>adios_db.scripts package<a class="headerlink" href="#module-adios_db.scripts" title="Link to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-adios_db.scripts.add_labels">
+<span id="adios-db-scripts-add-labels-module"></span><h2>adios_db.scripts.add_labels module<a class="headerlink" href="#module-adios_db.scripts.add_labels" title="Link to this heading"></a></h2>
+<p>Add the suggested labels to all records, from the add_labels code.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.add_labels.add_the_labels">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.add_labels.</span></span><span class="sig-name descname"><span class="pre">add_the_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.add_labels.add_the_labels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-adios_db.scripts.add_to_reference">
+<span id="adios-db-scripts-add-to-reference-module"></span><h2>adios_db.scripts.add_to_reference module<a class="headerlink" href="#module-adios_db.scripts.add_to_reference" title="Link to this heading"></a></h2>
+<p>This simply runs all the JSON records through the Oil object</p>
+<p>A way to “normalize” it all.</p>
+<p>Ideally, it doesn’t change a thing, but if the Oil object changes,
+then it might have to update something.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.add_to_reference.run_through">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.add_to_reference.</span></span><span class="sig-name descname"><span class="pre">run_through</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.add_to_reference.run_through" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-adios_db.scripts.assign_ids">
+<span id="adios-db-scripts-assign-ids-module"></span><h2>adios_db.scripts.assign_ids module<a class="headerlink" href="#module-adios_db.scripts.assign_ids" title="Link to this heading"></a></h2>
+<p>Assign Oil IDs to records</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripts.assign_ids.main">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.assign_ids.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.assign_ids.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="adios-db-scripts-db-backup-module">
-<h2>adios_db.scripts.db_backup module<a class="headerlink" href="#adios-db-scripts-db-backup-module" title="Permalink to this heading"></a></h2>
+<h2>adios_db.scripts.db_backup module<a class="headerlink" href="#adios-db-scripts-db-backup-module" title="Link to this heading"></a></h2>
 </section>
 <section id="adios-db-scripts-db-import-module">
-<h2>adios_db.scripts.db_import module<a class="headerlink" href="#adios-db-scripts-db-import-module" title="Permalink to this heading"></a></h2>
+<h2>adios_db.scripts.db_import module<a class="headerlink" href="#adios-db-scripts-db-import-module" title="Link to this heading"></a></h2>
 </section>
 <section id="adios-db-scripts-db-initialize-module">
-<h2>adios_db.scripts.db_initialize module<a class="headerlink" href="#adios-db-scripts-db-initialize-module" title="Permalink to this heading"></a></h2>
+<h2>adios_db.scripts.db_initialize module<a class="headerlink" href="#adios-db-scripts-db-initialize-module" title="Link to this heading"></a></h2>
 </section>
 <section id="adios-db-scripts-db-restore-module">
-<h2>adios_db.scripts.db_restore module<a class="headerlink" href="#adios-db-scripts-db-restore-module" title="Permalink to this heading"></a></h2>
+<h2>adios_db.scripts.db_restore module<a class="headerlink" href="#adios-db-scripts-db-restore-module" title="Link to this heading"></a></h2>
 </section>
-<section id="module-adios_db.scripts.import_csv">
-<span id="adios-db-scripts-import-csv-module"></span><h2>adios_db.scripts.import_csv module<a class="headerlink" href="#module-adios_db.scripts.import_csv" title="Permalink to this heading"></a></h2>
-<p>Script to import data from a CSV file exported from the
-NOAA “standard” Excel template.</p>
-<p>That template should be in this repo in the “data” folder</p>
-<p>Note that the CSV should be exported as “CSV utf-8 Comma Delimited”</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.check_field_name">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">check_field_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.check_field_name" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.main">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.main" title="Permalink to this definition"></a></dt>
-<dd><p>Read the data the CSV file provided on the command line</p>
-<p>export it as a JSON file</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.normalize">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.normalize" title="Permalink to this definition"></a></dt>
-<dd><dl class="simple">
-<dt>normalizes a name:</dt><dd><p>removes whitespace
-lower cases it</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_csv_file">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_csv_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infilename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_csv_file" title="Permalink to this definition"></a></dt>
-<dd><p>Read the CSV file infilename</p>
-<p>Return an Oil object</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_measurement">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_measurement" title="Permalink to this definition"></a></dt>
-<dd><p>reads a sequence, and returns a dict of measurement values:</p>
-<p>min_value=float(row[1]),
-value=float(row[2]),
-max_value=float(row[3]),
-unit</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_physical_properties">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_physical_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_physical_properties" title="Permalink to this definition"></a></dt>
-<dd><p>read the physical properties data</p>
-<p>Stops when “Distillation Data” is reached</p>
-<p>class PhysicalProperties:</p>
-<p>pour_point: PourPoint = None
-flash_point: FlashPoint = None</p>
-<p>densities: DensityList = field(default_factory=DensityList)
-kinematic_viscosities: KinematicViscosityList = field(default_factory=KinematicViscosityList)
-dynamic_viscosities: DynamicViscosityList = field(default_factory=DynamicViscosityList)</p>
-<p>interfacial_tension_air: InterfacialTensionList = field(default_factory=InterfacialTensionList)
-interfacial_tension_water: InterfacialTensionList = field(default_factory=InterfacialTensionList)
-interfacial_tension_seawater: InterfacialTensionList = field(default_factory=InterfacialTensionList)</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_record_metadata">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_record_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_record_metadata" title="Permalink to this definition"></a></dt>
-<dd><p>read the record metadata – stops when “Subsample Metadata” is reached.</p>
-<p>returns a Metadata object</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_subsample">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_subsample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_subsample" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.read_subsample_metadata">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">read_subsample_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.read_subsample_metadata" title="Permalink to this definition"></a></dt>
-<dd><p>Read the record metadata – stops when “Physical Properties” is reached.</p>
-<p>returns a SubsampleMetadata object</p>
-<p>class SampleMetaData:
-name: str = “Fresh Oil Sample”
-short_name: str = None
-sample_id: str = None
-description: str = None
-fraction_evaporated: MassFraction = None
-boiling_point_range: Temperature = None</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="adios_db.scripts.import_csv.strstrip">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.import_csv.</span></span><span class="sig-name descname"><span class="pre">strstrip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.import_csv.strstrip" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+<section id="adios-db-scripts-eccc-compare-oils-module">
+<h2>adios_db.scripts.eccc_compare_oils module<a class="headerlink" href="#adios-db-scripts-eccc-compare-oils-module" title="Link to this heading"></a></h2>
 </section>
 <section id="adios-db-scripts-oil-query-module">
-<h2>adios_db.scripts.oil_query module<a class="headerlink" href="#adios-db-scripts-oil-query-module" title="Permalink to this heading"></a></h2>
+<h2>adios_db.scripts.oil_query module<a class="headerlink" href="#adios-db-scripts-oil-query-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-adios_db.scripts.process_json">
-<span id="adios-db-scripts-process-json-module"></span><h2>adios_db.scripts.process_json module<a class="headerlink" href="#module-adios_db.scripts.process_json" title="Permalink to this heading"></a></h2>
+<span id="adios-db-scripts-process-json-module"></span><h2>adios_db.scripts.process_json module<a class="headerlink" href="#module-adios_db.scripts.process_json" title="Link to this heading"></a></h2>
 <p>This simply runs all the JSON records through the Oil object</p>
 <p>A way to “normalize” it all.</p>
 <p>Ideally, it doesn’t change a thing, but if the Oil object changes,
 then it might have to update something.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.process_json.run_through">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.process_json.</span></span><span class="sig-name descname"><span class="pre">run_through</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.process_json.run_through" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.process_json.</span></span><span class="sig-name descname"><span class="pre">run_through</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.process_json.run_through" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
+<section id="adios-db-scripts-read-noaa-csv-module">
+<h2>adios_db.scripts.read_noaa_csv module<a class="headerlink" href="#adios-db-scripts-read-noaa-csv-module" title="Link to this heading"></a></h2>
+</section>
 <section id="module-adios_db.scripts.update_test_data">
-<span id="adios-db-scripts-update-test-data-module"></span><h2>adios_db.scripts.update_test_data module<a class="headerlink" href="#module-adios_db.scripts.update_test_data" title="Permalink to this heading"></a></h2>
+<span id="adios-db-scripts-update-test-data-module"></span><h2>adios_db.scripts.update_test_data module<a class="headerlink" href="#module-adios_db.scripts.update_test_data" title="Link to this heading"></a></h2>
 <p>Script to update the test data from the “canonical” source data</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.update_test_data.main">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.update_test_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.update_test_data.main" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.update_test_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.update_test_data.main" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-adios_db.scripts.validate">
-<span id="adios-db-scripts-validate-module"></span><h2>adios_db.scripts.validate module<a class="headerlink" href="#module-adios_db.scripts.validate" title="Permalink to this heading"></a></h2>
+<span id="adios-db-scripts-validate-module"></span><h2>adios_db.scripts.validate module<a class="headerlink" href="#module-adios_db.scripts.validate" title="Link to this heading"></a></h2>
 <p>generates a validation report from a collection of oil JSON files</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.validate.main">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.main" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.main" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.validate.write_by_error">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_by_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_by_error</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_by_error" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_by_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_by_error</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_by_error" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.validate.write_by_record">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_by_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_by_record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_by_record" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_by_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_by_record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_by_record" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.validate.write_header">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">of</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_header" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">of</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_header" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.validate.write_header_rev">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_header_rev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_header_rev" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_header_rev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_header_rev" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripts.validate.write_reports">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_reports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_reports" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripts.validate.</span></span><span class="sig-name descname"><span class="pre">write_reports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripts.validate.write_reports" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
