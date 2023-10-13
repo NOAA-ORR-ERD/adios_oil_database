@@ -27,7 +27,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   tags:
     - docker
     - linux
@@ -716,7 +716,7 @@ stop_proxy_public:
 
 init_git_repo_on_stage:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   
   environment:
@@ -734,7 +734,7 @@ init_git_repo_on_stage:
 
 sync_with_git_review:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   environment:
@@ -751,7 +751,7 @@ sync_with_git_review:
 
 sync_with_git_prod:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   environment:
     name: stage
@@ -767,7 +767,7 @@ sync_with_git_prod:
 
 drop_db_volume_public:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   environment:
     name: public
