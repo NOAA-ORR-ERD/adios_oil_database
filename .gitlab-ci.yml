@@ -41,6 +41,9 @@ test_develop:
     # - conda update -y conda
     # - conda update -y mamba
 
+    # needed for cornice (for now)
+    - conda config --add channels defaults
+
   script:
     # install all the requirements
     - >
