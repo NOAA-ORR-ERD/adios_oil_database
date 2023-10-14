@@ -12,8 +12,6 @@
 # It would be best to have these channels configured the order of precedence
 # outlined above in your conda configuration.
 
-python>=3.8,<3.12
+python>=3.9,<3.12
 numpy>=1.20
 pynucos>=2.12
-
-# scipy  # no longer used

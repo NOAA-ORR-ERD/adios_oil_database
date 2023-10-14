@@ -38,13 +38,13 @@ test_develop:
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
-    - conda update -y conda
-    - conda update -y mamba
+    # - conda update -y conda
+    # - conda update -y mamba
 
   script:
     # install all the requirements
     - >
-      mamba install -y
+      conda install -y
       python=$PYTHON_VER
       --file adios_db/conda_requirements.txt
       --file adios_db/conda_requirements_optional.txt
@@ -66,12 +66,12 @@ test_develop:
     # Install & test the adios_db package
     - cd adios_db
     - pip install ./
-    - pytest --mongo adios_db
+    - pytest --mongo adios_db/test
 
     # Install & test the adios_db_api package
     - cd ../web_api
     - pip install ./
-    - pytest adios_db_api
+    - pytest adios_db_api/tests
 
 build_api:
   stage: build
