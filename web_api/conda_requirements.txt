@@ -16,14 +16,16 @@ pyramid_debugtoolbar
 cornice>=3.4.4  # Use the NOAA fork with pip for PyInstaller
 paste
 pastedeploy>=2.0.1
-pymongo
+
+# for working with mongodb
+pymongo>=3.11.0
+
 waitress
 ujson
 docutils>=0.15.2
 
 pytest>=3.8.0
 WebTest
-# pyinstaller
 psutil
 
 # The oil database is required, but is located within this project
