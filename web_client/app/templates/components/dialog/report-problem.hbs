@@ -1,111 +1,97 @@
-<div id="reportProblemDialog" class="modal fade" role="dialog" tabindex="-1"
-     aria-labelledby="reportProblemDialogLabel" aria-hidden="true"
-     {{did-insert this.setModalEvents}}
-     >
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="reportProblemDialogLabel">
-          Report a Problem
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div class="form">
-
-          <div class="row align-items-right">
-            <div class="col-2">
-              <div class="d-flex justify-content-end">
-                To:
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="d-flex justify-content-start">
-                {{this.destination}}
-              </div>
-            </div>
+<BsModal @onSubmit={{action "submitForm"}}
+         @onHidden={{action "closeForm"}}
+         class="modal-lg"
+         as |Modal|>
+  <Modal.header>
+    <h5 class="modal-title" id="reportProblemDialogLabel">Report a Problem</h5>
+  </Modal.header>
+  <Modal.body>
+    <div class="form">
+  
+      <div class="row align-items-right">
+        <div class="col-2">
+          <div class="d-flex justify-content-end">
+            To:
           </div>
-
-          <div class="row align-items-right">
-            <div class="col-2 my-auto">
-              <div class="d-flex justify-content-end">
-                Subject:
-              </div>
-            </div>
-            <div class="col-6 px-1">
-              <Input class="form-control bg-transparent border"
-                 @value={{this.subject}}
-                 placeholder="Enter Subject Line"
-                 title="Enter Subject Line"
-                 {{on "change" this.updateSubject}}
-                 {{on "keypress" this.updateSubject}}
-                 {{on "focusout" this.updateSubject}}
-              />
-            </div>
+        </div>
+        <div class="col-6">
+          <div class="d-flex justify-content-start">
+            {{this.destination}}
           </div>
-
-          <div class="row align-items-right">
-            <div class="col-2">
-              <div class="d-flex justify-content-end"></div>
-            </div>
-            <div class="col-10 px-1">
-
-              <Textarea
-                class="p-1 reference-textarea overflow-auto bg-transparent border"
-                @value={{this.body}}
-                placeholder="Enter a message"
-                title="Enter a message"
-                rows="6"
-                {{on "change" this.updateBody}}
-                {{on "keypress" this.updateBody}}
-                {{on "focusout" this.updateBody}}
-              />
-
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center">
-            {{#if this.formFilledOut}}
-              <a type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-                href="mailto:orr.adios@noaa.gov?subject={{this.subject}}&body={{this.body_as_uri_component}}">
-                Send
-              </a>
-            {{else}}
-              <button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-                data-dismiss="modal" disabled
-              >
-                Send
-              </button>
-            {{/if}}
-          </div>
-
-          <div class="row align-items-right">
-            <div class="col-3">
-              <div class="d-flex justify-content-end">
-                Note:
-              </div>
-            </div>
-            <div class="col-9 px-1">
-              Clicking send will prompt the browser to start an e-mail
-              application for which it is configured.  If that link does not work
-              for you (either doing nothing or bringing up the wrong email client)
-              then you can open your e-mail application manually and copy/paste the
-              information above, and sent to: orr.adios@noaa.gov
-            </div>
-          </div>
-
         </div>
       </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
-
+  
+      <div class="row align-items-right">
+        <div class="col-2 my-auto">
+          <div class="d-flex justify-content-end">
+            Subject:
+          </div>
+        </div>
+        <div class="col-6 px-1">
+          <Input class="form-control bg-transparent border"
+             @value={{this.subject}}
+             placeholder="Enter Subject Line"
+             title="Enter Subject Line"
+             {{on "change" this.updateSubject}}
+             {{on "keypress" this.updateSubject}}
+             {{on "focusout" this.updateSubject}}
+          />
+        </div>
       </div>
+  
+      <div class="row align-items-right">
+        <div class="col-2">
+          <div class="d-flex justify-content-end"></div>
+        </div>
+        <div class="col-10 px-1">
+  
+          <Textarea
+            class="p-1 reference-textarea overflow-auto bg-transparent border"
+            @value={{this.body}}
+            placeholder="Enter a message"
+            title="Enter a message"
+            rows="6"
+            {{on "change" this.updateBody}}
+            {{on "keypress" this.updateBody}}
+            {{on "focusout" this.updateBody}}
+          />
+  
+        </div>
+      </div>
+  
+      <div class="d-flex justify-content-center">
+        {{#if this.formFilledOut}}
+          <a type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
+            href="mailto:orr.adios@noaa.gov?subject={{this.subject}}&body={{this.body_as_uri_component}}">
+            Send
+          </a>
+        {{else}}
+          <button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
+            data-dismiss="modal" disabled
+          >
+            Send
+          </button>
+        {{/if}}
+      </div>
+  
+      <div class="row align-items-right">
+        <div class="col-3">
+          <div class="d-flex justify-content-end">
+            Note:
+          </div>
+        </div>
+        <div class="col-9 px-1">
+          Clicking send will prompt the browser to start an e-mail
+          application for which it is configured.  If that link does not work
+          for you (either doing nothing or bringing up the wrong email client)
+          then you can open your e-mail application manually and copy/paste the
+          information above, and sent to: orr.adios@noaa.gov
+        </div>
+      </div>
+  
     </div>
-  </div>
-</div>
+  </Modal.body>
+  <Modal.footer as |footer|>
+    <BsButton @onClick={{action Modal.close}} @type="secondary">Close</BsButton>
+  </Modal.footer>
+</BsModal>

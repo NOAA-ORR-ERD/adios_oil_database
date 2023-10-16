@@ -1,12 +1,16 @@
-<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Report a Problem"
-        data-toggle="modal"
-        data-target="#reportProblemDialog" >
+<BsButton @type="dark" @onClick={{this.show_dialog}}
+          class="m-1 btn-sm text-nowrap" >
   Report a Problem
-</button>
+</BsButton>
 
-<Dialog::ReportProblem
-  @destination={{this.destination}}
-  @subject={{this.subject}}
-  @body={{this.body}}
-/>
+
+{{#if this.dialogVisible}}
+  <Dialog::ReportProblem
+    @destination={{this.destination}}
+    @subject={{this.subject}}
+    @body={{this.body}}
+    @submit={{this.submit}}
+    @close={{this.close_dialog}}
+  />
+{{/if}}
+

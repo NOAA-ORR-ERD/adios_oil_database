@@ -1,29 +1,29 @@
-  <BsModal @onSubmit={{action "submitForm"}}
-           @onHidden={{action "closeForm"}}
-           as |Modal|>
-    <Modal.header>
-      <h5 class="modal-title" id="addNewOilDialogLabel">Add New Oil</h5>
-    </Modal.header>
-    <Modal.body>
-      <div class="form">
-        <div class="row">
+<BsModal @onSubmit={{action "submitForm"}}
+         @onHidden={{action "closeForm"}}
+         as |Modal|>
+  <Modal.header>
+    <h5 class="modal-title" id="addNewOilDialogLabel">Add New Oil</h5>
+  </Modal.header>
+  <Modal.body>
+    <div class="form">
+      <div class="row">
 
-          <div class="col-6">
-            <Input type="text" class="form-control bg-transparent border"
-                   placeholder="Enter Name"
-                   title="Enter Name"
-                   autofocus
-                   {{on "change" this.updateName}}
-                   {{on "keypress" this.updateName}}
-                   {{on "focusout" this.updateName}}
-            />
-          </div>
-
+        <div class="col-6">
+          <Input type="text" class="form-control bg-transparent border"
+                 placeholder="Enter Name"
+                 title="Enter Name"
+                 autofocus
+                 {{on "change" this.updateName}}
+                 {{on "keypress" this.updateName}}
+                 {{on "focusout" this.updateName}}
+          />
         </div>
+
       </div>
-    </Modal.body>
-    <Modal.footer as |footer|>
-      <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
-      <BsButton @onClick={{action Modal.submit}} @type="primary">OK</BsButton>
-    </Modal.footer>
-  </BsModal>
+    </div>
+  </Modal.body>
+  <Modal.footer as |footer|>
+    <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
+    <BsButton @onClick={{action Modal.submit}} @type="primary">OK</BsButton>
+  </Modal.footer>
+</BsModal>
