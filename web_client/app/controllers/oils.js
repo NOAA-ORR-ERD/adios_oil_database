@@ -25,7 +25,6 @@ export default class OilsController extends Controller {
         }
     }
 
-
     @action
     commitTemporaryEdits(oil, newRoute) {
         // reset the flag
@@ -42,14 +41,16 @@ export default class OilsController extends Controller {
                     }
                 }, this);
 
+                let current_route = this.get('target');
+
                 permOil.save()
                 .then(function(result) {
                     if (newRoute) {
-                        this.transitionTo(newRoute);
+                        current_route.transitionTo(newRoute);
                     }
                     else {
                         // keep the current route, but with the new ID
-                        this.transitionTo('oils.show', result.id);
+                        current_route.transitionTo('oils.show', result.id);
                     }
                 }.bind(this))
                 .then(function() {
@@ -70,14 +71,15 @@ export default class OilsController extends Controller {
         if (oil.oil_id.endsWith(this.tempSuffix)) {
             // switch back to the permanent model, discarding our changes.
             let permID = oil.oil_id.substring(0, oil.oil_id.length - this.tempSuffix.length);
+            let current_route = this.get('target');
 
             this.store.findRecord('oil', permID).then(function(permOil) {
                 if (newRoute) {
-                    this.transitionTo(newRoute);
+                    current_route.transitionTo(newRoute);
                 }
                 else {
                     // keep the current route, but with the new ID
-                    this.transitionTo('oils.show', permOil.id);
+                    current_route.transitionTo('oils.show', permOil.id);
                 }
 
                 oil.deleteRecord();
@@ -87,9 +89,6 @@ export default class OilsController extends Controller {
             }.bind(this));
         }
     }
-
-
-
 
     @action
     createOil(oil) {
@@ -126,20 +125,23 @@ export default class OilsController extends Controller {
             }
 
             let tempOil = this.store.createRecord('oil', oilAttrs);
+            let current_route = this.get('target');
 
-            // transition to the temp object
             tempOil.save().then(function(result) {
-                this.transitionTo('oils.show', result.id);
+                // transition to the temp object
+                current_route.transitionTo('oils.show', result.id);
             }.bind(this));
         }
     }
 
     @action
     deleteOil(oil) {
+        let current_route = this.get('target');
+
         oil.deleteRecord();
         oil.save().then(function(result) {
-            result._internalModel.unloadRecord();
-            this.transitionTo('oils.index');
+            result.unloadRecord();
+            current_route.transitionTo('oils.index');
         }.bind(this));
     }
 

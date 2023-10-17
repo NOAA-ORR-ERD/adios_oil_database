@@ -35,7 +35,7 @@ export default class CopyOilDlg extends Component {
 
     @action
     submitForm() {
-        let oil = this.args.oil.toJSON();
+        let oil = this.args.oil.serialize().data.attributes;
 
         set(oil.metadata, 'name', this.oilName);
         delete oil.id;
