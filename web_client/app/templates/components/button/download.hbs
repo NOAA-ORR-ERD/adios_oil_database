@@ -1,6 +1,5 @@
-<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Download"
-        disabled={{@changesMade}}
-        {{on "click" this.downloadOil}} >
+<BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.downloadOil}}
+          disabled={{@changesMade}} >
   Download
-</button>
+</BsButton>

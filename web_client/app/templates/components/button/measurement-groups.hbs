@@ -1,11 +1,10 @@
-<button type="button" class="btn btn-outline-dark btn-sm p-0 border-0"
-        onclick={{action "showModal"}}
-        id={{this.componentId}}
- >
+<BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.showModal}} >
   {{fa-icon "list-ul"}}
-</button>
+</BsButton>
 
-{{#if this.isShowingModal}}
+
+{{#if this.dialogVisible}}
   <Dialog::MeasurementGroups
     @inputValue={{this.inputValue}}
     @submit={{@submit}}

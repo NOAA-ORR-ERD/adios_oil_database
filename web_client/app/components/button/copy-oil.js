@@ -4,7 +4,7 @@ import { action } from "@ember/object";
 
 
 export default class AddNewOilButton extends Component {
-    @tracked dialogVisible;
+    @tracked dialogVisible = false;
 
     @action
     show_dialog(event) {

@@ -4,7 +4,7 @@ import { action } from "@ember/object";
 
 
 export default class ReportProblemQuery extends Component {
-    @tracked dialogVisible;
+    @tracked dialogVisible = false;
 
     get destination() {
         return 'orr.adios@noaa.gov';
