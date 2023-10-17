@@ -23,7 +23,7 @@ COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/stage/web_client/ /web_client/public/configs/
 
 RUN cd /web_client && npm install -g n
-RUN cd /web_client && n 14
+RUN cd /web_client && n 18
 RUN cd /web_client && node --version
 
 RUN cd /web_client && npm install npm@latest -g
