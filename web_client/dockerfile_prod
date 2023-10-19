@@ -1,23 +1,7 @@
 # Oil Database Web Client production Docker configuration
 #
-FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
-
-RUN echo "ip_resolve=4" >> /etc/yum.conf
-
-RUN yum -y update
-
-# 01/19/2022: So apparently the way Node gets installed on CentOS has changed
-#             Pretty dramatically.
-#             This is just so we can even see any node distribution at all,
-#             and we can't simply refer to latest, we need to choose a version.
-RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash -
-RUN yum -y install gcc-c++ make
-
-RUN yum -y install nodejs
-
-# node + npm are both installed at latest version for the distro, so we don't
-# need to explicitly install npm.
-#RUN yum -y install npm
+#FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
+FROM node:18.18.2-buster
 
 RUN yum -y install nginx
 
@@ -26,18 +10,15 @@ COPY ./oildb-deploy/config/public/web_client/ /config/
 
 WORKDIR web_client
 
-#
-# build our production web client
-#
-RUN npm install -g n
-RUN n 14
-RUN node --version
-
 RUN npm install npm@latest -g
-RUN npm install
+RUN node --version
 RUN npm --version
 
-RUN npm install -g ember-cli
+# ember-cli should already be in our package.json, but we want to install it globally.
+RUN npm install ember-cli -g
+RUN ember --version
+RUN node --version
+RUN npm --version
 
 RUN ember build --environment production
 
