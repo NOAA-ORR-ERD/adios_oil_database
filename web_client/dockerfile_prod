@@ -8,8 +8,7 @@ RUN node --version
 RUN npm --version
 
 RUN apt-get update
-RUN apt-cache search nginx
-RUN apt-get install nginx
+RUN apt-get install nginx -y
 
 
 COPY ./web_client/ /web_client/
