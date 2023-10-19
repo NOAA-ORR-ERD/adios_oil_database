@@ -22,67 +22,89 @@
                 "unit": "%",
                 "unit_type": "volumefraction"
             },
-            "physical_properties": {
-                "pour_point": {
-                    "measurement": {
-                        "value": -43.50085,
-                        "unit": "C",
-                        "unit_type": "temperature"
-                    }
-                },
-                "densities": [
-                    {
-                        "density": {
-                            "value": 0.84796,
-                            "unit": "g/cm^3",
-                            "unit_type": "density"
-                        },
-                        "ref_temp": {
-                            "value": 15.6,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    }
-                ],
-                "kinematic_viscosities": [
-                    {
-                        "viscosity": {
-                            "value": 6.739,
-                            "unit": "cSt",
-                            "unit_type": "kinematicviscosity"
-                        },
-                        "ref_temp": {
-                            "value": 20.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "viscosity": {
-                            "value": 4.5818,
-                            "unit": "cSt",
-                            "unit_type": "kinematicviscosity"
-                        },
-                        "ref_temp": {
-                            "value": 40.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "viscosity": {
-                            "value": 3.883,
-                            "unit": "cSt",
-                            "unit_type": "kinematicviscosity"
-                        },
-                        "ref_temp": {
-                            "value": 50.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    }
-                ]
+          "physical_properties": {
+            "pour_point": {
+              "measurement": {
+                "value": -43.50085,
+                "unit": "C",
+                "unit_type": "temperature"
+              }
             },
+            "flash_point": {
+              "measurement": {
+                "value": -43.50085,
+                "unit": "C",
+                "unit_type": "temperature"
+              }
+            },
+            "bullwinkle": {
+              "measurement": {
+                "value": 0.69,
+                "unit": " ",
+                "unit_type": "massfraction"
+              }
+            },
+            "maximum_water_content": {
+              "measurement": {
+                "value": 0.39,
+                "unit": " ",
+                "unit_type": "massfraction"
+              }
+            },
+
+            "densities": [
+              {
+                "density": {
+                  "value": 0.84796,
+                  "unit": "g/cm^3",
+                  "unit_type": "density"
+                },
+                "ref_temp": {
+                  "value": 15.6,
+                  "unit": "C",
+                  "unit_type": "temperature"
+                }
+              }
+            ],
+            "kinematic_viscosities": [
+              {
+                "viscosity": {
+                  "value": 6.739,
+                  "unit": "cSt",
+                  "unit_type": "kinematicviscosity"
+                },
+                "ref_temp": {
+                  "value": 20.0,
+                  "unit": "C",
+                  "unit_type": "temperature"
+                }
+              },
+              {
+                "viscosity": {
+                  "value": 4.5818,
+                  "unit": "cSt",
+                  "unit_type": "kinematicviscosity"
+                },
+                "ref_temp": {
+                  "value": 40.0,
+                  "unit": "C",
+                  "unit_type": "temperature"
+                }
+              },
+              {
+                "viscosity": {
+                  "value": 3.883,
+                  "unit": "cSt",
+                  "unit_type": "kinematicviscosity"
+                },
+                "ref_temp": {
+                  "value": 50.0,
+                  "unit": "C",
+                  "unit_type": "temperature"
+                }
+              }
+            ]
+          },
             "distillation_data": {
                 "type": "volume fraction",
                 "end_point": {
