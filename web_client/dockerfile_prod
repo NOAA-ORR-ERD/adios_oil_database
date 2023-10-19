@@ -26,6 +26,7 @@ RUN ember --version
 RUN node --version
 RUN npm --version
 
+RUN npm install
 RUN ember build --environment production
 
 #
