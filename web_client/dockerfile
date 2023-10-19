@@ -3,10 +3,6 @@
 #FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
 FROM node:18.18.2-buster-slim
 
-RUN echo "ip_resolve=4" >> /etc/yum.conf
-
-RUN yum -y update
-
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/stage/web_client/ /web_client/public/configs/
 
