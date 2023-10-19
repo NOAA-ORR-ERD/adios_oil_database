@@ -6,7 +6,6 @@ FROM node:18
 # first of all let's see what we have in our base image
 RUN node --version
 RUN npm --version
-RUN nginx --version
 
 RUN apt-get update
 RUN apt-cache search nginx
