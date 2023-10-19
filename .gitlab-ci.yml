@@ -27,7 +27,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   tags:
     - docker
     - linux
@@ -38,13 +38,14 @@ test_develop:
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
-    - conda update -y conda
-    - conda update -y mamba
+    # - conda update -y conda
+    # - conda update -y mamba
+
 
   script:
     # install all the requirements
     - >
-      mamba install -y
+      conda install -y
       python=$PYTHON_VER
       --file adios_db/conda_requirements.txt
       --file adios_db/conda_requirements_optional.txt
@@ -66,12 +67,12 @@ test_develop:
     # Install & test the adios_db package
     - cd adios_db
     - pip install ./
-    - pytest --mongo adios_db
+    - pytest --mongo adios_db/test
 
     # Install & test the adios_db_api package
     - cd ../web_api
     - pip install ./
-    - pytest adios_db_api
+    - pytest adios_db_api/tests
 
 build_api:
   stage: build
@@ -716,7 +717,7 @@ stop_proxy_public:
 
 init_git_repo_on_stage:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   
   environment:
@@ -734,7 +735,7 @@ init_git_repo_on_stage:
 
 sync_with_git_review:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   environment:
@@ -751,7 +752,7 @@ sync_with_git_review:
 
 sync_with_git_prod:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   environment:
     name: stage
@@ -767,7 +768,7 @@ sync_with_git_prod:
 
 drop_db_volume_public:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   environment:
     name: public
