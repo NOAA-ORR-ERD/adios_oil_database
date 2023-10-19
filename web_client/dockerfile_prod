@@ -4,8 +4,8 @@
 FROM node:18.18.2-buster
 
 #RUN yum -y install nginx
-RUN apk update
-RUN apk add nginx
+RUN apt-cache search nginx
+RUN apt-get install nginx
 
 
 COPY ./web_client/ /web_client/
