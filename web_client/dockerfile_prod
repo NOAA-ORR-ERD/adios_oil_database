@@ -4,7 +4,9 @@
 FROM node:18.18.2-buster
 
 #RUN yum -y install nginx
-RUN apt-get -y install nginx
+RUN apk update
+RUN apk add nginx
+
 
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/public/web_client/ /config/
