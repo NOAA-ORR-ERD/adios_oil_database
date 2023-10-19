@@ -1,9 +1,13 @@
 # Oil Database Web Client production Docker configuration
 #
 #FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
-FROM node:18.18.2-buster
+FROM node:18
 
-#RUN yum -y install nginx
+# first of all let's see what we have in our base image
+RUN node --version
+RUN npm --version
+RUN nginx --version
+
 RUN apt-cache search nginx
 RUN apt-get install nginx
 
