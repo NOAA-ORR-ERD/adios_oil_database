@@ -38,7 +38,7 @@ RUN cp /config/main.json dist/configs
 # put our distribution in its own area
 #
 RUN cp -r dist /adios_client
-RUN chgrp -R nginx /adios_client/*
+RUN chgrp -R www-data /adios_client/*
 RUN chmod 640 /adios_client/configs/*
 RUN chmod 644 /adios_client/assets/images/*
 
