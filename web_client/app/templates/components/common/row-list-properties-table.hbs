@@ -35,7 +35,7 @@
       {{/if}}
 
       <tbody>
-        {{#if (or @editable anyDataPresent)}}
+        {{#if (or @editable this.anyDataPresent)}}
           {{#each-in this.properties as |attr value|}}
             <tr>
               <th scope="col">{{value.label}}</th>

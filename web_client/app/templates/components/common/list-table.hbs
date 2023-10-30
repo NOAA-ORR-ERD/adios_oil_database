@@ -30,7 +30,7 @@
     </thead>
 
     <tbody>
-      {{#if (or @editable anyDataPresent)}}
+      {{#if (or @editable this.anyDataPresent)}}
         {{#each this.baseProperty as |row index|}}
           <tr>
             {{#each-in this.properties as |attr value|}}
