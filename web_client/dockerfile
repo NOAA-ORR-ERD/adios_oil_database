@@ -10,10 +10,6 @@ RUN npm --version
 COPY ./web_client/ /web_client/
 COPY ./oildb-deploy/config/stage/web_client/ /web_client/public/configs/
 
-RUN npm install npm@latest -g
-RUN node --version
-RUN npm --version
-
 # ember-cli should already be in our package.json, but we want to install it globally.
 RUN npm install ember-cli -g
 RUN ember --version
