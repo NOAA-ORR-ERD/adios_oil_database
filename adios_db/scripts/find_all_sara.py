@@ -12,9 +12,9 @@ import adios_db.scripting as adb
 #dry_run = adb.process_input()
 base_dir = (r"C:\Users\rintaro.moriyasu\Oil Databases\noaa-oil-data\data\oil")
 #Choose Oil Product Type
-product_type = "Crude Oil NOS"
+#product_type = "Crude Oil NOS"
 #product_type = "Condensate"
-#product_type = "Tight Oil"
+product_type = "Tight Oil"
 # write the header row:
 # create a new text file for output
 outfile = open(product_type + "_sara_data.csv", 'w', encoding="utf-8")
