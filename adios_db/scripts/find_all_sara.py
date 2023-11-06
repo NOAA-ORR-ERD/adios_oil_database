@@ -39,7 +39,9 @@ for oil, path in adb.get_all_records(base_dir):
         if SARA:
             # write a row in the csv file
 
-            outfile.write(f'"{oil.metadata.name}", {oil.oil_id}, {oil.metadata.API}')
+            outfile.write(f'"{oil.metadata.name}", {oil.oil_id}')
+            outfile.write(f',"{oil.metadata.location}"')
+            outfile.write(f', {oil.metadata.API}')
             outfile.write(f',{"" if SARA.saturates is None else SARA.saturates.converted_to("fraction").value}' )
             outfile.write(f',{"" if SARA.aromatics is None else SARA.aromatics.converted_to("fraction").value}' )
             outfile.write(f',{"" if SARA.resins is None else SARA.resins.converted_to("fraction").value}' )
