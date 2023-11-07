@@ -29,6 +29,14 @@ td:empty::after{
   content: "\00a0";
 }
 
+.input-group {
+    width: inherit;
+}
+
+.input-group-prepend {
+    width: fit-content;
+}
+
 .input-group-text {
     border: none;
     background-color: inherit;
@@ -89,6 +97,10 @@ td:empty::after{
 }
 .reference-textarea {
   width: 100%;
+}
+
+.large-text-container {
+    width: -webkit-fill-available;
 }
 
 .no-borders{
@@ -178,6 +190,7 @@ td:empty::after{
     line-height: 1.45;
     float: left;
     margin: 2px 0 2px 3px;
+    width: inherit;
 }
 
 .list-item-alternate-names {

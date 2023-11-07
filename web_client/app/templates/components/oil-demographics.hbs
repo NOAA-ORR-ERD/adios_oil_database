@@ -56,7 +56,7 @@
         </div>
 
         {{! Type }}
-        <div class="col-sm-12 col-md-7 pl-0 form-inline align-items-center">
+        <div class="col-sm-12 col-md-7 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Product Type:</label>
           {{#if @editable}}
             <select class="p-1 mt-1 overflow-hidden bg-transparent border"
@@ -106,7 +106,7 @@
         </div>
         
         {{! Model Completeness (not editable) }}
-        <div class="col-sm-12 col-md-7 pl-0 form-inline align-items-center">
+        <div class="col-sm-12 col-md-7 pl-0 input-group align-items-center">
           <label class="p-1 input-group-text font-weight-bold">Completeness:</label>
           <span class="p-1">{{@oil.metadata.model_completeness}}</span>
         </div>
@@ -166,7 +166,7 @@
             />
           </div>
         {{else}}
-          <label class="p-1 input-group-text font-weight-bold">Alternate Names:</label>
+          <label class="p-1 input-group-text input-group font-weight-bold">Alternate Names:</label>
           <div class="col pl-1">
             {{#each @oil.metadata.alternate_names as |id|}}
               <span class="list-item-alternate-names">
@@ -184,7 +184,7 @@
     <div class="col-6">
 
       {{! Reference }}
-      <div class="row mb-1">
+      <div class="row mb-1 large-text-container">
         <div class="col-12 input-group">        
           <label class="p-1 input-group-text font-weight-bold">Reference:</label>
           {{#let (if @oil.metadata.reference.reference
