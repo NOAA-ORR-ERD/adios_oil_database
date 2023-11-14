@@ -936,3 +936,32 @@ def test_get_minimum_maximum_range():
     assert m.value is None
     assert m.minimum == 1.0
     assert m.maximum == 2.3
+
+
+def test_as_text_value():
+    m = MassFraction(value=0.3)
+    text = m.as_text()
+
+    assert text == "0.3"
+
+
+def test_as_text_min():
+    m = MassFraction(min_value=0.3)
+    text = m.as_text()
+
+    assert text == ">0.3"
+
+
+def test_as_text_max():
+    m = MassFraction(max_value=0.3)
+    text = m.as_text()
+
+    assert text == "<0.3"
+
+
+def test_as_text_range():
+    m = MassFraction(min_value=0.1, max_value=0.3)
+    text = m.as_text()
+
+    assert text == "0.1\N{Em Dash}0.3"
+

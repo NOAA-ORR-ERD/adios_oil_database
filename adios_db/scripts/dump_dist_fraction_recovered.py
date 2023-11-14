@@ -21,19 +21,20 @@ but not save any changes
 def main():
     base_dir, dry_run = ads.process_input(USAGE)
 
-    print("writing: adios_distillation_data.csv")
-    outfile = open("adios_distillation_data.csv", 'w')
+    print("writing: adios_distillation_data.tsv")
+    outfile = open("adios_distillation_data.tsv", 'w')
 
     outfile.write(f"Oil ID\tName\tReference\tdistillation_method\tfraction_recovered\n")
 
     for rec, pth in ads.get_all_records(base_dir):
         ID = rec.oil_id
+        print(f"searching: {ID}")
         name = rec.metadata.name
-        reference = rec.metadata.reference.reference
+        reference = rec.metadata.reference.reference.replace("\n", " ")
         dist_method = rec.sub_samples[0].distillation_data.method
         frac_recov = rec.sub_samples[0].distillation_data.fraction_recovered
-
-        outfile.write(f'{ID} \t"{name}" \t"{reference}" \t{dist_method} \t{frac_recov}\n')
+        if frac_recov is not None:
+            outfile.write(f'{ID} \t"{name}" \t"{reference}" \t{dist_method} \t{frac_recov}\n')
 
 
 if __name__ == "__main__":

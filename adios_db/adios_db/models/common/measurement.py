@@ -245,6 +245,14 @@ class MeasurementBase(MeasurementDataclass):
 
         return None
 
+    def converted_to(self, new_unit):
+        """
+        returns a new Measurement object, converted to the units specified
+        """
+        new = self.copy()
+        new.convert_to(new_unit)
+        return new
+
     @property
     def minimum(self):
         """
@@ -259,15 +267,6 @@ class MeasurementBase(MeasurementDataclass):
         """
         return self.value if self.max_value is None else self.max_value
 
-
-    def converted_to(self, new_unit):
-        """
-        returns a new Measurement object, converted to the units specified
-        """
-        new = self.copy()
-        new.convert_to(new_unit)
-        return new
-
     def copy(self):
         """
         There will be cases where we want to be non-destructive, such as
@@ -279,7 +278,30 @@ class MeasurementBase(MeasurementDataclass):
         before the conversion happens.
         """
         # fixme: why not use the copy.deepcopy() function here?
+        # do we even need it?
         return copy.copy(self)
+
+    def as_text(self):
+        """
+        returns a nice human-readable text representation, e.g.:
+
+        "1.0"
+        or
+        ">1.0"
+        or
+        "<1.0"
+        or
+        "1.0--2.0"
+        """
+        if self.value:
+            return f"{self.value}"
+        if self.min_value is not None and self.max_value is not None:
+            return f"{self.min_value}\N{Em Dash}{self.max_value}"
+        if self.min_value is not None:
+            return f">{self.min_value}"
+        if self.max_value is not None:
+            return f"<{self.max_value}"
+
 
 
 class Temperature(MeasurementBase):
