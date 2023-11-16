@@ -10,9 +10,9 @@
 
 {{!-- based on ember-modal-dialog with ember-tether --}}
 <ModalDialog
-  @onClose={{action "closeModalDialog"}}
+  @onClose={{this.closeModalDialog}}
   @translucentOverlay={{false}}
-  @tetherTarget={{componentId}}
+  @tetherTarget={{@componentId}}
   @targetAttachment={{@targetAttachment}}
   @attachment={{@attachment}}
 >
@@ -41,7 +41,7 @@
           name="min-value"
           size="5"
           placeholder="-∞"
-          value={{this.dialogMinValue}} {{on "change" this.changeMin}}
+          @value={{this.dialogMinValue}} {{on "change" this.changeMin}}
           class="m-2" {{on "focusin" (action "toggleRadio" true)}} 
         />
         <Input
@@ -50,7 +50,7 @@
           name="max-value"
           size="5"
           placeholder="+∞"
-          value={{this.dialogMaxValue}} {{on "change" this.changeMax}}
+          @value={{this.dialogMaxValue}} {{on "change" this.changeMax}}
           class="m-2" {{on "focusin" (action "toggleRadio" true)}}
         />
       </div>
@@ -71,7 +71,7 @@
           name="scalar"
           size="5"
           placeholder=""
-          value={{this.dialogValue}} {{on "change" this.changeValue}} {{on "focusin" (action "toggleRadio" false)}}
+          @value={{this.dialogValue}} {{on "change" this.changeValue}} {{on "focusin" (action "toggleRadio" false)}}
         />
       </div>
 

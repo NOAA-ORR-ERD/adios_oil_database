@@ -85,7 +85,7 @@ export default class OilsController extends Controller {
 
                 oil.deleteRecord();
                 oil.save().then(function(result) {
-                    result._internalModel.unloadRecord();
+                    result.unloadRecord();
                 }.bind(this));
             }.bind(this));
         }
