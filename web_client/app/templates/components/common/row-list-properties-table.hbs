@@ -18,14 +18,14 @@
                   <button type="button"
                     {{on "click" (fn this.deleteTableRow (sub index 1))}}
                     class="btn btn-outline-danger btn-sm p-0 border-0">
-                    {{fa-icon "times"}}
+                    <FaIcon @icon="times" />
                   </button>
                 {{/if}}
 
                 <button type="button"
                   {{on "click" (fn this.addEmptyTableRow index)}}
                   class="btn btn-outline-dark btn-sm p-0 border-0">
-                  {{fa-icon "plus"}}
+                  <FaIcon @icon="plus" />
                 </button>
               </td>
             {{/each}}

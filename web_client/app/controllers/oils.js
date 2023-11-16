@@ -3,12 +3,13 @@ import { action } from "@ember/object";
 import { service } from '@ember/service';
 
 export default class OilsController extends Controller {
+    tempSuffix = '-TEMP';
     @service store;
 
     get canModifyDb() {
         return this.capabilities.toArray()[0].can_modify_db == 'true';
     }
-    
+
     @action
     filterByName(param) {
         if (param !== '') {
@@ -28,7 +29,7 @@ export default class OilsController extends Controller {
     @action
     commitTemporaryEdits(oil, newRoute) {
         // reset the flag
-        this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
+        this.changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
 
         if (oil.oil_id.endsWith(this.tempSuffix)) {
             // switch back to the permanent model, keeping our changes.
@@ -56,7 +57,7 @@ export default class OilsController extends Controller {
                 .then(function() {
                     oil.deleteRecord();
                     oil.save().then(function(result) {
-                        result._internalModel.unloadRecord();
+                        result.unloadRecord();
                     }.bind(this));
                 }.bind(this));
             }.bind(this));
@@ -66,7 +67,7 @@ export default class OilsController extends Controller {
     @action
     discardTemporaryEdits(oil, newRoute) {
         // reset the flag
-        this.controllerFor('oils.show').changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
+        this.changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
 
         if (oil.oil_id.endsWith(this.tempSuffix)) {
             // switch back to the permanent model, discarding our changes.
@@ -108,7 +109,7 @@ export default class OilsController extends Controller {
 
     @action
     updateOil(oil) {
-        let changesMade = this.controllerFor('oils.show').changesMade;  // eslint-disable-line ember/no-controller-access-in-routes
+        let changesMade = this.changesMade;
 
         if (changesMade) {
             // we are already in the editing context
@@ -116,7 +117,7 @@ export default class OilsController extends Controller {
         }
         else {
             // we need to transition to the editing context
-            this.controllerFor('oils.show').changesMade = true;  // eslint-disable-line ember/no-controller-access-in-routes
+            this.changesMade = true;
 
             // create a temporary oil object
             let oilAttrs = oil.serialize().data.attributes;

@@ -21,7 +21,7 @@
             <button type="button"
               {{on "click" (fn this.addEmptyTableRow 0)}}
               class="btn btn-outline-dark btn-sm p-0 border-0">
-              {{fa-icon "plus"}}
+              <FaIcon @icon="plus" />
             </button>
           </td>
         {{/if}}
@@ -71,13 +71,13 @@
                 <button type="button"
                   {{on "click" (fn this.deleteTableRow index)}}
                   class="btn btn-outline-danger btn-sm p-0 border-0">
-                  {{fa-icon "times"}}
+                  <FaIcon @icon="times" />
                 </button>
 
                 <button type="button"
                   {{on "click" (fn this.addEmptyTableRow (add index 1))}}
                   class="btn btn-outline-dark btn-sm p-0 border-0">
-                  {{fa-icon "plus"}}
+                  <FaIcon @icon="plus" />
                 </button>
               </td>
             {{/if}}

@@ -46,7 +46,7 @@
                   <button type="button"
                     {{on "click" (fn this.deleteGroup index)}}
                     class="btn btn-outline-danger btn-sm p-0 border-0">
-                    {{fa-icon "times"}}
+                    <FaIcon @icon="times" />
                   </button>
                 </td>
 
@@ -55,7 +55,7 @@
                   <button type="button"
                     {{on "click" (fn this.addNewGroup (add index 1))}}
                     class="btn btn-outline-dark btn-sm p-0 border-0">
-                    {{fa-icon "plus"}}
+                    <FaIcon @icon="plus" />
                   </button>
                 </td>
 
@@ -67,7 +67,7 @@
                   <button type="button"
                     {{on "click" (fn this.addNewGroup (add index 1))}}
                     class="btn btn-outline-dark btn-sm p-0 border-0">
-                    {{fa-icon "plus"}}
+                    <FaIcon @icon="plus" />
                   </button>
                 </td>
               </tr>

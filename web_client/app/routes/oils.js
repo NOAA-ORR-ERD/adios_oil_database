@@ -4,8 +4,6 @@ import { action } from "@ember/object";
 
 
 export default class OilsRoute extends ApplicationRoute {
-    tempSuffix = '-TEMP';
-
     model() {
         return hash({
             configs: (async () => {
