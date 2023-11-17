@@ -938,6 +938,22 @@ def test_get_minimum_maximum_range():
     assert m.maximum == 2.3
 
 
+def test_validate_all_fields():
+    """
+    A measurement should never have all three values filled in.
+    """
+    m = Length(value=1, min_value=2, max_value=3, unit='m')
+
+    print(m)
+
+    val = m.validate()
+
+    print(val)
+
+    assert len(val) == 1
+    assert val[0].startswith("E047:")
+
+
 def test_as_text_value():
     m = MassFraction(value=0.3)
     text = m.as_text()

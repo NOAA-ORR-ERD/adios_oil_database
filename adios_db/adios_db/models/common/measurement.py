@@ -188,6 +188,13 @@ class MeasurementBase(MeasurementDataclass):
             warnings.warn("nucos version >= 3.1.0 required "
                           "for unit validation")
 
+        # check if all fields are set
+        # shouldn't be min, max and value
+        if (self.value is not None
+                and self.min_value is not None
+                and self.max_value is not None):
+            msgs.append(ERRORS['E047'].format(self))
+
         return msgs
 
     def is_empty(self):

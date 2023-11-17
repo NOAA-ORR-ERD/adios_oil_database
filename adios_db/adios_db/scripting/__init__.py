@@ -85,3 +85,20 @@ def process_input(USAGE=USAGE):
         sys.exit()
 
     return base_dir, dry_run
+
+
+def find_highest_id(prefix, oil_path):
+    """
+    find the highest id of the records with a
+    given prefix.
+
+    :param prefix: two-char prefix of the IDs
+
+    :param oil_path: Path where the oil JSON files are.
+
+    NOTE: this assumes that the file names match the ID
+    """
+    records = (oil_path / prefix).glob(f"{prefix}?????.json")
+    highest = max(records)
+    return highest.stem
+
