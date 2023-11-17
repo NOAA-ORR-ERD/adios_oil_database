@@ -16,6 +16,7 @@ from adios_db.computation import physical_properties
 from adios_db.models.common.measurement import Density, Temperature
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
+from adios_db.models.oil.distillation import Distillation
 from adios_db.models.oil.physical_properties import DensityPoint
 from adios_db.models.oil.validation.validate import validate_json, validate
 from adios_db.models.oil.validation import (unpack_status,
@@ -442,3 +443,34 @@ def test_bad_unit():
                 break
         else:
             assert False, f'"{err}" not in validation messages'
+
+
+def test_gnome_suitable_true():
+    """
+    running an gnome suitable oil should set the flag to True
+    """
+    oil = Oil.from_file(TEST_DATA_DIR / "EC" / "EC00506.json")
+
+    print(oil.metadata.gnome_suitable)
+    msgs = oil.validate()
+    assert oil.metadata.gnome_suitable
+    print(msgs)
+    assert not msgs
+
+
+def test_gnome_suitable_false():
+    """
+    running an not gnome suitable oil should set the flag to False
+    and add a message to the Warnings.
+    """
+    oil = Oil.from_file(TEST_DATA_DIR / "EC" / "EC02234.json")
+
+    # remove dist data
+    oil.sub_samples[0].distillation_data = Distillation()
+    print(oil.metadata.gnome_suitable)
+    msgs = oil.validate()
+    print(oil.metadata.gnome_suitable)
+    assert not oil.metadata.gnome_suitable
+    print(msgs)
+    assert len(msgs) == 1
+    assert msgs[0].startswith("W100:")

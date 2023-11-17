@@ -421,6 +421,14 @@ def get_pour_point(oil):
 
     return pour_point
 
+def get_flash_point(oil):
+    """
+    Return oil's FLash Point or None
+    """
+    phys_props = oil.sub_samples[0].physical_properties
+    flash_point = phys_props.flash_point
+    return flash_point
+
 
 def get_frac_recovered(oil, units="fraction"):
     """

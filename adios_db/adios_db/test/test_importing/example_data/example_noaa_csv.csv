@@ -1,4 +1,8 @@
+<<<<<<< 2542abbe27249cb611fcfa6f229c8ad7f969c246
+﻿ADIOS Data Model Version,0.12.0,,,,,
+=======
 ADIOS Data Model Version,0.12.0,,,,,
+>>>>>>> 17e0de73bd477155e6c2d1dcbc186a17f49ef048
 Record Metadata,,,,,,
     Name,"DMA, Chevron -- 2021",,,,,
     Source ID, xx-123 ,,,,,
@@ -71,3 +75,10 @@ Bulk Composition,  Name,  fraction,  Fraction Unit, unit type, method,  comment,
 ,,,,,,
 Industry Properties, name, value, unit, unit type, method,
 Property 1, Reid Vapor Pressure, 0.7, PSI, Pressure,a method,,
+<<<<<<< 2542abbe27249cb611fcfa6f229c8ad7f969c246
+
+
+
+
+=======
+>>>>>>> 17e0de73bd477155e6c2d1dcbc186a17f49ef048

@@ -1,0 +1,42 @@
+﻿Emulsion Properties,,,,
+  Emulsion 1,,,,
+    Age,1,day,,
+    Temperature,15,C,,
+    Visual Stability,Mesostable,,,
+    Water Content,20,fraction,,
+    Complex Viscosity,1000,cP,,
+    Complex Modulus,123,Pa,,
+    Storage Modulus,12,Pa,,
+    Loss Modulus,1234,Pa,,
+    Tan Delta (V/E),0.5,(unitless),,
+    Method,some method,,,
+    Kinematic Viscosity,Viscosity,Unit,Temp,Unit
+      Viscosity at temp,1000,cSt,0,C
+      Viscosity at temp,500,cSt,15,C
+      Viscosity at temp,,cSt,,
+,,,,
+    Dynamic Viscosity,Viscosity,Unit,Temp,Unit
+      Viscosity at temp,1200,cP,32,F
+      Viscosity at temp,600,cP,70,F
+      Viscosity at temp,,,,
+,,,,
+  Emulsion 2,,,,
+    Age,17,day,,
+    Temperature,15,C,,
+    Visual Stability,Stable,,,
+    Water Content,20,fraction,,
+    Complex Viscosity,1000,cP,,
+    Complex Modulus,123,Pa,,
+    Storage Modulus,12,Pa,,
+    Loss Modulus,1234,Pa,,
+    Tan Delta (V/E),0.5,(unitless),,
+    Method,some other method,,,
+    Kinematic Viscosity,Viscosity,Unit,Temp,Unit
+      Viscosity at temp,1000,cSt,0,C
+      Viscosity at temp,500,cSt,15,C
+      Viscosity at temp,,cSt,,
+,,,,
+    Dynamic Viscosity,Viscosity,Unit,Temp,Unit
+      Viscosity at temp,1200,cP,32,F
+      Viscosity at temp,600,cP,70,F
+      Viscosity at temp,,,,
