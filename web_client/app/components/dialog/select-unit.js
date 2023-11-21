@@ -18,7 +18,6 @@ export default class SelectUnitDialog extends Component {
         this._initEscListener();
 
         this.unit = this.args.baseProperty.trim();
-        this.unitType = this.args.unitType;
 
         if (!this.unit && this.args.defaultUnit) {
             this.unit = this.args.defaultUnit;
@@ -26,9 +25,9 @@ export default class SelectUnitDialog extends Component {
 
         this.generateCompatibleConverters();
 
-        if (this.unitType) {
+        if (this.args.unitType) {
             let compatList = this.compatibleConverters.filter(c => {
-                return c.Name.replace(/\s/g, '').toLowerCase() === this.unitType;
+                return c.Name.replace(/\s/g, '').toLowerCase() === this.args.unitType;
             });
 
             this.unitType = compatList[0];
