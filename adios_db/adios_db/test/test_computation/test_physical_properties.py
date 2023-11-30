@@ -83,6 +83,39 @@ def test_get_kinematic_viscosity_data_defaults():
     assert isclose(kv[1][1], 288.15, rel_tol=1e-6)  # temp
 
 
+def test_get_dynamic_viscosity_data_multiple_shear_rates_default():
+    oil = Oil.from_file(EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json")
+    dv = get_dynamic_viscosity_data(oil)
+
+    print(oil.oil_id)
+
+    assert len(dv) == 2
+
+    print(dv)
+
+    assert isclose(dv[0][0], 6.402, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[0][1], 275.15, rel_tol=1e-6)  # temp
+    assert isclose(dv[1][0], 1.199, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[1][1], 288.15, rel_tol=1e-6)  # temp
+
+
+def test_get_dynamic_viscosity_data_multiple_shear_rates_set():
+    oil = Oil.from_file(EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json")
+
+    dv = get_dynamic_viscosity_data(oil, shear_rate=100)
+
+    print(oil.oil_id)
+
+    assert len(dv) == 2
+
+    print(dv)
+
+    assert isclose(dv[0][0], 1.954, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[0][1], 275.15, rel_tol=1e-6)  # temp
+    assert isclose(dv[1][0], 0.582, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[1][1], 288.15, rel_tol=1e-6)  # temp
+
+
 def test_get_kinematic_viscosity_data_no_data():
     """
     Issue:
