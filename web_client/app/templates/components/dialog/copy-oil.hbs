@@ -1,62 +1,40 @@
-<div id="copyOilDialog" class="modal fade" role="dialog" tabindex="-1"
-     aria-labelledby="copyOilDialogLabel" aria-hidden="true"
-     {{did-insert this.setModalEvents}}
-     >
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="copyOilDialogLabel">
-          Copy Oil
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-12 mb-3">
-            <span>
-              Use this function to create a copy of this oil record. Enter a name for the new oil record below.
-            </span>
-          </div>
-        </div>
-
-        <div class="form">
-          <div class="row">
-
-            <div class="col-12">
-              <Input type="text" @class="form-control bg-transparent border"
-                     value={{this.oilName}}
-                     title="Oil Name"
-                     {{on "change" this.updateName}}
-                     {{on "keypress" this.updateName}}
-                     {{on "focusout" this.updateName}}
-              />
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Cancel
-        </button>
-
-        {{#if this.formFilledOut}}
-          <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  {{ref this "okButton"}}
-                  {{on "click" this.submitForm}} >
-            OK
-          </button>
-        {{else}}
-          <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  disabled>
-            OK
-          </button>
-        {{/if}}
+<BsModal @onSubmit={{action "submitForm"}}
+         @onHidden={{action "closeForm"}}
+         as |Modal|>
+  <Modal.header>
+    <h5 class="modal-title" id="copyOilDialogLabel">Copy Oil</h5>
+  </Modal.header>
+  <Modal.body>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <span>
+          Use this function to create a copy of this oil record. Enter a name for the new oil record below.
+        </span>
       </div>
     </div>
-  </div>
-</div>
+
+    <div class="form">
+      <div class="row">
+
+        <div class="col-12">
+          <Input @type="text" class="form-control bg-transparent border"
+                 title="Oil Name"
+                 @value={{this.oilName}}
+                 {{on "change" this.updateName}}
+                 {{on "keypress" this.updateName}}
+                 {{on "focusout" this.updateName}}
+          />
+        </div>
+
+      </div>
+    </div>
+  </Modal.body>
+  <Modal.footer as |footer|>
+    <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
+
+    <BsButton @onClick={{action Modal.submit}} @type="primary"
+              disabled={{not this.formFilledOut}} >
+      OK
+    </BsButton>
+  </Modal.footer>
+</BsModal>

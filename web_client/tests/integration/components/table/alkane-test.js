@@ -16,9 +16,9 @@ module('Integration | Component | table/alkane', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#table/alkane}}
+      <Table::Alkane>
         template block text
-      {{/table/alkane}}
+      </Table::Alkane>
     `);
 
     assert.dom(this.element).hasText('template block text');

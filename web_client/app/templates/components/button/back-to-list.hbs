@@ -1,12 +1,13 @@
-<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Back to List"
-        data-toggle="modal"
-        data-target="#dropChangesDialog" >
-  &lt; Back to List
-</button>
+<BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.show_dialog}} >
+  Back to List
+</BsButton>
 
-<Dialog::DropChanges
-  @id="dropChangesDialog"
-  @oil={{@oil}}
-  @submit={{this.submit}}
-/>
+{{#if this.dialogVisible}}
+  <Dialog::DropChanges
+    @id="dropChangesDialog"
+    @oil={{@oil}}
+    @close={{this.close_dialog}}
+    @submit={{this.submit}}
+  />
+{{/if}}

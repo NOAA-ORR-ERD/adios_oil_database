@@ -1,55 +1,6 @@
-<nav>
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    {{#each this.navTabProperties as |props idx|}}
-      <a data-toggle="tab" role="tab" tab-level="0"
-         id={{props.id}}
-         href={{props.href}}
-         aria-controls={{props.aria-controls}}
-         class={{props.class}}
-         aria-selected={{props.aria-selected}}
-         {{did-insert this.setEventShown}}
-      >
-
-
-        {{#if @editable}}
-          <Input
-            @class="p-1 overflow-hidden bg-transparent border"
-            @value={{props.short_name}}
-            @change={{action "updateShortSampleName" idx}}
-          />
-        {{else}}
-          {{props.short_name}}
-        {{/if}}
-
-        {{#if idx}}
-          {{#if @editable}}
-            <TabNav::RemoveSample
-              @oil={{@oil}}
-              @index={{idx}}
-              @submit={{@submit}}
-            />
-          {{/if}}
-        {{/if}}
-      </a>
-    {{/each}}
-
-    {{#if @editable}}
-      <TabNav::AddSample
-        @oil={{@oil}}
-        @submit={{@submit}}
-      />
-    {{/if}}
-
-  </div>
-</nav>
-
-<div class="tab-content" id="nav-tabContent">
-  {{#each this.tabPaneProperties as |props|}}
-    <div role="tabpanel" tab-level="0"
-      id={{props.id}}
-      aria-labelledby={{props.aria-labelledby}}
-      class={{props.class}}
-    >
+<BsTab as |tab|>
+  {{#each this.navTabProperties as |props idx|}}
+    <tab.pane @title={{props.short_name}}>
       <TabPane::SubSample
         @oil={{@oil}}
         @store={{@oil.store}}
@@ -61,7 +12,6 @@
         @sampleName={{props.short_name}}
         @distillationTypes={{@distillationTypes}}
       />
-    </div>
+    </tab.pane>
   {{/each}}
-
-</div>
+</BsTab>

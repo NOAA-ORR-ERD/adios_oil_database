@@ -1,68 +1,52 @@
-<div id={{@id}} class="modal fade" role="dialog" tabindex="-1"
-     aria-labelledby="logChangesDialogLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="logChangesDialogLabel">
-          Log Changes to Oil
-        </h5>
+<BsModal @onSubmit={{action "submitForm"}}
+         @onHidden={{action "closeForm"}}
+         as |Modal|>
+  <Modal.header>
+    <h5 class="modal-title" id="logChangesDialogLabel">Log Changes to Oil</h5>
+  </Modal.header>
+  <Modal.body>
+    <div class="form">
+
+      <div class="d-flex justify-content-center">
+        <strong>
+          Please describe the changes you made to the oil.<br>
+          This information will be added to the change log of this record.
+        </strong>
       </div>
 
-      <div class="modal-body">
-        <div class="form">
+      <div class="row">
 
-          <div class="d-flex justify-content-center">
-            <strong>
-              Please describe the changes you made to the oil.<br>
-              This information will be added to the change log of this record.
-            </strong>
-          </div>
-
-          <div class="row">
-
-            <div class="col-6">
-              <Input type="text" @class="form-control bg-transparent border"
-                     @placeholder="Enter Name"
-                     title="Enter Name"
-                     {{on "change" this.updateName}}
-                     {{on "keypress" this.updateName}}
-                     {{on "focusout" this.updateName}}
-              />
-
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-12">
-              <Input type="text" @class="form-control bg-transparent border"
-                     @placeholder="Enter a Comment"
-                     title="Enter a Comment"
-                     {{on "change" this.updateComment}}
-                     {{on "keypress" this.updateComment}}
-                     {{on "focusout" this.updateComment}}
-              />
-
-            </div>
-          </div>
+        <div class="col-6">
+          <Input type="text" class="form-control bg-transparent border"
+                 placeholder="Enter Name"
+                 title="Enter Name"
+                 {{on "change" this.updateName}}
+                 {{on "keypress" this.updateName}}
+                 {{on "focusout" this.updateName}}
+          />
 
         </div>
       </div>
 
-      <div class="modal-footer">
+      <div class="row">
+        <div class="col-12">
+          <Input type="text" class="form-control bg-transparent border"
+                 placeholder="Enter a Comment"
+                 title="Enter a Comment"
+                 {{on "change" this.updateComment}}
+                 {{on "keypress" this.updateComment}}
+                 {{on "focusout" this.updateComment}}
+          />
 
-        {{#if this.formFilledOut}}
-          <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  {{ref this "okButton"}}
-                  {{on "click" this.submitForm}} >
-            OK
-          </button>
-        {{else}}
-          <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  disabled>
-            OK
-          </button>
-        {{/if}}
+        </div>
       </div>
+
     </div>
-  </div>
-</div>
+  </Modal.body>
+  <Modal.footer as |footer|>
+    <BsButton @type="primary" @onClick={{action Modal.submit}}
+              disabled={{not this.formFilledOut}} >
+      OK
+    </BsButton>
+  </Modal.footer>
+</BsModal>

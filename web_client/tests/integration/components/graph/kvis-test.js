@@ -16,9 +16,9 @@ module('Integration | Component | graph/kvis', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#graph/kvis}}
+      <Graph::Kvis>
         template block text
-      {{/graph/kvis}}
+      </Graph::Kvis>
     `);
 
     assert.dom(this.element).hasText('template block text');

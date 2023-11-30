@@ -1,13 +1,16 @@
-<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Save Edits"
-        data-toggle="modal"
-        data-target="#logChangesDialog2"
-        disabled={{not @changesMade}} >
+<BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.show_dialog}}
+          disabled={{not @changesMade}} >
   Save Edits
-</button>
+</BsButton>
 
-<Dialog::LogChanges
-  @id="logChangesDialog2"
-  @oil={{@oil}}
-  @submit={{this.submit}}
-/>
+
+{{#if this.dialogVisible}}
+  <Dialog::LogChanges
+    @id="logChangesDialog2"
+    @oil={{@oil}}
+    @submit={{this.submit}}
+    @close={{this.close_dialog}}
+  />
+{{/if}}
+

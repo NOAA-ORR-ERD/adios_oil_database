@@ -10,9 +10,9 @@
 
 {{!-- based on ember-modal-dialog with ember-tether --}}
 <ModalDialog
-  @onClose={{action "closeModalDialog"}}
+  @onClose={{this.closeModalDialog}}
   @translucentOverlay={{false}}
-  @tetherTarget={{componentId}}
+  @tetherTarget={{@componentId}}
   @targetAttachment={{@targetAttachment}}
   @attachment={{@attachment}}
 >
@@ -26,73 +26,82 @@
     <div class="card-body p-1">
       {{!-- range input --}}
       <div class="row d-flex align-items-center mx-2">
-        <Input
-          @type="radio"
-          @name="interval-number"
-          @value="true"
-          @focus-in={{action "toggleRadio" true}}
-          id="range-radio-btn"
-          checked={{this.isInterval}}
-        />
-        <label for="range-radio-btn" class="m-2 pb-1">
-          Range
-        </label>
-        <Input
-          @type="number"
-          @step={{this.numberStep}}
-          @name="min-value"
-          @size="5"
-          placeholder="-∞"
-          value={{this.dialogMinValue}}
-          @focus-in={{action "toggleRadio" true}}
-          {{on "change" this.changeMin}}
-          class="m-2" 
-        />
-        <Input
-          @type="number"
-          @step={{this.numberStep}}
-          @name="max-value"
-          @size="5"
-          placeholder="+∞"
-          value={{this.dialogMaxValue}}
-          @focus-in={{action "toggleRadio" true}}
-          {{on "change" this.changeMax}}
-          class="m-2"
-        />
+        <div class="col-1 p-0">
+          <Input
+            @type="radio"
+            name="interval-number"
+            @value="true" id="range-radio-btn"
+            checked={{this.isInterval}} {{on "focusin" (action "toggleRadio" true)}}
+          />
+        </div>
+
+        <div class="col-2 p-0">
+          <label for="range-radio-btn" class="m-2 pb-1">Range</label>
+        </div>
+
+        <div class="col-4 p-1">
+          <Input
+            @type="number"
+            step={{this.numberStep}}
+            name="min-value"
+            size="5"
+            placeholder="-∞"
+            @value={{this.dialogMinValue}} {{on "change" this.changeMin}}
+            class="m-0 range-input-text-field"
+            {{on "focusin" (action "toggleRadio" true)}} 
+          />
+        </div>
+
+        <div class="col-4 p-1">
+          <Input
+            @type="number"
+            step={{this.numberStep}}
+            name="max-value"
+            size="5"
+            placeholder="+∞"
+            @value={{this.dialogMaxValue}} {{on "change" this.changeMax}}
+            class="m-0 range-input-text-field"
+            {{on "focusin" (action "toggleRadio" true)}}
+          />
+        </div>
       </div>
       {{!-- scalar input --}}
       <div class="row d-flex align-items-center mx-2">
-        <Input
-          @type="radio"
-          @name="interval-number"
-          @value="number"
-          @focus-in={{action "toggleRadio" false}}
-          id="value-radio-btn"
-          checked={{not this.isInterval}}
-        />
-        <label for="value-radio-btn" class="m-2 pb-1 pr-3">
-          Value
-        </label>
-        <Input
-          @type="number"
-          @step={{this.numberStep}}
-          @name="scalar"
-          @size="5"
-          placeholder=""
-          value={{this.dialogValue}}
-          @focus-in={{action "toggleRadio" false}}
-          {{on "change" this.changeValue}}
-        />
+
+        <div class="col-1 p-0">
+          <Input
+            @type="radio"
+            name="interval-number"
+            @value="number" id="value-radio-btn"
+            checked={{not this.isInterval}} {{on "focusin" (action "toggleRadio" false)}}
+          />
+        </div>
+
+        <div class="col-2 p-0">
+          <label for="value-radio-btn" class="m-2 pb-1 pr-3">Value</label>
+        </div>
+
+        <div class="col-4 p-1">
+          <Input
+            @type="number"
+            step={{this.numberStep}}
+            name="scalar"
+            size="5"
+            placeholder=""
+            class="m-0 range-input-text-field"
+            @value={{this.dialogValue}} {{on "change" this.changeValue}} {{on "focusin" (action "toggleRadio" false)}}
+          />
+        </div>
       </div>
 
       {{!-- dialog Cancel and Save buttons --}}
-      <div class="row d-flex justify-content-end mx-2">
-        <button type="button" class="btn btn-secondary btn-sm mr-2"
+      <div class="row d-flex justify-content-end mx-1 p-1">
+        <button type="button" class="btn btn-secondary btn-sm col-2 m-1"
                 onClick={{action "closeModalDialog"}}
          >
           Cancel
         </button>
-        <button type="button" class="btn btn-primary btn-sm"
+        <button type="button" class="btn btn-primary btn-sm col-2 m-1"
                 onClick={{action "onSave"}}
          >
           Save

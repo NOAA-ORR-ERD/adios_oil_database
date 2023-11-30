@@ -10,7 +10,7 @@ $nav-tabs-border-color: #adb5bd;
 $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 
 // main bootstrap import
-@import "ember-cli-bootstrap-4/bootstrap";
+@import "ember-bootstrap/bootstrap";
 @import "controls";
 @import "spinner";
 @import "ember-toggle-ios";
@@ -23,10 +23,19 @@ $nav-tabs-link-active-border-color: #adb5bd #adb5bd $body-bg;
 
 .table th, .table td {
     padding: 0.12rem;
+    border-width: 1px;
 }
 
 td:empty::after{
   content: "\00a0";
+}
+
+.input-group {
+    width: inherit;
+}
+
+.input-group-prepend {
+    width: fit-content;
 }
 
 .input-group-text {
@@ -89,6 +98,14 @@ td:empty::after{
 }
 .reference-textarea {
   width: 100%;
+}
+
+.large-text-container {
+    width: -webkit-fill-available;
+}
+
+.range-input-text-field {
+    width: -webkit-fill-available;
 }
 
 .no-borders{
@@ -155,6 +172,11 @@ td:empty::after{
                     background: #282828;
                 }
             }
+            button{
+                color: #dddddd;
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
         }
     }
 }
@@ -173,6 +195,7 @@ td:empty::after{
     line-height: 1.45;
     float: left;
     margin: 2px 0 2px 3px;
+    width: inherit;
 }
 
 .list-item-alternate-names {

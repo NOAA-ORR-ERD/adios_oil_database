@@ -18,9 +18,8 @@
   <div class="table-responsive">
     <strong>{{@tableTitle}}:</strong>
 
-    <table class="table table-hover table-bordered">
-      <thead aria-controls={{this.tableId}}
-             aria-expanded="false">
+    <table class="table table-hover">
+      <thead aria-controls={{this.tableId}}>
         <tr>
           <th scope="col">{{@leftColumnTitle}}</th>
           <th scope="col">{{@rightColumnTitle}}</th>
@@ -30,7 +29,7 @@
               <button type="button"
                 {{on "click" (fn this.addEmptyTableRow 0)}}
                 class="btn btn-outline-dark btn-sm p-0 border-0">
-                {{fa-icon "plus"}}
+                <FaIcon @icon="plus" />
               </button>
             </td>
           {{/if}}
@@ -64,13 +63,13 @@
                 <button type="button"
                   {{on "click" (fn this.deleteTableRow index)}}
                   class="btn btn-outline-danger btn-sm p-0 border-0">
-                  {{fa-icon "times"}}
+                  <FaIcon @icon="times" />
                 </button>
 
                 <button type="button"
                   {{on "click" (fn this.addEmptyTableRow (add index 1))}}
                   class="btn btn-outline-dark btn-sm p-0 border-0">
-                  {{fa-icon "plus"}}
+                  <FaIcon @icon="plus" />
                 </button>
               </td>
             {{/if}}

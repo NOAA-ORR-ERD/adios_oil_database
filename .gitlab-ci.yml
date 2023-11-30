@@ -6,7 +6,7 @@ include:
   #- template: DAST.gitlab-ci.yml
 
 variables:
-  PYTHON_VER: "3.10"
+  PYTHON_VER: "3.11"
   SECURE_ANALYZERS_PREFIX: "registry.gitlab.com/gitlab-org/security-products/analyzers"
   CS_MAJOR_VERSION: 3
   CLAIR_OUTPUT: High

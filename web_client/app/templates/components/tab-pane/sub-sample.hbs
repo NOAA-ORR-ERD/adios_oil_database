@@ -1,39 +1,14 @@
-<nav>
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    {{#each this.navTabProperties as |props|}}
-      <a data-toggle="tab" role="tab" tab-level="1"
-         id={{props.id}}
-         href={{props.href}}
-         aria-controls={{props.aria-controls}}
-         class={{props.class}}
-         aria-selected={{props.aria-selected}}
-         {{did-insert this.setEventShown}}
-         >
-        {{props.label}}
-      </a>
-    {{/each}}
-  </div>
-</nav>
-
-
-<div class="tab-content" id="nav-tabContent">
+<BsTab as |tab|>
   {{#each this.tabPaneProperties as |props|}}
-    {{#if props.visible}}
-      <div role="tabpanel" tab-level="1"
-           id={{props.id}}
-           aria-labelledby={{props.aria-labelledby}}
-           class={{props.class}}
-      >
-        {{component props.componentName
-          oil=this.sample
-          store=@store
-          editable=@editable
-          submit=(action "submitSample")
-          sampleIndex=this.sampleIndex
-          sampleName=@sampleName
-          distillationTypes=@distillationTypes}}
-      </div>
-    {{/if}}
+    <tab.pane @title={{props.label}}>
+      {{component props.componentName
+        oil=this.sample
+        store=@store
+        editable=@editable
+        submit=(action "submitSample")
+        sampleIndex=this.sampleIndex
+        sampleName=@sampleName
+        distillationTypes=@distillationTypes}}
+    </tab.pane>
   {{/each}}
-
-</div>
+</BsTab>

@@ -1,6 +1,11 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from "@ember/object";
+
 
 export default class ReportProblemQuery extends Component {
+    @tracked dialogVisible = false;
+
     get destination() {
         return 'orr.adios@noaa.gov';
     }
@@ -14,5 +19,15 @@ export default class ReportProblemQuery extends Component {
                 'I noticed a problem when using the oil query table.' +
                 '\n\n<please state your problem>'
                 );
+    }
+
+    @action
+    show_dialog(event) {
+        this.dialogVisible = true;
+    }
+
+    @action
+    close_dialog(event) {
+        this.dialogVisible = false;
     }
 }
