@@ -128,25 +128,47 @@ class Density:
 
 class KinematicViscosity:
     """
-    class to hold and do calculations on kinematic viscosity
+    Class to hold and do calculations on kinematic viscosity
 
-    data is stored internally in standard units:
+    Data is stored internally in standard units:
     temperature in Kelvin
     viscosity in m^2/s
-    """
 
-    def __init__(self, oil):
+    Viscosity as a function of temp is given by:
+        v = A exp(k_v2 / T)
+    """
+    DEFAULT_KV2 = 2100.0  # K
+
+    def __init__(self, oil_or_data, k_v2=None):
         """
-        initialize from an oil object
+        Initialize from an Oil object or data table.
+
+        If an oil object, the viscosity data will be extracted
+        from the data.
+
+        If a data table, it should be in the form::
+
+            [(kvis1, temp1),
+             (kvis2, temp2),
+             (kvis3, temp3),
+             ]
+
+        :param k_v2=None: The "Slope" parameter of the curve.
+                          Used only if there is one data point.
+                          If there are two or more, it is calculated
+                          from a fit to the data points. If not specified
+                          and only one data point, 2100.0K is used, derived
+                          from typical data for crude oils.
+        :type k_v2: float
         """
-        if _is_oil(oil):
-            data = get_kinematic_viscosity_data(oil,
+        if _is_oil(oil_or_data):
+            data = get_kinematic_viscosity_data(oil_or_data,
                                                 units='m^2/s',
                                                 temp_units="K")
         else:
             # not an oil object -- assume it's a table of data in the
             #                      correct form
-            data = oil
+            data = oil_or_data
 
         if data:
             data = sorted(data, key=itemgetter(1))
@@ -155,6 +177,7 @@ class KinematicViscosity:
             self.kviscs = []
             self.temps = []
 
+        self._k_v2 = k_v2
         self.initialize()
 
     def at_temp(self, temp, kvis_units='m^2/s', temp_units="K"):
@@ -204,7 +227,8 @@ class KinematicViscosity:
         if len(kvis) == 0:
             raise ValueError("Cannot initialize a KinematicViscosity object with no data")
         elif len(kvis) == 1:  # use default k_v2
-            self._k_v2 = 2100.0
+            if self._k_v2 is None:
+                self._k_v2 = self.DEFAULT_KV2
             self._visc_A = kvis[0] * np.exp(-self._k_v2 / kvis_ref_temps[0])
         else:
             # do a least squares fit to the data
