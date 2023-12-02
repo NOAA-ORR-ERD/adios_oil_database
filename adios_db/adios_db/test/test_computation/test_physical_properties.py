@@ -464,6 +464,45 @@ class TestKinematicViscosity:
         assert k1_50 < k1_20 < k1_2
         assert k2_50 < k2_20 < k2_2
 
+    def test_one_vicosity_diesel(self):
+        """
+        if there's only one viscocity, and it's a diesel
+        it should use the correct kv_2
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'SimpleULSFO.json')
+
+        kv = KinematicViscosity(oil)
+
+        print(kv._k_v2)
+        assert kv._k_v2 == 6200.0
+
+
+    def test_multiple_vicosities_crude(self):
+        """
+        if there's there's multiple viscosities, it shouldn't use any of the defaults
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'hoops-blend_EX00026.json')
+
+        kv = KinematicViscosity(oil)
+
+        print(kv._k_v2)
+        # This has multiple data points, it should not use any of the default values.
+        for kv_2 in KinematicViscosity.default_kvs.values():
+            assert kv._k_v2 != kv_2
+
+    def test_single_vicosities_crude(self):
+        """
+        if there's only one viscocity, and it's a Crude
+        it should use the correct kv_2
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'ExampleSparseRecord.json')
+
+        kv = KinematicViscosity(oil)
+
+        print(kv._k_v2)
+
+        assert kv._k_v2 == 2099.9999
+
 
 
 def test_get_frac_recovered():

@@ -137,6 +137,15 @@ class KinematicViscosity:
     Viscosity as a function of temp is given by:
         v = A exp(k_v2 / T)
     """
+    # Default constants for when there is only one viscosity
+    # data point.
+    # fixme: we need to get numbers for all oil types!
+    #        including Crude -- 2100 is the old ADIOS2 value
+    default_kvs = {"Crude Oil NOS": 2099.9999,  # only so we can distingish from default
+                   "Distillate Fuel Oil": 6200.0,
+                   }
+    # value to us if it's not in the above dict -- or
+    # if product type is unknown.
     DEFAULT_KV2 = 2100.0  # K
 
     def __init__(self, oil_or_data, k_v2=None):
@@ -165,10 +174,15 @@ class KinematicViscosity:
             data = get_kinematic_viscosity_data(oil_or_data,
                                                 units='m^2/s',
                                                 temp_units="K")
+            if k_v2 is None:
+                k_v2 = self.default_kvs.get(oil_or_data.metadata.product_type,
+                                            self.DEFAULT_KV2)
+
         else:
             # not an oil object -- assume it's a table of data in the
             #                      correct form
             data = oil_or_data
+            k_v2 = k_v2 if k_v2 is not None else self.DEFAULT_KV2
 
         if data:
             data = sorted(data, key=itemgetter(1))
@@ -227,8 +241,8 @@ class KinematicViscosity:
         if len(kvis) == 0:
             raise ValueError("Cannot initialize a KinematicViscosity object with no data")
         elif len(kvis) == 1:  # use default k_v2
-            if self._k_v2 is None:
-                self._k_v2 = self.DEFAULT_KV2
+            # if self._k_v2 is None:
+            #     self._k_v2 = self.DEFAULT_KV2
             self._visc_A = kvis[0] * np.exp(-self._k_v2 / kvis_ref_temps[0])
         else:
             # do a least squares fit to the data
