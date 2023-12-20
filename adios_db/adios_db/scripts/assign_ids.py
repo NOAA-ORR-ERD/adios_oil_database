@@ -60,9 +60,9 @@ def main():
             max_id = max(max_id, int(id[len(prefix):]))
 
     # assign the ids:
-    max_id += 1
+    # max_id += 1
     for fname in infiles:
-        file_dir = Path(fname).parent
+        # file_dir = Path(fname).parent
         max_id += 1
         oil = Oil.from_file(fname)
         id = oil.oil_id
@@ -70,7 +70,8 @@ def main():
         new_id = f"{prefix}{max_id:05}"
         print(f"assigning: {new_id} to: {name}")
         oil.oil_id = new_id
-        new_fname = file_dir / f"{new_id}.json"
+        (base_dir / prefix).mkdir(exist_ok=True)
+        new_fname = base_dir / prefix / f"{new_id}.json"
         if not dry_run:
             print("Saving to:", new_fname)
             oil.to_file(new_fname)

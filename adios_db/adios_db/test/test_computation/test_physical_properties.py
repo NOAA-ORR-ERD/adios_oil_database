@@ -501,8 +501,7 @@ class TestKinematicViscosity:
 
         print(kv._k_v2)
 
-        assert kv._k_v2 == 2099.9999
-
+        assert kv._k_v2 == KinematicViscosity.default_kvs[oil.metadata.product_type]
 
 
 def test_get_frac_recovered():
