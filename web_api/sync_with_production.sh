@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Script to backup oil database and set it to production branch
-echo "In sync_with_production.sh script"
 
+echo "Inside Script: $0"
 set -e  # exit script if any commands fail
 set -x  # echo commands to stdout
 
@@ -25,7 +25,8 @@ git config user.email "adios-script@noaa.gov"
 git config user.name "Adios Automated Script"
 
 
-# this will update the local list of remote branches
+# this will update the local list of remote branches, as they may change
+# when a merge request removes a branch and squashes commits.
 git remote update origin --prune
 
 git status
