@@ -10,7 +10,7 @@
 
     <table class="table table-hover table-bordered">
       <tbody>
-        {{#if (or @editable anyDataPresent)}}
+        {{#if (or @editable this.anyDataPresent)}}
           {{#each-in this.properties as |attr value|}}
             <tr>
               {{!-- <td>{{attr}}</td> --}}

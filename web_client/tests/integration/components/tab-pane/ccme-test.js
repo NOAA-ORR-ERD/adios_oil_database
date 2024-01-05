@@ -16,9 +16,9 @@ module('Integration | Component | tab-pane/ccme', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#tab-pane/ccme}}
+      <TabPane::Ccme>
         template block text
-      {{/tab-pane/ccme}}
+      </TabPane::Ccme>
     `);
 
     assert.dom(this.element).hasText('template block text');

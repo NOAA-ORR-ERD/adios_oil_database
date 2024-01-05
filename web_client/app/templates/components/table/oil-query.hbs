@@ -1,13 +1,13 @@
-{{#light-table table height="65vh" class="w-100" as |t|}}
+<LightTable @table={{this.table}} @height="65vh" class="w-100" as |t| >
   <div class="container-fluid mb-2">
     <div class="row">
       <div class="col-3">
         <div class="row h-100 ml-1 align-items-center">
           <input class="form-control"
-            value={{q}}
+            value={{this.q}}
             title="Search ID, Name, or Location"
             placeholder="Search ID, Name, or Location"
-            oninput={{action (pipe (action (mut q)) (action "onSearchChange")) value="target.value"}}
+            oninput={{action (pipe (action (mut this.q)) (action "onSearchChange")) value="target.value"}}
           >
         </div>
 
@@ -63,7 +63,7 @@
             >
               <option class="bg-light" value="">unspecified</option>
 
-              {{#each @productTypes.firstObject.product_types as |oilType|}}
+              {{#each (get @productTypes "0.product_types") as |oilType|}}
                 {{#if (eq oilType this.selectedType)}}
                   <option class="bg-light" selected>{{oilType}}</option>
                 {{else}}
@@ -114,20 +114,20 @@
     @enableScaffolding={{true}}
     @autoHideScrollbar={{false}} as |body|
   >
-    {{#if isLoading}}
-      {{#body.loader}}
+    {{#if this.isLoading}}
+      <body.loader>
         <Table::Loader />
-      {{/body.loader}}
-    {{else if table.isEmpty}}
-      {{#body.no-data}}
+      </body.loader>
+    {{else if this.table.isEmpty}}
+      <body.no-data>
         <p class="text-center">
           <strong>Sorry, your filter produced no results</strong>
         </p>
         <p class="text-center">
           To widen your search, change or remove filters above
         </p>
-      {{/body.no-data}}
+      </body.no-data>
     {{/if}}
   </t.body>
 
-{{/light-table}}
+</LightTable>

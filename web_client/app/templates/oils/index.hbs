@@ -5,10 +5,10 @@
     </div>
 
     <div class="align-content-right">
-      {{#if this.canModifyDb}}
-        <Button::AddNewOil @submit={{action send "createOil"}} />
+      {{#if this.canModifyDb }}
+        <Button::AddNewOil @submit={{action "createOil"}} />
 
-        <Button::Upload @submit={{action send "createOil"}} />
+        <Button::Upload @submit={{action "createOil"}} />
       {{/if}}
 
       <Button::ReportProblemQuery/>

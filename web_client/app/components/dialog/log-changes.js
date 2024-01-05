@@ -25,7 +25,7 @@ export default class LogChangesDlg extends BaseComponent {
             this.okButton.focus();
         }
     }
-    
+
     @action
     updateName(event) {
         this.name = event.target.value;
@@ -36,6 +36,11 @@ export default class LogChangesDlg extends BaseComponent {
     updateComment(event) {
         this.comment = event.target.value;
         this.focusOKButton(event);
+    }
+
+    @action
+    closeForm() {
+        this.args.close();
     }
 
     @action
@@ -54,5 +59,4 @@ export default class LogChangesDlg extends BaseComponent {
 
         this.args.submit(this.args.oil);
     }
-
 }

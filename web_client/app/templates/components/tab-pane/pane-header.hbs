@@ -1,10 +1,9 @@
 <div class="text-center">
   {{#if @editable}}
     <Input
-      @class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
+      class="edit-sample-name p-1 my-3 flex-fill bg-transparent border"
       @value={{@oil.metadata.name}}
-      @placeholder="Enter Sample Name"
-      @change={{action @submit @oil}}
+      placeholder="Enter Sample Name" {{on "change" (action @submit @oil)}}
     />
   {{else}}
     <h4>

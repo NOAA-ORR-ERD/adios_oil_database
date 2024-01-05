@@ -2,7 +2,8 @@ import ApplicationRoute from './application';
 
 
 export default class IndexRoute extends ApplicationRoute {
-    redirect() {
-        this.transitionTo('oils');
+    beforeModel(/* transition */) {
+        // Implicitly aborts the on-going transition.
+        this.router.transitionTo('oils');
     }
 }

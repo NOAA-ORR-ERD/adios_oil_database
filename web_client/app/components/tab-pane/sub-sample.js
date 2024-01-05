@@ -78,55 +78,21 @@ export default class SubSample extends Component {
         return ret;
     }
 
-    get navTabProperties() {
-        return [
-            ['physical', 'Physical Properties'],
-            ['distillation', 'Distillation Data'],
-            ['compounds', 'Compounds'],
-            ['bulk-composition', 'Bulk Composition'],
-            ['environmental', 'Environmental Behavior'],
-            ['industry-properties', 'Industry Properties'],
-            ['metadata', 'Metadata']
-        ].map((item) => {
-            let [tabName, label] = item;
-            let ret = {
-                'label': label,
-                'id': this.sampleTab() + '-' + tabName + '-nav-tab',
-                'href': '#' + this.sampleTab() + '-' + tabName,
-                'aria-controls': this.sampleTab() + '-' + tabName,
-            }
-
-            if ('#' + this.categoryTab() === ret['href']) {
-                return {
-                    ...ret,
-                    'class': 'nav-item nav-link active',
-                    'aria-selected': true
-                };
-            }
-            else {
-                return {
-                    ...ret,
-                    'class': 'nav-item nav-link',
-                    'aria-selected': false
-                };
-            }
-        });
-    }
-
     get tabPaneProperties() {
         return [
-            ['physical', 'tab-pane/physical'],
-            ['distillation', 'tab-pane/distillation'],
-            ['compounds', 'tab-pane/compounds'],
-            ['bulk-composition', 'tab-pane/bulk-composition'],
-            ['environmental', 'tab-pane/environmental'],
-            ['industry-properties', 'tab-pane/industry-properties'],
-            ['metadata', 'tab-pane/subsample-metadata']
+            ['physical', 'tab-pane/physical', 'Physical Properties'],
+            ['distillation', 'tab-pane/distillation', 'Distillation Data'],
+            ['compounds', 'tab-pane/compounds', 'Compounds'],
+            ['bulk-composition', 'tab-pane/bulk-composition', 'Bulk Composition'],
+            ['environmental', 'tab-pane/environmental', 'Environmental Behavior'],
+            ['industry-properties', 'tab-pane/industry-properties', 'Industry Properties'],
+            ['metadata', 'tab-pane/subsample-metadata', 'Metadata']
         ].map((item) => {
-            let [tabName, componentName] = item;
+            let [tabName, componentName, label] = item;
 
             let ret = {
                 'id': this.sampleTab() + '-' + tabName,
+                'label': label,
                 'aria-labelledby': this.sampleTab() + '-' + tabName + '-nav-tab',
                 'componentName': componentName,
                 'visible': this.visible(tabName)

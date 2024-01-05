@@ -16,9 +16,9 @@ module('Integration | Component | tab-pane/physical', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#tab-pane/physical}}
+      <TabPane::Physical>
         template block text
-      {{/tab-pane/physical}}
+      </TabPane::Physical>
     `);
 
     assert.dom(this.element).hasText('template block text');

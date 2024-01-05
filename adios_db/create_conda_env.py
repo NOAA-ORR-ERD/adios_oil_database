@@ -17,7 +17,7 @@ default is "run" -- full dev environment
 
 "all" will install everything for running and testing with mongodb
 
-NOTE: currently hard-coded for Python 3.9
+NOTE: currently hard-coded for Python 3.10
 """
 
 if __name__ == "__main__":
@@ -37,7 +37,7 @@ if __name__ == "__main__":
         reqs.append("conda_requirements_optional.txt")
         reqs.append("docs_requirements.txt")
 
-    cmd = ["conda", "create", "-n", env_name, "python=3.9"]
+    cmd = ["conda", "create", "-n", env_name, "python=3.10"]
 
     for req in reqs:
         cmd.extend(["--file", req])

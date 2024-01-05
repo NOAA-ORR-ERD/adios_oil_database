@@ -16,9 +16,9 @@ module('Integration | Component | tab-pane/weathered-top-level', function(hooks)
 
     // Template block usage:
     await render(hbs`
-      {{#tab-pane/weathered-top-level}}
+      <TabPane::WeatheredTopLevel>
         template block text
-      {{/tab-pane/weathered-top-level}}
+      </TabPane::WeatheredTopLevel>
     `);
 
     assert.dom(this.element).hasText('template block text');

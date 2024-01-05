@@ -76,6 +76,7 @@ class Sample:
     def __post_init__(self):
         metadata = self.metadata
 
+        # fixme -- this should not be built in to the object!!
         if metadata.name is not None:
             if metadata.name.lower() == 'whole crude':
                 metadata.name = 'Fresh Oil Sample'
@@ -84,7 +85,7 @@ class Sample:
             if metadata.name.lower() == 'fresh oil sample':
                 metadata.short_name = 'Fresh Oil'
             else:
-                metadata.short_name = f'{self.name[:12]}...'
+                metadata.short_name = f'{metadata.name[:12]}...'
 
     def __repr__(self):
         return f"sample: {self.metadata.name}\n{self.metadata.description}"

@@ -19,6 +19,7 @@ ERRORS = {
     "E044": "Value: '{}' for '{}' is not valid",
     "E045": "Unit: '{}' is not a valid unit for unit type: '{}'. Options are: {}",
     "E046": "A unit must be specified for unit type: '{}'",
+    "E047": "A measurement can not have min, max, and value: '{}'",
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",

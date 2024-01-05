@@ -1,12 +1,13 @@
-<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Make a Copy"
-        disabled={{@changesMade}}
-        data-toggle="modal"
-        data-target="#copyOilDialog" >
+<BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.show_dialog}} >
   Copy
-</button>
+</BsButton>
 
-<Dialog::CopyOil
-  @oil={{@oil}}
-  @submit={{@submit}}
-/>
+
+{{#if this.dialogVisible}}
+  <Dialog::CopyOil
+    @oil={{@oil}}
+    @submit={{this.submit}}
+    @close={{this.close_dialog}}
+  />
+{{/if}}

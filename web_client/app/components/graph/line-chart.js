@@ -101,12 +101,12 @@ export default class LineChart extends Component {
                 'width',
                 'height'
                 ].map((s, i) => {
-                    return [s, this.args.size[s] - marginSizes[i]];
+                    return [s, this.args.size[i] - marginSizes[i]];
                 }));
         }
         else {
-            let width = this.clientWidth - m.right - m.left;
-            let height = (this.clientWidth / this.aspectRatio) - m.top - m.bottom;
+            let width = Math.max(350, window.innerWidth / 2.5) - m.right - m.left;
+            let height = (width / this.aspectRatio) - m.top - m.bottom;
 
             return {
                 width: width,

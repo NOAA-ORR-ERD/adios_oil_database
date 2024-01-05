@@ -8,7 +8,7 @@
       {{/if}}
     </div>
 
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover">
       {{#if @editable}}
         <thead>
           <tr>
@@ -18,14 +18,14 @@
                   <button type="button"
                     {{on "click" (fn this.deleteTableRow (sub index 1))}}
                     class="btn btn-outline-danger btn-sm p-0 border-0">
-                    {{fa-icon "times"}}
+                    <FaIcon @icon="times" />
                   </button>
                 {{/if}}
 
                 <button type="button"
                   {{on "click" (fn this.addEmptyTableRow index)}}
                   class="btn btn-outline-dark btn-sm p-0 border-0">
-                  {{fa-icon "plus"}}
+                  <FaIcon @icon="plus" />
                 </button>
               </td>
             {{/each}}
@@ -35,7 +35,7 @@
       {{/if}}
 
       <tbody>
-        {{#if (or @editable anyDataPresent)}}
+        {{#if (or @editable this.anyDataPresent)}}
           {{#each-in this.properties as |attr value|}}
             <tr>
               <th scope="col">{{value.label}}</th>
@@ -53,22 +53,18 @@
                     />
                   {{else if (eq value.dataType "string")}}
                     {{#if @editable}}
-                      <Input @class="p-1 overflow-hidden bg-transparent border"
+                      <Input class="p-1 overflow-hidden bg-transparent border"
                         @value={{get col attr}}
-                        @placeholder="Enter Value"
-                        @change={{fn this.updateListString index attr}}
-                        size={{if value.size value.size "10"}}
+                        placeholder="Enter Value" size={{if value.size value.size "10"}} {{on "change" (fn this.updateListString index attr)}}
                       />
                     {{else}}
                       <span class="p-1">{{get col attr}}</span>
                     {{/if}}
                   {{else if (eq value.dataType "number")}}
                     {{#if @editable}}
-                      <Input @class="p-1 overflow-hidden bg-transparent border"
+                      <Input class="p-1 overflow-hidden bg-transparent border"
                         @value={{get col attr}}
-                        @placeholder="Enter Value"
-                        @change={{fn this.updateListString index attr}}
-                        size={{if value.size value.size "10"}}
+                        placeholder="Enter Value" size={{if value.size value.size "10"}} {{on "change" (fn this.updateListString index attr)}}
                       />
                     {{else}}
                       <span class="p-1">{{get col attr}}</span>

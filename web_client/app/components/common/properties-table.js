@@ -27,7 +27,9 @@ export default class PropertiesTable extends BaseComponent {
         }
         else {
             // Otherwise use the slugified table title
-            this.template = slugify(this.args.tableTitle, { separator: '_' }) + '.json';
+            this.template = slugify(this.args.tableTitle, {
+                replacement: '_'
+            }) + '.json';
         }
     }
 

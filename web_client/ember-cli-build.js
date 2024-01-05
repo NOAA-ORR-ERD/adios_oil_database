@@ -4,11 +4,10 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
-    // // Add options here
-    // // This is an attempt to prepend a path for the stand-alone
-    // fingerprint: {
-    // prepend: 'http://0.0.0.0:9898/client/'
-    //}
+    'ember-bootstrap': {
+      bootstrapVersion: 5,
+      importBootstrapCSS: false
+    }
   });
   // Use `app.import` to add additional libraries to the generated
   // output files.

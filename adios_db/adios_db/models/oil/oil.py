@@ -24,10 +24,15 @@ from .review_status import ReviewStatus
 
 ADIOS_DATA_MODEL_VERSION = Version(0, 12, 0)
 
+def get_current_version():
+    return ADIOS_DATA_MODEL_VERSION
+
+
 from .version_update import update_json  # noqa: E402
 
 # from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS  # noqa: E402
+from .validation.warnings import WARNINGS  # noqa: E402
 
 
 @dataclass_to_json
@@ -35,6 +40,7 @@ from .validation.errors import ERRORS  # noqa: E402
 class Oil:
     oil_id: str  # required
     adios_data_model_version: Version = ADIOS_DATA_MODEL_VERSION
+    # adios_data_model_version: Version = field(default_factory=get_current_version)
     metadata: MetaData = field(default_factory=MetaData)
     sub_samples: SampleList = field(default_factory=SampleList)
     status: list = field(default_factory=list)
@@ -108,6 +114,7 @@ class Oil:
 
         validation of sub-objects is automatically applied
         """
+        msgs = []
         try:
             # See if it can be used as a GNOME oil
             # NOTE: This is an odd one, as it puts the information in a
@@ -116,10 +123,10 @@ class Oil:
             # NOTE: If it barfs for any reason it's not suitable
             make_gnome_oil(copy.deepcopy(self))
             self.metadata.gnome_suitable = True
-        except Exception:
+        except Exception as ex:
+            print(ex)
             self.metadata.gnome_suitable = False
-
-        msgs = []
+            msgs.append(WARNINGS["W100"].format(str(ex)))
 
         try:
             self._validate_id(self.oil_id)

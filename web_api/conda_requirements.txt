@@ -1,14 +1,8 @@
 # conda requirements file for the adios_db_api package.
 
-# These should all be in one of the following channels:
-# 1: conda-forge
-# 2: NOAA-ORR-ERD channel
-# 3: defaults
-#
-# It would be best to have these channels configured the order of precedence
-# outlined above in your conda configuration.
+# These should all be in the conda-forge channel
 
-python>=3.9,<3.11
+python>=3.9,<3.12
 
 pyramid>=1.10.1,<2
 pyramid_tm
@@ -16,14 +10,16 @@ pyramid_debugtoolbar
 cornice>=3.4.4  # Use the NOAA fork with pip for PyInstaller
 paste
 pastedeploy>=2.0.1
-pymongo
+
+# for working with mongodb
+pymongo>=3.11.0
+
 waitress
 ujson
 docutils>=0.15.2
 
 pytest>=3.8.0
 WebTest
-# pyinstaller
 psutil
 
 # The oil database is required, but is located within this project

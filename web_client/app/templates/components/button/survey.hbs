@@ -1,9 +1,10 @@
-<a type="button"
-   href="#"
-   title="Website Survey"
-   data-toggle="modal"
-   data-target="#surveyDialog" >
+<BsButton @type="link"
+          @onClick={{this.show_dialog}} >
   Website Survey
-</a>
+</BsButton>
 
-<Dialog::Survey/>
+
+{{#if this.dialogVisible}}
+  <Dialog::Survey/>
+{{/if}}
+

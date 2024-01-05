@@ -16,9 +16,9 @@ module('Integration | Component | table/sulfur', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#table/sulfur}}
+      <Table::Sulfur>
         template block text
-      {{/table/sulfur}}
+      </Table::Sulfur>
     `);
 
     assert.dom(this.element).hasText('template block text');

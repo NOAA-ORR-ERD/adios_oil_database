@@ -1,55 +1,42 @@
-<ModalDialog
-  @onClose={{this.closeModal}}
-  @translucentOverlay={{false}}
-  @targetAttachment="center left"
-  @tetherTarget={{@parent}}
-  @attachment="center left"
->
-  <div class="card">
-
-    <h5 class="card-header text-center p-1">
-      Select Unit
-    </h5>
-
+<BsModal @onSubmit={{action "submitForm"}}
+         @onHidden={{action "closeModal"}}
+         as |Modal|>
+  <Modal.header>
+    <h5 class="card-header text-center p-1">Select Unit</h5>
+  </Modal.header>
+  <Modal.body>
     <div class="card-body p-1">
       <div class="row d-flex align-items-center mx-2">
 
-        <select name="unit-type" id="unit-type"
-                {{on "change" this.updateUnitType}}
-        >
-          {{#each this.unitTypeNames as |name|}}
-            <option value={{get name 0}} selected={{get name 1}}>
-              {{get name 0}}
-            </option>
-          {{/each}}
-        </select>
+        <div class="col-6 p-1">
+          <select name="unit-type" id="unit-type"
+                  {{on "change" this.updateUnitType}}
+          >
+            {{#each this.unitTypeNames as |name|}}
+              <option value={{get name 0}} selected={{get name 1}}>
+                {{get name 0}}
+              </option>
+            {{/each}}
+          </select>
+        </div>
 
-        <select name="unit" id="unit"
-                {{on "change" this.updateUnit}}
-        >
-          {{#each this.primaryUnitNames as |primaryName|}}
-            <option value={{get primaryName 0}} selected={{get primaryName 1}}>
-              {{get primaryName 0}}
-            </option>
-          {{/each}}
-        </select>
+        <div class="col-6 p-1">
+          <select name="unit" id="unit"
+                  {{on "change" this.updateUnit}}
+          >
+            {{#each this.primaryUnitNames as |primaryName|}}
+              <option value={{get primaryName 0}} selected={{get primaryName 1}}>
+                {{get primaryName 0}}
+              </option>
+            {{/each}}
+          </select>
+        </div>
 
       </div>
     </div>
-
-    <div class="row d-flex justify-content-end mx-2">
-      <button type="button" class="btn btn-secondary btn-sm mr-2"
-              {{on "click" this.closeModal}}
-       >
-        Cancel
-      </button>
-
-      <button type="button" class="btn btn-primary btn-sm"
-              {{on "click" this.submitForm}}
-       >
-        OK
-      </button>
-    </div>
-
-  </div>
-</ModalDialog>
+  </Modal.body>
+  <Modal.footer as |footer|>
+    <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
+    <BsButton @onClick={{action Modal.submit}} @type="primary">OK</BsButton>
+  </Modal.footer>
+</BsModal>
