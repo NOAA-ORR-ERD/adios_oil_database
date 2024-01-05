@@ -16,9 +16,9 @@ module('Integration | Component | table/sara', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#table/sara}}
+      <Table::Sara>
         template block text
-      {{/table/sara}}
+      </Table::Sara>
     `);
 
     assert.dom(this.element).hasText('template block text');

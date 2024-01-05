@@ -5,7 +5,7 @@ include:
   #- template: DAST.gitlab-ci.yml
 
 variables:
-  PYTHON_VER: "3.10"
+  PYTHON_VER: "3.11"
   SECURE_ANALYZERS_PREFIX: "registry.gitlab.com/gitlab-org/security-products/analyzers"
   CS_MAJOR_VERSION: 3
   CLAIR_OUTPUT: High
@@ -37,7 +37,9 @@ test_develop:
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
     - yum update -y
-    - conda update -y conda
+    # - conda update -y conda
+    # - conda update -y mamba
+
 
   script:
     # install all the requirements
@@ -64,12 +66,12 @@ test_develop:
     # Install & test the adios_db package
     - cd adios_db
     - pip install ./
-    - pytest --mongo adios_db
+    - pytest --mongo adios_db/test
 
     # Install & test the adios_db_api package
     - cd ../web_api
     - pip install ./
-    - pytest adios_db_api
+    - pytest adios_db_api/tests
 
 build_api:
   stage: build
@@ -329,6 +331,7 @@ deploy_api_stage:
     - >
       docker volume inspect $KC_CONFIG_VOLUME >/dev/null 2>&1 ||
       docker volume create $KC_CONFIG_VOLUME
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -394,6 +397,7 @@ deploy_oauth_api_stage:
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -456,6 +460,7 @@ deploy_client_stage:
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     - >
@@ -515,6 +520,7 @@ deploy_oauth_client_stage:
     - >
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
     - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
     #- OAUTH2_PROXY_CLIENT_SECRET=`cat /data/adios_oil_db/oauth-proxy-client-secret.txt`
@@ -713,7 +719,7 @@ stop_proxy_public:
 
 init_git_repo_on_stage:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   
   environment:
@@ -724,6 +730,7 @@ init_git_repo_on_stage:
     SCRIPT_NAME: init_noaa_data.sh
   script:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
   tags:
@@ -731,7 +738,7 @@ init_git_repo_on_stage:
 
 sync_with_git_review:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   environment:
@@ -744,11 +751,12 @@ sync_with_git_review:
     SCRIPT_NAME: sync_with_under_review.sh
   script:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
 sync_with_git_prod:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   environment:
     name: stage
@@ -760,11 +768,29 @@ sync_with_git_prod:
     SCRIPT_NAME: sync_with_production.sh
   script:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
+    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
+
+pull_remote_under_review_changes:
+  stage: maintenance
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+  when: manual
+  environment:
+    name: stage
+    url: https://adios-stage.orr.noaa.gov
+  tags:
+    - adios-stage
+  variables:
+    CONTAINER_NAME: adios_db_web_api
+    SCRIPT_NAME: pull_remote_under_review_changes.sh
+  script:
+    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
 drop_db_volume_public:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
   when: manual
   environment:
     name: public

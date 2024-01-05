@@ -16,9 +16,9 @@ module('Integration | Component | table/alkylated-pah', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#table/alkylated-pah}}
+      <Table::AlkylatedPah>
         template block text
-      {{/table/alkylated-pah}}
+      </Table::AlkylatedPah>
     `);
 
     assert.dom(this.element).hasText('template block text');

@@ -16,9 +16,9 @@ module('Integration | Component | tab-pane/environmental', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#tab-pane/environmental}}
+      <TabPane::Environmental>
         template block text
-      {{/tab-pane/environmental}}
+      </TabPane::Environmental>
     `);
 
     assert.dom(this.element).hasText('template block text');

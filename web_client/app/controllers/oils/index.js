@@ -1,5 +1,6 @@
 import OilsController from '../oils';
 import { tracked } from '@glimmer/tracking';
+import { action } from "@ember/object";
 
 
 export default class IndexController extends OilsController {
@@ -11,11 +12,8 @@ export default class IndexController extends OilsController {
         'gnomeSuitable': false
     };
 
-    get canModifyDb() {
-        return this.capabilities.firstObject.can_modify_db == 'true';
-    }
-    
     get warningIgnoreList() {
         return this.configs.ignoreWarnings;
     }
+
 }

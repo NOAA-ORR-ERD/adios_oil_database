@@ -1,3 +1,7 @@
-import templateOnly from '@ember/component/template-only';
+import Component from '@glimmer/component';
+import { ref } from 'ember-ref-bucket';
 
-export default templateOnly();
+
+export default class SurveyDialog extends Component {
+    @ref("okButton") okButton; 
+}

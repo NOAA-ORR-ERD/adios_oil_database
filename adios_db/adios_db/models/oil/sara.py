@@ -37,5 +37,8 @@ class Sara:
                 setattr(sara, field, MassFraction(value, unit))
         return sara
 
-
-
+    def __bool__(self):
+        return not (self.saturates is None
+                    and self.aromatics is None
+                    and self.resins is None
+                    and self.asphaltenes is None)

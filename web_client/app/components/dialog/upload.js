@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 
+
 export default class UploadDlg extends Component {
     @tracked file;
 
@@ -46,6 +47,11 @@ export default class UploadDlg extends Component {
             this.file = null;
         }
 
+    }
+
+    @action
+    closeForm() {
+        this.args.close();
     }
 
     @action

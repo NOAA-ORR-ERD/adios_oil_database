@@ -6,10 +6,9 @@
         <strong>Subsample Name:&nbsp;</strong>
         {{#if @editable}}
           <Input
-            @class="p-0 flex-fill bg-transparent border"
+            class="p-0 flex-fill bg-transparent border"
             @value={{@oil.metadata.name}}
-            @placeholder="Enter Sample Name"
-            @change={{action @submit @oil}}
+            placeholder="Enter Sample Name" {{on "change" (action @submit @oil)}}
           />
         {{else}}
           {{@oil.metadata.name}}
@@ -20,10 +19,9 @@
         <strong>Short Name:&nbsp;</strong>
         {{#if @editable}}
           <Input
-            @class="p-0 flex-fill bg-transparent border"
+            class="p-0 flex-fill bg-transparent border"
             @value={{@oil.metadata.short_name}}
-            @placeholder="Enter Short Name"
-            @change={{action @submit @oil}}
+            placeholder="Enter Short Name" {{on "change" (action @submit @oil)}}
           />
         {{else}}
           {{@oil.metadata.short_name}}
@@ -34,11 +32,9 @@
         <strong>Sample ID:&nbsp;</strong>
         {{#if @editable}}
           <Input
-            @class="p-0 flex-fill bg-transparent border"
+            class="p-0 flex-fill bg-transparent border"
             @value={{@oil.metadata.sample_id}}
-            @placeholder="Enter Sample ID"
-            @change={{action @submit @oil}}
-            size="10"
+            placeholder="Enter Sample ID" size="10" {{on "change" (action @submit @oil)}}
           />
         {{else}}
           {{@oil.metadata.sample_id}}
@@ -46,7 +42,7 @@
       </div>
 
       <div class="row pl-0 mb-1">
-        <form class="form-inline justify-content-center" role="form">
+        <form class="form-inline justify-content-center">
           <div class="form-group">
             <strong>
               {{this.fractionEvaporatedUnitType}}
@@ -92,9 +88,9 @@
                   @oil.metadata.description
                   (if @editable "" "None")) as |sampleDescription|}}
             <Textarea
-              @class="p-1 reference-textarea overflow-hidden bg-transparent border"
+              class="p-1 reference-textarea overflow-hidden bg-transparent border"
               @value={{sampleDescription}}
-              @placeholder="Enter description"
+              placeholder="Enter description"
               @change={{action "updateDescription"}}
               rows="4"
               disabled={{not @editable}}

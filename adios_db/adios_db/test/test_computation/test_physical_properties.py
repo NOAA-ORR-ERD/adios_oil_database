@@ -83,6 +83,39 @@ def test_get_kinematic_viscosity_data_defaults():
     assert isclose(kv[1][1], 288.15, rel_tol=1e-6)  # temp
 
 
+def test_get_dynamic_viscosity_data_multiple_shear_rates_default():
+    oil = Oil.from_file(EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json")
+    dv = get_dynamic_viscosity_data(oil)
+
+    print(oil.oil_id)
+
+    assert len(dv) == 2
+
+    print(dv)
+
+    assert isclose(dv[0][0], 6.402, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[0][1], 275.15, rel_tol=1e-6)  # temp
+    assert isclose(dv[1][0], 1.199, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[1][1], 288.15, rel_tol=1e-6)  # temp
+
+
+def test_get_dynamic_viscosity_data_multiple_shear_rates_set():
+    oil = Oil.from_file(EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json")
+
+    dv = get_dynamic_viscosity_data(oil, shear_rate=100)
+
+    print(oil.oil_id)
+
+    assert len(dv) == 2
+
+    print(dv)
+
+    assert isclose(dv[0][0], 1.954, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[0][1], 275.15, rel_tol=1e-6)  # temp
+    assert isclose(dv[1][0], 0.582, rel_tol=1e-6)  # dvisc
+    assert isclose(dv[1][1], 288.15, rel_tol=1e-6)  # temp
+
+
 def test_get_kinematic_viscosity_data_no_data():
     """
     Issue:
@@ -100,6 +133,7 @@ def test_get_kinematic_viscosity_data_no_data():
     kv = get_kinematic_viscosity_data(oil)
 
     assert kv == []
+
 
 
 # def test_get_kinematic_viscosity_data_from_dynamic():
@@ -362,20 +396,112 @@ class TestKinematicViscosity:
         with pytest.raises(ValueError):
             _ = KinematicViscosity(oil)
 
-    @pytest.mark.xfail
+#    @pytest.mark.xfail
     def test_from_raw_data(self):
-        """
-        This record has no viscosity data -- should raise
-        """
-        # these were dynamic
+        # two data points should be an exact fit at the points
         data = [(0.043, 275.15),  # 2C
-                (0.012, 288.15),  # 15C
                 (0.0054, 323.15)]  # 50C
 
         kv = KinematicViscosity(data)
 
-        k = kv.at_temp(2, kvis_units='m^2/s', temp_units="C")
-        assert isclose(k, 0.043, rel_tol=1e-4)
+        k2 = kv.at_temp(2, kvis_units='m^2/s', temp_units="C")
+        assert isclose(k2, 0.043, rel_tol=1e-4)
+        k50 = kv.at_temp(50, kvis_units='m^2/s', temp_units="C")
+        assert isclose(k50, 0.0054, rel_tol=1e-4)
+
+        # intermediate temp should be in between
+        k20 = kv.at_temp(20, kvis_units='m^2/s', temp_units="C")
+        assert k50 < k20 < k2
+
+    def test_set_kv2(self):
+        """
+        The curve:
+
+        v = A exp(k_v2 / T)
+
+        Is fit to two or more data points. If only one is provided,
+        then k_v2 must be assumed.
+
+        This is testing that it works to specify it.
+        """
+        # one data point should be an exact fit at that point
+        data = [
+                # (0.043, 275.15),  # 2C
+                (0.0054, 323.15),  # 50C
+                ]
+
+        # not specified -- uses the default default :-)
+        # (2100 K)
+        kv1 = KinematicViscosity(data)
+        kv2 = KinematicViscosity(data, k_v2=3000.0)
+
+        # calculated from above data:
+        # kv._k_v2=3843.3410327682077
+        # kv._visc_A=3.691227309345265e-08
+
+        # with the default and only the 50C point
+        # kv._k_v2=2100.0
+        # kv._visc_A=8.130513951017499e-06
+
+        print(f"{kv2._k_v2=}")
+        print(f"{kv2._visc_A=}")
+
+        assert kv1._k_v2 == KinematicViscosity.DEFAULT_KV2
+        assert kv2._k_v2 == 3000.0
+
+        k1_2 = kv1.at_temp(2, kvis_units='m^2/s', temp_units="C")
+        k2_2 = kv2.at_temp(2, kvis_units='m^2/s', temp_units="C")
+        # assert isclose(k1_2, 0.043, rel_tol=1e-4)
+
+        # both should match the one point provided
+        k1_50 = kv1.at_temp(50, kvis_units='m^2/s', temp_units="C")
+        k2_50 = kv2.at_temp(50, kvis_units='m^2/s', temp_units="C")
+        assert isclose(k2_50, 0.0054, rel_tol=1e-4)
+
+        # intermediate temp should be in between
+        k1_20 = kv1.at_temp(20, kvis_units='m^2/s', temp_units="C")
+        k2_20 = kv2.at_temp(20, kvis_units='m^2/s', temp_units="C")
+        assert k1_50 < k1_20 < k1_2
+        assert k2_50 < k2_20 < k2_2
+
+    def test_one_vicosity_diesel(self):
+        """
+        if there's only one viscocity, and it's a diesel
+        it should use the correct kv_2
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'SimpleULSFO.json')
+
+        kv = KinematicViscosity(oil)
+
+        print(kv._k_v2)
+        assert kv._k_v2 == 6200.0
+
+
+    def test_multiple_vicosities_crude(self):
+        """
+        if there's there's multiple viscosities, it shouldn't use any of the defaults
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'hoops-blend_EX00026.json')
+
+        kv = KinematicViscosity(oil)
+
+        print(kv._k_v2)
+        # This has multiple data points, it should not use any of the default values.
+        for kv_2 in KinematicViscosity.default_kvs.values():
+            assert kv._k_v2 != kv_2
+
+    def test_single_vicosities_crude(self):
+        """
+        if there's only one viscocity, and it's a Crude
+        it should use the correct kv_2
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'ExampleSparseRecord.json')
+
+        kv = KinematicViscosity(oil)
+
+        print(kv._k_v2)
+
+        assert kv._k_v2 == KinematicViscosity.default_kvs[oil.metadata.product_type]
 
 
 def test_get_frac_recovered():

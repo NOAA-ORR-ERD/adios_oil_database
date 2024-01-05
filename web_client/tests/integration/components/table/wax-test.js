@@ -16,9 +16,9 @@ module('Integration | Component | table/wax', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#table/wax}}
+      <Table::Wax>
         template block text
-      {{/table/wax}}
+      </Table::Wax>
     `);
 
     assert.dom(this.element).hasText('template block text');

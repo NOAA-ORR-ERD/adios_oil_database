@@ -4,29 +4,34 @@ import { action } from '@ember/object';
 
 
 export default class SelectUnitButton extends Component {
-  @tracked baseProperty;
-  @tracked element;
-  @tracked selectingUnit = false;
+    @tracked baseProperty;
+    @tracked element;
+    @tracked dialogVisible = false;
 
-  constructor() {
-      super(...arguments);
+    constructor() {
+        super(...arguments);
 
-      this.baseProperty = this.args.baseProperty;
-  }
+        this.baseProperty = this.args.baseProperty;
+    }
 
-  @action
-  setComponentElement(element) {
-      this.element = element;
-  }
+    @action
+    show_dialog(event) {
+        this.dialogVisible = true;
+    }
 
-  @action
-  launchSelectDialog() {
-    this.selectingUnit = true;
-  }
+    @action
+    close_dialog(event) {
+        this.dialogVisible = false;
+    }
 
-  @action
-  closeSelectDialog() {
-    this.selectingUnit = false;
-  }
+    @action
+    setComponentElement(element) {
+        this.element = element;
+    }
+
+    @action
+    submit(event) {
+        this.args.change(event);
+    }
 
 }

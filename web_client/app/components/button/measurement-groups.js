@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
 
 export default class MeasurementGroupsButton extends BaseComponent {
-    @tracked isShowingModal = false;
+    @tracked dialogVisible = false;
     @tracked valueObject;
     @tracked inputValue;
 
@@ -32,11 +32,11 @@ export default class MeasurementGroupsButton extends BaseComponent {
 
     @action
     showModal() {
-        this.isShowingModal = true;
+        this.dialogVisible = true;
     }
 
     @action
     closeModal() {
-        this.isShowingModal = false;
+        this.dialogVisible = false;
     }
 }

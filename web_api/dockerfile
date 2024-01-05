@@ -2,7 +2,7 @@
 #
 ARG PYTHON_VER
 
-FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python$PYTHON_VER
+FROM registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
 
 ARG KEY_FILE
 ARG PYTHON_VER
@@ -21,6 +21,9 @@ COPY ./ /adios-db/
 WORKDIR adios-db
 
 # install deps
+# needed for cornice (for now)
+RUN conda config --append channels defaults
+
 RUN conda install -y \
     python=$PYTHON_VER \
     --file adios_db/conda_requirements.txt \

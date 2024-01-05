@@ -1,10 +1,12 @@
-<button type="button" class="btn btn-dark m-1 btn-sm text-nowrap"
-        title="Add New Oil"
-        data-toggle="modal"
-        data-target="#addNewOilDialog" >
+<BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.show_dialog}} >
   Add New Oil
-</button>
+</BsButton>
 
-<Dialog::AddNewOil
-  @submit={{@submit}}
-/>
+
+{{#if this.dialogVisible}}
+  <Dialog::AddNewOil
+    @close={{this.close_dialog}}
+    @submit={{this.submit}}
+  />
+{{/if}}

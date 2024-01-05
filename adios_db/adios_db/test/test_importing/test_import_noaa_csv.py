@@ -4,6 +4,11 @@ Tests the importing from a "NOAA Standard" CSV file script.
 Note: tests aren't comprehensive, but at least there's something.
 
 If it breaks on future files - please add a test!
+
+NOTE: you can see all the logging messages when running the tests by:
+
+   pytest --log-cli-level debug
+
 """
 from pathlib import Path
 
@@ -32,7 +37,9 @@ from adios_db.data_sources.noaa_csv.reader import (read_csv,
                                                    read_measurement,
                                                    float_or_placeholder,
                                                    padded_csv_reader,
-                                                   empty_measurement)
+                                                   empty_measurement,
+                                                   read_emulsions,
+                                                   )
 
 from adios_db.computation.gnome_oil import make_gnome_oil
 
@@ -42,11 +49,12 @@ from adios_db.computation.gnome_oil import make_gnome_oil
 
 
 HERE = Path(__file__).parent
-
+DATA_DIR = HERE / "example_data"
 test_file1 = HERE / "example_data" / "LSU_AlaskaNorthSlope.csv"
 test_file2 = HERE / "example_data" / "example_noaa_csv.csv"
 test_file3 = HERE / "example_data" / "Average-VLSFO-AMSA-2022.csv"
 test_file4 = HERE / "example_data" / "generic_d.csv"
+test_file5 = HERE / "example_data" / "example_noaa_csv_with_emulsion.csv"
 
 
 # make module level?
@@ -60,7 +68,7 @@ def test_record():
 
 @pytest.fixture
 def csv_to_test_padding():
-    fname = HERE / "example_data" / "csv_for_testing_padding.csv"
+    fname = DATA_DIR / "csv_for_testing_padding.csv"
 
     with open(fname, 'w', encoding='utf-8') as outfile:
         outfile.write("this, that, the,,,\n"
@@ -212,6 +220,8 @@ def test_subsample_metadata_0(attr, value, test_record):
     ('flash_point', FlashPoint(Temperature(max_value=-8, unit='C'))),
 ])
 def test_subsample_physical_properties(attr, value, test_record):
+    print(len(test_record.sub_samples))
+    assert len(test_record.sub_samples) == 2
     pp = test_record.sub_samples[0].physical_properties
     print(attr, getattr(pp, attr))
     assert getattr(pp, attr) == value
@@ -448,6 +458,8 @@ def test_generic_csv():
     md = oil.metadata
     oil.to_file(test_file4.with_suffix(".json"))
 
+    print(md)
+
     assert md.source_id[:5] == '2023-'
     assert md.reference.year == 2023
     assert md.reference.reference == "NOAA Technical Report on Generic Oils"
@@ -477,11 +489,74 @@ def test_generic_csv():
     go = make_gnome_oil(oil)
 
 
+def test_read_emulsions():
+
+    reader = BufferedIterator(padded_csv_reader(DATA_DIR / "Emulsion_example.csv"))
+    # pop off the 'Emulsion Properties' line
+    next(reader)
+    el = read_emulsions(reader)
+
+    assert len(el) == 2
+
+    # only testing a few, but it's something
+    emulsion = el[0]
+    assert emulsion.age.value == 1
+    assert emulsion.age.unit == 'day'
+    assert emulsion.storage_modulus.value == 12.0
+
+    # viscosity data
+    assert len(emulsion.kinematic_viscosities) == 2
+    assert len(emulsion.dynamic_viscosities) == 2
+
+    emulsion = el[1]
+    assert emulsion.age.value == 17
+    assert emulsion.age.unit == 'day'
+    assert emulsion.complex_modulus.value == 123.0
+    # viscosity data
+    assert len(emulsion.kinematic_viscosities) == 2
+    assert len(emulsion.dynamic_viscosities) == 2
+
+
+def test_emulsion_in_record():
+    """
+    check that emulsions are read properly
+
+    NOTE: This is (so far) only testing a psuedo-emulsion record
+          generated from "bullwinkle"
+    """
+    oil = read_csv(test_file5)
+
+    assert len(oil.sub_samples) == 2
+
+    # Emulsion data in the first subsample
+    ss0 = oil.sub_samples[0]
+    emulsions = ss0.environmental_behavior.emulsions
+    assert len(emulsions) == 1
+    emulsion = emulsions[0]
+    assert emulsion.visual_stability == "Did not form"
+    assert emulsion.ref_temp.value == 15
+    assert emulsion.ref_temp.unit == "C"
+    assert emulsion.water_content is None
+
+
+
+    # Emulsion data in the second subsample
+    ss0 = oil.sub_samples[1]
+    emulsions = ss0.environmental_behavior.emulsions
+    assert len(emulsions) == 1
+    emulsion = emulsions[0]
+    assert emulsion.visual_stability == "Unknown stability"
+    assert emulsion.ref_temp.value == 15
+    assert emulsion.ref_temp.unit == "C"
+    assert emulsion.water_content.value == 0.7
+    assert emulsion.water_content.unit == "fraction"
+
 @pytest.mark.parametrize('filename', [
     test_file1,
     test_file2,
     test_file3,
     test_file4,  # need valid generic diesel record first
+    test_file5,  # should check bullwinkle at some point
 ])
 def test_full_record(filename):
     """
@@ -498,3 +573,7 @@ def test_full_record(filename):
 
     # make sure it's GNOME Suitable
     go = make_gnome_oil(oil)
+
+
+
+

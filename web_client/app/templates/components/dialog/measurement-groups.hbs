@@ -29,16 +29,15 @@
       {{!-- range input --}}
       <div class="row d-flex align-items-center mx-2">
         <table class="table table-hover table-bordered">
-          <thead aria-controls="ift-tbody" aria-expanded="false">
+          <thead aria-controls="ift-tbody">
           </thead>
           <tbody>
             {{#each this.tempList as |group index|}}
               <tr>
                 <td>
-                  <Input @class="p-1 overflow-hidden bg-transparent border"
+                  <Input class="p-1 overflow-hidden bg-transparent border"
                     @value={{group}}
-                    @placeholder="Enter Value"
-                    @change={{fn this.updateValue group index}}
+                    placeholder="Enter Value" {{on "change" (fn this.updateValue group index)}}
                   />
                 </td>
 
@@ -47,7 +46,7 @@
                   <button type="button"
                     {{on "click" (fn this.deleteGroup index)}}
                     class="btn btn-outline-danger btn-sm p-0 border-0">
-                    {{fa-icon "times"}}
+                    <FaIcon @icon="times" />
                   </button>
                 </td>
 
@@ -56,7 +55,7 @@
                   <button type="button"
                     {{on "click" (fn this.addNewGroup (add index 1))}}
                     class="btn btn-outline-dark btn-sm p-0 border-0">
-                    {{fa-icon "plus"}}
+                    <FaIcon @icon="plus" />
                   </button>
                 </td>
 
@@ -68,7 +67,7 @@
                   <button type="button"
                     {{on "click" (fn this.addNewGroup (add index 1))}}
                     class="btn btn-outline-dark btn-sm p-0 border-0">
-                    {{fa-icon "plus"}}
+                    <FaIcon @icon="plus" />
                   </button>
                 </td>
               </tr>

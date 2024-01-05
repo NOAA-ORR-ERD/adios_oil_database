@@ -5,7 +5,7 @@ module.exports = function(environment) {
     modulePrefix: 'adios-db',
     environment,
     rootURL: '/',
-    locationType: 'auto',
+    locationType: 'history',
 
     moment: {
       // Options:

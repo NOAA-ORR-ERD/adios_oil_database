@@ -1,7 +1,7 @@
 {{#if this.hasErrors}}
-  <i class="fa fa-times status-error"></i>
+  <FaIcon @icon="times" class="status-error"/>  
 {{else if this.hasWarnings}}
-  <i class="fa fa-exclamation-triangle status-warning"></i>
+  <FaIcon @icon="exclamation-triangle" class="status-warning"/>  
 {{else}}
-  <i class="fa fa-check-circle status-good"></i>
+  <FaIcon @icon="check-circle" class="status-good"/>  
 {{/if}}

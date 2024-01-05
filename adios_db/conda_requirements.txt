@@ -5,15 +5,11 @@
 # see the conda_requirements_optional.txt file for
 #   additional packages that might be useful
 
-# These should all be in one of the following channels:
-# 1: conda-forge
-# 2: defaults
+# These should all be in the conda-forge channel:
 
-# It would be best to have these channels configured the order of precedence
-# outlined above in your conda configuration.
+# It is best to have the conda-forge channel configured as
+# the first channel, and have channel_priority set to "strict"
 
-python>=3.8,<3.11
+python>=3.9,<3.12
 numpy>=1.20
 pynucos>=2.12
-
-# scipy  # no longer used

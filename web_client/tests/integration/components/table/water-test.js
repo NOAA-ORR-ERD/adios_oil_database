@@ -16,9 +16,9 @@ module('Integration | Component | table/water', function(hooks) {
 
     // Template block usage:
     await render(hbs`
-      {{#table/water}}
+      <Table::Water>
         template block text
-      {{/table/water}}
+      </Table::Water>
     `);
 
     assert.dom(this.element).hasText('template block text');

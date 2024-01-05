@@ -6,6 +6,7 @@ Generated from the Excel Template:
 adios_db/data/ADIOS_data_template.xlsx
 
 Note that the CSV should be exported as "CSV utf-8 Comma Delimited"
+
 """
 import csv
 import warnings
@@ -13,7 +14,7 @@ import logging
 
 import nucos
 
-from adios_db.util import BufferedIterator
+# from adios_db.util import BufferedIterator
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.version import Version
 from adios_db.models.oil.metadata import MetaData, SampleMetaData
@@ -33,12 +34,57 @@ from adios_db.models.oil.bulk_composition import (BulkComposition,
                                                   BulkCompositionList)
 from adios_db.models.oil.industry_property import (IndustryProperty,
                                                    IndustryPropertyList)
+from adios_db.models.oil.environmental_behavior import (EnvironmentalBehavior,
+                                                        )
+from adios_db.models.oil.properties import (DispersibilityList,
+                                            EmulsionList,
+                                            Emulsion,
+                                            ESTSEvaporationTest
+                                            )
+
+
 from adios_db.models.oil.cleanup import FixAPI
 
 from adios_db.models.common.measurement import (MassFraction,
                                                 Temperature,
                                                 MassOrVolumeFraction,
-                                                AnyUnit)
+                                                AnyUnit,
+                                                Time,
+                                                DynamicViscosity,
+                                                Pressure,
+                                                Unitless,
+                                                )
+
+
+class BufferedIterator():
+    """
+    An iterator that can have stuff put back
+
+    Give it an iterable, and it will create an iterator that iterates,
+    but you can push things back on to be returned in future next calls.
+
+    In the common case, this would be used to put back an item, but you
+    could use it more generally.
+
+    See the test code in test_utilities
+
+    """
+    def __init__(self, iterable):
+        self.iter = iter(iterable)
+        self.buffer = []
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.buffer:
+            row = self.buffer.pop()
+            logging.debug(f"Returning Buffered row: {row}")
+            return row
+        return next(self.iter)
+
+    def push(self, item):
+        self.buffer.append(item)
 
 
 def padded_csv_reader(file_path, num_fields=6):
@@ -53,6 +99,9 @@ def padded_csv_reader(file_path, num_fields=6):
             # this broke a lot -- which is odd, but ???
             # row = [f.strip() for f in row]
             logging.debug(f"Processing row: {i}: , {row}")
+            # this broke some stuff -- why?
+            # if row[0].strip():  # skip the blank rows
+            #    yield row
             yield row
 
 
@@ -61,6 +110,20 @@ def read_csv(filename, oil_id="PlaceHolder"):
     reader.load_from_csv(filename)
 
     return reader.oil
+
+
+# Utilities:
+def normalize(name):
+    """
+    normalizes a name:
+      removes whitespace
+      lower cases it
+    """
+    return "".join(name.split()).lower().rstrip(':')
+
+
+def strstrip(obj):
+    return str(obj).strip()
 
 
 class Reader():
@@ -97,15 +160,17 @@ class Reader():
 
         # read the metadata:
         oil.metadata = read_record_metadata(reader)
+        logging.debug(f"Record metadata:{oil.metadata}")
 
         # Read the Samples
         for row in reader:
             if check_field_name(row[0], 'Subsample Metadata'):
+                logging.debug("about to read a subsample")
                 ss = read_subsample(reader)
                 oil.sub_samples.append(ss)
-
+                logging.debug(f"done reading subsample no: {len(oil.sub_samples)}")
         # add in API if it's not there:
-        # note: maybe add a cleanup options?
+        # note: maybe add other cleanup options?
         if not oil.metadata.API:
             FixAPI(oil).cleanup()
 
@@ -138,6 +203,7 @@ def read_record_metadata(reader):
         if check_field_name(row[0], "Subsample Metadata"):
             reader.push(row)
             logging.debug("found Subsample metadata, breaking out")
+            logging.debug(f"Metadata:{md}")
             break
         else:
             # This could be more efficient with a dict lookup
@@ -145,6 +211,7 @@ def read_record_metadata(reader):
             try:
                 if row[1]:
                     attr, func = metadata_map[normalize(row[0])]
+                    logging.debug(f"setting:{attr} to {row[1]}")
                     setattr(md, attr, func(row[1]))
             except KeyError:
                 if check_field_name(row[0], "Reference"):
@@ -158,24 +225,33 @@ def read_record_metadata(reader):
                 if check_field_name(row[0], "Labels"):
                     md.labels = [n.strip() for n in row[1:] if n.strip()]
 
+    logging.debug(f"returning: Metadata:{md}")
     return md
 
 
 def read_subsample(reader):
     logging.debug("reading subsample")
     ss = Sample(metadata=read_subsample_metadata(reader))
-    ss.physical_properties = read_physical_properties(reader)
-    ss.distillation_data = read_distillation_data(reader)
-    ss.SARA = read_sara(reader)
-    ss.compounds = read_compounds(reader)
-    ss.bulk_composition = read_bulk_composition(reader)
-    ss.industry_properties = read_industry_properties(reader)
+    # try:
+    #     row = next(reader)
+    # except StopIteration:
+    #     raise ValueError("End of file with no sub sample data")
+    for row in reader:
+        if check_field_name(row[0], 'Subsample Metadata'):
+            logging.debug("found new subsample: moving on")
+            reader.push(row)
+            break
+        else:
+            if row[0]: # read the next section
+                attr, fun = SAMPLE_SECTIONS[normalize(row[0])]
+                setattr(ss, attr, fun(reader))
     return ss
 
 
 def read_subsample_metadata(reader):
     """
-    Read the record metadata -- stops when "Physical Properties" is reached.
+    Read the record metadata -- stops when any of the subsample headers
+    is reached.
 
     returns a SubsampleMetadata object
 
@@ -198,10 +274,11 @@ def read_subsample_metadata(reader):
         normalize("Description"): ("description", strstrip),
     }
     md = SampleMetaData()
-    # look for Physical Properties data, then stop
+    # look for subsample header, then stop
     for row in reader:
-        if check_field_name(row[0], "Physical Properties"):
-            logging.debug("found Physical Properties: breaking out")
+        if normalize(row[0]) in SAMPLE_SECTIONS:
+            logging.debug(f"found {row[0]}: breaking out")
+            reader.push(row)
             break
         else:
             # this could be more efficient with a dict lookup
@@ -228,36 +305,41 @@ def read_subsample_metadata(reader):
                         pass
     return md
 
-
+# PHYSICAL_PROPERTY_SECTIONS = {normalize(name) for name in ("Density",
+#                                                            "Kinematic Viscosity",
+#                                                            "Dynamic Viscosity"
+#                                                            )}
 def read_physical_properties(reader):
     """
     read the physical properties data
 
-    Stops when "Distillation Data" is reached
+    Stops when anything in Sample Sections is reached.
     """
     logging.debug("Reading physical Properties")
     pp = PhysicalProperties()
-
     for row in reader:
-        if check_field_name(row[0], "Distillation Data"):
-            logging.debug('found "Distillation Data": breaking out')
+        if normalize(row[0]) in SAMPLE_SECTIONS:
+            logging.debug(f"found {row[0]}: breaking out")
+            reader.push(row)
             break
         else:
-            if check_field_name(row[0], "Pour Point"):
+            if not row[0]:
+                continue
+            elif check_field_name(row[0], "Pour Point"):
                 m = Temperature(**read_measurement(row[1:]))
                 pp.pour_point = None if empty_measurement(m) else PourPoint(measurement=m)
 
-            if check_field_name(row[0], "Flash Point"):
+            elif check_field_name(row[0], "Flash Point"):
                 m = Temperature(**read_measurement(row[1:]))
                 pp.flash_point = None if empty_measurement(m) else FlashPoint(measurement=m)
 
-            if check_field_name(row[0], "Density"):
+            elif check_field_name(row[0], "Density"):
                 pp.densities = read_densities(reader)
 
-            if check_field_name(row[0], "Kinematic Viscosity"):
+            elif check_field_name(row[0], "Kinematic Viscosity"):
                 pp.kinematic_viscosities = read_kvis(reader)
 
-            if check_field_name(row[0], "Dynamic Viscosity"):
+            elif check_field_name(row[0], "Dynamic Viscosity"):
                 pp.dynamic_viscosities = read_dvis(reader)
 
     return pp
@@ -284,8 +366,9 @@ def read_kvis(reader):
     data = []
 
     for row in reader:
+        logging.debug(row)
         if (check_field_name(row[0], "Viscosity at temp")
-                and "".join(row[1:]).strip()):
+                and row[1].strip()):  # there needs to be a viscosity value
             data.append(read_val_at_temp_row(row[1:]))
         else:
             break
@@ -299,10 +382,11 @@ def read_dvis(reader):
     data = []
     for row in reader:
         if (check_field_name(row[0], "Viscosity at temp")
-                and "".join(row[1:]).strip()):
+                and row[1].strip()):  # there needs to be a viscosity value
             data.append(read_val_at_temp_row(row[1:]))
         else:
             break
+    logging.debug(f"dvis data: {data}")
     return DynamicViscosityList.from_data(data)
 
 
@@ -316,8 +400,9 @@ def read_sara(reader):
     method = None
 
     for row in reader:
-        if check_field_name(row[0], "Compounds"):
-            logging.debug('found "Compounds": breaking out')
+        if normalize(row[0]) in SAMPLE_SECTIONS:
+            logging.debug(f"found {row[0]}: breaking out")
+            reader.push(row)
             break
         else:
             name = row[0].strip().lower()
@@ -359,6 +444,7 @@ def read_compound(row):
     comment = row[4].strip()
     groups = [group for group in row[5:] if group.strip()]
 
+    logging.debug(f"Found a Compound: {name}")
     return Compound(name=name,
                     measurement=MassFraction(fraction, unit=frac_unit),
                     method=method,
@@ -370,8 +456,9 @@ def read_compounds(reader):
     compounds = CompoundList()
 
     for row in reader:
-        if check_field_name(row[0], "Bulk Composition"):
-            logging.debug('found "Bulk Composition": breaking out')
+        if normalize(row[0]) in SAMPLE_SECTIONS:
+            logging.debug(f"found {row[0]}: breaking out")
+            reader.push(row)
             break
         else:
             first = row[0].strip().lower()
@@ -420,8 +507,9 @@ def read_bulk_composition(reader):
     bulk_comps = BulkCompositionList()
 
     for row in reader:
-        if check_field_name(row[0], "Industry Properties"):
-            logging.debug('found "Industry Properties": breaking out')
+        if normalize(row[0]) in SAMPLE_SECTIONS:
+            logging.debug(f"found {row[0]}: breaking out")
+            reader.push(row)
             break
         else:
             first = row[0].strip().lower()
@@ -467,9 +555,9 @@ def read_industry_properties(reader):
     ind_props = IndustryPropertyList()
 
     for row in reader:
-        if check_field_name(row[0], "Subsample Metadata"):
+        if normalize(row[0]) in SAMPLE_SECTIONS:
+            logging.debug(f"found {row[0]}: breaking out")
             reader.push(row)
-            logging.debug('found "Subsample Metadata": breaking out')
             break
         else:
             first = row[0].strip().lower()
@@ -486,13 +574,124 @@ def read_industry_properties(reader):
     return ind_props
 
 
+def read_environmental_behavior(reader):
+    """
+    Read the Environmental Behavior data
+
+    Stops when anything in Sample Sections is reached.
+    """
+    logging.debug("Reading Environmental Behavior")
+    eb = EnvironmentalBehavior()
+
+    for row in reader:
+        if normalize(row[0]) in SAMPLE_SECTIONS:
+            logging.debug(f"found {row[0]}: breaking out")
+            reader.push(row)
+            break
+        else:
+            if check_field_name(row[0], "Emulsion Properties"):
+                eb.emulsions = read_emulsions(reader)
+                logging.debug(f"Got {len(eb.emulsions)} emulsions -- moving on")
+            # That's all for now -- we need dispersibilities
+            # at least at some point
+    logging.debug("** returning from environmental behavior")
+    return eb
+
+
+def read_emulsions(reader):
+    """
+    read one or more sets of emulsion data
+    """
+    el = EmulsionList()
+    logging.debug("reading emulsions")
+    for row in reader:
+        logging.debug(f"in read_emulsions: {row}")
+        if not row[0]:
+            continue
+        # if normalize(row[0]) in SAMPLE_SECTIONS:
+        #     logging.debug(f"found {row[0]}: breaking out")
+        #     reader.push(row)
+        #     break
+        elif normalize(row[0]).startswith('emulsion'):
+            logging.debug("found an emulsion")
+            el.append(read_emulsion(reader))
+        else:
+            logging.debug("****Done with Emulsions")
+            reader.push(row)
+            break
+    logging.debug(f"returning list: {el}")
+    return el
+
+def read_emulsion(reader):
+    """
+    read data on a single emulsion
+
+      Tan Delta (V/E)
+      Kinematic Viscosity
+    """
+    field_map = {normalize("Age"): ('age', Time),
+                 normalize("Water Content"): ('water_content', MassFraction),
+                 normalize("Temperature"): ('ref_temp', Temperature),
+                 normalize("Complex Viscosity"): ('complex_viscosity', DynamicViscosity),
+                 normalize("Complex Modulus"): ('complex_modulus', Pressure),
+                 normalize("Storage Modulus"): ('storage_modulus', Pressure),
+                 normalize("Loss Modulus"): ('loss_modulus', Pressure),
+                 }
+    # reading one emulsion
+    logging.debug("reading an emulsion")
+    em = Emulsion()
+    for row in reader:
+        field = normalize(row[0])
+        logging.debug(f"{field=}")
+        if not field:
+            continue
+        if field in SAMPLE_SECTIONS:
+            logging.debug("done with emulsion -- breaking out")
+            reader.push(row)
+            break
+        if field.startswith('emulsion'):
+            logging.debug("found another one:")
+            reader.push(row)
+            break
+        if field in field_map:
+            attr, Meas = field_map[field]
+            logging.debug("setting: {attr}")
+            val_unit = read_val_and_unit(row[1:])
+            if val_unit is not None:
+                setattr(em, attr, Meas(**val_unit))
+        elif check_field_name(row[0], 'Visual Stability'):
+            logging.debug("setting visual_stability")
+            em.visual_stability = row[1].strip()
+        elif check_field_name(row[0], 'Method'):
+            logging.debug("setting method")
+            em.method = row[1].strip()
+        elif field.startswith("tandelta"):
+            val_unit = read_val_and_unit(row[1:])
+            if val_unit is not None:
+                logging.debug("setting tan delta")
+                em.tan_delta_v_e = Unitless(val_unit['value'])
+        elif check_field_name(row[0], 'Kinematic Viscosity'):
+            em.kinematic_viscosities = read_kvis(reader)
+        elif check_field_name(row[0], 'Dynamic Viscosity'):
+            em.dynamic_viscosities = read_dvis(reader)
+        else:
+            logging.debug("nothing valid: breaking out")
+            reader.push(row)
+            break
+    else:
+        logging.debug("end of loop, didn't break out")
+    logging.debug("returning {em}")
+    return em
+
+
 def read_distillation_data(reader):
     try:
         dist_data = Distillation()
 
         for row in reader:
-            if check_field_name(row[0], "SARA Analysis"):
-                logging.debug('found "SARA Analysis": breaking out')
+            if normalize(row[0]) in SAMPLE_SECTIONS:
+                logging.debug(f"found {row[0]}: breaking out")
+                reader.push(row)
                 break
             else:
                 if row[0].strip().lower().startswith("type"):
@@ -530,6 +729,7 @@ def read_dist_cut_table(reader, unit_type):
     try:
         for row in reader:
             if not row[0].strip().lower().startswith('cut'):
+                logging.debug("reached end of dist cuts-breaking out")
                 break
 
             frac, frac_u, temp, temp_u = read_val_at_temp_row(row[1:])
@@ -687,21 +887,19 @@ def read_min_max_unit(row):
     return data
 
 
-def normalize(name):
-    """
-    normalizes a name:
-      removes whitespace
-      lower cases it
-    """
-    return "".join(name.split()).lower().rstrip(':')
-
-
 def check_field_name(field, name):
     # this somehow broke a few things
     # return normalize(name).startswith(normalize(field))
     return normalize(field) == normalize(name)
 
-
-# Utilities:
-def strstrip(obj):
-    return str(obj).strip()
+# All the subheaders that could be in a Sample section
+SAMPLE_SECTIONS = {"Physical Properties": ("physical_properties", read_physical_properties),
+                   "Distillation Data": ("distillation_data", read_distillation_data),
+                   "SARA Analysis": ("SARA", read_sara),
+                   "Compounds": ("compounds", read_compounds),
+                   "Bulk Composition": ("bulk_composition", read_bulk_composition),
+                   "Industry Properties": ("industry_properties", read_industry_properties),
+                   "Environmental Behavior": ("environmental_behavior", read_environmental_behavior),
+                   "Subsample Metadata": (None, None),
+                   }
+SAMPLE_SECTIONS = {normalize(sec): func for sec, func in SAMPLE_SECTIONS.items()}

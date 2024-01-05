@@ -33,8 +33,8 @@
             {{#if (eq this.sampleType this.SampleTypes.evaporated)}}
               <div class="col-6 form-group input-group">
                 <Input type="number" step="0.01" min="0" max="1"
-                          @class="form-control bg-transparent border overflow-hidden"
-                          @placeholder="Fraction (percent)"
+                          class="form-control bg-transparent border overflow-hidden"
+                          placeholder="Fraction (percent)"
                           {{on "change" this.updateFraction}}
                           {{on "keypress" this.updateFraction}}
                           {{on "focusout" this.updateFraction}}
@@ -43,8 +43,8 @@
             {{else if (eq this.sampleType this.SampleTypes.distillate)}}
               <div class="col-3 form-group input-group">
                 <Input type="number"
-                        @class="form-control bg-transparent border overflow-hidden"
-                        @placeholder="Min"
+                        class="form-control bg-transparent border overflow-hidden"
+                        placeholder="Min"
                         {{on "change" this.updateDistillateMin}}
                         {{on "keypress" this.updateDistillateMin}}
                         {{on "focusout" this.updateDistillateMin}}
@@ -52,8 +52,8 @@
               </div>
               <div class="col-3 form-group input-group">
                 <Input type="number"
-                        @class="form-control bg-transparent border overflow-hidden"
-                        @placeholder="Max"
+                        class="form-control bg-transparent border overflow-hidden"
+                        placeholder="Max"
                         {{on "change" this.updateDistillateMax}}
                         {{on "keypress" this.updateDistillateMax}}
                         {{on "focusout" this.updateDistillateMax}}
@@ -61,8 +61,8 @@
               </div>
             {{else}}
               <div class="col-6 form-group input-group">
-                <Input type="text" @class="form-control bg-transparent border overflow-hidden"
-                      @placeholder="Enter Name"
+                <Input type="text" class="form-control bg-transparent border overflow-hidden"
+                      placeholder="Enter Name"
                       {{on "change" this.updateName}}
                       {{on "keypress" this.updateName}}
                       {{on "focusout" this.updateName}}

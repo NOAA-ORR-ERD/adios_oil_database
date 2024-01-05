@@ -1,17 +1,16 @@
-<button type="button"
- {{on "click" this.launchSelectDialog}}
- {{did-insert this.setComponentElement}}
- >
+<BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.show_dialog}} >
   {{this.baseProperty}}
-</button>
+</BsButton>
 
-{{#if this.selectingUnit}}
+
+{{#if this.dialogVisible}}
   <Dialog::SelectUnit
     @baseProperty={{this.baseProperty}}
     @parent={{this.element}}
     @unitType={{@unitType}}
     @defaultUnit={{@defaultUnit}}
-    @closeModal={{this.closeSelectDialog}}
-    @ok={{@change}}
+    @closeModal={{this.close_dialog}}
+    @ok={{this.submit}}
   />
 {{/if}}

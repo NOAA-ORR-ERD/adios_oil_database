@@ -936,3 +936,48 @@ def test_get_minimum_maximum_range():
     assert m.value is None
     assert m.minimum == 1.0
     assert m.maximum == 2.3
+
+
+def test_validate_all_fields():
+    """
+    A measurement should never have all three values filled in.
+    """
+    m = Length(value=1, min_value=2, max_value=3, unit='m')
+
+    print(m)
+
+    val = m.validate()
+
+    print(val)
+
+    assert len(val) == 1
+    assert val[0].startswith("E047:")
+
+
+def test_as_text_value():
+    m = MassFraction(value=0.3)
+    text = m.as_text()
+
+    assert text == "0.3"
+
+
+def test_as_text_min():
+    m = MassFraction(min_value=0.3)
+    text = m.as_text()
+
+    assert text == ">0.3"
+
+
+def test_as_text_max():
+    m = MassFraction(max_value=0.3)
+    text = m.as_text()
+
+    assert text == "<0.3"
+
+
+def test_as_text_range():
+    m = MassFraction(min_value=0.1, max_value=0.3)
+    text = m.as_text()
+
+    assert text == "0.1\N{Em Dash}0.3"
+

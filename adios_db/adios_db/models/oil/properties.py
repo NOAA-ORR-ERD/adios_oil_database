@@ -78,7 +78,7 @@ class Emulsion:
         msgs = []
         if self.visual_stability is not None:
             msgs.extend(EnumValidator({"Stable", "Mesostable", "Unstable",
-                                       "Entrained", "Did not form"},
+                                       "Entrained", "Did not form", "Unknown stability"},
                                       ERRORS["E033"],
                                       case_insensitive=False)(self.visual_stability))
 

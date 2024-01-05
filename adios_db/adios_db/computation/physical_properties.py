@@ -9,6 +9,16 @@ import nucos as uc
 
 from adios_db.util import sigfigs
 
+def _is_oil(obj):
+    """
+    return TRue if obj is an Oil obj
+
+    Here because isinstance requires a circular import
+    """
+    return (hasattr(obj, 'oil_id')
+            and hasattr(obj, 'metadata')
+            )
+
 
 class Density:
     """
@@ -32,9 +42,9 @@ class Density:
 
         If data pairs, units must be kg/m^3 and K
         """
-        try:
+        if _is_oil(oil):
             data = get_density_data(oil, units='kg/m^3', temp_units="K")
-        except AttributeError:
+        else:
             # not an oil object -- assume it's a table of data in the
             #                      correct form
             data = oil
@@ -118,24 +128,61 @@ class Density:
 
 class KinematicViscosity:
     """
-    class to hold and do calculations on kinematic viscosity
+    Class to hold and do calculations on kinematic viscosity
 
-    data is stored internally in standard units:
+    Data is stored internally in standard units:
     temperature in Kelvin
     viscosity in m^2/s
-    """
 
-    def __init__(self, oil):
+    Viscosity as a function of temp is given by:
+        v = A exp(k_v2 / T)
+    """
+    # Default constants for when there is only one viscosity
+    # data point.
+    # fixme: we need to get numbers for all oil types!
+    #        including Crude -- 2100 is the old ADIOS2 value
+    default_kvs = {"Crude Oil NOS": 2099.9999,  # only so we can distingish from default
+                   "Distillate Fuel Oil": 6200.0,
+                   }
+    # value to us if it's not in the above dict -- or
+    # if product type is unknown.
+    DEFAULT_KV2 = 2100.0  # K
+
+    def __init__(self, oil_or_data, k_v2=None):
         """
-        initialize from an oil object
+        Initialize from an Oil object or data table.
+
+        If an oil object, the viscosity data will be extracted
+        from the data.
+
+        If a data table, it should be in the form::
+
+            [(kvis1, temp1),
+             (kvis2, temp2),
+             (kvis3, temp3),
+             ]
+
+        :param k_v2=None: The "Slope" parameter of the curve.
+                          Used only if there is one data point.
+                          If there are two or more, it is calculated
+                          from a fit to the data points. If not specified
+                          and only one data point, 2100.0K is used, derived
+                          from typical data for crude oils.
+        :type k_v2: float
         """
-        try:
-            data = get_kinematic_viscosity_data(oil, units='m^2/s',
+        if _is_oil(oil_or_data):
+            data = get_kinematic_viscosity_data(oil_or_data,
+                                                units='m^2/s',
                                                 temp_units="K")
-        except AttributeError:
+            if k_v2 is None:
+                k_v2 = self.default_kvs.get(oil_or_data.metadata.product_type,
+                                            self.DEFAULT_KV2)
+
+        else:
             # not an oil object -- assume it's a table of data in the
             #                      correct form
-            data = oil
+            data = oil_or_data
+            k_v2 = k_v2 if k_v2 is not None else self.DEFAULT_KV2
 
         if data:
             data = sorted(data, key=itemgetter(1))
@@ -144,6 +191,7 @@ class KinematicViscosity:
             self.kviscs = []
             self.temps = []
 
+        self._k_v2 = k_v2
         self.initialize()
 
     def at_temp(self, temp, kvis_units='m^2/s', temp_units="K"):
@@ -193,7 +241,8 @@ class KinematicViscosity:
         if len(kvis) == 0:
             raise ValueError("Cannot initialize a KinematicViscosity object with no data")
         elif len(kvis) == 1:  # use default k_v2
-            self._k_v2 = 2100.0
+            # if self._k_v2 is None:
+            #     self._k_v2 = self.DEFAULT_KV2
             self._visc_A = kvis[0] * np.exp(-self._k_v2 / kvis_ref_temps[0])
         else:
             # do a least squares fit to the data
@@ -238,7 +287,23 @@ def get_density_data(oil, units="kg/m^3", temp_units="K"):
     return density_table
 
 
-def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
+def _get_visc_data(visc, units, temp_units, shear_rate):
+    visc_table = []
+
+    for visc_point in visc:
+        d = visc_point.viscosity.converted_to(units).value
+        t = visc_point.ref_temp.converted_to(temp_units).value
+        sr = visc_point.shear_rate
+        if sr is not None:
+            sr = sr.converted_to("1/s").value
+            if shear_rate is None:
+                shear_rate = sr
+        if sr is None or sr == shear_rate:
+            visc_table.append((d, t))
+    return visc_table
+
+
+def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K", shear_rate=None):
     """
     Return a table of kinematic viscosity data:
 
@@ -249,6 +314,11 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
     :param units="m^2/s": units you want the viscosity in
 
     :param temp_units="K": units you want the temperature in
+
+    :param shear_rate: what shear rate the data are for, in 1/s
+                       if None, the first shear rate found will be used,
+                       if there are more than one.
+    :type shear_rate: float or int
     """
     try:
         kvisc = [k for k in (oil.sub_samples[0]
@@ -259,26 +329,20 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K"):
         return []
 
     if len(kvisc) > 0:  # use provided kinematic viscosity of it exists
-        visc_table = []
-
-        for visc_point in kvisc:
-            d = visc_point.viscosity.converted_to(units).value
-            t = visc_point.ref_temp.converted_to(temp_units).value
-            visc_table.append((d, t))
+        visc_table = _get_visc_data(kvisc, units, temp_units, shear_rate)
 
     else:  # no kinematic data, try to use dynamic viscosity data
-        dvisc = oil.sub_samples[0].physical_properties.dynamic_viscosities
-        if len(dvisc) > 0:
-            dvisc = get_dynamic_viscosity_data(oil, units="Pa s", temp_units="K")
-            density = Density(oil)
-            visc_table = convert_dvisc_to_kvisc(dvisc, density)
-        else:
-            visc_table = []
+        dvisc = get_dynamic_viscosity_data(oil,
+                                           units="Pa s",
+                                           temp_units="K",
+                                           shear_rate=shear_rate)
+        density = Density(oil)
+        visc_table = convert_dvisc_to_kvisc(dvisc, density)
 
     return visc_table
 
 
-def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
+def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K", shear_rate=None):
     """
     Return a table of dynamic viscosity data:
 
@@ -289,6 +353,12 @@ def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
     :param units="Pas": units you want the viscosity in
 
     :param temp_units="K": units you want the temperature in
+
+    :param shear_rate: what shear rate the data are for, in 1/s
+                       if None, the first shear rate found will be used,
+                       if there are more than one.
+    :type shear_rate: float or int
+
     """
     dvisc = [d for d in (oil.sub_samples[0]
                          .physical_properties.dynamic_viscosities)
@@ -296,14 +366,8 @@ def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K"):
              and d.ref_temp is not None]
 
     if len(dvisc) > 0:
-        visc_table = []
-
-        for visc_point in dvisc:
-            v = visc_point.viscosity.converted_to(units).value
-            t = visc_point.ref_temp.converted_to(temp_units).value
-            visc_table.append((v, t))
-
-    else:
+        visc_table = _get_visc_data(dvisc, units, temp_units, shear_rate)
+    else:  # no dynamic, check kinematic
         kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
         if len(kvisc) > 0:
             raise NotImplementedError("can't compute dynamic from kinematic yet")

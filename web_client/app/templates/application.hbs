@@ -1,84 +1,86 @@
-<div class="container-fluid">
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3">
+<div class="ember-view">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3">
 
-    <LinkTo @route="index" class="navbar-brand" title="ADIOS Oil Database">
-      <span class="adios-logo" role="img" aria-label="ADIOS Oil Database"/>
-    </LinkTo>
+      <LinkTo @route="index" class="navbar-brand" title="ADIOS Oil Database">
+        <span class="adios-logo" role="img" aria-label="ADIOS Oil Database"/>
+      </LinkTo>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
 
-        <li class="nav-item active">
-          <LinkTo @route="about" class="nav-link">
-            About <span class="sr-only">(current)</span>
-          </LinkTo>
-        </li>
+          <li class="nav-item active">
+            <LinkTo @route="about" class="nav-link">
+              About <span class="sr-only">(current)</span>
+            </LinkTo>
+          </li>
 
-        <li class="nav-item active">
-          <span class="nav-link">
-            <a class="nav-link-external" href="https://adios.orr.noaa.gov/api/docs/" target="_blank" rel="noopener noreferrer">User Guide</a>
-          </span>
-        </li>
+          <li class="nav-item active">
+            <span class="nav-link">
+              <a class="nav-link-external" href="https://adios.orr.noaa.gov/api/docs/" target="_blank" rel="noopener noreferrer">User Guide</a>
+            </span>
+          </li>
 
-        <li class="nav-item active">
-          <LinkTo @route="contact" class="nav-link">
-            Contact <span class="sr-only">(current)</span>
-          </LinkTo>
-        </li>
+          <li class="nav-item active">
+            <LinkTo @route="contact" class="nav-link">
+              Contact <span class="sr-only">(current)</span>
+            </LinkTo>
+          </li>
 
-      </ul>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="body">
+      {{outlet}}
     </div>
-  </nav>
 
-  <div class="body">
-    {{outlet}}
-  </div>
+    <footer class="footer bg-secondary">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-1 pl-4 noaa-logo"></div>
 
-  <footer class="footer bg-secondary">
-    <div class="container-fluid">
-      <div class="row align-items-center">
-        <div class="col-1 pl-4 noaa-logo"></div>
-
-        <div class="col-11">
-          <div class="row align-items-center">
-            <ul class="nav nav-pills">
-              <li>
-                <a href="http://www.commerce.gov/" class="nav-link" target="_blank" rel="noopener noreferrer">US DOC</a>
-              </li>
-              <li>
-                <a href="http://www.noaa.gov" class="nav-link" target="_blank" rel="noopener noreferrer">NOAA</a>
-              </li>
-              <li>
-                <a href="http://oceanservice.noaa.gov/" class="nav-link" target="_blank" rel="noopener noreferrer">NOS</a>
-              </li>
-              <li>
-                <a href="http://response.restoration.noaa.gov/" class="nav-link" target="_blank" rel="noopener noreferrer">
-                  NOAA Office of Response &amp; Restoration
-                </a>
-              </li>
-              <li>
-                <LinkTo @route="disclaimer" class="nav-link">
-                  Disclaimer <span class="sr-only">(current)</span>
-                </LinkTo>
-              </li>
-              <li>
-                <LinkTo @route="privacy" class="nav-link">
-                  Privacy Policy <span class="sr-only">(current)</span>
-                </LinkTo>
-              </li>
-              <li>
-                <Button::Survey/>
-              </li>
-            </ul>
+          <div class="col-11">
+            <div class="row align-items-center">
+              <ul class="nav nav-pills">
+                <li>
+                  <a href="http://www.commerce.gov/" class="nav-link" target="_blank" rel="noopener noreferrer">US DOC</a>
+                </li>
+                <li>
+                  <a href="http://www.noaa.gov" class="nav-link" target="_blank" rel="noopener noreferrer">NOAA</a>
+                </li>
+                <li>
+                  <a href="http://oceanservice.noaa.gov/" class="nav-link" target="_blank" rel="noopener noreferrer">NOS</a>
+                </li>
+                <li>
+                  <a href="http://response.restoration.noaa.gov/" class="nav-link" target="_blank" rel="noopener noreferrer">
+                    NOAA Office of Response &amp; Restoration
+                  </a>
+                </li>
+                <li>
+                  <LinkTo @route="disclaimer" class="nav-link">
+                    Disclaimer <span class="sr-only">(current)</span>
+                  </LinkTo>
+                </li>
+                <li>
+                  <LinkTo @route="privacy" class="nav-link">
+                    Privacy Policy <span class="sr-only">(current)</span>
+                  </LinkTo>
+                </li>
+                <li>
+                  <Button::Survey/>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
+
+  </div>
 
 </div>
-
