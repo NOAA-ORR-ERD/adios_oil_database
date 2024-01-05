@@ -6,18 +6,8 @@ echo "Inside Script: $0"
 set -e  # exit script if any commands fail
 set -x  # echo commands to stdout
 
-function branch_exists_remotely() {
-    local branch=${1}
-    local exists_in_remote=$(git ls-remote --heads origin ${branch})
-
-    if [[ -n ${exists_in_remote} ]]
-    then
-        echo 0
-    else
-        echo 1
-    fi
-}
-
+SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" &> /dev/null && pwd )
+source ${SCRIPT_DIR}/git_functions.sh
 
 cd /data/git_repos/noaa-oil-data/
 

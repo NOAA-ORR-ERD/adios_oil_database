@@ -7,45 +7,10 @@ echo "In: init_noaa_data.sh script"
 set -e  # exit script if any commands fail
 set -x  # echo commands to stdout
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" &> /dev/null && pwd )
+source ${SCRIPT_DIR}/git_functions.sh
+
 REPO_NAME=noaa-oil-data
-
-function branch_exists_locally() {
-    local branch=${1}
-    local exists_in_local=$(git branch --list ${branch})
-
-    if [[ -n ${exists_in_local} ]]
-    then
-        echo 0
-    else
-        echo 1
-    fi
-}
-
-function branch_exists_remotely() {
-    local branch=${1}
-    local exists_in_remote=$(git ls-remote --heads origin ${branch})
-
-    if [[ -n ${exists_in_remote} ]]
-    then
-        echo 0
-    else
-        echo 1
-    fi
-}
-
-function branch_exists() {
-    local branch=${1}
-    local exists_in_local=$(git branch --list ${branch})
-    local exists_in_remote=$(git ls-remote --heads origin ${branch})
-
-    if [[ -n ${exists_in_local} ]] || [[ -n ${exists_in_remote} ]]
-    then
-        echo 0
-    else
-        echo 1
-    fi
-}
-
 
 cd /data/git_repos
 
