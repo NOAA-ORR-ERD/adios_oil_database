@@ -731,6 +731,7 @@ init_git_repo_on_stage:
     SCRIPT_NAME: init_noaa_data.sh
   script:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
   tags:
@@ -751,6 +752,7 @@ sync_with_git_review:
     SCRIPT_NAME: sync_with_under_review.sh
   script:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
 sync_with_git_prod:
@@ -767,6 +769,7 @@ sync_with_git_prod:
     SCRIPT_NAME: sync_with_production.sh
   script:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
 pull_remote_under_review_changes:
@@ -783,6 +786,7 @@ pull_remote_under_review_changes:
     SCRIPT_NAME: pull_remote_under_review_changes.sh
   script:
     - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
+    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
 drop_db_volume_public:
