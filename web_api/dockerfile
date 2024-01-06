@@ -29,7 +29,7 @@ RUN conda install -y \
     --file adios_db/conda_requirements.txt \
     --file web_api/conda_requirements.txt \
     --file documents/conda_requirements.txt \
-    && conda clean --all
+    && mamba clean --all
 
 RUN cd adios_db && pip install -e ./
 RUN cd web_api && pip install -e ./
