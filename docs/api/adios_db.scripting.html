@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.scripting package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -61,6 +63,7 @@
 <li class="toctree-l3"><a class="reference internal" href="adios_db.db_init.html">adios_db.db_init package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adios_db.models.html">adios_db.models package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">adios_db.scripting package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adios_db.scripting.find_highest_id"><code class="docutils literal notranslate"><span class="pre">find_highest_id()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios_db.scripting.get_all_records"><code class="docutils literal notranslate"><span class="pre">get_all_records()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adios_db.scripting.process_input"><code class="docutils literal notranslate"><span class="pre">process_input()</span></code></a></li>
 </ul>
@@ -102,6 +105,22 @@
   <section id="module-adios_db.scripting">
 <span id="adios-db-scripting-package"></span><h1>adios_db.scripting package<a class="headerlink" href="#module-adios_db.scripting" title="Link to this heading"></a></h1>
 <p>Assorted utilities to help with writing scripts that use the oil database</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.scripting.find_highest_id">
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">find_highest_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oil_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.find_highest_id" title="Link to this definition"></a></dt>
+<dd><p>find the highest id of the records with a
+given prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prefix</strong> – two-char prefix of the IDs</p></li>
+<li><p><strong>oil_path</strong> – Path where the oil JSON files are.</p></li>
+</ul>
+</dd>
+</dl>
+<p>NOTE: this assumes that the file names match the ID</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripting.get_all_records">
 <span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">get_all_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.get_all_records" title="Link to this definition"></a></dt>
