@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADIOS Oil Database adios_db package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#">
+            
+              <img src="_static/ADIOS_Oil_Database.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing.html">Managing the Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation with the ADIOS data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing_new_data.html">Importing New Data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/adios_db.html">adios_db package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ADIOS Oil Database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ADIOS Oil Database <code class="docutils literal notranslate"><span class="pre">adios_db</span></code> package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adios-oil-database-adios-db-package">
+<h1>ADIOS Oil Database <code class="docutils literal notranslate"><span class="pre">adios_db</span></code> package<a class="headerlink" href="#adios-oil-database-adios-db-package" title="Link to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">adios_db</span></code> package is a PYthon package developed to help manage and work with oil properties data, as managed in the NOAA ADIOS Oil Database project:</p>
+<p><a class="reference external" href="http://adios.orr.noaa.gov">http://adios.orr.noaa.gov</a></p>
+<p>This package is used to provide the back-end services of the ADIOS Oil Database web application, and can also be used to work with the data directly itself.</p>
+<p>There are three things one might want to do with this package:</p>
+<ol class="arabic simple">
+<li><p>Manage the data itself: search it, update it, add to it etc.
+See: <a class="reference internal" href="managing.html#managing-the-data"><span class="std std-ref">Managing the Data</span></a> for some documentation of this use case.</p></li>
+<li><p>Extract numerical values from the data to use for computation,
+such as initializing an oil weathering model.
+See: <a class="reference internal" href="computation.html#computation"><span class="std std-ref">Computation with the ADIOS data</span></a> for some documentation of this use case.</p></li>
+<li><p>Extracting data needed for modeling. Oil weathing models need oil properties in order to apply the model to a particular oil. But each model requires different data, and each oil record provides different data. So building a “model oil” is non-trivial. See <a class="reference internal" href="api/adios_db.computation.html#module-adios_db.computation.gnome_oil" title="adios_db.computation.gnome_oil"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adios_db.computation.gnome_oil</span></code></a>  for an example of an Oil object as required by the GNOME oil weathering model is constructed from the data. Other models should be able to be supported with similar code.</p></li>
+</ol>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing.html">Managing the Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="managing.html#the-scripting-module">The Scripting Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managing.html#working-with-json">Working with JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managing.html#creating-an-oil-from-scratch">Creating an Oil from scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managing.html#example-scripts">Example Scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation with the ADIOS data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="computation.html#the-measurement-objects">The Measurement Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="importing_new_data.html">Importing New Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="importing_new_data.html#using-the-python-library">Using the Python Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importing_new_data.html#generate-json-directly">Generate JSON Directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importing_new_data.html#edit-json-by-hand">Edit JSON by Hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importing_new_data.html#use-a-standard-csv-format">Use a Standard CSV Format</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/adios_db.html">adios_db package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/adios_db.html#adios_db.initialize_console_log"><code class="docutils literal notranslate"><span class="pre">initialize_console_log()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/adios_db.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-right" title="Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, NOAA Emergency Response Division.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
