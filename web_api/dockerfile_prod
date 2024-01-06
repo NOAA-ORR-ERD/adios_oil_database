@@ -27,7 +27,7 @@ WORKDIR adios-db
 RUN conda config --append channels defaults
 
 # install deps
-RUN mamba install -y \
+RUN conda install -y \
     python=$PYTHON_VER \
     --file adios_db/conda_requirements.txt \
     --file web_api/conda_requirements.txt \

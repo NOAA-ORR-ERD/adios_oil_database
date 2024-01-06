@@ -44,7 +44,7 @@ test_develop:
   script:
     # install all the requirements
     - >
-      mamba install -y
+      conda install -y
       python=$PYTHON_VER
       --file adios_db/conda_requirements.txt
       --file adios_db/conda_requirements_optional.txt
