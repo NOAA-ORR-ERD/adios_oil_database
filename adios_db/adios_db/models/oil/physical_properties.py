@@ -6,6 +6,7 @@ This maps to the JSON used in the DB
 Having a Python class makes it easier to write importing, validating etc, code.
 """
 from dataclasses import dataclass, field
+from operator import itemgetter
 
 from .validation.errors import ERRORS
 
@@ -179,6 +180,32 @@ class DynamicViscosityList(RefTempList, JSON_List):
         return kvl
 
 
+    def validate(self):
+        """
+        validator for viscosity
+
+        Checks dvis are increasing with temperature.
+        """
+        msgs = super().validate()
+        points_list = self
+        dvis_list = []
+        for pt in points_list:
+            try:
+                ref_temp = pt.ref_temp.converted_to('C').value
+                viscosity = pt.viscosity.converted_to('Pas').value
+                dvis_list.append((viscosity,ref_temp))
+            except (TypeError, AttributeError):
+                pass
+
+        if len(dvis_list) > 1:
+            dvis_list = sorted(dvis_list, key=itemgetter(1))
+            dvis_list.sort(key=itemgetter(0), reverse=True)
+            dvis, temps = zip(*dvis_list)
+            if(any(i <= j for i, j in zip(dvis, dvis[1:]))):
+                msgs.append(ERRORS["E062"])
+
+        return msgs
+
 
 @dataclass_to_json
 @dataclass
@@ -219,6 +246,34 @@ class KinematicViscosityList(RefTempList, JSON_List):
         # sort by temp -- assume the same units
         kvl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
         return kvl
+
+    def validate(self):
+        """
+        validator for viscosity
+
+        Checks kvis are increasing with temperature.
+        """
+        msgs = super().validate()
+        points_list = self
+        kvis_list = []
+        for pt in points_list:
+            try:
+                ref_temp = pt.ref_temp.converted_to('C').value
+                viscosity = pt.viscosity.converted_to('m^2/s').value
+                kvis_list.append((viscosity,ref_temp))
+            except (TypeError, AttributeError):
+                pass
+
+        if len(kvis_list) > 1:
+            kvis_list = sorted(kvis_list, key=itemgetter(1))
+            kvis, temps = zip(*kvis_list)
+            if(any(i <= j for i, j in zip(kvis, kvis[1:]))):
+                msgs.append(ERRORS["E062"])
+
+#         if len(temp) > 1:
+#             if(any(i > j for i, j in zip(temp, temp[1:]))):
+#                 msgs.append(ERRORS["E061"])
+        return msgs
 
 
 
