@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.computation package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -443,12 +445,21 @@ density in kg/m^3</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.KinematicViscosity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">KinematicViscosity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">KinematicViscosity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_or_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_v2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>class to hold and do calculations on kinematic viscosity</p>
-<p>data is stored internally in standard units:
+<p>Class to hold and do calculations on kinematic viscosity</p>
+<p>Data is stored internally in standard units:
 temperature in Kelvin
 viscosity in m^2/s</p>
+<dl class="simple">
+<dt>Viscosity as a function of temp is given by:</dt><dd><p>v = A exp(k_v2 / T)</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="adios_db.computation.physical_properties.KinematicViscosity.DEFAULT_KV2">
+<span class="sig-name descname"><span class="pre">DEFAULT_KV2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2100.0</span></em><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity.DEFAULT_KV2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.KinematicViscosity.at_temp">
 <span class="sig-name descname"><span class="pre">at_temp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kvis_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'m^2/s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity.at_temp" title="Link to this definition"></a></dt>
@@ -463,6 +474,11 @@ of values.  Should be in Kelvin</p>
 v = A exp(k_v2 / T)</p>
 <p>with constants determined from measured data</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="adios_db.computation.physical_properties.KinematicViscosity.default_kvs">
+<span class="sig-name descname"><span class="pre">default_kvs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Crude</span> <span class="pre">Oil</span> <span class="pre">NOS':</span> <span class="pre">2099.9999,</span> <span class="pre">'Distillate</span> <span class="pre">Fuel</span> <span class="pre">Oil':</span> <span class="pre">6200.0}</span></em><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity.default_kvs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.KinematicViscosity.initialize">
@@ -550,7 +566,7 @@ the emulsion. (from ADIOS2)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.get_dynamic_viscosity_data">
-<span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">get_dynamic_viscosity_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Pas'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.get_dynamic_viscosity_data" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">get_dynamic_viscosity_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Pas'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.get_dynamic_viscosity_data" title="Link to this definition"></a></dt>
 <dd><p>Return a table of dynamic viscosity data:</p>
 <p>list of (viscosity, temp) pairs</p>
 <dl class="field-list simple">
@@ -559,6 +575,9 @@ the emulsion. (from ADIOS2)</p>
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
 <li><p><strong>units=&quot;Pas&quot;</strong> – units you want the viscosity in</p></li>
 <li><p><strong>temp_units=&quot;K&quot;</strong> – units you want the temperature in</p></li>
+<li><p><strong>shear_rate</strong> (<em>float</em><em> or </em><em>int</em>) – what shear rate the data are for, in 1/s
+if None, the first shear rate found will be used,
+if there are more than one.</p></li>
 </ul>
 </dd>
 </dl>
@@ -619,7 +638,7 @@ and whether fraction recovered is in the database T or F</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.get_kinematic_viscosity_data">
-<span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">get_kinematic_viscosity_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'m^2/s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.get_kinematic_viscosity_data" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">get_kinematic_viscosity_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'m^2/s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.get_kinematic_viscosity_data" title="Link to this definition"></a></dt>
 <dd><p>Return a table of kinematic viscosity data:</p>
 <p>list of (viscosity, temp) pairs</p>
 <dl class="field-list simple">
@@ -628,6 +647,9 @@ and whether fraction recovered is in the database T or F</p>
 <li><p><strong>oil</strong> – the oil object to get data from</p></li>
 <li><p><strong>units=&quot;m^2/s&quot;</strong> – units you want the viscosity in</p></li>
 <li><p><strong>temp_units=&quot;K&quot;</strong> – units you want the temperature in</p></li>
+<li><p><strong>shear_rate</strong> (<em>float</em><em> or </em><em>int</em>) – what shear rate the data are for, in 1/s
+if None, the first shear rate found will be used,
+if there are more than one.</p></li>
 </ul>
 </dd>
 </dl>
