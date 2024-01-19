@@ -13,3 +13,4 @@
 python>=3.9,<3.12
 numpy>=1.20
 pynucos>=2.12
+awesome-slugify>=1.6.5
