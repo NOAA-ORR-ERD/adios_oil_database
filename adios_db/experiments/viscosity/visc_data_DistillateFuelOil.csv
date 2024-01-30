@@ -1,0 +1,116 @@
+Name, "Product Type", ID, "Kin. Values", "Dyn. Values"
+"AUTOMOTIVE GASOLINE, EXXON", "Distillate Fuel Oil", AD00084, 1, 0
+"AVIATION GASOLINE 100LL, STAR ENTERPRISE", "Distillate Fuel Oil", AD00092, 1, 0
+"AVIATION GASOLINE 80", "Distillate Fuel Oil", AD00094, 0, 2
+"DF2 SUMMER (DIESEL), TESORO", "Distillate Fuel Oil", AD00293, 1, 0
+"DF2 WINTER (DIESEL), TESORO", "Distillate Fuel Oil", AD00294, 1, 0
+"DIESEL", "Distillate Fuel Oil", AD00297, 1, 2
+"STRAIGHT RUN", "Distillate Fuel Oil", AD00300, 1, 2
+"FUEL OIL NO.1 (AVJET A), STAR ENTERPRISE", "Distillate Fuel Oil", AD00403, 1, 0
+"FUEL OIL NO.1 (DIESEL/HEATING FUEL), PETRO STAR", "Distillate Fuel Oil", AD00404, 1, 0
+"FUEL OIL NO.1 (JP-5)", "Distillate Fuel Oil", AD00407, 1, 2
+"FUEL OIL NO.1 (JP-8)", "Distillate Fuel Oil", AD00408, 1, 0
+"FUEL OIL NO.1 (JP-7)", "Distillate Fuel Oil", AD00409, 1, 0
+"FUEL OIL NO.1 (JET FUEL A)", "Distillate Fuel Oil", AD00412, 2, 0
+"FUEL OIL NO.1 (JET FUEL A-1)", "Distillate Fuel Oil", AD00413, 2, 2
+"FUEL OIL NO.1 (JET FUEL B)", "Distillate Fuel Oil", AD00414, 0, 2
+"FUEL OIL NO.1 (KEROSENE) ", "Distillate Fuel Oil", AD00416, 1, 2
+"FUEL OIL NO.2", "Distillate Fuel Oil", AD00422, 1, 2
+"FUEL OIL NO.2 (DIESEL), STAR ENTERPRISE", "Distillate Fuel Oil", AD00431, 1, 0
+"FUEL OIL NO.2 (HO/DIESEL), EXXON", "Distillate Fuel Oil", AD00433, 1, 0
+"FUEL OIL NO.4", "Distillate Fuel Oil", AD00434, 0, 2
+"JET A (DFA), TESORO", "Distillate Fuel Oil", AD00584, 2, 0
+"MARINE DIESEL FUEL OIL", "Distillate Fuel Oil", AD00721, 1, 1
+"PREMIUM UNLEADED GASOLINE, STAR ENTERPRISE", "Distillate Fuel Oil", AD00913, 1, 0
+"UNLEADED INTERM GASOLINE, STAR ENTERPRISE", "Distillate Fuel Oil", AD01137, 1, 0
+"MARINE DIESEL F-76, MANCHESTER FUEL", "Distillate Fuel Oil", AD01215, 1, 0
+"FUEL OIL NO.2, AMOCO", "Distillate Fuel Oil", AD01427, 1, 0
+"JET A-1,  MARITIME SAFETY AUTHORITY OF NEW ZEALAND", "Distillate Fuel Oil", AD01500, 1, 0
+"DUAL PURPOSE KEROSINE,  MARITIME SAFETY AUTHORITY OF NEW ZEALAND", "Distillate Fuel Oil", AD01501, 1, 0
+"FUEL OIL NO.1 (JET B, ALASKA)", "Distillate Fuel Oil", AD01765, 0, 2
+"DIESEL/HEATING OIL NO.2, CHEVRON", "Distillate Fuel Oil", AD01774, 1, 0
+"MOTOR GASOLINE-PREMIUM UNLEADED, SHELL REFINING PTY ", "Distillate Fuel Oil", AD01776, 1, 0
+"MOTOR GASOLINE-UNLEADED, SHELL REFINING PTY ", "Distillate Fuel Oil", AD01777, 1, 0
+"MOTOR GASOLINE-LEADED, SHELL REFINING PTY ", "Distillate Fuel Oil", AD01778, 1, 0
+"AUTOMOTIVE DIESEL FUEL, SHELL REFINING PTY ", "Distillate Fuel Oil", AD01779, 1, 0
+"AVIATION TURBINE FUEL, SHELL REFINING PTY ", "Distillate Fuel Oil", AD01786, 1, 0
+"AVIATION GASOLINE 100", "Distillate Fuel Oil", AD02015, 0, 2
+"AVIATION GASOLINE 100LL", "Distillate Fuel Oil", AD02016, 0, 2
+"AVIATION GASOLINE 80", "Distillate Fuel Oil", AD02017, 0, 2
+"DIESEL FUEL OIL (ALASKA)", "Distillate Fuel Oil", AD02081, 0, 2
+"DIESEL FUEL OIL (CANADA)", "Distillate Fuel Oil", AD02082, 0, 4
+"DIESEL FUEL OIL (SOUTHERN USA 1994)", "Distillate Fuel Oil", AD02083, 0, 2
+"DIESEL FUEL OIL (SOUTHERN USA 1997)", "Distillate Fuel Oil", AD02084, 0, 2
+"FUEL OIL NO.1 (JP-1)", "Distillate Fuel Oil", AD02132, 0, 3
+"FUEL OIL NO.1 (JP-3)", "Distillate Fuel Oil", AD02133, 0, 1
+"FUEL OIL NO.1 (JP-4)", "Distillate Fuel Oil", AD02134, 0, 2
+"FUEL OIL NO.1 (JP-6)", "Distillate Fuel Oil", AD02136, 1, 0
+"FUEL OIL NO.2", "Distillate Fuel Oil", AD02138, 0, 2
+"FUEL OIL NO.2 (HIGH AROMATIC CONTENT HEATING OIL)", "Distillate Fuel Oil", AD02139, 2, 0
+"FUEL OIL NO.4", "Distillate Fuel Oil", AD02141, 0, 2
+"GASOLINE (LEADED)", "Distillate Fuel Oil", AD02151, 0, 4
+"GASOLINE (UNLEADED), SHELL", "Distillate Fuel Oil", AD02153, 1, 0
+"JET A/JET A-1", "Distillate Fuel Oil", AD02193, 1, 2
+"JET B", "Distillate Fuel Oil", AD02194, 0, 2
+"JET B (ALASKA)", "Distillate Fuel Oil", AD02195, 0, 2
+"MARINE DIESEL FUEL OIL", "Distillate Fuel Oil", AD02247, 1, 1
+"MARINE GAS OIL", "Distillate Fuel Oil", AD02248, 1, 0
+"MARINE GAS OIL (HEAVY)", "Distillate Fuel Oil", AD02249, 1, 0
+"FUEL OIL N0.1 (JP-8)", "Distillate Fuel Oil", AD02400, 1, 0
+"JET FUEL, TESORO", "Distillate Fuel Oil", AD02425, 2, 0
+"HOME HEATING OIL", "Distillate Fuel Oil", AD02426, 2, 0
+"JP-4", "Distillate Fuel Oil", AD02429, 0, 2
+"JP-5", "Distillate Fuel Oil", AD02430, 1, 2
+"JP-8", "Distillate Fuel Oil", AD02433, 1, 0
+"JP-8", "Distillate Fuel Oil", AD02434, 1, 0
+"DIESEL FUEL OIL NO.2 (BONDED), TESORO", "Distillate Fuel Oil", AD02436, 1, 0
+"MARINE DIESEL, U.S. NAVY", "Distillate Fuel Oil", AD02447, 1, 0
+"ULTRA LOW SULFUR DIESEL", "Distillate Fuel Oil", AD02541, 1, 0
+"AUTOMOTIVE DIESEL OIL, ESSO", "Distillate Fuel Oil", AD02543, 0, 1
+"MARINE DIESEL OIL, ESSO", "Distillate Fuel Oil", AD02544, 0, 1
+"VLSFO O-1 (AMSA)", "Distillate Fuel Oil", AD02582, 3, 3
+"VLSFO O-2 (AMSA)", "Distillate Fuel Oil", AD02583, 3, 3
+"VLSFO O-3 (AMSA)", "Distillate Fuel Oil", AD02584, 3, 3
+"VLSFO O-4 (AMSA)", "Distillate Fuel Oil", AD02585, 3, 3
+"VLSFO O-5 (AMSA)", "Distillate Fuel Oil", AD02586, 3, 3
+"VLSFO O-6 (AMSA)", "Distillate Fuel Oil", AD02587, 3, 3
+"VLSFO O-7 (AMSA)", "Distillate Fuel Oil", AD02588, 3, 3
+"VLSFO O-8 (AMSA)", "Distillate Fuel Oil", AD02589, 3, 3
+"VLSFO O-9 (AMSA)", "Distillate Fuel Oil", AD02590, 3, 3
+"VLSFO O-10 (AMSA)", "Distillate Fuel Oil", AD02591, 3, 3
+"VLSFO IM-5 (IMAROS)", "Distillate Fuel Oil", AD02592, 0, 4
+"LSFO Gwangyang Source Oil", "Distillate Fuel Oil", AD02593, 1, 0
+"ULSFO IM-1 (IMAROS)", "Distillate Fuel Oil", AD02594, 0, 0
+"VLSFO IM-2 (IMAROS)", "Distillate Fuel Oil", AD02595, 0, 0
+"VLSFO IM-3 (IMAROS)", "Distillate Fuel Oil", AD02596, 0, 2
+"VLSFO IM-4 (IMAROS)", "Distillate Fuel Oil", AD02597, 0, 2
+"VLSFO IM-6 (IMAROS)", "Distillate Fuel Oil", AD02598, 0, 2
+"VLSFO IM-7 (IMAROS)", "Distillate Fuel Oil", AD02599, 0, 2
+"VLSFO IM-8 (IMAROS)", "Distillate Fuel Oil", AD02600, 0, 2
+"ULSFO IM-9 (IMAROS)", "Distillate Fuel Oil", AD02601, 0, 0
+"VLSFO IM-10 (IMAROS)", "Distillate Fuel Oil", AD02602, 0, 2
+"VLSFO IM-11 (IMAROS)", "Distillate Fuel Oil", AD02603, 0, 2
+"VLSFO IM-12 (IMAROS)", "Distillate Fuel Oil", AD02604, 0, 2
+"VLSFO IM-13 (IMAROS)", "Distillate Fuel Oil", AD02605, 0, 2
+"ULSFO Gas Oil (SINTEF)", "Distillate Fuel Oil", AD02606, 0, 2
+"ULSFO Marine Gas Oil (SINTEF)", "Distillate Fuel Oil", AD02607, 0, 2
+"ULSFO Rotterdam Diesel (SINTEF)", "Distillate Fuel Oil", AD02608, 0, 2
+"VLSFO WRG oil, DMZ-RMA quality (SINTEF)", "Distillate Fuel Oil", AD02609, 0, 2
+"ULSFO Heavy Distillate Marine ECA 50 (SINTEF)", "Distillate Fuel Oil", AD02610, 0, 2
+"Ultra Low Sulphur Fuel Oil (ULSFO), RMA-quality oil (SINTEF)", "Distillate Fuel Oil", AD02611, 0, 2
+"Diesel [2002]", "Distillate Fuel Oil", EC00567, 0, 2
+"Diesel ULSD (2006)", "Distillate Fuel Oil", EC01001, 0, 2
+"Diesel (summer) COM ULSD", "Distillate Fuel Oil", EC01487, 0, 2
+"Marine Diesel-Corporal Teather", "Distillate Fuel Oil", EC03720, 0, 2
+"Marine Diesel-Ile Saint Ours", "Distillate Fuel Oil", EC03721, 0, 2
+"Marine Diesel-Hurst Marina", "Distillate Fuel Oil", EC03869, 0, 2
+"Marine Diesel-Burnaby BC", "Distillate Fuel Oil", EC04025, 0, 2
+"Marine Diesel [2018]", "Distillate Fuel Oil", EC04026, 0, 2
+"Ultra Low Sulfur Diesel (ULSFO)", "Distillate Fuel Oil", LS00002, 1, 0
+"DMA (ULSFO)", "Distillate Fuel Oil", LS00009, 1, 0
+"DMB (ULSFO)", "Distillate Fuel Oil", LS00010, 1, 0
+"Marine Gas Oil (ULSFO)", "Distillate Fuel Oil", LS00014, 1, 0
+"MARINE GAS OIL 500 ppm S", "Distillate Fuel Oil", NO00119, 0, 3
+"HEAVY DISTILLATE MARINE ECA 50", "Distillate Fuel Oil", NO00121, 0, 3
+"ROTTERDAM DIESEL", "Distillate Fuel Oil", NO00122, 0, 3
+"GAS OIL 10 ppm S", "Distillate Fuel Oil", NO00123, 0, 3
