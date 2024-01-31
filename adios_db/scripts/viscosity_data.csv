@@ -1,0 +1,248 @@
+Name, "Product Type", ID, "Kin. Values", "Dyn. Values"
+"KOAKOAK 0-22", "Crude Oil NOS", AD00615, 0, 3
+"LA ROSA", "Crude Oil NOS", AD00638, 1, 3
+"NAPHTHA (STODDARD SOLVENT)", "Solvent", AD00801, 1, 3
+"NAPHTHA (VARNISH MAKERS & PAINTERS)", "Solvent", AD00802, 1, 3
+"NEKTORALIK K-59", "Crude Oil NOS", AD00809, 0, 3
+"NEKTORALIK K-59A", "Crude Oil NOS", AD00810, 2, 3
+"NERLERK", "Crude Oil NOS", AD00811, 0, 3
+"NERLERK M-98C", "Crude Oil NOS", AD00813, 0, 3
+"WEYBURN-MIDALE", "Crude Oil NOS", AD01180, 0, 3
+"KUTUBU LIGHT, BHP PETROLEUM", "Crude Oil NOS", AD01235, 3, 0
+"DIA HUNG, OIL & GAS", "Crude Oil NOS", AD01266, 3, 0
+"FORTIES, OIL & GAS", "Crude Oil NOS", AD01378, 3, 0
+"RABBI, COASTAL EAGLE POINT OIL", "Crude Oil NOS", AD01411, 3, 0
+"ARABIAN MEDIUM, SHELL OIL", "Crude Oil NOS", AD01434, 3, 0
+"BACHAQUERO, SHELL OIL", "Crude Oil NOS", AD01436, 3, 0
+"BETA PRODUCTION, SHELL OIL", "Crude Oil NOS", AD01438, 3, 0
+"BONITO P/L SOUR, SHELL OIL", "Crude Oil NOS", AD01439, 3, 0
+"BONNY LIGHT, SHELL OIL", "Crude Oil NOS", AD01440, 3, 0
+"BRASS RIVER, SHELL OIL", "Crude Oil NOS", AD01441, 3, 0
+"COGNAC-BLOCK 194, SHELL OIL", "Crude Oil NOS", AD01443, 3, 0
+"DJENO, SHELL OIL", "Crude Oil NOS", AD01444, 3, 0
+"ESCRAVOS, SHELL OIL", "Crude Oil NOS", AD01446, 3, 0
+"ETCHEGOIN, SHELL OIL", "Crude Oil NOS", AD01447, 3, 0
+"FLOTTA, SHELL OIL", "Crude Oil NOS", AD01448, 3, 0
+"FORCADOS, SHELL OIL", "Crude Oil NOS", AD01449, 3, 0
+"FORTIES, SHELL OIL", "Crude Oil NOS", AD01450, 3, 0
+"FURRIAL, SHELL OIL", "Crude Oil NOS", AD01451, 3, 0
+"GREEN CANYON, SHELL OIL", "Crude Oil NOS", AD01453, 3, 0
+"GULLFAKS, SHELL OIL", "Crude Oil NOS", AD01454, 3, 0
+"HARDING, SHELL OIL", "Crude Oil NOS", AD01455, 3, 0
+"HIGH ISLAND SWEET, SHELL OIL", "Crude Oil NOS", AD01456, 3, 0
+"ISTHMUS, SHELL OIL", "Crude Oil NOS", AD01458, 3, 0
+"JABIRU, SHELL OIL", "Crude Oil NOS", AD01460, 3, 0
+"KIRKUK, SHELL OIL", "Crude Oil NOS", AD01462, 3, 0
+"KOLE, SHELL OIL", "Crude Oil NOS", AD01463, 3, 0
+"KUTUBU, SHELL OIL", "Crude Oil NOS", AD01464, 3, 0
+"LAGOCINCO, SHELL OIL", "Crude Oil NOS", AD01465, 3, 0
+"LAGOMAR, SHELL OIL", "Crude Oil NOS", AD01466, 3, 0
+"LAGOTRECO, SHELL OIL", "Crude Oil NOS", AD01467, 3, 0
+"LOKELE, SHELL OIL", "Crude Oil NOS", AD01468, 3, 0
+"LLOYDMINSTER, SHELL OIL", "Crude Oil NOS", AD01469, 3, 0
+"ARABIAN LIGHT, SHELL OIL", "Crude Oil NOS", AD01470, 3, 0
+"LORETO, SHELL OIL", "Crude Oil NOS", AD01471, 3, 0
+"LUCINA, SHELL OIL", "Crude Oil NOS", AD01472, 3, 0
+"MAYA, SHELL OIL", "Crude Oil NOS", AD01474, 3, 0
+"MANDJI, SHELL OIL", "Crude Oil NOS", AD01475, 3, 0
+"MURBAN, SHELL OIL", "Crude Oil NOS", AD01476, 3, 0
+"OLMECA, SHELL OIL", "Crude Oil NOS", AD01477, 3, 0
+"OMAN, SHELL OIL", "Crude Oil NOS", AD01478, 3, 0
+"ORIENTE, SHELL OIL", "Crude Oil NOS", AD01479, 3, 0
+"OSEBERG, SHELL OIL", "Crude Oil NOS", AD01480, 3, 0
+"PALANCA, SHELL OIL", "Crude Oil NOS", AD01481, 3, 0
+"PECAN ISLAND, SHELL OIL", "Crude Oil NOS", AD01482, 3, 0
+"QUA IBOE, SHELL OIL", "Crude Oil NOS", AD01483, 3, 0
+"RABI BLEND, SHELL OIL", "Crude Oil NOS", AD01484, 3, 0
+"RABI-KOUNGA, SHELL OIL", "Crude Oil NOS", AD01485, 3, 0
+"SAHARAN BLEND BEJAIA, SHELL OIL", "Crude Oil NOS", AD01486, 3, 0
+"SAHARAN BLEND ARZEW, SHELL OIL", "Crude Oil NOS", AD01487, 3, 0
+"SKUA, SHELL OIL", "Crude Oil NOS", AD01488, 3, 0
+"SOYO, SHELL OIL", "Crude Oil NOS", AD01489, 3, 0
+"TIA JUANA LIGHT, SHELL OIL", "Crude Oil NOS", AD01490, 3, 0
+"TIERRA DEL FUEGO, SHELL OIL", "Crude Oil NOS", AD01491, 3, 0
+"VENTURA SHELL TAYLOR LEASE, SHELL OIL", "Crude Oil NOS", AD01492, 3, 0
+"VIOSCA KNOLL 826, SHELL OIL", "Crude Oil NOS", AD01493, 3, 0
+"WEST DELTA BLOCK 89, SHELL OIL", "Crude Oil NOS", AD01494, 3, 0
+"WEST LAKE VERRET, SHELL OIL", "Crude Oil NOS", AD01495, 3, 0
+"YOWLUMNE, SHELL OIL", "Crude Oil NOS", AD01498, 3, 0
+"ZAIRE, SHELL OIL", "Crude Oil NOS", AD01499, 3, 0
+"CUSIANA", "Crude Oil NOS", AD01634, 3, 0
+"ORIMULSION", "Bitumen Blend", AD01706, 0, 3
+"SOUTH PASS BLOCK 67", "Crude Oil NOS", AD01739, 0, 3
+"BLINA, BP", "Crude Oil NOS", AD01855, 3, 0
+"JACKSON, BP", "Crude Oil NOS", AD01856, 3, 0
+"SURAT BASIN, BP", "Crude Oil NOS", AD01857, 3, 0
+"THEVENAND, BP", "Crude Oil NOS", AD01858, 3, 0
+"VARANUS, BP", "Crude Oil NOS", AD01859, 3, 0
+"WANDO, BP", "Crude Oil NOS", AD01860, 3, 0
+"UMM SHAIF, BP", "Crude Oil NOS", AD01861, 3, 0
+"UPPER ZAKUM, BP", "Crude Oil NOS", AD01862, 3, 0
+"MARGHAM, BP", "Crude Oil NOS", AD01863, 3, 0
+"KUWAIT, BP", "Crude Oil NOS", AD01864, 3, 0
+"KHAFJI, BP", "Crude Oil NOS", AD01865, 3, 0
+"AL RAYYAN, BP", "Crude Oil NOS", AD01866, 3, 0
+"SAJAA CONDENSATE, BP", "Condensate", AD01868, 3, 0
+"NANNAI LIGHT, BP", "Crude Oil NOS", AD01869, 3, 0
+"BELIDA, BP", "Crude Oil NOS", AD01870, 3, 0
+"BONTANG MIX, BP", "Crude Oil NOS", AD01872, 3, 0
+"HANDIL, BP", "Crude Oil NOS", AD01873, 3, 0
+"KERAPU, BP", "Crude Oil NOS", AD01874, 3, 0
+"MIRI LIGHT, BP", "Crude Oil NOS", AD01876, 3, 0
+"VIOSCA KNOLL BLOCK 990", "Crude Oil NOS", AD01978, 0, 3
+"ALASKA NORTH SLOPE (SOCSEX)", "Crude Oil NOS", AD01989, 1, 4
+"BACH HO", "Crude Oil NOS", AD02018, 3, 0
+"CASTOR OIL", "Natural Plant Oil", AD02062, 0, 3
+"COAL OIL POINT SEEP OIL", "Crude Oil NOS", AD02067, 0, 3
+"CUSIANA", "Crude Oil NOS", AD02077, 3, 2
+"DAI HUNG", "Crude Oil NOS", AD02078, 3, 0
+"DANISH NORTH SEA", "Crude Oil NOS", AD02080, 3, 0
+"DIESEL FUEL OIL (CANADA)", "Distillate Fuel Oil", AD02082, 0, 4
+"ELECTRICAL INSULATING OIL (VOLTESSO 35)", "Dielectric Oil", AD02098, 0, 6
+"EMERALD", "Crude Oil NOS", AD02099, 3, 0
+"FUEL OIL NO.1 (JP-1)", "Distillate Fuel Oil", AD02132, 0, 3
+"GASOLINE (LEADED)", "Distillate Fuel Oil", AD02151, 0, 4
+"HEBRON", "Crude Oil NOS", AD02168, 3, 2
+"HIBERNIA", "Crude Oil NOS", AD02170, 3, 2
+"IF-30 FUEL OIL 180", "Residual Fuel Oil", AD02181, 0, 4
+"INTERMEDIATE FUEL OIL 180 (SOCSEX)", "Residual Fuel Oil", AD02182, 0, 3
+"INTERMEDIATE FUEL OIL 300", "Residual Fuel Oil", AD02183, 0, 4
+"INTERMEDIATE FUEL OIL 300 (SOCSEX)", "Residual Fuel Oil", AD02184, 0, 3
+"IPAR 3", "Other", AD02185, 0, 3
+"ISTHMUS", "Crude Oil NOS", AD02189, 1, 3
+"KOAKOAK", "Crude Oil NOS", AD02201, 0, 3
+"KUTUBU", "Crude Oil NOS", AD02206, 3, 0
+"LAGO TRECO", "Crude Oil NOS", AD02211, 0, 3
+"LEONA", "Crude Oil NOS", AD02213, 3, 0
+"LLOYDMINSTER", "Crude Oil NOS", AD02215, 1, 6
+"MARINE INTERMEDIATE FUEL OIL", "Residual Fuel Oil", AD02250, 0, 6
+"MARS BLEND", "Crude Oil NOS", AD02251, 3, 0
+"MAYA (1997)", "Crude Oil NOS", AD02255, 0, 3
+"MURBAN", "Crude Oil NOS", AD02266, 1, 5
+"NAPHTHA (STODDARD SOLVENT)", "Solvent", AD02270, 0, 3
+"NORMAN WELLS", "Crude Oil NOS", AD02282, 0, 5
+"ORIENTE", "Crude Oil NOS", AD02289, 1, 3
+"ORIMULSION-100", "Bitumen Blend", AD02290, 0, 5
+"PRUDHOE BAY", "Crude Oil NOS", AD02304, 0, 6
+"SAKHALIN", "Crude Oil NOS", AD02317, 0, 3
+"SOCKEYE COMINGLED", "Crude Oil NOS", AD02337, 0, 3
+"SOYBEAN OIL", "Natural Plant Oil", AD02348, 0, 3
+"KOAKOAK 0-22A", "Crude Oil NOS", AD02402, 0, 3
+"IFO 300", "Residual Fuel Oil", AD02428, 0, 4
+"ESCALANTE, ITS", "Crude Oil NOS", AD02441, 3, 0
+"LUCKENBACH FUEL OIL", "Residual Fuel Oil", AD02448, 4, 0
+"ZUATA SWEET, OIL & GAS JOURNAL", "Crude Oil NOS", AD02474, 3, 0
+"CONDENSATE (SWEET), ENCANA CORP.", "Condensate", AD02483, 3, 0
+"U.S. HIGH SWEET-CLEARBROOK", "Crude Oil NOS", AD02540, 5, 0
+"HOOPS BLEND, ExxonMobil", "Crude Oil NOS", AD02547, 6, 0
+"ALVHEIM BLEND, STATOIL", "Crude Oil NOS", AD02551, 3, 0
+"AZERI BTC, STATOIL", "Crude Oil NOS", AD02553, 3, 0
+"AZERI LIGHT, STATOIL", "Crude Oil NOS", AD02554, 3, 0
+"CLOV, STATOIL", "Crude Oil NOS", AD02555, 3, 0
+"DALIA, STATOIL", "Crude Oil NOS", AD02556, 3, 0
+"EKOFISK, STATOIL", "Crude Oil NOS", AD02558, 3, 0
+"FORTIES, STATOIL", "Crude Oil NOS", AD02559, 3, 0
+"GIMBO, STATOIL", "Crude Oil NOS", AD02560, 3, 0
+"GIRASSOL, STATOIL", "Crude Oil NOS", AD02561, 3, 0
+"GOLIAT BLEND, STATOIL", "Crude Oil NOS", AD02562, 3, 0
+"GRANE BLEND, STATOIL", "Crude Oil NOS", AD02563, 3, 0
+"GUDRUN BLEND, STATOIL", "Crude Oil NOS", AD02564, 3, 0
+"GULLFAKS, STATOIL", "Crude Oil NOS", AD02565, 3, 0
+"HEIDRUN, STATOIL", "Crude Oil NOS", AD02566, 3, 0
+"HIBERNIA BLEND, STATOIL", "Crude Oil NOS", AD02567, 3, 0
+"HUNGO BLEND, STATOIL", "Crude Oil NOS", AD02569, 3, 0
+"ALASKA NORTH SLOPE, BP", "Crude Oil NOS", AD02570, 4, 0
+"AMSA Average Very Low Sulfur Fuel Oil (VLSFO)", "Residual Fuel Oil", AD02580, 3, 0
+"VLSFO O-1 (AMSA)", "Distillate Fuel Oil", AD02582, 3, 3
+"VLSFO O-2 (AMSA)", "Distillate Fuel Oil", AD02583, 3, 3
+"VLSFO O-3 (AMSA)", "Distillate Fuel Oil", AD02584, 3, 3
+"VLSFO O-4 (AMSA)", "Distillate Fuel Oil", AD02585, 3, 3
+"VLSFO O-5 (AMSA)", "Distillate Fuel Oil", AD02586, 3, 3
+"VLSFO O-6 (AMSA)", "Distillate Fuel Oil", AD02587, 3, 3
+"VLSFO O-7 (AMSA)", "Distillate Fuel Oil", AD02588, 3, 3
+"VLSFO O-8 (AMSA)", "Distillate Fuel Oil", AD02589, 3, 3
+"VLSFO O-9 (AMSA)", "Distillate Fuel Oil", AD02590, 3, 3
+"VLSFO O-10 (AMSA)", "Distillate Fuel Oil", AD02591, 3, 3
+"VLSFO IM-5 (IMAROS)", "Distillate Fuel Oil", AD02592, 0, 4
+"Arabian Heavy [2004]", "Crude Oil NOS", EC00519, 0, 3
+"Cook Inlet [2003]", "Crude Oil NOS", EC00561, 0, 3
+"Hibernia [1999]", "Crude Oil NOS", EC00604, 0, 4
+"IFO 180 [2004]", "Residual Fuel Oil", EC00612, 0, 3
+"Mars TLP [2000]", "Crude Oil NOS", EC00638, 0, 3
+"Maya [2004]", "Crude Oil NOS", EC00643, 0, 3
+"Prudhoe Bay [2004]", "Crude Oil NOS", EC00679, 0, 3
+"South Louisiana", "Crude Oil NOS", EC00698, 0, 3
+"Troll", "Crude Oil NOS", EC00721, 0, 3
+"West Delta Block 143", "Crude Oil NOS", EC00734, 0, 3
+"White Rose [2000]", "Crude Oil NOS", EC00738, 0, 4
+"Bunker C MV Manolis", "Residual Fuel Oil", EC02542, 0, 3
+"Bunker C Zalinski", "Residual Fuel Oil", EC02714, 0, 4
+"Bunker C MV Manolis 2015-May operation", "Residual Fuel Oil", EC02932, 0, 3
+"MV Arrow [2015]", "Crude Oil NOS", EC03048, 0, 5
+"Bunker C MV Manolis 2015-Oct. operation", "Residual Fuel Oil", EC03072, 0, 4
+"Marine Safe Lube", "Lube Oil", EC03097, 0, 3
+"Aasgard Blend", "Crude Oil NOS", EX00001, 3, 0
+"Alaska North Slope", "Crude Oil NOS", EX00002, 3, 0
+"Azeri Light", "Crude Oil NOS", EX00003, 3, 0
+"Balder Blend", "Crude Oil NOS", EX00004, 3, 0
+"Banyu Urip", "Crude Oil NOS", EX00005, 3, 0
+"Basrah", "Crude Oil NOS", EX00006, 3, 0
+"Basrah Heavy", "Crude Oil NOS", EX00007, 3, 0
+"Bonga", "Crude Oil NOS", EX00008, 3, 0
+"Brent Blend", "Crude Oil NOS", EX00009, 3, 0
+"CLOV", "Crude Oil NOS", EX00010, 3, 0
+"Cold Lake Blend", "Crude Oil NOS", EX00011, 3, 0
+"Curlew", "Crude Oil NOS", EX00012, 3, 0
+"Dalia", "Crude Oil NOS", EX00013, 3, 0
+"Doba Blend", "Crude Oil NOS", EX00014, 3, 0
+"Ebok", "Crude Oil NOS", EX00015, 3, 0
+"Ekofisk", "Crude Oil NOS", EX00016, 3, 0
+"Erha", "Crude Oil NOS", EX00017, 3, 0
+"Forties Blend", "Crude Oil NOS", EX00018, 3, 0
+"Gindungo", "Crude Oil NOS", EX00019, 3, 0
+"Gippsland Blend", "Crude Oil NOS", EX00020, 3, 0
+"Girassol", "Crude Oil NOS", EX00021, 3, 0
+"Gorgon", "Crude Oil NOS", EX00022, 3, 0
+"Grane", "Crude Oil NOS", EX00023, 3, 0
+"Gudrun Blend", "Crude Oil NOS", EX00024, 3, 0
+"Gullfaks Blend", "Crude Oil NOS", EX00025, 3, 0
+"HOOPS Blend", "Crude Oil NOS", EX00026, 3, 0
+"Hebron", "Crude Oil NOS", EX00027, 3, 0
+"Hibernia Blend", "Crude Oil NOS", EX00028, 3, 0
+"Hungo Blend", "Crude Oil NOS", EX00029, 3, 0
+"Jotun Blend", "Crude Oil NOS", EX00030, 3, 0
+"Kearl", "Crude Oil NOS", EX00031, 3, 0
+"Kissanje Blend", "Crude Oil NOS", EX00032, 3, 0
+"Kutubu", "Crude Oil NOS", EX00033, 3, 0
+"Marib Light", "Crude Oil NOS", EX00034, 3, 0
+"Mondo", "Crude Oil NOS", EX00035, 3, 0
+"Mostarda", "Crude Oil NOS", EX00036, 3, 0
+"Ormen Lange", "Crude Oil NOS", EX00037, 3, 0
+"Oseberg Blend", "Crude Oil NOS", EX00038, 3, 0
+"Oso Condensate", "Condensate", EX00039, 3, 0
+"Pazflor", "Crude Oil NOS", EX00040, 3, 0
+"Qua Iboe", "Crude Oil NOS", EX00041, 3, 0
+"Sable Island", "Crude Oil NOS", EX00042, 3, 0
+"Saxi Batuque", "Crude Oil NOS", EX00043, 3, 0
+"Sokol", "Crude Oil NOS", EX00044, 3, 0
+"Statfjord Blend", "Crude Oil NOS", EX00045, 3, 0
+"Tapis", "Crude Oil NOS", EX00046, 3, 0
+"Terengganu Condensate", "Condensate", EX00047, 3, 0
+"Terra Nova", "Crude Oil NOS", EX00048, 3, 0
+"Thunder Horse", "Crude Oil NOS", EX00049, 3, 0
+"Triton Blend", "Crude Oil NOS", EX00050, 3, 0
+"Troll Blend", "Crude Oil NOS", EX00051, 3, 0
+"Upper Zakum", "Crude Oil NOS", EX00052, 3, 0
+"Usan", "Crude Oil NOS", EX00053, 3, 0
+"Volve", "Crude Oil NOS", EX00054, 3, 0
+"Woollybutt", "Crude Oil NOS", EX00055, 3, 0
+"Yoho", "Crude Oil NOS", EX00056, 3, 0
+"Zafiro Blend", "Crude Oil NOS", EX00057, 3, 0
+"Liza", "Crude Oil NOS", EX00058, 3, 0
+"IFO-80LS", "Residual Fuel Oil", NO00050, 0, 3
+"MARINE GAS OIL 500 ppm S", "Distillate Fuel Oil", NO00119, 0, 3
+"ULTRA LOW SULFUR FUEL OIL", "Fuel Oil NOS", NO00120, 0, 3
+"HEAVY DISTILLATE MARINE ECA 50", "Distillate Fuel Oil", NO00121, 0, 3
+"ROTTERDAM DIESEL", "Distillate Fuel Oil", NO00122, 0, 3
+"GAS OIL 10 ppm S", "Distillate Fuel Oil", NO00123, 0, 3
+"WIDE RANGE GAS OIL 2017", "Refinery Intermediate", NO00124, 0, 3

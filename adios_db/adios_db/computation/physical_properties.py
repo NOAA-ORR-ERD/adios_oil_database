@@ -327,9 +327,14 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K", shear_rate=
                  and k.ref_temp is not None]
     except IndexError:  # no subsamples at all!
         return []
-
-    if len(kvisc) > 0:  # use provided kinematic viscosity of it exists
+    dvisc = oil.sub_samples[0].physical_properties.dynamic_viscosities
+    
+    if (len(kvisc) >= len(dvisc)) and (len(kvisc) > 0):
         visc_table = _get_visc_data(kvisc, units, temp_units, shear_rate)
+    
+    #raise Exception("Stop Here")
+    # if len(kvisc) > 0:  # use provided kinematic viscosity of it exists
+    #     visc_table = _get_visc_data(kvisc, units, temp_units, shear_rate)
 
     else:  # no kinematic data, try to use dynamic viscosity data
         dvisc = get_dynamic_viscosity_data(oil,
