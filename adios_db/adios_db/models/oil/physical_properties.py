@@ -187,22 +187,39 @@ class DynamicViscosityList(RefTempList, JSON_List):
         Checks dvis are increasing with temperature.
         """
         msgs = super().validate()
+        data_str = self.__class__.__name__
         points_list = self
         dvis_list = []
-        for pt in points_list:
+
+        for p in points_list:
+            if p.ref_temp is None:
+                msgs.append(ERRORS["E042"]
+                            .format(data_str + " reference temp"))
+                return msgs
+
+            ref_temp = p.ref_temp.converted_to('C').value
+            shear_rate = 0
             try:
-                ref_temp = pt.ref_temp.converted_to('C').value
-                viscosity = pt.viscosity.converted_to('Pas').value
-                dvis_list.append((viscosity,ref_temp))
+                shear_rate = p.shear_rate.value
             except (TypeError, AttributeError):
                 pass
+            try:
+                viscosity = p.viscosity.converted_to('Pas').value
+            except (TypeError, AttributeError):
+                pass
+            dvis_list.append((viscosity,ref_temp,shear_rate))
 
         if len(dvis_list) > 1:
-            dvis_list = sorted(dvis_list, key=itemgetter(1))
-            dvis_list.sort(key=itemgetter(0), reverse=True)
-            dvis, temps = zip(*dvis_list)
-            if(any(i <= j for i, j in zip(dvis, dvis[1:]))):
-                msgs.append(ERRORS["E062"])
+            dvis_list.sort(key=lambda sl: (sl[1], sl[2]))
+
+            viscosities = {}
+            for visc, temp, shear_rate in dvis_list:
+                viscosities.setdefault(shear_rate, []).append((temp, visc))
+
+            for k, v in viscosities.items():
+                temps, dvis = zip(*v)
+                if(any(i <= j for i, j in zip(dvis, dvis[1:]))):
+                    msgs.append(ERRORS["E062"])
 
         return msgs
 
@@ -254,25 +271,42 @@ class KinematicViscosityList(RefTempList, JSON_List):
         Checks kvis are increasing with temperature.
         """
         msgs = super().validate()
+        data_str = self.__class__.__name__
         points_list = self
         kvis_list = []
-        for pt in points_list:
+
+
+        for p in points_list:
+            if p.ref_temp is None:
+                msgs.append(ERRORS["E042"]
+                            .format(data_str + " reference temp"))
+                return msgs
+
+            ref_temp = p.ref_temp.converted_to('C').value
+            shear_rate = 0
             try:
-                ref_temp = pt.ref_temp.converted_to('C').value
-                viscosity = pt.viscosity.converted_to('m^2/s').value
-                kvis_list.append((viscosity,ref_temp))
+                #ref_temp = ref_temp + p.shear_rate.value / (max_shear_rate*10)
+                shear_rate = p.shear_rate.value
             except (TypeError, AttributeError):
                 pass
+            try:
+                viscosity = p.viscosity.converted_to('m^2/s').value
+            except (TypeError, AttributeError):
+                pass
+            kvis_list.append((viscosity,ref_temp,shear_rate))
 
         if len(kvis_list) > 1:
-            kvis_list = sorted(kvis_list, key=itemgetter(1))
-            kvis, temps = zip(*kvis_list)
-            if(any(i <= j for i, j in zip(kvis, kvis[1:]))):
-                msgs.append(ERRORS["E062"])
+            kvis_list.sort(key=lambda sl: (sl[1], sl[2]))
 
-#         if len(temp) > 1:
-#             if(any(i > j for i, j in zip(temp, temp[1:]))):
-#                 msgs.append(ERRORS["E061"])
+            viscosities = {}
+            for visc, temp, shear_rate in kvis_list:
+                viscosities.setdefault(shear_rate, []).append((temp, visc))
+
+            for k,v in viscosities.items():
+                temps, kvis = zip(*v)
+                if(any(i <= j for i, j in zip(kvis, kvis[1:]))):
+                    msgs.append(ERRORS["E062"])
+
         return msgs
 
 

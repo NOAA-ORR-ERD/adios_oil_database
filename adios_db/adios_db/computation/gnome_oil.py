@@ -124,7 +124,25 @@ def make_gnome_oil(oil):
     viscosities = get_kinematic_viscosity_data(oil, units="m^2/s",
                                                temp_units="K")
 
+    # need to check if values are decreasing with temp
     if viscosities:
+        if len(viscosities) > 1:
+            viscosities.sort(key=lambda sl: sl[1]) # are they already sorted?
+            kvis, temps = zip(*viscosities)
+            if(any(i <= j for i, j in zip(kvis, kvis[1:]))):
+                raise ValueError("Viscosities must be decreasing with temperature")
+        else: # need to add a second viscosity value, at 0 or 15 C, if there is only one
+            visc, temp = viscosities[0][0], viscosities[0][1]
+            # todo: switch to use KV class above
+            kvis2 = KinematicViscosity(oil)
+            # use 0 C unless the value is close to zero
+            #if (temp > 280.65 or temp < 265.65):
+            if (temp > 280.65):
+                new_visc = kvis2.at_temp(273.15)
+                viscosities.insert(0,(new_visc, 273.15))
+            else:
+                new_visc = kvis2.at_temp(288.15)
+                viscosities.append((new_visc, 288.15))
         go['kvis'], go['kvis_ref_temps'] = zip(*viscosities)
         go['kvis_weathering'] = [0.0] * len(go['kvis'])
     else:

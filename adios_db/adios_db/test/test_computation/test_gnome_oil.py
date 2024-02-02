@@ -10,6 +10,7 @@ from adios_db.models.oil.oil import Oil
 from adios_db.computation.gnome_oil import (make_gnome_oil,
                                             sara_totals,
                                             estimate_pour_point)
+from adios_db.computation.physical_properties import get_kinematic_viscosity_data
 
 
 HERE = Path(__file__).parent
@@ -71,6 +72,31 @@ def test_kvis():
     assert list(data['kvis_ref_temps']) == [273.15, 288.15]
     assert list(data['kvis_weathering']) == [0.0, 0.0]
 
+
+def test_kvis_single_value():
+    test_oil = EXAMPLE_DATA_DIR / "SimpleULSFO.json"
+    FullOil = Oil.from_file(test_oil)
+    viscosities = get_kinematic_viscosity_data(FullOil, units="m^2/s",
+                                               temp_units="K")
+
+    assert len(viscosities) == 1	# original file has one viscosity
+    data = make_gnome_oil(FullOil)
+    assert len(data['kvis']) == 2	# gnome_oil has two viscosities
+
+
+def test_bad_kvis_exception():
+    test_oil = EXAMPLE_DATA_DIR / "AD00813.json"
+    FullOil = Oil.from_file(test_oil)
+
+    with pytest.raises(ValueError):
+        data = make_gnome_oil(FullOil)
+
+def test_no_kvis_exception():
+    test_oil = EXAMPLE_DATA_DIR / "EC00622-no-visc.json"
+    FullOil = Oil.from_file(test_oil)
+
+    with pytest.raises(ValueError):
+        data = make_gnome_oil(FullOil)
 
 def test_SARA():
     saturates, aromatics, resins, asphaltenes = sara_totals(FullOil)
