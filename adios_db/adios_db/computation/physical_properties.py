@@ -9,15 +9,14 @@ import nucos as uc
 
 from adios_db.util import sigfigs
 
+
 def _is_oil(obj):
     """
     return TRue if obj is an Oil obj
 
     Here because isinstance requires a circular import
     """
-    return (hasattr(obj, 'oil_id')
-            and hasattr(obj, 'metadata')
-            )
+    return hasattr(obj, 'oil_id') and hasattr(obj, 'metadata')
 
 
 class Density:
@@ -28,7 +27,6 @@ class Density:
     temperature in Kelvin
     density in kg/m^3
     """
-
     def __init__(self, oil):
         """
         Initialize a density calculator
@@ -141,9 +139,11 @@ class KinematicViscosity:
     # data point.
     # fixme: we need to get numbers for all oil types!
     #        including Crude -- 2100 is the old ADIOS2 value
-    default_kvs = {"Crude Oil NOS": 2099.9999,  # only so we can distingish from default
-                   "Distillate Fuel Oil": 6200.0,
-                   }
+    default_kvs = {
+        "Crude Oil NOS": 2099.9999,  # only so we can distingish from default
+        "Distillate Fuel Oil": 6200.0,
+    }
+
     # value to us if it's not in the above dict -- or
     # if product type is unknown.
     DEFAULT_KV2 = 2100.0  # K
@@ -231,18 +231,17 @@ class KinematicViscosity:
         '''
 
         # # this sets:
-        # self._k_v2 = None  # decay constant for viscosity curve
-        # self._visc_A = None
-        self.residuals = None # residuals if curve is fit
+        #     self._k_v2 = None  # decay constant for viscosity curve
+        #     self._visc_A = None
+        self.residuals = None  # residuals if curve is fit
 
         kvis = self.kviscs
         kvis_ref_temps = self.temps
 
         if len(kvis) == 0:
-            raise ValueError("Cannot initialize a KinematicViscosity object with no data")
+            raise ValueError("Cannot initialize a KinematicViscosity object "
+                             "with no data")
         elif len(kvis) == 1:  # use default k_v2
-            # if self._k_v2 is None:
-            #     self._k_v2 = self.DEFAULT_KV2
             self._visc_A = kvis[0] * np.exp(-self._k_v2 / kvis_ref_temps[0])
         else:
             # do a least squares fit to the data
@@ -294,16 +293,20 @@ def _get_visc_data(visc, units, temp_units, shear_rate):
         d = visc_point.viscosity.converted_to(units).value
         t = visc_point.ref_temp.converted_to(temp_units).value
         sr = visc_point.shear_rate
+
         if sr is not None:
             sr = sr.converted_to("1/s").value
             if shear_rate is None:
                 shear_rate = sr
+
         if sr is None or sr == shear_rate:
             visc_table.append((d, t))
+
     return visc_table
 
 
-def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K", shear_rate=None):
+def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K",
+                                 shear_rate=None):
     """
     Return a table of kinematic viscosity data:
 
@@ -328,15 +331,11 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K", shear_rate=
     except IndexError:  # no subsamples at all!
         return []
     dvisc = oil.sub_samples[0].physical_properties.dynamic_viscosities
-    
+
     if (len(kvisc) >= len(dvisc)) and (len(kvisc) > 0):
         visc_table = _get_visc_data(kvisc, units, temp_units, shear_rate)
-    
-    #raise Exception("Stop Here")
-    # if len(kvisc) > 0:  # use provided kinematic viscosity of it exists
-    #     visc_table = _get_visc_data(kvisc, units, temp_units, shear_rate)
-
-    else:  # no kinematic data, try to use dynamic viscosity data
+    else:
+        # no kinematic data, try to use dynamic viscosity data
         dvisc = get_dynamic_viscosity_data(oil,
                                            units="Pa s",
                                            temp_units="K",
@@ -347,7 +346,8 @@ def get_kinematic_viscosity_data(oil, units="m^2/s", temp_units="K", shear_rate=
     return visc_table
 
 
-def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K", shear_rate=None):
+def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K",
+                               shear_rate=None):
     """
     Return a table of dynamic viscosity data:
 
@@ -372,10 +372,12 @@ def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K", shear_rate=None
 
     if len(dvisc) > 0:
         visc_table = _get_visc_data(dvisc, units, temp_units, shear_rate)
-    else:  # no dynamic, check kinematic
+    else:
+        # no dynamic, check kinematic
         kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
         if len(kvisc) > 0:
-            raise NotImplementedError("can't compute dynamic from kinematic yet")
+            raise NotImplementedError("can't compute dynamic "
+                                      "from kinematic yet")
             # kvisc = get_kinematic_viscosity_data(oil)
         else:
             visc_table = []
@@ -407,19 +409,6 @@ def convert_dvisc_to_kvisc(dvisc, density):
     return kvisc_table
 
 
-# def density_at_temp(densities, temp, units="kg/m^3", temp_units="K"):
-#     # sort them to make sure
-#     densities = sorted(densities, key=itemgetter(1))
-#     dens, temps = zip(*densities)
-
-#     return np.interp(temp, temps, dens)
-
-# def get_kinematic_viscosity_at_temp(temp,
-#                                     kvis_units='cSt',
-#                                     temp_units='C'):
-#     raise NotImplementedError
-
-
 def get_interfacial_tension_seawater(oil, units="N/m", temp_units="K"):
     """
     Return a table of interfacial tension data:
@@ -433,15 +422,15 @@ def get_interfacial_tension_seawater(oil, units="N/m", temp_units="K"):
     :param temp_units="K": units you want the reference temperature in
     """
     interfacial_tensions = [t for t in oil.sub_samples[0].physical_properties.interfacial_tension_seawater
-                 if t.tension is not None
-                 and t.ref_temp is not None]
+                            if t.tension is not None
+                            and t.ref_temp is not None]
 
     # create normalized list of interfacial tensions
     interfacial_tension_table = []
-    for interfacial_tension_point in interfacial_tensions:
+    for tension_point in interfacial_tensions:
         try:
-            i = interfacial_tension_point.tension.converted_to(units).value
-            t = interfacial_tension_point.ref_temp.converted_to(temp_units).value
+            i = tension_point.tension.converted_to(units).value
+            t = tension_point.ref_temp.converted_to(temp_units).value
             interfacial_tension_table.append((i, t))
         except (TypeError, ValueError):
             # Data not good -- moving on
@@ -463,15 +452,15 @@ def get_interfacial_tension_water(oil, units="N/m", temp_units="K"):
     :param temp_units="K": units you want the reference temperature in
     """
     interfacial_tensions = [t for t in oil.sub_samples[0].physical_properties.interfacial_tension_water
-                 if t.tension is not None
-                 and t.ref_temp is not None]
+                            if t.tension is not None
+                            and t.ref_temp is not None]
 
     # create normalized list of interfacial tensions
     interfacial_tension_table = []
-    for interfacial_tension_point in interfacial_tensions:
+    for tension_point in interfacial_tensions:
         try:
-            i = interfacial_tension_point.tension.converted_to(units).value
-            t = interfacial_tension_point.ref_temp.converted_to(temp_units).value
+            i = tension_point.tension.converted_to(units).value
+            t = tension_point.ref_temp.converted_to(temp_units).value
             interfacial_tension_table.append((i, t))
         except (TypeError, ValueError):
             # Data not good -- moving on
@@ -485,10 +474,10 @@ def get_pour_point(oil):
     Return oil's pour point or None
     """
     phys_props = oil.sub_samples[0].physical_properties
-
     pour_point = phys_props.pour_point
 
     return pour_point
+
 
 def get_flash_point(oil):
     """
@@ -496,6 +485,7 @@ def get_flash_point(oil):
     """
     phys_props = oil.sub_samples[0].physical_properties
     flash_point = phys_props.flash_point
+
     return flash_point
 
 
@@ -508,7 +498,6 @@ def get_frac_recovered(oil, units="fraction"):
 
     :param units="fraction": units you want the fraction in
     """
-
     fraction_recovered = oil.sub_samples[0].distillation_data.fraction_recovered
 
     if fraction_recovered is None:
@@ -516,7 +505,6 @@ def get_frac_recovered(oil, units="fraction"):
     else:
         frac_recovered = fraction_recovered.converted_to(units).value
         return frac_recovered, True
-
 
 
 def get_distillation_cuts(oil, units="fraction", temp_units="K"):
@@ -532,11 +520,9 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
     :param temp_units="K": units you want the temperature in
     """
     distillation_cuts = oil.sub_samples[0].distillation_data.cuts
-
     cuts_table = []
 
     for cut in distillation_cuts:
-
         if cut.fraction is None:
             f = None
         else:
@@ -557,7 +543,8 @@ def get_distillation_cuts(oil, units="fraction", temp_units="K"):
 def max_water_fraction_emulsion(oil):
     """
     This function looks for max water fraction in the database
-    The value chosen from the database is the maximum water fraction of a stable emulsion.
+    The value chosen from the database is the maximum water fraction
+    of a stable emulsion.
     """
     max_water_content = 0
     emulsion_max_water = None
@@ -584,7 +571,6 @@ def emul_water(oil):
     Smax is the maximum surface area of the water droplets inside
     the emulsion. (from ADIOS2)
     """
-
     dens = Density(oil)
     density = dens.at_temp(288.15)
     kvis = KinematicViscosity(oil)
@@ -592,9 +578,9 @@ def emul_water(oil):
     dynamic_viscosity = viscosity * density
 
     if (dynamic_viscosity > 0.050):
-       Ymax = 0.9 - 0.0952 * np.log(dynamic_viscosity / 0.050)
+        Ymax = 0.9 - 0.0952 * np.log(dynamic_viscosity / 0.050)
     else:
-       Ymax = 0.9
+        Ymax = 0.9
 
     # this is done is py_gnome
     # drop_min = 1.0e-6		# min oil droplet size
@@ -603,9 +589,14 @@ def emul_water(oil):
 
 
 def bullwinkle_fraction(oil):
-    Ni = 0
-    Va = 0
+    Ni = Va = 0.
 
+    # Fixme: Ni and Va have already been set to a default of 0.
+    #        There is no need to set it again in the exception handler.
+    #        For that matter, why are we even handling an exception here?
+    #
+    #        And f_asph could be handled in the same way.  Why are we handling
+    #        it differently.
     try:
         bulk_composition = oil.sub_samples[0].bulk_composition
 
