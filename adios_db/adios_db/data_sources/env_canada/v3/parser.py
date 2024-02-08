@@ -18,9 +18,6 @@ from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase
 from adios_db.data_sources.importer_base import parse_single_datetime
 
-import pdb
-from pprint import pprint
-
 
 logger = logging.getLogger(__name__)
 
@@ -78,13 +75,9 @@ class ECMeasurementDataclass:
         self.fix_unit()
         self.determine_unit_type()
 
-        #print(f'{self.property_group}.{self.property_name}:\t'
-        #      f'(self.value: {self.value}, '
-        #      f'self.unit: {self.unit_of_measure})')
-
     def treat_any_bad_initial_values(self):
         for f in fields(self.__class__):
-            if getattr(self, f.name) in ('N/A', ''):
+            if getattr(self, f.name) in ('N/A', 'NM', ''):
                 setattr(self, f.name, None)
 
     def fix_value_if_min_max(self):

@@ -90,7 +90,8 @@ def dataclass_to_json(cls):
 
         The top-level validator extends the existing list
         """
-        # This happens because the field's type object's validate is being called.
+        # This happens because the field's type object's validate
+        # is being called.
         if self is None:
             return []
 

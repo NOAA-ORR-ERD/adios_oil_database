@@ -62,7 +62,6 @@ class Density:
 
         For outside the measured range
         """
-
         if not np.all(np.diff(self.temps) > 0):
             raise ValueError("temperatures must be discreet")
 
