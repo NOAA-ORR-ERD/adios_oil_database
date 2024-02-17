@@ -71,8 +71,8 @@ class EnvCanadaCsvFile(CsvFile):
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
 
-        print(f'num fields should be {self.number_of_columns}')
-        print(f'num fields are {self.field_names}')
+        print(f'The number of fields should be {self.number_of_columns} '
+              f'and they are {len(self.field_names)}')
         if len(self.field_names) != self.number_of_columns:
             raise InvalidFileError('Fields are invalid for an '
                                    'Environment Canada .csv file')

@@ -18,6 +18,14 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
     but because of the nature of the .csv measurement rows, some re-mapping
     will be necessary to put it in a form that the Oil object expects.
     """
+    vs_map = {
+        'yes': 'Unknown stability',
+        'no': 'Did not form',
+        'non': 'Did not form',
+        'meso-stable': 'Mesostable',
+        'not stable': 'Unstable',
+    }
+
     def remap_emulsions(self):
         for sample in self.record['sub_samples']:
             eb = sample.get('environmental_behavior', {})
@@ -52,6 +60,7 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
                         new_vs = (new_emul.pop('visual_stability', {})
                                   .get('value', None))
                         if new_vs is not None:
+                            new_vs = self.vs_map.get(new_vs.lower(), new_vs)
                             new_emul['visual_stability'] = new_vs
 
                         new_emul['method'] = ', '.join({v['method']

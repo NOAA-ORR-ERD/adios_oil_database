@@ -46,7 +46,10 @@ class FolderCollection:
                                        int(oil_id.lstrip(prefix)))
 
     def _next_id(self, prefix):
-        self.next_id[prefix] += 1
+        try:
+            self.next_id[prefix] += 1
+        except Exception:
+            self.next_id[prefix] = 1
 
         return f'{prefix}{self.next_id[prefix]:05}'
 

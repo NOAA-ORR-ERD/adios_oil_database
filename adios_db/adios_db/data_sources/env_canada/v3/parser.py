@@ -103,7 +103,9 @@ class ECMeasurementDataclass:
         - Case 'N (min.)': min_value = N
         - Case 'N (max.)': max_value = N
         - Case 'N1 (min.), N2 (max.)': Split on the ','.
-                                       min_value = N, max_value = N
+                                       min_value = N1, max_value = N2
+        - Case 'min N1, max N2': Split on the ','.
+                                 min_value = N1, max_value = N2
         """
         if isinstance(self.value, (int, float, type(None))):
             return  # nothing to do, it's already a number
@@ -166,23 +168,27 @@ class ECMeasurementDataclass:
         - There are also a few cases where the min/max quality of the value
           is annotated with a ' (min.)' or a ' (max.)' suffix.
         """
-
         # process our min_value
         if isinstance(min_value, (int, float, type(None))):
             self.min_value = min_value
             self.value = self.max_value = None
-        elif any([b in min_value for b in ('(min', '(max')]):
+        elif any([b in min_value for b in ('min', 'max')]):
             # Yeah, the min_value could have a min or max annotation.
             match_obj = re.search(r'([-\.\d]+) \((min|max).\)', min_value)
             if match_obj is not None:
                 num_val, min_max = (match_obj.groups())
+            else:
+                match_obj = re.search(r'(min|max) ([-\.\d]+)', min_value)
 
-                if min_max == 'min':
-                    self.min_value = float(num_val)
-                else:
-                    self.max_value = float(num_val)
+                if match_obj is not None:
+                    min_max, num_val = (match_obj.groups())
 
-                self.value = self.max_value = None
+            if min_max == 'min':
+                self.min_value = float(num_val)
+            else:
+                self.max_value = float(num_val)
+
+            self.value = self.max_value = None
         else:
             self.min_value = float(min_value)
             self.value = self.max_value = None
@@ -191,18 +197,23 @@ class ECMeasurementDataclass:
         if isinstance(max_value, (int, float, type(None))):
             self.max_value = max_value
             self.value = self.min_value = None
-        elif any([b in max_value for b in ('(min', '(max')]):
+        elif any([b in max_value for b in ('min', 'max')]):
             # Yeah, the max_value could have a min or max annotation.
             match_obj = re.search(r'([-\.\d]+) \((min|max).\)', max_value)
             if match_obj is not None:
                 num_val, min_max = (match_obj.groups())
+            else:
+                match_obj = re.search(r'(min|max) ([-\.\d]+)', max_value)
 
-                if min_max == 'min':
-                    self.min_value = float(num_val)
-                else:
-                    self.max_value = float(num_val)
+                if match_obj is not None:
+                    min_max, num_val = (match_obj.groups())
 
-                self.value = self.min_value = None
+            if min_max == 'min':
+                self.min_value = float(num_val)
+            else:
+                self.max_value = float(num_val)
+
+            self.value = self.min_value = None
         else:
             self.max_value = float(max_value)
             self.value = self.min_value = None
@@ -1108,7 +1119,7 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
         if self.API:
             self.deep_set(self.oil_obj, 'metadata.API', self.API)
 
-        oil_id = f'EC{self.oil_obj["metadata"]["source_id"]:>05}'
+        oil_id = f'CC{self.oil_obj["metadata"]["source_id"]:>05}'
         self.oil_obj['oil_id'] = oil_id
 
     def set_aggregate_oil_property(self, attr):
