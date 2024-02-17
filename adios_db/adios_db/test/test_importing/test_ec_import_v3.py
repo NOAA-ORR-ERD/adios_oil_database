@@ -212,7 +212,7 @@ class TestEnvCanadaCsvRecordMapper(object):
             _mapper = EnvCanadaCsvRecordMapper1999(None)
 
     @pytest.mark.parametrize('oil_id, expected', [
-        ('ODB00-6', {'oil_id': 'ECODB00-6',
+        ('ODB00-6', {'oil_id': 'CCODB00-6',
                      'metadata.name': 'Alaska North Slope (1989)',
                      'metadata.source_id': 'ODB00-6',
                      'metadata.location': 'Alaska, USA',
@@ -563,7 +563,7 @@ class TestEnvCanadaCsvRecordMapper(object):
               {'method': '',
                'ref_temp': {'value': 15.0, 'unit': 'C',
                             'unit_type': 'temperature'},
-               'visual_stability': 'Meso-stable',
+               'visual_stability': 'Mesostable',
                'complex_modulus': {'value': 120000, 'unit': 'mPa',
                                    'unit_type': 'pressure'},
                'complex_viscosity': {'value': 2600, 'unit': 'mPas',
