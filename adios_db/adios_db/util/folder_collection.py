@@ -107,9 +107,10 @@ class FolderCollection:
             replacement['oil_id'] = self._next_id(prefix)
 
         folder, filename = self._get_path_and_filename(replacement)
+        folder.mkdir(exist_ok=True)
 
-        folder.joinpath(filename).write_text(json.dumps(replacement,
-                                                        indent=4))
+        with folder.joinpath(filename).open('w') as fd:
+            fd.write(json.dumps(replacement, indent=4))
 
     def replace_one(self, filter, replacement, upsert=True):
         raise NotImplemented
