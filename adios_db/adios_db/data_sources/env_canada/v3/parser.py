@@ -1231,6 +1231,20 @@ class EnvCanadaCsvRecordParser1999(ParserBase):
                 weathering_percent = {
                     'min_value': 0.0, 'max_value': None, 'unit': '%'
                 }
+            elif weathering_percent == 'New':
+                name = 'Fresh Oil Sample'
+                short_name = 'Fresh Oil'
+                weathering_percent = {
+                    'value': 0.0, 'unit': '%'
+                }
+            elif weathering_percent in ('Used', 'Weathered'):
+                # We can't tell how much the sample is weathered,
+                # but it is more than 0%
+                name = f'{weathering_percent} (unknown weathered amount)'
+                short_name = f'{weathering_percent}'
+                weathering_percent = {
+                    'min_value': 1.0, 'max_value': None, 'unit': '%'
+                }
             else:
                 try:
                     weathering_percent = weathering_percent.rstrip('%')

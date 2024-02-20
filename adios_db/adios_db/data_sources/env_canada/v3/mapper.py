@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import logging
 import re
+from math import isclose
 
 from adios_db.models.oil.oil import Oil
+from adios_db.models.common.measurement import Temperature, Density
 from ..v2 import EnvCanadaCsvRecordMapper
 from .refcode_lu import reference_codes
 
@@ -129,3 +131,56 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
             'reference': newref,
             'year': self.get_ref_year(oil_name, newref)
         })
+
+    def remap_oil_api(self):
+        if len(self.record['sub_samples']) > 0:
+            # API must be determined from a fresh sample.  There is
+            # no point in going forward if it is not fresh.
+            # The criteria for a fresh sample are:
+            # - It has to be the first sample
+            # - The fraction weathered should be very close to 0.0
+            fresh_sample = self.record['sub_samples'][0]
+
+            try:
+                fraction_weathered = (fresh_sample.get('metadata', {})
+                                      .get('fraction_weathered', {})
+                                      .get('value', None))
+            except Exception:
+                logger.warning(f'{self.record["oil_id"]}: fresh sample has '
+                               'a weird fraction weathered value. '
+                               f'{fresh_sample["metadata"]=}')
+                return
+
+            if (fraction_weathered is None or
+                    not isclose(fraction_weathered, 0.0)):
+                return
+
+            api = self.record.get('metadata', {}).get('API', None)
+
+            if api is None:
+                # grab the fresh density at 15C and convert
+                densities = (fresh_sample.get('physical_properties', {})
+                             .get('densities', []))
+                api_density = None
+
+                for d in densities:
+                    ref_temp = Temperature.from_py_json(d.get('ref_temp', {}))
+                    temperature_value = ref_temp.convert_to('C').value
+
+                    if (temperature_value is not None and
+                            isclose(temperature_value, 15.0)):
+                        api_density = Density.from_py_json(
+                            d.get('density', {})
+                        ).value
+                        break
+
+                if api_density is not None:
+                    api_rho = api_density  # g/mL
+                    api = 141.5 / api_rho - 131.5
+
+            if api is not None:
+                try:
+                    self.record['metadata']['API'] = round(api, 2)
+                except TypeError:
+                    logger.warning(f'oil {self.record["oil_id"]} '
+                                   f'failed to set API to {api}')
