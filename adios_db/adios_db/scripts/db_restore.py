@@ -40,7 +40,7 @@ def restore_db_cmd(argv=sys.argv):
         print('Using default settings')
         settings = default_settings()
 
-    base_path = args.path if args.path is not None else './data'
+    base_path = args.path[0] if args.path is not None else './data'
 
     try:
         restore_db(settings, base_path)

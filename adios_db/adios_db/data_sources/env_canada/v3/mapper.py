@@ -75,7 +75,7 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
 
                 eb['emulsions'] = [em for em in emulsions if em]
 
-    def remap_final_bp(self):
+    def remap_distillation_final_bp(self):
         for sample in self.record['sub_samples']:
             dist = sample.get('distillation_data', {})
 
@@ -87,6 +87,17 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
 
         if final_cut is not None and 'vapor_temp' in final_cut:
             dist['end_point'] = final_cut['vapor_temp']
+
+    def remap_distillation_sort_by_fraction(self):
+        for sample in self.record['sub_samples']:
+            dist = sample.get('distillation_data', {})
+
+            if 'cuts' in dist:
+                dist['cuts'] = sorted(
+                    dist['cuts'],
+                    key=lambda c: (c.get('fraction', {}).get('value', None),
+                                   c.get('vapor_temp', {}).get('value', None))
+                )
 
     def get_ref_year(self, name, reference):
         """
