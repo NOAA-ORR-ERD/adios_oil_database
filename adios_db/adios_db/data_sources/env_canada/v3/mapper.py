@@ -195,3 +195,61 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
                 except TypeError:
                     logger.warning(f'oil {self.record["oil_id"]} '
                                    f'failed to set API to {api}')
+
+    def remap_interfacial_tension(self):
+        super().remap_interfacial_tension()
+
+        for sample in self.record['sub_samples']:
+            phys = sample.get('physical_properties', {})
+
+            for attr in ('interfacial_tension_air',
+                         'interfacial_tension_water',
+                         'interfacial_tension_seawater'):
+                value_attr = 'tension'
+
+                phys[attr] = [
+                    t for t in phys.get(attr, [])
+                    if self.measurement_is_ok(t, value_attr)
+                ]
+
+    def measurement_is_ok(self, measurement, value_attr):
+        """
+        Determine if a measurement object is good or not.
+
+        :param measurement: The JSON measurement object.
+        :type measurement: JSON struct
+
+        :param value_attr: The name of the attribute that contains the value
+                           of the measurement
+        :type value_attr: str
+        """
+        for attr in (value_attr, 'ref_temp'):
+            # validate the attribute
+            if not self.value_unit_is_ok(measurement.get(attr, {})):
+                return False
+
+        return True
+
+    def value_unit_is_ok(self, value_unit):
+        """
+        Determine if a value/unit object inside a measurement is good or not.
+
+        :param value_unit: The JSON value/unit object.
+        :type value_unit: JSON struct
+        """
+        # I am not sure if we want to be this strict.
+        # for va_attr in ('unit', 'unit_type'):
+        #     value = value_unit.get(va_attr, None)
+        #
+        #     if value is None:
+        #         # if any one of these is empty, we are bad
+        #         return False
+
+        for va_attr in ('value', 'min_value', 'max_value'):
+            value = value_unit.get(va_attr, None)
+
+            if value is not None:
+                # if at least one of these has something in it, we are good
+                return True
+
+        return False
