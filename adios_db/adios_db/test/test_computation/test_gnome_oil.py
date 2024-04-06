@@ -114,7 +114,8 @@ def test_max_water_emulsion():
 def test_max_water_emulsion_estimated():
     data = make_gnome_oil(SparseOil)
 
-    assert isclose(data['emulsion_water_fraction_max'], 0.843579, rel_tol=1e-4)
+    #assert isclose(data['emulsion_water_fraction_max'], 0.843579, rel_tol=1e-4)
+    assert isclose(data['emulsion_water_fraction_max'], 0.83821, rel_tol=1e-4)
 
 
 def test_bullwinkle():

@@ -7,7 +7,7 @@ import pytest
 from adios_db.models.common import measurement as meas
 from adios_db.models.oil.oil import Oil
 from adios_db.models.oil.sample import Sample
-from adios_db.models.oil.physical_properties import KinematicViscosityPoint
+from adios_db.models.oil.physical_properties import KinematicViscosityPoint, DensityPoint
 from adios_db.models.oil.cleanup.add_labels import get_suggested_labels, get_sulfur_labels
 
 DATA_DIR = TEST_DATA_DIR = Path(__file__).parent.parent.parent.parent / "data_for_testing" / "example_data/"
@@ -33,6 +33,29 @@ def add_kin_viscosity_to_oil(oil,
             meas.KinematicViscosity(kvis, unit=unit),
             meas.Temperature(kvis_temp, unit=temp_unit))
         sample.physical_properties.kinematic_viscosities.append(kp)
+    return None
+
+
+def add_density_to_oil(oil,
+                       densities,
+                       temp,
+                       unit,
+                       dens_temp=15.0,
+                       temp_unit="C"):
+    """
+    utility for making test oils with given densities.
+    """
+    try:
+        sample = oil.sub_samples[0]
+    except IndexError:
+        sample = Sample()
+        sample.metadata.name = "only density"
+        oil.sub_samples.append(sample)
+    for dens in densities:
+        dp = DensityPoint(
+            meas.Density(dens, unit="kg/m^3"),
+            meas.Temperature(dens_temp, unit=temp_unit))
+        sample.physical_properties.densities.append(dp)
     return None
 
 
@@ -120,7 +143,9 @@ def test_add_labels_to_oil_api_and_visc(pt, api, kvis, kvis_temp, labels):
     oil = Oil('XXXXX')
     oil.metadata.API = api
     oil.metadata.product_type = pt
+    dens = 870 # single viscosity data sets require density for kv_2 calculation
     add_kin_viscosity_to_oil(oil, (kvis, ), 15, 'cSt', kvis_temp, 'C')
+    add_density_to_oil(oil, (dens, ), 15, 'kg/m^3', kvis_temp, 'C')
 
     assert get_suggested_labels(oil) == sorted(labels)
 
