@@ -430,9 +430,16 @@ class TestKinematicViscosity:
                 (0.0054, 323.15),  # 50C
                 ]
 
-        # not specified -- uses the default default :-)
-        # (2100 K)
-        kv1 = KinematicViscosity(data)
+        data2 = [
+                (0.043, 275.15),  # 2C
+                (0.0054, 323.15),  # 50C
+                ]
+
+        # not specified -- uses the default default :-), requires either multiple
+        # viscosities or k_v2 supplied, should fail with one viscosity and no k_v2
+        with pytest.raises(ValueError):
+            kv1 = KinematicViscosity(data)
+        kv1 = KinematicViscosity(data2)
         kv2 = KinematicViscosity(data, k_v2=3000.0)
 
         # calculated from above data:
@@ -446,7 +453,8 @@ class TestKinematicViscosity:
         print(f"{kv2._k_v2=}")
         print(f"{kv2._visc_A=}")
 
-        assert kv1._k_v2 == KinematicViscosity.DEFAULT_KV2
+        #assert kv1._k_v2 == KinematicViscosity.DEFAULT_KV2
+        assert isclose(kv1._k_v2, 3843.341, rel_tol=1.e-4)
         assert kv2._k_v2 == 3000.0
 
         k1_2 = kv1.at_temp(2, kvis_units='m^2/s', temp_units="C")
@@ -474,7 +482,8 @@ class TestKinematicViscosity:
         kv = KinematicViscosity(oil)
 
         print(kv._k_v2)
-        assert kv._k_v2 == 6200.0
+        #assert kv._k_v2 == 6200.0 # switched default
+        assert isclose(kv._k_v2, 3465.64, rel_tol=1e-4)
 
 
     def test_multiple_vicosities_crude(self):
@@ -487,8 +496,10 @@ class TestKinematicViscosity:
 
         print(kv._k_v2)
         # This has multiple data points, it should not use any of the default values.
-        for kv_2 in KinematicViscosity.default_kvs.values():
-            assert kv._k_v2 != kv_2
+        #for kv_2 in KinematicViscosity.default_kvs.values():
+            #assert kv._k_v2 != kv_2
+
+        assert kv._k_v2 != kv.default_kv2(oil)
 
     def test_single_vicosities_crude(self):
         """
@@ -501,7 +512,8 @@ class TestKinematicViscosity:
 
         print(kv._k_v2)
 
-        assert kv._k_v2 == KinematicViscosity.default_kvs[oil.metadata.product_type]
+        #assert kv._k_v2 == KinematicViscosity.default_kvs[oil.metadata.product_type]
+        assert kv._k_v2 == kv.default_kv2(oil)
 
 
 def test_get_frac_recovered():

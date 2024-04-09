@@ -221,7 +221,7 @@ deploy_mongodb_stage:
       docker volume inspect $DB_VOLUME >/dev/null 2>&1 ||
       docker volume create $DB_VOLUME
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     # The volume permissions are important here, so we need to set a user:group
     # when starting the container.
     # Right now they are set to james.makela:adios-dev so developers can manage
@@ -247,7 +247,7 @@ stop_mongodb_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
@@ -276,7 +276,7 @@ deploy_mongodb_public:
       docker volume inspect $DB_VOLUME >/dev/null 2>&1 ||
       docker volume create $DB_VOLUME
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     - >
       docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       -p $PORT_MAPPING
@@ -297,7 +297,7 @@ stop_mongodb_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy
@@ -334,7 +334,7 @@ deploy_api_stage:
       docker volume create $KC_CONFIG_VOLUME
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       -e MONGODB_WRITEABLE=true
@@ -361,7 +361,7 @@ stop_api_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
@@ -400,7 +400,7 @@ deploy_oauth_api_stage:
       docker network create -d bridge $APP_NETWORK
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       --network $APP_NETWORK --restart unless-stopped
@@ -435,7 +435,7 @@ stop_oauth_api_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_api
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
@@ -463,7 +463,7 @@ deploy_client_stage:
       docker network create -d bridge $APP_NETWORK
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
       --network $APP_NETWORK
@@ -484,7 +484,7 @@ stop_client_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
@@ -523,7 +523,7 @@ deploy_oauth_client_stage:
       docker network create -d bridge $APP_NETWORK
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     #- OAUTH2_PROXY_CLIENT_SECRET=`cat /data/adios_oil_db/oauth-proxy-client-secret.txt`
     - >
       docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
@@ -559,7 +559,7 @@ stop_oauth_client_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_client
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
@@ -585,7 +585,7 @@ deploy_api_public:
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     - >
       docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       -e MONGODB_WRITEABLE=false $IMAGE_TAG
@@ -605,7 +605,7 @@ stop_api_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy
@@ -630,7 +630,7 @@ deploy_client_public:
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
     - >
       docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
       $IMAGE_TAG
@@ -650,7 +650,7 @@ stop_client_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy
@@ -677,7 +677,7 @@ deploy_proxy_public:
       docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
       docker network create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
 
     - if [ -d $OILDB_PROJ_FOLDER ]; then rm -rf $OILDB_PROJ_FOLDER; fi
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git $OILDB_PROJ_FOLDER
@@ -713,7 +713,7 @@ stop_proxy_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_proxy
   script:
-    - docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy

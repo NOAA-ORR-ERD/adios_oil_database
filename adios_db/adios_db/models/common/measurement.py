@@ -26,9 +26,6 @@ from ..common.utilities import dataclass_to_json
 from ..oil.validation.warnings import WARNINGS
 from ..oil.validation.errors import ERRORS
 
-import pdb
-from pprint import pprint
-
 
 __all__ = [
     'AngularVelocity',
@@ -49,7 +46,6 @@ __all__ = [
     'Unitless',
     'AnyUnit',
 ]
-
 
 
 @dataclass_to_json
@@ -171,7 +167,8 @@ class MeasurementBase(MeasurementDataclass):
         msgs = []
 
         if not hasattr(self, "is_empty"):
-            raise TypeError(f"{self} is not a valid field type for a measurement")
+            raise TypeError(f"{self} is not a valid field type "
+                            "for a measurement")
         if self.is_empty():
             # an empty dataclass is not necessarily an error, as it will likely
             # get pruned when converted back to py_json
@@ -308,7 +305,6 @@ class MeasurementBase(MeasurementDataclass):
             return f">{self.min_value}"
         if self.max_value is not None:
             return f"<{self.max_value}"
-
 
 
 class Temperature(MeasurementBase):

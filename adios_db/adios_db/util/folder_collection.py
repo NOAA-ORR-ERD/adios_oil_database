@@ -46,7 +46,10 @@ class FolderCollection:
                                        int(oil_id.lstrip(prefix)))
 
     def _next_id(self, prefix):
-        self.next_id[prefix] += 1
+        try:
+            self.next_id[prefix] += 1
+        except Exception:
+            self.next_id[prefix] = 1
 
         return f'{prefix}{self.next_id[prefix]:05}'
 
@@ -104,9 +107,10 @@ class FolderCollection:
             replacement['oil_id'] = self._next_id(prefix)
 
         folder, filename = self._get_path_and_filename(replacement)
+        folder.mkdir(exist_ok=True)
 
-        folder.joinpath(filename).write_text(json.dumps(replacement,
-                                                        indent=4))
+        with folder.joinpath(filename).open('w') as fd:
+            fd.write(json.dumps(replacement, indent=4))
 
     def replace_one(self, filter, replacement, upsert=True):
         raise NotImplemented

@@ -138,14 +138,33 @@ class KinematicViscosity:
     # data point.
     # fixme: we need to get numbers for all oil types!
     #        including Crude -- 2100 is the old ADIOS2 value
-    default_kvs = {
-        "Crude Oil NOS": 2099.9999,  # only so we can distingish from default
-        "Distillate Fuel Oil": 6200.0,
-    }
+
+    # Fit curve to coefficient of viscosity vs density scatter plot for each oil type
+    # Value of coefficient of viscosity at density at 15C is used as the kv2 value
+    # Product types that will be rejected, not enough data to fit the curve (or no data) -
+    # "Bitumen" "Tight Oil" "Fuel Oil NOS" "Hydraulic Fluid" "Bio-Petro Fuel Oil" "Other"
+    slope_intercept_kv2 = {"Crude Oil NOS": (22.57, -13935.62),
+                   "Distillate Fuel Oil": (40.148, -30298.849),
+                   "Condensate": (149.39, -108117.618),
+                   "Bitumen Blend": (-51.857, 54002.01),
+                   "Refined Product NOS": (39.768, -29255.87),
+                   "Residual Fuel Oil": (89.557, -75563.817),
+                   #"Refinery Intermediate": (29.49, -21530.544),	# not a good fit for these oils
+                   "Solvent": (7.317, -4075.659),
+                   "Bio-fuel Oil": (40.148, -30298.849),
+                   "Natural Plant Oil": (40.148, -30298.849),
+                   "Lube Oil": (40.148, -30298.849),
+                   "Dielectric Oil": (40.148, -30298.849)
+                   }
+	# Previously used mean of viscosity coefficients over all oils
+#     default_kvs = {
+#         "Crude Oil NOS": 2099.9999,  # only so we can distingish from default
+#         "Distillate Fuel Oil": 6200.0,
+#     }
 
     # value to us if it's not in the above dict -- or
     # if product type is unknown.
-    DEFAULT_KV2 = 2100.0  # K
+    #DEFAULT_KV2 = 2100.0  # K
 
     def __init__(self, oil_or_data, k_v2=None):
         """
@@ -174,14 +193,24 @@ class KinematicViscosity:
                                                 units='m^2/s',
                                                 temp_units="K")
             if k_v2 is None:
-                k_v2 = self.default_kvs.get(oil_or_data.metadata.product_type,
-                                            self.DEFAULT_KV2)
+                #k_v2 = self.default_kvs.get(oil_or_data.metadata.product_type,
+                #                            self.DEFAULT_KV2)
+                if data:
+                    kviscs, temps = zip(*data)
+                    if len(kviscs)==1:	# only need default value if have only 1 viscosity
+                        k_v2 = self.default_kv2(oil_or_data)
 
         else:
             # not an oil object -- assume it's a table of data in the
             #                      correct form
             data = oil_or_data
-            k_v2 = k_v2 if k_v2 is not None else self.DEFAULT_KV2
+            #k_v2 = k_v2 if k_v2 is not None else self.DEFAULT_KV2 # raise error if no kv2 here
+            if k_v2 is not None:
+                k_v2 = k_v2
+            else:
+                if len(data) == 1:
+                    raise ValueError("k_v2 required for single viscosity input as data table")
+
 
         if data:
             data = sorted(data, key=itemgetter(1))
@@ -192,6 +221,34 @@ class KinematicViscosity:
 
         self._k_v2 = k_v2
         self.initialize()
+
+
+    def default_kv2(self, oil):
+        """
+        Get the coefficient of viscosity at 15C
+
+        :param oil: oil object to get density and product type
+
+        for each oil type line fit to coefficient of viscosity vs density scatter plot:
+        kv2 = slope * density + intercept
+        """
+
+        dens = Density(oil)
+        density = dens.at_temp(288.15)	# 15C
+
+        try:
+            (slope, intercept) = self.slope_intercept_kv2.get(oil.metadata.product_type)
+        except (TypeError) as err:
+            raise TypeError("Unable to estimate kv2 for {}. Oil {} not suitable for use "
+                            "in Gnome.".format(oil.metadata.product_type, oil.oil_id))
+
+        kv2 = slope * density + intercept
+        if kv2 < 0:
+            if oil.metadata.product_type == "Condensate":
+                kv2 = 1250		# scatter plot has a flat line fit for low densities
+            else:
+                kv2 = 0
+        return kv2
 
     def at_temp(self, temp, kvis_units='m^2/s', temp_units="K"):
         """
