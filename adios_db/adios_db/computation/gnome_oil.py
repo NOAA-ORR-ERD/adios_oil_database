@@ -160,7 +160,8 @@ def make_gnome_oil(oil):
                 emulsions = sub_sample.environmental_behavior.emulsions
                 for emulsion in emulsions:
                     vs = emulsion.visual_stability
-                    if vs == "Stable" or vs == "Mesostable" or vs == "Entrained":
+                    #if vs == "Stable" or vs == "Mesostable" or vs == "Entrained":
+                    if vs == "Stable" or vs == "Mesostable":
                         bullwinkle = frac_evaporated
                         break	# this fraction_evaporated has a stable emulsion
         except Exception:
