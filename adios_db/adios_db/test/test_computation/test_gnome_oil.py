@@ -121,7 +121,8 @@ def test_max_water_emulsion_estimated():
 def test_bullwinkle():
     data = make_gnome_oil(FullOil)
 
-    assert data['bullwinkle_fraction'] == 0.0
+    #assert data['bullwinkle_fraction'] == 0.0 # removed Entrained from stable emulsions
+    assert isclose(data['bullwinkle_fraction'], .165592, rel_tol=1e-4)
 
 
 def test_bullwinkle_estimated():
