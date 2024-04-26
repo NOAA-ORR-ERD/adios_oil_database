@@ -19,6 +19,7 @@ export default class SaveEditsButton extends Component {
     @action
     submit() {
         this.args.submit(this.args.oil);
+        this.dialogVisible = false;
     }
 
 }

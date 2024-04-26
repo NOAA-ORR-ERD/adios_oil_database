@@ -1,10 +1,14 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
+import { ref } from 'ember-ref-bucket';
 
 
 export default class AddNewOilDlg extends Component {
     @tracked name;
+
+    // @ref gives us a reference to a piece of our template
+    @ref("okButton") okButton;
 
     get formFilledOut() {
         if (this.name) {
@@ -19,8 +23,7 @@ export default class AddNewOilDlg extends Component {
         this.name = event.target.value;
 
         if (['change', 'focusout'].includes(event.type)
-                && this.formFilledOut
-                && this.okButton)
+                && this.formFilledOut)
         {
             this.okButton.focus();
         }
@@ -50,7 +53,5 @@ export default class AddNewOilDlg extends Component {
                 physical_properties: {}
             }]
         });
-
     }
-
 }

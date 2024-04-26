@@ -24,7 +24,7 @@ export default class SubSample extends Component {
             let ret = {
                 'name': s.metadata.name,
                 'short_name': s.metadata.short_name,
-                'id': tabName + '-nav-tab',
+                'id': tabName,
                 'href': '#' + tabName,
                 'aria-controls': tabName
             };

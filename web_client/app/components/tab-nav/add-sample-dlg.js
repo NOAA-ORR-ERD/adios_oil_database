@@ -1,8 +1,9 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
+import { ref } from 'ember-ref-bucket';
 import { roundRelative } from 'adios-db/helpers/round-relative';
-import $ from 'jquery';
+
 
 export default class AddSampleDlg extends Component {
     SampleTypes = {
@@ -10,6 +11,9 @@ export default class AddSampleDlg extends Component {
         distillate: 1,
         nameOnly: 2
     };
+
+    // @ref gives us a reference to a piece of our template
+    @ref("okButton") okButton;
 
     @tracked sampleType = 0;
 
@@ -39,26 +43,6 @@ export default class AddSampleDlg extends Component {
         }
 
         return false;
-    }
-
-    @action
-    setModalEvents(element) {
-        // Note: Bootstrap modals can not be modified with event handlers until
-        //       the elements are completely rendered.  So we can't add an 'on'
-        //       handler in the template like you would normally be able to do.
-        //       So we add a did-insert handler in the template, attaching it
-        //       to this function.
-        // Note: Ember doesn't want you to use JQuery for some purity reason,
-        //       and it throws warnings when the app starts.
-        //       Unfortunately, JQuery is the only way to add an event listener
-        //       to a bootstrap modal.
-        //       Don't believe me?  https://stackoverflow.com/questions/24211185/twitter-bootstrap-why-do-modal-events-work-in-jquery-but-not-in-pure-js
-        $(element).on('shown.bs.modal', this.shown);  // eslint-disable-line ember/no-jquery
-    }
-
-    @action
-    shown(event) {
-        event.currentTarget.querySelector('input').focus();
     }
 
     @action
@@ -111,6 +95,11 @@ export default class AddSampleDlg extends Component {
     @action
     updateSampleType(choice) {
         this.sampleType = Number(choice.target.value);
+    }
+
+    @action
+    closeForm() {
+        this.args.close();
     }
 
     @action

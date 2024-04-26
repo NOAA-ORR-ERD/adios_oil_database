@@ -19,5 +19,6 @@ export default class AddNewOilButton extends Component {
     @action
     submit(oil) {
         this.args.submit(oil);
+        this.dialogVisible = false;
     }
 }

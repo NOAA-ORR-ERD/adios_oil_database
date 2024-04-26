@@ -21,6 +21,7 @@ export default class BackToListButton extends Component {
     @action
     submit() {
         this.args.submit(this.args.oil);
+        this.dialogVisible = false;
     }
 
 }

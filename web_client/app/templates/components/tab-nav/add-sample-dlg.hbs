@@ -1,97 +1,80 @@
-<div id="addSampleDialog" class="modal fade" role="dialog" tabindex="-1"
-     aria-labelledby="addSampleDialogLabel" aria-hidden="true"
-     {{did-insert this.setModalEvents}}
-     >
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addSampleDialogLabel">Add Oil Subsample</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+<BsModal @onSubmit={{action "submitForm"}}
+         @onHidden={{action "closeForm"}}
+         as |Modal|>
+  <Modal.header>
+    <h5 class="modal-title" id="addSampleDialogLabel">Add Oil Subsample</h5>
+  </Modal.header>
+  <Modal.body>
+    <div class="form">
 
-      <div class="modal-body">
-        <div class="form">
-          <div class="row">
+      <div class="row">
 
-            <div class="col-6 form-group input-group">
-              <select class="form-control overflow-hidden" {{on "change" this.updateSampleType}}>
-                <option value={{this.SampleTypes.evaporated}}>
-                  Evaporated Fraction
-                </option>
-                <option value={{this.SampleTypes.distillate}}>
-                  Boiling Point Range
-                </option>
-                <option value={{this.SampleTypes.nameOnly}}>
-                  Name
-                </option>
-              </select>
-            </div>
-
-
-            {{#if (eq this.sampleType this.SampleTypes.evaporated)}}
-              <div class="col-6 form-group input-group">
-                <Input type="number" step="0.01" min="0" max="1"
-                          class="form-control bg-transparent border overflow-hidden"
-                          placeholder="Fraction (percent)"
-                          {{on "change" this.updateFraction}}
-                          {{on "keypress" this.updateFraction}}
-                          {{on "focusout" this.updateFraction}}
-                  />
-              </div>
-            {{else if (eq this.sampleType this.SampleTypes.distillate)}}
-              <div class="col-3 form-group input-group">
-                <Input type="number"
-                        class="form-control bg-transparent border overflow-hidden"
-                        placeholder="Min"
-                        {{on "change" this.updateDistillateMin}}
-                        {{on "keypress" this.updateDistillateMin}}
-                        {{on "focusout" this.updateDistillateMin}}
-                />
-              </div>
-              <div class="col-3 form-group input-group">
-                <Input type="number"
-                        class="form-control bg-transparent border overflow-hidden"
-                        placeholder="Max"
-                        {{on "change" this.updateDistillateMax}}
-                        {{on "keypress" this.updateDistillateMax}}
-                        {{on "focusout" this.updateDistillateMax}}
-                />
-              </div>
-            {{else}}
-              <div class="col-6 form-group input-group">
-                <Input type="text" class="form-control bg-transparent border overflow-hidden"
-                      placeholder="Enter Name"
-                      {{on "change" this.updateName}}
-                      {{on "keypress" this.updateName}}
-                      {{on "focusout" this.updateName}}
-                />
-              </div>
-            {{/if}}
-
-          </div>
+        <div class="col-6 form-group input-group">
+          <select class="form-control overflow-hidden" {{on "change" this.updateSampleType}}>
+            <option value={{this.SampleTypes.evaporated}}>
+              Evaporated Fraction
+            </option>
+            <option value={{this.SampleTypes.distillate}}>
+              Boiling Point Range
+            </option>
+            <option value={{this.SampleTypes.nameOnly}}>
+              Name
+            </option>
+          </select>
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Cancel
-        </button>
 
-        {{#if this.formFilledOut}}
-          <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  {{ref this "okButton"}}
-                  {{on "click" this.submitForm}} >
-            OK
-          </button>
+        {{#if (eq this.sampleType this.SampleTypes.evaporated)}}
+          <div class="col-6 form-group input-group">
+            <Input type="number" step="0.01" min="0" max="1"
+                      class="form-control bg-transparent border overflow-hidden"
+                      placeholder="Fraction (percent)"
+                      {{on "change" this.updateFraction}}
+                      {{on "keypress" this.updateFraction}}
+                      {{on "focusout" this.updateFraction}}
+              />
+          </div>
+        {{else if (eq this.sampleType this.SampleTypes.distillate)}}
+          <div class="col-3 form-group input-group">
+            <Input type="number"
+                    class="form-control bg-transparent border overflow-hidden"
+                    placeholder="Min"
+                    {{on "change" this.updateDistillateMin}}
+                    {{on "keypress" this.updateDistillateMin}}
+                    {{on "focusout" this.updateDistillateMin}}
+            />
+          </div>
+          <div class="col-3 form-group input-group">
+            <Input type="number"
+                    class="form-control bg-transparent border overflow-hidden"
+                    placeholder="Max"
+                    {{on "change" this.updateDistillateMax}}
+                    {{on "keypress" this.updateDistillateMax}}
+                    {{on "focusout" this.updateDistillateMax}}
+            />
+          </div>
         {{else}}
-          <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  disabled>
-            OK
-          </button>
+          <div class="col-6 form-group input-group">
+            <Input type="text" class="form-control bg-transparent border overflow-hidden"
+                  placeholder="Enter Name"
+                  {{on "change" this.updateName}}
+                  {{on "keypress" this.updateName}}
+                  {{on "focusout" this.updateName}}
+            />
+          </div>
         {{/if}}
+
       </div>
+
     </div>
-  </div>
-</div>
+  </Modal.body>
+
+  <Modal.footer as |footer|>
+    <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
+    <BsButton @onClick={{action Modal.submit}} @type="primary"
+      {{create-ref "okButton"}}
+    >
+      OK
+    </BsButton>
+  </Modal.footer>
+</BsModal>
