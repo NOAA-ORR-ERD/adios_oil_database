@@ -32,7 +32,7 @@ JSON-compatible-Python
 A subset of JSON can be mapped directly to Python builtin objects.
 We call this "JSON-compatible-Python", or ``py_json`` for short.
 Essentially, it is Python that can be saved-to and loaded-from JSON losslessly:
-arbitrarily nested lists, dicts, strings, numbers, and booleans.
+arbitrarily nested lists, dicts, strings, numbers, and bools.
 
 Creating an ``Oil`` object
 ..........................
