@@ -39,6 +39,7 @@ __all__ = [
     'Mass',
     'MassFraction',
     'VolumeFraction',
+    'MassOrVolumeFraction',
     'NeedleAdhesion',
     'Pressure',
     'Temperature',
