@@ -353,6 +353,16 @@ class TestKinematicViscosityList:
         assert "E042:" in msgs[0]
         assert "KinematicViscosity" in msgs[0]
 
+    def test_order_kvis(self):
+        data = [(100, "cSt", 0, "C"),
+                (200, "cSt", 15.0, "C"),
+                ]
+        kv = KinematicViscosityList.from_data(data)
+
+        msgs = kv.validate()
+
+        assert "E062:" in msgs[0]
+        assert "Viscosity" in msgs[0]
 
 class TestPhysicalProperties:
     def test_init(self):

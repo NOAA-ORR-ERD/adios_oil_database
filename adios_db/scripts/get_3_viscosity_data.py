@@ -28,13 +28,14 @@ for oil, path in dbs.get_all_records(data_dir):
 
     records_with_kvis_data.setdefault(len(kvis), set()).add(oil.metadata.name)
     records_with_dvis_data.setdefault(len(dvis), set()).add(oil.metadata.name)
+    
+    numkvis = len(kvis)
+    numdvis = len(dvis)
+    if numkvis >= 3 or numdvis >= 3:
+        outfile.write(f'"{oil.metadata.name}", "{oil.metadata.product_type}", {oil.oil_id}, {len(kvis)}, {len(dvis)}\n')
 
-    outfile.write(f'"{oil.metadata.name}", "{oil.metadata.product_type}", {oil.oil_id}, {len(kvis)}, {len(dvis)}\n')
 
 
-    if (len(fresh.distillation_data.cuts) >= 3 and
-            max(len(kvis), len(dvis)) == 1):
-        records_with_dist_cuts.append(oil.metadata.name)
 
 
 print("Available viscosity Data:")

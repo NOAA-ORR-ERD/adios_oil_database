@@ -138,6 +138,7 @@ class DensityList(RefTempList, JSON_List):
         dl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
         return dl
 
+
 @dataclass_to_json
 @dataclass
 class DynamicViscosityPoint:
@@ -171,13 +172,61 @@ class DynamicViscosityList(RefTempList, JSON_List):
         """
         kvl = cls()
         for row in data_table:
-            kvl.append(DynamicViscosityPoint(viscosity=DynamicViscosity(row[0], unit=row[1]),
-                                             ref_temp=Temperature(row[2], unit=row[3]),
-                      ))
+            kvl.append(DynamicViscosityPoint(
+                viscosity=DynamicViscosity(row[0], unit=row[1]),
+                ref_temp=Temperature(row[2], unit=row[3]),
+            ))
+
         # sort by temp -- assume the same units
         kvl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+
         return kvl
 
+    def validate(self):
+        """
+        validator for viscosity
+
+        Checks dvis are increasing with temperature.
+        """
+        msgs = super().validate()
+        data_str = self.__class__.__name__
+        points_list = self
+        dvis_list = []
+
+        for p in points_list:
+            if p.ref_temp is None:
+                msgs.append(ERRORS["E042"]
+                            .format(data_str + " reference temp"))
+                return msgs
+
+            ref_temp = p.ref_temp.converted_to('C').value
+
+            try:
+                shear_rate = p.shear_rate.value
+            except (TypeError, AttributeError):
+                shear_rate = 0
+
+            try:
+                viscosity = p.viscosity.converted_to('Pas').value
+            except (TypeError, AttributeError):
+                viscosity = None
+
+            if viscosity is not None:
+                dvis_list.append((viscosity, ref_temp, shear_rate))
+
+        if len(dvis_list) > 1:
+            dvis_list.sort(key=lambda sl: (sl[1], sl[2]))
+
+            viscosities = {}
+            for visc, temp, shear_rate in dvis_list:
+                viscosities.setdefault(shear_rate, []).append((temp, visc))
+
+            for _k, v in viscosities.items():
+                _temps, dvis = zip(*v)
+                if(any(i <= j for i, j in zip(dvis, dvis[1:]))):
+                    msgs.append(ERRORS["E062"])
+
+        return msgs
 
 
 @dataclass_to_json
@@ -213,13 +262,61 @@ class KinematicViscosityList(RefTempList, JSON_List):
         """
         kvl = cls()
         for row in data_table:
-            kvl.append(KinematicViscosityPoint(viscosity=KinematicViscosity(row[0], unit=row[1]),
-                                              ref_temp=Temperature(row[2], unit=row[3]),
-                      ))
+            kvl.append(KinematicViscosityPoint(
+                viscosity=KinematicViscosity(row[0], unit=row[1]),
+                ref_temp=Temperature(row[2], unit=row[3]),
+            ))
+
         # sort by temp -- assume the same units
         kvl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
+
         return kvl
 
+    def validate(self):
+        """
+        validator for viscosity
+
+        Checks kvis are increasing with temperature.
+        """
+        msgs = super().validate()
+        data_str = self.__class__.__name__
+        points_list = self
+        kvis_list = []
+
+        for p in points_list:
+            if p.ref_temp is None:
+                msgs.append(ERRORS["E042"]
+                            .format(data_str + " reference temp"))
+                return msgs
+
+            ref_temp = p.ref_temp.converted_to('C').value
+
+            try:
+                shear_rate = p.shear_rate.value
+            except (TypeError, AttributeError):
+                shear_rate = 0
+
+            try:
+                viscosity = p.viscosity.converted_to('m^2/s').value
+            except (TypeError, AttributeError):
+                viscosity = None
+
+            if viscosity is not None:
+                kvis_list.append((viscosity, ref_temp, shear_rate))
+
+        if len(kvis_list) > 1:
+            kvis_list.sort(key=lambda sl: (sl[1], sl[2]))
+
+            viscosities = {}
+            for visc, temp, shear_rate in kvis_list:
+                viscosities.setdefault(shear_rate, []).append((temp, visc))
+
+            for _k, v in viscosities.items():
+                _temps, kvis = zip(*v)
+                if(any(i <= j for i, j in zip(kvis, kvis[1:]))):
+                    msgs.append(ERRORS["E062"])
+
+        return msgs
 
 
 @dataclass_to_json

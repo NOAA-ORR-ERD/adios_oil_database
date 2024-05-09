@@ -24,6 +24,7 @@ from .review_status import ReviewStatus
 
 ADIOS_DATA_MODEL_VERSION = Version(0, 12, 0)
 
+
 def get_current_version():
     return ADIOS_DATA_MODEL_VERSION
 
@@ -93,17 +94,15 @@ class Oil:
         except AttributeError:
             py_json = json.load(open(infile, encoding='utf-8'))
 
-        # py_json = update_json(py_json)
-
         return cls.from_py_json(py_json)
 
     @staticmethod
-    def _validate_id(id):
-        if id == "":
+    def _validate_id(oil_id):
+        if oil_id == "":
             raise TypeError("You must supply a non-empty oil_id")
-        elif not isinstance(id, str):
+        elif not isinstance(oil_id, str):
             raise ValueError("oil_id must be a string")
-        elif len(id) > 40:
+        elif len(oil_id) > 40:
             # arbitrary limit to catch ridiculous ones, UUID is  36 characters
             raise ValueError("oil_id must be a string less than "
                              "40 characters in length")
@@ -124,7 +123,6 @@ class Oil:
             make_gnome_oil(copy.deepcopy(self))
             self.metadata.gnome_suitable = True
         except Exception as ex:
-            print(ex)
             self.metadata.gnome_suitable = False
             msgs.append(WARNINGS["W100"].format(str(ex)))
 

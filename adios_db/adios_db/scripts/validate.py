@@ -66,7 +66,7 @@ def write_reports(base_dir, save):
                 validation_by_record[oil.oil_id] = (oil.metadata.name,
                                                     oil.status)
         for error_code, msgs in status.items():
-            issues = "\n".join(f"\n#### `{oil.oil_id}` "
+            issues = "\n".join(f"\n#### `{oil_id_content(oil)}` "
                                f"-- {oil.metadata.name}:\n\n{msg}\n"
                                for msg in msgs)
 
@@ -95,6 +95,18 @@ def write_reports(base_dir, save):
         write_by_error(outfile, validation_by_error)
         write_header_rev(outfile)
         write_by_error(outfile, validation_by_error_rev)
+
+
+def oil_id_content(oil):
+    """
+    Generate and return the content for the oil's identification.
+    """
+    ret = f'{oil.oil_id}'
+
+    if oil.metadata.source_id is not None:
+        ret += f' ({oil.metadata.source_id})'
+
+    return f'{ret}'
 
 
 def write_by_record(outfile1, validation_by_record):
