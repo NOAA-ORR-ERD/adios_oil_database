@@ -39,6 +39,13 @@ git pull -s recursive -X theirs --no-edit
 git branch -D under_review || echo "local under_review not found. This is ok."
 
 git checkout -b $BRANCH
+if [[ $(branch_exists_remotely $BRANCH) -eq "0" ]];
+then
+    echo "The remote branch origin/$BRANCH exists."
+    git branch --set-upstream-to=origin/$BRANCH $BRANCH
+    git pull
+fi
+
 
 # Save out what's in the mongodb
 adios_db_backup --config /config/config_oil_db.ini
