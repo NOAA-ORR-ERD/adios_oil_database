@@ -107,9 +107,14 @@ def load_from_csv_file(filepath=None):
 
         return ptypes_labels
 
+def normalize(pt):
+    return "".join(pt.lower().strip().split())
 
 PRODUCT_TYPE_LABEL_MAPPING = load_from_csv_file()
 PRODUCT_TYPES = tuple(PRODUCT_TYPE_LABEL_MAPPING)
+
+# dict indexed by normalized names for faster lookup
+NORM_PTS = {normalize(pt): pt for pt in PRODUCT_TYPES}
 
 types_to_labels = TypeLabelsMap(PRODUCT_TYPE_LABEL_MAPPING)
 
@@ -134,3 +139,18 @@ class ProductType(str):
             return [WARNINGS["W002"]]
 
         return cls._validator(value)
+
+    @staticmethod
+    def normalize_product_type(product_type):
+        """
+        Makes sure the case and whitespace of product type is consistent with the list.
+
+        :param: product type string.
+        :returns: normalized string
+        """
+        print("product type in:", product_type)
+        pt = NORM_PTS.get(normalize(product_type), product_type)
+        print("returning", pt)
+        return pt
+
+

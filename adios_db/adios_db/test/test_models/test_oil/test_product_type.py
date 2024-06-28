@@ -79,3 +79,17 @@ def test_all_product_types(example_data):
         'Condensate',
         'Bitumen Blend'
     ])
+
+@pytest.mark.parametrize(("pt_in", "pt_out"), [
+                         ("Crude oil  nos ", "Crude Oil NOS" ),
+                         ("Crude Oil  NOS", "Crude Oil NOS" ),
+                         ("Condensate", "Condensate" ),
+                         (" condensate", "Condensate" ),
+                         ("Random junk", "Random junk"),
+                         ("", ""),
+                         ])
+def test_normalize_product_type(pt_in, pt_out):
+    pt_norm = ProductType.normalize_product_type(pt_in)
+
+    assert pt_norm == pt_out
+

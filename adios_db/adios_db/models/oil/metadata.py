@@ -4,6 +4,7 @@ Class that represents the demographic data (metadata) of an oil record.
 from datetime import datetime
 from dataclasses import dataclass, field
 
+from ...util import sigfigs
 from ..common.utilities import dataclass_to_json, JSON_List
 from ..common.measurement import MassFraction, Temperature
 
@@ -65,15 +66,18 @@ class MetaData:
         Assorted cleanup
         """
         # force API to be a float if possible, otherwise set it to None.
+        # also reduce the number of sigfigs
         if self.API is not None:
             try:
-                self.API = float(self.API)
+                self.API = sigfigs(float(self.API), 4)
             except ValueError:
                 self.API = None
 
         # make sure lists are sorted
         self.labels = sorted(self.labels)
         self.alternate_names = sorted(self.alternate_names)
+        # normalize case of product type
+        self.product_type = ProductType.normalize_product_type(self.product_type)
 
     def validate(self):
         msgs = []

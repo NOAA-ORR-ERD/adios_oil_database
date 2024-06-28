@@ -197,3 +197,13 @@ def test_bad_log_date():
     print(msgs)
     print(md.py_json())
     assert snippet_in_oil_status("W011", msgs)
+
+def test_normalize_product_type():
+    md = MetaData(product_type="crude  oil NOS")
+
+    assert md.product_type == "Crude Oil NOS"
+
+def test_sigfigs_in_API():
+    md = MetaData(API="32.123456789")
+
+    assert md.API == 32.12
