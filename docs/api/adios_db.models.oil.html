@@ -1923,6 +1923,20 @@ validation messages.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.product_type.</span></span><span class="sig-name descname"><span class="pre">ProductType</span></span><a class="headerlink" href="#adios_db.models.oil.product_type.ProductType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.oil.product_type.ProductType.normalize_product_type">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normalize_product_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">product_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.product_type.ProductType.normalize_product_type" title="Link to this definition"></a></dt>
+<dd><p>Makes sure the case and whitespace of product type is consistent with the list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>product type string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>normalized string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="adios_db.models.oil.product_type.ProductType.validate">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.product_type.ProductType.validate" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1996,6 +2010,11 @@ provided, it will look for:
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="adios_db.models.oil.product_type.normalize">
+<span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.product_type.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.product_type.normalize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-adios_db.models.oil.properties">
