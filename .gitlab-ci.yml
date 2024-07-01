@@ -37,9 +37,8 @@ test_develop:
 
   before_script:
     - echo "ip_resolve=4" >> /etc/yum.conf
-    -  apt-get update && \
-    -  apt-get upgrade -y && \
-    apt-get install -y less nvi wget
+    - apt-get update
+    - apt-get upgrade -y
 
     # - conda update -y conda
     # - conda update -y mamba
