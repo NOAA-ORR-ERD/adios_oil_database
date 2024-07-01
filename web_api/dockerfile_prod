@@ -2,7 +2,7 @@
 #
 ARG PYTHON_VER
 
-FROM registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+FROM registry.orr.noaa.gov/erd/centos-conda/ubuntuforge-python$PYTHON_VER
 
 ARG KEY_FILE
 ARG PYTHON_VER
