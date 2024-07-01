@@ -148,9 +148,7 @@ class ProductType(str):
         :param: product type string.
         :returns: normalized string
         """
-        print("product type in:", product_type)
         pt = NORM_PTS.get(normalize(product_type), product_type)
-        print("returning", pt)
         return pt
 
 

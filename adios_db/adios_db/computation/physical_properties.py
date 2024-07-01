@@ -136,8 +136,6 @@ class KinematicViscosity:
     """
     # Default constants for when there is only one viscosity
     # data point.
-    # fixme: we need to get numbers for all oil types!
-    #        including Crude -- 2100 is the old ADIOS2 value
 
     # Fit curve to coefficient of viscosity vs density scatter plot for each oil type
     # Value of coefficient of viscosity at density at 15C is used as the kv2 value
@@ -145,12 +143,12 @@ class KinematicViscosity:
     # "Bitumen" "Fuel Oil NOS" "Hydraulic Fluid" "Bio-Petro Fuel Oil" "Other"
     slope_intercept_kv2 = {"Crude Oil NOS": (22.57, -13935.62),
                    "Tight Oil": (22.57, -13935.62), # not enough data but similar to Crude Oil NOS
-                   "Distillate Fuel Oil": (40.148, -30298.849),
+                   "Distillate Fuel Oil": (47.8421, -36442.499),
                    "Condensate": (149.39, -108117.618),
                    "Bitumen Blend": (-51.857, 54002.01),
-                   "Refined Product NOS": (39.768, -29255.87),
+                   # "Refined Product NOS": (39.768, -29255.87), # not clearly defined.
                    "Residual Fuel Oil": (89.557, -75563.817),
-                   #"Refinery Intermediate": (29.49, -21530.544), # not a good fit for these oils
+                   # "Refinery Intermediate": (29.49, -21530.544), # not a good fit for these oils
                    "Solvent": (7.317, -4075.659),
                    "Bio-fuel Oil": (40.148, -30298.849),
                    "Natural Plant Oil": (40.148, -30298.849),
@@ -244,9 +242,9 @@ class KinematicViscosity:
                             "in Gnome.".format(oil.metadata.product_type, oil.oil_id))
 
         kv2 = slope * density + intercept
-        kv2 = max(kv2,0)
+        kv2 = max(kv2, 0)
         if oil.metadata.product_type == "Condensate":
-            kv2 = max(kv2,844) # scatter plot has a flat line fit for low densities
+            kv2 = max(kv2, 844) # scatter plot has a flat line fit for low densities
 
         return kv2
 
