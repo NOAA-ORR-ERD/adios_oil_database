@@ -17,7 +17,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=8d563738"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -48,6 +48,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts for working with the data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="managing.html">Managing the Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="computation.html">Computation with the ADIOS data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="importing_new_data.html">Importing New Data</a></li>
@@ -83,7 +84,7 @@
              
   <section id="adios-oil-database-adios-db-package">
 <h1>ADIOS Oil Database <code class="docutils literal notranslate"><span class="pre">adios_db</span></code> package<a class="headerlink" href="#adios-oil-database-adios-db-package" title="Link to this heading"></a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">adios_db</span></code> package is a PYthon package developed to help manage and work with oil properties data, as managed in the NOAA ADIOS Oil Database project:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">adios_db</span></code> package is a Python package developed to help manage and work with oil properties data, as managed in the NOAA ADIOS Oil Database project:</p>
 <p><a class="reference external" href="http://adios.orr.noaa.gov">http://adios.orr.noaa.gov</a></p>
 <p>This package is used to provide the back-end services of the ADIOS Oil Database web application, and can also be used to work with the data directly itself.</p>
 <p>There are three things one might want to do with this package:</p>
@@ -93,12 +94,16 @@ See: <a class="reference internal" href="managing.html#managing-the-data"><span 
 <li><p>Extract numerical values from the data to use for computation,
 such as initializing an oil weathering model.
 See: <a class="reference internal" href="computation.html#computation"><span class="std std-ref">Computation with the ADIOS data</span></a> for some documentation of this use case.</p></li>
-<li><p>Extracting data needed for modeling. Oil weathing models need oil properties in order to apply the model to a particular oil. But each model requires different data, and each oil record provides different data. So building a “model oil” is non-trivial. See <a class="reference internal" href="api/adios_db.computation.html#module-adios_db.computation.gnome_oil" title="adios_db.computation.gnome_oil"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adios_db.computation.gnome_oil</span></code></a>  for an example of an Oil object as required by the GNOME oil weathering model is constructed from the data. Other models should be able to be supported with similar code.</p></li>
+<li><p>Extracting data needed for modeling. Oil weathering models need oil properties in order to apply the model to a particular oil. But each model requires different data, and each oil record provides different data. So building a “model oil” is non-trivial. See <a class="reference internal" href="api/adios_db.computation.html#module-adios_db.computation.gnome_oil" title="adios_db.computation.gnome_oil"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adios_db.computation.gnome_oil</span></code></a> for an example of hownan <cite>Oil</cite> object as required by the GNOME oil weathering model is constructed from the data. Other models should be able to be supported with similar code.</p></li>
 </ol>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts for working with the data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html#the-installed-scripts">The Installed scripts</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="managing.html">Managing the Data</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managing.html#the-scripting-module">The Scripting Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managing.html#working-with-json">Working with JSON</a></li>
