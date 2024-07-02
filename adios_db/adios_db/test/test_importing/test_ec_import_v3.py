@@ -32,6 +32,10 @@ from adios_db.data_sources.env_canada.v3 import (EnvCanadaCsvFile1999,
 
 from adios_db.data_sources.env_canada.v2 import InvalidFileError
 
+# Pass the --import command line option if you want these to run.
+pytestmark = pytest.mark.importing
+
+
 example_dir = Path(__file__).resolve().parent / 'example_data'
 example_index = example_dir / 'index.txt'
 data_file = example_dir / 'ECCC_AlaskaNorthSlope.csv'
