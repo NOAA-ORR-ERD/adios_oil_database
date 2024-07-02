@@ -12,11 +12,19 @@ def pytest_addoption(parser):
         default=False,
         help="run the tests that require mongo to be running"
     )
+    parser.addoption(
+        "--import",
+        action="store_true",
+        default=False,
+        help="run the importing tests"
+    )
 
 
 def pytest_configure(config):
     config.addinivalue_line("markers",
                             "mongo: mark test as requiring mongo")
+    config.addinivalue_line("markers",
+                            "import: mark test as being an import test")
 
 
 def pytest_collection_modifyitems(config, items):
