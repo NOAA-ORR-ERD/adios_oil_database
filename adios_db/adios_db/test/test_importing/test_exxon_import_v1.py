@@ -22,6 +22,9 @@ from adios_db.models.common.measurement import Temperature, VolumeFraction
 from adios_db.data_sources.exxon_assays import (ExxonDataReader, ExxonMapper,
                                                 ExxonRecordParser)
 
+# Pass the --import command line option if you want these to run.
+pytestmark = pytest.mark.importing
+
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
 

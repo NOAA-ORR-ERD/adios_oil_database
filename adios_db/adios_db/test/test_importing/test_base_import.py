@@ -12,6 +12,8 @@ import pytest
 
 from adios_db.data_sources import CsvFile
 
+# Pass the --import command line option if you want these to run.
+pytestmark = pytest.mark.importing
 
 example_dir = Path(__file__).resolve().parent / 'example_data'
 data_file = example_dir / 'CsvTestSet.csv'

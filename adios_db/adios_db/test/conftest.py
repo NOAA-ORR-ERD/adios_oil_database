@@ -17,17 +17,27 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     config.addinivalue_line("markers",
                             "mongo: mark test as requiring mongo")
+    config.addinivalue_line("markers",
+                            "importing: mark test as being an import test")
 
 
 def pytest_collection_modifyitems(config, items):
-    if config.getoption("--mongo"):
-        # --mongo given in cli: do not skip tests that require mongo
-        return
+    if not config.getoption("--mongo"):
+        # --mongo not given in cli: skip tests that require mongo
 
-    skip_mongo = pytest.mark.skip(reason="need --mongo option to run")
+        skip_mongo = pytest.mark.skip(reason="need --mongo option to run")
 
-    for item in items:
-        if "mongo" in item.keywords:
-            item.add_marker(skip_mongo)
+        for item in items:
+            if "mongo" in item.keywords:
+                item.add_marker(skip_mongo)
+
+    if not config.getoption("--import"):
+        # --import not given in cli: skip import tests
+
+        skip_import = pytest.mark.skip(reason="need --import option to run")
+
+        for item in items:
+            if "importing" in item.keywords:
+                item.add_marker(skip_import)
 
 
