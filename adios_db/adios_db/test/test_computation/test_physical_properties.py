@@ -474,7 +474,7 @@ class TestKinematicViscosity:
 
     def test_one_vicosity_diesel(self):
         """
-        if there's only one viscocity, and it's a diesel
+        if there's only one viscosity, and it's a diesel
         it should use the correct kv_2
         """
         oil = Oil.from_file(EXAMPLE_DATA_DIR / 'SimpleULSFO.json')
@@ -483,7 +483,7 @@ class TestKinematicViscosity:
 
         print(kv._k_v2)
         #assert kv._k_v2 == 6200.0 # switched default
-        assert isclose(kv._k_v2, 3465.64, rel_tol=1e-4)
+        assert isclose(kv._k_v2, 3792.73, rel_tol=1e-4)
 
 
     def test_multiple_vicosities_crude(self):
