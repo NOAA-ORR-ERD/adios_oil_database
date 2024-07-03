@@ -141,19 +141,19 @@ class KinematicViscosity:
     # Value of coefficient of viscosity at density at 15C is used as the kv2 value
     # Product types that will be rejected, not enough data to fit the curve (or no data) -
     # "Bitumen" "Fuel Oil NOS" "Hydraulic Fluid" "Bio-Petro Fuel Oil" "Other"
-    slope_intercept_kv2 = {"Crude Oil NOS": (22.57, -13935.62),
+    slope_intercept_kv2 = {"Crude Oil NOS": (22.14, -13547.38),
                    "Tight Oil": (22.57, -13935.62), # not enough data but similar to Crude Oil NOS
                    "Distillate Fuel Oil": (47.8421, -36442.499),
                    "Condensate": (149.39, -108117.618),
-                   "Bitumen Blend": (-51.857, 54002.01),
+                   "Bitumen Blend": (56.89, -46772.773),
                    # "Refined Product NOS": (39.768, -29255.87), # not clearly defined.
                    "Residual Fuel Oil": (89.557, -75563.817),
                    # "Refinery Intermediate": (29.49, -21530.544), # not a good fit for these oils
-                   "Solvent": (7.317, -4075.659),
-                   "Bio-fuel Oil": (40.148, -30298.849),
-                   "Natural Plant Oil": (40.148, -30298.849),
-                   "Lube Oil": (40.148, -30298.849),
-                   "Dielectric Oil": (40.148, -30298.849)
+                   "Solvent": (3.2533, -221.49),
+                   "Bio-fuel Oil": (-35.3808, 33221),
+                   #"Natural Plant Oil": (80.4, -70487.17185),
+                   "Lube Oil": (-1.851, 6432),
+                   "Dielectric Oil": (14.291, -8598.1815)
                    }
 	# Previously used mean of viscosity coefficients over all oils
 #     default_kvs = {
