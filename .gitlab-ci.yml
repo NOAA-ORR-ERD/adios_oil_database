@@ -1,15 +1,12 @@
 
 include:
-  - template: Dependency-Scanning.gitlab-ci.yml
-  - template: License-Scanning.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
   #- template: SAST.gitlab-ci.yml
   #- template: DAST.gitlab-ci.yml
 
 variables:
   PYTHON_VER: "3.11"
   SECURE_ANALYZERS_PREFIX: "registry.gitlab.com/gitlab-org/security-products/analyzers"
-  CS_MAJOR_VERSION: 3
-  CLAIR_OUTPUT: High
   DS_DISABLE_DIND: "true"
   SAST_DISABLE_DIND: "true"
   CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
@@ -27,7 +24,7 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   tags:
     - docker
     - linux
@@ -36,8 +33,14 @@ test_develop:
     - schedules
 
   before_script:
-    - echo "ip_resolve=4" >> /etc/yum.conf
-    # - yum update -y
+    - apt update
+    - apt upgrade -y
+
+    # mongod fails if the tzdata package is missing
+    - echo 'tzdata tzdata/Areas select America' | debconf-set-selections
+    - echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
+    - DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
+
     # - conda update -y conda
     # - conda update -y mamba
 
@@ -62,7 +65,13 @@ test_develop:
     - mkdir /var/log/mongodb
     - mkdir /var/run/mongodb
 
+    # We can start the docker container manually like this:
+    #   docker run --volume $(pwd)/git_repos/oil_database:/oil_database -it registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python3.11 /bin/bash
+    
     - mongod --config mongo_config_test.yml &
+    
+    # apt-get install -y lsof
+    # lsof -nP -iTCP -sTCP:LISTEN  # see if mongod is listening
 
     # Install & test the adios_db package
     - cd adios_db
@@ -720,7 +729,7 @@ stop_proxy_public:
 
 init_git_repo_on_stage:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   
   environment:
@@ -739,7 +748,7 @@ init_git_repo_on_stage:
 
 sync_with_git_review:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   environment:
@@ -757,7 +766,7 @@ sync_with_git_review:
 
 sync_with_git_prod:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   environment:
     name: stage
@@ -774,7 +783,7 @@ sync_with_git_prod:
 
 pull_remote_under_review_changes:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   environment:
     name: stage
@@ -791,7 +800,7 @@ pull_remote_under_review_changes:
 
 drop_db_volume_public:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/miniforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   environment:
     name: public
