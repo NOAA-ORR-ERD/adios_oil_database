@@ -36,8 +36,8 @@ test_develop:
     - schedules
 
   before_script:
-    - apt-get update
-    - apt-get upgrade -y
+    - apt update
+    - apt upgrade -y
 
     # mongod fails if the tzdata package is missing
     - echo 'tzdata tzdata/Areas select America' | debconf-set-selections

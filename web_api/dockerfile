@@ -2,7 +2,7 @@
 
 ARG PYTHON_VER
 
-FROM registry.orr.noaa.gov/erd/centos-conda/ubuntuforge-python$PYTHON_VER
+FROM registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
 
 ARG KEY_FILE
 ARG PYTHON_VER
@@ -16,6 +16,15 @@ RUN chmod og-rw /root/.ssh/id_rsa
 
 RUN echo "[gitlab.orr.noaa.gov]:9933,[3.133.34.161]:9933 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMgZKGmTe4Qk+PLudgaTbu0R5OzLqqkAxFtp/O+/Aw2YupqtJQb5XDXaPvBtIg2pohmHc66Yjk7HpIoEU/R4+50=" > /root/.ssh/known_hosts
 RUN chmod og-rw /root/.ssh/known_hosts
+
+# update our apt packages
+RUN apt update
+RUN apt upgrade -y
+
+# mongod fails if the tzdata package is missing
+RUN echo 'tzdata tzdata/Areas select America' | debconf-set-selections
+RUN echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
+RUN DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
 COPY ./ /adios-db/
 WORKDIR adios-db
