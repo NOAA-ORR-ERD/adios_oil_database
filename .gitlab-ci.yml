@@ -36,9 +36,13 @@ test_develop:
     - schedules
 
   before_script:
-    - echo "ip_resolve=4" >> /etc/yum.conf
     - apt-get update
     - apt-get upgrade -y
+
+    # mongod fails if the tzdata package is missing
+    - echo 'tzdata tzdata/Areas select America' | debconf-set-selections
+    - echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
+    - DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
     # - conda update -y conda
     # - conda update -y mamba
@@ -64,7 +68,13 @@ test_develop:
     - mkdir /var/log/mongodb
     - mkdir /var/run/mongodb
 
+    # We can start the docker container manually like this:
+    #   docker run --volume $(pwd)/git_repos/oil_database:/oil_database -it registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python3.11 /bin/bash
+    
     - mongod --config mongo_config_test.yml &
+    
+    # apt-get install -y lsof
+    # lsof -nP -iTCP -sTCP:LISTEN  # see if mongod is listening
 
     # Install & test the adios_db package
     - cd adios_db
