@@ -17,10 +17,17 @@ export default class SelectUnitDialog extends Component {
         super(...arguments);
         this._initEscListener();
 
-        this.unit = this.args.baseProperty.trim();
 
-        if (!this.unit && this.args.defaultUnit) {
-            this.unit = this.args.defaultUnit;
+        this.args.baseProperty.trim().length;
+        
+        if (this.args.baseProperty.trim().length > 0) {
+            this.unit = this.args.baseProperty.trim();
+        }
+        else if (this.args.defaultUnit.trim().length > 0) {
+            this.unit = this.args.defaultUnit.trim();
+        }
+        else {
+            console.err("No unit or default unit defined!");
         }
 
         this.generateCompatibleConverters();
@@ -156,7 +163,7 @@ export default class SelectUnitDialog extends Component {
 
         this.args.ok({'target': {
             'value': this.unit,
-            'unit_type': this.unitType.Name
+            'unit_type': this.unitType.Name.toLowerCase().replace(/\s/g, '')
         }});
     }
 

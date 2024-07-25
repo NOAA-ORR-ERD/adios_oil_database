@@ -41,9 +41,6 @@ test_develop:
     - echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
     - DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
-    # - conda update -y conda
-    # - conda update -y mamba
-
 
   script:
     # install all the requirements

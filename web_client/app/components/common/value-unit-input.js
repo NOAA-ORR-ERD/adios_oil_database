@@ -17,6 +17,10 @@ export default class ValueUnitInput extends Component {
         this.beaUnit = valueUnitUnit([unitObj]);
         
         this.editUnit = this.args.editUnit;
+        if (!this.editUnit) {
+            // force this flag to be boolean true/false for clarity
+            this.editUnit = false;
+        }
     }
 
     @action
