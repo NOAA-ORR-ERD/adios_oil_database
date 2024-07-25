@@ -18,13 +18,16 @@ RUN echo "[gitlab.orr.noaa.gov]:9933,[3.133.34.161]:9933 ecdsa-sha2-nistp256 AAA
 RUN chmod og-rw /root/.ssh/known_hosts
 
 # update our apt packages
-RUN apt update
-RUN apt upgrade -y
+RUN apt-get update
+RUN apt-get upgrade -y
+
+# we need git in order to manage the noaa-oil-data repo on our deployments
+RUN apt-get install git
 
 # mongod fails if the tzdata package is missing
 RUN echo 'tzdata tzdata/Areas select America' | debconf-set-selections
 RUN echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
-RUN DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y tzdata
 
 COPY ./ /adios-db/
 WORKDIR adios-db
