@@ -1,7 +1,13 @@
-<a href="#" class="nav-item nav-link btn btn-lg" role="button"
-   data-toggle="modal"
-   data-target="#addSampleDialog" >
+<BsButton @type="light" class="m-1 btn-sm text-nowrap"
+          @onClick={{this.show_dialog}} >
   <FaIcon @icon="plus" />
-</a>
+</BsButton>
 
-<TabNav::AddSampleDlg @oil={{@oil}} @submit={{@submit}} />
+
+{{#if this.dialogVisible}}
+  <TabNav::AddSampleDlg
+    @oil={{@oil}}
+    @close={{this.close_dialog}}
+    @submit={{this.submit}}
+  />
+{{/if}}

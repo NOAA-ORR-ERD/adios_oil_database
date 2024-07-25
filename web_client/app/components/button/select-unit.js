@@ -32,6 +32,7 @@ export default class SelectUnitButton extends Component {
     @action
     submit(event) {
         this.args.change(event);
+        this.dialogVisible = false;
     }
 
 }

@@ -38,16 +38,11 @@
 /**
  * This section is specific to the buttons inside the nav-tabs
  */
-.nav-tabs > a > button {
-    cursor:pointer;
-    right: 6px;
-    top: 8px;
-    color: red;
-}
-.nav-tabs > a > button {
+.nav-item > a > button {
     display:none;
 }
-.nav-tabs > a:hover > button {
+
+.nav-item:hover > a > button {
     display: inline-flex;
 }
 

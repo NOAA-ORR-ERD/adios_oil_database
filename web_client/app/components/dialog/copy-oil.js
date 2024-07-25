@@ -1,8 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from "@ember/object";
+import { ref } from 'ember-ref-bucket';
 
 export default class CopyOilDlg extends Component {
+    // @ref gives us a reference to a piece of our template
+    @ref("okButton") okButton;
+
     @tracked oilName;
 
     constructor() {

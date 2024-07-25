@@ -45,7 +45,9 @@
   </Modal.body>
   <Modal.footer as |footer|>
     <BsButton @type="primary" @onClick={{action Modal.submit}}
-              disabled={{not this.formFilledOut}} >
+              disabled={{not this.formFilledOut}}
+              {{create-ref "okButton"}}
+    >
       OK
     </BsButton>
   </Modal.footer>

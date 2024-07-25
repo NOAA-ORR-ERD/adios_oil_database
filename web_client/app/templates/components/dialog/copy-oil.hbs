@@ -33,7 +33,9 @@
     <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
 
     <BsButton @onClick={{action Modal.submit}} @type="primary"
-              disabled={{not this.formFilledOut}} >
+              disabled={{not this.formFilledOut}}
+              {{create-ref "okButton"}}
+    >
       OK
     </BsButton>
   </Modal.footer>

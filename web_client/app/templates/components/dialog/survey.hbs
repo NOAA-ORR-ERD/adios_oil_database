@@ -80,6 +80,10 @@
     </div>
   </Modal.body>
   <Modal.footer as |footer|>
-    <BsButton @onClick={{action Modal.submit}} @type="primary">OK</BsButton>
+    <BsButton @onClick={{action Modal.submit}} @type="primary"
+      {{create-ref "okButton"}}
+    >
+      OK
+    </BsButton>
   </Modal.footer>
 </BsModal>

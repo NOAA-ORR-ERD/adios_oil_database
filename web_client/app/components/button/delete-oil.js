@@ -19,5 +19,6 @@ export default class DeleteOilButton extends Component {
     @action
     submit(oil) {
         this.args.submit(oil);
+        this.dialogVisible = false;
     }
 }

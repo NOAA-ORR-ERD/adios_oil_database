@@ -23,7 +23,14 @@
     </div>
   </Modal.body>
   <Modal.footer as |footer|>
-    <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
-    <BsButton @onClick={{action Modal.submit}} @type="primary">OK</BsButton>
+    <BsButton @onClick={{action Modal.close}} @type="secondary">
+      Cancel
+    </BsButton>
+    <BsButton @onClick={{action Modal.submit}} @type="primary"
+              disabled={{not this.formFilledOut}}
+              {{create-ref "okButton"}}
+    >
+      OK
+    </BsButton>
   </Modal.footer>
 </BsModal>

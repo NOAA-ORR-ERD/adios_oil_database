@@ -195,9 +195,9 @@
               @value={{oilReference}}
               placeholder="Enter reference"
               title="Reference"
-              @change={{action "updateReference"}}
               rows="4"
               disabled={{not @editable}}
+              {{on "change" (action "updateReference")}}
             />
           {{/let}}
         </div>
@@ -217,7 +217,8 @@
                 class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilReferenceDate}}
                 placeholder="YYYY"
-                size="7" {{on "change" (action "updateReferenceDate")}}
+                size="7"
+                {{on "change" (action "updateReferenceDate")}}
               />
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
@@ -265,8 +266,8 @@
             rows="2"
             placeholder="Enter comments"
             title="Comments"
-            @change={{action "updateComments"}}
             disabled={{not @editable}}
+            {{on "change" (action "updateComments")}}
           />
         {{/let}}
       </div>

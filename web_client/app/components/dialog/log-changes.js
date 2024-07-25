@@ -1,11 +1,15 @@
 import BaseComponent from '../common/base-component';
 import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
+import { ref } from 'ember-ref-bucket';
 
 import moment from 'moment';
 
 
 export default class LogChangesDlg extends BaseComponent {
+    // @ref gives us a reference to a piece of our template
+    @ref("okButton") okButton;
+
     @tracked name;
     @tracked comment;
 
@@ -19,8 +23,7 @@ export default class LogChangesDlg extends BaseComponent {
 
     focusOKButton(event) {
         if (['change', 'focusout'].includes(event.type)
-                && this.formFilledOut
-                && this.okButton)
+                && this.formFilledOut)
         {
             this.okButton.focus();
         }
