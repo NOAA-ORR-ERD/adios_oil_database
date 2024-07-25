@@ -22,7 +22,7 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 # we need git in order to manage the noaa-oil-data repo on our deployments
-RUN apt-get install git
+RUN apt-get install git -y
 
 # mongod fails if the tzdata package is missing
 RUN echo 'tzdata tzdata/Areas select America' | debconf-set-selections
