@@ -192,8 +192,7 @@ def test_convert_dvisc_to_kvisc_from_record():
 
     from the record::
 
-    raw_dvis=[(43.0, 275.15), (12.0, 286.15), (5.4, 323.15)]
-
+    raw_dvis=[(43.0, 275.15), (5.4, 323.15)]
 
     """
     oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
@@ -208,17 +207,14 @@ def test_convert_dvisc_to_kvisc_from_record():
 
     kv = KinematicViscosity(oil)
 
-    breakpoint()
-    for dv in raw_dvis[1:]:
+    for dv in raw_dvis:
         print(f"{dv=}")
         kv2 = kv.at_temp(dv[1], kvis_units='cSt', temp_units='K')
         d = density.at_temp(dv[1], unit='K') / 1000
-        dv2 = kv2 / d
-        print("temp is:", nucos.convert('K', 'C', dv[1]))
+        dv2 = kv2 * d
+        print(f"temp is: {nucos.convert('K', 'C', dv[1])} C")
         print(d)
-        assert isclose(kv2, dv2)
-
-    # assert False
+        assert isclose(dv2, dv[0])
 
 
 def test_get_dynamic_viscosity_data_defaults():
