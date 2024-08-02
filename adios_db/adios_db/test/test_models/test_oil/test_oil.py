@@ -431,6 +431,9 @@ def test_version_bad():
         _oil = Oil.from_py_json(pyjs)
 
 
+# this fails because it will try to load it anyway
+# after running through the updaters
+# and only raise an error if it can't load.
 @pytest.mark.xfail
 def test_version_too_high():
     pyjs = {
