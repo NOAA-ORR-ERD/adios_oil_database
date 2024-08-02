@@ -141,29 +141,21 @@ class KinematicViscosity:
     # Value of coefficient of viscosity at density at 15C is used as the kv2 value
     # Product types that will be rejected, not enough data to fit the curve (or no data) -
     # "Bitumen" "Fuel Oil NOS" "Hydraulic Fluid" "Bio-Petro Fuel Oil" "Other"
-    slope_intercept_kv2 = {"Crude Oil NOS": (22.14, -13547.38),
-                   "Tight Oil": (22.57, -13935.62), # not enough data but similar to Crude Oil NOS
-                   "Distillate Fuel Oil": (47.8421, -36442.499),
-                   "Condensate": (149.39, -108117.618),
-                   "Bitumen Blend": (56.89, -46772.773),
-                   # "Refined Product NOS": (39.768, -29255.87), # not clearly defined.
-                   "Residual Fuel Oil": (89.557, -75563.817),
-                   # "Refinery Intermediate": (29.49, -21530.544), # not a good fit for these oils
-                   "Solvent": (3.2533, -221.49),
-                   "Bio-fuel Oil": (-35.3808, 33221),
-                   #"Natural Plant Oil": (80.4, -70487.17185),
-                   "Lube Oil": (-1.851, 6432),
+    # slope, intercept, minimum value
+    slope_intercept_kv2 = {"Crude Oil NOS": (22.14, -13547.38, 0),
+                   "Tight Oil": (22.57, -13935.62, 0), # not enough data but similar to Crude Oil NOS
+                   "Distillate Fuel Oil": (47.8421, -36442.499, 0),
+                   "Condensate": (149.39, -108117.618, 844),
+                   "Bitumen Blend": (56.89, -46772.773, 0),
+                   # "Refined Product NOS": (39.768, -29255.87, 0), # not clearly defined.
+                   "Residual Fuel Oil": (89.557, -75563.817, 0),
+                   # "Refinery Intermediate": (29.49, -21530.544, 0), # not a good fit for these oils
+                   "Solvent": (3.2533, -221.49, 0),
+                   "Bio-fuel Oil": (-35.3808, 33221, 0),
+                   #"Natural Plant Oil": (80.4, -70487.17185, 0),
+                   "Lube Oil": (-1.851, 6432, 0),
                    "Dielectric Oil": (14.291, -8598.1815)
                    }
-	# Previously used mean of viscosity coefficients over all oils
-#     default_kvs = {
-#         "Crude Oil NOS": 2099.9999,  # only so we can distingish from default
-#         "Distillate Fuel Oil": 6200.0,
-#     }
-
-    # value to us if it's not in the above dict -- or
-    # if product type is unknown.
-    #DEFAULT_KV2 = 2100.0  # K
 
     def __init__(self, oil_or_data, k_v2=None):
         """
@@ -188,28 +180,28 @@ class KinematicViscosity:
         :type k_v2: float
         """
         if _is_oil(oil_or_data):
-            data = get_kinematic_viscosity_data(oil_or_data,
+            oil = oil_or_data
+            data = get_kinematic_viscosity_data(oil,
                                                 units='m^2/s',
                                                 temp_units="K")
             if k_v2 is None:
-                #k_v2 = self.default_kvs.get(oil_or_data.metadata.product_type,
+                #k_v2 = self.default_kvs.get(oil.metadata.product_type,
                 #                            self.DEFAULT_KV2)
                 if data:
                     kviscs, temps = zip(*data)
-                    if len(kviscs)==1:	# only need default value if have only 1 viscosity
-                        k_v2 = self.default_kv2(oil_or_data)
+                    if len(kviscs) == 1:	# only need default value if have only 1 viscosity
+                        density = Density(oil).at_temp(288.15)  # 15C
+                        k_v2 = self.default_kv2(density, oil.metadata.product_type)
 
         else:
-            # not an oil object -- assume it's a table of data in the
-            #                      correct form
+            # not an oil object -- assume it's a table of data in the correct form
             data = oil_or_data
-            #k_v2 = k_v2 if k_v2 is not None else self.DEFAULT_KV2 # raise error if no kv2 here
+
             if k_v2 is not None:
                 k_v2 = k_v2
             else:
                 if len(data) == 1:
                     raise ValueError("k_v2 required for single viscosity input as data table")
-
 
         if data:
             data = sorted(data, key=itemgetter(1))
@@ -222,29 +214,28 @@ class KinematicViscosity:
         self.initialize()
 
 
-    def default_kv2(self, oil):
+    def default_kv2(self, density, product_type):
         """
         Get the coefficient of viscosity at 15C
 
-        :param oil: oil object to get density and product type
+        :param density: density at 15C
+        :param product_type: density at 15C
 
         for each oil type line fit to coefficient of viscosity vs density scatter plot:
         kv2 = slope * density + intercept
         """
 
-        dens = Density(oil)
-        density = dens.at_temp(288.15)	# 15C
+        # dens = Density(oil)
+        # density = dens.at_temp(288.15)	# 15C
 
         try:
-            (slope, intercept) = self.slope_intercept_kv2.get(oil.metadata.product_type)
+            (slope, intercept, minimum) = self.slope_intercept_kv2.get(product_type)
         except (TypeError) as err:
             raise TypeError("Unable to estimate kv2 for {}. Oil {} not suitable for use "
-                            "in Gnome.".format(oil.metadata.product_type, oil.oil_id))
+                            "in Gnome.".format(product_type, oil.oil_id))
 
         kv2 = slope * density + intercept
-        kv2 = max(kv2, 0)
-        if oil.metadata.product_type == "Condensate":
-            kv2 = max(kv2, 844) # scatter plot has a flat line fit for low densities
+        kv2 = max(kv2, minimum)
 
         return kv2
 

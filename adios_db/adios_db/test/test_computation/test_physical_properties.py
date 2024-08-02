@@ -183,7 +183,7 @@ def test_convert_dvisc_to_kvisc():
         kv2 = dv[0] / density.at_temp(dv[1], 'K')
         assert kv[0] == kv2
 
-@pytest.mark.xfail
+# @pytest.mark.xfail
 def test_convert_dvisc_to_kvisc_from_record():
     """
     This is bit of an integration test
@@ -192,41 +192,33 @@ def test_convert_dvisc_to_kvisc_from_record():
 
     from the record::
 
-        "viscosity": {
-            "value": 59.0,
-            "unit": "cP",
-            "unit_type": "dynamicviscosity"
-        },
-        "ref_temp": {
-            "value": 13.0,
-            "unit": "C",
-            "unit_type": "temperature"
-                            },
+    raw_dvis=[(43.0, 275.15), (12.0, 286.15), (5.4, 323.15)]
 
 
     """
     oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
 
     raw_dvis = get_dynamic_viscosity_data(oil, units="cP")
+    print(f"{raw_dvis=}")
 
     density = Density(oil)
 
     kvis_data = get_kinematic_viscosity_data(oil)
-    print(kvis_data)
+    print(f"{kvis_data=}")
 
     kv = KinematicViscosity(oil)
 
-    print(kv.at_temp(13, kvis_units='cSt', temp_units='C'))
-
+    breakpoint()
     for dv in raw_dvis[1:]:
+        print(f"{dv=}")
         kv2 = kv.at_temp(dv[1], kvis_units='cSt', temp_units='K')
         d = density.at_temp(dv[1], unit='K') / 1000
-        dv2 = dv[0] / d
+        dv2 = kv2 / d
         print("temp is:", nucos.convert('K', 'C', dv[1]))
         print(d)
         assert isclose(kv2, dv2)
 
-    assert False
+    # assert False
 
 
 def test_get_dynamic_viscosity_data_defaults():
@@ -499,12 +491,15 @@ class TestKinematicViscosity:
         #for kv_2 in KinematicViscosity.default_kvs.values():
             #assert kv._k_v2 != kv_2
 
-        assert kv._k_v2 != kv.default_kv2(oil)
+        density = Density(oil).at_temp(288.15)  # 15C
+        assert kv._k_v2 != kv.default_kv2(density, oil.metadata.product_type)
 
     def test_single_vicosities_crude(self):
         """
         if there's only one viscocity, and it's a Crude
         it should use the correct kv_2
+
+        FIXME: any reason to test this??
         """
         oil = Oil.from_file(EXAMPLE_DATA_DIR / 'ExampleSparseRecord.json')
 
@@ -513,7 +508,35 @@ class TestKinematicViscosity:
         print(kv._k_v2)
 
         #assert kv._k_v2 == KinematicViscosity.default_kvs[oil.metadata.product_type]
-        assert kv._k_v2 == kv.default_kv2(oil)
+        density = Density(oil).at_temp(288.15)  # 15C
+        assert kv._k_v2 == kv.default_kv2(density, oil.metadata.product_type)
+
+    def test_default_kv2_condensate(self):
+        density = 800
+        kv2 = self.kv.default_kv2(density, 'Condensate')
+
+        # eyeballed off plot -- looks about right
+        assert kv2 == 11394.381999999983
+
+
+        density = 720
+        kv2 = self.kv.default_kv2(density, 'Condensate')
+
+        assert kv2 == 844
+
+    def test_default_kv2_distillate(self):
+        density = 900
+        kv2 = self.kv.default_kv2(density, "Distillate Fuel Oil")
+
+        # eyeballed off plot -- looks about right
+        assert kv2 == 6615.390999999996
+
+
+        density = 720
+        kv2 = self.kv.default_kv2(density, "Distillate Fuel Oil")
+
+        assert kv2 == 0
+
 
 
 def test_get_frac_recovered():
