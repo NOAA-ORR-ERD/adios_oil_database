@@ -124,23 +124,6 @@
                     },
                     {
                         "viscosity": {
-                            "value": 12.0,
-                            "unit": "cP",
-                            "unit_type": "dynamicviscosity"
-                        },
-                        "ref_temp": {
-                            "value": 13.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        },
-                        "shear_rate": {
-                            "value": 10.0,
-                            "unit": "1/s",
-                            "unit_type": "angularvelocity"
-                        }
-                    },
-                    {
-                        "viscosity": {
                             "value": 5.4,
                             "unit": "cP",
                             "unit_type": "dynamicviscosity"
