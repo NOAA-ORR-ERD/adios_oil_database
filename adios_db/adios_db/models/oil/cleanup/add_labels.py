@@ -112,7 +112,8 @@ label_map.update({
     'Heavy Fuel Oil': {
         "api_min": -inf,
         "api_max": 13.4,  # changed to eliminate overlap with IFOs
-        "kvis_min": 381,  # changed from 200 to eliminate overlap with new IFO label criteria
+        #"kvis_min": 381,  # changed from 200 to eliminate overlap with new IFO label criteria
+        "kvis_min": -inf,
         "kvis_max": inf,
         'kvis_temp': 50
     },
@@ -265,7 +266,9 @@ def is_label(oil, label):
         return False
 
     api = oil.metadata.API
-
+    #if label == 'Heavy Fuel Oil':
+        #print(f'{data=}')
+        #print(f'{api=}')
     # check API:
     if ((data['api_min'] != -inf) or (data['api_max'] != inf)):
         if (api is not None and data['api_min'] <= api < data['api_max']):
@@ -281,6 +284,7 @@ def is_label(oil, label):
             KV = KinematicViscosity(oil)
             kvis = KV.at_temp(temp=data['kvis_temp'], kvis_units='cSt',
                               temp_units='C')
+            #print(f"{kvis=}")
             is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
         except (ZeroDivisionError, ValueError):
             # if it can't do this, we don't apply the label
