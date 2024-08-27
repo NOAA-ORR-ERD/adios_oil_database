@@ -1,0 +1,114 @@
+adios\_db.scripts package
+=========================
+
+.. automodule:: adios_db.scripts
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+adios\_db.scripts.add\_labels module
+------------------------------------
+
+.. automodule:: adios_db.scripts.add_labels
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.add\_to\_reference module
+-------------------------------------------
+
+.. automodule:: adios_db.scripts.add_to_reference
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.assign\_ids module
+------------------------------------
+
+.. automodule:: adios_db.scripts.assign_ids
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.db\_backup module
+-----------------------------------
+
+.. automodule:: adios_db.scripts.db_backup
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.db\_import module
+-----------------------------------
+
+.. automodule:: adios_db.scripts.db_import
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.db\_initialize module
+---------------------------------------
+
+.. automodule:: adios_db.scripts.db_initialize
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.db\_restore module
+------------------------------------
+
+.. automodule:: adios_db.scripts.db_restore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.eccc\_compare\_oils module
+--------------------------------------------
+
+.. automodule:: adios_db.scripts.eccc_compare_oils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.oil\_query module
+-----------------------------------
+
+.. automodule:: adios_db.scripts.oil_query
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.process\_json module
+--------------------------------------
+
+.. automodule:: adios_db.scripts.process_json
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.read\_noaa\_csv module
+----------------------------------------
+
+.. automodule:: adios_db.scripts.read_noaa_csv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.update\_test\_data module
+-------------------------------------------
+
+.. automodule:: adios_db.scripts.update_test_data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+adios\_db.scripts.validate module
+---------------------------------
+
+.. automodule:: adios_db.scripts.validate
+   :members:
+   :undoc-members:
+   :show-inheritance:

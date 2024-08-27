@@ -41,7 +41,6 @@ test_develop:
     - echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
     - DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
-
   script:
     # install all the requirements
     - >
@@ -569,7 +568,6 @@ stop_oauth_client_stage:
   tags:
     - adios-stage
     - deploy
-
 
 
 deploy_api_public:
