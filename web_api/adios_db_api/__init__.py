@@ -8,6 +8,7 @@ import json
 
 from importlib.metadata import version as get_version
 
+import pkg_resources
 from pyramid.config import Configurator
 from pyramid.response import Response, FileResponse
 from pyramid.renderers import JSON as JSONRenderer
