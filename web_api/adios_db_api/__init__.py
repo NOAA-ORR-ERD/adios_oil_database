@@ -6,13 +6,14 @@ import datetime
 
 import json
 
-from adios_db import __version__ as adios_db_version
-from adios_db.session import Session
+from importlib.metadata import version as get_version
 
-import pkg_resources
 from pyramid.config import Configurator
 from pyramid.response import Response, FileResponse
 from pyramid.renderers import JSON as JSONRenderer
+
+from adios_db import __version__ as adios_db_version
+from adios_db.session import Session
 
 from .common.views import cors_policy
 
@@ -56,7 +57,7 @@ def about(_request):
         directly
         print('Incoming request')
     """
-    pyramid_version = pkg_resources.get_distribution("pyramid").version
+    pyramid_version = get_version('pyramid')
 
     msg = f"""
         <!DOCTYPE html>
@@ -73,6 +74,7 @@ def about(_request):
                 This service is a JSON Web REST Service.<br><br>
                 Pyramid Version: {pyramid_version}<br>
                 Adios Database Version: {adios_db_version}<br>
+                Web API version: {__version__}<br>
             </p>
             <p>
                 [We need to document the API here -- or point to docs.]
