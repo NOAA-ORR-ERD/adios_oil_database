@@ -23,7 +23,10 @@ ERRORS = {
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",
-
+    "E051": ("Duplicate sub_sample short name(s): {} "
+             "Sub_sample short names must be unique"),
+    "E052": ("Duplicate sub_sample name(s): {} "
+             "names must be unique"),
     # E06* -- dataset error
     "E060": "Oil fraction in distillation cuts is not accumulative",
     "E061": "Boiling points in distillation cuts are not strictly increasing",

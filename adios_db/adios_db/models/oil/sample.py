@@ -105,7 +105,21 @@ class SampleList(JSON_List):
             # This is here because only need to check the "fresh" sample
             if (self[0].physical_properties is None
                     or not self[0].physical_properties.densities):
+                # warning if no density in zeroth subample
                 msgs.append(WARNINGS["W006"])
+
+            short_names = [ss.metadata.short_name for ss in self]
+            names = [ss.metadata.name for ss in self]
+
+            # find duplicates
+            seen = set()
+            dupes = [x for x in short_names if x in seen or seen.add(x)]
+            if dupes:
+                msgs.append(ERRORS["E051"].format(dupes))
+            seen = set()
+            dupes = [x for x in names if x in seen or seen.add(x)]
+            if dupes:
+                msgs.append(ERRORS["E052"].format(dupes))
 
             # # check_for_distillation_cuts
             # try:
@@ -113,6 +127,8 @@ class SampleList(JSON_List):
             #         msgs.append(WARNINGS['W007'])
             # except AttributeError:
             #     msgs.append(WARNINGS['W007'])
+
+
 
         # validate all the subsamples
         for ss in self:

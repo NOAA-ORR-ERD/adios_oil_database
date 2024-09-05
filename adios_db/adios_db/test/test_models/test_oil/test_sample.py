@@ -232,3 +232,44 @@ class TestSampleList:
 
         assert len(sl) == 1
         assert type(sl[0]) == Sample
+
+    def test_validate_no_repeated_names(self):
+        sl = SampleList()
+
+        sl.append(
+            Sample(metadata=SampleMetaData(short_name="short",
+                                           name="a longer name that is more descriptive")))
+
+        sl.append(
+            Sample(metadata=SampleMetaData(short_name="short2",
+                                           name="another longer name that is more descriptive")))
+
+        msgs = sl.validate()
+
+        print(msgs)
+        for msg in msgs:
+            assert "E051" not in msg
+
+    def test_validate_repeated_names(self):
+        sl = SampleList()
+
+        sl.append(
+            Sample(metadata=SampleMetaData(short_name="short",
+                                           name="a longer name that is more descriptive")))
+
+        sl.append(
+            Sample(metadata=SampleMetaData(short_name="short",
+                                           name="a longer name that is more descriptive")))
+
+        msgs = sl.validate()
+
+        print(msgs)
+        found_short_name = False
+        found_name = False
+        for msg in msgs:
+            if "E051" in msg:
+                found_short_name = True
+            if "E052" in msg:
+                found_name = True
+        assert found_short_name and found_name
+
