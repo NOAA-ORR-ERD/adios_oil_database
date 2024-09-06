@@ -38,9 +38,12 @@ export default class RangeValueDialog extends Component {
                 this.isInterval = false;
             } else {
                 // always select interval input if there is no scalar value (?)
-                let valMin, valMax;
-                [valMin, valMax] = valueUnit([convertUnit(
-                    [this.sourceValue, this.args.valueUnit]), this.args.valuePrecision, true]);
+                let [valMin, valMax] = valueUnit([
+                    convertUnit([this.sourceValue, this.args.valueUnit]),
+                    this.args.valuePrecision,
+                    true
+                ]);
+
                 this.dialogMinValue = valMin;
                 this.dialogMaxValue = valMax;
                 this.isInterval = true;
