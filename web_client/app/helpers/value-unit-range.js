@@ -19,7 +19,8 @@ export function valueUnitRange([valueUnitObj, tol, hideUnit,
     valueUnitObj.value = valueUnitObj.min_value;
     if (hideUnit) {
       return [min, max];
-    } else {
+    }
+    else {
       return `${min}${unit}`;
     }  
   }
@@ -27,26 +28,34 @@ export function valueUnitRange([valueUnitObj, tol, hideUnit,
            !isNaN(parseFloat(max)) && isFinite(max)) {
     if (hideUnit) {
       return [min, max];
-    } else {
+    }
+    else {
       return `[${min}\u2192${max}]${unit}`;
     }
   }
   else if (!isNaN(parseFloat(min)) && isFinite(min)) {
     if (hideUnit) {
       return [min, `+\u221e`];
-    } else {
+    }
+    else {
       return `>${min}${unit}`;
     }
   }
   else if (!isNaN(parseFloat(max)) && isFinite(max)) {
     if (hideUnit) {
       return [`-\u221e`, max];
-    } else {
+    }
+    else {
       return `<${max}${unit}`;
     }
   }
 
-  return null;
+  if (hideUnit) {
+    return [null, null];
+  }
+  else {
+    return null;
+  }
 }
 
 export default helper(valueUnitRange);
