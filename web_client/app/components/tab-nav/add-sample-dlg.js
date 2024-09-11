@@ -179,7 +179,7 @@ export default class AddSampleDlg extends Component {
         }
 
         let oil = this.args.oil;
-        oil.sub_samples.pushObject(newSample);
+        oil.sub_samples = [...oil.sub_samples, newSample];
         this.args.submit(oil);
     }
 
