@@ -21,10 +21,14 @@ export default class OilDemographics extends Component {
         if (productType) {
             return this.args.labels.filter(i => {
                 return i.product_types.includes(productType);
-            }).mapBy('name');
+            }).map(el => {
+                return el.name;
+            });
         }
         else {
-            return this.args.labels.mapBy('name');
+            return this.args.labels.map(el => {
+                return el.name;
+            });
         }
     }
 

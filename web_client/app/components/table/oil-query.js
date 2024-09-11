@@ -136,7 +136,9 @@ export default class NewOilQuery extends Component {
             enableSync: this.enableSync
         });
 
-        let sortColumn = this.table.allColumns.findBy('valuePath', this.sort);
+        let sortColumn = this.table.allColumns.find(el => {
+            return el.valuePath == this.sort;
+        });
 
         // Setup initial sort column
         if (sortColumn) {
@@ -154,10 +156,14 @@ export default class NewOilQuery extends Component {
         if (productType) {
             return this.args.labels.filter(i => {
                 return i.product_types.includes(productType);
-            }).mapBy('name');
+            }).map(el => {
+                return el.name;
+            });
         }
         else {
-            return this.args.labels.mapBy('name');
+            return this.args.labels.map(el => {
+                return el.name;
+            });
         }
     }
 
@@ -198,13 +204,13 @@ export default class NewOilQuery extends Component {
 
             this.meta = records.meta;
 
-            let recArray = records.toArray().map(i => {
+            let recArray = [...records].map(i => {
                 i.filteredStatus = i.status.filter(s => {
                     return !(this.args.warningIgnoreList||[]).includes(s.substring(0, 4));
                 }, this);
                 return i;
             }, this);
-            this.data.pushObjects(recArray);
+            this.data = [...this.data, ...recArray];
             yield this.table.pushRows(recArray);
 
             this.page++;
@@ -219,7 +225,7 @@ export default class NewOilQuery extends Component {
         this.args.savedFilters['labels'] = this.selectedLabels;
         this.args.savedFilters['gnomeSuitable'] = this.selectedGnomeSuitable;
 
-        this.data.clear();
+        this.data = [];
         this.table.setRows([]);
         this.page = 0;
         this.canLoadMore = true;
@@ -250,7 +256,7 @@ export default class NewOilQuery extends Component {
             page: 0
         });
 
-        this.data.clear();
+        this.data = [];
         this.table.setRows([]);
         this.page = 0;
         this.canLoadMore = true;

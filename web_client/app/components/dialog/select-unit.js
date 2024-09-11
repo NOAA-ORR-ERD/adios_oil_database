@@ -94,16 +94,16 @@ export default class SelectUnitDialog extends Component {
             });
 
             let unitNames = Object.values(this.unitType.PrimaryUnitNames);
-            unitNames.insertAt(0, "");
-            
+            unitNames.splice(0, 0, '');
+
             if (selected.reduce((a, b) => a || b, false)) {
                 // There was something selected.  Prepend an unselected
                 // empty option
-                selected.insertAt(0, false);
+                selected.splice(0, 0, false);
             }
             else {
                 // Nothing selected.  Prepend a selected empty option.
-                selected.insertAt(0, true);
+                selected.splice(0, 0, true);
             }
 
             return unitNames.map((v, i) => {

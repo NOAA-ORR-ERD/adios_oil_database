@@ -7,7 +7,7 @@ export default class OilsController extends Controller {
     @service store;
 
     get canModifyDb() {
-        return this.capabilities.toArray()[0].can_modify_db == 'true';
+        return [...this.capabilities][0].can_modify_db == 'true';
     }
 
     @action
