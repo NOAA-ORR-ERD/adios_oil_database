@@ -1,4 +1,8 @@
-<BsTab @customTabs={{true}} as |tab|>
+<BsTab
+  @customTabs={{true}}
+  @activeId={{this.sampleTab}}
+  @onChange={{this.onChangeTab}}
+  as |tab|>
 
   {{! First we render our tab navigation items }}
   <BsNav @type="tabs" role="tablist" as |nav|>
@@ -7,13 +11,13 @@
         {{#if (eq tab.activeId props.id) }}
           <a role="tab" class="nav-link active" aria-selected="{{eq tab.activeId props.id }}"
             href={{props.href}}
-            onclick={{action tab.select props.id}}
+            onclick={{fn tab.select props.id}}
            >
             {{#if @editable}}
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
                 @value={{props.short_name}}
-                @change={{action "updateShortSampleName" idx}}
+                @change={{fn this.updateShortSampleName idx}}
               />
               {{#if idx}}
                 {{! We don't want to remove sample 0 (Fresh Oil) }}
@@ -30,13 +34,13 @@
         {{else}}
           <a role="tab" class="nav-link" aria-selected="{{eq tab.activeId props.id }}"
             href={{props.href}}
-            onclick={{action tab.select props.id}}
+            onclick={{fn tab.select props.id}}
            >
             {{#if @editable}}
               <Input
                 @class="p-1 overflow-hidden bg-transparent border"
                 @value={{props.short_name}}
-                @change={{action "updateShortSampleName" idx}}
+                @change={{fn this.updateShortSampleName idx}}
               />
               {{#if idx}}
                 {{! We don't want to remove sample 0 (Fresh Oil) }}
