@@ -1,6 +1,10 @@
-<BsTab as |tab|>
+<BsTab
+  @activeId={{this.categoryTab}}
+  @onChange={{this.onChangeTab}}
+  as |tab|>
+
   {{#each this.tabPaneProperties as |props|}}
-    <tab.pane @title={{props.label}}>
+    <tab.pane @id={{props.id}} @title={{props.label}}>
       {{component props.componentName
         oil=this.sample
         store=@store

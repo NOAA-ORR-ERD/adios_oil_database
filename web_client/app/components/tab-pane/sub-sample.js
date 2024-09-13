@@ -26,7 +26,7 @@ export default class SubSample extends Component {
         return this.args.oil.sub_samples.findIndex(s => s.metadata.short_name === this.args.sampleName);
     }
 
-    sampleTab() {
+    get sampleTab() {
         if (this.args.sampleTab) {
             // get the last active subsample tab
             return this.args.sampleTab.slice('#'.length);
@@ -37,7 +37,7 @@ export default class SubSample extends Component {
         }
     }
 
-    categoryTab() {
+    get categoryTab() {
         if(this.args.sampleTab && this.args.categoryTab &&
                 this.args.categoryTab[this.args.sampleTab]) {
             return this.args.categoryTab[this.args.sampleTab].slice('#'.length)
@@ -91,9 +91,9 @@ export default class SubSample extends Component {
             let [tabName, componentName, label] = item;
 
             let ret = {
-                'id': this.sampleTab() + '-' + tabName,
+                'id': this.sampleTab + '-' + tabName,
                 'label': label,
-                'aria-labelledby': this.sampleTab() + '-' + tabName + '-nav-tab',
+                'aria-labelledby': this.sampleTab + '-' + tabName + '-nav-tab',
                 'componentName': componentName,
                 'visible': this.visible(tabName)
             }
@@ -125,6 +125,11 @@ export default class SubSample extends Component {
     @action
     shown(event) {
         event.data.args.updateCategoryTab(event.currentTarget.hash);
+    }
+
+    @action
+    onChangeTab(newTab) {
+        this.args.updateCategoryTab('#' + newTab);
     }
 
     @action
