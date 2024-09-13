@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 export default class SubSample extends Component {
 
-    sampleTab() {
+    get sampleTab() {
         if (this.args.sampleTab) {
             // get the last active subsample tab
             return this.args.sampleTab.slice('#'.length);
@@ -17,7 +17,7 @@ export default class SubSample extends Component {
     }
 
     get navTabProperties() {
-        let savedTab = this.sampleTab();
+        let savedTab = this.sampleTab;
 
         return this.args.oil.sub_samples.map(s => {
             let tabName = slugify(s.metadata.short_name);
@@ -47,7 +47,7 @@ export default class SubSample extends Component {
     }
 
     get tabPaneProperties() {
-        let sampleTab = this.sampleTab();
+        let sampleTab = this.sampleTab;
 
         return this.args.oil.sub_samples.map(s => {
             let tabName = slugify(s.metadata.short_name);
@@ -86,6 +86,11 @@ export default class SubSample extends Component {
     @action
     shown(event) {
         event.data.args.updateSampleTab(event.currentTarget.hash);
+    }
+
+    @action
+    onChangeTab(newTab) {
+        this.args.updateSampleTab('#' + newTab);
     }
 
     @action
