@@ -34,7 +34,9 @@
           {{#if @editable}}
             <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.name}}
-              placeholder="Enter Value" size={{24}} {{on "change" (fn this.updateValue item)}}
+              placeholder="Enter Value"
+              size={{24}}
+              {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.name}}
@@ -62,7 +64,9 @@
           {{#if @editable}}
             <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.measurement.standard_deviation}}
-              placeholder="Enter Value" size={{10}} {{on "change" (fn this.updateValue item)}}
+              placeholder="Enter Value"
+              size={{10}}
+              {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.measurement.standard_deviation}}
@@ -73,7 +77,9 @@
           {{#if @editable}}
             <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.measurement.replicates}}
-              placeholder="Enter Value" size={{10}} {{on "change" (fn this.updateValue item)}}
+              placeholder="Enter Value"
+              size={{10}}
+              {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.measurement.replicates}}
@@ -84,7 +90,9 @@
           {{#if @editable}}
             <Input class="p-1 overflow-hidden bg-transparent border"
               @value={{item.value.method}}
-              placeholder="Enter Value" size={{10}} {{on "change" (fn this.updateValue item)}}
+              placeholder="Enter Value"
+              size={{10}}
+              {{on "change" (fn this.updateValue item)}}
             />
           {{else}}
             {{item.value.method}}

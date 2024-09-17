@@ -11,13 +11,17 @@
   <Input
     class="p-1 bg-transparent border"
     @type="text"
-    @value={{value-unit (convert-unit this.inputValue @valueUnit) @valuePrecision}} id={{this.componentId}} {{on "focusin" (action "openModalDialog")}}
+    @value={{value-unit (convert-unit this.inputValue @valueUnit) @valuePrecision}}
+    id={{this.componentId}}
+    {{on "focusin" this.openModalDialog}}
   />
 {{else}}
   <Input
     class="p-1 bg-transparent border"
     @type="text"
-    @value="No Data" id={{this.componentId}} {{on "focusin" (action "openModalDialog")}}
+    @value="No Data"
+    id={{this.componentId}}
+    {{on "focusin" this.openModalDialog}}
   />
 {{/if}}
 

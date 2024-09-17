@@ -12,15 +12,17 @@
       <Input
         @type="text"
         class="bg-transparent border form-control"
-        @value={{value-unit (convert-unit @valueObject @valueUnit)
-                 @valuePrecision true}} size="10" {{on "change" (action "updateValue")}}
+        @value={{value-unit (convert-unit @valueObject @valueUnit) @valuePrecision true}}
+        size="10"
+        {{on "change" this.updateValue}}
       />
     {{else}}
       <Input
         @type="text"
         class="bg-transparent border form-control"
         @value=""
-        placeholder="Enter a number value" size="10" {{on "change" (action "updateValue")}}
+        placeholder="Enter a number value" size="10"
+        {{on "change" this.updateValue}}
       />
     {{/if}}
 
@@ -29,7 +31,7 @@
         @baseProperty={{this.beaUnit}}
         @unitType={{@valueObject.unit_type}}
         @defaultUnit={{@defaultUnit}}
-        @change={{action "updateUnit"}}
+        @change={{this.updateUnit}}
        />
     {{else}}
       <label class="input-group-text">{{this.beaUnit}}</label>

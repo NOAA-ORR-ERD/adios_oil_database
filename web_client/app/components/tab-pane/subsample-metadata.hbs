@@ -8,7 +8,8 @@
           <Input
             class="p-0 flex-fill bg-transparent border"
             @value={{@oil.metadata.name}}
-            placeholder="Enter Sample Name" {{on "change" (action @submit @oil)}}
+            placeholder="Enter Sample Name"
+            {{on "change" (fn @submit @oil)}}
           />
         {{else}}
           {{@oil.metadata.name}}
@@ -21,7 +22,8 @@
           <Input
             class="p-0 flex-fill bg-transparent border"
             @value={{@oil.metadata.short_name}}
-            placeholder="Enter Short Name" {{on "change" (action @submit @oil)}}
+            placeholder="Enter Short Name"
+            {{on "change" (fn @submit @oil)}}
           />
         {{else}}
           {{@oil.metadata.short_name}}
@@ -34,7 +36,8 @@
           <Input
             class="p-0 flex-fill bg-transparent border"
             @value={{@oil.metadata.sample_id}}
-            placeholder="Enter Sample ID" size="10" {{on "change" (action @submit @oil)}}
+            placeholder="Enter Sample ID" size="10"
+            {{on "change" (fn @submit @oil)}}
           />
         {{else}}
           {{@oil.metadata.sample_id}}
@@ -55,7 +58,7 @@
               @valueUnitType="massfraction"
               @valuePrecision={{2}}
               @editable={{@editable}}
-              @submit={{action "updateFractionEvaporated"}}
+              @submit={{this.updateFractionEvaporated}}
             />
           </div>
         </form>
@@ -71,7 +74,7 @@
               @valueUnit="C"
               @valuePrecision="2"
               @sampleIndex={{@sampleIndex}}
-              @submit={{action @submit @oil}}
+              @submit={{fn @submit @oil}}
           />
         {{else}}
           {{value-unit (convert-unit @oil.metadata.boiling_point_range "C") 2}}
@@ -91,7 +94,7 @@
               class="p-1 reference-textarea overflow-hidden bg-transparent border"
               @value={{sampleDescription}}
               placeholder="Enter description"
-              @change={{action "updateDescription"}}
+              @change={{this.updateDescription}}
               rows="4"
               disabled={{not @editable}}
             />

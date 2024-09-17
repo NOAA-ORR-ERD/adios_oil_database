@@ -15,7 +15,7 @@
       <label class="p-0 input-group-text font-weight-bold">Distillation Type:</label>
       {{#if @editable}}
         <select class="p-1 mt-1 overflow-hidden bg-transparent border"
-            onchange={{action "updateDistillationType"}}
+            onchange={{this.updateDistillationType}}
         >
           {{#if (includes this.distillationType @distillationTypes)}}
           {{else}}
@@ -50,7 +50,7 @@
               @valueUnitType="massfraction"
               @valuePrecision="2"
               @sampleIndex={{@sampleIndex}}
-              @submit={{action @submit @oil}}
+              @submit={{fn @submit @oil}}
             />
           {{else}}
             {{value-unit (convert-unit @oil.distillation_data.fraction_recovered "%") 2}}
@@ -75,7 +75,7 @@
               @valueUnitType="temperature"
               @valuePrecision="2"
               @sampleIndex={{@sampleIndex}}
-              @submit={{action @submit @oil}}
+              @submit={{fn @submit @oil}}
               @attachment="center right"
               @targetAttachment="center right"
             />
@@ -95,7 +95,9 @@
           <Input
             class="p-1 overflow-hidden bg-transparent border"
             @value={{distillationMethod}}
-            placeholder="Enter Distillation Method" disabled={{not @editable}} {{on "change" (action "updateDistillationMethod")}}
+            placeholder="Enter Distillation Method"
+            disabled={{not @editable}}
+            {{on "change" this.updateDistillationMethod}}
           />
         {{/let}}
       {{else}}

@@ -7,7 +7,7 @@
             value={{this.q}}
             title="Search ID, Name, or Location"
             placeholder="Search ID, Name, or Location"
-            oninput={{action (pipe (action (mut this.q)) (action "onSearchChange")) value="target.value"}}
+            {{on "input"  this.onKeywordChange}}
           >
         </div>
 
@@ -23,7 +23,7 @@
               @start={{this.selectedApi}} @min={{0}} @max={{100}} @step={{1}}
               @connect={{true}}
               @tooltips={{true}}
-              @on-change={{action (pipe (action (mut this.selectedApi)) (action "onSearchChange"))}}
+              @on-change={{this.onAPIRangeChange}}
             />
           </div>
         </div>
@@ -37,11 +37,7 @@
               @type="checkbox"
               title="GNOME Compatible"
               @checked={{this.selectedGnomeSuitable}}
-              {{on "input" (action (pipe (toggle "selectedGnomeSuitable" this)
-                                         (action "onSearchChange")
-                                    )
-                             value="target.value")
-              }}
+              {{on "input" this.onGnomeSuitableChange}}
             />
 
           </div>
@@ -58,8 +54,7 @@
           <div class="col-10 ml-0">
             <select class="p-1 mt-1 overflow-hidden bg-transparent border"
                 title="Oil Type"
-                onChange={{action (pipe (action "onTypeSelected")
-                                        (action "onSearchChange") )}}
+                onChange={{this.onTypeChange}}
             >
               <option class="bg-light" value="">unspecified</option>
 
@@ -83,7 +78,7 @@
               @selected={{this.selectedLabels}}
               @options={{this.filteredLabels}}
               @placeholder="unspecified"
-              @onChange={{action (pipe (action (mut this.selectedLabels)) (action "onSearchChange"))}}
+              @onChange={{this.onLabelsChange}}
               @onKeydown={{this.handleKeydown}} as |name|>
               {{name}}
             </PowerSelectMultiple>
@@ -101,7 +96,7 @@
   </div>
 
   <t.head
-    @onColumnClick={{action "onColumnClick"}}
+    @onColumnClick={{this.onColumnClick}}
     @iconSortable="fa fa-sort"
     @iconAscending="fa fa-sort-asc"
     @iconDescending="fa fa-sort-desc"

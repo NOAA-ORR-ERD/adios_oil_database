@@ -22,7 +22,8 @@
               <Input
                 class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilLocation}}
-                placeholder="Enter Location" {{on "change" (action "updateLocation")}}
+                placeholder="Enter Location"
+                {{on "change" this.updateLocation}}
               />
             {{/let}}
           {{else}}
@@ -45,7 +46,8 @@
                 class="p-0 overflow-hidden bg-transparent border"
                 size="14"
                 @value={{sourceID}}
-                placeholder="Enter Source ID" {{on "change" (action "updateSourceID")}}
+                placeholder="Enter Source ID"
+                {{on "change" this.updateSourceID}}
               />
             {{/let}}
           {{else}}
@@ -60,7 +62,7 @@
           <label class="p-1 input-group-text font-weight-bold">Product Type:</label>
           {{#if @editable}}
             <select class="p-1 mt-1 overflow-hidden bg-transparent border"
-                onchange={{action "updateType"}}
+                onchange={{this.updateType}}
             >
               {{#if (includes @oil.metadata.product_type
                               (get @productTypes "0.product_types"))}}
@@ -94,7 +96,9 @@
                 @type="text"
                 class="p-1 overflow-hidden bg-transparent border"
                 placeholder="API value"
-                @value={{oilAPI}} size="6" {{on "change" (action "updateAPI")}} />
+                @value={{oilAPI}} size="6"
+                {{on "change" this.updateAPI}}
+              />
             {{else}}
               {{#if (is-empty oilAPI)}}
                 <span class="p-1">No Value</span>
@@ -136,7 +140,7 @@
             @matchTriggerWidth={{false}}
             @selected={{this.selectedLabels}}
             @options={{this.filteredLabels}}
-            @onChange={{action "updateLabels"}}
+            @onChange={{this.updateLabels}}
             @onKeydown={{this.handleKeydown}} as |name|>
             <span class="bg-transparent border-0">{{name}}</span>
           </PowerSelectMultiple>
@@ -197,7 +201,7 @@
               title="Reference"
               rows="4"
               disabled={{not @editable}}
-              {{on "change" (action "updateReference")}}
+              {{on "change" this.updateReference}}
             />
           {{/let}}
         </div>
@@ -218,7 +222,7 @@
                 @value={{oilReferenceDate}}
                 placeholder="YYYY"
                 size="7"
-                {{on "change" (action "updateReferenceDate")}}
+                {{on "change" this.updateReferenceDate}}
               />
             {{else}}
               <span class="p-1 flex-fill">{{oilReferenceDate}}</span>
@@ -238,7 +242,8 @@
                 class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilSampleDate}}
                 placeholder="YYYY-MM-DD"
-                size="12" {{on "change" (action "updateSampleReceivedDate")}}
+                size="12"
+                {{on "change" this.updateSampleReceivedDate}}
               />
             {{else}}
               <span class="p-1 ">{{oilSampleDate}}</span>
@@ -267,7 +272,7 @@
             placeholder="Enter comments"
             title="Comments"
             disabled={{not @editable}}
-            {{on "change" (action "updateComments")}}
+            {{on "change" this.updateComments}}
           />
         {{/let}}
       </div>
