@@ -1,5 +1,5 @@
-<BsModal @onSubmit={{action "submitForm"}}
-         @onHidden={{action "closeForm"}}
+<BsModal @onSubmit={{this.submitForm}}
+         @onHidden={{this.closeForm}}
          as |Modal|>
   <Modal.header>
     <h5 class="modal-title" id="deleteOilDialogLabel">
@@ -19,8 +19,8 @@
     </div>
   </Modal.body>
   <Modal.footer as |footer|>
-    <BsButton @onClick={{action Modal.close}} @type="secondary">Cancel</BsButton>
-    <BsButton @onClick={{action Modal.submit}} @type="primary"
+    <BsButton @onClick={{Modal.close}} @type="secondary">Cancel</BsButton>
+    <BsButton @onClick={{Modal.submit}} @type="primary"
               {{create-ref "okButton"}}
     >
       OK

@@ -8,6 +8,8 @@ import { task } from 'ember-concurrency';
 
 import Table from 'ember-light-table';
 
+import { ensureSafeComponent } from '@embroider/util';
+
 
 export default class NewOilQuery extends Component {
     @service store;
@@ -19,6 +21,7 @@ export default class NewOilQuery extends Component {
     @tracked dir = 'asc';
     @tracked meta;
     @tracked selectedType;
+    @tracked selectedLabels;
     @tracked gnomeSuitable;
 
     @tracked table;
@@ -34,7 +37,7 @@ export default class NewOilQuery extends Component {
     columns = [{
         label: 'Status',
         valuePath: 'filteredStatus',
-        cellComponent: 'table/cell/status',
+        cellComponent: ensureSafeComponent('table/cell/status', this),
         width: '5em',
         minResizeWidth: 80,
         classNames: 'text-nowrap',
@@ -52,7 +55,7 @@ export default class NewOilQuery extends Component {
     }, {
         label: 'Name',
         valuePath: 'metadata.name',
-        cellComponent: 'table/cell/oil-name',
+        cellComponent: ensureSafeComponent('table/cell/oil-name', this),
         classNames: 'text-nowrap',
         searchable: true,
         minResizeWidth: 100,
@@ -76,7 +79,7 @@ export default class NewOilQuery extends Component {
     }, {
         label: 'API',
         valuePath: 'metadata.API',
-        cellComponent: 'table/cell/api',
+        cellComponent: ensureSafeComponent('table/cell/api', this),
         width: '4em',
         minResizeWidth: 60,
         classNames: 'text-nowrap',
@@ -91,7 +94,7 @@ export default class NewOilQuery extends Component {
     }, {
         label: 'Date',
         valuePath: 'metadata.sample_date',
-        cellComponent: 'table/cell/sample-date',
+        cellComponent: ensureSafeComponent('table/cell/sample-date', this),
         width: '4em',
         minResizeWidth: 60,
         classNames: 'text-nowrap',
@@ -217,6 +220,45 @@ export default class NewOilQuery extends Component {
             this.canLoadMore = !isEmpty(records);
         }
     }).restartable()) fetchRecords;
+
+    @action onKeywordChange(event) {
+        // this is to handle the events coming from the keyword text entry
+        if (event.inputType === 'deleteContentBackward') {
+            this.q = '';
+        }
+        else if (event.inputType === 'insertFromPaste') {
+            this.q = event.target.value
+        }
+        else if (event.inputType === 'insertText') {
+            this.q += event.data;
+        }
+
+        this.onSearchChange();
+    }
+
+    @action onAPIRangeChange(event) {
+        // this is to handle the events coming from the API range entry
+        this.selectedApi = event;
+        this.onSearchChange();
+    }
+
+    @action onGnomeSuitableChange(event) {
+        // this is to handle the events coming from the API range entry
+        this.selectedGnomeSuitable = event.target.value === 'on' ? true : false;
+        this.onSearchChange();
+    }
+
+    @action onTypeChange(event) {
+        // this is to handle the events coming from the API range entry
+        this.selectedType = event.target.value;
+        this.onSearchChange();
+    }
+
+    @action onLabelsChange(event) {
+        // this is to handle the events coming from the API range entry
+        this.selectedLabels = event;
+        this.onSearchChange();
+    }
 
     @action onSearchChange() {
         this.args.savedFilters['text'] = this.q;

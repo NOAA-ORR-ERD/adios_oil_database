@@ -31,7 +31,8 @@
             @type="radio"
             name="interval-number"
             @value="true" id="range-radio-btn"
-            checked={{this.isInterval}} {{on "focusin" (action "toggleRadio" true)}}
+            checked={{this.isInterval}}
+            {{on "focusin" (fn this.toggleRadio true)}}
           />
         </div>
 
@@ -46,9 +47,10 @@
             name="min-value"
             size="5"
             placeholder="-∞"
-            @value={{this.dialogMinValue}} {{on "change" this.changeMin}}
+            @value={{this.dialogMinValue}}
             class="m-0 range-input-text-field"
-            {{on "focusin" (action "toggleRadio" true)}} 
+            {{on "change" this.changeMin}}
+            {{on "focusin" (fn this.toggleRadio true)}} 
           />
         </div>
 
@@ -59,9 +61,10 @@
             name="max-value"
             size="5"
             placeholder="+∞"
-            @value={{this.dialogMaxValue}} {{on "change" this.changeMax}}
+            @value={{this.dialogMaxValue}}
             class="m-0 range-input-text-field"
-            {{on "focusin" (action "toggleRadio" true)}}
+            {{on "change" this.changeMax}}
+            {{on "focusin" (fn this.toggleRadio true)}}
           />
         </div>
       </div>
@@ -73,7 +76,8 @@
             @type="radio"
             name="interval-number"
             @value="number" id="value-radio-btn"
-            checked={{not this.isInterval}} {{on "focusin" (action "toggleRadio" false)}}
+            checked={{not this.isInterval}}
+            {{on "focusin" (fn this.toggleRadio false)}}
           />
         </div>
 
@@ -89,7 +93,9 @@
             size="5"
             placeholder=""
             class="m-0 range-input-text-field"
-            @value={{this.dialogValue}} {{on "change" this.changeValue}} {{on "focusin" (action "toggleRadio" false)}}
+            @value={{this.dialogValue}}
+            {{on "change" this.changeValue}}
+            {{on "focusin" (fn this.toggleRadio false)}}
           />
         </div>
       </div>
@@ -97,12 +103,12 @@
       {{!-- dialog Cancel and Save buttons --}}
       <div class="row d-flex justify-content-end mx-1 p-1">
         <button type="button" class="btn btn-secondary btn-sm col-2 m-1"
-                onClick={{action "closeModalDialog"}}
+                onClick={{this.closeModalDialog}}
          >
           Cancel
         </button>
         <button type="button" class="btn btn-primary btn-sm col-2 m-1"
-                onClick={{action "onSave"}}
+                onClick={{this.onSave}}
          >
           Save
         </button>

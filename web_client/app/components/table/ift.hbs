@@ -28,7 +28,9 @@
               <tr>
                 <td>
                   {{#if @editable}}
-                    <select class="p-1 flex-fill bg-transparent border" {{on "change" (fn this.updateInterface index)}}>
+                    <select class="p-1 flex-fill bg-transparent border"
+                      {{on "change" (fn this.updateInterface index)}}
+                    >
                       {{#each @interfaces as |interface|}}
                         {{#if (eq ift.interface interface)}}
                           <option class="bg-light" selected>{{interface}}</option>

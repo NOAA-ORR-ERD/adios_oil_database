@@ -7,7 +7,8 @@
               <Input
                 class="p-1 overflow-hidden bg-transparent border"
                 @value={{oilName}}
-                placeholder="Enter Name" size="30" {{on "change" (action "updateName")}}
+                placeholder="Enter Name" size="30"
+                {{on "change" this.updateName}}
               />
           </div>
         {{/let}}
@@ -26,7 +27,7 @@
         {{#if this.changesMade}}
           <Button::BackToList
             @oil={{this.model}}
-            @submit={{action "discardTemporaryEdits" this.model "oils.index"}}
+            @submit={{fn this.discardTemporaryEdits this.model "oils.index"}}
           />
         {{else}}
           <LinkTo @route="oils">
@@ -80,15 +81,15 @@
         {{#if this.canModifyDb}}
           <Button::DiscardEdits
             @oil={{this.model}}
-            @submit={{action "discardTemporaryEdits" this.model ""}}
+            @submit={{fn this.discardTemporaryEdits this.model ""}}
             @changesMade={{this.changesMade}}
           />
 
           <Button::SaveEdits
             @oil={{this.model}}
-            @submit={{action (pipe
-                        (action "updateOil" this.model)
-                        (action "commitTemporaryEdits" this.model))
+            @submit={{fn (pipe
+                        (fn this.updateOil this.model)
+                        (fn this.commitTemporaryEdits this.model))
                     }}
             @changesMade={{this.changesMade}}
           />
@@ -102,7 +103,7 @@
         {{#if this.canModifyDb}}
           <Button::CopyOil
             @oil={{this.model}}
-            @submit={{action "createOil"}}
+            @submit={{this.createOil}}
             @changesMade={{this.changesMade}}
           />
         {{/if}}
@@ -110,7 +111,7 @@
         {{#if this.canModifyDb}}
           <Button::DeleteOil
             @oil={{this.model}}
-            @submit={{action "deleteOil"}}
+            @submit={{this.deleteOil}}
             @changesMade={{this.changesMade}}
           />
         {{/if}}
@@ -128,7 +129,7 @@
       @labels={{this.labels}}
       @productTypes={{this.productTypes}}
       @editable={{this.editable}}
-      @submit={{action "updateOil"}}
+      @submit={{this.updateOil}}
       @oilTypes={{array
           "crude"
           "refined"
@@ -143,11 +144,11 @@
     @oil={{this.model}}
     @editable={{this.editable}}
     @categoryTab={{this.currentCategoryTab}}
-    @updateCategoryTab={{action this.updateCategoryTab}}
+    @updateCategoryTab={{this.updateCategoryTab}}
     @sampleTab={{this.currentSampleTab}}
-    @updateSampleTab={{action this.updateSampleTab}}
+    @updateSampleTab={{this.updateSampleTab}}
     @distillationTypes={{this.distillationTypes}}
-    @submit={{action "updateOil"}}
+    @submit={{this.updateOil}}
   />
 
 </div>

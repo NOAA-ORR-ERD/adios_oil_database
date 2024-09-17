@@ -37,7 +37,8 @@
                 <td>
                   <Input class="p-1 overflow-hidden bg-transparent border"
                     @value={{group}}
-                    placeholder="Enter Value" {{on "change" (fn this.updateValue group index)}}
+                    placeholder="Enter Value"
+                    {{on "change" (fn this.updateValue group index)}}
                   />
                 </td>
 
@@ -80,12 +81,12 @@
       {{!-- dialog Cancel and Save buttons --}}
       <div class="row d-flex justify-content-end mx-2">
         <button type="button" class="btn btn-secondary btn-sm mr-2"
-                onClick={{action "closeModal"}}
+                onClick={{this.closeModal}}
          >
           Cancel
         </button>
         <button type="button" class="btn btn-primary btn-sm"
-                onClick={{action "onSave"}}
+                onClick={{this.onSave}}
          >
           Save
         </button>

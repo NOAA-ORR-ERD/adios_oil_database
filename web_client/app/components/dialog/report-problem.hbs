@@ -1,5 +1,5 @@
-<BsModal @onSubmit={{action "submitForm"}}
-         @onHidden={{action "closeForm"}}
+<BsModal @onSubmit={{this.submitForm}}
+         @onHidden={{this.closeForm}}
          class="modal-lg"
          as |Modal|>
   <Modal.header>
@@ -92,6 +92,6 @@
     </div>
   </Modal.body>
   <Modal.footer as |footer|>
-    <BsButton @onClick={{action Modal.close}} @type="secondary">Close</BsButton>
+    <BsButton @onClick={{Modal.close}} @type="secondary">Close</BsButton>
   </Modal.footer>
 </BsModal>
