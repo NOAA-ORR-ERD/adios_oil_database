@@ -60,31 +60,44 @@ If "dry_run" is on the command line, it will report what it would do,
 but not save any changes
 """
 
-
-def process_input(USAGE=USAGE):
+def process_input(USAGE=USAGE, other_flags=()):
     """
     process sys.argv to get the path and whether it's a dry_run or not
 
     :param USAGE=USAGE: the usage message to return print if there's an
                         error in the input -- default provided
 
-    :returns base_dir, dry_run: base_dir is a Path object of the dir passed in.
+    :returns base_dir, dry_run, other_flags: base_dir is a Path object of the dir passed in.
                                 dry_run is True if "dry_run" is on the
-                                command line.
+                                command line. other_flags is a list of Bools, as to whether
+                                the other flags are there.
     """
     try:
         sys.argv.remove("dry_run")
         dry_run = True
     except ValueError:
         dry_run = False
+    if isinstance(other_flags, str):
+        other_flags = [other_flags]
+    others = []
+    for flag in other_flags:
+        try:
+            sys.argv.remove(flag)
+            others.append(True)
+        except ValueError:
+            others.append(False)
 
     try:
         base_dir = Path(sys.argv[1])
     except IndexError:
         print(USAGE)
         sys.exit()
-
-    return base_dir, dry_run
+    if others:
+        if len(others) == 1:
+            others = others[0]
+        return base_dir, dry_run, others
+    else:
+        return base_dir, dry_run
 
 
 def find_highest_id(prefix, oil_path):
