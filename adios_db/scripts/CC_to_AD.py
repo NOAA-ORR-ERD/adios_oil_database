@@ -136,6 +136,17 @@ def update_oil_fields(oil_obj, oil_id,
     oil_obj.metadata.gnome_suitable = None
 
 
+def set_id_to_filename(cc_file, ad_file, dry_run):
+    print(f'set_id_to_filename {ad_file}')
+    if dry_run:
+        return
+
+    temp_oil = Oil.from_file(ad_file)
+
+    temp_oil.oil_id = ad_file.name.split('.')[0]
+    temp_oil.to_file(ad_file)
+
+
 def main(argv=sys.argv):
     args = argp.parse_args(argv[1:])
 
