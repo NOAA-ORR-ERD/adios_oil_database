@@ -20,7 +20,6 @@ the CCs that we kept that need to be renamed.
 """
 import os
 import sys
-import shutil
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -28,9 +27,6 @@ from openpyxl import load_workbook
 
 import adios_db
 from adios_db.models.oil.oil import Oil
-
-import pdb
-from pprint import pprint
 
 
 argp = ArgumentParser(description='Database Backup Arguments:')
@@ -49,7 +45,7 @@ def generate_sheet(file):
 def generate_row_iter(sheet):
     sheet_iter = sheet.iter_rows()
     sheet_iter.__next__()  # bypass column names
-    
+
     return sheet_iter
 
 
@@ -86,6 +82,17 @@ def rename_file(cc_file, ad_file, dry_run):
     os.remove(cc_file)
 
 
+def set_id_to_filename(cc_file, ad_file, dry_run):
+    print(f'set_id_to_filename {ad_file}')
+    if dry_run:
+        return
+
+    temp_oil = Oil.from_file(ad_file)
+
+    temp_oil.oil_id = ad_file.name.split('.')[0]
+    temp_oil.to_file(ad_file)
+
+
 def main(argv=sys.argv):
     args = argp.parse_args(argv[1:])
 
@@ -102,13 +109,11 @@ def main(argv=sys.argv):
         cc_id, ad_id = [f.value for f in r]
         cc_file = oil_json_file_path(base_path, "oil", cc_id)
         ad_file = oil_json_file_path(base_path, "oil", ad_id)
-        
-        if cc_file.is_file() and ad_file.is_file():
-            clobber_file(cc_file, ad_file, dry_run)
-        elif cc_file.is_file():
-            rename_file(cc_file, ad_file, dry_run)
+
+        if ad_file.is_file():
+            set_id_to_filename(cc_file, ad_file, dry_run)
         else:
-            print(f'{cc_file} does not exist.')
+            print(f'{ad_file} does not exist.')
 
 
 if __name__ == "__main__":
