@@ -69,7 +69,7 @@
 
   {{! Now we render our tab panes }}
   <div class="tab-content">
-    {{#each this.tabPaneProperties as |props|}}
+    {{#each this.tabPaneProperties as |props idx|}}
       <tab.pane @id={{props.id}} @title={{props.short_name}} >
 
         <TabPane::SubSample
@@ -81,6 +81,7 @@
           @categoryTab={{@categoryTab}}
           @updateCategoryTab={{@updateCategoryTab}}
           @sampleName={{props.short_name}}
+          @sampleIndex={{idx}}
           @distillationTypes={{@distillationTypes}}
         />
 
