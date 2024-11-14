@@ -11,7 +11,7 @@ then it might have to update something.
 from adios_db.scripting import Oil, process_input
 
 USAGE = """
-adios_db_process_json data_dir [dry_run]
+adios_db_process_json data_dir [dry_run] [strip_status]
 
 Process a collection of JSON files -- they are loaded into
 the adios_db Oil object, then saved out a again.
@@ -25,13 +25,17 @@ search for JSON files
 If "dry_run" is on the command line, it will report what it would do,
 but not save any changes. So that's a good way to check that the JSON
 is valid without changing anything.
+
+If "strip_status" is on the command line, it will strip the status and gnome_compatible flags.
 """
 
 
 def run_through():
-    base_dir, dry_run = process_input(USAGE=USAGE)
+    base_dir, dry_run, strip_status = process_input(USAGE=USAGE, other_flags = "strip_status")
 
     print("Processing JSON files in:", base_dir)
+    if strip_status:
+        print("stripping the status info")
     pth = None
     for pth in sorted(base_dir.rglob("*.json")):
         print("processing:", pth)
@@ -42,6 +46,10 @@ def run_through():
             print("Something went wrong loading:", pth)
             print(ex)
             raise
+
+        if strip_status:
+            oil.status = []
+            oil.metadata.gnome_suitable = None
 
         if not dry_run:
             print("Saving out:", pth)
