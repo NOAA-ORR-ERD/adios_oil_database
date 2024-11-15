@@ -83,7 +83,7 @@ def backup_db(settings, base_path):
         collection = getattr(db, collection_name)
 
         for rec in collection.find({}):
-            export_to_file(base_path, collection_name, rec)
+            export_to_file(rec, base_path, collection_name)
 
     print('\nDatabase backup done!\n')
 
@@ -138,7 +138,6 @@ def export_to_file(record, base_path, collection_name='oil'):
         filename = data_path / f'{record_name}.json'
         record.to_file(filename)
     else:
-        record = record.to_py_json()
         record_name = str(record['_id'])
         filename = os.path.join(base_path, collection_name,
                                 f'{record_name}.json')
