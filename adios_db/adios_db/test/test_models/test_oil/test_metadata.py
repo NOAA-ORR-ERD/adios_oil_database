@@ -183,7 +183,6 @@ def test_ChangeLog():
     assert msgs == ["W011: change log entry date format: 2021-040-01 "
                     "is invalid: Invalid isoformat string: '2021-040-01'"]
 
-
 def test_bad_log_date():
     md = MetaData()
     md.change_log.append(ChangeLogEntry(

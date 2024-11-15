@@ -15,7 +15,7 @@ from .location_coordinates import LocationCoordinates
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
 from .validation import is_not_iso_or_year
-
+from ..common.validators import DateTimeValidator
 
 @dataclass_to_json
 @dataclass
@@ -25,16 +25,19 @@ class ChangeLogEntry:
     comment: str = ""
 
     def validate(self):
-        msgs = []
+        # keep two formatting place holders
+        date_validator = DateTimeValidator(err_msg = WARNINGS["W011"].format("change log entry","{}","{}"))
 
-        # check date is valid
         if self.date:
-            try:
-                datetime.fromisoformat(self.date)
-            except ValueError as err:
-                msgs.append(WARNINGS["W011"].format(
-                    "change log entry", self.date, str(err)
-                ))
+            msgs = date_validator(self.date)
+
+        # if self.date:
+        #     try:
+        #         datetime.fromisoformat(self.date)
+        #     except ValueError as err:
+        #         msgs.append(WARNINGS["W011"].format(
+        #             "change log entry", self.date, str(err)
+        #         ))
 
         return msgs
 
