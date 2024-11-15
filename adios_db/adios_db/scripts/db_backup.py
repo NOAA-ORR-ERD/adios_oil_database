@@ -138,7 +138,6 @@ def export_to_file(record, base_path, collection_name='oil'):
         filename = data_path / f'{record_name}.json'
         record.to_file(filename)
     else:
-        record = record.to_py_json()
         record_name = str(record['_id'])
         filename = os.path.join(base_path, collection_name,
                                 f'{record_name}.json')
