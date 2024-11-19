@@ -1,4 +1,5 @@
 
+import datetime
 
 class EnumValidator:
     """
@@ -126,3 +127,35 @@ class YearValidator:
             return [self.err_msg.format(value, self.min, self.max)]
         else:
             return []
+
+class DateTimeValidator:
+    """
+    Validator for strings that should be an ISO string, e.g.
+
+    2010-06-24T
+
+    it uses the build-in:
+    datetime.fromisoformat()
+
+    so anything that passes that will pass this validator
+
+    """
+    def __init__(self, err_msg=None):
+        """
+        :param err_msg: The error message that should be used on failure.
+                        Should be a format string that takes one parameter:
+                        default is:
+
+                        "ValidationError: {} is not a valid datetime string"
+        """
+        if err_msg is None:
+            self.err_msg = 'ValidationError: "{}"" is not a valid datetime string: {}'
+        else:
+            self.err_msg = err_msg
+
+    def __call__(self, value):
+        try:
+            datetime.datetime.fromisoformat(value)
+        except ValueError as err:
+            return [self.err_msg.format(value, err)]
+        return []

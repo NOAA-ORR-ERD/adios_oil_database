@@ -1,11 +1,12 @@
-import sys
-import os
-import shutil
+from argparse import ArgumentParser
+import datetime
 import io
 import json
-import datetime
 import logging
-from argparse import ArgumentParser
+import os
+from pathlib import Path
+import shutil
+import sys
 
 from bson import ObjectId
 
@@ -82,7 +83,7 @@ def backup_db(settings, base_path):
         collection = getattr(db, collection_name)
 
         for rec in collection.find({}):
-            export_to_file(base_path, collection_name, rec)
+            export_to_file(rec, base_path, collection_name)
 
     print('\nDatabase backup done!\n')
 
@@ -110,24 +111,39 @@ def add_folder(base_path, folder):
         os.mkdir(folder)
 
 
-def export_to_file(base_path, collection_name, record):
+def export_to_file(record, base_path, collection_name='oil'):
+    """
+    export a record to a json file
+
+    :param record: py_json of a full record
+    :param base_path: path to the dir in which to dump the data
+    :param collection_name='oil': which collection to dump -- 'oil' by default'
+    """
+    base_path = Path(base_path)
+
     if collection_name == 'oil':
-        record = Oil.from_py_json(record).py_json()
-        record_name = str(record['oil_id'])
+        record = Oil.from_py_json(record)
 
-        add_folder(os.path.join(base_path, collection_name), record_name[:2])
+        # remove the status
+        record.status = []
+        # remove the gnome_suitable flag
+        record.metadata.gnome_suitable = None
+        record_name = record.oil_id
 
-        # There could be a lot of oil records, so we want to break them up by
+        # There are a lot of oil records, so we want to break them up by
         # prefix
-        filename = os.path.join(base_path, collection_name,
-                                record_name[:2], f'{record_name}.json')
+        data_path = base_path / "oil"/ record_name[:2]
+        data_path.mkdir(parents=True, exist_ok=True)
+
+        filename = data_path / f'{record_name}.json'
+        record.to_file(filename)
     else:
         record_name = str(record['_id'])
         filename = os.path.join(base_path, collection_name,
                                 f'{record_name}.json')
 
-    with open(filename, 'w', encoding="utf-8") as outfile:
-        json.dump(record, outfile, indent=4, default=json_handle_unparseable)
+        with open(filename, 'w', encoding="utf-8") as outfile:
+            json.dump(record, outfile, indent=4, default=json_handle_unparseable)
 
 
 def json_handle_unparseable(o):

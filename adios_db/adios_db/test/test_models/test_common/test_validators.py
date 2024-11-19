@@ -5,7 +5,9 @@ import pytest
 
 from adios_db.models.common.validators import (EnumValidator,
                                                FloatRangeValidator,
-                                               YearValidator)
+                                               YearValidator,
+                                               DateTimeValidator,
+                                               )
 from adios_db.models.oil.validation.warnings import WARNINGS
 
 
@@ -130,3 +132,34 @@ class TestYearValidator:
         assert str(value) in result[0]
         assert str(min_val) in result[0]
         assert str(max_val) in result[0]
+
+
+class TestDateTimeValidator:
+    @pytest.mark.parametrize("value", ["2025-12-04",
+                                       "2025-12-04 12:00",
+                                       "2025-12-04T12:00",
+                                       ])
+    def test_valid(self, value):
+        val = DateTimeValidator()
+
+        result = val(value)
+        assert result == []
+
+    @pytest.mark.parametrize("value", ["2025-24-04",
+                                       "2025-12-04 garbage ",
+                                       "2025-12-04Time 12:00",
+                                       ])
+    def test_invalid(self, value):
+        val = DateTimeValidator()
+
+        result = val(value)
+        assert len(result) == 1
+        assert f'"{value}"' in result[0]
+
+        # custom_message:
+        val = DateTimeValidator(err_msg="custom: {}")
+
+        result = val(value)
+        assert len(result) == 1
+        assert result[0] == f"custom: {value}"
+

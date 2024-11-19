@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 
 from ..common.utilities import dataclass_to_json
 
-from ..common.validators import EnumValidator
+from ..common.validators import EnumValidator, DateTimeValidator
 
 from .validation.errors import ERRORS
 from .validation.warnings import WARNINGS
@@ -29,13 +29,11 @@ class ReviewStatus:
     def validate(self):
         msgs = []
 
+        # keep two formatting place holders
+        date_validator = DateTimeValidator(err_msg = WARNINGS["W011"].format("review date","{}","{}"))
+
         if self.review_date:
-            try:
-                datetime.fromisoformat(self.review_date)
-            except ValueError as err:
-                msgs.append(WARNINGS["W011"].format(
-                    "review date", self.review_date, str(err)
-                ))
+            msgs.extend(date_validator(self.review_date))
 
         msgs.extend(self._status_validator(self.status))
 

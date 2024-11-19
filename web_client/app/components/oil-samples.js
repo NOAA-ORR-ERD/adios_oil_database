@@ -18,12 +18,25 @@ export default class SubSample extends Component {
 
     get navTabProperties() {
         let savedTab = this.sampleTab;
+        let freshIndex = 0;
 
         return this.args.oil.sub_samples.map(s => {
-            let tabName = slugify(s.metadata.short_name);
+            let sampleName = s.metadata.name;
+            let sampleShortName = s.metadata.short_name;
+            let tabName = slugify(sampleShortName);
+
+            if (sampleName === 'Fresh Oil Sample') {
+                if (freshIndex > 0) {
+                    //sampleName = sampleName + `# ${freshIndex + 1}`;
+                    //sampleShortName = sampleShortName + `# ${freshIndex + 1}`;
+                    tabName = slugify(sampleShortName + `# ${freshIndex + 1}`);
+                }
+            }
+            freshIndex += 1;
+
             let ret = {
-                'name': s.metadata.name,
-                'short_name': s.metadata.short_name,
+                'name': sampleName,
+                'short_name': sampleShortName,
                 'id': tabName,
                 'href': '#' + tabName,
                 'aria-controls': tabName
@@ -48,16 +61,28 @@ export default class SubSample extends Component {
 
     get tabPaneProperties() {
         let sampleTab = this.sampleTab;
+        let freshIndex = 0;
 
         return this.args.oil.sub_samples.map(s => {
-            let tabName = slugify(s.metadata.short_name);
+            let sampleName = s.metadata.name;
+            let sampleShortName = s.metadata.short_name;
+            let tabName = slugify(sampleShortName);
+
+            if (sampleName === 'Fresh Oil Sample') {
+                if (freshIndex > 0) {
+                    //sampleName = sampleName + `# ${freshIndex + 1}`;
+                    //sampleShortName = sampleShortName + `# ${freshIndex + 1}`;
+                    tabName = slugify(sampleShortName + `# ${freshIndex + 1}`);
+                }
+            }
+            freshIndex += 1;
+
             let ret = {
-                'name': s.metadata.name,
-                'short_name': s.metadata.short_name,
+                'name': sampleName,
+                'short_name': sampleShortName,
                 'id': tabName,
                 'aria-labelledby': tabName + '-nav-tab'
             };
-
 
             if (sampleTab === tabName) {
                 return {
