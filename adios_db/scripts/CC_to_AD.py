@@ -136,15 +136,59 @@ def update_oil_fields(oil_obj, oil_id,
     oil_obj.metadata.gnome_suitable = None
 
 
-def set_id_to_filename(cc_file, ad_file, dry_run):
-    print(f'set_id_to_filename {ad_file}')
-    if dry_run:
-        return
+def set_id_from_filename(oil_obj, oil_file_path, dry_run):
+    print(f'set_id_from_filename {oil_file_path}')
+    oil_obj.oil_id = oil_file_path.name.split('.')[0]
 
-    temp_oil = Oil.from_file(ad_file)
 
-    temp_oil.oil_id = ad_file.name.split('.')[0]
-    temp_oil.to_file(ad_file)
+def diag_print_oil_fields(oil_obj):
+    msg = f'''        {oil_obj.oil_id=},
+        {oil_obj.metadata.labels=},
+        {oil_obj.metadata.alternate_names=},
+        {oil_obj.metadata.comments=},
+        {oil_obj.metadata.reference.reference=}
+    '''
+    print(msg)
+
+
+def get_fields_from_oil(ad_oil):
+    new_reference_content = ('\n\n'
+                             'As published in: '
+                             'Environment and Climate Change Canada, '
+                             'A Catalogue of Crude Oil and Oil Product Properties '
+                             '(1999)- Revised 2022, '
+                             'Environment and Climate Change Canada, 2022.')
+
+    return (ad_oil.oil_id,
+            ad_oil.metadata.labels,
+            ad_oil.metadata.alternate_names,
+            ad_oil.metadata.comments,
+            ad_oil.metadata.reference.reference + new_reference_content)
+
+
+def update_oil_fields(oil_obj, oil_id,
+                      labels, alternate_names, comments, reference):
+    oil_obj.oil_id = oil_id
+    oil_obj.metadata.labels += labels
+    oil_obj.metadata.alternate_names += alternate_names
+
+    if len(comments) > 0:
+        # we do have something to add
+        if len(oil_obj.metadata.comments.strip()) == 0:
+            oil_obj.metadata.comments = comments
+        elif oil_obj.metadata.comments.strip().endswith('.'):
+            oil_obj.metadata.comments += f'  {comments}'
+        else:
+            oil_obj.metadata.comments += f', {comments}'
+
+    if len(reference) > 0:
+        # we do have something to add
+        if len(oil_obj.metadata.reference.reference.strip()) == 0:
+            oil_obj.metadata.reference.reference = reference
+        elif oil_obj.metadata.comments.strip().endswith('.'):
+            oil_obj.metadata.reference.reference += f'\n{reference}'
+        else:
+            oil_obj.metadata.reference.reference += f',\n{reference}'
 
 
 def main(argv=sys.argv):
