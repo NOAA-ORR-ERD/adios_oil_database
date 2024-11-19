@@ -53,44 +53,82 @@ def oil_json_file_path(base_path, collection_name, oil_id):
     return (Path(base_path) / collection_name / oil_id[:2] / f'{oil_id}.json')
 
 
-def clobber_file(cc_file, ad_file, dry_run):
-    print(f'clobbering {cc_file} into {ad_file}')
+def clobber_file(cc_obj, cc_file_path, ad_file_path, dry_run):
+    print(f'clobbering {cc_file_path} into {ad_file_path}')
     if dry_run:
         return
 
-    temp_oil = Oil.from_file(cc_file)
-    temp_oil.oil_id = ad_file.name.split('.')[0]
-
-    os.remove(ad_file)
-    temp_oil.to_file(ad_file)
-    os.remove(cc_file)
+    os.remove(ad_file_path)
+    cc_obj.to_file(ad_file_path)
+    os.remove(cc_file_path)
 
 
-def rename_file(cc_file, ad_file, dry_run):
-    print(f'rename {cc_file} to {ad_file}')
+def rename_file(cc_obj, cc_file_path, ad_file_path, dry_run):
+    print(f'rename {cc_file_path} to {ad_file_path}')
     if dry_run:
         return
-
-    temp_oil = Oil.from_file(cc_file)
-    temp_oil.oil_id = ad_file.name.split('.')[0]
 
     # The AD file doesn't exist, so the underlying paths might not either
-    dir_path = os.path.dirname(ad_file)
+    dir_path = os.path.dirname(ad_file_path)
     os.makedirs(dir_path, exist_ok=True)
 
-    temp_oil.to_file(ad_file)
-    os.remove(cc_file)
+    cc_obj.to_file(ad_file_path)
+    os.remove(cc_file_path)
 
 
-def set_id_to_filename(cc_file, ad_file, dry_run):
-    print(f'set_id_to_filename {ad_file}')
-    if dry_run:
-        return
+def set_id_from_filename(oil_obj, oil_file_path, dry_run):
+    print(f'set_id_from_filename {oil_file_path}')
+    oil_obj.oil_id = oil_file_path.name.split('.')[0]
 
-    temp_oil = Oil.from_file(ad_file)
 
-    temp_oil.oil_id = ad_file.name.split('.')[0]
-    temp_oil.to_file(ad_file)
+def diag_print_oil_fields(oil_obj):
+    msg = f'''        {oil_obj.oil_id=},
+        {oil_obj.metadata.labels=},
+        {oil_obj.metadata.alternate_names=},
+        {oil_obj.metadata.comments=},
+        {oil_obj.metadata.reference.reference=}
+    '''
+    print(msg)
+
+
+def get_fields_from_oil(ad_oil):
+    new_reference_content = ('\n\n'
+                             'As published in: '
+                             'Environment and Climate Change Canada, '
+                             'A Catalogue of Crude Oil and Oil Product Properties '
+                             '(1999)- Revised 2022, '
+                             'Environment and Climate Change Canada, 2022.')
+
+    return (ad_oil.oil_id,
+            ad_oil.metadata.labels,
+            ad_oil.metadata.alternate_names,
+            ad_oil.metadata.comments,
+            ad_oil.metadata.reference.reference + new_reference_content)
+
+
+def update_oil_fields(oil_obj, oil_id,
+                      labels, alternate_names, comments, reference):
+    oil_obj.oil_id = oil_id
+    oil_obj.metadata.labels += labels
+    oil_obj.metadata.alternate_names += alternate_names
+
+    if len(comments) > 0:
+        # we do have something to add
+        if len(oil_obj.metadata.comments.strip()) == 0:
+            oil_obj.metadata.comments = comments
+        elif oil_obj.metadata.comments.strip().endswith('.'):
+            oil_obj.metadata.comments += f'  {comments}'
+        else:
+            oil_obj.metadata.comments += f', {comments}'
+
+    if len(reference) > 0:
+        # we do have something to add
+        if len(oil_obj.metadata.reference.reference.strip()) == 0:
+            oil_obj.metadata.reference.reference = reference
+        elif oil_obj.metadata.comments.strip().endswith('.'):
+            oil_obj.metadata.reference.reference += f'\n{reference}'
+        else:
+            oil_obj.metadata.reference.reference += f',\n{reference}'
 
 
 def main(argv=sys.argv):
@@ -110,10 +148,26 @@ def main(argv=sys.argv):
         cc_file = oil_json_file_path(base_path, "oil", cc_id)
         ad_file = oil_json_file_path(base_path, "oil", ad_id)
 
-        if ad_file.is_file():
-            set_id_to_filename(cc_file, ad_file, dry_run)
+        if cc_file.is_file() and ad_file.is_file():
+            cc_oil = Oil.from_file(cc_file)
+            ad_oil = Oil.from_file(ad_file)
+
+            #print('Before:')
+            #diag_print_oil_fields(cc_oil)
+
+            update_oil_fields(cc_oil, *get_fields_from_oil(ad_oil))
+
+            #print('After:')
+            #diag_print_oil_fields(cc_oil)
+
+            clobber_file(cc_oil, cc_file, ad_file, dry_run)
+        elif cc_file.is_file():
+            cc_oil = Oil.from_file(cc_file)
+
+            set_id_from_filename(cc_oil, ad_file, dry_run)
+            rename_file(cc_oil, cc_file, ad_file, dry_run)
         else:
-            print(f'{ad_file} does not exist.')
+            print(f'{cc_file} file is missing.')
 
 
 if __name__ == "__main__":
