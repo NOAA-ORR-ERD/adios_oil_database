@@ -190,6 +190,9 @@ def update_oil_fields(oil_obj, oil_id,
         else:
             oil_obj.metadata.reference.reference += f',\n{reference}'
 
+    oil_obj.status = None
+    oil_obj.metadata.gnome_suitable = None
+
 
 def main(argv=sys.argv):
     args = argp.parse_args(argv[1:])
