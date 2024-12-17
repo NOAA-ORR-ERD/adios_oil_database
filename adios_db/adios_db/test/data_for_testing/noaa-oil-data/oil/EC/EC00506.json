@@ -2031,18 +2031,6 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 40.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
                             "value": 60.0,
                             "unit": "C",
                             "unit_type": "temperature"
@@ -3762,30 +3750,6 @@
                             "unit_type": "massfraction"
                         },
                         "vapor_temp": {
-                            "value": 40.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
-                            "value": 60.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
                             "value": 80.0,
                             "unit": "C",
                             "unit_type": "temperature"
@@ -5482,78 +5446,6 @@
                     "unit_type": "concentration"
                 },
                 "cuts": [
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
-                            "value": 40.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
-                            "value": 60.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
-                            "value": 80.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
-                            "value": 100.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
-                            "value": 120.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
-                    {
-                        "fraction": {
-                            "value": 0.0,
-                            "unit": "%",
-                            "unit_type": "massfraction"
-                        },
-                        "vapor_temp": {
-                            "value": 140.0,
-                            "unit": "C",
-                            "unit_type": "temperature"
-                        }
-                    },
                     {
                         "fraction": {
                             "value": 0.0,
