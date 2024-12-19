@@ -30,9 +30,30 @@ class EnvCanadaCsvRecordMapper(MapperBase):
         method_list = [attr for attr in dir(self)
                        if callable(getattr(self, attr))
                        and attr.startswith('remap_') is True]
+        self.reorder_methods(method_list)
 
         for method in method_list:
             getattr(self, method)()
+
+    def reorder_methods(self, methods):
+        '''
+        Generally the remap_*() methods are supposed to be executable in
+        any order, but there could be a situation where a particular
+        method needs to run before another.
+
+        This method receives a list of method names, and modifies the list
+        in-place.
+
+        Example:
+
+            try:
+                # move the method 'remap_method' to the front of the list
+                methods.insert(0, methods.pop(methods.index('remap_method')))
+            except ValueError:
+                # Raise a warning that the method could not be reordered.
+                pass
+        '''
+        pass
 
     def remap_SARA(self):
         for sample in self.record['sub_samples']:

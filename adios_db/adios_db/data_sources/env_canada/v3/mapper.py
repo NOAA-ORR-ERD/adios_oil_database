@@ -8,7 +8,6 @@ from adios_db.models.common.measurement import Temperature, Density
 from ..v2 import EnvCanadaCsvRecordMapper
 from .refcode_lu import reference_codes
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -27,6 +26,22 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
         'meso-stable': 'Mesostable',
         'not stable': 'Unstable',
     }
+
+    def reorder_methods(self, methods):
+        '''
+        This method receives a list of method names, and modifies the list
+        in-place.
+        '''
+        try:
+            # move the method 'remap_choose_distillation_set' to the
+            # front of the list
+            methods.insert(0, methods.pop(methods.index(
+                'remap_choose_distillation_set'
+            )))
+        except ValueError:
+            logger.warning(f'{self.record["oil_id"]}: '
+                           'Could not reorder the method '
+                           'remap_choose_distillation_set.')
 
     def remap_emulsions(self):
         for sample in self.record['sub_samples']:
@@ -74,6 +89,40 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
                     emulsions[idx] = new_emul
 
                 eb['emulsions'] = [em for em in emulsions if em]
+
+    def remap_choose_distillation_set(self):
+        '''
+        We start with two attributes ('cwf_cuts', 'tco_cuts').
+        - cwf_cuts == cuts from Boiling Point Cumulative Weight Fraction
+        - tco_cuts == cuts from Boiling Point Temperature Cut Off
+
+        A record may have one or the other or both of these sets.  Whichever
+        set exists in the parsed object will be renamed 'cuts'.
+        In the case that both sets exist in the parsed object, the set with
+        the most data points will be renamed 'cuts'.
+        '''
+        for sample in self.record['sub_samples']:
+            dist = sample.get('distillation_data', {})
+
+            if 'cwf_cuts' in dist and 'tco_cuts' in dist:
+                if len(dist['cwf_cuts']) > len(dist['tco_cuts']):
+                    dist['cuts'] = dist['cwf_cuts']
+                    qc_eval = 'fraction count'
+                elif len(dist['cwf_cuts']) < len(dist['tco_cuts']):
+                    dist['cuts'] = dist['tco_cuts']
+                    qc_eval = 'temperature cutoff'
+                else:
+                    dist['cuts'] = dist['tco_cuts']
+                    qc_eval = 'equal'
+
+                print('\nRecord has both distillation sets, '
+                      f'{self.record["metadata"]["source_id"]}, '
+                      f'{len(dist["cwf_cuts"])}, {len(dist["tco_cuts"])}, '
+                      f'{qc_eval}')
+            elif 'cwf_cuts' in dist:
+                dist['cuts'] = dist['cwf_cuts']
+            elif 'tco_cuts' in dist:
+                dist['cuts'] = dist['tco_cuts']
 
     def remap_distillation_final_bp(self):
         for sample in self.record['sub_samples']:

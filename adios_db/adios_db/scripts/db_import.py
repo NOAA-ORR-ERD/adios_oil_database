@@ -109,7 +109,7 @@ argp.add_argument('--config', nargs=1,
                         'MongoDB server.'))
 argp.add_argument('--path', nargs=1,
                   help=('Specify a path to the test data (filesystem). '
-                        'If not specified, the default is to use "./data"'
+                        'If not specified, the default is "./data". '
                         'This option overrides --config.'))
 
 
