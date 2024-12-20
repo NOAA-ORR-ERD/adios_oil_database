@@ -38,9 +38,10 @@ class FolderCollection:
             with open(file_path, encoding="utf-8") as fd:
                 oil_json = json.load(fd)
                 oil_id = oil_json['oil_id']
+                source_id = oil_json['metadata'].get('source_id', None)
                 oil_name = oil_json['metadata']['name']
 
-                self.oil_id_index[prefix][oil_name] = oil_id
+                self.oil_id_index[prefix][(oil_name, source_id)] = oil_id
 
             self.next_id[prefix] = max(self.next_id[prefix],
                                        int(oil_id.lstrip(prefix)))
@@ -53,11 +54,12 @@ class FolderCollection:
 
         return f'{prefix}{self.next_id[prefix]:05}'
 
-    def _previous_id(self, prefix, oil_name):
+    def _previous_id(self, prefix, oil_name, source_id):
         """
         look up the previous id that was generated for an oil, or return None
         """
-        return self.oil_id_index.get(prefix, {}).get(oil_name, None)
+        return (self.oil_id_index.get(prefix, {})
+                .get((oil_name, source_id), None))
 
     def _get_path_and_filename(self, oil_obj):
         oil_id = oil_obj['oil_id']
@@ -97,14 +99,19 @@ class FolderCollection:
         - otherwise, generate the next ID and use it.
         """
         oil_name = replacement['metadata']['name']
+        source_id = replacement['metadata'].get('source_id', None)
+
         oil_id = replacement['oil_id']
         prefix = oil_id[:2]
 
-        previous_id = self._previous_id(prefix, oil_name)
+        previous_id = self._previous_id(prefix, oil_name, source_id)
         if previous_id is not None:
             replacement['oil_id'] = previous_id
         else:
             replacement['oil_id'] = self._next_id(prefix)
+
+        #print(f'inserting {replacement["oil_id"]}, '
+        #      f'{replacement['metadata'].get('source_id', None)}')
 
         folder, filename = self._get_path_and_filename(replacement)
         folder.mkdir(exist_ok=True)
