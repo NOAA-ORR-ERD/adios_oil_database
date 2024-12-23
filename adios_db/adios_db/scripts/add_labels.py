@@ -21,6 +21,8 @@ If "dry_run" is on the command line, it will report what it would do,
 but not save any changes
 """
 
+LABELS_NOT_TO_USE = {"Home Heating Oil"}
+
 
 def add_the_labels():
     # Look for "replace"
@@ -51,6 +53,8 @@ def add_the_labels():
 
                 if not replace:
                     labels = sorted(set(labels + prev_labels))
+
+                labels = sorted(set(labels) - LABELS_NOT_TO_USE)
 
                 print("new:      ", labels)
                 outfile.write(f"{id}, {name}, {pt}, {str(labels).strip('{}')}\n")
