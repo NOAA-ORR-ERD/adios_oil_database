@@ -119,6 +119,7 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
                       f'{self.record["metadata"]["source_id"]}, '
                       f'{len(dist["cwf_cuts"])}, {len(dist["tco_cuts"])}, '
                       f'{qc_eval}')
+                self.distillation_cut_set_resolved = True
             elif 'cwf_cuts' in dist:
                 dist['cuts'] = dist['cwf_cuts']
             elif 'tco_cuts' in dist:

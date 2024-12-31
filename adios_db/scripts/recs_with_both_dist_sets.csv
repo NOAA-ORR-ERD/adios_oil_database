@@ -1,0 +1,107 @@
+source_id,adios_id,fraction count,temperature count,which has more?
+ ODB00-20, CC00020,18,19, temperature cutoff
+ ODB00-29, CC00023,15,19, temperature cutoff
+ ODB00-31, CC00031,19,18, fraction count
+ ODB00-52, CC00052,18,19, temperature cutoff
+ ODB00-105, CC00104,19,19, equal
+ ODB00-113, CC00112,13,17, temperature cutoff
+ ODB00-122, CC00121,11,18, temperature cutoff
+ ODB00-127, CC00126,16,15, fraction count
+ ODB00-128, CC00127,14,14, equal
+ ODB00-163, CC00162,12,19, temperature cutoff
+ ODB00-168, CC00167,9,19, temperature cutoff
+ ODB00-223, CC00220,11,19, temperature cutoff
+ ODB00-415, CC00407,9,19, temperature cutoff
+ ODB00-523, CC00514,14,19, temperature cutoff
+ ODB00-528, CC00519,16,19, temperature cutoff
+ ODB00-531, CC00522,18,19, temperature cutoff
+ ODB00-532, CC00523,19,19, equal
+ ODB00-551, CC00542,10,16, temperature cutoff
+ ODB00-659, CC00650,17,19, temperature cutoff
+ ODB00-4, CC00708,11,19, temperature cutoff
+ ODB00-9, CC00710,19,18, fraction count
+ ODB00-14, CC00714,19,19, equal
+ ODB00-19, CC00719,18,20, temperature cutoff
+ ODB00-34, CC00727,17,17, equal
+ ODB00-69, CC00756,15,19, temperature cutoff
+ ODB00-74, CC00760,19,18, fraction count
+ ODB00-82, CC00768,13,19, temperature cutoff
+ ODB00-84, CC00770,18,18, equal
+ ODB00-90, CC00775,16,17, temperature cutoff
+ ODB00-96, CC00781,15,15, equal
+ ODB00-132, CC00803,19,18, fraction count
+ ODB00-135, CC00806,11,19, temperature cutoff
+ ODB00-145, CC00815,11,15, temperature cutoff
+ ODB00-147, CC00816,19,16, fraction count
+ ODB00-184, CC00848,19,18, fraction count
+ ODB00-194, CC00854,19,19, equal
+ ODB00-206, CC00856,19,19, equal
+ ODB00-208, CC00858,19,18, fraction count
+ ODB00-214, CC00864,15,19, temperature cutoff
+ ODB00-215, CC00865,14,19, temperature cutoff
+ ODB00-217, CC00867,18,19, temperature cutoff
+ ODB00-219, CC00869,18,19, temperature cutoff
+ ODB00-222, CC00872,7,19, temperature cutoff
+ ODB00-225, CC00874,6,19, temperature cutoff
+ ODB00-226, CC00875,7,19, temperature cutoff
+ ODB00-302, CC00934,9,15, temperature cutoff
+ ODB00-315, CC00946,18,18, equal
+ ODB00-316, CC00947,16,18, temperature cutoff
+ ODB00-321, CC00952,19,19, equal
+ ODB00-325, CC00954,10,19, temperature cutoff
+ ODB00-339, CC00963,12,17, temperature cutoff
+ ODB00-346, CC00967,19,18, fraction count
+ ODB00-352, CC00973,13,18, temperature cutoff
+ ODB00-353, CC00974,13,18, temperature cutoff
+ ODB00-354, CC00975,12,17, temperature cutoff
+ ODB00-355, CC00976,12,17, temperature cutoff
+ ODB00-362, CC00983,15,20, temperature cutoff
+ ODB00-383, CC00998,17,18, temperature cutoff
+ ODB00-398, CC01009,17,17, equal
+ ODB00-399, CC01010,19,1, fraction count
+ ODB00-401, CC01012,16,18, temperature cutoff
+ ODB00-411, CC01020,19,19, equal
+ ODB00-469, CC01039,17,17, equal
+ ODB00-471, CC01041,15,19, temperature cutoff
+ ODB00-472, CC01042,17,19, temperature cutoff
+ ODB00-473, CC01043,17,17, equal
+ ODB00-490, CC01053,17,16, fraction count
+ ODB00-503, CC01063,15,19, temperature cutoff
+ ODB00-506, CC01065,19,18, fraction count
+ ODB00-529, CC01083,19,19, equal
+ ODB00-533, CC01085,17,19, temperature cutoff
+ ODB00-536, CC01088,19,10, fraction count
+ ODB00-540, CC01092,19,19, equal
+ ODB00-559, CC01105,14,18, temperature cutoff
+ ODB00-563, CC01109,14,19, temperature cutoff
+ ODB00-568, CC01113,17,16, fraction count
+ ODB00-569, CC01114,16,15, fraction count
+ ODB00-570, CC01115,19,19, equal
+ ODB00-571, CC01116,19,17, fraction count
+ ODB00-573, CC01118,5,19, temperature cutoff
+ ODB00-576, CC01121,19,18, fraction count
+ ODB00-580, CC01125,19,19, equal
+ ODB00-586, CC01131,18,18, equal
+ ODB00-604, CC01147,19,17, fraction count
+ ODB00-613, CC01156,18,19, temperature cutoff
+ ODB00-619, CC01162,19,19, equal
+ ODB00-635, CC01175,19,19, equal
+ ODB00-636, CC01176,18,19, temperature cutoff
+ ODB00-637, CC01177,18,19, temperature cutoff
+ ODB00-638, CC01178,18,19, temperature cutoff
+ ODB00-644, CC01183,19,19, equal
+ ODB00-647, CC01186,15,17, temperature cutoff
+ ODB00-649, CC01188,17,19, temperature cutoff
+ ODB00-655, CC01193,14,19, temperature cutoff
+ ODB00-677, CC01211,19,19, equal
+ ODB00-678, CC01212,19,19, equal
+ ODB00-679, CC01213,19,19, equal
+ ODB00-680, CC01214,15,19, temperature cutoff
+ ODB00-686, CC01220,19,19, equal
+ ODB00-691, CC01222,13,18, temperature cutoff
+ ODB00-704, CC01233,17,17, equal
+ ODB00-706, CC01235,15,19, temperature cutoff
+ ODB00-707, CC01236,13,19, temperature cutoff
+ ODB00-709, CC01238,19,19, equal
+ ODB00-712, CC01241,19,19, equal
+ ODB00-715, CC01243,17,17, equal
