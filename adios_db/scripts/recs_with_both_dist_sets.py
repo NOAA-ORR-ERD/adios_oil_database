@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 """
 Process the ECCC oil records that have both types of distillation sets.
-There should be 106 such records in the source data.
+( /gnome/oil_database/oil_database/-/issues/587 )
 
+There should be 106 such records in the source data.
 I have placed the data file in the same folder as this script:
     ("./recs_with_both_dist_sets.csv").
 
@@ -30,7 +31,7 @@ import adios_db
 from adios_db.models.oil.oil import Oil
 
 
-argp = ArgumentParser(description='Database Backup Arguments:')
+argp = ArgumentParser(description='Script Arguments:')
 argp.add_argument('--path', nargs=1,
                   help=('Specify a path to a data storage area (filesystem). '
                         'If not specified, the default is to use "./data"'))
@@ -142,7 +143,6 @@ def main(argv=sys.argv):
         print(f'Dry run...no files to be changed.')
 
     with open('./recs_with_both_dist_sets.csv', newline='') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for r in generate_row_iter(csvfile):
             src_id, ad_id, frac_count, temp_count, chosen_set = [f.strip()
                                                                  for f in r]
