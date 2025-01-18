@@ -401,6 +401,32 @@ class TestKinematicViscosity:
         k20 = kv.at_temp(20, kvis_units='m^2/s', temp_units="C")
         assert k50 < k20 < k2
 
+    def test_get_default_kv2_crude(self):
+        """
+        The curve:
+
+        v = A exp(k_v2 / T)
+
+        There's a default if there's only one data point
+        """
+
+        kv2 = KinematicViscosity.default_kv2(899.0, "Crude Oil NOS")
+
+        # assuming value currently calculated is correct.
+        assert np.isclose(kv2, 6356.48)
+
+    def test_get_default_kv2_bad_product_type(self):
+        """
+        The curve:
+
+        v = A exp(k_v2 / T)
+
+        There's a default if there's only one data point
+        """
+        with pytest.raises(TypeError, match="Unable to estimate kv2") as err:
+            kv2 = KinematicViscosity.default_kv2(899.0, "Refined Product NOS")
+
+
     def test_set_kv2(self):
         """
         The curve:
