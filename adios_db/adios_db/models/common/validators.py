@@ -1,6 +1,7 @@
 
 import datetime
 
+
 class EnumValidator:
     """
     validator for Enum values: a value that can only be one of a set
@@ -127,6 +128,7 @@ class YearValidator:
             return [self.err_msg.format(value, self.min, self.max)]
         else:
             return []
+
 
 class DateTimeValidator:
     """

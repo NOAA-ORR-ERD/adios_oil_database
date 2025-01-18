@@ -133,4 +133,9 @@ class Distillation:
                 if(any(i > j for i, j in zip(temp, temp[1:]))):
                     msgs.append(ERRORS["E061"])
 
+            # check if there are any duplicate fractions
+            fractions = [c.fraction.value for c in self.cuts]
+            if len(fractions) != len(set(fractions)):
+                msgs.append(ERRORS["E063"])
+
         return msgs

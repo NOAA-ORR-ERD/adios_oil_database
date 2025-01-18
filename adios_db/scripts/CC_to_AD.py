@@ -29,7 +29,7 @@ import adios_db
 from adios_db.models.oil.oil import Oil
 
 
-argp = ArgumentParser(description='Database Backup Arguments:')
+argp = ArgumentParser(description='Script Arguments:')
 argp.add_argument('--path', nargs=1,
                   help=('Specify a path to a data storage area (filesystem). '
                         'If not specified, the default is to use "./data"'))
@@ -86,7 +86,9 @@ def diag_print_oil_fields(oil_obj):
         {oil_obj.metadata.labels=},
         {oil_obj.metadata.alternate_names=},
         {oil_obj.metadata.comments=},
-        {oil_obj.metadata.reference.reference=}
+        {oil_obj.metadata.reference.reference=},
+        {oil_obj.status=},
+        {oil_obj.metadata.gnome_suitable=}
     '''
     print(msg)
 
@@ -129,6 +131,9 @@ def update_oil_fields(oil_obj, oil_id,
             oil_obj.metadata.reference.reference += f'\n{reference}'
         else:
             oil_obj.metadata.reference.reference += f',\n{reference}'
+
+    oil_obj.status = None
+    oil_obj.metadata.gnome_suitable = None
 
 
 def main(argv=sys.argv):

@@ -31,6 +31,7 @@ ERRORS = {
     "E060": "Oil fraction in distillation cuts is not accumulative",
     "E061": "Boiling points in distillation cuts are not strictly increasing",
     "E062": "Viscosity data is not strictly decreasing",
+    "E063": "Oil fraction in distillation cuts has duplicate entries",
 
     # E09* -- system errors
     "E098": "Exception Raised while computing completeness",

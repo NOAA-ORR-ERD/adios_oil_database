@@ -18,9 +18,6 @@ from adios_db.util import sigfigs
 from adios_db.data_sources.parser import ParserBase
 from adios_db.data_sources.importer_base import parse_single_datetime
 
-import pdb
-from pprint import pprint
-
 
 logger = logging.getLogger(__name__)
 
@@ -309,7 +306,7 @@ class ECMeasurementDataclass:
                     .lstrip('¬∞').lstrip('‚Å∞').lstrip('Ãä')
                     .lstrip('â•'))
 
-            unit = unit.replace('¬≤', '^2').replace('²','^2')
+            unit = unit.replace('¬≤', '^2').replace('²', '^2')
 
             self.unit_of_measure = unit
 
@@ -655,9 +652,9 @@ mapping_list = [
     # ('Vapor Pressure.Vapor Pressure', '????', ECVaporPressure, 'sample'),
 
     ('Boiling Point Cumulative Weight Fraction.Boiling Point Cumulative Weight Fraction',
-     'distillation_data.cuts.+', BPCumulativeWeightFraction, 'sample'),
+     'distillation_data.cwf_cuts.+', BPCumulativeWeightFraction, 'sample'),
     ('Boiling Point Temperature Cut Off.Boiling Point Temperature Cut Off',
-     'distillation_data.cuts.+', BPTemperatureDistribution, 'sample'),
+     'distillation_data.tco_cuts.+', BPTemperatureDistribution, 'sample'),
 
     ('Adhesion.Adhesion', 'environmental_behavior.adhesion',
      ECAdhesion, 'sample'),

@@ -213,12 +213,12 @@ class KinematicViscosity:
         self._k_v2 = k_v2
         self.initialize()
 
-
-    def default_kv2(self, density, product_type):
+    @classmethod
+    def default_kv2(cls, density, product_type):
         """
         Get the coefficient of viscosity at 15C
 
-        :param density: density at 15C
+        :param density: density at 15C -- kg/m^3
         :param product_type: density at 15C
 
         for each oil type line fit to coefficient of viscosity vs density scatter plot:
@@ -227,12 +227,11 @@ class KinematicViscosity:
 
         # dens = Density(oil)
         # density = dens.at_temp(288.15)	# 15C
-
         try:
-            (slope, intercept, minimum) = self.slope_intercept_kv2.get(product_type)
-        except (TypeError) as err:
-            raise TypeError("Unable to estimate kv2 for {}. Oil {} not suitable for use "
-                            "in Gnome.".format(product_type, oil.oil_id))
+            (slope, intercept, minimum) = cls.slope_intercept_kv2.get(product_type)
+        except (TypeError) as err: # can't unpack None -- so a type error.
+            raise TypeError("Cannot compute Kinematic Viscosity with temperature: "
+                            f"Unable to estimate kv2 for {product_type}.")
 
         kv2 = slope * density + intercept
         kv2 = max(kv2, minimum)
@@ -421,8 +420,8 @@ def get_dynamic_viscosity_data(oil, units="Pas", temp_units="K",
         # no dynamic, check kinematic
         kvisc = oil.sub_samples[0].physical_properties.kinematic_viscosities
         if len(kvisc) > 0:
-            raise NotImplementedError("can't compute dynamic "
-                                      "from kinematic yet")
+            raise NotImplementedError("can't compute dynamic viscosity  "
+                                      "from kinematic viscosity yet")
             # kvisc = get_kinematic_viscosity_data(oil)
         else:
             visc_table = []
