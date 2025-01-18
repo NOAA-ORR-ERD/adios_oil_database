@@ -3,6 +3,7 @@ import os
 import io
 import logging
 import traceback
+import pathlib
 
 from datetime import datetime
 from argparse import ArgumentParser
@@ -296,7 +297,7 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
                 oil = validate_json(oil_pyjson)
                 set_completeness(oil)
 
-                insert_oil(oil_collection, oil.py_json())
+                insert_oil(oil_collection, oil.py_json(), oil_mapper)
             except DuplicateKeyError as e:
                 if overwrite is True:
                     try:
@@ -343,9 +344,22 @@ def import_records(config, oil_collection, reader_cls, parser_cls, mapper_cls,
                       tc.change(error_count, 'bold')))
 
 
-def insert_oil(collection, py_json):
+def insert_oil(collection, py_json, oil_mapper=None):
+    py_json.pop('status', None)
+    py_json['metadata'].pop('gnome_suitable', None)
     collection.find_one_and_replace({'oil_id': py_json['oil_id']}, py_json,
                                     upsert=True,)
+
+    if hasattr(oil_mapper, 'distillation_cut_set_resolved'):
+        # write out the record to local dir
+        oil = validate_json(py_json)
+        set_completeness(oil)
+        oil.metadata.gnome_suitable = None
+        oil.status = []
+
+        folder = pathlib.Path('./distillation_cut_set_resolved')
+        folder.mkdir(exist_ok=True)
+        oil.to_file(folder.joinpath(f'{py_json["oil_id"]}.json'))
 
 
 def _add_datafiles(settings):

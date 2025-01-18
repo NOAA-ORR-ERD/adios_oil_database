@@ -29,7 +29,7 @@ import adios_db
 from adios_db.models.oil.oil import Oil
 
 
-argp = ArgumentParser(description='Database Backup Arguments:')
+argp = ArgumentParser(description='Script Arguments:')
 argp.add_argument('--path', nargs=1,
                   help=('Specify a path to a data storage area (filesystem). '
                         'If not specified, the default is to use "./data"'))
