@@ -1,0 +1,21 @@
+{{#if @editable}}
+  {{! todo: change the button color based on review status }}
+  <BsButton @type="dark" class="m-1 btn-sm text-nowrap"
+            @onClick={{this.show_dialog}} >
+    {{@oil.review_status.status}}
+  </BsButton>
+
+
+  {{#if this.dialogVisible}}
+    <Dialog::ReviewStatus
+      @oil={{@oil}}
+      @close={{this.close_dialog}}
+      @submit={{this.submit}}
+    />
+  {{/if}}
+{{else}}
+  <div class="input-group-prepend">
+    <label class="p-1 input-group-text font-weight-bold">Review Status:</label>
+  </div>
+  <span class="p-1">{{@oil.review_status.status}}</span>
+{{/if}}

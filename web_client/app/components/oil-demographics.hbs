@@ -276,6 +276,16 @@
           />
         {{/let}}
       </div>
+
+      <div class="col p-0 input-group">
+        <Button::ReviewStatus
+          @oil={{@oil}}
+          @editable={{@editable}}
+          @submit={{this.updateReviewStatus}}
+        />
+      
+      </div>
+
     </div>
   {{/if}}
 
