@@ -1,9 +1,27 @@
 {{#if @editable}}
-  {{! todo: change the button color based on review status }}
-  <BsButton @type="dark" class="m-1 btn-sm text-nowrap"
-            @onClick={{this.show_dialog}} >
-    {{@oil.review_status.status}}
-  </BsButton>
+  {{#if (eq @oil.review_status.status "Review Complete") }}
+    <BsButton @type="success" class="m-1 btn-sm text-nowrap"
+              @onClick={{this.show_dialog}} >
+      <strong>
+        {{@oil.review_status.status}}
+      </strong>
+    </BsButton>
+  {{else if (eq @oil.review_status.status "Under Review") }}
+    <BsButton @type="warning" class="m-1 btn-sm text-nowrap"
+              @onClick={{this.show_dialog}} >
+      <strong>
+        {{@oil.review_status.status}}
+      </strong>
+    </BsButton>
+  {{else}}
+    <BsButton @type="danger" class="m-1 btn-sm text-nowrap"
+              @onClick={{this.show_dialog}} >
+      <strong>
+        {{@oil.review_status.status}}
+      </strong>
+    </BsButton>
+  {{/if}}
+
 
 
   {{#if this.dialogVisible}}
@@ -14,8 +32,33 @@
     />
   {{/if}}
 {{else}}
-  <div class="input-group-prepend">
-    <label class="p-1 input-group-text font-weight-bold">Review Status:</label>
+  <div class="col-3 pl-0">
+    <strong>
+      Review Status:
+    </strong>
   </div>
-  <span class="p-1">{{@oil.review_status.status}}</span>
+
+  <div class="col pl-0">
+    <strong>
+      {{#if (eq @oil.review_status.status "Review Complete") }}
+        <span class="p-1 status-good">{{@oil.review_status.status}}</span>
+      {{else if (eq @oil.review_status.status "Under Review") }}
+        <span class="p-1 status-warning">{{@oil.review_status.status}}</span>
+      {{else if (eq @oil.review_status.status "Not Reviewed") }}
+        <span class="p-1 status-error">{{@oil.review_status.status}}</span>
+      {{else}}
+        <span class="p-1 status-error">Unknown</span>
+      {{/if}}
+    </strong>
+  
+    <Textarea
+      class="p-1 reference-textarea overflow-auto bg-transparent border"
+      @value={{@oil.review_status.notes}}
+      placeholder="No Notes"
+      title="Review Status Notes"
+      rows="2"
+      disabled={{true}}
+    />
+  </div>
+
 {{/if}}
