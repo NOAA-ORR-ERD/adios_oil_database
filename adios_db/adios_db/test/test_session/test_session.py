@@ -93,15 +93,15 @@ class TestSessionQuery(SessionTestBase):
 
         recs, total = session.query()
 
-        assert len(recs) == 26  # our test set size
-        assert total == 26
+        assert len(recs) == 24  # our test set size
+        assert total == 24
 
     def test_query_with_projection(self):
         session = connect_mongodb(self.settings)
 
         recs, _total = session.query(projection=['metadata.name'])
 
-        assert len(recs) == 26  # our test set size
+        assert len(recs) == 24  # our test set size
 
         for rec in recs:
             # We should only get the oil_id plus one field
@@ -135,7 +135,7 @@ class TestSessionQuery(SessionTestBase):
         q_text = 'Saudi Arabia'
         recs, _total = session.query(text=q_text)
 
-        assert len(recs) == 4
+        assert len(recs) == 3
 
         for rec in recs:
             assert q_text.lower() in rec['metadata']['location'].lower()
@@ -209,7 +209,7 @@ class TestSessionQuery(SessionTestBase):
         recs, _total = session.query(sort=[(field, direction)],
                                      projection=['metadata.labels'])
 
-        assert len(recs) == 26
+        assert len(recs) == 24
 
         for rec1, rec2 in zip(recs, recs[1:]):
             value1 = self.deep_get(rec1, field, default=None)
@@ -231,9 +231,9 @@ class TestSessionQuery(SessionTestBase):
     @pytest.mark.parametrize('page, expected', [
         ([0, 10], 10),
         ([10, 0], 10),
-        (0, 26),
-        (10, 16),
-        ([20, 30], 6),
+        (0, 24),
+        (10, 14),
+        ([20, 30], 4),
         ('0,10', 10),
         ('0, 10', 10),
     ])
