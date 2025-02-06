@@ -455,7 +455,11 @@ def test_gnome_suitable_true():
     msgs = oil.validate()
     assert oil.metadata.gnome_suitable
     print(msgs)
-    assert not msgs
+    # NOTE: these might change if data are fixed
+    # missing interfacial tension and distillation duplicates
+    assert len(msgs) == 2
+    assert msgs[0].startswith("E044:")
+    assert msgs[1].startswith("E063:")
 
 
 def test_gnome_suitable_false():
@@ -472,5 +476,7 @@ def test_gnome_suitable_false():
     print(oil.metadata.gnome_suitable)
     assert not oil.metadata.gnome_suitable
     print(msgs)
-    assert len(msgs) == 1
-    assert msgs[0].startswith("W100:")
+    # missing interfacial tension and no distillation for GNOME
+    assert len(msgs) == 2
+    assert msgs[0].startswith("E044:")
+    assert msgs[1].startswith("W100:")
