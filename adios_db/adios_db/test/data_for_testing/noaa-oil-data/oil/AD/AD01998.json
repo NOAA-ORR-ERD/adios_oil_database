@@ -2,9 +2,9 @@
     "oil_id": "AD01998",
     "adios_data_model_version": "0.12.0",
     "metadata": {
-        "name": "AMAULIGAK (1999)",
+        "name": "AMAULIGAK",
         "source_id": "AD01998",
-        "location": "BEAUFORT SEA, CANADA",
+        "location": "Canada, Beaufort Sea",
         "reference": {
             "year": 1999,
             "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Fieldhouse, B., Lambert, P., Mullen, J. 1999. Properties of Crude Oils and Oil Products.  Manuscript Report EE-165, Environmental Protection Service, Environment Canada, Ottawa, Ontario."
@@ -16,8 +16,24 @@
             "Crude Oil",
             "Medium Crude"
         ],
-        "model_completeness": 72,
-        "gnome_suitable": true
+        "model_completeness": 63,
+        "change_log": [
+            {
+                "name": "Rin M",
+                "date": "2022-11-25T11:25:55.808-08:00",
+                "comment": "Issue #25 - Name with Year"
+            },
+            {
+                "name": "Rin",
+                "date": "2022-11-25T13:27:57.193-08:00",
+                "comment": "Issue #27 - Normalize Location"
+            },
+            {
+                "name": "R",
+                "date": "2022-11-28T10:33:46.137-08:00",
+                "comment": "Issue #27 - Generalize Location"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -446,9 +462,6 @@
                 ]
             }
         }
-    ],
-    "status": [
-        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

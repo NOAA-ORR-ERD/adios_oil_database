@@ -4,7 +4,7 @@
     "metadata": {
         "name": "Cook Inlet [2003]",
         "source_id": "561",
-        "location": "Alaska, USA",
+        "location": "USA, Alaska",
         "reference": {
             "year": 2021,
             "reference": "Environment and Climate Change Canada, Environment Canada Crude Oil and Petroleum Product Database, Environment and Climate Change Canada, 2021.\n\nurl: https://open.canada.ca/data/en/dataset/53c38f91-35c8-49a6-a437-b311703db8c5"
@@ -17,8 +17,15 @@
             "Crude Oil",
             "Medium Crude"
         ],
-        "model_completeness": 42,
-        "gnome_suitable": true
+        "model_completeness": 39,
+        "gnome_suitable": true,
+        "change_log": [
+            {
+                "name": "Rin",
+                "date": "2022-11-28T10:03:11.730-08:00",
+                "comment": "Issue #27 -- Normalize Location"
+            }
+        ]
     },
     "sub_samples": [
         {

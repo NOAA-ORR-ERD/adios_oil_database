@@ -4,7 +4,7 @@
     "metadata": {
         "name": "COOK INLET, DRIFT RIVER TERMINAL",
         "source_id": "AD00269",
-        "location": "DRIFT RIVER TERMINAL, ANCHORAGE, AK",
+        "location": "USA, Alaska, Anchorage, Drift River Terminal",
         "reference": {
             "year": 2017,
             "reference": "Drift River Terminal, Anchorage, AK.  Memo to John Whitney, NOAA."
@@ -16,8 +16,19 @@
             "Crude Oil",
             "Medium Crude"
         ],
-        "model_completeness": 42,
-        "gnome_suitable": true
+        "model_completeness": 40,
+        "change_log": [
+            {
+                "name": "R",
+                "date": "2022-11-25T15:24:19.430-08:00",
+                "comment": "Issue #27 -- Normalize Location"
+            },
+            {
+                "name": "R",
+                "date": "2022-11-28T10:54:54.875-08:00",
+                "comment": "Issue #27 - Normalize Location"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -206,9 +217,6 @@
                 ]
             }
         }
-    ],
-    "status": [
-        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

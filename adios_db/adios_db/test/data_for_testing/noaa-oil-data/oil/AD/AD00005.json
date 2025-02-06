@@ -14,8 +14,7 @@
             "Refined Product",
             "Refinery Intermediate"
         ],
-        "model_completeness": 15,
-        "gnome_suitable": false
+        "model_completeness": 15
     },
     "sub_samples": [
         {

@@ -13,7 +13,12 @@
         "product_type": "Residual Fuel Oil",
         "API": 12.07,
         "labels": [
+            "Bunker C",
             "Fuel Oil",
+            "HFO",
+            "Heavy Fuel Oil",
+            "IFO",
+            "No. 6 Fuel Oil",
             "Refined Product",
             "Residual Fuel"
         ],

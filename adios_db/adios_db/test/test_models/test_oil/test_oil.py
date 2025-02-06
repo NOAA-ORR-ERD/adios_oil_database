@@ -313,7 +313,7 @@ class TestFullRecordMetadata:
         assert oil.oil_id == "EC02234"
 
     @pytest.mark.parametrize("attr, value", [
-        ("location", "Alberta, Canada"),
+        ("location", "Canada, Alberta"),
         ('name', 'Access West Blend Winter'),
         ('source_id', '2234'),
         ('sample_date', '2013-08-04'),
