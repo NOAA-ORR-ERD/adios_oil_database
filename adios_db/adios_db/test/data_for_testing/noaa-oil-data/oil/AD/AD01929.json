@@ -1,10 +1,10 @@
 {
-    "oil_id": "AD01901",
+    "oil_id": "AD01929",
     "adios_data_model_version": "0.12.0",
     "metadata": {
-        "name": "SEPINGGAN-YAKIN, OIL & GAS",
-        "source_id": "AD01901",
-        "location": "INDONESIA",
+        "name": "SEPINGGAN-YAKIN MIXED, OIL & GAS",
+        "source_id": "AD01929",
+        "location": "Indonesia",
         "reference": {
             "year": 1998,
             "reference": "McNamara, J. (ed.), Patterson, M. (ed.),1998. Oil & Gas Journal Data Book. Tulsa, OK: Pennwell Books. 402 pp."
@@ -15,8 +15,15 @@
             "Crude Oil",
             "Medium Crude"
         ],
-        "model_completeness": 15,
-        "gnome_suitable": true
+        "model_completeness": 16,
+        "gnome_suitable": true,
+        "change_log": [
+            {
+                "name": "R",
+                "date": "2022-11-25T15:48:24.358-08:00",
+                "comment": "Issue #27 -- Normalize Location"
+            }
+        ]
     },
     "sub_samples": [
         {

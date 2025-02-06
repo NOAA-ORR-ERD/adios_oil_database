@@ -7,7 +7,7 @@
         "alternate_names": [
             "Airlie"
         ],
-        "location": "AUSTRALIA",
+        "location": "Australia",
         "reference": {
             "year": 1998,
             "reference": "Gilbert, T., Austrlian Maritime Safety Authority., Letter to William Lehr, NOAA, March 24, 1998."
@@ -18,8 +18,14 @@
             "Crude Oil",
             "Light Crude"
         ],
-        "model_completeness": 39,
-        "gnome_suitable": true
+        "model_completeness": 36,
+        "change_log": [
+            {
+                "name": "Rin",
+                "date": "2022-11-25T13:08:55.495-08:00",
+                "comment": "Issue #27 - Normalize Location"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -176,7 +182,7 @@
                     "measurement": {
                         "value": 0.125,
                         "unit": "bar",
-                        "unit_type": "massfraction"
+                        "unit_type": "pressure"
                     }
                 },
                 {
@@ -189,9 +195,6 @@
                 }
             ]
         }
-    ],
-    "status": [
-        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"
