@@ -143,7 +143,7 @@ class KinematicViscosity:
     # "Bitumen" "Fuel Oil NOS" "Hydraulic Fluid" "Bio-Petro Fuel Oil" "Other"
     # slope, intercept, minimum value
     slope_intercept_kv2 = {"Crude Oil NOS": (22.14, -13547.38, 0),
-                   "Tight Oil": (22.57, -13935.62, 0), # not enough data but similar to Crude Oil NOS
+                   "Tight Oil": (22.14, -13547.38, 0), # not enough data but similar to Crude Oil NOS
                    "Distillate Fuel Oil": (47.8421, -36442.499, 0),
                    "Condensate": (149.39, -108117.618, 844),
                    "Bitumen Blend": (56.89, -46772.773, 0),
