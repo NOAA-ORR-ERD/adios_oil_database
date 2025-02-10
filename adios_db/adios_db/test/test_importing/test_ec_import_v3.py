@@ -325,24 +325,9 @@ class TestEnvCanadaCsvRecordMapper(object):
               'end_point': {'value': 663.0,
                             'unit': 'C', 'unit_type': 'temperature'},
               'cuts': [
-                   {'fraction': {'value': 4, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 40.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 5, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 60.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 5.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 66.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 8, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 80.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
                    {'fraction': {'value': 10.0, 'unit': '%',
@@ -350,19 +335,9 @@ class TestEnvCanadaCsvRecordMapper(object):
                     'vapor_temp': {'value': 88.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
-                   {'fraction': {'value': 13, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 100.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 15.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 113.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 16, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 120.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
                    {'fraction': {'value': 20.0, 'unit': '%',
@@ -370,34 +345,14 @@ class TestEnvCanadaCsvRecordMapper(object):
                     'vapor_temp': {'value': 137.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
-                   {'fraction': {'value': 21, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 140.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 25, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 160.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 25.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 161.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
-                   {'fraction': {'value': 29, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 180.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 30.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 185.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 33, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 200.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
                    {'fraction': {'value': 35.0, 'unit': '%',
@@ -410,11 +365,6 @@ class TestEnvCanadaCsvRecordMapper(object):
                     'vapor_temp': {'value': 234.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
-                   {'fraction': {'value': 43, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 250.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 45.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 258.0, 'unit': 'C',
@@ -423,11 +373,6 @@ class TestEnvCanadaCsvRecordMapper(object):
                    {'fraction': {'value': 50.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 283.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 53, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 300.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
                    {'fraction': {'value': 55.0, 'unit': '%',
@@ -440,11 +385,6 @@ class TestEnvCanadaCsvRecordMapper(object):
                     'vapor_temp': {'value': 329.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
-                   {'fraction': {'value': 64, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 350.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 65.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 356.0, 'unit': 'C',
@@ -453,11 +393,6 @@ class TestEnvCanadaCsvRecordMapper(object):
                    {'fraction': {'value': 70.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 384.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 73, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 400.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
                    {'fraction': {'value': 75.0, 'unit': '%',
@@ -470,19 +405,9 @@ class TestEnvCanadaCsvRecordMapper(object):
                     'vapor_temp': {'value': 444.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
-                   {'fraction': {'value': 81, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 450.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 85.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 479.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 88, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 500.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
                    {'fraction': {'value': 90.0, 'unit': '%',
@@ -490,24 +415,9 @@ class TestEnvCanadaCsvRecordMapper(object):
                     'vapor_temp': {'value': 523.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
-                   {'fraction': {'value': 93, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 550.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
                    {'fraction': {'value': 95.0, 'unit': '%',
                                  'unit_type': 'massfraction'},
                     'vapor_temp': {'value': 583.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 96, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 600.0, 'unit': 'C',
-                                   'unit_type': 'temperature'}
-                    },
-                   {'fraction': {'value': 99, 'unit': '%',
-                                 'unit_type': 'massfraction'},
-                    'vapor_temp': {'value': 650.0, 'unit': 'C',
                                    'unit_type': 'temperature'}
                     },
               ]
