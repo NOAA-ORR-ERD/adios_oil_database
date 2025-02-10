@@ -389,7 +389,7 @@ deploy_oauth_api_stage:
     OAUTH2_PROXY_PROVIDER: keycloak-oidc
     OAUTH2_PROXY_CLIENT_ID: adios-database
     OAUTH2_PROXY_REDIRECT_URL: https://adios-stage.orr.noaa.gov/oauth2/callback
-    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth-dev.orr.noaa.gov/auth/realms/ORR
+    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth-dev.orr.noaa.gov/realms/ORR
     OAUTH2_PROXY_EMAIL_DOMAINS: noaa.gov
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
     OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_api:9898
@@ -512,7 +512,7 @@ deploy_oauth_client_stage:
     OAUTH2_PROXY_PROVIDER: keycloak-oidc
     OAUTH2_PROXY_CLIENT_ID: adios-database
     OAUTH2_PROXY_REDIRECT_URL: https://adios-stage.orr.noaa.gov/oauth2/callback
-    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth-dev.orr.noaa.gov/auth/realms/ORR
+    OAUTH2_PROXY_OIDC_ISSUER_URL: https://auth-dev.orr.noaa.gov/realms/ORR
     OAUTH2_PROXY_EMAIL_DOMAINS: noaa.gov
     OAUTH2_PROXY_COOKIE_SECRET: penguinsarereallythebest
     OAUTH2_PROXY_UPSTREAMS: http://adios_db_web_client:4200
