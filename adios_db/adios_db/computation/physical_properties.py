@@ -154,7 +154,7 @@ class KinematicViscosity:
                    "Bio-fuel Oil": (-35.3808, 33221, 0),
                    #"Natural Plant Oil": (80.4, -70487.17185, 0),
                    "Lube Oil": (-1.851, 6432, 0),
-                   "Dielectric Oil": (14.291, -8598.1815)
+                   "Dielectric Oil": (14.291, -8598.1815, 0)
                    }
 
     def __init__(self, oil_or_data, k_v2=None):
