@@ -44,7 +44,7 @@ def memoize_oil_arg(func):
         key = oil['oil_id']
 
         if key not in memoized_results:
-            logger.info('loading Key: "{}"'.format(key))
+            # logger.info('loading Key: "{}"'.format(key))
             memoized_results[key] = func(oil)
 
         return memoized_results[key]
