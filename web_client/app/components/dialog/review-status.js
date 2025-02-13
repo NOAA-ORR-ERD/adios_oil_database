@@ -71,11 +71,10 @@ export default class DialogReviewStatus extends Component {
 
     @action
     submitForm() {
-
         let reviewStatus = {
             status: this.status,
             reviewers: this.reviewers,
-            review_date: moment().local().format("YYYY-MM-DD hh:mm:ssa"),
+            review_date: moment().local().format("YYYY-MM-DDTHH:mm:ss"),
             notes: this.notes
         };
 
