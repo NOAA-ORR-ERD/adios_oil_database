@@ -193,6 +193,23 @@ class MeasurementBase(MeasurementDataclass):
                 and self.max_value is not None):
             msgs.append(ERRORS['E047'].format(self))
 
+        # check if all numerical fields have valid numbers
+        # "E048": "Measurement value: {} is not a valid number for the {} field of a measurement",
+        for field in ('value', 'min_value', 'max_value', 'standard_deviation'):
+            val = getattr(self, field)
+            if val is not None:
+                try:
+                    float(val)
+                except ValueError:
+                    msgs.append(ERRORS['E048'].format(val, field))
+        val = self.replicates
+        if val is not None:
+            try:
+                int(val)
+                if int(val) != val:
+                    raise ValueError
+            except ValueError:
+                msgs.append(ERRORS['E048'].format(val, 'replicates'))
         return msgs
 
     def is_empty(self):

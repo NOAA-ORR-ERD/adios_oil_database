@@ -20,6 +20,7 @@ ERRORS = {
     "E045": "Unit: '{}' is not a valid unit for unit type: '{}'. Options are: {}",
     "E046": "A unit must be specified for unit type: '{}'",
     "E047": "A measurement can not have min, max, and value: '{}'",
+    "E048": "Measurement value: {} is not a valid number for the {} field of a measurement",
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",

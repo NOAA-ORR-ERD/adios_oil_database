@@ -981,3 +981,24 @@ def test_as_text_range():
 
     assert text == "0.1\N{Em Dash}0.3"
 
+def test_validate_non_number_for_values_std():
+    dv = DynamicViscosity(value=2170.0,
+                          unit="mPa.s",
+                          standard_deviation="ESTS 12.05/1.0/M",
+                          )
+
+    msgs = dv.validate()
+    assert "E048" in msgs[0]
+    assert "standard_deviation" in msgs[0]
+
+def test_validate_non_in_for_values_replicates():
+    dv = KinematicViscosity(value=2170.0,
+                            unit="cSt",
+                            standard_deviation=132.2,
+                            replicates=1.2,
+                          )
+
+    msgs = dv.validate()
+    print(msgs)
+    assert "E048" in msgs[0]
+    assert "replicates" in msgs[0]

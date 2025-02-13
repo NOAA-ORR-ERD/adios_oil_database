@@ -30,6 +30,18 @@ def main():
     for rec, pth in get_all_records(base_dir):
         print("\n\n******************\n")
         print("processing:", rec.oil_id, rec.metadata.name)
+        # first check if API passes validation:
+        msgs = rec.validate()
+        has_API = False
+        for msg in msgs:
+            if "API" in msg:
+                print(msg)
+                has_API = True
+        if not has_API:
+            continue
+
+        print("There was an API related Validation Error")
+
         old_API = rec.metadata.API
         rec.metadata.API = None
         fixer = FixAPI(rec)
