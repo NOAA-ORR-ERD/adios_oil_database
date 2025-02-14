@@ -167,8 +167,9 @@ class TestDensityList:
         msgs = DL.validate()
 
         print(msgs)
-        assert len(msgs) == 1
-        assert "E044:" in msgs[0]
+        assert len(msgs) == 2
+        for msg in msgs:
+           assert ("E048:" in msg) or ("E044:" in msg)
 
     def test_validate_negative_numeric_value(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),

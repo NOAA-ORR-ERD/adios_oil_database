@@ -84,19 +84,30 @@ class RefTempList:
             else:
                 data_name = None
 
+        # make sure there is data there
         for pt in points_list:
-            value = getattr(getattr(pt, data_name, None), 'value', None)
-
+            meas = getattr(pt, data_name, None)
+            if meas is None or meas.no_value():
+                msgs.append(ERRORS["E044"].format(None, data_name))
+                continue
+            # how to check all three
+            value = meas.minimum
             if value is None:
+                value = meas.maximum
+
+            # if value is None:
+            #     # this should get picked up by the measurement test?
+            #     # breakpoint()
+            #     pass
+            #     # msgs.append(ERRORS["E044"].format(value, data_name))
+            # else:
+            try:
+                value = float(value)
+            except (ValueError, TypeError):
                 msgs.append(ERRORS["E044"].format(value, data_name))
             else:
-                try:
-                    value = float(value)
-                except (ValueError, TypeError):
+                if value <= 0.0:
                     msgs.append(ERRORS["E044"].format(value, data_name))
-                else:
-                    if value <= 0.0:
-                        msgs.append(ERRORS["E044"].format(value, data_name))
 
         return msgs
 
