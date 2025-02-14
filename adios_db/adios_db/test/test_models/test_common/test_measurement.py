@@ -107,6 +107,43 @@ def test_ensure_float_from_json():
     assert isinstance(mass.value, float)
     assert isinstance(mass.standard_deviation, float)
 
+def test_meas_is_empty():
+    # create and empty one
+    m = Length()
+    assert m.is_empty()
+
+
+@pytest.mark.parametrize('kwargs', [{"value": 3.2},
+                                    {"min_value": 3.2},
+                                    {"max_value": 3.2},
+                                    ])
+def test_meas_not_is_empty(kwargs):
+    m = Length(**kwargs)
+
+    print(m)
+    assert not m.is_empty()
+
+
+def test_meas_no_value():
+    # no value even if other stuff is set.
+    m = Length(standard_deviation=3.1, replicates=3)
+
+    print(m)
+    assert m.no_value()
+
+
+@pytest.mark.parametrize('kwargs', [{"value": 3.2},
+                                    {"min_value": 3.2},
+                                    {"max_value": 3.2},
+                                    ])
+def test_meas_not_no_value(kwargs):
+    m = Length(**kwargs)
+
+    print(m)
+    assert not m.no_value()
+
+
+
 
 class TestUnitless:
     def test_init_empty(self):
@@ -982,6 +1019,7 @@ def test_as_text_range():
     assert text == "0.1\N{Em Dash}0.3"
 
 def test_validate_non_number_for_values_std():
+    # NOTE: actual example from some bad data!
     dv = DynamicViscosity(value=2170.0,
                           unit="mPa.s",
                           standard_deviation="ESTS 12.05/1.0/M",

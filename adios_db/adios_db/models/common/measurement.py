@@ -117,6 +117,7 @@ class MeasurementBase(MeasurementDataclass):
         self.min_value = self._make_float(self.min_value)
         self.max_value = self._make_float(self.max_value)
         self.standard_deviation = self._make_float(self.standard_deviation)
+        self.replicates = self._make_int(self.replicates)
 
     @staticmethod
     def _make_float(value):
@@ -132,6 +133,21 @@ class MeasurementBase(MeasurementDataclass):
                 return None
             pass
         return value
+
+    @staticmethod
+    def _make_int(value):
+        """
+        Convert to int if possible, otherwise return the original value.
+        Convert empty string to None
+        """
+        try:
+            value = int(str(value))  # so it won't truncate a float
+        except (TypeError, ValueError):
+            if value == '':
+                return None
+            pass
+        return value
+
 
     def _fix_value_if_min_max(self):
         """
@@ -213,10 +229,24 @@ class MeasurementBase(MeasurementDataclass):
         return msgs
 
     def is_empty(self):
+        """
+        returns True if there if none of the fields are set.
+        """
         attr_data = [getattr(self, k)
                      for k in self.__dataclass_fields__.keys()
                      if k != 'unit_type' and getattr(self, k) is not None]
         return attr_data == []
+
+    def no_value(self):
+        """
+        Returns True if there are no values set
+        """
+        if (self.value is None
+            and self.min_value is None
+            and self.max_value is None):
+            return True
+        return False
+
 
     def py_json(self, sparse=True):
         """
