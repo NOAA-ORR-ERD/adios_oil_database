@@ -1,0 +1,90 @@
+<BsModal @onSubmit={{this.submitForm}}
+         @onHidden={{this.closeForm}}
+         as |Modal|>
+  <Modal.header>
+    <h5 class="modal-title" id="reviewStatusDialogLabel">Review Status</h5>
+  </Modal.header>
+  <Modal.body>
+    <div class="form">
+
+      <div class="row">
+        <div class="col-4 justify-content-end d-flex">
+          <label class="m-2 pb-1">Review Status:</label>
+        </div>
+      
+        <div class="col-6">
+          <select class="p-1 mt-1 overflow-hidden bg-transparent border"
+              {{on "change" this.updateStatus}}
+          >
+            {{#if (includes this.status this.valid_status_values) }}
+            {{else}}
+              {{log "status not in valid status list..."}}
+              <option class="bg-light" selected>{{this.status}}</option>
+            {{/if}}
+
+            {{#each this.valid_status_values as |validStatus|}}
+              {{#if (eq this.status validStatus)}}
+                <option class="bg-light" selected>{{validStatus}}</option>
+              {{else}}
+                <option class="bg-light">{{validStatus}}</option>
+              {{/if}}
+            {{/each}}
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4 justify-content-end d-flex">
+          <label class="m-2 pb-1">Reviewers:</label>
+        </div>
+        <div class="col-6">
+          <Input @type="text" class="form-control bg-transparent border"
+                 title="Reviewers"
+                 @value={{this.reviewers}}
+                 {{on "change" this.updateReviewers}}
+                 {{on "keypress" this.updateReviewers}}
+                 {{on "focusout" this.updateReviewers}}
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4 justify-content-end d-flex">
+          <label class="m-2 pb-1">Notes:</label>
+        </div>
+        <div class="col-8">
+          <Textarea
+            class="form-control overflow-auto bg-transparent border"
+            title="Notes"
+            @value={{this.notes}}
+            rows="4"
+            {{on "change" this.updateNotes}}
+            {{on "keypress" this.updateNotes}}
+            {{on "focusout" this.updateNotes}}
+          />
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4 justify-content-end d-flex">
+          <label class="m-2 pb-1">Last Updated:</label>
+        </div>
+        <div class="col-8">
+          <label class="m-2 pb-1">{{@oil.review_status.review_date}}</label>
+        </div>
+      </div>
+
+    </div>
+  </Modal.body>
+  <Modal.footer as |footer|>
+    <BsButton @onClick={{Modal.close}} @type="secondary">Cancel</BsButton>
+
+    <BsButton @onClick={{Modal.submit}} @type="primary"
+              disabled={{not this.formFilledOut}}
+              {{create-ref "okButton"}}
+    >
+      OK
+    </BsButton>
+  </Modal.footer>
+</BsModal>

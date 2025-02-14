@@ -125,6 +125,9 @@ class EnvCanadaCsvRecordMapper1999(EnvCanadaCsvRecordMapper):
             elif 'tco_cuts' in dist:
                 dist['cuts'] = dist['tco_cuts']
 
+            dist.pop('cwf_cuts', None)
+            dist.pop('tco_cuts', None)
+
     def remap_distillation_final_bp(self):
         for sample in self.record['sub_samples']:
             dist = sample.get('distillation_data', {})

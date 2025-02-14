@@ -18,8 +18,14 @@
             "Gasoline",
             "Refined Product"
         ],
-        "model_completeness": 42,
-        "gnome_suitable": true
+        "model_completeness": 56,
+        "change_log": [
+            {
+                "name": "RM",
+                "date": "2024-01-11T14:45:22.329-08:00",
+                "comment": "Changed fraction recovered to 100%"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -79,6 +85,11 @@
             },
             "distillation_data": {
                 "type": "volume fraction",
+                "fraction_recovered": {
+                    "value": 100.0,
+                    "unit": "%",
+                    "unit_type": "massfraction"
+                },
                 "cuts": [
                     {
                         "fraction": {
@@ -141,9 +152,6 @@
                 }
             ]
         }
-    ],
-    "status": [
-        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

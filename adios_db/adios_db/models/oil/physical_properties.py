@@ -87,7 +87,9 @@ class RefTempList:
         for pt in points_list:
             value = getattr(getattr(pt, data_name, None), 'value', None)
 
-            if value is not None:
+            if value is None:
+                msgs.append(ERRORS["E044"].format(value, data_name))
+            else:
                 try:
                     value = float(value)
                 except (ValueError, TypeError):

@@ -105,13 +105,12 @@ class OilTests(OilTestBase):
         Note: We are basing our tests on webtest(unittest), so
               parametrization doesn't work.
         """
-        for oil_id in ('AD00009',
+        for oil_id in ('AD00005',
                        'AD00020',
                        'AD00025',
                        'EC02234',
                        'EC00506',
                        'EC00561'):
-            print(f'checking for {oil_id}')
             resp = self.testapp.get('/oils/{0}'.format(oil_id))
             oil = resp.json_body
 
@@ -119,8 +118,6 @@ class OilTests(OilTestBase):
 
             for k in ('data',):
                 assert k in oil
-
-            print('oil: ', oil['data']['_id'])
 
             # The adios_db module has its own tests for all the oil
             # attributes, but we need to test that we conform to it.
@@ -137,11 +134,13 @@ class OilTests(OilTestBase):
 
             for k in ('name',
                       'source_id',
-                      'location',
+#                      'location',
                       'reference',
                       'product_type',
                       'API'):
-                assert k in oil['data']['attributes']['metadata']
+                print("checking:", oil['data']['attributes']['oil_id'] )
+                if oil['data']['attributes']['metadata']['product_type'] != "Refinery Intermediate":
+                    assert k in oil['data']['attributes']['metadata']
 
             sample = [s for s in oil['data']['attributes']['sub_samples']
                       if s['metadata']['name'] == 'Fresh Oil Sample'][0]

@@ -248,8 +248,8 @@ class TestDynamicViscosityList:
         """
         simple creation from a data table
         """
-        data = [(100, "cP", 273.15, "K"),
-                (1234.3, "cP", 15.0, "C"),
+        data = [(1234.3, "cP", 273.15, "K"),
+                (800.3, "cP", 15.0, "C"),
                 ]
         dl = DynamicViscosityList.from_data(data)
 
@@ -258,12 +258,28 @@ class TestDynamicViscosityList:
         for p in pjs:
             print(p)
 
-        assert pjs == [{'viscosity': {'value': 100.0, 'unit': 'cP', 'unit_type': 'dynamicviscosity'},
+        assert pjs == [{'viscosity': {'value': 1234.3, 'unit': 'cP', 'unit_type': 'dynamicviscosity'},
                         'ref_temp': {'value': 273.15, 'unit': 'K', 'unit_type': 'temperature'}},
-                       {'viscosity': {'value': 1234.3, 'unit': 'cP', 'unit_type': 'dynamicviscosity'},
+                       {'viscosity': {'value': 800.3, 'unit': 'cP', 'unit_type': 'dynamicviscosity'},
                         'ref_temp': {'value': 15.0, 'unit': 'C', 'unit_type': 'temperature'}},
                        ]
+    def test_validate_missing_value(self):
+        data = [(1234.3, "cP", 273.15, "K"),
+                (800.3, "cP", 15.0, "C"),
+                ]
+        dl = DynamicViscosityList.from_data(data)
+        # remove a value:
+ #       print(dl[0])
+        dl[0].viscosity.value=None
+ #       print(dl[0])
+        print(dl.py_json())
 
+        msgs = dl.validate()
+
+        print(msgs)
+
+        assert len(msgs) == 1
+        assert msgs[0] == "E044: Value: 'None' for 'viscosity' is not valid"
 
 
 class TestKinematicViscosityPoint:
@@ -466,7 +482,7 @@ class Test_interfacial_tension:
         make sure we can add and save a comment to an InterfacialTensionPoint
         """
         itp = InterfacialTensionPoint(
-            tension=None,
+            tension=InterfacialTension(0.03, unit="N/m"),
             ref_temp=Temperature(value=15.0, unit="C"),
             comment="Too Viscous"
         )

@@ -144,4 +144,13 @@ export default class OilDemographics extends Component {
         this.args.submit(this.args.oil);
     }
 
+    @action
+    updateReviewStatus(reviewStatus) {
+        Object.entries(reviewStatus).map(([ key, value ]) => {
+            set(this.args.oil.review_status, key, value);
+        });
+
+        this.args.submit(this.args.oil);
+    }
+
 }

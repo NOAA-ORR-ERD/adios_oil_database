@@ -4,7 +4,7 @@
     "metadata": {
         "name": "ABU SAFAH, ARAMCO",
         "source_id": "AD00010",
-        "location": "RAS TANURA, SAUDI ARABIA",
+        "location": "Saudi Arabia, Ras Tanura",
         "reference": {
             "year": 1992,
             "reference": "Zaindin, A., May 18, 1992, Global Oil Spill Coordination Group, Dhahran, Saudi Arabia, Letter to V. Barnes, Aramco Services Company."
@@ -16,8 +16,19 @@
             "Crude Oil",
             "Medium Crude"
         ],
-        "model_completeness": 24,
-        "gnome_suitable": true
+        "model_completeness": 44,
+        "change_log": [
+            {
+                "name": "Rin",
+                "date": "2022-11-25T13:07:29.264-08:00",
+                "comment": "Issue #27 - Normalize Location"
+            },
+            {
+                "name": "R",
+                "date": "2022-11-28T13:25:57.983-08:00",
+                "comment": "Issue #27 - Normalize Location"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -182,9 +193,6 @@
                 ]
             }
         }
-    ],
-    "status": [
-        "W009: Distillation fraction recovered is missing or invalid"
     ],
     "review_status": {
         "status": "Not Reviewed"

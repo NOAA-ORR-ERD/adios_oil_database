@@ -15,9 +15,8 @@
            >
             {{#if @editable}}
               <Input
-                @class="p-1 overflow-hidden bg-transparent border"
-                @value={{props.short_name}}
-                @change={{fn this.updateShortSampleName idx}}
+                class="p-1 overflow-hidden bg-transparent border"
+                @value={{props.short_name}} {{on "change" (fn this.updateShortSampleName idx)}}
               />
               {{#if idx}}
                 {{! We don't want to remove sample 0 (Fresh Oil) }}
@@ -38,9 +37,8 @@
            >
             {{#if @editable}}
               <Input
-                @class="p-1 overflow-hidden bg-transparent border"
-                @value={{props.short_name}}
-                @change={{fn this.updateShortSampleName idx}}
+                class="p-1 overflow-hidden bg-transparent border"
+                @value={{props.short_name}} {{on "change" (fn this.updateShortSampleName idx)}}
               />
               {{#if idx}}
                 {{! We don't want to remove sample 0 (Fresh Oil) }}

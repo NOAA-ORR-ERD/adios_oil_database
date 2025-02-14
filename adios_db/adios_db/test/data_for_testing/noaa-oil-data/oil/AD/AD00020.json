@@ -7,7 +7,7 @@
         "alternate_names": [
             "ANS"
         ],
-        "location": "ALASKA",
+        "location": "USA, Alaska",
         "reference": {
             "year": 1996,
             "reference": "Jokuty, P., Whiticar, S., Wang, Z., Fingas, M., Lambert, P., Fieldhouse, B., Mullen, J. 1996. A Catalogue of Crude Oil and Oil Product Properties (1996 Edition). Prepared for Environment Canada, EE-157, Ottawa, Ontario."
@@ -19,8 +19,19 @@
             "Crude Oil",
             "Medium Crude"
         ],
-        "model_completeness": 55,
-        "gnome_suitable": true
+        "model_completeness": 48,
+        "change_log": [
+            {
+                "name": "Rin",
+                "date": "2022-11-25T13:12:03.111-08:00",
+                "comment": "Issue #27 - Normalize Location"
+            },
+            {
+                "name": "Rin",
+                "date": "2022-11-28T10:01:53.795-08:00",
+                "comment": "Issue #27 -- Normalize Location"
+            }
+        ]
     },
     "sub_samples": [
         {
@@ -181,7 +192,7 @@
                     "measurement": {
                         "value": 0.19,
                         "unit": "bar",
-                        "unit_type": "massfraction"
+                        "unit_type": "pressure"
                     }
                 }
             ]

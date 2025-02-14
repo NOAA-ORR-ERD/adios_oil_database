@@ -276,6 +276,30 @@
           />
         {{/let}}
       </div>
+
+      <div class="col input-group">
+        <Button::ReviewStatus
+          @oil={{@oil}}
+          @editable={{@editable}}
+          @submit={{this.updateReviewStatus}}
+        />
+      
+      </div>
+
+    </div>
+  {{else}}
+    <div class="row p-0 mb-1">
+      <div class="col p-0 input-group">
+        {{! empty div if there are no comments }}
+      </div>
+
+      <div class="col input-group">
+        <Button::ReviewStatus
+          @oil={{@oil}}
+          @editable={{@editable}}
+          @submit={{this.updateReviewStatus}}
+        />
+      </div>
     </div>
   {{/if}}
 
