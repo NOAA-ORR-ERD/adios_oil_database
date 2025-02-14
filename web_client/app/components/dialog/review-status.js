@@ -22,8 +22,6 @@ export default class DialogReviewStatus extends Component {
     constructor() {
         super(...arguments);
 
-        console.log("DialogReviewStatus.constructor()...");
-
         this.status = this.args.oil.review_status.status;
         this.reviewers = this.args.oil.review_status.reviewers;
         this.notes = this.args.oil.review_status.notes;
