@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.scripting package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
@@ -143,17 +143,18 @@ as record, path pairs</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="adios_db.scripting.process_input">
-<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">process_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USAGE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\ndo_something.py:</span>&#160; <span class="pre">data_dir</span> <span class="pre">[dry_run]\n\ndata_dir</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">are:</span> <span class="pre">the</span> <span class="pre">script</span> <span class="pre">will</span> <span class="pre">recursively\nsearch</span> <span class="pre">for</span> <span class="pre">JSON</span> <span class="pre">files\n\nIf</span> <span class="pre">&quot;dry_run&quot;</span> <span class="pre">is</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">command</span> <span class="pre">line,</span> <span class="pre">it</span> <span class="pre">will</span> <span class="pre">report</span> <span class="pre">what</span> <span class="pre">it</span> <span class="pre">would</span> <span class="pre">do,\nbut</span> <span class="pre">not</span> <span class="pre">save</span> <span class="pre">any</span> <span class="pre">changes\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.process_input" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">adios_db.scripting.</span></span><span class="sig-name descname"><span class="pre">process_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USAGE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\ndo_something.py:</span>&#160; <span class="pre">data_dir</span> <span class="pre">[dry_run]\n\ndata_dir</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">are:</span> <span class="pre">the</span> <span class="pre">script</span> <span class="pre">will</span> <span class="pre">recursively\nsearch</span> <span class="pre">for</span> <span class="pre">JSON</span> <span class="pre">files\n\nIf</span> <span class="pre">&quot;dry_run&quot;</span> <span class="pre">is</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">command</span> <span class="pre">line,</span> <span class="pre">it</span> <span class="pre">will</span> <span class="pre">report</span> <span class="pre">what</span> <span class="pre">it</span> <span class="pre">would</span> <span class="pre">do,\nbut</span> <span class="pre">not</span> <span class="pre">save</span> <span class="pre">any</span> <span class="pre">changes\n'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.scripting.process_input" title="Link to this definition"></a></dt>
 <dd><p>process sys.argv to get the path and whether it’s a dry_run or not</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>USAGE=USAGE</strong> – the usage message to return print if there’s an
 error in the input – default provided</p>
 </dd>
-<dt class="field-even">Returns base_dir, dry_run<span class="colon">:</span></dt>
+<dt class="field-even">Returns base_dir, dry_run, other_flags<span class="colon">:</span></dt>
 <dd class="field-even"><p>base_dir is a Path object of the dir passed in.
 dry_run is True if “dry_run” is on the
-command line.</p>
+command line. other_flags is a list of Bools, as to whether
+the other flags are there.</p>
 </dd>
 </dl>
 </dd></dl>

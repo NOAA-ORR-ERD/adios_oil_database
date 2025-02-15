@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Managing the Data &mdash; ADIOS Oil Database 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -105,7 +105,7 @@
 <h2>The Scripting Module<a class="headerlink" href="#the-scripting-module" title="Link to this heading"></a></h2>
 <p>Most of the things you’ll need for “typical” work with the data can be found in the
 :py:mod`adios-db.scripting` module. We recommend that you import it like so:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">adios_db.scripting</span> <span class="k">as</span> <span class="nn">ads</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">adios_db.scripting</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ads</span>
 </pre></div>
 </div>
 <p>Then you can access all the needed functions an objects from the <code class="docutils literal notranslate"><span class="pre">ads</span></code> name.</p>
@@ -179,8 +179,8 @@ Other subsamples will have been processes on some way.</p></li>
 <p>The <a class="reference internal" href="api/adios_db.models.oil.html#adios_db.models.oil.distillation.Distillation" title="adios_db.models.oil.distillation.Distillation"><code class="xref py py-class docutils literal notranslate"><span class="pre">adios_db.models.oil.distillation.Distillation</span></code></a> holds distillation cut data.
 It contains information about the distillation process, and the cut data itself.
 The distillation cuts are stored in a distillation cut list, with a set of fraction: temperature pairs. The is a utility constructor to generate the cut list from arrays of data. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">adios_db.models.oil.distillation</span> <span class="kn">import</span> <span class="n">Distillation</span><span class="p">,</span> <span class="n">DistCutList</span>
-<span class="kn">from</span> <span class="nn">adios_db.models.common.measurement</span> <span class="kn">import</span> <span class="n">Temperature</span><span class="p">,</span> <span class="n">Concentration</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">adios_db.models.oil.distillation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Distillation</span><span class="p">,</span> <span class="n">DistCutList</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">adios_db.models.common.measurement</span><span class="w"> </span><span class="kn">import</span> <span class="n">Temperature</span><span class="p">,</span> <span class="n">Concentration</span>
 
 <span class="n">fractions</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">,</span> <span class="mf">12.4</span><span class="p">,</span> <span class="mf">23.5</span><span class="p">,</span> <span class="mf">44.3</span><span class="p">,</span> <span class="mf">63.9</span><span class="p">,</span> <span class="mf">82.7</span><span class="p">,</span> <span class="mf">91.7</span><span class="p">,</span> <span class="mf">96.2</span><span class="p">,</span> <span class="mf">98.8</span><span class="p">)</span>
 <span class="n">temps</span> <span class="o">=</span> <span class="p">(</span><span class="mf">36.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">,</span> <span class="mf">119.0</span><span class="p">,</span> <span class="mf">173.0</span><span class="p">,</span> <span class="mf">283.0</span><span class="p">,</span> <span class="mf">391.0</span><span class="p">,</span> <span class="mf">513.0</span><span class="p">,</span> <span class="mf">604.0</span><span class="p">,</span> <span class="mf">672.0</span><span class="p">,</span> <span class="mf">729.0</span><span class="p">)</span>
