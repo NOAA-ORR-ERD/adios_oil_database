@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>adios_db.models.common package &mdash; ADIOS Oil Database 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
@@ -466,6 +466,17 @@ to not be false like zero, for instance</p>
 </section>
 <section id="module-adios_db.models.common.validators">
 <span id="adios-db-models-common-validators-module"></span><h2>adios_db.models.common.validators module<a class="headerlink" href="#module-adios_db.models.common.validators" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="adios_db.models.common.validators.DateTimeValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.common.validators.</span></span><span class="sig-name descname"><span class="pre">DateTimeValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">err_msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.common.validators.DateTimeValidator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Validator for strings that should be an ISO string, e.g.</p>
+<p>2010-06-24T</p>
+<p>it uses the build-in:
+datetime.fromisoformat()</p>
+<p>so anything that passes that will pass this validator</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.common.validators.EnumValidator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.common.validators.</span></span><span class="sig-name descname"><span class="pre">EnumValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valid_items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err_msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">case_insensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.common.validators.EnumValidator" title="Link to this definition"></a></dt>
