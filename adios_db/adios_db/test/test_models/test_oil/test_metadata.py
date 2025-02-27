@@ -206,3 +206,18 @@ def test_sigfigs_in_API():
     md = MetaData(API="32.123456789")
 
     assert md.API == 32.12
+
+def test_location_validation():
+    md = MetaData(location="Canada, Alberta")
+
+    msgs = md.validate()
+
+    for msg in msgs:
+        if "W012" in msg:
+            there = True
+            break
+        else:
+            there = False
+
+    assert there
+
