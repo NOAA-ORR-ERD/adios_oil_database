@@ -11,6 +11,7 @@ from ..common.measurement import MassFraction, Temperature
 from .values import Reference
 from .product_type import ProductType, DOESNT_NEED_API
 from .location_coordinates import LocationCoordinates
+from .location_info import validate_location
 
 from .validation.warnings import WARNINGS
 from .validation.errors import ERRORS
@@ -110,6 +111,8 @@ class MetaData:
             err = is_not_iso_or_year(sd)
             if err:
                 msgs.append(WARNINGS["W011"].format("sample date", self.sample_date, str(err)))
+        # validate the location:
+        msgs.extend(validate_location(self.location))
 
         return msgs
 
