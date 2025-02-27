@@ -18,7 +18,7 @@ WARNINGS = {
     "W010": ("Temperature: {} is close to {} -- looks like it could be a "
              "K to C conversion error"),
     "W011": "{} date format: {} is invalid: {}",
-
+    "W012": 'Location: "{}" in wrong order. Should be: "{}"',
     "W100": ("Not GNOME compatible: {}"),
 }
 
