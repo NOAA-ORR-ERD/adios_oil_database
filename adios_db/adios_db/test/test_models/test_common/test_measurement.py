@@ -142,7 +142,20 @@ def test_meas_not_no_value(kwargs):
     print(m)
     assert not m.no_value()
 
-
+@pytest.mark.parametrize("meas, is_empty",[(Mass(value=5), False),
+                                           (Mass(min_value=5), False),
+                                           (Mass(max_value=5), False),
+                                           (Mass(), True),
+                                           (Mass(unit='kg'), True),
+                                        ])
+def test_is_empty(meas, is_empty):
+    """
+    An empty measurement is one with no values.
+    It will have a unit type
+    It might have a unit
+    """
+    print(meas)
+    assert meas.is_empty() is is_empty
 
 
 class TestUnitless:
@@ -1026,7 +1039,7 @@ def test_validate_non_number_for_values_std():
                           )
 
     msgs = dv.validate()
-    assert "E048" in msgs[0]
+    assert "E044" in msgs[0]
     assert "standard_deviation" in msgs[0]
 
 def test_validate_non_in_for_values_replicates():

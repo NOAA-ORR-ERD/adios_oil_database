@@ -16,7 +16,21 @@ class Cleanup:
         :param oil: the oil object you want to clean up
         :type oil: adios_db.models.oil.oil.OIl
         """
+        self._check_subclass_ids()
         self.oil = oil
+
+    @classmethod
+    def _check_subclass_ids(klass):
+        """
+        Check that no subclasses duplicate IDs
+        """
+        all_ids = set()
+        for cls in Cleanup.__subclasses__():
+            ID = cls.ID
+            if ID in all_ids:
+                raise TypeError("all subclasses of Cleanup must have unique IDs\n"
+                                f"{klass} is using already existing ID: {ID}")
+            all_ids.add(ID)
 
     def cleanup(self, oil, do_it=False):
         """
