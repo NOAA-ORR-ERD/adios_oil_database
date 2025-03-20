@@ -210,14 +210,14 @@ class MeasurementBase(MeasurementDataclass):
             msgs.append(ERRORS['E047'].format(self))
 
         # check if all numerical fields have valid numbers
-        # "E048": "Measurement value: {} is not a valid number for the {} field of a measurement",
+        # "E044": "Measurement value: {} is not a valid number for the {} field of a measurement",
         for field in ('value', 'min_value', 'max_value', 'standard_deviation'):
             val = getattr(self, field)
             if val is not None:
                 try:
                     float(val)
                 except ValueError:
-                    msgs.append(ERRORS['E048'].format(val, field))
+                    msgs.append(ERRORS['E044'].format(val, field))
         val = self.replicates
         if val is not None:
             try:
@@ -234,7 +234,7 @@ class MeasurementBase(MeasurementDataclass):
         """
         attr_data = [getattr(self, k)
                      for k in self.__dataclass_fields__.keys()
-                     if k != 'unit_type' and getattr(self, k) is not None]
+                     if (k not in {'unit', 'unit_type'}) and getattr(self, k) is not None]
         return attr_data == []
 
     def no_value(self):
@@ -285,7 +285,7 @@ class MeasurementBase(MeasurementDataclass):
                 try:
                     new_val = convert(self.unit_type, self.unit, new_unit, val)
                 except (TypeError, ValueError):
-                    print(f'Error in convert(), obj: {self}')
+                    # print(f'Error in convert(), obj: {self}')
                     raise
 
                 new_vals[attr] = new_val

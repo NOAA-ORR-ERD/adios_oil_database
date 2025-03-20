@@ -25,6 +25,8 @@ class RefTempList:
     mixin for all classes that are a list of points with
     reference temperatures
     """
+    _data_name = None  # set in subclass -- one of: {"density", "viscosity", "tension"}
+
     def validate(self):
         """
         validator for anything that has a list of reference temps
@@ -37,79 +39,116 @@ class RefTempList:
         data_str = self.__class__.__name__
         msgs = super().validate()
 
-        # check for odd temperatures
+        bad_item = False
+        # make sure values are reasonable
         for pt in points_list:
-            if pt.ref_temp is None:
-                msgs.append(ERRORS["E042"]
-                            .format(data_str + " reference temp"))
-                return msgs
+            meas = getattr(pt, self._data_name, None)
+            value = getattr(meas, 'value', None)
+            ref_temp = pt.ref_temp
+            temp = getattr(ref_temp, 'value', None)
 
-            temp = pt.ref_temp.converted_to('C').value
+            # check if either are empty:
+            # "E048": "Missing reference temperature for {} with value: {}",
+            # "E049": "Missing value for {} with reference temperature:{}",
+            if ref_temp is None or ref_temp.is_empty():
+                msgs.append(ERRORS["E048"].format(type(meas).__name__, value))
+                bad_item = True
+                continue
 
-            if temp is None:
-                msgs.append(ERRORS["E042"]
-                            .format(data_str + " reference temp"))
-                return msgs
-
-            if temp < -100.0:  # arbitrary, but should catch K/C confusion
+            # check reasonable temp range.
+            temp_c = pt.ref_temp.converted_to('C').value
+            if temp_c < -100.0:  # arbitrary, but should catch K/C confusion
                 t = f"{pt.ref_temp.value:.2f} {pt.ref_temp.unit}"
                 msgs.append(ERRORS["E040"].format(data_str, t))
-
-        # check for duplicate temp/shear_rate combos
-        temps = []
-
-        for p in points_list:
-            temp = p.ref_temp.converted_to('K').value
-
-            try:
-                temp = temp + p.shear_rate.value
-            except (TypeError, AttributeError):
-                pass
-
-            temps.append(temp)
-
-        temps.sort()
-        diff = (abs(t2 - t1) for t1, t2 in zip(temps[1:], temps[:1]))
-
-        for d in diff:
-            if d < 1e-3:
-                msgs.append(ERRORS["E050"].format("Temperatures", data_str))
-
-        # make sure values are reasonable too
-        # find the attr with the data
-        for name in {"density", "viscosity", "tension"}:
-            if hasattr(self.item_type, name):
-                data_name = name
-                break
-            else:
-                data_name = None
-
-        # make sure there is data there
-        for pt in points_list:
-            meas = getattr(pt, data_name, None)
-            if meas is None or meas.no_value():
-                msgs.append(ERRORS["E044"].format(None, data_name))
                 continue
-            # how to check all three
-            value = meas.minimum
-            if value is None:
-                value = meas.maximum
 
-            # if value is None:
-            #     # this should get picked up by the measurement test?
-            #     # breakpoint()
-            #     pass
-            #     # msgs.append(ERRORS["E044"].format(value, data_name))
-            # else:
+            if meas is  None or meas.is_empty():
+                msgs.append(ERRORS["E049"].format(type(meas).__name__, temp))
+                bad_item = True
+                continue
+
+            # check if the value make any sense:
             try:
                 value = float(value)
             except (ValueError, TypeError):
-                msgs.append(ERRORS["E044"].format(value, data_name))
+                msgs.append(ERRORS["E044"].format(value, self._data_name))
+                bad_item = True
+                continue
             else:
                 if value <= 0.0:
-                    msgs.append(ERRORS["E044"].format(value, data_name))
+                    msgs.append(ERRORS["E044"].format(value, self._data_name))
+                    bad_item = True
+                    continue
+        # check for duplicate temp/shear_rate combos
+        if not bad_item:
+
+# <<<<<<< Updated upstream
+#         # make sure there is data there
+#         for pt in points_list:
+#             meas = getattr(pt, data_name, None)
+#             if meas is None or meas.no_value():
+#                 msgs.append(ERRORS["E044"].format(None, data_name))
+#                 continue
+#             # how to check all three
+#             value = meas.minimum
+#             if value is None:
+#                 value = meas.maximum
+
+#             # if value is None:
+#             #     # this should get picked up by the measurement test?
+#             #     # breakpoint()
+#             #     pass
+#             #     # msgs.append(ERRORS["E044"].format(value, data_name))
+#             # else:
+#             try:
+#                 value = float(value)
+#             except (ValueError, TypeError):
+#                 msgs.append(ERRORS["E044"].format(value, data_name))
+#             else:
+#                 if value <= 0.0:
+#                     msgs.append(ERRORS["E044"].format(value, data_name))
+# =======
+            temps = []
+
+            for p in points_list:
+                temp = p.ref_temp.converted_to('K').value
+
+                try:
+                    temp = temp + p.shear_rate.value
+                except (TypeError, AttributeError):
+                    pass
+
+                temps.append(temp)
+
+            # look for duplicates
+            temps.sort()
+            diff = (abs(t2 - t1) for t1, t2 in zip(temps[1:], temps[:1]))
+
+            for d in diff:
+                if d < 1e-3:
+                    msgs.append(ERRORS["E050"].format("Temperatures", data_str))
+# >>>>>>> Stashed changes
 
         return msgs
+
+    def delete_empty_values(self):
+        """
+        Deletes entries that have empty values in either the ref_temp or value
+        entry
+        """
+        points_list = self
+        data_str = self.__class__.__name__
+
+        for i in reversed(range(len(self))):
+            pt = self[i]
+            meas = getattr(pt, self._data_name, None)
+            ref_temp = pt.ref_temp
+
+            if (ref_temp is None
+                or ref_temp.is_empty()
+                or meas is None
+                or meas.is_empty()):
+                del self[i]
 
 
 @dataclass_to_json
@@ -123,6 +162,7 @@ class DensityPoint:
 
 class DensityList(RefTempList, JSON_List):
     item_type = DensityPoint
+    _data_name = "density"
 
     @classmethod
     def from_data(cls, data_table):
@@ -164,7 +204,7 @@ class DynamicViscosityPoint:
 
 class DynamicViscosityList(RefTempList, JSON_List):
     item_type = DynamicViscosityPoint
-
+    _data_name = "viscosity"
     @classmethod
     def from_data(cls, data_table):
         """
@@ -207,10 +247,11 @@ class DynamicViscosityList(RefTempList, JSON_List):
         dvis_list = []
 
         for p in points_list:
-            if p.ref_temp is None:
-                msgs.append(ERRORS["E042"]
-                            .format(data_str + " reference temp"))
-                return msgs
+            if p.ref_temp is None or p.ref_temp.is_empty:
+                # continue  # Error should be caught by the base class
+                # msgs.append(ERRORS["E042"]
+                #             .format(data_str + " reference temp"))
+                return msgs  # Error should be reported by base class
 
             ref_temp = p.ref_temp.converted_to('C').value
 
@@ -227,6 +268,7 @@ class DynamicViscosityList(RefTempList, JSON_List):
             if viscosity is not None:
                 dvis_list.append((viscosity, ref_temp, shear_rate))
 
+        # check for decreasing with temp.
         if len(dvis_list) > 1:
             dvis_list.sort(key=lambda sl: (sl[1], sl[2]))
 
@@ -254,7 +296,7 @@ class KinematicViscosityPoint:
 
 class KinematicViscosityList(RefTempList, JSON_List):
     item_type = KinematicViscosityPoint
-
+    _data_name = "viscosity"
     @classmethod
     def from_data(cls, data_table):
         """
@@ -297,10 +339,10 @@ class KinematicViscosityList(RefTempList, JSON_List):
         kvis_list = []
 
         for p in points_list:
-            if p.ref_temp is None:
-                msgs.append(ERRORS["E042"]
-                            .format(data_str + " reference temp"))
-                return msgs
+            if p.ref_temp is None or p.ref_temp.is_empty():
+                # msgs.append(ERRORS["E042"]
+                #             .format(data_str + " reference temp"))
+                return msgs  # error should have been caught by base class
 
             ref_temp = p.ref_temp.converted_to('C').value
 
@@ -373,7 +415,7 @@ class InterfacialTensionPoint:
 
 class InterfacialTensionList(RefTempList, JSON_List):
     item_type = InterfacialTensionPoint
-
+    _data_name = "tension"
 
 @dataclass_to_json
 @dataclass
