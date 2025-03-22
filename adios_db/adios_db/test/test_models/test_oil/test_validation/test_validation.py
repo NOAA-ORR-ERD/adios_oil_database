@@ -457,12 +457,14 @@ def test_gnome_suitable_true():
     print(msgs)
     # NOTE: these might change if data are fixed
     # missing interfacial tension and distillation duplicates
+    for msg in msgs:
+        print(msg)
     assert len(msgs) >= 2
     num_expected = 0
     for msg in msgs:
         if msg.startswith("E044:"):
             num_expected += 1
-        if msg.startswith("E063:"):
+        if msg.startswith("W013:"):
             num_expected += 1
     assert num_expected == 2
 

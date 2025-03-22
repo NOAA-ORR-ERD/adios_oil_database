@@ -136,6 +136,6 @@ class Distillation:
             # check if there are any duplicate fractions
             fractions = [c.fraction.value for c in self.cuts]
             if len(fractions) != len(set(fractions)):
-                msgs.append(ERRORS["E063"])
+                msgs.append(WARNINGS["W013"])
 
         return msgs
