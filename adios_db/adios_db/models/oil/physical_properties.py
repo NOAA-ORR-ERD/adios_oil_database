@@ -145,9 +145,9 @@ class RefTempList:
             ref_temp = pt.ref_temp
 
             if (ref_temp is None
-                or ref_temp.is_empty()
+                or ref_temp.no_value()
                 or meas is None
-                or meas.is_empty()):
+                or meas.no_value()):
                 del self[i]
 
 

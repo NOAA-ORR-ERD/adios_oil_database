@@ -243,7 +243,7 @@ class TestDistillation:
 
         msgs = dist.validate()
         assert len(msgs) == 1
-        assert msgs[0].startswith('E063:')
+        assert msgs[0].startswith('W013:')
 
     def test_distillation_accumulative_fraction(self):
         dist = Distillation(
