@@ -15,8 +15,6 @@ def test_country_right_order():
 def test_two_word_country_right_order():
     msgs = validate_location("Busan, South Korea")
 
-    "Busan, South Korea"
-
     assert not msgs
 
 def test_country_wrong_order():
