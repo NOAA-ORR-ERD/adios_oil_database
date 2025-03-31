@@ -454,19 +454,17 @@ def test_gnome_suitable_true():
     print(oil.metadata.gnome_suitable)
     msgs = oil.validate()
     assert oil.metadata.gnome_suitable
-    print(msgs)
     # NOTE: these might change if data are fixed
     # missing interfacial tension and distillation duplicates
     for msg in msgs:
         print(msg)
-    assert len(msgs) >= 2
-    num_expected = 0
+    num_expected = 2
     for msg in msgs:
         if msg.startswith("E044:"):
             num_expected += 1
-        if msg.startswith("W013:"):
+        if msg.startswith("W012:"):  # location in wrong order
             num_expected += 1
-    assert num_expected == 2
+    assert num_expected == len(msgs)
 
 
 def test_gnome_suitable_false():
@@ -483,14 +481,13 @@ def test_gnome_suitable_false():
     print(oil.metadata.gnome_suitable)
     assert not oil.metadata.gnome_suitable
     print(msgs)
-    # missing interfacial tension and no distillation for GNOME
-    assert len(msgs) >= 2
-    num_expected = 0
+    # 2 missing interfacial tension and no distillation for GNOME
+    num_expected = 3
     for msg in msgs:
         if msg.startswith("E044:"):
             num_expected += 1
-        if msg.startswith("W100:"):
+        if msg.startswith("W012:"): # Canada, Alberta in wrong order
             num_expected += 1
-    assert num_expected == 2
+    assert num_expected == len(msgs)
 
 

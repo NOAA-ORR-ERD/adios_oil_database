@@ -25,6 +25,7 @@ WARNINGS = {
              "K to C conversion error"),
     "W011": "{} date format: {} is invalid: {}",
     "W013": "Oil fraction in distillation cuts has duplicate entries",
+    "W014": 'Non-simple value: "{}" for {}',
 
     # NOAA specific
     "W100": ("Not GNOME compatible: {}"),

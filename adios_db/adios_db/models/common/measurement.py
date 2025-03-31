@@ -228,15 +228,17 @@ class MeasurementBase(MeasurementDataclass):
                 msgs.append(ERRORS['E048'].format(val, 'replicates'))
         return msgs
 
+    # fixme - overlaps with no_value?
     def is_empty(self):
         """
         returns True if there if none of the fields are set.
         """
         attr_data = [getattr(self, k)
                      for k in self.__dataclass_fields__.keys()
-                     if (k not in {'unit', 'unit_type'}) and getattr(self, k) is not None]
+                     if (k not in {'unit', 'unit_type', 'replicates'}) and getattr(self, k) is not None]
         return attr_data == []
 
+    # fixme - overlaps with empty?
     def no_value(self):
         """
         Returns True if there are no values set
@@ -246,6 +248,17 @@ class MeasurementBase(MeasurementDataclass):
             and self.max_value is None):
             return True
         return False
+
+    def just_value(self):
+        """
+        Returns True if there is a single value, and no min_value or max_value
+        """
+        if (self.value is not None
+            and self.min_value is None
+            and self.max_value is None):
+            return True
+        else:
+            return False
 
 
     def py_json(self, sparse=True):

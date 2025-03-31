@@ -157,6 +157,23 @@ def test_is_empty(meas, is_empty):
     print(meas)
     assert meas.is_empty() is is_empty
 
+@pytest.mark.parametrize("meas, just_value",[(Mass(value=5), True),
+                                             (Mass(min_value=5), False),
+                                             (Mass(max_value=5), False),
+                                             (Mass(), False),
+                                             (Mass(value=5, min_value=3, unit='kg'), False),
+                                             (Mass(value=5, max_value=7, unit='kg'), False),
+                                             (Mass(min_value=3, max_value=5, unit='kg'), False),
+                                             ])
+def test_just_value(meas, just_value):
+    """
+    An empty measurement is one with no values.
+    It will have a unit type
+    It might have a unit
+    """
+    print(meas)
+    assert meas.just_value() is just_value
+
 
 class TestUnitless:
     def test_init_empty(self):
