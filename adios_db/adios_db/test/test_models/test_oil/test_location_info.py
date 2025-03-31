@@ -12,12 +12,20 @@ def test_country_right_order():
 
     assert not msgs
 
+def test_two_word_country_right_order():
+    msgs = validate_location("Busan, South Korea")
+
+    "Busan, South Korea"
+
+    assert not msgs
+
 def test_country_wrong_order():
     msgs = validate_location("Canada, Alberta, something else")
 
     # ['W012: Location: "Canada, Alberta, something else" in wrong order. Should be: "Alberta, something else, Canada"']
 
     assert msgs[0].startswith('W012:')
+
 
 def test_empty():
     msgs = validate_location("")
