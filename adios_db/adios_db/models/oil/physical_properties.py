@@ -8,6 +8,7 @@ Having a Python class makes it easier to write importing, validating etc, code.
 from dataclasses import dataclass, field
 
 from .validation.errors import ERRORS
+from .validation.warnings import WARNINGS
 
 from ..common.utilities import dataclass_to_json, JSON_List
 
@@ -42,43 +43,53 @@ class RefTempList:
         bad_item = False
         # make sure values are reasonable
         for pt in points_list:
+
             meas = getattr(pt, self._data_name, None)
-            value = getattr(meas, 'value', None)
             ref_temp = pt.ref_temp
             temp = getattr(ref_temp, 'value', None)
 
+            # check the measurement
+            if meas is None or meas.is_empty():
+                    msgs.append(ERRORS["E049"].format(type(meas).__name__, temp))
+                    bad_item = True
+                    continue
+            elif not meas.just_value():
+                # "W014": "Non-simple value:{} for {}",
+                msgs.append(WARNINGS["W014"].format(meas.as_text(), data_str))
+                bad_item = True
+                continue
+            else:
+                value = getattr(meas, 'value', None)
+
+                # check if the value make any sense:
+                try:
+                    value = float(value)
+                except (ValueError, TypeError):
+                    msgs.append(ERRORS["E044"].format(value, self._data_name))
+                    bad_item = True
+                    continue
+                else:
+                    if value <= 0.0:
+                        msgs.append(ERRORS["E044"].format(value, self._data_name))
+                        bad_item = True
+                        continue
+
+            # check the ref temp
+
             # check if either are empty:
             # "E048": "Missing reference temperature for {} with value: {}",
-            # "E049": "Missing value for {} with reference temperature:{}",
-            if ref_temp is None or ref_temp.is_empty():
-                msgs.append(ERRORS["E048"].format(type(meas).__name__, value))
+            if ref_temp is None or ref_temp.value is None:  # ref_temp can't be a range, etc. is_empty():
+                msgs.append(ERRORS["E048"].format(data_str, value))
                 bad_item = True
                 continue
 
             # check reasonable temp range.
             temp_c = pt.ref_temp.converted_to('C').value
-            if temp_c < -100.0:  # arbitrary, but should catch K/C confusion
+            if temp_c is not None and temp_c < -100.0:  # arbitrary, but should catch K/C confusion
                 t = f"{pt.ref_temp.value:.2f} {pt.ref_temp.unit}"
                 msgs.append(ERRORS["E040"].format(data_str, t))
                 continue
 
-            if meas is  None or meas.is_empty():
-                msgs.append(ERRORS["E049"].format(type(meas).__name__, temp))
-                bad_item = True
-                continue
-
-            # check if the value make any sense:
-            try:
-                value = float(value)
-            except (ValueError, TypeError):
-                msgs.append(ERRORS["E044"].format(value, self._data_name))
-                bad_item = True
-                continue
-            else:
-                if value <= 0.0:
-                    msgs.append(ERRORS["E044"].format(value, self._data_name))
-                    bad_item = True
-                    continue
         # check for duplicate temp/shear_rate combos
         if not bad_item:
 
@@ -107,7 +118,6 @@ class RefTempList:
 #             else:
 #                 if value <= 0.0:
 #                     msgs.append(ERRORS["E044"].format(value, data_name))
-# =======
             temps = []
 
             for p in points_list:
@@ -127,7 +137,6 @@ class RefTempList:
             for d in diff:
                 if d < 1e-3:
                     msgs.append(ERRORS["E050"].format("Temperatures", data_str))
-# >>>>>>> Stashed changes
 
         return msgs
 

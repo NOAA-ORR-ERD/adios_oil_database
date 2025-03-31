@@ -334,6 +334,7 @@ class TestDynamicViscosityList:
                 (800.3, "cP", 15.0, "C"),
                 ]
         dl = DynamicViscosityList.from_data(data)
+        # set one value to None
         dl[0].viscosity.value=None
         print(dl.py_json())
 
@@ -553,3 +554,23 @@ class Test_interfacial_tension:
         msgs = itl.validate()
 
         assert not msgs
+
+    def test_warning_min_max(self):
+        """
+        make sure there's a warning if a value has min_value or max_value in it
+        """
+        itl = InterfacialTensionList([InterfacialTensionPoint(
+                                        tension=InterfacialTension(min_value=0.03, unit="N/m"),
+                                        ref_temp=Temperature(value=15.0, unit="C"),
+                                        comment="Too Viscous"),
+                                      InterfacialTensionPoint(
+                                        tension=InterfacialTension(0.03, unit="N/m"),
+                                        ref_temp=Temperature(value=25.0, unit="C"),
+                                        comment="Too Viscous"),
+                                      ])
+
+        msgs = itl.validate()
+        print(msgs)
+
+        assert len(msgs) == 1
+        assert msgs[0] == 'W014: Non-simple value: ">0.03" for InterfacialTensionList'
