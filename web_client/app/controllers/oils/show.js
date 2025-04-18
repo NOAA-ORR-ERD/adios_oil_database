@@ -3,11 +3,16 @@ import { tracked } from '@glimmer/tracking';
 import { action } from "@ember/object";
 import { service } from '@ember/service';
 
+
 export default class ShowController extends OilsController {
     @tracked currentSampleTab = '';
     @tracked currentCategoryTab = {};
     @tracked changesMade = false;
     @tracked editable = false;
+
+    get webApi() {
+        return this.configs.webApi;
+    }
 
     @action
     setEditable(toggleState) {

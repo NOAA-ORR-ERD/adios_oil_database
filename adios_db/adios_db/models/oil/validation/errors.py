@@ -16,10 +16,13 @@ ERRORS = {
     "E041": "Value for {}: {} must be between 0 and 1",
     "E042": "Must have a value for {}",
     "E043": "API, {} does not match density at 60F. API should be: {:.1f}",
-    "E044": "Value: '{}' for '{}' is not valid",
+#    "E044": "Value: '{}' for '{}' is not valid",
+    "E044": "Measurement value: {} is not a valid number for the {} field of a measurement",
     "E045": "Unit: '{}' is not a valid unit for unit type: '{}'. Options are: {}",
     "E046": "A unit must be specified for unit type: '{}'",
     "E047": "A measurement can not have min, max, and value: '{}'",
+    "E048": "Missing reference temperature for {} with value: {}",
+    "E049": "Missing value for {} with reference temperature: {}",
 
     # E05* -- duplicates, etc
     "E050": "Duplicate {} in {}",
@@ -31,7 +34,6 @@ ERRORS = {
     "E060": "Oil fraction in distillation cuts is not accumulative",
     "E061": "Boiling points in distillation cuts are not strictly increasing",
     "E062": "Viscosity data is not strictly decreasing",
-    "E063": "Oil fraction in distillation cuts has duplicate entries",
 
     # E09* -- system errors
     "E098": "Exception Raised while computing completeness",

@@ -1,11 +1,9 @@
 """
-cleanups that work with density
+cleanups of the metadata
 """
 import nucos as uc
 
 from .cleanup import Cleanup
-
-class
 
 class NormalizeMetadata(Cleanup):
     """

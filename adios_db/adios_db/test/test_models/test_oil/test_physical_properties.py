@@ -46,6 +46,70 @@ class TestDensityPoint:
         assert model.py_json() == json_obj
 
 
+class TestRefTempList_delete_empty_values:
+    """
+    most of this is tested through the subclasses, but seems better to put key stuff here.
+    """
+    def get_new_list(self):
+        """
+        using densities, but should work for most things
+        """
+        densities = DensityList([
+            DensityPoint(density=Density(value=0.8751, unit="g/cm^3"),
+                         ref_temp=Temperature(value=60.0, unit="F")),
+            DensityPoint(density=Density(value=0.99, unit="g/cm^3"),
+                         ref_temp=Temperature(value=25.0, unit="C")),
+            DensityPoint(density=Density(value=0.96, unit="g/cm^3"),
+                         ref_temp=Temperature(value=50.0, unit="C")),
+
+        ])
+        return densities
+
+    def test_remove_empty_all_good(self):
+        """
+        list is full -- nothing should get removed
+        """
+        dl = self.get_new_list()
+
+        dl.delete_empty_values()
+
+        assert dl == self.get_new_list()
+
+    def test_remove_empty_some_none(self):
+        """
+        Set some to None
+        """
+        orig = self.get_new_list()
+        dl = self.get_new_list()
+
+        dl[0].ref_temp = None
+        dl[2].density = None
+
+        dl.delete_empty_values()
+
+        assert dl[0] == orig[1]
+        assert len(dl) == 1
+
+    def test_remove_empty_some_empty(self):
+        """
+        Set some to None
+        """
+        orig = self.get_new_list()
+        dl = self.get_new_list()
+
+        # set a couple to empty
+        dl[0].ref_temp = Temperature(unit="C")
+        dl[2].density = Density(unit="g/cm^3")
+
+        assert dl[0].ref_temp.is_empty()
+        assert dl[2].density.is_empty()
+
+        dl.delete_empty_values()
+
+        assert dl[0] == orig[1]
+        assert len(dl) == 1
+
+
 class TestDensityList:
     def test_init_empty(self):
         assert DensityList().py_json() == []
@@ -96,6 +160,7 @@ class TestDensityList:
                            ref_temp=Temperature(value=0.001, unit='C'))
 
         DL = DensityList((dp1, dp2))
+
         msgs = DL.validate()
 
         print(msgs)
@@ -167,8 +232,9 @@ class TestDensityList:
         msgs = DL.validate()
 
         print(msgs)
-        assert len(msgs) == 1
-        assert "E044:" in msgs[0]
+        assert len(msgs) == 2
+        for msg in msgs:
+           assert ("E048:" in msg) or ("E044:" in msg)
 
     def test_validate_negative_numeric_value(self):
         dp1 = DensityPoint(density=Density(value=900, unit='kg/m^3'),
@@ -268,10 +334,8 @@ class TestDynamicViscosityList:
                 (800.3, "cP", 15.0, "C"),
                 ]
         dl = DynamicViscosityList.from_data(data)
-        # remove a value:
- #       print(dl[0])
+        # set one value to None
         dl[0].viscosity.value=None
- #       print(dl[0])
         print(dl.py_json())
 
         msgs = dl.validate()
@@ -279,7 +343,7 @@ class TestDynamicViscosityList:
         print(msgs)
 
         assert len(msgs) == 1
-        assert msgs[0] == "E044: Value: 'None' for 'viscosity' is not valid"
+        assert msgs[0] == "E049: Missing value for DynamicViscosity with reference temperature: 273.15"
 
 
 class TestKinematicViscosityPoint:
@@ -366,7 +430,7 @@ class TestKinematicViscosityList:
         kvl = KinematicViscosityList((kvp,))
         msgs = kvl.validate()
 
-        assert "E042:" in msgs[0]
+        assert "E048:" in msgs[0]
         assert "KinematicViscosity" in msgs[0]
 
     def test_order_kvis(self):
@@ -474,7 +538,7 @@ class Test_interfacial_tension:
         itl = InterfacialTensionList((itp,))
         msgs = itl.validate()
 
-        assert "E042:" in msgs[0]
+        assert "E048:" in msgs[0]
         assert "InterfacialTension" in msgs[0]
 
     def test_comment_no_errors(self):
@@ -490,3 +554,23 @@ class Test_interfacial_tension:
         msgs = itl.validate()
 
         assert not msgs
+
+    def test_warning_min_max(self):
+        """
+        make sure there's a warning if a value has min_value or max_value in it
+        """
+        itl = InterfacialTensionList([InterfacialTensionPoint(
+                                        tension=InterfacialTension(min_value=0.03, unit="N/m"),
+                                        ref_temp=Temperature(value=15.0, unit="C"),
+                                        comment="Too Viscous"),
+                                      InterfacialTensionPoint(
+                                        tension=InterfacialTension(0.03, unit="N/m"),
+                                        ref_temp=Temperature(value=25.0, unit="C"),
+                                        comment="Too Viscous"),
+                                      ])
+
+        msgs = itl.validate()
+        print(msgs)
+
+        assert len(msgs) == 1
+        assert msgs[0] == 'W014: Non-simple value: ">0.03" for InterfacialTensionList'

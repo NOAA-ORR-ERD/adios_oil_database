@@ -4,6 +4,10 @@ import slugify from 'ember-slugify';
 import $ from 'jquery';
 
 export default class SubSample extends Component {
+    get oilId() {
+        return this.args.oil.oil_id;
+    }
+
     get sample() {
         let ret;
 
@@ -93,7 +97,7 @@ export default class SubSample extends Component {
             ['bulk-composition', 'tab-pane/bulk-composition', 'Bulk Composition'],
             ['environmental', 'tab-pane/environmental', 'Environmental Behavior'],
             ['industry-properties', 'tab-pane/industry-properties', 'Industry Properties'],
-            ['metadata', 'tab-pane/subsample-metadata', 'Metadata']
+            ['metadata', 'tab-pane/subsample-metadata', 'Metadata'],
         ].map((item) => {
             let [tabName, componentName, label] = item;
 

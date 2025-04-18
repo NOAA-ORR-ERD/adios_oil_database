@@ -117,6 +117,7 @@ class MeasurementBase(MeasurementDataclass):
         self.min_value = self._make_float(self.min_value)
         self.max_value = self._make_float(self.max_value)
         self.standard_deviation = self._make_float(self.standard_deviation)
+        self.replicates = self._make_int(self.replicates)
 
     @staticmethod
     def _make_float(value):
@@ -132,6 +133,21 @@ class MeasurementBase(MeasurementDataclass):
                 return None
             pass
         return value
+
+    @staticmethod
+    def _make_int(value):
+        """
+        Convert to int if possible, otherwise return the original value.
+        Convert empty string to None
+        """
+        try:
+            value = int(str(value))  # so it won't truncate a float
+        except (TypeError, ValueError):
+            if value == '':
+                return None
+            pass
+        return value
+
 
     def _fix_value_if_min_max(self):
         """
@@ -193,13 +209,57 @@ class MeasurementBase(MeasurementDataclass):
                 and self.max_value is not None):
             msgs.append(ERRORS['E047'].format(self))
 
+        # check if all numerical fields have valid numbers
+        # "E044": "Measurement value: {} is not a valid number for the {} field of a measurement",
+        for field in ('value', 'min_value', 'max_value', 'standard_deviation'):
+            val = getattr(self, field)
+            if val is not None:
+                try:
+                    float(val)
+                except ValueError:
+                    msgs.append(ERRORS['E044'].format(val, field))
+        val = self.replicates
+        if val is not None:
+            try:
+                int(val)
+                if int(val) != val:
+                    raise ValueError
+            except ValueError:
+                msgs.append(ERRORS['E048'].format(val, 'replicates'))
         return msgs
 
+    # fixme - overlaps with no_value?
     def is_empty(self):
+        """
+        returns True if there if none of the fields are set.
+        """
         attr_data = [getattr(self, k)
                      for k in self.__dataclass_fields__.keys()
-                     if k != 'unit_type' and getattr(self, k) is not None]
+                     if (k not in {'unit', 'unit_type', 'replicates'}) and getattr(self, k) is not None]
         return attr_data == []
+
+    # fixme - overlaps with empty?
+    def no_value(self):
+        """
+        Returns True if there are no values set
+        """
+        if (self.value is None
+            and self.min_value is None
+            and self.max_value is None):
+            return True
+        return False
+
+    def just_value(self):
+        """
+        Returns True if there is a single value, and no min_value or max_value
+        """
+        if (self.value is not None
+            and self.min_value is None
+            and self.max_value is None):
+            return True
+        else:
+            return False
+
 
     def py_json(self, sparse=True):
         """
@@ -238,7 +298,7 @@ class MeasurementBase(MeasurementDataclass):
                 try:
                     new_val = convert(self.unit_type, self.unit, new_unit, val)
                 except (TypeError, ValueError):
-                    print(f'Error in convert(), obj: {self}')
+                    # print(f'Error in convert(), obj: {self}')
                     raise
 
                 new_vals[attr] = new_val
