@@ -290,7 +290,7 @@
 <span id="adios-db-data-sources-importer-base-module"></span><h2>adios_db.data_sources.importer_base module<a class="headerlink" href="#module-adios_db.data_sources.importer_base" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.importer_base.ImporterBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">ImporterBase</span></span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.importer_base.</span></span><span class="sig-name descname"><span class="pre">ImporterBase</span></span><a class="headerlink" href="#adios_db.data_sources.importer_base.ImporterBase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Only things that are common to all importer modules</p>
 <dl class="py method">
@@ -378,7 +378,7 @@ Some formats that I have seen:
 <span id="adios-db-data-sources-mapper-module"></span><h2>adios_db.data_sources.mapper module<a class="headerlink" href="#module-adios_db.data_sources.mapper" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.mapper.</span></span><span class="sig-name descname"><span class="pre">MapperBase</span></span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.mapper.</span></span><span class="sig-name descname"><span class="pre">MapperBase</span></span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#adios_db.data_sources.importer_base.ImporterBase" title="adios_db.data_sources.importer_base.ImporterBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImporterBase</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase.compound">
@@ -412,7 +412,7 @@ Some formats that I have seen:
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.data_sources.mapper.MapperBase.slugify">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">slugify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.slugify" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">slugify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.mapper.MapperBase.slugify" title="Link to this definition"></a></dt>
 <dd><p>Generate a string that is suitable for use as an object attribute.</p>
 <ul class="simple">
 <li><p>The strings will be snake-case, all lowercase words separated
@@ -437,7 +437,7 @@ class to all the importer types.</p>
 <span id="adios-db-data-sources-parser-module"></span><h2>adios_db.data_sources.parser module<a class="headerlink" href="#module-adios_db.data_sources.parser" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.parser.ParserBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.parser.</span></span><span class="sig-name descname"><span class="pre">ParserBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.parser.ParserBase" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.parser.</span></span><span class="sig-name descname"><span class="pre">ParserBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.parser.ParserBase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#adios_db.data_sources.importer_base.ImporterBase" title="adios_db.data_sources.importer_base.ImporterBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImporterBase</span></code></a></p>
 <p>Only things that are common to all parsers</p>
 </dd></dl>
@@ -448,7 +448,7 @@ class to all the importer types.</p>
 <p>Base classes for various different readers that we may want to use.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.data_sources.reader.CsvFile">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.reader.</span></span><span class="sig-name descname"><span class="pre">CsvFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_delim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mac_roman'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.data_sources.reader.</span></span><span class="sig-name descname"><span class="pre">CsvFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_delim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mac_roman'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.data_sources.reader.CsvFile" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A generalized file reader for comma separated variables (.csv)
 flat datafiles.

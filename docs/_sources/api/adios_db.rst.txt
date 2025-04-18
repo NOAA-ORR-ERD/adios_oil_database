@@ -3,8 +3,8 @@ adios\_db package
 
 .. automodule:: adios_db
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------

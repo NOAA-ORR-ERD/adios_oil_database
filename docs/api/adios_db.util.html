@@ -112,7 +112,7 @@
 <p>A few right here:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.util.BufferedIterator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.</span></span><span class="sig-name descname"><span class="pre">BufferedIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.BufferedIterator" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.</span></span><span class="sig-name descname"><span class="pre">BufferedIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.BufferedIterator" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>An iterator that can have stuff put back</p>
 <p>Give it an iterable, and it will create an iterator that iterates,
@@ -147,7 +147,7 @@ could use it more generally.</p>
 <span id="adios-db-util-folder-collection-module"></span><h2>adios_db.util.folder_collection module<a class="headerlink" href="#module-adios_db.util.folder_collection" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.util.folder_collection.FolderCollection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.folder_collection.</span></span><span class="sig-name descname"><span class="pre">FolderCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.folder_collection.FolderCollection" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.folder_collection.</span></span><span class="sig-name descname"><span class="pre">FolderCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.folder_collection.FolderCollection" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Ducktyped class that acts like a MongoDB oil collection, but acts upon a
 file folder instead.</p>
@@ -201,7 +201,7 @@ and
 <p>They are copies, so that mutating them won’t break the internal data.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.util.many_many.ManyMany">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.many_many.</span></span><span class="sig-name descname"><span class="pre">ManyMany</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.many_many.ManyMany" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.many_many.</span></span><span class="sig-name descname"><span class="pre">ManyMany</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.many_many.ManyMany" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.util.many_many.ManyMany.add_to_left">
@@ -239,14 +239,14 @@ corresponding set</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="adios_db.util.many_many.ManyMany.left">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">left</span></span><a class="headerlink" href="#adios_db.util.many_many.ManyMany.left" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">left</span></span><a class="headerlink" href="#adios_db.util.many_many.ManyMany.left" title="Link to this definition"></a></dt>
 <dd><p>A copy of the left dict</p>
 <p>It’s a copy, so it won’t change the internal ones if mutated</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="adios_db.util.many_many.ManyMany.right">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><a class="headerlink" href="#adios_db.util.many_many.ManyMany.right" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><a class="headerlink" href="#adios_db.util.many_many.ManyMany.right" title="Link to this definition"></a></dt>
 <dd><p>A copy of the right dict</p>
 <p>It’s a copy, so it won’t change the internal ones if mutated</p>
 </dd></dl>
@@ -283,11 +283,11 @@ It would obviate the need for a utility module like this.</p>
 on a terminal a bit nicer.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.util.term.TermColor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.term.</span></span><span class="sig-name descname"><span class="pre">TermColor</span></span><a class="headerlink" href="#adios_db.util.term.TermColor" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.util.term.</span></span><span class="sig-name descname"><span class="pre">TermColor</span></span><a class="headerlink" href="#adios_db.util.term.TermColor" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.util.term.TermColor.change">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.term.TermColor.change" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.util.term.TermColor.change" title="Link to this definition"></a></dt>
 <dd><p>Surround our string with terminal codes that will change its
 color and then change it back</p>
 </dd></dl>
