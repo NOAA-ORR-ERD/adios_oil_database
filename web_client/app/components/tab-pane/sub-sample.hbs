@@ -7,7 +7,9 @@
     <tab.pane @id={{props.id}} @title={{props.label}}>
       {{component props.componentName
         oil=this.sample
+        oilId=this.oilId
         store=@store
+        webApi=@webApi
         editable=@editable
         submit=this.submitSample
         sampleIndex=@sampleIndex

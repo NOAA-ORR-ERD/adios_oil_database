@@ -6,17 +6,26 @@ from configparser import ConfigParser
 
 
 def default_settings():
-    return {'mongodb.host': 'localhost',
-            'mongodb.port': 27017,
-            'mongodb.database': 'adios_db',
-            'mongodb.alias': 'adios-db-app'}
+    return {
+        'mongodb.host': 'localhost',
+        'mongodb.port': 27017,
+        'mongodb.database': 'adios_db',
+        'mongodb.alias': 'adios-db-app',
+        'gridfs.buckets': ['attachments'],
+    }
 
 
 def file_settings(config_file, section='app:adios_db'):
     config = ConfigParser()
     config.read(config_file)
 
-    return {k: convert_str_to_type_value(v) for k, v in config.items(section)}
+    settings = {k: convert_str_to_type_value(v) for k, v in config.items(section)}
+
+    for k in ('gridfs.buckets',):
+        # these keys contain listable values, separated by '\n'
+        settings[k] = settings[k].split('\n')
+
+    return settings
 
 
 def convert_str_to_type_value(str_in):

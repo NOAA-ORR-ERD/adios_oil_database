@@ -7,12 +7,23 @@ or other uses that require high performance querying, etc.
 In theory this same Session object could be duck typed to use a
 different back-end: RDBMS, simple file store, etc.
 """
+from pathlib import Path
 from numbers import Number
 import warnings
+import mimetypes
 
 from pymongo import MongoClient, ASCENDING, DESCENDING
+from bson.objectid import ObjectId
+from gridfs import GridFS
 
 from ..models.oil.product_type import types_to_labels
+
+# The MIME type of an XLSX file could be missing on our docker images,
+# so we manually add it here.
+mimetypes.add_type(
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    '.xlsx'
+)
 
 
 class CursorWrapper():
@@ -55,6 +66,294 @@ class CursorWrapper():
         return self.cursor[idx]
 
 
+class OpenFileObjectContext:
+    """
+    This is a context manager usable in a 'with' block that takes an already
+    open file.  This is so we define some actions upon entering & exiting
+    the context.
+    """
+    def __init__(self, file_obj):
+        if not callable(getattr(file_obj, 'read', None)):
+            raise ValueError(f'"{type(file_obj).__name__}" '
+                             'object has no callable attribute "read"')
+
+        self.file_obj = file_obj
+
+    def __enter__(self):
+        return self.file_obj
+
+    def __exit__(self, _exc_type, _exc_val, _exc_tb):
+        self.file_obj.flush()  # flush, but do not close
+        return False  # Re-raise any exceptions
+
+
+class Attachments():
+    """
+    We sometimes get spectroscopic and Gas Chromatography(GC) data, as well as
+    other interesting and relevant things, in document form, which are related
+    to a particular oil but external to its oil record assay.  So we have a
+    problem trying to add this data to the Adios Oil schema.  And this could
+    happen more often in the future.  For example, all the new LSU analysis
+    data.
+
+    These are usually simply PDFs or images, but we don't want to limit
+    ourselves.
+
+    We deal with this by formalizing the collection of arbitrary file
+    attachments that are stored and associated with an oil record.
+    """
+    def __init__(self, database):
+        self._bucket = GridFS(database, "attachments")
+
+    @property
+    def _collection(self):
+        try:
+            return self._bucket._collection
+        except AttributeError:
+            # use the old API
+            return self._bucket._GridFS__collection
+
+    @property
+    def _files(self):
+        try:
+            return self._bucket._files
+        except AttributeError:
+            # use the old API
+            return self._bucket._GridFS__files
+
+    @property
+    def bucket_name(self):
+        return self._collection.name
+
+    def attachment_file_path(self, oil_id, file_path):
+        """
+        Here is the spec we came up with for the final storage of attachment
+        files in the noaa-oil-data Git repo.
+
+            f'data/{collection}/{prefix}/{oil_id}/{id}'
+
+        where:
+            collection == 'attachments'
+            prefix == {oil_id[:2]}
+            oil_id == {the_oil_identifier}
+            id == {the_document_filename}
+
+        So we will just match the stuff below the collection, such that
+        the path will be formatted as:
+
+            f'{prefix}/{oil_id}/{id}'
+
+        I know this spec is probably too specific for general attachments
+        functionality, but if it becomes a problem, we can maybe split the
+        file path spec functionality between adios_db and web_api
+        """
+        try:
+            filename = Path(file_path).name
+        except TypeError:
+            filename = ''
+
+        return f'{oil_id[:2]}/{oil_id}/{filename}'
+
+    def get_content_type(self, file_path):
+        """
+        Right now we are just using the builtin mimetypes package, which just
+        looks at the file extension and compares it to the mime.types entries
+        installed on your operating system.  This should recognize most of the
+        common types.
+
+        A better way would be to use python-magic.  python-magic is a Python
+        interface to the libmagic file type identification library.
+        Libmagic is a library that identifies file types by examining their
+        content rather than relying solely on file extensions.
+        It's the underlying technology behind the Unix file command
+        """
+        mime_type, _encoding = mimetypes.guess_type(file_path)
+        return mime_type
+
+    def list(self):
+        return self._bucket.list()
+
+    def find_oil_attachments(self, oil_id):
+        return [
+            f._file
+            for f in self._bucket.find({
+                'filename': {'$regex': f'.+{oil_id}.+'}
+            })
+        ]
+
+    def find_one(self, oil_id=None, file_path=None, file_id=None):
+        """
+        Returns a file-like object
+        """
+        ret = None
+
+        if oil_id is not None and file_path is not None:
+            filename = self.attachment_file_path(oil_id, file_path)
+            ret = self._bucket.find_one({
+                'filename': filename
+            })
+        elif file_id is not None:
+            if not isinstance(file_id, ObjectId):
+                file_id = ObjectId(file_id)
+
+            ret = self._bucket.find_one({
+                '_id': file_id
+            })
+        else:
+            raise ValueError('Bad values passed in: '
+                             f'{oil_id=}, {file_path=}, {file_id=}')
+
+        if ret is None:
+            raise FileNotFoundError(f'Could not find "{filename}"')
+
+        return ret
+
+    def insert_one(self, oil_id, file_path, file_obj=None, **kwargs):
+        """
+        We insert a file into MongoDB as a GridFS blob.
+
+        :param oil_id: The ID of the associated oil record
+        :param file_path: The path of the file we are inserting.
+                          This is NOT assumed to be pointing to a valid file
+                          in a local file system.  We do need the name of the
+                          file in order to give the inserted blob an
+                          identifier though.
+        :param file_obj: A readable open file-like object
+
+        Basically the preferred method would be to pass in an open file object.
+        But we will "try" to open the file_path if there is none passed in.
+        """
+        if file_obj is None:
+            return self._insert_file_path(oil_id, file_path, **kwargs)
+        else:
+            return self._insert_file_obj(oil_id, file_path, file_obj, **kwargs)
+
+    def _insert_file_path(self, oil_id, file_path, **kwargs):
+        attachment_path = self.attachment_file_path(oil_id, file_path)
+
+        try:
+            with open(file_path, 'rb') as file_obj:
+                return self._insert_or_replace(
+                    attachment_path,
+                    self.get_content_type(file_path),
+                    file_obj,
+                    **kwargs
+                )
+        except FileNotFoundError:
+            raise FileNotFoundError(f'Could not find file "{file_path}" '
+                                    'to insert')
+
+    def _insert_file_obj(self, oil_id, file_path, file_obj, **kwargs):
+        attachment_path = self.attachment_file_path(oil_id, file_path)
+
+        try:
+            with OpenFileObjectContext(file_obj) as file_obj:
+                return self._insert_or_replace(
+                    attachment_path,
+                    self.get_content_type(file_path),
+                    file_obj,
+                    **kwargs
+                )
+        except ValueError:
+            raise ValueError(f'Could not create context for "{file_obj}" '
+                             'to insert')
+
+    def _insert_or_replace(self, attachment_path, content_type, file_obj,
+                           **kwargs):
+        kwargs = self.gfs_put_prune_kwargs(kwargs)
+
+        # Check if file with same name exists
+        existing_file = self._bucket.find_one({
+            'filename': attachment_path
+        })
+
+        if existing_file:
+            obj_id = existing_file._id
+            self._bucket.delete(obj_id)
+
+            # Upload new file content re-using the ID
+            self._bucket.put(file_obj,
+                             _id=obj_id,
+                             filename=attachment_path,
+                             content_type=content_type,
+                             **kwargs)
+        else:
+            obj_id = self._bucket.put(file_obj,
+                                      filename=attachment_path,
+                                      content_type=content_type,
+                                      **kwargs)
+
+        return obj_id
+
+    def gfs_put_prune_kwargs(self, kwargs):
+        """
+        Basically when we perform a gfs put() operation, we want to pass any
+        custom fields that we find in our kwargs.  But we don't want to use
+        any keywords that are reserved for GridFS.  I imagine that we could
+        do better than a hard-coded list of keys, but this will do for now.
+        """
+        forbidden_keys = {'_id', 'filename', 'length', 'contentType',
+                          'chunkSize', 'uploadDate'}
+
+        return {k: v
+                for k, v in kwargs.items()
+                if k not in forbidden_keys}
+
+    def replace_one(self, oil_id, file_path, **kwargs):
+        """
+        This is just to have a similar API to the regular Session object
+        for oil record handling.  GridFS doesn't behave exactly like the
+        builtin MongoDB collections.
+        """
+        return self.insert_one(oil_id, file_path, **kwargs)
+
+    def replace_fields(self, oil_id, file_path, **kwargs):
+        """
+        For a single file, update any extra fields
+        without replacing the GridFS file contents.
+        """
+        if oil_id is not None and file_path is not None:
+            filename = self.attachment_file_path(oil_id, file_path)
+
+            return self._files.update_one(
+                {'filename': filename},
+                {'$set': kwargs}
+            )
+        else:
+            return None
+
+    def get_extra_fields(self, oil_id, file_path):
+        """
+        For a single file, return any extra fields it is storing.
+        """
+        if oil_id is not None and file_path is not None:
+            filename = self.attachment_file_path(oil_id, file_path)
+
+            return self.gfs_put_prune_kwargs(
+                self._files.find_one(
+                    {'filename': filename},
+                )
+            )
+        else:
+            return None
+
+    def delete_one(self, oil_id, file_path):
+        """
+        Delete a single File with the given oil_id & filename.
+        Deletes of non-existent files are considered successful so we always
+        return None
+        """
+        attachment_path = self.attachment_file_path(oil_id, file_path)
+
+        existing = self._bucket.find_one({'filename': attachment_path})
+
+        if existing:
+            obj_id = existing._id
+            return self._bucket.delete(obj_id)
+        else:
+            return None
+
+
 class Session():
     sort_direction = {'asc': ASCENDING,
                       'ascending': ASCENDING,
@@ -73,7 +372,8 @@ class Session():
         self.server_info = self.mongo_client.server_info()
 
         self._db = getattr(self.mongo_client, database)
-        self._oil_collection = self._db.oil  # the oil collection
+        self._oil_collection = self._db.oil
+        self.attachments = Attachments(self._db)
 
     def find_one(self, oil_id):
         """
@@ -93,14 +393,11 @@ class Session():
         oil_id = oil_obj.oil_id
         oil_obj = oil_obj.py_json()
 
-        # is this necessary? couldn't we let Mongo make it?
         oil_obj['_id'] = oil_id
 
         self._oil_collection.insert_one(oil_obj)
 
         return oil_id
-        # we want to hide Mongo details, including _id
-        # return self._oil_collection.insert_one(oil_obj).inserted_id
 
     def replace_one(self, oil_obj):
         """

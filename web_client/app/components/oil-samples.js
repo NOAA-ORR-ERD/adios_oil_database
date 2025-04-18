@@ -16,7 +16,7 @@ export default class SubSample extends Component {
         }
     }
 
-    get navTabProperties() {
+    get subsampleNavTabProperties() {
         let savedTab = this.sampleTab;
         let freshIndex = 0;
 
@@ -59,7 +59,7 @@ export default class SubSample extends Component {
         });
     }
 
-    get tabPaneProperties() {
+    get subsampleTabPaneProperties() {
         let sampleTab = this.sampleTab;
         let freshIndex = 0;
 
@@ -78,13 +78,78 @@ export default class SubSample extends Component {
             freshIndex += 1;
 
             let ret = {
+                'id': tabName,
+                'aria-labelledby': tabName + '-nav-tab',
                 'name': sampleName,
                 'short_name': sampleShortName,
-                'id': tabName,
-                'aria-labelledby': tabName + '-nav-tab'
             };
 
             if (sampleTab === tabName) {
+                return {
+                    ...ret,
+                    'class': 'tab-pane active show'
+                };
+            }
+            else {
+                return {
+                    ...ret,
+                    'class': 'tab-pane'
+                };
+            }
+        });
+    }
+
+    get extraNavTabProperties() {
+        let savedTab = this.sampleTab;
+
+        return [
+            {'name': 'Attachments'}
+        ].map(s => {
+            let sampleName = s.name;
+            let sampleShortName = s.name;
+            let tabName = slugify(sampleShortName);
+
+            let ret = {
+                'name': sampleName,
+                'short_name': sampleShortName,
+                'id': tabName,
+                'href': '#' + tabName,
+                'aria-controls': tabName
+            };
+
+            if (savedTab === tabName) {
+                return {
+                    ...ret,
+                    'class': 'nav-item nav-link active',
+                    'aria-selected': true
+                };
+            }
+            else {
+                return {
+                    ...ret,
+                    'class': 'nav-item nav-link',
+                    'aria-selected': false
+                };
+            }
+        });
+    }
+
+    get extraTabPaneProperties() {
+        let sampleTab = this.sampleTab;
+
+        return [
+            ['attachments', 'tab-pane/attachments', 'Attachments'],
+        ].map((item) => {
+            let [tabName, componentName, label] = item;
+
+            let ret = {
+                'id': tabName,
+                'label': label,
+                'aria-labelledby': tabName + '-nav-tab',
+                'componentName': componentName,
+            }
+
+            if (ret['visible']) {
                 return {
                     ...ret,
                     'class': 'tab-pane active show'

@@ -68,6 +68,7 @@
     "ember-d3": "^0.5.1",
     "ember-data": "^5.2.0",
     "ember-fetch": "^8.1.2",
+    "ember-file-upload": "^9.3.0",
     "ember-light-table": "JamesMakela-NOAA/ember-light-table",
     "ember-load-initializers": "^2.1.2",
     "ember-math-helpers": "^4.0.0",

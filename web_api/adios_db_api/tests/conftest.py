@@ -2,9 +2,11 @@
 Configuration setup for pytest tests.
 """
 import pytest
+
 from webtest import TestApp
 
-from adios_db.test.test_session.test_session import restore_test_db
+from adios_db.test.test_session.session_test_base import restore_test_db
+
 from adios_db_api import main
 
 
@@ -22,7 +24,9 @@ TEST_SETTINGS = {
     'mongodb.port': '27017',
     'mongodb.database': 'adios_db_test',
     'mongodb.alias': 'oil-db-app',
+    'gridfs.buckets': ['attachments'],
     'caps.can_modify_db': 'true',
+    'caps.attachment_max_size': '1048576000',
     'install_path': '.',
     'help_dir': './help',
     'user_docs_dir': '../user_docs',
