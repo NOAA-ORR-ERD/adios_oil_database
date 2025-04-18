@@ -412,7 +412,7 @@ estimate if no data</p>
 oil record</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.Density">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">Density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.Density" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">Density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.Density" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>class to hold and do calculations on density</p>
 <p>data is stored internally in standard units:
@@ -444,7 +444,7 @@ density in kg/m^3</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.KinematicViscosity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">KinematicViscosity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_or_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_v2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.computation.physical_properties.</span></span><span class="sig-name descname"><span class="pre">KinematicViscosity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil_or_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_v2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to hold and do calculations on kinematic viscosity</p>
 <p>Data is stored internally in standard units:
@@ -471,7 +471,7 @@ v = A exp(k_v2 / T)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="adios_db.computation.physical_properties.KinematicViscosity.default_kv2">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_kv2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity.default_kv2" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_kv2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.computation.physical_properties.KinematicViscosity.default_kv2" title="Link to this definition"></a></dt>
 <dd><p>Get the coefficient of viscosity at 15C</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

@@ -170,7 +170,7 @@
 <p>classes for options to clean up Records</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.cleanup.cleanup.Cleanup">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.cleanup.</span></span><span class="sig-name descname"><span class="pre">Cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.cleanup.Cleanup" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.cleanup.</span></span><span class="sig-name descname"><span class="pre">Cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.cleanup.Cleanup" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="adios_db.models.oil.cleanup.cleanup.Cleanup.ID">
@@ -204,7 +204,7 @@ the action is taken, and the Oil object is altered.</p></li>
 <p>cleanups that work with density</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.cleanup.density.FixAPI">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.density.</span></span><span class="sig-name descname"><span class="pre">FixAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.density.FixAPI" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.density.</span></span><span class="sig-name descname"><span class="pre">FixAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.density.FixAPI" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#adios_db.models.oil.cleanup.cleanup.Cleanup" title="adios_db.models.oil.cleanup.cleanup.Cleanup"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cleanup</span></code></a></p>
 <p>adds (or replaces) the API value, from the density measurements</p>
 <dl class="py attribute">
@@ -264,7 +264,7 @@ if something is wrong, but can not be cleaned up, flag is False</p>
 <p>There could be more, but for now, it sets the unit_type for the cuts.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="adios_db.models.oil.cleanup.distillation.FixCutUnitType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.distillation.</span></span><span class="sig-name descname"><span class="pre">FixCutUnitType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.distillation.FixCutUnitType" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.distillation.</span></span><span class="sig-name descname"><span class="pre">FixCutUnitType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.distillation.FixCutUnitType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#adios_db.models.oil.cleanup.cleanup.Cleanup" title="adios_db.models.oil.cleanup.cleanup.Cleanup"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cleanup</span></code></a></p>
 <p>sets the unit type for the cut fractions, based on the distillation type</p>
 <dl class="py attribute">
@@ -297,8 +297,72 @@ if something is wrong, but can not be cleaned up, flag is False</p>
 </dd></dl>
 
 </section>
-<section id="adios-db-models-oil-cleanup-metadata-module">
-<h2>adios_db.models.oil.cleanup.metadata module<a class="headerlink" href="#adios-db-models-oil-cleanup-metadata-module" title="Link to this heading"></a></h2>
+<section id="module-adios_db.models.oil.cleanup.metadata">
+<span id="adios-db-models-oil-cleanup-metadata-module"></span><h2>adios_db.models.oil.cleanup.metadata module<a class="headerlink" href="#module-adios_db.models.oil.cleanup.metadata" title="Link to this heading"></a></h2>
+<p>cleanups of the metadata</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="adios_db.models.oil.cleanup.metadata.NormalizeMetadata">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">adios_db.models.oil.cleanup.metadata.</span></span><span class="sig-name descname"><span class="pre">NormalizeMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.metadata.NormalizeMetadata" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#adios_db.models.oil.cleanup.cleanup.Cleanup" title="adios_db.models.oil.cleanup.cleanup.Cleanup"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cleanup</span></code></a></p>
+<p>Normalizes the meta-data:
+Makes things case consistent, etc.</p>
+<p>So far:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Normalize product type</p></li>
+<li><p>set sigfigs on API</p></li>
+</ul>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="adios_db.models.oil.cleanup.metadata.NormalizeMetadata.ID">
+<span class="sig-name descname"><span class="pre">ID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'001'</span></em><a class="headerlink" href="#adios_db.models.oil.cleanup.metadata.NormalizeMetadata.ID" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.oil.cleanup.metadata.NormalizeMetadata.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.metadata.NormalizeMetadata.check" title="Link to this definition"></a></dt>
+<dd><p>checks to see if there is something to fix</p>
+<p>returns: flag, msg</p>
+<p>if nothing is needed, flag is None
+if something can be cleaned up, flag is True
+if something is wrong, but can not be cleaned up, flag is False</p>
+<p>fixme: – maybe cleanup and validation should be better integrated?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.oil.cleanup.metadata.NormalizeMetadata.check_for_valid_api">
+<span class="sig-name descname"><span class="pre">check_for_valid_api</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.metadata.NormalizeMetadata.check_for_valid_api" title="Link to this definition"></a></dt>
+<dd><p>Check is the API value is already valid</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.oil.cleanup.metadata.NormalizeMetadata.cleanup">
+<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.metadata.NormalizeMetadata.cleanup" title="Link to this definition"></a></dt>
+<dd><p>run this particular cleanup option</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>oil</strong> – an Oil object to act on</p>
+</dd>
+</dl>
+<p># :param do_it=False: flag to tell the cleanup to do its thing.
+#                     If False, the method returns a message. If True,
+#                     the action is taken, and the Oil object is altered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a message of what could be done, or what was done.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="adios_db.models.oil.cleanup.metadata.NormalizeMetadata.find_density_at_60F">
+<span class="sig-name descname"><span class="pre">find_density_at_60F</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#adios_db.models.oil.cleanup.metadata.NormalizeMetadata.find_density_at_60F" title="Link to this definition"></a></dt>
+<dd><p>Returns the density (in kg/m3)</p>
+<p>It will interpolate and extrapolate as needed</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
