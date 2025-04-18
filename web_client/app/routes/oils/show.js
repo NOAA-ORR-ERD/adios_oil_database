@@ -14,6 +14,7 @@ export default class OilsShowRoute extends ApplicationRoute {
     setupController(controller, model) {
         super.setupController(controller, model);
 
+        controller.set('configs', this.models.configs);
         controller.set('labels', this.models.labels);
         controller.set('productTypes', this.models.productTypes);
         controller.set('capabilities', this.models.capabilities);

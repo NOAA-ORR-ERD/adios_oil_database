@@ -85,10 +85,12 @@ td:empty::after{
 .status-error {
   color: $red;
 }
+
 .reference-height {
   height: 88px;
   overflow: auto;
 }
+
 .reference-span {
   white-space: pre-wrap;
   overflow-y: scroll; 
@@ -96,7 +98,12 @@ td:empty::after{
   width: 100%;
   height: 88px;
 }
+
 .reference-textarea {
+  width: 100%;
+}
+
+.attachment-comments-textarea {
   width: 100%;
 }
 

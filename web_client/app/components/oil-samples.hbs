@@ -6,7 +6,7 @@
 
   {{! First we render our tab navigation items }}
   <BsNav @type="tabs" role="tablist" as |nav|>
-    {{#each this.navTabProperties as |props idx|}}
+    {{#each this.subsampleNavTabProperties as |props idx|}}
       <nav.item @active={{eq tab.activeId props.id }} role="presentation">
         {{#if (eq tab.activeId props.id) }}
           <a role="tab" class="nav-link active" aria-selected="{{eq tab.activeId props.id }}"
@@ -55,6 +55,48 @@
         {{/if}}
       </nav.item>
     {{/each}}
+
+    {{! The "extra" tabs are associated to the oil, }}
+    {{! but are not subsample data (e.g. attachments) }}
+    {{#each this.extraNavTabProperties as |props idx|}}
+      <nav.item @active={{eq tab.activeId props.id }} role="presentation">
+        {{#if (eq tab.activeId props.id) }}
+          <a role="tab" class="nav-link active" aria-selected="{{eq tab.activeId props.id }}"
+            href={{props.href}}
+            onclick={{fn tab.select props.id}}
+           >
+            {{#if @editable}}
+              {{! Here, we only use the input control to match the styling }}
+              {{! of the other tabs.  We will not change the tab name . }}
+              <Input
+                class="p-1 overflow-hidden bg-transparent border"
+                @value={{props.short_name}}
+                disabled
+              />
+            {{else}}
+              {{props.short_name}}
+            {{/if}}
+          </a>
+        {{else}}
+          <a role="tab" class="nav-link" aria-selected="{{eq tab.activeId props.id }}"
+            href={{props.href}}
+            onclick={{fn tab.select props.id}}
+           >
+            {{#if @editable}}
+              {{! Here, we only use the input control to match the styling }}
+              {{! of the other tabs.  We will not change the tab name . }}
+              <Input
+                class="p-1 overflow-hidden bg-transparent border"
+                @value={{props.short_name}}
+                disabled
+              />
+            {{else}}
+              {{props.short_name}}
+            {{/if}}
+          </a>
+        {{/if}}
+      </nav.item>
+    {{/each}}
     
     {{#if @editable}}
       <TabNav::AddSample
@@ -67,12 +109,13 @@
 
   {{! Now we render our tab panes }}
   <div class="tab-content">
-    {{#each this.tabPaneProperties as |props idx|}}
+    {{#each this.subsampleTabPaneProperties as |props idx|}}
       <tab.pane @id={{props.id}} @title={{props.short_name}} >
 
         <TabPane::SubSample
           @oil={{@oil}}
           @store={{@oil.store}}
+          @webApi={{@webApi}}
           @editable={{@editable}}
           @submit={{@submit}}
           @sampleTab={{@sampleTab}}
@@ -85,5 +128,18 @@
 
       </tab.pane>
     {{/each}}
+
+    {{! The "extra" tab panes are tab panes associated to the oil, }}
+    {{! but are not subsample data (e.g. attachments) }}
+    {{#each this.extraTabPaneProperties as |props|}}
+      <tab.pane @id={{props.id}} @title={{props.label}}>
+        {{component props.componentName
+          oil=@oil
+          store=@store
+          webApi=@webApi
+          editable=@editable}}
+      </tab.pane>
+    {{/each}}
+
   </div>
 </BsTab>

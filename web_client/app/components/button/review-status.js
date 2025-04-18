@@ -30,7 +30,6 @@ export default class ButtonReviewStatus extends Component {
             // We don't have a valid value for review status.  Use default
             this.reviewStatus = 'Not Reviewed';
         }
-        console.log('ButtonReviewStatus.constructor()...');
     }
 
     get reviewStatusProperties() {

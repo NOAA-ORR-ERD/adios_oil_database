@@ -138,6 +138,10 @@ def main(_global_config, **settings):
     from .views import oil
     config.add_cornice_service(oil.oil_api)
 
+    from .views import attachment
+    config.add_cornice_service(attachment.attachment_api)
+    print(f'attachment_api: {attachment.attachment_api}')
+
     from .views.label import label_api
     config.add_cornice_service(label_api)
 
