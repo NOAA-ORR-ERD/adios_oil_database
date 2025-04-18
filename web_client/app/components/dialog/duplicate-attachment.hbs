@@ -1,0 +1,47 @@
+<BsModal @onSubmit={{this.submitForm}}
+         @onHidden={{this.closeForm}}
+         as |Modal|>
+  <Modal.header>
+    <h5 class="modal-title" id="duplicateAttachmentDialogLabel">
+      Attachment File Name Exists
+    </h5>
+  </Modal.header>
+  <Modal.body>
+    <div class="form">
+
+      <div class="d-flex justify-content-center">
+        <strong>
+          You tried saving an attachment with a name that already exists
+          for this oil record.
+          You may rename the attachment here, or decide to overwrite the
+          existing attachment.
+          <br><br>
+          To overwrite, simply keep the name the same, and press "OK"
+        </strong>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+
+          <Input @type="text" class="form-control bg-transparent border"
+                 title="Attachment Name"
+                 @value={{this.attachmentName}}
+                 {{on "change" this.updateAttachmentName}}
+                 {{on "keypress" this.updateAttachmentName}}
+                 {{on "focusout" this.updateAttachmentName}}
+          />
+
+        </div>
+      </div>
+
+    </div>
+  </Modal.body>
+  <Modal.footer as |footer|>
+    <BsButton @onClick={{Modal.close}} @type="secondary">Cancel</BsButton>
+    <BsButton @onClick={{Modal.submit}} @type="primary"
+              {{create-ref "okButton"}}
+    >
+      OK
+    </BsButton>
+  </Modal.footer>
+</BsModal>

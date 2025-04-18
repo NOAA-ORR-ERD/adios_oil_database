@@ -1,0 +1,143 @@
+<div class="text-center">
+  <h4>File Attachments</h4>
+
+  {{#if @editable}}
+
+    {{#let (file-queue name="attachments" onFileAdded=this.submitAttachmentForUpload)
+      as |queue|}}
+
+      <FileDropzone
+        @queue={{queue}}
+        @filter={{this.validateFile}}
+        as |dropzone|
+      >
+        {{#if dropzone.active}}
+          Drop to upload
+        {{else if queue.files.length}}
+          Uploading {{queue.files.length}} files. ({{queue.progress}}%)
+        {{else if dropzone.supported}}
+          Drag and drop attachments here to upload them
+        {{/if}}
+
+        <table class="table table-hover">
+          <thead aria-controls="ift-tbody">
+            <tr>
+              <th scope="col">File Name</th>
+              {{!-- <th scope="col">Content Type</th> --}}
+              <th scope="col">Comments</th>
+              <th scope="col" class="col-1">Size</th>
+
+              {{! these controls are not implemented at all }}
+              {{! these controls are not implemented at all }}
+              {{! these controls are not implemented at all }}
+              {{!--
+              <td class="border-0 edit-table-button-column"
+                  title="Add a new attachment">
+                <button type="button" {{queue.selectFile filter=this.validateFile}}
+                  class="btn btn-outline-dark btn-sm p-0 border-0">
+                  <FaIcon @icon="plus" />
+                </button>
+              </td>
+               --}}
+            </tr>
+          </thead>
+
+          <tbody>
+            {{#each this.attachmentList as |attachment index|}}
+              <tr>
+                <td>
+                    <a target="_blank"
+                      href="{{@webApi}}/attachments/{{@oil.oil_id}}/{{attachment.filename}}" rel="noopener noreferrer"
+                    >
+                      {{attachment.filename}}
+                    </a>
+                </td>
+
+                {{!-- <td>{{attachment.contentType}}</td> --}}
+
+                <td>
+                  <Textarea
+                    class="p-1 large-text-container overflow-auto bg-transparent border"
+                    @value={{attachment.comments}}
+                    placeholder="Enter Comments"
+                    title="Comments"
+                    rows="1"
+                    disabled={{not @editable}}
+                    {{on "change" (fn this.updateAttachment index)}}
+                  />
+                </td>
+
+                <td>{{attachment.length}}</td>
+
+                <td class="border-0 edit-table-button-column"
+                    title="Delete attachment">
+                  <button type="button"
+                    {{on "click" (fn this.deleteAttachment index)}}
+                    class="btn btn-outline-danger btn-sm p-0 border-0">
+                    <FaIcon @icon="times" />
+                  </button>
+                </td>
+
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
+      </FileDropzone>
+
+    {{/let}}
+
+  {{else}}
+
+    <table class="table table-hover">
+      <thead aria-controls="ift-tbody">
+        <tr>
+          <th scope="col">File Name</th>
+          {{!-- <th scope="col">Content Type</th> --}}
+          <th scope="col">Comments</th>
+          <th scope="col" class="col-1">Size</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each this.attachmentList as |attachment index|}}
+          <tr>
+            <td>
+                <a target="_blank"
+                  href="{{@webApi}}/attachments/{{@oil.oil_id}}/{{attachment.filename}}" rel="noopener noreferrer"
+                >
+                  {{attachment.filename}}
+                </a>
+            </td>
+            {{!--  <td>{{attachment.contentType}}</td> --}}
+
+            <td>
+              <Textarea
+                class="p-1 large-text-container overflow-auto bg-transparent border"
+                @value={{attachment.comments}}
+                placeholder="Enter Comments"
+                title="Comments"
+                rows="1"
+                disabled={{not @editable}}
+              />
+            </td>
+
+            <td>{{attachment.length}}</td>
+            <td hidden></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  {{/if}}
+
+
+</div>
+
+{{#if this.dialogVisible}}
+  <Dialog::DuplicateAttachment
+    @attachment={{this.duplicateAttachment}}
+    @submit={{this.submit_dialog}}
+    @close={{this.close_dialog}}
+  />
+{{/if}}

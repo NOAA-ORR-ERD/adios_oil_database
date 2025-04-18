@@ -6,7 +6,7 @@ import os
 from unittest import TestCase
 from webtest import TestApp
 
-from adios_db.test.test_session.test_session import restore_test_db
+from adios_db.test.test_session.session_test_base import restore_test_db
 
 from adios_db_api import main
 

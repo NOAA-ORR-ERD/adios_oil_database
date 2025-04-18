@@ -134,11 +134,11 @@ class OilTests(OilTestBase):
 
             for k in ('name',
                       'source_id',
-#                      'location',
+                      # 'location',
                       'reference',
                       'product_type',
                       'API'):
-                print("checking:", oil['data']['attributes']['oil_id'] )
+                print("checking:", oil['data']['attributes']['oil_id'])
                 if oil['data']['attributes']['metadata']['product_type'] != "Refinery Intermediate":
                     assert k in oil['data']['attributes']['metadata']
 

@@ -84,7 +84,9 @@ def test_get_kinematic_viscosity_data_defaults():
 
 
 def test_get_dynamic_viscosity_data_multiple_shear_rates_default():
-    oil = Oil.from_file(EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json")
+    oil = Oil.from_file(
+        EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json"
+    )
     dv = get_dynamic_viscosity_data(oil)
 
     print(oil.oil_id)
@@ -100,8 +102,9 @@ def test_get_dynamic_viscosity_data_multiple_shear_rates_default():
 
 
 def test_get_dynamic_viscosity_data_multiple_shear_rates_set():
-    oil = Oil.from_file(EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json")
-
+    oil = Oil.from_file(
+        EXAMPLE_DATA_DIR / "Record_with_viscosity_at_two_shear_rates.json"
+    )
     dv = get_dynamic_viscosity_data(oil, shear_rate=100)
 
     print(oil.oil_id)
@@ -135,14 +138,15 @@ def test_get_kinematic_viscosity_data_no_data():
     assert kv == []
 
 
-
 # def test_get_kinematic_viscosity_data_from_dynamic():
 #     """
 #     There seemed to be an error with computing the kinematic
 #     from the dynamic viscosity
 
 #     """
-#     oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
+#     oil = Oil.from_file(
+#         EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json'
+#     )
 #     kv = get_kinematic_viscosity_data(oil)
 
 #     print(kv)
@@ -154,9 +158,11 @@ def test_convert_dvisc_to_kvisc():
     make sure the conversion is correct
 
     """
-    oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
+    oil = Oil.from_file(
+        EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json'
+    )
 
-    dvis = get_dynamic_viscosity_data(oil)
+    # dvis = get_dynamic_viscosity_data(oil)
 
     dvis = [(0.043000000000000003, 275.15),  # 2C
             (0.012, 288.15),  # 15C
@@ -164,11 +170,10 @@ def test_convert_dvisc_to_kvisc():
     print(dvis)
 
     print(get_density_data(oil, units='kg/m^3', temp_units="K"))
-    density = Density(oil)
-    density = Density([(885.0, 288.15)]) # 15C
+    # density = Density(oil)
+    density = Density([(885.0, 288.15)])  # 15C
 
-
-#    [(980.0, 288.15), (990.0, 273.15)])
+    # [(980.0, 288.15), (990.0, 273.15)])
 
     # 0.885, "unit": "g/cm^3",
     print(density.at_temp(15, 'C'))
@@ -183,19 +188,23 @@ def test_convert_dvisc_to_kvisc():
         kv2 = dv[0] / density.at_temp(dv[1], 'K')
         assert kv[0] == kv2
 
+
 # @pytest.mark.xfail
 def test_convert_dvisc_to_kvisc_from_record():
     """
     This is bit of an integration test
 
-    For a record with only dynamic viscosity data, do we get the right kinematic viscosity?
+    For a record with only dynamic viscosity data, do we get the
+    right kinematic viscosity?
 
     from the record::
 
     raw_dvis=[(43.0, 275.15), (5.4, 323.15)]
 
     """
-    oil = Oil.from_file(EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json')
+    oil = Oil.from_file(
+        EXAMPLE_DATA_DIR / 'record_with_only_dynamic_viscosity.json'
+    )
 
     raw_dvis = get_dynamic_viscosity_data(oil, units="cP")
     print(f"{raw_dvis=}")
@@ -423,9 +432,8 @@ class TestKinematicViscosity:
 
         There's a default if there's only one data point
         """
-        with pytest.raises(TypeError, match="Unable to estimate kv2") as err:
-            kv2 = KinematicViscosity.default_kv2(899.0, "Refined Product NOS")
-
+        with pytest.raises(TypeError, match="Unable to estimate kv2"):
+            _kv2 = KinematicViscosity.default_kv2(899.0, "Refined Product NOS")
 
     def test_set_kv2(self):
         """
@@ -449,10 +457,11 @@ class TestKinematicViscosity:
                 (0.0054, 323.15),  # 50C
                 ]
 
-        # not specified -- uses the default default :-), requires either multiple
-        # viscosities or k_v2 supplied, should fail with one viscosity and no k_v2
+        # not specified -- uses the default default :-),
+        # requires either multiple viscosities or k_v2 supplied,
+        # should fail with one viscosity and no k_v2
         with pytest.raises(ValueError):
-            kv1 = KinematicViscosity(data)
+            _kv1 = KinematicViscosity(data)
         kv1 = KinematicViscosity(data2)
         kv2 = KinematicViscosity(data, k_v2=3000.0)
 
@@ -467,7 +476,7 @@ class TestKinematicViscosity:
         print(f"{kv2._k_v2=}")
         print(f"{kv2._visc_A=}")
 
-        #assert kv1._k_v2 == KinematicViscosity.DEFAULT_KV2
+        # assert kv1._k_v2 == KinematicViscosity.DEFAULT_KV2
         assert isclose(kv1._k_v2, 3843.341, rel_tol=1.e-4)
         assert kv2._k_v2 == 3000.0
 
@@ -496,22 +505,23 @@ class TestKinematicViscosity:
         kv = KinematicViscosity(oil)
 
         print(kv._k_v2)
-        #assert kv._k_v2 == 6200.0 # switched default
+        # assert kv._k_v2 == 6200.0 # switched default
         assert isclose(kv._k_v2, 3792.73, rel_tol=1e-4)
-
 
     def test_multiple_vicosities_crude(self):
         """
-        if there's there's multiple viscosities, it shouldn't use any of the defaults
+        if there's there's multiple viscosities, it shouldn't use any of the
+        defaults
         """
         oil = Oil.from_file(EXAMPLE_DATA_DIR / 'hoops-blend_EX00026.json')
 
         kv = KinematicViscosity(oil)
 
         print(kv._k_v2)
-        # This has multiple data points, it should not use any of the default values.
-        #for kv_2 in KinematicViscosity.default_kvs.values():
-            #assert kv._k_v2 != kv_2
+        # This has multiple data points, it should not use any of the
+        # default values.
+        # for kv_2 in KinematicViscosity.default_kvs.values():
+        #     assert kv._k_v2 != kv_2
 
         density = Density(oil).at_temp(288.15)  # 15C
         assert kv._k_v2 != kv.default_kv2(density, oil.metadata.product_type)
@@ -529,7 +539,8 @@ class TestKinematicViscosity:
 
         print(kv._k_v2)
 
-        #assert kv._k_v2 == KinematicViscosity.default_kvs[oil.metadata.product_type]
+        # assert kv._k_v2 == (KinematicViscosity
+        #                     .default_kvs[oil.metadata.product_type])
         density = Density(oil).at_temp(288.15)  # 15C
         assert kv._k_v2 == kv.default_kv2(density, oil.metadata.product_type)
 
@@ -539,7 +550,6 @@ class TestKinematicViscosity:
 
         # eyeballed off plot -- looks about right
         assert kv2 == 11394.381999999983
-
 
         density = 720
         kv2 = self.kv.default_kv2(density, 'Condensate')
@@ -553,12 +563,10 @@ class TestKinematicViscosity:
         # eyeballed off plot -- looks about right
         assert kv2 == 6615.390999999996
 
-
         density = 720
         kv2 = self.kv.default_kv2(density, "Distillate Fuel Oil")
 
         assert kv2 == 0
-
 
 
 def test_get_frac_recovered():
