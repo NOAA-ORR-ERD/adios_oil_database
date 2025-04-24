@@ -90,7 +90,7 @@ export default class TabPaneAttachments extends Component {
       this.getAttachmentList();
     })
     .catch(error => {
-      console.error('Error deleting resource:', error);
+      console.error('Error deleting attachment:', error);
     });
   }
 

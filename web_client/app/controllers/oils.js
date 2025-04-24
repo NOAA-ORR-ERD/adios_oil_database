@@ -137,13 +137,61 @@ export default class OilsController extends Controller {
 
     @action
     deleteOil(oil) {
+        // This is the current oil route in the browser
         let current_route = this.get('target');
 
+        this.deleteOilAttachments(oil);
+
+        // This block deletes the oil record.
         oil.deleteRecord();
         oil.save().then(function(result) {
             result.unloadRecord();
             current_route.transitionTo('oils.index');
         }.bind(this));
+    }
+
+    @action
+    async deleteOilAttachments(oil) {
+        try {
+            // our attachments API is at the same place as the oils.
+            let host = this.store.adapterFor('oil').host;
+            const response = await fetch(`${host}/attachments/${oil.oil_id}/`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            let attachmentList = await response.json();
+
+            attachmentList.forEach(i => {
+                this.deleteOilAttachment(host, oil.oil_id, i.filename);
+            });
+        }
+        catch (error) {
+            console.error('Error deleting attachments:', error);
+        }
+    }
+
+    @action
+    deleteOilAttachment(host, oil_id, filename) {
+        const url = `${host}/attachments/${oil_id}/${filename}`;
+        const options = {
+            method: 'DELETE',
+        };
+
+        fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Successfully deleted attachment: ', data);
+        })
+        .catch(error => {
+            console.error('Error deleting attachment:', error);
+        });
     }
 
     @action
