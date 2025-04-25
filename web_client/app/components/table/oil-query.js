@@ -23,6 +23,8 @@ export default class NewOilQuery extends Component {
     @tracked selectedType;
     @tracked selectedLabels;
     @tracked gnomeSuitable;
+    
+    @tracked queryTextSelectedRange;
 
     @tracked table;
     page = 0;
@@ -221,17 +223,63 @@ export default class NewOilQuery extends Component {
         }
     }).restartable()) fetchRecords;
 
+    @action onKeywordSelectionChange(event) {
+        // This is to capture any text
+        this.queryTextSelectedRange = [event.target.selectionStart,
+                                       event.target.selectionEnd];
+    }
+
     @action onKeywordChange(event) {
+        // get our position/selection information
+        let rng = this.queryTextSelectedRange;
+        //console.log(`onKeywordChange(): ${event.inputType}: rng = ${rng}`);
+
         // this is to handle the events coming from the keyword text entry
-        if (event.inputType === 'deleteContentBackward') {
-            this.q = '';
+        if (event.inputType === 'deleteContentForward') {
+            if (rng && rng.length > 0 && rng[0] != rng[1]) {
+                this.q = this.q.slice(0, rng[0]) + this.q.slice(rng[1], this.q.length);
+            }
+            else if (rng) {
+                this.q = this.q.slice(0, rng[0]) + this.q.slice(rng[1] + 1, this.q.length);
+            }
+            else {
+                this.q = this.q.slice(1, this.q.length);
+            }
+            
+        }
+        else if (event.inputType === 'deleteContentBackward') {
+            if (rng && rng.length > 0 && rng[0] != rng[1]) {
+                this.q = this.q.slice(0, rng[0]) + this.q.slice(rng[1], this.q.length);
+            }
+            else if (rng) {
+                this.q = this.q.slice(0, rng[0] - 1) + this.q.slice(rng[1], this.q.length);
+            }
+            else {
+                this.q = this.q.slice(0, -1);
+            }
+        }
+        else if (event.inputType === 'insertText') {
+            if (rng && rng.length > 0 && rng[0] != rng[1]) {
+                this.q = this.q.slice(0, rng[0]) + event.data + this.q.slice(rng[1], this.q.length);
+            }
+            else if (rng) {
+                this.q = this.q.slice(0, rng[0]) + event.data + this.q.slice(rng[1], this.q.length);
+            }
+            else {
+                this.q += event.data;
+            }
+
         }
         else if (event.inputType === 'insertFromPaste') {
             this.q = event.target.value
         }
-        else if (event.inputType === 'insertText') {
-            this.q += event.data;
+        else if (event.inputType === 'historyUndo') {
+            this.q = event.target.value
         }
+        else if (event.inputType === 'historyRedo') {
+            this.q = event.target.value
+        }
+        
 
         this.onSearchChange();
     }
