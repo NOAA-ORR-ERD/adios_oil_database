@@ -3,7 +3,7 @@
   "template": {
       "viscosity": {
           "label": "Viscosity",
-          "dataType": "value-unit",
+          "dataType": "range-value-unit",
           "unit": "cSt",
           "unit_type": "kinematicviscosity",
           "precision": 3
