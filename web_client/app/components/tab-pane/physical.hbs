@@ -34,11 +34,16 @@
 
   <div class="row">
     <div class="col-md-6 col-lg-4">
-      <Table::Density
+      {{log @oil}}
+      <Common::ListPropertiesTable
         @oil={{@oil}}
+        @store={{@store}}
         @editable={{@editable}}
         @submit={{@submit}}
-        class="row"/>
+        @tableTitle="Density"
+        @propertyName="physical_properties.densities"
+      />
+
     </div>
 
     <div class="col-md-6 col-lg-4">
