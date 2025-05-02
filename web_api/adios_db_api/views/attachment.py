@@ -142,12 +142,11 @@ def update_attachment(request):
 
 
 def update_attachment_fields(request, oil_id, filename, comments):
-    attachments = request.adb_session.attachments
-
-    if comments != '':
-        attachments.replace_fields(oil_id, filename, comments=comments)
-    else:
-        attachments.replace_fields(oil_id, filename)
+    request.adb_session.attachments.replace_fields(
+        oil_id,
+        filename,
+        comments=comments,
+    )
 
 
 def update_attachment_file(request, oil_id, filename, comments):
@@ -185,6 +184,7 @@ def validate_post_put_params(request, req_type):
     logger.info(f'{req_type_lu[req_type.lower()]} /attachments: '
                 f'{oil_id=}, {filename=}, {content_type=}, '
                 f'filesize={len(request.body)}, '
+                f'{comments=}, '
                 f'{fields_only=}')
 
     # look up the oil to see if we are dealing with a good request

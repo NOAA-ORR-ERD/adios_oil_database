@@ -18,6 +18,7 @@ from gridfs import GridFS
 
 from ..models.oil.product_type import types_to_labels
 
+
 # The MIME type of an XLSX file could be missing on our docker images,
 # so we manually add it here.
 mimetypes.add_type(
@@ -315,9 +316,14 @@ class Attachments():
         if oil_id is not None and file_path is not None:
             filename = self.attachment_file_path(oil_id, file_path)
 
+            set_items = {k: v for k, v in kwargs.items()
+                         if v is not None and v != ''}
+            unset_items = {k: v for k, v in kwargs.items()
+                           if v is None or v == ''}
+
             return self._files.update_one(
                 {'filename': filename},
-                {'$set': kwargs}
+                {'$set': set_items, '$unset': unset_items},
             )
         else:
             return None
@@ -598,13 +604,15 @@ class Session():
         if labels is None:
             labels = []
         elif isinstance(labels, str):
-            labels = [l.strip() for l in labels.split(',')]
+            labels = [label.strip() for label in labels.split(',')]
 
         if len(labels) == 1:
             return {'metadata.labels': {'$in': labels}}
         elif len(labels) > 1:
-            return self._make_inclusive([{'metadata.labels': {'$in': [l]}}
-                                        for l in labels])
+            return self._make_inclusive(
+                [{'metadata.labels': {'$in': [label]}}
+                 for label in labels]
+            )
         else:
             return {}
 
