@@ -19,12 +19,29 @@
   <div id="scalar-range-dialog" class="card">
     {{!-- dialog header --}}
     <h5 class="card-header text-center p-1">
-      {{@valueTitle}} ({{this.beaUnit}})
+      {{@valueTitle}} ({{this.unit}})
     </h5>
 
     {{!-- dialog body --}}
     <div class="card-body p-1">
       {{!-- range input --}}
+
+      <div class="row d-flex align-items-center mx-2">
+
+        <div class="col-6 p-1">
+          <select name="unit" id="unit"
+                  {{on "change" this.updateUnit}}
+          >
+            {{#each this.primaryUnitNames as |primaryName|}}
+              <option value={{get primaryName 0}} selected={{get primaryName 1}}>
+                {{get primaryName 0}}
+              </option>
+            {{/each}}
+          </select>
+        </div>
+
+      </div>
+
       <div class="row d-flex align-items-center mx-2">
         <div class="col-1 p-0">
           <Input

@@ -57,7 +57,6 @@
                         @submit={{@submit}}
                       />
                     {{else}}
-                      {{log value.precision}}
                       {{value-unit (get row attr) value.precision}}
                     {{/if}}
                   {{else if (eq value.dataType "string")}}
