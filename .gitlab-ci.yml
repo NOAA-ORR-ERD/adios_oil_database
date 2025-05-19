@@ -24,7 +24,8 @@ stages:
 
 test_develop:
   stage: test
-  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
+#  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   tags:
     - docker
     - linux
@@ -62,7 +63,7 @@ test_develop:
     - mkdir /var/run/mongodb
 
     # We can start the docker container manually like this:
-    #   docker run --volume $(pwd)/git_repos/oil_database:/oil_database -it registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python3.11 /bin/bash
+    #   docker run --volume $(pwd)/git_repos/oil_database:/oil_database -it registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python3.11 /bin/bash
     
     - mongod --config mongo_config_test.yml &
     
@@ -724,7 +725,8 @@ stop_proxy_public:
 
 init_git_repo_on_stage:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
+  # image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   
   environment:
@@ -743,7 +745,7 @@ init_git_repo_on_stage:
 
 sync_with_git_review:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   environment:
@@ -761,7 +763,7 @@ sync_with_git_review:
 
 sync_with_git_prod:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   environment:
     name: stage
@@ -778,7 +780,7 @@ sync_with_git_prod:
 
 pull_remote_under_review_changes:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   environment:
     name: stage
@@ -795,7 +797,7 @@ pull_remote_under_review_changes:
 
 drop_db_volume_public:
   stage: maintenance
-  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
   environment:
     name: public
