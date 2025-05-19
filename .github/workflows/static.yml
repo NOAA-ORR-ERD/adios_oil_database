@@ -36,8 +36,11 @@ jobs:
       - name: Build_Docs
         shell: bash -l {0}
         run: |
-            pip install sphinx sphinx_rtd_theme
-            cd adios_db/Documentation/API_docs/
+            cd adios_db
+            pip install -r docs_requirements.txt
+            pip install ./
+            cd Documentation/API_docs/
+            ./build_api_docs.sh
             make html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
