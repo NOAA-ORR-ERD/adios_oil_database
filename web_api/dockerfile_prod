@@ -2,7 +2,8 @@
 #
 ARG PYTHON_VER
 
-FROM registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+# FROM registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+FROM registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
 
 ARG KEY_FILE
 ARG PYTHON_VER
