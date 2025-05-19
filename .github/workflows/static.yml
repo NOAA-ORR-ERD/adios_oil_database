@@ -38,7 +38,7 @@ jobs:
         run: |
             cd adios_db
             pip install -r docs_requirements.txt
-            pip install ./
+            pip install -e ./
             cd Documentation/API_docs/
             ./build_api_docs.sh
             make html
