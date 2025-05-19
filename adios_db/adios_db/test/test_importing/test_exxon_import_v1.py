@@ -25,6 +25,7 @@ from adios_db.data_sources.exxon_assays import (ExxonDataReader, ExxonMapper,
 # Pass the --import command line option if you want these to run.
 pytestmark = pytest.mark.importing
 
+output_dir = Path(__file__).resolve().parent / "output_dir"
 example_dir = Path(__file__).resolve().parent / "example_data"
 example_index = example_dir / "index.txt"
 
@@ -103,7 +104,7 @@ def test_full_round_trip():
 
     print(oil.oil_id)
 
-    filename = example_dir / "ExampleOutput.json"
+    filename = output_dir / "ExampleOutput.json"
     oil.to_file(filename)
 
     oil2 = Oil.from_file(filename)
