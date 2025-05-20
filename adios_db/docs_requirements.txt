@@ -11,3 +11,5 @@ openpyxl
 
 sphinx
 sphinx_rtd_theme
+# for highlighting ipython code / examples
+ipython
