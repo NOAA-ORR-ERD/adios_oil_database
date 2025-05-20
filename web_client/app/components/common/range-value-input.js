@@ -34,6 +34,10 @@ export default class RangeValueInput extends BaseComponent {
         return true;
     }
 
+    get unit() {
+        return (this.inputValue || {})["unit"] || this.args.valueUnit;
+    }
+
     get editable() {
         return this.args.editable;
     }

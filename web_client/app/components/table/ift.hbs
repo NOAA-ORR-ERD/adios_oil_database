@@ -44,13 +44,18 @@
                   {{/if}}
                 </td>
                 <td>
-                  <Common::ValueUnitInput
-                    @valueObject={{get (set-attr-if-none ift "tension" (hash)) "tension"}}
-                    @valueUnit={{"N/m"}}
-                    @valuePrecision={{3}}
-                    @editable={{@editable}}
-                    @submit={{fn this.updateAttr index "tension"}}
-                  />
+                  {{#if @editable}}
+                    <Common::RangeValueInput
+                      @valueTitle="Tension"
+                      @valueObject={{get (set-attr-if-none ift "tension" (hash)) "tension"}}
+                      @valueUnit={{"N/m"}}
+                      @valuePrecision={{3}}
+                      @editable={{@editable}}
+                      @submit={{fn this.updateAttr index "tension"}}
+                    />
+                  {{else}}
+                    {{value-unit ift.tension 3}}
+                  {{/if}}
                 </td>
                 <td>
                   <Common::ValueUnitInput

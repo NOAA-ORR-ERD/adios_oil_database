@@ -6,11 +6,17 @@ import { convertUnit } from 'adios-db/helpers/convert-unit';
 import { valueUnit } from 'adios-db/helpers/value-unit';
 import $ from 'jquery';
 
+import Nucos from 'nucos/nucos';
+
 const ESC_KEY = 27;
 
 
 export default class RangeValueDialog extends Component {
     @tracked isInterval = false;
+
+    @tracked unit;
+    @tracked unitType;
+    @tracked compatibleConverters;
 
     @tracked dialogValue = "";
     @tracked dialogMinValue = "";
@@ -26,8 +32,16 @@ export default class RangeValueDialog extends Component {
 
         this.numberStep = 1/Math.pow(10, this.args.valuePrecision);
 
-        let unitObj = {"unit": this.args.valueUnit};
-        this.beaUnit = valueUnitUnit([unitObj]);
+        if (this.args.valueUnit.trim().length > 0) {
+            this.unit = this.args.valueUnit.trim();
+        }
+        else {
+            console.err("No unit or default unit defined!");
+        }
+
+        this.generateCompatibleConverters();
+
+        this.unitType = this.compatibleConverters[0];
 
         if(this.sourceValue)
         {
@@ -54,8 +68,49 @@ export default class RangeValueDialog extends Component {
         this.isShowingModal = true;
     }
 
+    generateCompatibleConverters() {
+        if (this.unit) {
+            this.compatibleConverters = Object.values(Nucos.Converters).filter(c => {
+                return c.Synonyms.hasOwnProperty(
+                    (this.unit || '').toLowerCase().replace(/[\s.]/g, '')
+                );
+            });
+        }
+        else {
+            this.compatibleConverters = Object.values(Nucos.Converters);
+        }
+    }
+
     get argNames() {
         return Object.keys(this.args);
+    }
+
+    get primaryUnitNames() {
+        if (this.unitType) {
+            let selected = Object.keys(this.unitType.PrimaryUnitNames).map(i => {
+                return i === this.unitType.Synonyms[this.unit.toLowerCase().replace(/[\s.]/g, '')]
+            });
+
+            let unitNames = Object.values(this.unitType.PrimaryUnitNames);
+            unitNames.splice(0, 0, '');
+
+            if (selected.reduce((a, b) => a || b, false)) {
+                // There was something selected.  Prepend an unselected
+                // empty option
+                selected.splice(0, 0, false);
+            }
+            else {
+                // Nothing selected.  Prepend a selected empty option.
+                selected.splice(0, 0, true);
+            }
+
+            return unitNames.map((v, i) => {
+                return [v, selected[i]];
+            });
+        }
+        else {
+            return [];
+        }
     }
 
     // add on ESC key event listener for dialog
@@ -79,6 +134,24 @@ export default class RangeValueDialog extends Component {
         super.willDestroy();
 
         $('body').off('keyup.modal-dialog');  // eslint-disable-line ember/no-jquery
+    }
+
+    @action
+    updateUnit(event) {
+        let primaryName = Object.keys(this.unitType.PrimaryUnitNames).find(key => {
+            return this.unitType.PrimaryUnitNames[key] === event.target.value;
+        });
+
+        let value = Object.entries(this.unitType.Synonyms).filter( ([k, v]) => {
+            return (v === primaryName && k !== primaryName);
+        }).map(([k,]) => {
+            return k
+        })[0];
+
+        this.unit = value;
+
+        // invoke a new unit type list
+        this.generateCompatibleConverters();
     }
 
     @action
@@ -136,7 +209,7 @@ export default class RangeValueDialog extends Component {
         }
 
         if (closeDialog) {
-            let enteredValue = {"unit": this.args.valueUnit};
+            let enteredValue = {"unit": this.unit};
 
             if (this.isInterval) {
                 if (this.dialogMinValue !== "") {

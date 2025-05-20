@@ -17,9 +17,6 @@ export default class SelectUnitDialog extends Component {
         super(...arguments);
         this._initEscListener();
 
-
-        this.args.baseProperty.trim().length;
-        
         if (this.args.baseProperty.trim().length > 0) {
             this.unit = this.args.baseProperty.trim();
         }

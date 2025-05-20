@@ -1,0 +1,19 @@
+{
+  "id": "density.json",
+  "template": {
+      "density": {
+          "label": "Density",
+          "dataType": "range-value-unit",
+          "unit": "kg/m^3",
+          "unit_type": "density",
+          "precision": 4
+      },
+      "ref_temp": {
+          "label": "Temperature",
+          "dataType": "value-unit",
+          "unit": "C",
+          "unit_type": "temperature",
+          "precision": 3
+      }
+  }
+}
