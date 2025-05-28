@@ -1,31 +1,96 @@
+variables:
+  PYTHON_VER: '3.11'
+  CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
 
 include:
-  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
-  #- template: SAST.gitlab-ci.yml
-  #- template: DAST.gitlab-ci.yml
-
-variables:
-  PYTHON_VER: "3.11"
-  SECURE_ANALYZERS_PREFIX: "registry.gitlab.com/gitlab-org/security-products/analyzers"
-  DS_DISABLE_DIND: "true"
-  SAST_DISABLE_DIND: "true"
-  CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
-  DAST_WEBSITE: https://adios-stage.orr.noaa.gov
-  DAST_USE_AJAX_SPIDER: "true"
+  - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Do not run this job for merge requests
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "pipeline" # Do not run this job for pipelines
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      before_script:
+        - mv $ADIOS_PROD_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
+      job-name: 'Build Debug ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
+      build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
+        - KEY_FILE=./web_api/key # Path to the key file used for authentication, relative to the repository root.
+        - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
+      version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
+      image-name: 'adios-api-debug' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      dockerfile-path: ./web_api/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
+      latest: true
+  - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Do not run this job for merge requests
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "pipeline" # Do not run this job for pipelines
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      before_script:
+        - mv $ADIOS_PROD_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
+      job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
+      build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
+        - KEY_FILE=./web_api/key # Path to the key file used for authentication, relative to the repository root.
+        - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
+      version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
+      image-name: 'adios-api' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      dockerfile-path: ./web_api/dockerfile_prod # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
+      latest: true
+  - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Do not run this job for merge requests
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "pipeline" # Do not run this job for pipelines
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Build debug ADIOS client Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
+      version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
+      image-name: 'adios-client-dbg' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      dockerfile-path: ./web_client/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
+      latest: true
+  - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Do not run this job for merge requests
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "pipeline" # Do not run this job for pipelines
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Build ADIOS client Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
+      version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
+      image-name: 'adios-client' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      dockerfile-path: ./web_client/dockerfile_prod # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
+      latest: true
 
 stages:
-  - test
+  - pre-test
   - build
   - verify
   - deploy_db
   - deploy
+  - test
   - maintenance
 
-
 test_develop:
-  stage: test
+  stage: pre-test
   image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
-#  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
+  #  image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   tags:
     - docker
     - linux
@@ -39,18 +104,16 @@ test_develop:
 
     # mongod fails if the tzdata package is missing
     - echo 'tzdata tzdata/Areas select America' | debconf-set-selections
-    - echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
+    - echo 'tzdata tzdata/Zones/America select Los_Angeles' |
+      debconf-set-selections
     - DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
   script:
     # install all the requirements
     - >
-      conda install -y
-      python=$PYTHON_VER
-      --file adios_db/conda_requirements.txt
-      --file adios_db/conda_requirements_optional.txt
-      --file adios_db/conda_requirements_test.txt
-      --file web_api/conda_requirements.txt
+      conda install -y python=$PYTHON_VER --file adios_db/conda_requirements.txt
+      --file adios_db/conda_requirements_optional.txt --file
+      adios_db/conda_requirements_test.txt --file web_api/conda_requirements.txt
 
     # configure and start mongodb
 
@@ -64,9 +127,9 @@ test_develop:
 
     # We can start the docker container manually like this:
     #   docker run --volume $(pwd)/git_repos/oil_database:/oil_database -it registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python3.11 /bin/bash
-    
+
     - mongod --config mongo_config_test.yml &
-    
+
     # apt-get install -y lsof
     # lsof -nP -iTCP -sTCP:LISTEN  # see if mongod is listening
 
@@ -80,7 +143,7 @@ test_develop:
     - pip install ./
     - pytest adios_db_api/tests
 
-build_api:
+.build_api:
   stage: build
   tags:
     - build
@@ -94,22 +157,25 @@ build_api:
   before_script:
     - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key
   script:
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
+    - git clone
+      https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG --build-arg KEY_FILE="./web_api/key" --build-arg PYTHON_VER=$PYTHON_VER
+    - docker build . -f web_api/dockerfile -t $IMAGE_TAG_DBG --build-arg
+      KEY_FILE="./web_api/key" --build-arg PYTHON_VER=$PYTHON_VER
 
     # apparently there is a timeout on the docker session, so we re-login
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_DBG
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build . -f web_api/dockerfile_prod -t $IMAGE_TAG_PROD --build-arg KEY_FILE="./web_api/key" --build-arg PYTHON_VER=$PYTHON_VER
+    - docker build . -f web_api/dockerfile_prod -t $IMAGE_TAG_PROD --build-arg
+      KEY_FILE="./web_api/key" --build-arg PYTHON_VER=$PYTHON_VER
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_PROD
 
-build_client:
+.build_client:
   stage: build
   tags:
     - build
@@ -120,7 +186,8 @@ build_client:
     IMAGE_TAG_DBG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client-dbg
     IMAGE_TAG_PROD: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
   script:
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
+    - git clone
+      https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build . -f web_client/dockerfile -t $IMAGE_TAG_DBG
@@ -135,73 +202,7 @@ build_client:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG_PROD
 
-scan-api:
-  stage: verify
-  image: "$CS_ANALYZER_IMAGE"
-  allow_failure: true
-
-  variables:
-    CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-api
-    # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
-    # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
-    CLAIR_DB_IMAGE_TAG: "latest"
-    CLAIR_DB_IMAGE: "$SECURE_ANALYZERS_PREFIX/clair-vulnerabilities-db:$CLAIR_DB_IMAGE_TAG"
-    # Override the GIT_STRATEGY variable in your `.gitlab-ci.yml` file and set it to `fetch` if you want to provide a `clair-whitelist.yml`
-    # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
-    # for details
-    GIT_STRATEGY: none
-  services:
-    - name: $CLAIR_DB_IMAGE
-      alias: clair-vulnerabilities-db
-  script:
-    - /analyzer run
-  artifacts:
-    reports:
-      container_scanning: gl-container-scanning-report.json
-  dependencies: []
-  rules:
-    - if: $CONTAINER_SCANNING_DISABLED
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH &&
-        $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
-
-scan-client:
-  stage: verify
-  image: "$CS_ANALYZER_IMAGE"
-  allow_failure: true
-
-  variables:
-    CS_ANALYZER_IMAGE: $SECURE_ANALYZERS_PREFIX/klar:$CS_MAJOR_VERSION
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:adios-db-web-client
-    # By default, use the latest clair vulnerabilities database, however, allow it to be overridden here with a specific image
-    # to enable container scanning to run offline, or to provide a consistent list of vulnerabilities for integration testing purposes
-    CLAIR_DB_IMAGE_TAG: "latest"
-    CLAIR_DB_IMAGE: "$SECURE_ANALYZERS_PREFIX/clair-vulnerabilities-db:$CLAIR_DB_IMAGE_TAG"
-    # Override the GIT_STRATEGY variable in your `.gitlab-ci.yml` file and set it to `fetch` if you want to provide a `clair-whitelist.yml`
-    # file. See https://docs.gitlab.com/ee/user/application_security/container_scanning/index.html#overriding-the-container-scanning-template
-    # for details
-    GIT_STRATEGY: none
-  services:
-    - name: $CLAIR_DB_IMAGE
-      alias: clair-vulnerabilities-db
-  script:
-    - /analyzer run
-  artifacts:
-    reports:
-      container_scanning: gl-container-scanning-report.json
-  dependencies: []
-  rules:
-    - if: $CONTAINER_SCANNING_DISABLED
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH &&
-        $GITLAB_FEATURES =~ /\bcontainer_scanning\b/
-
-deploy_mongodb_stage:
+.deploy_mongodb_stage:
   stage: deploy_db
   only:
     - develop
@@ -221,27 +222,27 @@ deploy_mongodb_stage:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - >
-      docker volume inspect $DB_VOLUME >/dev/null 2>&1 ||
-      docker volume create $DB_VOLUME
+      docker volume inspect $DB_VOLUME >/dev/null 2>&1 || docker volume create
+      $DB_VOLUME
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     # The volume permissions are important here, so we need to set a user:group
     # when starting the container.
     # Right now they are set to james.makela:adios-dev so developers can manage
     # the volume external to the docker container.  We will need to change this
     # on the public server.
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network $APP_NETWORK
-      -v $DB_VOLUME:/data/db
-      --restart unless-stopped $IMAGE_TAG
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network
+      $APP_NETWORK -v $DB_VOLUME:/data/db --restart unless-stopped $IMAGE_TAG
   tags:
     - adios-stage
     - deploy
 
-stop_mongodb_stage:
+.stop_mongodb_stage:
   stage: deploy_db
   when: manual
   only:
@@ -253,12 +254,13 @@ stop_mongodb_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
 
-deploy_mongodb_public:
+.deploy_mongodb_public:
   stage: deploy_db
   only:
     - production
@@ -276,22 +278,22 @@ deploy_mongodb_public:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - >
-      docker volume inspect $DB_VOLUME >/dev/null 2>&1 ||
-      docker volume create $DB_VOLUME
+      docker volume inspect $DB_VOLUME >/dev/null 2>&1 || docker volume create
+      $DB_VOLUME
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     - >
-      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
-      -p $PORT_MAPPING
-      -v $DB_VOLUME:/data/db $IMAGE_TAG
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart
+      unless-stopped -p $PORT_MAPPING -v $DB_VOLUME:/data/db $IMAGE_TAG
   tags:
     - adios-prod
     - deploy
 
-stop_mongodb_public:
+.stop_mongodb_public:
   stage: deploy_db
   only:
     - production
@@ -303,13 +305,13 @@ stop_mongodb_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: mongodb
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy
 
-
-deploy_api_stage:
+.deploy_api_stage:
   stage: deploy
   only:
     - develop
@@ -330,32 +332,30 @@ deploy_api_stage:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - >
-      docker volume inspect $REPO_VOLUME >/dev/null 2>&1 ||
-      docker volume create $REPO_VOLUME
+      docker volume inspect $REPO_VOLUME >/dev/null 2>&1 || docker volume create
+      $REPO_VOLUME
     - >
-      docker volume inspect $KC_CONFIG_VOLUME >/dev/null 2>&1 ||
-      docker volume create $KC_CONFIG_VOLUME
+      docker volume inspect $KC_CONFIG_VOLUME >/dev/null 2>&1 || docker volume
+      create $KC_CONFIG_VOLUME
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      -e MONGODB_WRITEABLE=true
-      -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
-      --network $APP_NETWORK
-      -v $REPO_VOLUME:/data/git_repos
-      -v $KC_CONFIG_VOLUME:/data/kc_config
-      --restart unless-stopped $IMAGE_TAG
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME -e
+      MONGODB_WRITEABLE=true -e REFRESH_INTERNAL_DB=$REFRESH_INTERNAL_DB
+      --network $APP_NETWORK -v $REPO_VOLUME:/data/git_repos -v
+      $KC_CONFIG_VOLUME:/data/kc_config --restart unless-stopped $IMAGE_TAG
     - docker ps
     - docker logs $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
 
-stop_api_stage:
+.stop_api_stage:
   stage: deploy
   only:
     - develop
@@ -367,12 +367,13 @@ stop_api_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
 
-deploy_oauth_api_stage:
+.deploy_oauth_api_stage:
   stage: deploy
   only:
     - develop
@@ -401,34 +402,34 @@ deploy_oauth_api_stage:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      --network $APP_NETWORK --restart unless-stopped
-      --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
-      --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
-      --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
-      --env OAUTH2_PROXY_COOKIE_SECRET=$AUTH_COOKIE_SECRET
-      --env OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL
-      --env OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL
-      --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
-      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
-      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
-      --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
-      --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
-      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
-      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
-      -v $KC_CONFIG_VOLUME:/data/kc_config
-      $IMAGE_TAG
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network
+      $APP_NETWORK --restart unless-stopped --env
+      OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER --env
+      OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID --env
+      OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET --env
+      OAUTH2_PROXY_COOKIE_SECRET=$AUTH_COOKIE_SECRET --env
+      OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL --env
+      OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL --env
+      OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS --env
+      OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS --env
+      OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN --env
+      OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS --env
+      OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true --env
+      OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config --env
+      OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg -v
+      $KC_CONFIG_VOLUME:/data/kc_config $IMAGE_TAG
   tags:
     - adios-stage
     - deploy
 
-stop_oauth_api_stage:
+.stop_oauth_api_stage:
   stage: deploy
   only:
     - develop
@@ -440,12 +441,13 @@ stop_oauth_api_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_api
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
 
-deploy_client_stage:
+.deploy_client_stage:
   stage: deploy
   only:
     - develop
@@ -464,20 +466,20 @@ deploy_client_stage:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      --network $APP_NETWORK
-      --restart unless-stopped $IMAGE_TAG
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network
+      $APP_NETWORK --restart unless-stopped $IMAGE_TAG
   tags:
     - adios-stage
     - deploy
 
-stop_client_stage:
+.stop_client_stage:
   stage: deploy
   only:
     - develop
@@ -489,12 +491,13 @@ stop_client_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
 
-deploy_oauth_client_stage:
+.deploy_oauth_client_stage:
   stage: deploy
   only:
     - develop
@@ -523,35 +526,35 @@ deploy_oauth_client_stage:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     #- OAUTH2_PROXY_CLIENT_SECRET=`cat /data/adios_oil_db/oauth-proxy-client-secret.txt`
     - >
-      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME
-      --network $APP_NETWORK --restart unless-stopped
-      --env OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER
-      --env OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
-      --env OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET
-      --env OAUTH2_PROXY_COOKIE_SECRET=$AUTH_COOKIE_SECRET
-      --env OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL
-      --env OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL
-      --env OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS
-      --env OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS
-      --env OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN
-      --env OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS
-      --env OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true
-      --env OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config
-      --env OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg
-      -v $KC_CONFIG_VOLUME:/data/kc_config
-      $IMAGE_TAG
+      docker run -d -p $PORT_MAPPING --name $CONTAINER_NAME --network
+      $APP_NETWORK --restart unless-stopped --env
+      OAUTH2_PROXY_PROVIDER=$OAUTH2_PROXY_PROVIDER --env
+      OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID --env
+      OAUTH2_PROXY_CLIENT_SECRET=$AUTH_SECRET --env
+      OAUTH2_PROXY_COOKIE_SECRET=$AUTH_COOKIE_SECRET --env
+      OAUTH2_PROXY_REDIRECT_URL=$OAUTH2_PROXY_REDIRECT_URL --env
+      OAUTH2_PROXY_OIDC_ISSUER_URL=$OAUTH2_PROXY_OIDC_ISSUER_URL --env
+      OAUTH2_PROXY_EMAIL_DOMAINS=$OAUTH2_PROXY_EMAIL_DOMAINS --env
+      OAUTH2_PROXY_UPSTREAMS=$OAUTH2_PROXY_UPSTREAMS --env
+      OAUTH2_PROXY_COOKIE_DOMAIN=$OAUTH2_PROXY_COOKIE_DOMAIN --env
+      OAUTH2_PROXY_HTTP_ADDRESS=$OAUTH2_PROXY_HTTP_ADDRESS --env
+      OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL=true --env
+      OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR=/data/kc_config --env
+      OAUTH2_PROXY_CUSTOM_SIGN_IN_LOGO=/data/kc_config/NOAA_logo.svg -v
+      $KC_CONFIG_VOLUME:/data/kc_config $IMAGE_TAG
   tags:
     - adios-stage
     - deploy
 
-stop_oauth_client_stage:
+.stop_oauth_client_stage:
   stage: deploy
   only:
     - develop
@@ -563,13 +566,13 @@ stop_oauth_client_stage:
     GIT_STRATEGY: none
     CONTAINER_NAME: auth_web_client
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-stage
     - deploy
 
-
-deploy_api_public:
+.deploy_api_public:
   stage: deploy
   only:
     - production
@@ -585,18 +588,19 @@ deploy_api_public:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     - >
-      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
-      -e MONGODB_WRITEABLE=false $IMAGE_TAG
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart
+      unless-stopped -e MONGODB_WRITEABLE=false $IMAGE_TAG
   tags:
     - adios-prod
     - deploy
 
-stop_api_public:
+.stop_api_public:
   stage: deploy
   only:
     - production
@@ -608,13 +612,13 @@ stop_api_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_api
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy
 
-
-deploy_client_public:
+.deploy_client_public:
   stage: deploy
   only:
     - production
@@ -630,18 +634,19 @@ deploy_client_public:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
     - >
-      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
-      $IMAGE_TAG
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart
+      unless-stopped $IMAGE_TAG
   tags:
     - adios-prod
     - deploy
 
-stop_client_public:
+.stop_client_public:
   stage: deploy
   only:
     - production
@@ -653,12 +658,13 @@ stop_client_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_client
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy
 
-deploy_proxy_public:
+.deploy_proxy_public:
   stage: deploy
   only:
     - production
@@ -677,34 +683,34 @@ deploy_proxy_public:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - >
-      docker network inspect $APP_NETWORK >/dev/null 2>&1 ||
-      docker network create -d bridge $APP_NETWORK
+      docker network inspect $APP_NETWORK >/dev/null 2>&1 || docker network
+      create -d bridge $APP_NETWORK
     - docker pull $IMAGE_TAG
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
 
     - if [ -d $OILDB_PROJ_FOLDER ]; then rm -rf $OILDB_PROJ_FOLDER; fi
-    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git $OILDB_PROJ_FOLDER
+    - git clone
+      https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
+      $OILDB_PROJ_FOLDER
     - chmod go+rw $OILDB_PROJ_FOLDER/config/public/proxy/*
     - >
-      chmod go+rx
-      $OILDB_PROJ_FOLDER
-      $OILDB_PROJ_FOLDER/config
-      $OILDB_PROJ_FOLDER/config/public
-      $OILDB_PROJ_FOLDER/config/public/proxy
+      chmod go+rx $OILDB_PROJ_FOLDER $OILDB_PROJ_FOLDER/config
+      $OILDB_PROJ_FOLDER/config/public $OILDB_PROJ_FOLDER/config/public/proxy
 
     - ls -la $OILDB_PROJ_FOLDER
     - ls -la $OILDB_PROJ_FOLDER/config/public/proxy
     - ls -la /etc/ssl/certs/*
     - >
-      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart unless-stopped
-      -p $PORT_MAPPING1 -p $PORT_MAPPING2
-      -v $OILDB_PROJ_FOLDER/config/public/proxy:/etc/nginx/
-      -v /etc/ssl/certs:/etc/ssl/certs $IMAGE_TAG
+      docker run -d --name $CONTAINER_NAME --network $APP_NETWORK --restart
+      unless-stopped -p $PORT_MAPPING1 -p $PORT_MAPPING2 -v
+      $OILDB_PROJ_FOLDER/config/public/proxy:/etc/nginx/ -v
+      /etc/ssl/certs:/etc/ssl/certs $IMAGE_TAG
   tags:
     - adios-prod
     - deploy
 
-stop_proxy_public:
+.stop_proxy_public:
   stage: deploy
   only:
     - production
@@ -716,17 +722,18 @@ stop_proxy_public:
     GIT_STRATEGY: none
     CONTAINER_NAME: adios_db_web_proxy
   script:
-    - docker stop $CONTAINER_NAME && docker container rm --volumes $CONTAINER_NAME
+    - docker stop $CONTAINER_NAME && docker container rm --volumes
+      $CONTAINER_NAME
   tags:
     - adios-prod
     - deploy
 
-init_git_repo_on_stage:
+.init_git_repo_on_stage:
   stage: maintenance
   image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   # image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
-  
+
   environment:
     name: stage
     url: https://adios-stage.orr.noaa.gov
@@ -741,7 +748,7 @@ init_git_repo_on_stage:
   tags:
     - adios-stage
 
-sync_with_git_review:
+.sync_with_git_review:
   stage: maintenance
   image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   rules:
@@ -759,7 +766,7 @@ sync_with_git_review:
     - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
-sync_with_git_prod:
+.sync_with_git_prod:
   stage: maintenance
   image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
@@ -776,7 +783,7 @@ sync_with_git_prod:
     - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
-pull_remote_under_review_changes:
+.pull_remote_under_review_changes:
   stage: maintenance
   image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
@@ -793,7 +800,7 @@ pull_remote_under_review_changes:
     - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
     - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
 
-drop_db_volume_public:
+.drop_db_volume_public:
   stage: maintenance
   image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
   when: manual
