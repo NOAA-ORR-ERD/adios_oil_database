@@ -15,6 +15,8 @@ include:
     inputs:
       before-script:
         - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
+        - git clone
+          https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
       job-name: 'Build Debug ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
@@ -36,6 +38,8 @@ include:
     inputs:
       before-script:
         - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
+        - git clone
+          https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
       job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
