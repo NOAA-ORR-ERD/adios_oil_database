@@ -1,6 +1,9 @@
 variables:
   PYTHON_VER: '3.11'
   CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
+  TF_DESTROY: 'false'
+  MY_SERVER_ROLE_TAG: 'adios'
+  TRAEFIK_IMAGE: '$SYSADMIN_CONTAINER_REGISTRY/sidecar-traefik/sidecar-traefik:1.1.2'
 
 include:
   - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
@@ -152,6 +155,39 @@ test_develop:
     - cd ../web_api
     - pip install ./
     - pytest adios_db_api/tests
+
+Build Dev Server:
+  stage: build
+  needs: []
+  variables:
+    # Basic metadata for Terraform.
+    TF_VAR_line_office: NOS
+    TF_VAR_division: ERD
+    TF_VAR_program: ORR
+    TF_VAR_program_manager: 'amy.macfadyen@noaa.gov'
+    TF_VAR_system_owner_name: 'James Makela'
+    TF_VAR_system_owner_email: 'james.makela@noaa.gov'
+    TF_VAR_vm_template_name: $GLOBAL_REDHAT_BASELINE_STABLE
+    TF_VAR_role_tag: '$MY_SERVER_ROLE_TAG'
+    TF_STATE_NAME: 'Development' # (LEAVE ME)
+    TF_VAR_environment_tag: 'Development' # (LEAVE ME) Case-sensitive; indicates where your server deploys.
+    TF_VAR_application_name: 'adios-dev' # (CHANGE ME) Used as a tag and part of the server name. Include -dev as a suffix.
+    TF_VAR_instance_count: 1 # (LEAVE ME) Usually 1 unless a system admin instructs otherwise.
+    TF_VAR_vm_data_disk_size: 100 # (LEAVE or CHANGE ME) The "data" disk for Docker volumes and data.
+    TF_VAR_vm_disk_size: 100 # (LEAVE ME) The root volume size, typically enough for most uses.
+    TF_ROOT: 'terraform/vmware' # (LEAVE ME) Points Terraform to the correct directory.
+    TF_VAR_vm_cpu_cores_per_socket: 1 # (LEAVE or CHANGE ME) CPU cores per socket.
+    TF_VAR_vm_cpu_cores: 6 # (LEAVE or CHANGE ME) Total CPU sockets.
+    TF_VAR_vm_memory: 8192 # (LEAVE or CHANGE ME) Amount of RAM. Typically 2GB or 4GB is enough.
+
+  trigger:
+    forward:
+      pipeline_variables: true
+    strategy: depend # (LEAVE ME)
+    include:
+      - project: templates/developer-ci-templates # (LEAVE ME)
+        ref: latest # (LEAVE ME)
+        file: 'jobs/terraform/terraform.vm.gitlab-ci.yml' # (LEAVE ME)
 
 .build_api:
   stage: build
