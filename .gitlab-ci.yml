@@ -14,7 +14,7 @@ include:
       - if: $CI_COMMIT_REF_NAME
     inputs:
       before-script:
-        - mv $ADIOS_PROD_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
+        - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
       job-name: 'Build Debug ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
@@ -35,7 +35,7 @@ include:
       - if: $CI_COMMIT_REF_NAME
     inputs:
       before-script:
-        - mv $ADIOS_PROD_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
+        - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
       job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
