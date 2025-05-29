@@ -30,7 +30,7 @@ services:
       - api
 
   client:
-    image: registry.orr.noaa.gov/gnome/oil_database/oil_database/client
+    image: ${CLIENT_IMAGE}
     depends_on:
       - web_api
     volumes:
@@ -50,7 +50,7 @@ services:
 
 
   api:
-    image: registry.orr.noaa.gov/gnome/oil_database/oil_database/api
+    image: ${API_IMAGE}
     depends_on:
       - mongodb
     volumes:

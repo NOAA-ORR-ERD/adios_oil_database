@@ -97,6 +97,12 @@ include:
       server-role-tag: $MY_SERVER_ROLE_TAG
       docker-compose-file-path: 'docker-compose.yml'
       environment-name: 'dev'
+      deployment-target: 'vmware'
+      docker-compose-pull-images: true
+      docker-compose-environment-variables:
+        - SIDECAR_TRAEFIK_IMAGE=$TRAEFIK_IMAGE
+        - CLIENT_IMAGE=$CI_REGISTRY_IMAGE/adios-client-debug:$CI_COMMIT_REF_NAME
+        - API_IMAGE=$CI_REGISTRY_IMAGE/adios-api-debug:$CI_COMMIT_REF_NAME
 
 stages:
   - pre-test
