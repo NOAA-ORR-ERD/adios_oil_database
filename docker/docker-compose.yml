@@ -33,8 +33,6 @@ services:
     image: ${CLIENT_IMAGE}
     depends_on:
       - api
-    volumes:
-      - ./config/web_client:/config:ro
     expose:
       - 4200
     restart: on-failure
@@ -53,7 +51,6 @@ services:
     depends_on:
       - mongodb
     volumes:
-      - ./config/web_api:/config:ro
       - ../noaa-oil-data:/noaa-oil-data:ro
     expose:
       - 9898
@@ -76,7 +73,7 @@ services:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
     volumes:
-      - /data/mongodb:/data/db
+      - mongodata:/data/db
     expose:
       - 27017
     command: mongod --logpath=/dev/null
@@ -87,3 +84,6 @@ networks:
   application:
     name: application
     external: false
+
+volumes:
+  mongodata:
