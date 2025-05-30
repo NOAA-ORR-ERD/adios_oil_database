@@ -1,7 +1,7 @@
 services:
   proxy:
     image: ${SIDECAR_TRAEFIK_IMAGE}
-    container_name: traefik
+    container_name: proxy
     restart: unless-stopped
     command:
       - '--providers.docker=true' # Discover containers through the Docker provider.
@@ -31,6 +31,7 @@ services:
 
   client:
     image: ${CLIENT_IMAGE}
+    container_name: client
     depends_on:
       - api
     expose:
@@ -50,6 +51,7 @@ services:
     image: ${API_IMAGE}
     depends_on:
       - mongodb
+    container_name: api
     volumes:
       - ../noaa-oil-data:/noaa-oil-data:ro
     expose:
@@ -68,6 +70,7 @@ services:
 
   mongodb:
     image: mongo:4.4.6
+    container_name: mongodb
     volumes:
       - mongodata:/data/db
     expose:
