@@ -41,7 +41,8 @@ services:
       - application
     labels:
       traefik.enable: 'true' # Enable Traefik for this service.
-      traefik.http.routers.client.rule: 'Host(`adios-edit.orr.noaa.gov`)' # Route traffic to this service based on the host.
+      traefik.http.routers.client.rule: 'Host(`adios-edit.orr.noaa.gov`,
+        `nos-orr-adios-dev1-6701`)' # Route traffic to this service based on the host.
       traefik.http.routers.client.entrypoints: 'websecure' # Use the secure entrypoint.
       traefik.http.routers.client.service: client
       traefik.http.services.client.loadbalancer.server.port: '4200' # Forward requests to port 4200 in the container.
@@ -61,8 +62,8 @@ services:
       - application
     labels:
       traefik.enable: 'true' # Enable Traefik for this service.
-      traefik.http.routers.api.rule: 'Host(`adios-edit.orr.noaa.gov`) &&
-        PathPrefix(`/api`)' # Route traffic to this service based on the host.
+      traefik.http.routers.api.rule: 'Host(`adios-edit.orr.noaa.gov`,
+        `nos-orr-adios-dev1-6701`) && PathPrefix(`/api`)' # Route traffic to this service based on the host.
       traefik.http.routers.api.entrypoints: 'websecure' # Use the secure entrypoint.
       traefik.http.routers.api.service: api
       traefik.http.services.api.loadbalancer.server.port: '9898' # Forward requests to port 4200 in the container.
