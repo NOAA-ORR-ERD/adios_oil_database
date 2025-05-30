@@ -95,7 +95,7 @@ include:
       job-name: 'Deploy Dev'
       action: 'deploy'
       server-role-tag: $MY_SERVER_ROLE_TAG
-      docker-compose-file-path: 'docker-compose.yml'
+      docker-compose-file-path: './docker/docker-compose.yml'
       environment-name: 'dev'
       log-level: 'debug'
       deployment-target: 'vmware'
