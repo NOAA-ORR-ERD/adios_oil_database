@@ -104,6 +104,10 @@ include:
         - SIDECAR_TRAEFIK_IMAGE=$TRAEFIK_IMAGE
         - CLIENT_IMAGE=$CI_REGISTRY_IMAGE/adios-client-debug:$CI_COMMIT_REF_NAME
         - API_IMAGE=$CI_REGISTRY_IMAGE/adios-api-debug:$CI_COMMIT_REF_NAME
+        - AUTH_COOKIE_SECRET=$AUTH_COOKIE_SECRET
+        - AUTH_SECRET=$AUTH_SECRET
+        - AUTH_URL='https://sso.orr.noaa.gov/realms/ORR'
+        - AUTH_CLIENT_ID='adios'
 
 stages:
   - pre-test

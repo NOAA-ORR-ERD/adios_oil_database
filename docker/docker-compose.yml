@@ -15,6 +15,8 @@ services:
       - '--entrypoints.websecure.http.tls=true' # Enforce TLS for the 'websecure' entrypoint.
       - '--providers.file.directory=/etc/traefik/dynamic/'
       # Load additional Traefik configs from the /etc/traefik/dynamic directory (built into the image).
+      - '--experimental.plugins.traefik-oidc-auth.modulename=github.com/sevensolutions/traefik-oidc-auth'
+      - '--experimental.plugins.traefik-oidc-auth.version=v0.11.0'
 
       - '--log.level=DEBUG' # Enable detailed logs. Useful for troubleshooting.
     ports:
@@ -45,8 +47,16 @@ services:
         `nos-orr-adios-dev1-6701`)' # Route traffic to this service based on the host.
       traefik.http.routers.client.entrypoints: 'websecure' # Use the secure entrypoint.
       traefik.http.routers.client.service: client
+      traefik.http.routers.client.middlewares: client-auth
       traefik.http.services.client.loadbalancer.server.port: '4200' # Forward requests to port 4200 in the container.
       traefik.http.services.client.loadbalancer.server.scheme: http
+      traefik.http.middlewares.client-auth.plugin.traefik-oidc-auth.secret: ${AUTH_COOKIE_SECRET}
+      traefik.http.middlewares.client-auth.plugin.traefik-oidc-auth.loglevel: DEBUG
+      traefik.http.middlewares.client-auth.plugin.traefik-oidc-auth.scopes:
+        'openid email profile' # Request these scopes from the OIDC provider.
+      traefik.http.middlewares.client-auth.plugin.traefik-oidc-auth.provider.url: ${AUTH_URL}
+      traefik.http.middlewares.client-auth.plugin.traefik-oidc-auth.provider.clientid: ${AUTH_CLIENT_ID}
+      traefik.http.middlewares.client-auth.plugin.traefik-oidc-auth.provider.clientsecret: ${AUTH_SECRET}
 
   api:
     image: ${API_IMAGE}
