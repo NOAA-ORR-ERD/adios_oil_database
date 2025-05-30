@@ -32,7 +32,7 @@ services:
   client:
     image: ${CLIENT_IMAGE}
     depends_on:
-      - web_api
+      - api
     volumes:
       - ./config/web_client:/config:ro
     expose:
