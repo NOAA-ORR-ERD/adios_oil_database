@@ -67,7 +67,7 @@ services:
       traefik.http.services.api.loadbalancer.server.scheme: http
 
   mongodb:
-    image: mongo:latest
+    image: mongo:4.4.6
     volumes:
       - mongodata:/data/db
     expose:
