@@ -15,7 +15,7 @@ services:
       - '--entrypoints.websecure.http.tls=true' # Enforce TLS for the 'websecure' entrypoint.
       - '--providers.file.directory=/etc/traefik/dynamic/'
       # Load additional Traefik configs from the /etc/traefik/dynamic directory (built into the image).
-      - '--experimental.enable=true' # Enable experimental features in Traefik.
+      - '--experimental.enabled=true' # Enable experimental features in Traefik.
       - '--experimental.plugins.traefik-oidc-auth.modulename=github.com/sevensolutions/traefik-oidc-auth'
       - '--experimental.plugins.traefik-oidc-auth.version=v0.11.0'
 
