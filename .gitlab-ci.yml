@@ -170,7 +170,7 @@ test_develop:
     - pip install ./
     - pytest adios_db_api/tests
 
-Build Dev Server:
+.Build Dev Server:
   stage: build
   needs: []
   variables:
