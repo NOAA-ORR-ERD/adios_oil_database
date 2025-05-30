@@ -4,22 +4,22 @@ services:
     container_name: traefik
     restart: unless-stopped
     command:
-      - "--providers.docker=true"                  # Discover containers through the Docker provider.
-      - "--providers.docker.exposedbydefault=false"# Only expose containers you explicitly label.
-      - "--entrypoints.web.address=:80"            # Listen on port 80 for unencrypted HTTP.
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https" 
+      - '--providers.docker=true' # Discover containers through the Docker provider.
+      - '--providers.docker.exposedbydefault=false' # Only expose containers you explicitly label.
+      - '--entrypoints.web.address=:80' # Listen on port 80 for unencrypted HTTP.
+      - '--entrypoints.web.http.redirections.entryPoint.to=websecure'
+      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
       # Automatically redirect HTTP requests (port 80) to HTTPS (port 443).
 
-      - "--entrypoints.websecure.address=:443"     # Listen on port 443 for secure HTTPS traffic.
-      - "--entrypoints.websecure.http.tls=true"    # Enforce TLS for the 'websecure' entrypoint.
-      - "--providers.file.directory=/etc/traefik/dynamic/"
+      - '--entrypoints.websecure.address=:443' # Listen on port 443 for secure HTTPS traffic.
+      - '--entrypoints.websecure.http.tls=true' # Enforce TLS for the 'websecure' entrypoint.
+      - '--providers.file.directory=/etc/traefik/dynamic/'
       # Load additional Traefik configs from the /etc/traefik/dynamic directory (built into the image).
 
-      - "--log.level=DEBUG"                        # Enable detailed logs. Useful for troubleshooting.
+      - '--log.level=DEBUG' # Enable detailed logs. Useful for troubleshooting.
     ports:
-      - "80:80"   # Map host port 80 to container port 80 for HTTP (redirecting to HTTPS).
-      - "443:443" # Map host port 443 to container port 443 for secure traffic.
+      - '80:80' # Map host port 80 to container port 80 for HTTP (redirecting to HTTPS).
+      - '443:443' # Map host port 443 to container port 443 for secure traffic.
     networks:
       - application
     volumes:
@@ -41,13 +41,12 @@ services:
     networks:
       - application
     labels:
-      traefik.enable: "true" # Enable Traefik for this service.
-      traefik.http.routers.client.rule: "Host(`adios-edit.orr.noaa.gov`)" # Route traffic to this service based on the host.
-      traefik.http.routers.client.entrypoints: "websecure" # Use the secure entrypoint.
+      traefik.enable: 'true' # Enable Traefik for this service.
+      traefik.http.routers.client.rule: 'Host(`adios-edit.orr.noaa.gov`)' # Route traffic to this service based on the host.
+      traefik.http.routers.client.entrypoints: 'websecure' # Use the secure entrypoint.
       traefik.http.routers.client.service: client
-      traefik.http.services.client.loadbalancer.server.port: "4200" # Forward requests to port 4200 in the container.
+      traefik.http.services.client.loadbalancer.server.port: '4200' # Forward requests to port 4200 in the container.
       traefik.http.services.client.loadbalancer.server.scheme: http
-
 
   api:
     image: ${API_IMAGE}
@@ -62,13 +61,13 @@ services:
     networks:
       - application
     labels:
-      traefik.enable: "true" # Enable Traefik for this service.
-      traefik.http.routers.api.rule: "Host(`adios-edit.orr.noaa.gov`) && PathPrefix(`/api`)" # Route traffic to this service based on the host.
-      traefik.http.routers.api.entrypoints: "websecure" # Use the secure entrypoint.
+      traefik.enable: 'true' # Enable Traefik for this service.
+      traefik.http.routers.api.rule: 'Host(`adios-edit.orr.noaa.gov`) &&
+        PathPrefix(`/api`)' # Route traffic to this service based on the host.
+      traefik.http.routers.api.entrypoints: 'websecure' # Use the secure entrypoint.
       traefik.http.routers.api.service: api
-      traefik.http.services.api.loadbalancer.server.port: "9898" # Forward requests to port 4200 in the container.
+      traefik.http.services.api.loadbalancer.server.port: '9898' # Forward requests to port 4200 in the container.
       traefik.http.services.api.loadbalancer.server.scheme: http
-      
 
   mongodb:
     image: mongo:latest
@@ -77,7 +76,7 @@ services:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
     volumes:
-      - /data/adios_oil_db/data/db:/data/db
+      - /data/mongodb:/data/db
     expose:
       - 27017
     command: mongod --logpath=/dev/null
