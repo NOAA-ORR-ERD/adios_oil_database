@@ -68,7 +68,7 @@ include:
       job-name: 'Build debug ADIOS client Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
-      image-name: 'adios-client-dbg' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      image-name: 'adios-client-debug' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
       dockerfile-path: ./web_client/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
       latest: true
   - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
