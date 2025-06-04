@@ -1,7 +1,7 @@
 # Oil Database Web Client Docker configuration
 #
 #FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
-FROM node:20
+FROM node:lts-slim
 
 COPY ./web_client .
 COPY ./docker/config/client/ /web_client/configs/
