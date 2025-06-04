@@ -16,17 +16,12 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      before-script:
-        - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
-        - git clone
-          https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
-      job-name: 'Build Debug ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
-        - KEY_FILE=./web_api/key # Path to the key file used for authentication, relative to the repository root.
         - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
       version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
-      image-name: 'adios-api-debug' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      image-name: 'adios-api' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
       dockerfile-path: ./web_api/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
       latest: true
   - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
@@ -39,32 +34,6 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      before-script:
-        - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key # Move the production key file to the correct location before building the image.
-        - git clone
-          https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
-      job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
-      stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
-      build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
-        - KEY_FILE=./web_api/key # Path to the key file used for authentication, relative to the repository root.
-        - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
-      version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
-      image-name: 'adios-api' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
-      dockerfile-path: ./web_api/dockerfile_prod # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
-      latest: true
-  - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
-    rules:
-      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
-        when: never
-      - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Do not run this job for merge requests
-        when: never
-      - if: $CI_PIPELINE_SOURCE == "pipeline" # Do not run this job for pipelines
-        when: never
-      - if: $CI_COMMIT_REF_NAME
-    inputs:
-      before-script:
-        - git clone
-          https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
       job-name: 'Build debug ADIOS client Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
@@ -81,14 +50,13 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      before-script:
-        - git clone
-          https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.orr.noaa.gov/gnome/oil_database/oildb-deploy.git
       job-name: 'Build ADIOS client Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
       image-name: 'adios-client' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
-      dockerfile-path: ./web_client/dockerfile_prod # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
+      dockerfile-path: ./web_client/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
+      build-args:
+        - BUILD_ENV=production
       latest: true
   - component: $CI_SERVER_FQDN/components/docker-compose/DockerCompose@v1.0.2
     inputs:
@@ -103,7 +71,7 @@ include:
       docker-compose-environment-variables:
         - SIDECAR_TRAEFIK_IMAGE=$TRAEFIK_IMAGE
         - CLIENT_IMAGE=$CI_REGISTRY_IMAGE/adios-client-debug:$CI_COMMIT_REF_NAME
-        - API_IMAGE=$CI_REGISTRY_IMAGE/adios-api-debug:$CI_COMMIT_REF_NAME
+        - API_IMAGE=$CI_REGISTRY_IMAGE/adios-api:$CI_COMMIT_REF_NAME
         - AUTH_COOKIE_SECRET=$AUTH_COOKIE_SECRET
         - AUTH_SECRET=$AUTH_SECRET
         - AUTH_URL='https://sso.orr.noaa.gov/realms/ORR'
