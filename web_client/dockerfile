@@ -3,7 +3,7 @@
 #FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
 FROM node:lts-slim
 
-COPY ./web_client .
+COPY ./web_client ./web_client
 RUN npm install -g ember-cli npm@latest
 RUN cd web_client && \
 		npm ci && \
