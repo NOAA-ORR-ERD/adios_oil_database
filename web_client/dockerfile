@@ -4,11 +4,11 @@
 FROM node:lts-slim
 
 COPY ./web_client .
-COPY ./docker/config/client/ /web_client/configs/
 RUN npm install -g ember-cli npm@latest
 RUN cd web_client && \
 		npm ci && \
 		ember build --environment ${BUILD_ENV:-development}
+COPY ./docker/config/client/main.json web_client/dist/configs/
 
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
