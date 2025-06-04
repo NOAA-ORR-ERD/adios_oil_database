@@ -5,33 +5,11 @@ ARG PYTHON_VER
 # FROM registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
 FROM registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
 
-ARG KEY_FILE
-ARG PYTHON_VER
-
-#RUN echo "KEY FILE: $KEY_FILE"
-#RUN echo "PYTHON VER: $PYTHON_VER"
-
-COPY $KEY_FILE /root/.ssh/id_rsa
-RUN chmod og-rw /root/.ssh/id_rsa
-#RUN cat /root/.ssh/id_rsa
-
-RUN echo "[gitlab.orr.noaa.gov]:9933,[3.133.34.161]:9933 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMgZKGmTe4Qk+PLudgaTbu0R5OzLqqkAxFtp/O+/Aw2YupqtJQb5XDXaPvBtIg2pohmHc66Yjk7HpIoEU/R4+50=" > /root/.ssh/known_hosts
-RUN chmod og-rw /root/.ssh/known_hosts
-
-# update our apt packages
-RUN apt-get update
-RUN apt-get upgrade -y
-
-# we need git in order to manage the noaa-oil-data repo on our deployments
-RUN apt-get install git -y
-
-# mongod fails if the tzdata package is missing
-RUN echo 'tzdata tzdata/Areas select America' | debconf-set-selections
-RUN echo 'tzdata tzdata/Zones/America select Los_Angeles' | debconf-set-selections
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y tzdata
-
-COPY ./ /adios-db/
-WORKDIR adios-db
+COPY ./web_api ./web_api
+COPY ./adios_db ./adios_db
+COPY ./documents ./documents
+COPY ./README.md ./README.md
+COPY ./user_docs ./user_docs
 
 # install deps
 # needed for cornice (for now)
@@ -54,8 +32,7 @@ RUN cd documents \
     && /usr/bin/rm -rf build
 
 
-RUN mkdir /config
-RUN /usr/bin/cp /adios-db/oildb-deploy/config/stage/web_api/* /config/
+COPY ./docker/config/api /config/
 
 EXPOSE 9898
-ENTRYPOINT ["/adios-db/web_api/docker_start.sh"]
+ENTRYPOINT ["/web_api/docker_start.sh"]

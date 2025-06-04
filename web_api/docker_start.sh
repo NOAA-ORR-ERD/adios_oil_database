@@ -1,13 +1,7 @@
 #!/bin/bash
 
-echo `pwd`
+echo $(pwd)
 ls -la
-
-cp ./oildb-deploy/config/stage/keycloak/* /data/kc_config/
-chmod +r /data/kc_config/*.html
-
-cp ./web_client/public/assets/images/NOAA_logo.svg /data/kc_config/
-chmod +r /data/kc_config/*.svg
 
 echo "Starting our server on host:port:"
 egrep -w "host|port" /config/config.ini
