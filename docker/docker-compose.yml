@@ -27,6 +27,40 @@ services:
     depends_on:
       - client
       - api
+      - auth
+
+  auth:
+    image: bitnami/oauth2-proxy
+    container_name: auth
+    restart: unless-stopped
+    command:
+      - '--upstream=http://client:80/'
+      - '--upstream=http://api:9898/api/'
+      - '--provider=keycloak-oidc'
+      - '--client-id=adios'
+      - '--redirect-url=https://adios-edit.orr.noaa.gov/oauth2/callback'
+      - '--oidc-issuer-url=https://sso.orr.noaa.gov/realms/ORR'
+      - '--email-domain=noaa.gov'
+      - '--cookie-domain=https://adios-edit.orr.noaa.gov'
+      - '--insecure-oidc-allow-unverified-email=true'
+      - '--client-secret=$AUTH_SECRET'
+      - '--cookie-secret=$AUTH_COOKIE_SECRET'
+      - '--reverse-proxy=true' # Enable reverse proxy mode
+      - '--http-address=http://0.0.0.0:4180'
+      - "--skip-auth-route=${PUBLIC_ACCESS_PATH:-''}"
+    expose:
+      - 4180
+    networks:
+      - application
+    labels:
+      traefik.enable: 'true' # Enable Traefik for this service.
+      traefik.docker.network: application
+      traefik.http.routers.auth.rule: 'Host(`adios-edit.orr.noaa.gov`,
+        `nos-orr-adios-dev1-6701`, `localhost`)' # Route traffic to this service based on the host.
+      traefik.http.routers.auth.entrypoints: 'websecure' # Use the secure entrypoint.
+      traefik.http.routers.auth.service: auth
+      traefik.http.services.auth.loadbalancer.server.port: '4180'
+      traefik.http.services.auth.loadbalancer.server.scheme: http
 
   client:
     image: ${CLIENT_IMAGE}
@@ -38,15 +72,6 @@ services:
     restart: on-failure
     networks:
       - application
-    labels:
-      traefik.enable: 'true' # Enable Traefik for this service.
-      traefik.docker.network: application
-      traefik.http.routers.client.rule: 'Host(`adios-edit.orr.noaa.gov`,
-        `nos-orr-adios-dev1-6701`, `localhost`)' # Route traffic to this service based on the host.
-      traefik.http.routers.client.entrypoints: 'websecure' # Use the secure entrypoint.
-      traefik.http.routers.client.service: client
-      traefik.http.services.client.loadbalancer.server.port: '80'
-      traefik.http.services.client.loadbalancer.server.scheme: http
 
   api:
     image: ${API_IMAGE}
@@ -60,18 +85,6 @@ services:
     restart: on-failure
     networks:
       - application
-    labels:
-      traefik.enable: 'true' # Enable Traefik for this service.
-      traefik.docker.network: application
-      traefik.http.routers.api.rule: 'Host(`adios-edit.orr.noaa.gov`,
-        `nos-orr-adios-dev1-6701`, `localhost`) && PathPrefix(`/api`)' # Route traffic to this service based on the host.
-      # needs to redirect to / on the service
-      traefik.http.routers.api.entrypoints: 'websecure' # Use the secure entrypoint.
-      traefik.http.routers.api.service: api
-      traefik.http.services.api.loadbalancer.server.port: '9898'
-      traefik.http.services.api.loadbalancer.server.scheme: http
-      traefik.http.middlewares.api-strip.stripprefix.prefixes: '/api'
-      traefik.http.routers.api.middlewares: api-strip
 
   mongodb:
     image: mongo:4.4.6
