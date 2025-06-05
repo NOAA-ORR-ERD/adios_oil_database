@@ -78,6 +78,8 @@ services:
     depends_on:
       - mongodb
     container_name: api
+    environment:
+      - CAN_MODIFY_DB=${CAN_MODIFY_DB:-false}
     volumes:
       - ../noaa-oil-data:/noaa-oil-data:ro
     expose:
