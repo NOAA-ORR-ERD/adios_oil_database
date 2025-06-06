@@ -85,6 +85,7 @@ include:
     rules:
       - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
         when: never
+      - if: $CI_COMMIT_REF_NAME
     inputs:
       job-name: 'Sync with under review'
       when: 'manual'

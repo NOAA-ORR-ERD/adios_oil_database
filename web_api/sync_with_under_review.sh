@@ -11,9 +11,6 @@ source ${SCRIPT_DIR}/git_functions.sh
 
 cd /noaa-oil-data/
 
-git config user.email "adios-script@noaa.gov"
-git config user.name "Adios Automated Script"
-
 # To start, let's get our repo in a consistent state with our remote.
 # First, we will update the local list of remote branches, as they may change
 # when a merge request removes a branch and squashes commits.
