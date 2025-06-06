@@ -81,7 +81,7 @@ services:
     environment:
       - CAN_MODIFY_DB=${CAN_MODIFY_DB:-false}
     volumes:
-      - ../noaa-oil-data:/noaa-oil-data:ro
+      - noaa-oil-data:/noaa-oil-data
     expose:
       - 9898
     restart: on-failure
@@ -105,3 +105,4 @@ networks:
 
 volumes:
   mongodata:
+  noaa-oil-data:
