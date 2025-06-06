@@ -1,0 +1,6 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Run Sync script
+      command: /bin/bash -c "/web_api/sync_with_under_review.sh"
