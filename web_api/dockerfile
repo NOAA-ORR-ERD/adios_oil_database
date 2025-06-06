@@ -5,11 +5,20 @@ ARG PYTHON_VER
 # FROM registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
 FROM registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
 
+ARG KEY_FILE
+ARG PYTHON_VER
+
+VOLUME [ "/noaa-oil-data" ]
+
 COPY ./web_api ./web_api
 COPY ./adios_db ./adios_db
 COPY ./documents ./documents
 COPY ./README.md ./README.md
 COPY ./user_docs ./user_docs
+COPY ./docker/config/api/ssh_config /root/.ssh/config
+COPY $KEY_FILE /root/.ssh/id_rsa
+
+RUN chmod 600 /root/.ssh/id_rsa
 
 # install deps
 # needed for cornice (for now)
@@ -31,6 +40,15 @@ RUN cd documents \
     && /usr/bin/cp -rf build/html/* ../user_docs \
     && /usr/bin/rm -rf build
 
+RUN apt-get install git -y
+
+# setup initial data repository
+RUN git config --global user.email 'adios-script@noaa.gov' \
+    && git config --global user.name 'ADIOS automated script'
+
+RUN git clone ssh://git@gitlab/gnome/oil_database/noaa-oil-data.git /noaa-oil-data \
+    && cd /noaa-oil-data \
+    && git checkout -b under_review production
 
 COPY ./docker/config/api /config/
 
