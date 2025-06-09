@@ -1,0 +1,13 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Load data into mongodb from the repository.
+      community.docker.docker_container_exec:
+        container: api
+        # Ensure the container is running before executing the command
+        state: started
+        # Execute the sync script inside the container
+        command:
+          /bin/bash -c "adios_db_restore --config /config/config_oil_db.yml
+          --path /noaa-oil-data/data"

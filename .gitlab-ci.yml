@@ -99,6 +99,24 @@ include:
         - ansible-playbooks
         - Infrastructure
         - developer-ci-templates
+  - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Load mongodb with data from repository'
+      stage: maintenance
+      log-level: info
+      when: manual
+      environment-name: 'dev'
+      deployment-target: 'vmware'
+      playbook-file-name: 'load-data-from-repo.yml'
+      ansible-inventory-file: 'ansible/hosts/vmware.yml'
+      runner-tags:
+        - ansible-playbooks
+        - Infrastructure
+        - developer-ci-templates
 
 stages:
   - pre-test
@@ -197,26 +215,6 @@ test_develop:
       - project: templates/developer-ci-templates # (LEAVE ME)
         ref: latest # (LEAVE ME)
         file: 'jobs/terraform/terraform.vm.gitlab-ci.yml' # (LEAVE ME)
-
-.init_git_repo_on_stage:
-  stage: maintenance
-  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
-  # image: registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
-  when: manual
-
-  environment:
-    name: stage
-    url: https://adios-stage.orr.noaa.gov
-  variables:
-    CONTAINER_NAME: adios_db_web_api
-    SCRIPT_NAME: init_noaa_data.sh
-  script:
-    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
-    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
-    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
-
-  tags:
-    - adios-stage
 
 .sync_with_git_review:
   stage: maintenance
