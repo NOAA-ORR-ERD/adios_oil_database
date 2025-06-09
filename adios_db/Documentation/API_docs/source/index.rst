@@ -1,8 +1,3 @@
-.. ADIOS Oil Database documentation master file, created by
-   sphinx-quickstart on Thu Jan 28 16:08:19 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 ADIOS Oil Database ``adios_db`` package
 =======================================
 
@@ -22,7 +17,7 @@ There are three things one might want to do with this package:
    such as initializing an oil weathering model.
    See: :ref:`computation` for some documentation of this use case.
 
-3) Extracting data needed for modeling. Oil weathering models need oil properties in order to apply the model to a particular oil. But each model requires different data, and each oil record provides different data. So building a "model oil" is non-trivial. See :py:mod:`adios_db.computation.gnome_oil` for an example of hownan `Oil` object as required by the GNOME oil weathering model is constructed from the data. Other models should be able to be supported with similar code.
+3) Extracting data needed for modeling. Oil weathering models need oil properties in order to apply the model to a particular oil. But each model requires different data, and each oil record provides different data. So building a "model oil" is non-trivial. See :py:mod:`adios_db.computation.gnome_oil` for an example of how an `Oil` object as required by the GNOME oil weathering model is constructed from the data. Other models should be able to be supported with similar code.
 
 
 .. toctree::

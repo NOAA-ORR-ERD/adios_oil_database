@@ -17,6 +17,7 @@ This would commonly be a way to get your data into ADIOS DB if it's already in a
 
 You can see some examples of import scripts in the :py:mod:`data_sources` package.
 
+
 Utility functions to make importing easier
 ------------------------------------------
 
@@ -65,7 +66,7 @@ and match that JSON. Note that the JSON is "sparse" -- there is no need to inclu
 Edit JSON by Hand
 =================
 
-JSON is a human-readable format, and to some extend human-writable, but writing full JSON by hand can be pretty challenging. However, editing JSON by hand is quite manageable, so if you start with a similar record, from:
+JSON is a human-readable format, and to some extent human-writable, but writing full JSON by hand can be pretty challenging. However, editing JSON by hand is quite manageable, so if you start with a similar record, from:
 
 http://adios.orr.noaa.gov
 
@@ -73,7 +74,7 @@ or
 
 https://github.com/NOAA-ORR-ERD/noaa-oil-data
 
-You can then hand edit the file to replace the data with value you want. We recommend you take the time to update the meta-data in the file. And almost everything in the format is optional, so you can simply remove fields that are not relevant to your problem.
+You can then hand edit the file to replace the data with values you want. We recommend you take the time to update the meta-data in the file. And almost everything in the format is optional, so you can simply remove fields that are not relevant to your problem.
 
 
 Use a Standard CSV Format
@@ -105,7 +106,7 @@ Units
 
 The units used for data are critical to include, and usually are kept in a separate cell from the values. Units should conform to the units used in the ADIOS DB -- which are specified in the NOAA "NUCOS" unit conversion system. The unit list is published here: https://github.com/NOAA-ORR-ERD/PyNUCOS/blob/master/NUCOS_unit_list.rst
 
-However, allowable units conform to standard industry practice, and should be in pick lists in the template.
+However, allowable units conform to standard industry practice, and should be in pick lists in the Excel template.
 
 The fields
 ..........
@@ -155,7 +156,7 @@ Labels
     Both the labels and the mapping of labels to product types can be found in this CSV file: :download:`Mapping Product Types to Labels <../../../adios_db/models/oil/product_types_and_labels.csv>`
 
 Location Coordinates
-    Geographic coordinates of the source, if relevant (Decimal degrees, WGS84). If the source is a well, the coordinates can be a simple longitude-latitude point:  ``28.324, -76.521``, or if the location is a region (such as an oil field) it can be a polygon: an ordered list of multiple points:
+    Geographic coordinates of the source, if relevant (Decimal degrees, WGS84). If the source is a well, the coordinates can be a simple longitude-latitude point:  ``[28.324, -76.521]``, or if the location is a region (such as an oil field) it can be a polygon: an ordered list of multiple points:
 
     ``[(88.671327, 29.111853),(88.512073, 29.155960),(88.434388, 29.033772),`` ``(88.554800, 28.891036),(88.706286, -28.982817)]``
 
@@ -167,7 +168,7 @@ Subsample Metadata
 
 Some labs will have an original sample, and then also process the oil in some way and collect measurements about the processed data. These data are all part of the same record, but may have a completely new set of measurements associated with them. The data model is designed to handle arbitrary "subsamples", created in different ways, but the two common ones currently in the data are distillation fractions (from physical distillation) and lab-weathered samples, such as evaporated in a rotovap or "topped" to some temperature.
 
-All records will have at least one subsample -- assumed to be the original (usually fresh oil)
+All records will have at least one subsample -- assumed to be the original (usually fresh oil).
 
 Each subsample has its own metadata describing it.
 
@@ -202,10 +203,10 @@ Flash Point
     The subsample flash point
 
 Density
-    The density of the subsample. Density varies with temperature, so there can be any number of density, temperature pairs. Add extra rows as needed.
+    The density of the subsample. Density varies with temperature, so there can be any number of density-temperature pairs. Add extra rows as needed.
 
 Viscosity
-    The viscosity of the subsample. Viscosity varies with temperature, so there can be any number of viscosity, temperature pairs. Add extra rows as needed.
+    The viscosity of the subsample. Viscosity varies with temperature, so there can be any number of viscosity-temperature pairs. Add extra rows as needed.
 
 Distillation Data
 .................
@@ -231,17 +232,30 @@ Distillation cuts
 
     Add extra rows as needed.
 
+
 Compounds
 .........
 
 Compounds can be concentration measurements for zero or more individual compounds. Add as many rows as required. Each object in the list has the same structure including the following elements:
 
-    Name: Name of the measurement
-    Fraction: Numerical value of the concentration measurement
-    Fraction unit: A pick list where the unit can be specified. Options include percent, ppm, g/kg, and mg/g.
-    Unit type: A pick list where the unit type can be specified. Options include mass fraction (m/m) or volume fraction (v/v).
-    Method: Name of the method used
-    Groups: Optional labels used to group related measurements together on the ADIOS interface. Examples include “BTEX”, “n-alkanes”, “PAHs”.
+Name
+    Name of the compound
+
+Fraction
+    Numerical value of the concentration measurement
+
+Fraction unit:
+    A pick list where the unit can be specified. Options include percent, ppm, g/kg, and mg/g.
+
+Unit type:
+    A pick list where the unit type can be specified. Options include mass fraction (m/m) or volume fraction (v/v).
+
+Method:
+    Name of the method used
+
+Groups:
+    Optional labels used to group related measurements together on the ADIOS interface. Examples include “BTEX”, “n-alkanes”, “PAHs”.
+
 
 Bulk Composition
 ................

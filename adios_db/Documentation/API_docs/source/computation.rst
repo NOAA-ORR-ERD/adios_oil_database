@@ -5,25 +5,26 @@
 Computation with the ADIOS data
 ###############################
 
-The core ``Oil`` object system was designed to managing the data -- lots of detail about exactly what data is there, the ability to anything to be missing, and units clearly defined with each value.
+The core ``Oil`` object system was designed for managing the data -- lots of detail about exactly what data is there, the ability for anything to be missing, and units clearly defined with each value.
 
 However, this makes it a bit awkward to work with if you want to do computation.
 
 The :py:mod:`computation` sub-package provides a number of utilities that make it easier to do computation with the data.
 
+
 The Measurement Objects
 =======================
 
-At the base of the entire set of data structures are py:class:`Measurement` objects. A `Measurment` object is used to store the actual data, along with its units, and a few utilties for unit conversion etc.
+At the base of the entire set of data structures are py:class:`Measurement` objects. A ``Measurement`` object is used to store the actual data, along with its units, and a few utilities for unit conversion etc.
 
-Features of a `Measurement` Object.
+Features of a ``Measurement`` Object.
 
 * Unique object type for each physical unit type, e.g. Mass, Length, etc.
 * Stores the unit of the data
-* Can store single value, as well as a range of values, or greater than or less than.
-* Supplies unit convertion to other compatible units.
+* Can store single value, as well as a range of values, or greater than or less than a given value.
+* Supplies unit conversion to other compatible units.
 
-.. note:: The Measurement objects use the `pynucos` pacakge for all unit defintions and conversions. See: `PyNUCOS on GitHub <https://github.com/NOAA-ORR-ERD/PyNUCOS>`_ for unit types, names, etc.
+.. note:: The ``Measurement`` objects use the ``pynucos`` package for all unit defintions and conversions. See: `PyNUCOS on GitHub <https://github.com/NOAA-ORR-ERD/PyNUCOS>`_ for unit types, names, etc.
 
 Available Measurement classes:
 
@@ -57,7 +58,7 @@ Single Value:
 
 .. code-block:: ipython
 
-    # All the Measurment objects should be in the scripting namespace
+    # All the ``Measurement`` objects should be in the scripting namespace
     import adios_db.scripting as ads
 
     In [4]: mass_recovered = ads.Mass(54, 'kg')
@@ -83,7 +84,7 @@ Single Value:
     In [10]: mass_recovered.unit
     Out[10]: 'g'
 
-    # it will not let you conver to an invalid unit:
+    # it will not let you convert to an invalid unit:
 
     In [11]: mass_recovered.convert_to('meter')
 
@@ -91,7 +92,6 @@ Single Value:
 
     InvalidUnitError: The unit: meter is not in the list for Unit Type: Mass
 
-    In [12]: mass_recovered.convert_to('meter')
 
 Range of Values:
 ................
@@ -125,7 +125,7 @@ You can specify a range of values for a measurement:
 Greater than or less than values:
 .................................
 
-You can specify only a minimum or maximum, to represent :greater than, or les than, for example a measurment below a detection limit might be less than a given value:
+You can specify only a minimum or maximum, to represent greater-than or less-than, for example a measurement below a detection limit might be less than a given value:
 
 .. code-block:: ipython
 
