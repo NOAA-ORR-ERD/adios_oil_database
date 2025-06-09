@@ -95,7 +95,7 @@ include:
       environment-name: 'dev'
       deployment-target: 'vmware'
       playbook-file-name: 'sync-with-under-review.yml'
-      ansible-inventory-file: 'ansible/hosts/vmware.yml'
+      ansible-inventory-file: hosts/vmware.yml
       runner-tags:
         - ansible-playbooks
         - Infrastructure
@@ -113,7 +113,7 @@ include:
       environment-name: 'dev'
       deployment-target: 'vmware'
       playbook-file-name: 'load-data-from-repo.yml'
-      ansible-inventory-file: 'ansible/hosts/vmware.yml'
+      ansible-inventory-file: hosts/vmware.yml
       runner-tags:
         - ansible-playbooks
         - Infrastructure
@@ -131,7 +131,7 @@ include:
       environment-name: 'dev'
       deployment-target: 'vmware'
       playbook-file-name: 'sync-with-production.yml'
-      ansible-inventory-file: 'ansible/hosts/vmware.yml'
+      ansible-inventory-file: hosts/vmware.yml
       runner-tags:
         - ansible-playbooks
         - Infrastructure
@@ -149,7 +149,7 @@ include:
       environment-name: 'dev'
       deployment-target: 'vmware'
       playbook-file-name: 'sync-with-production.yml'
-      ansible-inventory-file: 'ansible/hosts/vmware.yml'
+      ansible-inventory-file: hosts/vmware.yml
       runner-tags:
         - ansible-playbooks
         - Infrastructure
