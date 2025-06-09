@@ -46,9 +46,11 @@ RUN apt-get install git -y
 RUN git config --global user.email 'adios-script@noaa.gov' \
     && git config --global user.name 'ADIOS automated script'
 
-RUN git clone ssh://git@gitlab/gnome/oil_database/noaa-oil-data.git /noaa-oil-data \
+    # change this to https clone, then switch the remote to ssh after.
+RUN git clone https://gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git /noaa-oil-data \
     && cd /noaa-oil-data \
-    && git checkout -b under_review production
+    && git checkout -b under_review production \
+    && git remote set-url origin ssh://git@gitlab/gnome/oil_database/noaa-oil-data.git 
 
 COPY ./docker/config/api /config/
 
