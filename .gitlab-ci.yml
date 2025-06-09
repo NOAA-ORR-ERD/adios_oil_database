@@ -88,10 +88,10 @@ include:
       - if: $CI_COMMIT_REF_NAME
     inputs:
       job-name: 'Sync with under review'
-      when: 'manual'
       stage: maintenance
       log-level: info
-      environment-name: 'development'
+      when: manual
+      environment-name: 'dev'
       deployment-target: 'vmware'
       playbook-file-name: 'sync-under-review.yml'
       ansible-inventory-file: 'ansible/hosts/vmware.yml'
