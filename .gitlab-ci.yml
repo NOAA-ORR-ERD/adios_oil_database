@@ -135,6 +135,24 @@ include:
         - ansible-playbooks
         - Infrastructure
         - developer-ci-templates
+  - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Pull remote under review'
+      stage: maintenance
+      log-level: info
+      when: manual
+      environment-name: 'dev'
+      deployment-target: 'vmware'
+      playbook-file-name: 'sync-with-production.yml'
+      ansible-inventory-file: 'ansible/hosts/vmware.yml'
+      runner-tags:
+        - ansible-playbooks
+        - Infrastructure
+        - developer-ci-templates
 
 stages:
   - pre-test
