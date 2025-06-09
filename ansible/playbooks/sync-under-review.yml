@@ -3,4 +3,9 @@
 
   tasks:
     - name: Run Sync script
-      command: /bin/bash -c "/web_api/sync_with_under_review.sh"
+      community.docker.docker_container_exec:
+        container: api
+        # Ensure the container is running before executing the command
+        state: started
+        # Execute the sync script inside the container
+        command: /bin/bash -c "/web_api/sync_with_under_review.sh"
