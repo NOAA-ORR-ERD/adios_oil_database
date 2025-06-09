@@ -23,6 +23,7 @@ include:
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
         - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
         - KEY_FILE=./web_api/key
+        - CI_JOB_TOKEN=$CI_JOB_TOKEN # GitLab CI job token for authentication.
       version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
       image-name: 'adios-api' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
       dockerfile-path: ./web_api/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
@@ -81,7 +82,6 @@ include:
         - AUTH_CLIENT_ID='adios'
         - PUBLIC_ACCESS_PATH='/' # '/' allows public access to the whole application '/nullpath/' restricts public access to everything except the /nullpath/ endpoint.
         - CAN_MODIFY_DB=true # Set to true to allow the API to modify the database. Set to false to restrict the API to read-only operations. Defaults to false.
-        - CI_JOB_TOKEN=$CI_JOB_TOKEN # Required for the the dockerfile to pull the data initially
   - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
     rules:
       - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
