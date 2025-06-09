@@ -216,24 +216,6 @@ test_develop:
         ref: latest # (LEAVE ME)
         file: 'jobs/terraform/terraform.vm.gitlab-ci.yml' # (LEAVE ME)
 
-.sync_with_git_review:
-  stage: maintenance
-  image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-  environment:
-    name: stage
-    url: https://adios-stage.orr.noaa.gov
-  tags:
-    - adios-stage
-  variables:
-    CONTAINER_NAME: adios_db_web_api
-    SCRIPT_NAME: sync_with_under_review.sh
-  script:
-    - docker cp ./web_api/$SCRIPT_NAME $CONTAINER_NAME:/
-    - docker cp ./web_api/git_functions.sh $CONTAINER_NAME:/
-    - docker exec $CONTAINER_NAME /bin/bash /$SCRIPT_NAME
-
 .sync_with_git_prod:
   stage: maintenance
   image: registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
