@@ -93,7 +93,7 @@ include:
       when: manual
       environment-name: 'dev'
       deployment-target: 'vmware'
-      playbook-file-name: 'sync-under-review.yml'
+      playbook-file-name: 'sync-with-under-review.yml'
       ansible-inventory-file: 'ansible/hosts/vmware.yml'
       runner-tags:
         - ansible-playbooks
