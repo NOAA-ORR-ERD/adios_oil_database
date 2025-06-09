@@ -94,24 +94,6 @@ Other wise, new ones will be added, but none removed.
 If ``dry_run`` is on the command line, it will report what it would do, but not save any changes
 
 
-Scripts for working with the web application / Mongo DB:
---------------------------------------------------------
-
-adios_db_init
-.............
-
-adios_db_import
-...............
-
-adios_db_oil_query
-..................
-
-adios_db_backup
-...............
-
-adios_db_restore
-................
-
 Scripts for working with the code / tests
 -----------------------------------------
 
@@ -119,6 +101,71 @@ adios_db_update_test_data
 .........................
 
 This will update the test data with the latest version from NOAA oil data. This should only be run by people working on the ``adios_db`` codebase.
+
+Scripts for working with the web application / Mongo DB:
+--------------------------------------------------------
+
+These are assorted scripts that help you work with the data in a Mongo Database. This is used as the back-end for the NOAA web application. It is unlikely that you'd need these unless you are running your own version of the ADIOS Oil Database web app, or another system in which you need high performance access to the data.
+
+adios_db_init
+.............
+
+Command line utuility for initilizing the Mongo database -- only needed if you want to run the API (or use Mongo for something else).
+
+```
+
+$ adios_db_init --help
+usage: oil_db_init [-h] [--config CONFIG]
+
+Database Initialization Arguments:
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --config CONFIG  Specify a *.ini file to supply application settings. If not
+                   specified, the default is to use a local MongoDB server.
+
+```
+
+adios_db_import
+...............
+
+This is a command-line application that imports a number of oil record
+data sets into the database. YOU probablyl have no erason ever to run this -- iuf you want the standard NOAA managed data, see the full set, already in adios_db compatible format at:
+
+https://github.com/NOAA-ORR-ERD/noaa-oil-data
+
+```
+$ adios_db_import --help
+usage: oil_db_import [-h] [--all] [--config CONFIG]
+
+Database Import Arguments:
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --all            Import all datasets, bypassing the menus, and quit the
+                   application when finished.
+  --config CONFIG  Specify a *.ini file to supply application settings. If not
+                   specified, the default is to use a local MongoDB server.
+```
+
+
+adios_db_oil_query
+..................
+
+Utility for querying the mongo database directly. Not well doucmented.
+
+For the most part, you can simply loop through the JSON file to find stuff, unless you really need performance (as we do in the Web App)
+
+
+adios_db_backup
+...............
+
+Utility for "backing up" the data in the Mongo Database to JSON files on disk.
+
+adios_db_restore
+................
+
+Utility for "restoring" the Mongo Database from JSON files on disk
 
 
 

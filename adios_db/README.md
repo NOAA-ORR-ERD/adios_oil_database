@@ -7,30 +7,24 @@ The records conform to the NOAA "Response Oil Assay" data model, and can be load
 
 This library can be used for importing data from arbitrary formats by writing a custom importer.
 
-The entire dataset can be managed in MongoDB, a popular object database system.
+The entire dataset can be managed in MongoDB, a popular object database system, but that is unnecessary, unless you want to run a web application, such as NOAA's ADIOS Oil Database:
 
+## Where to find data
 
-## Command Line Scripts
+The collection of oil records that NOAA maintains is found on gitHub here:
 
-A couple of command-line applications are delivered along with this package.
+https://github.com/NOAA-ORR-ERD/noaa-oil-data
 
-#### `oil_db_init`
+That is a collection of JSON files, one for each record. This package is essentially a tool for manipulating that data.
 
-This is a command-line application that initializes the database.
+Anyone, or course could maintain their own collection of data.
 
-```
+## Documentation:
 
-$ oil_db_init --help
-usage: oil_db_init [-h] [--config CONFIG]
+The documentation for this package is in this repo in `adios_db/Documentation/API_docs/` as a Sphinx doc, and published at:
 
-Database Initialization Arguments:
+https://noaa-orr-erd.github.io/adios_oil_database/
 
-optional arguments:
-  -h, --help       show this help message and exit
-  --config CONFIG  Specify a *.ini file to supply application settings. If not
-                   specified, the default is to use a local MongoDB server.
-
-```
 
 #### `oil_db_import`
 
@@ -53,41 +47,34 @@ optional arguments:
 
 ## Installation
 
-### For Deployment
+The `adios_db` package is available on conda-forge:
 
-#### Install the package
+https://anaconda.org/conda-forge/adios_db
 
-`pip install .`
+Or can be installed from source:
+
+(source at: https://github.com/NOAA-ORR-ERD/adios_oil_database)
+
+```
+cd adios_db  # if you haven't already
+
+python -m pip install .
+
+or, of you ware working on the code, and editable install:
+
+python -m pip install -e .
+```
 
 This will install the Python package, which can then be used with:
 
-`import oil_database`
+`import adios_db`
 
-#### Set up the Database
+If installing from source, you will need the requirements in:
 
-If you want to work with the data in MongoDB, you need to set up the mongo database:
+`conda_requirements.txt`
 
-`oil_db_init`
+(these should all be pip-installable as well)
 
-If you want to import fresh data from the delivered data sources:
-
-`oil_db_import --all`
-
-
-### For Development
-
-For development, you may need to clean out the install, and want to install in "develop" or "editable" mode.
-
-```
-python setup.py clean
-pip uninstall adios_db
-pip install -e ./
-oil_db_init
-# optionally:
-oil_db_import --all
-```
-
-NOTE: in order to initialize the database, you need an instance of MongoDB running.
 
 
 
