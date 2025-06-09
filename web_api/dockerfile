@@ -7,6 +7,7 @@ FROM registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
 
 ARG KEY_FILE
 ARG PYTHON_VER
+ARG CI_JOB_TOKEN
 
 VOLUME [ "/noaa-oil-data" ]
 
