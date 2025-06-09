@@ -23,3 +23,6 @@ filters:
   - "summary.runtime.powerState is defined and summary.runtime.powerState ==
     'poweredOn'"
   - "tag_category.Role is defined and 'adios' in tag_category.Role"
+  - "tag_category.Environment is defined and 'Staging' in
+    tag_category.Environment or tag_category.Environment is defined and
+    'Development' in tag_category.Environment"
