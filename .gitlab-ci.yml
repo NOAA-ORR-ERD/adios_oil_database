@@ -63,6 +63,10 @@ include:
         - BUILD_ENV=production
       latest: true
   - component: $CI_SERVER_FQDN/components/docker-compose/DockerCompose@v1.0.5
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
     inputs:
       job-name: 'Deploy Dev'
       action: 'deploy'
