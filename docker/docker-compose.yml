@@ -78,6 +78,7 @@ services:
     depends_on:
       - mongodb
     container_name: api
+    stop_grace_period: 5s
     environment:
       - CAN_MODIFY_DB=${CAN_MODIFY_DB:-false}
     volumes:
