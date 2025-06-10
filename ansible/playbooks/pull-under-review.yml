@@ -3,9 +3,5 @@
 
   tasks:
     - name: Run pull script
-      community.docker.docker_container_exec:
-        container: api
-        # Ensure the container is running before executing the command
-        state: started
-        # Execute the sync script inside the container
-        command: /bin/bash -c "/web_api/pull_remote_under_review.sh"
+      command:
+        docker exec -i api /bin/bash -c "/web_api/pull_remote_under_review.sh"
