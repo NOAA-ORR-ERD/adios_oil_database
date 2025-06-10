@@ -172,9 +172,13 @@ test_develop:
     - docker
     - linux
 
-  except:
-    - schedules
-
+  rules:
+    - if: $TF_DESTOY == "true" # Do not run when TF_DESTROY is true
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_REF_NAME
+      when: always
   before_script:
     - apt update
     - apt upgrade -y
