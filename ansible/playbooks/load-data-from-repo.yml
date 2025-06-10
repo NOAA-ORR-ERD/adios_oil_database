@@ -4,5 +4,4 @@
   tasks:
     - name: Load data into mongodb from the repository.
       command:
-        docker exec -i api /bin/bash -c 'adios_db_restore --config
-        /config/config_oil_db.yml --path /noaa-oil-data/data'
+        docker exec -i api /bin/bash -c 'adios_db_restore --config /config/config_oil_db.ini --path /noaa-oil-data/data'
