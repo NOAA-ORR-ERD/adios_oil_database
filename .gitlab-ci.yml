@@ -62,7 +62,7 @@ include:
       build-args:
         - BUILD_ENV=production
       latest: true
-  - component: $CI_SERVER_FQDN/components/docker-compose/DockerCompose@v2.0.0-beta-2.0
+  - component: $CI_SERVER_FQDN/components/docker-compose/DockerCompose@v1.0.5
     inputs:
       job-name: 'Deploy Dev'
       action: 'deploy'
