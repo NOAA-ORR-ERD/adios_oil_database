@@ -4,6 +4,8 @@
 # adios database server
 echo "In: init_noaa_data.sh script"
 
+BRANCH_NAME=${BRANCH_NAME:-"under_review"}
+
 set -e # exit script if any commands fail
 set -x # echo commands to stdout
 
@@ -23,13 +25,13 @@ git clone https://adios-api:${noaa_oil_data_token}@gitlab.orr.noaa.gov/gnome/oil
 cd $REPO_NAME
 
 # setup the initial state of the repository
-if [ $(branch_exists under_review) ]; then
-    echo "The under_review branch already exists."
-    git checkout under_review
+if [ $(branch_exists $BRANCH_NAME) ]; then
+    echo "The $BRANCH_NAME branch already exists."
+    git checkout $BRANCH_NAME
 else
-    echo "Creating the under_review branch."
+    echo "Creating the $BRANCH_NAME branch."
     git checkout production
-    git checkout -b under_review
+    git checkout -b $BRANCH_NAME
     git push --set-upstream origin
 fi
 
