@@ -3,4 +3,6 @@
 
   tasks:
     - name: Run Sync script
-      command: docker exec -i api /bin/bash -c "/web_api/sync_with_under_review.sh"
+      command:
+        docker exec -i api /bin/bash -c "/web_api/sync_with_under_review.sh"
+      when: "'prod' in ansible_facts['hostname']"
