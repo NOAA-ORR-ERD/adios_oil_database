@@ -242,7 +242,7 @@ test_develop:
     - linux
 
   rules:
-    - if: $TF_DESTOY == "true" # Do not run when TF_DESTROY is true
+    - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
       when: never
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
