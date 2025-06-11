@@ -140,7 +140,7 @@ include:
     inputs:
       job-name: 'Deploy Public'
       action: 'deploy'
-      server-role-tag: $MY_SERVER_ROLE_TAG
+      server-role-tag: $MY_SERVER_ROLE_TAG-public
       docker-compose-file-path: './docker/docker-compose.yml'
       environment-name: 'prod'
       log-level: 'debug'
@@ -186,7 +186,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Load mongodb with data from repository'
+      job-name: 'Load prod mongodb with data from repository'
       stage: maintenance
       log-level: info
       when: manual
@@ -205,13 +205,32 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
+      job-name: 'Load public mongodb with data from repository'
+      stage: maintenance
+      log-level: info
+      when: manual
+      environment-name: 'prod'
+      deployment-target: 'aws'
+      playbook-file-name: 'load-data-from-repo.yml'
+      server-role-tag: $MY_SERVER_ROLE_TAG-public
+      runner-tags:
+        - developer-ci-templates
+        - aws
+        - us-west-2
+        - prod
+  - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
       job-name: 'Sync with production'
       stage: maintenance
       log-level: info
       when: manual
       environment-name: 'prod'
       deployment-target: 'aws'
-      server-role-tag: $MY_SERVER_ROLE_TAG
+      server-role-tag: $MY_SERVER_ROLE_TAG-public
       playbook-file-name: 'sync-with-production.yml'
       runner-tags:
         - developer-ci-templates
@@ -369,7 +388,7 @@ Build Public Server:
     TF_VAR_system_owner_name: 'James Makela'
     TF_VAR_system_owner_email: 'james.makela@noaa.gov'
     TF_VAR_vm_template_name: $GLOBAL_REDHAT_BASELINE_STABLE
-    TF_VAR_role_tag: '$MY_SERVER_ROLE_TAG'
+    TF_VAR_role_tag: '$MY_SERVER_ROLE_TAG-public'
     TF_VAR_environment_tag: 'prod' # (LEAVE ME) Case-sensitive; indicates where your server deploys.
     TF_VAR_application_name: 'adios-pub' # (CHANGE ME) Used as a tag and part of the server name. Include -dev as a suffix.
     TF_VAR_instance_count: 1 # (LEAVE ME) Usually 1 unless a system admin instructs otherwise.
