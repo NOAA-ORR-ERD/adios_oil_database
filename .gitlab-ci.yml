@@ -173,6 +173,7 @@ include:
       when: manual
       environment-name: 'prod'
       deployment-target: 'aws'
+      server-role-tag: $MY_SERVER_ROLE_TAG
       playbook-file-name: 'sync-with-under-review.yml'
       runner-tags:
         - developer-ci-templates
@@ -192,6 +193,7 @@ include:
       environment-name: 'prod'
       deployment-target: 'aws'
       playbook-file-name: 'load-data-from-repo.yml'
+      server-role-tag: $MY_SERVER_ROLE_TAG
       runner-tags:
         - developer-ci-templates
         - aws
@@ -209,6 +211,7 @@ include:
       when: manual
       environment-name: 'prod'
       deployment-target: 'aws'
+      server-role-tag: $MY_SERVER_ROLE_TAG
       playbook-file-name: 'sync-with-production.yml'
       runner-tags:
         - developer-ci-templates
