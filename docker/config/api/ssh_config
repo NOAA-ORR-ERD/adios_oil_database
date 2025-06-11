@@ -1,5 +1,0 @@
-Host gitlab
-	Hostname gitlab.orr.noaa.gov
-	Port 9933
-	StrictHostKeyChecking no
-	UserKnownHostsFile /dev/null

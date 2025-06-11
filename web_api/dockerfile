@@ -5,9 +5,8 @@ ARG PYTHON_VER
 # FROM registry.orr.noaa.gov/erd/centos-conda/ubuntu/ubuntuforge-python$PYTHON_VER
 FROM registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
 
-ARG KEY_FILE
 ARG PYTHON_VER
-ARG CI_JOB_TOKEN
+ARG noaa_oil_data_token
 
 VOLUME [ "/noaa-oil-data" ]
 
@@ -16,10 +15,6 @@ COPY ./adios_db ./adios_db
 COPY ./documents ./documents
 COPY ./README.md ./README.md
 COPY ./user_docs ./user_docs
-COPY ./docker/config/api/ssh_config /root/.ssh/config
-COPY $KEY_FILE /root/.ssh/id_rsa
-
-RUN chmod 600 /root/.ssh/id_rsa
 
 # install deps
 # needed for cornice (for now)
