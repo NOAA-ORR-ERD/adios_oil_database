@@ -117,6 +117,11 @@ include:
       log-level: 'debug'
       deployment-target: 'aws'
       docker-compose-pull-images: true
+      runner-tags:
+        - 'docker'
+        - 'aws'
+        - 'us-west-2'
+        - 'prod'
       docker-compose-environment-variables:
         - SIDECAR_TRAEFIK_IMAGE=$TRAEFIK_IMAGE
         - CLIENT_IMAGE=$CI_REGISTRY_IMAGE/adios-client:$CI_COMMIT_REF_NAME
@@ -141,6 +146,11 @@ include:
       log-level: 'debug'
       deployment-target: 'aws'
       docker-compose-pull-images: true
+      runner-tags:
+        - 'docker'
+        - 'aws'
+        - 'us-west-2'
+        - 'prod'
       docker-compose-environment-variables:
         - SIDECAR_TRAEFIK_IMAGE=$TRAEFIK_IMAGE
         - CLIENT_IMAGE=$CI_REGISTRY_IMAGE/adios-client:$CI_COMMIT_REF_NAME
