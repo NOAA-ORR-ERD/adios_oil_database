@@ -12,15 +12,13 @@ source ${SCRIPT_DIR}/git_functions.sh
 
 REPO_NAME=noaa-oil-data
 
-cd /${REPO_NAME}
-
-if [ -d $REPO_NAME ]; then
-    echo "$REPO_NAME exists. Dropping the repository."
-    rm -rf $REPO_NAME
+if [ -d /$REPO_NAME ]; then
+    echo "/$REPO_NAME exists. Dropping the repository."
+    rm -rf /$REPO_NAME
 fi
 
 echo "Cloning the repo"
-git clone https://adios-api:${noaa_oil_data_token}@gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git /noaa-oil-data
+git clone https://adios-api:${noaa_oil_data_token}@gitlab.orr.noaa.gov/gnome/oil_database/noaa-oil-data.git /$REPO_NAME
 
 cd $REPO_NAME
 
