@@ -379,7 +379,7 @@ Build Public Server:
     TF_VAR_application_name: 'adios-pub' # (CHANGE ME) Used as a tag and part of the server name. Include -dev as a suffix.
     TF_VAR_instance_count: 1 # (LEAVE ME) Usually 1 unless a system admin instructs otherwise.
     TF_VAR_ami_name: '$GLOBAL_LATEST_RHEL8_BASELINE'
-    TF_STATE_NAME: 'prod'
+    TF_STATE_NAME: 'public'
     TF_ROOT: 'terraform/aws'
     TF_VAR_account_tag: 'erma'
     TF_VAR_instance_type: 't3.small' # Please dont use a t3.micro
