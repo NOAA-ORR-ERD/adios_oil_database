@@ -42,7 +42,7 @@ include:
         - noaa_oil_data_token=$noaa_oil_data_token
         - BRANCH_NAME=production
       version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
-      image-name: 'adios-api-prod-data' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      image-name: 'adios-api-public' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
       dockerfile-path: ./web_api/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
       latest: true
   - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
@@ -103,6 +103,54 @@ include:
         - AUTH_CLIENT_ID='adios'
         - PUBLIC_ACCESS_PATH='/' # '/' allows public access to the whole application '/nullpath/' restricts public access to everything except the /nullpath/ endpoint.
         - CAN_MODIFY_DB=true # Set to true to allow the API to modify the database. Set to false to restrict the API to read-only operations. Defaults to false.
+  - component: $CI_SERVER_FQDN/components/docker-compose/DockerCompose@v1.0.5
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Deploy Production (editable)'
+      action: 'deploy'
+      server-role-tag: $MY_SERVER_ROLE_TAG
+      docker-compose-file-path: './docker/docker-compose.yml'
+      environment-name: 'prod'
+      log-level: 'debug'
+      deployment-target: 'aws'
+      docker-compose-pull-images: true
+      docker-compose-environment-variables:
+        - SIDECAR_TRAEFIK_IMAGE=$TRAEFIK_IMAGE
+        - CLIENT_IMAGE=$CI_REGISTRY_IMAGE/adios-client:$CI_COMMIT_REF_NAME
+        - API_IMAGE=$CI_REGISTRY_IMAGE/adios-api:$CI_COMMIT_REF_NAME
+        - AUTH_COOKIE_SECRET=$AUTH_COOKIE_SECRET
+        - AUTH_SECRET=$AUTH_SECRET
+        - AUTH_URL='https://sso.orr.noaa.gov/realms/ORR'
+        - AUTH_CLIENT_ID='adios'
+        - PUBLIC_ACCESS_PATH='/nullpath/' # '/' allows public access to the whole application '/nullpath/' restricts public access to everything except the /nullpath/ endpoint.
+        - CAN_MODIFY_DB=true # Set to true to allow the API to modify the database. Set to false to restrict the API to read-only operations. Defaults to false.
+  - component: $CI_SERVER_FQDN/components/docker-compose/DockerCompose@v1.0.5
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Deploy Public'
+      action: 'deploy'
+      server-role-tag: $MY_SERVER_ROLE_TAG
+      docker-compose-file-path: './docker/docker-compose.yml'
+      environment-name: 'prod'
+      log-level: 'debug'
+      deployment-target: 'aws'
+      docker-compose-pull-images: true
+      docker-compose-environment-variables:
+        - SIDECAR_TRAEFIK_IMAGE=$TRAEFIK_IMAGE
+        - CLIENT_IMAGE=$CI_REGISTRY_IMAGE/adios-client:$CI_COMMIT_REF_NAME
+        - API_IMAGE=$CI_REGISTRY_IMAGE/adios-api-public:$CI_COMMIT_REF_NAME
+        - AUTH_COOKIE_SECRET=$AUTH_COOKIE_SECRET
+        - AUTH_SECRET=$AUTH_SECRET
+        - AUTH_URL='https://sso.orr.noaa.gov/realms/ORR'
+        - AUTH_CLIENT_ID='adios'
+        - PUBLIC_ACCESS_PATH='/' # '/' allows public access to the whole application '/nullpath/' restricts public access to everything except the /nullpath/ endpoint.
+        - CAN_MODIFY_DB=false # Set to true to allow the API to modify the database. Set to false to restrict the API to read-only operations. Defaults to false.a
   - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
     rules:
       - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
@@ -277,6 +325,78 @@ Build Dev Server:
       - project: templates/developer-ci-templates # (LEAVE ME)
         ref: latest # (LEAVE ME)
         file: 'jobs/terraform/terraform.vm.gitlab-ci.yml' # (LEAVE ME)
+
+Build Production Server:
+  stage: build
+  needs: []
+  variables:
+    # Basic metadata for Terraform.
+    TF_VAR_line_office: NOS
+    TF_VAR_division: ERD
+    TF_VAR_program: ORR
+    TF_VAR_program_manager: 'amy.macfadyen@noaa.gov'
+    TF_VAR_system_owner_name: 'James Makela'
+    TF_VAR_system_owner_email: 'james.makela@noaa.gov'
+    TF_VAR_vm_template_name: $GLOBAL_REDHAT_BASELINE_STABLE
+    TF_VAR_role_tag: '$MY_SERVER_ROLE_TAG'
+    TF_VAR_environment_tag: 'prod' # (LEAVE ME) Case-sensitive; indicates where your server deploys.
+    TF_VAR_application_name: 'adios-prod' # (CHANGE ME) Used as a tag and part of the server name. Include -dev as a suffix.
+    TF_VAR_instance_count: 1 # (LEAVE ME) Usually 1 unless a system admin instructs otherwise.
+    TF_VAR_ami_name: '$GLOBAL_LATEST_RHEL8_BASELINE'
+    TF_STATE_NAME: 'prod'
+    TF_ROOT: 'terraform/aws'
+    TF_VAR_account_tag: 'erma'
+    TF_VAR_instance_type: 't3.small' # Please dont use a t3.micro
+    TF_VAR_root_volume_type: 'gp2'
+    TF_VAR_root_volume_size: 100
+    TF_VAR_data_volume_type: 'gp2'
+    TF_VAR_data_volume_size: 100
+    TF_VAR_subnet_id: 'subnet-041022ffbcb0cd6e8'
+    TF_VAR_security_group_id: 'sg-0cfd1c6f73bc2f1e5'
+  trigger:
+    forward:
+      pipeline_variables: true
+    strategy: depend
+    include:
+      - project: templates/developer-ci-templates
+        ref: develop
+        file: jobs/terraform/terraform.ec2.gitlab-ci.yml
+
+Build Public Server:
+  stage: build
+  needs: []
+  variables:
+    # Basic metadata for Terraform.
+    TF_VAR_line_office: NOS
+    TF_VAR_division: ERD
+    TF_VAR_program: ORR
+    TF_VAR_program_manager: 'amy.macfadyen@noaa.gov'
+    TF_VAR_system_owner_name: 'James Makela'
+    TF_VAR_system_owner_email: 'james.makela@noaa.gov'
+    TF_VAR_vm_template_name: $GLOBAL_REDHAT_BASELINE_STABLE
+    TF_VAR_role_tag: '$MY_SERVER_ROLE_TAG'
+    TF_VAR_environment_tag: 'prod' # (LEAVE ME) Case-sensitive; indicates where your server deploys.
+    TF_VAR_application_name: 'adios-pub' # (CHANGE ME) Used as a tag and part of the server name. Include -dev as a suffix.
+    TF_VAR_instance_count: 1 # (LEAVE ME) Usually 1 unless a system admin instructs otherwise.
+    TF_VAR_ami_name: '$GLOBAL_LATEST_RHEL8_BASELINE'
+    TF_STATE_NAME: 'prod'
+    TF_ROOT: 'terraform/aws'
+    TF_VAR_account_tag: 'erma'
+    TF_VAR_instance_type: 't3.small' # Please dont use a t3.micro
+    TF_VAR_root_volume_type: 'gp2'
+    TF_VAR_root_volume_size: 100
+    TF_VAR_data_volume_type: 'gp2'
+    TF_VAR_data_volume_size: 100
+    TF_VAR_subnet_id: 'subnet-041022ffbcb0cd6e8'
+    TF_VAR_security_group_id: 'sg-0cfd1c6f73bc2f1e5'
+  trigger:
+    forward:
+      pipeline_variables: true
+    strategy: depend
+    include:
+      - project: templates/developer-ci-templates
+        ref: develop
+        file: jobs/terraform/terraform.ec2.gitlab-ci.yml
 
 .drop_db_volume_public:
   stage: maintenance
