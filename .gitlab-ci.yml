@@ -18,14 +18,31 @@ include:
     inputs:
       job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
-      before-script:
-        - mv $ADIOS_STAGE_CONTAINER_KEY ./web_api/key
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
         - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
-        - KEY_FILE=./web_api/key
         - noaa_oil_data_token=$noaa_oil_data_token
       version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
       image-name: 'adios-api' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
+      dockerfile-path: ./web_api/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
+      latest: true
+  - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Do not run this job for merge requests
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "pipeline" # Do not run this job for pipelines
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Build Production ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
+      build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
+        - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
+        - noaa_oil_data_token=$noaa_oil_data_token
+        - BRANCH_NAME=production
+      version: $CI_COMMIT_REF_NAME # (Optional) Specifies the image version, following semantic versioning. If the version is not specified, then `0.0.0-build.${CI_COMMIT_SHORT_SHA}` is used.
+      image-name: 'adios-api-prod-data' # The name of the Docker image to be built and published. The CI_REGISTRY_IMAGE path is added through the job.
       dockerfile-path: ./web_api/dockerfile # Relative path to the Dockerfile in your repository. Useful if your Dockerfile is in a non-standard location.
       latest: true
   - component: $CI_SERVER_FQDN/components/build-publish-docker-image/BuildPublishContainerRegistryImage@v3.0.0

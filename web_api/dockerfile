@@ -7,7 +7,7 @@ FROM registry.orr.noaa.gov/erd/environments/ubuntu/ubuntuforge-python$PYTHON_VER
 
 ARG PYTHON_VER
 ARG noaa_oil_data_token
-ARG BRAND_NAME='under_review'
+ARG BRANCH_NAME='under_review'
 
 VOLUME [ "/noaa-oil-data" ]
 
