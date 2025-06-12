@@ -132,6 +132,7 @@ include:
         - AUTH_CLIENT_ID='adios'
         - PUBLIC_ACCESS_PATH='/nullpath/' # '/' allows public access to the whole application '/nullpath/' restricts public access to everything except the /nullpath/ endpoint.
         - CAN_MODIFY_DB=true # Set to true to allow the API to modify the database. Set to false to restrict the API to read-only operations. Defaults to false.
+        - ROUTER_RULE='Host(`adios-edit.orr.noaa.gov`)'
   - component: $CI_SERVER_FQDN/components/docker-compose/DockerCompose@v1.0.5
     rules:
       - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
@@ -161,6 +162,7 @@ include:
         - AUTH_CLIENT_ID='adios'
         - PUBLIC_ACCESS_PATH='/' # '/' allows public access to the whole application '/nullpath/' restricts public access to everything except the /nullpath/ endpoint.
         - CAN_MODIFY_DB=false # Set to true to allow the API to modify the database. Set to false to restrict the API to read-only operations. Defaults to false.a
+        - ROUTER_RULE='Host(`adios.orr.noaa.gov`)'
   - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
     rules:
       - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true

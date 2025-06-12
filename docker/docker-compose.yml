@@ -55,8 +55,7 @@ services:
     labels:
       traefik.enable: 'true' # Enable Traefik for this service.
       traefik.docker.network: application
-      traefik.http.routers.auth.rule: 'Host(`adios-edit.orr.noaa.gov`,
-        `nos-orr-adios-dev1-6701`, `localhost`)' # Route traffic to this service based on the host.
+      traefik.http.routers.auth.rule: ${ROUTER_RULE} # @TODO CHANGE THIS TO A VARIABLE
       traefik.http.routers.auth.entrypoints: 'websecure' # Use the secure entrypoint.
       traefik.http.routers.auth.service: auth
       traefik.http.services.auth.loadbalancer.server.port: '4180'
