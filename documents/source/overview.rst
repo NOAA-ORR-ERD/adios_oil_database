@@ -2,7 +2,7 @@
 Overview
 ########
 
-The ADIOS Oil Database is a collection of properties of petroleum products.
+The ADIOS\ :sup:`®` Oil Database is a collection of properties of petroleum products.
 
 The purpose of the database is to provide information about crude oils, fuels, and other related materials to support the response to oil spills in the environment.
 
@@ -20,7 +20,7 @@ The information in the database can be read online, dowloaded (in JSON format) f
 Related Projects
 ================
 
-The ADIOS Oil Database is part of the
+The ADIOS\ :sup:`®` Oil Database is part of the
 `GNOME Suite for oil spill modeling <https://response.restoration.noaa.gov/oil-and-chemical-spills/oil-spills/response-tools/gnome-suite-oil-spill-modeling.html>`_
 
 Closely related projects include

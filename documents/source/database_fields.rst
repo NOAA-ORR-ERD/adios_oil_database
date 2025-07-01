@@ -4,7 +4,7 @@ Fields in the database
 
 The following are general descriptions of the data stored in the database.
 
-For a more technical detail of data in the database, see the ADIOS Data Model documentation
+For a more technical detail of data in the database, see the ADIOS\ :sup:`®` Data Model documentation
 (currently unpublished -- reach out to us at: ``adios@orr.noaa.gov`` for information).
 
 Record Metadata
