@@ -9,11 +9,7 @@ set -x  # echo commands to stdout
 SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" &> /dev/null && pwd )
 source ${SCRIPT_DIR}/git_functions.sh
 
-cd /data/git_repos/noaa-oil-data/
-
-git config user.email "adios-script@noaa.gov"
-git config user.name "Adios Automated Script"
-
+cd /noaa-oil-data/
 
 # this will update the local list of remote branches, as they may change
 # when a merge request removes a branch and squashes commits.

@@ -1,26 +1,15 @@
 # Oil Database Web Client Docker configuration
 #
 #FROM registry.orr.noaa.gov/erd/centos-conda/centos7-python3.9
-FROM node:20
+FROM node:lts-slim
 
-# first of all let's see what we have in our base image
-RUN node --version
-RUN npm --version
+COPY ./web_client ./web_client
+RUN cd web_client && \
+		npm ci && \
+		npx ember build --environment ${BUILD_ENV:-development}
+COPY ./docker/config/client/main.json web_client/dist/configs/
 
-COPY ./web_client/ /web_client/
-COPY ./oildb-deploy/config/stage/web_client/ /web_client/public/configs/
-
-RUN npm install npm@latest -g
-RUN node --version
-RUN npm --version
-
-# ember-cli should already be in our package.json, but we want to install it globally.
-RUN npm install ember-cli -g
-RUN ember --version
-RUN node --version
-RUN npm --version
-
-RUN cd /web_client && npm install
-
-EXPOSE 4200
-ENTRYPOINT ["/web_client/docker_start.sh"]
+FROM nginx:alpine
+WORKDIR /etc/nginx/html
+COPY --from=0 /web_client/dist/ .
+COPY ./docker/config/client/nginx.conf /etc/nginx/nginx.conf

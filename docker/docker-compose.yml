@@ -1,0 +1,108 @@
+services:
+  proxy:
+    image: ${SIDECAR_TRAEFIK_IMAGE}
+    container_name: proxy
+    restart: unless-stopped
+    command:
+      - '--providers.docker=true' # Discover containers through the Docker provider.
+      - '--providers.docker.exposedbydefault=false' # Only expose containers you explicitly label.
+      - '--entrypoints.web.address=:80' # Listen on port 80 for unencrypted HTTP.
+      - '--entrypoints.web.http.redirections.entryPoint.to=websecure'
+      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
+      # Automatically redirect HTTP requests (port 80) to HTTPS (port 443).
+
+      - '--entrypoints.websecure.address=:443' # Listen on port 443 for secure HTTPS traffic.
+      - '--entrypoints.websecure.http.tls=true' # Enforce TLS for the 'websecure' entrypoint.
+      - '--providers.file.directory=/etc/traefik/dynamic/'
+      # Load additional Traefik configs from the /etc/traefik/dynamic directory (built into the image).
+      - '--log.level=DEBUG' # Enable detailed logs. Useful for troubleshooting.
+    ports:
+      - '80:80' # Map host port 80 to container port 80 for HTTP (redirecting to HTTPS).
+      - '443:443' # Map host port 443 to container port 443 for secure traffic.
+    networks:
+      - application
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Mount the Docker socket (read-only) so Traefik can see other containers.
+    depends_on:
+      - client
+      - api
+      - auth
+
+  auth:
+    image: bitnami/oauth2-proxy
+    container_name: auth
+    restart: unless-stopped
+    command:
+      - '--upstream=http://client:80/'
+      - '--upstream=http://api:9898/api/'
+      - '--provider=keycloak-oidc'
+      - '--client-id=adios'
+      - '--redirect-url=https://adios-edit.orr.noaa.gov/oauth2/callback'
+      - '--oidc-issuer-url=https://sso.orr.noaa.gov/realms/ORR'
+      - '--email-domain=noaa.gov'
+      - '--cookie-domain=https://adios-edit.orr.noaa.gov'
+      - '--insecure-oidc-allow-unverified-email=true'
+      - '--client-secret=$AUTH_SECRET'
+      - '--cookie-secret=$AUTH_COOKIE_SECRET'
+      - '--reverse-proxy=true' # Enable reverse proxy mode
+      - '--http-address=http://0.0.0.0:4180'
+      - "--skip-auth-route=${PUBLIC_ACCESS_PATH:-''}"
+    expose:
+      - 4180
+    networks:
+      - application
+    labels:
+      traefik.enable: 'true' # Enable Traefik for this service.
+      traefik.docker.network: application
+      traefik.http.routers.auth.rule: ${ROUTER_RULE} # @TODO CHANGE THIS TO A VARIABLE
+      traefik.http.routers.auth.entrypoints: 'websecure' # Use the secure entrypoint.
+      traefik.http.routers.auth.service: auth
+      traefik.http.services.auth.loadbalancer.server.port: '4180'
+      traefik.http.services.auth.loadbalancer.server.scheme: http
+
+  client:
+    image: ${CLIENT_IMAGE}
+    container_name: client
+    depends_on:
+      - api
+    expose:
+      - 80
+    restart: on-failure
+    networks:
+      - application
+
+  api:
+    image: ${API_IMAGE}
+    depends_on:
+      - mongodb
+    container_name: api
+    stop_grace_period: 5s
+    environment:
+      - CAN_MODIFY_DB=${CAN_MODIFY_DB:-false}
+    volumes:
+      - noaa-oil-data:/noaa-oil-data
+    expose:
+      - 9898
+    restart: on-failure
+    networks:
+      - application
+
+  mongodb:
+    image: mongo:4.4.6
+    container_name: mongodb
+    volumes:
+      - mongodata:/data/db
+    expose:
+      - 27017
+    networks:
+      - application
+
+networks:
+  application:
+    name: application
+    external: false
+
+volumes:
+  mongodata:
+  noaa-oil-data:
