@@ -4,7 +4,7 @@
 Scripts for working with the data
 #################################
 
-A number of top-level scripts are installed along with the python package. If the package is installed inot a Python installation that is set up correctly, you shoujld be able to invoke the scripts directly, e.g. ::
+A number of top-level scripts are installed along with the Python package. If the package is installed into a Python installation that is set up correctly, you should be able to invoke the scripts directly, e.g. ::
 
   adios_db_validate dir_to_validate
 
@@ -80,7 +80,7 @@ but not save any changes
 adios_db_add_labels
 ...................
 
-This script will add likely labels to the records, based on a set of criteria developed int eh code -- it will not correctly label everyting, but should give you a good start.
+This script will add likely labels to the records, based on a set of criteria developed in the code -- it will not correctly label everything, but should give you a good start.
 
 ::
 
@@ -105,62 +105,66 @@ This will update the test data with the latest version from NOAA oil data. This 
 Scripts for working with the web application / Mongo DB:
 --------------------------------------------------------
 
-These are assorted scripts that help you work with the data in a Mongo Database. This is used as the back-end for the NOAA web application. It is unlikely that you'd need these unless you are running your own version of the ADIOS Oil Database web app, or another system in which you need high performance access to the data.
+These are assorted scripts that help you work with the data in a Mongo Database. This is used as the back-end for the NOAA web application. It is unlikely that you'd need these unless you are running your own version of the ADIOS\ :sup:`®` Oil Database web app, or another system in which you need high performance access to the data.
 
 adios_db_init
 .............
 
-Command line utuility for initilizing the Mongo database -- only needed if you want to run the API (or use Mongo for something else).
+Command line utility for initializing the Mongo database -- only needed if you want to run the API (or use Mongo for something else).
 
-```
+.. code-block::
 
-$ adios_db_init --help
-usage: oil_db_init [-h] [--config CONFIG]
+    $ adios_db_init --help
+    usage: oil_db_init [-h] [--config CONFIG]
 
-Database Initialization Arguments:
+    Database Initialization Arguments:
 
-optional arguments:
-  -h, --help       show this help message and exit
-  --config CONFIG  Specify a *.ini file to supply application settings. If not
-                   specified, the default is to use a local MongoDB server.
+    optional arguments:
+      -h, --help       show this help message and exit
+      --config CONFIG  Specify a *.ini file to supply application settings. If not
+                       specified, the default is to use a local MongoDB server.
 
-```
 
 adios_db_import
 ...............
 
 This is a command-line application that imports a number of oil record
-data sets into the database. YOU probablyl have no erason ever to run this -- iuf you want the standard NOAA managed data, see the full set, already in adios_db compatible format at:
+data sets into the database. You probably have no reason ever to run this.
+If you want the standard NOAA managed data, see the full set, already in
+`adios_db` compatible format at:
 
 https://github.com/NOAA-ORR-ERD/noaa-oil-data
 
-```
-$ adios_db_import --help
-usage: oil_db_import [-h] [--all] [--config CONFIG]
+.. code-block::
 
-Database Import Arguments:
+    $ adios_db_import --help
+    usage: oil_db_import [-h] [--all] [--config CONFIG]
 
-optional arguments:
-  -h, --help       show this help message and exit
-  --all            Import all datasets, bypassing the menus, and quit the
-                   application when finished.
-  --config CONFIG  Specify a *.ini file to supply application settings. If not
-                   specified, the default is to use a local MongoDB server.
-```
+    Database Import Arguments:
+
+    optional arguments:
+      -h, --help       show this help message and exit
+      --all            Import all datasets, bypassing the menus, and quit the
+                       application when finished.
+      --config CONFIG  Specify a *.ini file to supply application settings. If not
+                       specified, the default is to use a local MongoDB server.
 
 
 adios_db_oil_query
 ..................
 
-Utility for querying the mongo database directly. Not well doucmented.
+Utility for querying the mongo database directly. Not well documented.
 
-For the most part, you can simply loop through the JSON file to find stuff, unless you really need performance (as we do in the Web App)
+For the most part, you can simply loop through the JSON files to find stuff, unless you really need performance (as we do in the Web App).
+
+See the examples in the scripts dir in the repo for working directly with a set of JSON files.
 
 
 adios_db_backup
 ...............
 
 Utility for "backing up" the data in the Mongo Database to JSON files on disk.
+
 
 adios_db_restore
 ................

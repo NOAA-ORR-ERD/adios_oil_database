@@ -4,7 +4,7 @@
 Importing New Data
 ##################
 
-The ADIOS Oil Database uses JSON as its native storage / interchange format.
+The ADIOS\ :sup:`®` Oil Database uses JSON as its native storage / interchange format.
 
 In order to get a new record into the database, it must be converted to JSON somehow. How best to do that depends on the how the data are currently stored, and what tools one is familiar with.
 
@@ -13,7 +13,7 @@ Using the Python Library
 
 If you are familiar with Python, then using the ``adios_db`` Python package may be the easiest way to go. The library provides a set of nested Python objects that conform to our data model, and that can save themselves out to our JSON interchange format. See :ref:`managing_the_data` for details.
 
-This would commonly be a way to get your data into ADIOS DB if it's already in a custom database or CSV files, or..
+This would commonly be a way to get your data into ADIOS\ :sup:`®` Oil Database if it's already in a custom database or CSV files, or..
 
 You can see some examples of import scripts in the :py:mod:`data_sources` package.
 
@@ -92,19 +92,19 @@ It may help to be familiar with the ADIOS data model, but the goal is to have th
 
 Use one worksheet for each record. If/when you save it out as a CSV file, be sure to save it in UTF8 encoding: "CSV-UTF8".
 
-Note that it's OK to simply leave fields blank if there is no data -- the ADIOS DB is very forgiving of sparse data.
+Note that it's OK to simply leave fields blank if there is no data -- the ADIOS\ :sup:`®` Oil Database is very forgiving of sparse data.
 
 Multiple values
 ...............
 
-In general, you don't want to touch any of the field names or descriptions, only the data entry cells. However, there are a number of places where ADIOS DB will accept "one or more" data points for a given property (e.g. density at different temperatures), so you are free to insert new rows to accommodate all your data.
+In general, you don't want to touch any of the field names or descriptions, only the data entry cells. However, there are a number of places where ADIOS\ :sup:`®` Oil Database will accept "one or more" data points for a given property (e.g. density at different temperatures), so you are free to insert new rows to accommodate all your data.
 
 Do make sure to insert an empty row in between "tables" of the same data type.
 
 Units
 .....
 
-The units used for data are critical to include, and usually are kept in a separate cell from the values. Units should conform to the units used in the ADIOS DB -- which are specified in the NOAA "NUCOS" unit conversion system. The unit list is published here: https://github.com/NOAA-ORR-ERD/PyNUCOS/blob/master/NUCOS_unit_list.rst
+The units used for data are critical to include, and usually are kept in a separate cell from the values. Units should conform to the units used in the ADIOS\ :sup:`®` Oil Database -- which are specified in the NOAA "NUCOS" unit conversion system. The unit list is published here: https://github.com/NOAA-ORR-ERD/PyNUCOS/blob/master/NUCOS_unit_list.rst
 
 However, allowable units conform to standard industry practice, and should be in pick lists in the Excel template.
 
@@ -117,7 +117,7 @@ ADIOS Data Model Version
 Sections
 ........
 
-The template is broken down into sections that correspond to the structure of the ADIOS Oil Database. The sections are indicated with bold text in the template.
+The template is broken down into sections that correspond to the structure of the ADIOS\ :sup:`®` Oil Database. The sections are indicated with bold text in the template.
 
 Record metadata
 ...............
@@ -145,14 +145,14 @@ Sample Date
     Date the sample was obtained, in the ISO data format: YYYY-MM-DD, e.g. 2021-06-28 for June 6, 2021. It can be just a year as well.
 
 Product Type
-   Product Type -- one of the product types used in the ADIOS DB. It specifies "what" the product is. Any given product has one and only one product type. Use one of the ones in the pick list, or see below for labels.
+   Product Type -- one of the product types used in the ADIOS\ :sup:`®` Oil Database. It specifies "what" the product is. Any given product has one and only one product type. Use one of the ones in the pick list, or see below for labels.
 
 API
     API Gravity -- this is in the meta data for searching, etc. Actual density should be provided in the physical properties data.
 
 Labels
     Labels are various ways one might refer to this record -- used for searching. For example, an oil might be called "Diesel" or "Fuel Oil #2", etc.
-    It is best to pick labels from the current list used in the ADIOS DB.
+    It is best to pick labels from the current list used in the ADIOS\ :sup:`®` Oil Database.
     Both the labels and the mapping of labels to product types can be found in this CSV file: :download:`Mapping Product Types to Labels <../../../adios_db/models/oil/product_types_and_labels.csv>`
 
 Location Coordinates

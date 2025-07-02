@@ -15,7 +15,7 @@ The :py:mod:`computation` sub-package provides a number of utilities that make i
 The Measurement Objects
 =======================
 
-At the base of the entire set of data structures are py:class:`Measurement` objects. A ``Measurement`` object is used to store the actual data, along with its units, and a few utilities for unit conversion etc.
+At the base of the entire set of data structures are :py:class:`Measurement` objects. A ``Measurement`` object is used to store the actual data, along with its units, and a few utilities for unit conversion etc.
 
 Features of a ``Measurement`` Object.
 
@@ -28,27 +28,27 @@ Features of a ``Measurement`` Object.
 
 Available Measurement classes:
 
-`AngularVelocity`,
-`AnyUnit`,
-`Concentration`,
-`Density`,
-`Dimensionless`,
-`DynamicViscosity`,
-`InterfacialTension`,
-`KinematicViscosity`,
-`Length`,
-`Mass`,
-`MassFraction`,
-`MassOrVolumeFraction`,
-`MeasurementBase`,
-`MeasurementDataclass`,
-`NeedleAdhesion`,
-`Pressure`,
-`SayboltViscosity`,
-`Temperature`,
-`Time`,
-`Unitless`,
-`VolumeFraction`
+``AngularVelocity``,
+``AnyUnit``,
+``Concentration``,
+``Density``,
+``Dimensionless``,
+``DynamicViscosity``,
+``InterfacialTension``,
+``KinematicViscosity``,
+``Length``,
+``Mass``,
+``MassFraction``,
+``MassOrVolumeFraction``,
+``MeasurementBase``,
+``MeasurementDataclass``,
+``NeedleAdhesion``,
+``Pressure``,
+``SayboltViscosity``,
+``Temperature``,
+``Time``,
+``Unitless``,
+``VolumeFraction``
 
 Examples
 --------

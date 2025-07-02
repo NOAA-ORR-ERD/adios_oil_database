@@ -4,7 +4,7 @@
 Managing the Data
 #################
 
-In order to manage the data, you'll want to work with the :py:class:`Oil` object.
+In order to manage the data, you'll want to work with the ``Oil`` object.
 
 The Oil object is essentially a Python class that mimics the base JSON format. It then provides attributes that let you "drill down" to find the data you want.
 
@@ -13,7 +13,7 @@ The Scripting Module
 --------------------
 
 Most of the things you'll need for "typical" work with the data can be found in the
-:py:mod`adios-db.scripting` module. We recommend that you import it like so:
+``adios-db.scripting`` module. We recommend that you import it like so:
 
 .. code-block:: python
 
@@ -75,7 +75,7 @@ The file path can be a string or ``pathlib.Path`` object
 Creating an Oil from scratch
 ----------------------------
 
-You can create an empty Oil object from scratch -- this is likely to be useful for creating data from other data sources: CSV files, databases, etc. It does require a fairly in-depth knowledge of the nested structure, however.
+You can create an empty ``Oil`` object from scratch -- this is likely to be useful for creating data from other data sources: CSV files, databases, etc. It does require a fairly in-depth knowledge of the nested structure, however.
 
 .. code-block:: python
 

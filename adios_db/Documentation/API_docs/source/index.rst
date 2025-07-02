@@ -1,11 +1,11 @@
 ADIOS Oil Database ``adios_db`` package
 =======================================
 
-The ``adios_db`` package is a Python package developed to help manage and work with oil properties data, as managed in the NOAA ADIOS Oil Database project:
+The ``adios_db`` package is a Python package developed to help manage and work with oil properties data, as managed in the ADIOS\ :sup:`®` Oil Database project:
 
 http://adios.orr.noaa.gov
 
-This package is used to provide the back-end services of the ADIOS Oil Database web application, and can also be used to work with the data directly itself.
+This package is used to provide the back-end services of the ADIOS\ :sup:`®` Oil Database web application, and can also be used to work with the data directly itself.
 
 
 There are three things one might want to do with this package:
