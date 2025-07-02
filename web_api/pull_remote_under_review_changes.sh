@@ -15,16 +15,13 @@
 # 4 - Restore the Mongo DB from the under_review branch.
 
 echo "Inside Script: $0"
-set -e  # exit script if any commands fail
-set -x  # echo commands to stdout
+set -e # exit script if any commands fail
+set -x # echo commands to stdout
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(cd -- "$(dirname -- "${0}")" &>/dev/null && pwd)
 source ${SCRIPT_DIR}/git_functions.sh
 
-cd /data/git_repos/noaa-oil-data/
-
-git config user.email "adios-script@noaa.gov"
-git config user.name "Adios Automated Script"
+cd /noaa-oil-data/
 
 # 1. To start, let's get our repo in a consistent state with our remote.
 # First, we will update the local list of remote branches, as they may change
@@ -37,16 +34,14 @@ git checkout production
 git pull -s recursive -X theirs --no-edit
 
 # sync with the latest version on the server
-if [[ $(branch_exists_remotely under_review) -eq "0" ]];
-then
+if [[ $(branch_exists_remotely under_review) -eq "0" ]]; then
     echo "The remote under_review branch exists.  Check it out and pull."
     # 3a. Pull the remote under_review branch changes.
     git checkout under_review
     git pull -s recursive -X theirs --no-edit
 else
     echo "The remote under_review branch does not exist."
-    if [[ $(branch_exists_locally under_review) -eq "0" ]];
-    then
+    if [[ $(branch_exists_locally under_review) -eq "0" ]]; then
         echo "The local under_review branch exists."
         # 3b. Remove the local under_review branch.
         git branch -D under_review

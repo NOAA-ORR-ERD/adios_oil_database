@@ -1,0 +1,7 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Run pull script
+      command:
+        docker exec -i api /bin/bash -c "/web_api/pull_remote_under_review.sh"

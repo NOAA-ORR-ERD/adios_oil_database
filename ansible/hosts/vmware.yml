@@ -1,0 +1,28 @@
+plugin: community.vmware.vmware_vm_inventory
+hostnames:
+  - 'config.name'
+strict: false
+properties:
+  - name
+  - network
+  - overallStatus
+  - value
+  - capability
+  - config
+  - guest
+  - runtime
+  - summary
+with_nested_properties: true
+with_tags: true
+keyed_groups:
+  - key: tag_category.Role
+    separator: ''
+  - key: tag_category.Environment
+    separator: ''
+filters:
+  - "summary.runtime.powerState is defined and summary.runtime.powerState ==
+    'poweredOn'"
+  - "tag_category.Role is defined and 'adios' in tag_category.Role"
+  - "tag_category.Environment is defined and 'Staging' in
+    tag_category.Environment or tag_category.Environment is defined and
+    'Development' in tag_category.Environment"
