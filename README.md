@@ -1,6 +1,7 @@
 # ADIOS Oil Database
 
-ADIOS Oil Database project: system for managing oil properties data for use in Oil Spill Response. It is the code behind the Web Application at:
+ADIOS<sup>®</sup> Oil Database project:
+System for managing oil properties data for use in Oil Spill Response. It is the code behind the Web Application at:
 
 http://adios.orr.noaa.gov
 
@@ -9,20 +10,20 @@ This repository contains three packages:
 ``adios_db``: Python Package for managing the data.
 ( Docs [here](https://noaa-orr-erd.github.io/adios_oil_database/) )
 
-``adios_db_api``: A Python / Pyramid web application that provides a JSON-API for accessing the data.
+``adios_db_api``: A Python / Pyramid web application that provides a JSON API for accessing the data.
 
-``ADIOS web_client``: Ember-JS based Web browser client for searching, viewing, and modifying the data.
+ADIOS<sup>®</sup> ``web_client``: Ember-JS based Web browser client for searching, viewing, and modifying the data.
 
 ## Oil Data
 
-This package includes a small set of data in JSON format used for testing. The full dataset managed by NOAA can be found in the noaa-oil-data project here:
+This package includes a small set of data in JSON format used for testing. The full data set managed by NOAA can be found in the `noaa-oil-data` project here:
 
 https://github.com/NOAA-ORR-ERD/noaa-oil-data
 
 
 ## Dev Process:
 
-As of March, 2022, the project is still under active development, though nearly at a stable state.
+As of July, 2025, the project is under maintenance development.
 
 It is developed in an internal NOAA git repository. We try to keep the gitHub version up to date, but it may be a bit behind.
 If you find issues in or have questions about the code, reach out to NOAA (gitHub issues are good for questions) and we will work to push the latest version and address your questions.
@@ -38,9 +39,9 @@ The ADIOS Oil Database is a "Single page/rich client/AJAX" Web Application with 
 
 The Client is built with the Ember Javascript Framework, which provides a whole pile of javascript, in browser templating, etc. You can read more about it on the Web, but in short: it's a bunch of javascript, at run-time, entirely in the Browser.
 
-The Client relies on a JSON REST service, which is provided by a Python/Pyramid Application, using Cornice to help with the REST stuff. This is the "web_api", and the python package is called "adios_db_api".
+The Client relies on a JSON REST service, which is provided by a Python/Pyramid Application, using Cornice to help with the REST stuff. This is the "web_api", and the python package is called `adios_db_api`.
 
-The adios_db_api uses mongodb to manage the data itself. mongodb (https://www.mongodb.com/) is a "NoSQL Document Database", which runs as a separate server process.
+The `adios_db_api` uses mongodb to manage the data itself. mongodb (https://www.mongodb.com/) is a "NoSQL Document Database", which runs as a separate server process.
 
 So: to run the app, you need to:
 
@@ -76,7 +77,7 @@ Python package for managing the data. It provides code for:
 
  * Importing data
  * Reading and writing the JSON format
- * A data validation framework (there is a small amount of validation included, it is fairly starightformward to add more.
+ * A data validation framework (there is a moderate amount of validation included, and it is fairly straightforward to add more.
  * Serving the data via MongoDB
  * Extracting specific data.
  * Managing physical units, including unit conversion.
@@ -84,17 +85,6 @@ Python package for managing the data. It provides code for:
  * Code to build an oil definition as required by the NOAA GNOME model.
 
 Docs at: https://noaa-orr-erd.github.io/adios_oil_database/
-
-Python package for managing the data. It provides code for:
-
- * Importing data
- * Reading and writing the JSON format
- * A data validation framework (there is a small amount of validation included, it is fairly starightformward to add more.
- * Serving the data via MongoDB
- * Extracting specific data.
- * Managing physical units, including unit conversion.
- * Some computation on the data (interpolation, etc.)
- * Code to build an oil definition as required by the NOAA GNOME model.
 
 ### `adios_db_api`:
 
@@ -104,20 +94,18 @@ Python (Pyramid) web server for interaction between the database and the Web cli
 
 Single page web app (emberjs based)for displaying and editing the data.
 
-
 ## Installing for development:
 
 ### conda setup:
 
-We are using conda wherever possible for getting all the dependencies.
+We are using conda and conda-forge wherever possible for getting all the dependencies. (though most (all?) are available on PyPI via pip as well)
 
 To get conda going:
 
-* Install miniconda: https://docs.conda.io/en/latest/miniconda.html
-  (Python 3 version is best at this point)
+* Install miniforge: https://conda-forge.org/download/ (or another conda system)
 
 * We use a lot of packages from the "conda-forge" channel, so you
-  need to add that to your conda config:
+  need to add that to your conda config, if you aren't starting with miniforge.
 
 ```
 conda config --add channels conda-forge
@@ -125,17 +113,35 @@ conda config --add channels conda-forge
 
 * If you are only working on one project, you can use the "base"
   environment, but it is usually best to create an environment for
-  each specific project -- each environment can have a different set of dependencies, including Python itself.
+  each specific project -- each environment can have a different set
+  of dependencies, including Python itself.
 
 
 ## Installing the ``adios_db`` package:
 
+### Released Version:
+
+We publish the `adios_db` package on conda-forge, so:
+
+```
+> conda install adios_db
+```
+
+Should do it.
+
+### From source code (this repo)
 
 #### Setup and activate a conda environment:
 
 ```
 conda create -n adios_db --file adios_db/conda_requirements.txt
 conda activate adios_db
+```
+
+Or, if you already have an environment, install the dependencies:
+
+```
+conda install --file adios_db/conda_requirements.txt
 ```
 
 #### Install the package
@@ -184,15 +190,15 @@ $ pytest --pyargs adios_db
 ### If you have not already created a conda environment:
 
 ```
-conda create -n adiosdb --file oil_db/conda_requirements.txt --file web_api/conda_requirements.txt
+conda create -n adios_db --file oil_db/conda_requirements.txt --file web_api/conda_requirements.txt
 ```
 
-This will `create` a new environment with the name (`-n`) adiosdb, using the requirements `--file`s in the oil_db and web_api directories.
+This will `create` a new environment with the name (`-n`) adios_db, using the requirements `--file`s in the oil_db and web_api directories.
 
 To use this new environment, you need to activate it:
 
 ```
-conda activate adiosdb
+conda activate adios_db
 ```
 
 ### If you have already created a conda environment:
@@ -200,7 +206,7 @@ conda activate adiosdb
 Activate your adios_db environment, if it's not already activated:
 
 ```
-conda activate adiosdb
+conda activate adios_db
 ```
 
 Install the dependencies (it's good to pass the adios_db ones in, even if they have already been installed, so conda won't get confused)
@@ -211,7 +217,7 @@ conda install --file oil_db/conda_requirements.txt --file web_api/conda_requirem
 
 ## MongoDB
 
-The oil_db code needs a mongodb instance running to support the web_api. It can be used without mongo for most scripting activities.
+The oil_db code needs a mongod instance running to support the web_api. It can be used without mongo for most scripting activities.
 
 MongoDB can be installed in various ways, and which is best depends on platform and deployment environment. But the easiest way on Windows and Mac for development is to use conda to install it:
 

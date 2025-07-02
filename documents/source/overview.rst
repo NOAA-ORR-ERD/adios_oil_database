@@ -14,7 +14,7 @@ It is developed and supported by:
 
 `<https://response.restoration.noaa.gov/>`_
 
-The information in the database can be read online, dowloaded (in JSON format) for use with NOAA's GNOME model or other systems.
+The information in the database can be read online, downloaded (in JSON format) for use with NOAA's GNOME model or other systems.
 
 
 Related Projects
