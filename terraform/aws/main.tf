@@ -202,7 +202,7 @@ terraform {
 
 module "amazon" {
   source = "gitlab.orr.noaa.gov/internal-terraform-module-registry/amazon/ec2s"
-  version = "0.3.0"
+  version = "0.3.1"
 
   count                     = var.instance_count
   vm_name                   = "${lower(var.line_office)}-${lower(var.program)}-${lower(var.application_name)}${count.index + 1}-6702"
