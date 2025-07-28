@@ -159,7 +159,7 @@ def main(_global_config, **settings):
 
     user_docs_dir = settings.get('user_docs_dir')
 
-    config.add_static_view(name='/docs',
+    config.add_static_view(name='/docs/',
                            path=user_docs_dir,
                            cache_max_age=12 * 3600)
 
