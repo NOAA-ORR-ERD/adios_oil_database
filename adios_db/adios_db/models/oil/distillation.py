@@ -58,6 +58,8 @@ class Distillation:
     end_point: Temperature = None
     fraction_recovered: MassOrVolumeFraction = None
     cuts: DistCutList = field(default_factory=DistCutList)
+    comment: str = None
+
 
     def validate(self):
         msgs = []
