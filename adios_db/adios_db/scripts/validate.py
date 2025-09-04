@@ -95,14 +95,14 @@ def write_reports(base_dir, save):
 
     with open("validation_by_record.md", 'w',
               encoding="utf-8") as outfile1:
-        write_header(outfile1, base_dir)
+        write_header(outfile1, base_dir, duplicate_ids)
         write_by_record(outfile1, validation_by_record)
         write_header_rev(outfile1)
         write_by_record(outfile1, validation_by_record_rev)
 
     # write out the validation by error
     with open("validation_by_error.md", 'w', encoding="utf-8") as outfile:
-        write_header(outfile, base_dir)
+        write_header(outfile, base_dir, duplicate_ids)
         write_by_error(outfile, validation_by_error)
         write_header_rev(outfile)
         write_by_error(outfile, validation_by_error_rev)
@@ -138,12 +138,17 @@ def write_by_error(outfile, validation_by_error):
         outfile.writelines(errors)
 
 
-def write_header(of, base_dir):
+def write_header(of, base_dir, dups=[]):
     of.write("# ADIOS Oil Database Validation Report\n\n")
     of.write("Validation of data in: \n\n")
     of.write(f"`{base_dir.absolute()}`\n\n")
     of.write("**Generated:** "
              f"{datetime.datetime.now().strftime('%h %d, %Y - %H:00')}\n\n")
+    if dups:
+        of.write(f"** ERROR: DUPLICATE IDs **\n")
+        for ID in dups:
+            of.write(f"{ID}\n")
+
 
 
 def write_header_rev(outfile):
