@@ -342,7 +342,7 @@ Build Dev Server:
         ref: latest # (LEAVE ME)
         file: 'jobs/terraform/terraform.vm.gitlab-ci.yml' # (LEAVE ME)
 
-Build Production Server:
+Build Editable Server:
   stage: build
   needs: []
   variables:
