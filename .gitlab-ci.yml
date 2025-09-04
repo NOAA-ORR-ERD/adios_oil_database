@@ -16,7 +16,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      job-name: 'Build ADIOS API Image with under review data' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
         - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
@@ -35,7 +35,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Build Production ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      job-name: 'Build ADIOS API Image with production data' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
         - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
@@ -109,7 +109,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Deploy Production (editable)'
+      job-name: 'Deploy Editable'
       action: 'deploy'
       server-role-tag: $MY_SERVER_ROLE_TAG
       docker-compose-file-path: './docker/docker-compose.yml'
