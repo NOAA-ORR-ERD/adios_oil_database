@@ -16,7 +16,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Build ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      job-name: 'Build ADIOS API Image with under review data' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
         - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
@@ -35,7 +35,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Build Production ADIOS API Image' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
+      job-name: 'Build ADIOS API Image with production data' # (Optional) The name of the GitLab job. If not specified then `BuildDockerImage` is used.
       stage: build # Specifies the pipeline stage (e.g., build, test, deploy) where the component will run
       build-args: # (Optional) Docker build arguments passed to the Dockerfile during the build
         - PYTHON_VER=$PYTHON_VER # Python version to be used in the Docker image.
@@ -109,7 +109,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Deploy Production (editable)'
+      job-name: 'Deploy Editable'
       action: 'deploy'
       server-role-tag: $MY_SERVER_ROLE_TAG
       docker-compose-file-path: './docker/docker-compose.yml'
@@ -169,7 +169,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Sync with under review'
+      job-name: 'Sync editable with under review branch'
       stage: maintenance
       log-level: info
       when: manual
@@ -188,7 +188,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Load prod mongodb with data from repository'
+      job-name: 'Load editable mongodb with data from repository'
       stage: maintenance
       log-level: info
       when: manual
@@ -226,7 +226,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Sync with production'
+      job-name: 'Update public with production branch'
       stage: maintenance
       log-level: info
       when: manual
@@ -234,6 +234,25 @@ include:
       deployment-target: 'aws'
       server-role-tag: ${MY_SERVER_ROLE_TAG}public
       playbook-file-name: 'sync-with-production.yml'
+      runner-tags:
+        - developer-ci-templates
+        - aws
+        - us-west-2
+        - prod
+  - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Reset editable to under review branch'
+      stage: maintenance
+      log-level: info
+      when: manual
+      environment-name: 'prod'
+      deployment-target: 'aws'
+      server-role-tag: ${MY_SERVER_ROLE_TAG}
+      playbook-file-name: 'reset-editable-server.yml'
       runner-tags:
         - developer-ci-templates
         - aws
@@ -342,7 +361,7 @@ Build Dev Server:
         ref: latest # (LEAVE ME)
         file: 'jobs/terraform/terraform.vm.gitlab-ci.yml' # (LEAVE ME)
 
-Build Production Server:
+Build Editable Server:
   stage: build
   needs: []
   variables:

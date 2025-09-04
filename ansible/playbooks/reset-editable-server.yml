@@ -1,0 +1,8 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Run Sync script
+      command:
+        docker exec -i api /bin/bash -c
+        "/web_api/pull_remote_under_review_changes.sh"
