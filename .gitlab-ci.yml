@@ -169,7 +169,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Sync with under review'
+      job-name: 'Sync editable with under review branch'
       stage: maintenance
       log-level: info
       when: manual
@@ -188,7 +188,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Load prod mongodb with data from repository'
+      job-name: 'Load editable mongodb with data from repository'
       stage: maintenance
       log-level: info
       when: manual
@@ -226,7 +226,7 @@ include:
         when: never
       - if: $CI_COMMIT_REF_NAME
     inputs:
-      job-name: 'Sync with production'
+      job-name: 'Update public with production branch'
       stage: maintenance
       log-level: info
       when: manual
@@ -234,6 +234,25 @@ include:
       deployment-target: 'aws'
       server-role-tag: ${MY_SERVER_ROLE_TAG}public
       playbook-file-name: 'sync-with-production.yml'
+      runner-tags:
+        - developer-ci-templates
+        - aws
+        - us-west-2
+        - prod
+  - component: $CI_SERVER_FQDN/components/ansible/Ansible@v1.3.0
+    rules:
+      - if: $TF_DESTROY == "true" # Do not run when TF_DESTROY is true
+        when: never
+      - if: $CI_COMMIT_REF_NAME
+    inputs:
+      job-name: 'Reset editable to under review branch'
+      stage: maintenance
+      log-level: info
+      when: manual
+      environment-name: 'prod'
+      deployment-target: 'aws'
+      server-role-tag: ${MY_SERVER_ROLE_TAG}
+      playbook-file-name: 'reset-editable-server.yml'
       runner-tags:
         - developer-ci-templates
         - aws
