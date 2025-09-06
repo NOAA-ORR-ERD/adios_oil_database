@@ -38,7 +38,13 @@ def main():
         print(USAGE)
         sys.exit(1)
 
-    write_reports(base_dir, save)
+    dups = write_reports(base_dir, save)
+
+    if dups:
+        print(f"ERROR: There were {len(dups)} duplicate IDs:\n{dups}")
+        sys.exit(1)
+    else:
+        sys.exit(0)
 
 
 def write_reports(base_dir, save):
@@ -47,10 +53,13 @@ def write_reports(base_dir, save):
     validation_by_record_rev = {}
     validation_by_error_rev = {}
 
+    all_ids = []
+
     # validate all the records:
     for oil, pth in get_all_records(base_dir):
         print("\n\n******************\n")
         print(f"processing: {oil.oil_id}: {oil.metadata.name}")
+        all_ids.append(oil.oil_id)
 
         oil.reset_validation()
         # unpack into a dict for easier processing
@@ -82,19 +91,23 @@ def write_reports(base_dir, save):
             with open(pth, 'w', encoding='utf-8') as datafile:
                 json.dump(oil.py_json(), datafile, indent=4)
 
+    duplicate_ids = check_for_dups(all_ids)
+
     with open("validation_by_record.md", 'w',
               encoding="utf-8") as outfile1:
-        write_header(outfile1, base_dir)
+        write_header(outfile1, base_dir, duplicate_ids)
         write_by_record(outfile1, validation_by_record)
         write_header_rev(outfile1)
         write_by_record(outfile1, validation_by_record_rev)
 
     # write out the validation by error
     with open("validation_by_error.md", 'w', encoding="utf-8") as outfile:
-        write_header(outfile, base_dir)
+        write_header(outfile, base_dir, duplicate_ids)
         write_by_error(outfile, validation_by_error)
         write_header_rev(outfile)
         write_by_error(outfile, validation_by_error_rev)
+
+    return duplicate_ids
 
 
 def oil_id_content(oil):
@@ -125,12 +138,17 @@ def write_by_error(outfile, validation_by_error):
         outfile.writelines(errors)
 
 
-def write_header(of, base_dir):
+def write_header(of, base_dir, dups=[]):
     of.write("# ADIOS Oil Database Validation Report\n\n")
     of.write("Validation of data in: \n\n")
     of.write(f"`{base_dir.absolute()}`\n\n")
     of.write("**Generated:** "
              f"{datetime.datetime.now().strftime('%h %d, %Y - %H:00')}\n\n")
+    if dups:
+        of.write(f"** ERROR: DUPLICATE IDs **\n")
+        for ID in dups:
+            of.write(f"{ID}\n")
+
 
 
 def write_header_rev(outfile):
@@ -139,6 +157,22 @@ def write_header_rev(outfile):
                   "but still have issues that are known and may never "
                   "be resolved\n\n")
 
+def check_for_dups(all_ids):
+    """
+    given a sequence of all ids -- check for duplicates
+    """
+    existing = set()
+    dups = []
+    for ID in all_ids:
+        if ID in existing:
+            dups.append(ID)
+        existing.add(ID)
+    return dups
+
+
 
 if __name__ == "__main__":
     main()
+
+
+
