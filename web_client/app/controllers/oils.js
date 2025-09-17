@@ -67,7 +67,12 @@ export default class OilsController extends Controller {
     @action
     discardTemporaryEdits(oil, newRoute) {
         // reset the flag
-        this.changesMade = false;  // eslint-disable-line ember/no-controller-access-in-routes
+        this.changesMade = false;
+
+        // We are starting with a clean slate in our editing.
+        // Therefore we reset the tabs to the default starting position.
+        this.updateSampleTab('#fresh-oil');
+        this.updateCategoryTab('#fresh-oil-physical');
 
         if (oil.oil_id.endsWith(this.tempSuffix)) {
             // switch back to the permanent model, discarding our changes.
