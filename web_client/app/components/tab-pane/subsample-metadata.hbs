@@ -23,7 +23,7 @@
             class="p-0 flex-fill bg-transparent border"
             @value={{@oil.metadata.short_name}}
             placeholder="Enter Short Name"
-            {{on "change" (fn @submit @oil)}}
+            {{on "change" this.updateSampleName}}
           />
         {{else}}
           {{@oil.metadata.short_name}}

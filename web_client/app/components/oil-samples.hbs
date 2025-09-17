@@ -13,44 +13,14 @@
             href={{props.href}}
             onclick={{fn tab.select props.id}}
            >
-            {{#if @editable}}
-              <Input
-                class="p-1 overflow-hidden bg-transparent border"
-                @value={{props.short_name}} {{on "change" (fn this.updateShortSampleName idx)}}
-              />
-              {{#if idx}}
-                {{! We don't want to remove sample 0 (Fresh Oil) }}
-                <TabNav::RemoveSample
-                  @oil={{@oil}}
-                  @index={{idx}}
-                  @submit={{@submit}}
-                />
-              {{/if}}
-            {{else}}
-              {{props.short_name}}
-            {{/if}}
+          {{props.short_name}}
           </a>
         {{else}}
           <a role="tab" class="nav-link" aria-selected="{{eq tab.activeId props.id }}"
             href={{props.href}}
             onclick={{fn tab.select props.id}}
            >
-            {{#if @editable}}
-              <Input
-                class="p-1 overflow-hidden bg-transparent border"
-                @value={{props.short_name}} {{on "change" (fn this.updateShortSampleName idx)}}
-              />
-              {{#if idx}}
-                {{! We don't want to remove sample 0 (Fresh Oil) }}
-                <TabNav::RemoveSample
-                  @oil={{@oil}}
-                  @index={{idx}}
-                  @submit={{@submit}}
-                />
-              {{/if}}
-            {{else}}
-              {{props.short_name}}
-            {{/if}}
+          {{props.short_name}}
           </a>
         {{/if}}
       </nav.item>
@@ -65,34 +35,14 @@
             href={{props.href}}
             onclick={{fn tab.select props.id}}
            >
-            {{#if @editable}}
-              {{! Here, we only use the input control to match the styling }}
-              {{! of the other tabs.  We will not change the tab name . }}
-              <Input
-                class="p-1 overflow-hidden bg-transparent border"
-                @value={{props.short_name}}
-                disabled
-              />
-            {{else}}
-              {{props.short_name}}
-            {{/if}}
+          {{props.short_name}}
           </a>
         {{else}}
           <a role="tab" class="nav-link" aria-selected="{{eq tab.activeId props.id }}"
             href={{props.href}}
             onclick={{fn tab.select props.id}}
            >
-            {{#if @editable}}
-              {{! Here, we only use the input control to match the styling }}
-              {{! of the other tabs.  We will not change the tab name . }}
-              <Input
-                class="p-1 overflow-hidden bg-transparent border"
-                @value={{props.short_name}}
-                disabled
-              />
-            {{else}}
-              {{props.short_name}}
-            {{/if}}
+          {{props.short_name}}
           </a>
         {{/if}}
       </nav.item>
@@ -121,6 +71,7 @@
           @sampleTab={{@sampleTab}}
           @categoryTab={{@categoryTab}}
           @updateCategoryTab={{@updateCategoryTab}}
+          @updateSampleTab={{@updateSampleTab}}
           @sampleName={{props.short_name}}
           @sampleIndex={{idx}}
           @distillationTypes={{@distillationTypes}}
