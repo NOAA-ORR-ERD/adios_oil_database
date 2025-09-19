@@ -17,6 +17,10 @@ def dataclass_to_json(cls):
     """
     class decorator that adds the ability to save a dataclass as JSON
 
+    And all the other special behavior that we need for the database objects
+
+    e.g. validation, etc.
+
     All fields must be either JSON-able Python types or
     have be a type with a _to_json method
     """
@@ -110,6 +114,7 @@ def dataclass_to_json(cls):
         return sorted(set(messages))
 
     def __setattr__(self, name, val):
+        # enforce that we can only set attributes that are expected
         try:
             _fieldobj = self.__dataclass_fields__[name]
         except KeyError:

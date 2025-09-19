@@ -46,6 +46,9 @@ countries = {
 def validate_location(location):
     msgs = []
     splitup = location.split(", ", maxsplit=1)
+    # special case Singapore -- if we find other city states we can generalize this
+    if location == "Singapore, Singapore":
+        return msgs
     if len(splitup) == 2 and splitup[0] in countries:
         should_be = ", ".join((splitup[1], splitup[0]))
         msgs.append(WARNINGS['W012'].format(location, should_be))
