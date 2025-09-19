@@ -200,6 +200,37 @@ class DensityList(RefTempList, JSON_List):
         dl.sort(key=lambda dp: dp.ref_temp.converted_to('C').value)
         return dl
 
+def check_for_out_of_order_visc(vis_list):
+    """
+    check out of order and missing shear rates for viscosity
+    """
+    msgs = []
+    num_shear_rate = 0
+    if len(vis_list) > 1:
+        vis_list.sort(key=lambda sl: (sl[1], sl[2]))
+
+        viscosities = {}
+        for visc, temp, shear_rate in vis_list:
+            viscosities.setdefault(shear_rate, []).append((temp, visc))
+            if shear_rate is not None:
+                num_shear_rate += 1
+
+        for _k, v in viscosities.items():
+            _temps, vis = zip(*v)
+            if(any(i <= j for i, j in zip(vis, vis[1:]))):
+                msgs.append(ERRORS["E062"])
+        if num_shear_rate not in (0, len(vis_list)):
+            msgs.append(WARNINGS["W015"])
+    return msgs
+
+
+def check_for_shear_rate(vis_list):
+    num_shear_rate = 0
+    for visc, temp, shear_rate in vis_list:
+        if shear_rate is not None:
+            num_shear_rate += 1
+    if num_shear_rate:
+        return [ERRORS["E062"]]
 
 @dataclass_to_json
 @dataclass
@@ -256,7 +287,7 @@ class DynamicViscosityList(RefTempList, JSON_List):
         dvis_list = []
 
         for p in points_list:
-            if p.ref_temp is None or p.ref_temp.is_empty:
+            if p.ref_temp is None or p.ref_temp.is_empty():
                 # continue  # Error should be caught by the base class
                 # msgs.append(ERRORS["E042"]
                 #             .format(data_str + " reference temp"))
@@ -267,7 +298,7 @@ class DynamicViscosityList(RefTempList, JSON_List):
             try:
                 shear_rate = p.shear_rate.value
             except (TypeError, AttributeError):
-                shear_rate = 0
+                shear_rate = None
 
             try:
                 viscosity = p.viscosity.converted_to('Pas').value
@@ -278,17 +309,18 @@ class DynamicViscosityList(RefTempList, JSON_List):
                 dvis_list.append((viscosity, ref_temp, shear_rate))
 
         # check for decreasing with temp.
-        if len(dvis_list) > 1:
-            dvis_list.sort(key=lambda sl: (sl[1], sl[2]))
+        msgs += check_for_out_of_order_visc(dvis_list)
+        # if len(dvis_list) > 1:
+        #     dvis_list.sort(key=lambda sl: (sl[1], sl[2]))
 
-            viscosities = {}
-            for visc, temp, shear_rate in dvis_list:
-                viscosities.setdefault(shear_rate, []).append((temp, visc))
+        #     viscosities = {}
+        #     for visc, temp, shear_rate in dvis_list:
+        #         viscosities.setdefault(shear_rate, []).append((temp, visc))
 
-            for _k, v in viscosities.items():
-                _temps, dvis = zip(*v)
-                if(any(i <= j for i, j in zip(dvis, dvis[1:]))):
-                    msgs.append(ERRORS["E062"])
+        #     for _k, v in viscosities.items():
+        #         _temps, dvis = zip(*v)
+        #         if(any(i <= j for i, j in zip(dvis, dvis[1:]))):
+        #             msgs.append(ERRORS["E062"])
 
         return msgs
 
@@ -309,11 +341,11 @@ class KinematicViscosityList(RefTempList, JSON_List):
     @classmethod
     def from_data(cls, data_table):
         """
-        Create a DensityList from data of the format:
+        Create a KinematicViscosityList from data of the format:
 
         ```
         [(viscosity, viscosity_unit, temp, temp_unit),
-         (viscosity, viscosity, temp, temp_unit),
+         (viscosity, viscosity_unit, temp, temp_unit),
          ...
          ]
         ```
@@ -368,17 +400,8 @@ class KinematicViscosityList(RefTempList, JSON_List):
             if viscosity is not None:
                 kvis_list.append((viscosity, ref_temp, shear_rate))
 
-        if len(kvis_list) > 1:
-            kvis_list.sort(key=lambda sl: (sl[1], sl[2]))
-
-            viscosities = {}
-            for visc, temp, shear_rate in kvis_list:
-                viscosities.setdefault(shear_rate, []).append((temp, visc))
-
-            for _k, v in viscosities.items():
-                _temps, kvis = zip(*v)
-                if(any(i <= j for i, j in zip(kvis, kvis[1:]))):
-                    msgs.append(ERRORS["E062"])
+        # check for decreasing with temp.
+        msgs += check_for_out_of_order_visc(kvis_list)
 
         return msgs
 

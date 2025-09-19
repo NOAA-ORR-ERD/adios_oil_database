@@ -21,9 +21,10 @@ class Sara:
     @classmethod
     def from_data(cls, data, unit):
         """
-        create a Sara object from the data provided
+        Create a Sara object from the data provided
 
-        must be a 4-sequence:
+        Must be a length-4 Sequence (list) -- all in the same units.
+         - Any data missing can be set to None
 
         :param data: [saturate_fraction, aromatic_fraction, resin_fraction, asphaltene_fraction]
                      (any value can be None)
