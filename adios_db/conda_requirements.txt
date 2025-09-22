@@ -10,7 +10,7 @@
 # It is best to have the conda-forge channel configured as
 # the first channel, and have channel_priority set to "strict"
 
-python>=3.9,<=3.12
+python>=3.9,<3.14
 numpy>=1.24
 pynucos>=3.3
 awesome-slugify>=1.6.5

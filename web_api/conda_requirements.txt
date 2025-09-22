@@ -2,7 +2,7 @@
 
 # These should all be in the conda-forge channel
 
-python>=3.9,<3.12
+python>=3.9,<3.14
 
 pyramid>=2,<3
 pyramid_tm
@@ -12,7 +12,8 @@ paste
 pastedeploy>=2.0.1
 
 # for working with mongodb
-pymongo>=3.11.0
+mongodb>=6.0.0
+pymongo>=4.11.0
 
 waitress
 ujson

@@ -1,5 +1,5 @@
 variables:
-  PYTHON_VER: '3.11'
+  PYTHON_VER: '3.13'
   CI_APPLICATION_TAG: $CI_COMMIT_SHA-api-stage
   TF_DESTROY: 'false'
   MY_SERVER_ROLE_TAG: 'adios'
