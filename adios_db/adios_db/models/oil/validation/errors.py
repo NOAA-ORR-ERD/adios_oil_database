@@ -33,7 +33,8 @@ ERRORS = {
     # E06* -- dataset error
     "E060": "Oil fraction in distillation cuts is not accumulative",
     "E061": "Boiling points in distillation cuts are not strictly increasing",
-    "E062": "Viscosity data is not strictly decreasing",
+    "E062": "Viscosity data is not strictly decreasing with increasing temperature",
+    "E063": "Viscosity data has shear rate for some values, but not others",
 
     # E09* -- system errors
     "E098": "Exception Raised while computing completeness",

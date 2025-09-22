@@ -345,6 +345,103 @@ class TestDynamicViscosityList:
         assert len(msgs) == 1
         assert msgs[0] == "E049: Missing value for DynamicViscosity with reference temperature: 273.15"
 
+    def test_validate_all_same(self):
+        # from AD02151 "GASOLINE (LEADED)
+        data = [{
+            "viscosity": {
+                "value": 0.001,
+                "unit": "kg/(m s)",
+                "unit_type": "dynamicviscosity"
+            },
+            "ref_temp": {
+                "value": 0.0,
+                "unit": "C",
+                "unit_type": "temperature"
+            }
+        }, {
+            "viscosity": {
+                "value": 0.001,
+                "unit": "kg/(m s)",
+                "unit_type": "dynamicviscosity"
+            },
+            "ref_temp": {
+                "value": 5.0,
+                "unit": "C",
+                "unit_type": "temperature"
+            }
+        }, {
+            "viscosity": {
+                "value": 0.001,
+                "unit": "kg/(m s)",
+                "unit_type": "dynamicviscosity"
+            },
+            "ref_temp": {
+                "value": 15.0,
+                "unit": "C",
+                "unit_type": "temperature"
+            }
+        }, {
+            "viscosity": {
+                "value": 0.001,
+                "unit": "kg/(m s)",
+                "unit_type": "dynamicviscosity"
+            },
+            "ref_temp": {
+                "value": 20.0,
+                "unit": "C",
+                "unit_type": "temperature"
+            }
+        }]
+
+        dvl = DynamicViscosityList.from_py_json(data)
+
+        msgs = dvl.validate()
+
+        print(msgs)
+
+        assert len(msgs) == 1
+        assert "E062:" in msgs[0]
+
+
+    def test_missing_shear_rate(self):
+        data = [{
+            "viscosity": {
+                "value": 63180.0,
+                "unit": "mPas",
+                "unit_type": "dynamicviscosity"
+            },
+            "ref_temp": {
+                "value": 0.0,
+                "unit": "C",
+                "unit_type": "temperature"
+            },
+            "shear_rate": {
+                "value": 10.0,
+                "unit": "1/s",
+                "unit_type": "angularvelocity"
+            }
+        }, {
+            "viscosity": {
+                "value": 76000.0,
+                "unit": "mPas",
+                "unit_type": "dynamicviscosity"
+            },
+            "ref_temp": {
+                "value": 15.0,
+                "unit": "C",
+                "unit_type": "temperature"
+            }
+        }]
+
+        dvl = DynamicViscosityList.from_py_json(data)
+
+        msgs = dvl.validate()
+
+        print(msgs)
+
+        assert len(msgs) == 1
+        assert "W015:" in msgs[0]
+
 
 class TestKinematicViscosityPoint:
     def test_init_empty(self):
@@ -443,6 +540,68 @@ class TestKinematicViscosityList:
 
         assert "E062:" in msgs[0]
         assert "Viscosity" in msgs[0]
+
+    def test_same_kvis(self):
+        data = [(100, "cSt", 0, "C"),
+                (100, "cSt", 15.0, "C"),
+                ]
+        kv = KinematicViscosityList.from_data(data)
+
+        msgs = kv.validate()
+
+        assert "E062:" in msgs[0]
+        assert "Viscosity" in msgs[0]
+
+    def test_multiple_shear_rates_not_decreasing(self):
+        data =  [
+                    {
+                        "viscosity": {
+                            "value": 1000.0,
+                            "unit": "cSt",
+                            "standard_deviation": 67000.0,
+                            "replicates": 3,
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 15.0,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        },
+                        "shear_rate": {
+                            "value": 10.0,
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity"
+                        },
+                        "method": "ESTS 12.06/x.x/M"
+                    },
+                    {
+                        "viscosity": {
+                            "value": 900.0,
+                            "unit": "cSt",
+                            "standard_deviation": 2233480.0,
+                            "replicates": 3,
+                            "unit_type": "kinematicviscosity"
+                        },
+                        "ref_temp": {
+                            "value": 0.0,
+                            "unit": "C",
+                            "unit_type": "temperature"
+                        },
+                        "shear_rate": {
+                            "value": 1,
+                            "unit": "1/s",
+                            "unit_type": "angularvelocity"
+                        },
+                        "method": "ESTS 12.06/x.x/M"
+                    }
+                ]
+        kvl = KinematicViscosityList.from_py_json(data)
+
+        msgs = kvl.validate()
+
+        print(msgs)
+
+        assert not msgs
 
 class TestPhysicalProperties:
     def test_init(self):

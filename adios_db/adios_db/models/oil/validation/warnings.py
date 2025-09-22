@@ -26,10 +26,10 @@ WARNINGS = {
     "W011": "{} date format: {} is invalid: {}",
     "W013": "Oil fraction in distillation cuts has duplicate entries",
     "W014": 'Non-simple value: "{}" for {}',
+    "W015": "Viscosity data has shear rate for some values, but not others",
 
     # NOAA specific
     "W100": ("Not GNOME compatible: {}"),
-
 
 }
 

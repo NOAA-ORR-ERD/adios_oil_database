@@ -136,26 +136,43 @@ class KinematicViscosity:
     """
     # Default constants for when there is only one viscosity
     # data point.
-
+    # NOTE: data from latest calculation as of 2025-09-19
     # Fit curve to coefficient of viscosity vs density scatter plot for each oil type
     # Value of coefficient of viscosity at density at 15C is used as the kv2 value
     # Product types that will be rejected, not enough data to fit the curve (or no data) -
     # "Bitumen" "Fuel Oil NOS" "Hydraulic Fluid" "Bio-Petro Fuel Oil" "Other"
     # slope, intercept, minimum value
-    slope_intercept_kv2 = {"Crude Oil NOS": (22.14, -13547.38, 0),
-                   "Tight Oil": (22.14, -13547.38, 0), # not enough data but similar to Crude Oil NOS
-                   "Distillate Fuel Oil": (47.8421, -36442.499, 0),
-                   "Condensate": (149.39, -108117.618, 844),
-                   "Bitumen Blend": (56.89, -46772.773, 0),
-                   # "Refined Product NOS": (39.768, -29255.87, 0), # not clearly defined.
-                   "Residual Fuel Oil": (89.557, -75563.817, 0),
-                   # "Refinery Intermediate": (29.49, -21530.544, 0), # not a good fit for these oils
-                   "Solvent": (3.2533, -221.49, 0),
-                   "Bio-fuel Oil": (-35.3808, 33221, 0),
-                   #"Natural Plant Oil": (80.4, -70487.17185, 0),
-                   "Lube Oil": (-1.851, 6432, 0),
-                   "Dielectric Oil": (14.291, -8598.1815, 0)
-                   }
+
+    slope_intercept_kv2 = {
+        'Bio-fuel Oil': (-35.38083731539273, 33221.861943825446, 1864.6319412651287),
+        'Bitumen Blend': (57.0098013105482, -46883.25794309046, 4975.3797142363555),
+        'Condensate': (113.85627373625817, -80982.84503070948, 578.8245147092716),
+        'Crude Oil NOS': (23.991510744131457, -15357.265090333929, 148.70771832267968),
+        'Dielectric Oil': (14.291295675366111, -8598.1815248434, 3287.232879657373),
+        'Distillate Fuel Oil': (46.447713038535895, -35221.68741027304, 19.364150795627832),
+        'Lube Oil': (0.0, 4806.966168072863, 4806.966168072863),
+        # 'Natural Plant Oil': (80.11660887308639, -70176.0257133979, 3787.6275982354664),
+        # 'Refined Product NOS': (110.6592861637017, -97137.65686690569, 2850.912416724771),
+        # 'Refinery Intermediate': (26.07049770263108, -18349.98627361308, 239.3701601223172),
+        'Residual Fuel Oil': (73.48177044619234, -59654.198920653376, 7963.306900940253),
+        'Solvent': (0.0, 2389.0485403857015, 2389.0485403857015)
+    }
+
+    # slope_intercept_kv2 = {"Crude Oil NOS": (22.14, -13547.38, 0),
+    #                "Distillate Fuel Oil": (47.8421, -36442.499, 0),
+    #                "Condensate": (149.39, -108117.618, 844),
+    #                "Bitumen Blend": (56.89, -46772.773, 0),
+    #                # "Refined Product NOS": (39.768, -29255.87, 0), # not clearly defined.
+    #                "Residual Fuel Oil": (89.557, -75563.817, 0),
+    #                # "Refinery Intermediate": (29.49, -21530.544, 0), # not a good fit for these oils
+    #                "Solvent": (3.2533, -221.49, 0),
+    #                "Bio-fuel Oil": (-35.3808, 33221, 0),
+    #                # "Natural Plant Oil": (80.4, -70487.17185, 0),
+    #                "Lube Oil": (-1.851, 6432, 0),
+    #                "Dielectric Oil": (14.291, -8598.1815, 0)
+    #                }
+    # not enough data but similar to Crude Oil NOS
+    slope_intercept_kv2["Tight Oil"] = slope_intercept_kv2["Crude Oil NOS"]
 
     def __init__(self, oil_or_data, k_v2=None):
         """
@@ -242,8 +259,12 @@ class KinematicViscosity:
         """
         Compute the kinematic viscosity of the oil as a function of temperature
 
-        :param temp_k: temperatures to compute at: can be scalar or array
-                       of values.  Should be in Kelvin
+        :param temp: temperatures to compute at: can be scalar or array
+                       of values.
+
+        :param kvis_units='m^2/s'"" units you want the result in.
+
+        :param temp_units="K": units the temperatue is in.
 
         viscosity as a function of temp is given by:
         v = A exp(k_v2 / T)
@@ -331,20 +352,32 @@ def get_density_data(oil, units="kg/m^3", temp_units="K"):
 
 
 def _get_visc_data(visc, units, temp_units, shear_rate):
+    """
+    shear_rate, if provided should be in units of 1/s
+    """
     visc_table = []
+
+    if shear_rate is None:
+        # find shear rates in the data
+        all_srs = [vp.shear_rate for vp in visc if vp.shear_rate is not None]
+        shear_rate = all_srs[0] if all_srs else None
+        if shear_rate is not None:
+            shear_rate = shear_rate.converted_to("1/s").value
 
     for visc_point in visc:
         d = visc_point.viscosity.converted_to(units).value
         t = visc_point.ref_temp.converted_to(temp_units).value
         sr = visc_point.shear_rate
-
         if sr is not None:
-            sr = sr.converted_to("1/s").value
-            if shear_rate is None:
-                shear_rate = sr
+           sr = sr.converted_to("1/s").value
 
-        if sr is None or sr == shear_rate:
+        if sr == shear_rate:
             visc_table.append((d, t))
+        #     if shear_rate is None:
+        #         shear_rate = sr
+
+        # if sr is None or sr == shear_rate:
+        #     visc_table.append((d, t))
 
     return visc_table
 
@@ -525,7 +558,7 @@ def get_pour_point(oil):
 
 def get_flash_point(oil):
     """
-    Return oil's FLash Point or None
+    Return oil's Flash Point or None
     """
     phys_props = oil.sub_samples[0].physical_properties
     flash_point = phys_props.flash_point

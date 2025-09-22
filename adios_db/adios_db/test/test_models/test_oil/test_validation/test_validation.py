@@ -483,7 +483,9 @@ def test_gnome_suitable_false():
     print(msgs)
     # 2 missing interfacial tension and no distillation for GNOME
     num_expected = 3
+
     for msg in msgs:
+        print(msg)
         if msg.startswith("E044:"):
             num_expected += 1
         if msg.startswith("W012:"): # Canada, Alberta in wrong order

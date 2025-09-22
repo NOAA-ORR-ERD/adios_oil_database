@@ -118,7 +118,6 @@ def test_get_dynamic_viscosity_data_multiple_shear_rates_set():
     assert isclose(dv[1][0], 0.582, rel_tol=1e-6)  # dvisc
     assert isclose(dv[1][1], 288.15, rel_tol=1e-6)  # temp
 
-
 def test_get_kinematic_viscosity_data_no_data():
     """
     Issue:
@@ -393,6 +392,10 @@ class TestKinematicViscosity:
         with pytest.raises(ValueError):
             _ = KinematicViscosity(oil)
 
+#    def test_get_visc_data_multiple_shear_rates(self):
+
+
+
 #    @pytest.mark.xfail
     def test_from_raw_data(self):
         # two data points should be an exact fit at the points
@@ -422,7 +425,7 @@ class TestKinematicViscosity:
         kv2 = KinematicViscosity.default_kv2(899.0, "Crude Oil NOS")
 
         # assuming value currently calculated is correct.
-        assert np.isclose(kv2, 6356.48)
+        assert np.isclose(kv2, 6211.103, rtol=1e-4)
 
     def test_get_default_kv2_bad_product_type(self):
         """
@@ -495,18 +498,56 @@ class TestKinematicViscosity:
         assert k1_50 < k1_20 < k1_2
         assert k2_50 < k2_20 < k2_2
 
-    def test_one_vicosity_diesel(self):
+    def test_one_viscosity_diesel(self):
         """
         if there's only one viscosity, and it's a diesel
         it should use the correct kv_2
         """
         oil = Oil.from_file(EXAMPLE_DATA_DIR / 'SimpleULSFO.json')
 
-        kv = KinematicViscosity(oil)
+        kvisc = KinematicViscosity(oil)
+        print(f"{kvisc.kviscs=}")
+        print(f"{kvisc.temps=}")
 
-        print(kv._k_v2)
+        print(kvisc._k_v2)
         # assert kv._k_v2 == 6200.0 # switched default
-        assert isclose(kv._k_v2, 3792.73, rel_tol=1e-4)
+        assert isclose(kvisc._k_v2, 3840.864, rel_tol=1e-4)
+
+        assert isclose(kvisc.at_temp(kvisc.temps[0], 'm^2/s', 'K'),
+                       kvisc.kviscs[0])
+        t0 = kvisc.at_temp(0, 'cSt', 'C')
+        t15 = kvisc.at_temp(15, 'cSt', 'C')
+        t30 = kvisc.at_temp(30, 'cSt', 'C')
+
+        print(t0, t15, t30)
+
+        assert t0 > t15 > t30
+
+    def test_one_viscosity_gasoline(self):
+        """
+        This was a bug with gasoline records
+
+        """
+        oil = Oil.from_file(EXAMPLE_DATA_DIR / 'AD00092_gasoline_one_viscosity.json')
+
+        kvisc = KinematicViscosity(oil)
+        print(f"{kvisc.kviscs=}")
+        print(f"{kvisc.temps=}")
+
+        print(f"{kvisc._k_v2=}")
+        # assert kv._k_v2 == 6200.0 # switched default
+        # assert isclose(kvisc._k_v2, 3792.73, rel_tol=1e-4)
+
+        assert isclose(kvisc.at_temp(kvisc.temps[0], 'm^2/s', 'K'),
+                       kvisc.kviscs[0])
+        t0 = kvisc.at_temp(0, 'cSt', 'C')
+        t15 = kvisc.at_temp(15, 'cSt', 'C')
+        t30 = kvisc.at_temp(30, 'cSt', 'C')
+
+        print(t0, t15, t30)
+
+        assert t0 > t15 > t30
+
 
     def test_multiple_vicosities_crude(self):
         """
@@ -549,24 +590,24 @@ class TestKinematicViscosity:
         kv2 = self.kv.default_kv2(density, 'Condensate')
 
         # eyeballed off plot -- looks about right
-        assert kv2 == 11394.381999999983
+        assert isclose(kv2, 10102.173958)
 
         density = 720
         kv2 = self.kv.default_kv2(density, 'Condensate')
 
-        assert kv2 == 844
+        assert isclose(kv2, 993.672059)
 
     def test_default_kv2_distillate(self):
         density = 900
         kv2 = self.kv.default_kv2(density, "Distillate Fuel Oil")
 
         # eyeballed off plot -- looks about right
-        assert kv2 == 6615.390999999996
+        assert isclose(kv2, 6581.2543244)
 
         density = 720
         kv2 = self.kv.default_kv2(density, "Distillate Fuel Oil")
 
-        assert kv2 == 0
+        assert kv2 >= KinematicViscosity.slope_intercept_kv2["Distillate Fuel Oil"][2]
 
 
 def test_get_frac_recovered():

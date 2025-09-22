@@ -132,7 +132,7 @@ def test_add_labels_to_oil_api(pt, api, labels):
         'Fuel Oil', 'Heavy Fuel Oil', 'HFO'
     }),
     # IFOs
-    ('Residual Fuel Oil', 29.0, 10, 38, {
+    ('Residual Fuel Oil', 29.0, 12, 38, { # ends up as kvis slightley higher than 4 at 50C
         'Refined Product', 'Residual Fuel', 'Fuel Oil', 'IFO'
     }),
 ])

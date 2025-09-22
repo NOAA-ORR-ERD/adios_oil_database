@@ -284,7 +284,7 @@ def is_label(oil, label):
             KV = KinematicViscosity(oil)
             kvis = KV.at_temp(temp=data['kvis_temp'], kvis_units='cSt',
                               temp_units='C')
-            #print(f"{kvis=}")
+            print(f"{kvis=}")
             is_label = True if data['kvis_min'] <= kvis < data['kvis_max'] else False
         except (ZeroDivisionError, ValueError):
             # if it can't do this, we don't apply the label
