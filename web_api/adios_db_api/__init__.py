@@ -17,7 +17,7 @@ from adios_db.session import Session
 
 from .common.views import cors_policy
 
-__version__ = "1.2.7"
+__version__ = "1.3.0dev"
 
 
 def load_cors_origins(settings, key):
