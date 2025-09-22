@@ -3,7 +3,7 @@ from logging import (basicConfig, getLogger, NullHandler,
                      DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 
-__version__ = "1.2.7dev"
+__version__ = "1.2.7"
 
 
 def initialize_console_log(level='debug'):
