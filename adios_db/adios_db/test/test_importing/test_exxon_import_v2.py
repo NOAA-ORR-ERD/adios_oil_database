@@ -13,8 +13,15 @@ import json
 
 import pytest
 
+# skip these if openpyxl isn't there.
+openpyxl = pytest.importorskip("openpyxl")
+
 import adios_db
-from adios_db.data_sources.exxon_assays import ExxonDataReader, ExxonMapper
+try:
+    # the tests should be skipped without openpyxl
+    from adios_db.data_sources.exxon_assays import ExxonDataReader, ExxonMapper
+except:
+    pass
 
 from adios_db.models.common.measurement import (Temperature, VolumeFraction)
 

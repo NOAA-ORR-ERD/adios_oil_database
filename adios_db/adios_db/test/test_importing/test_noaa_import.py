@@ -4,11 +4,16 @@ import json
 
 import pytest
 
+dateutil = pytest.importorskip("dateutil")
+
 import adios_db
-from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
+try: # can't work if dateutil isn't there
+    from adios_db.data_sources.noaa_fm import (OilLibraryCsvFile,
                                            OilLibraryRecordParser,
                                            OilLibraryAttributeMapper,
                                            ImportFileHeaderLengthError)
+except:
+    pass
 
 # Pass the --import command line option if you want these to run.
 pytestmark = pytest.mark.importing

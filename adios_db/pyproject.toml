@@ -7,7 +7,7 @@ name = "adios-db"
 dynamic = ["version"]
 readme = "README.md"
 license = {text = "CC0"}
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     { name = "ADIOS/GNOME team at NOAA ORR", email = "orr.gnome@noaa.gov" },
 ]
@@ -31,8 +31,9 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Chemistry",
 ]
 dependencies = [
-    "numpy",
-    "pynucos",
+    "numpy>=1.24",
+    "pynucos>=3.3",
+    "awesome-slugify>=1.6.5",
 ]
 
 [tool.setuptools.dynamic]

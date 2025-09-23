@@ -13,14 +13,23 @@ import json
 
 import pytest
 
+# skip these if openpyxl isn't there.
+openpyxl = pytest.importorskip("openpyxl")
+
+
 import nucos as uc
 
 import adios_db
 from adios_db.util import sigfigs
 from adios_db.models.oil.oil import Oil
 from adios_db.models.common.measurement import Temperature, VolumeFraction
-from adios_db.data_sources.exxon_assays import (ExxonDataReader, ExxonMapper,
-                                                ExxonRecordParser)
+try:
+    # the tests should be skipped without openpyxl
+    from adios_db.data_sources.exxon_assays import (ExxonDataReader,
+                                                    ExxonMapper,
+                                                    ExxonRecordParser)
+except:
+    pass
 
 # Pass the --import command line option if you want these to run.
 pytestmark = pytest.mark.importing

@@ -13,11 +13,16 @@ import json
 import numpy as np
 import pytest
 
+dateutil = pytest.importorskip("dateutil")
+
 import adios_db
-from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
-                                                 EnvCanadaCsvRecordParser,
-                                                 EnvCanadaCsvRecordMapper,
-                                                 InvalidFileError)
+try: # can't work if dateutil isn't there
+    from adios_db.data_sources.env_canada.v2 import (EnvCanadaCsvFile,
+                                                     EnvCanadaCsvRecordParser,
+                                                     EnvCanadaCsvRecordMapper,
+                                                     InvalidFileError)
+except:
+    pass
 
 from pprint import pprint
 
